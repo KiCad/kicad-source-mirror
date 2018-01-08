@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-07 22:10+0100\n"
-"PO-Revision-Date: 2018-01-06 01:18+0100\n"
+"PO-Revision-Date: 2018-01-08 01:06+0100\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -965,9 +965,8 @@ msgid "Show 3D virtual models"
 msgstr "Modelle von virtuellen Bauteilen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:145
-#, fuzzy
 msgid "Board layers:"
-msgstr "Platinenebenen:"
+msgstr "Platinenlagen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:162
 msgid "Show silkscreen layers"
@@ -1761,7 +1760,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:204
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*."
-msgstr ""
+msgstr "Eagle Version 6.x XML Bibliothek (*.lbr)|*."
 
 #: common/wildcards_and_files_ext.cpp:210
 msgid "Geda PCB footprint library files (*.fp)|*."
@@ -1777,19 +1776,19 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:230
 msgid "Drill files (*.drl)|*."
-msgstr ""
+msgstr "Bohrdaten (*.drl)|*."
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "SVG files (*.svg)|*."
-msgstr ""
+msgstr "SVG-Bild (*.svg)|*."
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "HTML files (*.html)|*."
-msgstr ""
+msgstr "HTML-Datei (*.html)|*."
 
 #: common/wildcards_and_files_ext.cpp:249
 msgid "CSV Files (*.csv)|*."
-msgstr ""
+msgstr "CSV-Dateien (*.csv)|*."
 
 #: common/wildcards_and_files_ext.cpp:255
 msgid "Portable document format files (*.pdf)|*."
@@ -1797,7 +1796,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "PostScript files (.ps)|*."
-msgstr ""
+msgstr "PostScript-Datei (.ps)|*."
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "Report files (*.rpt)|*."
@@ -1818,7 +1817,7 @@ msgstr "IDFv3 Bauteildateien (*.idf)|*."
 
 #: common/wildcards_and_files_ext.cpp:292
 msgid "Text files (*.txt)|*."
-msgstr ""
+msgstr "Textdatei (*.txt)|*."
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "Legacy footprint export files (*.emp)|*."
@@ -1850,15 +1849,15 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:340
 msgid "GenCAD 1.4 board files (.cad)|*."
-msgstr ""
+msgstr "GenCAD 1.4 Board Datei (*.cad)|*."
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "DXF Files (*.dxf)|*."
-msgstr ""
+msgstr "DXF-Datei (*.dxf)|*."
 
 #: common/wildcards_and_files_ext.cpp:352
 msgid "Gerber job file (*.gbrjob)|*."
-msgstr ""
+msgstr "Gerber Job-Datei (*.gbrjob)|*."
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Specctra DSN file (*.dsn)|*."
@@ -1866,7 +1865,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "IPC-D-356 Test Files (.d356)|*."
-msgstr ""
+msgstr "IPC-D-356 Testdateien (.d356)|*."
 
 #: common/wildcards_and_files_ext.cpp:371
 msgid "Workbook file (*.wbk)|*."
@@ -1874,7 +1873,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:377
 msgid "PNG file (*.png)|*."
-msgstr ""
+msgstr "PNG-Bild (*.pgn)|*."
 
 #: common/confirm.cpp:79 common/pgm_base.cpp:933 eeschema/symbedit.cpp:107
 #: eeschema/widgets/widget_eeschema_color_config.cpp:296
@@ -2830,9 +2829,8 @@ msgid "Path:"
 msgstr "Pfade:"
 
 #: common/dialogs/dialog_env_var_config.cpp:202
-#, fuzzy
 msgid "Path already exists."
-msgstr "Pfad existiert bereits"
+msgstr "Pfad existiert bereits."
 
 #: common/dialogs/dialog_env_var_config.cpp:256
 #, fuzzy, c-format
@@ -3862,7 +3860,7 @@ msgstr "Bildschwenk und Zoom"
 #: cvpcb/dialogs/dialog_display_options_base.cpp:43
 #, fuzzy
 msgid "Center and warp cursor on zoom"
-msgstr "Curs&or beim Zoomen nicht zentrieren und umpositionieren"
+msgstr "Cursor beim Zoomen zentrieren und umpositionieren"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:151
@@ -4179,7 +4177,7 @@ msgstr "Konnte die Bibliothek %s nicht finden."
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #, c-format
 msgid "Failed to create file \"%s\""
-msgstr ""
+msgstr "Konnte \"%s\" nicht erstellen"
 
 #: eeschema/sch_plugin.cpp:27 eeschema/sch_io_mgr.cpp:32 pcbnew/io_mgr.cpp:42
 #: pcbnew/plugin.cpp:29
@@ -4423,7 +4421,7 @@ msgstr ""
 
 #: eeschema/libedit.cpp:610
 msgid "Save Libraries"
-msgstr ""
+msgstr "Bibliotheken speichern"
 
 #: eeschema/libedit.cpp:611
 msgid "Select libraries to save before closing"
@@ -4672,7 +4670,7 @@ msgstr "Wähle Symbolbibliothek"
 #: eeschema/selpart.cpp:144
 #, c-format
 msgid "Error occurred loading symbol library \"%s\"."
-msgstr ""
+msgstr "Beim Laden der Symbolbibliothek \"%s\" ist ein Fehler aufgetreten."
 
 #: eeschema/selpart.cpp:150
 msgid "Library:Symbol"
@@ -4713,7 +4711,7 @@ msgstr "Symbol exportieren"
 #: eeschema/symbedit.cpp:194
 #, c-format
 msgid "Saving symbol in \"%s\""
-msgstr ""
+msgstr "Schaltplansymbol wird in \"%s\" gespeichert"
 
 #: eeschema/symbedit.cpp:211
 #, c-format
@@ -4737,7 +4735,7 @@ msgstr ""
 #: eeschema/sheet.cpp:133 eeschema/sheet.cpp:177
 #, c-format
 msgid "A file named \"%s\" already exists."
-msgstr ""
+msgstr "Eine Datei mit dem Namen \"%s\" existiert bereits."
 
 #: eeschema/sheet.cpp:136
 msgid ""
@@ -4782,12 +4780,12 @@ msgstr ""
 #: eeschema/sheet.cpp:219
 #, c-format
 msgid "Error occurred saving schematic file \"%s\"."
-msgstr ""
+msgstr "Beim Speichern der Schaltplandatei \"%s\" ist ein Fehler aufgetreten."
 
 #: eeschema/sheet.cpp:222
 #, c-format
 msgid "Failed to save schematic \"%s\""
-msgstr ""
+msgstr "Konnte Schaltplan \"%s\" nicht speichern"
 
 #: eeschema/sheet.cpp:254 eeschema/files-io.cpp:300 eeschema/files-io.cpp:446
 msgid ""
@@ -4845,12 +4843,12 @@ msgstr ""
 
 #: eeschema/libeditframe.cpp:579
 msgid "&Save Library [Read Only]"
-msgstr ""
+msgstr "Bibliothek &speichern [schreibgeschützt]"
 
 #: eeschema/libeditframe.cpp:580 eeschema/menubar_libedit.cpp:82
 #: eeschema/widgets/cmp_tree_pane.cpp:56
 msgid "&Save Library"
-msgstr ""
+msgstr "Bibliothek &speichern"
 
 #: eeschema/libeditframe.cpp:1185
 msgid "Add pin"
@@ -4893,15 +4891,17 @@ msgstr "Auswahl klarstellen"
 #: eeschema/libeditframe.cpp:1527
 #, c-format
 msgid "Library \"%s\" already exists"
-msgstr ""
+msgstr "Bibliothek \"%s\" existiert bereits"
 
 #: eeschema/libeditframe.cpp:1542
 msgid "Could not create the library file. Check write permission."
 msgstr ""
+"Konnte die Bibliotheksdatei nicht erstellen. Bitte die Berechtigungen "
+"kontrollieren."
 
 #: eeschema/libeditframe.cpp:1549
 msgid "Could not open the library file."
-msgstr ""
+msgstr "Konnte die Bibliotheksdatei nicht öffnen."
 
 #: eeschema/libeditframe.cpp:1562 eeschema/dialogs/dialog_sym_lib_table.cpp:352
 #: pcbnew/librairi.cpp:80
@@ -4927,7 +4927,7 @@ msgstr "Global"
 
 #: eeschema/libeditframe.cpp:1648
 msgid "Project"
-msgstr ""
+msgstr "Projekt"
 
 #: eeschema/libeditframe.cpp:1650
 msgid "Select Symbol Library Table"
@@ -5111,12 +5111,10 @@ msgid "Edit Symbol Reference"
 msgstr "Referenz editieren"
 
 #: eeschema/hotkeys.cpp:180
-#, fuzzy
 msgid "Edit Symbol Footprint"
-msgstr "Bearbeite Footprint"
+msgstr "Bearbeite Footprintzuordnung"
 
 #: eeschema/hotkeys.cpp:183
-#, fuzzy
 msgid "Edit with Symbol Editor"
 msgstr "Bearbeiten mit Bauteileditor"
 
@@ -5324,15 +5322,15 @@ msgstr "Unbekannter SCH_FILE_T Wert: %d"
 
 #: eeschema/menubar_libedit.cpp:68
 msgid "&New Library"
-msgstr ""
+msgstr "&Neue Bibliothek"
 
 #: eeschema/menubar_libedit.cpp:69
 msgid "Creates an empty library"
-msgstr ""
+msgstr "Erstellt eine neue, leere Bibliothek"
 
 #: eeschema/menubar_libedit.cpp:74
 msgid "&Add Library"
-msgstr ""
+msgstr "Bibliothek hinzufügen (&a)"
 
 #: eeschema/menubar_libedit.cpp:75
 msgid "Adds a previously created library"
@@ -5344,11 +5342,11 @@ msgstr "Momentan aktive Bauteilbibliothek speichern"
 
 #: eeschema/menubar_libedit.cpp:90 eeschema/widgets/cmp_tree_pane.cpp:58
 msgid "Save Library As..."
-msgstr ""
+msgstr "Bibliothek speichern unter..."
 
 #: eeschema/menubar_libedit.cpp:91
 msgid "Save the current library to a new file"
-msgstr ""
+msgstr "Die aktive Bibliothek in eine neue Datei speichern"
 
 #: eeschema/menubar_libedit.cpp:96
 msgid "Save All &Libraries"
@@ -5436,9 +5434,8 @@ msgid "Toggles the search tree visibility"
 msgstr ""
 
 #: eeschema/menubar_libedit.cpp:193
-#, fuzzy
 msgid "&New Symbol"
-msgstr "Neues Symbol"
+msgstr "&Neues Bauteil"
 
 #: eeschema/menubar_libedit.cpp:194
 #, fuzzy
@@ -5466,9 +5463,8 @@ msgid "Import a symbol to the current library"
 msgstr "In momentan aktive Bauteilbibliothek speichern"
 
 #: eeschema/menubar_libedit.cpp:214
-#, fuzzy
 msgid "&Export Symbol"
-msgstr "Symbol exportieren"
+msgstr "Bauteil &exportieren"
 
 #: eeschema/menubar_libedit.cpp:215
 #, fuzzy
@@ -5480,9 +5476,8 @@ msgid "&Properties"
 msgstr ""
 
 #: eeschema/menubar_libedit.cpp:223 eeschema/tool_lib.cpp:148
-#, fuzzy
 msgid "Edit symbol properties"
-msgstr "Feldeigenschaften bearbeiten"
+msgstr "Bauteileigenschaften bearbeiten"
 
 #: eeschema/menubar_libedit.cpp:228
 msgid "&Fields"
@@ -5864,6 +5859,9 @@ msgid ""
 "\"%s\"\n"
 "before closing?"
 msgstr ""
+"Die Änderungen in\n"
+"\"%s\"\n"
+"vor dem Schließen speichern?"
 
 #: eeschema/schframe.cpp:794
 msgid "Draw wires and buses in any direction"
@@ -5911,7 +5909,7 @@ msgstr "Schaltplan öffnen"
 
 #: eeschema/schframe.cpp:1168
 msgid "Could not open CvPcb"
-msgstr ""
+msgstr "Konnte CvPcb nicht öffnen"
 
 #: eeschema/schframe.cpp:1205
 #, fuzzy
@@ -6173,7 +6171,7 @@ msgstr "Keine Symbole wiederhergestellt."
 #: eeschema/project_rescue.cpp:654
 #, c-format
 msgid "Failed to create symbol library file \"%s\""
-msgstr ""
+msgstr "Konnte Schaltplansymboldatei \"%s\" nicht erstellen"
 
 #: eeschema/project_rescue.cpp:778
 #, c-format
@@ -6222,11 +6220,11 @@ msgstr "Speichern"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:52 eeschema/widgets/cmp_tree_pane.cpp:94
 msgid "&New Library..."
-msgstr ""
+msgstr "&Neue Bibliothek..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:54 eeschema/widgets/cmp_tree_pane.cpp:96
 msgid "&Add Library..."
-msgstr ""
+msgstr "Bibliothek hinzufügen (&a)..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:60
 msgid "&Revert Library"
@@ -6419,7 +6417,7 @@ msgstr "Keine neuen hierarchischen Bezeichner gefunden."
 #: eeschema/plot_schematic_SVG.cpp:77
 #, c-format
 msgid "Cannot create file \"%s\".\n"
-msgstr ""
+msgstr "Kann Datei \"%s\" nicht erstellen.\n"
 
 #: eeschema/lib_polyline.cpp:51
 msgid "PolyLine"
@@ -6930,7 +6928,6 @@ msgid "Create symbol with alternate body style (DeMorgan)"
 msgstr "Bauteil mit alternativer Darstellungsform (De Morgan) erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:66
-#, fuzzy
 msgid "Create symbol as power symbol"
 msgstr "Bauteil als Spannungsquellensymbol erstellen"
 
@@ -7166,7 +7163,7 @@ msgstr "Die Y-Koordinate des Textes relativ zum Bauteil"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:723
 msgid "Select library"
-msgstr ""
+msgstr "Bibliothek wählen"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:35
 msgid "Pin &name:"
@@ -7202,7 +7199,6 @@ msgid "Sharing"
 msgstr "Gemeinsame Nutzung"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
-#, fuzzy
 msgid "Common to all &units in symbol"
 msgstr "Von allen &Einheiten eines Bauteils gemeinsam genutzt"
 
@@ -7555,7 +7551,7 @@ msgstr "Änderung zurücknehmen"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:49
 msgid "Color:"
-msgstr ""
+msgstr "Farbe:"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:509
@@ -7566,20 +7562,20 @@ msgstr "Solide"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dashed"
-msgstr ""
+msgstr "Gestrichelt"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dotted"
-msgstr ""
+msgstr "Punkte"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dash-Dot"
-msgstr ""
+msgstr "Strich-Punkt"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:64
 #: eeschema/dialogs/dialog_edit_line_style_base.h:74
 msgid "Line Style"
-msgstr ""
+msgstr "Linienstil"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:40
 msgid "Select"
@@ -8179,12 +8175,10 @@ msgid "Orientation (degrees):"
 msgstr "Ausrichtung (Grad):"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#, fuzzy
 msgid "Mirror horizontally"
 msgstr "Horizontal spiegeln"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#, fuzzy
 msgid "Mirror vertically"
 msgstr "Vertikal spiegeln"
 
@@ -8745,7 +8739,7 @@ msgstr "Anzeige von Seiten&rändern"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:112
 msgid "Footprint previews in symbol chooser (experimental)"
-msgstr ""
+msgstr "Footprint-Vorschau in der Schaltplansymbol-Auswahl (experimentell)"
 
 # Different translation needed here depending on the context.
 # For menu item...
@@ -8785,9 +8779,8 @@ msgid "minutes"
 msgstr "Minuten"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:212
-#, fuzzy
 msgid "A&utomatically place symbol fields"
-msgstr "Bauteilfelder a&utomatisch platzieren"
+msgstr "Textfelder a&utomatisch platzieren"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:215
 msgid "A&llow field autoplace to change justification"
@@ -9790,7 +9783,7 @@ msgstr ""
 #: eeschema/sch_base_frame.cpp:61
 #, c-format
 msgid "Could not load symbol \"%s\" from library \"%s\"."
-msgstr ""
+msgstr "Konnte Schaltplansymbol \"%s\" aus Bibliothek \"%s\" nicht laden."
 
 #: eeschema/sch_base_frame.cpp:325
 #, c-format
@@ -9914,7 +9907,7 @@ msgstr "nicht gequotete Zeichenkette erwartet"
 #: eeschema/sch_legacy_plugin.cpp:749
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
-msgstr ""
+msgstr "\"%s\" scheint keine Eeschema-Datei zu sein"
 
 #: eeschema/sch_legacy_plugin.cpp:777
 msgid "Missing 'EELAYER END'"
@@ -9985,20 +9978,19 @@ msgstr "Aktuelle Zeichnung exportieren"
 
 #: eeschema/tool_lib.cpp:108
 msgid "Create a new library"
-msgstr ""
+msgstr "Neue Bibliothek erstellen"
 
 #: eeschema/tool_lib.cpp:112
 msgid "Add an existing library"
-msgstr ""
+msgstr "Eine existierende Bibliothek hinzufügen"
 
 #: eeschema/tool_lib.cpp:116
 msgid "Save current library"
-msgstr ""
+msgstr "Aktuelle Bibliothek speichern"
 
 #: eeschema/tool_lib.cpp:120
-#, fuzzy
 msgid "Create new symbol"
-msgstr "Neue Platine erstellen"
+msgstr "Neues Bauteil erstellen"
 
 #: eeschema/tool_lib.cpp:124
 #, fuzzy
@@ -10011,9 +10003,8 @@ msgid "Import symbol"
 msgstr "Symbol importieren"
 
 #: eeschema/tool_lib.cpp:130
-#, fuzzy
 msgid "Export symbol"
-msgstr "Symbol exportieren"
+msgstr "Bauteil exportieren"
 
 #: eeschema/tool_lib.cpp:135 eeschema/tool_sch.cpp:84
 #: pcbnew/tools/pcbnew_control.cpp:231
@@ -10418,12 +10409,14 @@ msgstr "Datei mit den gegenwärtigen Tastaturbefehlen erstellen"
 
 #: eeschema/menubar.cpp:634
 msgid "Manage Symbol Library Tables"
-msgstr ""
+msgstr "Tabellen der Schaltplansymbol-Bibliotheken bearbeiten"
 
 #: eeschema/menubar.cpp:635
 msgid ""
 "Edit the global and project symbol library tables (list of active libraries)."
 msgstr ""
+"Die Globale und die projekteigene Tabelle von Schaltplansymbol-Bibliotheken "
+"bearbeiten"
 
 #: eeschema/menubar.cpp:652
 msgid "Edit Eeschema preferences"
@@ -10966,12 +10959,10 @@ msgid "Select symbol to browse"
 msgstr "Bauteil auswählen"
 
 #: eeschema/tool_viewlib.cpp:62
-#, fuzzy
 msgid "Display previous symbol"
 msgstr "Vorheriges Bauteil anzeigen"
 
 #: eeschema/tool_viewlib.cpp:66
-#, fuzzy
 msgid "Display next symbol"
 msgstr "Nächstes Bauteil anzeigen"
 
@@ -10996,7 +10987,6 @@ msgid "Cl&ose"
 msgstr "&Beenden"
 
 #: eeschema/tool_viewlib.cpp:186
-#, fuzzy
 msgid "Close schematic symbol viewer"
 msgstr "Bauteilbetrachter schließen"
 
@@ -11273,7 +11263,7 @@ msgstr "Dateiname:"
 #: eeschema/libedit_plot_component.cpp:137
 #, c-format
 msgid "Can't save file \"%s\""
-msgstr ""
+msgstr "Datei \"%s\" konnte nicht geschrieben werden"
 
 #: eeschema/onrightclick.cpp:100
 msgid "Edit Text"
@@ -11612,7 +11602,6 @@ msgid "Place bus to bus entry"
 msgstr "Buseingang zu Buseingang führen"
 
 #: eeschema/help_common_strings.h:59
-#, fuzzy
 msgid "Place no connection flag"
 msgstr "'Keine-Verbindung' Symbol hinzufügen"
 
@@ -11673,9 +11662,8 @@ msgid "Annotate schematic symbols"
 msgstr "Annotation im Schaltplan durchführen"
 
 #: eeschema/help_common_strings.h:77
-#, fuzzy
 msgid "Create, delete, and edit symbols"
-msgstr "Bauteil als Spannungsquellensymbol erstellen"
+msgstr "Schaltplansymbole erstellen, löschen oder verändern"
 
 #: eeschema/help_common_strings.h:78
 #, fuzzy
@@ -11696,9 +11684,8 @@ msgstr ""
 "CvPvb .cmp Datei."
 
 #: eeschema/help_common_strings.h:84
-#, fuzzy
 msgid "Add pins to symbol"
-msgstr "Pins dem Bauteil hinzufügen"
+msgstr "Pins zum Schaltplansymbol hinzufügen"
 
 #: eeschema/help_common_strings.h:85
 #, fuzzy
@@ -11953,9 +11940,8 @@ msgid ""
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:226 pcbnew/pcbframe.cpp:485
-#, fuzzy
 msgid "Enable Graphics Acceleration"
-msgstr "Automatisches Löschen von Leiterbahnen aktivieren"
+msgstr "Grafikbeschleunigung einschalten"
 
 #: gerbview/gerbview_frame.cpp:229 pcbnew/pcbframe.cpp:488
 #, fuzzy
@@ -11964,7 +11950,7 @@ msgstr "Automatisches Löschen von Leiterbahnen aktivieren"
 
 #: gerbview/gerbview_frame.cpp:229 pcbnew/pcbframe.cpp:488
 msgid "&No Thanks"
-msgstr ""
+msgstr "&Nein Danke"
 
 #: gerbview/gerbview_frame.cpp:634
 msgid "D Codes"
@@ -12723,12 +12709,12 @@ msgstr "Keine der Gerberlagen enthält Daten"
 
 #: gerbview/export_to_pcbnew.cpp:178
 msgid "Board File Name"
-msgstr ""
+msgstr "Dateiname für Platine"
 
 #: gerbview/export_to_pcbnew.cpp:214
 #, c-format
 msgid "Cannot create file \"%s\""
-msgstr ""
+msgstr "Datei \"%s\" konnte nicht erstellt werden"
 
 #: gerbview/rs274x.cpp:277
 #, c-format
@@ -13169,6 +13155,8 @@ msgid ""
 "\n"
 "Open \"%s\"\n"
 msgstr ""
+"\n"
+"Öffne \"%s\"\n"
 
 #: kicad/files-io.cpp:73
 msgid "Target Directory"
@@ -13293,12 +13281,12 @@ msgstr "Konnte keine HTML Metainformation für diese Vorlage finden!"
 #: kicad/project_template.cpp:205
 #, c-format
 msgid "Cannot create folder \"%s\"."
-msgstr ""
+msgstr "Kann Ordner \"%s\" nicht erstellen."
 
 #: kicad/project_template.cpp:227
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr ""
+msgstr "Datei \"%s\" konnte nicht kopiert werden."
 
 #: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
@@ -13519,7 +13507,7 @@ msgstr "Editiere Schaltplan"
 
 #: kicad/menubar.cpp:406
 msgid "Edit Schematic Symbols"
-msgstr ""
+msgstr "Schaltplansymbole bearbeiten"
 
 #: kicad/menubar.cpp:410
 msgid "Edit PCB Layout"
@@ -13527,7 +13515,7 @@ msgstr "Leiterplattenlayout bearbeiten"
 
 #: kicad/menubar.cpp:414
 msgid "Edit PCB Footprints"
-msgstr ""
+msgstr "Footprints bearbeiten"
 
 #: kicad/menubar.cpp:418
 msgid "View Gerber Files"
@@ -13598,6 +13586,9 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
+"Ordner \"%s\" konnte nicht erstellt werden.\n"
+"\n"
+"Bitte Schreibrechte überprüfen und erneut versuchen."
 
 #: kicad/prjconfig.cpp:222
 msgid ""
@@ -13636,7 +13627,7 @@ msgstr ""
 #: kicad/prjconfig.cpp:339
 #, c-format
 msgid "Cannot write to folder \"%s\"."
-msgstr ""
+msgstr "Kann nicht in Ordner \"%s\" schreiben."
 
 #: kicad/prjconfig.cpp:340
 msgid "Error!"
@@ -13880,7 +13871,7 @@ msgstr "pl_editor ist bereits gestartet? Fortsetzen?"
 #: pagelayout_editor/pl_editor_frame.cpp:202
 #, c-format
 msgid "Error when loading file \"%s\""
-msgstr ""
+msgstr "Fehler beim Laden von \"%s\""
 
 #: pagelayout_editor/files.cpp:48
 msgid "Page Layout Description File"
@@ -14025,12 +14016,10 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:218
-#, fuzzy
 msgid "Position X (mm)"
 msgstr "X-Position (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:231
-#, fuzzy
 msgid "Position Y (mm)"
 msgstr "Y-Position (mm)"
 
@@ -14156,7 +14145,6 @@ msgid "Top margin (mm)"
 msgstr "Oberer Rand (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:593
-#, fuzzy
 msgid "Bottom margin (mm)"
 msgstr "Unterer Rand (mm)"
 
@@ -15675,7 +15663,7 @@ msgstr ""
 #: pcbnew/librairi.cpp:550 pcbnew/gpcb_plugin.cpp:1049
 #, c-format
 msgid "Library \"%s\" is read only"
-msgstr ""
+msgstr "Bibliothek \"%s\" ist schreibgeschützt"
 
 #: pcbnew/kicad_plugin.cpp:2072
 #, c-format
@@ -16145,7 +16133,7 @@ msgstr "Werkzeugleiste für M&ikrowellen"
 #: pcbnew/librairi.cpp:60
 #, c-format
 msgid "Library \"%s\" exists, OK to replace ?"
-msgstr ""
+msgstr "Bibliothek \"%s\" existiert, ersetzen?"
 
 #: pcbnew/librairi.cpp:61
 msgid "Create New Library Folder (the .pretty folder is the library)"
@@ -16184,7 +16172,7 @@ msgstr ""
 #: pcbnew/librairi.cpp:69
 #, c-format
 msgid "Library \"%s\" is read only, not writable"
-msgstr ""
+msgstr "Bibliothek \"%s\" ist schreibgeschützt"
 
 #: pcbnew/librairi.cpp:71
 msgid "Export Footprint"
@@ -16265,6 +16253,9 @@ msgid ""
 "one of invalid chars \"%s\" found\n"
 "in \"%s\""
 msgstr ""
+"Fehler:\n"
+"Eines der ungültigen Zeichen \"%s\" in\n"
+"\"%s\" gefunden"
 
 #: pcbnew/librairi.cpp:759
 #, c-format
@@ -16712,9 +16703,9 @@ msgid "Components"
 msgstr "Bauteile"
 
 #: pcbnew/netlist.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol \"%s\".\n"
-msgstr "Es wurde kein Footprint für die Komponente '%s' definiert.\n"
+msgstr "Es wurde kein Footprint für das Bauteil '%s' definiert.\n"
 
 #: pcbnew/netlist.cpp:272
 #, fuzzy, c-format
@@ -17653,7 +17644,7 @@ msgstr "Wähle allgemeine Optionen für Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:213 pcbnew/menubar_modedit.cpp:345
 msgid "&Display Settings"
-msgstr ""
+msgstr "Anzeigeeinstellungen (&d)"
 
 #: pcbnew/menubar_pcbframe.cpp:214
 msgid "Select how items (pads, tracks, texts) are displayed"
@@ -17954,10 +17945,12 @@ msgid "Adjust default pad characteristics"
 msgstr "Standard-Pad-Eigenschaften einstellen"
 
 #: pcbnew/menubar_pcbframe.cpp:605
+#, fuzzy
 msgid "Pads to &Mask Clearance"
 msgstr "Pad Abstands&maske"
 
 #: pcbnew/menubar_pcbframe.cpp:606
+#, fuzzy
 msgid "Adjust global clearance between pads and solder resist mask"
 msgstr "Globale Abstandsflächen zwischen Pads und Lötstoppmaske anpassen"
 
@@ -17967,7 +17960,7 @@ msgstr "&Differenzielle Paare"
 
 #: pcbnew/menubar_pcbframe.cpp:611
 msgid "Define global gap/width for differential pairs."
-msgstr "Globalen Abstand/Weite für differenzielle Paare einstellen."
+msgstr "Globalen Abstand/Breite für differenzielle Paare einstellen."
 
 #: pcbnew/menubar_pcbframe.cpp:616
 msgid "Save dimension preferences"
@@ -18968,7 +18961,7 @@ msgstr ""
 #: pcbnew/files.cpp:461
 #, c-format
 msgid "Board \"%s\" does not exist.  Do you wish to create it?"
-msgstr ""
+msgstr "Platine \"%s\" existiert nicht. Soll sie erstellt werden?"
 
 #: pcbnew/files.cpp:526
 #, c-format
@@ -18995,7 +18988,7 @@ msgstr ""
 #: pcbnew/files.cpp:684 pcbnew/files.cpp:777
 #, c-format
 msgid "No access rights to write to file \"%s\""
-msgstr ""
+msgstr "Keine Zugriffsrechte zum Speichern von Datei \"%s\""
 
 #: pcbnew/files.cpp:723 pcbnew/files.cpp:802
 #, c-format
@@ -19003,11 +18996,13 @@ msgid ""
 "Error saving board file \"%s\".\n"
 "%s"
 msgstr ""
+"Fehler beim Speichern von \"%s\".\n"
+"%s"
 
 #: pcbnew/files.cpp:729
 #, c-format
 msgid "Failed to create \"%s\""
-msgstr ""
+msgstr "Konnte \"%s\" nicht erstellen"
 
 #: pcbnew/files.cpp:755
 #, c-format
@@ -19421,7 +19416,6 @@ msgid "Trapezoid direction:"
 msgstr "Trapez Ausrichtung:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
-#, fuzzy
 msgid "Corner size:"
 msgstr "Abrundung der Ecken:"
 
@@ -19967,7 +19961,6 @@ msgid "&Delete unconnected tracks"
 msgstr "&Entferne nicht verbundene Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:106
-#, fuzzy
 msgid "Enable automatic track deletion when redrawing a track."
 msgstr ""
 "Das automatische Löschen von Leiterbahnen aktivieren/deaktivieren, wenn "
@@ -20077,7 +20070,7 @@ msgstr "Aktiviert"
 #: pcbnew/dialogs/dialog_layers_setup.cpp:625
 #, fuzzy, c-format
 msgid "Board thickness %s is out of range."
-msgstr "Board Stärke %s ist außerhalb des Bereiches."
+msgstr "Platinendicke %s ist außerhalb des Bereiches."
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:635
 msgid ""
@@ -23256,9 +23249,8 @@ msgid "Available:"
 msgstr "Verfügbar:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
-#, fuzzy
 msgid "Available Footprint Generators"
-msgstr "Mögliche Footprint-Generatoren"
+msgstr "Vorhandene Footprint-Generatoren"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
@@ -23392,6 +23384,10 @@ msgid ""
 "while downloading library:\n"
 "\"%s\""
 msgstr ""
+"Fehler:\n"
+"\"%s\"\n"
+"beim Download von Bibliothek\n"
+"\"%s\""
 
 #: pcbnew/dialogs/wizard_add_fplib.cpp:815
 msgid "Please wait..."
@@ -23446,7 +23442,6 @@ msgid "Item rotation:"
 msgstr "Element Rotation:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "Current position"
 msgstr "Aktuelle Position"
 
@@ -23466,7 +23461,6 @@ msgid "Sheet origin"
 msgstr "Ursprung Blatt"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:79
-#, fuzzy
 msgid "Move Relative To:"
 msgstr "Bewege relativ zu:"
 
@@ -24310,7 +24304,7 @@ msgstr "Keine Lage gewählt, keine Daten zum Plotten."
 #: pcbnew/dialogs/dialog_plot.cpp:871
 #, c-format
 msgid "Plot file \"%s\" created."
-msgstr ""
+msgstr "Plot-Datei \"%s\" erstellt."
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:119
 #, fuzzy
@@ -24458,7 +24452,7 @@ msgstr "Lokale Pad Lötstoppmaske muss gleich oder größer als Null sein."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1052
 #, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
-msgstr ""
+msgstr "Pad-Lötstopp-Abstand muss größer als %s sein"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1060
 msgid "Pad local solder paste clearance must be zero or less than zero"
@@ -24989,7 +24983,6 @@ msgid "Information:"
 msgstr "Informationen"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:132
-#, fuzzy
 msgid "Default Via Drill:"
 msgstr "Voreinstellung DuKo-Bohrdurchmesser:"
 
@@ -25031,7 +25024,6 @@ msgid "Micro vias:"
 msgstr "Micro-Durchkontaktierungen:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:169
-#, fuzzy
 msgid "Buried vias:"
 msgstr "Vergrabene Durchkontaktierungen:"
 
@@ -25256,7 +25248,7 @@ msgstr "Footprints Assoziierungsdatei speichern"
 #: pcbnew/dialogs/dialog_exchange_modules.cpp:444
 #, c-format
 msgid "Could not create file \"%s\""
-msgstr ""
+msgstr "Konnte Datei \"%s\" nicht erstellen"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:35
 msgid ""
@@ -25367,15 +25359,19 @@ msgstr "Prüfe Texte ...\n"
 msgid "Courtyard areas...\n"
 msgstr "Umrissflächen ...\n"
 
+# TODO: Überarbeiten
 #: pcbnew/drc.cpp:515
 #, c-format
 msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
-msgstr ""
+msgstr "Netzklasse \"%s\" hat Abstand %s, weniger als der globale Wert von %s"
 
+# TODO: Überarbeiten
 #: pcbnew/drc.cpp:529
 #, c-format
 msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
 msgstr ""
+"Netzklasse \"%s\" hat Leiterbahnbreite %s, weniger als der globale Wert von "
+"%s"
 
 #: pcbnew/drc.cpp:542
 #, c-format
@@ -25603,7 +25599,7 @@ msgstr ""
 
 #: pcbnew/zone_filler.cpp:157
 msgid "Removing insulated copper islands..."
-msgstr ""
+msgstr "Entferne nicht verbundene Kupferinseln..."
 
 #: pcbnew/zone_filler.cpp:179
 msgid "Caching polygon triangulations..."
@@ -26415,9 +26411,8 @@ msgid "Import parameters:"
 msgstr "Parameter für Import:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:150
-#, fuzzy
 msgid "Default line width:"
-msgstr "&Voreinstellung für &Linienbreite:"
+msgstr "Voreinstellung für Linienbreite:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:163
 #, fuzzy
@@ -27663,6 +27658,8 @@ msgid ""
 "Cannot download library \"%s\".\n"
 "The library does not exist on the server"
 msgstr ""
+"Kann Bibliothek \"%s\" nicht herunterladen.\n"
+"Die Bibliothek existiert auf dem Server nicht."
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -27830,7 +27827,6 @@ msgid "Export STEP"
 msgstr "STEP-Export"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.h:75
-#, fuzzy
 msgid "Export SVG File"
 msgstr "Als SVG exportieren"
 
