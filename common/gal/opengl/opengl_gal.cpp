@@ -889,7 +889,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     float commonOffset;
     std::tie( textSize, commonOffset ) = computeBitmapTextSize( text );
 
-    const double SCALE = GetGlyphSize().y / textSize.y;
+    const double SCALE = 1.4 * GetGlyphSize().y / textSize.y;
     bool overbar = false;
 
     int overbarLength = 0;
