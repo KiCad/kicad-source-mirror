@@ -6,6 +6,35 @@ translations for KiCad.
 It is cmake equipped to conform with the rest of the installation
 principles for KiCad.
 
+== How to submit translations
+No general details about translating po-files will be described here,
+there are plenty of resources on the rest of the www. But a suggestion
+on how to handle updates and translations will be provided.
+
+When you start translating we need to make sure there is an updated
+po-file. You can either ask someone to do push an update or do it
+yourself with the `update-po-files.sh` script. You can add your
+language code as the first argument to the script to only update that
+single language.
+
+When you did update the po-file, please make a commit with the
+following text if you update the german language relative to the kicad
+master branch:
+```
+Update german to master
+
+ca264f898290158f60d4c9dcd55d0428b7fa7965
+```
+
+Here we included the language, branch and sha of the kicad source at
+the time of updating.  Now make your translations and commit that and
+push the pull request.
+
+This is not mandatory, but it makes it easer for other people to
+review your changes when we seperate the automatic update from the
+human edits.
+
+
 == Depends
 - Cmake
 - Gettext
