@@ -134,7 +134,6 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
 
         switch( m_modelType->GetSelection() )
         {
-            case -1: break;
             case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_SUBCKT; break;
             case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_BJT; break;
             case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_MOSFET; break;
@@ -756,7 +755,6 @@ void DIALOG_SPICE_MODEL::onModelSelected( wxCommandEvent& event )
     }
     else
     {
-        m_modelType->SetSelection( wxNOT_FOUND );
         m_libraryContents->ShowPosition( 0 );
     }
 }
