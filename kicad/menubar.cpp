@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -505,26 +505,24 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
  */
 void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 {
-    // Check if toolbar is not already created
-    if( m_mainToolBar != NULL )
-        return;
-
-    // Allocate memory for m_mainToolBar
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
+        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // New
     m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
-                            KiBitmap( new_project_xpm ),
+                            KiScaledBitmap( new_project_xpm, this ),
                             _( "Create new project" ) );
 
     m_mainToolBar->AddTool( ID_NEW_PROJECT_FROM_TEMPLATE, wxEmptyString,
-                            KiBitmap( new_project_with_template_xpm ),
+                            KiScaledBitmap( new_project_with_template_xpm, this ),
                             _( "Create new project from template" ) );
 
     // Load
     m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
-                            KiBitmap( open_project_xpm ),
+                            KiScaledBitmap( open_project_xpm, this ),
                             _( "Open existing project" ) );
 
     // Currently there is nothing to save
@@ -532,29 +530,27 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 #if 0
     // Save
     m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
-                            KiBitmap( save_project_xpm ),
+                            KiScaledBitmap( save_project_xpm, this ),
                             _( "Save current project" ) );
 #endif
 
-    // Separator
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     // Archive
     m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
-                            KiBitmap( zip_xpm ),
+                            KiScaledBitmap( zip_xpm, this ),
                             _( "Archive all project files" ) );
 
     // Unarchive
     m_mainToolBar->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
-                            KiBitmap( unzip_xpm ),
+                            KiScaledBitmap( unzip_xpm, this ),
                             _( "Unarchive project files from zip archive" ) );
 
-    // Separator
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     // Refresh project tree
     m_mainToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
-                            KiBitmap( reload_xpm ),
+                            KiScaledBitmap( reload_xpm, this ),
                             _( "Refresh project tree" ) );
 
     // Create m_mainToolBar

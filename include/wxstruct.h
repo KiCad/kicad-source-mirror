@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -449,6 +449,21 @@ public:
      * bound to menu items.
      */
     bool PostCommandMenuEvent( int evt_type );
+
+    /**
+     * Function GetIconScale
+     *
+     * Return the desired scaling for toolbar/menubar icons in fourths (e.g. 4 is unity).
+     * A negative number indicates autoscale based on font size.
+     */
+    virtual int GetIconScale() { return -1; }
+
+    /**
+     * Function SetIconScale
+     *
+     * Modify the scale of icons in the window; should refresh them and save the setting.
+     */
+    virtual void SetIconScale( int aScale ) {}
 };
 
 

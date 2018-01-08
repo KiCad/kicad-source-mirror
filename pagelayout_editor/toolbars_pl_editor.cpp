@@ -1,26 +1,22 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -39,77 +35,77 @@
 
 void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 {
-    if( m_mainToolBar != NULL )
-        return;
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
+        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     wxString      msg;
 
     // Standard file commands
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-
-    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiBitmap( new_generic_xpm ),
+    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiScaledBitmap( new_generic_xpm, this ),
                             _( "New page layout design" ) );
 
-    m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiBitmap( pagelayout_load_xpm ),
+    m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiScaledBitmap( pagelayout_load_xpm, this ),
                             _( "Open an existing page layout design file" ) );
 
-    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_project_xpm ),
+    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiScaledBitmap( save_project_xpm, this ),
                             _( "Save page layout design" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
+    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
                             _( "Page settings" ) );
 
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
                             _( "Print page layout" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( delete_xpm ),
+    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
                             _( "Delete selected item" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString,
-                            KiBitmap( undo_xpm ), _( "Undo" ) );
+                            KiScaledBitmap( undo_xpm, this ), _( "Undo" ) );
 
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString,
-                            KiBitmap( redo_xpm ), _( "Redo" ) );
+                            KiScaledBitmap( redo_xpm, this ), _( "Redo" ) );
 
     // Standard Zoom controls:
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Redraw view" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom in" ), PlEditorHokeysDescr, HK_ZOOM_IN,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), PlEditorHokeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), PlEditorHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
     // Zoom-to-selection
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
                             _( "Zoom to selection" ), wxITEM_CHECK );
 
     // Display mode switch
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
-                            KiBitmap( pagelayout_normal_view_mode_xpm ),
+                            KiScaledBitmap( pagelayout_normal_view_mode_xpm, this ),
                             _( "Show title block like it will be displayed in applications\n"
                                "texts with format are replaced by the full text"),
                             wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_SHOW_PL_EDITOR_MODE,
-                            wxEmptyString, KiBitmap( pagelayout_special_view_mode_xpm ),
+                            wxEmptyString, KiScaledBitmap( pagelayout_special_view_mode_xpm, this ),
                             _( "Show title block in edit mode: texts are shown as is:\n"
                                "texts with format are displayed with no change"),
                             wxITEM_CHECK );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     wxString choiceList[5] =
     {
@@ -158,14 +154,14 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 void PL_EDITOR_FRAME::ReCreateVToolbar( void )
 {
     if( m_drawToolBar )
-        return;
-
-    m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar->Clear();
+    else
+        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ) );
-    m_drawToolBar->AddSeparator();
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ) );
+    KiScaledSeparator( m_drawToolBar, this );
 
     m_drawToolBar->Realize();
 }

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  6 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_DISPLAY_OPTIONS_BASE_H__
@@ -11,8 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
+#include "widgets/stepped_slider.h"
 #include "dialog_shim.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
@@ -21,8 +20,10 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/slider.h>
 #include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -44,6 +45,10 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxBoxSizer* sLeftSizer;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
+		wxStaticText* m_staticText1;
+		STEPPED_SLIDER* m_scaleSlider;
+		wxStaticText* m_staticText2;
+		wxCheckBox* m_scaleAuto;
 		wxCheckBox* m_OptDisplayTracks;
 		wxCheckBox* m_OptDisplayVias;
 		wxCheckBox* m_OptDisplayModOutlines;
@@ -58,6 +63,11 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
+		virtual void OnScaleAuto( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,7 +56,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bLeftSizer->Add( m_OptDisplayDCodes, 0, wxALL, 5 );
 	
 	
-	m_UpperSizer->Add( bLeftSizer, 0, wxALL|wxEXPAND, 5 );
+	m_UpperSizer->Add( bLeftSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -83,8 +83,43 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	bRightSizer->Add( bLeftBottomSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface:") ), wxVERTICAL );
 	
-	m_UpperSizer->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText1 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Icon scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
+	m_scaleSlider = new STEPPED_SLIDER( sbSizer2->GetStaticBox(), wxID_ANY, 50, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer1->Add( m_scaleSlider, 0, wxALL|wxEXPAND, 3 );
+	
+	m_staticText2 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
+	
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_scaleAuto = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Auto"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_scaleAuto, 0, wxALL, 5 );
+	
+	
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
+	sbSizer2->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bRightSizer->Add( sbSizer2, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	m_UpperSizer->Add( bRightSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bDialogSizer->Add( m_UpperSizer, 1, wxEXPAND, 5 );
@@ -107,6 +142,16 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bDialogSizer->Fit( this );
 	
 	// Connect Events
+	m_scaleSlider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleAuto->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleAuto ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOKBUttonClick ), NULL, this );
 }
@@ -114,6 +159,16 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 DIALOG_DISPLAY_OPTIONS_BASE::~DIALOG_DISPLAY_OPTIONS_BASE()
 {
 	// Disconnect Events
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleSlider->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleSlider ), NULL, this );
+	m_scaleAuto->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnScaleAuto ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOKBUttonClick ), NULL, this );
 	

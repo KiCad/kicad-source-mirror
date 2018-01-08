@@ -182,6 +182,7 @@ set( COMMON_WIDGET_SRCS
     widgets/two_column_tree_list.cpp
     widgets/unit_binder.cpp
     widgets/widget_hotkey_list.cpp
+    widgets/stepped_slider.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS

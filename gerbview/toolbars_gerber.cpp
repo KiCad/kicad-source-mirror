@@ -3,24 +3,20 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -49,49 +45,49 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 {
     wxString      msg;
 
-    if( m_mainToolBar != NULL )
-        return;
-
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
+        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
-                            KiBitmap( gerbview_clear_layers_xpm ),
+                            KiScaledBitmap( gerbview_clear_layers_xpm, this ),
                             _( "Erase all layers" ) );
 
-    m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiBitmap( gerber_file_xpm ),
+    m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiScaledBitmap( gerber_file_xpm, this ),
                             _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
 
     m_mainToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,
-                            KiBitmap( gerbview_drill_file_xpm ),
+                            KiScaledBitmap( gerbview_drill_file_xpm, this ),
                             _( "Load an excellon drill file on the current layer. Previous data will be deleted" ) );
 
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_GERBVIEW_SET_PAGE_BORDER, wxEmptyString, KiBitmap( sheetset_xpm ),
+    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddTool( ID_GERBVIEW_SET_PAGE_BORDER, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
                             _( "Show/hide frame reference and select paper size for printing" ) );
 
     m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
                             _( "Print layers" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     msg = AddHotkeyName( _( "Redraw view" ), GerbviewHokeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom in" ), GerbviewHokeysDescr, HK_ZOOM_IN,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), GerbviewHokeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), GerbviewHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
                                _( "Zoom to selection" ), wxITEM_CHECK );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
                                 ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
@@ -108,10 +104,12 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_mainToolBar->Realize();
 }
 
+
 void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 {
     wxWindowUpdateLocker dummy( this );
 
+#if 0
     if( m_auxiliaryToolBar )
     {
         updateComponentListSelectBox();
@@ -140,9 +138,13 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
         m_auimgr.Update();
         return;
     }
+#endif
 
-    m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                           KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    if( m_auxiliaryToolBar )
+        m_auxiliaryToolBar->Clear();
+    else
+        m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Creates box to display and choose components:
     wxStaticText* text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Cmp:") );
@@ -152,7 +154,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     m_SelComponentBox->SetToolTip( _("Select a component and highlight items belonging to this component") );
     updateComponentListSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelComponentBox );
-    m_auxiliaryToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     // Creates choice box to display net names and highlight selected:
     text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Net:") );
@@ -162,7 +164,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     m_SelNetnameBox->SetToolTip( _("Select a net name and highlight graphic items belonging to this net") );
     m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
     updateNetnameListSelectBox();
-    m_auxiliaryToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     // Creates choice box to display aperture attributes and highlight selected:
     text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Attr:") );
@@ -173,7 +175,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
     updateAperAttributesSelectBox();
 
-    m_auxiliaryToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("DCode:") );
     m_auxiliaryToolBar->AddControl( text );
     m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
@@ -196,8 +198,8 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ) );
-    m_drawToolBar->AddSeparator();
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ) );
+    KiScaledSeparator( m_mainToolBar, this );
 
     m_drawToolBar->Realize();
 }
@@ -214,79 +216,79 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
+    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
                                wxEmptyString, wxITEM_CHECK );
 
     if( IsGalCanvasActive() )
     {
         m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
-                                   KiBitmap( measurement_xpm ),
+                                   KiScaledBitmap( measurement_xpm, this ),
                                    _( "Measure distance between two points" ),
                                    wxITEM_CHECK );
     }
 
-    m_optionsToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
-                               KiBitmap( polar_coord_xpm ),
+                               KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Turn polar coordinate on" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiBitmap( unit_inch_xpm ),
+                               KiScaledBitmap( unit_inch_xpm, this ),
                                _( "Set units to inches" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiBitmap( unit_mm_xpm ),
+                               KiScaledBitmap( unit_mm_xpm, this ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
 #ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiBitmap( cursor_shape_xpm ),
+                               KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
 #endif // !__APPLE__
 
-    m_optionsToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
-                               KiBitmap( pad_sketch_xpm ),
+                               KiScaledBitmap( pad_sketch_xpm, this ),
                                _( "Show spots in sketch mode" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH, wxEmptyString,
-                               KiBitmap( showtrack_xpm ),
+                               KiScaledBitmap( showtrack_xpm, this ),
                                _( "Show lines in sketch mode" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
-                               KiBitmap( opt_show_polygon_xpm ),
+                               KiScaledBitmap( opt_show_polygon_xpm, this ),
                                _( "Show polygons in sketch mode" ),
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, wxEmptyString,
-                               KiBitmap( gerbview_show_negative_objects_xpm ),
+                               KiScaledBitmap( gerbview_show_negative_objects_xpm, this ),
                                _( "Show negatives objects in ghost color" ),
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
-                               KiBitmap( show_dcodenumber_xpm ),
+                               KiScaledBitmap( show_dcodenumber_xpm, this ),
                                _( "Show dcode number" ), wxITEM_CHECK );
 
     // tools to select draw mode in GerbView, unused in GAL
     if( !IsGalCanvasActive() )
     {
-        m_optionsToolBar->AddSeparator();
+        KiScaledSeparator( m_mainToolBar, this );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
-                                   KiBitmap( gbr_select_mode0_xpm ),
+                                   KiScaledBitmap( gbr_select_mode0_xpm, this ),
                                    _( "Show layers in raw mode\n"
         "(could have problems with negative items when more than one gerber file is shown)" ),
                                    wxITEM_CHECK );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
-                                   KiBitmap( gbr_select_mode1_xpm ),
+                                   KiScaledBitmap( gbr_select_mode1_xpm, this ),
                                    _( "Show layers in stacked mode\n"
                                       "(show negative items without artifacts)" ),
                                    wxITEM_CHECK );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
-                                   KiBitmap( gbr_select_mode2_xpm ),
+                                   KiScaledBitmap( gbr_select_mode2_xpm, this ),
                                    _( "Show layers in transparency mode\n"
                                       "(show negative items without artifacts)" ),
                                    wxITEM_CHECK );
@@ -294,22 +296,22 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     else
     {
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_DIFF_MODE, wxEmptyString,
-                                   KiBitmap( gbr_select_mode2_xpm ),
+                                   KiScaledBitmap( gbr_select_mode2_xpm, this ),
                                    _( "Show layers in diff (compare) mode" ),
                                    wxITEM_CHECK );
 
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, wxEmptyString,
-                                   KiBitmap( contrast_mode_xpm ),
+                                   KiScaledBitmap( contrast_mode_xpm, this ),
                                    _( "Enable high contrast display mode" ),
                                    wxITEM_CHECK );
 
     }
 
     // Tools to show/hide toolbars:
-    m_optionsToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                                wxEmptyString,
-                               KiBitmap( layers_manager_xpm ),
+                               KiScaledBitmap( layers_manager_xpm, this ),
                                _( "Show/hide the layers manager toolbar" ),
                                wxITEM_CHECK );
 

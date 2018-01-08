@@ -4,24 +4,20 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -31,6 +27,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
+#include <kiface_i.h>
 #include <kiway.h>
 #include <project.h>
 #include <kicad_plugin.h>
@@ -75,6 +72,12 @@
 #include "tools/pad_tool.h"
 #include "tools/pcb_actions.h"
 
+///@{
+/// \ingroup config
+
+static const wxString IconScaleEntry =          "ModIconScale";
+
+///@}
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
@@ -1015,4 +1018,25 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
     }
 
     ReCreateMenuBar();
+}
+
+
+int FOOTPRINT_EDIT_FRAME::GetIconScale()
+{
+    int scale = 0;
+    Kiface().KifaceSettings()->Read( IconScaleEntry, &scale, 0 );
+    return scale;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SetIconScale( int aScale )
+{
+    Kiface().KifaceSettings()->Write( IconScaleEntry, aScale );
+    ReCreateMenuBar();
+    ReCreateHToolbar();
+    ReCreateAuxiliaryToolbar();
+    ReCreateVToolbar();
+    ReCreateOptToolbar();
+    Layout();
+    SendSizeEvent();
 }

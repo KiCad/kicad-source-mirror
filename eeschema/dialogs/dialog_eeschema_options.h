@@ -43,6 +43,9 @@ class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 private:
     static int  m_lastPageSelected; ///< the active notebook page when closing this dialog
                                     ///< strored to keep selection during a session
+
+    int m_last_scale;               ///< saved icon scale when Auto selected
+
 protected:
     WIDGET_HOTKEY_LIST*             m_hotkeyListCtrl;
     WIDGET_EESCHEMA_COLOR_CONFIG*   m_colorConfigCtrl;
@@ -72,6 +75,9 @@ protected:
      */
     void OnDeleteButtonClick( wxCommandEvent& event ) override;
 
+    void OnScaleSlider( wxScrollEvent& aEvent ) override;
+    void OnScaleAuto( wxCommandEvent& aEvent ) override;
+
     /**
      * Function TransferDataToWindow
      * Transfer data into the GUI.
@@ -83,6 +89,9 @@ protected:
      * Transfer data out of the GUI.
      */
     bool TransferDataFromWindow() override;
+
+    bool TransferDataToFieldGrid();
+    bool TransferDataFromFieldGrid();
 
 public:
     /**

@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/stepped_slider.h"
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -20,9 +21,10 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
+#include <wx/slider.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
-#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -44,6 +46,8 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		
 		// Private event handlers
 		void _wxFB_OnSize( wxSizeEvent& event ){ OnSize( event ); }
+		void _wxFB_OnScaleSlider( wxScrollEvent& event ){ OnScaleSlider( event ); }
+		void _wxFB_OnScaleAuto( wxCommandEvent& event ){ OnScaleAuto( event ); }
 		void _wxFB_OnChooseUnits( wxCommandEvent& event ){ OnChooseUnits( event ); }
 		void _wxFB_OnAddButtonClick( wxCommandEvent& event ){ OnAddButtonClick( event ); }
 		void _wxFB_OnDeleteButtonClick( wxCommandEvent& event ){ OnDeleteButtonClick( event ); }
@@ -71,6 +75,10 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticLineWidthUnits;
 		wxStaticText* m_staticText26;
 		wxChoice* m_choiceSeparatorRefId;
+		wxStaticText* m_stIconScale;
+		STEPPED_SLIDER* m_scaleSlider;
+		wxStaticText* m_staticText211;
+		wxCheckBox* m_scaleAuto;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkHVOrientation;
@@ -118,6 +126,8 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
+		virtual void OnScaleAuto( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteButtonClick( wxCommandEvent& event ) { event.Skip(); }

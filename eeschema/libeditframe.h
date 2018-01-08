@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -377,7 +377,7 @@ public:
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
-    void CreateOptionToolbar();
+    void ReCreateOptToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     double BestZoom() override;         // Returns the best zoom
@@ -696,6 +696,9 @@ public:
      * Synchronize the library manager and the symbol library table. Displays a progress dialog.
      */
     void SyncLibraries( bool aLoad );
+
+    int GetIconScale() override;
+    void SetIconScale( int aScale ) override;
 
 private:
     ///> Helper screen used when no part is loaded

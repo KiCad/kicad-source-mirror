@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/stepped_slider.h"
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -20,9 +21,10 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
+#include <wx/slider.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
-#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -34,7 +36,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_LIBEDIT_OPTIONS_BASE : public DIALOG_SHIM
 {
+	DECLARE_EVENT_TABLE()
 	private:
+		
+		// Private event handlers
+		void _wxFB_OnScaleSlider( wxScrollEvent& event ){ OnScaleSlider( event ); }
+		void _wxFB_OnScaleAuto( wxCommandEvent& event ){ OnScaleAuto( event ); }
+		
 	
 	protected:
 		wxStaticText* m_staticText3;
@@ -63,6 +71,10 @@ class DIALOG_LIBEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText16;
 		wxStaticText* m_staticText17;
 		wxSpinCtrl* m_spinRepeatLabel;
+		wxStaticText* m_staticText18;
+		STEPPED_SLIDER* m_scaleSlider;
+		wxStaticText* m_staticText19;
+		wxCheckBox* m_scaleAuto;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkShowPinElectricalType;
@@ -70,6 +82,11 @@ class DIALOG_LIBEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
+		virtual void OnScaleAuto( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@
 // test if it works under stable release
 // #include <wx/bitmap.h>   // only to define wxBitmap
 class wxBitmap;     // only to define wxBitmap
+class EDA_BASE_FRAME;
+class wxWindow;
+class wxAuiToolBar;
 
 #include <config.h>
 
@@ -57,6 +60,32 @@ typedef const BITMAP_OPAQUE *BITMAP_DEF;
  * BITMAP_DEF.
  */
 wxBitmap KiBitmap( BITMAP_DEF aBitmap );
+
+
+/**
+ * Function KiScaledBitmap
+ * Constructs a wxBitmap from a memory record, scaling it if device DPI demands it.
+ * Internally this may use caching to avoid scaling the same image twice. If caching
+ * is used, it's guaranteed threadsafe.
+ *
+ * @param aBitmap bitmap definition
+ * @param aWindow target window for scaling context
+ */
+wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow );
+
+
+/**
+ * Function KiScaledSeparator
+ * Adds a separator to the given toolbar scaled the same way as KiScaledBitmap.
+ */
+void KiScaledSeparator( wxAuiToolBar* aToolbar, EDA_BASE_FRAME* aWindow );
+
+/**
+ * Function KiIconScale
+ * Returns the automatic scale factor that would be used for a given window by
+ * KiScaledBitmap and KiScaledSeparator.
+ */
+int KiIconScale( wxWindow* aWindow );
 
 
 /**

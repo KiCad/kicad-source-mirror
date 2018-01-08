@@ -2,24 +2,20 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* functions relatives to the dialog opened from the main menu :
@@ -65,12 +61,15 @@ void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 
 DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_DISPLAY_OPTIONS_BASE( parent ),
-    m_parent( parent )
+    m_parent( parent ),
+    m_last_scale( -1 )
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_parent->GetGalDisplayOptions();
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
 
     sLeftSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
+
+    m_scaleSlider->SetStep( 25 );
 
     SetFocus();
 
@@ -102,6 +101,19 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataToWindow()
     m_OptDisplayPadNoConn->SetValue( m_parent->IsElementVisible( LAYER_NO_CONNECTS ) );
     m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
+
+    const int scale_fourths = m_parent->GetIconScale();
+
+    if( scale_fourths <= 0 )
+    {
+        m_scaleAuto->SetValue( true );
+        m_scaleSlider->SetValue( 25 * KiIconScale( m_parent ) );
+    }
+    else
+    {
+        m_scaleAuto->SetValue( false );
+        m_scaleSlider->SetValue( scale_fourths * 25 );
+    }
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -150,7 +162,34 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataFromWindow()
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
+    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
+
+    if( m_parent->GetIconScale() != scale_fourths )
+        m_parent->SetIconScale( scale_fourths );
+
     m_parent->GetCanvas()->Refresh();
 
     return true;
+}
+
+
+void DIALOG_DISPLAY_OPTIONS::OnScaleSlider( wxScrollEvent& aEvent )
+{
+    m_scaleAuto->SetValue( false );
+    aEvent.Skip();
+}
+
+
+void DIALOG_DISPLAY_OPTIONS::OnScaleAuto( wxCommandEvent& aEvent )
+{
+    if( m_scaleAuto->GetValue() )
+    {
+        m_last_scale = m_scaleSlider->GetValue();
+        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        if( m_last_scale >= 0 )
+            m_scaleSlider->SetValue( m_last_scale );
+    }
 }

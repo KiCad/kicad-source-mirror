@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,15 @@
 #include "../widgets/widget_eeschema_color_config.h"
 #include <schframe.h>
 #include <hotkeys.h>
+#include <bitmap_types.h>
 
 #include <wx/settings.h>
 
 int  DIALOG_EESCHEMA_OPTIONS::m_lastPageSelected = 0;
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
-    DIALOG_EESCHEMA_OPTIONS_BASE( parent )
+    DIALOG_EESCHEMA_OPTIONS_BASE( parent ),
+    m_last_scale( -1 )
 {
     m_choiceUnits->SetFocus();
     m_sdbSizerOK->SetDefault();
@@ -52,6 +54,8 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
         m_fieldGrid->SetColMinimalWidth( i, m_fieldGrid->GetColSize( i ) );
         m_fieldGrid->AutoSizeColLabelSize( i );
     }
+
+    m_scaleSlider->SetStep( 25 );
 
     // Embed the hotkeys list
     HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( g_Eeschema_Hokeys_Descr );
@@ -128,6 +132,7 @@ void DIALOG_EESCHEMA_OPTIONS::SetRefIdSeparator( wxChar aSep, wxChar aFirstId)
     m_choiceSeparatorRefId->SetSelection( sel );
 }
 
+
 void DIALOG_EESCHEMA_OPTIONS::GetRefIdSeparator( int& aSep, int& aFirstId)
 {
     // m_choiceSeparatorRefId displays one of
@@ -191,7 +196,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
         }
     }
 
-    TransferDataFromWindow();
+    TransferDataFromFieldGrid();
 
     TEMPLATE_FIELDNAMES::iterator pos;
 
@@ -205,7 +210,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
     newFieldname.m_Value = wxT( "Value" );
     newFieldname.m_Visible = false;
     templateFields.insert( pos, newFieldname );
-    TransferDataToWindow();
+    TransferDataToFieldGrid();
 
     event.Skip();
 }
@@ -227,7 +232,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
         }
     }
 
-    TransferDataFromWindow();
+    TransferDataFromFieldGrid();
 
     int n_rows = m_fieldGrid->GetNumberRows();
 
@@ -242,7 +247,28 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
         }
     }
 
-    TransferDataToWindow();
+    TransferDataToFieldGrid();
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnScaleSlider( wxScrollEvent& aEvent )
+{
+    m_scaleAuto->SetValue( false );
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnScaleAuto( wxCommandEvent& aEvent )
+{
+    if( m_scaleAuto->GetValue() )
+    {
+        m_last_scale = m_scaleSlider->GetValue();
+        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        if( m_last_scale >= 0 )
+            m_scaleSlider->SetValue( m_last_scale );
+    }
 }
 
 
@@ -254,6 +280,66 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
     if( !m_hotkeyListCtrl->TransferDataToControl() )
         return false;
 
+    if( !TransferDataToFieldGrid() )
+        return false;
+
+    int scale_fourths = GetParent()->GetIconScale();
+
+    if( scale_fourths <= 0 )
+    {
+        m_scaleAuto->SetValue( true );
+        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        m_scaleAuto->SetValue( false );
+        m_scaleSlider->SetValue( scale_fourths * 25 );
+    }
+
+    m_stIconScale->SetLabel(
+            _( "Icon scale:" ) +
+            wxString::Format( " (diag: %d)",
+                GetParent()->ConvertDialogToPixels( wxSize( 0, 8 ) ).y ) );
+
+    Layout();
+    return true;
+}
+
+
+bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
+{
+    m_lastPageSelected = m_notebook->GetSelection();
+
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !m_hotkeyListCtrl->TransferDataFromControl() )
+        return false;
+
+    GetParent()->WriteHotkeyConfig( g_Eeschema_Hokeys_Descr );
+
+    if( !m_colorConfigCtrl->TransferDataFromControl() )
+        return false;
+
+    if( !TransferDataFromFieldGrid() )
+        return false;
+
+    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
+
+    if( GetParent()->GetIconScale() != scale_fourths )
+        GetParent()->SetIconScale( scale_fourths );
+
+    // Refresh hotkeys
+    GetParent()->ReCreateMenuBar();
+    GetParent()->Refresh();
+
+
+    return true;
+}
+
+
+bool DIALOG_EESCHEMA_OPTIONS::TransferDataToFieldGrid()
+{
     m_fieldGrid->Freeze();
 
     if( m_fieldGrid->GetNumberRows() )
@@ -281,30 +367,12 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
     m_fieldGrid->AutoSizeRows();
     m_fieldGrid->Thaw();
 
-    Layout();
     return true;
 }
 
 
-bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
+bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromFieldGrid()
 {
-    m_lastPageSelected = m_notebook->GetSelection();
-
-    if( !wxDialog::TransferDataFromWindow() )
-        return false;
-
-    if( !m_hotkeyListCtrl->TransferDataFromControl() )
-        return false;
-
-    GetParent()->WriteHotkeyConfig( g_Eeschema_Hokeys_Descr );
-
-    if( !m_colorConfigCtrl->TransferDataFromControl() )
-        return false;
-
-    // Refresh hotkeys
-    GetParent()->ReCreateMenuBar();
-    GetParent()->Refresh();
-
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         templateFields[row].m_Name  = m_fieldGrid->GetCellValue( row, 0 );
@@ -315,14 +383,13 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
     return true;
 }
 
-
 void DIALOG_EESCHEMA_OPTIONS::SetTemplateFields( const TEMPLATE_FIELDNAMES& aFields )
 {
     // Set the template fields object
     templateFields = aFields;
 
     // Build and refresh the view
-    TransferDataToWindow();
+    TransferDataToFieldGrid();
 }
 
 

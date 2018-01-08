@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1497,4 +1497,24 @@ void SCH_EDIT_FRAME::UpdateTitle()
 void SCH_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
     Pgm().ConfigurePaths( this );
+}
+
+
+int SCH_EDIT_FRAME::GetIconScale()
+{
+    int scale = 0;
+    Kiface().KifaceSettings()->Read( SchIconScaleEntry, &scale, 0 );
+    return scale;
+}
+
+
+void SCH_EDIT_FRAME::SetIconScale( int aScale )
+{
+    Kiface().KifaceSettings()->Write( SchIconScaleEntry, aScale );
+    ReCreateMenuBar();
+    ReCreateHToolbar();
+    ReCreateVToolbar();
+    ReCreateOptToolbar();
+    Layout();
+    SendSizeEvent();
 }

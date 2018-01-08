@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,44 +47,44 @@
 
 void LIB_EDIT_FRAME::ReCreateVToolbar()
 {
-    if( m_drawToolBar != NULL )
-        return;
-
-    m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+    if( m_drawToolBar )
+        m_drawToolBar->Clear();
+    else
+        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
                             _( "Deselect current tool" ), wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiBitmap( pin_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiScaledBitmap( pin_xpm, this ),
                             HELP_ADD_PIN, wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, KiBitmap( text_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, KiScaledBitmap( text_xpm, this ),
                             HELP_ADD_BODYTEXT, wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString, KiBitmap( add_rectangle_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString, KiScaledBitmap( add_rectangle_xpm, this ),
                             HELP_ADD_BODYRECT, wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString, KiBitmap( add_circle_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString, KiScaledBitmap( add_circle_xpm, this ),
                             HELP_ADD_BODYCIRCLE, wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString, KiBitmap( add_arc_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString, KiScaledBitmap( add_arc_xpm, this ),
                             HELP_ADD_BODYARC, wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString, KiBitmap( add_polygon_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString, KiScaledBitmap( add_polygon_xpm, this ),
                             HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString, KiBitmap( anchor_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString, KiScaledBitmap( anchor_xpm, this ),
                             _( "Move symbol anchor" ), wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString, KiBitmap( import_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString, KiScaledBitmap( import_xpm, this ),
                             _( "Import existing drawings" ), wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString, KiBitmap( export_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString, KiScaledBitmap( export_xpm, this ),
                             _( "Export current drawing" ), wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
                             HELP_DELETE_ITEMS, wxITEM_CHECK  );
 
     m_drawToolBar->Realize();
@@ -95,99 +95,104 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 
-    // Create the toolbar if not exists
-    if( m_mainToolBar != NULL )
-        return;
-
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
+        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_LIBRARY, wxEmptyString,
-                            KiBitmap( new_library_xpm ),
+                            KiScaledBitmap( new_library_xpm, this ),
                             _( "Create a new library" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_ADD_LIBRARY, wxEmptyString,
-                            KiBitmap( add_library_xpm ),
+                            KiScaledBitmap( add_library_xpm, this ),
                             _( "Add an existing library" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_LIBRARY, wxEmptyString,
-                            KiBitmap( save_library_xpm ),
+                            KiScaledBitmap( save_library_xpm, this ),
                             _( "Save current library" ) );
 
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiScaledBitmap( new_component_xpm, this ),
                             _( "Create new symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_PART, wxEmptyString,
-                            KiBitmap( save_part_xpm ),
+                            KiScaledBitmap( save_part_xpm, this ),
                             _( "Save current symbol" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_part_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiScaledBitmap( import_part_xpm, this ),
                             _( "Import symbol" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_part_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiScaledBitmap( export_part_xpm, this ),
                             _( "Export symbol" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
+    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiScaledBitmap( paste_xpm, this ),
                             _( "Paste" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     msg = AddHotkeyName( HELP_UNDO, g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
+    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ), msg );
 
     msg = AddHotkeyName( HELP_REDO, g_Libedit_Hokeys_Descr, HK_REDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
+    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ), msg );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
-                            KiBitmap( part_properties_xpm ), _( "Edit symbol properties" ) );
+                            KiScaledBitmap( part_properties_xpm, this ), _( "Edit symbol properties" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
-                            KiBitmap( text_xpm ),
+                            KiScaledBitmap( text_xpm, this ),
                             _( "Edit field properties" ) );
 
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiBitmap( erc_xpm ),
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
                             _( "Check duplicate and off grid pins" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
+
     msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Libedit_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_OUT, g_Libedit_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_FIT, g_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
                             _( "Zoom to selection" ), wxITEM_CHECK );
 
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString, KiBitmap( morgan1_xpm ),
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString, KiScaledBitmap( morgan1_xpm, this ),
                             _( "Show as \"De Morgan\" normal symbol" ), wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString, KiBitmap( morgan2_xpm ),
+    m_mainToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString, KiScaledBitmap( morgan2_xpm, this ),
                             _( "Show as \"De Morgan\" convert symbol" ), wxITEM_CHECK );
 
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString, KiBitmap( datasheet_xpm ),
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString, KiScaledBitmap( datasheet_xpm, this ),
                             _( "Show associated datasheet or document" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
+
     m_partSelectBox = new wxComboBox( m_mainToolBar,
                                       ID_LIBEDIT_SELECT_PART_NUMBER,
                                       wxEmptyString,
                                       wxDefaultPosition,
                                       wxSize( LISTBOX_WIDTH, -1 ),
-                                      0, NULL, wxCB_READONLY );
+                                      0, nullptr, wxCB_READONLY );
     m_mainToolBar->AddControl( m_partSelectBox );
 
     m_aliasSelectBox = new wxComboBox( m_mainToolBar,
@@ -195,19 +200,20 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                        wxEmptyString,
                                        wxDefaultPosition,
                                        wxSize( LISTBOX_WIDTH, -1 ),
-                                       0, NULL, wxCB_READONLY );
+                                       0, nullptr, wxCB_READONLY );
     m_mainToolBar->AddControl( m_aliasSelectBox );
 
     m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     msg = _( "Allows disabling pin edition coupling between units.\n"
              "When not disabled, adding, deleting and moving pins are synchronized\n"
              "between units for pins at the same location.\n"
              "For instance, adding a pin to a unit also add a similar pin to other units at the same location.\n"
              "However, pins can have a different number or size because they are specific to a unit.\n"
              "Usually synchronization is enabled when units are interchangeable and disabled if not." );
-    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, KiBitmap( pin2pin_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, KiScaledBitmap( pin2pin_xpm, this ),
                             msg, wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiBitmap( pin_table_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiScaledBitmap( pin_table_xpm, this ),
                             _( "Show pin table" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
@@ -215,37 +221,37 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 }
 
 
-void LIB_EDIT_FRAME::CreateOptionToolbar()
+void LIB_EDIT_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
-        return;
+        m_optionsToolBar->Clear();
+    else
+        m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                         KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiBitmap( unit_inch_xpm ), _( "Set units to inches" ),
+                               KiScaledBitmap( unit_inch_xpm, this ), _( "Set units to inches" ),
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiBitmap( unit_mm_xpm ),
+                               KiScaledBitmap( unit_mm_xpm, this ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
 #ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiBitmap( cursor_shape_xpm ),
+                               KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
 #endif // !__APPLE__
 
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
-                               KiBitmap( pin_show_etype_xpm ),
+                               KiScaledBitmap( pin_show_etype_xpm, this ),
                                _( "Show pins electrical type" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
-                               KiBitmap( search_tree_xpm ),
+                               KiScaledBitmap( search_tree_xpm, this ),
                                _( "Toggles the search tree" ), wxITEM_CHECK );
 
     m_optionsToolBar->Realize();

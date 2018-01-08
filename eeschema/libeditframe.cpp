@@ -54,6 +54,7 @@
 
 #include <kicad_device_context.h>
 #include <hotkeys.h>
+#include <eeschema_config.h>
 
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_component_in_lib.h>
@@ -280,7 +281,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             m_aliasName = part->GetName();
     }
 
-    CreateOptionToolbar();
+    ReCreateOptToolbar();
     DisplayLibInfos();
     DisplayCmpDoc();
     UpdateAliasSelectList();
@@ -1746,4 +1747,24 @@ void LIB_EDIT_FRAME::emptyScreen()
     m_dummyScreen->ClearUndoRedoList();
     Zoom_Automatique( false );
     Refresh();
+}
+
+
+int LIB_EDIT_FRAME::GetIconScale()
+{
+    int scale = 0;
+    Kiface().KifaceSettings()->Read( LibIconScaleEntry, &scale, 0 );
+    return scale;
+}
+
+
+void LIB_EDIT_FRAME::SetIconScale( int aScale )
+{
+    Kiface().KifaceSettings()->Write( LibIconScaleEntry, aScale );
+    ReCreateMenuBar();
+    ReCreateVToolbar();
+    ReCreateHToolbar();
+    ReCreateOptToolbar();
+    Layout();
+    SendSizeEvent();
 }

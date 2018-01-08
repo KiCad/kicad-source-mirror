@@ -1475,6 +1475,9 @@ public:
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
 
+    int GetIconScale() override;
+    void SetIconScale( int aScale ) override;
+
     ///> Probe cursor, used by circuit simulator
     const static wxCursor CURSOR_PROBE;
 

@@ -3,24 +3,20 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -41,66 +37,66 @@
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
-    if( m_mainToolBar != NULL )
-        return;
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
+        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiScaledBitmap( save_xpm, this ), SAVE_HLP_MSG );
 
-    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ), SAVE_HLP_MSG );
-
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_LIB_TABLE_EDIT, wxEmptyString,
-                            KiBitmap( config_xpm ),
+                            KiScaledBitmap( config_xpm, this ),
                             _( "Edit footprint library table" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString,
-                            KiBitmap( show_footprint_xpm ),
+                            KiScaledBitmap( show_footprint_xpm, this ),
                             _( "View selected footprint" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
-                            KiBitmap( left_xpm ),
+                            KiScaledBitmap( left_xpm, this ),
                             _( "Select previous unlinked symbol" ) );
 
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString,
-                            KiBitmap( right_xpm ),
+                            KiScaledBitmap( right_xpm, this ),
                             _( "Select next unlinked symbol" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
-                            KiBitmap( auto_associe_xpm ),
+                            KiScaledBitmap( auto_associe_xpm, this ),
                             _( "Perform automatic footprint association" ) );
 
     m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
-                            KiBitmap( delete_association_xpm ),
+                            KiScaledBitmap( delete_association_xpm, this ),
                             _( "Delete all footprint associations" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
-                            KiBitmap( module_filtered_list_xpm ),
+                            KiScaledBitmap( module_filtered_list_xpm, this ),
                             wxNullBitmap,
                             true, NULL,
                             _( "Filter footprint list by schematic symbol keywords" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
-                            KiBitmap( module_pin_filtered_list_xpm ),
+                            KiScaledBitmap( module_pin_filtered_list_xpm, this ),
                             wxNullBitmap,
                             true, NULL,
                             _( "Filter footprint list by pin count" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
-                            KiBitmap( module_library_list_xpm ),
+                            KiScaledBitmap( module_library_list_xpm, this ),
                             wxNullBitmap, true, NULL,
                             _( "Filter footprint list by library" ),
                             wxEmptyString );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
-                            KiBitmap( module_name_filtered_list_xpm ),
+                            KiScaledBitmap( module_name_filtered_list_xpm, this ),
                             wxNullBitmap, true, NULL,
                             _( "Filter footprint list using a partial name or a pattern" ),
                             wxEmptyString );

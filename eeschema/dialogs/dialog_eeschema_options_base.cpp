@@ -11,6 +11,8 @@
 
 BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, DIALOG_SHIM )
 	EVT_SIZE( DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnSize )
+	EVT_SCROLL( DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnScaleSlider )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnScaleAuto )
 	EVT_CHOICE( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnChooseUnits )
 	EVT_BUTTON( wxID_ADD_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnAddButtonClick )
 	EVT_BUTTON( wxID_DELETE_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnDeleteButtonClick )
@@ -87,6 +89,26 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 	
+	m_stIconScale = new wxStaticText( m_panel5, wxID_ANY, _("Icon scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stIconScale->Wrap( -1 );
+	fgSizer32->Add( m_stIconScale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
+	
+	m_scaleSlider = new STEPPED_SLIDER( m_panel5, wxID_ANY, 50, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer32->Add( m_scaleSlider, 0, wxALL|wxEXPAND, 3 );
+	
+	m_staticText211 = new wxStaticText( m_panel5, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText211->Wrap( -1 );
+	fgSizer32->Add( m_staticText211, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
+	
+	
+	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_scaleAuto = new wxCheckBox( m_panel5, wxID_ANY, _("Auto"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer32->Add( m_scaleAuto, 0, wxALL|wxEXPAND, 3 );
+	
+	
+	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	
 	bSizer82->Add( fgSizer32, 0, wxALL|wxEXPAND, 5 );
 	
@@ -119,7 +141,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel5->SetSizer( bSizer82 );
 	m_panel5->Layout();
 	bSizer82->Fit( m_panel5 );
-	m_notebook->AddPage( m_panel5, _("Display"), false );
+	m_notebook->AddPage( m_panel5, _("Display"), true );
 	m_panel3 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -358,7 +380,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Default Fields"), true );
+	m_notebook->AddPage( m_panel2, _("Default Fields"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	

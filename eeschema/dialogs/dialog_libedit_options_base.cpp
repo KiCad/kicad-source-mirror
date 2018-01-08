@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,6 +8,11 @@
 #include "dialog_libedit_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
+
+BEGIN_EVENT_TABLE( DIALOG_LIBEDIT_OPTIONS_BASE, DIALOG_SHIM )
+	EVT_SCROLL( DIALOG_LIBEDIT_OPTIONS_BASE::_wxFB_OnScaleSlider )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_LIBEDIT_OPTIONS_BASE::_wxFB_OnScaleAuto )
+END_EVENT_TABLE()
 
 DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
@@ -135,6 +140,26 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	
 	fgSizer->Add( 0, 0, 0, 0, 5 );
+	
+	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Icon scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	fgSizer->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_scaleSlider = new STEPPED_SLIDER( this, wxID_ANY, 50, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer->Add( m_scaleSlider, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText19 = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	fgSizer->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_scaleAuto = new wxCheckBox( this, wxID_ANY, _("Auto"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer->Add( m_scaleAuto, 0, wxALL, 5 );
+	
+	
+	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
 	bSizer3->Add( fgSizer, 0, wxEXPAND, 0 );

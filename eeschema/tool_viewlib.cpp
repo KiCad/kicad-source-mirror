@@ -3,24 +3,20 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -47,81 +43,81 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     wxString    msg;
     LIB_PART*   part = NULL;
 
-    if( m_mainToolBar == NULL )
-    {
+    if( m_mainToolBar )
+        m_mainToolBar->Clear();
+    else
         m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                           KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-        m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-                                KiBitmap( add_component_xpm ),
-                                _( "Select symbol to browse" ) );
+    m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
+            KiScaledBitmap( add_component_xpm, this ),
+            _( "Select symbol to browse" ) );
 
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
+            KiScaledBitmap( lib_previous_xpm, this ),
+            _( "Display previous symbol" ) );
+
+    m_mainToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
+            KiScaledBitmap( lib_next_xpm, this ),
+            _( "Display next symbol" ) );
+
+    m_mainToolBar->AddSeparator();
+    msg = AddHotkeyName( _( "Zoom in" ), g_Viewlib_Hokeys_Descr,
+            HK_ZOOM_IN, IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
+            KiScaledBitmap( zoom_in_xpm, this ), msg );
+
+    msg = AddHotkeyName( _( "Zoom out" ), g_Viewlib_Hokeys_Descr,
+            HK_ZOOM_OUT, IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
+            KiScaledBitmap( zoom_out_xpm, this ), msg );
+
+    msg = AddHotkeyName( _( "Redraw view" ), g_Viewlib_Hokeys_Descr,
+            HK_ZOOM_REDRAW, IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
+            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
+
+    msg = AddHotkeyName( _( "Zoom auto" ), g_Viewlib_Hokeys_Descr,
+            HK_ZOOM_AUTO, IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
+            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
+
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
+            KiScaledBitmap( morgan1_xpm, this ),
+            _( "Show as \"De Morgan\" normal symbol" ),
+            wxITEM_CHECK );
+
+    m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
+            KiScaledBitmap( morgan2_xpm, this ),
+            _( "Show as \"De Morgan\" convert symbol" ),
+            wxITEM_CHECK );
+
+    m_mainToolBar->AddSeparator();
+
+    m_selpartBox = new wxComboBox( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+            wxEmptyString, wxDefaultPosition,
+            wxSize( 150, -1 ), 0, NULL, wxCB_READONLY );
+    m_mainToolBar->AddControl( m_selpartBox );
+
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
+            KiScaledBitmap( datasheet_xpm, this ),
+            _( "View symbol documents" ) );
+    m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
+
+    if( IsModal() )
+    {
         m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-                                KiBitmap( lib_previous_xpm ),
-                                _( "Display previous symbol" ) );
-
-        m_mainToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-                                KiBitmap( lib_next_xpm ),
-                                _( "Display next symbol" ) );
-
-        m_mainToolBar->AddSeparator();
-        msg = AddHotkeyName( _( "Zoom in" ), g_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_IN, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-                                KiBitmap( zoom_in_xpm ), msg );
-
-        msg = AddHotkeyName( _( "Zoom out" ), g_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_OUT, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-                                KiBitmap( zoom_out_xpm ), msg );
-
-        msg = AddHotkeyName( _( "Redraw view" ), g_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_REDRAW, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                             KiBitmap( zoom_redraw_xpm ), msg );
-
-        msg = AddHotkeyName( _( "Zoom auto" ), g_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_AUTO, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                                KiBitmap( zoom_fit_in_page_xpm ), msg );
-
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-                                KiBitmap( morgan1_xpm ),
-                                _( "Show as \"De Morgan\" normal symbol" ),
-                                wxITEM_CHECK );
-
-        m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-                                KiBitmap( morgan2_xpm ),
-                                _( "Show as \"De Morgan\" convert symbol" ),
-                                wxITEM_CHECK );
-
-        m_mainToolBar->AddSeparator();
-
-        m_selpartBox = new wxComboBox( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
-                                       wxEmptyString, wxDefaultPosition,
-                                       wxSize( 150, -1 ), 0, NULL, wxCB_READONLY );
-        m_mainToolBar->AddControl( m_selpartBox );
-
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
-                                KiBitmap( datasheet_xpm ),
-                                _( "View symbol documents" ) );
-        m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
-
-        if( IsModal() )
-        {
-            m_mainToolBar->AddSeparator();
-            m_mainToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-                                    wxEmptyString, KiBitmap( export_xpm ),
-                                    _( "Insert symbol in schematic" ) );
-        }
-
-        // after adding the buttons to the toolbar, must call Realize() to
-        // reflect the changes
-        m_mainToolBar->Realize();
+        m_mainToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
+                wxEmptyString, KiScaledBitmap( export_xpm, this ),
+                _( "Insert symbol in schematic" ) );
     }
+
+    // after adding the buttons to the toolbar, must call Realize() to
+    // reflect the changes
+    m_mainToolBar->Realize();
 
     if( m_libraryName.size() && m_entryName.size() )
     {

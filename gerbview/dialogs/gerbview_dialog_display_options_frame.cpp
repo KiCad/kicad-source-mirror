@@ -2,24 +2,20 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -53,11 +49,18 @@ class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 private:
     GERBVIEW_FRAME* m_Parent;
     GAL_OPTIONS_PANEL* m_galOptsPanel;
+    int m_last_scale;
 
 public:
 
     DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME* parent );
     ~DIALOG_DISPLAY_OPTIONS() {};
+
+protected:
+    void OnScaleSlider( wxScrollEvent& aEvent ) override;
+    void OnScaleAuto( wxCommandEvent& aEvent ) override;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
 private:
     void OnOKBUttonClick( wxCommandEvent& event ) override;
@@ -77,9 +80,11 @@ void GERBVIEW_FRAME::InstallGerberOptionsDialog( wxCommandEvent& event )
 
 
 DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME *parent) :
-    DIALOG_DISPLAY_OPTIONS_BASE( parent, wxID_ANY )
+    DIALOG_DISPLAY_OPTIONS_BASE( parent, wxID_ANY ),
+    m_last_scale( -1 )
 {
     m_Parent = parent;
+    m_scaleSlider->SetStep( 25 );
     SetFocus();
     initOptDialog( );
 
@@ -139,6 +144,7 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 
 void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 {
+    TransferDataFromWindow();
     auto displayOptions = (GBR_DISPLAY_OPTIONS*) m_Parent->GetDisplayOptions();
 
     m_Parent->m_DisplayOptions.m_DisplayPolarCood =
@@ -192,3 +198,56 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     EndModal( 1 );
 }
 
+
+bool DIALOG_DISPLAY_OPTIONS::TransferDataToWindow()
+{
+    const auto parent = static_cast<GERBVIEW_FRAME*>( GetParent() );
+    const int scale_fourths = parent->GetIconScale();
+
+    if( scale_fourths <= 0 )
+    {
+        m_scaleAuto->SetValue( true );
+        m_scaleSlider->SetValue( 25 * KiIconScale( parent ) );
+    }
+    else
+    {
+        m_scaleAuto->SetValue( false );
+        m_scaleSlider->SetValue( scale_fourths * 25 );
+    }
+
+    return true;
+}
+
+
+bool DIALOG_DISPLAY_OPTIONS::TransferDataFromWindow()
+{
+    const auto parent = static_cast<GERBVIEW_FRAME*>( GetParent() );
+    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
+
+    if( parent->GetIconScale() != scale_fourths )
+        parent->SetIconScale( scale_fourths );
+
+    return true;
+}
+
+
+void DIALOG_DISPLAY_OPTIONS::OnScaleSlider( wxScrollEvent& aEvent )
+{
+    m_scaleAuto->SetValue( false );
+    aEvent.Skip();
+}
+
+
+void DIALOG_DISPLAY_OPTIONS::OnScaleAuto( wxCommandEvent& aEvent )
+{
+    if( m_scaleAuto->GetValue() )
+    {
+        m_last_scale = m_scaleSlider->GetValue();
+        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        if( m_last_scale >= 0 )
+            m_scaleSlider->SetValue( m_last_scale );
+    }
+}
