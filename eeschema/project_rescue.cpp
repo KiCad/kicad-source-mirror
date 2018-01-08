@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,11 @@ wxString RESCUE_CACHE_CANDIDATE::GetActionDescription() const
 
 bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
-    LIB_PART new_part( *m_cache_candidate );
+    LIB_PART* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
+
+    wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
+
+    LIB_PART new_part( *tmp );
     new_part.SetName( m_new_name );
     new_part.RemoveAllAliases();
     aRescuer->AddPart( &new_part );
@@ -410,7 +414,11 @@ wxString RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::GetActionDescription() const
 
 bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
-    LIB_PART new_part( *m_cache_candidate );
+    LIB_PART* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
+
+    wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
+
+    LIB_PART new_part( *tmp );
     new_part.SetName( m_new_id.GetLibItemName() );
     new_part.RemoveAllAliases();
     aRescuer->AddPart( &new_part );
