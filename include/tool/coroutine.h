@@ -135,9 +135,9 @@ public:
         m_func( std::move( aEntry ) ),
         m_running( false ),
         m_args( 0 ),
+        m_callContext( nullptr ),
         m_callee( nullptr ),
-        m_retVal( 0 ),
-        m_callContext( nullptr )
+        m_retVal( 0 )
     {
     }
 
