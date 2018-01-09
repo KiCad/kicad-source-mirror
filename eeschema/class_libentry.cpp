@@ -85,12 +85,10 @@ LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootPart ) :
 
 LIB_ALIAS::~LIB_ALIAS()
 {
-    wxASSERT_MSG( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
+    wxLogTrace( traceSchLibMem, wxT( "%s: destroying alias:'%s'" ),
+                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( GetName() ) );
 
-    wxLogTrace( traceSchLibMem,
-                wxT( "%s: destroying alias:'%s' of part:'%s'." ),
-                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( name ),
-                GetChars( shared->GetName() ) );
+    wxCHECK_RET( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
 
     if( shared )
         shared->RemoveAlias( this );
@@ -209,7 +207,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
 LIB_PART::~LIB_PART()
 {
     wxLogTrace( traceSchLibMem,
-                wxT( "%s: destroying part with alias list count of %llu." ),
+                wxT( "%s: destroying part with alias list count of %llu" ),
                 GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
                 (long long unsigned) m_aliases.size() );
 
