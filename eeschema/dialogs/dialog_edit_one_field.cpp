@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,12 +277,13 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     wxASSERT_MSG( component != NULL && component->Type() == SCH_COMPONENT_T,
                   wxT( "Invalid schematic field parent item." ) );
 
+    // The library symbol may have been removed so using SCH_COMPONENT::GetPartRef() here
+    // could result in a segfault.  If the library symbol is no longer available, the
+    // schematic fields can still edit so set the power symbol flag to false.  This may not
+    // be entirely accurate if the power library is missing but it's better then a segfault.
     const LIB_PART* part = GetParent()->GetLibPart( component->GetLibId(), true );
 
-    wxASSERT_MSG( part, wxT( "Library symbol for schematic symbol <" ) +
-                  component->GetLibId().Format() + wxT( "> could not be found." ) );
-
-    m_isPower = part->IsPower();
+    m_isPower = ( part ) ? part->IsPower() : false;
 
     init();
 }
