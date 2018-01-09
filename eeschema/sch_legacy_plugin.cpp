@@ -2515,6 +2515,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         part->GetValueField().SetVisible( false );
     }
 
+    // Don't set the library alias, this is determined by the symbol library table.
+    part->SetLibId( LIB_ID( wxEmptyString, part->GetName() ) );
+
     // There are some code paths in SetText() that do not set the root alias to the
     // alias list so add it here if it didn't get added by SetText().
     if( !part->HasAlias( part->GetName() ) )

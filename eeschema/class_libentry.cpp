@@ -1203,15 +1203,6 @@ void LIB_PART::SetConversion( bool aSetConvert )
 }
 
 
-void LIB_PART::SetLib( PART_LIB* aLibrary )
-{
-    m_library = aLibrary;
-
-    if( aLibrary )
-        m_libId.SetLibNickname( aLibrary->GetName() );
-}
-
-
 wxArrayString LIB_PART::GetAliasNames( bool aIncludeRoot ) const
 {
     wxArrayString names;

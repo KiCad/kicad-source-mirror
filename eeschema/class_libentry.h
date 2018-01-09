@@ -265,12 +265,13 @@ public:
     const wxString& GetName() const;
 
     const LIB_ID& GetLibId() const { return m_libId; }
+    void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
 
     const wxString GetLibraryName();
 
     PART_LIB* GetLib()              { return m_library; }
 
-    void SetLib( PART_LIB* aLibrary );
+    void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
 

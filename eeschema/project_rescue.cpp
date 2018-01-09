@@ -437,6 +437,7 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
     wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
 
     LIB_PART new_part( *tmp );
+    new_part.SetLibId( m_new_id );
     new_part.SetName( m_new_id.GetLibItemName() );
     new_part.RemoveAllAliases();
     aRescuer->AddPart( &new_part );
