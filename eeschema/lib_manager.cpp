@@ -338,13 +338,12 @@ SCH_SCREEN* LIB_MANAGER::GetScreen( const wxString& aAlias, const wxString& aLib
 }
 
 
-bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary, wxString aOldName )
+bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 {
     wxCHECK( LibraryExists( aLibrary ), false );
     wxCHECK( aPart, false );
-    const wxString partName = aOldName.IsEmpty() ? aPart->GetName() : aOldName;
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
-    auto partBuf = libBuf.GetBuffer( partName );
+    auto partBuf = libBuf.GetBuffer( aPart->GetName() );
     LIB_PART* partCopy = new LIB_PART( *aPart, nullptr );
 
     if( partBuf )

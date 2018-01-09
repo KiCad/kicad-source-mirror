@@ -166,8 +166,10 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         if( !parent->HasAlias( m_aliasName ) )
             m_aliasName = newFieldValue;
 
-        //m_libMgr->RemovePart( fieldText, lib );
-        m_libMgr->UpdatePart( parent, lib, fieldText );
+        if( newFieldValue != fieldText )
+            m_libMgr->RemovePart( fieldText, lib );
+
+        m_libMgr->UpdatePart( parent, lib );
     }
 
 

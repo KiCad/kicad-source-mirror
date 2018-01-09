@@ -1146,7 +1146,10 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
         m_drawSpecificUnit = GetCurPart()->UnitsLocked() ? true : false;
     }
 
-    m_libMgr->UpdatePart( GetCurPart(), GetCurLib(), oldName );
+    if( oldName != GetCurPart()->GetName() )
+        m_libMgr->RemovePart( GetCurLib(), oldName );
+
+    m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
 
     UpdateAliasSelectList();
     UpdatePartSelectList();
