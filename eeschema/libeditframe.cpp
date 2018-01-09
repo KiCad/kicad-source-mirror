@@ -617,7 +617,7 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
 {
     LIB_PART*      part = GetCurPart();
 
-    event.Enable( part && ( part->GetUnitCount() > 1 || m_showDeMorgan ) );
+    event.Enable( part && part->GetUnitCount() > 1 && !part->UnitsLocked() );
 
     event.Check( m_editPinsSeparately );
 }
@@ -1412,24 +1412,30 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
 
     if( item->Type() == LIB_PIN_T )
     {
-        LIB_PIN*    pin = (LIB_PIN*) item;
+        LIB_PIN*    pin = static_cast<LIB_PIN*>( item );
         wxPoint     pos = pin->GetPosition();
 
         part->RemoveDrawItem( (LIB_ITEM*) pin, m_canvas, aDC );
 
+        // when pin edition is synchronized, all pins of the same body style
+        // are removed:
         if( SynchronizePins() )
         {
-            LIB_PIN* tmp = part->GetNextPin();
+            int curr_convert = pin->GetConvert();
+            LIB_PIN* next_pin = part->GetNextPin();
 
-            while( tmp != NULL )
+            while( next_pin != NULL )
             {
-                pin = tmp;
-                tmp = part->GetNextPin( pin );
+                pin = next_pin;
+                next_pin = part->GetNextPin( pin );
 
                 if( pin->GetPosition() != pos )
                     continue;
 
-                part->RemoveDrawItem( (LIB_ITEM*) pin );
+                if( pin->GetConvert() != curr_convert )
+                    continue;
+
+                part->RemoveDrawItem( pin );
             }
         }
 
@@ -1495,8 +1501,7 @@ bool LIB_EDIT_FRAME::SynchronizePins()
 {
     LIB_PART*      part = GetCurPart();
 
-    return !m_editPinsSeparately && ( part &&
-        ( part->HasConversion() || part->IsMulti() ) );
+    return !m_editPinsSeparately && part && part->IsMulti() && !part->UnitsLocked();
 }
 
 

@@ -210,9 +210,12 @@ public:
     void Process_Config( wxCommandEvent& event );
 
     /**
-     * @return True if the edit pins per part or convert is false and the current
-     *         component has multiple parts or body styles.  Otherwise false is
-     *         returned.
+     * Pin edition (add, delete, move...) can be synchronized between units
+     * when units are interchangeable because in this case similar pins are expected
+     * at the same location
+     * @return true if the edit pins separately option is false and the current symbol
+     * has multiple interchengeable units.
+     * Otherwise return false.
      */
     bool SynchronizePins();
 
@@ -566,16 +569,11 @@ private:
     void StartMovePin( wxDC* DC );
 
     /**
-     * Adds copies of \a aPin for \a aUnit in components with multiple parts and
-     * \a aConvert for components that have multiple body styles.
+     * Adds copies of \a aPin in components with multiple units in all units
      *
-     * @param aPin The pin to copy.
-     * @param aUnit The unit to add a copy of \a aPin to.
-     * @param aConvert The alternate body style to add a copy of \a aPin to.
-     * @param aDeMorgan Flag to indicate if \a aPin should be created for the
-     *                  alternate body style.
+     * @param aPin The pin to copy to others units.
      */
-    void CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bool aDeMorgan );
+    void CreateImagePins( LIB_PIN* aPin );
 
     /**
      * Places an  anchor reference coordinate for the current component.
