@@ -112,30 +112,21 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 }
 
 
+DIALOG_SHIM* findQuasiModalDialog( wxWindowList& aList )
+{
+    for( wxWindowList::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    {
+        DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( *iter );
+        if( dlg && dlg->IsQuasiModal() )
+            return dlg;
+    }
+    return NULL;
+}
+
+
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
-    DIALOG_SHIM* dlg  = NULL;
-    wxWindowList list = GetChildren();
-
-    // Quasi modal dialogs create issues (crashes) when closing Kicad.
-    // I am guessing they are delete too late, when deleting main frames.
-    // AFAIK, only these DIALOG_SHIM dialogs create such issues.
-    // The policy is do not allow closing Kicad if a Quasi modal dialog is open.
-    // (Anyway, closing without prompting the user is certainly bad,
-    // because an edit is in preogress)
-    // Therefore, iterate through the child list to find at least
-    // a DIALOG_SHIM opened in quasi modal mode
-    for( wxWindowList::iterator iter = list.begin(); iter != list.end(); ++iter )
-    {
-        if( (dlg = dynamic_cast<DIALOG_SHIM*> (*iter) ) != NULL )
-        {
-            if( dlg->IsQuasiModal() )
-                break;
-            else
-                dlg = NULL;
-        }
-    }
-
+    DIALOG_SHIM* dlg = findQuasiModalDialog( GetChildren() );
     if( dlg )
     {
         // Happens when a quasi modal dialog is currently open.
@@ -184,6 +175,13 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 
 bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 {
+    if( !IsEnabled() && IsActive() )
+    {
+        DIALOG_SHIM* dlg = findQuasiModalDialog( GetChildren() );
+        if( dlg )
+            dlg->Raise();
+    }
+
     if( !wxFrame::ProcessEvent( aEvent ) )
         return false;
 
