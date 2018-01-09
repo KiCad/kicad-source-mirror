@@ -146,6 +146,12 @@ void COMPONENT_TREE::SelectLibId( const LIB_ID& aLibId )
 }
 
 
+void COMPONENT_TREE::Unselect()
+{
+    m_tree_ctrl->UnselectAll();
+}
+
+
 void COMPONENT_TREE::Regenerate()
 {
     STATE current;
@@ -232,7 +238,7 @@ void COMPONENT_TREE::setState( const STATE& aState )
     // command is issued, otherwise it selects a random item (Windows)
     m_tree_ctrl->Thaw();
 
-    if( aState.selection.IsValid() )
+    if( !aState.selection.GetLibItemName().empty() || !aState.selection.GetLibNickname().empty() )
         SelectLibId( aState.selection );
 }
 

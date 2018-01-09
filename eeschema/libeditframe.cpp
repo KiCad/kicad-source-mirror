@@ -1635,6 +1635,11 @@ wxString LIB_EDIT_FRAME::getTargetLib() const
 
 void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
 {
+    LIB_ID selected;
+
+    if( m_treePane )
+        selected = m_treePane->GetCmpTree()->GetSelectedLibId();
+
     if( aProgress )
     {
         wxProgressDialog progressDlg( _( "Loading Symbol Libraries" ),
@@ -1650,7 +1655,31 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
     }
 
     if( m_treePane )
+    {
+        wxDataViewItem found;
+
+        if( selected.IsValid() )
+        {
+            // Check if the previously selected item is still valid,
+            // if not - it has to be unselected to prevent crash
+            found = m_libMgr->GetAdapter()->FindItem( selected );
+
+            if( !found )
+                m_treePane->GetCmpTree()->Unselect();
+        }
+
         m_treePane->Regenerate();
+
+        // Try to select the parent library, in case the part is not found
+        if( !found && selected.IsValid() )
+        {
+            selected.SetLibItemName( "" );
+            found = m_libMgr->GetAdapter()->FindItem( selected );
+
+            if( found )
+                m_treePane->GetCmpTree()->SelectLibId( selected );
+        }
+    }
 }
 
 

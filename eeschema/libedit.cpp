@@ -378,10 +378,6 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
     if( isCurrentPart( libId ) )
         emptyScreen();
 
-    // Keeping a removed item selected may lead to a crash
-    if( m_treePane->GetCmpTree()->GetSelectedLibId( nullptr ) == libId )
-        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( libId.GetLibNickname(), "" ) );
-
     m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
 }
 
@@ -389,7 +385,8 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
 {
     int unit = 0;
-    LIB_ID partId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
+    auto cmpTree = m_treePane->GetCmpTree();
+    LIB_ID partId = cmpTree->GetSelectedLibId( &unit );
     LIB_PART* part = m_libMgr->GetBufferedPart( partId.GetLibItemName(), partId.GetLibNickname() );
 
     if( !part )
@@ -402,10 +399,6 @@ void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
     {
         if( isCurrentPart( libId ) )
             emptyScreen();
-
-        // Keeping a removed item selected may lead to a crash
-        if( m_treePane->GetCmpTree()->GetSelectedLibId( nullptr ) == libId )
-            m_treePane->GetCmpTree()->SelectLibId( LIB_ID( libId.GetLibNickname(), "" ) );
 
         m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
     }

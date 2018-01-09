@@ -35,7 +35,10 @@
 #include <symbol_lib_table.h>
 #include <template_fieldnames.h>
 #include <dialog_edit_one_field.h>
+
 #include <lib_manager.h>
+#include <widgets/cmp_tree_pane.h>
+#include <component_tree.h>
 
 
 void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
@@ -166,10 +169,11 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         if( !parent->HasAlias( m_aliasName ) )
             m_aliasName = newFieldValue;
 
-        if( newFieldValue != fieldText )
-            m_libMgr->RemovePart( fieldText, lib );
-
+        m_libMgr->RemovePart( fieldText, lib );
         m_libMgr->UpdatePart( parent, lib );
+
+        // Reselect the renamed part
+        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, newFieldValue ) );
     }
 
 

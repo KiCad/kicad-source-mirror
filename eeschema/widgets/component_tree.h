@@ -78,6 +78,11 @@ public:
     void SelectLibId( const LIB_ID& aLibId );
 
     /**
+     * Unselect currently selected item in wxDataViewCtrl
+     */
+    void Unselect();
+
+    /**
      * Associates a right click context menu for a specific node type.
      * @param aType is the node type to have a menu associated.
      * @param aMenu is the associated menu.
