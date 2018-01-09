@@ -288,7 +288,17 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 wxString RESCUE_CACHE_CANDIDATE::GetActionDescription() const
 {
     wxString action;
-    action.Printf( _( "Rescue %s as %s" ), m_requested_name, m_new_name );
+
+    if( !m_cache_candidate && !m_lib_candidate )
+        action.Printf( _( "Cannot rescue symbol %s which is not avialable in any library or "
+                          "the cache." ), m_requested_name );
+    else if( m_cache_candidate && !m_lib_candidate )
+        action.Printf( _( "Rescue symbol %s found only in cache library to %s." ),
+                       m_requested_name, m_new_name );
+    else
+        action.Printf( _( "Rescue modified symbol %s to %s" ),
+                       m_requested_name, m_new_name );
+
     return action;
 }
 
@@ -356,8 +366,6 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
     LIB_PART* lib_match = nullptr;
     LIB_ID old_part_id;
 
-    wxString part_name_suffix = aRescuer.GetPartNameSuffix();
-
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
         LIB_ID part_id = each_component->GetLibId();
@@ -367,7 +375,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             // A new part name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_part_id = part_id;
-            cache_match = find_component( part_id.GetLibItemName(), aRescuer.GetPrj()->SchLibs(),
+            cache_match = find_component( part_id.Format().wx_str(), aRescuer.GetPrj()->SchLibs(),
                                           true );
 
             lib_match = aRescuer.GetFrame()->GetLibPart( part_id );
@@ -382,13 +390,13 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
               && !LIB_ID::HasIllegalChars( part_id.GetLibItemName() ) )
                 continue;
 
-            // May have been rescued already.
+            // Fix illegal LIB_ID name characters.
             wxString new_name = LIB_ID::FixIllegalChars( part_id.GetLibItemName() );
 
-            if( new_name.Find( part_name_suffix ) == wxNOT_FOUND )
-                new_name += part_name_suffix;
-
-            LIB_ID new_id( GetRescueLibraryFileName().GetName(), new_name );
+            // Differentiate symbol name in the resue library by appending the symbol library
+            // table nickname to the symbol name to prevent name clashes in the rescue library.
+            LIB_ID new_id( GetRescueLibraryFileName().GetName(),
+                           new_name + "-" + part_id.GetLibNickname().wx_str() );
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( part_id, new_id, cache_match, lib_match );
 
@@ -407,7 +415,17 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 wxString RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::GetActionDescription() const
 {
     wxString action;
-    action.Printf( _( "Rescue to %s" ), m_new_id.Format().wx_str() );
+
+    if( !m_cache_candidate && !m_lib_candidate )
+        action.Printf( _( "Cannot rescue symbol %s which is not avialable in any library or "
+                          "the cache." ), m_requested_id.GetLibItemName().wx_str() );
+    else if( m_cache_candidate && !m_lib_candidate )
+        action.Printf( _( "Rescue symbol %s found only in cache library to %s." ),
+                       m_requested_id.Format().wx_str(), m_new_id.Format().wx_str() );
+    else
+        action.Printf( _( "Rescue modified symbol %s to %s" ),
+                       m_requested_id.Format().wx_str(), m_new_id.Format().wx_str() );
+
     return action;
 }
 
