@@ -290,7 +290,7 @@ wxString RESCUE_CACHE_CANDIDATE::GetActionDescription() const
     wxString action;
 
     if( !m_cache_candidate && !m_lib_candidate )
-        action.Printf( _( "Cannot rescue symbol %s which is not avialable in any library or "
+        action.Printf( _( "Cannot rescue symbol %s which is not available in any library or "
                           "the cache." ), m_requested_name );
     else if( m_cache_candidate && !m_lib_candidate )
         action.Printf( _( "Rescue symbol %s found only in cache library to %s." ),
@@ -417,7 +417,7 @@ wxString RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::GetActionDescription() const
     wxString action;
 
     if( !m_cache_candidate && !m_lib_candidate )
-        action.Printf( _( "Cannot rescue symbol %s which is not avialable in any library or "
+        action.Printf( _( "Cannot rescue symbol %s which is not available in any library or "
                           "the cache." ), m_requested_id.GetLibItemName().wx_str() );
     else if( m_cache_candidate && !m_lib_candidate )
         action.Printf( _( "Rescue symbol %s found only in cache library to %s." ),
