@@ -165,8 +165,6 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 {
-    wxLogDebug( "In DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()" );
-
     m_TextValue->SetValue( m_text );
 
     if( m_fieldId == REFERENCE )
@@ -214,8 +212,6 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 {
-    wxLogDebug( "In DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()" );
-
     m_text = m_TextValue->GetValue();
 
     // There are lots of specific tests required to validate field text.
