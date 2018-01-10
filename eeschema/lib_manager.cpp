@@ -318,7 +318,11 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
             wxCHECK( alias, nullptr );
             bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
             libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
-        } catch( IO_ERROR& e ) {}
+        }
+        catch( IO_ERROR& e ) 
+        {
+            bufferedPart = nullptr;
+        }
     }
 
     return bufferedPart;
@@ -387,6 +391,7 @@ bool LIB_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary )
     auto partBuf = it->second.GetBuffer( aAlias );
     wxCHECK( partBuf, false );
     partBuf->SetPart( new LIB_PART( *partBuf->GetOriginal() ) );
+    m_frame.SyncLibraries( false );
 
     return true;
 }
@@ -587,6 +592,7 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
     if( it != m_libs.end() )
         return it->second;
 
+    // The requested buffer does not exist yet, so create one
     auto ret = m_libs.emplace( aLibrary, LIB_BUFFER( aLibrary ) );
     LIB_BUFFER& buf = ret.first->second;
 

@@ -132,8 +132,22 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
 {
     wxASSERT( aParent && aAlias );
 
-    Type        = LIBID;
-    Parent      = aParent;
+    Type = LIBID;
+    Parent = aParent;
+    Update( aAlias );
+}
+
+
+CMP_TREE_NODE_UNIT& CMP_TREE_NODE_LIB_ID::AddUnit( int aUnit )
+{
+    CMP_TREE_NODE_UNIT* unit = new CMP_TREE_NODE_UNIT( this, aUnit );
+    Children.push_back( std::unique_ptr<CMP_TREE_NODE>( unit ) );
+    return *unit;
+}
+
+
+void CMP_TREE_NODE_LIB_ID::Update( LIB_ALIAS* aAlias )
+{
     Name        = aAlias->GetName();
     Desc        = aAlias->GetDescription();
 
@@ -165,21 +179,13 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
         SearchText += footprint.Lower();
     }
 
+    Children.clear();
+
     if( part && part->IsMulti() )
     {
         for( int u = 1; u <= part->GetUnitCount(); ++u )
-        {
             AddUnit( u );
-        }
     }
-}
-
-
-CMP_TREE_NODE_UNIT& CMP_TREE_NODE_LIB_ID::AddUnit( int aUnit )
-{
-    CMP_TREE_NODE_UNIT* unit = new CMP_TREE_NODE_UNIT( this, aUnit );
-    Children.push_back( std::unique_ptr<CMP_TREE_NODE>( unit ) );
-    return *unit;
 }
 
 

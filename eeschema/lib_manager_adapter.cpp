@@ -113,13 +113,15 @@ int LIB_MANAGER_ADAPTER::GetLibrariesCount() const
 
 void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
 {
-    if( m_libHashes.count( aLibNode.Name ) == 0 )
+    auto hashIt = m_libHashes.find( aLibNode.Name );
+
+    if( hashIt == m_libHashes.end() )
     {
         // add a new library
         for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
             aLibNode.AddAlias( alias );
     }
-    else
+    else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.Name ) )
     {
         // update an existing libary
         std::list<LIB_ALIAS*> aliases = m_libMgr->GetAliases( aLibNode.Name );
@@ -135,7 +137,8 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
             if( aliasIt != aliases.end() )
             {
                 // alias exists both in the component tree and the library manager,
-                // no need to update
+                // update only the node data
+                static_cast<CMP_TREE_NODE_LIB_ID*>( nodeIt->get() )->Update( *aliasIt );
                 aliases.erase( aliasIt );
                 ++nodeIt;
             }
@@ -194,7 +197,7 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
             // mark modified libs with bold font
             aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
 
-            // mark current library with inverted colors
+            // mark the current library with inverted colors
             if( node->Name == m_libMgr->GetCurrentLib() )
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 
@@ -207,7 +210,7 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
             // mark aliases with italic font
             aAttr.SetItalic( !node->IsRoot );
 
-            // mark current library with inverted colors
+            // mark the current part with inverted colors
             if( node->LibId == m_libMgr->GetCurrentLibId() )
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 

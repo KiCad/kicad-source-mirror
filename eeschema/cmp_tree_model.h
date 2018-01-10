@@ -202,6 +202,10 @@ public:
      */
     CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias );
 
+    /**
+     * Update the node using data from a LIB_ALIAS object.
+     */
+    void Update( LIB_ALIAS* aAlias );
 
     /**
      * Perform the actual search.
