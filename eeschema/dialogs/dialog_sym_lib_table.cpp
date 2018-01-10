@@ -266,11 +266,11 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
                 // button.
                 model.DeleteRows( r, 1 );
             }
-            else if( nick.find( ':' ) != size_t( -1 ) )
+            else if( nick.find( ':' ) != size_t( -1 ) || nick.find( ' ' ) != size_t( -1 ) )
             {
                 wxString msg = wxString::Format(
                     _( "Illegal character \"%s\" found in Nickname: \"%s\" in row %d" ),
-                    ":", GetChars( nick ), r );
+                    ( nick.find( ':' ) != size_t( -1 ) ) ? ":" : " ", GetChars( nick ), r + 1 );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( &model != cur_model() )

@@ -153,6 +153,10 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             int libNameInc = 1;
             int libNameLen = libName.Length();
 
+            // Spaces in the file name will break the symbol name because they are not
+            // quoted in the symbol library file format.
+            libName.Replace( " ", "-" );
+
             // Don't create duplicate table entries.
             while( std::find( libNames.begin(), libNames.end(), libName ) != libNames.end() )
             {

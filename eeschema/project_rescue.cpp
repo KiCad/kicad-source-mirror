@@ -395,8 +395,12 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
             // Differentiate symbol name in the resue library by appending the symbol library
             // table nickname to the symbol name to prevent name clashes in the rescue library.
-            LIB_ID new_id( GetRescueLibraryFileName().GetName(),
-                           new_name + "-" + part_id.GetLibNickname().wx_str() );
+            wxString libNickname = GetRescueLibraryFileName().GetName();
+
+            // Spaces in the file name will break the symbol name because they are not
+            // quoted in the symbol library file format.
+            libNickname.Replace( " ", "-" );
+            LIB_ID new_id( libNickname, new_name + "-" + part_id.GetLibNickname().wx_str() );
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( part_id, new_id, cache_match, lib_match );
 
@@ -808,7 +812,13 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame )
         }
 
         wxString uri = "${KIPRJMOD}/" + fn.GetFullName();
-        SYMBOL_LIB_TABLE_ROW* row = new SYMBOL_LIB_TABLE_ROW( fn.GetName(), uri,
+        wxString libNickname = fn.GetName();
+
+        // Spaces in the file name will break the symbol name because they are not
+        // quoted in the symbol library file format.
+        libNickname.Replace( " ", "-" );
+
+        SYMBOL_LIB_TABLE_ROW* row = new SYMBOL_LIB_TABLE_ROW( libNickname, uri,
                                                               wxString( "Legacy" ) );
         m_prj->SchSymbolLibTable()->InsertRow( row );
 
