@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# 74LS125
+# sonde xilinx_schlib:74LS125
 #
-DEF 74LS125 U 0 30 Y Y 4 F N
+DEF sonde xilinx_schlib:74LS125 U 0 30 Y Y 4 F N
 F0 "U" 0 100 50 H V L BNN
-F1 "74LS125" 50 -150 40 H V L TNN
+F1 "sonde xilinx_schlib:74LS125" 50 -150 40 H V L TNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -27,11 +27,11 @@ X D 12 -450 0 300 R 50 30 4 1 I
 ENDDRAW
 ENDDEF
 #
-# C
+# sonde xilinx_schlib:C
 #
-DEF C C 0 10 N Y 1 F N
+DEF sonde xilinx_schlib:C C 0 10 N Y 1 F N
 F0 "C" 0 100 40 H V L CNN
-F1 "C" 6 -85 40 H V L CNN
+F1 "sonde xilinx_schlib:C" 6 -85 40 H V L CNN
 F2 "" 38 -150 30 H V C CNN
 F3 "" 0 100 30 H V C CNN
 $FPLIST
@@ -47,11 +47,11 @@ X ~ 2 0 -200 170 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CONN_6
+# sonde xilinx_schlib:CONN_6
 #
-DEF CONN_6 P 0 30 Y N 1 F N
+DEF sonde xilinx_schlib:CONN_6 P 0 30 Y N 1 F N
 F0 "P" -50 0 60 V V C CNN
-F1 "CONN_6" 50 0 60 V V C CNN
+F1 "sonde xilinx_schlib:CONN_6" 50 0 60 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -65,11 +65,11 @@ X 6 6 -350 -250 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CP
+# sonde xilinx_schlib:CP
 #
-DEF CP C 0 10 N N 1 F N
+DEF sonde xilinx_schlib:CP C 0 10 N N 1 F N
 F0 "C" 50 100 40 H V L CNN
-F1 "CP" 50 -100 40 H V L CNN
+F1 "sonde xilinx_schlib:CP" 50 -100 40 H V L CNN
 F2 "" 100 -150 30 H V C CNN
 F3 "" 50 100 30 H V C CNN
 ALIAS CAPAPOL
@@ -85,11 +85,11 @@ X ~ 2 0 -200 150 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DB25
+# sonde xilinx_schlib:DB25
 #
-DEF DB25 J 0 40 Y N 1 F N
+DEF sonde xilinx_schlib:DB25 J 0 40 Y N 1 F N
 F0 "J" 50 1350 70 H V C CNN
-F1 "DB25" -50 -1350 70 H V C CNN
+F1 "sonde xilinx_schlib:DB25" -50 -1350 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -182,11 +182,11 @@ X 9 9 -450 400 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DB9
+# sonde xilinx_schlib:DB9
 #
-DEF DB9 J 0 40 Y N 1 F N
+DEF sonde xilinx_schlib:DB9 J 0 40 Y N 1 F N
 F0 "J" 0 550 70 H V C CNN
-F1 "DB9" 0 -550 70 H V C CNN
+F1 "sonde xilinx_schlib:DB9" 0 -550 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -235,11 +235,11 @@ X P9 9 -450 300 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DIODESCH
+# sonde xilinx_schlib:DIODESCH
 #
-DEF DIODESCH D 0 40 N N 1 F N
+DEF sonde xilinx_schlib:DIODESCH D 0 40 N N 1 F N
 F0 "D" 0 100 40 H V C CNN
-F1 "DIODESCH" 0 -100 40 H V C CNN
+F1 "sonde xilinx_schlib:DIODESCH" 0 -100 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -254,11 +254,11 @@ X K 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# GND
+# sonde xilinx_schlib:GND
 #
-DEF ~GND #PWR 0 0 Y Y 1 F P
+DEF ~sonde xilinx_schlib:GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "GND" 0 -70 30 H I C CNN
+F1 "sonde xilinx_schlib:GND" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -267,11 +267,11 @@ X GND 1 0 0 0 U 30 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# PWR_FLAG
+# sonde xilinx_schlib:PWR_FLAG
 #
-DEF PWR_FLAG #FLG 0 0 N N 1 F P
+DEF sonde xilinx_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 95 30 H I C CNN
-F1 "PWR_FLAG" 0 180 30 H V C CNN
+F1 "sonde xilinx_schlib:PWR_FLAG" 0 180 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -280,11 +280,11 @@ X pwr 1 0 0 0 U 20 20 0 0 w
 ENDDRAW
 ENDDEF
 #
-# R
+# sonde xilinx_schlib:R
 #
-DEF R R 0 0 N Y 1 F N
+DEF sonde xilinx_schlib:R R 0 0 N Y 1 F N
 F0 "R" 80 0 40 V V C CNN
-F1 "R" 7 1 40 V V C CNN
+F1 "sonde xilinx_schlib:R" 7 1 40 V V C CNN
 F2 "" -70 0 30 V V C CNN
 F3 "" 0 0 30 H V C CNN
 $FPLIST
@@ -301,11 +301,11 @@ X ~ 2 0 -250 100 U 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# VCC
+# sonde xilinx_schlib:VCC
 #
-DEF VCC #PWR 0 0 Y Y 1 F P
+DEF sonde xilinx_schlib:VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 30 H I C CNN
-F1 "VCC" 0 100 30 H V C CNN
+F1 "sonde xilinx_schlib:VCC" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
