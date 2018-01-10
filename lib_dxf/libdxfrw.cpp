@@ -150,11 +150,11 @@ bool dxfRW::write( DRW_Interface* interface_, DRW::Version ver, bool bin )
         writer->writeString( 999, comm );
     }
 
-    DRW_Header header;
-    iface->writeHeader( header );
+    DRW_Header h;
+    iface->writeHeader( h );
     writer->writeString( 0, "SECTION" );
     entCount = FIRSTHANDLE;
-    header.write( writer, version );
+    h.write( writer, version );
     writer->writeString( 0, "ENDSEC" );
     writer->writeString( 0, "SECTION" );
     writer->writeString( 2, "CLASSES" );

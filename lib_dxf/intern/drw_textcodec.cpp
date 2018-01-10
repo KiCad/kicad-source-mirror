@@ -589,102 +589,102 @@ std::string DRW_Conv932Table::toUtf8( std::string* s )
 std::string DRW_TextCodec::correctCodePage( const std::string& s )
 {
     // stringstream cause crash in OS/X, bug#3597944
-    std::string cp = s;
+    std::string c = s;
 
-    transform( cp.begin(), cp.end(), cp.begin(), toupper );
+    transform( c.begin(), c.end(), c.begin(), toupper );
 
     // Latin/Thai
-    if( cp=="ANSI_874" || cp=="CP874" || cp=="ISO8859-11" || cp=="TIS-620" )
+    if( c=="ANSI_874" || c=="c874" || c=="ISO8859-11" || c=="TIS-620" )
     {
         return "ANSI_874";
         // Central Europe and Eastern Europe
     }
-    else if( cp=="ANSI_1250" || cp=="CP1250" || cp=="ISO8859-2" )
+    else if( c=="ANSI_1250" || c=="c1250" || c=="ISO8859-2" )
     {
         return "ANSI_1250";
         // Cyrillic script
     }
-    else if( cp=="ANSI_1251" || cp=="CP1251" || cp=="ISO8859-5" || cp=="KOI8-R"
-             || cp=="KOI8-U" || cp=="IBM 866" )
+    else if( c=="ANSI_1251" || c=="c1251" || c=="ISO8859-5" || c=="KOI8-R"
+             || c=="KOI8-U" || c=="IBM 866" )
     {
         return "ANSI_1251";
         // Western Europe
     }
-    else if( cp=="ANSI_1252" || cp=="CP1252" || cp=="LATIN1" || cp=="ISO-8859-1"
-             || cp=="CP819" || cp=="CSISO" || cp=="IBM819" || cp=="ISO_8859-1" || cp=="APPLE ROMAN"
-             || cp=="ISO8859-1" || cp=="ISO8859-15" || cp=="ISO-IR-100" || cp=="L1" || cp==
+    else if( c=="ANSI_1252" || c=="c1252" || c=="LATIN1" || c=="ISO-8859-1"
+             || c=="c819" || c=="CSISO" || c=="IBM819" || c=="ISO_8859-1" || c=="APPLE ROMAN"
+             || c=="ISO8859-1" || c=="ISO8859-15" || c=="ISO-IR-100" || c=="L1" || c==
              "IBM 850" )
     {
         return "ANSI_1252";
         // Greek
     }
-    else if( cp=="ANSI_1253" || cp=="CP1253" || cp=="iso8859-7" )
+    else if( c=="ANSI_1253" || c=="c1253" || c=="iso8859-7" )
     {
         return "ANSI_1253";
         // Turkish
     }
-    else if( cp=="ANSI_1254" || cp=="CP1254" || cp=="iso8859-9" || cp=="iso8859-3" )
+    else if( c=="ANSI_1254" || c=="c1254" || c=="iso8859-9" || c=="iso8859-3" )
     {
         return "ANSI_1254";
         // Hebrew
     }
-    else if( cp=="ANSI_1255" || cp=="CP1255" || cp=="iso8859-8" )
+    else if( c=="ANSI_1255" || c=="c1255" || c=="iso8859-8" )
     {
         return "ANSI_1255";
         // Arabic
     }
-    else if( cp=="ANSI_1256" || cp=="CP1256" || cp=="ISO8859-6" )
+    else if( c=="ANSI_1256" || c=="c1256" || c=="ISO8859-6" )
     {
         return "ANSI_1256";
         // Baltic
     }
-    else if( cp=="ANSI_1257" || cp=="CP1257" || cp=="ISO8859-4" || cp=="ISO8859-10" || cp==
+    else if( c=="ANSI_1257" || c=="c1257" || c=="ISO8859-4" || c=="ISO8859-10" || c==
              "ISO8859-13" )
     {
         return "ANSI_1257";
         // Vietnamese
     }
-    else if( cp=="ANSI_1258" || cp=="CP1258" )
+    else if( c=="ANSI_1258" || c=="c1258" )
     {
         return "ANSI_1258";
 
         // Japanese
     }
-    else if( cp=="ANSI_932" || cp=="SHIFT-JIS" || cp=="SHIFT_JIS" || cp=="CSSHIFTJIS"
-             || cp=="CSWINDOWS31J" || cp=="MS_KANJI" || cp=="X-MS-CP932" || cp=="X-SJIS"
-             || cp=="EUCJP" || cp=="EUC-JP" || cp=="CSEUCPKDFMTJAPANESE" || cp=="X-EUC"
-             || cp=="X-EUC-JP" || cp=="JIS7" )
+    else if( c=="ANSI_932" || c=="SHIFT-JIS" || c=="SHIFT_JIS" || c=="CSSHIFTJIS"
+             || c=="CSWINDOWS31J" || c=="MS_KANJI" || c=="X-MS-c932" || c=="X-SJIS"
+             || c=="EUCJP" || c=="EUC-JP" || c=="CSEUcKDFMTJAPANESE" || c=="X-EUC"
+             || c=="X-EUC-JP" || c=="JIS7" )
     {
         return "ANSI_932";
         // Chinese PRC GBK (XGB) simplified
     }
-    else if( cp=="ANSI_936" || cp=="GBK" || cp=="GB2312" || cp=="CHINESE" || cp=="CN-GB"
-             || cp=="CSGB2312" || cp=="CSGB231280" || cp=="CSISO58BG231280"
-             || cp=="GB_2312-80" || cp=="GB231280" || cp=="GB2312-80"
-             || cp=="ISO-IR-58" || cp=="GB18030" )
+    else if( c=="ANSI_936" || c=="GBK" || c=="GB2312" || c=="CHINESE" || c=="CN-GB"
+             || c=="CSGB2312" || c=="CSGB231280" || c=="CSISO58BG231280"
+             || c=="GB_2312-80" || c=="GB231280" || c=="GB2312-80"
+             || c=="ISO-IR-58" || c=="GB18030" )
     {
         return "ANSI_936";
         // Korean
     }
-    else if( cp=="ANSI_949" || cp=="EUCKR" )
+    else if( c=="ANSI_949" || c=="EUCKR" )
     {
         return "ANSI_949";
         // Chinese Big5 (Taiwan, Hong Kong SAR)
     }
-    else if( cp=="ANSI_950" || cp=="BIG5" || cp=="CN-BIG5" || cp=="CSBIG5"
-             || cp=="X-X-BIG5" || cp=="BIG5-HKSCS" )
+    else if( c=="ANSI_950" || c=="BIG5" || c=="CN-BIG5" || c=="CSBIG5"
+             || c=="X-X-BIG5" || c=="BIG5-HKSCS" )
     {
         return "ANSI_950";
 
 // celtic
-/*    } else if (cp=="ISO8859-14") {
+/*    } else if (c=="ISO8859-14") {
  *      return "ISO8859-14";
- *   } else if (cp=="TSCII") {
+ *   } else if (c=="TSCII") {
  *       return "TSCII"; //tamil
- *   } else if (cp=="UTF16") {
+ *   } else if (c=="UTF16") {
  *       return "UTF16"; */
     }
-    else if( cp=="UTF-8" || cp=="UTF8" || cp=="UTF88-BIT" )
+    else if( c=="UTF-8" || c=="UTF8" || c=="UTF88-BIT" )
     {
         return "UTF-8";
     }
