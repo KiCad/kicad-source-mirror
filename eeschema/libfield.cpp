@@ -75,112 +75,39 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         return;
 
     newFieldValue = dlg.GetText();
-    wxString fieldText = aField->GetFullText( m_unit );
+    wxString oldFieldValue = aField->GetFullText( m_unit );
+    bool renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
 
-    bool creatingNewComponent =  aField->GetId() == VALUE && newFieldValue != aField->GetText();
-
-    /* If the value field is changed, this is equivalent to creating a new component from
-     * the old one.  Rename the component and remove any conflicting aliases to prevent name
-     * errors when updating the library.
-     */
-    if( creatingNewComponent )
+    if( renamed )
     {
         wxString msg;
         wxString lib = GetCurLib();
 
-        // Test the current library for name conflicts.
+        // Test the current library for name conflicts
         if( !lib.empty() && m_libMgr->PartExists( newFieldValue, lib ) )
         {
             msg.Printf( _(
-                "The name \"%s\" conflicts with an existing entry in the symbol library \"%s\".\n\n"
-                "Do you wish to replace the current symbol in the library with this one?" ),
-                newFieldValue,
-                lib
-                );
+                "The name \"%s\" conflicts with an existing entry in the symbol library \"%s\"." ),
+                newFieldValue, lib );
 
-            int rsp = wxMessageBox( msg, _( "Confirm" ),
-                                    wxYES_NO | wxICON_QUESTION | wxNO_DEFAULT, this );
-
-            if( rsp == wxNO )
-                return;
-        }
-
-        // Test the current component for name conflicts.
-        if( parent->HasAlias( newFieldValue ) )
-        {
-            msg.Printf( _( "The current component already has an alias named \"%s\".\n\n"
-                           "Do you wish to remove this alias from the component?" ),
-                        GetChars( newFieldValue ) );
-
-            int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
-
-            if( rsp == wxNO )
-                return;
-
-            parent->RemoveAlias( newFieldValue );
+            DisplayErrorMessage( this, msg );
+            return;
         }
 
         parent->SetName( newFieldValue );
 
-        // Test the library for any conflicts with the any aliases in the current component.
-        if( parent->GetAliasCount() > 1 && !lib.empty() )
-        {
-            bool conflicts = false;
-            wxArrayString libAliasNames, symbolAliasNames;
-
-            libAliasNames = m_libMgr->GetAliasNames( lib );
-            symbolAliasNames = parent->GetAliasNames();
-
-            for( size_t i = 0; i < symbolAliasNames.GetCount(); i++ )
-            {
-                if( libAliasNames.Index( symbolAliasNames[i] ) != wxNOT_FOUND )
-                {
-                    conflicts = true;
-                    break;
-                }
-            }
-
-            if( conflicts )
-            {
-                msg.Printf( _( "The new symbol contains alias names that conflict with "
-                               "entries in the library \"%s\".\n\n"
-                               "Do you wish to remove all of the conflicting aliases from "
-                               "this symbol?" ),
-                            lib );
-
-                int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
-
-                if( rsp == wxNO )
-                {
-                    parent->SetName( fieldText );
-                    return;
-                }
-
-                wxArrayString aliases = parent->GetAliasNames( false );
-
-                for( size_t i = 0;  i < aliases.GetCount();  i++ )
-                {
-                    if( m_libMgr->GetAlias( aliases[i], lib ) != NULL )
-                        parent->RemoveAlias( aliases[ i ] );
-                }
-            }
-        }
-
         if( !parent->HasAlias( m_aliasName ) )
             m_aliasName = newFieldValue;
 
-        m_libMgr->RemovePart( fieldText, lib );
+        m_libMgr->RemovePart( oldFieldValue, lib );
         m_libMgr->UpdatePart( parent, lib );
 
         // Reselect the renamed part
         m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, newFieldValue ) );
     }
 
-
-    if( !aField->InEditMode() && !creatingNewComponent )
-    {
+    if( !aField->InEditMode() && !renamed )
         SaveCopyInUndoList( parent );
-    }
 
     dlg.UpdateField( aField );
     m_canvas->Refresh();
