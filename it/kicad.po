@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-10 12:09+0100\n"
-"PO-Revision-Date: 2018-01-10 12:54+0100\n"
+"POT-Creation-Date: 2018-01-10 16:42+0100\n"
+"PO-Revision-Date: 2018-01-10 16:46+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4180,8 +4180,10 @@ msgstr "Rinomina a %s"
 #: eeschema/project_rescue.cpp:293 eeschema/project_rescue.cpp:420
 #, c-format
 msgid ""
-"Cannot rescue symbol %s which is not avialable in any library or the cache."
-msgstr "Impossibile recuperare il simbolo %s perché non trovato in nessuna libreria o cache."
+"Cannot rescue symbol %s which is not available in any library or the cache."
+msgstr ""
+"Impossibile recuperare il simbolo %s perché non trovato in nessuna libreria "
+"o cache."
 
 #: eeschema/project_rescue.cpp:296 eeschema/project_rescue.cpp:423
 #, c-format
@@ -5390,8 +5392,8 @@ msgstr "Indefinito"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
 #: pcbnew/class_zone.cpp:822 pcbnew/class_drawsegment.cpp:402
 #: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:372
-#: pcbnew/class_track.cpp:1151 pcbnew/class_track.cpp:1178
-#: pcbnew/class_track.cpp:1227 pcbnew/dialogs/dialog_layers_setup.cpp:345
+#: pcbnew/class_track.cpp:1181 pcbnew/class_track.cpp:1208
+#: pcbnew/class_track.cpp:1257 pcbnew/dialogs/dialog_layers_setup.cpp:345
 msgid "Type"
 msgstr "Tipo"
 
@@ -5721,7 +5723,7 @@ msgid "Visible"
 msgstr "Visibile"
 
 #: eeschema/lib_pin.cpp:1724 pcbnew/class_drawsegment.cpp:427
-#: pcbnew/class_track.cpp:1054
+#: pcbnew/class_track.cpp:1084
 msgid "Length"
 msgstr "Lunghezza"
 
@@ -6908,46 +6910,12 @@ msgstr "Modifica campo %s"
 msgid "Enter a new value for the %s field."
 msgstr "Inserire un nuovo valore per il campo %s."
 
-#: eeschema/libfield.cpp:95
+#: eeschema/libfield.cpp:90
 #, c-format
 msgid ""
 "The name \"%s\" conflicts with an existing entry in the symbol library \"%s"
-"\".\n"
-"\n"
-"Do you wish to replace the current symbol in the library with this one?"
-msgstr ""
-"Il nome \"%s\" è in conflitto con un altro elemento nella libreria di simboli \"%s\".\n"
-"\n"
-"Sostituire il simbolo presente nella libreria con questo?"
-
-#: eeschema/libfield.cpp:101 eeschema/libfield.cpp:115
-#: eeschema/libfield.cpp:151
-msgid "Confirm"
-msgstr "Conferma"
-
-#: eeschema/libfield.cpp:111
-#, c-format
-msgid ""
-"The current component already has an alias named \"%s\".\n"
-"\n"
-"Do you wish to remove this alias from the component?"
-msgstr ""
-"Il componente corrente ha già un alias con nome \"%s\".\n"
-"\n"
-"Eliminare questo alias dal componente?"
-
-#: eeschema/libfield.cpp:145
-#, c-format
-msgid ""
-"The new symbol contains alias names that conflict with entries in the "
-"library \"%s\".\n"
-"\n"
-"Do you wish to remove all of the conflicting aliases from this symbol?"
-msgstr ""
-"Il nuovo simbolo contiene nomi alias in conflitto con altre voci nella "
-"libreria \"%s\".\n"
-"\n"
-"Eliminare tutti gli alias in conflitto da questo simbolo?"
+"\"."
+msgstr "Il nome \"%s\" è in conflitto con un altro elemento nella libreria di simboli \"%s\"."
 
 #: eeschema/find.cpp:98
 #, c-format
@@ -7176,22 +7144,22 @@ msgstr "Mostra il documento o il datasheet associato"
 
 #: eeschema/tool_lib.cpp:202
 msgid ""
-"Allows disabling pin edition coupling between units or body styles\n"
+"Allows disabling pin edition coupling between units.\n"
 "When not disabled, adding, deleting and moving pins are synchronized\n"
-"between units and body styles for pins at the same location\n"
+"between units for pins at the same location.\n"
 "For instance, adding a pin to a unit also add a similar pin to other units "
-"at the same location\n"
+"at the same location.\n"
 "However, pins can have a different number or size because they are specific "
-"to a unit\n"
+"to a unit.\n"
 "Usually synchronization is enabled when units are interchangeable and "
-"disabled if not"
+"disabled if not."
 msgstr ""
-"Permette la disabilitazione della modifica dei pin nell'accoppiamento tra unità o stili di corpo\n"
+"Permette la disabilitazione della modifica dei pin nell'accoppiamento tra unità.\n"
 "Quando non è disabilitato, l'aggiunta, la cancellazione e lo spostamento di pin sono sincronizzati\n"
-"tra unità e stili di corpo per pin presenti nella stessa posizione\n"
-"Per esempio, l'aggiunta di un pin ad una unità aggiunge anche un pin simile ad altre unità nella stessa posizione\n"
-"Comunque, i pin possono avere numero o dimensione diversi perché specifici di una unità\n"
-"Normalmente la sincronizzazione è abilitata quando le unità sono intercambiabili e disabilitata se non lo sono"
+"tra unità per pin presenti nella stessa posizione.\n"
+"Per esempio, l'aggiunta di un pin ad una unità aggiunge anche un pin simile ad altre unità nella stessa posizione.\n"
+"Comunque, i pin possono avere numero o dimensione diversi perché specifici di una unità.\n"
+"Normalmente la sincronizzazione è abilitata quando le unità sono intercambiabili e disabilitata se non lo sono."
 
 #: eeschema/tool_lib.cpp:211 eeschema/menubar_libedit.cpp:237
 msgid "Show pin table"
@@ -7995,8 +7963,8 @@ msgstr "Campo %s %s"
 
 #: eeschema/lib_field.cpp:618 pcbnew/class_pad.cpp:707
 #: pcbnew/class_pcb_text.cpp:149 pcbnew/class_drawsegment.cpp:446
-#: pcbnew/class_text_mod.cpp:398 pcbnew/class_track.cpp:1166
-#: pcbnew/class_track.cpp:1193 pcbnew/dialogs/dialog_design_rules_base.cpp:354
+#: pcbnew/class_text_mod.cpp:398 pcbnew/class_track.cpp:1196
+#: pcbnew/class_track.cpp:1223 pcbnew/dialogs/dialog_design_rules_base.cpp:354
 msgid "Width"
 msgstr "Larghezza"
 
@@ -8394,7 +8362,7 @@ msgstr "Comando netlist:"
 msgid "Browse Plugins"
 msgstr "Esplora plugin"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:227
+#: eeschema/dialogs/dialog_edit_one_field.cpp:223
 msgid "Illegal reference field value!"
 msgstr "Valore campo riferimento errato!"
 
@@ -8408,7 +8376,8 @@ msgstr "Impronta specificata non valida"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:467
 msgid "Double-click here to select a symbol from the library browser"
-msgstr "Doppio clic qui per selezionare un simbolo dall'esploratore delle librerie"
+msgstr ""
+"Doppio clic qui per selezionare un simbolo dall'esploratore delle librerie"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print options:"
@@ -12475,7 +12444,7 @@ msgstr "RS274X: Comando KNOCKOUT ignorato da Gerbview "
 #: pcbnew/class_pcb_text.cpp:135 pcbnew/class_pcb_layer_widget.cpp:371
 #: pcbnew/class_zone.cpp:868 pcbnew/class_drawsegment.cpp:444
 #: pcbnew/layer_widget.cpp:484 pcbnew/class_text_mod.cpp:382
-#: pcbnew/class_track.cpp:1161 pcbnew/class_track.cpp:1188
+#: pcbnew/class_track.cpp:1191 pcbnew/class_track.cpp:1218
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:113
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:142
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:84
@@ -16241,7 +16210,7 @@ msgstr "Fronte"
 msgid "Pads"
 msgstr "Piazzole"
 
-#: pcbnew/class_module.cpp:561 pcbnew/class_track.cpp:1143
+#: pcbnew/class_module.cpp:561 pcbnew/class_track.cpp:1173
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:186
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:193
 msgid "Status"
@@ -17281,7 +17250,7 @@ msgstr "Piazzola"
 msgid "Net"
 msgstr "Collegamento"
 
-#: pcbnew/class_pad.cpp:716 pcbnew/class_track.cpp:1256
+#: pcbnew/class_pad.cpp:716 pcbnew/class_track.cpp:1286
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:305
 msgid "Drill"
@@ -17885,7 +17854,7 @@ msgstr "(non attivato)"
 msgid "Dimension \"%s\" on %s"
 msgstr "Dimensioni \"%s\" su %s"
 
-#: pcbnew/class_pcb_layer_widget.cpp:62 pcbnew/class_track.cpp:1223
+#: pcbnew/class_pcb_layer_widget.cpp:62 pcbnew/class_track.cpp:1253
 msgid "Through Via"
 msgstr "Via passanti"
 
@@ -17901,7 +17870,7 @@ msgstr "Via coperti/interni"
 msgid "Show blind or buried vias"
 msgstr "Mostra Via ciechi o sepolti"
 
-#: pcbnew/class_pcb_layer_widget.cpp:64 pcbnew/class_track.cpp:1213
+#: pcbnew/class_pcb_layer_widget.cpp:64 pcbnew/class_track.cpp:1243
 msgid "Micro Via"
 msgstr "Microvia"
 
@@ -18729,11 +18698,11 @@ msgstr "Proibita"
 msgid "<unknown>"
 msgstr "<sconosciuto>"
 
-#: pcbnew/class_zone.cpp:853 pcbnew/class_track.cpp:1100
+#: pcbnew/class_zone.cpp:853 pcbnew/class_track.cpp:1130
 msgid "NetName"
 msgstr "Nome collegamento"
 
-#: pcbnew/class_zone.cpp:857 pcbnew/class_track.cpp:1104
+#: pcbnew/class_zone.cpp:857 pcbnew/class_track.cpp:1134
 msgid "NetCode"
 msgstr "Codice collegamento"
 
@@ -20647,72 +20616,72 @@ msgstr "Microvia %s, collegamento[%s] (%d) su strati %s/%s"
 msgid "Via %s net [%s] (%d) on layers %s/%s"
 msgstr "Via %s collegamento[%s] (%d) su strati %s/%s"
 
-#: pcbnew/class_track.cpp:1059
+#: pcbnew/class_track.cpp:1089
 msgid "Full Length"
 msgstr "Lung. intera"
 
-#: pcbnew/class_track.cpp:1062
+#: pcbnew/class_track.cpp:1092
 msgid "Pad To Die Length"
 msgstr "Lunghezza da piazzola a die"
 
-#: pcbnew/class_track.cpp:1070
+#: pcbnew/class_track.cpp:1100
 msgid "NC Name"
 msgstr "Nome NC"
 
-#: pcbnew/class_track.cpp:1071
+#: pcbnew/class_track.cpp:1101
 msgid "NC Clearance"
 msgstr "Isolamento NC"
 
-#: pcbnew/class_track.cpp:1074
+#: pcbnew/class_track.cpp:1104
 msgid "NC Width"
 msgstr "Spessore NC"
 
-#: pcbnew/class_track.cpp:1077
+#: pcbnew/class_track.cpp:1107
 msgid "NC Via Size"
 msgstr "Dimensioni via NC"
 
-#: pcbnew/class_track.cpp:1080
+#: pcbnew/class_track.cpp:1110
 msgid "NC Via Drill"
 msgstr "Foratura via NC"
 
-#: pcbnew/class_track.cpp:1151
+#: pcbnew/class_track.cpp:1181
 msgid "Track"
 msgstr "Pista"
 
-#: pcbnew/class_track.cpp:1170 pcbnew/class_track.cpp:1197
+#: pcbnew/class_track.cpp:1200 pcbnew/class_track.cpp:1227
 msgid "Segment Length"
 msgstr "Lunghezza segmento"
 
-#: pcbnew/class_track.cpp:1178
+#: pcbnew/class_track.cpp:1208
 msgid "Zone "
 msgstr "Zona"
 
-#: pcbnew/class_track.cpp:1218
+#: pcbnew/class_track.cpp:1248
 msgid "Blind/Buried Via"
 msgstr "Via cieco/sepolto"
 
-#: pcbnew/class_track.cpp:1243 pcbnew/dialogs/dialog_layers_setup_base.cpp:94
+#: pcbnew/class_track.cpp:1273 pcbnew/dialogs/dialog_layers_setup_base.cpp:94
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:318
 msgid "Layers"
 msgstr "Strati"
 
-#: pcbnew/class_track.cpp:1249 pcbnew/dialogs/dialog_design_rules_base.cpp:304
+#: pcbnew/class_track.cpp:1279 pcbnew/dialogs/dialog_design_rules_base.cpp:304
 msgid "Diameter"
 msgstr "Diametro"
 
-#: pcbnew/class_track.cpp:1279
+#: pcbnew/class_track.cpp:1309
 msgid "(Specific)"
 msgstr "(Specifica)"
 
-#: pcbnew/class_track.cpp:1281
+#: pcbnew/class_track.cpp:1311
 msgid "(NetClass)"
 msgstr "(netclass)"
 
-#: pcbnew/class_track.cpp:1594
+#: pcbnew/class_track.cpp:1624
 msgid "Not found"
 msgstr "Non trovato "
 
-#: pcbnew/class_track.cpp:1602
+#: pcbnew/class_track.cpp:1632
 #, c-format
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Pista %s, collegamento [%s] (%d) su strato %s, lunghezza: %s"
@@ -21852,25 +21821,29 @@ msgstr "Spessore predefinito"
 msgid "Layer:"
 msgstr "Strato:"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:488
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
 #: pcbnew/dialogs/dialog_track_via_size.cpp:61
 msgid "Invalid track width"
 msgstr "Larghezza pista non valida"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:497
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:604
 #: pcbnew/dialogs/dialog_track_via_size.cpp:68
 msgid "Invalid via diameter"
 msgstr "Diametro via non valido"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:504
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:611
 #: pcbnew/dialogs/dialog_track_via_size.cpp:75
 msgid "Invalid via drill size"
 msgstr "Diametro foro dei via non valido"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:511
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:618
 #: pcbnew/dialogs/dialog_track_via_size.cpp:82
 msgid "Via drill size has to be smaller than via diameter"
 msgstr "La dimensione del foro del via deve essere minore del diametro del via"
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:629
+msgid "Via start layer and end layer cannot be the same"
+msgstr "Gli strati di inizio e di fine via non possono essere uguali"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:97
 msgid "An error occurred initializing the printer information."
