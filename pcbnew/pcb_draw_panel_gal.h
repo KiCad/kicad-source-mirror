@@ -103,6 +103,9 @@ public:
     ///> Forces refresh of the ratsnest visual representation
     void RedrawRatsnest();
 
+    ///> @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
+    BOX2I GetDefaultViewBBox() const override;
+
 protected:
 
     KIGFX::PCB_VIEW* view() const;

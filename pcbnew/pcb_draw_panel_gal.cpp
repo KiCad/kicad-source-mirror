@@ -395,6 +395,15 @@ void PCB_DRAW_PANEL_GAL::RedrawRatsnest()
 }
 
 
+BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
+{
+    if( m_worksheet )
+        return m_worksheet->ViewBBox();
+
+    return BOX2I();
+}
+
+
 void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
     // caching makes no sense for Cairo and other software renderers

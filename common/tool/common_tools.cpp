@@ -114,21 +114,15 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
     {
-        // Empty view
-        view->SetScale( 17.0 );     // works fine for the standard worksheet frame
-
-        view->SetCenter( screenSize / 2.0 );
-    }
-    else
-    {
-        VECTOR2D vsize = bBox.GetSize();
-        double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                                                    fabs( vsize.y / screenSize.y ) );
-
-        view->SetScale( scale );
-        view->SetCenter( bBox.Centre() );
+        bBox = galCanvas->GetDefaultViewBBox();
     }
 
+    VECTOR2D vsize = bBox.GetSize();
+    double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+                                                fabs( vsize.y / screenSize.y ) );
+
+    view->SetScale( scale );
+    view->SetCenter( bBox.Centre() );
 
     // Take scrollbars into account
     VECTOR2D worldScrollbarSize = view->ToWorld( scrollbarSize, false );

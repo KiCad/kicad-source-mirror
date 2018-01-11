@@ -33,6 +33,7 @@
 
 #include <wx/window.h>
 #include <wx/timer.h>
+#include <math/box2.h>
 #include <math/vector2d.h>
 #include <msgpanel.h>
 #include <memory>
@@ -223,6 +224,17 @@ public:
      * @return the current cursor shape, depending on the current selected tool
      */
     int GetCurrentCursor() const { return m_currentCursor; }
+
+    /**
+     * Returns the bounding box of the view that should be used if model is not valid
+     * For example, the worksheet bounding box for an empty PCB
+     *
+     * @return the default bounding box for the panel
+     */
+    virtual BOX2I GetDefaultViewBBox() const
+    {
+        return BOX2I();
+    }
 
 
 protected:
