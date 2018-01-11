@@ -217,7 +217,7 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
         m_cur_grid = m_project_grid;
     }
 
-    SetSizeInDU( 360, 240 );
+    SetSizeInDU( 450, 400 );
 
     // On some window managers (Unity, XFCE), this dialog is
     // not always raised, depending on this dialog is run.
