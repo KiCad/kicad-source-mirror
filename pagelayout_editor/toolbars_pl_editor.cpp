@@ -44,13 +44,16 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
     wxString      msg;
 
     // Standard file commands
-    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiScaledBitmap( new_generic_xpm, this ),
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+
+    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiScaledBitmap( new_page_layout_xpm, this ),
                             _( "New page layout design" ) );
 
-    m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiScaledBitmap( pagelayout_load_xpm, this ),
+    m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiScaledBitmap( open_page_layout_xpm, this ),
                             _( "Open an existing page layout design file" ) );
 
-    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiScaledBitmap( save_project_xpm, this ),
+    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiScaledBitmap( save_xpm, this ),
                             _( "Save page layout design" ) );
 
     KiScaledSeparator( m_mainToolBar, this );

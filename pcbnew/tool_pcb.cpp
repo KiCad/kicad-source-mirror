@@ -228,7 +228,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     // Set up toolbar
     if( Kiface().IsSingle() )
     {
-        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiScaledBitmap( new_generic_xpm, this ),
+        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiScaledBitmap( new_board_xpm, this ),
                                 _( "New board" ) );
         m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiScaledBitmap( open_brd_file_xpm, this ),
                                 _( "Open existing board" ) );

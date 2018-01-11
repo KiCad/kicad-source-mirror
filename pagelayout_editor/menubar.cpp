@@ -71,12 +71,12 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "&New" ), PlEditorHokeysDescr, HK_NEW );
     AddMenuItem( fileMenu, wxID_NEW, msg,
                  _( "Create new page layout design" ),
-                 KiBitmap( new_generic_xpm ) );
+                 KiBitmap( new_page_layout_xpm ) );
 
     msg = AddHotkeyName( _( "&Open..." ), PlEditorHokeysDescr, HK_OPEN );
     AddMenuItem( fileMenu, wxID_OPEN, msg,
                  _( "Open an existing page layout design file" ),
-                 KiBitmap(  pagelayout_load_xpm ) );
+                 KiBitmap(  open_page_layout_xpm ) );
 
     openRecentMenu = new wxMenu();
     Kiface().GetFileHistory().UseMenu( openRecentMenu );

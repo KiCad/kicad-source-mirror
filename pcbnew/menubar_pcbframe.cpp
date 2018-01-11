@@ -630,7 +630,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
         AddMenuItem( aParentMenu, ID_NEW_BOARD,
                 _( "&New Board" ),
                 _( "Create new board" ),
-                KiBitmap( new_generic_xpm ) );
+                KiBitmap( new_board_xpm ) );
 
         text = AddHotkeyName( _( "&Open Board" ), g_Pcbnew_Editor_Hokeys_Descr, HK_LOAD_BOARD );
         AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
@@ -663,7 +663,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
         AddMenuItem( aParentMenu, ID_APPEND_FILE,
                      _( "&Append Board" ),
                      _( "Append another board to currently loaded board" ),
-                     KiBitmap( import_xpm ) );
+                     KiBitmap( add_board_xpm ) );
 
         AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
                 _( "Import Non-Kicad Board File" ),
@@ -835,7 +835,7 @@ void prepareExportMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_VRML,
                  _( "&VRML" ),
                  _( "Export VRML board representation" ),
-                 KiBitmap( three_d_xpm ) );
+                 KiBitmap( export3d_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_IDF3,
                  _( "I&DFv3" ), _( "IDFv3 board and symbol export" ),
@@ -843,7 +843,7 @@ void prepareExportMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_STEP,
                  _( "S&TEP" ), _( "STEP export" ),
-                 KiBitmap( export_idf_xpm ) );
+                 KiBitmap( export_step_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_GEN_CMP_FILE,
                  _( "&Footprint Association (.cmp) File" ),

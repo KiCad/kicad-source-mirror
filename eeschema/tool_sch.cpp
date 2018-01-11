@@ -56,8 +56,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
         // These 2 menus have meaning only outside a project, i.e. not under a project manager:
-        m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
-                                KiScaledBitmap( new_generic_xpm, this ),
+        m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiScaledBitmap( new_document_xpm, this ),
                                 _( "New schematic project" ) );
 
         m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,

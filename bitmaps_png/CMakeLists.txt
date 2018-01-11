@@ -107,6 +107,7 @@ set( BMAPS_SMALL
 set( BMAPS_MID
     about
     add_arc
+    add_board
     add_bus2bus
     add_bus
     add_circle
@@ -114,6 +115,8 @@ set( BMAPS_MID
     add_corner
     add_dashed_line
     add_dimension
+    add_document
+    add_gerber
     add_glabel
     add_graphical_segments
     add_graphical_polygon
@@ -152,11 +155,13 @@ set( BMAPS_MID
     axis3d_right
     axis3d_top
     axis3d
+    bitmap2component
     bom
     book
     break_bus
     break_line
     browse_files
+    calculator
     cancel
     change_entry_orient
     contrast_mode
@@ -184,6 +189,7 @@ set( BMAPS_MID
     delete_connection
     delete_dimension
     delete_field
+    delete_gerber
     delete_glabel
     delete_line
     delete_module
@@ -225,11 +231,13 @@ set( BMAPS_MID
     erc
     exit
     exchange
+    export3d
     export_dsn
     export_idf
     export_footprint_names
     export_module
     export_part
+    export_step
     export
     fabrication
     file_footprint
@@ -275,10 +283,12 @@ set( BMAPS_MID
     image
     import_brd_file
     import_cmp_from_lib
+    import_document
     import_footprint_names
     import_hierarchical_label
     import_module
     import_part
+    import_project
     import_setup
     import
     info
@@ -324,6 +334,7 @@ set( BMAPS_MID
     library_table
     lines90
     list_nets
+    load_gerber
     load_module_board
     load_module_lib
     local_ratsnest
@@ -370,11 +381,14 @@ set( BMAPS_MID
     netlist
     net_locked
     net_unlocked
+    new_board
     new_component
     new_cvpcb
+    new_document
     new_footprint
     new_library
     new_generic
+    new_page_layout
     new_project
     new_project_with_template
     noconn
@@ -382,6 +396,7 @@ set( BMAPS_MID
     online_help
     open_brd_file
     open_library
+    open_page_layout
     open_project
     open_document
     options_3drender
@@ -475,6 +490,7 @@ set( BMAPS_MID
     rotate_neg_z
     rotate_pos_z
     save_as
+    save_gerber
     save_library
     save_part
     save_part_in_mem

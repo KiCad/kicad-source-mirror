@@ -53,10 +53,10 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
-                            KiScaledBitmap( gerbview_clear_layers_xpm, this ),
+                            KiScaledBitmap( delete_gerber_xpm, this ),
                             _( "Erase all layers" ) );
 
-    m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiScaledBitmap( gerber_file_xpm, this ),
+    m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiScaledBitmap( load_gerber_xpm, this ),
                             _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
 
     m_mainToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,

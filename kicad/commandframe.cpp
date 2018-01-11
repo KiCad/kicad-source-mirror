@@ -70,7 +70,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
 
     AddButton( ID_TO_SCH_LIB_EDITOR,
                KiBitmap( icon_libedit_xpm ),
-               _( "Schematic library editor" ) );
+               _( "Symbol library editor" ) );
 
     AddButton( ID_TO_PCB,
                KiBitmap( icon_pcbnew_xpm ),
@@ -78,7 +78,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
 
     AddButton( ID_TO_PCB_FP_EDITOR,
                KiBitmap( icon_modedit_xpm ),
-               _( "PCB library editor" ) );
+               _( "Footprint library editor" ) );
 
     AddButton( ID_TO_GERBVIEW,
                KiBitmap( icon_gerbview_xpm ),

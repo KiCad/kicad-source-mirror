@@ -63,7 +63,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, wxID_FILE,
                  _( "Load &Gerber File" ),
                  _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
-                 KiBitmap( gerber_file_xpm ) );
+                 KiBitmap( load_gerber_xpm ) );
 
     // Load Excellon drill files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
@@ -151,7 +151,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  ID_GERBVIEW_ERASE_ALL,
                  _( "Clear &All" ),
                  _( "Clear all layers. All data will be deleted" ),
-                 KiBitmap( gerbview_clear_layers_xpm ) );
+                 KiBitmap( delete_gerber_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();

@@ -99,7 +99,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, openSubmenu, -1,
                  _( "&Load Footprint" ),
                  _( "Load footprint" ),
-                 KiBitmap( open_document_xpm ) );
+                 KiBitmap( load_module_lib_xpm ) );
     fileMenu->AppendSeparator();
 
     // Save the currently loaded legacy library as an s-expression library.

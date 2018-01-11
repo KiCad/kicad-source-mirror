@@ -306,7 +306,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                      ID_NEW_PROJECT,
                      _( "&New Schematic Project" ),
                      _( "Clear current schematic hierarchy and start new schematic root sheet" ),
-                     KiBitmap( new_generic_xpm ) );
+                     KiBitmap( new_document_xpm ) );
 
         text = AddHotkeyName( _( "&Open Schematic Project" ), g_Schematic_Hokeys_Descr, HK_LOAD_SCH );
         AddMenuItem( aParentMenu,
@@ -340,12 +340,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     AddMenuItem( aParentMenu,
                  ID_APPEND_PROJECT, _( "App&end Schematic Sheet" ),
                  _( "Import schematic sheet content from another project to current sheet" ),
-                 KiBitmap( open_document_xpm ) );
+                 KiBitmap( add_document_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_IMPORT_NON_KICAD_SCH, _( "&Import Non-Kicad Schematic File" ),
                 _( "Import schematic file from other applications" ),
-                 KiBitmap( open_document_xpm ) );   // TODO needs a different icon
+                 KiBitmap( import_document_xpm ) );   // TODO needs a different icon
 
     aParentMenu->AppendSeparator();
 

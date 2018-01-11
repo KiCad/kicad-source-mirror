@@ -271,14 +271,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "Eagle CAD" ),
             _( "Import Eagle CAD XML schematic and board" ),
-            KiBitmap( new_project_xpm ) );
+            KiBitmap( import_project_xpm ) );
 
 
     AddMenuItem( fileMenu, importprjSubMenu,
             wxID_ANY,
             _( "Import Project" ),
             _( "Import project files from other software" ),
-            KiBitmap( new_project_xpm ) );
+            KiBitmap( import_project_xpm ) );
 
 
     fileMenu->AppendSeparator();
@@ -422,14 +422,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "Convert Image" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_BM2COMPONENT );
     AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
-                 _( "Bitmap2Component - Convert bitmap images to Eeschema\n"
-                    "or Pcbnew elements" ),
-                 KiBitmap( image_xpm ) );
+                 _( "Bitmap2Component - Convert bitmap images to schematic\n"
+                    "or PCB elements" ),
+                 KiBitmap( bitmap2component_xpm ) );
 
     msg = AddHotkeyName( _( "Run PCB Calculator" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
                  _( "Pcb calculator - Calculator for components, track width, etc." ),
-                 KiBitmap( pcbcalculator_xpm ) );
+                 KiBitmap( calculator_xpm ) );
 
     msg = AddHotkeyName( _( "Edit Page Layout" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
