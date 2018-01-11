@@ -166,7 +166,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_movingCursorWithKeyboard = false;
     m_zoomLevelCoeff      = 1.0;
 
-    m_auimgr.SetFlags(wxAUI_MGR_DEFAULT|wxAUI_MGR_LIVE_RESIZE);
+    m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
 
     CreateStatusBar( 6 );
 
