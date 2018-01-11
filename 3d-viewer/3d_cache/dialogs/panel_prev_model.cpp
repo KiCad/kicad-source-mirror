@@ -146,7 +146,7 @@ void PANEL_PREV_3D::initPanel()
     if( !units.IsEmpty() )
     {
         units = wxString::Format( _( "Offset (%s)" ), units );
-        vbOffset->GetStaticBox()->SetLabel( units );
+        m_staticTextOffset->SetLabel( units );
     }
 }
 

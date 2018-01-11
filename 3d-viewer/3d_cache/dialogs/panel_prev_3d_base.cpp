@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "panel_prev_3d_base.h"
@@ -17,63 +17,71 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* vbScale;
-	vbScale = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scale") ), wxVERTICAL );
+	wxBoxSizer* bSizerScale;
+	bSizerScale = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextScale = new wxStaticText( this, wxID_ANY, _("Scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextScale->Wrap( -1 );
+	bSizerScale->Add( m_staticTextScale, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerScale;
 	fgSizerScale = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizerScale->SetFlexibleDirection( wxBOTH );
 	fgSizerScale->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( vbScale->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	fgSizerScale->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	xscale = new wxTextCtrl( vbScale->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	xscale = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerScale->Add( xscale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_spinXscale = new wxSpinButton( vbScale->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinXscale = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerScale->Add( m_spinXscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText2 = new wxStaticText( vbScale->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	fgSizerScale->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	yscale = new wxTextCtrl( vbScale->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	yscale = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerScale->Add( yscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_spinYscale = new wxSpinButton( vbScale->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinYscale = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerScale->Add( m_spinYscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText3 = new wxStaticText( vbScale->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	fgSizerScale->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	zscale = new wxTextCtrl( vbScale->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	zscale = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerScale->Add( zscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 	
-	m_spinZscale = new wxSpinButton( vbScale->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinZscale = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	vbScale->Add( fgSizerScale, 0, wxEXPAND, 5 );
+	bSizerScale->Add( fgSizerScale, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
-	bSizerLeft->Add( vbScale, 0, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( bSizerScale, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* vbRotate;
-	vbRotate = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Rotation (degrees)") ), wxVERTICAL );
+	wxBoxSizer* bSizerRotation;
+	bSizerRotation = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextRot = new wxStaticText( this, wxID_ANY, _("Rotation (degrees)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRot->Wrap( -1 );
+	bSizerRotation->Add( m_staticTextRot, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerRotate;
 	fgSizerRotate = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizerRotate->SetFlexibleDirection( wxBOTH );
 	fgSizerRotate->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText11 = new wxStaticText( vbRotate->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	fgSizerRotate->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	xrot = new wxTextCtrl( vbRotate->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	xrot = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !xrot->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -84,14 +92,14 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	#endif
 	fgSizerRotate->Add( xrot, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_spinXrot = new wxSpinButton( vbRotate->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinXrot = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerRotate->Add( m_spinXrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText21 = new wxStaticText( vbRotate->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21 = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
 	fgSizerRotate->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	yrot = new wxTextCtrl( vbRotate->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	yrot = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !yrot->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -102,14 +110,14 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	#endif
 	fgSizerRotate->Add( yrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_spinYrot = new wxSpinButton( vbRotate->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinYrot = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerRotate->Add( m_spinYrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText31 = new wxStaticText( vbRotate->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31 = new wxStaticText( this, wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText31->Wrap( -1 );
 	fgSizerRotate->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	zrot = new wxTextCtrl( vbRotate->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	zrot = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !zrot->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -120,57 +128,62 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	#endif
 	fgSizerRotate->Add( zrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 	
-	m_spinZrot = new wxSpinButton( vbRotate->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinZrot = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	vbRotate->Add( fgSizerRotate, 0, wxEXPAND, 5 );
+	bSizerRotation->Add( fgSizerRotate, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
-	bSizerLeft->Add( vbRotate, 0, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( bSizerRotation, 0, wxEXPAND, 5 );
 	
-	vbOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
+	wxBoxSizer* bSizerOffset;
+	bSizerOffset = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextOffset = new wxStaticText( this, wxID_ANY, _("Offset"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOffset->Wrap( -1 );
+	bSizerOffset->Add( m_staticTextOffset, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerOffset;
 	fgSizerOffset = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizerOffset->SetFlexibleDirection( wxBOTH );
 	fgSizerOffset->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText12 = new wxStaticText( vbOffset->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12 = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	fgSizerOffset->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	xoff = new wxTextCtrl( vbOffset->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	xoff = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerOffset->Add( xoff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_spinXoffset = new wxSpinButton( vbOffset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinXoffset = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerOffset->Add( m_spinXoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText22 = new wxStaticText( vbOffset->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText22 = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
 	fgSizerOffset->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	yoff = new wxTextCtrl( vbOffset->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	yoff = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerOffset->Add( yoff, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_spinYoffset = new wxSpinButton( vbOffset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinYoffset = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerOffset->Add( m_spinYoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText32 = new wxStaticText( vbOffset->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32 = new wxStaticText( this, wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
 	fgSizerOffset->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	zoff = new wxTextCtrl( vbOffset->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	zoff = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerOffset->Add( zoff, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 	
-	m_spinZoffset = new wxSpinButton( vbOffset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
+	m_spinZoffset = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	vbOffset->Add( fgSizerOffset, 0, wxEXPAND, 5 );
+	bSizerOffset->Add( fgSizerOffset, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
-	bSizerLeft->Add( vbOffset, 0, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( bSizerOffset, 1, wxEXPAND, 5 );
 	
 	
 	bSizermain->Add( bSizerLeft, 0, wxEXPAND, 5 );
@@ -240,7 +253,6 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	
 	this->SetSizer( bSizermain );
 	this->Layout();
-	bSizermain->Fit( this );
 	
 	// Connect Events
 	xscale->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PREV_3D_BASE::onMouseWheelScale ), NULL, this );
