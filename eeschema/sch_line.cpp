@@ -378,8 +378,8 @@ bool SCH_LINE::IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition )
     else
         return false;
 
-    return (std::signbit( first.x ) == std::signbit( second.x ) &&
-            std::signbit( first.y ) == std::signbit( second.y ) );
+    return ( sign( first.x ) == sign( second.x ) &&
+             sign( first.y ) == sign( second.y ) );
 }
 
 
