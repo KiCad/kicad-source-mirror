@@ -119,16 +119,6 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
 }
 
 
-void DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
-                             const wxString& text, const wxSize& size )
-{
-    HTML_MESSAGE_BOX dlg( parent, title, wxDefaultPosition, size );
-
-    dlg.AddHTML_Text( text );
-    dlg.ShowModal();
-}
-
-
 bool IsOK( wxWindow* aParent, const wxString& aMessage )
 {
     wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),

@@ -311,7 +311,11 @@ void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
     msg << _( "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to "
               "create your own project templates folder." );
 
-    DisplayHtmlInfoMessage( GetParent(), _( "Environment Variable Help" ), msg );
+    HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
+    dlg.SetDialogSizeInDU( 400, 350 );
+
+    dlg.AddHTML_Text( msg );
+    dlg.ShowModal();
 }
 
 
@@ -473,5 +477,9 @@ void DIALOG_ENV_VAR_SINGLE::onHelpClick( wxCommandEvent& event )
                       "cannot start with a digit (0-9)."
                     );
 
-    DisplayHtmlInfoMessage( GetParent(), _( "Environment Variable Help" ), msg );
+    HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
+    dlg.SetDialogSizeInDU( 400, 350 );
+
+    dlg.AddHTML_Text( msg );
+    dlg.ShowModal();
 }

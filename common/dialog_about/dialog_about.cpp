@@ -571,8 +571,8 @@ void DIALOG_ABOUT::onShowVersionInfo( wxCommandEvent& event )
     wxString msg_version;
     buildVersionInfoData( msg_version, true );
 
-    HTML_MESSAGE_BOX dlg( this, _( "Version Info" ), wxDefaultPosition,
-                          wxSize( 550, 500 ) );
+    HTML_MESSAGE_BOX dlg( this, _( "Version Info" ));
+    dlg.SetDialogSizeInDU( 400, 350 );
 
     dlg.AddHTML_Text( msg_version );
     dlg.ShowModal();

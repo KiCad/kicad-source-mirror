@@ -482,8 +482,9 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
 
     // Create a non modal dialog, which shows the list of hotkeys until dismissed
     // but does not block the parent window
-    HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX( aFrame, _( "Hotkeys List" ),
-                                        wxDefaultPosition, wxSize( 340, 750 ) );
+    HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX( aFrame, _( "Hotkeys List" ) );
+    dlg->SetDialogSizeInDU( 300, 250 );
+
     dlg->AddHTML_Text( msg );
     dlg->Show( true );
 }

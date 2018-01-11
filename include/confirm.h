@@ -113,14 +113,6 @@ int YesNoCancelDialog( wxWindow*       aParent,
                        const wxString& aCancelButtonText = wxEmptyString );
 
 
-/**
- * Function DisplayHtmlInforMessage
- * displays \a aMessage in HTML format.
- */
-void DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
-                             const wxString& aMessage,
-                             const wxSize& size = wxDefaultSize );
-
 
 /**
  * Displays a dialog with radioboxes asking the user to select an option.
@@ -140,7 +132,7 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
  * @param aMessage is a text label displayed in the first row of the dialog.
  * @param aOptions is a vector of possible options.
  * @param aDefaultState is the default state for the checkboxes.
- * @return Vector containing indices of the selected option. 
+ * @return Vector containing indices of the selected option.
  */
 std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
         const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState = false );

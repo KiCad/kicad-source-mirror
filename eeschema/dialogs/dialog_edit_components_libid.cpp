@@ -177,7 +177,7 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
     m_panelGrid->SetMinSize( wxSize( minwidth, -1) );
     Layout();
 
-    SetSizeInDU( 360, 300 );
+    SetSizeInDU( 500, 400 );
     Center();
 }
 

@@ -642,8 +642,8 @@ void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
 
 void DIALOG_BOM::OnHelp( wxCommandEvent& event )
 {
-    HTML_MESSAGE_BOX help_Dlg( this, _("Bom Generation Help"),
-                               wxDefaultPosition, wxSize( 750,550 ) );
+    HTML_MESSAGE_BOX help_Dlg( this, _("Bom Generation Help") );
+    help_Dlg.SetDialogSizeInDU( 500, 350 );
 
     wxString msg = FROM_UTF8(s_bomHelpInfo);
     help_Dlg.m_htmlWindow->AppendToPage( msg );

@@ -49,7 +49,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent,
     m_sdbSizerOK->SetDefault();
 
     Layout();
-    SetSizeInDU( 240, 120 );
+    SetSizeInDU( 350, 300 );
     Center();
 }
 

@@ -28,13 +28,15 @@
 #include <common.h>
 
 
-HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle,
-        wxPoint aPos, wxSize aSize) :
-    DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, aTitle, aPos, aSize )
+HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle) :
+    DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, aTitle )
 {
     m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
     ListClear();
-    SetSizeInDU( 240, 120 );
+
+    // Gives a default logical size (the actual size depends on the display definition)
+    SetSizeInDU( 240, 150 );
+
     Center();
 }
 
