@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# +12V
+# carte_test_schlib:+12V
 #
-DEF +12V #PWR 0 0 Y Y 1 F P
+DEF carte_test_schlib:+12V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "+12V" 0 140 50 H V C CNN
+F1 "carte_test_schlib:+12V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -16,11 +16,11 @@ X +12V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# -12V
+# carte_test_schlib:-12V
 #
-DEF -12V #PWR 0 0 Y Y 1 F N
+DEF carte_test_schlib:-12V #PWR 0 0 Y Y 1 F N
 F0 "#PWR" 0 100 50 H I C CNN
-F1 "-12V" 0 150 50 H V C CNN
+F1 "carte_test_schlib:-12V" 0 150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -29,11 +29,11 @@ X -12V 1 0 0 0 U 50 50 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# 74HCT04
+# carte_test_schlib:74HC04
 #
-DEF 74HCT04 U 0 30 Y Y 6 F N
+DEF carte_test_schlib:74HC04 U 0 30 Y Y 6 F N
 F0 "U" 150 100 40 H V C CNN
-F1 "74HCT04" 200 -100 40 H V C CNN
+F1 "carte_test_schlib:74HC04" 200 -100 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS 74HC14 74HC04 74LS14
@@ -68,27 +68,11 @@ X ~ 13 -450 0 300 R 60 60 6 2 I I
 ENDDRAW
 ENDDEF
 #
-# 7805
+# carte_test_schlib:C
 #
-DEF 7805 U 0 30 N Y 1 F N
-F0 "U" 150 -196 60 H V C CNN
-F1 "7805" 0 200 60 H V C CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
-ALIAS LM7805 LM7812 78L05
-DRAW
-S -200 -150 200 150 0 1 0 N
-X GND GND 0 -250 100 U 40 40 1 1 I
-X VI VI -400 50 200 R 40 40 1 1 I
-X VO VO 400 50 200 L 40 40 1 1 w
-ENDDRAW
-ENDDEF
-#
-# C
-#
-DEF C C 0 10 N Y 1 F N
+DEF carte_test_schlib:C C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "C" 25 -100 50 H V L CNN
+F1 "carte_test_schlib:C" 25 -100 50 H V L CNN
 F2 "" 38 -150 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -102,11 +86,11 @@ X ~ 2 0 -150 110 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CONN_2
+# carte_test_schlib:CONN_2
 #
-DEF CONN_2 P 0 40 Y N 1 F N
+DEF carte_test_schlib:CONN_2 P 0 40 Y N 1 F N
 F0 "P" -50 0 40 V V C CNN
-F1 "CONN_2" 50 0 40 V V C CNN
+F1 "carte_test_schlib:CONN_2" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -116,11 +100,11 @@ X PM 2 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_2X2
+# carte_test_schlib:CONN_2X2
 #
-DEF CONN_2X2 P 0 40 Y N 1 F N
+DEF carte_test_schlib:CONN_2X2 P 0 40 Y N 1 F N
 F0 "P" 0 150 50 H V C CNN
-F1 "CONN_2X2" 10 -130 40 H V C CNN
+F1 "carte_test_schlib:CONN_2X2" 10 -130 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -132,11 +116,11 @@ X 4 4 400 -50 300 L 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_3
+# carte_test_schlib:CONN_3
 #
-DEF CONN_3 K 0 40 Y N 1 F N
+DEF carte_test_schlib:CONN_3 K 0 40 Y N 1 F N
 F0 "K" -50 0 50 V V C CNN
-F1 "CONN_3" 50 0 40 V V C CNN
+F1 "carte_test_schlib:CONN_3" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -147,11 +131,11 @@ X P3 3 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CP
+# carte_test_schlib:CP
 #
-DEF CP C 0 10 N Y 1 F N
+DEF carte_test_schlib:CP C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "CP" 25 -100 50 H V L CNN
+F1 "carte_test_schlib:CP" 25 -100 50 H V L CNN
 F2 "" 38 -150 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -170,11 +154,11 @@ X ~ 2 0 -150 110 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CRYSTAL
+# carte_test_schlib:CRYSTAL
 #
-DEF CRYSTAL X 0 40 N N 1 F N
+DEF carte_test_schlib:CRYSTAL X 0 40 N N 1 F N
 F0 "X" 0 150 60 H V C CNN
-F1 "CRYSTAL" 0 -150 60 H V C CNN
+F1 "carte_test_schlib:CRYSTAL" 0 -150 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -186,11 +170,11 @@ X 2 2 300 0 200 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DB25
+# carte_test_schlib:DB25
 #
-DEF DB25 J 0 40 Y N 1 F N
+DEF carte_test_schlib:DB25 J 0 40 Y N 1 F N
 F0 "J" 50 1350 70 H V C CNN
-F1 "DB25" -50 -1350 70 H V C CNN
+F1 "carte_test_schlib:DB25" -50 -1350 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -280,11 +264,11 @@ X 9 9 -450 400 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DB9
+# carte_test_schlib:DB9
 #
-DEF DB9 J 0 40 Y N 1 F N
+DEF carte_test_schlib:DB9 J 0 40 Y N 1 F N
 F0 "J" 0 550 70 H V C CNN
-F1 "DB9" 0 -550 70 H V C CNN
+F1 "carte_test_schlib:DB9" 0 -550 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -330,11 +314,11 @@ X P9 9 -450 300 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DIODE
+# carte_test_schlib:DIODE
 #
-DEF DIODE D 0 0 Y Y 1 F N
+DEF carte_test_schlib:DIODE D 0 0 Y Y 1 F N
 F0 "D" 0 100 40 H V C CNN
-F1 "DIODE" 0 -100 40 H V C CNN
+F1 "carte_test_schlib:DIODE" 0 -100 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -349,11 +333,11 @@ X A 2 -200 0 150 R 20 20 1 1 P
 ENDDRAW
 ENDDEF
 #
-# GND
+# carte_test_schlib:GND
 #
-DEF GND #PWR 0 0 Y Y 1 F P
+DEF carte_test_schlib:GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "GND" 0 -150 50 H V C CNN
+F1 "carte_test_schlib:GND" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -362,11 +346,11 @@ X GND 1 0 0 0 D 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# LED
+# carte_test_schlib:LED
 #
-DEF LED D 0 40 Y N 1 F N
+DEF carte_test_schlib:LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "LED" 0 -100 50 H V C CNN
+F1 "carte_test_schlib:LED" 0 -100 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -388,36 +372,50 @@ X A 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# LM318N
+# carte_test_schlib:LM318N
 #
-DEF LM318N U 0 30 Y Y 1 F N
+DEF carte_test_schlib:LM318N U 0 30 Y Y 1 F N
 F0 "U" 100 300 60 H V C CNN
-F1 "LM318N" 210 -250 60 H V C CNN
+F1 "carte_test_schlib:LM318N" 210 -250 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
-P 2 0 1 0 -200 -200 -200 200 N
-P 2 0 1 0 -200 200 200 0 N
 P 2 0 1 0 200 -100 100 -50 N
-P 2 0 1 0 200 0 -200 -200 N
 P 2 0 1 0 200 100 100 50 N
 P 2 0 1 0 200 200 0 100 N
-X FIN2 1 500 200 300 L 60 30 1 1 P
-X - 2 -500 -100 300 R 60 60 1 1 I
-X + 3 -500 100 300 R 60 60 1 1 I
-X V- 4 -100 -400 250 U 60 30 1 1 W
-X FOUT 5 500 -100 300 L 60 30 1 1 P
-X OUT 6 500 0 300 L 60 30 1 1 O
-X V+ 7 -100 400 250 D 60 30 1 1 W
-X FIN1 8 500 100 300 L 60 30 1 1 P
+P 4 0 1 12 200 0 -200 200 -200 -200 200 0 f
+X FIN2 1 400 200 200 L 60 30 1 1 P
+X - 2 -400 -100 200 R 60 60 1 1 I
+X + 3 -400 100 200 R 60 60 1 1 I
+X V- 4 -100 -300 150 U 60 30 1 1 W
+X FOUT 5 400 -100 200 L 60 30 1 1 P
+X OUT 6 400 0 200 L 60 30 1 1 O
+X V+ 7 -100 300 150 D 60 30 1 1 W
+X FIN1 8 400 100 200 L 60 30 1 1 P
 ENDDRAW
 ENDDEF
 #
-# PWR_FLAG
+# carte_test_schlib:LM7805
 #
-DEF PWR_FLAG #FLG 0 0 N N 1 F P
+DEF carte_test_schlib:LM7805 U 0 30 N Y 1 F N
+F0 "U" 150 -196 60 H V C CNN
+F1 "carte_test_schlib:LM7805" 0 200 60 H V C CNN
+F2 "" 0 0 60 H V C CNN
+F3 "" 0 0 60 H V C CNN
+ALIAS LM7805 LM7812 78L05
+DRAW
+S -200 -150 200 150 0 1 0 N
+X GND GND 0 -250 100 U 40 40 1 1 I
+X VI VI -400 50 200 R 40 40 1 1 I
+X VO VO 400 50 200 L 40 40 1 1 w
+ENDDRAW
+ENDDEF
+#
+# carte_test_schlib:PWR_FLAG
+#
+DEF carte_test_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 95 30 H I C CNN
-F1 "PWR_FLAG" 0 180 30 H V C CNN
+F1 "carte_test_schlib:PWR_FLAG" 0 180 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -426,11 +424,11 @@ X pwr 1 0 0 0 U 20 20 0 0 w
 ENDDRAW
 ENDDEF
 #
-# R
+# carte_test_schlib:R
 #
-DEF R R 0 0 N Y 1 F N
+DEF carte_test_schlib:R R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "R" 0 0 50 V V C CNN
+F1 "carte_test_schlib:R" 0 0 50 V V C CNN
 F2 "" -70 0 50 V I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -444,17 +442,17 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# RAM_32KO
+# carte_test_schlib:RAM_32KO
 #
-DEF RAM_32KO U 0 40 Y Y 1 F N
+DEF carte_test_schlib:RAM_32KO U 0 40 Y Y 1 F N
 F0 "U" 150 900 70 H V C CNN
-F1 "RAM_32KO" 300 -1100 60 H V C CNN
+F1 "carte_test_schlib:RAM_32KO" 300 -1100 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
-S -400 850 400 -1050 0 1 0 N
-X GND 14 0 -1050 0 U 60 60 0 0 W N
-X VCC 28 0 850 0 D 60 60 0 0 W N
+S -400 850 400 -1050 0 1 12 f
+X GND 14 0 -1250 200 U 60 60 0 0 W
+X VCC 28 0 1050 200 D 60 60 0 0 W
 X A14 1 -700 -600 300 R 60 60 1 1 I
 X A0 10 -700 800 300 R 60 60 1 1 I
 X D0 11 700 800 300 L 60 60 1 1 T
@@ -484,11 +482,11 @@ X A1 9 -700 700 300 R 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# SW_PUSH
+# carte_test_schlib:SW_PUSH
 #
-DEF SW_PUSH SW 0 40 N N 1 F N
+DEF carte_test_schlib:SW_PUSH SW 0 40 N N 1 F N
 F0 "SW" 150 110 50 H V C CNN
-F1 "SW_PUSH" 0 -80 50 H V C CNN
+F1 "carte_test_schlib:SW_PUSH" 0 -80 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -499,15 +497,15 @@ X 2 2 300 0 200 L 60 60 0 1 P I
 ENDDRAW
 ENDDEF
 #
-# TDA8702
+# carte_test_schlib:TDA8702
 #
-DEF TDA8702 U 0 40 Y Y 1 F N
+DEF carte_test_schlib:TDA8702 U 0 40 Y Y 1 F N
 F0 "U" 200 800 60 H V L CNN
-F1 "TDA8702" 200 -800 60 H V L CNN
+F1 "carte_test_schlib:TDA8702" 200 -800 60 H V L CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
-S -500 700 500 -700 0 1 0 N
+S -500 700 500 -700 0 1 12 f
 X VREF 1 -800 -400 300 R 50 50 1 1 B
 X DB4 10 -800 200 300 R 50 50 1 1 I
 X DB1 11 -800 500 300 R 50 50 1 1 I
@@ -545,11 +543,11 @@ X DB5 9 -800 100 300 R 50 50 1 2 I
 ENDDRAW
 ENDDEF
 #
-# VCC
+# carte_test_schlib:VCC
 #
-DEF VCC #PWR 0 0 Y Y 1 F P
+DEF carte_test_schlib:VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "VCC" 0 150 50 H V C CNN
+F1 "carte_test_schlib:VCC" 0 150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -559,15 +557,15 @@ X VCC 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# XC95108PC84
+# carte_test_schlib:XC95108PC84
 #
-DEF XC95108PC84 U 0 30 Y Y 1 F N
+DEF carte_test_schlib:XC95108PC84 U 0 30 Y Y 1 F N
 F0 "U" 550 2550 60 H V L CNN
-F1 "XC95108PC84" 400 -1950 60 H V L CNN
+F1 "carte_test_schlib:XC95108PC84" 400 -1950 60 H V L CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
-S -850 2450 850 -1850 0 1 0 N
+S -850 2450 850 -1850 0 1 15 f
 X P1 1 -1150 1850 300 R 60 60 1 1 B
 X I/O/GCK2 10 -1150 1050 300 R 60 60 1 1 B
 X P11 11 -1150 950 300 R 60 60 1 1 B

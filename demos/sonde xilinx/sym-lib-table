@@ -1,4 +1,3 @@
 (sym_lib_table
-  (lib (name "sonde xilinx_schlib")(type Legacy)(uri "${KIPRJMOD}/sonde xilinx_schlib.lib")(options "")(descr ""))
-  (lib (name power1)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/power.lib)(options "")(descr ""))
+  (lib (name sonde_xilinx_schlib)(type Legacy)(uri "${KIPRJMOD}/sonde xilinx_schlib.lib")(options "")(descr ""))
 )

@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L sonde~xilinx_schlib:R R11
+L sonde_xilinx_schlib:R R11
 U 1 1 4D527316
 P 6650 2600
 F 0 "R11" V 6730 2600 50  0000 C CNN
@@ -35,7 +35,7 @@ Wire Wire Line
 Wire Wire Line
 	5900 4200 6300 4200
 $Comp
-L sonde~xilinx_schlib:GND #PWR01
+L sonde_xilinx_schlib:GND #PWR01
 U 1 1 3EBF81B1
 P 6300 4700
 F 0 "#PWR01" H 6300 4700 40  0001 C CNN
@@ -46,7 +46,7 @@ F 3 "" H 6300 4700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:C C4
+L sonde_xilinx_schlib:C C4
 U 1 1 3EBF81A7
 P 6300 4450
 F 0 "C4" H 6350 4550 50  0000 L CNN
@@ -57,7 +57,7 @@ F 3 "" H 6300 4450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R13
+L sonde_xilinx_schlib:R R13
 U 1 1 4D528082
 P 6650 4200
 F 0 "R13" V 6730 4200 50  0000 C CNN
@@ -72,7 +72,7 @@ Wire Wire Line
 Wire Wire Line
 	4800 4500 5450 4500
 $Comp
-L sonde~xilinx_schlib:74LS125 U1
+L sonde_xilinx_schlib:74LS125 U1
 U 4 1 3EBF7DBD
 P 5450 4200
 F 0 "U1" H 5450 4300 50  0000 L BNN
@@ -108,7 +108,7 @@ Wire Wire Line
 Wire Wire Line
 	10200 4200 10250 4200
 $Comp
-L sonde~xilinx_schlib:DB9 J2
+L sonde_xilinx_schlib:DB9 J2
 U 1 1 3ECDE5C8
 P 10700 3900
 F 0 "J2" H 10700 4450 70  0000 C CNN
@@ -131,7 +131,7 @@ Wire Wire Line
 Wire Wire Line
 	8400 3700 8400 2750
 $Comp
-L sonde~xilinx_schlib:PWR_FLAG #FLG02
+L sonde_xilinx_schlib:PWR_FLAG #FLG02
 U 1 1 3EBF848F
 P 6100 950
 F 0 "#FLG02" H 6100 1220 30  0001 C CNN
@@ -142,7 +142,7 @@ F 3 "" H 6100 950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:VCC #PWR03
+L sonde_xilinx_schlib:VCC #PWR03
 U 1 1 3EBF8479
 P 5800 950
 F 0 "#PWR03" H 5800 1050 30  0001 C CNN
@@ -153,7 +153,7 @@ F 3 "" H 5800 950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:GND #PWR04
+L sonde_xilinx_schlib:GND #PWR04
 U 1 1 3EBF8458
 P 10200 4850
 F 0 "#PWR04" H 10200 4850 40  0001 C CNN
@@ -164,7 +164,7 @@ F 3 "" H 10200 4850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:PWR_FLAG #FLG05
+L sonde_xilinx_schlib:PWR_FLAG #FLG05
 U 1 1 3EBF843C
 P 10200 4800
 F 0 "#FLG05" H 10200 5070 30  0001 C CNN
@@ -184,7 +184,7 @@ Wire Wire Line
 Wire Wire Line
 	2500 2700 2200 2700
 $Comp
-L sonde~xilinx_schlib:GND #PWR06
+L sonde_xilinx_schlib:GND #PWR06
 U 1 1 4D528081
 P 2500 2750
 F 0 "#PWR06" H 2500 2750 40  0001 C CNN
@@ -207,7 +207,7 @@ Wire Wire Line
 Text Label 9450 3500 0    60   ~ 0
 PWR_3,3-5V
 $Comp
-L sonde~xilinx_schlib:GND #PWR07
+L sonde_xilinx_schlib:GND #PWR07
 U 1 1 4D52808A
 P 10050 3600
 F 0 "#PWR07" H 10050 3600 40  0001 C CNN
@@ -228,7 +228,7 @@ TD0-DONE
 Text Label 7700 2550 0    60   ~ 0
 PWR_3,3-5V
 $Comp
-L sonde~xilinx_schlib:GND #PWR08
+L sonde_xilinx_schlib:GND #PWR08
 U 1 1 3EBF8376
 P 8450 2650
 F 0 "#PWR08" H 8450 2650 40  0001 C CNN
@@ -265,12 +265,12 @@ Wire Wire Line
 Wire Wire Line
 	7300 1000 7650 1000
 $Comp
-L sonde~xilinx_schlib:CONN_6 P1
+L sonde_xilinx_schlib:CONN_6 P1
 U 1 1 3EBF830C
 P 8850 2800
 F 0 "P1" V 8800 2800 60  0000 C CNN
 F 1 "CONN_6" V 8900 2800 60  0000 C CNN
-F 2 "Connect:bornier6" H 8850 2800 60  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 8850 2800 60  0001 C CNN
 F 3 "" H 8850 2800 60  0001 C CNN
 	1    8850 2800
 	1    0    0    -1  
@@ -279,7 +279,7 @@ Connection ~ 6500 1000
 Wire Wire Line
 	6500 1000 6500 1050
 $Comp
-L sonde~xilinx_schlib:GND #PWR09
+L sonde_xilinx_schlib:GND #PWR09
 U 1 1 3EBF82CF
 P 6500 1500
 F 0 "#PWR09" H 6500 1500 40  0001 C CNN
@@ -290,7 +290,7 @@ F 3 "" H 6500 1500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:CP C1
+L sonde_xilinx_schlib:CP C1
 U 1 1 3EBF82C6
 P 6500 1250
 F 0 "C1" H 6550 1350 50  0000 L CNN
@@ -316,7 +316,7 @@ Wire Wire Line
 Wire Wire Line
 	5850 1900 5900 1900
 $Comp
-L sonde~xilinx_schlib:GND #PWR010
+L sonde_xilinx_schlib:GND #PWR010
 U 1 1 4D528089
 P 6300 3800
 F 0 "#PWR010" H 6300 3800 40  0001 C CNN
@@ -327,7 +327,7 @@ F 3 "" H 6300 3800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:C C5
+L sonde_xilinx_schlib:C C5
 U 1 1 4D528086
 P 6300 3550
 F 0 "C5" H 6350 3650 50  0000 L CNN
@@ -338,7 +338,7 @@ F 3 "" H 6300 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R12
+L sonde_xilinx_schlib:R R12
 U 1 1 4D528083
 P 6650 3300
 F 0 "R12" V 6730 3300 50  0000 C CNN
@@ -349,7 +349,7 @@ F 3 "" H 6650 3300 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:GND #PWR011
+L sonde_xilinx_schlib:GND #PWR011
 U 1 1 4D528088
 P 6300 3100
 F 0 "#PWR011" H 6300 3100 40  0001 C CNN
@@ -360,7 +360,7 @@ F 3 "" H 6300 3100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:C C2
+L sonde_xilinx_schlib:C C2
 U 1 1 4D528085
 P 6300 2850
 F 0 "C2" H 6350 2950 50  0000 L CNN
@@ -383,7 +383,7 @@ Wire Wire Line
 Wire Wire Line
 	6200 1000 6200 1050
 $Comp
-L sonde~xilinx_schlib:GND #PWR012
+L sonde_xilinx_schlib:GND #PWR012
 U 1 1 3EBF81B3
 P 6200 1600
 F 0 "#PWR012" H 6200 1600 40  0001 C CNN
@@ -394,7 +394,7 @@ F 3 "" H 6200 1600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:GND #PWR013
+L sonde_xilinx_schlib:GND #PWR013
 U 1 1 4D528087
 P 6300 2400
 F 0 "#PWR013" H 6300 2400 40  0001 C CNN
@@ -405,7 +405,7 @@ F 3 "" H 6300 2400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:C C3
+L sonde_xilinx_schlib:C C3
 U 1 1 4D528084
 P 6300 2150
 F 0 "C3" H 6350 2250 50  0000 L CNN
@@ -416,7 +416,7 @@ F 3 "" H 6300 2150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R14
+L sonde_xilinx_schlib:R R14
 U 1 1 3EBF819B
 P 6650 1900
 F 0 "R14" V 6730 1900 50  0000 C CNN
@@ -427,7 +427,7 @@ F 3 "" H 6650 1900 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R5
+L sonde_xilinx_schlib:R R5
 U 1 1 3EBF818E
 P 6200 1300
 F 0 "R5" H 6050 1500 50  0000 C CNN
@@ -438,7 +438,7 @@ F 3 "" H 6200 1300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R2
+L sonde_xilinx_schlib:R R2
 U 1 1 3EBF8187
 P 5900 1300
 F 0 "R2" H 5750 1500 50  0000 C CNN
@@ -449,7 +449,7 @@ F 3 "" H 5900 1300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:DIODESCH D2
+L sonde_xilinx_schlib:DIODESCH D2
 U 1 1 3EBF8176
 P 7100 1000
 F 0 "D2" H 7100 1100 50  0000 C CNN
@@ -460,7 +460,7 @@ F 3 "" H 7100 1000 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:DIODESCH D1
+L sonde_xilinx_schlib:DIODESCH D1
 U 1 1 3EBF815E
 P 4500 1000
 F 0 "D1" H 4500 1100 50  0000 C CNN
@@ -484,7 +484,7 @@ Wire Wire Line
 Wire Wire Line
 	2500 1700 2200 1700
 $Comp
-L sonde~xilinx_schlib:GND #PWR014
+L sonde_xilinx_schlib:GND #PWR014
 U 1 1 3EBF8100
 P 2500 1750
 F 0 "#PWR014" H 2500 1750 40  0001 C CNN
@@ -495,7 +495,7 @@ F 3 "" H 2500 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:GND #PWR015
+L sonde_xilinx_schlib:GND #PWR015
 U 1 1 3EBF80DD
 P 4650 2000
 F 0 "#PWR015" H 4650 2000 40  0001 C CNN
@@ -569,7 +569,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 7200 1700 7200
 $Comp
-L sonde~xilinx_schlib:GND #PWR016
+L sonde_xilinx_schlib:GND #PWR016
 U 1 1 3EBF7F0D
 P 1150 7300
 F 0 "#PWR016" H 1150 7300 40  0001 C CNN
@@ -589,7 +589,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 5600 1250 5600
 $Comp
-L sonde~xilinx_schlib:74LS125 U2
+L sonde_xilinx_schlib:74LS125 U2
 U 4 1 3EBF7EEC
 P 1700 5600
 F 0 "U2" H 1700 5700 50  0000 L BNN
@@ -600,7 +600,7 @@ F 3 "" H 1700 5600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:74LS125 U2
+L sonde_xilinx_schlib:74LS125 U2
 U 3 1 3EBF7EDF
 P 1700 6250
 F 0 "U2" H 1700 6350 50  0000 L BNN
@@ -611,7 +611,7 @@ F 3 "" H 1700 6250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:74LS125 U2
+L sonde_xilinx_schlib:74LS125 U2
 U 2 1 3EBF7EDD
 P 1700 6900
 F 0 "U2" H 1700 7000 50  0000 L BNN
@@ -636,7 +636,7 @@ Wire Wire Line
 Wire Wire Line
 	4650 2000 4650 1900
 $Comp
-L sonde~xilinx_schlib:74LS125 U1
+L sonde_xilinx_schlib:74LS125 U1
 U 3 1 3EBF7DB3
 P 5450 3300
 F 0 "U1" H 5450 3400 50  0000 L BNN
@@ -647,7 +647,7 @@ F 3 "" H 5450 3300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:74LS125 U1
+L sonde_xilinx_schlib:74LS125 U1
 U 2 1 3EBF7DAD
 P 5450 2600
 F 0 "U1" H 5450 2700 50  0000 L BNN
@@ -658,7 +658,7 @@ F 3 "" H 5450 2600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:74LS125 U1
+L sonde_xilinx_schlib:74LS125 U1
 U 1 1 3EBF7D9F
 P 5400 1900
 F 0 "U1" H 5400 2000 50  0000 L BNN
@@ -669,7 +669,7 @@ F 3 "" H 5400 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sonde~xilinx_schlib:74LS125 U2
+L sonde_xilinx_schlib:74LS125 U2
 U 1 1 3EBF7D92
 P 4650 1600
 F 0 "U2" H 4650 1700 50  0000 L BNN
@@ -682,7 +682,7 @@ $EndComp
 Wire Wire Line
 	2200 1600 3700 1600
 $Comp
-L sonde~xilinx_schlib:R R9
+L sonde_xilinx_schlib:R R9
 U 1 1 3EBF7D33
 P 3950 4200
 F 0 "R9" V 4030 4200 50  0000 C CNN
@@ -693,7 +693,7 @@ F 3 "" H 3950 4200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R10
+L sonde_xilinx_schlib:R R10
 U 1 1 3EBF7D31
 P 3950 3300
 F 0 "R10" V 4030 3300 50  0000 C CNN
@@ -704,7 +704,7 @@ F 3 "" H 3950 3300 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R8
+L sonde_xilinx_schlib:R R8
 U 1 1 4D528080
 P 3950 2900
 F 0 "R8" V 4030 2900 50  0000 C CNN
@@ -715,7 +715,7 @@ F 3 "" H 3950 2900 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R7
+L sonde_xilinx_schlib:R R7
 U 1 1 4D52807F
 P 3950 2600
 F 0 "R7" V 4030 2600 50  0000 C CNN
@@ -726,7 +726,7 @@ F 3 "" H 3950 2600 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R6
+L sonde_xilinx_schlib:R R6
 U 1 1 3EBF7D26
 P 3950 2250
 F 0 "R6" V 4030 2250 50  0000 C CNN
@@ -737,7 +737,7 @@ F 3 "" H 3950 2250 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R4
+L sonde_xilinx_schlib:R R4
 U 1 1 3EBF7D22
 P 3950 1600
 F 0 "R4" V 4030 1600 50  0000 C CNN
@@ -748,7 +748,7 @@ F 3 "" H 3950 1600 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:R R1
+L sonde_xilinx_schlib:R R1
 U 1 1 3EBF7D16
 P 3950 1000
 F 0 "R1" V 4030 1000 50  0000 C CNN
@@ -759,7 +759,7 @@ F 3 "" H 3950 1000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sonde~xilinx_schlib:DB25 J1
+L sonde_xilinx_schlib:DB25 J1
 U 1 1 3EBF7D04
 P 1750 2800
 F 0 "J1" H 1800 4150 70  0000 C CNN
@@ -773,7 +773,7 @@ Wire Wire Line
 	9400 1000 9400 3500
 Connection ~ 7650 1000
 $Comp
-L sonde~xilinx_schlib:GND #PWR017
+L sonde_xilinx_schlib:GND #PWR017
 U 1 1 5510FC05
 P 4950 2000
 F 0 "#PWR017" H 4950 2000 30  0001 C CNN
