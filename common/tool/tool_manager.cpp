@@ -510,6 +510,9 @@ OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
+    // Save current settings before overwriting with the dispatched tool
+    auto vc_settings = m_viewControls->GetSettings();
+
     // iterate over all registered tools
     for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
@@ -598,6 +601,8 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         if( finished )
             break;      // only the first tool gets the event
     }
+
+    m_viewControls->ApplySettings( vc_settings );
 }
 
 

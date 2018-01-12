@@ -1201,6 +1201,11 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
         }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            GetManager()->PassEvent();
+        }
     }
 
     view.SetVisible( &ruler, false );
