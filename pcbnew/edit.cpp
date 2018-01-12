@@ -852,13 +852,19 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
-    case ID_POPUP_PCB_EXCHANGE_FOOTPRINTS:
-        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
+    case ID_POPUP_PCB_UPDATE_FOOTPRINTS:
+        if( GetCurItem() && GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
-        InstallExchangeModuleFrame( (MODULE*) GetCurItem() );
-        // Warning: the current item can be deleted by exchange module
-        SetCurItem( NULL );
+        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), true );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
+    case ID_POPUP_PCB_EXCHANGE_FOOTPRINTS:
+        if( GetCurItem() && GetCurItem()->Type() != PCB_MODULE_T )
+            break;
+
+        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), false );
         m_canvas->MoveCursorToCrossHair();
         break;
 
@@ -1234,6 +1240,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_PCB_CLEAN:
         Clean_Pcb();
+        break;
+
+    case ID_MENU_PCB_UPDATE_FOOTPRINTS:
+        InstallExchangeModuleFrame( (MODULE*) nullptr, true );
+        break;
+
+    case ID_MENU_PCB_EXCHANGE_FOOTPRINTS:
+        InstallExchangeModuleFrame( (MODULE*) nullptr, false );
         break;
 
     case ID_MENU_PCB_SWAP_LAYERS:

@@ -55,6 +55,7 @@ public:
     enum FP_PRM_EDITOR_RETVALUE
     {
         PRM_EDITOR_ABORT,
+        PRM_EDITOR_WANT_UPDATE_FP,
         PRM_EDITOR_WANT_EXCHANGE_FP,
         PRM_EDITOR_EDIT_OK,
         PRM_EDITOR_WANT_MODEDIT
@@ -86,6 +87,7 @@ private:
         BrowseAndAdd3DShapeFile();
     }
     void GotoModuleEditor( wxCommandEvent& event ) override;
+    void UpdateModule( wxCommandEvent& event ) override;
     void ExchangeModule( wxCommandEvent& event ) override;
     void ModuleOrientEvent( wxCommandEvent& event ) override;
     void Cfg3DPath( wxCommandEvent& event ) override;

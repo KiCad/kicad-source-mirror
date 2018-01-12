@@ -850,6 +850,9 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_CREATE_ARRAY,
                      msg, KiBitmap( array_xpm ) );
 
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_UPDATE_FOOTPRINTS,
+                     _( "Update Footprint" ), KiBitmap( reload_xpm ) );
+
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EXCHANGE_FOOTPRINTS,
                      _( "Change Footprint" ), KiBitmap( exchange_xpm ) );
     }

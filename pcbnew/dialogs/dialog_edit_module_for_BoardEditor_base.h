@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 12 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,10 +40,11 @@ class TEXT_CTRL_EVAL;
 
 #define ID_NOTEBOOK 1000
 #define ID_LISTBOX_ORIENT_SELECT 1001
-#define ID_MODULE_PROPERTIES_EXCHANGE 1002
-#define ID_GOTO_MODULE_EDITOR 1003
-#define ID_ADD_3D_SHAPE 1004
-#define ID_REMOVE_3D_SHAPE 1005
+#define ID_MODULE_PROPERTIES_UPDATE 1002
+#define ID_MODULE_PROPERTIES_EXCHANGE 1003
+#define ID_GOTO_MODULE_EDITOR 1004
+#define ID_ADD_3D_SHAPE 1005
+#define ID_REMOVE_3D_SHAPE 1006
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MODULE_BOARD_EDITOR_BASE
@@ -76,6 +77,7 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_YPosUnit;
 		wxStaticText* m_TextSheetPath;
 		wxTextCtrl* m_textCtrlSheetPath;
+		wxButton* m_buttonUpdate;
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;
 		wxRadioBox* m_AttributsCtrl;
@@ -119,6 +121,7 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnEditReference( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditValue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UpdateModule( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExchangeModule( wxCommandEvent& event ) { event.Skip(); }
 		virtual void GotoModuleEditor( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DShapeNameSelected( wxCommandEvent& event ) { event.Skip(); }

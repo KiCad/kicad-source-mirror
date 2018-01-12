@@ -32,6 +32,7 @@
 #include <wxPcbStruct.h>
 #include <macros.h>
 #include <board_commit.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -47,15 +48,21 @@
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 
 
-int DIALOG_EXCHANGE_MODULE::m_selectionMode = 0;
+int DIALOG_EXCHANGE_MODULE::m_matchModeForUpdate           = wxID_MATCH_FP_ALL;
+int DIALOG_EXCHANGE_MODULE::m_matchModeForExchange         = wxID_MATCH_FP_REF;
+int DIALOG_EXCHANGE_MODULE::m_matchModeForUpdateSelected   = wxID_MATCH_FP_REF;
+int DIALOG_EXCHANGE_MODULE::m_matchModeForExchangeSelected = wxID_MATCH_FP_REF;
 
 
-DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* Module ) :
+DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* Module,
+                                                bool updateMode ) :
     DIALOG_EXCHANGE_MODULE_BASE( parent ), m_commit( parent )
 {
     m_parent = parent;
     m_currentModule = Module;
-    init();
+    m_updateMode = updateMode;
+
+    init( m_updateMode );
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Center();
@@ -64,66 +71,224 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
 
 void DIALOG_EXCHANGE_MODULE::OnQuit( wxCommandEvent& event )
 {
-    m_selectionMode = m_Selection->GetSelection();
     Show( false );
     EndQuasiModal( wxID_CANCEL );
 }
 
 
-void DIALOG_EXCHANGE_MODULE::init()
+void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
 {
     SetFocus();
 
-    m_CurrentFootprintFPID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-    m_NewFootprintFPID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-    m_CmpValue->AppendText( m_currentModule->GetValue() );
-    m_CmpReference->AppendText( m_currentModule->GetReference() );
-    m_Selection->SetString( 0, wxString::Format(
-                            _( "Change footprint of \"%s\"" ),
-                            GetChars( m_currentModule->GetReference() ) ) );
-    wxString fpname = m_CurrentFootprintFPID->GetValue().AfterLast( ':' );
+    // fetch title and mode strings out of the dialog (so they can be easily localized)
+    wxString title = updateMode ? m_updateModeTitle->GetLabel() : m_exchangeModeTitle->GetLabel();
+    wxString verb  = updateMode ? m_updateModeVerb->GetLabel()  : m_exchangeModeVerb->GetLabel();
+    wxString label;
+    m_localizationSizer->Show( false );
 
-    if( fpname.IsEmpty() )    // Happens for old fp names
-        fpname = m_CurrentFootprintFPID->GetValue();
+    SetTitle( title );
 
-    m_Selection->SetString( 1, wxString::Format(
-                            _( "Change footprints \"%s\"" ),
-                            GetChars( fpname.Left( 12 ) ) ) );
+    if( updateMode )
+    {
+        label.Printf( m_matchAll->GetLabel(), verb );
+        m_matchAll->SetLabel( label );
 
-    m_Selection->SetSelection( m_selectionMode );
+        m_middleSizer->Show( false );
+    }
+    else
+    {
+        m_allSizer->Show( false );
 
-    // Enable/disable widgets:
+        if( m_currentModule )
+            m_newID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+        m_newIDBrowseButton->SetBitmap( KiBitmap( library_browse_xpm ) );
+    }
+
+    if( m_currentModule )
+    {
+        m_specifiedRefSizer->Show( false );
+
+        label.Printf( m_matchCurrentRef->GetLabel(), verb, m_currentModule->GetReference() );
+        m_matchCurrentRef->SetLabel( label );
+
+        m_specifiedValueSizer->Show( false );
+
+        label.Printf( m_matchCurrentValue->GetLabel(), verb, m_currentModule->GetValue() );
+        m_matchCurrentValue->SetLabel( label );
+    }
+    else
+    {
+        m_currentRefSizer->Show( false );
+
+        label.Printf( m_matchSpecifiedRef->GetLabel(), verb );
+        m_matchSpecifiedRef->SetLabel( label );
+
+        m_currentValueSizer->Show( false );
+
+        label.Printf( m_matchSpecifiedValue->GetLabel(), verb );
+        m_matchSpecifiedValue->SetLabel( label );
+    }
+
+    label.Printf( m_matchSpecifiedID->GetLabel(), verb );
+    m_matchSpecifiedID->SetLabel( label );
+    if( m_currentModule )
+        m_specifiedID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+    m_specifiedIDBrowseButton->SetBitmap( KiBitmap( library_browse_xpm ) );
+
+    // initialize match-mode
     wxCommandEvent event;
-    OnSelectionClicked( event );
+    switch( getMatchMode() )
+    {
+    case wxID_MATCH_FP_ALL:
+        if( m_currentModule )
+            OnMatchRefClicked( event );
+        else
+            OnMatchAllClicked( event );
+        break;
+    case wxID_MATCH_FP_REF:
+        OnMatchRefClicked( event );
+        break;
+    case wxID_MATCH_FP_VAL:
+        OnMatchValueClicked( event );
+        break;
+    case wxID_MATCH_FP_ID:
+        OnMatchIDClicked( event );
+    }
+}
+
+
+int DIALOG_EXCHANGE_MODULE::getMatchMode()
+{
+    if( m_updateMode )
+        return( m_currentModule ? m_matchModeForUpdateSelected : m_matchModeForUpdate );
+    else
+        return( m_currentModule ? m_matchModeForExchangeSelected : m_matchModeForExchange );
+}
+
+
+void DIALOG_EXCHANGE_MODULE::setMatchMode( int aMatchMode )
+{
+    if( m_updateMode )
+    {
+        if( m_currentModule )
+            m_matchModeForUpdateSelected = aMatchMode;
+        else
+            m_matchModeForUpdate = aMatchMode;
+    }
+    else
+    {
+        if( m_currentModule )
+            m_matchModeForExchangeSelected = aMatchMode;
+        else
+            m_matchModeForExchange = aMatchMode;
+    }
+}
+
+
+bool DIALOG_EXCHANGE_MODULE::isMatch( MODULE* aModule )
+{
+    switch( getMatchMode() )
+    {
+    case wxID_MATCH_FP_ALL:
+        return true;
+    case wxID_MATCH_FP_REF:
+        // currentModule case goes through changeCurrentFootprint, so we only have
+        // to handle specifiedRef case
+        return aModule->GetReference() == m_specifiedRef->GetValue();
+    case wxID_MATCH_FP_VAL:
+        // currentValue must also check FPID so we don't get accidental matches that
+        // the user didn't intend
+        if( m_currentModule )
+            return aModule->GetValue() == m_currentModule->GetValue()
+                    && aModule->GetFPID() == m_currentModule->GetFPID();
+        else
+            return aModule->GetValue() == m_specifiedValue->GetValue();
+    case wxID_MATCH_FP_ID:
+        return aModule->GetFPID() == m_specifiedID->GetValue();
+    }
+    return false;   // just to quiet compiler warnings....
+}
+
+
+wxRadioButton* DIALOG_EXCHANGE_MODULE::getRadioButtonForMode()
+{
+    switch( getMatchMode() )
+    {
+    case wxID_MATCH_FP_ALL:
+        return( m_matchAll );
+    case wxID_MATCH_FP_REF:
+        return( m_matchCurrentRef->IsShown() ? m_matchCurrentRef : m_matchSpecifiedRef );
+    case wxID_MATCH_FP_VAL:
+        return( m_matchCurrentValue->IsShown() ? m_matchCurrentValue : m_matchSpecifiedValue );
+    case wxID_MATCH_FP_ID:
+        return( m_matchSpecifiedID );
+    default:
+        return nullptr;
+    }
+}
+
+
+void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons()
+{
+    wxRadioButton* button = getRadioButtonForMode();
+
+    m_matchAll->SetValue( m_matchAll == button );
+    m_matchCurrentRef->SetValue( m_matchCurrentRef == button );
+    m_matchSpecifiedRef->SetValue( m_matchSpecifiedRef == button );
+    m_matchCurrentValue->SetValue( m_matchCurrentValue == button );
+    m_matchSpecifiedValue->SetValue( m_matchSpecifiedValue == button );
+    m_matchSpecifiedID->SetValue(m_matchSpecifiedID == button );
+}
+
+
+void DIALOG_EXCHANGE_MODULE::OnMatchAllClicked( wxCommandEvent& event )
+{
+    setMatchMode( wxID_MATCH_FP_ALL );
+    updateMatchModeRadioButtons();
+    m_matchAll->SetFocus();
+}
+
+void DIALOG_EXCHANGE_MODULE::OnMatchRefClicked( wxCommandEvent& event )
+{
+    setMatchMode( wxID_MATCH_FP_REF );
+    updateMatchModeRadioButtons();
+
+    if( m_specifiedRef->IsShown() && event.GetEventObject() != m_specifiedRef )
+        m_specifiedRef->SetFocus();
+}
+
+
+void DIALOG_EXCHANGE_MODULE::OnMatchValueClicked( wxCommandEvent& event )
+{
+    setMatchMode( wxID_MATCH_FP_VAL );
+    updateMatchModeRadioButtons();
+
+    if( m_specifiedValue->IsShown() && event.GetEventObject() != m_specifiedValue )
+        m_specifiedValue->SetFocus();
+}
+
+
+void DIALOG_EXCHANGE_MODULE::OnMatchIDClicked( wxCommandEvent& event )
+{
+    setMatchMode( wxID_MATCH_FP_ID );
+    updateMatchModeRadioButtons();
+
+    if( m_specifiedID->IsShown() && event.GetEventObject() != m_specifiedID )
+        m_specifiedID->SetFocus();
 }
 
 
 void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
 {
-    m_selectionMode = m_Selection->GetSelection();
     bool result = false;
 
     m_MessageWindow->Clear();
     m_MessageWindow->Flush();
 
-    switch( m_Selection->GetSelection() )
-    {
-    case 0:
+    if( getMatchMode() == wxID_MATCH_FP_REF && m_currentModule )
         result = changeCurrentFootprint();
-        break;
-
-    case 1:
-        result = changeSameFootprints( false );
-        break;
-
-    case 2:
-        result = changeSameFootprints( true );
-        break;
-
-    case 3:
-        result = changeAllFootprints();
-        break;
-    }
+    else
+        result = changeSameFootprints();
 
     if( result )
     {
@@ -134,27 +299,6 @@ void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
     }
 
     m_commit.Push( wxT( "Changed footprint" ) );
-}
-
-
-void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
-{
-    bool enable = true;
-
-    switch( m_Selection->GetSelection() )
-    {
-    case 0:
-    case 1:
-    case 2:
-        break;
-
-    case 3:
-        enable = false;
-        break;
-    }
-
-    m_NewFootprintFPID->Enable( enable );
-    m_Browsebutton->Enable( enable );
 }
 
 
@@ -185,52 +329,31 @@ void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 
 bool DIALOG_EXCHANGE_MODULE::changeCurrentFootprint()
 {
-    wxString newmodulename = m_NewFootprintFPID->GetValue();
+    if( m_updateMode )
+        return change_1_Module( m_currentModule, m_currentModule->GetFPID(), true );
 
-    if( newmodulename == wxEmptyString )
+    wxString newFPID = m_newID->GetValue();
+
+    if( newFPID == wxEmptyString )
         return false;
 
-    return change_1_Module( m_currentModule, newmodulename, true );
+    return change_1_Module( m_currentModule, newFPID, true );
 }
 
 
-bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
+bool DIALOG_EXCHANGE_MODULE::changeSameFootprints()
 {
-    wxString msg;
     MODULE*  Module;
     MODULE*  PtBack;
     bool     change = false;
-    wxString newmodulename = m_NewFootprintFPID->GetValue();
+    wxString newFPID = m_newID->GetValue();
     wxString value;
-    LIB_ID   lib_reference;
-    bool     check_module_value = false;
     int      ShowErr = 3;           // Post 3 error messages max.
 
     if( m_parent->GetBoard()->m_Modules == NULL )
         return false;
 
-    if( newmodulename == wxEmptyString )
-        return false;
-
-    lib_reference = m_currentModule->GetFPID();
-
-    if( aUseValue )
-    {
-        check_module_value = true;
-        value = m_currentModule->GetValue();
-        msg.Printf( _( "Change footprint %s -> %s (for value = %s)?" ),
-                    GetChars( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) ),
-                    GetChars( newmodulename ),
-                    GetChars( m_currentModule->GetValue() ) );
-    }
-    else
-    {
-        msg.Printf( _( "Change footprint %s -> %s ?" ),
-                    GetChars( FROM_UTF8( lib_reference.Format().c_str() ) ),
-                    GetChars( newmodulename ) );
-    }
-
-    if( !IsOK( this, msg ) )
+    if( !m_updateMode && newFPID == wxEmptyString )
         return false;
 
     /* The change is done from the last module because
@@ -245,50 +368,16 @@ bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
     {
         PtBack = Module->Back();
 
-        if( lib_reference != Module->GetFPID() )
+        if( !isMatch( Module ) )
             continue;
 
-        if( check_module_value )
-        {
-            if( value.CmpNoCase( Module->GetValue() ) != 0 )
-                continue;
-        }
+        bool result;
+        if( m_updateMode )
+            result = change_1_Module( Module, Module->GetFPID(), ShowErr );
+        else
+            result = change_1_Module( Module, newFPID, ShowErr );
 
-        if( change_1_Module( Module, newmodulename, ShowErr ) )
-            change = true;
-        else if( ShowErr )
-            ShowErr--;
-    }
-
-    return change;
-}
-
-
-bool DIALOG_EXCHANGE_MODULE::changeAllFootprints()
-{
-    MODULE* Module, * PtBack;
-    bool    change  = false;
-    int     ShowErr = 3;              // Post 3 error max.
-
-    if( m_parent->GetBoard()->m_Modules == NULL )
-        return false;
-
-    if( !IsOK( this, _( "Are you sure you want to change all footprints?" ) ) )
-        return false;
-
-    /* The change is done from the last module because the function
-     * change_1_Module () modifies the last module in the list
-     *
-     * note: for the first module in chain (the last here), Module->Back()
-     * points the board or is NULL
-     */
-    Module = m_parent->GetBoard()->m_Modules.GetLast();
-
-    for( ; Module && ( Module->Type() == PCB_MODULE_T ); Module = PtBack )
-    {
-        PtBack = Module->Back();
-
-        if( change_1_Module( Module, Module->GetFPID(), ShowErr ) )
+        if( result )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -333,6 +422,8 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
 
     if( aModule == m_currentModule )
         m_currentModule = newModule;
+    if( aModule == m_parent->GetCurItem() )
+        m_parent->SetCurItem( newModule );
 
     msg += ": OK";
     reporter.Report( msg, REPORTER::RPT_ACTION );
@@ -382,19 +473,6 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
 }
 
 
-// Displays the list of available footprints in library name and select a footprint.
-void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
-{
-    wxString newname;
-
-    newname = m_parent->SelectFootprint( m_parent, wxEmptyString, wxEmptyString, wxEmptyString,
-                                         Prj().PcbFootprintLibs() );
-
-    if( newname != wxEmptyString )
-        m_NewFootprintFPID->SetValue( newname );
-}
-
-
 void DIALOG_EXCHANGE_MODULE::ViewAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname;
@@ -403,7 +481,10 @@ void DIALOG_EXCHANGE_MODULE::ViewAndSelectFootprint( wxCommandEvent& event )
 
     if( frame->ShowModal( &newname, this ) )
     {
-        m_NewFootprintFPID->SetValue( newname );
+        if( event.GetEventObject() == m_newIDBrowseButton )
+            m_newID->SetValue( newname );
+        else
+            m_specifiedID->SetValue( newname );
     }
 
     frame->Destroy();

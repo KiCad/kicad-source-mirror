@@ -146,9 +146,14 @@ TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         _( "Delete (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm,
         AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
+TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.InteractiveEdit.updateFootprints",
+        AS_GLOBAL, 0,
+        _( "Update Footprint" ), _( "Update the footprint from the library" ),
+        reload_xpm );
+
 TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
         AS_GLOBAL, 0,
-        _( "Exchange Footprint" ), _( "Change the footprint used for modules" ),
+        _( "Change Footprint" ), _( "Assign a different footprint from the library" ),
         exchange_xpm );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
@@ -313,10 +318,9 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::explodePadToShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
-    menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor,
-                  singleModuleCondition );
-    menu.AddItem( PCB_ACTIONS::exchangeFootprints,
-                  singleModuleCondition );
+    menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor, singleModuleCondition );
+    menu.AddItem( PCB_ACTIONS::updateFootprints, singleModuleCondition );
+    menu.AddItem( PCB_ACTIONS::exchangeFootprints, singleModuleCondition );
 
     return true;
 }
@@ -1100,13 +1104,9 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection( 0, FootprintFilter );
 
-    if( selection.Empty() )
-        return 0;
+    bool updateMode = aEvent.IsAction( &PCB_ACTIONS::updateFootprints );
 
-    MODULE* mod = selection.FirstOfKind<MODULE> ();
-
-    if( !mod )
-        return 0;
+    MODULE* mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
 
     frame()->SetCurItem( mod );
 
@@ -1116,13 +1116,9 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
     // invoke the exchange dialog process
     {
-        DIALOG_EXCHANGE_MODULE dialog( frame(), mod );
+        DIALOG_EXCHANGE_MODULE dialog( frame(), mod, updateMode );
         dialog.ShowQuasiModal();
     }
-
-    // The current item can be deleted by exchange module, and the
-    // selection is emptied, so remove current item from frame info area
-    frame()->SetCurItem( nullptr );
 
     return 0;
 }
@@ -1240,6 +1236,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Mirror,     PCB_ACTIONS::mirror.MakeEvent() );
 
     Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::updateFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
     Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,         PCB_ACTIONS::copyToClipboard.MakeEvent() );

@@ -1134,7 +1134,7 @@ public:
      */
     void Change_Side_Module( MODULE* Module, wxDC* DC );
 
-    int InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
+    int InstallExchangeModuleFrame( MODULE* ExchangeModuleModule, bool updateMode );
 
     /**
      * Function Exchange_Module

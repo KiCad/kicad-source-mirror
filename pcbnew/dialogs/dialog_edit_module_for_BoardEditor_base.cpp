@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 12 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -125,11 +125,20 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	
 	m_PropRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonExchange = new wxButton( m_PanelProperties, ID_MODULE_PROPERTIES_EXCHANGE, _("Change Footprint(s)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PropRightSizer->Add( m_buttonExchange, 0, wxALL|wxEXPAND, 5 );
+	m_buttonUpdate = new wxButton( m_PanelProperties, ID_MODULE_PROPERTIES_UPDATE, _("Update Footprint from Library"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PropRightSizer->Add( m_buttonUpdate, 0, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_buttonExchange = new wxButton( m_PanelProperties, ID_MODULE_PROPERTIES_EXCHANGE, _("Change Footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_buttonExchange, 1, wxALL|wxEXPAND, 5 );
 	
 	m_buttonModuleEditor = new wxButton( m_PanelProperties, ID_GOTO_MODULE_EDITOR, _("Footprint Editor"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PropRightSizer->Add( m_buttonModuleEditor, 0, wxALL|wxEXPAND, 5 );
+	bSizer17->Add( m_buttonModuleEditor, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	m_PropRightSizer->Add( bSizer17, 1, wxALL|wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizerAttrib;
 	bSizerAttrib = new wxBoxSizer( wxHORIZONTAL );
@@ -179,7 +188,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	sbSizerAP->Add( bSizerMoveOpt, 1, wxEXPAND, 5 );
 	
 	
-	m_PropRightSizer->Add( sbSizerAP, 0, wxEXPAND|wxALL, 5 );
+	m_PropRightSizer->Add( sbSizerAP, 0, wxEXPAND|wxALL, 0 );
 	
 	wxStaticBoxSizer* sbSizerLocalProperties;
 	sbSizerLocalProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Local Settings") ), wxVERTICAL );
@@ -370,6 +379,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_button4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnEditReference ), NULL, this );
 	m_button5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnEditValue ), NULL, this );
 	m_OrientCtrl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
+	m_buttonUpdate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::UpdateModule ), NULL, this );
 	m_buttonExchange->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
 	m_buttonModuleEditor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::GotoModuleEditor ), NULL, this );
 	m_3D_ShapeNameListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::On3DShapeNameSelected ), NULL, this );
@@ -387,6 +397,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::~DIALOG_MODULE_BOARD_EDITOR_BASE()
 	m_button4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnEditReference ), NULL, this );
 	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnEditValue ), NULL, this );
 	m_OrientCtrl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
+	m_buttonUpdate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::UpdateModule ), NULL, this );
 	m_buttonExchange->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
 	m_buttonModuleEditor->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::GotoModuleEditor ), NULL, this );
 	m_3D_ShapeNameListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::On3DShapeNameSelected ), NULL, this );

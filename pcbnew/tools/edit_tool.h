@@ -128,8 +128,8 @@ public:
     /**
      * Function ExchangeFootprints()
      *
-     * Invoke the dialog used to change the footprints used for modules
-     * and update module footprints based on result
+     * Invoke the dialog used to update or exchange the footprints used for
+     * modules.  The mode depends on the PCB_ACTIONS held by the TOOL_EVENT.
      */
     int ExchangeFootprints( const TOOL_EVENT& aEvent );
 

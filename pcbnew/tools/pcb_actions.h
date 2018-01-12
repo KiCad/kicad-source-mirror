@@ -116,6 +116,9 @@ public:
     /// Activation of the duplication tool with incrementing (e.g. pad number)
     static TOOL_ACTION duplicateIncrement;
 
+    /// Update footprints to reflect any changes in the library
+    static TOOL_ACTION updateFootprints;
+
     /// Exchange footprints of modules
     static TOOL_ACTION exchangeFootprints;
 

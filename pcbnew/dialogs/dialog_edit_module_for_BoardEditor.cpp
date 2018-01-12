@@ -242,6 +242,12 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
 }
 
 
+void DIALOG_MODULE_BOARD_EDITOR::UpdateModule( wxCommandEvent& event )
+{
+    EndModal( PRM_EDITOR_WANT_UPDATE_FP );
+}
+
+
 void DIALOG_MODULE_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
 {
     EndModal( PRM_EDITOR_WANT_EXCHANGE_FP );

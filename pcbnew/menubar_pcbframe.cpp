@@ -488,6 +488,16 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Set text size and width of footprint fields" ),
                  KiBitmap( reset_text_xpm ) );
 
+    AddMenuItem( aParentMenu, ID_MENU_PCB_UPDATE_FOOTPRINTS,
+                 _( "Update Footprints from Library" ),
+                 _( "Update footprints to include any changes from the library" ),
+                 KiBitmap( reload_xpm ) );
+
+    AddMenuItem( aParentMenu, ID_MENU_PCB_EXCHANGE_FOOTPRINTS,
+                 _( "Change Footprints" ),
+                 _( "Assign different footprints from the library" ),
+                 KiBitmap( exchange_xpm ) );
+
     AddMenuItem( aParentMenu, ID_MENU_PCB_SWAP_LAYERS,
                  _( "&Swap Layers" ),
                  _( "Swap tracks on copper layers or drawings on other layers" ),

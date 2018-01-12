@@ -87,11 +87,14 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
         editor->Raise();        // Iconize( false );
     }
 
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_UPDATE_FP )
+    {
+        InstallExchangeModuleFrame( Module, true );
+    }
+
     if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
     {
-        InstallExchangeModuleFrame( Module );
-        // Warning: the current item can be deleted by exchange module
-        SetCurItem( NULL );
+        InstallExchangeModuleFrame( Module, false );
     }
 }
 

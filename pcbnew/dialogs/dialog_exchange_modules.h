@@ -37,24 +37,37 @@ class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
 private:
     PCB_EDIT_FRAME* m_parent;
     MODULE*         m_currentModule;
-    static int      m_selectionMode;    // Remember the last exchange option
+    bool            m_updateMode;
+    static          int m_matchModeForUpdate;           // remember last match-mode
+    static          int m_matchModeForExchange;         // remember last match-mode
+    static          int m_matchModeForUpdateSelected;   // remember last match-mode
+    static          int m_matchModeForExchangeSelected; // remember last match-mode
 
 public:
-    DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
+    DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode );
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
-    void OnSelectionClicked( wxCommandEvent& event ) override;
+    void OnMatchAllClicked( wxCommandEvent& event ) override;
+    void OnMatchRefClicked( wxCommandEvent& event ) override;
+    void OnMatchValueClicked( wxCommandEvent& event ) override;
+    void OnMatchIDClicked( wxCommandEvent& event ) override;
     void OnOkClick( wxCommandEvent& event ) override;
     void OnQuit( wxCommandEvent& event ) override;
-    void BrowseAndSelectFootprint( wxCommandEvent& event ) override;
     void ViewAndSelectFootprint( wxCommandEvent& event ) override;
     void RebuildCmpList( wxCommandEvent& event ) override;
-    void init();
 
+    void init( bool updateMode );
+
+    int getMatchMode();
+    void setMatchMode( int aMatchMode );
+
+    wxRadioButton* getRadioButtonForMode();
+    void updateMatchModeRadioButtons();
+
+    bool isMatch( MODULE* );
     bool changeCurrentFootprint();
-    bool changeSameFootprints( bool aUseValue);
-    bool changeAllFootprints();
+    bool changeSameFootprints();
     bool change_1_Module( MODULE*            aModule,
                           const LIB_ID&      aNewFootprintFPID,
                           bool               eShowError );

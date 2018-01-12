@@ -173,6 +173,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_PCB_GLOBAL_DELETE, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_CLEAN, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_UPDATE_FOOTPRINTS, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_EXCHANGE_FOOTPRINTS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
               PCB_EDIT_FRAME::OnResetModuleTextSizes )
@@ -1278,9 +1280,9 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
 }
 
 
-int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
+int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module, bool updateMode )
 {
-    DIALOG_EXCHANGE_MODULE dialog( this, Module );
+    DIALOG_EXCHANGE_MODULE dialog( this, Module, updateMode );
 
     return dialog.ShowQuasiModal();
 }
