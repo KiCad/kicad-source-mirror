@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 16:35+0100\n"
-"PO-Revision-Date: 2018-01-12 16:37+0100\n"
+"POT-Creation-Date: 2018-01-12 23:25+0100\n"
+"PO-Revision-Date: 2018-01-12 23:26+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -554,7 +554,7 @@ msgstr "Render della vista corrente con raytracing"
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:77 common/zoom.cpp:248
 #: eeschema/tool_viewlib.cpp:66 eeschema/help_common_strings.h:43
 #: gerbview/toolbars_gerber.cpp:78 pagelayout_editor/menubar.cpp:134
-#: pagelayout_editor/toolbars_pl_editor.cpp:82
+#: pagelayout_editor/toolbars_pl_editor.cpp:85
 #: pcbnew/footprint_wizard_frame.cpp:687 pcbnew/tool_modedit.cpp:124
 #: pcbnew/tool_modview.cpp:79 pcbnew/help_common_strings.h:19
 msgid "Zoom in"
@@ -564,7 +564,7 @@ msgstr "Ingrandisci"
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1194 common/zoom.cpp:250
 #: eeschema/tool_viewlib.cpp:71 eeschema/help_common_strings.h:44
 #: gerbview/toolbars_gerber.cpp:81 pagelayout_editor/menubar.cpp:137
-#: pagelayout_editor/toolbars_pl_editor.cpp:85
+#: pagelayout_editor/toolbars_pl_editor.cpp:88
 #: pcbnew/footprint_wizard_frame.cpp:692 pcbnew/tool_modedit.cpp:127
 #: pcbnew/tool_modview.cpp:84 pcbnew/help_common_strings.h:20
 msgid "Zoom out"
@@ -573,7 +573,7 @@ msgstr "Rimpicciolisci"
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:84 common/zoom.cpp:252
 #: eeschema/tool_viewlib.cpp:76 gerbview/toolbars_gerber.cpp:75
 #: pagelayout_editor/menubar.cpp:148
-#: pagelayout_editor/toolbars_pl_editor.cpp:79
+#: pagelayout_editor/toolbars_pl_editor.cpp:82
 #: pcbnew/footprint_wizard_frame.cpp:697 pcbnew/tool_modedit.cpp:120
 #: pcbnew/tool_modview.cpp:89
 msgid "Redraw view"
@@ -1516,7 +1516,7 @@ msgid "Center"
 msgstr "Centra"
 
 #: common/zoom.cpp:254 eeschema/tool_viewlib.cpp:81
-#: gerbview/toolbars_gerber.cpp:84 pagelayout_editor/toolbars_pl_editor.cpp:88
+#: gerbview/toolbars_gerber.cpp:84 pagelayout_editor/toolbars_pl_editor.cpp:91
 #: pcbnew/footprint_wizard_frame.cpp:702 pcbnew/tool_modedit.cpp:130
 #: pcbnew/tool_modview.cpp:94
 msgid "Zoom auto"
@@ -2214,11 +2214,11 @@ msgid "Grid"
 msgstr "Griglia"
 
 #: common/tool/zoom_tool.cpp:55 common/block_commande.cpp:97
-#: eeschema/tool_sch.cpp:127 eeschema/libeditframe.cpp:1186
+#: eeschema/tool_sch.cpp:126 eeschema/libeditframe.cpp:1186
 #: eeschema/tool_lib.cpp:174 eeschema/schedit.cpp:516
 #: gerbview/toolbars_gerber.cpp:88 gerbview/events_called_functions.cpp:237
 #: pagelayout_editor/events_functions.cpp:136 pagelayout_editor/menubar.cpp:143
-#: pagelayout_editor/toolbars_pl_editor.cpp:93 pcbnew/tool_modedit.cpp:134
+#: pagelayout_editor/toolbars_pl_editor.cpp:96 pcbnew/tool_modedit.cpp:134
 #: pcbnew/tool_pcb.cpp:280 pcbnew/edit.cpp:1449 pcbnew/modedit.cpp:934
 msgid "Zoom to selection"
 msgstr "Zoom a selezione"
@@ -2628,7 +2628,7 @@ msgstr "errore durante la scrittura del file \"%s\""
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER errore di scrittura"
 
-#: common/basicframe.cpp:144
+#: common/basicframe.cpp:135
 msgid ""
 "The program cannot be closed\n"
 "A quasi-modal dialog window is currently open, please close it first."
@@ -2637,12 +2637,12 @@ msgstr ""
 "Una finestra di dialogo quasi-modale è attualmente aperta, prima bisogna "
 "chiuderla."
 
-#: common/basicframe.cpp:429
+#: common/basicframe.cpp:427
 #, c-format
 msgid "File \"%s\" was not found."
 msgstr "File \"%s\" non trovato."
 
-#: common/basicframe.cpp:474
+#: common/basicframe.cpp:472
 #, c-format
 msgid ""
 "Html or pdf help file \n"
@@ -2655,12 +2655,12 @@ msgstr ""
 "o\n"
 "\"%s\" non trovato."
 
-#: common/basicframe.cpp:491
+#: common/basicframe.cpp:489
 #, c-format
 msgid "Help file \"%s\" could not be found."
 msgstr "File della guida \"%s\" non trovato."
 
-#: common/basicframe.cpp:525
+#: common/basicframe.cpp:523
 #, c-format
 msgid ""
 "Could not launch the default browser.\n"
@@ -2669,28 +2669,28 @@ msgstr ""
 "Impossibile eseguire il browser Internet predefinito.\n"
 "Per informazioni su come aiutare il progetto KiCad, visitare %s"
 
-#: common/basicframe.cpp:528
+#: common/basicframe.cpp:526
 msgid "Get involved with KiCad"
 msgstr "Collabora a KiCad"
 
-#: common/basicframe.cpp:560
+#: common/basicframe.cpp:558
 #, c-format
 msgid "You do not have write permissions to folder \"%s\"."
 msgstr "Non hai i permessi di scrittura per la cartella \"%s\"."
 
-#: common/basicframe.cpp:565
+#: common/basicframe.cpp:563
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 msgstr ""
 "Non hai i permessi di scrittura per salvare il file \"%s\" nella cartella "
 "\"%s\"."
 
-#: common/basicframe.cpp:570
+#: common/basicframe.cpp:568
 #, c-format
 msgid "You do not have write permissions to save file \"%s\"."
 msgstr "Non hai i permessi necessari per salvare il file \"%s\"."
 
-#: common/basicframe.cpp:602
+#: common/basicframe.cpp:600
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -2705,26 +2705,26 @@ msgstr ""
 "\"%s\"\n"
 "non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
 
-#: common/basicframe.cpp:630
+#: common/basicframe.cpp:628
 #, c-format
 msgid "Could not create backup file \"%s\""
 msgstr "Impossibile creare il file di salvataggio \"%s\""
 
-#: common/basicframe.cpp:638
+#: common/basicframe.cpp:636
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Il file di salvataggio automatico non può essere rinominato con il nome file "
 "della scheda"
 
-#: common/basicframe.cpp:690
+#: common/basicframe.cpp:688
 msgid "Icons in Menus"
 msgstr "Icone nei menu"
 
-#: common/basicframe.cpp:696
+#: common/basicframe.cpp:694
 msgid "Icons Options"
 msgstr "Opzioni icone"
 
-#: common/basicframe.cpp:697
+#: common/basicframe.cpp:695
 msgid "Select show icons in menus and icons sizes"
 msgstr "Seleziona di mostrare icone nei menu e la loro dimensione"
 
@@ -3946,7 +3946,7 @@ msgstr "Unità in pollici"
 msgid "Set units to millimeters"
 msgstr "Unità in millimetri"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:195 eeschema/tool_sch.cpp:301
+#: cvpcb/class_DisplayFootprintsFrame.cpp:195 eeschema/tool_sch.cpp:300
 #: eeschema/tool_lib.cpp:246 gerbview/toolbars_gerber.cpp:250
 #: pcbnew/tool_pcb.cpp:366
 msgid "Change cursor shape"
@@ -4224,98 +4224,98 @@ msgstr ""
 "Errore durante il salvataggio della tabella librerie simboli specifica del "
 "progetto."
 
-#: eeschema/tool_sch.cpp:61
+#: eeschema/tool_sch.cpp:60
 msgid "New schematic project"
 msgstr "Nuovo progetto schema"
 
-#: eeschema/tool_sch.cpp:65
+#: eeschema/tool_sch.cpp:64
 msgid "Open schematic project"
 msgstr "Apri progetto schema"
 
-#: eeschema/tool_sch.cpp:70
+#: eeschema/tool_sch.cpp:69
 msgid "Save schematic project"
 msgstr "Salva progetto schema"
 
-#: eeschema/tool_sch.cpp:75
+#: eeschema/tool_sch.cpp:74
 msgid "Edit Page settings"
 msgstr "Modifica impostazioni pagina"
 
-#: eeschema/tool_sch.cpp:80
+#: eeschema/tool_sch.cpp:79
 msgid "Print schematic"
 msgstr "Stampa schema"
 
-#: eeschema/tool_sch.cpp:83
+#: eeschema/tool_sch.cpp:82
 msgid "Plot schematic"
 msgstr "Traccia schema"
 
-#: eeschema/tool_sch.cpp:88 eeschema/tool_lib.cpp:135
+#: eeschema/tool_sch.cpp:87 eeschema/tool_lib.cpp:135
 #: pcbnew/tools/pcbnew_control.cpp:231
 msgid "Paste"
 msgstr "Incolla"
 
-#: eeschema/tool_sch.cpp:106
+#: eeschema/tool_sch.cpp:105
 msgid "Find and replace text"
 msgstr "Trova e sostituisci testo"
 
-#: eeschema/tool_sch.cpp:133
+#: eeschema/tool_sch.cpp:132
 msgid "Navigate schematic hierarchy"
 msgstr "Naviga la gerarchia dello schema"
 
-#: eeschema/tool_sch.cpp:137
+#: eeschema/tool_sch.cpp:136
 msgid "Leave sheet"
 msgstr "Esci dal foglio"
 
-#: eeschema/tool_sch.cpp:151
+#: eeschema/tool_sch.cpp:150
 msgid "Footprint Editor - Create/edit footprints"
 msgstr "Editor impronte - Crea/modifica impronte"
 
-#: eeschema/tool_sch.cpp:159 eeschema/menubar.cpp:521
+#: eeschema/tool_sch.cpp:158 eeschema/menubar.cpp:521
 msgid "Perform electrical rules check"
 msgstr "Esegui controllo regole elettriche"
 
-#: eeschema/tool_sch.cpp:162
+#: eeschema/tool_sch.cpp:161
 msgid "Run CvPcb to associate footprints to symbols"
 msgstr "Avvia CvPcb per associare le impronte ai simboli"
 
-#: eeschema/tool_sch.cpp:165
+#: eeschema/tool_sch.cpp:164
 msgid "Generate netlist"
 msgstr "Genera netlist"
 
-#: eeschema/tool_sch.cpp:168
+#: eeschema/tool_sch.cpp:167
 msgid "Edit symbol fields"
 msgstr "Modifica i campi del simbolo"
 
-#: eeschema/tool_sch.cpp:177
+#: eeschema/tool_sch.cpp:176
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Avvia PcbNew per la creazione del circuito stampato"
 
-#: eeschema/tool_sch.cpp:204 pcbnew/tools/pcb_editor_control.cpp:946
+#: eeschema/tool_sch.cpp:203 pcbnew/tools/pcb_editor_control.cpp:946
 #: pcbnew/tool_pcb.cpp:445 pcbnew/edit.cpp:1523
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
 
-#: eeschema/tool_sch.cpp:266 eeschema/help_common_strings.h:90
+#: eeschema/tool_sch.cpp:265 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
 msgstr "Aggiungi immagine bitmap"
 
-#: eeschema/tool_sch.cpp:288 eeschema/tool_lib.cpp:233
+#: eeschema/tool_sch.cpp:287 eeschema/tool_lib.cpp:233
 #: gerbview/toolbars_gerber.cpp:233
 msgid "Turn grid off"
 msgstr "Visualizzazione griglia "
 
-#: eeschema/tool_sch.cpp:292
+#: eeschema/tool_sch.cpp:291
 msgid "Set unit to inch"
 msgstr "Unità in pollici"
 
-#: eeschema/tool_sch.cpp:296
+#: eeschema/tool_sch.cpp:295
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:307 eeschema/schframe.cpp:805
+#: eeschema/tool_sch.cpp:306 eeschema/schframe.cpp:805
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
-#: eeschema/tool_sch.cpp:312
+#: eeschema/tool_sch.cpp:311
 msgid "HV orientation for wires and bus"
 msgstr "Orientamento per fili e bus"
 
@@ -6445,14 +6445,14 @@ msgid "Reset Local Coordinates"
 msgstr "Reimposta le coordinate locali"
 
 #: eeschema/hotkeys.cpp:124 pagelayout_editor/menubar.cpp:120
-#: pagelayout_editor/hotkeys.cpp:92 pagelayout_editor/toolbars_pl_editor.cpp:72
+#: pagelayout_editor/hotkeys.cpp:92 pagelayout_editor/toolbars_pl_editor.cpp:75
 #: pcbnew/hotkeys.cpp:197
 msgid "Undo"
 msgstr "Annulla"
 
 #: eeschema/hotkeys.cpp:128 eeschema/hotkeys.cpp:130
 #: pagelayout_editor/menubar.cpp:123 pagelayout_editor/hotkeys.cpp:93
-#: pagelayout_editor/toolbars_pl_editor.cpp:75 pcbnew/hotkeys.cpp:201
+#: pagelayout_editor/toolbars_pl_editor.cpp:78 pcbnew/hotkeys.cpp:201
 #: pcbnew/hotkeys.cpp:203
 msgid "Redo"
 msgstr "Rifà"
@@ -8218,8 +8218,8 @@ msgstr "Polilinea a (%s, %s) con %d punti"
 
 #: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:236
 #: pcbnew/class_drawsegment.cpp:413 pcbnew/class_board_item.cpp:45
-#: pcbnew/dialogs/dialog_pad_properties.cpp:747
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1860
+#: pcbnew/dialogs/dialog_pad_properties.cpp:760
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1873
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:93
 msgid "Arc"
 msgstr "Arco"
@@ -13312,11 +13312,9 @@ msgstr "Converti immagine"
 
 #: kicad/menubar.cpp:425
 msgid ""
-"Bitmap2Component - Convert bitmap images to Eeschema\n"
-"or Pcbnew elements"
-msgstr ""
-"Bitmap2Component - Convertitore di immagini bitmap in elementi Eeschema o "
-"Pcbnew"
+"Bitmap2Component - Convert bitmap images to schematic\n"
+"or PCB elements"
+msgstr "Bitmap2Component - Convertitore di immagini bitmap in elementi dello schema elettrico o del circuito stampato"
 
 #: kicad/menubar.cpp:429
 msgid "Run PCB Calculator"
@@ -13474,16 +13472,16 @@ msgid "Schematic layout editor"
 msgstr "Editor di schemi elettrici"
 
 #: kicad/commandframe.cpp:73
-msgid "Schematic library editor"
-msgstr "Editor librerie di schemi elettrici"
+msgid "Symbol library editor"
+msgstr "Editor librerie di simboli"
 
 #: kicad/commandframe.cpp:77
 msgid "PCB layout editor"
 msgstr "Editor di circuiti stampati"
 
 #: kicad/commandframe.cpp:81
-msgid "PCB library editor"
-msgstr "Editor di librerie di impronte"
+msgid "Footprint library editor"
+msgstr "Editor librerie di impronte"
 
 #: kicad/commandframe.cpp:85
 msgid "Gerber viewer"
@@ -13747,7 +13745,7 @@ msgstr "Nuovo progetto di disposizione pagina"
 msgid "&Open..."
 msgstr "&Apri..."
 
-#: pagelayout_editor/menubar.cpp:78 pagelayout_editor/toolbars_pl_editor.cpp:51
+#: pagelayout_editor/menubar.cpp:78 pagelayout_editor/toolbars_pl_editor.cpp:54
 msgid "Open an existing page layout design file"
 msgstr "Apri file di disposizione pagina esistente"
 
@@ -13897,27 +13895,27 @@ msgstr "Specifica selezione"
 msgid "pl_editor is already running. Continue?"
 msgstr "pl_editor è già in esecuzione. Continuare?"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:48
+#: pagelayout_editor/toolbars_pl_editor.cpp:51
 msgid "New page layout design"
 msgstr "Nuovo disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:54
+#: pagelayout_editor/toolbars_pl_editor.cpp:57
 msgid "Save page layout design"
 msgstr "Salva disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:59
+#: pagelayout_editor/toolbars_pl_editor.cpp:62
 msgid "Page settings"
 msgstr "Impostazioni pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:62
+#: pagelayout_editor/toolbars_pl_editor.cpp:65
 msgid "Print page layout"
 msgstr "Stampa disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:67
+#: pagelayout_editor/toolbars_pl_editor.cpp:70
 msgid "Delete selected item"
 msgstr "Elimina elemento selezionato"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:99
+#: pagelayout_editor/toolbars_pl_editor.cpp:102
 msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
@@ -13926,7 +13924,7 @@ msgstr ""
 "applicazioni\n"
 "I testi con formato vengono rimpiazzati dal testo completo"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:104
+#: pagelayout_editor/toolbars_pl_editor.cpp:107
 msgid ""
 "Show title block in edit mode: texts are shown as is:\n"
 "texts with format are displayed with no change"
@@ -13935,39 +13933,39 @@ msgstr ""
 "come sono:\n"
 "I testi con formato sono visualizzati senza cambiamenti"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:112
+#: pagelayout_editor/toolbars_pl_editor.cpp:115
 msgid "Left Top paper corner"
 msgstr "angolo alto sx carta"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:113
+#: pagelayout_editor/toolbars_pl_editor.cpp:116
 msgid "Right Bottom page corner"
 msgstr "angolo basso dx pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:114
+#: pagelayout_editor/toolbars_pl_editor.cpp:117
 msgid "Left Bottom page corner"
 msgstr "angolo basso sx pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:115
+#: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid "Right Top page corner"
 msgstr "angolo alto dx pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:116
+#: pagelayout_editor/toolbars_pl_editor.cpp:119
 msgid "Left Top page corner"
 msgstr "angolo alto sx pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:123
+#: pagelayout_editor/toolbars_pl_editor.cpp:126
 msgid "Origin of coordinates displayed to the status bar"
 msgstr "Origine delle coordinate mostrate sulla barra di stato"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:136
+#: pagelayout_editor/toolbars_pl_editor.cpp:139
 msgid "Page 1"
 msgstr "Pagina 1"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:137
+#: pagelayout_editor/toolbars_pl_editor.cpp:140
 msgid "Other pages"
 msgstr "Altre pagine"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:144
+#: pagelayout_editor/toolbars_pl_editor.cpp:147
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
@@ -19117,8 +19115,8 @@ msgid "Curve"
 msgstr "Curva"
 
 #: pcbnew/class_drawsegment.cpp:424
-#: pcbnew/dialogs/dialog_pad_properties.cpp:741
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1860
+#: pcbnew/dialogs/dialog_pad_properties.cpp:754
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1873
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:202
 msgid "Segment"
@@ -25335,99 +25333,99 @@ msgstr "Nessun strato selezionato, niente da tracciare"
 msgid "Plot file \"%s\" created."
 msgstr "File tracciatura \"%s\" creato."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:469
+#: pcbnew/dialogs/dialog_pad_properties.cpp:482
 msgid "Back side (footprint is mirrored)"
 msgstr "Lato retro (l'impronta è speculare)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:477
+#: pcbnew/dialogs/dialog_pad_properties.cpp:490
 msgid "No footprint"
 msgstr "Nessuna impronta"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:735
+#: pcbnew/dialogs/dialog_pad_properties.cpp:748
 #, c-format
 msgid "width %s"
 msgstr "larghezza %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:742
+#: pcbnew/dialogs/dialog_pad_properties.cpp:755
 msgid "from "
 msgstr "da"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:743
+#: pcbnew/dialogs/dialog_pad_properties.cpp:756
 msgid "to "
 msgstr "a"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:748
+#: pcbnew/dialogs/dialog_pad_properties.cpp:761
 msgid "center "
 msgstr "centro "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:749
+#: pcbnew/dialogs/dialog_pad_properties.cpp:762
 msgid "start "
 msgstr "inizio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:750
+#: pcbnew/dialogs/dialog_pad_properties.cpp:763
 #, c-format
 msgid "angle %s"
 msgstr "angolo %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:755
+#: pcbnew/dialogs/dialog_pad_properties.cpp:768
 msgid "ring"
 msgstr "anello"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:757
+#: pcbnew/dialogs/dialog_pad_properties.cpp:770
 msgid "circle"
 msgstr "cerchio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:760
+#: pcbnew/dialogs/dialog_pad_properties.cpp:773
 #, c-format
 msgid "radius %s"
 msgstr "raggio %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:766
+#: pcbnew/dialogs/dialog_pad_properties.cpp:779
 #, c-format
 msgid "corners count %d"
 msgstr "conteggio vertici %d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1020
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1033
 msgid "Pad size must be greater than zero"
 msgstr "La dimensione piazzola deve essere maggiore di zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1026
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1039
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
 "Valore errato per la foratura della piazzola: foro maggiore della dimensione "
 "piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1033
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1046
 msgid "Pad local clearance must be zero or greater than zero"
 msgstr "L'isolamento locale della piazzola deve essere zero o maggiore di zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1044
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1057
 msgid "Pad local solder mask clearance must be zero or greater than zero"
 msgstr ""
 "L'isolamento della mascheda di saldatura locale deve essere zero o maggiore "
 "di zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1052
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1065
 #, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
 msgstr ""
 "La distanza della maschera di saldatura locale deve essere maggiore di %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1060
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1073
 msgid "Pad local solder paste clearance must be zero or less than zero"
 msgstr ""
 "L'isolamento della pasta di saldatura locale deve essere zero o maggiore di "
 "zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1066
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1079
 msgid "Error: pad has no layer"
 msgstr "Errore: la piazzola non ha strati"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1073
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1086
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Errore: la piazzola non è su uno strato in rame ed ha un foro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1078
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1091
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -25436,19 +25434,19 @@ msgstr ""
 "foratura identiche a quelle della piazzola, se non si desidera tracciare "
 "questa piazzola nei file Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1098
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1111
 msgid "Incorrect value for pad offset"
 msgstr "Valore sbagliato per scarto piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1104
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1117
 msgid "Too large value for pad delta size"
 msgstr "Valore eccessivo per scarto piazzola "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1112
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1125
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Errore: piazzola con foro passante: diametro foro impostato a 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1117
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1130
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -25456,56 +25454,56 @@ msgstr ""
 "Errore: le piazzole del connettore non sono sullo strato pasta salda\n"
 "Usare piazzole SMD"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1126
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1139
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
 msgstr ""
 "Errore: solo uno strato esterno in rame è consentito per SMD o piazzole "
 "connettori"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1138
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1151
 msgid "Incorrect corner size value"
 msgstr "Valore dimensione angolo errato"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1142
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1155
 msgid "Incorrect (negative) corner size value"
 msgstr "Errato (negativo) valore dimensione angolo"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1144
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1157
 msgid "Corner size value must be smaller than 50%"
 msgstr "Il valore dimensione angolo deve essere inferiore al 50%"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1152
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1165
 msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
 msgstr ""
 "Forma piazzola errata: la forma deve essere equivalente ad un poligono solo"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1158
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1171
 msgid "Pad setup errors list"
 msgstr "Elenco errori impostazioni piazzole"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1395
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1408
 msgid "Unknown netname, netname not changed"
 msgstr "Collegamento sconosciuto"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1437
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1450
 msgid "Modify pad"
 msgstr "Modifica piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1769
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1912
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1953
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1782
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1925
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1966
 msgid "No shape selected"
 msgstr "Nessuna forma selezionata"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1860
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1873
 msgid "ring/circle"
 msgstr "anello/cerchio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1860
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1873
 msgid "polygon"
 msgstr "poligono"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1863
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1876
 msgid "Select shape type:"
 msgstr "Seleziona il tipo di forma:"
 
