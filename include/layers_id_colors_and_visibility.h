@@ -546,6 +546,9 @@ public:
     /// *_User layers.
     LSEQ Users() const;
 
+    /// Returns the technical and user layers in the order shown in layer widget
+    LSEQ TechAndUserUIOrder() const;
+
     LSEQ UIOrder() const;
 
     /**

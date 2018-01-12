@@ -190,18 +190,18 @@ LSEQ LSET::Technicals( LSET aSetToOmit ) const
 {
     // desired sequence
     static const PCB_LAYER_ID sequence[] = {
-        B_Adhes,
         F_Adhes,
-        B_Paste,
+        B_Adhes,
         F_Paste,
-        B_SilkS,
+        B_Paste,
         F_SilkS,
-        B_Mask,
+        B_SilkS,
         F_Mask,
-        B_CrtYd,
+        B_Mask,
         F_CrtYd,
-        B_Fab,
+        B_CrtYd,
         F_Fab,
+        B_Fab,
     };
 
     LSET subset = ~aSetToOmit & *this;
@@ -220,6 +220,33 @@ LSEQ LSET::Users() const
         Eco2_User,
         Edge_Cuts,
         Margin,
+   };
+
+   return Seq( sequence, DIM( sequence ) );
+}
+
+
+LSEQ LSET::TechAndUserUIOrder() const
+{
+    static const PCB_LAYER_ID sequence[] = {
+        F_Adhes,
+        B_Adhes,
+        F_Paste,
+        B_Paste,
+        F_SilkS,
+        B_SilkS,
+        F_Mask,
+        B_Mask,
+        Dwgs_User,
+        Cmts_User,
+        Eco1_User,
+        Eco2_User,
+        Edge_Cuts,
+        Margin,
+        F_CrtYd,
+        B_CrtYd,
+        F_Fab,
+        B_Fab,
    };
 
    return Seq( sequence, DIM( sequence ) );
@@ -758,16 +785,11 @@ LSET LSET::BackMask()
 
 LSEQ LSET::UIOrder() const
 {
-    PCB_LAYER_ID order[PCB_LAYER_ID_COUNT];
+    LSEQ order = CuStack();
+    LSEQ techuser = TechAndUserUIOrder();
+    order.insert( order.end(), techuser.begin(), techuser.end() );
 
-    // Assmuming that the PCB_LAYER_ID order is according to preferred UI order, as of
-    // today this is true.  When that becomes not true, its easy to change the order
-    // in here to compensate.
-
-    for( unsigned i=0;  i<DIM(order);  ++i )
-        order[i] = PCB_LAYER_ID( i );
-
-    return Seq( order, DIM( order ) );
+    return order;
 }
 
 
