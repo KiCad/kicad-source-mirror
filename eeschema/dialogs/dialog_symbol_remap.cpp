@@ -79,7 +79,8 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     wxBusyCursor busy;
 
-    backupProject( m_messagePanel->Reporter() );
+    if( !backupProject( m_messagePanel->Reporter() ) )
+        return;
 
     // Ignore the never show rescue setting for one last rescue of legacy symbol
     // libraries before remapping to the symbol library table.  This ensures the
@@ -92,12 +93,15 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     wxFileName prjSymLibTableFileName( Prj().GetProjectPath(),
                                        SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
-    if( !prjSymLibTableFileName.FileExists() )
+    // Delete the existing project symbol library table.
+    if( prjSymLibTableFileName.FileExists() )
     {
-        createProjectSymbolLibTable( m_messagePanel->Reporter() );
-        Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-        Prj().SchSymbolLibTable();
+        wxRemoveFile( prjSymLibTableFileName.GetFullPath() );
     }
+
+    createProjectSymbolLibTable( m_messagePanel->Reporter() );
+    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+    Prj().SchSymbolLibTable();
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
 
@@ -306,12 +310,13 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
 }
 
 
-void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
+bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 {
     static wxString backupPath = "rescue-backup";
 
     wxString tmp;
     wxString errorMsg;
+    wxFileName srcFileName;
     wxFileName destFileName;
     SCH_SCREENS schematic;
 
@@ -325,13 +330,37 @@ void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         {
             errorMsg.Printf( _( "Cannot create project remap back up folder \"%s\"." ),
                              destFileName.GetPath() );
-            DisplayError( this, errorMsg );
-            return;
+
+            wxMessageDialog dlg( this, errorMsg, _( "Backup Error" ),
+                                 wxYES_NO | wxCENTRE | wxRESIZE_BORDER | wxICON_QUESTION );
+            dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Continue with Rescue" ) ),
+                                wxMessageDialog::ButtonLabel( _( "Abort Rescue" ) ) );
+
+            if( dlg.ShowModal() == wxID_NO )
+                return false;
         }
     }
 
     // Time stamp to append to file name in case multiple remappings are performed.
     wxString timeStamp = wxDateTime::Now().Format( "-%Y-%m-%d-%H-%M-%S" );
+
+    // Back up symbol library table.
+    srcFileName.SetPath( Prj().GetProjectPath() );
+    srcFileName.SetName( SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+    destFileName = srcFileName;
+    destFileName.AppendDir( backupPath );
+    destFileName.SetName( destFileName.GetName() + timeStamp );
+
+    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
+                srcFileName.GetFullPath(), destFileName.GetFullPath() );
+    aReporter.Report( tmp, REPORTER::RPT_INFO );
+
+    if( wxFileName::Exists( srcFileName.GetFullPath() )
+      && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
+    {
+        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        errorMsg += tmp;
+    }
 
     // Back up the schematic files.
     for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
@@ -368,8 +397,6 @@ void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         errorMsg += tmp;
     }
 
-    wxFileName srcFileName;
-
     // Back up the cache library.
     srcFileName.SetPath( Prj().GetProjectPath() );
     srcFileName.SetName( Prj().GetProjectName() + "-cache" );
@@ -390,7 +417,7 @@ void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         errorMsg += tmp;
     }
 
-    // Back up the rescue library if it exists.
+    // Back up the rescue symbol library if it exists.
     srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
     destFileName.SetName( srcFileName.GetName() + timeStamp );
 
@@ -405,7 +432,7 @@ void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         errorMsg += tmp;
     }
 
-    // Back up the rescue library document file if it exists.
+    // Back up the rescue symbol library document file if it exists.
     srcFileName.SetExt( "dcm" );
     destFileName.SetExt( srcFileName.GetExt() );
 
@@ -422,10 +449,19 @@ void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 
     if( !errorMsg.IsEmpty() )
     {
+        wxMessageDialog dlg( this, _( "Some of the project files could not be backed up." ),
+                             _( "Backup Error" ),
+                             wxYES_NO | wxCENTRE | wxRESIZE_BORDER | wxICON_QUESTION );
         errorMsg.Trim();
-        DisplayErrorMessage( this, _( "Some of the project files could not be backed up." ),
-                             errorMsg );
+        dlg.SetExtendedMessage( errorMsg );
+        dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Continue with Rescue" ) ),
+                            wxMessageDialog::ButtonLabel( _( "Abort Rescue" ) ) );
+
+        if( dlg.ShowModal() == wxID_NO )
+            return false;
     }
+
+    return true;
 }
 
 

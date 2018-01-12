@@ -82,8 +82,9 @@ private:
      *   file.
      *
      * @param aReporter is the #REPORTER object in which to write information messages.
+     * @return true to continue rescue or false to abort rescue.
      */
-    void backupProject( REPORTER& aReporter );
+    bool backupProject( REPORTER& aReporter );
 
     bool m_remapped;
 };
