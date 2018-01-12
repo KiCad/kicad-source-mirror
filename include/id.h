@@ -191,6 +191,9 @@ enum main_id
     ID_POPUP_ZOOM_PAGE,
     ID_POPUP_ZOOM_REDRAW,
 
+    ID_KEY_ZOOM_IN,
+    ID_KEY_ZOOM_OUT,
+
     /* Reserve IDs for popup menu zoom levels.  If you need more
      * levels of zoom, change ID_POPUP_ZOOM_LEVEL_END.  Note that more
      * than 15 entries in a context submenu may get too large to display

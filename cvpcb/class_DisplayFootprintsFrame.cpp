@@ -339,12 +339,12 @@ bool DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
     switch( aHotKey )
     {
     case WXK_F1:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
+        cmd.SetId( ID_KEY_ZOOM_IN );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case WXK_F2:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        cmd.SetId( ID_KEY_ZOOM_OUT );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 

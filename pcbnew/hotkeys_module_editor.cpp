@@ -123,12 +123,12 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         break;
 
     case HK_ZOOM_IN:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
+        cmd.SetId( ID_KEY_ZOOM_IN );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_OUT:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        cmd.SetId( ID_KEY_ZOOM_OUT );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 

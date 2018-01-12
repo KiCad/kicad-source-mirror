@@ -222,11 +222,11 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_ZOOM_IN:
-        evt_type = ID_POPUP_ZOOM_IN;
+        evt_type = ID_KEY_ZOOM_IN;
         break;
 
     case HK_ZOOM_OUT:
-        evt_type = ID_POPUP_ZOOM_OUT;
+        evt_type = ID_KEY_ZOOM_OUT;
         break;
 
     case HK_ZOOM_REDRAW:

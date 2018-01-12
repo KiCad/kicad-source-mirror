@@ -132,6 +132,14 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     BASE_SCREEN* screen = GetScreen();
     wxPoint      center = GetScrollCenterPosition();
 
+    if ( id == ID_KEY_ZOOM_IN ) {
+        id = GetCanvas()->GetEnableZoomNoCenter() ?
+             ID_OFFCENTER_ZOOM_IN : ID_POPUP_ZOOM_IN;
+    } else if ( id == ID_KEY_ZOOM_OUT ) {
+        id = GetCanvas()->GetEnableZoomNoCenter() ?
+             ID_OFFCENTER_ZOOM_OUT : ID_POPUP_ZOOM_OUT;
+    }
+
     switch( id )
     {
     case ID_OFFCENTER_ZOOM_IN:
