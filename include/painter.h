@@ -278,7 +278,7 @@ protected:
 class PAINTER
 {
 public:
-    /*
+    /**
      * Constructor PAINTER( GAL* )
      * initializes this object for painting on any of the polymorphic
      * GRAPHICS_ABSTRACTION_LAYER* derivatives.

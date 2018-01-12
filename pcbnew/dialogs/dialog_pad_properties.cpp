@@ -44,6 +44,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <pcb_painter.h>
 
 #include <dialog_pad_properties.h>
 #include <html_messagebox.h>
@@ -201,9 +202,21 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     {
         m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
         m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+
         m_panelShowPadGal->Show();
         m_panelShowPad->Hide();
-        auto view = m_panelShowPadGal->GetView();
+
+        KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+
+        // fix the pad render mode (filled/not filled)
+        KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        bool filled = true;     // could be an option in dialog
+        settings->SetSketchMode( LAYER_PADS_TH, !filled );
+        settings->SetSketchMode( LAYER_PAD_FR, !filled );
+        settings->SetSketchMode( LAYER_PAD_BK, !filled );
+        settings->SetSketchModeGraphicItems( !filled );
+
         // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
         double gridsize = 0.001 * IU_PER_MM;
         view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
@@ -1168,7 +1181,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
 {
     if( m_parent->IsGalCanvasActive() )
     {
-        auto view = m_panelShowPadGal->GetView();
+        KIGFX::VIEW* view = m_panelShowPadGal->GetView();
         m_panelShowPadGal->StopDrawing();
 
         view->SetTopLayer( F_SilkS );

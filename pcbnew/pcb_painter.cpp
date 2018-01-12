@@ -133,7 +133,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
     m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[LAYER_PADS_TH]         = !aOptions->m_DisplayPadFill;
+    m_sketchMode[LAYER_PADS_TH]      = !aOptions->m_DisplayPadFill;
     m_sketchMode[LAYER_VIA_THROUGH]  = !aOptions->m_DisplayViaFill;
     m_sketchMode[LAYER_VIA_BBLIND]   = !aOptions->m_DisplayViaFill;
     m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions->m_DisplayViaFill;

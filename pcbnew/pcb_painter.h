@@ -126,6 +126,16 @@ public:
         return m_sketchMode[aItemLayer];
     }
 
+    /**
+     * Turns on/off sketch mode for graphic items (DRAWSEGMENTs, texts).
+     * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
+     * false for filled mode).
+     */
+    inline void SetSketchModeGraphicItems( bool aEnabled )
+    {
+        m_sketchBoardGfx = aEnabled;
+    }
+
     inline bool IsBackgroundDark() const
     {
         auto luma = m_layerColors[ LAYER_PCB_BACKGROUND ].GetBrightness();
