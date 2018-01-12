@@ -119,12 +119,17 @@ void Triangle::ClearDelunayEdges()
 
 Point* Triangle::OppositePoint(Triangle& t, Point& p)
 {
-  Point *cw = t.PointCW(p);
-  double x = cw->x;
-  double y = cw->y;
-  x = p.x;
-  y = p.y;
-  return PointCW(*cw);
+    Point*  cw  = t.PointCW( p );
+
+    /*
+    double  x   = cw->x;
+    double  y   = cw->y;
+
+    x   = p.x;
+    y   = p.y;
+    */
+
+    return PointCW( *cw );
 }
 
 // Legalized triangle by rotating clockwise around point(0)
