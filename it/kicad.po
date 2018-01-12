@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-11 11:13+0100\n"
-"PO-Revision-Date: 2018-01-11 11:14+0100\n"
+"POT-Creation-Date: 2018-01-12 16:35+0100\n"
+"PO-Revision-Date: 2018-01-12 16:37+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -250,13 +250,13 @@ msgstr "Sposta in alto "
 msgid "Move Down"
 msgstr "Sposta in basso"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:23
 msgid "Scale"
 msgstr "Scala"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:28
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:72
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:32
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:80
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:152
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:67
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:69
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:69
@@ -264,9 +264,9 @@ msgstr "Scala"
 msgid "X:"
 msgstr "X:"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:38
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:90
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:149
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:42
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:98
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:162
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:87
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:84
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:80
@@ -275,25 +275,25 @@ msgstr "X:"
 msgid "Y:"
 msgstr "Y:"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:48
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:108
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:159
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:52
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:116
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:172
 msgid "Z:"
 msgstr "Z:"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:65
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:71
 msgid "Rotation (degrees)"
 msgstr "Rotazione (gradi)"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:132
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:143
 msgid "Offset"
 msgstr "Scostamento"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:201
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:214
 msgid "Change to isometric perspective"
 msgstr "Cambia in prospettiva isometrica"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:215
+#: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:228
 msgid "Reload board and 3D models"
 msgstr "Ricarica scheda e modelli 3D"
 
@@ -9774,19 +9774,19 @@ msgstr ""
 "Se si sceglie di saltare questo passo, si dovranno rimappare manualmente i "
 "simboli."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:185
+#: eeschema/dialogs/dialog_symbol_remap.cpp:189
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
 "Aggiunta libreria \"%s\", file \"%s\" alla tabella librerie simboli del "
 "progetto."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:194
+#: eeschema/dialogs/dialog_symbol_remap.cpp:198
 #, c-format
 msgid "Library \"%s\" not found."
 msgstr "Libreria \"%s\" non trovata."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:211
+#: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
 msgid ""
 "Failed to write project symbol library table. Error:\n"
@@ -9795,48 +9795,65 @@ msgstr ""
 "Fallita scrittura file tabella librerie simboli progetto. Errore:\n"
 "  %s"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:216
+#: eeschema/dialogs/dialog_symbol_remap.cpp:220
 msgid "Created project symbol library table.\n"
 msgstr "Creata una tabella librerie simboli del progetto.\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:244
+#: eeschema/dialogs/dialog_symbol_remap.cpp:248
 #, c-format
 msgid "No symbol \"%s\" found in symbol library table."
 msgstr "Simbolo \"%s\" non trovato nella tabella librerie di simboli."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:250
+#: eeschema/dialogs/dialog_symbol_remap.cpp:254
 #, c-format
 msgid "Symbol \"%s\" mapped to symbol library \"%s\"."
 msgstr "Symbolo \"%s\" mappato nella libreria di simboli \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:259
+#: eeschema/dialogs/dialog_symbol_remap.cpp:263
 msgid "Symbol library table mapping complete!"
 msgstr "Mappatura tabella librerie simboli completa!"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:326
+#: eeschema/dialogs/dialog_symbol_remap.cpp:331
 #, c-format
 msgid "Cannot create project remap back up folder \"%s\"."
 msgstr "Impossibile creare la cartella di salvataggio rimappatura \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:343
-#: eeschema/dialogs/dialog_symbol_remap.cpp:360
-#: eeschema/dialogs/dialog_symbol_remap.cpp:382
-#: eeschema/dialogs/dialog_symbol_remap.cpp:397
-#: eeschema/dialogs/dialog_symbol_remap.cpp:412
+#: eeschema/dialogs/dialog_symbol_remap.cpp:334
+#: eeschema/dialogs/dialog_symbol_remap.cpp:453
+msgid "Backup Error"
+msgstr "Errore di salvataggio"
+
+#: eeschema/dialogs/dialog_symbol_remap.cpp:336
+#: eeschema/dialogs/dialog_symbol_remap.cpp:457
+msgid "Continue with Rescue"
+msgstr "Continua il recupero"
+
+#: eeschema/dialogs/dialog_symbol_remap.cpp:337
+#: eeschema/dialogs/dialog_symbol_remap.cpp:458
+msgid "Abort Rescue"
+msgstr "Interrompi il recupero"
+
+#: eeschema/dialogs/dialog_symbol_remap.cpp:354
+#: eeschema/dialogs/dialog_symbol_remap.cpp:372
+#: eeschema/dialogs/dialog_symbol_remap.cpp:389
+#: eeschema/dialogs/dialog_symbol_remap.cpp:409
+#: eeschema/dialogs/dialog_symbol_remap.cpp:424
+#: eeschema/dialogs/dialog_symbol_remap.cpp:439
 #, c-format
 msgid "Backing up file \"%s\" to file \"%s\"."
 msgstr "Salvataggio del file \"%s\" nel file \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:350
-#: eeschema/dialogs/dialog_symbol_remap.cpp:367
-#: eeschema/dialogs/dialog_symbol_remap.cpp:389
-#: eeschema/dialogs/dialog_symbol_remap.cpp:404
-#: eeschema/dialogs/dialog_symbol_remap.cpp:419
+#: eeschema/dialogs/dialog_symbol_remap.cpp:361
+#: eeschema/dialogs/dialog_symbol_remap.cpp:379
+#: eeschema/dialogs/dialog_symbol_remap.cpp:396
+#: eeschema/dialogs/dialog_symbol_remap.cpp:416
+#: eeschema/dialogs/dialog_symbol_remap.cpp:431
+#: eeschema/dialogs/dialog_symbol_remap.cpp:446
 #, c-format
 msgid "Failed to back up file \"%s\".\n"
 msgstr "Impossibile fare il salvataggio del file \"%s\".\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:426
+#: eeschema/dialogs/dialog_symbol_remap.cpp:452
 msgid "Some of the project files could not be backed up."
 msgstr "Alcuni file del progetto potrebbero non essere stati salvati."
 
@@ -16466,7 +16483,7 @@ msgid "Unfill all zones"
 msgstr "Svuota tutte le zone"
 
 #: pcbnew/tools/zone_filler_tool.cpp:116
-#: pcbnew/zones_by_polygon_fill_functions.cpp:107
+#: pcbnew/zones_by_polygon_fill_functions.cpp:105
 msgid "Fill All Zones"
 msgstr "Riempi tutte le zone"
 
@@ -17666,104 +17683,112 @@ msgid "Micro Via: incorrect layer pairs (not adjacent)"
 msgstr "Microvia: coppia di strati errata (non adiacente)"
 
 #: pcbnew/class_drc_item.cpp:75
+msgid "Micro Via: not allowed"
+msgstr "Microvia: non permessi"
+
+#: pcbnew/class_drc_item.cpp:77
+msgid "Buried Via: not allowed"
+msgstr "Via coperti: non permessi"
+
+#: pcbnew/class_drc_item.cpp:79
 msgid "Copper area inside copper area"
 msgstr "Zona in rame interna ad un'altra"
 
-#: pcbnew/class_drc_item.cpp:77
+#: pcbnew/class_drc_item.cpp:81
 msgid "Copper areas intersect or are too close"
 msgstr "Le intersezioni delle zone sono troppo vicine"
 
-#: pcbnew/class_drc_item.cpp:80
+#: pcbnew/class_drc_item.cpp:84
 msgid "Copper area belongs a net which has no pads. This is strange"
 msgstr ""
 "L'area di rame appartiene ad una connessione che non possiede piazzole. "
 "Strano"
 
-#: pcbnew/class_drc_item.cpp:83
+#: pcbnew/class_drc_item.cpp:87
 msgid "Hole near pad"
 msgstr "Foro vicino a piazzola"
 
-#: pcbnew/class_drc_item.cpp:85
+#: pcbnew/class_drc_item.cpp:89
 msgid "Hole near track"
 msgstr "Foro vicino a pista"
 
-#: pcbnew/class_drc_item.cpp:87
+#: pcbnew/class_drc_item.cpp:91
 msgid "Too small track width"
 msgstr "Larghezza pista troppo piccola"
 
-#: pcbnew/class_drc_item.cpp:89
+#: pcbnew/class_drc_item.cpp:93
 msgid "Too small via size"
 msgstr "Dimensione via troppo piccolo"
 
-#: pcbnew/class_drc_item.cpp:91
+#: pcbnew/class_drc_item.cpp:95
 msgid "Too small micro via size"
 msgstr "Dimensione Microvia troppo piccola"
 
-#: pcbnew/class_drc_item.cpp:93
+#: pcbnew/class_drc_item.cpp:97
 msgid "Too small via drill"
 msgstr "Foro via troppo piccolo"
 
-#: pcbnew/class_drc_item.cpp:95
+#: pcbnew/class_drc_item.cpp:99
 msgid "Too small micro via drill"
 msgstr "Foro microvia troppo piccolo"
 
-#: pcbnew/class_drc_item.cpp:99
+#: pcbnew/class_drc_item.cpp:103
 msgid "NetClass Track Width &lt; global limit"
 msgstr "Larghezza pista netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:101
+#: pcbnew/class_drc_item.cpp:105
 msgid "NetClass Clearance &lt; global limit"
 msgstr "Isolamento netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:103
+#: pcbnew/class_drc_item.cpp:107
 msgid "NetClass Via Dia &lt; global limit"
 msgstr "Diametro via netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:105
+#: pcbnew/class_drc_item.cpp:109
 msgid "NetClass Via Drill &lt; global limit"
 msgstr "Foratura via netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:107
+#: pcbnew/class_drc_item.cpp:111
 msgid "NetClass uVia Dia &lt; global limit"
 msgstr "Diametro microvia netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:109
+#: pcbnew/class_drc_item.cpp:113
 msgid "NetClass uVia Drill &lt; global limit"
 msgstr "Foratura microvia netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:112
+#: pcbnew/class_drc_item.cpp:116
 msgid "Via inside a keepout area"
 msgstr "Via interno ad zona proibita"
 
-#: pcbnew/class_drc_item.cpp:115
+#: pcbnew/class_drc_item.cpp:119
 msgid "Track inside a keepout area"
 msgstr "Pista interna a zona proibita"
 
-#: pcbnew/class_drc_item.cpp:118
+#: pcbnew/class_drc_item.cpp:122
 msgid "Pad inside a keepout area"
 msgstr "Piazzola interna a zona proibita"
 
-#: pcbnew/class_drc_item.cpp:121
+#: pcbnew/class_drc_item.cpp:125
 msgid "Via inside a text"
 msgstr "Via dentro un testo"
 
-#: pcbnew/class_drc_item.cpp:124
+#: pcbnew/class_drc_item.cpp:128
 msgid "Track inside a text"
 msgstr "Pista dentro un testo"
 
-#: pcbnew/class_drc_item.cpp:127
+#: pcbnew/class_drc_item.cpp:131
 msgid "Pad inside a text"
 msgstr "Piazzola dentro un testo"
 
-#: pcbnew/class_drc_item.cpp:130
+#: pcbnew/class_drc_item.cpp:134
 msgid "Courtyards overlap"
 msgstr "Gli ingombri si sovrappongono"
 
-#: pcbnew/class_drc_item.cpp:133
+#: pcbnew/class_drc_item.cpp:137
 msgid "Footprint has no courtyard defined"
 msgstr "L'impronta non ha un ingombro definito"
 
-#: pcbnew/class_drc_item.cpp:136
+#: pcbnew/class_drc_item.cpp:140
 msgid "Footprint has incorrect courtyard (not a closed shape)"
 msgstr "L'impronta ha un ingombro non corretto (non è una forma chiusa)"
 
