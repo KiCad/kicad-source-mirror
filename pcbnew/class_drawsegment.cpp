@@ -810,11 +810,14 @@ const std::vector<wxPoint> DRAWSEGMENT::GetPolyPoints() const
 {
     std::vector<wxPoint> rv;
 
-    if( !m_Poly.IsEmpty() )
+    if( m_Poly.OutlineCount() )
     {
-        for ( auto iter = m_Poly.CIterate(); iter; iter++ )
+        if( m_Poly.COutline( 0 ).PointCount() )
         {
-            rv.push_back( wxPoint( iter->x, iter->y ) );
+            for ( auto iter = m_Poly.CIterate(); iter; iter++ )
+            {
+                rv.push_back( wxPoint( iter->x, iter->y ) );
+            }
         }
     }
 
