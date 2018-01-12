@@ -243,7 +243,7 @@ public:
         // for ALT+A handling, we want the initial focus to be on the first selected grid.
         m_cur_grid->SetFocus();
 
-        SetSizeInDU( 360, 240 );
+        SetSizeInDU( 450, 380 );
 
         // On some windows manager (Unity, XFCE), this dialog is
         // not always raised, depending on this dialog is run.
