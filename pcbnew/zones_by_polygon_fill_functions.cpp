@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009 Jean-Pierre Charras jp.charras at wanadoo.fr
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,13 +101,11 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 
     ZONE_FILLER filler( GetBoard() );
 
+    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
+            new WX_PROGRESS_REPORTER( aActiveWindow, _( "Fill All Zones" ), 3 ) );
+
     if( aVerbose )
-    {
-        std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-                new WX_PROGRESS_REPORTER( aActiveWindow, _( "Fill All Zones" ), 3 )
-                );
         filler.SetProgressReporter( progressReporter.get() );
-    }
 
     filler.Fill( toFill );
 
