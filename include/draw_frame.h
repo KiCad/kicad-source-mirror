@@ -141,6 +141,12 @@ protected:
     /// One-shot to avoid a recursive mouse event during hotkey movement
     bool            m_movingCursorWithKeyboard;
 
+    /// Flag indicating that drawing canvas type needs to be saved to config
+    bool            m_canvasTypeDirty;
+
+    /// The current canvas type
+    EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
+
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     /**

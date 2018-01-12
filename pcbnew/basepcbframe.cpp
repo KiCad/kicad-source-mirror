@@ -975,7 +975,9 @@ void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
     }
 
     UseGalCanvas( use_gal );
-    saveCanvasTypeSetting( canvasType );
+
+    m_canvasType = canvasType;
+    m_canvasTypeDirty = true;
 }
 
 
