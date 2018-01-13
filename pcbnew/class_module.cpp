@@ -1303,9 +1303,6 @@ double MODULE::CoverageRatio() const
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
         addRect( holes, pad->GetBoundingBox() );
 
-    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
-        addRect( holes, item->GetBoundingBox() );
-
     addRect( holes, m_Reference->GetBoundingBox() );
     addRect( holes, m_Value->GetBoundingBox() );
 
