@@ -6,10 +6,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,6 +90,9 @@ private:
 
     wxFloatingPointValidator<double>    m_OrientValidator;
     double  m_OrientValue;
+    static bool m_drawPadOutlineMode;   // Stores the pad draw option during a session
+    COLOR4D m_selectedColor;            // Color used to draw selected primitives when
+                                        // editing a custom pad shape
 
 private:
     void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
@@ -118,6 +121,7 @@ private:
 
     void OnPadShapeSelection( wxCommandEvent& event ) override;
     void OnDrillShapeSelected( wxCommandEvent& event ) override;
+	void onChangePadMode( wxCommandEvent& event ) override;
 
     void PadOrientEvent( wxCommandEvent& event ) override;
     void PadTypeSelected( wxCommandEvent& event ) override;

@@ -6,10 +6,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,6 +121,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_PadOrientCtrl->SetValidator( m_OrientValidator );
     m_OrientValidator.SetWindow( m_PadOrientCtrl );
 
+    m_cbShowPadOutline->SetValue( m_drawPadOutlineMode );
+
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
@@ -146,11 +148,14 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     FinishDialogSettings();
 }
 
+bool DIALOG_PAD_PROPERTIES::m_drawPadOutlineMode = false;   // Stores the pad draw option during a session
+
 
 void DIALOG_PAD_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
 {
     m_PadNumCtrl->SetFocus();
     m_PadNumCtrl->SetSelection( -1, -1 );
+    m_selectedColor = COLOR4D( 1.0, 1.0, 1.0, 0.7 );
 
     // Needed on some WM to be sure the pad is redrawn according to the final size
     // of the canvas, with the right zoom factor
@@ -211,7 +216,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
         // fix the pad render mode (filled/not filled)
         KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-        bool filled = true;     // could be an option in dialog
+        bool filled = !m_cbShowPadOutline->IsChecked();
         settings->SetSketchMode( LAYER_PADS_TH, !filled );
         settings->SetSketchMode( LAYER_PAD_FR, !filled );
         settings->SetSketchMode( LAYER_PAD_BK, !filled );
@@ -261,6 +266,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     drawInfo.m_Offset    = m_dummyPad->GetPosition();
     drawInfo.m_Display_padnum  = true;
     drawInfo.m_Display_netname = true;
+    drawInfo.m_ShowPadFilled = !m_drawPadOutlineMode;
 
     if( m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
         drawInfo.m_ShowNotPlatedHole = true;
@@ -322,7 +328,6 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     m_dummyPad->DrawShape( NULL, &dc, drawInfo );
 
     // draw selected primitives:
-    COLOR4D hcolor = CYAN;
     long select = m_listCtrlPrimitives->GetFirstSelected();
     wxPoint start, end, center;
 
@@ -340,33 +345,60 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
         switch( primitive.m_Shape )
         {
         case S_SEGMENT:         // usual segment : line with rounded ends
-            GRFilledSegment( NULL, &dc, dummySegment.GetStart(), dummySegment.GetEnd(),
-                             primitive.m_Thickness, hcolor );
+            if( !m_drawPadOutlineMode )
+                GRFilledSegment( NULL, &dc, dummySegment.GetStart(), dummySegment.GetEnd(),
+                             primitive.m_Thickness, m_selectedColor );
+            else
+                GRCSegm( NULL, &dc, dummySegment.GetStart(), dummySegment.GetEnd(),
+                         primitive.m_Thickness, m_selectedColor );
             break;
 
         case S_ARC:             // Arc with rounded ends
-            GRArc1( NULL, &dc, dummySegment.GetArcEnd(), dummySegment.GetArcStart(),
-                    dummySegment.GetCenter(), primitive.m_Thickness, hcolor );
+            if( !m_drawPadOutlineMode )
+                GRArc1( NULL, &dc, dummySegment.GetArcEnd(), dummySegment.GetArcStart(),
+                        dummySegment.GetCenter(), primitive.m_Thickness, m_selectedColor );
+            else
+            {
+                GRArc1( NULL, &dc, dummySegment.GetArcEnd(), dummySegment.GetArcStart(),
+                        dummySegment.GetCenter(), 0, m_selectedColor );
+/*                GRArc1( NULL, &dc, dummySegment.GetArcEnd(), dummySegment.GetArcStart(),
+                        dummySegment.GetCenter() - primitive.m_Thickness, 0, m_selectedColor );*/
+             }
             break;
 
         case S_CIRCLE:          //  ring or circle
             if( primitive.m_Thickness )
             {
-                GRCircle(  NULL, &dc, dummySegment.GetCenter(), primitive.m_Radius,
-                           primitive.m_Thickness, hcolor );
+                if( !m_drawPadOutlineMode )
+                    GRCircle( NULL, &dc, dummySegment.GetCenter(), primitive.m_Radius,
+                              primitive.m_Thickness, m_selectedColor );
+                else
+                {
+                    GRCircle( NULL, &dc, dummySegment.GetCenter(),
+                              primitive.m_Radius + primitive.m_Thickness/2, 0,
+                              m_selectedColor );
+                    GRCircle( NULL, &dc, dummySegment.GetCenter(),
+                              primitive.m_Radius - primitive.m_Thickness/2, 0,
+                              m_selectedColor );
+                }
             }
             else
             {
-                GRFilledCircle( NULL, &dc, dummySegment.GetCenter(),
-                                primitive.m_Radius, hcolor );
+                if( !m_drawPadOutlineMode )
+                    GRFilledCircle( NULL, &dc, dummySegment.GetCenter(),
+                                    primitive.m_Radius, m_selectedColor );
+                else
+                    GRCircle( NULL, &dc, dummySegment.GetCenter(),
+                              primitive.m_Radius, 0, m_selectedColor );
             }
             break;
 
         case S_POLYGON:         // polygon
         {
             std::vector<wxPoint> poly = dummySegment.GetPolyPoints();
-            GRClosedPoly( NULL, &dc, poly.size(), &poly[0], /* filled */ true,
-                          primitive.m_Thickness, hcolor, hcolor );
+            GRClosedPoly( NULL, &dc, poly.size(), &poly[0],
+                          m_drawPadOutlineMode ? false : true,
+                          primitive.m_Thickness, m_selectedColor, m_selectedColor );
         }
             break;
 
@@ -805,6 +837,28 @@ void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 }
 
 
+void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
+{
+    m_drawPadOutlineMode = m_cbShowPadOutline->GetValue();
+
+    if( m_parent->IsGalCanvasActive() )
+    {
+        KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+
+        // fix the pad render mode (filled/not filled)
+        KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+
+        settings->SetSketchMode( LAYER_PADS_TH, m_drawPadOutlineMode );
+        settings->SetSketchMode( LAYER_PAD_FR, m_drawPadOutlineMode );
+        settings->SetSketchMode( LAYER_PAD_BK, m_drawPadOutlineMode );
+        settings->SetSketchModeGraphicItems( m_drawPadOutlineMode );
+    }
+
+    redraw();
+}
+
+
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
     bool is_custom = false;
@@ -1184,7 +1238,14 @@ void DIALOG_PAD_PROPERTIES::redraw()
         KIGFX::VIEW* view = m_panelShowPadGal->GetView();
         m_panelShowPadGal->StopDrawing();
 
-        view->SetTopLayer( F_SilkS );
+        // The layer used to place primitive items selected when editing custom pad shapes
+        // we use here a layer never used in a pad:
+        #define SELECTED_ITEMS_LAYER Dwgs_User
+
+        view->SetTopLayer( SELECTED_ITEMS_LAYER );
+        KIGFX::PCB_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        settings->SetLayerColor( SELECTED_ITEMS_LAYER, m_selectedColor );
 
         view->Update( m_dummyPad );
 
@@ -1203,7 +1264,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
             PAD_CS_PRIMITIVE& primitive = m_primitives[select];
 
             DRAWSEGMENT* dummySegment = new DRAWSEGMENT;
-            dummySegment->SetLayer( F_SilkS );
+            dummySegment->SetLayer( SELECTED_ITEMS_LAYER );
             primitive.ExportTo( dummySegment );
             dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
             dummySegment->Move( m_dummyPad->GetPosition() );
@@ -1227,13 +1288,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
                 }
                 break;
 
-            case S_POLYGON:         // polygon
-            {
-                for( auto iter = dummySegment->GetPolyShape().Iterate(); iter; iter++ )
-                {
-                    (*iter) += VECTOR2I( m_dummyPad->GetPosition() );
-                }
-            }
+            case S_POLYGON:
                 break;
 
             default:
