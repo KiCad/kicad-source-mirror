@@ -76,7 +76,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-13 18:30+0100\n"
-"PO-Revision-Date: 2018-01-13 18:36+0100\n"
+"PO-Revision-Date: 2018-01-13 18:43+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -3955,7 +3955,7 @@ msgstr "Cambia dimensione puntatore"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:201 pcbnew/basepcbframe.cpp:488
 #: pcbnew/tool_pcb.cpp:393
 msgid "Show pads in outline mode"
-msgstr "Mostra contorni piazzole"
+msgstr "Mostra piazzole in modalità contorno"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:205
 msgid "Show texts in line mode"
@@ -17891,15 +17891,15 @@ msgstr "Abilita autoelimina vecchie piste"
 
 #: pcbnew/toolbars_update_user_interface.cpp:168 pcbnew/tool_pcb.cpp:397
 msgid "Show vias in outline mode"
-msgstr "Mostra contorni via"
+msgstr "Mostra via in modalità contorno"
 
 #: pcbnew/toolbars_update_user_interface.cpp:169
 msgid "Show vias in fill mode"
-msgstr "Mostra Via in modalità piena"
+msgstr "Mostra via in modalità piena"
 
 #: pcbnew/toolbars_update_user_interface.cpp:179 pcbnew/tool_pcb.cpp:401
 msgid "Show tracks in outline mode"
-msgstr "Mostra contorni piste"
+msgstr "Mostra piste in modalità contorno"
 
 #: pcbnew/toolbars_update_user_interface.cpp:180
 msgid "Show tracks in fill mode"
@@ -17936,7 +17936,7 @@ msgstr "Via coperti/interni"
 
 #: pcbnew/class_pcb_layer_widget.cpp:63
 msgid "Show blind or buried vias"
-msgstr "Mostra Via ciechi o sepolti"
+msgstr "Mostra via ciechi o sepolti"
 
 #: pcbnew/class_pcb_layer_widget.cpp:64 pcbnew/class_track.cpp:1243
 msgid "Micro Via"
@@ -17944,7 +17944,7 @@ msgstr "Microvia"
 
 #: pcbnew/class_pcb_layer_widget.cpp:64
 msgid "Show micro vias"
-msgstr "Mostra i Microvia"
+msgstr "Mostra i microvia"
 
 #: pcbnew/class_pcb_layer_widget.cpp:65
 msgid "Non Plated Holes"
@@ -25869,7 +25869,7 @@ msgstr "Mostra piazzole in modalità schizzo"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:113
 msgid "Show pad clearance"
-msgstr "Mostra tolleranza piazzola"
+msgstr "Mostra distanza piazzole"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:116
 msgid "Show pad number"
