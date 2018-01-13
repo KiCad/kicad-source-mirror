@@ -3,13 +3,14 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-14 00:37+0100\n"
-"PO-Revision-Date: 2017-12-01 10:19+0100\n"
+"PO-Revision-Date: 2018-01-14 00:54+0100\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:415
 #, c-format
@@ -301,9 +302,8 @@ msgid "Path"
 msgstr "Path"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:54
-#, fuzzy
 msgid "Configure Environment Variables"
-msgstr "Environment Variable"
+msgstr "Configure Environment Variables"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
 #: eeschema/libedit.cpp:655 eeschema/viewlibs.cpp:240
@@ -897,27 +897,24 @@ msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Displays the current hotkeys list and corresponding commands"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:25
-#, fuzzy
 msgid "Render options:"
-msgstr "Render Options"
+msgstr "Render options:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:42
 msgid "Realistic mode"
 msgstr "Realistic mode"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
-#, fuzzy
 msgid "Show board body"
-msgstr "Show Board Bod&y"
+msgstr "Show board body"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:60
 msgid "Show copper thickness"
 msgstr "Show copper thickness"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:69
-#, fuzzy
 msgid "Show model bounding boxes"
-msgstr "Show Model Bounding Boxes"
+msgstr "Show model bounding boxes"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:78
 #: pcbnew/tool_pcb.cpp:382
@@ -925,29 +922,24 @@ msgid "Show filled areas in zones"
 msgstr "Show filled areas in zones"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:92
-#, fuzzy
 msgid "3D model visibility:"
-msgstr "3D models by"
+msgstr "3D model visibility:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:109
-#, fuzzy
 msgid "Show 3D through hole models"
-msgstr "Show through vias"
+msgstr "Show 3D through hole models"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
-#, fuzzy
 msgid "Show 3D SMD models"
-msgstr "Show 3D Models"
+msgstr "Show 3D SMD models"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:127
-#, fuzzy
 msgid "Show 3D virtual models"
-msgstr "Show 3D Models"
+msgstr "Show 3D virtual models"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:145
-#, fuzzy
 msgid "Board layers:"
-msgstr "Board Classes"
+msgstr "Board layers:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:162
 msgid "Show silkscreen layers"
@@ -966,9 +958,8 @@ msgid "Show adhesive layers"
 msgstr "Show adhesive layers"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:195
-#, fuzzy
 msgid "User layers:"
-msgstr "Copper layers:"
+msgstr "User layers:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:212
 msgid "Show comments and drawings layers"
@@ -1506,7 +1497,7 @@ msgstr " mm"
 
 #: common/base_units.cpp:246
 msgid " \""
-msgstr " ″"
+msgstr " \""
 
 #: common/base_units.cpp:254
 msgid " deg"
@@ -1787,9 +1778,8 @@ msgid "VRML and X3D files (*.wrl *.x3d)|*."
 msgstr "VRML and X3D files (*.wrl *.x3d)|*."
 
 #: common/wildcards_and_files_ext.cpp:286
-#, fuzzy
 msgid "IDFv3 footprint files (*.idf)|*."
-msgstr "IDFv3 component files (*.idf)|*."
+msgstr "IDFv3 footprint files (*.idf)|*."
 
 #: common/wildcards_and_files_ext.cpp:292
 msgid "Text files (*.txt)|*."
@@ -1936,7 +1926,7 @@ msgstr ""
 #: common/basicframe.cpp:427
 #, c-format
 msgid "File \"%s\" was not found."
-msgstr "File “%s” not found"
+msgstr "File \"%s\" was not found."
 
 #: common/basicframe.cpp:472
 #, c-format
@@ -2771,19 +2761,17 @@ msgid "Select by Browser"
 msgstr "Select by Browser"
 
 #: common/dialogs/dialog_env_var_config.cpp:133
-#, fuzzy
 msgid "Path:"
-msgstr "Paths:"
+msgstr "Path:"
 
 #: common/dialogs/dialog_env_var_config.cpp:202
-#, fuzzy
 msgid "Path already exists."
-msgstr "Path already exists"
+msgstr "Path already exists."
 
 #: common/dialogs/dialog_env_var_config.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Environment variable \"%s\" cannot be renamed."
-msgstr "Environment variable “%s” cannot be renamed"
+msgstr "Environment variable \"%s\" cannot be renamed."
 
 #: common/dialogs/dialog_env_var_config.cpp:259
 msgid ""
@@ -2794,7 +2782,6 @@ msgstr ""
 "and can not be renamed."
 
 #: common/dialogs/dialog_env_var_config.cpp:285
-#, fuzzy
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -2802,7 +2789,7 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Enter the name and path for each environment variable.  Grey entries are "
+"Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
 "Environment variables defined at the system or user level take precedence "
 "over the ones defined in this table.  This means the values in this table "
@@ -2827,13 +2814,12 @@ msgstr ""
 "libraries."
 
 #: common/dialogs/dialog_env_var_config.cpp:296
-#, fuzzy
 msgid ""
 "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository of the "
 "official KiCad footprint libraries."
 msgstr ""
 "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository of the "
-"official KiCad libraries."
+"official KiCad footprint libraries."
 
 #: common/dialogs/dialog_env_var_config.cpp:299
 msgid ""
@@ -2876,9 +2862,8 @@ msgstr ""
 "your own project templates folder."
 
 #: common/dialogs/dialog_env_var_config.cpp:420
-#, fuzzy
 msgid "Select Path for Environment Variable"
-msgstr "Set path for environment variable"
+msgstr "Select Path for Environment Variable"
 
 #: common/dialogs/dialog_env_var_config.cpp:439
 msgid "Environment variable name cannot be empty."
@@ -2889,12 +2874,10 @@ msgid "Environment variable value cannot be empty."
 msgstr "Environment variable value cannot be empty."
 
 #: common/dialogs/dialog_env_var_config.cpp:454
-#, fuzzy
 msgid "Environment variable names cannot start with a digit (0-9)."
-msgstr "Environment variable name cannot start with a digit (0-9)."
+msgstr "Environment variable names cannot start with a digit (0-9)."
 
 #: common/dialogs/dialog_env_var_config.cpp:466
-#, fuzzy
 msgid ""
 "An environment variable is used for string substitutions.<br>Environment "
 "variables are primarily used for paths to make KiCad portable between "
@@ -2905,14 +2888,14 @@ msgid ""
 "allowed in environment variable names and the environment variable name "
 "cannot start with a digit (0-9)."
 msgstr ""
-"An environment variable is as an equivalence of a string.<br>It is used "
-"mainly in paths to make them portable between installs<br><br>For instance, "
-"if an environment variable is defined as<br><b>MYLIBPATH</b> with a value "
-"like <b>e:/kicad_libs</b>, if a library name is <br><b>${MYLIBPATH}/mylib."
-"lib</b>, the actual path is<br><b>e:/kicad_libs/mylib.lib</b><br><br><b>Note:"
-"</b><br>Only chars <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are allowed "
-"in environment variable names<br>and the environment variable name cannot "
-"start with a digit (0-9)"
+"An environment variable is used for string substitutions.<br>Environment "
+"variables are primarily used for paths to make KiCad portable between "
+"platforms.<br><br>If an environment variable is defined as <b>MYLIBPATH</b> "
+"with a value <b>e:/kicad_libs</b>, then a library name <b>${MYLIBPATH}/mylib."
+"lib</b> gets expanded to <b>e:/kicad_libs/mylib.lib</b><br><br><b>Note:</"
+"b><br>Only characters <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are "
+"allowed in environment variable names and the environment variable name "
+"cannot start with a digit (0-9)."
 
 #: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:168
 msgid "Mirror X"
@@ -3450,14 +3433,12 @@ msgid "About"
 msgstr "About"
 
 #: common/dialogs/dialog_env_var_config_base.h:63
-#, fuzzy
 msgid "Environment Variable Configuration"
-msgstr "Environment Variable"
+msgstr "Environment Variable Configuration"
 
 #: common/dialogs/dialog_env_var_config_base.h:94
-#, fuzzy
 msgid "Edit Environment Variable"
-msgstr "Edit Environment Value Variable"
+msgstr "Edit Environment Variable"
 
 #: common/dialogs/dialog_hotkeys_editor_base.h:53
 msgid "Hotkeys Editor"
@@ -3480,14 +3461,12 @@ msgid "View selected footprint"
 msgstr "View selected footprint"
 
 #: cvpcb/tool_cvpcb.cpp:61
-#, fuzzy
 msgid "Select previous unlinked symbol"
-msgstr "Select previous unlinked component"
+msgstr "Select previous unlinked symbol"
 
 #: cvpcb/tool_cvpcb.cpp:65
-#, fuzzy
 msgid "Select next unlinked symbol"
-msgstr "Select next unlinked component"
+msgstr "Select next unlinked symbol"
 
 #: cvpcb/tool_cvpcb.cpp:70
 msgid "Perform automatic footprint association"
@@ -3498,9 +3477,8 @@ msgid "Delete all footprint associations"
 msgstr "Delete all footprint associations"
 
 #: cvpcb/tool_cvpcb.cpp:81
-#, fuzzy
 msgid "Filter footprint list by schematic symbol keywords"
-msgstr "Filter footprint list by schematic components keywords"
+msgstr "Filter footprint list by schematic symbol keywords"
 
 #: cvpcb/tool_cvpcb.cpp:88
 msgid "Filter footprint list by pin count"
@@ -3761,9 +3739,8 @@ msgid "File \"%s\" already exists in list"
 msgstr "File “%s” already exists in list"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:23
-#, fuzzy
 msgid "Draw Options"
-msgstr "Draw options"
+msgstr "Draw Options"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
 msgid "Graphic items sketch mode"
@@ -3788,9 +3765,8 @@ msgid "Pan and Zoom"
 msgstr "Pan and Zoom"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:43
-#, fuzzy
 msgid "Center and warp cursor on zoom"
-msgstr "Ce&nter and warp cursor on zoom"
+msgstr "Center and warp cursor on zoom"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:151
@@ -3813,9 +3789,8 @@ msgstr ""
 "+scroll)."
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:53
-#, fuzzy
 msgid "Pan while moving object"
-msgstr "&Pan while moving object"
+msgstr "Pan while moving object"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:54
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:161
@@ -3827,14 +3802,12 @@ msgstr ""
 "display."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
-#, fuzzy
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Symbol footprint association files (*.equ)|*."
+msgstr "Symbol Footprint Association Files (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
-#, fuzzy
 msgid "Edit File"
-msgstr "Edit Field"
+msgstr "Edit File"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
@@ -3863,14 +3836,12 @@ msgid "Absolute"
 msgstr "Absolute"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
-#, fuzzy
 msgid "Relative"
-msgstr "Relative path"
+msgstr "Relative"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type:"
-msgstr "Pad type:"
+msgstr "Path Type:"
 
 #: cvpcb/cvpcb_mainframe.cpp:246
 msgid ""
@@ -4020,13 +3991,12 @@ msgid "Footprint &Association Files"
 msgstr "Footprint &Association Files"
 
 #: cvpcb/menubar.cpp:94
-#, fuzzy
 msgid ""
 "Configure footprint association file (.equ) list.These files are used to "
 "automatically assign the footprint name from the symbol value"
 msgstr ""
 "Configure footprint association file (.equ) list.These files are used to "
-"automatically assign the footprint name (FPID) from the component value"
+"automatically assign the footprint name from the symbol value"
 
 #: cvpcb/menubar.cpp:106
 msgid "&Keep Open On Save"
@@ -4079,9 +4049,8 @@ msgid "Display Options"
 msgstr "Display Options"
 
 #: cvpcb/common_help_msg.h:28
-#, fuzzy
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr "Save footprint association in schematic component footprint fields"
+msgstr "Save footprint associations in schematic symbol footprint fields"
 
 #: eeschema/sch_collectors.cpp:426
 #, c-format
@@ -4977,9 +4946,8 @@ msgid "Add Junction"
 msgstr "Add Junction"
 
 #: eeschema/hotkeys.cpp:150
-#, fuzzy
 msgid "Add Symbol"
-msgstr "Symbol"
+msgstr "Add Symbol"
 
 #: eeschema/hotkeys.cpp:152
 msgid "Add Power"
@@ -5022,33 +4990,28 @@ msgid "Edit Item"
 msgstr "Edit Item"
 
 #: eeschema/hotkeys.cpp:174
-#, fuzzy
 msgid "Edit Symbol Value"
-msgstr "Edit Value"
+msgstr "Edit Symbol Value"
 
 #: eeschema/hotkeys.cpp:177
-#, fuzzy
 msgid "Edit Symbol Reference"
-msgstr "Edit Reference"
+msgstr "Edit Symbol Reference"
 
 #: eeschema/hotkeys.cpp:180
-#, fuzzy
 msgid "Edit Symbol Footprint"
-msgstr "Edit Footprint"
+msgstr "Edit Symbol Footprint"
 
 #: eeschema/hotkeys.cpp:183
-#, fuzzy
 msgid "Edit with Symbol Editor"
-msgstr "Edit with Component Editor"
+msgstr "Edit with Symbol Editor"
 
 #: eeschema/hotkeys.cpp:187
 msgid "Move Schematic Item"
 msgstr "Move Schematic Item"
 
 #: eeschema/hotkeys.cpp:191
-#, fuzzy
 msgid "Duplicate Symbol or Label"
-msgstr "Duplicate Component or Label"
+msgstr "Duplicate Symbol or Label"
 
 #: eeschema/hotkeys.cpp:195 pcbnew/hotkeys.cpp:125
 msgid "Drag Item"
@@ -5222,9 +5185,9 @@ msgid "Choose Symbol (%d items loaded)"
 msgstr "Choose Symbol (%d items loaded)"
 
 #: eeschema/viewlibs.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Browser -- %s"
-msgstr "Symbol Library Editor - "
+msgstr "Symbol Library Browser -- %s"
 
 #: eeschema/block.cpp:467
 msgid "No item to paste."
@@ -5281,18 +5244,16 @@ msgid "Create &PNG File from Screen..."
 msgstr "Create &PNG File from Screen…"
 
 #: eeschema/menubar_libedit.cpp:107
-#, fuzzy
 msgid "Create a PNG file from the current symbol"
-msgstr "Create a SVG file from the current loaded part"
+msgstr "Create a PNG file from the current symbol"
 
 #: eeschema/menubar_libedit.cpp:113
 msgid "Create S&VG File..."
 msgstr "Create S&VG File…"
 
 #: eeschema/menubar_libedit.cpp:114
-#, fuzzy
 msgid "Create a SVG file from the current symbol"
-msgstr "Create a SVG file from the current loaded part"
+msgstr "Create a SVG file from the current symbol"
 
 #: eeschema/menubar_libedit.cpp:123
 msgid "&Quit"
@@ -5345,62 +5306,52 @@ msgid "&Redraw"
 msgstr "&Redraw"
 
 #: eeschema/menubar_libedit.cpp:184
-#, fuzzy
 msgid "&Search Tree"
-msgstr "&Search tree"
+msgstr "&Search Tree"
 
 #: eeschema/menubar_libedit.cpp:185
 msgid "Toggles the search tree visibility"
 msgstr "Toggles the search tree visibility"
 
 #: eeschema/menubar_libedit.cpp:193
-#, fuzzy
 msgid "&New Symbol"
-msgstr "New Symbol"
+msgstr "&New Symbol"
 
 #: eeschema/menubar_libedit.cpp:194
-#, fuzzy
 msgid "Create a new empty symbol"
-msgstr "Create a new empty part"
+msgstr "Create a new empty symbol"
 
 #: eeschema/menubar_libedit.cpp:197
-#, fuzzy
 msgid "&Save Symbol"
-msgstr "New Symbol"
+msgstr "&Save Symbol"
 
 #: eeschema/menubar_libedit.cpp:201
-#, fuzzy
 msgid "Saves the current symbol to the library"
-msgstr "Saves the current part to the library"
+msgstr "Saves the current symbol to the library"
 
 #: eeschema/menubar_libedit.cpp:208
-#, fuzzy
 msgid "&Import Symbol"
-msgstr "Import Symbol"
+msgstr "&Import Symbol"
 
 #: eeschema/menubar_libedit.cpp:209
-#, fuzzy
 msgid "Import a symbol to the current library"
-msgstr "Import a part to the current library"
+msgstr "Import a symbol to the current library"
 
 #: eeschema/menubar_libedit.cpp:214
-#, fuzzy
 msgid "&Export Symbol"
-msgstr "Export Symbol"
+msgstr "&Export Symbol"
 
 #: eeschema/menubar_libedit.cpp:215
-#, fuzzy
 msgid "Export the current symbol"
-msgstr "Export the current part"
+msgstr "Export the current symbol"
 
 #: eeschema/menubar_libedit.cpp:222
 msgid "&Properties"
 msgstr "&Properties"
 
 #: eeschema/menubar_libedit.cpp:223 eeschema/tool_lib.cpp:148
-#, fuzzy
 msgid "Edit symbol properties"
-msgstr "Edit field properties"
+msgstr "Edit symbol properties"
 
 #: eeschema/menubar_libedit.cpp:228
 msgid "&Fields"
@@ -5465,9 +5416,8 @@ msgid "General &Options"
 msgstr "General &Options"
 
 #: eeschema/menubar_libedit.cpp:305
-#, fuzzy
 msgid "Set Symbol Editor default values and options"
-msgstr "Set Part Editor default values and options"
+msgstr "Set Symbol Editor default values and options"
 
 #: eeschema/menubar_libedit.cpp:320 eeschema/menubar.cpp:569
 #: eeschema/tool_viewlib.cpp:214
@@ -5516,9 +5466,8 @@ msgid "&View"
 msgstr "&View"
 
 #: eeschema/menubar_libedit.cpp:355 eeschema/menubar.cpp:193
-#, fuzzy
 msgid "&Symbol"
-msgstr "Symbol"
+msgstr "&Symbol"
 
 #: eeschema/menubar_libedit.cpp:356 eeschema/menubar.cpp:121
 #: pagelayout_editor/menubar.cpp:245 pcbnew/menubar_pcbframe.cpp:156
@@ -5829,9 +5778,8 @@ msgid "Could not open CvPcb"
 msgstr "Could not open CvPcb"
 
 #: eeschema/schframe.cpp:1205
-#, fuzzy
 msgid "Error: not a symbol or no symbol."
-msgstr "Error: not a component or no component"
+msgstr "Error: not a symbol or no symbol."
 
 #: eeschema/schframe.cpp:1490
 msgid " [no file]"
@@ -6057,15 +6005,16 @@ msgid "Rename to %s"
 msgstr "Rename to %s"
 
 #: eeschema/project_rescue.cpp:293 eeschema/project_rescue.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr "Symbol %s not found in any library or cache."
+msgstr ""
+"Cannot rescue symbol %s which is not available in any library or the cache."
 
 #: eeschema/project_rescue.cpp:296 eeschema/project_rescue.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "Symbol “%s” found in library “%s”"
+msgstr "Rescue symbol %s found only in cache library to %s."
 
 #: eeschema/project_rescue.cpp:299 eeschema/project_rescue.cpp:430
 #, c-format
@@ -6465,9 +6414,9 @@ msgid "Symbol not found in %s!!!"
 msgstr "Symbol not found in %s!!!"
 
 #: eeschema/sch_component.cpp:1727
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s, %s"
-msgstr "Symbols by"
+msgstr "Symbol %s, %s"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:35
@@ -6790,9 +6739,8 @@ msgid "Source"
 msgstr "Source"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:578
-#, fuzzy
 msgid "Disable symbol for simulation"
-msgstr "Disable component for simulation"
+msgstr "Disable symbol for simulation"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:584
 msgid "Alternate node sequence:"
@@ -6804,17 +6752,15 @@ msgid "General Settings"
 msgstr "General Settings"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:34
-#, fuzzy
 msgid "Symbol &name:"
-msgstr "Symbol Name"
+msgstr "Symbol &name:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:36
-#, fuzzy
 msgid ""
 "This is the symbol name in library,\n"
 "and also the default component value when loaded in the schematic."
 msgstr ""
-"This is the component name in library,\n"
+"This is the symbol name in library,\n"
 "and also the default component value when loaded in the schematic."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:43
@@ -6830,14 +6776,12 @@ msgid "Number of units per package:"
 msgstr "Number of units per package:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:63
-#, fuzzy
 msgid "Create symbol with alternate body style (DeMorgan)"
-msgstr "Create component with alternate body style (DeMorgan)"
+msgstr "Create symbol with alternate body style (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:66
-#, fuzzy
 msgid "Create symbol as power symbol"
-msgstr "Create component as power symbol"
+msgstr "Create symbol as power symbol"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:69
 msgid "Units are not interchangeable"
@@ -6864,9 +6808,8 @@ msgid "Pin name inside"
 msgstr "Pin name inside"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:39
-#, fuzzy
 msgid "Symbols"
-msgstr "Symbol"
+msgstr "Symbols"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:40
 msgid "Current Symbol"
@@ -6942,9 +6885,8 @@ msgstr "Horiz. Justify"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:73
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
-#, fuzzy
 msgid "Select if the symbol is to be rotated when drawn"
-msgstr "Select if the component is to be rotated when drawn"
+msgstr "Select if the symbol is to be rotated when drawn"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
@@ -6962,11 +6904,9 @@ msgstr "Vert. Justify"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:81
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:60
-#, fuzzy
 msgid "Pick the graphical transformation to be used when displaying the symbol"
 msgstr ""
-"Pick the graphical transformation to be used when displaying the component, "
-"if any"
+"Pick the graphical transformation to be used when displaying the symbol"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:123
@@ -7069,9 +7009,8 @@ msgid "Y Position"
 msgstr "Y Position"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:180
-#, fuzzy
 msgid "The Y coordinate of the text relative to the symbol anchor position"
-msgstr "The Y coordinate of the text relative to the component"
+msgstr "The Y coordinate of the text relative to the symbol anchor position"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:723
 msgid "Select library"
@@ -7111,9 +7050,8 @@ msgid "Sharing"
 msgstr "Sharing"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
-#, fuzzy
 msgid "Common to all &units in symbol"
-msgstr "Common to all &units in component"
+msgstr "Common to all &units in symbol"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:86
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:75
@@ -7429,27 +7367,24 @@ msgid "Custom"
 msgstr "Custom"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:388
-#, fuzzy
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Adjust passive component values (e.g. M → Meg; 100 nF → 100n)"
+msgstr "Adjust passive symbol values (e.g. M → Meg; 100 nF → 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:391
 msgid "Add full path for .include library directives"
 msgstr "Add full path for .include library directives"
 
 #: eeschema/dialogs/dialog_bom_editor_base.cpp:37
-#, fuzzy
 msgid "Group symbols"
-msgstr "Power symbol"
+msgstr "Group symbols"
 
 #: eeschema/dialogs/dialog_bom_editor_base.cpp:39
 msgid "Group components together based on common properties"
 msgstr "Group components together based on common properties"
 
 #: eeschema/dialogs/dialog_bom_editor_base.cpp:43
-#, fuzzy
 msgid "Regroup symbols"
-msgstr "Remap Symbols"
+msgstr "Regroup symbols"
 
 #: eeschema/dialogs/dialog_bom_editor_base.cpp:95
 msgid "Apply Changes"
@@ -7492,9 +7427,8 @@ msgid "Select"
 msgstr "Select"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:65
-#, fuzzy
 msgid "Power symbol value text cannot be modified!"
-msgstr "Power component value text cannot be modified!"
+msgstr "Power symbol value text cannot be modified!"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:77
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:210
@@ -7519,29 +7453,25 @@ msgstr "Invisible"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:203
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#, fuzzy
 msgid "Bold and italic"
-msgstr "Bold Italic"
+msgstr "Bold and italic"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:101
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
-#, fuzzy
 msgid "Align left"
-msgstr "Align Left"
+msgstr "Align left"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:101
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:107
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:175
-#, fuzzy
 msgid "Align center"
-msgstr "Align Center"
+msgstr "Align center"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:101
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
-#, fuzzy
 msgid "Align right"
-msgstr "Align Right"
+msgstr "Align right"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 msgid "Horizontal Justify"
@@ -7549,15 +7479,13 @@ msgstr "Horizontal Justify"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:107
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:175
-#, fuzzy
 msgid "Align top"
-msgstr "Align Top"
+msgstr "Align top"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:107
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:175
-#, fuzzy
 msgid "Align bottom"
-msgstr "Align Bottom"
+msgstr "Align bottom"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
 msgid "Vertical Justify"
@@ -7612,7 +7540,6 @@ msgstr ""
 "project folder \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:62
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -7623,13 +7550,14 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"This schematic currently uses the symbol library list look up method for "
-"loading schematic symbols.  KiCad will attempt to map the existing symbols "
-"to use the new symbol library table.  Remapping will change project files "
-"and schematics will not be compatible with previous versions of KiCad.  All "
-"files that are changed will be backed up with the .v4 extension should you "
-"need to revert any changes.  If you choose to skip this step, you will be "
-"responsible for manually remapping the symbols."
+"This schematic currently uses the project symbol library list look up method "
+"for loading library symbols.  KiCad will attempt to map the existing symbols "
+"to use the new symbol library table.  Remapping will change some project "
+"files and schematics may not be compatible with older versions of KiCad.  "
+"All files that are changed will be backed up to the \"remap_backup\" folder "
+"in the project folder should you need to revert any changes.  If you choose "
+"to skip this step, you will be responsible for manually remapping the "
+"symbols."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:189
 #, c-format
@@ -7669,15 +7597,14 @@ msgid "Symbol library table mapping complete!"
 msgstr "Symbol library table mapping complete!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder \"%s\"."
-msgstr "Cannot create folder “%s”."
+msgstr "Cannot create project remap back up folder \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:334
 #: eeschema/dialogs/dialog_symbol_remap.cpp:453
-#, fuzzy
 msgid "Backup Error"
-msgstr "Block Mirror"
+msgstr "Backup Error"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:336
 #: eeschema/dialogs/dialog_symbol_remap.cpp:457
@@ -7686,9 +7613,8 @@ msgstr "Continue with Rescue"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:337
 #: eeschema/dialogs/dialog_symbol_remap.cpp:458
-#, fuzzy
 msgid "Abort Rescue"
-msgstr "Resc&ue"
+msgstr "Abort Rescue"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:372
@@ -7696,9 +7622,9 @@ msgstr "Resc&ue"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:409
 #: eeschema/dialogs/dialog_symbol_remap.cpp:424
 #: eeschema/dialogs/dialog_symbol_remap.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file \"%s\" to file \"%s\"."
-msgstr "Backup file: “%s”"
+msgstr "Backing up file \"%s\" to file \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:361
 #: eeschema/dialogs/dialog_symbol_remap.cpp:379
@@ -7993,14 +7919,14 @@ msgid "Changes exist in component table"
 msgstr "Changes exist in component table"
 
 #: eeschema/dialogs/dialog_bom_editor.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Table - %u symbols in %u groups"
-msgstr "Component table - %u components in %u groups"
+msgstr "Symbol Table - %u symbols in %u groups"
 
 #: eeschema/dialogs/dialog_bom_editor.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Table - %u components"
-msgstr "Component table - %u components"
+msgstr "Symbol Table - %u components"
 
 #: eeschema/dialogs/dialog_bom_editor.cpp:274
 #, c-format
@@ -8008,9 +7934,8 @@ msgid " - %u changed"
 msgstr " - %u changed"
 
 #: eeschema/dialogs/dialog_bom_editor.cpp:421
-#, fuzzy
 msgid "Revert all symbol table changes?"
-msgstr "Revert all component table changes?"
+msgstr "Revert all symbol table changes?"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:176
 msgid "Global Label Properties"
@@ -8047,9 +7972,8 @@ msgid "Unit:"
 msgstr "Unit:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:37
-#, fuzzy
 msgid "Interchangeable units:"
-msgstr "Interchangeable Unit:"
+msgstr "Interchangeable units:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1106
@@ -8106,14 +8030,12 @@ msgid "Orientation (degrees):"
 msgstr "Orientation (degrees):"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#, fuzzy
 msgid "Mirror horizontally"
-msgstr "Mirror Horizontally"
+msgstr "Mirror horizontally"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#, fuzzy
 msgid "Mirror vertically"
-msgstr "Mirror Vertically"
+msgstr "Mirror vertically"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:79
@@ -8121,18 +8043,16 @@ msgid "Position:"
 msgstr "Position:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:64
-#, fuzzy
 msgid "Convert shape"
-msgstr "Convert Shape"
+msgstr "Convert shape"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:65
-#, fuzzy
 msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"Use the alternate shape of this component.\n"
-"For gates, this is the “De Morgan” conversion"
+"Use the alternate shape of this symbol.\n"
+"For gates, this is the \"De Morgan\" conversion"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:63
@@ -8140,9 +8060,8 @@ msgid "Library Symbol:"
 msgstr "Library Symbol:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:73
-#, fuzzy
 msgid "Name of the symbol in the library to which this symbol is linked"
-msgstr "Name of the symbol in the library from which this component come from"
+msgstr "Name of the symbol in the library to which this symbol is linked"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:80
 #: kicad/dialogs/dialog_template_selector_base.cpp:39
@@ -8155,14 +8074,12 @@ msgid "Change"
 msgstr "Change"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:92
-#, fuzzy
 msgid "Symbol ID:"
-msgstr "Symbol"
+msgstr "Symbol ID:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:97
-#, fuzzy
 msgid "Unique ID that identifies the symbol"
-msgstr "Unique ID that identifies the component"
+msgstr "Unique ID that identifies the symbol"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:104
 msgid "Edit Spice Model"
@@ -8173,14 +8090,13 @@ msgid "Reset Field Properties"
 msgstr "Reset Field Properties"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:108
-#, fuzzy
 msgid ""
 "Set position and style of fields and symbol orientation to default library "
 "value.\n"
 "Field values are not modified."
 msgstr ""
-"Set position and style of fields and component orientation to default "
-"library value.\n"
+"Set position and style of fields and symbol orientation to default library "
+"value.\n"
 "Field values are not modified."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:112
@@ -8254,9 +8170,8 @@ msgstr ""
 "show in your browser by pressing this button."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:247
-#, fuzzy
 msgid "Font size:"
-msgstr "Font Size:"
+msgstr "Font size:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:252
 msgid "Font Size of the selected field"
@@ -8368,9 +8283,8 @@ msgstr ""
 "Set this option to show the window of the running command."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:107
-#, fuzzy
 msgid "Plugin Information:"
-msgstr "Plugin Info:"
+msgstr "Plugin Information:"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:271
 msgid "No footprint specified"
@@ -8381,11 +8295,8 @@ msgid "Invalid footprint specified"
 msgstr "Invalid footprint specified"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:467
-#, fuzzy
 msgid "Double-click here to select a symbol from the library browser"
-msgstr ""
-"Double click here to select a symbol\n"
-"from the library browser"
+msgstr "Double-click here to select a symbol from the library browser"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:73
 msgid "Library Component Properties"
@@ -8540,9 +8451,8 @@ msgstr "&Increment of repeated labels:"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:95
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
 #: pcbnew/dialogs/dialog_modedit_display_options.cpp:62
-#, fuzzy
 msgid "Icon scale:"
-msgstr "X scale:"
+msgstr "Icon scale:"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:151
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:99
@@ -8586,14 +8496,12 @@ msgid "Default format"
 msgstr "Default format"
 
 #: eeschema/dialogs/dialog_netlist.cpp:397
-#, fuzzy
 msgid "Reformat passive symbol values"
-msgstr "Reformat passive component values"
+msgstr "Reformat passive symbol values"
 
 #: eeschema/dialogs/dialog_netlist.cpp:399
-#, fuzzy
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "Reformat passive component values e.g. 1M → 1Meg"
+msgstr "Reformat passive symbol values e.g. 1M → 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:404
 msgid "Simulator command:"
@@ -8728,9 +8636,8 @@ msgid "minutes"
 msgstr "minutes"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:234
-#, fuzzy
 msgid "A&utomatically place symbol fields"
-msgstr "A&utomatically place component fields"
+msgstr "A&utomatically place symbol fields"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:237
 msgid "A&llow field autoplace to change justification"
@@ -8858,10 +8765,9 @@ msgid "Has alternate symbol (DeMorgan)"
 msgstr "Has alternate symbol (DeMorgan)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:31
-#, fuzzy
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
 msgstr ""
-"Check this option if the component has an alternate body style (De Morgan)"
+"Check this option if the symbol has an alternate body style (De Morgan)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:35
 msgid "Show pin number"
@@ -8896,10 +8802,9 @@ msgid "Number of Units"
 msgstr "Number of Units"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:67
-#, fuzzy
 msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
-"Enter the number of units for a component that contains more than one unit"
+"Enter the number of units for a symbol that contains more than one unit"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:80
 msgid "Pin Name Position Offset"
@@ -8920,22 +8825,20 @@ msgid "Define as power symbol"
 msgstr "Define as power symbol"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:99
-#, fuzzy
 msgid "Check this option when the symbol is a power symbol"
-msgstr "Check this option when the component is a power symbol"
+msgstr "Check this option when the symbol is a power symbol"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:103
 msgid "All units are not interchangeable"
 msgstr "All units are not interchangeable"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:104
-#, fuzzy
 msgid ""
 "Check this option when creating multiple unit symbols and all units are not "
 "interchangeable"
 msgstr ""
-"Check this option when creating multiple unit components and all units are "
-"not interchangeable"
+"Check this option when creating multiple unit symbols and all units are not "
+"interchangeable"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:119
 msgid ""
@@ -8953,12 +8856,11 @@ msgid "Keywords"
 msgstr "Keywords"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:128
-#, fuzzy
 msgid ""
 "Enter key words that can be used to select this symbol.\n"
 "Key words cannot have spaces and are separated by a space."
 msgstr ""
-"Enter key words that can be used to select this component.\n"
+"Enter key words that can be used to select this symbol.\n"
 "Key words cannot have spaces and are separated by a space."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:135
@@ -8966,11 +8868,10 @@ msgid "Documentation File Name"
 msgstr "Documentation File Name"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:137
-#, fuzzy
 msgid ""
 "Enter the documentation file (a .pdf document) associated with the symbol."
 msgstr ""
-"Enter the documentation file (a .pdf document) associated to the component."
+"Enter the documentation file (a .pdf document) associated with the symbol."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:147
 msgid "Copy Document from Parent"
@@ -8985,15 +8886,14 @@ msgid "Alias List"
 msgstr "Alias List"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:170
-#, fuzzy
 msgid ""
 "An alias is a symbol that uses the body of its root symbol.\n"
 "It has its own documentation and keywords.\n"
 "A fast way to extend a library with similar symbols."
 msgstr ""
-"An alias is a component that uses the body of its root component.\n"
+"An alias is a symbol that uses the body of its root symbol.\n"
 "It has its own documentation and keywords.\n"
-"A fast way to extend a library with similar components"
+"A fast way to extend a library with similar symbols."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:186
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
@@ -9033,15 +8933,14 @@ msgid "Footprints"
 msgstr "Footprints"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:209
-#, fuzzy
 msgid ""
 "A list of footprints names that can be used for this symbol.\n"
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"A list of footprints names that can be used for this component.\n"
-"Footprints names can used jockers.\n"
-"(like sm* to allow all footprints names starting by sm)."
+"A list of footprints names that can be used for this symbol.\n"
+"Footprints names can used wildcards like sm* to allow all footprints names "
+"starting by sm."
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:34
 msgid "&Width:"
@@ -9072,9 +8971,8 @@ msgid "Select fields to update:"
 msgstr "Select fields to update:"
 
 #: eeschema/dialogs/dialog_update_fields_base.cpp:33
-#, fuzzy
 msgid "Select None"
-msgstr "Select none"
+msgstr "Select None"
 
 #: eeschema/dialogs/dialog_update_fields_base.cpp:39
 msgid "Remove extra fields"
@@ -9253,7 +9151,7 @@ msgstr "Please select a symbol library table file."
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:110
 #, c-format
 msgid "File \"%s\" not found."
-msgstr "File “%s” not found"
+msgstr "File \"%s\" not found."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:124
 #, c-format
@@ -9297,24 +9195,20 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_annotate.cpp:194
-#, fuzzy
 msgid "Clear and annotate all of the symbols on the entire schematic?"
-msgstr "Clear and annotate all of the components on the entire schematic?"
+msgstr "Clear and annotate all of the symbols on the entire schematic?"
 
 #: eeschema/dialogs/dialog_annotate.cpp:196
-#, fuzzy
 msgid "Clear and annotate all of the symbols on the current sheet?"
-msgstr "Clear and annotate all of the components on the current sheet?"
+msgstr "Clear and annotate all of the symbols on the current sheet?"
 
 #: eeschema/dialogs/dialog_annotate.cpp:202
-#, fuzzy
 msgid "Annotate only the unannotated symbols on the entire schematic?"
-msgstr "Annotate only the unannotated components on the entire schematic?"
+msgstr "Annotate only the unannotated symbols on the entire schematic?"
 
 #: eeschema/dialogs/dialog_annotate.cpp:204
-#, fuzzy
 msgid "Annotate only the unannotated symbols on the current sheet?"
-msgstr "Annotate only the unannotated components on the current sheet?"
+msgstr "Annotate only the unannotated symbols on the current sheet?"
 
 #: eeschema/dialogs/dialog_annotate.cpp:207
 msgid ""
@@ -9887,9 +9781,8 @@ msgid "Deselect current tool"
 msgstr "Deselect current tool"
 
 #: eeschema/tool_lib.cpp:79
-#, fuzzy
 msgid "Move symbol anchor"
-msgstr "Move part anchor"
+msgstr "Move symbol anchor"
 
 #: eeschema/tool_lib.cpp:82
 msgid "Import existing drawings"
@@ -9912,24 +9805,20 @@ msgid "Save current library"
 msgstr "Save current library"
 
 #: eeschema/tool_lib.cpp:120
-#, fuzzy
 msgid "Create new symbol"
-msgstr "Create new board"
+msgstr "Create new symbol"
 
 #: eeschema/tool_lib.cpp:124
-#, fuzzy
 msgid "Save current symbol"
-msgstr "Save current board"
+msgstr "Save current symbol"
 
 #: eeschema/tool_lib.cpp:127
-#, fuzzy
 msgid "Import symbol"
-msgstr "Import Symbol"
+msgstr "Import symbol"
 
 #: eeschema/tool_lib.cpp:130
-#, fuzzy
 msgid "Export symbol"
-msgstr "Export Symbol"
+msgstr "Export symbol"
 
 #: eeschema/tool_lib.cpp:135 eeschema/tool_sch.cpp:87
 #: pcbnew/tools/pcbnew_control.cpp:231
@@ -9937,14 +9826,12 @@ msgid "Paste"
 msgstr "Paste"
 
 #: eeschema/tool_lib.cpp:179 eeschema/tool_viewlib.cpp:89
-#, fuzzy
 msgid "Show as \"De Morgan\" normal symbol"
-msgstr "Show as “De Morgan” normal part"
+msgstr "Show as “De Morgan” normal symbol"
 
 #: eeschema/tool_lib.cpp:181 eeschema/tool_viewlib.cpp:94
-#, fuzzy
 msgid "Show as \"De Morgan\" convert symbol"
-msgstr "Show as “De Morgan” convert part"
+msgstr "Show as “De Morgan” convert symbol"
 
 #: eeschema/tool_lib.cpp:186
 msgid "Show associated datasheet or document"
@@ -10073,9 +9960,8 @@ msgid "&Hierarchical Label"
 msgstr "&Hierarchical Label"
 
 #: eeschema/menubar.cpp:260
-#, fuzzy
 msgid "Hierar&chical Sheet"
-msgstr "Hierarchical &Sheet"
+msgstr "Hierar&chical Sheet"
 
 #: eeschema/menubar.cpp:268
 msgid "I&mport Hierarchical Label"
@@ -10216,19 +10102,16 @@ msgid "Import Footprint Association File"
 msgstr "Import Footprint Association File"
 
 #: eeschema/menubar.cpp:455
-#, fuzzy
 msgid "Sets symbol fields to original library values"
-msgstr "Sets component fields to original library values"
+msgstr "Sets symbol fields to original library values"
 
 #: eeschema/menubar.cpp:461
-#, fuzzy
 msgid "Edit Symbol Library Links"
-msgstr "Edit Components to Symbol Library Links"
+msgstr "Edit Symbol Library Links"
 
 #: eeschema/menubar.cpp:462
-#, fuzzy
 msgid "Edit schematic symbol's symbol library links"
-msgstr "Edit Components to Symbol Library Links"
+msgstr "Edit schematic symbol's symbol library links"
 
 #: eeschema/menubar.cpp:476
 msgid "Updates PCB design with current schematic (forward annotation)."
@@ -10279,14 +10162,12 @@ msgid "Generate &Netlist File"
 msgstr "Generate &Netlist File"
 
 #: eeschema/menubar.cpp:527
-#, fuzzy
 msgid "Generate netlist file"
-msgstr "Generate &Netlist File"
+msgstr "Generate netlist file"
 
 #: eeschema/menubar.cpp:532
-#, fuzzy
 msgid "Symbol Table &View"
-msgstr "Component Table &View"
+msgstr "Symbol Table &View"
 
 #: eeschema/menubar.cpp:537
 msgid "Generate Bill of &Materials"
@@ -10504,9 +10385,8 @@ msgid "Duplicate Block"
 msgstr "Duplicate Block"
 
 #: eeschema/libedit_onrightclick.cpp:348 eeschema/onrightclick.cpp:883
-#, fuzzy
 msgid "Mirror Block Around Horizontal(X) Axis"
-msgstr "Flip Block Horizontal"
+msgstr "Mirror Block Around Horizontal(X) Axis"
 
 #: eeschema/libedit_onrightclick.cpp:352 eeschema/onrightclick.cpp:880
 msgid "Mirror Block Around Vertical(Y) Axis"
@@ -10543,15 +10423,13 @@ msgid "Enter a new value for the %s field."
 msgstr "Enter a new value for the %s field."
 
 #: eeschema/libfield.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The name \"%s\" conflicts with an existing entry in the symbol library \"%s"
 "\"."
 msgstr ""
-"The name “%s” conflicts with an existing entry in the component library "
-"“%s”.\n"
-"\n"
-"Do you wish to replace the current component in the library with this one?"
+"The name \"%s\" conflicts with an existing entry in the symbol library \"%s"
+"\"."
 
 #: eeschema/hierarch.cpp:149
 msgid "Navigator"
@@ -10821,18 +10699,16 @@ msgid "Footprint Editor - Create/edit footprints"
 msgstr "Footprint Editor - Create/edit footprints"
 
 #: eeschema/tool_sch.cpp:161
-#, fuzzy
 msgid "Run CvPcb to associate footprints to symbols"
-msgstr "Run CvPcb to associate footprints to components"
+msgstr "Run CvPcb to associate footprints to symbols"
 
 #: eeschema/tool_sch.cpp:164
 msgid "Generate netlist"
 msgstr "Generate netlist"
 
 #: eeschema/tool_sch.cpp:167
-#, fuzzy
 msgid "Edit symbol fields"
-msgstr "Update symbol fields"
+msgstr "Edit symbol fields"
 
 #: eeschema/tool_sch.cpp:176
 msgid "Run Pcbnew to layout printed circuit board"
@@ -10860,29 +10736,24 @@ msgid "HV orientation for wires and bus"
 msgstr "HV orientation for wires and bus"
 
 #: eeschema/tool_viewlib.cpp:54
-#, fuzzy
 msgid "Select symbol to browse"
-msgstr "Select component to browse"
+msgstr "Select symbol to browse"
 
 #: eeschema/tool_viewlib.cpp:59
-#, fuzzy
 msgid "Display previous symbol"
-msgstr "Display previous component"
+msgstr "Display previous symbol"
 
 #: eeschema/tool_viewlib.cpp:63
-#, fuzzy
 msgid "Display next symbol"
-msgstr "Display next component"
+msgstr "Display next symbol"
 
 #: eeschema/tool_viewlib.cpp:107
-#, fuzzy
 msgid "View symbol documents"
-msgstr "View component documents"
+msgstr "View symbol documents"
 
 #: eeschema/tool_viewlib.cpp:115
-#, fuzzy
 msgid "Insert symbol in schematic"
-msgstr "Insert component in schematic"
+msgstr "Insert symbol in schematic"
 
 #: eeschema/tool_viewlib.cpp:142
 #, c-format
@@ -10895,9 +10766,8 @@ msgid "Cl&ose"
 msgstr "Cl&ose"
 
 #: eeschema/tool_viewlib.cpp:182
-#, fuzzy
 msgid "Close schematic symbol viewer"
-msgstr "Close schematic component viewer"
+msgstr "Close schematic symbol viewer"
 
 #: eeschema/tool_viewlib.cpp:206
 msgid "&Show Pin Electrical Type"
@@ -10948,11 +10818,13 @@ msgstr ""
 "Do you want to continue?"
 
 #: eeschema/pinedit.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This position is already occupied by another pin, in unit %d.\n"
 "Continue?"
-msgstr "This position is already occupied by another pin. Continue?"
+msgstr ""
+"This position is already occupied by another pin, in unit %d.\n"
+"Continue?"
 
 #: eeschema/pinedit.cpp:704
 msgid "No pins!"
@@ -11102,9 +10974,8 @@ msgstr ""
 "Error: %s"
 
 #: eeschema/cross-probing.cpp:82
-#, fuzzy
 msgid "Selected net: "
-msgstr "Select none"
+msgstr "Selected net: "
 
 #: eeschema/class_drc_erc_item.cpp:40
 msgid "ERC err unspecified"
@@ -11258,15 +11129,13 @@ msgstr "Drag"
 
 #: eeschema/onrightclick.cpp:380 eeschema/onrightclick.cpp:793
 #: eeschema/onrightclick.cpp:920
-#, fuzzy
 msgid "Mirror Around Horizontal(X) Axis"
-msgstr "Mirror Horizontally"
+msgstr "Mirror Around Horizontal(X) Axis"
 
 #: eeschema/onrightclick.cpp:383 eeschema/onrightclick.cpp:796
 #: eeschema/onrightclick.cpp:923
-#, fuzzy
 msgid "Mirror Around Vertical(Y) Axis"
-msgstr "Mirror Vertically"
+msgstr "Mirror Around Vertical(Y) Axis"
 
 #: eeschema/onrightclick.cpp:386
 msgid "Reset to Default"
@@ -11468,18 +11337,16 @@ msgid "Redraw schematic view"
 msgstr "Redraw schematic view"
 
 #: eeschema/help_common_strings.h:51
-#, fuzzy
 msgid "Find symbols and text"
-msgstr "Find components and text"
+msgstr "Find symbols and text"
 
 #: eeschema/help_common_strings.h:52
 msgid "Find and replace text in schematic items"
 msgstr "Find and replace text in schematic items"
 
 #: eeschema/help_common_strings.h:53
-#, fuzzy
 msgid "Place symbol"
-msgstr "Power symbol"
+msgstr "Place symbol"
 
 #: eeschema/help_common_strings.h:54
 msgid "Place power port"
@@ -11502,14 +11369,12 @@ msgid "Place bus to bus entry"
 msgstr "Place bus to bus entry"
 
 #: eeschema/help_common_strings.h:59
-#, fuzzy
 msgid "Place no connection flag"
-msgstr "Place not-connected flag"
+msgstr "Place no connection flag"
 
 #: eeschema/help_common_strings.h:61
-#, fuzzy
 msgid "Place net label"
-msgstr "Place net name - local label"
+msgstr "Place net label"
 
 #: eeschema/help_common_strings.h:64
 msgid ""
@@ -11522,13 +11387,12 @@ msgstr ""
 "connected"
 
 #: eeschema/help_common_strings.h:66
-#, fuzzy
 msgid ""
 "Place a hierarchical label. Label will be seen as a hierarchical pin in the "
 "sheet"
 msgstr ""
 "Place a hierarchical label. Label will be seen as a hierarchical pin in the "
-"sheet symbol"
+"sheet"
 
 #: eeschema/help_common_strings.h:68
 msgid "Place junction"
@@ -11557,62 +11421,52 @@ msgid "Place text"
 msgstr "Place text"
 
 #: eeschema/help_common_strings.h:76
-#, fuzzy
 msgid "Annotate schematic symbols"
-msgstr "Annotate schematic components"
+msgstr "Annotate schematic symbols"
 
 #: eeschema/help_common_strings.h:77
-#, fuzzy
 msgid "Create, delete, and edit symbols"
-msgstr "Create component as power symbol"
+msgstr "Create, delete, and edit symbols"
 
 #: eeschema/help_common_strings.h:78
-#, fuzzy
 msgid "Browse symbol libraries"
-msgstr "Browse Libraries"
+msgstr "Browse symbol libraries"
 
 #: eeschema/help_common_strings.h:79
 msgid "Generate bill of materials"
 msgstr "Generate bill of materials"
 
 #: eeschema/help_common_strings.h:81
-#, fuzzy
 msgid ""
 "Back-import symbol footprint association fields from the .cmp back import "
 "file created by Pcbnew"
 msgstr ""
-"Back-import component footprint association fields from the .cmp back import "
+"Back-import symbol footprint association fields from the .cmp back import "
 "file created by Pcbnew"
 
 #: eeschema/help_common_strings.h:84
-#, fuzzy
 msgid "Add pins to symbol"
-msgstr "Add pins to component"
+msgstr "Add pins to symbol"
 
 #: eeschema/help_common_strings.h:85
-#, fuzzy
 msgid "Add text to symbol body"
-msgstr "Add text to component body"
+msgstr "Add text to symbol body"
 
 #: eeschema/help_common_strings.h:86
-#, fuzzy
 msgid "Add graphic rectangle to symbol body"
-msgstr "Add graphic rectangle to component body"
+msgstr "Add graphic rectangle to symbol body"
 
 #: eeschema/help_common_strings.h:87
-#, fuzzy
 msgid "Add circles to symbol body"
-msgstr "Add circles to component body"
+msgstr "Add circles to symbol body"
 
 #: eeschema/help_common_strings.h:88
-#, fuzzy
 msgid "Add arcs to symbol body"
-msgstr "Add arcs to component body"
+msgstr "Add arcs to symbol body"
 
 #: eeschema/help_common_strings.h:89
-#, fuzzy
 msgid "Add lines and polygons to symbol body"
-msgstr "Add lines and polygons to component body"
+msgstr "Add lines and polygons to symbol body"
 
 #: eeschema/sch_marker.h:97
 msgid "ERC Marker"
@@ -11636,9 +11490,8 @@ msgid "Netlist"
 msgstr "Netlist"
 
 #: eeschema/dialogs/dialog_netlist_base.h:117
-#, fuzzy
 msgid "Plugin Properties"
-msgstr "Pin Properties"
+msgstr "Plugin Properties"
 
 #: eeschema/dialogs/dialog_bom_base.h:95
 msgid "Bill of Material"
@@ -11649,9 +11502,8 @@ msgid "Pin Properties"
 msgstr "Pin Properties"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.h:113
-#, fuzzy
 msgid "Library Symbol Properties"
-msgstr "Library Component Properties"
+msgstr "Library Symbol Properties"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:93
 msgid "Field Properties"
@@ -11671,14 +11523,12 @@ msgstr "Schematic Sheet Properties"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.h:60
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:112
-#, fuzzy
 msgid "Symbol Properties"
-msgstr "Label Properties"
+msgstr "Symbol Properties"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:64
-#, fuzzy
 msgid "Edit Symbol Library Associations"
-msgstr "Edit Components to Symbol Library Links"
+msgstr "Edit Symbol Library Associations"
 
 #: eeschema/dialogs/dialog_libedit_options_base.h:93
 msgid "Library Editor Options"
@@ -11697,9 +11547,8 @@ msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
 
 #: eeschema/dialogs/dialog_update_fields_base.h:56
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Update symbol fields"
+msgstr "Update Symbol Fields"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:62
 msgid "Drawing Properties"
@@ -11850,14 +11699,12 @@ msgstr ""
 "in the View menu."
 
 #: gerbview/gerbview_frame.cpp:222 pcbnew/pcbframe.cpp:482
-#, fuzzy
 msgid "Enable Graphics Acceleration"
-msgstr "Enable automatic track deletion"
+msgstr "Enable Graphics Acceleration"
 
 #: gerbview/gerbview_frame.cpp:225 pcbnew/pcbframe.cpp:485
-#, fuzzy
 msgid "&Enable Acceleration"
-msgstr "Enable automatic track deletion"
+msgstr "&Enable Acceleration"
 
 #: gerbview/gerbview_frame.cpp:225 pcbnew/pcbframe.cpp:485
 msgid "&No Thanks"
@@ -12270,15 +12117,13 @@ msgid "Scale 0.7"
 msgstr "Scale 0.7"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
-#, fuzzy
 msgid "Approximate scale 1"
-msgstr "Approximate Scale"
+msgstr "Approximate scale 1"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
-#, fuzzy
 msgid "Accurate scale 1"
-msgstr "Accurate Scale 1"
+msgstr "Accurate scale 1"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
@@ -12305,14 +12150,12 @@ msgid "Scale 4"
 msgstr "Scale 4"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:46
-#, fuzzy
 msgid "Scale:"
-msgstr "Scale"
+msgstr "Scale:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
-#, fuzzy
 msgid "X scale adjust"
-msgstr "X scale adjust:"
+msgstr "X scale adjust"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:78
@@ -12320,9 +12163,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Set X scale adjust for exact scale plotting"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
-#, fuzzy
 msgid "Y scale adjust"
-msgstr "Y scale adjust:"
+msgstr "Y scale adjust"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:87
@@ -12503,9 +12345,8 @@ msgid "Get Stored Choice"
 msgstr "Get Stored Choice"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#, fuzzy
 msgid "Full size without page limits"
-msgstr "Full size without limits"
+msgstr "Full size without page limits"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:27
 msgid "Show Page Limits:"
@@ -12745,9 +12586,8 @@ msgstr "Set options to draw items"
 
 #: gerbview/menubar.cpp:214 pcbnew/menubar_pcbframe.cpp:562
 #: pcbnew/menubar_modedit.cpp:257
-#, fuzzy
 msgid "Legacy graphic&s"
-msgstr "Legacy Canva&s"
+msgstr "Legacy graphic&s"
 
 #: gerbview/menubar.cpp:219 pcbnew/menubar_pcbframe.cpp:567
 #: pcbnew/menubar_modedit.cpp:262
@@ -12939,9 +12779,8 @@ msgid "Page Borders"
 msgstr "Page Borders"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:81
-#, fuzzy
 msgid "Layer Selection"
-msgstr "Layer selection:"
+msgstr "Layer Selection"
 
 #: include/kiway_player.h:316
 msgid "This file is already open."
@@ -13148,18 +12987,16 @@ msgid "Schematic layout editor"
 msgstr "Schematic layout editor"
 
 #: kicad/commandframe.cpp:73
-#, fuzzy
 msgid "Symbol library editor"
-msgstr "Symbol Library Editor - "
+msgstr "Symbol library editor"
 
 #: kicad/commandframe.cpp:77
 msgid "PCB layout editor"
 msgstr "PCB layout editor"
 
 #: kicad/commandframe.cpp:81
-#, fuzzy
 msgid "Footprint library editor"
-msgstr "&Footprint Library Wizard"
+msgstr "Footprint library editor"
 
 #: kicad/commandframe.cpp:85
 msgid "Gerber viewer"
@@ -13441,13 +13278,12 @@ msgid "Convert Image"
 msgstr "Convert Image"
 
 #: kicad/menubar.cpp:425
-#, fuzzy
 msgid ""
 "Bitmap2Component - Convert bitmap images to schematic\n"
 "or PCB elements"
 msgstr ""
-"Bitmap2Component - Convert bitmap images to Eeschema\n"
-"or Pcbnew elements"
+"Bitmap2Component - Convert bitmap images to schematic\n"
+"or PCB elements"
 
 #: kicad/menubar.cpp:429
 msgid "Run PCB Calculator"
@@ -13881,54 +13717,46 @@ msgid "Not on page 1"
 msgstr "Not on page 1"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:80
-#, fuzzy
 msgid "Horizontal justification"
-msgstr "Horizontal Position:"
+msgstr "Horizontal justification"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:99
-#, fuzzy
 msgid "Vertical justification"
-msgstr "V justification"
+msgstr "Vertical justification"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:124
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:468
-#, fuzzy
 msgid "Text width (mm)"
-msgstr "Text Width (mm)"
+msgstr "Text width (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:137
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:481
-#, fuzzy
 msgid "Text height (mm)"
-msgstr "Text Height (mm)"
+msgstr "Text height (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:150
 msgid "Constraints:"
 msgstr "Constraints:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Maximum width (mm)"
-msgstr "Minimum width"
+msgstr "Maximum width (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:173
-#, fuzzy
 msgid "Maximum height Y (mm)"
-msgstr "Max Size Y (mm)"
+msgstr "Maximum height Y (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:199
 msgid "Comment"
 msgstr "Comment"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:218
-#, fuzzy
 msgid "Position X (mm)"
-msgstr "Pos X (mm)"
+msgstr "Position X (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:231
-#, fuzzy
 msgid "Position Y (mm)"
-msgstr "Pos Y (mm)"
+msgstr "Position Y (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:247
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:302
@@ -14037,24 +13865,20 @@ msgid "Page Margins"
 msgstr "Page Margins"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:548
-#, fuzzy
 msgid "Left margin (mm)"
-msgstr "Left Margin (mm)"
+msgstr "Left margin (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:561
-#, fuzzy
 msgid "Right margin (mm)"
-msgstr "Right Margin (mm)"
+msgstr "Right margin (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:580
-#, fuzzy
 msgid "Top margin (mm)"
-msgstr "Top Margin (mm)"
+msgstr "Top margin (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:593
-#, fuzzy
 msgid "Bottom margin (mm)"
-msgstr "Bottom Margin (mm)"
+msgstr "Bottom margin (mm)"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:219
 msgid "Print Page Layout"
@@ -16188,79 +16012,81 @@ msgstr ""
 "Edit graphics, making them contiguous polygons each."
 
 #: pcbnew/board_netlist_updater.cpp:108 pcbnew/class_board.cpp:2444
-#, fuzzy, c-format
+#, c-format
 msgid "Adding new symbol \"%s:%s\" footprint \"%s\".\n"
-msgstr "Adding new component “%s:%s” footprint “%s”.\n"
+msgstr "Adding new symbol \"%s:%s\" footprint \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Add symbol %s, footprint: %s.\n"
-msgstr "Add component %s, footprint: %s.\n"
+msgstr "Add symbol %s, footprint: %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add symbol %s due to missing footprint %s.\n"
-msgstr "Cannot add component %s due to missing footprint %s.\n"
+msgstr "Cannot add symbol %s due to missing footprint %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:142 pcbnew/class_board.cpp:2453
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\".\n"
-msgstr "Cannot add new component “%s:%s” due to missing footprint “%s”.\n"
+msgstr "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s footprint from %s to %s.\n"
-msgstr "Change component %s footprint from %s to %s.\n"
+msgstr "Change symbol %s footprint from %s to %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:176 pcbnew/class_board.cpp:2487
-#, fuzzy, c-format
+#, c-format
 msgid "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
-msgstr "Replacing component “%s:%s” footprint “%s” with “%s”.\n"
+msgstr "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot change symbol %s footprint due to missing footprint %s.\n"
-msgstr "Cannot change component %s footprint due to missing footprint %s.\n"
+msgstr "Cannot change symbol %s footprint due to missing footprint %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:213 pcbnew/class_board.cpp:2498
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot replace symbol \"%s:%s\" due to missing footprint \"%s\".\n"
-msgstr "Cannot replace component “%s:%s” due to missing footprint “%s”.\n"
+msgstr "Cannot replace symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s reference to %s.\n"
-msgstr "Change component %s reference to %s.\n"
+msgstr "Change symbol %s reference to %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "Changing symbol \"%s:%s\" reference to \"%s\".\n"
-msgstr "Changing component “%s:%s” reference to “%s”.\n"
+msgstr "Changing symbol \"%s:%s\" reference to \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s value from %s to %s.\n"
-msgstr "Change component %s value from %s to %s.\n"
+msgstr ""
+"Change symbol %s value from %s to %s.\n"
+"\n"
 
 #: pcbnew/board_netlist_updater.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid "Changing symbol \"%s:%s\" value from \"%s\" to \"%s\".\n"
-msgstr "Changing component “%s:%s” value from “%s” to “%s”.\n"
+msgstr "Changing symbol \"%s:%s\" value from \"%s\" to \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Changing symbol path \"%s:%s\" to \"%s\".\n"
-msgstr "Changing component path “%s:%s” to “%s”.\n"
+msgstr "Changing symbol path \"%s:%s\" to \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnect symbol %s pin %s.\n"
-msgstr "Disconnect component %s pin %s.\n"
+msgstr "Disconnect symbol %s pin %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Clearing symbol \"%s:%s\" pin \"%s\" net name.\n"
-msgstr "Clearing component “%s:%s” pin “%s” net name.\n"
+msgstr "Clearing symbol \"%s:%s\" pin \"%s\" net name.\n"
 
 #: pcbnew/board_netlist_updater.cpp:375
 #, c-format
@@ -16268,34 +16094,34 @@ msgid "Add net %s.\n"
 msgstr "Add net %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect symbol %s pin %s from net %s to net %s.\n"
-msgstr "Reconnect component %s pin %s from net %s to net %s.\n"
+msgstr "Reconnect symbol %s pin %s from net %s to net %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Connect symbol %s pin %s to net %s.\n"
-msgstr "Connect component %s pin %s to net %s.\n"
+msgstr "Connect symbol %s pin %s to net %s.\n"
 
 #: pcbnew/board_netlist_updater.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Changing symbol \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
-msgstr "Changing component “%s:%s” pin “%s” net name from “%s” to “%s”.\n"
+msgstr "Changing symbol \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked, skipping removal.\n"
-msgstr "Component %s is locked, skipping removal.\n"
+msgstr "Footprint %s is locked, skipping removal.\n"
 
 #: pcbnew/board_netlist_updater.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove footprint %s."
-msgstr "Remove component %s."
+msgstr "Remove footprint %s."
 
 #: pcbnew/board_netlist_updater.cpp:452 pcbnew/class_board.cpp:2679
-#, fuzzy, c-format
+#, c-format
 msgid "Removing unused footprint \"%s:%s\".\n"
-msgstr "Removing unused component “%s:%s”.\n"
+msgstr "Removing unused footprint \"%s:%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:517
 #, c-format
@@ -16582,18 +16408,18 @@ msgid "Components"
 msgstr "Components"
 
 #: pcbnew/netlist.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol \"%s\".\n"
-msgstr "No footprint defined for component “%s”.\n"
+msgstr "No footprint defined for symbol \"%s\".\n"
 
 #: pcbnew/netlist.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint of symbol \"%s\" changed: board footprint \"%s\", netlist "
 "footprint \"%s\"\n"
 msgstr ""
-"Footprint of component “%s” changed: board footprint “%s”, netlist footprint "
-"“%s”\n"
+"Footprint of symbol \"%s\" changed: board footprint \"%s\", netlist "
+"footprint \"%s\"\n"
 
 #: pcbnew/netlist.cpp:302
 #, c-format
@@ -18061,9 +17887,8 @@ msgid "I&DFv3"
 msgstr "I&DFv3"
 
 #: pcbnew/menubar_pcbframe.cpp:841
-#, fuzzy
 msgid "IDFv3 board and symbol export"
-msgstr "IDFv3 board and component export"
+msgstr "IDFv3 board and symbol export"
 
 #: pcbnew/menubar_pcbframe.cpp:845
 msgid "S&TEP"
@@ -18074,15 +17899,13 @@ msgid "STEP export"
 msgstr "STEP export"
 
 #: pcbnew/menubar_pcbframe.cpp:849
-#, fuzzy
 msgid "&Footprint Association (.cmp) File"
-msgstr "Footprint Association File"
+msgstr "&Footprint Association (.cmp) File"
 
 #: pcbnew/menubar_pcbframe.cpp:850
-#, fuzzy
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Export component file (*.cmp) for Eeschema footprint field back-annotation"
+"Export footprint association file (*.cmp) for schematic back annotation"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -18178,14 +18001,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Unable to export, please fix and try again"
 
 #: pcbnew/specctra_export.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol with value of \"%s\" has empty reference id."
-msgstr "Component with value of “%s” has empty reference id."
+msgstr "Symbol with value of \"%s\" has empty reference id."
 
 #: pcbnew/specctra_export.cpp:814
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple symbols have identical reference IDs of \"%s\"."
-msgstr "Multiple components have identical reference IDs of “%s”."
+msgstr "Multiple symbols have identical reference IDs of \"%s\"."
 
 #: pcbnew/class_pad.cpp:694
 msgid "Pad"
@@ -18310,14 +18133,12 @@ msgid "Micro Via: incorrect layer pairs (not adjacent)"
 msgstr "Micro Via: incorrect layer pairs (not adjacent)"
 
 #: pcbnew/class_drc_item.cpp:75
-#, fuzzy
 msgid "Micro Via: not allowed"
-msgstr "Micro Via Drill Value"
+msgstr "Micro Via: not allowed"
 
 #: pcbnew/class_drc_item.cpp:77
-#, fuzzy
 msgid "Buried Via: not allowed"
-msgstr "Buried Vias:"
+msgstr "Buried Via: not allowed"
 
 #: pcbnew/class_drc_item.cpp:79
 msgid "Copper area inside copper area"
@@ -19387,9 +19208,8 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:379
-#, fuzzy
 msgid "Parent Footprint Orientation"
-msgstr "Parent footprint orientation"
+msgstr "Parent Footprint Orientation"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:387
 msgid "Rotation:"
@@ -19564,9 +19384,8 @@ msgid "Custom Shape Primitives"
 msgstr "Custom Shape Primitives"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:659
-#, fuzzy
 msgid "Show pad in outline mode"
-msgstr "Show pads in outline mode"
+msgstr "Show pad in outline mode"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:668
 msgid ""
@@ -19672,29 +19491,24 @@ msgstr ""
 "models."
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:37
-#, fuzzy
 msgid "Text width"
-msgstr "Text width:"
+msgstr "Text width"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:44
-#, fuzzy
 msgid "Text height"
-msgstr "Text height:"
+msgstr "Text height"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:51
-#, fuzzy
 msgid "Text thickness"
-msgstr "Text thickness:"
+msgstr "Text thickness"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:58
-#, fuzzy
 msgid "Text position X"
-msgstr "Text Position X"
+msgstr "Text position X"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:65
-#, fuzzy
 msgid "Text position Y"
-msgstr "Text Position Y"
+msgstr "Text position Y"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:112
@@ -19955,9 +19769,8 @@ msgstr ""
 "file location."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:69
-#, fuzzy
 msgid "Included Layers:"
-msgstr "Included Layers"
+msgstr "Included Layers:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Plot sheet reference on all layers"
@@ -20427,18 +20240,16 @@ msgid "Technical layers:"
 msgstr "Technical layers:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:56
-#, fuzzy
 msgid "Exclude PCB edge layer"
-msgstr "Exclude Edges_Pcb layer"
+msgstr "Exclude PCB edge layer"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:57
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
 msgstr "Exclude contents of Edges_Pcb layer from all other layers"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
-#, fuzzy
 msgid "Approx. scale 1"
-msgstr "Approx. Scale 1"
+msgstr "Approx. scale 1"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
 msgid "Approximate Scale"
@@ -20600,14 +20411,12 @@ msgid "Footprint %s (%s) orientation %.1f"
 msgstr "Footprint %s (%s) orientation %.1f"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:74
-#, fuzzy
 msgid "Offset X:"
-msgstr "Offset X"
+msgstr "Offset X:"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:81
-#, fuzzy
 msgid "Offset Y:"
-msgstr "Offset Y"
+msgstr "Offset Y:"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:119
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
@@ -20678,9 +20487,8 @@ msgstr "Footprint 3D model path:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:49
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
-#, fuzzy
 msgid "Grid reference point:"
-msgstr "Grid Reference Point:"
+msgstr "Grid reference point:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "meter"
@@ -20828,9 +20636,8 @@ msgstr ""
 "Do not show the warning message before reading the netlist"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:142
-#, fuzzy
 msgid "Netlist file:"
-msgstr "Netlist File:"
+msgstr "Netlist file:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:156
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:158
@@ -20870,9 +20677,8 @@ msgstr "Start Point Y:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:174
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:176
-#, fuzzy
 msgid "Polygon Properties"
-msgstr "Pin Properties"
+msgstr "Polygon Properties"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:179
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:181
@@ -20939,18 +20745,16 @@ msgid "Enter the minimum acceptable value for a track width"
 msgstr "Enter the minimum acceptable value for a track width"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:75
-#, fuzzy
 msgid "Minimum via size"
-msgstr "Min via size"
+msgstr "Minimum via size"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77 pcbnew/dialogs/dialog_drc_base.cpp:86
 msgid "Enter the minimum acceptable diameter for a standard via"
 msgstr "Enter the minimum acceptable diameter for a standard via"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
-#, fuzzy
 msgid "Minimum uVia size"
-msgstr "Min µVia size"
+msgstr "Minimum uVia size"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:92 pcbnew/dialogs/dialog_drc_base.cpp:101
 msgid "Enter the minimum acceptable diameter for a micro via"
@@ -21046,9 +20850,8 @@ msgid "net %.3d"
 msgstr "net %.3d"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:629
-#, fuzzy
 msgid "Via start layer and end layer cannot be the same"
-msgstr "The start and end points cannot be the same."
+msgstr "Via start layer and end layer cannot be the same"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 msgid "Outlines Options"
@@ -21063,26 +20866,22 @@ msgid "H, V and 45 deg"
 msgstr "H, V and 45 deg"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
-#, fuzzy
 msgid "Zone Edge Orientation"
-msgstr "Zone Edge Orientation:"
+msgstr "Zone Edge Orientation"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
-#, fuzzy
 msgid "Hatched outline"
-msgstr "Hatched Outline"
+msgstr "Hatched outline"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
-#, fuzzy
 msgid "Full hatched"
-msgstr "Fully hatched"
+msgstr "Full hatched"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
-#, fuzzy
 msgid "Outline Appearence"
-msgstr "Outline Appearence:"
+msgstr "Outline Appearence"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 msgid "Zone min thickness value:"
@@ -21257,9 +21056,8 @@ msgid "Ignore virtual components"
 msgstr "Ignore virtual components"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:28
-#, fuzzy
 msgid "Document link"
-msgstr "Open Documentation"
+msgstr "Document link"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:77
 msgid "Footprint name in library"
@@ -21271,9 +21069,8 @@ msgstr "Library nickname"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:104
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:139
-#, fuzzy
 msgid "Placement Type"
-msgstr "Placement type"
+msgstr "Placement Type"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:108
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:143
@@ -21700,32 +21497,29 @@ msgid "Merge a session file created by FreeRouter with the current board."
 msgstr "Merge a session file created by FreeRouter with the current board."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:330
-#, fuzzy
 msgid ""
 "Use this attribute for most non SMD footprints\n"
 "Footprints with this option are not put in the footprint position list file"
 msgstr ""
-"Use this attribute for most non SMD components\n"
-"Components with this option are not put in the footprint position list file"
+"Use this attribute for most non SMD footprints\n"
+"Footprints with this option are not put in the footprint position list file"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:333
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:184
-#, fuzzy
 msgid ""
 "Use this attribute for SMD footprints.\n"
 "Only footprints with this option are put in the footprint position list file"
 msgstr ""
-"Use this attribute for SMD components.\n"
-"Only components with this option are put in the footprint position list file"
+"Use this attribute for SMD footprints.\n"
+"Only footprints with this option are put in the footprint position list file"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:336
-#, fuzzy
 msgid ""
 "Use this attribute for \"virtual\" footprints drawn on board\n"
 "such as an edge connector (old ISA PC bus for instance)"
 msgstr ""
-"Use this attribute for “virtual” components drawn on board\n"
-"like an edge connector (old ISA PC bus for instance)"
+"Use this attribute for \"virtual\" footprints drawn on board\n"
+"such as an edge connector (old ISA PC bus for instance)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:367
 msgid ""
@@ -21976,9 +21770,8 @@ msgstr ""
 "Can be used only when printing the current sheet"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:78
-#, fuzzy
 msgid "Print SVG Options:"
-msgstr "Print SVG options:"
+msgstr "Print SVG Options:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:82
 msgid ""
@@ -22029,9 +21822,8 @@ msgid "All in one file"
 msgstr "All in one file"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:122
-#, fuzzy
 msgid "File Option:"
-msgstr "File option:"
+msgstr "File Option:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -22046,9 +21838,8 @@ msgid "First pad number:"
 msgstr "First pad number:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:29
-#, fuzzy
 msgid "Keepout area layers:"
-msgstr "Keepout Area Layers:"
+msgstr "Keepout area layers:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:42
 msgid "Properties:"
@@ -22144,13 +21935,12 @@ msgid "Libraries"
 msgstr "Libraries"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:27
-#, fuzzy
 msgid ""
 "Note: for clearance values:\n"
 "- a positive value means a mask bigger than a pad\n"
 "- a negative value means a mask smaller than a pad\n"
 msgstr ""
-"Note: For clearance values:\n"
+"Note: for clearance values:\n"
 "- a positive value means a mask bigger than a pad\n"
 "- a negative value means a mask smaller than a pad\n"
 
@@ -22203,9 +21993,8 @@ msgstr ""
 "The final clearance value is the sum of this value and the clearance value"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:26
-#, fuzzy
 msgid "Match footprints by:"
-msgstr "Match components by:"
+msgstr "Match footprints by:"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:59
 msgid "Update PCB"
@@ -22477,9 +22266,8 @@ msgid "User defined"
 msgstr "User defined"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:40
-#, fuzzy
 msgid "Footprint filter:"
-msgstr "Footprint Filter"
+msgstr "Footprint filter:"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:42
 msgid ""
@@ -22691,14 +22479,14 @@ msgstr ""
 "It has been moved to the front silk screen layer. Please fix it."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:239
-#, fuzzy
 msgid ""
 "The graphic item will be on a copper layer.\n"
 "This is very dangerous because DRC does not handle it.\n"
 "Are you sure?"
 msgstr ""
 "The graphic item will be on a copper layer.\n"
-"This is very dangerous. Are you sure?"
+"This is very dangerous because DRC does not handle it.\n"
+"Are you sure?"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:310
 msgid "The arc angle cannot be zero."
@@ -22988,9 +22776,8 @@ msgid "Available:"
 msgstr "Available:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
-#, fuzzy
 msgid "Available Footprint Generators"
-msgstr "Available footprint generators"
+msgstr "Available Footprint Generators"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
@@ -23181,34 +22968,28 @@ msgid "Item rotation:"
 msgstr "Item rotation:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "Current position"
-msgstr "Current Position"
+msgstr "Current position"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "User origin"
-msgstr "User Origin"
+msgstr "User origin"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "Drill/Place origin"
-msgstr "Drill/Place Origin"
+msgstr "Drill/Place origin"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "Sheet origin"
-msgstr "Sheet Origin"
+msgstr "Sheet origin"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:79
-#, fuzzy
 msgid "Move Relative To:"
-msgstr "Move relative to:"
+msgstr "Move Relative To:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:88
-#, fuzzy
 msgid "Override default footprint anchor with:"
-msgstr "Override default component anchor with:"
+msgstr "Override default footprint anchor with:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:91
 msgid "Top left pad"
@@ -23251,17 +23032,15 @@ msgid "Select a corner before adding a new corner"
 msgstr "Select a corner before adding a new corner"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:182
-#, fuzzy
 msgid "Use this attribute for most non SMD footprints"
-msgstr "Use this attribute for most non SMD components"
+msgstr "Use this attribute for most non SMD footprints"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:187
-#, fuzzy
 msgid ""
 "Use this attribute for \"virtual\" footprints drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
 msgstr ""
-"Use this attribute for “virtual” components drawn on board\n"
+"Use this attribute for \"virtual\" footprints drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:211
@@ -24039,14 +23818,12 @@ msgid "Plot file \"%s\" created."
 msgstr "Plot file “%s” created."
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:119
-#, fuzzy
 msgid "Top/Front layer"
-msgstr "Top/Front Layer"
+msgstr "Top/Front layer"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:157
-#, fuzzy
 msgid "Bottom/Back layer"
-msgstr "Bottom/Back Layer"
+msgstr "Bottom/Back layer"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:22
 msgid "Search for:"
@@ -24061,14 +23838,12 @@ msgid "Find Marker"
 msgstr "Find Marker"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:27
-#, fuzzy
 msgid "Footprint value"
-msgstr "Footprint Layer"
+msgstr "Footprint value"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:34
-#, fuzzy
 msgid "Footprint reference"
-msgstr "Plot footprint references"
+msgstr "Footprint reference"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprint"
@@ -24099,14 +23874,12 @@ msgid "View Footprints"
 msgstr "View Footprints"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:74
-#, fuzzy
 msgid "Current footprint identifier"
-msgstr "Parent footprint orientation"
+msgstr "Current footprint identifier"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:81
-#, fuzzy
 msgid "New footprint identifier"
-msgstr "No footprint specified"
+msgstr "New footprint identifier"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:99
 msgid "Apply"
@@ -24358,9 +24131,8 @@ msgstr "From start value"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 #: pcbnew/dialogs/dialog_create_array_base.cpp:252
-#, fuzzy
 msgid "Initial Pad Number"
-msgstr "Initial pad number"
+msgstr "Initial Pad Number"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Continuous (1, 2, 3...)"
@@ -24638,9 +24410,8 @@ msgid "Excellon Drill File Options:"
 msgstr "Excellon Drill File Options:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:97
-#, fuzzy
 msgid "Mirror Y axis"
-msgstr "Mirror y axis"
+msgstr "Mirror Y axis"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid ""
@@ -24691,14 +24462,12 @@ msgstr ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
-#, fuzzy
 msgid "Information:"
-msgstr "Information"
+msgstr "Information:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:132
-#, fuzzy
 msgid "Default Via Drill:"
-msgstr "Default Vias Drill:"
+msgstr "Default Via Drill:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:134
 msgid "Via Drill Value"
@@ -24709,38 +24478,32 @@ msgid "Micro Vias Drill:"
 msgstr "Micro Vias Drill:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:143
-#, fuzzy
 msgid "Micro via drill size"
-msgstr "Invalid via drill size"
+msgstr "Micro via drill size"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Holes Count:"
 msgstr "Holes Count:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:153
-#, fuzzy
 msgid "Plated pads:"
-msgstr "Plated Pads:"
+msgstr "Plated pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
-#, fuzzy
 msgid "Not plated pads:"
-msgstr "Not Plated Pads:"
+msgstr "Not plated pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:161
-#, fuzzy
 msgid "Through vias:"
-msgstr "Through Vias:"
+msgstr "Through vias:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
-#, fuzzy
 msgid "Micro vias:"
-msgstr "Micro Vias:"
+msgstr "Micro vias:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:169
-#, fuzzy
 msgid "Buried vias:"
-msgstr "Buried Vias:"
+msgstr "Buried vias:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:188
 msgid "Drill File"
@@ -24780,18 +24543,16 @@ msgid "File %s already exists. Overwrite?"
 msgstr "File %s already exists. Overwrite?"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:131
-#, fuzzy
 msgid "Flip bottom footprint padstacks"
-msgstr "Flip bottom components padstacks"
+msgstr "Flip bottom footprint padstacks"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:132
 msgid "Generate unique pin names"
 msgstr "Generate unique pin names"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:133
-#, fuzzy
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr "Generate a new shape for each component instance (do not reuse shapes)"
+msgstr "Generate a new shape for each footprint instance (do not reuse shapes)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Save the origin coordinates in the file"
@@ -25488,19 +25249,21 @@ msgid "This is the default net class."
 msgstr "This is the default net class."
 
 #: pcbnew/class_board.cpp:2426
-#, fuzzy, c-format
+#, c-format
 msgid "Checking netlist symbol footprint \"%s:%s:%s\".\n"
-msgstr "Checking netlist component footprint “%s:%s:%s”.\n"
+msgstr "Checking netlist symbol footprint \"%s:%s:%s\".\n"
 
 #: pcbnew/class_board.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
-msgstr "Changing component “%s:%s” reference to “%s”.\n"
+msgstr ""
+"Changing footprint \"%s:%s\" reference to \"%s\".\n"
+"\n"
 
 #: pcbnew/class_board.cpp:2567
-#, fuzzy, c-format
+#, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
-msgstr "Changing component “%s:%s” value from “%s” to “%s”.\n"
+msgstr "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2584
 #, c-format
@@ -25513,10 +25276,11 @@ msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Clearing component “%s:%s” pin “%s” net name.\n"
 
 #: pcbnew/class_board.cpp:2627
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Changing footprint \"%s:%s\" pad \"%s\" net name from \"%s\" to \"%s\".\n"
-msgstr "Changing component “%s:%s” pin “%s” net name from “%s” to “%s”.\n"
+msgstr ""
+"Changing footprint \"%s:%s\" pad \"%s\" net name from \"%s\" to \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2786
 #, c-format
@@ -26090,9 +25854,8 @@ msgid "User defined position"
 msgstr "User defined position"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
-#, fuzzy
 msgid "Place DXF Origin (0,0) Point:"
-msgstr "Place DXF origin (0,0) point:"
+msgstr "Place DXF Origin (0,0) Point:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
 msgid "User defined position:"
@@ -26115,14 +25878,12 @@ msgid "Import parameters:"
 msgstr "Import parameters:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:150
-#, fuzzy
 msgid "Default line width:"
-msgstr "&Default line width:"
+msgstr "Default line width:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:163
-#, fuzzy
 msgid "Graphic layer:"
-msgstr "Graphic layers:"
+msgstr "Graphic layer:"
 
 #: pcbnew/import_dxf/dialog_dxf_import.cpp:235
 msgid "Open File"
@@ -26180,9 +25941,9 @@ msgid "Session file is missing the \"library_out\" section"
 msgstr "Session file is missing the “library_out” section"
 
 #: pcbnew/specctra_import.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "Session file has 'reference' to non-existent symbol \"%s\""
-msgstr "Session file has 'reference' to non-existent component “%s”"
+msgstr "Session file has 'reference' to non-existent symbol \"%s\""
 
 #: pcbnew/specctra_import.cpp:546
 #, c-format
@@ -27221,39 +26982,33 @@ msgid "Via %s, drill %s"
 msgstr "Via %s, drill %s"
 
 #: pcbnew/legacy_netlist_reader.cpp:120
-#, fuzzy
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "Cannot parse time stamp in component section of netlist."
+msgstr "Cannot parse time stamp in symbol section of netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:130
-#, fuzzy
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr "Cannot parse footprint name in component section of netlist."
+msgstr "Cannot parse footprint name in symbol section of netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:144
-#, fuzzy
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "Cannot parse reference designator in component section of netlist."
+msgstr "Cannot parse reference designator in symbol section of netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:154
-#, fuzzy
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "Cannot parse value in component section of netlist."
+msgstr "Cannot parse value in symbol section of netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:191
-#, fuzzy
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Cannot parse pin name in component net section of netlist."
+msgstr "Cannot parse pin name in symbol net section of netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:200
-#, fuzzy
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "Cannot parse net name in component net section of netlist."
+msgstr "Cannot parse net name in symbol net section of netlist."
 
 #: pcbnew/legacy_netlist_reader.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol \"%s\" in footprint filter section of netlist."
-msgstr "Cannot find component “%s” in footprint filter section of netlist."
+msgstr "Cannot find symbol \"%s\" in footprint filter section of netlist."
 
 #: pcbnew/github/github_getliblist.cpp:105
 #, c-format
@@ -27371,9 +27126,8 @@ msgid "Add Footprint Libraries Wizard"
 msgstr "Add Footprint Libraries Wizard"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:81
-#, fuzzy
 msgid "Generate Drill Files"
-msgstr "Generate Drill File"
+msgstr "Generate Drill Files"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:64
 msgid "Non Copper Zones Properties"
@@ -27389,32 +27143,28 @@ msgid "Select Footprint Library Folder"
 msgstr "Select Footprint Library Folder"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.h:60
-#, fuzzy
 msgid "Generate Footprint Position Files"
-msgstr "Generate Component Position Files"
+msgstr "Generate Footprint Position Files"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
-#, fuzzy
 msgid "Pad Enumeration Settings"
-msgstr "Pad enumeration settings"
+msgstr "Pad Enumeration Settings"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:61
 msgid "Target Properties"
 msgstr "Target Properties"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:55
-#, fuzzy
 msgid "Search for Footprint"
-msgstr "Search for footprint"
+msgstr "Search for Footprint"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:66
 msgid "Footprint Generators"
 msgstr "Footprint Generators"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
-#, fuzzy
 msgid "Traceback of Python Script Errors"
-msgstr "Traceback of errors in not loadable python scripts"
+msgstr "Traceback of Python Script Errors"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:62
 msgid "Export IDFv3"
@@ -27473,9 +27223,8 @@ msgid "Global Edition of Tracks and Vias"
 msgstr "Global Edition of Tracks and Vias"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:62
-#, fuzzy
 msgid "Track Width and Via Size"
-msgstr "Track width and via size"
+msgstr "Track Width and Via Size"
 
 #: pcbnew/dialogs/dialog_drc_base.h:115
 msgid "DRC Control"
@@ -27486,18 +27235,16 @@ msgid "Footprint Text Properties"
 msgstr "Footprint Text Properties"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:79
-#, fuzzy
 msgid "Trace Length Tuning"
-msgstr "Trace length tuning"
+msgstr "Trace Length Tuning"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.h:61
 msgid "Set Text Size"
 msgstr "Set Text Size"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:50
-#, fuzzy
 msgid "Select Layer"
-msgstr "Select Layer:"
+msgstr "Select Layer"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:81
 msgid "Select Copper Layer Pair:"
@@ -27508,9 +27255,8 @@ msgid "Export STEP"
 msgstr "Export STEP"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.h:75
-#, fuzzy
 msgid "Export SVG File"
-msgstr "Export SVG file"
+msgstr "Export SVG File"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.h:415
 msgid "Layer Setup"
