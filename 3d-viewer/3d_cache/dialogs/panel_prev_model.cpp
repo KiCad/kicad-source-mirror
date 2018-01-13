@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,51 +43,53 @@
 
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
-                                  MODULE* aModuleCopy,
-                                  COLORS_DESIGN_SETTINGS *aColors,
-                                  std::vector<MODULE_3D_SETTINGS> *aParentInfoList ):
-                PANEL_PREV_3D_BASE( aParent, wxID_ANY )
+                              MODULE* aModuleCopy,
+                              COLORS_DESIGN_SETTINGS *aColors,
+                              std::vector<MODULE_3D_SETTINGS> *aParentInfoList ) :
+    PANEL_PREV_3D_BASE( aParent, wxID_ANY )
+{
+    initPanel();
+
+    // Initialize the color settings to draw the board and the footprint
+    if( aColors )
+        m_dummyBoard->SetColorsSettings( aColors );
+    else
     {
-        initPanel();
-
-        // Initialize the color settings to draw the board and the footprint
-        if( aColors )
-            m_dummyBoard->SetColorsSettings( aColors );
-        else
-        {
-            static COLORS_DESIGN_SETTINGS defaultColors( FRAME_PCB_DISPLAY3D );
-            m_dummyBoard->SetColorsSettings( &defaultColors );
-        }
-
-        if( NULL != aCacheManager )
-            m_resolver = aCacheManager->GetResolver();
-
-        m_parentInfoList = aParentInfoList;
-
-        m_dummyBoard->Add( (MODULE*)aModuleCopy );
-        m_copyModule = aModuleCopy;
-
-        // Set 3d viewer configuration for preview
-        m_settings3Dviewer = new CINFO3D_VISU();
-
-        // Create the 3D canvas
-        m_previewPane = new EDA_3D_CANVAS( this,
-                                           COGL_ATT_LIST::GetAttributesList( true ),
-                                           m_dummyBoard,
-                                           *m_settings3Dviewer,
-                                           aCacheManager );
-
-        m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND );
-
-        m_previewPane->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
-                            PANEL_PREV_3D::onEnterPreviewCanvas ), NULL, this );
+        static COLORS_DESIGN_SETTINGS defaultColors( FRAME_PCB_DISPLAY3D );
+        m_dummyBoard->SetColorsSettings( &defaultColors );
     }
+
+    if( NULL != aCacheManager )
+        m_resolver = aCacheManager->GetResolver();
+
+    m_parentInfoList = aParentInfoList;
+
+    m_dummyBoard->Add( (MODULE*)aModuleCopy );
+    m_copyModule = aModuleCopy;
+
+    // Set 3d viewer configuration for preview
+    m_settings3Dviewer = new CINFO3D_VISU();
+
+    // Create the 3D canvas
+    m_previewPane = new EDA_3D_CANVAS( this,
+                                       COGL_ATT_LIST::GetAttributesList( true ),
+                                       m_dummyBoard,
+                                       *m_settings3Dviewer,
+                                       aCacheManager );
+
+    m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND );
+
+    m_previewPane->Connect( wxEVT_ENTER_WINDOW,
+                            wxMouseEventHandler( PANEL_PREV_3D::onEnterPreviewCanvas ),
+                            NULL, this );
+}
 
 
 PANEL_PREV_3D::~PANEL_PREV_3D()
 {
     m_previewPane->Disconnect( wxEVT_ENTER_WINDOW,
-            wxMouseEventHandler( PANEL_PREV_3D::onEnterPreviewCanvas ), NULL, this );
+                               wxMouseEventHandler( PANEL_PREV_3D::onEnterPreviewCanvas ),
+                               NULL, this );
 
     delete m_settings3Dviewer;
     delete m_dummyBoard;
@@ -173,8 +175,9 @@ static void checkRotation( double& aRotation )
     }
 }
 
+
 static bool validateFloatTextCtrl( wxTextCtrl* aTextCtrl )
- {
+{
     if( aTextCtrl == NULL )
         return false;
 
@@ -543,11 +546,13 @@ void PANEL_PREV_3D::onMouseWheelRot( wxMouseEvent& event )
     incrementTextCtrl( textCtrl, step, -MAX_ROTATION, MAX_ROTATION );
 }
 
+
 void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
     double step = OFFSET_INCREMENT_MM;
+
     if( event.ShiftDown( ) )
         step = OFFSET_INCREMENT_MM_FINE;
 
@@ -563,6 +568,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
 
     incrementTextCtrl( textCtrl, step, -MAX_OFFSET, MAX_OFFSET );
 }
+
 
 void PANEL_PREV_3D::getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGPOINT& aOffset )
 {
@@ -677,6 +683,7 @@ bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
 
     return invalidScale == false;
 }
+
 
 void PANEL_PREV_3D::updateListOnModelCopy()
 {

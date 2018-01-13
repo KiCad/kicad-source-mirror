@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Jan 12 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __PANEL_PREV_3D_BASE_H__
@@ -102,7 +102,7 @@ class PANEL_PREV_3D_BASE : public wxPanel
 	public:
 		wxTextCtrl* yoff;
 		
-		PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 354,383 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PREV_3D_BASE();
 	
 };

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Jan 12 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "panel_prev_3d_base.h"
@@ -164,7 +164,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerOffset->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	yoff = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerOffset->Add( yoff, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	fgSizerOffset->Add( yoff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
 	
 	m_spinYoffset = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
 	fgSizerOffset->Add( m_spinYoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -174,13 +174,13 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerOffset->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	zoff = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerOffset->Add( zoff, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerOffset->Add( zoff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_spinZoffset = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerOffset->Add( fgSizerOffset, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerOffset->Add( fgSizerOffset, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 	
 	
 	bSizerLeft->Add( bSizerOffset, 1, wxEXPAND, 5 );
@@ -253,6 +253,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	
 	this->SetSizer( bSizermain );
 	this->Layout();
+	bSizermain->Fit( this );
 	
 	// Connect Events
 	xscale->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PREV_3D_BASE::onMouseWheelScale ), NULL, this );

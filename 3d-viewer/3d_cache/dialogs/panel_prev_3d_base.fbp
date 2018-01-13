@@ -42,7 +42,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_PREV_3D_BASE</property>
             <property name="pos"></property>
-            <property name="size">354,383</property>
+            <property name="size">-1,-1</property>
             <property name="subclass"></property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -1958,7 +1958,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">10</property>
-                                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxFlexGridSizer" expanded="1">
                                         <property name="cols">3</property>
@@ -2315,7 +2315,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP</property>
                                             <property name="proportion">0</property>
                                             <object class="wxTextCtrl" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -2573,7 +2573,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxTextCtrl" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -2664,7 +2664,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                             <property name="proportion">0</property>
                                             <object class="wxSpinButton" expanded="1">
                                                 <property name="BottomDockable">1</property>

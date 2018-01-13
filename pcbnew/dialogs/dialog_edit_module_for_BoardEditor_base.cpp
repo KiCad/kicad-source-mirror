@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan 12 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,7 +81,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	bSizerLeft->Add( m_staticTextPos, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizerPos = new wxFlexGridSizer( 2, 3, 5, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizerPos->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -91,7 +91,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	fgSizerPos->Add( m_XPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModPositionX = new TEXT_CTRL_EVAL( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPos->Add( m_ModPositionX, 1, wxEXPAND|wxRIGHT, 5 );
+	fgSizerPos->Add( m_ModPositionX, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 	
 	m_XPosUnit = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_XPosUnit->Wrap( -1 );
@@ -102,7 +102,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	fgSizerPos->Add( m_YPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModPositionY = new TEXT_CTRL_EVAL( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPos->Add( m_ModPositionY, 1, wxEXPAND|wxRIGHT, 5 );
+	fgSizerPos->Add( m_ModPositionY, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 	
 	m_YPosUnit = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_YPosUnit->Wrap( -1 );
