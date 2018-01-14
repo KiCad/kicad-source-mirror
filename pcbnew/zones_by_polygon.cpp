@@ -47,6 +47,8 @@
 #include <drc_stuff.h>
 #include <connectivity_data.h>
 
+#include <widgets/progress_reporter.h>
+
 #include <zone_filler.h>
 
 // Outline creation:
@@ -924,6 +926,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         return;
     }
 
+    wxBusyCursor dummy;
+
     // Undraw old zone outlines
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
@@ -952,9 +956,11 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
 
     // refill zones with the new properties applied
+    std::vector<ZONE_CONTAINER*> zones_to_refill;
+
     for( unsigned i = 0; i < s_PickedList.GetCount(); ++i )
     {
-        auto zone = dyn_cast<ZONE_CONTAINER*>( s_PickedList.GetPickedItem( i ) );
+        ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( s_PickedList.GetPickedItem( i ) );
 
         if( zone == nullptr )
         {
@@ -963,10 +969,19 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         }
 
         if( zone->IsFilled() )
-        {
-            ZONE_FILLER filler ( GetBoard() );
-            filler.Fill( { zone } );
-        }
+            zones_to_refill.push_back( zone );
+    }
+
+    if( zones_to_refill.size() )
+    {
+        ZONE_FILLER filler ( GetBoard() );
+        wxString title;
+        title.Printf( _( "Refill %d Zones" ), (int)zones_to_refill.size() );
+        std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
+                                new WX_PROGRESS_REPORTER( this, title, 3 ) );
+
+        filler.SetProgressReporter( progressReporter.get() );
+        filler.Fill( zones_to_refill );
     }
 
     commit.Stage( s_PickedList );

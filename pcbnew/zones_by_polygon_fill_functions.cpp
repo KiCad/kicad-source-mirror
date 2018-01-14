@@ -92,6 +92,8 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, timestamp_t aTimestamp
 
 int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 {
+    wxBusyCursor dummy;
+
     std::vector<ZONE_CONTAINER*> toFill;
 
     for( auto zone : GetBoard()->Zones() )
