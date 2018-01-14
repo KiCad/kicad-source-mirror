@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras
+ * Copyright (C) 2018 Jean-Pierre Charras
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,16 +27,16 @@
 #ifndef DIALOG_EDIT_MODULE_TEXT_H
 #define DIALOG_EDIT_MODULE_TEXT_H
 
-#include <dialog_edit_module_text_base.h>
+#include <dialog_edit_module_text_BASE.h>
 #include <wx/valnum.h>
 
 /*************** **************/
-/* class DialogEditModuleText */
+/* class DIALOG_EDIT_FPTEXT */
 /*************** **************/
-class DialogEditModuleText : public DialogEditModuleText_base
+class DIALOG_EDIT_FPTEXT : public DIALOG_EDIT_FPTEXT_BASE
 {
 private:
-    PCB_BASE_FRAME* m_parent;
+    PCB_BASE_FRAME* m_boardEditor;
     wxDC* m_dc;
     MODULE* m_module;
     TEXTE_MODULE* m_currentText;
@@ -45,8 +45,9 @@ private:
     double m_OrientValue;
 
 public:
-    DialogEditModuleText( PCB_BASE_FRAME* aParent, TEXTE_MODULE* aTextMod, wxDC* aDC );
-    ~DialogEditModuleText() {};
+    DIALOG_EDIT_FPTEXT( wxWindow* aCaller, PCB_BASE_FRAME* aBoardEditor,
+                        TEXTE_MODULE* aTextMod, wxDC* aDC );
+    ~DIALOG_EDIT_FPTEXT() {};
 
 protected:
     bool TransferDataToWindow() override;

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_EDIT_MODULE_TEXT_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
 class TEXT_CTRL_EVAL;
 
@@ -33,9 +34,9 @@ class TEXT_CTRL_EVAL;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DialogEditModuleText_base
+/// Class DIALOG_EDIT_FPTEXT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DialogEditModuleText_base : public DIALOG_SHIM
+class DIALOG_EDIT_FPTEXT_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -75,8 +76,8 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 	
 	public:
 		
-		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DialogEditModuleText_base();
+		DIALOG_EDIT_FPTEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_EDIT_FPTEXT_BASE();
 	
 };
 

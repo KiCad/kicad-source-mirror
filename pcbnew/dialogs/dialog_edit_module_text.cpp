@@ -58,19 +58,17 @@ extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod
 void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
 {
     m_canvas->SetIgnoreMouseEvents( true );
-    DialogEditModuleText dialog( this, TextMod, DC );
+    DIALOG_EDIT_FPTEXT dialog( this, this, TextMod, DC );
     dialog.ShowModal();
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
 
-DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
+DIALOG_EDIT_FPTEXT::DIALOG_EDIT_FPTEXT( wxWindow* aCaller, PCB_BASE_FRAME* aBoardEditor,
                                             TEXTE_MODULE* aTextMod, wxDC* aDC ) :
-    DialogEditModuleText_base( aParent ),
-    m_OrientValidator( 1, &m_OrientValue )
-
+    DIALOG_EDIT_FPTEXT_BASE( aCaller ), m_OrientValidator( 1, &m_OrientValue )
 {
-    m_parent = aParent;
+    m_boardEditor = aBoardEditor;
     m_dc     = aDC;
     m_module = NULL;
     m_currentText = aTextMod;
@@ -89,7 +87,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
 }
 
 
-bool DialogEditModuleText::TransferDataToWindow()
+bool DIALOG_EDIT_FPTEXT::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -191,14 +189,14 @@ bool DialogEditModuleText::TransferDataToWindow()
     m_unlock->SetValue( m_currentText->IsUnlocked() );
 
     // Configure the layers list selector
-    if( !m_parent->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
+    if( !m_boardEditor->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
         // Footprints are built outside the current board, so items cann be
         // on a not activated layer, therefore show it if happens.
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetLayerSet( forbiddenLayers );
-    m_LayerSelectionCtrl->SetBoardFrame( m_parent );
+    m_LayerSelectionCtrl->SetBoardFrame( m_boardEditor );
     m_LayerSelectionCtrl->Resync();
 
     if( m_LayerSelectionCtrl->SetLayerSelection( m_currentText->GetLayer() ) < 0 )
@@ -214,11 +212,11 @@ bool DialogEditModuleText::TransferDataToWindow()
 }
 
 
-bool DialogEditModuleText::TransferDataFromWindow()
+bool DIALOG_EDIT_FPTEXT::TransferDataFromWindow()
 {
-    BOARD_COMMIT commit( m_parent );
+    BOARD_COMMIT commit( m_boardEditor );
 
-    if( !Validate() || !DialogEditModuleText_base::TransferDataFromWindow() )
+    if( !Validate() || !DIALOG_EDIT_FPTEXT_BASE::TransferDataFromWindow() )
         return false;
 
     if( m_module )
@@ -227,7 +225,7 @@ bool DialogEditModuleText::TransferDataFromWindow()
 #ifndef USE_WX_OVERLAY
     if( m_dc )     //Erase old text on screen
     {
-        m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
+        m_currentText->Draw( m_boardEditor->GetCanvas(), m_dc, GR_XOR,
                              (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
 #endif
@@ -340,11 +338,11 @@ bool DialogEditModuleText::TransferDataFromWindow()
 #ifndef USE_WX_OVERLAY
     if( m_dc )     // Display new text
     {
-        m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
+        m_currentText->Draw( m_boardEditor->GetCanvas(), m_dc, GR_XOR,
                 (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
 #else
-    m_parent->Refresh();
+    m_boardEditor->Refresh();
 #endif
 
     commit.Push( _( "Modify module text" ) );
@@ -356,7 +354,7 @@ bool DialogEditModuleText::TransferDataFromWindow()
 }
 
 
-void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
+void DIALOG_EDIT_FPTEXT::ModuleOrientEvent( wxCommandEvent& event )
 {
     bool custom_orientation = false;
 

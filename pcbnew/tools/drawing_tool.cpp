@@ -389,7 +389,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textMod->SetThickness( dsnSettings.m_ModuleTextWidth );
                     textMod->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                    DialogEditModuleText textDialog( m_frame, textMod, NULL );
+                    DIALOG_EDIT_FPTEXT textDialog( m_frame, m_frame, textMod, NULL );
                     bool placing;
 
                     RunMainStack([&]() {

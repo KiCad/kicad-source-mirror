@@ -6,9 +6,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,8 @@
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include "3d_cache/3d_cache.h"
 #include "3d_cache/3d_filename_resolver.h"
+
+#include <dialog_edit_module_text.h>
 
 size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
@@ -770,7 +772,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
 
     m_Parent->SetCrossHairPosition( m_ReferenceCopy->GetTextPos() );
     m_ReferenceCopy->SetParent( m_CurrentModule );
-    m_Parent->InstallTextModOptionsFrame( m_ReferenceCopy, NULL );
+
+    DIALOG_EDIT_FPTEXT dialog( this, m_Parent, m_ReferenceCopy, NULL );
+    dialog.ShowModal();
+
     m_Parent->SetCrossHairPosition( tmp );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->GetText() );
 }
@@ -782,7 +787,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
 
     m_Parent->SetCrossHairPosition( m_ValueCopy->GetTextPos() );
     m_ValueCopy->SetParent( m_CurrentModule );
-    m_Parent->InstallTextModOptionsFrame( m_ValueCopy, NULL );
+
+    DIALOG_EDIT_FPTEXT dialog( this, m_Parent, m_ValueCopy, NULL );
+    dialog.ShowModal();
+
     m_Parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 }
