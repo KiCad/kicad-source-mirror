@@ -104,24 +104,17 @@ private:
      *  ( holes are linked by overlapping segments to the main outline)
      * in order to have drawable (and plottable) filled polygons.
      * @return true if OK, false if the solid polygons cannot be built
-     * @param aPcb: the current board (can be NULL for non copper zones)
-     * @param aOutlineBuffer: A reference to a SHAPE_POLY_SET buffer to store polygons, or NULL.
-     * if NULL (default):
-     * - m_FilledPolysList is used to store solid areas polygons.
-     * - on copper layers, tracks and other items shapes of other nets are
-     * removed from solid areas
-     * if not null:
-     * Only the zone outline (with holes, if any) is stored in aOutlineBuffer
-     * with holes linked. Therefore only one polygon is created
-     *
-     * When aOutlineBuffer is not null, his function calls
-     * AddClearanceAreasPolygonsToPolysList() to add holes for pads and tracks
-     * and other items not in net.
+     * @param aZone is the zone to fill
+     * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer to store
+     * filled solid areas polygons (with holes)
+     * @param aFinalPolys: A reference to a SHAPE_POLY_SET buffer to store polygons with no holes
+     * (holes are linked to main outline by overlapping segments, and these polygons are shrinked
+     * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
+     * aFinalPolys are polygons that will be drawn on screen and plotted
      */
     bool fillSingleZone( const ZONE_CONTAINER* aZone,
             SHAPE_POLY_SET& aRawPolys,
-            SHAPE_POLY_SET& aFinalPolys,
-            ZONE_SEGMENT_FILL& aSegmentFill ) const;
+            SHAPE_POLY_SET& aFinalPolys ) const;
 
     BOARD* m_board;
     COMMIT* m_commit;

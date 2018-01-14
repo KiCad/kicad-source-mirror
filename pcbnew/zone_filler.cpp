@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Włostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -64,9 +64,7 @@ static double s_thermalRot = 450;    // angle of stubs in thermal reliefs for ro
 static const bool s_DumpZonesWhenFilling = false;
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_board( aBoard ),
-    m_commit( aCommit ),
-    m_progressReporter( nullptr )
+    m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr )
 {
 }
 
@@ -136,11 +134,10 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         {
             SHAPE_POLY_SET rawPolys, finalPolys;
             ZONE_SEGMENT_FILL segFill;
-            fillSingleZone ( toFill[i].m_zone, rawPolys, finalPolys, segFill );
+            fillSingleZone( toFill[i].m_zone, rawPolys, finalPolys );
 
             toFill[i].m_zone->SetRawPolysList( rawPolys );
             toFill[i].m_zone->SetFilledPolysList( finalPolys );
-            toFill[i].m_zone->SetFillSegments( segFill );
             toFill[i].m_zone->SetIsFilled( true );
 
             if( m_progressReporter )
@@ -148,9 +145,9 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
                 m_progressReporter->AdvanceProgress();
             }
         }
-
     }
 
+    // Now remove insulated copper islands
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();
@@ -204,6 +201,46 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
             toFill[i].m_zone->CacheTriangulation();
         }
     }
+
+    // If some zones must be filled by segments, create the filling segments
+    // (note, this is a outdated option, but it exists)
+    int zones_to_fill_count = 0;
+
+    for( unsigned i = 0; i < toFill.size(); i++ )
+    {
+        if( toFill[i].m_zone->GetFillMode() == ZFM_SEGMENTS )
+            zones_to_fill_count++;
+    }
+
+    if( zones_to_fill_count )
+    {
+        if( m_progressReporter )
+        {
+            m_progressReporter->AdvancePhase();
+            m_progressReporter->Report( _( "Fill with segments..." ) );
+            m_progressReporter->SetMaxProgress( zones_to_fill_count );
+        }
+
+        // TODO: use OPENMP to speedup calculations:
+        for( unsigned i = 0; i < toFill.size(); i++ )
+        {
+            ZONE_CONTAINER* zone = toFill[i].m_zone;
+
+            if( zone->GetFillMode() != ZFM_SEGMENTS )
+                continue;
+
+            if( m_progressReporter )
+            {
+                m_progressReporter->AdvanceProgress();
+            }
+
+            ZONE_SEGMENT_FILL segFill;
+
+            fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
+            toFill[i].m_zone->SetFillSegments( segFill );
+        }
+    }
+
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();
@@ -715,20 +752,10 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
 
 /* Build the filled solid areas data from real outlines (stored in m_Poly)
  * The solid areas can be more than one on copper layers, and do not have holes
-  ( holes are linked by overlapping segments to the main outline)
- * aPcb: the current board (can be NULL for non copper zones)
- * aCornerBuffer: A reference to a buffer to store polygon corners, or NULL
- * if aCornerBuffer == NULL:
- * - m_FilledPolysList is used to store solid areas polygons.
- * - on copper layers, tracks and other items shapes of other nets are
- * removed from solid areas
- * if not null:
- * Only the zone outline (with holes, if any) are stored in aCornerBuffer
- * with holes linked. Therefore only one polygon is created
- * This function calls ComputeRawFilledAreas()
- * to add holes for pads and tracks and other items not in net.
+ * ( holes are linked by overlapping segments to the main outline)
  */
-bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys, ZONE_SEGMENT_FILL& aSegmentFill ) const
+bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys,
+                                  SHAPE_POLY_SET& aFinalPolys ) const
 {
     SHAPE_POLY_SET smoothedPoly;
 
@@ -742,12 +769,6 @@ bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& a
     if( aZone->IsOnCopperLayer() )
     {
         computeRawFilledAreas( aZone, smoothedPoly, aRawPolys, aFinalPolys );
-
-        if( aZone->GetFillMode() == ZFM_SEGMENTS )   // if fill mode uses segments, create them:
-        {
-            if( !fillZoneWithSegments( aZone, aFinalPolys, aSegmentFill) )
-                return false;
-        }
     }
     else
     {
@@ -760,7 +781,9 @@ bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& a
     return true;
 }
 
-bool ZONE_FILLER::fillZoneWithSegments( const ZONE_CONTAINER* aZone, const SHAPE_POLY_SET& aFilledPolys, ZONE_SEGMENT_FILL& aFillSegs ) const
+bool ZONE_FILLER::fillZoneWithSegments( const ZONE_CONTAINER* aZone,
+                                        const SHAPE_POLY_SET& aFilledPolys,
+                                        ZONE_SEGMENT_FILL& aFillSegs ) const
 {
     bool success = true;
     // segments are on something like a grid. Give it a minimal size
