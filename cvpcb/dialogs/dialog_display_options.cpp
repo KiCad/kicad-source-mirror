@@ -79,7 +79,7 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
     m_ShowPadSketch->SetValue( not displ_opts->m_DisplayPadFill );
     m_ShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
 
-    m_enableZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
+    m_enableZoomNoCenter->SetValue( not m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
     m_enableMousewheelPan->SetValue( m_Parent->GetCanvas()->GetEnableMousewheelPan() );
     m_enableAutoPan->SetValue( m_Parent->GetCanvas()->GetEnableAutoPan() );
 }
@@ -99,7 +99,7 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
     displ_opts->m_DisplayPadNum  = m_ShowPadNum->GetValue();
     displ_opts->m_DisplayPadFill = not m_ShowPadSketch->GetValue();
 
-    m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_enableZoomNoCenter->GetValue() );
+    m_Parent->GetCanvas()->SetEnableZoomNoCenter( not m_enableZoomNoCenter->GetValue() );
     m_Parent->GetCanvas()->SetEnableMousewheelPan( m_enableMousewheelPan->GetValue() );
     m_Parent->GetCanvas()->SetEnableAutoPan( m_enableAutoPan->GetValue() );
 
