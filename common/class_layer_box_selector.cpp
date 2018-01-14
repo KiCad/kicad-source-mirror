@@ -54,11 +54,20 @@ void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
 
     // Prepare Bitmap
     bmpDC.SelectObject( aLayerbmp );
-    brush.SetColour( GetLayerColor( aLayer ).ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    COLOR4D backgroundColor = GetLayerColor( LAYER_PCB_BACKGROUND );
+    if( backgroundColor != COLOR4D::UNSPECIFIED )
+    {
+        brush.SetColour( backgroundColor.WithAlpha(1.0).ToColour() );
+        bmpDC.SetBrush( brush );
+        bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
+    }
+
+    brush.SetColour( GetLayerColor( aLayer ).ToColour() );
     bmpDC.SetBrush( brush );
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
+
     bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
     bmpDC.SetPen( *wxBLACK_PEN );
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );

@@ -555,6 +555,8 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
         view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
     }
 
+    myframe->ReCreateHToolbar();
+
     myframe->GetCanvas()->Refresh();
 }
 
@@ -647,6 +649,8 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 
         galCanvas->ForceRefresh();
     }
+
+    myframe->ReCreateHToolbar();
 
     myframe->GetCanvas()->Refresh();
 }

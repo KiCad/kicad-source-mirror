@@ -115,8 +115,9 @@ private:
      * Function makeLayerBitmap
      * creates the colored rectangle bitmaps used in the layer selection widget.
      * @param aColor is the color to fill the rectangle with.
+     * @param aBackground is the background color in case aColor is transparent.
      */
-    wxBitmap makeLayerBitmap( COLOR4D aColor );
+    wxBitmap makeLayerBitmap( COLOR4D aColor, COLOR4D aBackground );
 };
 
 
@@ -244,6 +245,7 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     LSET cu_set = LSET::AllCuMask( board->GetCopperLayerCount() );
 
+    COLOR4D backgroundColor = m_Parent->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
     for( LSEQ cu_stack = cu_set.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
     {
         PCB_LAYER_ID layer = *cu_stack;
@@ -256,7 +258,7 @@ void DIALOG_COPPER_ZONE::initDialog()
 
         COLOR4D layerColor = m_Parent->Settings().Colors().GetLayerColor( layer );
 
-        imageList->Add( makeLayerBitmap( layerColor ) );
+        imageList->Add( makeLayerBitmap( layerColor, backgroundColor ) );
 
         int itemIndex = m_LayerSelectionCtrl->InsertItem(
                 m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
@@ -682,15 +684,20 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 }
 
 
-wxBitmap DIALOG_COPPER_ZONE::makeLayerBitmap( COLOR4D aColor )
+wxBitmap DIALOG_COPPER_ZONE::makeLayerBitmap( COLOR4D aColor, COLOR4D aBackground )
 {
     wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     wxBrush     brush;
     wxMemoryDC  iconDC;
 
     iconDC.SelectObject( bitmap );
-    brush.SetColour( aColor.ToColour() );
+
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
+    iconDC.SetBrush( brush );
+    iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
+
+    brush.SetColour( aColor.ToColour() );
     iconDC.SetBrush( brush );
     iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
 

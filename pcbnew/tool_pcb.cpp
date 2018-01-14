@@ -94,12 +94,13 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
     int        ii, jj;
     COLOR4D    active_layer_color, Route_Layer_TOP_color,
-               Route_Layer_BOTTOM_color, via_color;
+               Route_Layer_BOTTOM_color, via_color, background_color;
     bool       change = false;
 
     static int previous_requested_scale;
     static COLOR4D previous_active_layer_color, previous_Route_Layer_TOP_color,
-                   previous_Route_Layer_BOTTOM_color, previous_via_color;
+                   previous_Route_Layer_BOTTOM_color, previous_via_color,
+                   previous_background_color;
 
     const int  requested_scale = GetIconScale();
 
@@ -144,6 +145,14 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
         change = true;
     }
 
+    background_color = Settings().Colors().GetItemColor( LAYER_PCB_BACKGROUND );
+
+    if( previous_background_color != background_color )
+    {
+        previous_background_color = background_color;
+        change = true;
+    }
+
     if( !change && LayerPairBitmap )
         return;
 
@@ -154,8 +163,14 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
      */
     wxMemoryDC iconDC;
     iconDC.SelectObject( *LayerPairBitmap );
+    wxBrush    brush;
     wxPen      pen;
     int buttonColor = -1;
+
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    brush.SetColour( background_color.WithAlpha(1.0).ToColour() );
+    iconDC.SetBrush( brush );
+    iconDC.DrawRectangle( 0, 0, BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
 
     for( ii = 0; ii < BM_LAYERICON_SIZE; ii++ )
     {
