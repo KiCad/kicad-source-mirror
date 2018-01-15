@@ -67,17 +67,21 @@ void PROGRESS_REPORTER::AdvanceProgress( )
 
 int PROGRESS_REPORTER::currentProgress() const
 {
-    double current = (1.0 / (double)m_numPhases) * ( (double) m_phase + ( (double) m_progress.load() / (double) m_maxProgress ) );
+    double current = ( 1.0 / (double)m_numPhases ) *
+                     ( (double) m_phase + ( (double) m_progress.load() / (double) m_maxProgress ) );
 
     return (int)(current * 1000);
 }
 
+// Please, *DO NOT* use wxPD_APP_MODAL style: it is not necessary
+// (without this option the PROGRESS_REPORTER is modal for the parent frame)
+// and PROGRESS_REPORTER works fine on OSX only without this style
+// when called from a quasi modal dialog
 WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent,
-        const wxString& aTitle,
-        int aNumPhases ) :
+        const wxString& aTitle, int aNumPhases ) :
     PROGRESS_REPORTER( aNumPhases ),
     wxProgressDialog( aTitle, wxT( "" ), 1, aParent, wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
-            wxPD_APP_MODAL | wxPD_ELAPSED_TIME )
+                      wxPD_ELAPSED_TIME )
 {
 }
 

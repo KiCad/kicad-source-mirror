@@ -408,16 +408,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    // Refill all zones
-    // On OSX the progress bar managed by Fill_All_Zones() create issues
-    // when Fill_All_Zones() is called by a QuasiModal dialog
-    // so it is not shown on OSX, until a better fix is found
-#ifdef __WXMAC__
-    wxWindow* caller = nullptr; // Do not show progress bar
-#else
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
     wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
-#endif
     m_pcbEditorFrame->Fill_All_Zones( caller, true );
 
     // test zone clearances to other zones
@@ -677,10 +669,11 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 
     if( aShowProgressBar && deltamax > 3 )
     {
+        // Do not use wxPD_APP_MODAL style here: it is not necessary and create issues
+        // on OSX
         progressDialog = new wxProgressDialog( _( "Track clearances" ), wxEmptyString,
                                                deltamax, aActiveWindow,
-                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
-                                               wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
+                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT | wxPD_ELAPSED_TIME );
         progressDialog->Update( 0, wxEmptyString );
     }
 
