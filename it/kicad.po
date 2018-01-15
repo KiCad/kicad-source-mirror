@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 18:30+0100\n"
-"PO-Revision-Date: 2018-01-13 18:43+0100\n"
+"POT-Creation-Date: 2018-01-15 14:47+0100\n"
+"PO-Revision-Date: 2018-01-15 14:49+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -3328,7 +3328,7 @@ msgid "Help"
 msgstr "Aiuto"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:117
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:122
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:120
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:44
 msgid "Value:"
 msgstr "Valore:"
@@ -10361,7 +10361,7 @@ msgstr "Genera errori"
 msgid "Annotation required!"
 msgstr "Annotazione necessaria!"
 
-#: eeschema/dialogs/dialog_erc.cpp:583 pcbnew/drc.cpp:475
+#: eeschema/dialogs/dialog_erc.cpp:583 pcbnew/drc.cpp:484
 msgid "Finished"
 msgstr "Terminato"
 
@@ -15557,7 +15557,7 @@ msgid "No footprints to archive!"
 msgstr "Nessuna impronta da archiviare!"
 
 #: pcbnew/librairi.cpp:698
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:460
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:462
 #, c-format
 msgid ""
 "Error:\n"
@@ -16483,7 +16483,7 @@ msgid "Unfill all zones"
 msgstr "Svuota tutte le zone"
 
 #: pcbnew/tools/zone_filler_tool.cpp:116
-#: pcbnew/zones_by_polygon_fill_functions.cpp:105
+#: pcbnew/zones_by_polygon_fill_functions.cpp:110
 msgid "Fill All Zones"
 msgstr "Riempi tutte le zone"
 
@@ -17040,7 +17040,7 @@ msgstr ""
 "La zona proibita duplicata non può stare sullo stesso strato della zona "
 "originale."
 
-#: pcbnew/tools/pcb_editor_control.cpp:758 pcbnew/zones_by_polygon.cpp:143
+#: pcbnew/tools/pcb_editor_control.cpp:758 pcbnew/zones_by_polygon.cpp:145
 msgid "The duplicated zone cannot be on the same layer as the original zone."
 msgstr ""
 "La zona duplicata non può stare sullo stesso strato della zona originale."
@@ -17550,36 +17550,41 @@ msgid "Copper zone (net name \"%s\"): net has no pads connected."
 msgstr ""
 "Zona rame (nome connessione \"%s\"): la connessione non ha piazzole connesse."
 
-#: pcbnew/zones_by_polygon.cpp:137
+#: pcbnew/zones_by_polygon.cpp:139
 msgid "The duplicated zone cannot be on the same layers as the original zone."
 msgstr ""
 "La zona duplicata non può stare sullo stesso strato della zona originale."
 
-#: pcbnew/zones_by_polygon.cpp:175
+#: pcbnew/zones_by_polygon.cpp:177
 msgid "Warning: The new zone fails DRC"
 msgstr "Attenzione: la nuova zona non passa i DRC"
 
-#: pcbnew/zones_by_polygon.cpp:377 pcbnew/zones_by_polygon.cpp:436
-#: pcbnew/zones_by_polygon.cpp:825
+#: pcbnew/zones_by_polygon.cpp:379 pcbnew/zones_by_polygon.cpp:438
+#: pcbnew/zones_by_polygon.cpp:827
 msgid "Area: DRC outline error"
 msgstr "Area: errore DRC nei bordi"
 
-#: pcbnew/zones_by_polygon.cpp:551
+#: pcbnew/zones_by_polygon.cpp:553
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "Errore: le aree proibite sono consentite solo sugli strati in rame"
 
-#: pcbnew/zones_by_polygon.cpp:698
+#: pcbnew/zones_by_polygon.cpp:700
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr ""
 "Errore DRC: questo punto iniziale è dentro o troppo vicino ad un'altra zona"
 
-#: pcbnew/zones_by_polygon.cpp:763
+#: pcbnew/zones_by_polygon.cpp:765
 msgid "DRC error: closing this area creates a DRC error with an other area"
 msgstr "Errore DRC: chiudere quest'area crea un errore DRC con un'altra area"
 
-#: pcbnew/zones_by_polygon.cpp:922 pcbnew/zones_by_polygon.cpp:973
+#: pcbnew/zones_by_polygon.cpp:924 pcbnew/zones_by_polygon.cpp:988
 msgid "Modify zone properties"
 msgstr "Modifica proprietà della zona"
+
+#: pcbnew/zones_by_polygon.cpp:979
+#, c-format
+msgid "Refill %d Zones"
+msgstr "Ri-riempi %d zone"
 
 #: pcbnew/moduleframe.cpp:539
 msgid "Save the changes to the footprint before closing?"
@@ -20469,81 +20474,81 @@ msgstr "Isolamento piste...\n"
 msgid "Fill zones...\n"
 msgstr "Riempimento zone...\n"
 
-#: pcbnew/drc.cpp:417
+#: pcbnew/drc.cpp:426
 msgid "Test zones...\n"
 msgstr "Verifica zone...\n"
 
-#: pcbnew/drc.cpp:428
+#: pcbnew/drc.cpp:437
 msgid "Unconnected pads...\n"
 msgstr "Piazzole non collegate...\n"
 
-#: pcbnew/drc.cpp:440
+#: pcbnew/drc.cpp:449
 msgid "Keepout areas ...\n"
 msgstr "Zone proibite ...\n"
 
-#: pcbnew/drc.cpp:450
+#: pcbnew/drc.cpp:459
 msgid "Test texts...\n"
 msgstr "Verifica testi...\n"
 
-#: pcbnew/drc.cpp:461
+#: pcbnew/drc.cpp:470
 msgid "Courtyard areas...\n"
 msgstr "Zone ingombri...\n"
 
-#: pcbnew/drc.cpp:515
+#: pcbnew/drc.cpp:524
 #, c-format
 msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
 msgstr "NETCLASS: \"%s\" ha isolamento: %s minore di quello globale: %s"
 
-#: pcbnew/drc.cpp:529
+#: pcbnew/drc.cpp:538
 #, c-format
 msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha la larghezza pista: %s minore di quella globale: %s"
 
-#: pcbnew/drc.cpp:542
+#: pcbnew/drc.cpp:551
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s"
 msgstr "NETCLASS: \"%s\" ha il diametro via: %s minore di quello globale: %s"
 
-#: pcbnew/drc.cpp:555
+#: pcbnew/drc.cpp:564
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha la foratura dei via: %s minore di quella globale: %s"
 
-#: pcbnew/drc.cpp:568
+#: pcbnew/drc.cpp:577
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha il diametro microvia: %s minore di quello globale: %s"
 
-#: pcbnew/drc.cpp:581
+#: pcbnew/drc.cpp:590
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha la foratura dei microvia: %s minore di quella globale: %s"
 
-#: pcbnew/drc.cpp:671
+#: pcbnew/drc.cpp:680
 msgid "Track clearances"
 msgstr "Isolamento piste"
 
-#: pcbnew/drc.cpp:1156
+#: pcbnew/drc.cpp:1165
 #, c-format
 msgid "footprint \"%s\" has malformed courtyard"
 msgstr "l'impronta \"%s\" ha un ingombro non corretto"
 
-#: pcbnew/drc.cpp:1173
+#: pcbnew/drc.cpp:1182
 #, c-format
 msgid "footprint \"%s\" has no courtyard defined"
 msgstr "l'impronta \"%s\" non ha un ingombro definito"
 
-#: pcbnew/drc.cpp:1211
+#: pcbnew/drc.cpp:1220
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on front (top) layer"
 msgstr ""
 "le impronte \"%s\" e \"%s\" si sovrappongono sullo strato (in cima) fronte"
 
-#: pcbnew/drc.cpp:1246
+#: pcbnew/drc.cpp:1255
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on back (bottom) layer"
 msgstr ""
@@ -21045,23 +21050,27 @@ msgstr "Impostazioni piazzola"
 msgid "Modified alignment target"
 msgstr "Obiettivo di allineamento modificato"
 
-#: pcbnew/zone_filler.cpp:115
+#: pcbnew/zone_filler.cpp:113
 msgid "Calculating zone fills..."
 msgstr "Calcolo riempimento zone..."
 
-#: pcbnew/zone_filler.cpp:157
+#: pcbnew/zone_filler.cpp:154
 msgid "Removing insulated copper islands..."
 msgstr "Rimozione isole di rame isolate..."
 
-#: pcbnew/zone_filler.cpp:179
+#: pcbnew/zone_filler.cpp:176
 msgid "Caching polygon triangulations..."
 msgstr "Rilevamento triangolazione poligoni..."
 
-#: pcbnew/zone_filler.cpp:210
+#: pcbnew/zone_filler.cpp:220
+msgid "Fill with segments..."
+msgstr "Riempi con segmenti..."
+
+#: pcbnew/zone_filler.cpp:247
 msgid "Committing changes..."
 msgstr "Inserimeno cambiamenti..."
 
-#: pcbnew/zone_filler.cpp:217
+#: pcbnew/zone_filler.cpp:254
 msgid "Fill Zone(s)"
 msgstr "Riempimento zone"
 
@@ -22161,7 +22170,7 @@ msgid "No layer selected, Please select the text layer"
 msgstr "Nessuno strato selezionato. Selezionare uno strato di testo."
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:308
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:268
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:266
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
@@ -22861,7 +22870,7 @@ msgstr "Salva le origini delle coordinate nel file"
 msgid "Save GenCAD Board File"
 msgstr "Salva file scheda GenCAD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:330
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:332
 msgid ""
 "Use this attribute for most non SMD footprints\n"
 "Footprints with this option are not put in the footprint position list file"
@@ -22870,8 +22879,8 @@ msgstr ""
 "Le impronte con questa opzione non vengono inserite nel file elenco "
 "posizioni impronte"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:333
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:184
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:335
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:186
 msgid ""
 "Use this attribute for SMD footprints.\n"
 "Only footprints with this option are put in the footprint position list file"
@@ -22880,7 +22889,7 @@ msgstr ""
 "Solo le impronte con questa opzione vengono inserite nel file elenco "
 "posizioni impronte"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:336
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:338
 msgid ""
 "Use this attribute for \"virtual\" footprints drawn on board\n"
 "such as an edge connector (old ISA PC bus for instance)"
@@ -22888,7 +22897,7 @@ msgstr ""
 "Usa questo attributo per le impronte \"virtuali\" disegnate sulla scheda\n"
 "come un connettore a pettine (per es. i vecchi connettori bus PC ISA)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:367
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:369
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
@@ -22896,7 +22905,7 @@ msgstr ""
 "Il componente può essere spostato e auto-piazzato liberamente. L'utente può "
 "selezionare e modificare arbitrariamente le piazzole del componente."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:370
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:372
 msgid ""
 "Component can be freely moved and auto placed, but its pads cannot be "
 "selected or edited."
@@ -22904,40 +22913,40 @@ msgstr ""
 "Il componente può essere spostato e auto-piazzato liberamente, ma le sue "
 "piazzole non possono essere selezionate o modificate."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:373
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:375
 msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr ""
 "Il componente è bloccato: non può essere spostato o auto-piazzato "
 "liberamente."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:498
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:357
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:500
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:359
 msgid "Invalid filename: "
 msgstr "Nome file non valido: "
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:500
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:359
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:502
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:361
 msgid "Edit 3D file name"
 msgstr "Modifica nome file 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:598
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:600
 msgid "Error: invalid footprint parameter"
 msgstr "Errore: parametro impronta non valido"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:604
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:606
 msgid "Error: invalid 3D parameter"
 msgstr "Errore: parametro 3D non valido"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:624
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:626
 msgid "Error: invalid or missing footprint parameter"
 msgstr "Errore: parametro impronta errato o mancante"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:630
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:632
 msgid "Error: invalid or missing 3D parameter"
 msgstr "Errore: parametro 3D errato o mancante"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:753
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:539
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:755
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:541
 msgid "Modify module properties"
 msgstr "Modifica le proprietà del componente"
 
@@ -23858,7 +23867,7 @@ msgid "Footprint %s (%s) orientation %.1f"
 msgstr "Impronta %s (%s) orientamento %.1f"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:46
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:130
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:128
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:28
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:27
 msgid "Reference:"
@@ -24816,12 +24825,12 @@ msgstr "Alla configurazione librerie globale (visibile da tutti i progetti)"
 msgid "To the current project only"
 msgstr "Solo al progetto corrente"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:126
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:124
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:25
 msgid "Text:"
 msgstr "Testo:"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:206
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:204
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the front silk screen layer. Please, fix it"
@@ -24829,7 +24838,7 @@ msgstr ""
 "Questo elemento ha un id strato illegale.\n"
 "Verrà forzato sullo strato serigrafia frontale. Sistemarlo per favore!"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:350
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:348
 msgid "Modify module text"
 msgstr "Modifica modulo testo"
 
@@ -25610,11 +25619,11 @@ msgstr "Strato finale:"
 msgid "Use net class size"
 msgstr "Usa dimensione net class"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:182
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:184
 msgid "Use this attribute for most non SMD footprints"
 msgstr "Usa questo attributo per la maggioranza delle impronte non SMD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:187
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:189
 msgid ""
 "Use this attribute for \"virtual\" footprints drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
@@ -25622,11 +25631,11 @@ msgstr ""
 "Usa questo attributo per impronte \"virtuali\" disegnate sulla scheda\n"
 "come un connettore a pettine (per es. i vecchi connettori bus PC ISA)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:211
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:213
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Abilita comandi da tastiera spostamento e autoposizionamento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:212
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:214
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Disabilita comandi da tastiera spostamento e autoposizionamento"
 
@@ -27540,7 +27549,7 @@ msgstr "Proprietà obiettivo"
 msgid "Footprint Properties"
 msgstr "Proprietà impronta"
 
-#: pcbnew/dialogs/dialog_edit_module_text_base.h:78
+#: pcbnew/dialogs/dialog_edit_module_text_base.h:79
 msgid "Footprint Text Properties"
 msgstr "Proprietà testo impronta"
 
