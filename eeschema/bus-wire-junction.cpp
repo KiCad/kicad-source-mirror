@@ -450,7 +450,9 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
     {
         next_item = item->Next();
 
-        if( item->GetFlags() & STRUCT_DELETED )
+        // Don't remove wires that are already deleted, are currently being
+        // dragged or are just created
+        if( item->GetFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_NEW ) )
             continue;
 
         if( item->Type() != SCH_LINE_T || item->GetLayer() != LAYER_WIRE )
