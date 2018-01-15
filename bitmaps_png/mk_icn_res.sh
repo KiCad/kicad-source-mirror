@@ -3,9 +3,9 @@
 # make icons using Inkscape
 
 # create output directories
+rm -r ../resources/linux/mime/icons/hicolor/*
+mkdir -p ../resources/linux/mime/icons/hicolor/scalable
 cd ../resources/linux/mime/icons/hicolor
-rm -r *
-mkdir scalable
 echo -e '\E[0;34m'"Directory \"scalable\" for .svg icons was created."
 
 # copy sources to the scalable dir
@@ -33,19 +33,19 @@ do
     mkdir ../$size/mimetypes
     echo -e '\E[0;34m'"Subdirectory \"mimetypes\" was created."
     tput sgr0
-    
+
     inkscape -f kicad.svg -e ../$size/mimetypes/application-x-kicad-project.png -w $sz -h $sz --export-area-snap
     inkscape -f eeschema.svg -e ../$size/mimetypes/application-x-kicad-eeschema.png -w $sz -h $sz --export-area-snap
     inkscape -f pcbnew.svg -e ../$size/mimetypes/application-x-kicad-pcbnew.png -w $sz -h $sz --export-area-snap
     echo -e '\E[0;34m'"Icons with size $size was created."
-    
+
     if [ $sz -eq 48 ]
     then
         echo -e '\E[0;32m'"\nMaking the applications icons with size $size."
         mkdir ../$size/apps
         echo -e '\E[0;34m'"Subdirectory \"apps\" was created."
         tput sgr0
-        
+
         inkscape -f kicad.svg -e ../$size/apps/kicad.png -w $sz -h $sz --export-area-snap
         inkscape -f eeschema.svg -e ../$size/apps/eeschema.png -w $sz -h $sz --export-area-snap
         inkscape -f pcbnew.svg -e ../$size/apps/pcbnew.png -w $sz -h $sz --export-area-snap
