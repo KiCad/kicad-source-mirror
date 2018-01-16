@@ -688,6 +688,9 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
     // Stroke the outline
     if( isStrokeEnabled )
     {
+        // Ensure stroke will be visible at current zoom
+        lineWidth = std::max( lineWidth, ( 1.01 / worldScale ) );
+
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         std::deque<VECTOR2D> pointList;
