@@ -318,16 +318,15 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
-    if( m_canvas )
-        return;
-
     int id = event.GetId();
 
     switch( id )
     {
     case ID_TB_OPTIONS_HIDDEN_PINS:
         m_showAllPins = m_optionsToolBar->GetToolToggled( id );
-        m_canvas->Refresh();
+
+        if( m_canvas )
+            m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:
