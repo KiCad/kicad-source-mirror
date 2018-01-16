@@ -550,6 +550,7 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
         {
             m_brdEditor->CursorGoto( item->GetPointA(), false );
             m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            RedrawDrawPanel();
         }
     }
 
@@ -573,6 +574,7 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
         {
             m_brdEditor->CursorGoto( item->GetPointA(), false );
             m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            RedrawDrawPanel();
         }
     }
 
@@ -582,7 +584,18 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
+    int freezeCount = 0;
+    while( m_brdEditor->IsFrozen() )
+    {
+        m_brdEditor->Thaw();
+        freezeCount++;
+    }
     m_brdEditor->GetCanvas()->Refresh();
+    while( freezeCount > 0)
+    {
+        m_brdEditor->Freeze();
+        freezeCount--;
+    }
 }
 
 
