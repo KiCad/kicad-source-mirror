@@ -27,12 +27,14 @@
 TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const
         wxString& aValue, const wxPoint& aPos, const wxSize& aSize, long aStyle,
         const wxValidator& aValidator, const wxString& aName )
-    : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle, aValidator, aName )
+    : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator, aName )
 {
     Connect( wxEVT_SET_FOCUS,
             wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusGet ), NULL, this );
     Connect( wxEVT_KILL_FOCUS,
             wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusLost ), NULL, this );
+    Connect( wxEVT_TEXT_ENTER,
+            wxCommandEventHandler( TEXT_CTRL_EVAL::onTextEnter ), NULL, this );
 }
 
 
@@ -49,11 +51,23 @@ void TEXT_CTRL_EVAL::onTextFocusGet( wxFocusEvent& aEvent )
 
 void TEXT_CTRL_EVAL::onTextFocusLost( wxFocusEvent& aEvent )
 {
+    evaluate();
+    aEvent.Skip();
+}
+
+
+void TEXT_CTRL_EVAL::onTextEnter( wxCommandEvent& aEvent )
+{
+    evaluate();
+    aEvent.Skip();
+}
+
+
+void TEXT_CTRL_EVAL::evaluate()
+{
     if( GetValue().IsEmpty() )
         SetValue( "0" );
 
     if( m_eval.process( GetValue().mb_str(), this ) )
         SetValue( wxString::FromUTF8( m_eval.result() ) );
-
-    aEvent.Skip();
 }

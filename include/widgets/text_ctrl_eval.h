@@ -53,6 +53,9 @@ protected:
 
     void onTextFocusGet( wxFocusEvent& aEvent );
     void onTextFocusLost( wxFocusEvent& aEvent );
+    void onTextEnter( wxCommandEvent& aEvent );
+
+    void evaluate();
 };
 
 
