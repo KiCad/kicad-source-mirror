@@ -535,43 +535,41 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     if( genericProcessing )
     {
-        bool finished = false;
-        unsigned int paramCounter = 0;
-
         trans += "(";
 
-        for( auto textCtrl : genericControls )
+        auto isempty = [] ( wxTextCtrl* ctrl ) {
+                           return empty( ctrl );
+                       };
+
+        auto first_empty = std::find_if( genericControls.begin(), genericControls.end(), isempty );
+
+        if( std::distance( first_empty, genericControls.end() ) == 0 )
         {
-            if( empty( textCtrl ) )
-            {
-                finished = true;
-
-                if( paramCounter < genericReqParamsCount )
-                {
-                    if( paramCounter == 0 )
-                    {
-                        // It is fine, no parameters were entered
-                        useTrans = false;
-                        break;
-                    }
-
-                    DisplayError( NULL,
-                            wxString::Format( wxT( "You need to specify at least the "
-                                    "first %d parameters for the transient source" ),
+            // all empty
+            useTrans = false;
+        }
+        else if( std::distance( genericControls.begin(), first_empty ) < genericReqParamsCount )
+        {
+            DisplayError( nullptr,
+                    wxString::Format( wxT( "You need to specify at least the "
+                                           "first %d parameters for the transient source" ),
                             genericReqParamsCount ) );
 
-                    return false;
-                }
-            }
-            else if( finished )
-            {
-                DisplayError( NULL, wxT( "You cannot leave interleaved blank "
+            return false;
+        }
+        else if( std::find_if_not( first_empty, genericControls.end(),
+                         isempty ) != genericControls.end() )
+        {
+            DisplayError( nullptr, wxT( "You cannot leave interleaved blank "
                                         "spaces for the transient source" ) );
-                return false;
-            }
-
-            trans += wxString::Format( "%s ", textCtrl->GetValue() );
-            ++paramCounter;
+            return false;
+        }
+        else
+        {
+            std::for_each( genericControls.begin(), first_empty,
+                    [&trans] ( wxTextCtrl* ctrl ) {
+                trans += wxString::Format( "%s ", ctrl->GetValue() );
+            } );
         }
 
         trans.Trim();
