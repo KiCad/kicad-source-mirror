@@ -526,6 +526,9 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
  */
 void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
 {
+    // Shouldn't be necessary, but is on at least OSX
+    m_Notebook->ChangeSelection( event.GetSelection() );
+
     m_DeleteCurrentMarkerButton->Enable( false );
     m_ClearanceListBox->SetSelection( -1 );
     m_UnconnectedListBox->SetSelection( -1 );
