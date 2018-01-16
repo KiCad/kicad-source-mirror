@@ -628,13 +628,13 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     if( aIsOutsideProject )
     {
         AddMenuItem( aParentMenu, ID_NEW_BOARD,
-                _( "&New Board" ),
+                _( "&New" ),
                 _( "Create new board" ),
                 KiBitmap( new_board_xpm ) );
 
-        text = AddHotkeyName( _( "&Open Board" ), g_Pcbnew_Editor_Hokeys_Descr, HK_LOAD_BOARD );
+        text = AddHotkeyName( _( "&Open" ), g_Pcbnew_Editor_Hokeys_Descr, HK_LOAD_BOARD );
         AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
-                _( "Load existing board" ),
+                _( "Open existing board" ),
                 KiBitmap( open_brd_file_xpm ) );
     }
 
@@ -658,7 +658,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
         AddMenuItem( aParentMenu, openRecentMenu,
                      -1, _( "Open &Recent" ),
                      _( "Open recently opened board" ),
-                     KiBitmap( open_project_xpm ) );
+                     KiBitmap( recent_xpm ) );
 
         AddMenuItem( aParentMenu, ID_APPEND_FILE,
                      _( "&Append Board" ),

@@ -304,14 +304,14 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         AddMenuItem( aParentMenu,
                      ID_NEW_PROJECT,
-                     _( "&New Schematic Project" ),
+                     _( "&New" ),
                      _( "Clear current schematic hierarchy and start new schematic root sheet" ),
                      KiBitmap( new_document_xpm ) );
 
-        text = AddHotkeyName( _( "&Open Schematic Project" ), g_Schematic_Hokeys_Descr, HK_LOAD_SCH );
+        text = AddHotkeyName( _( "&Open" ), g_Schematic_Hokeys_Descr, HK_LOAD_SCH );
         AddMenuItem( aParentMenu,
                      ID_LOAD_PROJECT, text,
-                     _( "Open existing schematic hierarchy" ),
+                     _( "Open existing schematic" ),
                      KiBitmap( open_document_xpm ) );
     }
 
@@ -333,8 +333,8 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         AddMenuItem( aParentMenu, openRecentMenu,
                      wxID_ANY, _( "Open &Recent" ),
-                     _( "Open recent opened schematic project" ),
-                     KiBitmap( open_project_xpm ) );
+                     _( "Open recently opened schematic" ),
+                     KiBitmap( recent_xpm ) );
     }
 
     AddMenuItem( aParentMenu,
@@ -349,16 +349,16 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Save Schematic Project" ),
+    text = AddHotkeyName( _( "&Save" ),
                           g_Schematic_Hokeys_Descr, HK_SAVE_SCH );
     AddMenuItem( aParentMenu,
                  ID_SAVE_PROJECT, text,
-                 _( "Save all sheets in schematic project" ),
-                 KiBitmap( save_project_xpm ) );
+                 _( "Save all sheets in schematic" ),
+                 KiBitmap( save_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_UPDATE_ONE_SHEET,
-                 _( "Save &Current Sheet Only" ),
+                 _( "Save &Current Sheet" ),
                  _( "Save only current schematic sheet" ),
                  KiBitmap( save_xpm ) );
 

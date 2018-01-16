@@ -57,7 +57,7 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     // Make an image list containing small icons
     m_ImageList = new wxImageList( iconsize.x, iconsize.y, true, TREE_MAX );
 
-    m_ImageList->Add( KiBitmap( kicad_icon_small_xpm ) );       // TREE_PROJECT
+    m_ImageList->Add( KiBitmap( new_project_xpm ) );            // TREE_PROJECT
     m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SCHEMA
     m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_LEGACY_PCB
     m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_SFMT_PCB

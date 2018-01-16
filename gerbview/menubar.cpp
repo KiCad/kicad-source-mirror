@@ -98,7 +98,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     AddMenuItem( fileMenu, openRecentGbrMenu, wxID_ANY,
                  _( "Open &Recent Gerber File" ),
-                 _( "Open a recent opened Gerber file" ),
+                 _( "Open a recently opened Gerber file" ),
                  KiBitmap( recent_xpm ) );
 
     // Recent drill files
@@ -112,7 +112,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_drillFileHistory.AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentDrlMenu, wxID_ANY,
                  _( "Open Recent Dri&ll File" ),
-                 _( "Open a recent opened drill file" ),
+                 _( "Open a recently opened drill file" ),
                  KiBitmap( recent_xpm ) );
 
     // Recent drill files
@@ -126,7 +126,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_zipFileHistory.AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentZipArchiveMenu, wxID_ANY,
                  _( "Open Recent Zip &Archive File" ),
-                 _( "Open a recent opened zip archive file" ),
+                 _( "Open a recently opened zip archive file" ),
                  KiBitmap( recent_xpm ) );
 
     // Recent job files
@@ -140,7 +140,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_jobFileHistory.AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentJobFilesMenu, wxID_ANY,
                  _( "Open Recent &Job File" ),
-                 _( "Open a recent opened gerber job file" ),
+                 _( "Open a recently opened gerber job file" ),
                  KiBitmap( recent_xpm ) );
 
     // Separator
