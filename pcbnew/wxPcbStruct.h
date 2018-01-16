@@ -1412,11 +1412,11 @@ public:
      * Function Fill_All_Zones
      *  Fill all zones on the board
      * The old fillings are removed
-     * @param aActiveWindow = the current active window, if a progress bar is shown
-     *                      = NULL to do not display a progress bar
-     * @param aVerbose = true to show error messages
+     * @param aActiveWindow = the current active window, if a progress bar is shown.
+     * the progress bar will be on top of aActiveWindow
+     * aActiveWindow = NULL to do not display a progress bar
      */
-    int Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose = true );
+    int Fill_All_Zones( wxWindow * aActiveWindow );
 
 
     /**

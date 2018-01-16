@@ -410,7 +410,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
     wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
-    m_pcbEditorFrame->Fill_All_Zones( caller, true );
+    m_pcbEditorFrame->Fill_All_Zones( caller );
 
     // test zone clearances to other zones
     if( aMessages )
