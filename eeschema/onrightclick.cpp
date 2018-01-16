@@ -75,6 +75,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     SCH_ITEM*   item = GetScreen()->GetCurItem();
     bool        blockActive = GetScreen()->IsBlockActive();
     wxString    msg;
+    bool        actionCancelled = false;
 
     // Do not start a block command  on context menu.
     m_canvas->SetCanStartBlock( -1 );
@@ -138,18 +139,14 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     // Try to locate items at cursor position.
     if( (item == NULL) || (item->GetFlags() == 0) )
     {
-        item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins );
+        item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins, 0, &actionCancelled );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
-        if( item == NULL && m_canvas->GetAbortRequest() )
-        {
-            m_canvas->SetAbortRequest( false );
+        if( item == NULL && actionCancelled )
             return false;
-        }
     }
 
     // If a command is in progress: add "cancel" and "end tool" menu
-    // If
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( item && item->GetFlags() )

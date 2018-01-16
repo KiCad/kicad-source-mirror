@@ -906,18 +906,10 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
     pos = event.GetPosition();
     m_ignoreMouseEvents = true;
     PopupMenu( &MasterMenu, pos );
-    // here, we are waiting for popup menu closing.
-    // Among different ways, it can be closed by clicking on the left mouse button.
-    // The expected behavior is to move the mouse cursor to its initial
-    // location, where the right click was made.
-    // However there is a case where the move cursor does not work as expected:
-    // when the user left clicks on the caption frame: the entire window is moved.
-    // Calling wxSafeYield avoid this behavior because it allows the left click
-    // to be proceeded before moving the mouse
-    wxSafeYield();
 
-    // Move the mouse cursor to its initial position:
-    MoveCursorToCrossHair();
+    // The ZoomAndGrid menu is only invoked over empty space so there's no point in warping
+    // the cursor back to the crosshair, and it's very annoying if one clicked out of the menu.
+
     m_ignoreMouseEvents = false;
 
     return true;

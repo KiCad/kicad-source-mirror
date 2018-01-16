@@ -50,7 +50,8 @@
 
 
 SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KICAD_T aFilterList[],
-                                             int aHotKeyCommandId )
+                                             int aHotKeyCommandId,
+                                             bool* clarificationMenuCancelled )
 {
     SCH_ITEM*      item;
     LIB_PIN*       Pin     = NULL;
@@ -65,6 +66,9 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
     // off grid position.
     if( !item && m_canvas->GetAbortRequest() )
     {
+        if( clarificationMenuCancelled )
+            *clarificationMenuCancelled = true;
+
         m_canvas->SetAbortRequest( false );
         return NULL;
     }
@@ -74,6 +78,9 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
     if( !item )
     {
+        if( clarificationMenuCancelled )
+            *clarificationMenuCancelled = m_canvas->GetAbortRequest();
+
         m_canvas->SetAbortRequest( false );  // Just in case the user aborted the context menu.
         return NULL;
     }
@@ -189,8 +196,12 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             GetScreen()->SetCurItem( NULL );
             m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
             PopupMenu( &selectMenu );
-            m_canvas->MoveCursorToCrossHair();
-            item = GetScreen()->GetCurItem();
+
+            if( !m_canvas->GetAbortRequest() )
+            {
+                m_canvas->MoveCursorToCrossHair();
+                item = GetScreen()->GetCurItem();
+            }
         }
     }
 
