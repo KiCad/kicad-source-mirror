@@ -1228,13 +1228,22 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
     }
     else
     {
+        // Update PCB requires a netlist. Therefore the schematic editor must be running
+        // If this is not the case, open the schematic editor
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, true );
-        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
 
-        if( !frame->IsVisible() )
+        if( !frame->IsShown() )
         {
+            wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
+
             frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
-            frame->Show( false );
+            // Because the schematic editor frame is not on screen, iconize it:
+            // However, an other valid option is to do not iconize the schematic editor frame
+            // and show it
+            frame->Iconize( true );
+            // we show the schematic editor frame, because do not show is seen as
+            // a not yet opened schematic by Kicad manager, which is not the case
+            frame->Show( true );
         }
 
         Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "", this );

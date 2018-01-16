@@ -329,7 +329,12 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
     // On Windows, Raise() does not bring the window on screen, when iconized or not shown
     // On linux, Raise() brings the window on screen, but this code works fine
     if( frame->IsIconized() )
+    {
         frame->Iconize( false );
+        // If an iconized frame was created by Pcbnew, Iconize( false ) is not enough
+        // to show the frame at its normal size: Maximize should be called.
+        frame->Maximize( false );
+    }
 
     frame->Raise();
 }
