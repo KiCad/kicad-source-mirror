@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_drclistbox.h"
@@ -249,7 +249,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_panelClearanceListBox->SetSizer( bSizeClearanceBox );
 	m_panelClearanceListBox->Layout();
 	bSizeClearanceBox->Fit( m_panelClearanceListBox );
-	m_Notebook->AddPage( m_panelClearanceListBox, _("Problems / Markers"), false );
+	m_Notebook->AddPage( m_panelClearanceListBox, _("Problems / Markers"), true );
 	m_panelUnconnectedBox = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnconnectedBox;
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );
@@ -263,7 +263,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_panelUnconnectedBox->SetSizer( bSizerUnconnectedBox );
 	m_panelUnconnectedBox->Layout();
 	bSizerUnconnectedBox->Fit( m_panelUnconnectedBox );
-	m_Notebook->AddPage( m_panelUnconnectedBox, _("Unconnected"), true );
+	m_Notebook->AddPage( m_panelUnconnectedBox, _("Unconnected"), false );
 	
 	m_ErrorMsgs->Add( m_Notebook, 1, wxEXPAND | wxALL, 5 );
 	

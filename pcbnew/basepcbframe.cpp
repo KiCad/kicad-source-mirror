@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,29 +340,43 @@ double PCB_BASE_FRAME::BestZoom()
 }
 
 
-void PCB_BASE_FRAME::CursorGoto( const wxPoint& aPos, bool aWarp )
+void PCB_BASE_FRAME::FocusOnLocation( const wxPoint& aPos,
+                                      bool aWarpMouseCursor, bool aCenterView )
 {
-    // factored out of pcbnew/find.cpp
-
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
-    // There may be need to reframe the drawing.
-    if( !m_canvas->IsPointOnDisplay( aPos ) )
+    if( IsGalCanvasActive() )
     {
-        SetCrossHairPosition( aPos );
-        RedrawScreen( aPos, aWarp );
+        if( aCenterView )
+            GetGalCanvas()->GetView()->SetCenter( aPos );
+
+        if( aWarpMouseCursor )
+            GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
+        else
+            GetGalCanvas()->GetViewControls()->SetCrossAirCursorPosition( aPos );
     }
     else
     {
-        // Put cursor on item position
-        m_canvas->CrossHairOff( &dc );
-        SetCrossHairPosition( aPos );
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-        if( aWarp )
-            m_canvas->MoveCursorToCrossHair();
+        // There may be need to reframe the drawing.
+        if( aCenterView || !m_canvas->IsPointOnDisplay( aPos ) )
+        {
+            SetCrossHairPosition( aPos );
+            RedrawScreen( aPos, aWarpMouseCursor );
+        }
+        else
+        {
+            // Put cursor on item position
+            m_canvas->CrossHairOff( &dc );
+            SetCrossHairPosition( aPos );
+
+            if( aWarpMouseCursor )
+                m_canvas->MoveCursorToCrossHair();
+        }
+
+        // Be sure cross hair cursor is ON:
+        m_canvas->CrossHairOn( &dc );
+        m_canvas->CrossHairOn( &dc );
     }
-    m_canvas->CrossHairOn( &dc );
-    m_canvas->CrossHairOn( &dc );
 }
 
 

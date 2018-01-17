@@ -2,8 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Marco Mattila <marcom99@gmail.com>
- * Copyright (C) 2006 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2012 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,10 +128,9 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     if( foundItem )
     {
         parent->SetCurItem( foundItem );
+        parent->FocusOnLocation( pos, !m_NoMouseWarpCheckBox->IsChecked(), true );
         msg.Printf( _( "\"%s\" found" ), GetChars( searchString ) );
         parent->SetStatusText( msg );
-
-        parent->CursorGoto( pos, !m_NoMouseWarpCheckBox->IsChecked() );
     }
     else
     {
@@ -166,10 +165,9 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
     if( foundItem )
     {
         parent->SetCurItem( foundItem );
+        parent->FocusOnLocation( pos, !m_NoMouseWarpCheckBox->IsChecked() );
         msg = _( "Marker found" );
         parent->SetStatusText( msg );
-
-        parent->CursorGoto( pos, !m_NoMouseWarpCheckBox->IsChecked() );
     }
     else
     {

@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,21 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
     m_config->Write( TestMissingCourtyardKey, m_cbCourtyardMissing->GetValue() );
     m_config->Write( TestFootprintCourtyardKey,  m_cbCourtyardOverlap->GetValue() );
+    // Disonnect events
+    m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
+                                    wxMouseEventHandler(
+                                     DIALOG_DRC_CONTROL::OnLeftDClickClearance ), NULL, this );
+    m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_RIGHT_UP,
+                                    wxMouseEventHandler(
+                                     DIALOG_DRC_CONTROL::OnRightUpClearance ), NULL, this );
+    m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK,
+                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::
+                                                        OnLeftDClickUnconnected ), NULL, this );
+    m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
+                                    wxMouseEventHandler(
+                                       DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+
+    this->Disconnect( wxEVT_MENU, wxCommandEventHandler( DIALOG_DRC_CONTROL::OnPopupMenu ), NULL, this );
 }
 
 void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
@@ -118,6 +133,9 @@ void DIALOG_DRC_CONTROL::InitValues()
     m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
                                    wxMouseEventHandler(
                                        DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+
+    this->Connect( wxEVT_MENU, wxCommandEventHandler( DIALOG_DRC_CONTROL::OnPopupMenu ), NULL, this );
+
 
     m_DeleteCurrentMarkerButton->Enable( false );
 
@@ -369,8 +387,10 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 
         if( item )
         {
-            m_brdEditor->CursorGoto( item->GetPointA() );
-            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            // When selecting a item, center it on GAL and just move the graphic
+            // cursor in legacy mode gives the best result
+            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+            m_brdEditor->FocusOnLocation( item->GetPointA(), true, center );
 
             if( !IsModal() )
             {
@@ -391,7 +411,7 @@ void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
 {
     int             source = event.GetId();
 
-    const DRC_ITEM* item = 0;
+    const DRC_ITEM* item = nullptr;
     wxPoint         pos;
 
     int             selection;
@@ -425,8 +445,10 @@ void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
 
     if( item )
     {
-        m_brdEditor->CursorGoto( pos );
-        m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+        // When selecting a item, center it on GAL and just move the graphic
+        // cursor in legacy mode gives the best result
+        bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+        m_brdEditor->FocusOnLocation( pos, true, center );
 
         if( !IsModal() )
             Show( false );
@@ -436,8 +458,6 @@ void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 {
-    event.Skip();
-
     // popup menu to go to either of the items listed in the DRC_ITEM.
 
     int selection = m_UnconnectedListBox->GetSelection();
@@ -464,8 +484,6 @@ void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 
 void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
 {
-    event.Skip();
-
     // popup menu to go to either of the items listed in the DRC_ITEM.
 
     int selection = m_ClearanceListBox->GetSelection();
@@ -506,8 +524,10 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
-            m_brdEditor->CursorGoto( item->GetPointA() );
-            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            // When selecting a item, center it on GAL and just move the graphic
+            // cursor in legacy mode gives the best result
+            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+            m_brdEditor->FocusOnLocation( item->GetPointA(), true, center );
 
             if( !IsModal() )
             {
@@ -534,6 +554,7 @@ void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
     m_UnconnectedListBox->SetSelection( -1 );
 }
 
+
 void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
 {
     int selection = event.GetSelection();
@@ -548,8 +569,10 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
         const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
         if( item )
         {
-            m_brdEditor->CursorGoto( item->GetPointA(), false );
-            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            // When selecting a item, center it on GAL and just move the graphic
+            // cursor in legacy mode gives the best result
+            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+            m_brdEditor->FocusOnLocation( item->GetPointA(), false, center );
             RedrawDrawPanel();
         }
     }
@@ -572,8 +595,10 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
-            m_brdEditor->CursorGoto( item->GetPointA(), false );
-            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            // When selecting a item, center it on GAL and just move the graphic
+            // cursor in legacy mode gives the best result
+            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+            m_brdEditor->FocusOnLocation( item->GetPointA(), false, center );
             RedrawDrawPanel();
         }
     }

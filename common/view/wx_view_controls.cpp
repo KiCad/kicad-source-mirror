@@ -449,6 +449,23 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
 }
 
 
+void WX_VIEW_CONTROLS::SetCrossAirCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true )
+{
+    m_updateCursor = false;
+
+    const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
+    BOX2I screen( VECTOR2I( 0, 0 ), screenSize );
+    VECTOR2D screenPos = m_view->ToScreen( aPosition );
+
+    if( !screen.Contains( screenPos ) )
+    {
+            m_view->SetCenter( aPosition );
+    }
+
+    m_cursorPos = aPosition;
+}
+
+
 void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
                                     bool aWarpView ) const
 {
