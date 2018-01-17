@@ -421,10 +421,19 @@ void DIALOG_SYMBOL_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     // If no candidate, just delete the row with the grid cursor.
     wxArrayInt selectedRows	= m_cur_grid->GetSelectedRows();
     wxGridCellCoordsArray cells = m_cur_grid->GetSelectedCells();
+    wxGridCellCoordsArray blockTopLeft = m_cur_grid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray blockBotRight = m_cur_grid->GetSelectionBlockBottomRight();
 
     // Add all row having cell selected to list:
     for( unsigned ii = 0; ii < cells.GetCount(); ii++ )
         selectedRows.Add( cells[ii].GetRow() );
+
+    // Handle block selection
+    if( !blockTopLeft.IsEmpty() && !blockBotRight.IsEmpty() )
+    {
+        for( int i = blockTopLeft[0].GetRow(); i <= blockBotRight[0].GetRow(); ++i )
+            selectedRows.Add( i );
+    }
 
     // Use the row having the grid cursor only if we have no candidate:
     if( selectedRows.size() == 0 && getCursorRow() >= 0 )
