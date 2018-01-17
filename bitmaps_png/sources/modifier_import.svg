@@ -54,7 +54,7 @@
      id="namedview170"
      showgrid="true"
      inkscape:zoom="33.246345"
-     inkscape:cx="9.469902"
+     inkscape:cx="4.9882063"
      inkscape:cy="13.88369"
      inkscape:window-x="65"
      inkscape:window-y="24"
@@ -528,19 +528,22 @@
   <g
      id="g3731"
      transform="matrix(0.68521018,0,0,0.68521018,2.3710088,-2.161323)">
-    <path
-       sodipodi:nodetypes="ccccccccc"
-       inkscape:connector-curvature="0"
-       style="color:#000000;fill:#00ffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:5.83762489;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       d="m 31.568971,30.164878 -0.0035,-16.071683 -12.697622,0 -0.0086,-8.0238149 -19.40425298,16.1979129 19.40523798,15.916382 0.0035,-8.023812 12.704417,0 z"
-       stroke-miterlimit="10"
-       id="path4232" />
-    <path
-       id="path5068"
-       stroke-miterlimit="10"
-       d="m 31.568971,30.164878 -0.0035,-16.071683 -12.697622,0 -0.0086,-8.0238149 -19.40425298,16.1979129 19.40523798,15.916382 0.0035,-8.023812 12.704417,0 z"
-       style="color:#000000;fill:#00ffff;fill-rule:evenodd;stroke:#000000;stroke-width:2.67777824;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccc" />
+    <g
+       id="g4233">
+      <path
+         id="path4232"
+         stroke-miterlimit="10"
+         d="m 31.568971,30.164878 -0.0035,-16.071683 -12.697622,0 -0.0086,-8.0238149 -19.40425298,16.1979129 19.40523798,15.916382 0.0035,-8.023812 12.704417,0 z"
+         style="color:#000000;fill:#00ffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:5.83762489;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccc" />
+      <path
+         sodipodi:nodetypes="ccccccccc"
+         inkscape:connector-curvature="0"
+         style="color:#000000;fill:#00ffff;fill-rule:evenodd;stroke:#000000;stroke-width:2.67777824;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         d="m 31.568971,30.164878 -0.0035,-16.071683 -12.697622,0 -0.0086,-8.0238149 -19.40425298,16.1979129 19.40523798,15.916382 0.0035,-8.023812 12.704417,0 z"
+         stroke-miterlimit="10"
+         id="path5068" />
+    </g>
   </g>
 </svg>

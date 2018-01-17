@@ -5,7 +5,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="26"
@@ -40,9 +39,9 @@
      inkscape:window-height="1028"
      id="namedview98"
      showgrid="true"
-     inkscape:zoom="9.9909695"
-     inkscape:cx="0.87560148"
-     inkscape:cy="7.2338421"
+     inkscape:zoom="7.0646823"
+     inkscape:cx="22.613225"
+     inkscape:cy="9.6277201"
      inkscape:window-x="992"
      inkscape:window-y="24"
      inkscape:window-maximized="0"
@@ -130,17 +129,6 @@
          stop-color="#4e9a06" />
     </radialGradient>
     <radialGradient
-       inkscape:collect="always"
-       xlink:href="#radialGradient4841-3-3"
-       id="radialGradient5070"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.45724167,0,0,-0.53724401,62.88381,990.58935)"
-       cx="34.857384"
-       cy="28.374384"
-       fx="34.857384"
-       fy="28.374384"
-       r="16.955999" />
-    <radialGradient
        id="radialGradient4841-3-3"
        gradientUnits="userSpaceOnUse"
        cy="20.493999"
@@ -158,17 +146,6 @@
          id="stop4845-7-7"
          style="stop-color:#b608ac;stop-opacity:1" />
     </radialGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#radialGradient5074-5"
-       id="radialGradient5072"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.45724167,0,0,-0.53724401,62.88381,990.58935)"
-       cx="34.857384"
-       cy="28.374384"
-       fx="34.857384"
-       fy="28.374384"
-       r="16.955999" />
     <radialGradient
        r="16.955999"
        gradientTransform="matrix(0,-0.84302,1.0202,0,-4.8963249,41.059418)"
@@ -254,23 +231,21 @@
     </g>
   </g>
   <g
-     transform="matrix(-0.95851322,0,0,0.95851322,31.669053,-1.1381455)"
-     id="g5064">
-    <g
-       id="g4529"
-       transform="matrix(-0.7605512,0,0,0.7605512,63.870771,-731.84891)">
-      <path
-         id="path5066"
-         stroke-miterlimit="10"
-         d="m 60.937114,980.01413 -0.0019,-9.48156 -7.04668,0 -0.0049,-4.21041 -10.846067,9.02812 10.846616,8.87121 0.0019,-4.21016 7.050468,0 z"
-         style="color:#000000;fill:url(#radialGradient5070);fill-rule:evenodd;stroke:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
-         style="color:#000000;fill:url(#radialGradient5072);fill-rule:evenodd;stroke:#000000;stroke-width:1.62230349;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-         d="m 60.937114,980.01413 -0.0019,-9.48156 -7.04668,0 -0.0049,-4.21041 -10.846067,9.02812 10.846616,8.87121 0.0019,-4.21016 7.050468,0 z"
-         stroke-miterlimit="10"
-         id="path5068" />
-    </g>
+     id="g4234"
+     transform="matrix(0.34260509,0,0,0.34260509,14.18431,-1.079514)">
+    <path
+       sodipodi:nodetypes="ccccccccc"
+       inkscape:connector-curvature="0"
+       style="color:#000000;fill:#00ffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:5.83762503;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       d="m 31.568971,30.164878 -0.0035,-16.071683 -12.697622,0 -0.0086,-8.0238149 -19.40425298,16.1979129 19.40523798,15.916382 0.0035,-8.023812 12.704417,0 z"
+       stroke-miterlimit="10"
+       id="path4236" />
+    <path
+       id="path4238"
+       stroke-miterlimit="10"
+       d="m 31.568971,30.164878 -0.0035,-16.071683 -12.697622,0 -0.0086,-8.0238149 -19.40425298,16.1979129 19.40523798,15.916382 0.0035,-8.023812 12.704417,0 z"
+       style="color:#000000;fill:#00ffff;fill-rule:evenodd;stroke:#000000;stroke-width:2.67777824;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc" />
   </g>
 </svg>
