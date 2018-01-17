@@ -120,6 +120,8 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     wxCHECK_RET( alias && alias->GetPart(), "Invalid symbol." );
 
+    SaveCopyInUndoList( part );
+
     LIB_PART* first = alias->GetPart();
     LIB_ITEMS_CONTAINER& drawList = first->GetDrawItems();
 
