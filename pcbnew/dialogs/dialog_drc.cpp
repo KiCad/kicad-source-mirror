@@ -585,13 +585,16 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
     int freezeCount = 0;
+
     while( m_brdEditor->IsFrozen() )
     {
         m_brdEditor->Thaw();
         freezeCount++;
     }
+
     m_brdEditor->GetCanvas()->Refresh();
-    while( freezeCount > 0)
+
+    while( freezeCount > 0 )
     {
         m_brdEditor->Freeze();
         freezeCount--;
