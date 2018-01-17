@@ -537,13 +537,11 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
     {
         trans += "(";
 
-        auto isempty = [] ( wxTextCtrl* ctrl ) {
-                           return empty( ctrl );
-                       };
+        auto first_empty = std::find_if( genericControls.begin(), genericControls.end(), empty );
+        auto first_not_empty = std::find_if( genericControls.begin(), genericControls.end(),
+                []( const wxTextCtrl* c ){ return !empty( c ); } );
 
-        auto first_empty = std::find_if( genericControls.begin(), genericControls.end(), isempty );
-
-        if( std::distance( first_empty, genericControls.end() ) == 0 )
+        if( std::distance( first_not_empty, genericControls.end() ) == 0 )
         {
             // all empty
             useTrans = false;
@@ -558,10 +556,10 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
             return false;
         }
         else if( std::find_if_not( first_empty, genericControls.end(),
-                         isempty ) != genericControls.end() )
+                         empty ) != genericControls.end() )
         {
-            DisplayError( nullptr, wxT( "You cannot leave interleaved blank "
-                                        "spaces for the transient source" ) );
+            DisplayError( nullptr, wxT( "You cannot leave interleaved empty fields "
+                                        "when defining a transient source" ) );
             return false;
         }
         else
@@ -581,6 +579,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
     if( useTrans )
         aTarget += trans;
 
+    // Remove whitespaces from left and right side
     aTarget.Trim( false );
     aTarget.Trim( true );
 
