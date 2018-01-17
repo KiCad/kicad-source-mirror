@@ -116,7 +116,7 @@ protected:
     /**
      * switches currently used canvas (default / Cairo / OpenGL).
      */
-    virtual void SwitchCanvas( wxCommandEvent& aEvent ) override;
+    virtual void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**

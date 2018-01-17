@@ -37,6 +37,7 @@
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <wxBasePcbFrame.h>
+#include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>
 
@@ -355,6 +356,19 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
 void PCB_DRAW_PANEL_GAL::OnShow()
 {
     PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+
+    try
+    {
+        // Check if the current rendering backend can be properly initialized
+        m_view->UpdateItems();
+    }
+    catch( const std::runtime_error& e )
+    {
+        // Fallback to software renderer
+        DisplayError( frame, e.what() );
+        bool use_gal = SwitchBackend( GAL_TYPE_CAIRO );
+        frame->UseGalCanvas( use_gal );
+    }
 
     if( frame )
     {

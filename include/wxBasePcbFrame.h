@@ -40,7 +40,6 @@
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <richio.h>
 #include <class_pcb_screen.h>
-
 #include <pcb_display_options.h>
 #include <pcb_general_settings.h>
 
@@ -648,6 +647,8 @@ public:
     void OnTogglePolarCoords( wxCommandEvent& aEvent );
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
 
+    virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
+
     // User interface update event handlers.
     void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
@@ -688,7 +689,7 @@ public:
     /**
      * switches currently used canvas (default / Cairo / OpenGL).
      */
-    virtual void SwitchCanvas( wxCommandEvent& aEvent );
+    bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
     /**
      * Update UI called when switches currently used canvas (default / Cairo / OpenGL).

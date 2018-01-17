@@ -121,7 +121,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
     StopDrawing();
 
-    assert( !m_drawing );
+    wxASSERT( !m_drawing );
 
     delete m_viewControls;
     delete m_view;
@@ -163,10 +163,10 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     m_viewControls->UpdateScrollbars();
 
-    m_view->UpdateItems();
-
     try
     {
+        m_view->UpdateItems();
+
         m_gal->BeginDrawing();
         m_gal->SetClearColor( settings->GetBackgroundColor() );
         m_gal->SetCursorColor( settings->GetLayerColor( LAYER_CURSOR ) );
@@ -188,13 +188,17 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     }
     catch( std::runtime_error& err )
     {
-        assert( GetBackend() != GAL_TYPE_CAIRO );
-
-        // Cairo is supposed to be the safe backend, there is not a single "throw" in its code
-        SwitchBackend( GAL_TYPE_CAIRO );
+        constexpr auto GAL_FALLBACK = GAL_TYPE_CAIRO;
 
         if( m_edaFrame )
-            m_edaFrame->UseGalCanvas( true );
+        {
+            bool use_gal = m_edaFrame->SwitchCanvas( GAL_FALLBACK );
+            m_edaFrame->UseGalCanvas( use_gal );
+        }
+        else
+        {
+            SwitchBackend( GAL_TYPE_CAIRO );
+        }
 
         DisplayError( m_parent, wxString( err.what() ) );
     }
@@ -363,6 +367,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     }
     catch( std::runtime_error& err )
     {
+        // Create a dummy GAL
         new_gal = new KIGFX::GAL( m_options );
         aGalType = GAL_TYPE_NONE;
         DisplayError( m_parent, wxString( err.what() ) );

@@ -187,9 +187,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_LEGACY, PCB_EDIT_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::OnSwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -1176,10 +1176,10 @@ void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
     // switches currently used canvas (default / Cairo / OpenGL).
-    PCB_BASE_FRAME::SwitchCanvas( aEvent );
+    PCB_BASE_FRAME::OnSwitchCanvas( aEvent );
 
     // The base class method reinit the layers manager.
     // We must upate the layer widget to match board visibility states,

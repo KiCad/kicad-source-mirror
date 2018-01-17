@@ -480,6 +480,25 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 }
 
 
+void PCB_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case ID_MENU_CANVAS_LEGACY:
+        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+        break;
+
+    case ID_MENU_CANVAS_CAIRO:
+        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+        break;
+
+    case ID_MENU_CANVAS_OPENGL:
+        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+        break;
+    }
+}
+
+
 void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
@@ -949,38 +968,6 @@ void PCB_BASE_FRAME::SetPrevGrid()
 }
 
 
-void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
-{
-    bool use_gal = false;
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-
-    switch( aEvent.GetId() )
-    {
-    case ID_MENU_CANVAS_LEGACY:
-        break;
-
-    case ID_MENU_CANVAS_CAIRO:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-
-        if( use_gal )
-            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-        break;
-
-    case ID_MENU_CANVAS_OPENGL:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-        if( use_gal )
-            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-        break;
-    }
-
-    UseGalCanvas( use_gal );
-
-    m_canvasType = canvasType;
-    m_canvasTypeDirty = true;
-}
-
-
 void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
@@ -1016,6 +1003,18 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         // Redirect all events to the legacy canvas
         galCanvas->SetEventDispatcher( NULL );
     }
+}
+
+
+bool PCB_BASE_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+{
+    bool use_gal = GetGalCanvas()->SwitchBackend( aCanvasType );
+    use_gal &= aCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    UseGalCanvas( use_gal );
+    m_canvasType = use_gal ? aCanvasType : EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    m_canvasTypeDirty = true;
+
+    return use_gal;
 }
 
 

@@ -337,6 +337,12 @@ public:
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
 
+    virtual bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+    {
+        wxFAIL_MSG( "SwitchCanvas not implemented" );
+        return false;
+    }
+
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 
     virtual wxString GetScreenDesc() const;
