@@ -550,7 +550,6 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
-
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
@@ -1524,12 +1523,37 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             }
         }
         break;
+
     case PCB_VIA_T:
         {
-            // For vias it is enough if only one of layers is visible
-            PCB_LAYER_ID top, bottom;
+            const VIA* via = static_cast<const VIA*>( aItem );
 
-            static_cast<const VIA*>( aItem )->LayerPair( &top, &bottom );
+            // Check if appropriate element layer is visible
+            switch( via->GetViaType() )
+            {
+                case VIA_THROUGH:
+                    if( !board()->IsElementVisible( LAYER_VIA_THROUGH ) )
+                        return false;
+                    break;
+
+                case VIA_BLIND_BURIED:
+                    if( !board()->IsElementVisible( LAYER_VIA_BBLIND ) )
+                        return false;
+                    break;
+
+                case VIA_MICROVIA:
+                    if( !board()->IsElementVisible( LAYER_VIA_MICROVIA ) )
+                        return false;
+                    break;
+
+                default:
+                    wxFAIL;
+                    return false;
+            }
+
+            // For vias it is enough if only one of its layers is visible
+            PCB_LAYER_ID top, bottom;
+            via->LayerPair( &top, &bottom );
 
             return board()->IsLayerVisible( top ) || board()->IsLayerVisible( bottom );
         }
