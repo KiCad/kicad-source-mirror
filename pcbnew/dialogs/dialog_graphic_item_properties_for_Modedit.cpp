@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -331,10 +331,17 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
         break;
     }
 
-    // Check the item thickness.
+    // Check the item thickness. Note the polygon outline thickness is allowed
+    // to be set to 0, because if the shape is exactly the polygon, its outline
+    // thickness must be 0
     int thickness = ValueFromString( g_UserUnit, m_ThicknessCtrl->GetValue() );
 
-    if( thickness <= 0 )
+    if( m_item->GetShape() == S_POLYGON )
+    {
+        if( thickness < 0 )
+            error_msgs.Add( _( "The polygon outline thickness must be >= 0." ) );
+    }
+    else if( thickness <= 0 )
         error_msgs.Add( _( "The item thickness must be greater than zero." ) );
 
     // And the default thickness.
