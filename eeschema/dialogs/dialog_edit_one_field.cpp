@@ -301,6 +301,25 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
             component->SetRef( aSheetPath, m_text );
     }
 
+    bool modified = false;
+
+    modified = ( modified ||
+                 ( ( aField->GetTextAngle() == TEXT_ANGLE_VERT ) != m_orientation ) );
+
+    modified = ( modified ||
+                 ( ( aField->GetHorizJustify() !=
+                     IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) ) ) );
+
+    modified = ( modified ||
+                 ( ( aField->GetVertJustify() !=
+                     IntToEdaTextVertJustify( m_verticalJustification - 1 ) ) ) );
+
     aField->SetText( m_text );
     updateText( aField );
+
+    if( modified )
+    {
+        auto component = static_cast< SCH_COMPONENT* >( aField->GetParent() );
+        component->ClearFieldsAutoplaced();
+    }
 }
