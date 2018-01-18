@@ -649,7 +649,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             catch( const IO_ERROR& ioe )
             {
                 wxString msg;
-                msg.Printf( _( "Part library \"%s\" failed to load. Error:\n %s" ),
+                msg.Printf( _( "Symbol library \"%s\" failed to load. Error:\n %s" ),
                             GetChars( filename ), GetChars( ioe.What() ) );
 
                 wxLogError( msg );
@@ -673,7 +673,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         catch( const IO_ERROR& ioe )
         {
             wxString msg = wxString::Format( _(
-                    "Part library \"%s\" failed to load.\nError: %s" ),
+                    "Symbol library \"%s\" failed to load.\nError: %s" ),
                     GetChars( cache_name ),
                     GetChars( ioe.What() )
                     );

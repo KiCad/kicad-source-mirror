@@ -524,7 +524,7 @@ void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
     if( aEvent.GetId() == ID_LIBEDIT_SAVE_PART )
     {
         bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
-        wxString text = AddHotkeyName( readOnly ? _( "&Save Part [Read Only]" ) : _( "&Save Part" ),
+        wxString text = AddHotkeyName( readOnly ? _( "&Save Symbol [Read Only]" ) : _( "&Save Symbol" ),
                 g_Libedit_Hokeys_Descr, HK_SAVE_PART );
 
         aEvent.SetText( text );

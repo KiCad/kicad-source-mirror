@@ -530,7 +530,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Error item %s%s unit %d and no more than %d parts\n" ),
+            msg.Printf( _( "Error item %s%s unit %d and no more than %d symbols\n" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         GetChars( tmp ),
                         componentFlatList[ii].m_Unit,

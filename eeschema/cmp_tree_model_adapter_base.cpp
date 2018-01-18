@@ -191,7 +191,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
 
-    wxString part_head = _( "Part" );
+    wxString part_head = _( "Symbol" );
     wxString desc_head = _( "Desc" );
 
     m_col_part = aDataViewCtrl->AppendTextColumn( part_head, 0, wxDATAVIEW_CELL_INERT,

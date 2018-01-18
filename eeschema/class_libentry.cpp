@@ -207,7 +207,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
 LIB_PART::~LIB_PART()
 {
     wxLogTrace( traceSchLibMem,
-                wxT( "%s: destroying part with alias list count of %llu" ),
+                wxT( "%s: destroying symbol with alias list count of %llu" ),
                 GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
                 (long long unsigned) m_aliases.size() );
 
@@ -1239,7 +1239,7 @@ bool LIB_PART::HasAlias( const wxString& aName ) const
 void LIB_PART::SetAliases( const wxArrayString& aAliasList )
 {
     wxCHECK_RET( !m_library,
-                 wxT( "Part aliases cannot be changed when they are owned by a library." ) );
+                 wxT( "Symbol aliases cannot be changed when they are owned by a library." ) );
     wxCHECK_RET( !aAliasList.IsEmpty(), wxT( "Alias list cannot be empty" ) );
 
     if( aAliasList == GetAliasNames() )
@@ -1291,7 +1291,7 @@ LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
         bool rename = aAlias->IsRoot();
 
         wxLogTrace( traceSchLibMem,
-                    wxT( "%s: part:'%s', alias:'%s', alias count %llu, reference count %ld." ),
+                    wxT( "%s: symbol:'%s', alias:'%s', alias count %llu, reference count %ld." ),
                     GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
                     GetChars( GetName() ),
                     GetChars( aAlias->GetName() ),
@@ -1351,7 +1351,7 @@ LIB_ALIAS* LIB_PART::GetAlias( size_t aIndex )
 void LIB_PART::AddAlias( const wxString& aName )
 {
     wxCHECK_RET( !HasAlias( aName ),
-                 wxT( "Part <" ) + GetName() + wxT( "> already has an alias <" ) +
+                 wxT( "Symbol <" ) + GetName() + wxT( "> already has an alias <" ) +
                  aName + wxT( ">.  Bad programmer." ) );
 
     m_aliases.push_back( new LIB_ALIAS( aName, this ) );

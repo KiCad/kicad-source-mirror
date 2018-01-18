@@ -482,7 +482,7 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
 
     if( !alias )
     {
-        wxString msg = wxString::Format( _( "Part name \"%s\" not found in library \"%s\"" ),
+        wxString msg = wxString::Format( _( "Symbol name \"%s\" not found in library \"%s\"" ),
             GetChars( aAlias ), GetChars( aLibrary ) );
         DisplayError( this, msg );
         return;
@@ -669,7 +669,7 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
     if( part->IsPower() )
         msg = _( "Power Symbol" );
     else
-        msg = _( "Part" );
+        msg = _( "Symbol" );
 
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
     AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 8 );

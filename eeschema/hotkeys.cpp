@@ -219,7 +219,7 @@ static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GR
 
 // Load/save files
 static EDA_HOTKEY HkSaveLib( _HKI( "Save Library" ), HK_SAVE_LIB, 'S' + GR_KB_CTRL + GR_KB_ALT, ID_LIBEDIT_SAVE_LIBRARY );
-static EDA_HOTKEY HkSavePart( _HKI( "Save Part" ), HK_SAVE_PART, 'S' + GR_KB_CTRL, ID_LIBEDIT_SAVE_PART );
+static EDA_HOTKEY HkSavePart( _HKI( "Save Symbol" ), HK_SAVE_PART, 'S' + GR_KB_CTRL, ID_LIBEDIT_SAVE_PART );
 static EDA_HOTKEY HkSaveSchematic( _HKI( "Save Schematic" ), HK_SAVE_SCH, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 

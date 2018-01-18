@@ -747,7 +747,7 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
         if( part->GetUnitCount() > 1 )
         {
-            msg += wxString::Format( _( " in part %c" ), 'A' + curr_pin->GetUnit() - 1 );
+            msg += wxString::Format( _( " in symbol %c" ), 'A' + curr_pin->GetUnit() - 1 );
         }
 
         if( m_showDeMorgan )
@@ -787,7 +787,7 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
         if( part->GetUnitCount() > 1 )
         {
-            msg += wxString::Format( _( " in part %c" ), 'A' + pin->GetUnit() - 1 );
+            msg += wxString::Format( _( " in symbol %c" ), 'A' + pin->GetUnit() - 1 );
         }
 
         if( m_showDeMorgan )

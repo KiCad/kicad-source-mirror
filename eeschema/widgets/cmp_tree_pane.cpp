@@ -57,35 +57,35 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
                  KiBitmap( save_library_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save Library As..." ),
                  KiBitmap( save_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT_LIBRARY, _( "&Revert Library" ),
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT_LIBRARY, _( "Revert Library" ),
                  KiBitmap( undo_xpm ) );
 
     menuLibrary->AppendSeparator();
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_NEW_PART, _( "New &Part..." ),
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_NEW_PART, _( "New Sy&mbol..." ),
                  KiBitmap( new_component_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_IMPORT_PART, _( "Import Part..." ),
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_IMPORT_PART, _( "&Import Symbol..." ),
                  KiBitmap( import_part_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Part" ),
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ),
                  KiBitmap( paste_xpm ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "Edit Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "&Edit Symbol" ),
                  KiBitmap( edit_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Remove Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Remove Symbol" ),
                  KiBitmap( delete_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "Export Part..." ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "E&xport Symbol..." ),
                  KiBitmap( export_part_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART, _( "&Save Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART, _( "&Save Symbol" ),
                  KiBitmap( save_part_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT_PART, _( "&Revert Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT_PART, _( "Revert Symbol" ),
                  KiBitmap( undo_xpm ) );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut Symbol" ),
                  KiBitmap( cut_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_COPY_PART, _( "Copy Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_COPY_PART, _( "Copy Symbol" ),
                  KiBitmap( copy_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Part" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Symbol" ),
                  KiBitmap( duplicate_xpm ) );
     menuPart->AppendSeparator();
 
