@@ -449,7 +449,7 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
 }
 
 
-void WX_VIEW_CONTROLS::SetCrossAirCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true )
+void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true )
 {
     m_updateCursor = false;
 

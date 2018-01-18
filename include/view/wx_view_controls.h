@@ -83,8 +83,8 @@ public:
 
     void SetCursorPosition( const VECTOR2D& aPosition, bool warpView ) override;
 
-    /// @copydoc VIEW_CONTROLS::SetCrossAirCursorPosition()
-    void SetCrossAirCursorPosition( const VECTOR2D& aPosition, bool aWarpView ) override;
+    /// @copydoc VIEW_CONTROLS::SetCrossHairCursorPosition()
+    void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView ) override;
 
     /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,

@@ -237,11 +237,11 @@ public:
 
 
     /**
-     * Moves the graphic crossair cursor to the requested position expressed in world coordinates.
+     * Moves the graphic crosshair cursor to the requested position expressed in world coordinates.
      * @param aPosition is the requested cursor position in the world coordinates.
      * @param aWarpView enables/disables view warp if the cursor is outside the current viewport.
      */
-    virtual void SetCrossAirCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true ) = 0;
+    virtual void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true ) = 0;
 
 
     /**

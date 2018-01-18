@@ -351,7 +351,7 @@ void PCB_BASE_FRAME::FocusOnLocation( const wxPoint& aPos,
         if( aWarpMouseCursor )
             GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
         else
-            GetGalCanvas()->GetViewControls()->SetCrossAirCursorPosition( aPos );
+            GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
     }
     else
     {

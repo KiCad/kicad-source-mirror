@@ -272,8 +272,8 @@ public:
 
     /**
      * Useful to focus on a particular location, in find functions
-     * Move the graphic cursor at a given coordinate and reframes the drawing if the
-     * requested point is out of view or if center on location is requested.
+     * Move the graphic cursor (crosshair cursor) at a given coordinate and reframes
+     * the drawing if the requested point is out of view or if center on location is requested.
      * @param aPos is the point to go to.
      * @param aWarpMouseCursor is true if the pointer should be warped to the new position.
      * @param aCenterView is true if the new cursor position should be centered on canvas.
