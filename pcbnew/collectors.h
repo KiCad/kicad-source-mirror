@@ -164,6 +164,21 @@ public:
     virtual     bool IgnoreModulesRefs() const = 0;
 
     /**
+     * @return true if should ignore through-hole vias
+     */
+    virtual     bool IgnoreThroughVias() const = 0;
+
+    /**
+     * @return true if should ignore blind/buried vias
+     */
+    virtual     bool IgnoreBlindBuriedVias() const = 0;
+
+    /**
+     * @return true if should ignore micro vias
+     */
+    virtual     bool IgnoreMicroVias() const = 0;
+
+    /**
      * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
      *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
     virtual     bool UseHitTesting() const = 0;
@@ -375,6 +390,9 @@ private:
     bool    m_IgnorePadsOnBack;
     bool    m_IgnoreModulesVals;
     bool    m_IgnoreModulesRefs;
+    bool    m_IgnoreThroughVias;
+    bool    m_IgnoreBlindBuriedVias;
+    bool    m_IgnoreMicroVias;
 
 public:
 
@@ -412,6 +430,10 @@ public:
 
         m_IgnoreModulesVals         = false;
         m_IgnoreModulesRefs         = false;
+
+        m_IgnoreThroughVias         = false;
+        m_IgnoreBlindBuriedVias     = false;
+        m_IgnoreMicroVias           = false;
     }
 
     /**
@@ -533,6 +555,15 @@ public:
      */
     bool IgnoreModulesRefs() const override { return m_IgnoreModulesRefs; }
     void SetIgnoreModulesRefs(bool ignore) { m_IgnoreModulesRefs = ignore; }
+
+    bool IgnoreThroughVias() const override { return m_IgnoreThroughVias; }
+    void SetIgnoreThroughVias( bool ignore ) { m_IgnoreThroughVias = ignore; }
+
+    bool IgnoreBlindBuriedVias() const override { return m_IgnoreBlindBuriedVias; }
+    void SetIgnoreBlindBuriedVias( bool ignore ) { m_IgnoreBlindBuriedVias = ignore; }
+
+    bool IgnoreMicroVias() const override { return m_IgnoreMicroVias; }
+    void SetIgnoreMicroVias( bool ignore ) { m_IgnoreMicroVias = ignore; }
 };
 
 

@@ -366,6 +366,18 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         goto exit;
     }
 
+    if( via )
+    {
+        auto type = via->GetViaType();
+
+        if( ( m_Guide->IgnoreThroughVias() && type == VIA_THROUGH ) ||
+            ( m_Guide->IgnoreBlindBuriedVias() && type == VIA_BLIND_BURIED ) ||
+            ( m_Guide->IgnoreMicroVias() && type == VIA_MICROVIA ) )
+        {
+            goto exit;
+        }
+    }
+
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) ||
             m_Guide->IgnorePreferredLayer() )
     {
