@@ -230,7 +230,7 @@ U 1 1 4B3A12F4
 P 1650 1400
 F 0 "P1" V 1600 1400 40  0000 C CNN
 F 1 "CONN_2" V 1700 1400 40  0000 C CNN
-F 2 "Connect:bornier2" H 1650 1200 30  0000 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 1650 1200 30  0000 C CNN
 F 3 "" H 1650 1400 60  0001 C CNN
 	1    1650 1400
 	-1   0    0    -1  
@@ -395,7 +395,7 @@ U 1 1 4AD71B06
 P 1650 2600
 F 0 "P2" V 1600 2600 40  0000 C CNN
 F 1 "CONN_2" V 1700 2600 40  0000 C CNN
-F 2 "Connect:bornier2" H 1650 2400 30  0000 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 1650 2400 30  0000 C CNN
 F 3 "" H 1650 2600 60  0001 C CNN
 	1    1650 2600
 	-1   0    0    -1  
