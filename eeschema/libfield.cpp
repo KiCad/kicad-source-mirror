@@ -94,13 +94,13 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
             return;
         }
 
+        SaveCopyInUndoList( parent, UR_LIB_RENAME );
         parent->SetName( newFieldValue );
 
         if( !parent->HasAlias( m_aliasName ) )
             m_aliasName = newFieldValue;
 
-        m_libMgr->RemovePart( oldFieldValue, lib );
-        m_libMgr->UpdatePart( parent, lib );
+        m_libMgr->UpdatePartAfterRename( parent, oldFieldValue, lib );
 
         // Reselect the renamed part
         m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, newFieldValue ) );

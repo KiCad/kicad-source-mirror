@@ -466,8 +466,10 @@ void LIB_EDIT_FRAME::OnRevertPart( wxCommandEvent& aEvent )
     if( currentPart )
         emptyScreen();
 
-    if( m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() ) )
-        m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+    libId = m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() );
+
+    m_treePane->GetCmpTree()->SelectLibId( libId );
+    m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
 
     if( currentPart && m_libMgr->PartExists( libId.GetLibItemName(), libId.GetLibNickname() ) )
         loadPart( libId.GetLibItemName(), libId.GetLibNickname(), unit );

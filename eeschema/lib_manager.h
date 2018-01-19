@@ -103,6 +103,13 @@ public:
     bool UpdatePart( LIB_PART* aPart, const wxString& aLibrary );
 
     /**
+     * Updates the part buffer with a new version of the part when the name has changed.
+     * The old library buffer will be deleted and a new one created with the new name.
+     */
+    bool UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAlias,
+                                const wxString& aLibrary );
+
+    /**
      * Removes the part from the part buffer.
      * It is required to save the library to have the part removed in the schematic editor.
      */
@@ -192,9 +199,10 @@ public:
 
     /**
      * Reverts unsaved changes for a particular part.
-     * @return True on success, false otherwise.
+     * @return The LIB_ID of the reverted part (which may be different in the case
+     * of a rename)
      */
-    bool RevertPart( const wxString& aAlias, const wxString& aLibrary );
+    LIB_ID RevertPart( const wxString& aAlias, const wxString& aLibrary );
 
     /**
      * Reverts unsaved changes for a particular library.

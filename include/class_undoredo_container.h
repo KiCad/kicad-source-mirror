@@ -71,6 +71,7 @@ enum UNDO_REDO_T {
     UR_WIRE_IMAGE,          // Specific to Eeschema for handling wires changes.
     UR_LIBEDIT,             // Specific to the component editor (libedit creates a full copy
                             // of the current component when changed)
+    UR_LIB_RENAME,          // As UR_LIBEDIT, but old copy should be removed from library
     UR_EXCHANGE_T           ///< Use for changing the schematic text type where swapping
                             ///< data structure is insufficient to restor the change.
 };

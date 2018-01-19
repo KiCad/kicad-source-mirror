@@ -555,10 +555,10 @@ public:
     /**
      * Create a copy of the current component, and save it in the undo list.
      *
-     * Because a component in library editor does not a lot of primitives,
-     * the full data is duplicated. It is not worth to try to optimize this save funtion
+     * Because a component in library editor does not have a lot of primitives,
+     * the full data is duplicated. It is not worth to try to optimize this save function.
      */
-    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy );
+    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType = UR_LIBEDIT );
 
 private:
     void GetComponentFromUndoList( wxCommandEvent& event );
@@ -737,7 +737,7 @@ private:
     ///> Stores the currently modified part in the library manager buffer.
     void storeCurrentPart();
 
-    ///> Returns true if currently modified part has the same LIB_ID.
+    ///> Returns true if \a aLibId is an alias for the editor screen part.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
     ///> Restores the empty editor screen, without any part or library selected.

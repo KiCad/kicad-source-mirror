@@ -367,6 +367,32 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 }
 
 
+bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAlias,
+                                         const wxString& aLibrary )
+{
+    // This is essentially a delete/update, but we have to make a copy of the "original"
+    // LIB_PART from the old buffer to give to the new one.
+
+    LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
+    auto partBuf = libBuf.GetBuffer( oldAlias );
+    wxCHECK( partBuf, false );
+
+    LIB_PART* original = new LIB_PART( *partBuf->GetOriginal() );
+
+    if( !libBuf.DeleteBuffer( partBuf ) )
+        return false;
+
+    if( !UpdatePart( aPart, aLibrary ))
+        return false;
+
+    partBuf = libBuf.GetBuffer( aPart->GetName() );
+    wxCHECK( partBuf, false );
+    partBuf->SetOriginal( original ); // part buffer takes ownership of pointer
+
+    return true;
+}
+
+
 bool LIB_MANAGER::FlushPart( const wxString& aAlias, const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
@@ -381,19 +407,28 @@ bool LIB_MANAGER::FlushPart( const wxString& aAlias, const wxString& aLibrary )
 }
 
 
-bool LIB_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary )
+LIB_ID LIB_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
 
     if( it == m_libs.end() )    // no items to flush
-        return true;
+        return LIB_ID( aLibrary, aAlias );
 
     auto partBuf = it->second.GetBuffer( aAlias );
-    wxCHECK( partBuf, false );
-    partBuf->SetPart( new LIB_PART( *partBuf->GetOriginal() ) );
-    m_frame.SyncLibraries( false );
+    wxCHECK( partBuf, LIB_ID( aLibrary, aAlias ) );
+    LIB_PART original( *partBuf->GetOriginal() );
 
-    return true;
+    if( original.GetName() != aAlias )
+    {
+        UpdatePartAfterRename( &original, aAlias, aLibrary );
+    }
+    else
+    {
+        partBuf->SetPart( new LIB_PART( original ) );
+        m_frame.SyncLibraries( false );
+    }
+
+    return LIB_ID( aLibrary, original.GetName() );
 }
 
 

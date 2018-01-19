@@ -148,9 +148,8 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
             break;
 
         case UR_DELETED:            // the picker is owner of this item
-        case UR_LIBEDIT:            /* Libedit save always a copy of the current item
-                                     *  So, the picker is always owner of the picked item
-                                     */
+        case UR_LIBEDIT:            // LIBEDIT and LIB_RENAME save a copy of the current item
+        case UR_LIB_RENAME:         //    so the picker is the owner of the picked item
             delete wrapper.GetItem();
             break;
 
