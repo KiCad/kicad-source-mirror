@@ -48,16 +48,16 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     wxASSERT( !m_items.Empty() );
 
     // This is a way to trick gcc into considering these variables as initialized
-    OPT<int> trackStartX = NULLOPT;
-    OPT<int> trackStartY = NULLOPT;
-    OPT<int> trackEndX = NULLOPT;
-    OPT<int> trackEndY = NULLOPT;
-    OPT<int> trackWidth = NULLOPT;
-    OPT<PCB_LAYER_ID> trackLayer = NULLOPT;
-    OPT<int> viaX = NULLOPT;
-    OPT<int> viaY = NULLOPT;
-    OPT<int> viaDiameter = NULLOPT;
-    OPT<int> viaDrill = NULLOPT;
+    OPT<int> trackStartX( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> trackStartY( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> trackEndX( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> trackEndY( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> trackWidth( []()->OPT<int> { return NULLOPT; }() );
+    OPT<PCB_LAYER_ID> trackLayer( []()->OPT<PCB_LAYER_ID> { return NULLOPT; }() );
+    OPT<int> viaX( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> viaY( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> viaDiameter( []()->OPT<int> { return NULLOPT; }() );
+    OPT<int> viaDrill( []()->OPT<int> { return NULLOPT; }() );
 
     VIATYPE_T viaType = VIA_NOT_DEFINED;
     PCB_LAYER_ID viaStartLayer = UNDEFINED_LAYER;
