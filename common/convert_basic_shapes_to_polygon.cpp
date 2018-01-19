@@ -58,7 +58,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         corner_position.x   = aRadius;
         corner_position.y   = 0;
         double angle = (ii * delta) + halfstep;
-        RotatePoint( &corner_position.x, &corner_position.y, angle );
+        RotatePoint( &corner_position, angle );
         corner_position += aCenter;
         aCornerBuffer.Append( corner_position.x, corner_position.y );
     }
@@ -313,6 +313,7 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     aCornerBuffer.Append( aCentre.x + inner_radius, aCentre.y );
 
     // Draw the outer circle of the ring
+    // the first point creates also a segment from the inner to the outer polygon
     for( int ii = 0; ii < 3600; ii += delta )
     {
         curr_point.x    = outer_radius;
@@ -324,5 +325,10 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     // Draw the last point of outer circle
     aCornerBuffer.Append( aCentre.x + outer_radius, aCentre.y );
+
+    // And connect the outer polygon to the inner polygon,.
+    // because a segment from inner to the outer polygon was already created,
+    // the final polygon is the inner and the outer outlines connected by
+    // 2 overlapping segments
     aCornerBuffer.Append( aCentre.x + inner_radius, aCentre.y );
 }
