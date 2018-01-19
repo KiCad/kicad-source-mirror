@@ -312,12 +312,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM* text = NULL;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SELECTION& selection = selTool->GetSelection();
     BOARD_COMMIT commit( m_frame );
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview;
-
-    m_view->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -339,11 +336,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         {
             if( text )
             {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
                 // Delete the old text and have another try
                 delete text;
                 text = NULL;
-
-                preview.Clear();
 
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
@@ -354,22 +351,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
             if( evt->IsActivate() ) // now finish unconditionally
                 break;
-        }
-        else if( text && evt->Category() == TC_COMMAND )
-        {
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
-            {
-                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *m_frame, *evt );
-
-                text->Rotate( text->GetPosition(), rotationAngle );
-                m_view->Update( &preview );
-            }
-            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
-            {
-                text->Flip( text->GetPosition() );
-                m_view->Update( &preview );
-            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -433,17 +414,13 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 m_controls->CaptureCursor( true );
                 m_controls->SetAutoPan( true );
-                // m_controls->ShowCursor( false );
 
-                preview.Add( text );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
             }
             else
             {
-                // assert( text->GetText().Length() > 0 );
-                // assert( text->GetTextSize().x > 0 && text->GetTextSize().y > 0 );
-
                 text->ClearFlags();
-                preview.Remove( text );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
                 commit.Add( text );
                 commit.Push( _( "Place a text" ) );
@@ -458,13 +435,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         else if( text && evt->IsMotion() )
         {
             text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-
-            // Show a preview of the item
-            m_view->Update( &preview );
+            selection.SetReferencePoint( cursorPos );
+            m_view->Update( &selection );
         }
     }
 
-    m_view->Remove( &preview );
     m_frame->SetNoToolSelected();
 
     return 0;
