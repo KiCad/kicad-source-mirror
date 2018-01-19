@@ -8,7 +8,7 @@
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -530,7 +530,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Error item %s%s unit %d and no more than %d symbols\n" ),
+            msg.Printf( _( "Error: symbol %s%s unit %d and symbol has only %d units defined\n" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         GetChars( tmp ),
                         componentFlatList[ii].m_Unit,
