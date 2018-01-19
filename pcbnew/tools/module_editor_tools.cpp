@@ -274,31 +274,26 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    KIGFX::PCB_VIEW* pcbview = view();
 
-    const LAYER_NUM layers[] = { LAYER_MOD_TEXT_BK,
-                                 LAYER_MOD_TEXT_FR,
-                                 LAYER_MOD_TEXT_INVISIBLE,
-                                 LAYER_MOD_REFERENCES,
-                                 LAYER_MOD_VALUES };
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)frame()->GetDisplayOptions();
 
-    bool enable = !settings->GetSketchMode( layers[0] );
+    // Switch the render mode:
+    bool enable = !displ_opts->m_DisplayModTextFill == SKETCH;
+    displ_opts->m_DisplayModTextFill = enable ? SKETCH : FILLED;
 
-    for( LAYER_NUM layer : layers )
-        settings->SetSketchMode( layer, enable );
+    pcbview->UpdateDisplayOptions( displ_opts );
 
     for( auto module : board()->Modules() )
     {
         for( auto item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_TEXT_T )
-                view->Update( item, KIGFX::GEOMETRY );
+                pcbview->Update( item, KIGFX::GEOMETRY );
         }
 
-        view->Update( &module->Reference(), KIGFX::GEOMETRY );
-        view->Update( &module->Value(), KIGFX::GEOMETRY );
+        pcbview->Update( &module->Reference(), KIGFX::GEOMETRY );
+        pcbview->Update( &module->Value(), KIGFX::GEOMETRY );
     }
 
     frame()->GetGalCanvas()->Refresh();
@@ -309,25 +304,21 @@ int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    KIGFX::PCB_VIEW* pcbview = view();
 
-    const PCB_LAYER_ID layers[] = { F_Adhes, B_Adhes, F_Paste, B_Paste,
-            F_SilkS, B_SilkS, F_Mask, B_Mask,
-            Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts };
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)frame()->GetDisplayOptions();
+    // switch the render mode:
+    bool enable_outline_mode = !displ_opts->m_DisplayModEdgeFill == SKETCH;
+    displ_opts->m_DisplayModEdgeFill = enable_outline_mode ? SKETCH : FILLED;
 
-    bool enable = !settings->GetSketchMode( layers[0] );
-
-    for( LAYER_NUM layer : layers )
-        settings->SetSketchMode( layer, enable );
+    pcbview->UpdateDisplayOptions( displ_opts );
 
     for( auto module : board()->Modules() )
     {
         for( auto item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
-                view->Update( item, KIGFX::GEOMETRY );
+                pcbview->Update( item, KIGFX::GEOMETRY );
         }
     }
 

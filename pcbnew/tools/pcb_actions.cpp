@@ -136,7 +136,7 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
         return PCB_ACTIONS::moduleEdgeOutlines.MakeEvent();
 
-    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
+    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:;
         return PCB_ACTIONS::moduleTextOutlines.MakeEvent();
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
