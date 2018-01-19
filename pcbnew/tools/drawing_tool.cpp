@@ -327,10 +327,15 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_TEXT_TOOL : ID_PCB_ADD_TEXT_BUTT,
             wxCURSOR_PENCIL, _( "Add text" ) );
 
+    bool reselect = false;
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+        if( reselect && text )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -437,6 +442,12 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection.SetReferencePoint( cursorPos );
             m_view->Update( &selection );
+        }
+
+        else if( text && evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            // Calling 'Properties' action clears the selection, so we need to restore it
+            reselect = true;
         }
     }
 

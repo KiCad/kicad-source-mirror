@@ -403,10 +403,15 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
     }
 
+    bool reselect = false;
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         cursorPos = controls->GetCursorPosition();
+
+        if( reselect && module )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
 
         if( evt->IsCancel() || evt->IsActivate() )
         {
@@ -459,6 +464,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection.SetReferencePoint( cursorPos );
             getView()->Update( &selection );
+        }
+
+        else if( module && evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            // Calling 'Properties' action clears the selection, so we need to restore it
+            reselect = true;
         }
     }
 
