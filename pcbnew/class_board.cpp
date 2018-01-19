@@ -2702,6 +2702,9 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
         for( const auto cnItem : connAlgo->PadList() )
         {
+            if( !cnItem->Valid() )
+                continue;
+
             int net = cnItem->Parent()->GetNetCode();
 
             if( net > 0 )
