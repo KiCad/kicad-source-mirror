@@ -298,18 +298,14 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 {
     // Load layer & elements visibility settings
     for( LAYER_NUM i = 0; i < PCB_LAYER_ID_COUNT; ++i )
-    {
         m_view->SetLayerVisible( i, aBoard->IsLayerVisible( PCB_LAYER_ID( i ) ) );
 
-        // Synchronize netname layers as well
-        if( IsCopperLayer( i ) )
-            m_view->SetLayerVisible( GetNetnameLayer( i ), aBoard->IsLayerVisible( PCB_LAYER_ID( i ) ) );
-    }
-
     for( GAL_LAYER_ID i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; ++i )
-    {
         m_view->SetLayerVisible( i, aBoard->IsElementVisible( i ) );
-    }
+
+    // Always enable netname layers, as their visibility is controlled by layer dependencies
+    for( LAYER_NUM i = NETNAMES_LAYER_ID_START; i < NETNAMES_LAYER_ID_END; ++i )
+        m_view->SetLayerVisible( i, true );
 
     // Enable some layers that are GAL specific
     m_view->SetLayerVisible( LAYER_PADS_PLATEDHOLES, true );
