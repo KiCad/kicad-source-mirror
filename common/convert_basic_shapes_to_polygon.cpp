@@ -4,8 +4,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,8 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                int aCircleToSegmentsCount )
 {
     wxPoint corner_position;
-    int     delta       = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
-    int     halfstep    = 1800 / aCircleToSegmentsCount;    // the starting value for rot angles
+    double delta    = 3600.0 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
+    double halfstep = delta/2;    // the starting value for rot angles
 
     aCornerBuffer.NewOutline();
 
@@ -57,7 +57,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         corner_position.x   = aRadius;
         corner_position.y   = 0;
-        int     angle = (ii * delta) + halfstep;
+        double angle = (ii * delta) + halfstep;
         RotatePoint( &corner_position.x, &corner_position.y, angle );
         corner_position += aCenter;
         aCornerBuffer.Append( corner_position.x, corner_position.y );
