@@ -58,8 +58,11 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Labels are similar (lower/upper case difference only)") );
     case ERCE_SIMILAR_GLBL_LABELS:
         return wxString( _("Global labels are similar (lower/upper case difference only)") );
+    case ERCE_DIFFERENT_UNIT_FP:
+        return wxString( _("Different footprint assigned in another unit of the same component") );
 
     default:
+        wxFAIL_MSG( "Missing ERC error description" );
         return wxString( wxT("Unkown.") );
     }
 }

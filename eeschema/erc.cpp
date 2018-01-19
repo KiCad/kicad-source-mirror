@@ -38,8 +38,8 @@
 #include <lib_pin.h>
 #include <erc.h>
 #include <sch_marker.h>
-#include <sch_component.h>
 #include <sch_sheet.h>
+#include <sch_reference_list.h>
 
 #include <wx/ffile.h>
 
@@ -222,6 +222,72 @@ int TestDuplicateSheetNames( bool aCreateMarker )
     }
 
     return err_count;
+}
+
+
+int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
+{
+    int errors = 0;
+    std::map<wxString, LIB_ID> footprints;
+    SCH_MULTI_UNIT_REFERENCE_MAP refMap;
+    aSheetList.GetMultiUnitComponents( refMap, true );
+
+    for( auto& component : refMap )
+    {
+        auto& refList = component.second;
+
+        if( refList.GetCount() == 0 )
+        {
+            wxFAIL;   // it should not happen
+            continue;
+        }
+
+        // Reference footprint
+        wxString fp;
+        wxString unitName;
+
+        for( int i = 0; i < component.second.GetCount(); ++i )
+        {
+            SCH_COMPONENT* cmp = refList.GetItem( i ).GetComp();
+            SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
+            fp = cmp->GetField( FOOTPRINT )->GetText();
+
+            if( !fp.IsEmpty() )
+            {
+                unitName = cmp->GetRef( &sheetPath )
+                    + LIB_PART::SubReference( cmp->GetUnit(), false );
+                break;
+            }
+        }
+
+        for( int i = 0; i < component.second.GetCount(); ++i )
+        {
+            SCH_REFERENCE& ref = refList.GetItem( i );
+            SCH_COMPONENT* unit = ref.GetComp();
+            SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
+            const wxString& curFp = unit->GetField( FOOTPRINT )->GetText();
+
+            if( !curFp.IsEmpty() && fp != curFp )
+            {
+                wxString curUnitName = unit->GetRef( &sheetPath )
+                    + LIB_PART::SubReference( unit->GetUnit(), false );
+
+                SCH_MARKER* marker = new SCH_MARKER();
+                marker->SetTimeStamp( GetNewTimeStamp() );
+                marker->SetData( ERCE_DIFFERENT_UNIT_FP, unit->GetPosition(),
+                    wxString::Format( _( "Unit %s has '%s' assigned, "
+                        "whereas unit %s has '%s' assigned" ), unitName, fp, curUnitName, curFp ),
+                    unit->GetPosition() );
+                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+                ref.GetSheetPath().LastScreen()->Append( marker );
+
+                ++errors;
+            }
+        }
+    }
+
+    return errors;
 }
 
 

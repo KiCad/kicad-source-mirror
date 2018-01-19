@@ -31,9 +31,9 @@
 #define _ERC_H
 
 
-//class EDA_DRAW_PANEL;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
+class SCH_SHEET_LIST;
 
 /* For ERC markers: error types (used in diags, and to set the color):
 */
@@ -60,6 +60,8 @@ extern const wxString CommentERC_V[];
 #define ERCE_GLOBLABEL            8    // global label not connected to any other global label
 #define ERCE_SIMILAR_LABELS       9    // 2 labels are equal fir case insensitive comparisons
 #define ERCE_SIMILAR_GLBL_LABELS  10   // 2 labels are equal fir case insensitive comparisons
+#define ERCE_DIFFERENT_UNIT_FP    11   // different units of the same component have different
+                                       // footprints assigned
 
 /* Minimal connection table */
 #define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
@@ -107,6 +109,13 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
  *                       false = calculate error count only
  */
 int TestDuplicateSheetNames( bool aCreateMarker );
+
+/**
+ * Test if all units of each multiunit component have the same footprint assigned.
+ * @param aSheetList contains components to be validated.
+ * @return The error count.
+ */
+int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList );
 
 
 #endif  // _ERC_H
