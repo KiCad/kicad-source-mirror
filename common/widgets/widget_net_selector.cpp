@@ -27,9 +27,12 @@
 
 #include <class_board.h>
 #include <class_netinfo.h>
+#include <wx/arrstr.h>
 
-WIDGET_NET_SELECTOR::WIDGET_NET_SELECTOR (wxWindow *parent, wxWindowID id, const wxString &value, const wxPoint &pos, const wxSize &size,
-    int n, const wxString choices[], long style, const wxValidator &validator, const wxString &name ) :
+WIDGET_NET_SELECTOR::WIDGET_NET_SELECTOR( wxWindow *parent, wxWindowID id,
+    const wxString &value, const wxPoint &pos, const wxSize &size,
+    int n, const wxString choices[], long style,
+    const wxValidator &validator, const wxString &name ) :
     wxComboBox( parent, id, value, pos, size, n, choices, style, validator, name ),
     m_multiple( false )
 {
@@ -55,11 +58,11 @@ void WIDGET_NET_SELECTOR::SetMultiple( bool aMultiple )
 
 void WIDGET_NET_SELECTOR::SetSelectedNet ( int aNetcode )
 {
-    for( const auto& n : m_nets )
+    for( const auto& net : m_nets )
     {
-        if( n.code == aNetcode )
+        if( net.m_Code == aNetcode )
         {
-            SetSelection( n.pos );
+            SetSelection( net.m_Pos );
             return;
         }
     }
@@ -70,10 +73,10 @@ int WIDGET_NET_SELECTOR::GetSelectedNet()
 {
     int pos = GetSelection();
 
-    for( const auto& n : m_nets )
+    for( const auto& net : m_nets )
     {
-        if( n.pos == pos )
-            return n.code;
+        if( net.m_Pos == pos )
+            return net.m_Code;
     }
 
     return 0;
@@ -93,21 +96,27 @@ void WIDGET_NET_SELECTOR::SetBoard( BOARD* aBoard )
 {
     auto& netinfo = aBoard->GetNetInfo();
 
-    Append( wxT( "<no net>" ) );
-
     for( unsigned i = 1; i < netinfo.GetNetCount(); i++ )
     {
         NETINFO_ITEM* ni = netinfo.GetNetItem( i );
-        NET           n;
-        n.name = ni->GetNetname();
-        n.code = i;
-        m_nets.push_back( n );
+        NET           net;
+        net.m_Name = ni->GetNetname();
+        net.m_Code = i;
+        m_nets.push_back( net );
     }
 
     std::sort( m_nets.begin(), m_nets.end() );
 
-    for( auto& n : m_nets )
+    // Add the list of selectable nets to the wxComboBox.
+    // Using a wxArrayString is much faster than adding each name separately
+    wxArrayString netnames;
+
+    netnames.Add( wxT( "<no net>" ) );    // Always on top of the list
+
+    for( auto& net : m_nets )
     {
-        n.pos = Append( n.name );
+        net.m_Pos = netnames.Add( net.m_Name );
     }
+
+    Append( netnames );
 }

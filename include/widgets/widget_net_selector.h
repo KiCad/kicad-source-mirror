@@ -33,10 +33,17 @@ class BOARD;
 class WIDGET_NET_SELECTOR : public wxComboBox
 {
 public:
-    WIDGET_NET_SELECTOR (wxWindow *parent, wxWindowID id, const wxString &value=wxEmptyString, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize,
-    int n=0, const wxString choices[]=NULL, long style=0, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxComboBoxNameStr);
+    // Note: this list of arguments is here because WIDGET_NET_SELECTOR must
+    // have the same arguments as wxComboBox to be used inside wxFormaBuilder
+    WIDGET_NET_SELECTOR( wxWindow *parent, wxWindowID id,
+                         const wxString &value=wxEmptyString,
+                         const wxPoint &pos=wxDefaultPosition,
+                         const wxSize &size=wxDefaultSize,
+                         int n=0, const wxString choices[]=NULL,
+                         long style=0, const wxValidator &validator=wxDefaultValidator,
+                         const wxString &name=wxComboBoxNameStr);
 
-            ~WIDGET_NET_SELECTOR();
+    ~WIDGET_NET_SELECTOR();
 
     void SetMultiple( bool aMultiple = true );
     void SetSelectedNet ( int aNetcode );
@@ -44,23 +51,23 @@ public:
 
     bool IsUniqueNetSelected() const;
 
-    void SetBoard( BOARD* m_board );
+    // Build the list of netnames and populate the wxComboBox
+    void SetBoard( BOARD* aBoard );
 
 private:
     struct NET {
-        int code;
-        int pos;
-        wxString name;
+        int m_Code;
+        int m_Pos;
+        wxString m_Name;
 
         bool operator <( const NET& aOther ) const
         {
-            return name < aOther.name;
+            return m_Name < aOther.m_Name;
         }
     };
 
     bool m_multiple;
     std::vector<NET> m_nets;
-
 };
 
 #endif
