@@ -459,7 +459,15 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetValue( wxVariant& aValu
             values.insert( (*i)->GetString( aCol ) );
 
         if( values.size() > 1 )
-            aValue << wxDataViewIconText( boost::algorithm::join( values, "," ), wxNullIcon );
+        {
+            // when multiple pins are grouped, thes have not necessary the same electrical type
+            // therefore use a neutral icon to show a type.
+            // Do Not use a null icon, because on some OS (Linux), for an obscure reason,
+            // if a null icon is used somewhere, no other icon is displayed
+            wxIcon icon_notype;
+            icon_notype.CopyFromBitmap( KiBitmap ( pintype_notspecif_xpm ) );   // could be tree_nosel_xpm
+            aValue << wxDataViewIconText( boost::algorithm::join( values, "," ), icon_notype );
+        }
         else
             m_Members.front()->GetValue( aValue, aCol );
     }
