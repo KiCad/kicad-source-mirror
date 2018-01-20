@@ -154,6 +154,11 @@ public:
 
     void SetGroup( Group* aGroup ) { m_Group = aGroup; }
 
+    static bool Compare( const Pin& lhs, const Pin& rhs )
+    {
+        return PinNumbers::Compare( lhs.m_Backing->GetNumber(), rhs.m_Backing->GetNumber() ) < 0;
+    }
+
 private:
     DataViewModel& m_Model;
     LIB_PIN* m_Backing;
@@ -244,6 +249,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::DataViewModel( LIB_PART& aPart ) :
     /// @todo C++11
     for( LIB_PINS::const_iterator i = m_Backing.begin(); i != m_Backing.end(); ++i )
         m_Pins.push_back( Pin( *this, *i ) );
+
+    m_Pins.sort(Pin::Compare);
 
     CalculateGrouping();
 }
