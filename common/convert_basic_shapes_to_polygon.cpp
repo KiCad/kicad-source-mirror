@@ -64,6 +64,66 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
 }
 
+void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                wxPoint aStart, wxPoint aEnd, int aWidth,
+                                int aCircleToSegmentsCount, double aCorrectionFactor )
+{
+    int     radius  = aWidth / 2;
+    wxPoint endp    = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
+    wxPoint startp  = aStart;
+    wxPoint corner;
+    VECTOR2I polypoint;
+    SHAPE_LINE_CHAIN polyshape;
+
+    radius = radius * aCorrectionFactor;
+
+    // normalize the position in order to have endp.x >= 0;
+    if( endp.x < 0 )
+    {
+        endp    = aStart - aEnd;
+        startp  = aEnd;
+    }
+
+    // delta_angle is in rd
+    double delta_angle = atan2( (double)endp.y, (double)endp.x );
+    int seg_len        = KiROUND( EuclideanNorm( endp ) );
+
+    int delta = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
+
+    // Compute the outlines of the segment, and creates a polygon
+    // add right rounded end:
+    for( int ii = 0; ii < 1800; ii += delta )
+    {
+        corner = wxPoint( 0, radius );
+        RotatePoint( &corner, ii );
+        corner.x += seg_len;
+        polyshape.Append( corner.x, corner.y );
+    }
+
+    // Finish arc:
+    corner = wxPoint( seg_len, -radius );
+    polyshape.Append( corner.x, corner.y );
+
+    // add left rounded end:
+    for( int ii = 0; ii < 1800; ii += delta )
+    {
+        corner = wxPoint( 0, -radius );
+        RotatePoint( &corner, ii );
+        polyshape.Append( corner.x, corner.y );
+    }
+
+    // Finish arc:
+    corner = wxPoint( 0, radius );
+    polyshape.Append( corner.x, corner.y );
+    polyshape.SetClosed( true );
+
+    // Rotate and move the polygon to its right location
+    polyshape.Rotate( delta_angle, VECTOR2I( 0, 0 ) );
+    polyshape.Move( startp );
+
+    aCornerBuffer.AddOutline( polyshape);
+}
+
 /* Returns the centers of the rounded corners of a rect.
  */
 void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,

@@ -900,12 +900,13 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     {
     case PAD_SHAPE_CIRCLE:
         return arect.IntersectsCircle( GetPosition(), GetBoundingRadius() );
+
     case PAD_SHAPE_RECT:
         shapeRect.SetOrigin( shapePos );
         shapeRect.Inflate( m_Size.x / 2, m_Size.y / 2 );
         return arect.Intersects( shapeRect, m_Orient );
-    case PAD_SHAPE_OVAL:
 
+    case PAD_SHAPE_OVAL:
         // Circlular test if dimensions are equal
         if( m_Size.x == m_Size.y )
             return arect.IntersectsCircle( shapePos, GetBoundingRadius() );
@@ -953,6 +954,7 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         }
 
         break;
+
     case PAD_SHAPE_TRAPEZOID:
         /* Trapezoid intersection tests:
          * A) Any points of rect inside trapezoid
@@ -996,8 +998,8 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         }
 
         return false;
-
         }
+
     case PAD_SHAPE_ROUNDRECT:
         /* RoundRect intersection can be broken up into simple tests:
          * a) Test intersection of horizontal rect
@@ -1053,6 +1055,7 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         }
 
         break;
+
     default:
         break;
     }

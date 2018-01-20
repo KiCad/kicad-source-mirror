@@ -50,6 +50,29 @@ void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
                                                 wxPoint aCenter, int aRadius,
                                                 int aCircleToSegmentsCount );
 
+
+/**
+ * convert a oblong shape to a polygon, using multiple segments
+ * It is similar to TransformRoundedEndsSegmentToPolygon, but the polygon
+ * is outside the actual oblong shape (a segment with rounded ends)
+ * It is suitable to create oblong clearance areas.
+ * because multiple segments create a smaller area than the circle, the
+ * radius of the circle to approximate must be bigger ( radius*aCorrectionFactor)
+ * to create segments outside the circle.
+ * @param aCornerBuffer = a buffer to store the polygon
+ * @param aStart = the first point of the segment
+ * @param aEnd = the second point of the segment
+ * @param aWidth = the width of the segment
+ * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aCorrectionFactor = the coefficient to have segments outside the circle
+ * if aCorrectionFactor = 1.0, the shape will be the same as
+ * TransformRoundedEndsSegmentToPolygon
+ */
+void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                wxPoint aStart, wxPoint aEnd, int aWidth,
+                                int aCircleToSegmentsCount, double aCorrectionFactor );
+
+
 /**
  * Helper function GetRoundRectCornerCenters
  * Has meaning only for rounded rect

@@ -651,13 +651,11 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         wxPoint shape_offset;
         if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
         {
-            dy = KiROUND( dy * aCorrectionFactor );
             shape_offset.y = dy - dx;
             width = dx * 2;
         }
         else    //if( dy <= dx )
         {
-            dx = KiROUND( dx * aCorrectionFactor );
             shape_offset.x = dy - dx;
             width = dy * 2;
         }
@@ -665,8 +663,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         RotatePoint( &shape_offset, angle );
         wxPoint start = padShapePos - shape_offset;
         wxPoint end = padShapePos + shape_offset;
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, start, end,
-                                              aCircleToSegmentsCount, width );
+        TransformOvalClearanceToPolygon( aCornerBuffer, start, end, width,
+                                aCircleToSegmentsCount, aCorrectionFactor );
         }
         break;
 
