@@ -68,34 +68,45 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                 wxPoint aStart, wxPoint aEnd, int aWidth,
                                 int aCircleToSegmentsCount, double aCorrectionFactor )
 {
+    // To build the polygonal shape outside the actual shape, we use a bigger
+    // radius to build rounded ends.
+    // However, the width of the segment is too big.
+    // so, later, we will clamp the polygonal shape with the bounding box
+    // of the segment.
     int     radius  = aWidth / 2;
-    wxPoint endp    = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
+    radius = radius * aCorrectionFactor;    // make segments outside the circles
+
+    // end point is the coordinate relative to aStart
+    wxPoint endp    = aEnd - aStart;
     wxPoint startp  = aStart;
     wxPoint corner;
-    VECTOR2I polypoint;
-    SHAPE_LINE_CHAIN polyshape;
+    SHAPE_POLY_SET polyshape;
 
-    radius = radius * aCorrectionFactor;
+    polyshape.NewOutline();
 
-    // normalize the position in order to have endp.x >= 0;
+    // normalize the position in order to have endp.x >= 0
+    // it makes calculations more easy to understand
     if( endp.x < 0 )
     {
         endp    = aStart - aEnd;
         startp  = aEnd;
     }
 
-    // delta_angle is in rd
+    // delta_angle is in radian
     double delta_angle = atan2( (double)endp.y, (double)endp.x );
     int seg_len        = KiROUND( EuclideanNorm( endp ) );
 
-    int delta = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
+    double delta = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
 
     // Compute the outlines of the segment, and creates a polygon
+    // Note: the polygonal shape is built from the equivalent horizontal
+    // segment starting ar 0,0, and ending at seg_len,0
+
     // add right rounded end:
-    for( int ii = 0; ii < 1800; ii += delta )
+    for( int ii = 0; ii < aCircleToSegmentsCount/2; ii++ )
     {
         corner = wxPoint( 0, radius );
-        RotatePoint( &corner, ii );
+        RotatePoint( &corner, delta*ii );
         corner.x += seg_len;
         polyshape.Append( corner.x, corner.y );
     }
@@ -105,23 +116,49 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     polyshape.Append( corner.x, corner.y );
 
     // add left rounded end:
-    for( int ii = 0; ii < 1800; ii += delta )
+    for( int ii = 0; ii < aCircleToSegmentsCount/2; ii++ )
     {
         corner = wxPoint( 0, -radius );
-        RotatePoint( &corner, ii );
+        RotatePoint( &corner, delta*ii );
         polyshape.Append( corner.x, corner.y );
     }
 
     // Finish arc:
     corner = wxPoint( 0, radius );
     polyshape.Append( corner.x, corner.y );
-    polyshape.SetClosed( true );
+
+    // Now, clamp the polygonal shape (too big) with the segment bounding box
+    // the polygonal shape bbox equivalent to the segment has a too big height,
+    // and the right width
+    if( aCorrectionFactor > 1.0 )
+    {
+        SHAPE_POLY_SET bbox;
+        bbox.NewOutline();
+        // Build the bbox (a horizontal rectangle).
+        int halfwidth = aWidth / 2;     // Use the exact segment width for the bbox height
+        corner.x = -radius - 2;         // use a bbox width slightly bigger to avoid
+                                        // creating useless corner at segment ends
+        corner.y = halfwidth;
+        bbox.Append( corner.x, corner.y );
+        corner.y = -halfwidth;
+        bbox.Append( corner.x, corner.y );
+        corner.x = radius + seg_len + 2;
+        bbox.Append( corner.x, corner.y );
+        corner.y = halfwidth;
+        bbox.Append( corner.x, corner.y );
+
+        // Now, clamp the shape
+        polyshape.BooleanIntersection( bbox, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        // Note the final polygon is a simple, convex polygon with no hole
+        // due to the shape of initial polygons
+    }
 
     // Rotate and move the polygon to its right location
     polyshape.Rotate( delta_angle, VECTOR2I( 0, 0 ) );
     polyshape.Move( startp );
 
-    aCornerBuffer.AddOutline( polyshape);
+
+    aCornerBuffer.Append( polyshape);
 }
 
 /* Returns the centers of the rounded corners of a rect.
