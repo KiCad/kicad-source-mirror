@@ -316,6 +316,7 @@ public:
     void OnEditSymbolLibTable( wxCommandEvent& aEvent ) override;
 
     bool IsSearchTreeShown();
+    void ClearSearchTreeSelection();
 
     void OnEditComponentProperties( wxCommandEvent& event );
     void InstallFieldsEditorDialog( wxCommandEvent& event );

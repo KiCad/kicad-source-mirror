@@ -181,6 +181,39 @@ CMP_TREE_NODE* LIB_MANAGER_ADAPTER::findLibrary( const wxString& aLibNickName )
 }
 
 
+void LIB_MANAGER_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                                    unsigned int aCol ) const
+{
+    auto node = ToNode( aItem );
+    wxASSERT( node );
+
+    switch( aCol )
+    {
+    case 0:
+        aVariant = node->Name;
+
+        // mark modified libs with an asterix
+        if( node->Type == CMP_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->Name ) )
+            aVariant = node->Name + " *";
+
+        // mark modified parts with an asterix
+        if( node->Type == CMP_TREE_NODE::LIBID
+                && m_libMgr->IsPartModified( node->Name, node->Parent->Name ) )
+            aVariant = node->Name + " *";
+
+        break;
+
+    case 1:
+        aVariant = node->Desc;
+        break;
+
+    default:    // column == -1 is used for default Compare function
+        aVariant = node->Name;
+        break;
+    }
+}
+
+
 bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
         wxDataViewItemAttr& aAttr ) const
 {
@@ -197,10 +230,16 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
             // mark modified libs with bold font
             aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
 
-            // mark the current library with inverted colors
+#ifdef __WXGTK__
+            // The native wxGTK+ impl ignores background colour, so set the text colour instead.
+            // This works reasonably well in dark themes, and quite poorly in light ones....
             if( node->Name == m_libMgr->GetCurrentLib() )
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-
+#else
+            // mark the current library with background color
+            if( node->Name == m_libMgr->GetCurrentLib() )
+                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+#endif
             break;
 
         case CMP_TREE_NODE::LIBID:
@@ -210,10 +249,16 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
             // mark aliases with italic font
             aAttr.SetItalic( !node->IsRoot );
 
-            // mark the current part with inverted colors
+#ifdef __WXGTK__
+            // The native wxGTK+ impl ignores background colour, so set the text colour instead.
+            // This works reasonably well in dark themes, and quite poorly in light ones....
             if( node->LibId == m_libMgr->GetCurrentLibId() )
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-
+#else
+            // mark the current part with background color
+            if( node->LibId == m_libMgr->GetCurrentLibId() )
+                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+#endif
             break;
 
         default:

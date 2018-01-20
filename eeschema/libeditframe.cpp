@@ -492,6 +492,12 @@ bool LIB_EDIT_FRAME::IsSearchTreeShown()
 }
 
 
+void LIB_EDIT_FRAME::ClearSearchTreeSelection()
+{
+    m_treePane->GetCmpTree()->Unselect();
+}
+
+
 void LIB_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetToolId() == aEvent.GetId() );

@@ -126,4 +126,7 @@ void CMP_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
     //wxPostEvent( libEditFrame, evt );
     //wxQueueEvent( m_libEditFrame, new wxCommandEvent( ID_LIBEDIT_EDIT_PART ) );
     m_libEditFrame->OnEditPart( evt );
+
+    // Make sure current-part highlighting doesn't get lost in seleciton highlighting
+    m_tree->Unselect();
 }
