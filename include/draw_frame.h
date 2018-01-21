@@ -337,12 +337,6 @@ public:
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
 
-    virtual bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
-    {
-        wxFAIL_MSG( "SwitchCanvas not implemented" );
-        return false;
-    }
-
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 
     virtual wxString GetScreenDesc() const;
@@ -861,6 +855,13 @@ public:
      * @param aEnable True for GAL-based canvas, false for standard canvas.
      */
     virtual void UseGalCanvas( bool aEnable );
+
+    /**
+     * Changes the current rendering backend.
+     * aCanvasType is the new rendering backend type.
+     * @return true if any kind of GAL canvas is used.
+     */
+    virtual bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     /**
      * Function IsGalCanvasActive

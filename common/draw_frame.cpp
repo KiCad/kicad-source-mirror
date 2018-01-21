@@ -1191,6 +1191,20 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 }
 
 
+bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+{
+    auto galCanvas = GetGalCanvas();
+    wxCHECK( galCanvas, false );
+    bool use_gal = galCanvas->SwitchBackend( aCanvasType );
+    use_gal &= aCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    UseGalCanvas( use_gal );
+    m_canvasType = use_gal ? aCanvasType : EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    m_canvasTypeDirty = true;
+
+    return use_gal;
+}
+
+
 EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting() const
 {
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;

@@ -1006,18 +1006,6 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
 }
 
 
-bool PCB_BASE_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
-{
-    bool use_gal = GetGalCanvas()->SwitchBackend( aCanvasType );
-    use_gal &= aCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    UseGalCanvas( use_gal );
-    m_canvasType = use_gal ? aCanvasType : EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    m_canvasTypeDirty = true;
-
-    return use_gal;
-}
-
-
 void PCB_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
 {
     wxMenuBar* menuBar = GetMenuBar();

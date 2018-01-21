@@ -90,9 +90,9 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnSwitchCanvas )
 
     // menu Postprocess
     EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
@@ -538,37 +538,22 @@ void GERBVIEW_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 }
 
 
-void GERBVIEW_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+void GERBVIEW_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
-    bool use_gal = false;
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-
     switch( aEvent.GetId() )
     {
     case ID_MENU_CANVAS_LEGACY:
+        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
         break;
 
     case ID_MENU_CANVAS_CAIRO:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-
-        if( use_gal )
-            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         break;
 
     case ID_MENU_CANVAS_OPENGL:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-        if( use_gal )
-            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
         break;
     }
-
-    UseGalCanvas( use_gal );
-    wxUpdateUIEvent e;
-    OnUpdateSwitchCanvas( e );
-
-    m_canvasType = canvasType;
-    m_canvasTypeDirty = true;
 }
 
 

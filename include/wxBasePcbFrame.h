@@ -687,11 +687,6 @@ public:
     virtual void UseGalCanvas( bool aEnable ) override;
 
     /**
-     * switches currently used canvas (default / Cairo / OpenGL).
-     */
-    bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
-
-    /**
      * Update UI called when switches currently used canvas (default / Cairo / OpenGL).
      */
     void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
