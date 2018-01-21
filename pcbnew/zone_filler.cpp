@@ -282,7 +282,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx.
      * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
-     * s_Correction is 1 /cos( PI/s_CircleToSegmentsCount  )
+     * correctionFactor is 1 /cos( PI/s_CircleToSegmentsCount  )
      */
     correctionFactor = 1.0 / cos( M_PI / (double) segsPerCircle );
 

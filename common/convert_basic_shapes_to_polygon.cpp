@@ -74,6 +74,12 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     // so, later, we will clamp the polygonal shape with the bounding box
     // of the segment.
     int     radius  = aWidth / 2;
+
+    // Note if we want to compensate the radius reduction of a circle due to
+    // the segment approx, aCorrectionFactor must be calculated like this:
+    // For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
+    // aCorrectionFactor is 1 /cos( PI/s_CircleToSegmentsCount  )
+
     radius = radius * aCorrectionFactor;    // make segments outside the circles
 
     // end point is the coordinate relative to aStart

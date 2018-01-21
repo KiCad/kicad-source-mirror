@@ -510,8 +510,8 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         break;
 
     case S_SEGMENT:
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_Start, m_End,
-                                              aCircleToSegmentsCount, linewidth );
+        TransformOvalClearanceToPolygon( aCornerBuffer, m_Start, m_End, linewidth,
+                                         aCircleToSegmentsCount, aCorrectionFactor );
         break;
 
     case S_POLYGON:
@@ -589,9 +589,9 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
  * to the real clearance value (usually near from 1.0)
  */
 void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                   int                      aClearanceValue,
-                                                   int                      aCircleToSegmentsCount,
-                                                   double                   aCorrectionFactor ) const
+                                                   int  aClearanceValue,
+                                                   int  aCircleToSegmentsCount,
+                                                   double aCorrectionFactor ) const
 {
     switch( Type() )
     {
@@ -604,10 +604,10 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         break;
 
     default:
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              m_Start, m_End,
-                                              aCircleToSegmentsCount,
-                                              m_Width + ( 2 * aClearanceValue) );
+        TransformOvalClearanceToPolygon( aCornerBuffer, m_Start, m_End,
+                                         m_Width + ( 2 * aClearanceValue),
+                                         aCircleToSegmentsCount,
+                                         aCorrectionFactor );
         break;
     }
 }
