@@ -1180,6 +1180,10 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
 
         auto cursorPosition = viewCtrls->GetCursorPosition( false );
 
+        // Set a reference point so InteractiveEdit will move it to the
+        // cursor before waiting for mouse move events
+        m_selection.SetReferencePoint( module->GetPosition() );
+
         // Place event on module origin first, so the generic anchor snap
         // doesn't just choose the closest pin for us
         viewCtrls->ForceCursorPosition( true, module->GetPosition() );
