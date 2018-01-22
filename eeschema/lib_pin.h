@@ -335,9 +335,11 @@ public:
      * parts or body styles in the component.  See SetCommonToAllParts()
      * and SetCommonToAllBodyStyles() for more information.
      *
-     * @param aEnable True marks all common pins for editing mode.  False
+     * @param aEnable = true marks all common pins for editing mode.  False
      *                clears the editing mode.
-     * @param aEditPinByPin Enables the edit pin by pin mode.
+     * @param aEditPinByPin == true enables the edit pin by pin mode.
+     * aEditPinByPin == false enables the pin edition coupling between pins at the same location
+     * if aEnable == false, aEditPinByPin is not used
      */
     void EnableEditMode( bool aEnable, bool aEditPinByPin = false );
 

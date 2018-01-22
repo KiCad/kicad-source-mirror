@@ -1075,6 +1075,9 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
+
+    // Ensure pin editind can be coupled for multi unitz
+    m_editPinsSeparately = aPart && aPart->IsMulti() && aPart->UnitsLocked();
 }
 
 

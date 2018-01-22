@@ -171,7 +171,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     LastPinCommonUnit = dlg.GetAddToAllParts();
     LastPinVisible = dlg.GetVisible();
 
-    pin->EnableEditMode( true, m_editPinsSeparately );
+    pin->EnableEditMode( true, SynchronizePins()? false : true );
     pin->SetName( dlg.GetPinName() );
     pin->SetNameTextSize( GetLastPinNameSize() );
     pin->SetNumber( dlg.GetPadName() );
@@ -199,7 +199,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         m_canvas->Refresh();
     }
 
-    pin->EnableEditMode( false, m_editPinsSeparately );
+    pin->EnableEditMode( false );
 
     // Restore pin flags, that can be changed by the dialog editor
     pin->ClearFlags();

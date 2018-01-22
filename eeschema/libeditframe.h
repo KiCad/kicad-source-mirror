@@ -91,6 +91,10 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
      * regardless other pins at the same location.
      * This requires the user to open each part or body style to make changes
      * to the other pins at the same location.
+     * To know if others pins must be coupled when editing a pin, use
+     * SynchronizePins() instead of m_editPinsSeparately, because SynchronizePins()
+     * is more reliable (takes in account the fact units are interchangeable,
+     * there are more than one unit )
      */
     bool m_editPinsSeparately;
 
