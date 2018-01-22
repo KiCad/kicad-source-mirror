@@ -32,12 +32,12 @@
 #include <memory>
 #include <wx/arrstr.h>
 #include <lib_manager_adapter.h>
+#include <class_sch_screen.h>
 
 class LIB_ALIAS;
 class LIB_PART;
 class LIB_BUFFER;
 class PART_LIB;
-class SCH_SCREEN;
 class SCH_PLUGIN;
 class LIB_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
@@ -289,7 +289,7 @@ private:
     class PART_BUFFER
     {
     public:
-        PART_BUFFER( LIB_PART* aPart = nullptr, SCH_SCREEN* aScreen = nullptr );
+        PART_BUFFER( LIB_PART* aPart = nullptr, std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
         ~PART_BUFFER();
 
         LIB_PART* GetPart() const { return m_part; }
@@ -299,13 +299,26 @@ private:
         void SetOriginal( LIB_PART* aPart );
 
         bool IsModified() const;
-        SCH_SCREEN* GetScreen() const { return m_screen; }
+        SCH_SCREEN* GetScreen() const { return m_screen.get(); }
+
+        ///> Transfer the screen ownership
+        std::unique_ptr<SCH_SCREEN> RemoveScreen()
+        {
+            return std::move( m_screen );
+        }
+
+        bool SetScreen( std::unique_ptr<SCH_SCREEN> aScreen )
+        {
+            bool ret = !!m_screen;
+            m_screen = std::move( aScreen );
+            return ret;
+        }
 
         typedef std::shared_ptr<PART_BUFFER> PTR;
         typedef std::weak_ptr<PART_BUFFER> WEAK_PTR;
 
     private:
-        SCH_SCREEN* m_screen;
+        std::unique_ptr<SCH_SCREEN> m_screen;
 
         ///> Working copy
         LIB_PART* m_part;

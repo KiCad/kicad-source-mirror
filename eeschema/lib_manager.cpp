@@ -378,14 +378,17 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAli
     wxCHECK( partBuf, false );
 
     LIB_PART* original = new LIB_PART( *partBuf->GetOriginal() );
+    // Save the screen object, so it is transferred to the new buffer
+    std::unique_ptr<SCH_SCREEN> screen = partBuf->RemoveScreen();
 
     if( !libBuf.DeleteBuffer( partBuf ) )
         return false;
 
-    if( !UpdatePart( aPart, aLibrary ))
+    if( !UpdatePart( aPart, aLibrary ) )
         return false;
 
     partBuf = libBuf.GetBuffer( aPart->GetName() );
+    partBuf->SetScreen( std::move( screen ) );
     wxCHECK( partBuf, false );
     partBuf->SetOriginal( original ); // part buffer takes ownership of pointer
 
@@ -638,8 +641,8 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
 }
 
 
-LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, SCH_SCREEN* aScreen )
-    : m_screen( aScreen ), m_part( aPart )
+LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCREEN> aScreen )
+    : m_screen( std::move( aScreen ) ), m_part( aPart )
 {
     m_original = new LIB_PART( *aPart );
 }
@@ -647,7 +650,6 @@ LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, SCH_SCREEN* aScreen )
 
 LIB_MANAGER::PART_BUFFER::~PART_BUFFER()
 {
-    delete m_screen;
     delete m_part;
     delete m_original;
 }
@@ -692,7 +694,8 @@ bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen
 {
     wxASSERT( m_aliases.count( aCopy->GetName() ) == 0 );   // only for new parts
     wxASSERT( aCopy->GetLib() == nullptr );
-    auto partBuf = std::make_shared<PART_BUFFER>( aCopy, aScreen );
+    std::unique_ptr<SCH_SCREEN> screen( aScreen );
+    auto partBuf = std::make_shared<PART_BUFFER>( aCopy, std::move( screen ) );
     m_parts.push_back( partBuf );
     addAliases( partBuf );
 
