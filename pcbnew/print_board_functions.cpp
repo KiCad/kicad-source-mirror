@@ -136,6 +136,11 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     displ_opts->m_DisplayPadFill = true;
     displ_opts->m_DisplayViaFill = true;
 
+    // Set all board layers as visible, because the print dialog has itself
+    // a layer selection, that have priority over the layer manager setup
+    LSET save_visible_brd_layers = Pcb->GetVisibleLayers();
+    Pcb->SetVisibleLayers( LSET::AllLayersMask() );
+
     if( !( aPrintMask & LSET::AllCuMask() ).any() )
     {
         if( onePagePerLayer )
@@ -303,7 +308,9 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     m_canvas->SetPrintMirrored( false );
 
+    // Restore settings:
     *displ_opts = save_opt;
+    Pcb->SetVisibleLayers( save_visible_brd_layers );
     GetScreen()->m_Active_Layer = activeLayer;
 
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, nctmp );
