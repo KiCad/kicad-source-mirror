@@ -289,6 +289,7 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
     }
 
     GetGerberLayout()->GetImagesList()->DeleteAllImages();
+    delete m_gerberLayout;
 }
 
 
