@@ -166,7 +166,7 @@ bool WIZARD_FPLIB_TABLE::LIBRARY::Test()
         return false;
     }
 
-    PLUGIN* p = IO_MGR::PluginFind( *m_plugin );
+    std::unique_ptr<PLUGIN> p( IO_MGR::PluginFind( *m_plugin ) );
     wxArrayString footprints;
 
     if( !p )
