@@ -309,17 +309,22 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& eve
 }
 
 
-/* Add a new name to the alias list box
- *  New name cannot be the root name, and must not exists
- */
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::EditAliasOfPart( wxCommandEvent& aEvent )
 {
-    wxString  aliasname;
-    LIB_PART* component = m_Parent->GetCurPart();
-    wxString  library = m_Parent->GetCurLib();
+    int sel = m_PartAliasListCtrl->GetSelection();
 
-    if( component == NULL )
+    if( sel == wxNOT_FOUND )
         return;
+
+    wxString aliasname = m_PartAliasListCtrl->GetString( sel );
+
+    if( aliasname.CmpNoCase( m_Parent->GetAliasName() ) == 0 )
+    {
+        wxString msg;
+        msg.Printf( _( "Current alias \"%s\" cannot be edited." ), GetChars( aliasname ) );
+        DisplayError( this, msg );
+        return;
+    }
 
     wxTextEntryDialog dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
 
@@ -327,49 +332,75 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
         return; // cancelled by user
 
     aliasname = dlg.GetValue( );
-
     aliasname.Replace( wxT( " " ), wxT( "_" ) );
 
+    if( checkNewAlias( aliasname) )
+        m_PartAliasListCtrl->SetString( sel, aliasname );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
+{
+    wxString  aliasname;
+
+    wxTextEntryDialog dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    aliasname = dlg.GetValue( );
+    aliasname.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( checkNewAlias( aliasname ) )
+        m_PartAliasListCtrl->Append( aliasname );
+}
+
+
+bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::checkNewAlias( wxString aliasname )
+{
     if( aliasname.IsEmpty() )
-        return;
+        return false;
 
     if( m_PartAliasListCtrl->FindString( aliasname ) != wxNOT_FOUND )
     {
         wxString msg;
         msg.Printf( _( "Alias \"%s\" already exists." ), GetChars( aliasname ) );
         DisplayInfoMessage( this, msg );
-        return;
+        return false;
     }
+
+    wxString  library = m_Parent->GetCurLib();
 
     if( !library.empty() && Prj().SchSymbolLibTable()->LoadSymbol( library, aliasname ) != NULL )
     {
         wxString msg;
         msg.Printf( _( "Symbol name \"%s\" already exists in library \"%s\"." ), aliasname, library );
         DisplayErrorMessage( this, msg );
-        return;
+        return false;
     }
 
-    m_PartAliasListCtrl->Append( aliasname );
+    return true;
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& event )
 {
-    wxString aliasname = m_PartAliasListCtrl->GetStringSelection();
+    int sel = m_PartAliasListCtrl->GetSelection();
 
-    if( aliasname.IsEmpty() )
+    if( sel == wxNOT_FOUND )
         return;
+
+    wxString aliasname = m_PartAliasListCtrl->GetString( sel );
 
     if( aliasname.CmpNoCase( m_Parent->GetAliasName() ) == 0 )
     {
         wxString msg;
-        msg.Printf( _( "Alias \"%s\" cannot be removed while it is being edited!" ),
-                    GetChars( aliasname ) );
+        msg.Printf( _( "Current alias \"%s\" cannot be removed." ), GetChars( aliasname ) );
         DisplayError( this, msg );
         return;
     }
 
-    m_PartAliasListCtrl->Delete( m_PartAliasListCtrl->GetSelection() );
+    m_PartAliasListCtrl->Delete( sel );
 }
 
 

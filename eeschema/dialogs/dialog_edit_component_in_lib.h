@@ -54,7 +54,9 @@ private:
     void OnOkClick(wxCommandEvent& event) override;
     void DeleteAllAliasOfPart(wxCommandEvent& event) override;
     void DeleteAliasOfPart(wxCommandEvent& event) override;
+    void EditAliasOfPart(wxCommandEvent& event) override;
     void AddAliasOfPart(wxCommandEvent& event) override;
+    bool checkNewAlias( wxString aliasname );
     bool ChangeNbUnitsPerPackage(int newUnit);
     bool SetUnsetConvert();
     void CopyDocFromRootToAlias(wxCommandEvent& event) override;

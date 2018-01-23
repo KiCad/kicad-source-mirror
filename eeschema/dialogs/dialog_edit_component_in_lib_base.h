@@ -80,6 +80,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextAlias;
 		wxListBox* m_PartAliasListCtrl;
 		wxButton* m_ButtonAddeAlias;
+		wxButton* m_ButtonEditAlias;
 		wxButton* m_ButtonDeleteOneAlias;
 		wxButton* m_ButtonDeleteAllAlias;
 		wxPanel* m_PanelFootprintFilter;
@@ -98,6 +99,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		virtual void CopyDocFromRootToAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void BrowseAndSelectDocFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void AddAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EditAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DeleteAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DeleteAllAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
 		virtual void AddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
