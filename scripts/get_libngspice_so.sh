@@ -20,7 +20,7 @@ case "${OSTYPE}" in
 
     "darwin"*)      # OS X
         # ngspice requires bison 2.7, the one in /usr/bin is 2.3
-        export PATH="/usr/local/Cellar/bison/3.0.4/bin:${PATH}"
+        export PATH="$(find /usr/local/Cellar/bison -name bin):${PATH}"
         ;;
 
     "mingw"*)
