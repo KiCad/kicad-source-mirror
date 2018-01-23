@@ -175,57 +175,31 @@ private:
     }
 
 
-    std::list<hed::EDGE_PTR> computeTriangulation( std::vector<hed::NODE_PTR>& aNodes )
+    // Checks if all nodes in aNodes lie on a single line. Requires the nodes to
+    // have unique coordinates!
+    bool areNodesColinear( const std::vector<hed::NODE_PTR>& aNodes ) const
     {
-        #if 0
-        bool refresh = false;
-        // we assume aNodes are sorted
-        VECTOR2I prevDelta;
+        if ( aNodes.size() <= 2 )
+            return true;
 
-        if ( aNodes.size() == m_prevNodes.size() )
+        const auto p0 = aNodes[0]->Pos();
+        const auto v0 = aNodes[1]->Pos() - p0;
+
+        for( int i = 2; i < aNodes.size(); i++ )
         {
-            for ( int i = 0; i < aNodes.size(); i++ )
+            const auto v1 = aNodes[i]->Pos() - p0;
+
+            if( v0.Cross( v1 ) != 0 )
             {
-                const auto& a = aNodes[i];
-                const auto& b = m_prevNodes[i];
-
-                const auto delta = a->Pos() - b;
-
-                if ( i > 0 && delta != prevDelta )
-                {
-                    refresh = true;
-                    break;
-                }
-
-                prevDelta = delta;
+                return false;
             }
         }
 
-        if( refresh )
-        {
-            m_prevNodes.resize( aNodes.size() );
+        return true;
+    }
 
-            for ( int i = 0; i < aNodes.size(); i++ )
-            {
-                m_prevNodes[i] = aNodes[i]->Pos();
-            }
-
-            printf("need triang refresh\n");
-            auto edges = hedTriangulation( aNodes );
-
-            m_prevEdges.resize( edges.size() );
-
-            int i = 0;
-            for ( auto e : edges )
-            {
-                m_prevEdges[i].first = e->GetSourceNode()->Id();
-                m_prevEdges[i].second = e->GetTargetNode()->Id();
-            }
-
-        }
-
-
-        #endif
+    const std::list<hed::EDGE_PTR> computeTriangulation( std::vector<hed::NODE_PTR>& aNodes )
+    {
         return hedTriangulation( aNodes );
     }
 
@@ -280,6 +254,7 @@ public:
             if( !prev || prev->Pos() != n->Pos() )
             {
                 auto tn = std::make_shared<hed::NODE> ( n->Pos().x, n->Pos().y );
+
                 tn->SetId( id );
                 triNodes.push_back( tn );
             }
@@ -305,17 +280,22 @@ public:
         {
             return mstEdges;
         }
-        else if( triNodes.size() == 2 )
+        else if( areNodesColinear( triNodes ) )
         {
-            auto src = m_allNodes[ triNodes[0]->Id() ];
-            auto dst = m_allNodes[ triNodes[1]->Id() ];
-            mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
+            // special case: all nodes are on the same line - there's no
+            // triangulation for such set. In this case, we sort along any coordinate
+            // and chain the nodes together.
+            for(int i = 0; i < triNodes.size() - 1; i++ )
+            {
+                auto src = m_allNodes[ triNodes[i]->Id() ];
+                auto dst = m_allNodes[ triNodes[i + 1]->Id() ];
+                mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
+            }
         }
         else
         {
             hed::TRIANGULATION triangulator;
             triangulator.CreateDelaunay( triNodes.begin(), triNodes.end() );
-//            std::list<hed::EDGE_PTR> edges;
             triangulator.GetEdges( triangEdges );
 
             for( auto e : triangEdges )
