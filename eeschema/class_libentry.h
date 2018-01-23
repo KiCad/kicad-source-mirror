@@ -579,12 +579,11 @@ public:
      * @param aRect - The bounding rectangle to test in draw items are inside.
      * @param aUnit - The current unit number to test against.
      * @param aConvert - Are the draw items being selected a conversion.
-     * @param aEditPinByPin - Used to ignore pin selections when in edit pin
-     *                        by pin mode is enabled.
+     * @param aSyncPinEdit - Enable pin selection in other units.
      * @return The number of draw objects found inside the block select
      *         rectangle.
      */
-    int SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditPinByPin );
+    int SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aSyncPinEdit );
 
     /**
      * Clears all the draw items marked by a block select.

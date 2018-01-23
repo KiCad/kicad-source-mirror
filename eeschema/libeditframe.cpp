@@ -124,7 +124,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
-    EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
@@ -186,7 +186,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY, LIB_EDIT_FRAME::OnUpdateSaveLib )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY_AS, LIB_EDIT_FRAME::OnUpdateSaveLibAs )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
-    EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::OnUpdatePinByPin )
+    EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnUpdateSelectAlias )
@@ -211,7 +211,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
     m_hotkeysDescrList    = g_Libedit_Hokeys_Descr;
-    m_editPinsSeparately = false;
+    m_syncPinEdit         = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
     SetShowElectricalType( true );
 
@@ -620,13 +620,11 @@ void LIB_EDIT_FRAME::OnUpdateViewDoc( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
+void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 {
-    LIB_PART*      part = GetCurPart();
-
-    event.Enable( part && part->GetUnitCount() > 1 && !part->UnitsLocked() );
-
-    event.Check( m_editPinsSeparately );
+    LIB_PART* part = GetCurPart();
+    event.Enable( part && part->IsMulti() && !part->UnitsLocked() );
+    event.Check( m_syncPinEdit );
 }
 
 
@@ -811,8 +809,8 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_CANCEL_EDITING:
         break;
 
-    case ID_LIBEDIT_EDIT_PIN_BY_PIN:
-        m_editPinsSeparately = m_mainToolBar->GetToolToggled( ID_LIBEDIT_EDIT_PIN_BY_PIN );
+    case ID_LIBEDIT_SYNC_PIN_EDIT:
+        m_syncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
         break;
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
@@ -1076,8 +1074,8 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
 
-    // Ensure pin editind can be coupled for multi unitz
-    m_editPinsSeparately = aPart && aPart->IsMulti() && aPart->UnitsLocked();
+    // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
+    m_syncPinEdit = aPart && aPart->IsMulti() && !aPart->UnitsLocked();
 }
 
 
@@ -1148,8 +1146,8 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     // to the best value
     if( partLocked != GetCurPart()->UnitsLocked() )
     {
-        // m_editPinsSeparately is set to the better value
-        m_editPinsSeparately = GetCurPart()->UnitsLocked() ? true : false;
+        // Enable synchronized pin edit mode for symbols with interchangeable units
+        m_syncPinEdit = !GetCurPart()->UnitsLocked();
         // also set default edit options to the better value
         // Usually if units are locked, graphic items are specific to each unit
         // and if units are interchangeable, graphic items are common to units
@@ -1512,9 +1510,9 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 
 bool LIB_EDIT_FRAME::SynchronizePins()
 {
-    LIB_PART*      part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
-    return !m_editPinsSeparately && part && part->IsMulti() && !part->UnitsLocked();
+    return m_syncPinEdit && part && part->IsMulti() && !part->UnitsLocked();
 }
 
 

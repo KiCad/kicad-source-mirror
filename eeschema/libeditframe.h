@@ -83,20 +83,20 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
      * Therefore deleting, moving pins are made for all pins at the same location
      * When units are interchangeable, synchronizing edition of pins is usually
      * the best way, because if units are interchangeable, it imply all similar
-     * pins are on the same location
+     * pins are on the same location.
      * When units are non interchangeable, do not synchronize edition of pins, because
-     * each part is specific, and there are no similar pins between units
+     * each part is specific, and there are no similar pins between units.
      *
      * Setting this to false allows editing each pin per part or body style
      * regardless other pins at the same location.
      * This requires the user to open each part or body style to make changes
      * to the other pins at the same location.
      * To know if others pins must be coupled when editing a pin, use
-     * SynchronizePins() instead of m_editPinsSeparately, because SynchronizePins()
+     * SynchronizePins() instead of m_syncPinEdit, because SynchronizePins()
      * is more reliable (takes in account the fact units are interchangeable,
-     * there are more than one unit )
+     * there are more than one unit).
      */
-    bool m_editPinsSeparately;
+    bool m_syncPinEdit;
 
     /**
      * the option to show the pin electrical name in the component editor
@@ -344,7 +344,7 @@ public:
     void OnUpdateSaveLib( wxUpdateUIEvent& event );
     void OnUpdateSaveLibAs( wxUpdateUIEvent& event );
     void OnUpdateViewDoc( wxUpdateUIEvent& event );
-    void OnUpdatePinByPin( wxUpdateUIEvent& event );
+    void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePinTable( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );

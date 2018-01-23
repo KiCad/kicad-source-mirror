@@ -130,7 +130,8 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     if( aConvert > 0 )
         m_convert = aConvert;
 
-    m_editPinsSeparately = GetCurPart()->UnitsLocked() ? true : false;
+    // Enable synchronized pin edit mode for symbols with interchangeable units
+    m_syncPinEdit = !GetCurPart()->UnitsLocked();
 
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );

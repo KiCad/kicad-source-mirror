@@ -124,7 +124,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         if( GetCurPart() )
             ItemCount = GetCurPart()->SelectItems( *block,
                                                   m_unit, m_convert,
-                                                  m_editPinsSeparately );
+                                                  m_syncPinEdit );
         if( ItemCount )
         {
             nextCmd = true;
@@ -151,7 +151,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     case BLOCK_CUT:
         if( GetCurPart() )
             ItemCount = GetCurPart()->SelectItems( *block, m_unit, m_convert,
-                                                  m_editPinsSeparately );
+                                                  m_syncPinEdit );
 
         if( ItemCount )
         {
@@ -176,7 +176,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         if( GetCurPart() )
             ItemCount = GetCurPart()->SelectItems( *block,
                                                   m_unit, m_convert,
-                                                  m_editPinsSeparately );
+                                                  m_syncPinEdit );
         if( ItemCount )
             SaveCopyInUndoList( GetCurPart() );
 
@@ -200,7 +200,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         if( GetCurPart() )
             ItemCount = GetCurPart()->SelectItems( *block,
                                                   m_unit, m_convert,
-                                                  m_editPinsSeparately );
+                                                  m_syncPinEdit );
         if( ItemCount )
             SaveCopyInUndoList( GetCurPart() );
 

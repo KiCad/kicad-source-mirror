@@ -925,7 +925,7 @@ void LIB_PART::ClearStatus()
 }
 
 
-int LIB_PART::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditPinByPin )
+int LIB_PART::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aSyncPinEdit )
 {
     int itemCount = 0;
 
@@ -939,8 +939,11 @@ int LIB_PART::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditP
             if( item.Type() != LIB_PIN_T )
                 continue;
 
-             // Specific rules for pins.
-            if( aEditPinByPin || m_unitsLocked
+             // Specific rules for pins:
+             // - do not select pins in other units when synchronized pin edit mode is disabled
+             // - do not select pins in other units when units are not interchangeable
+             // - in other cases verify if the pin belongs to the requested unit
+            if( !aSyncPinEdit || m_unitsLocked
                 || ( item.m_Convert && item.m_Convert != aConvert ) )
                 continue;
         }

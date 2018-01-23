@@ -205,13 +205,10 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     KiScaledSeparator( m_mainToolBar, this );
-    msg = _( "Allows disabling pin edition coupling between units.\n"
-             "When not disabled, adding, deleting and moving pins are synchronized\n"
-             "between units for pins at the same location.\n"
-             "For instance, adding a pin to a unit also add a similar pin to other units at the same location.\n"
-             "However, pins can have a different number or size because they are specific to a unit.\n"
-             "Usually synchronization is enabled when units are interchangeable and disabled if not." );
-    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, KiScaledBitmap( pin2pin_xpm, this ),
+    msg = _( "Synchronized pin edit mode\n"
+             "Synchronized pin edit mode propagates all pin changes to other units.\n"
+             "Normally enabled for multiunit parts with interchangeable units." );
+    m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString, KiScaledBitmap( pin2pin_xpm, this ),
                             msg, wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiScaledBitmap( pin_table_xpm, this ),
                             _( "Show pin table" ) );

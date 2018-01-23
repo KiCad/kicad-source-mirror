@@ -209,7 +209,7 @@ enum id_eeschema_frm
     /* Library editor horizontal toolbar IDs. */
     ID_DE_MORGAN_NORMAL_BUTT,
     ID_DE_MORGAN_CONVERT_BUTT,
-    ID_LIBEDIT_EDIT_PIN_BY_PIN,
+    ID_LIBEDIT_SYNC_PIN_EDIT,
     ID_LIBEDIT_EDIT_PIN_BY_TABLE,
     ID_LIBEDIT_VIEW_DOC,
     ID_LIBEDIT_CHECK_PART,
