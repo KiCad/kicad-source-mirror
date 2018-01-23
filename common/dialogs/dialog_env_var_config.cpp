@@ -188,7 +188,7 @@ bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvV
 
 void DIALOG_ENV_VAR_CONFIG::OnAddButton( wxCommandEvent& event )
 {
-    DIALOG_ENV_VAR_SINGLE dlg( this, wxEmptyString, wxEmptyString );
+    DIALOG_ENV_VAR_SINGLE dlg( nullptr, wxEmptyString, wxEmptyString );
 
     if( dlg.ShowModal() == wxID_OK )
     {
