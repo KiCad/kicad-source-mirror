@@ -219,18 +219,16 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
 void LIB_EDIT_FRAME::PlaceAnchor()
 {
-    if( LIB_PART*      part = GetCurPart() )
+    if( LIB_PART* part = GetCurPart() )
     {
         const wxPoint& cross_hair = GetCrossHairPosition();
 
         wxPoint offset( -cross_hair.x, cross_hair.y );
-
-        OnModify( );
-
         part->SetOffset( offset );
+        OnModify();
 
         // Redraw the symbol
-        RedrawScreen( wxPoint( 0 , 0 ), true );
+        RedrawScreen( wxPoint( 0, 0 ), true );
         m_canvas->Refresh();
     }
 }
