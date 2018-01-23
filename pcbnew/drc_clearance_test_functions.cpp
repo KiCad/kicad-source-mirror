@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1044,55 +1044,63 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         /* an oval is a complex shape, but is a rectangle and 2 circles
          * these 3 basic shapes are more easy to test.
          *
-         * In calculations we are using a vertical oval shape
-         * (i.e. a vertical rounded segment)
-         * for horizontal oval shapes, swap x and y size and rotate the shape
+         * In calculations we are using a vertical or horizontal oval shape
+         * (i.e. a vertical or horizontal rounded segment)
          */
-        if( padHalfsize.x > padHalfsize.y )
+        wxPoint cstart = m_padToTestPos;
+        wxPoint cend = m_padToTestPos;   // center of each circle
+        int delta = std::abs( padHalfsize.y - padHalfsize.x );
+        int radius = std::min( padHalfsize.y, padHalfsize.x );
+
+        if( padHalfsize.x > padHalfsize.y ) // horizontal equivalent segment
         {
-            std::swap( padHalfsize.x, padHalfsize.y );
-            orient = AddAngles( orient, 900 );
+            cstart.x -= delta;
+            cend.x += delta;
+            // Build the rectangular clearance area between the two circles
+            // the rect starts at cstart.x and ends at cend.x and its height
+            // is (radius + distToLine)*2
+            m_xcliplo = cstart.x;
+            m_ycliplo = cstart.y - radius - distToLine;
+            m_xcliphi = cend.x;
+            m_ycliphi = cend.y + radius + distToLine;
+        }
+        else    // vertical equivalent segment
+        {
+            cstart.y -= delta;
+            cend.y += delta;
+            // Build the rectangular clearance area between the two circles
+            // the rect starts at cstart.y and ends at cend.y and its width
+            // is (radius + distToLine)*2
+            m_xcliplo = cstart.x - distToLine - radius;
+            m_ycliplo = cstart.y;
+            m_xcliphi = cend.x + distToLine +radius;
+            m_ycliphi = cend.y;
         }
 
-        // here, padHalfsize.x is the radius of rounded ends.
-
-        int deltay = padHalfsize.y - padHalfsize.x;
-        // here: padHalfsize.x = radius,
-        // deltay = dist between the centre pad and the centre of a rounded end
-
-        // Test the rectangular area between the two circles (the rounded ends)
-        m_xcliplo = m_padToTestPos.x - distToLine - padHalfsize.x;
-        m_ycliplo = m_padToTestPos.y - deltay;
-        m_xcliphi = m_padToTestPos.x + distToLine + padHalfsize.x;
-        m_ycliphi = m_padToTestPos.y + deltay;
-
+        // Test the rectangular clearance area between the two circles (the rounded ends)
         if( !checkLine( startPoint, endPoint ) )
         {
             return false;
         }
 
-        // test the first circle
-        startPoint.x = m_padToTestPos.x;         // startPoint = centre of the upper circle of the oval shape
-        startPoint.y = m_padToTestPos.y + deltay;
-
+        // test the first end
         // Calculate the actual position of the circle, given the pad orientation:
-        RotatePoint( &startPoint, m_padToTestPos, orient );
+        RotatePoint( &cstart, m_padToTestPos, orient );
 
-        // Calculate the actual position of the circle in the new X,Y axis:
-        RotatePoint( &startPoint, m_segmAngle );
+        // Calculate the actual position of the circle in the new X,Y axis, relative
+        // to the segment:
+        RotatePoint( &cstart, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, padHalfsize.x + distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( cstart, radius + distToLine, m_segmLength ) )
         {
             return false;
         }
 
-        // test the second circle
-        startPoint.x = m_padToTestPos.x;         // startPoint = centre of the lower circle of the oval shape
-        startPoint.y = m_padToTestPos.y - deltay;
-        RotatePoint( &startPoint, m_padToTestPos, orient );
-        RotatePoint( &startPoint, m_segmAngle );
+        // test the second end
+        RotatePoint( &cend, m_padToTestPos, orient );
+        RotatePoint( &cend, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, padHalfsize.x + distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( cend, radius + distToLine, m_segmLength ) )
         {
             return false;
         }
