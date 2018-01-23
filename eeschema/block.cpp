@@ -127,6 +127,14 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
+        // If the block wasn't changed, don't update the schematic
+        if( block->GetMoveVector() == wxPoint( 0, 0 ) )
+        {
+            // This calls the block-abort command routine on cleanup
+            m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor() );
+            return;
+        }
+
         SaveCopyInUndoList( block->GetItems(), UR_CHANGED, false, block->GetMoveVector() );
         MoveItemsInList( block->GetItems(), block->GetMoveVector() );
         break;
@@ -252,6 +260,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
+                block->SetFlags( IS_MOVED );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );

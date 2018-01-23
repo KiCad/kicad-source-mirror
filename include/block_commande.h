@@ -169,6 +169,16 @@ public:
     }
 
     /**
+     * Function SetFlags
+     * sets a status flag on each item in a block selector.
+     */
+    void SetFlags( const STATUS_FLAGS aFlag )
+    {
+        for( unsigned i = 0; i < m_items.GetCount(); i++ )
+            m_items.GetPickedItem( i )->SetFlags( aFlag );
+    }
+
+    /**
      * Function IsDragging
      * returns true if the current block command is a drag operation.
      */

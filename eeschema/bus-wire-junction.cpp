@@ -270,7 +270,11 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 void SCH_EDIT_FRAME::GetSchematicConnections( std::vector< wxPoint >& aConnections )
 {
     for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
-        item->GetConnectionPoints( aConnections );
+    {
+        // Avoid items that are changing
+        if( !( item->GetFlags() & ( IS_DRAGGED | IS_MOVED | IS_DELETED ) ) )
+            item->GetConnectionPoints( aConnections );
+    }
 
     // We always have some overlapping connection points.  Drop duplicates here
     std::sort( aConnections.begin(), aConnections.end(),
@@ -452,7 +456,8 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
 
         // Don't remove wires that are already deleted, are currently being
         // dragged or are just created
-        if( item->GetFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_NEW ) )
+        if( item->GetFlags() &
+                ( STRUCT_DELETED | IS_DRAGGED | IS_NEW | IS_MOVED | SKIP_STRUCT ) )
             continue;
 
         if( item->Type() != SCH_LINE_T || item->GetLayer() != LAYER_WIRE )
