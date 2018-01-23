@@ -87,7 +87,6 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
                  KiBitmap( copy_xpm ) );
     AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Symbol" ),
                  KiBitmap( duplicate_xpm ) );
-    menuPart->AppendSeparator();
 
     // Menu displayed when nothing is selected
     std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
