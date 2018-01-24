@@ -706,6 +706,40 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
         export_vrml_arc( aModel, layer, x, y, x, y+r, w, 180.0 );
         break;
 
+    case S_POLYGON:
+        if( drawseg->IsPolyShapeValid() )
+        {
+            VRML_LAYER* vlayer;
+
+            if( !GetLayer( aModel, layer, &vlayer ) )
+                    break;
+
+            SHAPE_POLY_SET shape = drawseg->GetPolyShape();
+
+            const int circleSegmentsCount = 16;
+
+            if( drawseg->GetWidth() )
+            {
+                shape.Inflate( drawseg->GetWidth()/2, circleSegmentsCount );
+                shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            }
+
+            const SHAPE_LINE_CHAIN& outline = shape.COutline( 0 );
+
+            int seg = vlayer->NewContour();
+
+            for( int j = 0; j < outline.PointCount(); j++ )
+            {
+                if( !vlayer->AddVertex( seg, (double)outline.CPoint( j ).x * BOARD_SCALE,
+                                         -((double)outline.CPoint( j ).y * BOARD_SCALE ) ) )
+                    throw( std::runtime_error( vlayer->GetError() ) );
+
+            }
+
+            vlayer->EnsureWinding( seg, false );
+        }
+        break;
+
     default:
         export_vrml_line( aModel, layer, x, y, xf, yf, w );
         break;
@@ -1038,8 +1072,22 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
             if( !GetLayer( aModel, layer, &vl ) )
                 break;
 
-            std::vector<wxPoint> poly = aOutline->BuildPolyPointsList();
-            int nvert = poly.size() - 1;
+            SHAPE_POLY_SET shape = aOutline->GetPolyShape();
+
+            const int circleSegmentsCount = 16;
+
+            if( aOutline->GetWidth() )
+            {
+                shape.Inflate( aOutline->GetWidth()/2, circleSegmentsCount );
+                shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            }
+
+            shape.Rotate( -aModule->GetOrientationRadians(), VECTOR2I( 0, 0 ) );
+            shape.Move( aModule->GetPosition() );
+
+            const SHAPE_LINE_CHAIN& outline = shape.COutline( 0 );
+
+            int nvert = outline.PointCount() - 1;
             int i = 0;
 
             if( nvert < 3 ) break;
@@ -1051,11 +1099,8 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
 
             while( i < nvert )
             {
-                RotatePoint( &poly[i], aModule->GetOrientation() );
-                poly[i] += aModule->GetPosition();
-
-                x = poly[i].x * BOARD_SCALE;
-                y = - ( poly[i].y * BOARD_SCALE );
+                x = outline.CPoint( i ).x * BOARD_SCALE;
+                y = - ( outline.CPoint( i ).y * BOARD_SCALE );
 
                 if( !vl->AddVertex( seg, x, y ) )
                     throw( std::runtime_error( vl->GetError() ) );
