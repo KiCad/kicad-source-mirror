@@ -42,11 +42,14 @@
 #include <class_text_mod.h>
 #include <class_module.h>
 #include <class_pcb_target.h>
+#include <origin_viewitem.h>
 #include <project.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <menus_helpers.h>
+#include <tools/pcb_editor_control.h>
+#include <tools/pcbnew_control.h>
 
 
 /* Handle the left button mouse click, when a tool is active
@@ -427,17 +430,17 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
-        m_canvas->DrawAuxiliaryAxis( aDC, GR_XOR );
-        SetAuxOrigin( GetCrossHairPosition() );
-        m_canvas->DrawAuxiliaryAxis( aDC, GR_COPY );
-        OnModify();
+        PCB_EDITOR_CONTROL::SetDrillOrigin( GetGalCanvas()->GetView(), this,
+                                            new KIGFX::ORIGIN_VIEWITEM( GetAuxOrigin(), UR_TRANSIENT ),
+                                            GetCrossHairPosition() );
+        m_canvas->Refresh();
         break;
 
     case ID_PCB_PLACE_GRID_COORD_BUTT:
-        m_canvas->DrawGridAxis( aDC, GR_XOR, GetBoard()->GetGridOrigin() );
-        SetGridOrigin( GetCrossHairPosition() );
-        m_canvas->DrawGridAxis( aDC, GR_COPY, GetBoard()->GetGridOrigin() );
-        OnModify();
+        PCBNEW_CONTROL::SetGridOrigin( GetGalCanvas()->GetView(), this,
+                                       new KIGFX::ORIGIN_VIEWITEM( GetBoard()->GetGridOrigin(), UR_TRANSIENT ),
+                                       GetCrossHairPosition() );
+        m_canvas->Refresh();
         break;
 
     case ID_PCB_DRAW_VIA_BUTT:

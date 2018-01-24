@@ -41,6 +41,7 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoT
 
     // Clear current flags (which can be temporary set by a current edit command).
     CopyItem->ClearStatus();
+    CopyItem->SetFlags( CopyItem->GetFlags() | UR_TRANSIENT );
 
     ITEM_PICKER wrapper( CopyItem, undoType );
     lastcmd->PushItem( wrapper );
@@ -61,11 +62,13 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     ITEM_PICKER redoWrapper = redoCommand->PopItem();
     delete redoCommand;
     LIB_PART* part = (LIB_PART*) redoWrapper.GetItem();
+    part->SetFlags( part->GetFlags() & ~UR_TRANSIENT );
     UNDO_REDO_T undoRedoType = redoWrapper.GetStatus();
 
     // Store the current part in the undo buffer
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
     LIB_PART* oldPart = GetCurPart();
+    oldPart->SetFlags( oldPart->GetFlags() | UR_TRANSIENT );
     ITEM_PICKER undoWrapper( oldPart, undoRedoType );
     undoCommand->PushItem( undoWrapper );
     GetScreen()->PushCommandToUndoList( undoCommand );
@@ -112,11 +115,13 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     ITEM_PICKER undoWrapper = undoCommand->PopItem();
     delete undoCommand;
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
+    part->SetFlags( part->GetFlags() & ~UR_TRANSIENT );
     UNDO_REDO_T undoRedoType = undoWrapper.GetStatus();
 
     // Store the current part in the redo buffer
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
     LIB_PART* oldPart = GetCurPart();
+    oldPart->SetFlags( oldPart->GetFlags() | UR_TRANSIENT );
     ITEM_PICKER redoWrapper( oldPart, undoRedoType );
     redoCommand->PushItem( redoWrapper );
     GetScreen()->PushCommandToRedoList( redoCommand );

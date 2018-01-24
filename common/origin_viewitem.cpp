@@ -36,6 +36,15 @@ ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, in
 }
 
 
+ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const VECTOR2D& aPosition, STATUS_FLAGS flags ) :
+    BOARD_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD so it needs no type
+    m_size( NOT_USED ), m_color( UNSPECIFIED_COLOR ), m_style( NONE ), m_drawAtZero( false ),
+    m_position( aPosition )
+{
+    SetFlags( flags );
+}
+
+
 ORIGIN_VIEWITEM* ORIGIN_VIEWITEM::Clone() const
 {
     return new ORIGIN_VIEWITEM( m_color, m_style, m_size, m_position );

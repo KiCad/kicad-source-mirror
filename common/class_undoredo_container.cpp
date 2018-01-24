@@ -108,16 +108,16 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         ITEM_PICKER wrapper = PopItem();
         if( wrapper.GetItem() == NULL ) // No more item in list.
             break;
-        switch( wrapper.GetStatus() )
+
+        // The Link is an undo construct; it is always owned by the undo/redo container
+        if( wrapper.GetLink() )
+            delete wrapper.GetLink();
+
+        if( wrapper.GetFlags() & UR_TRANSIENT )
         {
-        case UR_UNSPECIFIED:
-            if( show_error_message )
-                wxMessageBox( wxT( "ClearListAndDeleteItems() error: UR_UNSPECIFIED command type" ) );
-
-            show_error_message = false;
-            break;
-
-        case UR_WIRE_IMAGE:
+            delete wrapper.GetItem();
+        }
+        else if( wrapper.GetStatus() == UR_WIRE_IMAGE )
         {
             // Specific to eeschema: a linked list of wires is stored.  The wrapper picks only
             // the first item (head of list), and is owner of all picked items.
@@ -131,34 +131,11 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
                 item = nextitem;
             }
         }
-        break;
-
-        case UR_MOVED:
-        case UR_FLIPPED:
-        case UR_MIRRORED_X:
-        case UR_MIRRORED_Y:
-        case UR_ROTATED:
-        case UR_ROTATED_CLOCKWISE:
-        case UR_NEW:        // Do nothing, items are in use, the picker is not owner of items
-            break;
-
-        case UR_CHANGED:
-        case UR_EXCHANGE_T:
-        case UR_DRILLORIGIN:
-        case UR_GRIDORIGIN:
-            delete wrapper.GetLink();   //  the picker is owner of this item
-            break;
-
-        case UR_DELETED:            // the picker is owner of this item
-        case UR_LIBEDIT:            // LIBEDIT and LIB_RENAME save a copy of the current item
-        case UR_LIB_RENAME:         //    so the picker is the owner of the picked item
+        else if( wrapper.GetStatus() == UR_DELETED )
+        {
+            // This should really be replaced with UR_TRANSIENT, but currently many clients
+            // (eeschema in particular) abuse this to achieve non-undo-related deletions.
             delete wrapper.GetItem();
-            break;
-
-        default:
-            wxFAIL_MSG( wxString::Format( wxT( "Cannot clear unknown undo/redo command %d" ),
-                                          wrapper.GetStatus() ) );
-            break;
         }
     }
 }

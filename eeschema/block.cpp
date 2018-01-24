@@ -454,11 +454,8 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
         /* Make a copy of the original picked item. */
         SCH_ITEM* copy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
         copy->SetParent( NULL );
-
-        // In list the wrapper is owner of the schematic item, we can use the UR_DELETED
-        // status for the picker because pickers with this status are owner of the picked item
-        // (or TODO ?: create a new status like UR_DUPLICATE)
-        ITEM_PICKER item( copy, UR_DELETED );
+        copy->SetFlags( copy->GetFlags() | UR_TRANSIENT );
+        ITEM_PICKER item( copy, UR_NEW );
 
         m_blockItems.PushItem( item );
     }

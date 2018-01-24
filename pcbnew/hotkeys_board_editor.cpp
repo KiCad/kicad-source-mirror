@@ -37,12 +37,14 @@
 #include <class_pcb_text.h>
 #include <class_pcb_target.h>
 #include <class_drawsegment.h>
+#include <origin_viewitem.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <class_zone.h>
 #include <tool/tool_manager.h>
+#include <tools/pcbnew_control.h>
 
 /* How to add a new hotkey:
  * see hotkeys.cpp
@@ -262,14 +264,16 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SET_GRID_ORIGIN:
-        SetGridOrigin( GetCrossHairPosition() );
-        OnModify();     // because grid origin is saved in board, show as modified
+        PCBNEW_CONTROL::SetGridOrigin( GetGalCanvas()->GetView(), this,
+                                       new KIGFX::ORIGIN_VIEWITEM( GetGridOrigin(), UR_TRANSIENT ),
+                                       GetCrossHairPosition() );
         m_canvas->Refresh();
         break;
 
     case HK_RESET_GRID_ORIGIN:
-        SetGridOrigin( wxPoint( 0,0 ) );
-        OnModify();     // because grid origin is saved in board, show as modified
+        PCBNEW_CONTROL::SetGridOrigin( GetGalCanvas()->GetView(), this,
+                                       new KIGFX::ORIGIN_VIEWITEM( GetGridOrigin(), UR_TRANSIENT ),
+                                       wxPoint( 0, 0 ) );
         m_canvas->Refresh();
         break;
 

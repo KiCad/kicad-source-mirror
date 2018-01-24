@@ -35,9 +35,11 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
+#include <origin_viewitem.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
+#include <tools/pcbnew_control.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
@@ -177,10 +179,10 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_PLACE_GRID_COORD:
-        m_canvas->DrawGridAxis( DC, GR_XOR, GetBoard()->GetGridOrigin() );
-        SetGridOrigin( GetCrossHairPosition() );
-        m_canvas->DrawGridAxis( DC, GR_COPY, GetBoard()->GetGridOrigin() );
-        GetScreen()->SetModify();
+        PCBNEW_CONTROL::SetGridOrigin( GetGalCanvas()->GetView(), this,
+                                       new KIGFX::ORIGIN_VIEWITEM( GetBoard()->GetGridOrigin(), UR_TRANSIENT ),
+                                       GetCrossHairPosition() );
+        m_canvas->Refresh();
         break;
 
     case ID_MODEDIT_TEXT_TOOL:

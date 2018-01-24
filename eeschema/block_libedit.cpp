@@ -394,11 +394,8 @@ void LIB_EDIT_FRAME::copySelectedItems()
 
         // Do not clear the 'selected' flag. It is required to have items drawn when they are pasted.
         LIB_ITEM* copy = (LIB_ITEM*) item.Clone();
-
-        // In list the wrapper is owner of the schematic item, we can use the UR_DELETED
-        // status for the picker because pickers with this status are owner of the picked item
-        // (or TODO ?: create a new status like UR_DUPLICATE)
-        ITEM_PICKER picker( copy, UR_DELETED );
+        copy->SetFlags( copy->GetFlags() | UR_TRANSIENT );
+        ITEM_PICKER picker( copy, UR_NEW );
         m_clipboard.PushItem( picker );
     }
 }

@@ -837,7 +837,7 @@ bool PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* a
     aFrame->SetAuxOrigin( wxPoint( aPosition.x, aPosition.y ) );
     originViewItem->SetPosition( wxPoint( aPosition.x, aPosition.y ) );
     aView->MarkDirty();
-
+    aFrame->OnModify();
     return true;
 }
 
@@ -846,7 +846,7 @@ bool PCB_EDITOR_CONTROL::SetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFr
                                          BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
     aFrame->SaveCopyInUndoList( originViewItem, UR_DRILLORIGIN );
-    DoSetDrillOrigin( aView, aFrame, originViewItem, aPosition );
+    return DoSetDrillOrigin( aView, aFrame, originViewItem, aPosition );
 }
 
 

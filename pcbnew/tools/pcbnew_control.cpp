@@ -604,7 +604,7 @@ bool PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame
     aView->GetGAL()->SetGridOrigin( aPoint );
     originViewItem->SetPosition( wxPoint( aPoint.x, aPoint.y ) );
     aView->MarkDirty();
-
+    aFrame->OnModify();
     return true;
 }
 

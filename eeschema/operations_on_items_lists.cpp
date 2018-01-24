@@ -173,12 +173,9 @@ void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool a
 
 void SCH_EDIT_FRAME::DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
 {
-    PICKED_ITEMS_LIST  itemsList;
-
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        ITEM_PICKER itemWrapper( item, UR_DELETED );
 
         if( item->GetFlags() & STRUCT_DELETED )
             continue;

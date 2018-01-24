@@ -151,7 +151,9 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
 #define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair
-                                  ///< (applies to segments only)
+                                   ///< (applies to segments only)
+#define UR_TRANSIENT   (1 << 28)   ///< indicates the item is owned by the undo/redo stack
+
 
 #define EDA_ITEM_ALL_FLAGS -1
 
