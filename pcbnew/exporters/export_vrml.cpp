@@ -1007,7 +1007,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
 
 
 static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
-                                     double aOrientation )
+                                     MODULE* aModule )
 {
     LAYER_NUM layer = aOutline->GetLayer();
     double  x   = aOutline->GetStart().x * BOARD_SCALE;
@@ -1051,13 +1051,11 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
 
             while( i < nvert )
             {
-                CPolyPt corner( poly[i] );
-                RotatePoint( &corner.x, &corner.y, aOrientation );
-                corner.x += aOutline->GetPosition().x;
-                corner.y += aOutline->GetPosition().y;
+                RotatePoint( &poly[i], aModule->GetOrientation() );
+                poly[i] += aModule->GetPosition();
 
-                x = corner.x * BOARD_SCALE;
-                y = - ( corner.y * BOARD_SCALE );
+                x = poly[i].x * BOARD_SCALE;
+                y = - ( poly[i].y * BOARD_SCALE );
 
                 if( !vl->AddVertex( seg, x, y ) )
                     throw( std::runtime_error( vl->GetError() ) );
@@ -1295,7 +1293,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
 
                 case PCB_MODULE_EDGE_T:
                     export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ),
-                                             aModule->GetOrientation() );
+                                             aModule );
                     break;
 
                 default:
