@@ -931,7 +931,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
     case S_POLYGON:
     {
-        const auto& points = aSegment->GetPolyPoints();
+        const auto& points = aSegment->BuildPolyPointsList();
         std::deque<VECTOR2D> pointsList;
 
         if( points.empty() )

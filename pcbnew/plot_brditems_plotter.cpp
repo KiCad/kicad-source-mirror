@@ -520,35 +520,33 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
     break;
 
     case S_POLYGON:
-    {
-        const std::vector<wxPoint>& polyPoints = aEdge->GetPolyPoints();
-
-        if( polyPoints.size() <= 1 )  // Malformed polygon
-            break;
-
-        // We must compute true coordinates from m_PolyList
-        // which are relative to module position, orientation 0
-        MODULE* module = aEdge->GetParentModule();
-
-        std::vector< wxPoint > cornerList;
-
-        cornerList.reserve( polyPoints.size() );
-
-        for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
+        if( aEdge->IsPolyShapeValid() )
         {
-            wxPoint corner = polyPoints[ii];
+            const std::vector<wxPoint>& polyPoints = aEdge->BuildPolyPointsList();
 
-            if( module )
+            // We must compute true coordinates from m_PolyList
+            // which are relative to module position, orientation 0
+            MODULE* module = aEdge->GetParentModule();
+
+            std::vector< wxPoint > cornerList;
+
+            cornerList.reserve( polyPoints.size() );
+
+            for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
             {
-                RotatePoint( &corner, module->GetOrientation() );
-                corner += module->GetPosition();
+                wxPoint corner = polyPoints[ii];
+
+                if( module )
+                {
+                    RotatePoint( &corner, module->GetOrientation() );
+                    corner += module->GetPosition();
+                }
+
+                cornerList.push_back( corner );
             }
 
-            cornerList.push_back( corner );
+            m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness, &gbr_metadata );
         }
-
-        m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness, &gbr_metadata );
-    }
     break;
     }
 }

@@ -806,7 +806,8 @@ void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
     }
 }
 
-const std::vector<wxPoint> DRAWSEGMENT::GetPolyPoints() const
+
+const std::vector<wxPoint> DRAWSEGMENT::BuildPolyPointsList() const
 {
     std::vector<wxPoint> rv;
 
@@ -823,6 +824,30 @@ const std::vector<wxPoint> DRAWSEGMENT::GetPolyPoints() const
 
     return rv;
 }
+
+
+bool DRAWSEGMENT::IsPolyShapeValid() const
+{
+    // return true if the polygonal shape is valid (has more than 2 points)
+    if( GetPolyShape().OutlineCount() == 0 )
+        return false;
+
+    const SHAPE_LINE_CHAIN& outline = ((SHAPE_POLY_SET&)GetPolyShape()).Outline( 0 );
+
+    return outline.PointCount() > 2;
+}
+
+
+int DRAWSEGMENT::GetPointCount() const
+{
+    // return the number of corners of the polygonal shape
+    // this shape is expected to be only one polygon without hole
+    if( GetPolyShape().OutlineCount() )
+        return GetPolyShape().VertexCount( 0 );
+
+    return 0;
+}
+
 
 void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
 {

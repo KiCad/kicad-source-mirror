@@ -167,9 +167,26 @@ public:
     // Accessors:
     const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; }
 
-    const std::vector<wxPoint> GetPolyPoints() const;
+    /** Build and return the list of corners in a std::vector<wxPoint>
+     * It must be used only to convert the SHAPE_POLY_SET internal corner buffer
+     * to a list of wxPoints, and nothing else, because it duplicates the buffer,
+     * that is inefficient to know for instance the corner count
+     */
+    const std::vector<wxPoint> BuildPolyPointsList() const;
+
+    /** @return the number of corners of the polygonal shape
+     */
+    int GetPointCount() const;
+
+    // Accessors to the polygonal shape
     SHAPE_POLY_SET& GetPolyShape() { return m_Poly; }
     const SHAPE_POLY_SET& GetPolyShape() const { return m_Poly; }
+
+    /**
+     * @return true if the polygonal shape is valid (has more than 2 points)
+     */
+    bool IsPolyShapeValid() const;
+
     void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_Poly = aShape; }
 
     void SetBezierPoints( const std::vector<wxPoint>& aPoints )

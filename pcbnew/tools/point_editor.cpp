@@ -617,7 +617,7 @@ void POINT_EDITOR::updatePoints()
 
         case S_POLYGON:
         {
-            const auto& points = segment->GetPolyPoints();
+            const auto& points = segment->BuildPolyPointsList();
             for( unsigned i = 0; i < points.size(); i++ )
             {
                 m_editPoints->Point( i ).SetPosition( points[i] );

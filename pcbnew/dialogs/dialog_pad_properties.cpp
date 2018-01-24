@@ -395,7 +395,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
         case S_POLYGON:         // polygon
         {
-            std::vector<wxPoint> poly = dummySegment.GetPolyPoints();
+            std::vector<wxPoint> poly = dummySegment.BuildPolyPointsList();
             GRClosedPoly( NULL, &dc, poly.size(), &poly[0],
                           m_drawPadOutlineMode ? false : true,
                           primitive.m_Thickness, m_selectedColor, m_selectedColor );

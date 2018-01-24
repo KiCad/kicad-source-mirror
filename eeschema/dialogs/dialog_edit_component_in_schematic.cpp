@@ -520,7 +520,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
         SCH_REFERENCE_LIST components;
         GetParent()->GetCurrentSheet().GetComponents( components );
-        for( int i = 0; i < components.GetCount(); i++ )
+        for( unsigned i = 0; i < components.GetCount(); i++ )
         {
             SCH_REFERENCE component = components[i];
             if( component.GetLibPart()->GetLibId() == thisLibId

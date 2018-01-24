@@ -355,7 +355,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
 
                 case S_POLYGON:
                 {
-                    for( const auto& p : dseg->GetPolyPoints() )
+                    for( const auto& p : dseg->BuildPolyPointsList() )
                     {
                         addAnchor( p, CORNER | SNAPPABLE, dseg );
                     }

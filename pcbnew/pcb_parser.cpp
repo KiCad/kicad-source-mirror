@@ -2571,7 +2571,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
                 case T_gr_poly:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddPrimitive( dummysegm->GetPolyPoints(), dummysegm->GetWidth() );
+                    pad->AddPrimitive( dummysegm->BuildPolyPointsList(), dummysegm->GetWidth() );
                     break;
 
                 default:

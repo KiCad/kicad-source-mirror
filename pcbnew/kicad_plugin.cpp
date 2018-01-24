@@ -870,8 +870,6 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 
 void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 {
-    unsigned i;
-
     switch( aSegment->GetShape() )
     {
     case S_SEGMENT:  // Line
@@ -898,12 +896,21 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
         break;
 
     case S_POLYGON: // Polygon
-        m_out->Print( aNestLevel, "(gr_poly (pts" );
+        if( aSegment->IsPolyShapeValid() )
+        {
+            SHAPE_POLY_SET& poly = aSegment->GetPolyShape();
+            SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+            int pointsCount = outline.PointCount();
 
-        for( i = 0;  i < aSegment->GetPolyPoints().size();  ++i )
-            m_out->Print( 0, " (xy %s)", FMT_IU( aSegment->GetPolyPoints()[i] ).c_str() );
+            m_out->Print( aNestLevel, "(gr_poly (pts" );
 
-        m_out->Print( 0, ")" );
+            for( int ii = 0; ii < pointsCount;  ++ii )
+            {
+                m_out->Print( 0, " (xy %s)", FMT_IU( outline.CPoint( ii ) ).c_str() );
+            }
+
+            m_out->Print( 0, ")" );
+        }
         break;
 
     case S_CURVE:   // Bezier curve
@@ -955,24 +962,31 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
                       FMT_ANGLE( aModuleDrawing->GetAngle() ).c_str() );
         break;
 
-    case S_POLYGON: // Polygon
-        m_out->Print( aNestLevel, "(fp_poly (pts" );
-
-        for( unsigned i = 0;  i < aModuleDrawing->GetPolyPoints().size();  ++i )
+    case S_POLYGON: // Polygonal segment
+        if( aModuleDrawing->IsPolyShapeValid() )
         {
-            int nestLevel = 0;
+            SHAPE_POLY_SET& poly = aModuleDrawing->GetPolyShape();
+            SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+            int pointsCount = outline.PointCount();
 
-            if( i && !(i%4) )   // newline every 4(pts)
+            m_out->Print( aNestLevel, "(fp_poly (pts" );
+
+            for( int ii = 0; ii < pointsCount;  ++ii )
             {
-                nestLevel = aNestLevel + 1;
-                m_out->Print( 0, "\n" );
+                int nestLevel = 0;
+
+                if( ii && !( ii%4 ) )   // newline every 4 pts
+                {
+                    nestLevel = aNestLevel + 1;
+                    m_out->Print( 0, "\n" );
+                }
+
+                m_out->Print( nestLevel, "%s(xy %s)",
+                              nestLevel ? "" : " ", FMT_IU( outline.CPoint( ii ) ).c_str() );
             }
 
-            m_out->Print( nestLevel, "%s(xy %s)",
-                          nestLevel ? "" : " ",
-                          FMT_IU( aModuleDrawing->GetPolyPoints()[i] ).c_str() );
+            m_out->Print( 0, ")" );
         }
-        m_out->Print( 0, ")" );
         break;
 
     case S_CURVE:   // Bezier curve

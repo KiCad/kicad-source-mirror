@@ -184,6 +184,12 @@ std::string BOARD_ITEM::FormatInternalUnits( const wxPoint& aPoint )
 }
 
 
+std::string BOARD_ITEM::FormatInternalUnits( const VECTOR2I& aPoint )
+{
+    return FormatInternalUnits( aPoint.x ) + " " + FormatInternalUnits( aPoint.y );
+}
+
+
 std::string BOARD_ITEM::FormatInternalUnits( const wxSize& aSize )
 {
     return FormatInternalUnits( aSize.GetWidth() ) + " " + FormatInternalUnits( aSize.GetHeight() );

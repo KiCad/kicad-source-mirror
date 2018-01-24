@@ -515,55 +515,54 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         break;
 
     case S_POLYGON:
-        if ( GetPolyPoints().size() < 2 )
-            break;      // Malformed polygon.
+        if( IsPolyShapeValid() )
         {
-        // The polygon is expected to be a simple polygon
-        // not self intersecting, no hole.
-        MODULE* module = GetParentModule();     // NULL for items not in footprints
-        double orientation = module ? module->GetOrientation() : 0.0;
-        wxPoint offset;
+            // The polygon is expected to be a simple polygon
+            // not self intersecting, no hole.
+            MODULE* module = GetParentModule();     // NULL for items not in footprints
+            double orientation = module ? module->GetOrientation() : 0.0;
+            wxPoint offset;
 
-        if( module )
-            offset = module->GetPosition();
+            if( module )
+                offset = module->GetPosition();
 
-        // Build the polygon with the actual position and orientation:
-        std::vector< wxPoint> poly;
-        poly = GetPolyPoints();
-
-        for( unsigned ii = 0; ii < poly.size(); ii++ )
-        {
-            RotatePoint( &poly[ii], orientation );
-            poly[ii] += offset;
-        }
-
-        // Generate polygons for the outline + clearance
-        // This code is compatible with a polygon with holes linked to external outline
-        // by overlapping segments.
-
-        // Insert the initial polygon:
-        aCornerBuffer.NewOutline();
-
-        for( unsigned ii = 0; ii < poly.size(); ii++ )
-            aCornerBuffer.Append( poly[ii].x, poly[ii].y );
-
-        if( linewidth )     // Add thick outlines
-        {
-            CPolyPt corner1( poly[poly.size()-1] );
+            // Build the polygon with the actual position and orientation:
+            std::vector< wxPoint> poly;
+            poly = BuildPolyPointsList();
 
             for( unsigned ii = 0; ii < poly.size(); ii++ )
             {
-                CPolyPt corner2( poly[ii] );
-
-                if( corner2 != corner1 )
-                {
-                    TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                            corner1, corner2, aCircleToSegmentsCount, linewidth );
-                }
-
-                corner1 = corner2;
+                RotatePoint( &poly[ii], orientation );
+                poly[ii] += offset;
             }
-        }
+
+            // Generate polygons for the outline + clearance
+            // This code is compatible with a polygon with holes linked to external outline
+            // by overlapping segments.
+
+            // Insert the initial polygon:
+            aCornerBuffer.NewOutline();
+
+            for( unsigned ii = 0; ii < poly.size(); ii++ )
+                aCornerBuffer.Append( poly[ii].x, poly[ii].y );
+
+            if( linewidth )     // Add thick outlines
+            {
+                wxPoint corner1( poly[poly.size()-1] );
+
+                for( unsigned ii = 0; ii < poly.size(); ii++ )
+                {
+                    wxPoint corner2( poly[ii] );
+
+                    if( corner2 != corner1 )
+                    {
+                        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
+                                corner1, corner2, aCircleToSegmentsCount, linewidth );
+                    }
+
+                    corner1 = corner2;
+                }
+            }
         }
         break;
 

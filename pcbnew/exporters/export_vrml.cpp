@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2014-2017  Cirilo Bernardo
- * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1031,13 +1031,15 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
         break;
 
     case S_POLYGON:
+        if( aOutline->IsPolyShapeValid() )
         {
             VRML_LAYER* vl;
 
             if( !GetLayer( aModel, layer, &vl ) )
                 break;
 
-            int nvert = aOutline->GetPolyPoints().size() - 1;
+            std::vector<wxPoint> poly = aOutline->BuildPolyPointsList();
+            int nvert = poly.size() - 1;
             int i = 0;
 
             if( nvert < 3 ) break;
@@ -1049,7 +1051,7 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
 
             while( i < nvert )
             {
-                CPolyPt corner( aOutline->GetPolyPoints()[i] );
+                CPolyPt corner( poly[i] );
                 RotatePoint( &corner.x, &corner.y, aOrientation );
                 corner.x += aOutline->GetPosition().x;
                 corner.y += aOutline->GetPosition().y;
