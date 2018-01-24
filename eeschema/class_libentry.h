@@ -367,7 +367,16 @@ public:
     void SetPower()     { m_options = ENTRY_POWER; }
     void SetNormal()    { m_options = ENTRY_NORMAL; }
 
+    /**
+     * Set interchangeable the property for part units.
+     * @param aLockUnits when true then units are set as not interchangeable.
+     */
     void LockUnits( bool aLockUnits ) { m_unitsLocked = aLockUnits; }
+
+    /**
+     * Check whether part units are interchangeable.
+     * @return False when interchangeable, true otherwise.
+     */
     bool UnitsLocked() const { return m_unitsLocked; }
 
     /**
@@ -676,7 +685,7 @@ public:
 
     /**
      * @return true if the part has multiple units per part.
-     * When happens, the reference has a sub reference ti identify part
+     * When true, the reference has a sub reference to identify part.
      */
     bool IsMulti() const { return m_unitCount > 1; }
 
