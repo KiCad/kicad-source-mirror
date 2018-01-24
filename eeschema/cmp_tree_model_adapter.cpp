@@ -47,22 +47,22 @@ void CMP_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
 {
     bool onlyPowerSymbols = ( GetFilter() == CMP_FILTER_POWER );
 
-    wxArrayString aliases;
+    std::vector<LIB_ALIAS*> alias_list;
 
     try
     {
-        m_libs->EnumerateSymbolLib( aLibNickname, aliases, onlyPowerSymbols );
+        m_libs->LoadSymbolLib( alias_list, aLibNickname, onlyPowerSymbols );
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogError( wxString::Format( _( "Error occurred loading symbol  library %s."
+        wxLogError( wxString::Format( _( "Error occurred loading symbol library %s."
                                          "\n\n%s" ), aLibNickname, ioe.What() ) );
         return;
     }
 
-    if( aliases.size() > 0 )
+    if( alias_list.size() > 0 )
     {
-        AddAliasList( aLibNickname, aliases );
+        AddAliasList( aLibNickname, alias_list );
         m_tree.AssignIntrinsicRanks();
     }
 }

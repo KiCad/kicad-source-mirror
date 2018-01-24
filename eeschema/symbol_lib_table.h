@@ -160,6 +160,9 @@ public:
     void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
                              bool aPowerSymbolsOnly = false );
 
+    void LoadSymbolLib( std::vector<LIB_ALIAS*>& aAliasList, const wxString& aNickname,
+                        bool aPowerSymbolsOnly = false );
+
     /**
      * Load a #LIB_ALIAS having @a aAliasName from the library given by @a aNickname.
      *

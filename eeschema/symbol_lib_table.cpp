@@ -310,6 +310,37 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 }
 
 
+void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+                                      const wxString& aNickname, bool aPowerSymbolsOnly )
+{
+    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    wxCHECK( row && row->plugin, /* void */  );
+
+    wxString options = row->GetOptions();
+
+    if( aPowerSymbolsOnly )
+        row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
+
+    row->plugin->EnumerateSymbolLib( aAliasList, row->GetFullURI( true ), row->GetProperties() );
+
+    if( aPowerSymbolsOnly )
+        row->SetOptions( options );
+
+    // The library cannot know its own name, because it might have been renamed or moved.
+    // Therefore footprints cannot know their own library nickname when residing in
+    // a symbol library.
+    // Only at this API layer can we tell the symbol about its actual library nickname.
+    for( LIB_ALIAS* alias : aAliasList )
+    {
+        // remove "const"-ness, I really do want to set nickname without
+        // having to copy the LIB_ID and its two strings, twice each.
+        LIB_ID& id = (LIB_ID&) alias->GetPart()->GetLibId();
+
+        id.SetLibNickname( row->GetNickName() );
+    }
+}
+
+
 LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aAliasName )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
