@@ -597,15 +597,23 @@ int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 }
 
 
-static bool setOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                       KIGFX::ORIGIN_VIEWITEM* aItem, const VECTOR2D& aPoint )
+bool PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                      BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
     aFrame->SetGridOrigin( wxPoint( aPoint.x, aPoint.y ) );
     aView->GetGAL()->SetGridOrigin( aPoint );
-    aItem->SetPosition( aPoint );
+    originViewItem->SetPosition( wxPoint( aPoint.x, aPoint.y ) );
     aView->MarkDirty();
 
     return true;
+}
+
+
+bool PCBNEW_CONTROL::SetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                    BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
+{
+    aFrame->SaveCopyInUndoList( originViewItem, UR_GRIDORIGIN );
+    return DoSetGridOrigin( aView, aFrame, originViewItem, aPoint );
 }
 
 
@@ -615,7 +623,9 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
     if( origin )
     {
-        setOrigin( getView(), m_frame, m_gridOrigin.get(), *origin );
+        // We can't undo the other grid dialog settings, so no sense undoing just the origin
+
+        DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), *origin );
         delete origin;
     }
     else
@@ -627,7 +637,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
         // TODO it will not check the toolbar button in module editor, as it uses a different ID..
         m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-        picker->SetClickHandler( std::bind( setOrigin, getView(), m_frame, m_gridOrigin.get(), _1 ) );
+        picker->SetClickHandler( std::bind( SetGridOrigin, getView(), m_frame, m_gridOrigin.get(), _1 ) );
         picker->Activate();
         Wait();
     }
@@ -638,8 +648,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 {
-    board()->SetGridOrigin( wxPoint( 0, 0 ) );
-    m_gridOrigin->SetPosition( VECTOR2D( 0, 0 ) );
+    SetGridOrigin( getView(), m_frame, m_gridOrigin.get(), VECTOR2D( 0, 0 ) );
 
     return 0;
 }

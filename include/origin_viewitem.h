@@ -38,7 +38,7 @@
  */
 namespace KIGFX {
 
-class ORIGIN_VIEWITEM : public EDA_ITEM
+class ORIGIN_VIEWITEM : public BOARD_ITEM
 {
 public:
     ///> Marker symbol styles
@@ -48,9 +48,17 @@ public:
                      MARKER_STYLE aStyle = CIRCLE_X, int aSize = 16,
                      const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
 
+    ORIGIN_VIEWITEM* Clone() const override;
+
     const BOX2I ViewBBox() const override;
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
+
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override
+    {
+        wxASSERT( 0 ); // ORIGIN_VIEWITEM never added to BOARD; drawn directly through ViewDraw().
+    }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
@@ -88,9 +96,14 @@ public:
         m_position = aPosition;
     }
 
-    inline const VECTOR2D& GetPosition() const
+    inline void SetPosition( const wxPoint& aPosition ) override
     {
-        return m_position;
+        m_position = VECTOR2D( aPosition );
+    }
+
+    inline const wxPoint GetPosition() const override
+    {
+        return wxPoint( m_position.x, m_position.y );
     }
 
     inline void SetSize( int aSize )

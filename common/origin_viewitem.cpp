@@ -22,15 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <class_drawpanel.h>
+#include <draw_frame.h>
 #include <origin_viewitem.h>
 #include <gal/graphics_abstraction_layer.h>
 
 using namespace KIGFX;
 
 ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, int aSize, const VECTOR2D& aPosition ) :
-    EDA_ITEM( NOT_USED ),   // this item is never added to a BOARD so it needs no type
+    BOARD_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD so it needs no type
     m_position( aPosition ), m_size( aSize ), m_color( aColor ), m_style( aStyle ), m_drawAtZero( false )
 {
+}
+
+
+ORIGIN_VIEWITEM* ORIGIN_VIEWITEM::Clone() const
+{
+    return new ORIGIN_VIEWITEM( m_color, m_style, m_size, m_position );
 }
 
 
@@ -40,7 +48,6 @@ const BOX2I ORIGIN_VIEWITEM::ViewBBox() const
     bbox.SetMaximum();
     return bbox;
 }
-
 
 void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
 {

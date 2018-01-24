@@ -144,6 +144,8 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 
         case UR_CHANGED:
         case UR_EXCHANGE_T:
+        case UR_DRILLORIGIN:
+        case UR_GRIDORIGIN:
             delete wrapper.GetLink();   //  the picker is owner of this item
             break;
 

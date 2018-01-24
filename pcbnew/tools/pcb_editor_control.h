@@ -89,8 +89,16 @@ public:
     ///> Reacts to selection change in eeschema.
     int CrossProbeSchToPcb( const TOOL_EVENT& aEvent );
 
-    ///> Places the origin point for drill and pick-and-place files.
+    ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
+
+    ///> UI-level access (including undo) to setting the drill origin
+    static bool SetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                BOARD_ITEM* aItem, const VECTOR2D& aPoint );
+
+    ///> Low-level access (below undo) to setting the drill origin
+    static bool DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                  BOARD_ITEM* aItem, const VECTOR2D& aPoint );
 
     ///> Highlights net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );

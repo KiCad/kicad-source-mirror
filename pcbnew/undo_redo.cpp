@@ -44,10 +44,13 @@ using namespace std::placeholders;
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_edge_mod.h>
+#include <origin_viewitem.h>
 
 #include <connectivity_data.h>
 
 #include <tools/selection_tool.h>
+#include <tools/pcbnew_control.h>
+#include <tools/pcb_editor_control.h>
 #include <tool/tool_manager.h>
 
 #include <view/view.h>
@@ -295,6 +298,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
         switch( command )
         {
         case UR_CHANGED:
+        case UR_DRILLORIGIN:
+        case UR_GRIDORIGIN:
 
             /* If needed, create a copy of item, and put in undo list
              * in the picker, as link
@@ -432,7 +437,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
          */
         UNDO_REDO_T status = aList->GetPickedItemStatus( ii );
 
-        if( status != UR_DELETED )
+        if( status != UR_DELETED
+                && status != UR_DRILLORIGIN     // origin markers never on board
+                && status != UR_GRIDORIGIN )    // origin markers never on board
         {
             if( build_item_list )
                 // Build list of existing items, for integrity test
@@ -546,6 +553,20 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
             break;
+
+        case UR_DRILLORIGIN:
+        case UR_GRIDORIGIN:
+        {
+            BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
+            VECTOR2D origin = image->GetPosition();
+            image->SetPosition( item->GetPosition() );
+
+            if( aList->GetPickedItemStatus( ii ) == UR_DRILLORIGIN )
+                PCB_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );
+            else
+                PCBNEW_CONTROL::DoSetGridOrigin( view, this, item, origin );
+        }
+        break;
 
         default:
         {

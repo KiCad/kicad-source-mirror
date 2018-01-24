@@ -831,14 +831,22 @@ int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
 }
 
 
-static bool setDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                            KIGFX::ORIGIN_VIEWITEM* aItem, const VECTOR2D& aPosition )
+bool PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                           BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
     aFrame->SetAuxOrigin( wxPoint( aPosition.x, aPosition.y ) );
-    aItem->SetPosition( aPosition );
+    originViewItem->SetPosition( wxPoint( aPosition.x, aPosition.y ) );
     aView->MarkDirty();
 
     return true;
+}
+
+
+bool PCB_EDITOR_CONTROL::SetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                         BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
+{
+    aFrame->SaveCopyInUndoList( originViewItem, UR_DRILLORIGIN );
+    DoSetDrillOrigin( aView, aFrame, originViewItem, aPosition );
 }
 
 
@@ -850,7 +858,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxCURSOR_HAND, _( "Adjust zero" ) );
-    picker->SetClickHandler( std::bind( setDrillOrigin, getView(), m_frame, m_placeOrigin.get(), _1 ) );
+    picker->SetClickHandler( std::bind( SetDrillOrigin, getView(), m_frame, m_placeOrigin.get(), _1 ) );
     picker->Activate();
     Wait();
 
