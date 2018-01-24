@@ -72,7 +72,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     m_mainSizer->Add( sLeftSizer, 1, wxALL | wxEXPAND, 0 );
 
     // @todo LEGACY: not required when legacy is gone
-    const wxString galOnlySuffix = _( " (OpenGL && Cairo)" );
+    const wxString galOnlySuffix = _( " (not supported in Legacy graphics)" );
 
     /*
      * Anti-aliasing subpanel
@@ -80,7 +80,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     {
         wxStaticBoxSizer* sOpenGLRenderingSizer;
         sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "OpenGL Rendering:" ) ), wxVERTICAL );
+                wxID_ANY, _( "Accelerated Graphics:" ) ), wxVERTICAL );
 
         wxString m_choiceAntialiasingChoices[] = {
             _( "No Antialiasing" ),
@@ -104,7 +104,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     {
         wxStaticBoxSizer* sGridSettings;
         sGridSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Grid Display" ) + galOnlySuffix ), wxVERTICAL );
+                wxID_ANY, _( "Grid Options" ) + galOnlySuffix ), wxVERTICAL );
 
         wxString m_gridStyleChoices[] = {
             _( "Dots" ),
@@ -179,24 +179,25 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     }
 
     {
+        wxString cursorDisplayTitle = _( "Cursor Options" );
+
+        // cursor is not shown in legacy on OSX
+        // @todo LEGACY remove this
+#ifdef __APPLE__
+        cursorDisplayTitle += galOnlySuffix;
+#endif
+
         auto sCursorSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Cursor Display" ) ), wxVERTICAL );
+                wxID_ANY, cursorDisplayTitle ), wxVERTICAL );
 
         sLeftSizer->Add( sCursorSettings, 1, wxALL | wxEXPAND, 5 );
 
         wxString m_CursorShapeChoices[] = {
-            _( "Small cross" ),
-            _( "Full screen cursor" )
+            _( "Small crosshair" ),
+            _( "Full window crosshair" )
         };
 
         wxString cursorShapeTitle = _( "Cursor Shape" );
-
-        // cursor is not shown in legacy on OSX, so this setting won't
-        // do anything there
-        // @todo LEGACY remove this
-#ifdef __APPLE__
-        cursorShapeTitle += galOnlySuffix;
-#endif
 
         int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
         m_cursorShape = new wxRadioBox( this, wxID_ANY,
@@ -204,11 +205,19 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
                  m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
 
         m_cursorShape->SetSelection( 0 );
-        m_cursorShape->SetToolTip( _( "Main cursor shape selection (small cross or large cursor)" ) );
+        m_cursorShape->SetToolTip( _( "Cursor shape for drawing, placement and movement tools" ) );
 
         sCursorSettings->Add( m_cursorShape, 0, wxALL | wxEXPAND, 5 );
 
-        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always display cursor" ) + galOnlySuffix );
+#ifndef __APPLE__
+        // Whole section is galOnly on OSX; no need for further qualifier here
+        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always display crosshairs" ) );
+#else
+        // User a shorter galOnly qualifier as otherwise the label is obnoxiously long
+        // @todo LEGACY remove this
+        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY,
+                                         _( "Always display crosshairs (not in Legacy)" ) );
+#endif
 
         sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
     }
