@@ -471,6 +471,7 @@ class SCH_LEGACY_PLUGIN_CACHE
 {
     static int      m_modHash;      // Keep track of the modification status of the library.
 
+    wxString        m_fileName;     // Absolute path and file name.
     wxFileName      m_libFileName;  // Absolute path and file name is required here.
     wxDateTime      m_fileModTime;
     LIB_ALIAS_MAP   m_aliases;      // Map of names of LIB_ALIAS pointers.
@@ -2140,6 +2141,7 @@ int SCH_LEGACY_PLUGIN_CACHE::m_modHash = 1;     // starts at 1 and goes up
 
 
 SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
+    m_fileName( aFullPathAndFileName ),
     m_libFileName( aFullPathAndFileName ),
     m_isWritable( true ),
     m_isModified( false )
@@ -2183,7 +2185,7 @@ wxDateTime SCH_LEGACY_PLUGIN_CACHE::GetLibModificationTime()
 
 bool SCH_LEGACY_PLUGIN_CACHE::IsFile( const wxString& aFullPathAndFileName ) const
 {
-    return m_libFileName == aFullPathAndFileName;
+    return m_fileName == aFullPathAndFileName;
 }
 
 
