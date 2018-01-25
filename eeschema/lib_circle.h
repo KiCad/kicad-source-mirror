@@ -56,6 +56,10 @@ public:
         return wxT( "LIB_CIRCLE" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Circle" );
+    }
 
     bool HitTest( const wxPoint& aPosition ) const override;
 

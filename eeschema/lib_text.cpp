@@ -48,7 +48,6 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
     EDA_TEXT()
 {
     SetTextSize( wxSize( 50, 50 ) );
-    m_typeName   = _( "Text" );
     m_rotate     = false;
     m_updateText = false;
 }

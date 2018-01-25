@@ -50,7 +50,6 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_PART*      aParent ) :
     m_Width      = 0;
     m_Fill       = NO_FILL;
     m_isFillable = true;
-    m_typeName   = _( "Circle" );
 }
 
 

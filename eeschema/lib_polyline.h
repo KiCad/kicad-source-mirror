@@ -57,6 +57,10 @@ public:
         return wxT( "LIB_POLYLINE" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "PolyLine" );
+    }
 
     void AddPoint( const wxPoint& aPoint );
 

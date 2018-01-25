@@ -100,6 +100,8 @@ public:
     wxString    Desc;        ///< Description to be displayed
     wxString    MatchName;   ///< Normalized name for matching
     wxString    SearchText;  ///< Descriptive text to search
+    bool        SearchTextNormalized;  ///< Support for lazy normalization.
+
 
     LIB_ID      LibId;       ///< LIB_ID determined by the parent library nickname and alias name.
     int         Unit;        ///< Actual unit, or zero

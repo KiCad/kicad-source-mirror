@@ -47,7 +47,6 @@ LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
     m_Fill       = NO_FILL;
     m_Width      = 0;
     m_isFillable = true;
-    m_typeName   = _( "Bezier" );
 }
 
 

@@ -25,6 +25,7 @@
 #include <eda_pattern_match.h>
 #include <make_unique.h>
 #include <utility>
+#include <pgm_base.h>
 
 
 // Each node gets this lowest score initially, without any matches applied.
@@ -114,13 +115,24 @@ CMP_TREE_NODE::CMP_TREE_NODE()
 
 CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
 {
+    static void* locale = nullptr;
+    static wxString namePrefix;
+
+    // Fetching translations can take a surprising amount of time when loading libraries,
+    // so only do it when necessary.
+    if( Pgm().GetLocale() != locale )
+    {
+        namePrefix = _( "Unit" );
+        locale = Pgm().GetLocale();
+    }
+
     Parent = aParent;
     Type = UNIT;
 
     Unit = aUnit;
     LibId = aParent->LibId;
 
-    Name = _( "Unit" ) + " " + LIB_PART::SubReference( aUnit, false );
+    Name = namePrefix + " " + LIB_PART::SubReference( aUnit, false );
     Desc = wxEmptyString;
     MatchName = wxEmptyString;
 
@@ -158,7 +170,7 @@ void CMP_TREE_NODE_LIB_ID::Update( LIB_ALIAS* aAlias )
     // Search text spaces out keywords and description to penalize description
     // matches - earlier matches are worth more.
     MatchName   = aAlias->GetName().Lower();
-    SearchText  = (aAlias->GetKeyWords() + "        " + Desc).Lower();
+    SearchText  = (aAlias->GetKeyWords() + "        " + Desc);
 
     // Extract default footprint text
     LIB_PART* part = aAlias->GetPart();
@@ -177,7 +189,7 @@ void CMP_TREE_NODE_LIB_ID::Update( LIB_ALIAS* aAlias )
     if( !footprint.IsEmpty() )
     {
         SearchText += "        ";
-        SearchText += footprint.Lower();
+        SearchText += footprint;
     }
 
     Children.clear();
@@ -194,6 +206,12 @@ void CMP_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
     if( Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
+
+    if( !SearchTextNormalized )
+    {
+        SearchText = SearchText.Lower();
+        SearchTextNormalized = true;
+    }
 
     // Keywords and description we only count if the match string is at
     // least two characters long. That avoids spurious, low quality

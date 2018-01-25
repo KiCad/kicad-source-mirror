@@ -128,8 +128,6 @@ protected:
      */
     FILL_T   m_Fill;
 
-    wxString m_typeName;          ///< Name of object displayed in the message panel.
-
     wxPoint  m_initialPos;        ///< Temporary position when moving an existing item.
     wxPoint  m_initialCursorPos;  ///< Initial cursor position at the beginning of a move.
 
@@ -148,7 +146,11 @@ public:
 
     virtual ~LIB_ITEM() { }
 
-    wxString GetTypeName() { return m_typeName; }
+    /**
+     * Provide a user-consumable name of the object type.  Perform localization when
+     * called so that run-time language selection works.
+     */
+    virtual wxString GetTypeName() = 0;
 
     /**
      * Begin an editing a component library draw item in \a aEditMode at \a aPosition.

@@ -84,8 +84,6 @@ void LIB_FIELD::Init( int id )
     SetTextWidth( GetDefaultTextSize() );
     SetTextHeight( GetDefaultTextSize() );
 
-    m_typeName = _( "Field" );
-
     SetTextAngle( TEXT_ANGLE_HORIZ );    // constructor already did this.
 
     m_rotate = false;

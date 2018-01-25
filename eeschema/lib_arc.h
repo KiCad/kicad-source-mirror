@@ -91,6 +91,11 @@ public:
         return wxT( "LIB_ARC" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Arc" );
+    }
+
     bool HitTest( const wxPoint& aPosition ) const override;
 
     bool HitTest( const wxPoint& aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;

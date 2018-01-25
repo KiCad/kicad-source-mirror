@@ -100,6 +100,11 @@ public:
         return wxT( "LIB_FIELD" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Field" );
+    }
+
     /**
      * Object constructor initialization helper.
      */

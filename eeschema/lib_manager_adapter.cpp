@@ -54,8 +54,12 @@ bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 }
 
 
+#define PROGRESS_INTERVAL_MILLIS 50
+
 void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
 {
+    wxLongLong nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
+
     int libMgrHash = m_libMgr->GetHash();
 
     if( !aForce && m_lastSyncHash == libMgrHash )
@@ -68,7 +72,12 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
     for( auto it = m_tree.Children.begin(); it != m_tree.Children.end(); /* iteration inside */ )
     {
         const wxString& name = it->get()->Name;
-        aProgressCallback( i++, max, name );
+
+        if( wxGetUTCTimeMillis() > nextUpdate )
+        {
+            aProgressCallback( i++, max, name );
+            nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
+        }
 
         if( !m_libMgr->LibraryExists( name ) )
         {
@@ -88,7 +97,12 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
     {
         if( m_libHashes.count( libName ) == 0 )
         {
-            aProgressCallback( i++, max, libName );
+            if( wxGetUTCTimeMillis() > nextUpdate )
+            {
+                aProgressCallback( i++, max, libName );
+                nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
+            }
+
             auto& lib_node = m_tree.AddLib( libName );
             updateLibrary( lib_node );
             m_tree.AssignIntrinsicRanks();

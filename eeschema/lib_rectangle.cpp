@@ -48,7 +48,6 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
     m_Width                = 0;
     m_Fill                 = NO_FILL;
     m_isFillable           = true;
-    m_typeName             = _( "Rectangle" );
     m_isHeightLocked       = false;
     m_isWidthLocked        = false;
     m_isStartPointSelected = false;

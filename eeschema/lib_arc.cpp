@@ -92,7 +92,6 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
     m_Width         = 0;
     m_Fill          = NO_FILL;
     m_isFillable    = true;
-    m_typeName      = _( "Arc" );
     m_editState     = 0;
     m_lastEditState = 0;
     m_editCenterDistance = 0.0;

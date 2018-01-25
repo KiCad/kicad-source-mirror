@@ -52,7 +52,6 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
     m_Convert           = aConvert;
     m_Fill              = aFillType;
     m_Parent            = (EDA_ITEM*) aComponent;
-    m_typeName          = _( "Undefined" );
     m_isFillable        = false;
     m_eraseLastDrawItem = false;
 }
@@ -62,7 +61,7 @@ void LIB_ITEM::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), m_typeName, CYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), GetTypeName(), CYAN ) );
 
     if( m_Unit == 0 )
         msg = _( "All" );

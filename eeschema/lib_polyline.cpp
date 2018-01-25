@@ -48,7 +48,6 @@ LIB_POLYLINE::LIB_POLYLINE( LIB_PART*      aParent ) :
     m_Fill  = NO_FILL;
     m_Width = 0;
     m_isFillable = true;
-    m_typeName   = _( "PolyLine" );
     m_ModifyIndex = 0;
 }
 

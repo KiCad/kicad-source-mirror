@@ -58,6 +58,10 @@ public:
         return wxT( "LIB_BEZIER" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Bezier" );
+    }
 
     void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 

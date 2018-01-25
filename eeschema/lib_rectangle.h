@@ -59,6 +59,11 @@ public:
         return wxT( "LIB_RECTANGLE" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Rectangle" );
+    }
+
     void SetEndPosition( const wxPoint& aPosition ) { m_End = aPosition; }
 
     bool HitTest( const wxPoint& aPosition ) const override;

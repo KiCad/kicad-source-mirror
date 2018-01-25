@@ -154,7 +154,6 @@ LIB_PIN::LIB_PIN( LIB_PART*      aParent ) :
     m_numTextSize = LIB_EDIT_FRAME::GetPinNumDefaultSize();
     m_nameTextSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
     m_width = 0;
-    m_typeName = _( "Pin" );
 }
 
 

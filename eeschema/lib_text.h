@@ -65,6 +65,11 @@ public:
         return wxT( "LIB_TEXT" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Text" );
+    }
+
     /**
      * Sets the text item string to \a aText.
      *

@@ -110,6 +110,11 @@ public:
         return wxT( "LIB_PIN" );
     }
 
+    wxString GetTypeName() override
+    {
+        return _( "Pin" );
+    }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif

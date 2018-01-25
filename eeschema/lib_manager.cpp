@@ -288,14 +288,15 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
     }
     else
     {
-        wxArrayString symbols;
+        std::vector<LIB_ALIAS*> aliases;
 
-        try {
-            symTable()->EnumerateSymbolLib( aLibrary, symbols );
+        try
+        {
+            symTable()->LoadSymbolLib( aliases, aLibrary );
+        }
+        catch( IO_ERROR& ) {}
 
-            for( const auto& symbol : symbols )
-                ret.push_back( symTable()->LoadSymbol( aLibrary, symbol ) );
-        } catch( IO_ERROR& e ) {}
+        std::copy( aliases.begin(), aliases.end(), std::back_inserter( ret ) );
     }
 
     return ret;
