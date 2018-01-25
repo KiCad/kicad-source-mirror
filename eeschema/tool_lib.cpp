@@ -206,8 +206,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     KiScaledSeparator( m_mainToolBar, this );
     msg = _( "Synchronized pin edit mode\n"
-             "Synchronized pin edit mode propagates all pin changes to other units.\n"
-             "Normally enabled for multiunit parts with interchangeable units." );
+             "Synchronized pin edit mode propagates to other units all pin changes except pin number modification.\n"
+             "Enabled by default for multiunit parts with interchangeable units." );
     m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString, KiScaledBitmap( pin2pin_xpm, this ),
                             msg, wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiScaledBitmap( pin_table_xpm, this ),
