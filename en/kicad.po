@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-25 18:55+0100\n"
-"PO-Revision-Date: 2018-01-14 00:54+0100\n"
+"PO-Revision-Date: 2018-01-25 19:05+0100\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language: en_US\n"
@@ -1503,7 +1503,7 @@ msgstr " deg"
 
 #: common/base_units.cpp:433 common/preview_items/preview_utils.cpp:41
 msgid "\""
-msgstr "″"
+msgstr "\""
 
 #: common/base_units.cpp:468
 msgid "millimeters"
@@ -2033,9 +2033,8 @@ msgid " (not supported in Legacy graphics)"
 msgstr " (not supported in Legacy graphics)"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated Graphics:"
-msgstr "Graphics:"
+msgstr "Accelerated Graphics:"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "No Antialiasing"
@@ -2058,9 +2057,8 @@ msgid "Supersampling (4x)"
 msgstr "Supersampling (4x)"
 
 #: common/widgets/gal_options_panel.cpp:107
-#, fuzzy
 msgid "Grid Options"
-msgstr "Generic Options"
+msgstr "Grid Options"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Dots"
@@ -2094,14 +2092,12 @@ msgid "Min grid spacing:"
 msgstr "Min grid spacing:"
 
 #: common/widgets/gal_options_panel.cpp:182
-#, fuzzy
 msgid "Cursor Options"
-msgstr "Gerber Options"
+msgstr "Cursor Options"
 
 #: common/widgets/gal_options_panel.cpp:196
-#, fuzzy
 msgid "Small crosshair"
-msgstr "Small cross"
+msgstr "Small crosshair"
 
 #: common/widgets/gal_options_panel.cpp:197
 msgid "Full window crosshair"
@@ -2116,14 +2112,12 @@ msgid "Cursor shape for drawing, placement and movement tools"
 msgstr "Cursor shape for drawing, placement and movement tools"
 
 #: common/widgets/gal_options_panel.cpp:214
-#, fuzzy
 msgid "Always display crosshairs"
-msgstr "Always display cursor"
+msgstr "Always display crosshairs"
 
 #: common/widgets/gal_options_panel.cpp:219
-#, fuzzy
 msgid "Always display crosshairs (not in Legacy)"
-msgstr "Always display cursor"
+msgstr "Always display crosshairs (not in Legacy)"
 
 #: common/widgets/footprint_select_widget.cpp:274
 msgid "No default footprint"
@@ -3558,7 +3552,6 @@ msgid "Footprint association sent to Eeschema"
 msgstr "Footprint association sent to Eeschema"
 
 #: cvpcb/cvpcb.cpp:161
-#, fuzzy
 msgid ""
 "You have run CvPcb for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -3570,10 +3563,12 @@ msgid ""
 "more information."
 msgstr ""
 "You have run CvPcb for the first time using the new footprint library table "
-"method for finding footprints.  CvPcb has either copied the default table or "
-"created an empty table in your home folder.  You must first configure the "
-"library table to include all footprint libraries not included with KiCad.  "
-"See the “Footprint Library Table” section of the CvPcb documentation for "
+"method for finding footprints.\n"
+"CvPcb has either copied the default table or created an empty table in your "
+"home folder.\n"
+"You must first configure the library table to include all footprint "
+"libraries not included with KiCad.\n"
+"See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 
 #: cvpcb/cvpcb.cpp:176
@@ -4288,9 +4283,9 @@ msgid "Symbol \"%s\" already exists in library \"%s\""
 msgstr "Symbol “%s” already exists in library “%s”"
 
 #: eeschema/libedit.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name \"%s\" not found in library \"%s\""
-msgstr "Symbol “%s” not found in library “%s”"
+msgstr "Symbol name \"%s\" not found in library \"%s\""
 
 #: eeschema/libedit.cpp:518
 msgid "No library specified."
@@ -4364,9 +4359,8 @@ msgid "Power Symbol"
 msgstr "Power Symbol"
 
 #: eeschema/libedit.cpp:675 eeschema/cmp_tree_model_adapter_base.cpp:194
-#, fuzzy
 msgid "Symbol"
-msgstr "&Symbol"
+msgstr "Symbol"
 
 #: eeschema/libedit.cpp:677 eeschema/sch_text.cpp:690
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
@@ -4737,9 +4731,8 @@ msgid "Unit %s"
 msgstr "Unit %s"
 
 #: eeschema/libeditframe.cpp:533
-#, fuzzy
 msgid "&Save Symbol [Read Only]"
-msgstr "&Save Part [Read Only]"
+msgstr "&Save Symbol [Read Only]"
 
 #: eeschema/libeditframe.cpp:533 eeschema/menubar_libedit.cpp:197
 #: eeschema/widgets/cmp_tree_pane.cpp:78
@@ -5096,9 +5089,8 @@ msgid "Save Library"
 msgstr "Save Library"
 
 #: eeschema/hotkeys.cpp:222
-#, fuzzy
 msgid "Save Symbol"
-msgstr "&Save Symbol"
+msgstr "Save Symbol"
 
 #: eeschema/hotkeys.cpp:223
 msgid "Save Schematic"
@@ -5989,9 +5981,9 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Item not annotated: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
-msgstr "Error item %s%s unit %d and no more than %d parts\n"
+msgstr "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
 
 #: eeschema/component_references_lister.cpp:573
 #: eeschema/component_references_lister.cpp:605
@@ -6102,59 +6094,48 @@ msgid "&Add Library..."
 msgstr "&Add Library…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:60
-#, fuzzy
 msgid "Revert Library"
-msgstr "&Revert library"
+msgstr "Revert Library"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:64
-#, fuzzy
 msgid "New Sy&mbol..."
-msgstr "New Symbol"
+msgstr "New Sy&mbol..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:66
-#, fuzzy
 msgid "&Import Symbol..."
-msgstr "&Import Symbol"
+msgstr "&Import Symbol..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:68
-#, fuzzy
 msgid "Paste Symbol"
-msgstr "&Save Symbol"
+msgstr "Paste Symbol"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:72
-#, fuzzy
 msgid "&Edit Symbol"
-msgstr "&Export Symbol"
+msgstr "&Edit Symbol"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:74
-#, fuzzy
 msgid "Remove Symbol"
-msgstr "Remap Symbols"
+msgstr "Remove Symbol"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:76
-#, fuzzy
 msgid "E&xport Symbol..."
-msgstr "Export Symbol"
+msgstr "E&xport Symbol..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:80
-#, fuzzy
 msgid "Revert Symbol"
-msgstr "Select Symbol"
+msgstr "Revert Symbol"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:84
-#, fuzzy
 msgid "Cut Symbol"
-msgstr "Current Symbol"
+msgstr "Cut Symbol"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:86
-#, fuzzy
 msgid "Copy Symbol"
-msgstr "Power Symbol"
+msgstr "Copy Symbol"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:88
-#, fuzzy
 msgid "Duplicate Symbol"
-msgstr "Duplicate Symbol or Label"
+msgstr "Duplicate Symbol"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:58
 msgid "Wire"
@@ -7152,9 +7133,8 @@ msgid "Append Library"
 msgstr "Append Library"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:138
-#, fuzzy
 msgid "Add a symbol library row to this table"
-msgstr "Add a PCB library row to this table"
+msgstr "Add a symbol library row to this table"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:142
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
@@ -7162,9 +7142,8 @@ msgid "Remove Library"
 msgstr "Remove Library"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:143
-#, fuzzy
 msgid "Remove a symbol library from this library table"
-msgstr "Remove a PCB library from this library table"
+msgstr "Remove a symbol library from this library table"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:148
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:147
@@ -8336,9 +8315,9 @@ msgid "Properties for %s (alias of %s)"
 msgstr "Properties for %s (alias of %s)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Alias List of %s"
-msgstr "Alias List"
+msgstr "Alias List of %s"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:90
 #, c-format
@@ -8367,9 +8346,9 @@ msgid "Symbol alias:"
 msgstr "Symbol alias:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Alias \"%s\" already exists."
-msgstr "Library “%s” already exists"
+msgstr "Alias \"%s\" already exists."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:347
 #, c-format
@@ -8964,9 +8943,8 @@ msgid "Delete All"
 msgstr "Delete All"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:199
-#, fuzzy
 msgid "Aliases"
-msgstr "Alias"
+msgstr "Aliases"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:207
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
@@ -9923,13 +9901,13 @@ msgid "Electronics Rule Check Error"
 msgstr "Electronics Rule Check Error"
 
 #: eeschema/cmp_tree_model_adapter.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred loading symbol library %s.\n"
 "\n"
 "%s"
 msgstr ""
-"Error occurred loading symbol  library %s.\n"
+"Error occurred loading symbol library %s.\n"
 "\n"
 "%s"
 
@@ -10024,14 +10002,12 @@ msgid "Clear current schematic hierarchy and start new schematic root sheet"
 msgstr "Clear current schematic hierarchy and start new schematic root sheet"
 
 #: eeschema/menubar.cpp:311 pcbnew/menubar_pcbframe.cpp:645
-#, fuzzy
 msgid "&Open"
-msgstr "Open"
+msgstr "&Open"
 
 #: eeschema/menubar.cpp:314
-#, fuzzy
 msgid "Open existing schematic"
-msgstr "Open existing schematic hierarchy"
+msgstr "Open existing schematic"
 
 #: eeschema/menubar.cpp:335 kicad/menubar.cpp:255
 #: pagelayout_editor/menubar.cpp:86 pcbnew/menubar_pcbframe.cpp:669
@@ -10039,9 +10015,8 @@ msgid "Open &Recent"
 msgstr "Open &Recent"
 
 #: eeschema/menubar.cpp:336
-#, fuzzy
 msgid "Open recently opened schematic"
-msgstr "Open recent opened schematic project"
+msgstr "Open recently opened schematic"
 
 #: eeschema/menubar.cpp:341
 msgid "App&end Schematic Sheet"
@@ -10060,14 +10035,12 @@ msgid "Import schematic file from other applications"
 msgstr "Import schematic file from other applications"
 
 #: eeschema/menubar.cpp:356
-#, fuzzy
 msgid "Save all sheets in schematic"
-msgstr "Save all sheets in schematic project"
+msgstr "Save all sheets in schematic"
 
 #: eeschema/menubar.cpp:361
-#, fuzzy
 msgid "Save &Current Sheet"
-msgstr "Save &Current Sheet Only"
+msgstr "Save &Current Sheet"
 
 #: eeschema/menubar.cpp:362
 msgid "Save only current schematic sheet"
@@ -10692,19 +10665,16 @@ msgid "Cursors"
 msgstr "Cursors"
 
 #: eeschema/tool_sch.cpp:61
-#, fuzzy
 msgid "New schematic"
-msgstr "New Schematic"
+msgstr "New schematic"
 
 #: eeschema/tool_sch.cpp:65
-#, fuzzy
 msgid "Open schematic"
-msgstr "Open Schematic"
+msgstr "Open schematic"
 
 #: eeschema/tool_sch.cpp:70
-#, fuzzy
 msgid "Save (all sheets)"
-msgstr "Leave sheet"
+msgstr "Save (all sheets)"
 
 #: eeschema/tool_sch.cpp:75
 msgid "Edit Page settings"
@@ -10880,9 +10850,9 @@ msgstr ""
 "pin %s “%s” at location <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:750 eeschema/pinedit.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid " in symbol %c"
-msgstr "Saving symbol in “%s”"
+msgstr " in symbol %c"
 
 #: eeschema/pinedit.cpp:756 eeschema/pinedit.cpp:796
 msgid "  of converted"
@@ -10992,21 +10962,21 @@ msgid "Loading "
 msgstr "Loading "
 
 #: eeschema/class_library.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
-"Part library “%s” failed to load. Error:\n"
+"Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 
 #: eeschema/class_library.cpp:676
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
-"Part library “%s” failed to load.\n"
+"Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 
 #: eeschema/cross-probing.cpp:82
@@ -12560,36 +12530,32 @@ msgid "Open &Recent Gerber File"
 msgstr "Open &Recent Gerber File"
 
 #: gerbview/menubar.cpp:101
-#, fuzzy
 msgid "Open a recently opened Gerber file"
-msgstr "Open a recent opened Gerber file"
+msgstr "Open a recently opened Gerber file"
 
 #: gerbview/menubar.cpp:114
 msgid "Open Recent Dri&ll File"
 msgstr "Open Recent Dri&ll File"
 
 #: gerbview/menubar.cpp:115
-#, fuzzy
 msgid "Open a recently opened drill file"
-msgstr "Open a recent opened drill file"
+msgstr "Open a recently opened drill file"
 
 #: gerbview/menubar.cpp:128
 msgid "Open Recent Zip &Archive File"
 msgstr "Open Recent Zip &Archive File"
 
 #: gerbview/menubar.cpp:129
-#, fuzzy
 msgid "Open a recently opened zip archive file"
-msgstr "Open a recent opened zip archive file"
+msgstr "Open a recently opened zip archive file"
 
 #: gerbview/menubar.cpp:142
 msgid "Open Recent &Job File"
 msgstr "Open Recent &Job File"
 
 #: gerbview/menubar.cpp:143
-#, fuzzy
 msgid "Open a recently opened gerber job file"
-msgstr "Open a recent opened gerber job file"
+msgstr "Open a recently opened gerber job file"
 
 #: gerbview/menubar.cpp:152
 msgid "Clear &All"
@@ -17285,14 +17251,12 @@ msgid "Delete (Alternative)"
 msgstr "Delete (Alternative)"
 
 #: pcbnew/tools/edit_tool.cpp:151 pcbnew/onrightclick.cpp:854
-#, fuzzy
 msgid "Update Footprint"
-msgstr "Save Footprint"
+msgstr "Update Footprint"
 
 #: pcbnew/tools/edit_tool.cpp:151
-#, fuzzy
 msgid "Update the footprint from the library"
-msgstr "Open footprint from library"
+msgstr "Update the footprint from the library"
 
 #: pcbnew/tools/edit_tool.cpp:156
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
@@ -17301,9 +17265,8 @@ msgid "Change Footprint"
 msgstr "Change Footprint"
 
 #: pcbnew/tools/edit_tool.cpp:156
-#, fuzzy
 msgid "Assign a different footprint from the library"
-msgstr "Load footprint from library"
+msgstr "Assign a different footprint from the library"
 
 #: pcbnew/tools/edit_tool.cpp:161
 msgid "Displays item properties dialog"
@@ -17613,25 +17576,21 @@ msgstr "Set text size and width of footprint fields"
 
 #: pcbnew/menubar_pcbframe.cpp:492
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:23
-#, fuzzy
 msgid "Update Footprints from Library"
-msgstr "Open footprint from library"
+msgstr "Update Footprints from Library"
 
 #: pcbnew/menubar_pcbframe.cpp:493
-#, fuzzy
 msgid "Update footprints to include any changes from the library"
-msgstr "Update footprint into current board"
+msgstr "Update footprints to include any changes from the library"
 
 #: pcbnew/menubar_pcbframe.cpp:497
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:27
-#, fuzzy
 msgid "Change Footprints"
-msgstr "Change Footprint"
+msgstr "Change Footprints"
 
 #: pcbnew/menubar_pcbframe.cpp:498
-#, fuzzy
 msgid "Assign different footprints from the library"
-msgstr "Open footprint from library"
+msgstr "Assign different footprints from the library"
 
 #: pcbnew/menubar_pcbframe.cpp:502
 msgid "&Swap Layers"
@@ -18666,9 +18625,9 @@ msgid "Modify zone properties"
 msgstr "Modify zone properties"
 
 #: pcbnew/zones_by_polygon.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid "Refill %d Zones"
-msgstr "Unfill All Zones"
+msgstr "Refill %d Zones"
 
 #: pcbnew/gpcb_plugin.cpp:113
 #, c-format
@@ -20785,9 +20744,8 @@ msgstr "The start and end points cannot be the same."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:346
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:342
-#, fuzzy
 msgid "The polygon outline thickness must be >= 0."
-msgstr "The item thickness must be greater than zero."
+msgstr "The polygon outline thickness must be >= 0."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:349
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:345
@@ -22405,9 +22363,8 @@ msgstr ""
 "This is an alternate identifier to the reference."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:128
-#, fuzzy
 msgid "Update Footprint from Library"
-msgstr "Open footprint from library"
+msgstr "Update Footprint from Library"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:152
 msgid "Lock pads"
@@ -23922,44 +23879,42 @@ msgid "Update"
 msgstr "Update"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s all footprints on board"
-msgstr "Update all footprints of the board"
+msgstr "%s all footprints on board"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "%s current footprint (%s)"
-msgstr "Print current footprint"
+msgstr "%s current footprint (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint with reference:"
-msgstr "Footprint reference"
+msgstr "%s footprint with reference:"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprints with matching value (%s)"
-msgstr "No footprints to archive!"
+msgstr "%s footprints with matching value (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprints with value:"
-msgstr "Show footprint's values"
+msgstr "%s footprints with value:"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprints with identifier:"
-msgstr "New footprint identifier"
+msgstr "%s footprints with identifier:"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:139
-#, fuzzy
 msgid "New footprint identifier:"
-msgstr "New footprint identifier"
+msgstr "New footprint identifier:"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:172
-#, fuzzy
 msgid "Export Footprint Associations"
-msgstr "Export Footprint Association File"
+msgstr "Export Footprint Associations"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:186
 msgid "Apply"
@@ -25139,9 +25094,8 @@ msgid "Caching polygon triangulations..."
 msgstr "Caching polygon triangulations…"
 
 #: pcbnew/zone_filler.cpp:220
-#, fuzzy
 msgid "Fill with segments..."
-msgstr "Split segment"
+msgstr "Fill with segments..."
 
 #: pcbnew/zone_filler.cpp:247
 msgid "Committing changes..."
@@ -27187,9 +27141,9 @@ msgid "Add Footprint Libraries Wizard"
 msgstr "Add Footprint Libraries Wizard"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.h:92
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "%"
+msgstr "%s"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:81
 msgid "Generate Drill Files"
