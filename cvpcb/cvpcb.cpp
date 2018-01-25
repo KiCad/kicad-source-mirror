@@ -160,11 +160,11 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             DisplayInfoMessage( NULL, _(
                 "You have run CvPcb for the first time using the "
                 "new footprint library table method for finding "
-                "footprints.  CvPcb has either copied the default "
+                "footprints.\nCvPcb has either copied the default "
                 "table or created an empty table in your home "
-                "folder.  You must first configure the library "
+                "folder.\nYou must first configure the library "
                 "table to include all footprint libraries not "
-                "included with KiCad.  See the \"Footprint Library "
+                "included with KiCad.\nSee the \"Footprint Library "
                 "Table\" section of the CvPcb documentation for "
                 "more information." ) );
         }
