@@ -546,7 +546,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
             // all empty
             useTrans = false;
         }
-        else if( std::distance( genericControls.begin(), first_empty ) < genericReqParamsCount )
+        else if( std::distance( genericControls.begin(), first_empty ) < (int)genericReqParamsCount )
         {
             DisplayError( nullptr,
                     wxString::Format( wxT( "You need to specify at least the "
