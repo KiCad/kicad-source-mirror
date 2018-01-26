@@ -119,7 +119,16 @@ private:
 
     void setRowItem( int aFieldNdx, const SCH_FIELD& aField )
     {
-        setRowItem( aFieldNdx, aField.GetName( false ), aField.GetText() );
+        // Use default field name for mandatory fields, because they are transalted
+        // according to the current locale
+        wxString f_name;
+
+        if( aFieldNdx < MANDATORY_FIELDS )
+            f_name = TEMPLATE_FIELDNAME::GetDefaultFieldName( aFieldNdx );
+        else
+            f_name = aField.GetName( false );
+
+        setRowItem( aFieldNdx, f_name, aField.GetText() );
     }
 
     // event handlers
@@ -791,6 +800,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
         // make the editable field position relative to the component
         m_FieldsBuf[i].Offset( -m_cmp->m_Pos );
+
+        // Ensure the Field name reflects the default name, even if the
+        // local has changed since schematic was read
+        m_FieldsBuf[i].SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
     }
 
     // Add template fieldnames:
