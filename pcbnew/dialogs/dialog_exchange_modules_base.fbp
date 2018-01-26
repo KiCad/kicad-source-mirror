@@ -44,10 +44,10 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_EXCHANGE_MODULE_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">550,523</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">%s</property>
+            <property name="title">dummy</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -646,7 +646,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">29</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">m_specifiedRefSizer</property>
@@ -743,7 +743,7 @@
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">3</property>
                                     <property name="flag">wxALL</property>
-                                    <property name="proportion">0</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -774,11 +774,11 @@
                                         <property name="id">wxID_ANY</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
-                                        <property name="maximum_size">80,-1</property>
+                                        <property name="maximum_size">-1,-1</property>
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">-1,24</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_specifiedRef</property>
                                         <property name="pane_border">1</property>
@@ -1032,7 +1032,7 @@
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">3</property>
                                     <property name="flag">wxALL</property>
-                                    <property name="proportion">0</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -1067,7 +1067,7 @@
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">160,24</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_specifiedValue</property>
                                         <property name="pane_border">1</property>
@@ -1266,7 +1266,7 @@
                                                 <property name="maxlength"></property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">500,24</property>
+                                                <property name="minimum_size">-1,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_specifiedID</property>
                                                 <property name="pane_border">1</property>
@@ -1321,7 +1321,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">0</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                             <property name="proportion">0</property>
                                             <object class="wxBitmapButton" expanded="0">
                                                 <property name="BottomDockable">1</property>
@@ -1638,7 +1638,7 @@
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">500,24</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_newID</property>
                                         <property name="pane_border">1</property>
@@ -1693,7 +1693,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">0</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>

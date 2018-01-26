@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wx_html_report_panel.h"
@@ -71,13 +71,10 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	m_specifiedRefSizer->Add( m_matchSpecifiedRef, 0, wxALL, 2 );
 	
 	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_specifiedRef->SetMinSize( wxSize( -1,24 ) );
-	m_specifiedRef->SetMaxSize( wxSize( 80,-1 ) );
-	
-	m_specifiedRefSizer->Add( m_specifiedRef, 0, wxALL, 3 );
+	m_specifiedRefSizer->Add( m_specifiedRef, 1, wxALL, 3 );
 	
 	
-	bUpperSizer->Add( m_specifiedRefSizer, 29, wxEXPAND, 5 );
+	bUpperSizer->Add( m_specifiedRefSizer, 0, wxEXPAND, 5 );
 	
 	m_currentValueSizer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -97,9 +94,7 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	m_specifiedValueSizer->Add( m_matchSpecifiedValue, 0, wxALL, 2 );
 	
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_specifiedValue->SetMinSize( wxSize( 160,24 ) );
-	
-	m_specifiedValueSizer->Add( m_specifiedValue, 0, wxALL, 3 );
+	m_specifiedValueSizer->Add( m_specifiedValue, 1, wxALL, 3 );
 	
 	
 	bUpperSizer->Add( m_specifiedValueSizer, 31, wxEXPAND, 5 );
@@ -113,12 +108,10 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	specifiedIDSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_specifiedID->SetMinSize( wxSize( 500,24 ) );
-	
 	specifiedIDSizer->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	specifiedIDSizer->Add( m_specifiedIDBrowseButton, 0, wxALL, 0 );
+	specifiedIDSizer->Add( m_specifiedIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
 	
 	
 	m_specifiedIDSizer->Add( specifiedIDSizer, 0, wxALIGN_TOP|wxEXPAND, 0 );
@@ -144,12 +137,10 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	newIDSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_newID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_newID->SetMinSize( wxSize( 500,24 ) );
-	
 	newIDSizer->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	newIDSizer->Add( m_newIDBrowseButton, 0, wxALL, 0 );
+	newIDSizer->Add( m_newIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
 	
 	
 	m_middleSizer->Add( newIDSizer, 0, wxEXPAND, 0 );
@@ -195,7 +186,6 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 	
 	// Connect Events
 	m_matchAll->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchAllClicked ), NULL, this );
