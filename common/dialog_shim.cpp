@@ -179,6 +179,11 @@ bool DIALOG_SHIM::Show( bool show )
         EDA_RECT  r( wxDialog::GetPosition(), wxDialog::GetSize() );
         class_map[ hash_key ] = r;
 
+#ifdef __WXMAC__
+        if ( m_eventLoop )
+            m_eventLoop->Exit( GetReturnCode() );   // Needed for APP-MODAL dlgs on OSX
+#endif
+
         ret = wxDialog::Show( show );
     }
 
