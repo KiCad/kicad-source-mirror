@@ -63,10 +63,13 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     // Netlist options
     const bool useNetcodeAsNetName = false;//aCtl & NET_USE_NETCODES_AS_NETNAMES;
 
+    // default title
+    m_title = "KiCad schematic";
+
     if( !ProcessNetlist( aCtl ) )
         return false;
 
-    aFormatter->Print( 0, ".title KiCad schematic\n" );
+    aFormatter->Print( 0, ".title %s\n", (const char*) m_title.c_str() );
 
     // Write .include directives
     for( const auto& lib : m_libraries )
@@ -381,6 +384,10 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
                         if( !lib.IsEmpty() )
                             m_libraries.insert( lib );
+                    }
+                    else if( directive.StartsWith( ".title " ) )
+                    {
+                        m_title = directive.AfterFirst( ' ' );
                     }
                     else
                     {

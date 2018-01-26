@@ -216,6 +216,9 @@ protected:
     virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const;
 
 private:
+    ///> Spice simulation title found in the processed schematic sheet
+    wxString m_title;
+
     ///> Spice directives found in the processed schematic sheet
     std::vector<wxString> m_directives;
 
