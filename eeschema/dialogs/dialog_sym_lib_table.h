@@ -88,6 +88,8 @@ private:
 
     wxGrid*          m_cur_grid;     ///< changed based on tab choice
     static int       m_pageNdx;      ///< Remember the last notebook page selected during a session
+
+    wxString         m_lastBrowseDir; ///< last browsed directory
 };
 
 #endif    // _DIALOG_SYM_LIB_TABLE_H_

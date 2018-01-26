@@ -353,8 +353,14 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             wxEmptyString, SchematicLibraryFileWildcard(),
             wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    dlg.SetDirectory( m_lastBrowseDir );
+
+    auto result = dlg.ShowModal();
+
+    if( result == wxID_CANCEL )
         return;
+
+    m_lastBrowseDir = dlg.GetDirectory();
 
     wxArrayString files;
     dlg.GetFilenames( files );
