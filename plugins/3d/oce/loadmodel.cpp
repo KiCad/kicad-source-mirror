@@ -40,7 +40,6 @@
 #include <TopoDS_Shape.hxx>
 #include <Quantity_Color.hxx>
 #include <XCAFApp_Application.hxx>
-#include <Handle_XCAFApp_Application.hxx>
 
 #include <AIS_Shape.hxx>
 
@@ -53,7 +52,6 @@
 
 #include <XCAFDoc_DocumentTool.hxx>
 #include <XCAFDoc_ColorTool.hxx>
-#include <Handle_XCAFDoc_ColorTool.hxx>
 #include <XCAFDoc_ShapeTool.hxx>
 
 #include <BRep_Tool.hxx>

@@ -76,8 +76,12 @@ option( KICAD_SCRIPTING_ACTION_MENU
     )
 
 option( KICAD_USE_OCE
-    "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
+    "Build tools and plugins related to OpenCascade Community Edition (default ON)"
     ON )
+
+option( KICAD_USE_OCC
+    "Build tools and plugins related to OpenCascade Technology (overrides KICAD_USE_OCE, default OFF)"
+    OFF )
 
 option( KICAD_INSTALL_DEMOS
     "Install kicad demos and examples (default ON)"
@@ -365,6 +369,12 @@ if( KICAD_USE_OCE )
     add_definitions( -DKICAD_USE_OCE )
 endif()
 
+if( KICAD_USE_OCC )
+    add_definitions( -DKICAD_USE_OCC )
+    remove_definitions( -DKICAD_USE_OCE )
+    unset( KICAD_USE_OCE )
+endif()
+
 if( KICAD_USE_CUSTOM_PADS )
     add_definitions( -DKICAD_USE_CUSTOM_PADS )
 endif()
@@ -617,10 +627,20 @@ if( KICAD_SPICE )
 endif()
 
 # Find OpenCascade Community Edition, required for STEP plugin and tools
-if( KICAD_USE_OCE )
-    set( LIBS_OCE TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
-
-    find_package( OCE 0.16 REQUIRED ${LIBS_OCE} )
+if( KICAD_USE_OCE OR KICAD_USE_OCC )
+    find_package(OpenCASCADE)
+    if( NOT OCC_FOUND )
+        MESSAGE( FATAL_ERROR "================================================================\n"
+                             "Neither OpenCASCADE Community Edition nor OpenCASCADE was found!\n"
+                             "================================================================\n")
+    endif()
+    if( OCC_VERSION_STRING VERSION_LESS 6.8.0 )
+        MESSAGE( FATAL_ERROR "================================================================\n"
+                             "OpenCASCADE version ${OCC_VERSION_STRING} was found.\n"
+                             "  KiCad requires a minimum version of 6.8.0\n"
+                             "================================================================\n")
+    endif()
+    include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
 endif()
 
 # Assist with header file searching optimization:

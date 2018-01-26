@@ -35,6 +35,9 @@
 extern std::string GetKicadCurlVersion();
 extern std::string GetCurlLibVersion();
 #endif
+#if defined( KICAD_USE_OCC ) | defined( KICAD_USE_OCE )
+#include <Standard_Version.hxx>
+#endif
 
 #include <boost/version.hpp>
 #include <wx/clipbrd.h>
@@ -473,6 +476,14 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
                       << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
                       << ( BOOST_VERSION % 100 ) << eol;
 
+#ifdef KICAD_USE_OCC
+    aMsg << indent4 << "OpenCASCADE Technology: " << OCC_VERSION_COMPLETE << eol;
+#endif
+
+#ifdef KICAD_USE_OCE
+    aMsg << indent4 << "OpenCASCADE Community Edition: " << OCC_VERSION_COMPLETE << eol;
+#endif
+
 #ifdef BUILD_GITHUB_PLUGIN
     aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
 #endif
@@ -552,6 +563,13 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
 
     aMsg << indent4 << "KICAD_USE_OCE=";
 #ifdef KICAD_USE_OCE
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_USE_OCC=";
+#ifdef KICAD_USE_OCC
     aMsg << ON;
 #else
     aMsg << OFF;

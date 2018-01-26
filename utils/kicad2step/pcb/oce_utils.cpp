@@ -43,6 +43,7 @@
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPCAFControl_Writer.hxx>
 #include <APIHeaderSection_MakeHeader.hxx>
+#include <Standard_Version.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TDataStd_Name.hxx>
 #include <TDF_LabelSequence.hxx>
@@ -818,6 +819,9 @@ bool PCBMODEL::CreatePCB()
         topex.Next();
     }
 
+#if ( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
+    m_assy->UpdateAssemblies();
+#endif
     return true;
 }
 
