@@ -510,20 +510,24 @@ OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
-    // Save current settings before overwriting with the dispatched tool
-    auto vc_settings = m_viewControls->GetSettings();
-
     // iterate over all registered tools
     for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
         TOOL_STATE* st = m_toolIdIndex[*it];
+
+        // forward context menu events to the tool that created the menu
+        if( aEvent.IsMenu() )
+        {
+            if( *it != m_menuOwner )
+                continue;
+        }
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
         if( st->pendingWait )
         {
             if( st->waitEvents.Matches( aEvent ) )
             {
-                // By default, only messages are passed further
+                // By default only messages are passed further
                 m_passEvent = ( aEvent.Category() == TC_MESSAGE );
 
                 // got matching event? clear wait list and wake up the coroutine
@@ -594,8 +598,6 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         if( finished )
             break;      // only the first tool gets the event
     }
-
-    m_viewControls->ApplySettings( vc_settings );
 }
 
 
@@ -668,6 +670,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 
         // Run update handlers on the created copy
         menu->UpdateAll();
+        m_menuOwner = toolId;
         m_menuActive = true;
 
         auto frame = dynamic_cast<wxFrame*>( m_editFrame );
@@ -676,8 +679,6 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         {
             frame->PopupMenu( menu.get() );
         }
-
-        m_menuActive = false;
 
         // Warp the cursor as long as the menu wasn't clicked out of
         if( menu->GetSelected() >= 0 )
@@ -694,6 +695,9 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
         evt.SetParameter( m );
         dispatchInternal( evt );
+
+        m_menuActive = false;
+        m_menuOwner = -1;
 
         // Restore the cursor settings if the tool is still active
         if( activeTool == GetCurrentToolId() )

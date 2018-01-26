@@ -307,6 +307,11 @@ public:
         return m_actions & ( TA_UNDO_REDO_PRE | TA_UNDO_REDO_POST );
     }
 
+    bool IsMenu() const
+    {
+        return m_actions & TA_CONTEXT_MENU;
+    }
+
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_MODIFIER_MASK ) const
     {

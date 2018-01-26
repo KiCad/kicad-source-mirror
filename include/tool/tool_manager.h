@@ -515,8 +515,11 @@ private:
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;
 
-    /// Flag indicating whether a context menu is currently displayed
+    /// Flag indicating whether a context menu is currently displayed.
     bool m_menuActive;
+
+    /// Tool currently displaying a popup menu. It is negative when there is no menu displayed.
+    TOOL_ID m_menuOwner;
 };
 
 #endif
