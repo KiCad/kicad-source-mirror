@@ -54,6 +54,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <router/router_tool.h>
 #include <connectivity_data.h>
+#include "tool_event_utils.h"
 
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
@@ -542,7 +543,7 @@ bool SELECTION_TOOL::selectMultiple()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             cancelled = true;
             break;
