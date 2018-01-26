@@ -680,6 +680,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
         // Plot pad holes
         if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
+            int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
+                                  ? SMALL_DRILL : INT_MAX;
+
             for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
             {
                 for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
@@ -690,9 +693,13 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
                         continue;
 
                     if( hole.x == hole.y )
+                    {
+                        hole.x = std::min( smallDrill, hole.x );
                         aPlotter->Circle( pad->GetPosition(), hole.x, NO_FILL );
+                    }
                     else
                     {
+                        // Note: small drill marks have no significance when applied to slots
                         wxPoint drl_start, drl_end;
                         int width;
                         pad->GetOblongDrillGeometry( drl_start, drl_end, width );
