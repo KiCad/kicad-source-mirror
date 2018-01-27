@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-26 11:34+0100\n"
-"PO-Revision-Date: 2018-01-26 12:02+0100\n"
+"POT-Creation-Date: 2018-01-27 15:05+0100\n"
+"PO-Revision-Date: 2018-01-27 15:13+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -190,7 +190,7 @@ msgstr "Tutti i file (*.*)|*.*"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:343
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:346
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:217
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:226
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:187
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_layers_setup.cpp:339
@@ -1544,7 +1544,7 @@ msgstr "Imposta griglia"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:107
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:198
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:159
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:189
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:180
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:56
 #: pcbnew/dialogs/dialog_update_pcb.cpp:149
@@ -1656,7 +1656,7 @@ msgstr "Impronta non trovata"
 
 #: common/widgets/gal_options_panel.cpp:75
 msgid " (not supported in Legacy graphics)"
-msgstr ""
+msgstr " (non supportato nella grafica tradizionale)"
 
 #: common/widgets/gal_options_panel.cpp:83
 msgid "Accelerated Graphics:"
@@ -1735,7 +1735,7 @@ msgstr "Forma puntatore"
 
 #: common/widgets/gal_options_panel.cpp:208
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "Forma del puntatore per gli strumenti di disegno, piazzamento e spostamento"
 
 #: common/widgets/gal_options_panel.cpp:214
 msgid "Always display crosshairs"
@@ -3819,10 +3819,14 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"È necessario eseguire CvPcb per la prima volta usando il nuovo metodo tabella librerie impronte per rilevare le impronte.\n"
-"CvPcb ha copiato la tabella predefinita o creato una tabella vuota nella cartella utente.\n"
-"Bisogna configurare la tabella librerie per includere tutte le librerie impronte non incluse in KiCad.\n"
-"Consultare la sezione \"Tabella librerie impronte\" della documentazione di CvPcb per ulteriori informazioni."
+"È necessario eseguire CvPcb per la prima volta usando il nuovo metodo "
+"tabella librerie impronte per rilevare le impronte.\n"
+"CvPcb ha copiato la tabella predefinita o creato una tabella vuota nella "
+"cartella utente.\n"
+"Bisogna configurare la tabella librerie per includere tutte le librerie "
+"impronte non incluse in KiCad.\n"
+"Consultare la sezione \"Tabella librerie impronte\" della documentazione di "
+"CvPcb per ulteriori informazioni."
 
 #: cvpcb/cvpcb.cpp:176
 msgid "An error occurred attempting to load the global footprint library table"
@@ -4065,7 +4069,7 @@ msgstr "Variabili ambiente disponibili per percorsi relativi:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
 #: eeschema/dialogs/dialog_rescue_each.cpp:117
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:220
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:229
 #: eeschema/bom_table_column.h:36 pcbnew/footprint_wizard_frame.cpp:295
 #: pcbnew/class_edge_mod.cpp:249 pcbnew/class_text_mod.cpp:362
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
@@ -5220,7 +5224,7 @@ msgstr "Campi"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:82
 #: eeschema/widgets/widget_eeschema_color_config.cpp:102
-#: pcbnew/tools/selection_tool.cpp:107
+#: pcbnew/tools/selection_tool.cpp:108
 msgid "Sheet"
 msgstr "Foglio"
 
@@ -5585,7 +5589,7 @@ msgid "Delete item"
 msgstr "Cancella voce"
 
 #: eeschema/libeditframe.cpp:1375 eeschema/controle.cpp:184
-#: pcbnew/tools/selection_tool.cpp:1376 pcbnew/controle.cpp:231
+#: pcbnew/tools/selection_tool.cpp:1377 pcbnew/controle.cpp:231
 #: pcbnew/modedit.cpp:133
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
@@ -5701,7 +5705,7 @@ msgstr "Stile"
 
 #: eeschema/lib_pin.cpp:1716
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1133
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1146
 #: gerbview/class_gerber_draw_item.cpp:709
 #: gerbview/class_gerber_draw_item.cpp:710 pcbnew/class_pcb_text.cpp:140
 #: pcbnew/class_text_mod.cpp:377
@@ -5709,7 +5713,7 @@ msgid "Yes"
 msgstr "Sì"
 
 #: eeschema/lib_pin.cpp:1718
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1135
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1148
 #: gerbview/class_gerber_draw_item.cpp:709
 #: gerbview/class_gerber_draw_item.cpp:710 pcbnew/class_pcb_text.cpp:138
 #: pcbnew/class_text_mod.cpp:375
@@ -6562,7 +6566,7 @@ msgstr "Ripeti l'ultimo elemento"
 msgid "Delete Item"
 msgstr "Cancella elemento"
 
-#: eeschema/hotkeys.cpp:206 pcbnew/tools/selection_tool.cpp:116
+#: eeschema/hotkeys.cpp:206 pcbnew/tools/selection_tool.cpp:117
 #: pcbnew/hotkeys.cpp:100 pcbnew/dialogs/dialog_find_base.cpp:39
 msgid "Find Item"
 msgstr "Trova elemento"
@@ -7155,6 +7159,9 @@ msgid ""
 "pin number modification.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
+"Modalità modifica pin sincronizzata\n"
+"La modalità di modifica pin sincronizzata propaga ad altre unità tutti i cambiamenti effettuati sui pin eccetto la modifica della numerazione dei pin.\n"
+"Abilitata come impostazione predefinita per le parti multiunità con unità interscambiabili."
 
 #: eeschema/tool_lib.cpp:214 eeschema/menubar_libedit.cpp:237
 msgid "Show pin table"
@@ -8083,7 +8090,7 @@ msgstr ""
 
 #: eeschema/class_drc_erc_item.cpp:62
 msgid "Different footprint assigned in another unit of the same component"
-msgstr ""
+msgstr "Impronta diversa assegnata in un'altra unità dello stesso componente"
 
 #: eeschema/libedit.cpp:62
 msgid "Symbol Library Editor - "
@@ -8922,7 +8929,7 @@ msgstr "Mostra nell'esploratore"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:788
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:981
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:994
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button "
 "should bring it up in your webbrowser."
@@ -10037,22 +10044,22 @@ msgid "Chip Name"
 msgstr "Nome chip"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:786
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:979
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:992
 msgid "Show Datasheet"
 msgstr "Mostra datasheet"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:793
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:986
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:999
 msgid "Browse Footprints"
 msgstr "Scorri impronte"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:795
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:988
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1001
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Apre l'esploratore delle impronte per sceglierne una ed assegnarla."
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:801
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:994
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1007
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Usato solo per campi impronte e datasheet."
 
@@ -11336,36 +11343,36 @@ msgstr ""
 "Questa è una tabella in sola lettura che mostra le variabili ambiente "
 "pertinenti."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:257
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:266
 #, c-format
 msgid "\"%s\" is not a valid library symbol indentifier."
 msgstr "\"%s\" non è valido come identificatore di librerie di simboli."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:274
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:283
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\""
 msgstr "Simbolo \"%s\" non trovato nella libreria \"%s\""
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:280
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:289
 #, c-format
 msgid "Symbol \"%s\" found in library \"%s\""
 msgstr "Simbolo \"%s\" trovato nella libreria \"%s\""
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:354
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:363
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid!"
 msgstr "L'identificatore di libreria di simboli \"%s\" non è valido!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:371
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:380
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\"!"
 msgstr "Simbolo \"%s\" non trovato nella libreria \"%s\"!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:446
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:455
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Riferimento errato. Un riferimento deve cominciare con una lettera."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:472
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:481
 #, c-format
 msgid ""
 "The field name \"%s\" does not have a value and is not defined in the field "
@@ -11376,7 +11383,7 @@ msgstr ""
 "validi e saranno rimossi dal componente. Si desidera rimuovere questo e gli "
 "altri campi vuoti?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:479
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:488
 msgid "Remove Fields"
 msgstr "Elimina campo"
 
@@ -15004,6 +15011,7 @@ msgstr "Sezione della zona"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:170
+#: pcbnew/dialogs/dialog_exchange_modules_base.h:93
 msgid "dummy"
 msgstr "fittizio"
 
@@ -16911,63 +16919,63 @@ msgstr ""
 msgid "Copy the current pad settings to other pads"
 msgstr "Copia impostazioni piazzola correnti su altre piazzole"
 
-#: pcbnew/tools/selection_tool.cpp:95
+#: pcbnew/tools/selection_tool.cpp:96
 msgid "Trivial Connection"
 msgstr "Connessione banale"
 
-#: pcbnew/tools/selection_tool.cpp:95
+#: pcbnew/tools/selection_tool.cpp:96
 msgid "Selects a connection between two junctions."
 msgstr "Seleziona una connessione tra due giunzioni."
 
-#: pcbnew/tools/selection_tool.cpp:99
+#: pcbnew/tools/selection_tool.cpp:100
 msgid "Copper Connection"
 msgstr "Connessione in rame"
 
-#: pcbnew/tools/selection_tool.cpp:99
+#: pcbnew/tools/selection_tool.cpp:100
 msgid "Selects whole copper connection."
 msgstr "Seleziona l'intero collegamento rame"
 
-#: pcbnew/tools/selection_tool.cpp:103
+#: pcbnew/tools/selection_tool.cpp:104
 msgid "Whole Net"
 msgstr "Intera net"
 
-#: pcbnew/tools/selection_tool.cpp:103
+#: pcbnew/tools/selection_tool.cpp:104
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "Seleziona tutte le piste e via appartenenti allo stesso collegamento."
 
-#: pcbnew/tools/selection_tool.cpp:107
+#: pcbnew/tools/selection_tool.cpp:108
 msgid "Selects all modules and tracks in the schematic sheet"
 msgstr "Seleziona tutti i moduli e piste nel foglio dello schema"
 
-#: pcbnew/tools/selection_tool.cpp:111
+#: pcbnew/tools/selection_tool.cpp:112
 msgid "Items in Same Hierarchical Sheet"
 msgstr "Elementi nello stesso foglio gerarchico"
 
-#: pcbnew/tools/selection_tool.cpp:112
+#: pcbnew/tools/selection_tool.cpp:113
 msgid "Selects all modules and tracks in the same schematic sheet"
 msgstr "Seleziona tutti i moduli e piste nello stesso foglio dello schema"
 
-#: pcbnew/tools/selection_tool.cpp:116
+#: pcbnew/tools/selection_tool.cpp:117
 msgid "Searches the document for an item"
 msgstr "Cerca un elemento nel documento"
 
-#: pcbnew/tools/selection_tool.cpp:123
+#: pcbnew/tools/selection_tool.cpp:124
 msgid "Filter Selection"
 msgstr "Filtra selezione"
 
-#: pcbnew/tools/selection_tool.cpp:123
+#: pcbnew/tools/selection_tool.cpp:124
 msgid "Filter the types of items in the selection"
 msgstr "Filtra i tipi di elementi nella selezione"
 
-#: pcbnew/tools/selection_tool.cpp:131
+#: pcbnew/tools/selection_tool.cpp:132
 msgid "Select..."
 msgstr "Seleziona..."
 
-#: pcbnew/tools/selection_tool.cpp:699
+#: pcbnew/tools/selection_tool.cpp:700
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:1299
+#: pcbnew/tools/selection_tool.cpp:1300
 msgid "Filter selection"
 msgstr "Filtra selezione"
 
@@ -23150,30 +23158,30 @@ msgstr "%s impronta corrente (%s)"
 msgid "%s footprint with reference:"
 msgstr "%s impronta con riferimento:"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:84
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:81
 #, c-format
 msgid "%s footprints with matching value (%s)"
 msgstr "%s impronte con valore corrispondente (%s)"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:94
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:91
 #, c-format
 msgid "%s footprints with value:"
 msgstr "%s impronte con valore:"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:109
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:104
 #, c-format
 msgid "%s footprints with identifier:"
 msgstr "%s impronte con identificatore:"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:139
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:132
 msgid "New footprint identifier:"
 msgstr "Nuovo identificatore impronta:"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:172
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:163
 msgid "Export Footprint Associations"
 msgstr "Esporta associazioni impronte"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:186
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:177
 msgid "Apply"
 msgstr "Applica"
 
@@ -27602,11 +27610,6 @@ msgstr "Genera file forature"
 msgid "Pad Enumeration Settings"
 msgstr "Impostazioni enumerazione piazzole"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.h:92
-#, c-format
-msgid "%s"
-msgstr "%s"
-
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.h:61
 msgid "Set Text Size"
 msgstr "Imposta dimensioni testo"
@@ -27690,6 +27693,9 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
+
+#~ msgid "%s"
+#~ msgstr "%s"
 
 #~ msgid " (OpenGL && Cairo)"
 #~ msgstr " (OpenGL && Cairo)"
