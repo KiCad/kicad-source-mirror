@@ -241,7 +241,12 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
-#endif // !__APPLE__
+#else
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
+                               KiScaledBitmap( cursor_shape_xpm, this ),
+                               _( "Change cursor shape (not supported in Legacy graphics)" ),
+                               wxITEM_CHECK  );
+#endif
 
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
                                KiScaledBitmap( pin_show_etype_xpm, this ),

@@ -379,7 +379,12 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
-#endif // !__APPLE__
+#else
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
+                               KiScaledBitmap( cursor_shape_xpm, this ),
+                               _( "Change cursor shape (not supported in Legacy graphics)" ),
+                               wxITEM_CHECK  );
+#endif
 
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
