@@ -586,8 +586,28 @@ void DXF_PLOTTER::SetDash( int dashed )
 void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
                                 EDA_DRAW_MODE_T aPlotMode, void* aData )
 {
-    MoveTo( aStart );
-    FinishTo( aEnd );
+    if( aPlotMode == SKETCH )
+    {
+        std::vector<wxPoint> cornerList;
+        SHAPE_POLY_SET outlineBuffer;
+        TransformOvalClearanceToPolygon( outlineBuffer,
+                aStart, aEnd, aWidth, 32 , 1.0 );
+        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline(0 );
+
+        for( int jj = 0; jj < path.PointCount(); jj++ )
+            cornerList.push_back( wxPoint( path.CPoint( jj ).x , path.CPoint( jj ).y ) );
+
+        // Ensure the polygon is closed
+        if( cornerList[0] != cornerList[cornerList.size() - 1] )
+            cornerList.push_back( cornerList[0] );
+
+        PlotPoly( cornerList, NO_FILL );
+    }
+    else
+    {
+        MoveTo( aStart );
+        FinishTo( aEnd );
+    }
 }
 
 /* Plot an arc in DXF format
