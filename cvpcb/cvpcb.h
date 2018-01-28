@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,8 @@
 #ifndef __CVPCB_H__
 #define __CVPCB_H__
 
-// config for footprints doc file access
-#define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
-
-// Define print format to display a schematic component line
+// Define print format to display a schematic component line. format:
+// idx reference - value : footprint_id
 #define CMP_FORMAT wxT( "%3d %8s - %16s : %s" )
 
 extern const wxString EquFileExtension;

@@ -38,14 +38,14 @@ set( CVPCB_SRCS
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/pcb_general_settings.cpp
     ../pcbnew/class_drc_item.cpp
-    autosel.cpp
+    auto_associate.cpp
     cfg.cpp
-    class_components_listbox.cpp
-    class_DisplayFootprintsFrame.cpp
-    class_footprints_listbox.cpp
-    class_library_listbox.cpp
+    components_listbox.cpp
+    display_footprints_frame.cpp
+    footprints_listbox.cpp
+    library_listbox.cpp
     cvpcb_mainframe.cpp
-    listboxes.cpp
+    listbox_base.cpp
     menubar.cpp
     readwrite_dlgs.cpp
     tool_cvpcb.cpp

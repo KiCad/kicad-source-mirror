@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_footprints_listbox.cpp
+ * @file footprints_listbox.cpp
  * class to display the list of available footprints
  */
 
@@ -33,7 +33,7 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <listview_classes.h>
+#include <listboxes.h>
 #include <cvpcb_id.h>
 #include <eda_pattern_match.h>
 #include <footprint_filter.h>

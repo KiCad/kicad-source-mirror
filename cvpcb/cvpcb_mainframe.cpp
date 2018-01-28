@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -45,9 +45,9 @@
 
 #include <cvpcb_mainframe.h>
 #include <cvpcb.h>
-#include <listview_classes.h>
+#include <listboxes.h>
 #include <invoke_pcb_dialog.h>
-#include <class_DisplayFootprintsFrame.h>
+#include <display_footprints_frame.h>
 #include <cvpcb_id.h>
 
 
@@ -57,10 +57,8 @@ wxSize const FRAME_DEFAULT_SIZE_DU( 500, 250 );
 ///@{
 /// \ingroup config
 
-/// Nonzero iff cvpcb should be kept open after saving files
+/// Nonzero if cvpcb should be kept open after saving association in schematic
 static const wxString KeepCvpcbOpenEntry = "KeepCvpcbOpen";
-
-static const wxString FootprintDocFileEntry = "footprints_doc_file";
 
 static const wxString FilterFootprintEntry = "FilterFootprint";
 ///@}
@@ -127,13 +125,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_filteringOptions      = 0;
     m_tcFilterString        = NULL;
     m_FootprintsList        = FOOTPRINT_LIST::GetInstance( Kiway() );
-
-    /* Name of the document footprint list
-     * usually located in share/modules/footprints_doc
-     * this is of the responsibility to users to create this file
-     * if they want to have a list of footprints
-     */
-    m_DocModulesFileName = DEFAULT_FOOTPRINTS_LIST_FILENAME;
 
     // Give an icon
     wxIcon icon;
@@ -211,8 +202,6 @@ void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
     aCfg->Read( KeepCvpcbOpenEntry, &m_keepCvpcbOpen, true );
-    aCfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
-                DEFAULT_FOOTPRINTS_LIST_FILENAME );
     aCfg->Read( FilterFootprintEntry, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
 }
 
@@ -222,7 +211,6 @@ void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
     aCfg->Write( KeepCvpcbOpenEntry, m_keepCvpcbOpen );
-    aCfg->Write( FootprintDocFileEntry, m_DocModulesFileName );
     aCfg->Write( FilterFootprintEntry, m_filteringOptions );
 }
 

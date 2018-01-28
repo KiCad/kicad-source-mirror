@@ -24,7 +24,7 @@
  */
 
 /**
- * @file class_DisplayFootprintsFrame.cpp
+ * @file display_footprints_frame.cpp
  */
 
 #include <fctsys.h>
@@ -44,9 +44,9 @@
 #include <class_board.h>
 
 #include <cvpcb_mainframe.h>
-#include <class_DisplayFootprintsFrame.h>
+#include <display_footprints_frame.h>
 #include <cvpcb_id.h>
-#include <listview_classes.h>
+#include <listboxes.h>
 
 #include <3d_viewer/eda_3d_viewer.h>
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef AUTOSEL_H
-#define AUTOSEL_H
+#ifndef AUTO_ASSOCIATE_H
+#define AUTO_ASSOCIATE_H
 
 // A helper class to handle info read in .equ files, which gives a footprint LIB_ID
 // corresponding to a component value.
@@ -42,4 +42,4 @@ public:
 
 typedef boost::ptr_vector< FOOTPRINT_EQUIVALENCE > FOOTPRINT_EQUIVALENCE_LIST;
 
-#endif      // ifndef AUTOSEL_H
+#endif      // ifndef AUTO_ASSOCIATE_H

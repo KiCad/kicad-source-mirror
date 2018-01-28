@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
  */
 
 /**
- * @file autosel.cpp
+ * @file auto_associate.cpp
  */
 
 // This file handle automatic selection of footprints, from .equ files which give
@@ -42,8 +42,8 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <listview_classes.h>
-#include <autosel.h>
+#include <listboxes.h>
+#include <auto_associate.h>
 
 #define QUOTE   '\''
 

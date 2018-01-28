@@ -22,7 +22,7 @@
  */
 
 /**
- * @file class_library_listbox.cpp
+ * @file library_listbox.cpp
  * class to display used library and selecting it
  */
 
@@ -32,7 +32,7 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <listview_classes.h>
+#include <listboxes.h>
 #include <cvpcb_id.h>
 
 

@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_DisplayFootprintsFrame.h
+ * @file display_footprints_frame.h
  */
 
 

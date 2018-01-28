@@ -39,7 +39,7 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <class_DisplayFootprintsFrame.h>
+#include <display_footprints_frame.h>
 
 
 PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters()
