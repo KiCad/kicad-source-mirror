@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <worksheet.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>

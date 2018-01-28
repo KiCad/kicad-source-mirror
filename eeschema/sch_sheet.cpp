@@ -33,7 +33,7 @@
 #include <trigo.h>
 #include <richio.h>
 #include <schframe.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <kicad_string.h>
 #include <msgpanel.h>
 

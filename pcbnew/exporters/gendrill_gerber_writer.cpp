@@ -31,7 +31,7 @@
 
 #include <vector>
 
-#include <class_plotter.h>
+#include <plotter.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <pgm_base.h>

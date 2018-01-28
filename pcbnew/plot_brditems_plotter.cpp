@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <base_struct.h>
 #include <drawtxt.h>
 #include <trigo.h>

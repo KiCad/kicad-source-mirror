@@ -23,8 +23,8 @@
  */
 
 /**
- * @file common_plotHPGL_functions.cpp
- * @brief KiCad: Common plot HPGL Routines
+ * @file HPGL_plotter.cpp
+ * @brief Kicad: specialized plotter for HPGL files format
  * Since this plot engine is mostly intended for import in external programs,
  * sadly HPGL/2 isn't supported a lot... some of the primitives use overlapped
  * strokes to fill the shape
@@ -199,7 +199,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <base_struct.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>

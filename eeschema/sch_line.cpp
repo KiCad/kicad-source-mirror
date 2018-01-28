@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <class_drawpanel.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <base_units.h>
 #include <eeschema_config.h>
 #include <general.h>

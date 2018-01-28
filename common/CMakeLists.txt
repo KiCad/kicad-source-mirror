@@ -208,6 +208,17 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/simple_overlay_item.cpp
     )
 
+set( PLOTTERS_CONTROL_SRCS
+    plotters/plotter.cpp
+    plotters/DXF_plotter.cpp
+    plotters/GERBER_plotter.cpp
+    plotters/HPGL_plotter.cpp
+    plotters/PDF_plotter.cpp
+    plotters/PS_plotter.cpp
+    plotters/SVG_plotter.cpp
+    plotters/common_plot_functions.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -215,6 +226,7 @@ set( COMMON_SRCS
     ${COMMON_WIDGET_SRCS}
     ${COMMON_PAGE_LAYOUT_SRCS}
     ${COMMON_PREVIEW_ITEMS_SRCS}
+    ${PLOTTERS_CONTROL_SRCS}
     base_struct.cpp
     basicframe.cpp
     bezier_curves.cpp
@@ -226,18 +238,10 @@ set( COMMON_SRCS
     class_colors_design_settings.cpp
     class_layer_box_selector.cpp
     class_marker_base.cpp
-    class_plotter.cpp
     class_undoredo_container.cpp
     colors.cpp
     commit.cpp
     common.cpp
-    common_plotDXF_functions.cpp
-    common_plotGERBER_functions.cpp
-    common_plotHPGL_functions.cpp
-    common_plotPDF_functions.cpp
-    common_plotPS_functions.cpp
-    common_plotSVG_functions.cpp
-    common_plot_functions.cpp
     config_params.cpp
     confirm.cpp
     convert_basic_shapes_to_polygon.cpp
@@ -246,7 +250,7 @@ set( COMMON_SRCS
     displlst.cpp
     draw_frame.cpp
     draw_panel.cpp
-    drawtxt.cpp
+    draw_graphic_text.cpp
     dsnlexer.cpp
     eagle_parser.cpp
     eda_dde.cpp

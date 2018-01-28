@@ -33,7 +33,7 @@
 #include <trigo.h>
 #include <common.h>
 #include <richio.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <bitmaps.h>
 
 #include <sch_junction.h>

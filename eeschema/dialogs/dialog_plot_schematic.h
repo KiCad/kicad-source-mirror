@@ -4,11 +4,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
  */
 
 #include <fctsys.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <class_sch_screen.h>
 #include <schframe.h>
 #include <dialog_plot_schematic_base.h>

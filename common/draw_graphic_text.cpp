@@ -32,7 +32,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 #include <trigo.h>
 #include <macros.h>

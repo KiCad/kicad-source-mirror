@@ -29,7 +29,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <class_drawpanel.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <drawtxt.h>
 #include <trigo.h>
 #include <wxstruct.h>

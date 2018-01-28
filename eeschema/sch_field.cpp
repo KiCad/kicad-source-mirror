@@ -42,7 +42,7 @@
 #include <drawtxt.h>
 #include <macros.h>
 #include <schframe.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <bitmaps.h>
 
 #include <general.h>

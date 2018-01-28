@@ -23,8 +23,8 @@
  */
 
 /**
- * @file class_plotter.cpp
- * @brief KiCad: Base of all the plot routines
+ * @file plotter.cpp
+ * @brief KiCad: Base of all the specialized plotters
  * the class PLOTTER handle basic functions to plot schematic and boards
  * with different plot formats.
  *
@@ -43,7 +43,7 @@
 #include <wxstruct.h>
 #include <base_struct.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>

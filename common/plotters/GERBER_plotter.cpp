@@ -23,8 +23,8 @@
  */
 
 /**
- * @file common_plotGERBER_functions.cpp
- * @brief Common GERBER plot routines.
+ * @file GERBER_gerber.cpp
+ * @brief Kicad: specialized plotter for GERBER files format
  */
 
 #include <fctsys.h>
@@ -33,7 +33,7 @@
 #include <wxstruct.h>
 #include <base_struct.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>

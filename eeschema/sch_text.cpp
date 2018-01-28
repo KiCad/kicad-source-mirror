@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <schframe.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>

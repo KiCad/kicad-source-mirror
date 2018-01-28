@@ -23,8 +23,8 @@
  */
 
 /**
- * @file common_plotPS_functions.cpp
- * @brief Kicad: Common plot Postscript Routines
+ * @file PS_plotter.cpp
+ * @brief Kicad: specialized plotter for PS files format
  */
 
 #include <fctsys.h>
@@ -32,7 +32,7 @@
 #include <wxstruct.h>
 #include <base_struct.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>

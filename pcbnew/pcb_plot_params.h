@@ -25,7 +25,7 @@
 
 #include <wx/wx.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
-#include <class_plotter.h>
+#include <plotter.h>
 #include <layers_id_colors_and_visibility.h>
 
 class PCB_PLOT_PARAMS_PARSER;

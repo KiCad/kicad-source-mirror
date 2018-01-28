@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <drawtxt.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <trigo.h>
 #include <richio.h>
 #include <schframe.h>

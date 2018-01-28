@@ -1,6 +1,6 @@
 /**
- * @file common_plotPS_functions.cpp
- * @brief Kicad: Common plot SVG functions
+ * @file SVG_plotter.cpp
+ * @brief Kicad: specialized plotter for SVG files format
  */
 
 /*
@@ -96,7 +96,7 @@
 #include <class_eda_rect.h>
 #include <base_struct.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 

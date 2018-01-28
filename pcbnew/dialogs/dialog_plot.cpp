@@ -27,7 +27,7 @@
 
 
 #include <kiface_i.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>

@@ -1,6 +1,6 @@
 /**
- * @file common_plotPDF_functions.cpp
- * @brief Kicad: Common plot PDF Routines
+ * @file PDF_plotter.cpp
+ * @brief Kicad: specialized plotter for PDF files format
  */
 
 /*
@@ -33,7 +33,7 @@
 #include <wxstruct.h>
 #include <base_struct.h>
 #include <common.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <wx/zstream.h>

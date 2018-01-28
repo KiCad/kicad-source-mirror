@@ -31,7 +31,7 @@
 
 #include <vector>
 
-#include <class_plotter.h>
+#include <plotter.h>
 #include <wxPcbStruct.h>
 #include <build_version.h>
 

@@ -1,6 +1,6 @@
 /**
- * @file common_plotDXF_functions.cpp
- * @brief KiCad: Common plot DXF Routines.
+ * @file DXF_plotter.cpp
+ * @brief Kicad: specialized plotter for DXF files format
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -31,7 +31,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <base_struct.h>
-#include <class_plotter.h>
+#include <plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
