@@ -108,7 +108,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 
 %include <plotcontroller.h>
 %include <pcb_plot_params.h>
-%include <class_plotter.h>
+%include <plotter.h>
 %include <exporters/gendrill_file_writer_base.h>
 %include <exporters/gendrill_Excellon_writer.h>
 %include <exporters/gendrill_gerber_writer.h>
