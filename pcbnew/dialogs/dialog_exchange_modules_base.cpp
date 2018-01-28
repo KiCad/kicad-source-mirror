@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wx_html_report_panel.h"
@@ -15,147 +15,108 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* mainSizer;
-	mainSizer = new wxBoxSizer( wxVERTICAL );
+	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_localizationSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_updateModeTitle = new wxStaticText( this, wxID_ANY, _("Update Footprints from Library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateModeTitle->Wrap( -1 );
-	m_localizationSizer->Add( m_updateModeTitle, 0, wxALL, 5 );
-	
-	m_exchangeModeTitle = new wxStaticText( this, wxID_ANY, _("Change Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_exchangeModeTitle->Wrap( -1 );
-	m_localizationSizer->Add( m_exchangeModeTitle, 0, wxALL, 5 );
-	
-	m_updateModeVerb = new wxStaticText( this, wxID_ANY, _("Update"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateModeVerb->Wrap( -1 );
-	m_localizationSizer->Add( m_updateModeVerb, 0, wxALL, 5 );
-	
-	m_exchangeModeVerb = new wxStaticText( this, wxID_ANY, _("Change"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_exchangeModeVerb->Wrap( -1 );
-	m_localizationSizer->Add( m_exchangeModeVerb, 0, wxALL, 5 );
-	
-	
-	mainSizer->Add( m_localizationSizer, 0, 0, 5 );
-	
-	wxBoxSizer* bUpperSizer;
-	bUpperSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_allSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_upperSizer = new wxGridBagSizer( 0, 0 );
+	m_upperSizer->SetFlexibleDirection( wxBOTH );
+	m_upperSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_matchAll = new wxRadioButton( this, wxID_MATCH_FP_ALL, _("%s all footprints on board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchAll->SetValue( true ); 
 	m_matchAll->SetMinSize( wxSize( -1,26 ) );
 	
-	m_allSizer->Add( m_matchAll, 0, wxALL, 2 );
-	
-	
-	bUpperSizer->Add( m_allSizer, 29, wxEXPAND, 5 );
-	
-	m_currentRefSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_upperSizer->Add( m_matchAll, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_matchCurrentRef = new wxRadioButton( this, wxID_MATCH_FP_REF, _("%s current footprint (%s)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchCurrentRef->SetMinSize( wxSize( -1,26 ) );
 	
-	m_currentRefSizer->Add( m_matchCurrentRef, 0, wxALL, 2 );
-	
-	
-	bUpperSizer->Add( m_currentRefSizer, 31, wxEXPAND, 5 );
-	
-	m_specifiedRefSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_upperSizer->Add( m_matchCurrentRef, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_matchSpecifiedRef = new wxRadioButton( this, wxID_MATCH_FP_REF, _("%s footprint with reference:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSpecifiedRef->SetMinSize( wxSize( -1,26 ) );
 	
-	m_specifiedRefSizer->Add( m_matchSpecifiedRef, 0, wxALL, 2 );
+	m_upperSizer->Add( m_matchSpecifiedRef, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 	
 	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_specifiedRefSizer->Add( m_specifiedRef, 1, wxALL, 3 );
-	
-	
-	bUpperSizer->Add( m_specifiedRefSizer, 0, wxEXPAND, 5 );
-	
-	m_currentValueSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_upperSizer->Add( m_specifiedRef, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
 	m_matchCurrentValue = new wxRadioButton( this, wxID_MATCH_FP_VAL, _("%s footprints with matching value (%s)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchCurrentValue->SetMinSize( wxSize( -1,26 ) );
 	
-	m_currentValueSizer->Add( m_matchCurrentValue, 0, wxALL, 2 );
-	
-	
-	bUpperSizer->Add( m_currentValueSizer, 31, wxEXPAND, 5 );
-	
-	m_specifiedValueSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_upperSizer->Add( m_matchCurrentValue, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_matchSpecifiedValue = new wxRadioButton( this, wxID_MATCH_FP_VAL, _("%s footprints with value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSpecifiedValue->SetMinSize( wxSize( -1,26 ) );
 	
-	m_specifiedValueSizer->Add( m_matchSpecifiedValue, 0, wxALL, 2 );
+	m_upperSizer->Add( m_matchSpecifiedValue, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_specifiedValueSizer->Add( m_specifiedValue, 1, wxALL, 3 );
-	
-	
-	bUpperSizer->Add( m_specifiedValueSizer, 31, wxEXPAND, 5 );
-	
-	m_specifiedIDSizer = new wxBoxSizer( wxVERTICAL );
+	m_upperSizer->Add( m_specifiedValue, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 	
 	m_matchSpecifiedID = new wxRadioButton( this, wxID_MATCH_FP_ID, _("%s footprints with identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_specifiedIDSizer->Add( m_matchSpecifiedID, 0, wxALL, 2 );
+	m_upperSizer->Add( m_matchSpecifiedID, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
-	wxBoxSizer* specifiedIDSizer;
-	specifiedIDSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	specifiedIDSizer->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
+	m_specifiedID->SetMinSize( wxSize( 500,22 ) );
+	
+	fgSizer1->Add( m_specifiedID, 0, wxALL|wxEXPAND, 3 );
 	
 	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	specifiedIDSizer->Add( m_specifiedIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
+	fgSizer1->Add( m_specifiedIDBrowseButton, 0, wxALL, 0 );
 	
 	
-	m_specifiedIDSizer->Add( specifiedIDSizer, 0, wxALIGN_TOP|wxEXPAND, 0 );
+	m_upperSizer->Add( fgSizer1, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 0 );
 	
 	
-	bUpperSizer->Add( m_specifiedIDSizer, 45, wxEXPAND, 5 );
+	m_upperSizer->AddGrowableCol( 1 );
 	
-	
-	mainSizer->Add( bUpperSizer, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_upperSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_middleSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticLine* staticline1;
 	staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_middleSizer->Add( staticline1, 0, wxEXPAND | wxALL, 0 );
+	m_middleSizer->Add( staticline1, 0, wxBOTTOM|wxEXPAND, 2 );
 	
 	wxStaticText* newIdLabel;
 	newIdLabel = new wxStaticText( this, wxID_ANY, _("New footprint identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
 	newIdLabel->Wrap( -1 );
-	m_middleSizer->Add( newIdLabel, 0, wxALL, 2 );
+	m_middleSizer->Add( newIdLabel, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
-	wxBoxSizer* newIDSizer;
-	newIDSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer2->AddGrowableCol( 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_newID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	newIDSizer->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
+	m_newID->SetMinSize( wxSize( 500,22 ) );
+	
+	fgSizer2->Add( m_newID, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	newIDSizer->Add( m_newIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
+	fgSizer2->Add( m_newIDBrowseButton, 0, wxALL, 0 );
 	
 	
-	m_middleSizer->Add( newIDSizer, 0, wxEXPAND, 0 );
+	m_middleSizer->Add( fgSizer2, 0, wxEXPAND, 0 );
 	
 	
-	mainSizer->Add( m_middleSizer, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_middleSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,300 ) );
 	
-	mainSizer->Add( m_MessageWindow, 1, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_MessageWindow, 5, wxALL|wxEXPAND, 5 );
 	
 	wxStaticLine* staticline2;
 	staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( staticline2, 0, wxEXPAND | wxALL, 5 );
+	m_mainSizer->Add( staticline2, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bottomSizer;
 	bottomSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -181,13 +142,15 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	bottomSizer->Add( m_closeButton, 0, wxALL, 5 );
 	
 	
-	mainSizer->Add( bottomSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( bottomSizer, 0, wxEXPAND, 5 );
 	
 	
-	this->SetSizer( mainSizer );
+	this->SetSizer( m_mainSizer );
 	this->Layout();
+	m_mainSizer->Fit( this );
 	
 	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXCHANGE_MODULE_BASE::updateMatchModeRadioButtons ) );
 	m_matchAll->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchAllClicked ), NULL, this );
 	m_matchCurrentRef->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchRefClicked ), NULL, this );
 	m_matchSpecifiedRef->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchRefClicked ), NULL, this );
@@ -198,8 +161,6 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	m_specifiedValue->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchValueClicked ), NULL, this );
 	m_specifiedValue->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchValueClicked ), NULL, this );
 	m_matchSpecifiedID->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchIDClicked ), NULL, this );
-	m_specifiedID->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchIDClicked ), NULL, this );
-	m_specifiedID->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchIDClicked ), NULL, this );
 	m_specifiedIDBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_newIDBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_exportButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::RebuildCmpList ), NULL, this );
@@ -210,6 +171,7 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 DIALOG_EXCHANGE_MODULE_BASE::~DIALOG_EXCHANGE_MODULE_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXCHANGE_MODULE_BASE::updateMatchModeRadioButtons ) );
 	m_matchAll->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchAllClicked ), NULL, this );
 	m_matchCurrentRef->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchRefClicked ), NULL, this );
 	m_matchSpecifiedRef->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchRefClicked ), NULL, this );
@@ -220,8 +182,6 @@ DIALOG_EXCHANGE_MODULE_BASE::~DIALOG_EXCHANGE_MODULE_BASE()
 	m_specifiedValue->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchValueClicked ), NULL, this );
 	m_specifiedValue->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchValueClicked ), NULL, this );
 	m_matchSpecifiedID->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchIDClicked ), NULL, this );
-	m_specifiedID->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchIDClicked ), NULL, this );
-	m_specifiedID->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnMatchIDClicked ), NULL, this );
 	m_specifiedIDBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_newIDBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_exportButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::RebuildCmpList ), NULL, this );

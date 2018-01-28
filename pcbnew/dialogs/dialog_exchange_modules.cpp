@@ -63,6 +63,11 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
     m_updateMode = updateMode;
 
     init( m_updateMode );
+
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
+    // because the update and change versions of this dialog have different controls.
+    m_hash_key = TO_UTF8( GetTitle() );
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Center();
@@ -80,11 +85,9 @@ void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
 {
     SetFocus();
 
-    // fetch title and mode strings out of the dialog (so they can be easily localized)
-    wxString title = updateMode ? m_updateModeTitle->GetLabel() : m_exchangeModeTitle->GetLabel();
-    wxString verb  = updateMode ? m_updateModeVerb->GetLabel()  : m_exchangeModeVerb->GetLabel();
+    wxString title = updateMode ? _( "Update Footprints from Library" ) : _( "Change Footprints" );
+    wxString verb  = updateMode ? _( "Update" )                         : _( "Change" );
     wxString label;
-    m_localizationSizer->Show( false );
 
     SetTitle( title );
 
@@ -97,7 +100,7 @@ void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
     }
     else
     {
-        m_allSizer->Show( false );
+        m_upperSizer->FindItem( m_matchAll )->Show( false );
 
         if( m_currentModule )
             m_newID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
@@ -106,24 +109,26 @@ void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
 
     if( m_currentModule )
     {
-        m_specifiedRefSizer->Show( false );
+        m_upperSizer->FindItem( m_matchSpecifiedRef )->Show( false );
+        m_upperSizer->FindItem( m_specifiedRef )->Show( false );
 
         label.Printf( m_matchCurrentRef->GetLabel(), verb, m_currentModule->GetReference() );
         m_matchCurrentRef->SetLabel( label );
 
-        m_specifiedValueSizer->Show( false );
+        m_upperSizer->FindItem( m_matchSpecifiedValue )->Show( false );
+        m_upperSizer->FindItem( m_specifiedValue )->Show( false );
 
         label.Printf( m_matchCurrentValue->GetLabel(), verb, m_currentModule->GetValue() );
         m_matchCurrentValue->SetLabel( label );
     }
     else
     {
-        m_currentRefSizer->Show( false );
+        m_upperSizer->FindItem( m_matchCurrentRef )->Show( false );
 
         label.Printf( m_matchSpecifiedRef->GetLabel(), verb );
         m_matchSpecifiedRef->SetLabel( label );
 
-        m_currentValueSizer->Show( false );
+        m_upperSizer->FindItem( m_matchCurrentValue )->Show( false );
 
         label.Printf( m_matchSpecifiedValue->GetLabel(), verb );
         m_matchSpecifiedValue->SetLabel( label );
@@ -131,9 +136,13 @@ void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
 
     label.Printf( m_matchSpecifiedID->GetLabel(), verb );
     m_matchSpecifiedID->SetLabel( label );
+
     if( m_currentModule )
         m_specifiedID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
     m_specifiedIDBrowseButton->SetBitmap( KiBitmap( library_browse_xpm ) );
+
+    m_upperSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
+    m_upperSizer->RecalcSizes();
 
     // initialize match-mode
     wxCommandEvent event;
@@ -228,7 +237,7 @@ wxRadioButton* DIALOG_EXCHANGE_MODULE::getRadioButtonForMode()
 }
 
 
-void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons()
+void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 {
     wxRadioButton* button = getRadioButtonForMode();
 
@@ -244,14 +253,12 @@ void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons()
 void DIALOG_EXCHANGE_MODULE::OnMatchAllClicked( wxCommandEvent& event )
 {
     setMatchMode( wxID_MATCH_FP_ALL );
-    updateMatchModeRadioButtons();
     m_matchAll->SetFocus();
 }
 
 void DIALOG_EXCHANGE_MODULE::OnMatchRefClicked( wxCommandEvent& event )
 {
     setMatchMode( wxID_MATCH_FP_REF );
-    updateMatchModeRadioButtons();
 
     if( m_specifiedRef->IsShown() && event.GetEventObject() != m_specifiedRef )
         m_specifiedRef->SetFocus();
@@ -261,7 +268,6 @@ void DIALOG_EXCHANGE_MODULE::OnMatchRefClicked( wxCommandEvent& event )
 void DIALOG_EXCHANGE_MODULE::OnMatchValueClicked( wxCommandEvent& event )
 {
     setMatchMode( wxID_MATCH_FP_VAL );
-    updateMatchModeRadioButtons();
 
     if( m_specifiedValue->IsShown() && event.GetEventObject() != m_specifiedValue )
         m_specifiedValue->SetFocus();
@@ -271,7 +277,6 @@ void DIALOG_EXCHANGE_MODULE::OnMatchValueClicked( wxCommandEvent& event )
 void DIALOG_EXCHANGE_MODULE::OnMatchIDClicked( wxCommandEvent& event )
 {
     setMatchMode( wxID_MATCH_FP_ID );
-    updateMatchModeRadioButtons();
 
     if( m_specifiedID->IsShown() && event.GetEventObject() != m_specifiedID )
         m_specifiedID->SetFocus();

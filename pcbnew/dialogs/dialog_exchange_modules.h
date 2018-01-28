@@ -48,6 +48,7 @@ public:
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
+    void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) override;
     void OnMatchAllClicked( wxCommandEvent& event ) override;
     void OnMatchRefClicked( wxCommandEvent& event ) override;
     void OnMatchValueClicked( wxCommandEvent& event ) override;
@@ -63,7 +64,6 @@ private:
     void setMatchMode( int aMatchMode );
 
     wxRadioButton* getRadioButtonForMode();
-    void updateMatchModeRadioButtons();
 
     bool isMatch( MODULE* );
     bool changeCurrentFootprint();
