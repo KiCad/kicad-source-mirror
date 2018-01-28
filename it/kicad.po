@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-27 15:05+0100\n"
-"PO-Revision-Date: 2018-01-27 15:13+0100\n"
+"POT-Creation-Date: 2018-01-28 01:46+0100\n"
+"PO-Revision-Date: 2018-01-28 01:48+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -185,7 +185,7 @@ msgstr "Tutti i file (*.*)|*.*"
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:37
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
 #: eeschema/widgets/tuner_slider_base.cpp:20 eeschema/sch_component.cpp:1444
-#: eeschema/sch_component.cpp:1480 eeschema/lib_pin.cpp:1703
+#: eeschema/sch_component.cpp:1480 eeschema/lib_pin.cpp:1702
 #: eeschema/viewlibs.cpp:239 eeschema/libedit.cpp:647
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:343
@@ -1735,7 +1735,8 @@ msgstr "Forma puntatore"
 
 #: common/widgets/gal_options_panel.cpp:208
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr "Forma del puntatore per gli strumenti di disegno, piazzamento e spostamento"
+msgstr ""
+"Forma del puntatore per gli strumenti di disegno, piazzamento e spostamento"
 
 #: common/widgets/gal_options_panel.cpp:214
 msgid "Always display crosshairs"
@@ -2796,7 +2797,7 @@ msgstr "Cartella risultati \"%s\" creata.\n"
 msgid "Cannot create output directory \"%s\".\n"
 msgstr "Impossibile creare la cartella risultati \"%s\".\n"
 
-#: common/eda_doc.cpp:145 eeschema/dialogs/dialog_edit_component_in_lib.cpp:437
+#: common/eda_doc.cpp:145 eeschema/dialogs/dialog_edit_component_in_lib.cpp:468
 msgid "Doc Files"
 msgstr "Specifiche"
 
@@ -3280,7 +3281,7 @@ msgstr "Scala immagine:"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_spice_model_base.cpp:519
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:183
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:222
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1095
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:75
 msgid "Add"
@@ -3296,7 +3297,8 @@ msgstr "Aggiungi prefisso percorso"
 #: eeschema/onrightclick.cpp:807 eeschema/onrightclick.cpp:838
 #: eeschema/libedit_onrightclick.cpp:194 eeschema/libedit_onrightclick.cpp:258
 #: eeschema/libedit_onrightclick.cpp:288
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:186
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
 #: pcbnew/onrightclick.cpp:215 pcbnew/onrightclick.cpp:267
 #: pcbnew/onrightclick.cpp:312 pcbnew/onrightclick.cpp:893
 #: pcbnew/onrightclick.cpp:1005 pcbnew/modedit_onclick.cpp:383
@@ -3399,7 +3401,7 @@ msgid "Show:"
 msgstr "Mostra:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:39
-#: eeschema/lib_draw_item.cpp:68 eeschema/lib_draw_item.cpp:75
+#: eeschema/lib_draw_item.cpp:67 eeschema/lib_draw_item.cpp:74
 msgid "All"
 msgstr "Tutti"
 
@@ -4064,8 +4066,8 @@ msgstr "Variabili ambiente disponibili per percorsi relativi:"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: eeschema/sch_component.cpp:1439 eeschema/sch_component.cpp:1478
-#: eeschema/lib_field.cpp:449 eeschema/lib_field.cpp:628
-#: eeschema/template_fieldnames.cpp:42
+#: eeschema/lib_field.cpp:447 eeschema/lib_field.cpp:626
+#: eeschema/template_fieldnames.cpp:48
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
 #: eeschema/dialogs/dialog_rescue_each.cpp:117
@@ -4324,18 +4326,9 @@ msgstr "Mostra piedini nascosti"
 msgid "HV orientation for wires and bus"
 msgstr "Orientamento per fili e bus"
 
-#: eeschema/lib_text.cpp:51 eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
-#: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:67
-#: pcbnew/class_text_mod.cpp:362 pcbnew/class_text_mod.cpp:369
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:22
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
-msgid "Text"
-msgstr "Testo"
-
-#: eeschema/lib_text.cpp:303 eeschema/lib_bezier.cpp:333
-#: eeschema/lib_circle.cpp:243 eeschema/lib_polyline.cpp:326
-#: eeschema/lib_arc.cpp:492 eeschema/lib_rectangle.cpp:222
+#: eeschema/lib_text.cpp:302 eeschema/lib_bezier.cpp:332
+#: eeschema/lib_circle.cpp:242 eeschema/lib_polyline.cpp:325
+#: eeschema/lib_arc.cpp:491 eeschema/lib_rectangle.cpp:221
 #: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:216
 #: pcb_calculator/transline_ident.cpp:248
@@ -4344,7 +4337,7 @@ msgstr "Testo"
 msgid "Line Width"
 msgstr "Larghezza conduttore"
 
-#: eeschema/lib_text.cpp:365 eeschema/sch_text.cpp:499
+#: eeschema/lib_text.cpp:364 eeschema/sch_text.cpp:499
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Testo grafico %s"
@@ -4497,7 +4490,7 @@ msgid "Reset to Default"
 msgstr "Imposta al predefinito"
 
 #: eeschema/onrightclick.cpp:387 eeschema/onrightclick.cpp:798
-#: eeschema/lib_pin.cpp:1727 eeschema/sch_text.cpp:661
+#: eeschema/lib_pin.cpp:1726 eeschema/sch_text.cpp:661
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:121
 msgid "Orientation"
 msgstr "Orientamento"
@@ -4520,8 +4513,8 @@ msgstr "Duplica"
 #: eeschema/libedit_onrightclick.cpp:178 eeschema/libedit_onrightclick.cpp:202
 #: eeschema/libedit_onrightclick.cpp:230 eeschema/libedit_onrightclick.cpp:239
 #: eeschema/libedit_onrightclick.cpp:296
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:186
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
 #: pagelayout_editor/onrightclick.cpp:110
 #: pagelayout_editor/events_functions.cpp:589 pagelayout_editor/menubar.cpp:128
 #: pcbnew/onrightclick.cpp:221 pcbnew/onrightclick.cpp:286
@@ -4564,8 +4557,8 @@ msgstr "Convertito"
 msgid "Unit %s"
 msgstr "Unità %s"
 
-#: eeschema/onrightclick.cpp:480 eeschema/lib_draw_item.cpp:72
-#: eeschema/cmp_tree_model.cpp:123 eeschema/libedit.cpp:663
+#: eeschema/onrightclick.cpp:480 eeschema/lib_draw_item.cpp:71
+#: eeschema/cmp_tree_model.cpp:125 eeschema/libedit.cpp:663
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:37
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:48
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:59
@@ -5193,8 +5186,7 @@ msgstr "Corpo"
 msgid "Body background"
 msgstr "Sfondo del corpo componente"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:72
-#: eeschema/lib_pin.cpp:157
+#: eeschema/widgets/widget_eeschema_color_config.cpp:72 eeschema/lib_pin.h:115
 msgid "Pin"
 msgstr "Pin"
 
@@ -5208,7 +5200,7 @@ msgstr "Nome piedino"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:75
 #: eeschema/sch_component.cpp:1435 eeschema/sch_component.cpp:1475
-#: eeschema/lib_field.cpp:442 eeschema/template_fieldnames.cpp:39
+#: eeschema/lib_field.cpp:440 eeschema/template_fieldnames.cpp:47
 #: eeschema/dialogs/dialog_rescue_each.cpp:113 eeschema/bom_table_column.h:33
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:30
@@ -5306,8 +5298,8 @@ msgstr "Indefinito!!!"
 msgid "<Unknown>"
 msgstr "<Sconosciuto>"
 
-#: eeschema/sch_component.cpp:1464 eeschema/lib_field.cpp:456
-#: eeschema/template_fieldnames.cpp:45 eeschema/bom_table_column.h:35
+#: eeschema/sch_component.cpp:1464 eeschema/lib_field.cpp:454
+#: eeschema/template_fieldnames.cpp:49 eeschema/bom_table_column.h:35
 #: pcbnew/class_module.cpp:587 pcbnew/class_pad.cpp:693 pcbnew/loadcmp.cpp:445
 #: pcbnew/loadcmp.cpp:509 pcbnew/class_edge_mod.cpp:248
 #: pcbnew/class_text_mod.cpp:366
@@ -5383,11 +5375,7 @@ msgstr ""
 "Errore durante il caricamento della tabella librerie simboli globale.\n"
 "Modificare la tabella globale librerie di simboli nel menu delle preferenze."
 
-#: eeschema/lib_draw_item.cpp:55
-msgid "Undefined"
-msgstr "Indefinito"
-
-#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1707
+#: eeschema/lib_draw_item.cpp:64 eeschema/lib_pin.cpp:1706
 #: eeschema/sch_text.cpp:690 eeschema/libedit.cpp:677
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -5403,15 +5391,15 @@ msgstr "Indefinito"
 msgid "Type"
 msgstr "Tipo"
 
-#: eeschema/lib_draw_item.cpp:77
+#: eeschema/lib_draw_item.cpp:76
 msgid "no"
 msgstr "No"
 
-#: eeschema/lib_draw_item.cpp:79
+#: eeschema/lib_draw_item.cpp:78
 msgid "yes"
 msgstr "Sì"
 
-#: eeschema/lib_draw_item.cpp:83
+#: eeschema/lib_draw_item.cpp:82
 msgid "Converted"
 msgstr "Convertito"
 
@@ -5658,12 +5646,8 @@ msgstr "Non trovato il file di libreria %s"
 msgid "Failed to create file \"%s\""
 msgstr "Impossibile creare il file \"%s\""
 
-#: eeschema/lib_bezier.cpp:50
-msgid "Bezier"
-msgstr "Bezier"
-
-#: eeschema/lib_bezier.cpp:338 eeschema/lib_circle.cpp:251
-#: eeschema/lib_polyline.cpp:331 eeschema/lib_arc.cpp:497
+#: eeschema/lib_bezier.cpp:337 eeschema/lib_circle.cpp:250
+#: eeschema/lib_polyline.cpp:330 eeschema/lib_arc.cpp:496
 msgid "Bounding Box"
 msgstr "Riquadro di delimitazione"
 
@@ -5691,19 +5675,19 @@ msgstr "Sopra"
 msgid "Down"
 msgstr "Sotto"
 
-#: eeschema/lib_pin.cpp:1705 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180
+#: eeschema/lib_pin.cpp:1704 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180
 msgid "Number"
 msgstr "Numero"
 
-#: eeschema/lib_pin.cpp:1713 eeschema/sch_text.cpp:672
-#: eeschema/lib_field.cpp:615
+#: eeschema/lib_pin.cpp:1712 eeschema/sch_text.cpp:672
+#: eeschema/lib_field.cpp:613
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:112
 msgid "Style"
 msgstr "Stile"
 
-#: eeschema/lib_pin.cpp:1716
+#: eeschema/lib_pin.cpp:1715
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1146
 #: gerbview/class_gerber_draw_item.cpp:709
@@ -5712,7 +5696,7 @@ msgstr "Stile"
 msgid "Yes"
 msgstr "Sì"
 
-#: eeschema/lib_pin.cpp:1718
+#: eeschema/lib_pin.cpp:1717
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1148
 #: gerbview/class_gerber_draw_item.cpp:709
 #: gerbview/class_gerber_draw_item.cpp:710 pcbnew/class_pcb_text.cpp:138
@@ -5720,7 +5704,7 @@ msgstr "Sì"
 msgid "No"
 msgstr "No"
 
-#: eeschema/lib_pin.cpp:1720
+#: eeschema/lib_pin.cpp:1719
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:345
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:127
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:156
@@ -5728,22 +5712,22 @@ msgstr "No"
 msgid "Visible"
 msgstr "Visibile"
 
-#: eeschema/lib_pin.cpp:1724 pcbnew/class_drawsegment.cpp:427
+#: eeschema/lib_pin.cpp:1723 pcbnew/class_drawsegment.cpp:427
 #: pcbnew/class_track.cpp:1084
 msgid "Length"
 msgstr "Lunghezza"
 
-#: eeschema/lib_pin.cpp:1740 eeschema/lib_pin.cpp:1759
+#: eeschema/lib_pin.cpp:1739 eeschema/lib_pin.cpp:1758
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1076
 msgid "Pos X"
 msgstr "Pos X"
 
-#: eeschema/lib_pin.cpp:1743 eeschema/lib_pin.cpp:1762
+#: eeschema/lib_pin.cpp:1742 eeschema/lib_pin.cpp:1761
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1077
 msgid "Pos Y"
 msgstr "Pos Y"
 
-#: eeschema/lib_pin.cpp:1963
+#: eeschema/lib_pin.cpp:1962
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -7160,8 +7144,11 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "Modalità modifica pin sincronizzata\n"
-"La modalità di modifica pin sincronizzata propaga ad altre unità tutti i cambiamenti effettuati sui pin eccetto la modifica della numerazione dei pin.\n"
-"Abilitata come impostazione predefinita per le parti multiunità con unità interscambiabili."
+"La modalità di modifica pin sincronizzata propaga ad altre unità tutti i "
+"cambiamenti effettuati sui pin eccetto la modifica della numerazione dei "
+"pin.\n"
+"Abilitata come impostazione predefinita per le parti multiunità con unità "
+"interscambiabili."
 
 #: eeschema/tool_lib.cpp:214 eeschema/menubar_libedit.cpp:237
 msgid "Show pin table"
@@ -7938,38 +7925,37 @@ msgstr "Il campo %s non può contenere %s caratteri."
 msgid "Field Validation Error"
 msgstr "Errore validazione campo"
 
-#: eeschema/lib_field.cpp:87 eeschema/lib_field.cpp:625
-#: eeschema/template_fieldnames.cpp:55
-#: eeschema/dialogs/dialog_bom_editor.cpp:58
-msgid "Field"
-msgstr "Campo"
-
-#: eeschema/lib_field.cpp:463 eeschema/libedit.cpp:680
-#: eeschema/template_fieldnames.cpp:48 eeschema/bom_table_column.h:37
+#: eeschema/lib_field.cpp:461 eeschema/libedit.cpp:680
+#: eeschema/template_fieldnames.cpp:50 eeschema/bom_table_column.h:37
 msgid "Datasheet"
 msgstr "Specifiche"
 
-#: eeschema/lib_field.cpp:472
+#: eeschema/lib_field.cpp:470
 #, c-format
 msgid "Field%d"
 msgstr "Campo%d"
 
-#: eeschema/lib_field.cpp:535
+#: eeschema/lib_field.cpp:533
 #, c-format
 msgid "Field %s %s"
 msgstr "Campo %s %s"
 
-#: eeschema/lib_field.cpp:618 pcbnew/class_pad.cpp:707
+#: eeschema/lib_field.cpp:616 pcbnew/class_pad.cpp:707
 #: pcbnew/class_pcb_text.cpp:149 pcbnew/class_drawsegment.cpp:446
 #: pcbnew/class_text_mod.cpp:398 pcbnew/class_track.cpp:1196
 #: pcbnew/class_track.cpp:1223 pcbnew/dialogs/dialog_design_rules_base.cpp:354
 msgid "Width"
 msgstr "Larghezza"
 
-#: eeschema/lib_field.cpp:621 pcbnew/class_pad.cpp:710
+#: eeschema/lib_field.cpp:619 pcbnew/class_pad.cpp:710
 #: pcbnew/class_pcb_text.cpp:152 pcbnew/class_text_mod.cpp:401
 msgid "Height"
 msgstr "Altezza"
+
+#: eeschema/lib_field.cpp:623 eeschema/template_fieldnames.cpp:51
+#: eeschema/dialogs/dialog_bom_editor.cpp:58 eeschema/lib_field.h:105
+msgid "Field"
+msgstr "Campo"
 
 #: eeschema/class_library.cpp:54
 #, c-format
@@ -8185,50 +8171,27 @@ msgstr ""
 msgid "Power Symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:239
-#: pcbnew/class_pad.cpp:1137 pcbnew/class_drawsegment.cpp:409
-#: pcbnew/class_board_item.cpp:46
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:108
-msgid "Circle"
-msgstr "Cerchio"
-
-#: eeschema/lib_circle.cpp:246
+#: eeschema/lib_circle.cpp:245
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:124
 msgid "Radius"
 msgstr "Raggio"
 
-#: eeschema/lib_circle.cpp:257
+#: eeschema/lib_circle.cpp:256
 #, c-format
 msgid "Circle center (%s, %s), radius %s"
 msgstr "Centro cerchio (%s, %s), raggio %s"
 
-#: eeschema/lib_polyline.cpp:51
-msgid "PolyLine"
-msgstr "Polilinea"
-
-#: eeschema/lib_polyline.cpp:337
+#: eeschema/lib_polyline.cpp:336
 #, c-format
 msgid "Polyline at (%s, %s) with %d points"
 msgstr "Polilinea a (%s, %s) con %d punti"
 
-#: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:236
-#: pcbnew/class_drawsegment.cpp:413 pcbnew/class_board_item.cpp:45
-#: pcbnew/dialogs/dialog_pad_properties.cpp:792
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1928
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:93
-msgid "Arc"
-msgstr "Arco"
-
-#: eeschema/lib_arc.cpp:503
+#: eeschema/lib_arc.cpp:502
 #, c-format
 msgid "Arc center (%s, %s), radius %s"
 msgstr "Centro arco (%s,%s), raggio %s"
 
-#: eeschema/lib_rectangle.cpp:51
-msgid "Rectangle"
-msgstr "Rettangolo"
-
-#: eeschema/lib_rectangle.cpp:298
+#: eeschema/lib_rectangle.cpp:297
 #, c-format
 msgid "Rectangle from (%s, %s) to (%s, %s)"
 msgstr "Rettangolo da (%s, %s) a (%s, %s)"
@@ -9686,61 +9649,68 @@ msgid "Remove all aliases from list?"
 msgstr "Rimuovere tutti i componenti similari dalla lista?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:324
+#, c-format
+msgid "Current alias \"%s\" cannot be edited."
+msgstr "L'alias corrente \"%s\" non può essere modificato."
+
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:329
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:346
 msgid "New Alias:"
 msgstr "Nuovo alias:"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:324
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:329
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:346
 msgid "Symbol alias:"
 msgstr "Alias simbolo:"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:339
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:367
 #, c-format
 msgid "Alias \"%s\" already exists."
 msgstr "L'alias \"%s\" esiste già."
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:347
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:377
 #, c-format
 msgid "Symbol name \"%s\" already exists in library \"%s\"."
 msgstr "Il nome simbolo \"%s\" esiste già nella libreria \"%s\"."
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:366
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:398
 #, c-format
-msgid "Alias \"%s\" cannot be removed while it is being edited!"
-msgstr "L'alias \"%s\" non può essere cancellato mentre viene modifcato!"
+msgid "Current alias \"%s\" cannot be removed."
+msgstr "L'alias corrente \"%s\" non può essere rimosso."
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:387
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:418
 msgid "Delete extra parts from component?"
 msgstr "Cancellare le ulteriori parti del componente?"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:407
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:438
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr ""
 "Aggiungere nuovi piedini per lo stile corpo alternativo (De Morgan) al "
 "componente?"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:412
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:443
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr "Cancellare lo stile alternativo (De Morgan) dal componente?"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:473
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:504
 msgid "OK to delete the footprint filter list ?"
 msgstr "Cancellare l'elenco filtri impronte?"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:494
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:525
 msgid "Add Footprint Filter"
 msgstr "Aggiungi filtro impronta"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:494
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:241
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:525
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:244
 msgid "Footprint Filter"
 msgstr "Filtro impronta"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:511
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:542
 #, c-format
 msgid "Foot print filter \"%s\" is already defined."
 msgstr "Il filtro impronta \"%s\" è già stato definito."
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:547
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:578
 msgid "Edit footprint filter"
 msgstr "Modifica filtro impronte"
 
@@ -10507,21 +10477,21 @@ msgstr ""
 "Esso ha una sua documentazione e parole chiave.\n"
 "È un modo veloce per estendere una libreria con simboli simili"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:192
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:234
 msgid "Delete All"
 msgstr "Cancella tutto"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:199
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
 msgid "Aliases"
 msgstr "Alias"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:207
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:210
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 msgid "Footprints"
 msgstr "Impronte"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:209
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:212
 msgid ""
 "A list of footprints names that can be used for this symbol.\n"
 "Footprints names can used wildcards like sm* to allow all footprints names "
@@ -11223,6 +11193,15 @@ msgstr "&Rimpiazza"
 msgid "Replace &All"
 msgstr "Rimpiazz&a tutti"
 
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28 eeschema/lib_text.h:70
+#: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:67
+#: pcbnew/class_text_mod.cpp:362 pcbnew/class_text_mod.cpp:369
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:22
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
+msgid "Text"
+msgstr "Testo"
+
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:40
 msgid "Select"
 msgstr "Seleziona"
@@ -11658,9 +11637,36 @@ msgstr "Aggiungi archi al corpo del simbolo"
 msgid "Add lines and polygons to symbol body"
 msgstr "Aggiungi linee e poligoni al corpo del simbolo"
 
+#: eeschema/lib_bezier.h:63
+msgid "Bezier"
+msgstr "Bezier"
+
+#: eeschema/lib_rectangle.h:64
+msgid "Rectangle"
+msgstr "Rettangolo"
+
 #: eeschema/sch_marker.h:97
 msgid "ERC Marker"
 msgstr "Evidenziatore ERC"
+
+#: eeschema/lib_arc.h:96 gerbview/class_gerber_draw_item.cpp:236
+#: pcbnew/class_drawsegment.cpp:413 pcbnew/class_board_item.cpp:45
+#: pcbnew/dialogs/dialog_pad_properties.cpp:792
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1928
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:93
+msgid "Arc"
+msgstr "Arco"
+
+#: eeschema/lib_polyline.h:62
+msgid "PolyLine"
+msgstr "Polilinea"
+
+#: eeschema/lib_circle.h:61 gerbview/class_gerber_draw_item.cpp:239
+#: pcbnew/class_pad.cpp:1137 pcbnew/class_drawsegment.cpp:409
+#: pcbnew/class_board_item.cpp:46
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:108
+msgid "Circle"
+msgstr "Cerchio"
 
 #: eeschema/sim/sim_plot_frame_base.h:105
 msgid "Spice Simulator"
@@ -11691,7 +11697,7 @@ msgstr "Proprietà punto di connessione tra fogli"
 msgid "BOM editor"
 msgstr "Editor diba"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.h:113
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.h:115
 msgid "Library Symbol Properties"
 msgstr "Proprietà libreria di simboli"
 
@@ -27693,6 +27699,12 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
+
+#~ msgid "Undefined"
+#~ msgstr "Indefinito"
+
+#~ msgid "Alias \"%s\" cannot be removed while it is being edited!"
+#~ msgstr "L'alias \"%s\" non può essere cancellato mentre viene modifcato!"
 
 #~ msgid "%s"
 #~ msgstr "%s"
