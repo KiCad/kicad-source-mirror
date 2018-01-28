@@ -562,6 +562,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
 
         m_triangles[layer_id] = layerTriangles;
 
+        // Load the 2D (X,Y axis) component of shapes
         for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
              itemOnLayer != listObject2d.end();
              ++itemOnLayer )
@@ -608,6 +609,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
 
         const MAP_POLY &map_poly = m_settings.GetPolyMap();
 
+        // Load the vertical (Z axis)  component of shapes
         if( map_poly.find( layer_id ) != map_poly.end() )
         {
             const SHAPE_POLY_SET *polyList = map_poly.at( layer_id );

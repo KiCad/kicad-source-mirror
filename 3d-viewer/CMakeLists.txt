@@ -47,6 +47,7 @@ set(3D-VIEWER_SRCS
     ../polygon/poly2tri/sweep/sweep_context.cc
     3d_canvas/cinfo3d_visu.cpp
     3d_canvas/create_layer_items.cpp
+    3d_canvas/create_3Dgraphic_brd_items.cpp
     3d_canvas/create_layer_poly.cpp
     3d_canvas/eda_3d_canvas.cpp
     3d_canvas/eda_3d_canvas_pivot.cpp
