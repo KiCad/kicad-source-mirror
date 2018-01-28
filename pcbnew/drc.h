@@ -229,43 +229,47 @@ private:
 
 
     /**
-     * Creates a marker and fills it in with information but does not add it to the BOARD.
+     * Function fillMarker
+     * Optionally creates a marker and fills it in with information, but does not add it to
+     * the BOARD.  Use this to report any kind of DRC problem, or unconnected pad problem.
      *
-     * Use this to report any kind of DRC problem or unconnected pad problem.
-     *
-     * @param aTrack The reference track.
-     * @param aItem  Another item on the BOARD, such as a VIA, SEGZONE,
-     *               or TRACK.
-     * @param aErrorCode A categorizing identifier for the particular type
-     *                   of error that is being reported.
-     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
-     *               first be allocated, then filled.
+     * @param aTrack/aPad The reference item.
+     * @param aItem  Another item on the BOARD, such as a VIA, SEGZONE, or TRACK, which is
+     *               in conflict with the reference item.
+     * @param aErrorCode An ID for the particular type of error that is being reported.
+     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to be created.
      */
-    MARKER_PCB* fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode,
-                            MARKER_PCB* fillMe );
+    MARKER_PCB* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
     MARKER_PCB* fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
-    MARKER_PCB* fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe );
-
-    MARKER_PCB* fillMarker( const wxPoint& aPos, int aErrorCode,
-                            const wxString& aMessage, MARKER_PCB* fillMe );
+    /**
+     * Function fillMarker
+     * Optionally creates a marker and fills it in with information, but does not add it to
+     * the BOARD.  Use this to report any kind of DRC problem, or unconnected pad problem.
+     *
+     * @param aItem The reference item.
+     * @param aPos Usually the position of the item, but could be more specific for a zone.
+     * @param aErrorCode An ID for the particular type of error that is being reported.
+     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to be created.
+     */
+    MARKER_PCB* fillMarker( BOARD_ITEM* aItem, const wxPoint& aPos, int aErrorCode,
+                            MARKER_PCB* fillMe );
 
     /**
-     * Create a marker and fills it in with information but do not add it to the BOARD.
+     * Function fillMarker
+     * Optionally creates a marker and fills it in with information, but does not add it to
+     * the BOARD.  Use this to report any kind of DRC problem, or unconnected pad problem.
      *
-     * Use this to report any kind of DRC problem, or unconnected pad problem.
-     *
-     * @param aArea The zone to test
-     * @param aPos position of error
-     * @param aErrorCode  Type of error
-     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
-     *               first be allocated, then filled.
+     * @param aPos The reference location.
+     * @param aErrorCode An ID for the particular type of error that is being reported.
+     * @param aItem The first item in conflict.
+     * @param bItem (Optional) The second item in conflict or NULL.
+     * @param aErrorCode An ID for the particular type of error that is being reported.
+     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to be created.
      */
-    MARKER_PCB* fillMarker( const ZONE_CONTAINER* aArea,
-                            const wxPoint&        aPos,
-                            int                   aErrorCode,
-                            MARKER_PCB*           fillMe );
+    MARKER_PCB* fillMarker( const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem,
+                            int aErrorCode, MARKER_PCB* fillMe );
 
     /**
      * Fill a MARKER which will report on a generic problem with the board which is

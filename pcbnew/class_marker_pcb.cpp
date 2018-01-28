@@ -54,19 +54,21 @@ MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
 
 
 MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-                        const wxString& aText, const wxPoint& aPos,
-                        const wxString& bText, const wxPoint& bPos ) :
+                        BOARD_ITEM* aItem, const wxPoint& aPos,
+                        BOARD_ITEM* bItem, const wxPoint& bPos ) :
     BOARD_ITEM( NULL, PCB_MARKER_T ),  // parent set during BOARD::Add()
-    MARKER_BASE( aErrorCode, aMarkerPos, aText, aPos, bText, bPos ), m_item( NULL )
+    MARKER_BASE( aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos ), m_item( NULL )
 {
     m_Color = WHITE;
     m_ScalingFactor = SCALING_FACTOR;
 }
 
+
 MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-                        const wxString& aText, const wxPoint& aPos ) :
+                        const wxString& aText, const wxPoint& aPos,
+                        const wxString& bText, const wxPoint& bPos ) :
     BOARD_ITEM( NULL, PCB_MARKER_T ),  // parent set during BOARD::Add()
-    MARKER_BASE( aErrorCode, aMarkerPos, aText,  aPos ), m_item( NULL )
+    MARKER_BASE( aErrorCode, aMarkerPos, aText, aPos, bText, bPos ), m_item( NULL )
 {
     m_Color = WHITE;
     m_ScalingFactor = SCALING_FACTOR;

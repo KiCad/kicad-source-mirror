@@ -61,6 +61,33 @@
 #include <connectivity_data.h>
 
 
+/**
+ * A singleton item of this class is returned for a weak reference that no longer exists.
+ * Its sole purpose is to flag the item as having been deleted.
+ */
+class DELETED_BOARD_ITEM : public BOARD_ITEM
+{
+public:
+    DELETED_BOARD_ITEM() :
+        BOARD_ITEM( nullptr, NOT_USED )
+    {}
+
+    wxString GetSelectMenuText() const override { return _( "(Deleted Item)" ); }
+    wxString GetClass() const override { return wxT( "DELETED_BOARD_ITEM" ); }
+
+    // pure virtuals:
+    const wxPoint GetPosition() const override { return wxPoint(); }
+    void SetPosition( const wxPoint& ) override {}
+    void Draw( EDA_DRAW_PANEL* , wxDC* , GR_DRAWMODE , const wxPoint& ) override {}
+
+#if defined(DEBUG)
+    void Show( int , std::ostream&  ) const override {}
+#endif
+};
+
+DELETED_BOARD_ITEM g_DeletedItem;
+
+
 /* This is an odd place for this, but CvPcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
  */
@@ -1008,6 +1035,45 @@ void BOARD::DeleteZONEOutlines()
 }
 
 
+BOARD_ITEM* BOARD::GetItem( void* aWeakReference, bool includeDrawings )
+{
+    for( TRACK* track : Tracks() )
+        if( track == aWeakReference )
+            return track;
+
+    for( MODULE* module : Modules() )
+    {
+        if( module == aWeakReference )
+            return module;
+
+        for( D_PAD* pad : module->Pads() )
+            if( pad == aWeakReference )
+                return pad;
+
+        if( includeDrawings )
+        {
+            for( BOARD_ITEM* drawing : module->GraphicalItems() )
+                if( drawing == aWeakReference )
+                    return drawing;
+        }
+    }
+
+    for( ZONE_CONTAINER* zone : Zones() )
+        if( zone == aWeakReference )
+            return zone;
+
+    if( includeDrawings )
+    {
+        for( BOARD_ITEM* drawing : Drawings() )
+            if( drawing == aWeakReference )
+                return drawing;
+    }
+
+    // Not found; weak reference has been deleted.
+    return &g_DeletedItem;
+}
+
+
 int BOARD::GetNumSegmTrack() const
 {
     return m_Track.GetCount();
@@ -1642,8 +1708,8 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
         // Pad found, it must be on the correct layer
         if( ( pad->GetLayerSet() & aLayerSet ).any() )
             return pad;
+        }
     }
-}
 
     return nullptr;
 }

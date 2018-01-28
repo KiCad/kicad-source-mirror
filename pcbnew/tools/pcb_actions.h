@@ -64,6 +64,9 @@ public:
     /// Unselects a list of items (specified as the event parameter)
     static TOOL_ACTION unselectItems;
 
+    /// Runs a selection menu to select from a list of items
+    static TOOL_ACTION selectionMenu;
+
     /// Selects a connection between junctions.
     static TOOL_ACTION selectConnection;
 

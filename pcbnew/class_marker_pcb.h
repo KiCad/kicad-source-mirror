@@ -49,6 +49,19 @@ public:
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
      * @param aMarkerPos The position of the MARKER_PCB on the BOARD
+     * @param aItem The first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bItem The second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
+                BOARD_ITEM* aItem, const wxPoint& aPos,
+                BOARD_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
+
+    /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
      * @param aText Text describing the first of two objects
      * @param aPos The position of the first of two objects
      * @param bText Text describing the second of the two conflicting objects
@@ -56,17 +69,7 @@ public:
      */
     MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
                 const wxString& aText, const wxPoint& aPos,
-                const wxString& bText, const wxPoint& bPos );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
-     * @param aText Text describing the object
-     * @param aPos The position of the object
-     */
-    MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-                const wxString& aText, const wxPoint& aPos );
+                const wxString& bText = wxEmptyString, const wxPoint& bPos = wxPoint() );
 
     ~MARKER_PCB();
 
@@ -87,16 +90,6 @@ public:
 
     const wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
-
-    void SetItem( const BOARD_ITEM* aItem )
-    {
-        m_item = aItem;
-    }
-
-    const BOARD_ITEM* GetItem() const
-    {
-        return m_item;
-    }
 
     bool HitTest( const wxPoint& aPosition ) const override
     {

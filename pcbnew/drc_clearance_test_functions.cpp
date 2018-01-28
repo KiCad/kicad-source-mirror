@@ -200,7 +200,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     // Phase 0 : Test vias
     if( aRefSeg->Type() == PCB_VIA_T )
     {
-        const VIA *refvia = static_cast<const VIA*>( aRefSeg );
+        VIA *refvia = static_cast<VIA*>( aRefSeg );
         // test if the via size is smaller than minimum
         if( refvia->GetViaType() == VIA_MICROVIA )
         {

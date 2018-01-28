@@ -280,10 +280,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                     if( aCreateMarkers )
                     {
                         wxPoint pt( currentVertex.x, currentVertex.y );
-                        wxString msg1 = zoneRef->GetSelectMenuText();
-                        wxString msg2 = zoneToTest->GetSelectMenuText();
                         MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
-                                                             pt, msg1, pt, msg2, pt );
+                                                             pt, zoneRef, pt, zoneToTest, pt );
                         commit.Add( marker );
                     }
 
@@ -302,10 +300,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                     if( aCreateMarkers )
                     {
                         wxPoint pt( currentVertex.x, currentVertex.y );
-                        wxString msg1 = zoneToTest->GetSelectMenuText();
-                        wxString msg2 = zoneRef->GetSelectMenuText();
                         MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
-                                                              pt, msg1, pt, msg2, pt );
+                                                             pt, zoneToTest, pt, zoneRef, pt );
                         commit.Add( marker );
                     }
 
@@ -350,10 +346,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                         // COPPERAREA_COPPERAREA error : intersect or too close
                         if( aCreateMarkers )
                         {
-                            wxString msg1 = zoneRef->GetSelectMenuText();
-                            wxString msg2 = zoneToTest->GetSelectMenuText();
                             MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_CLOSE_TO_COPPERAREA,
-                                                                 pt, msg1, pt, msg2, pt );
+                                                                 pt, zoneRef, pt, zoneToTest, pt );
                             commit.Add( marker );
                         }
 
@@ -791,16 +785,14 @@ void DRC::testUnconnected()
 
     for( const auto& edge : edges )
     {
-        wxString t_src = edge.GetSourceNode()->Parent()->GetSelectMenuText();
-        wxString t_dst = edge.GetTargetNode()->Parent()->GetSelectMenuText();
         auto src = edge.GetSourcePos();
         auto dst = edge.GetTargetPos();
 
-
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS,
-                                          t_src,
-                                          t_dst,
-                                          wxPoint( src.x, src.y ), wxPoint( dst.x, dst.y ) );
+                                          edge.GetSourceNode()->Parent(),
+                                          wxPoint( src.x, src.y ),
+                                          edge.GetTargetNode()->Parent(),
+                                          wxPoint( dst.x, dst.y ) );
         m_unconnected.push_back( uncItem );
 
     }
@@ -834,7 +826,7 @@ void DRC::testZones()
 
         if( ( netcode < 0 ) || pads_in_net == 0 )
         {
-            addMarkerToPcb( fillMarker( test_area,
+            addMarkerToPcb( fillMarker( test_area, test_area->GetPosition(),
                                         DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE, m_currentMarker ) );
             m_currentMarker = nullptr;
         }
@@ -1031,10 +1023,8 @@ void DRC::testDisabledLayers()
 
     auto createMarker = [&]( BOARD_ITEM* aItem )
     {
-        wxString msg;
-        msg.Printf( _( "\"%s\" is on a disabled layer" ), aItem->GetSelectMenuText() );
-        m_currentMarker = fillMarker( aItem->GetPosition(), DRCE_DISABLED_LAYER_ITEM,
-                msg, m_currentMarker );
+        m_currentMarker = fillMarker( aItem, aItem->GetPosition(), DRCE_DISABLED_LAYER_ITEM,
+                                      m_currentMarker );
         addMarkerToPcb( m_currentMarker );
         m_currentMarker = nullptr;
     };
@@ -1047,10 +1037,11 @@ void DRC::testDisabledLayers()
 
     for( auto module : board->Modules() )
     {
-        module->RunOnChildren( [&]( BOARD_ITEM* aItem ) {
-            if( disabledLayers.test( aItem->GetLayer() ) )
-                createMarker( aItem );
-        } );
+        module->RunOnChildren( [&]( BOARD_ITEM* aItem )
+            {
+                if( disabledLayers.test( aItem->GetLayer() ) )
+                    createMarker( aItem );
+            } );
     }
 
     for( auto zone : board->Zones() )
@@ -1258,11 +1249,9 @@ bool DRC::doFootprintOverlappingDrc()
 
         if( !is_ok && m_doFootprintOverlapping )
         {
-            msg.Printf( _( "footprint \"%s\" has malformed courtyard" ),
-                        footprint->GetReference().GetData() );
-            m_currentMarker = fillMarker( footprint->GetPosition(),
+            m_currentMarker = fillMarker( footprint, footprint->GetPosition(),
                                           DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
-                                          msg, m_currentMarker );
+                                          m_currentMarker );
             addMarkerToPcb( m_currentMarker );
             m_currentMarker = nullptr;
             success = false;
@@ -1275,11 +1264,9 @@ bool DRC::doFootprintOverlappingDrc()
             footprint->GetPolyCourtyardBack().OutlineCount() == 0 &&
             is_ok )
         {
-            msg.Printf( _( "footprint \"%s\" has no courtyard defined" ),
-                        footprint->GetReference().GetData() );
-            m_currentMarker = fillMarker( footprint->GetPosition(),
+            m_currentMarker = fillMarker( footprint, footprint->GetPosition(),
                                           DRCE_MISSING_COURTYARD_IN_FOOTPRINT,
-                                          msg, m_currentMarker );
+                                          m_currentMarker );
             addMarkerToPcb( m_currentMarker );
             m_currentMarker = nullptr;
             success = false;
@@ -1314,13 +1301,9 @@ bool DRC::doFootprintOverlappingDrc()
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                msg.Printf( _( "footprints \"%s\" and \"%s\" overlap on front (top) layer" ),
-                            footprint->GetReference().GetData(),
-                            candidate->GetReference().GetData() );
                 VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
-                wxPoint loc( pos.x, pos.y );
-                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg,
-                                              m_currentMarker );
+                m_currentMarker = fillMarker( wxPoint( pos.x, pos.y ), footprint, candidate,
+                                              DRCE_OVERLAPPING_FOOTPRINTS, m_currentMarker );
                 addMarkerToPcb( m_currentMarker );
                 m_currentMarker = nullptr;
                 success = false;
@@ -1351,13 +1334,9 @@ bool DRC::doFootprintOverlappingDrc()
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                msg.Printf( _( "footprints \"%s\" and \"%s\" overlap on back (bottom) layer" ),
-                            footprint->GetReference().GetData(),
-                            candidate->GetReference().GetData() );
                 VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
-                wxPoint loc( pos.x, pos.y );
-                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg,
-                                              m_currentMarker );
+                m_currentMarker = fillMarker( wxPoint( pos.x, pos.y ), footprint, candidate,
+                                              DRCE_OVERLAPPING_FOOTPRINTS, m_currentMarker );
                 addMarkerToPcb( m_currentMarker );
                 m_currentMarker = nullptr;
                 success = false;

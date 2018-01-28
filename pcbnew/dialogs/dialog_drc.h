@@ -140,7 +140,9 @@ private:
     void DelDRCMarkers();
     void RedrawDrawPanel();
 
-    void OnPopupMenu( wxCommandEvent& event );
+    /// Run the SELECTION_TOOL's disambiguation menu to highlight the two BOARD_ITEMs
+    /// in the DRC_ITEM.
+    void doSelectionMenu( const DRC_ITEM* aItem );
 
     BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;

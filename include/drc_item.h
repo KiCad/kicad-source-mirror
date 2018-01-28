@@ -28,6 +28,8 @@
 #include <macros.h>
 
 class MARKER_BASE;
+class BOARD;
+class BOARD_ITEM;
 
 
 /**
@@ -45,40 +47,34 @@ class MARKER_BASE;
 class DRC_ITEM
 {
 protected:
-    int      m_ErrorCode;                       ///< the error code's numeric value
-    wxString m_MainText;                        ///< text for the first BOARD_ITEM or SCH_ITEM
-    wxString m_AuxiliaryText;                   ///< text for the second BOARD_ITEM or SCH_ITEM
-    wxPoint  m_MainPosition;                    ///< the location of the first (or main ) BOARD_ITEM or SCH_ITEM. This is also the position of the marker
-    wxPoint  m_AuxiliaryPosition;               ///< the location of the second BOARD_ITEM or SCH_ITEM
-    bool     m_hasSecondItem;                   ///< true when 2 items create a DRC/ERC error, false if only one item
-    bool     m_noCoordinate;
+    int          m_ErrorCode;         // the error code's numeric value
+    wxString     m_MainText;          // text for the first BOARD_ITEM or SCH_ITEM
+    wxString     m_AuxiliaryText;     // text for the second BOARD_ITEM or SCH_ITEM
+    wxPoint      m_MainPosition;      // the location of the first (or main ) BOARD_ITEM or SCH_ITEM.
+    wxPoint      m_AuxiliaryPosition; // the location of the second BOARD_ITEM or SCH_ITEM
+    bool         m_hasSecondItem;     // true when 2 items create a DRC/ERC error, false if only one item
+    bool         m_noCoordinate;
 
-    /// The marker this item belongs to, if any
-    MARKER_BASE* m_parent;
+    MARKER_BASE* m_parent;            // The marker this item belongs to, if any
+    void*        m_mainItemWeakRef;   // search the current BOARD_ITEMs or SCH_ITEMs for a match
+    void*        m_auxItemWeakRef;    // search the current BOARD_ITEMs or SCH_ITEMs for a match
 
 public:
 
     DRC_ITEM()
     {
-        m_ErrorCode     = 0;
-        m_hasSecondItem = false;
-        m_noCoordinate = false;
-        m_parent = nullptr;
+        m_ErrorCode       = 0;
+        m_hasSecondItem   = false;
+        m_noCoordinate    = false;
+        m_parent          = nullptr;
+        m_mainItemWeakRef = nullptr;
+        m_auxItemWeakRef  = nullptr;
     }
 
-    DRC_ITEM( int aErrorCode,
-              const wxString& aMainText, const wxString& bAuxiliaryText,
-              const wxPoint& aMainPos, const wxPoint& bAuxiliaryPos )
+    DRC_ITEM( int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+              EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
     {
-        SetData( aErrorCode,
-                 aMainText, bAuxiliaryText,
-                 aMainPos, bAuxiliaryPos );
-    }
-
-    DRC_ITEM( int aErrorCode,
-              const wxString& aText, const wxPoint& aPos )
-    {
-        SetData( aErrorCode, aText, aPos );
+        SetData( aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
     }
 
 
@@ -86,39 +82,51 @@ public:
      * Function SetData
      * initialize all data in item
      * @param aErrorCode = error code
-     * @param aMainText = the text concerning the schematic or board item
-     * @param aMainPos = position the item and therefore of this issue
-     */
-    void SetData( int aErrorCode,
-                  const wxString& aMainText, const wxPoint& aMainPos )
-    {
-        SetData( aErrorCode,
-                 aMainText, aMainText,
-                 aMainPos, aMainPos );
-        m_hasSecondItem = false;
-        m_parent = nullptr;
-    }
-
-    /**
-     * Function SetData
-     * initialize all data in item
-     * @param aErrorCode = error code
-     * @param aMainText = the first text (main text) concerning the main schematic or board item
-     * @param bAuxiliaryText = the second text (main text) concerning the second schematic or board item
+     * @param aMainItem = the first (main) schematic or board item
+     * @param bAuxiliaryItem = the second schematic or board item
      * @param aMainPos = position the first item and therefore of this issue
      * @param bAuxiliaryPos = position the second item
      */
-    void SetData( int aErrorCode,
-                  const wxString& aMainText, const wxString& bAuxiliaryText,
-                  const wxPoint& aMainPos, const wxPoint& bAuxiliaryPos )
+    void SetData( int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+                  EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
+    {
+        m_ErrorCode         = aErrorCode;
+        m_MainText          = aMainItem->GetSelectMenuText();
+        m_AuxiliaryText     = bAuxiliaryItem ? bAuxiliaryItem->GetSelectMenuText() : wxString( wxEmptyString );
+        m_MainPosition      = aMainPos;
+        m_AuxiliaryPosition = bAuxiliaryPos;
+        m_hasSecondItem     = bAuxiliaryItem != nullptr;
+        m_noCoordinate      = false;
+        m_parent            = nullptr;
+
+        // Weak references (void*).  One must search the BOARD_ITEMS or SCH_ITEMS for a match.
+        m_mainItemWeakRef   = aMainItem;
+        m_auxItemWeakRef    = bAuxiliaryItem;
+    }
+
+    /**
+     * Function SetData
+     * initialize all data in item
+     * @param aErrorCode = error code
+     * @param aMainItem = the first (main) schematic or board item
+     * @param bAuxiliaryItem = the second schematic or board item
+     * @param aMainPos = position the first item and therefore of this issue
+     * @param bAuxiliaryPos = position the second item
+     */
+    void SetData( int aErrorCode, const wxString& aMainText, const wxPoint& aMainPos,
+                  const wxString& bAuxiliaryText = wxEmptyString, const wxPoint& bAuxiliaryPos = wxPoint() )
     {
         m_ErrorCode         = aErrorCode;
         m_MainText          = aMainText;
         m_AuxiliaryText     = bAuxiliaryText;
         m_MainPosition      = aMainPos;
         m_AuxiliaryPosition = bAuxiliaryPos;
-        m_hasSecondItem     = true;
+        m_hasSecondItem     = bAuxiliaryText.Length();
         m_noCoordinate      = false;
+        m_parent            = nullptr;
+
+        m_mainItemWeakRef       = nullptr;
+        m_auxItemWeakRef  = nullptr;
     }
 
     /**
@@ -132,6 +140,8 @@ public:
         m_AuxiliaryText     = aAuxiliaryText;
         m_AuxiliaryPosition = aAuxiliaryPos;
         m_hasSecondItem     = true;
+
+        m_auxItemWeakRef  = nullptr;
     }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
@@ -142,11 +152,17 @@ public:
 
     void SetShowNoCoordinate() { m_noCoordinate = true; }
 
-    /** acces to A and B texts
+    /**
+     * Access to A and B texts
      */
     wxString GetMainText() const { return m_MainText; }
     wxString GetAuxiliaryText() const { return m_AuxiliaryText; }
 
+    /**
+     * Access to A and B items for BOARDs
+     */
+    BOARD_ITEM* GetMainItem( BOARD* aBoard ) const;
+    BOARD_ITEM* GetAuxiliaryItem( BOARD* aBoard ) const;
 
     /**
      * Function ShowHtml

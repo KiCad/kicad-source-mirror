@@ -104,15 +104,24 @@ MARKER_BASE::MARKER_BASE()
 
 
 MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
+                          EDA_ITEM* aItem, const wxPoint& aPos,
+                          EDA_ITEM* bItem, const wxPoint& bPos )
+{
+    m_ScalingFactor = M_SHAPE_SCALE;
+    init();
+
+    SetData( aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos );
+}
+
+
+MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
                           const wxString& aText, const wxPoint& aPos,
                           const wxString& bText, const wxPoint& bPos )
 {
     m_ScalingFactor = M_SHAPE_SCALE;
     init();
 
-    SetData( aErrorCode, aMarkerPos,
-             aText, aPos,
-             bText, bPos );
+    SetData( aErrorCode, aMarkerPos, aText, aPos, bText, bPos );
 }
 
 
@@ -131,22 +140,21 @@ MARKER_BASE::~MARKER_BASE()
 
 
 void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-                           const wxString& aText, const wxPoint& aPos,
-                           const wxString& bText, const wxPoint& bPos )
+                           EDA_ITEM* aItem, const wxPoint& aPos,
+                           EDA_ITEM* bItem, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aErrorCode,
-                   aText, bText, aPos, bPos );
+    m_drc.SetData( aErrorCode, aItem, aPos, bItem, bPos );
     m_drc.SetParent( this );
 }
 
 
 void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-                           const wxString& aText, const wxPoint& aPos )
+                           const wxString& aText, const wxPoint& aPos,
+                           const wxString& bText, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aErrorCode,
-                   aText, aPos );
+    m_drc.SetData( aErrorCode, aText, aPos, bText, bPos );
     m_drc.SetParent( this );
 }
 

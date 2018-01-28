@@ -49,6 +49,7 @@ namespace KIGFX
 
 typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
 
+
 /**
  * Class SELECTION_TOOL
  *
@@ -127,6 +128,13 @@ public:
     ///> Multiple item unselection event handler
     int UnselectItems( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function SelectionMenu()
+     * Allows the selection of a single item from a list of items via a popup menu.  The
+     * list is passed as aEvent's parameter.
+     */
+    int SelectionMenu( const TOOL_EVENT& aEvent );
+
     ///> Event sent after an item is selected.
     static const TOOL_EVENT SelectedEvent;
 
@@ -178,6 +186,13 @@ private:
      * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
+
+    /**
+     * Allows the selection of a single item from a list via pop-up menu.  The items are
+     * highlighted on the canvas when hovered in the menu.
+     * @param aTitle (optional) Allows the menu to be titled (ie: "Clarify Selection").
+     */
+    BOARD_ITEM* doSelectionMenu( GENERAL_COLLECTOR* aItems, const wxString& aTitle );
 
     ///> Selects a trivial connection (between two junctions) of items in selection
     int selectConnection( const TOOL_EVENT& aEvent );
@@ -242,15 +257,6 @@ private:
     void clearSelection();
 
     /**
-     * Function disambiguationMenu()
-     * Handles the menu that allows one to select one of many items in case
-     * there is more than one item at the selected point (@see selectCursor()).
-     *
-     * @param aItems contains list of items that are displayed to the user.
-     */
-    BOARD_ITEM* disambiguationMenu( GENERAL_COLLECTOR* aItems );
-
-    /**
      * Function pickSmallestComponent()
      * Allows one to find the smallest (in terms of bounding box area) item from the list.
      *
@@ -301,17 +307,21 @@ private:
 
     /**
      * Function selectVisually()
-     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
-     * @param aItem is an item to be be marked.
+     * Highlights the item visually.
+     * @param aItem is an item to be be highlighted.
+     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void selectVisually( BOARD_ITEM* aItem );
+    void highlight( BOARD_ITEM* aItem, int aHighlightMode, SELECTION& aGroup );
 
     /**
      * Function unselectVisually()
-     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
-     * @param aItem is an item to be be marked.
+     * Unhighlights the item visually.
+     * @param aItem is an item to be be highlighted.
+     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aGroup is the group to remove the item from.
      */
-    void unselectVisually( BOARD_ITEM* aItem );
+    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, SELECTION& aGroup );
 
     /**
      * Function selectionContains()

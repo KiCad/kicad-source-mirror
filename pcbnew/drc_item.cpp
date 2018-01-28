@@ -32,6 +32,7 @@
 #include <pcbnew.h>
 #include <drc.h>
 #include <drc_item.h>
+#include <class_board.h>
 #include <base_units.h>
 
 
@@ -154,3 +155,14 @@ wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
     ret << aPos;
     return ret;
 }
+
+BOARD_ITEM* DRC_ITEM::GetMainItem( BOARD* aBoard ) const
+{
+    return aBoard->GetItem( m_mainItemWeakRef, false /* copper only */ );
+}
+
+BOARD_ITEM* DRC_ITEM::GetAuxiliaryItem( BOARD* aBoard ) const
+{
+    return aBoard->GetItem( m_auxItemWeakRef, false /* copper only */ );
+}
+

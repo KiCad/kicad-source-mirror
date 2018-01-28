@@ -39,6 +39,9 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <bitmaps.h>
+#include <collectors.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -51,6 +54,35 @@
 #define TestMissingCourtyardKey     wxT( "TestMissingCourtyard" )
 #define TestFootprintCourtyardKey   wxT( "TestFootprintCourtyard" )
 #define RefillZonesBeforeDrc        wxT( "RefillZonesBeforeDrc" )
+
+
+struct BOARD_THAWER
+{
+    BOARD_THAWER( PCB_EDIT_FRAME* aBoardEditor )
+    {
+        m_boardEditor = aBoardEditor;
+        m_freezeCount = 0;
+
+        while( m_boardEditor->IsFrozen() )
+        {
+            m_boardEditor->Thaw();
+            m_freezeCount++;
+        }
+    }
+
+    ~BOARD_THAWER()
+    {
+        while( m_freezeCount > 0 )
+        {
+            m_boardEditor->Freeze();
+            m_freezeCount--;
+        }
+    }
+
+protected:
+    PCB_EDIT_FRAME* m_boardEditor;
+    int             m_freezeCount;
+};
 
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
@@ -88,8 +120,6 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
     m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
                                     wxMouseEventHandler(
                                        DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
-
-    this->Disconnect( wxEVT_MENU, wxCommandEventHandler( DIALOG_DRC_CONTROL::OnPopupMenu ), NULL, this );
 }
 
 void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
@@ -140,10 +170,6 @@ void DIALOG_DRC_CONTROL::InitValues()
     m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
                                    wxMouseEventHandler(
                                        DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
-
-    this->Connect( wxEVT_MENU, wxCommandEventHandler( DIALOG_DRC_CONTROL::OnPopupMenu ), NULL,
-                   this );
-
 
     m_DeleteCurrentMarkerButton->Enable( false );
 
@@ -421,55 +447,6 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
-{
-    int             source = event.GetId();
-
-    const DRC_ITEM* item = nullptr;
-    wxPoint         pos;
-
-    int             selection;
-
-    switch( source )
-    {
-    case ID_POPUP_UNCONNECTED_A:
-        selection = m_UnconnectedListBox->GetSelection();
-        item = m_UnconnectedListBox->GetItem( selection );
-        pos  = item->GetPointA();
-        break;
-
-    case ID_POPUP_UNCONNECTED_B:
-        selection = m_UnconnectedListBox->GetSelection();
-        item = m_UnconnectedListBox->GetItem( selection );
-        pos  = item->GetPointB();
-        break;
-
-    case ID_POPUP_MARKERS_A:
-        selection = m_ClearanceListBox->GetSelection();
-        item = m_ClearanceListBox->GetItem( selection );
-        pos  = item->GetPointA();
-        break;
-
-    case ID_POPUP_MARKERS_B:
-        selection = m_ClearanceListBox->GetSelection();
-        item = m_ClearanceListBox->GetItem( selection );
-        pos  = item->GetPointB();
-        break;
-    }
-
-    if( item )
-    {
-        // When selecting a item, center it on GAL and just move the graphic
-        // cursor in legacy mode gives the best result
-        bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
-        m_brdEditor->FocusOnLocation( pos, true, center );
-
-        if( !IsModal() )
-            Show( false );
-    }
-}
-
-
 void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
@@ -477,22 +454,7 @@ void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
     int selection = m_UnconnectedListBox->GetSelection();
 
     if( selection != wxNOT_FOUND )
-    {
-        wxMenu          menu;
-        wxMenuItem*     mItem;
-        const DRC_ITEM* dItem = m_UnconnectedListBox->GetItem( selection );
-
-        mItem = new wxMenuItem( &menu, ID_POPUP_UNCONNECTED_A, dItem->GetTextA() );
-        menu.Append( mItem );
-
-        if( dItem->HasSecondItem() )
-        {
-            mItem = new wxMenuItem( &menu, ID_POPUP_UNCONNECTED_B, dItem->GetTextB() );
-            menu.Append( mItem );
-        }
-
-        PopupMenu( &menu );
-    }
+        doSelectionMenu( m_UnconnectedListBox->GetItem( selection ) );
 }
 
 
@@ -503,22 +465,23 @@ void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
     int selection = m_ClearanceListBox->GetSelection();
 
     if( selection != wxNOT_FOUND )
-    {
-        wxMenu          menu;
-        wxMenuItem*     mItem;
-        const DRC_ITEM* dItem = m_ClearanceListBox->GetItem( selection );
+        doSelectionMenu( m_ClearanceListBox->GetItem( selection ) );
+}
 
-        mItem = new wxMenuItem( &menu, ID_POPUP_MARKERS_A, dItem->GetTextA() );
-        menu.Append( mItem );
 
-        if( dItem->HasSecondItem() )
-        {
-            mItem = new wxMenuItem( &menu, ID_POPUP_MARKERS_B, dItem->GetTextB() );
-            menu.Append( mItem );
-        }
+void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
+{
+    // popup menu to go to either of the items listed in the DRC_ITEM.
+    GENERAL_COLLECTOR items;
 
-        PopupMenu( &menu );
-    }
+    items.Append( aItem->GetMainItem( m_brdEditor->GetBoard() ) );
+
+    if( aItem->HasSecondItem() )
+        items.Append( aItem->GetAuxiliaryItem( m_brdEditor->GetBoard() ) );
+
+    BOARD_THAWER thawer( m_brdEditor );
+    m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
+    m_brdEditor->GetCanvas()->Refresh();
 }
 
 
@@ -630,21 +593,9 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
-    int freezeCount = 0;
-
-    while( m_brdEditor->IsFrozen() )
-    {
-        m_brdEditor->Thaw();
-        freezeCount++;
-    }
+    BOARD_THAWER thawer( m_brdEditor );
 
     m_brdEditor->GetCanvas()->Refresh();
-
-    while( freezeCount > 0 )
-    {
-        m_brdEditor->Freeze();
-        freezeCount--;
-    }
 }
 
 

@@ -92,6 +92,10 @@ TOOL_ACTION PCB_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
+TOOL_ACTION PCB_ACTIONS::selectionMenu( "pcbnew.InteractiveSelection.SelectionMenu",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_TRIVIAL_CONNECTION ),
         _( "Trivial Connection" ), _( "Selects a connection between two junctions." ), add_tracks_xpm );
@@ -520,7 +524,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
     }
 
-    BOARD_ITEM* item = disambiguationMenu( &collector );
+    BOARD_ITEM* item = doSelectionMenu( &collector, _( "Clarify Selection" ) );
 
     if( item )
     {
@@ -682,6 +686,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::SelectItems, PCB_ACTIONS::selectItems.MakeEvent() );
     Go( &SELECTION_TOOL::UnselectItem, PCB_ACTIONS::unselectItem.MakeEvent() );
     Go( &SELECTION_TOOL::UnselectItems, PCB_ACTIONS::unselectItems.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectionMenu, PCB_ACTIONS::selectionMenu.MakeEvent() );
     Go( &SELECTION_TOOL::find, PCB_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, PCB_ACTIONS::findMove.MakeEvent() );
     Go( &SELECTION_TOOL::filterSelection, PCB_ACTIONS::filterSelection.MakeEvent() );
@@ -1368,10 +1373,11 @@ void SELECTION_TOOL::clearSelection()
     if( m_selection.Empty() )
         return;
 
-    for( auto item : m_selection )
-        unselectVisually( static_cast<BOARD_ITEM*>( item ) );
+    while( m_selection.GetSize() )
+        unhighlight( static_cast<BOARD_ITEM*>( m_selection.Front() ), SELECTED, m_selection );
 
-    m_selection.Clear();
+    view()->Update( &m_selection );
+
     m_selection.SetIsHover( false );
     m_selection.ClearReferencePoint();
 
@@ -1387,10 +1393,20 @@ void SELECTION_TOOL::clearSelection()
 }
 
 
-BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
+int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
+{
+    GENERAL_COLLECTOR* collector = aEvent.Parameter<GENERAL_COLLECTOR*>();
+    doSelectionMenu( collector, wxEmptyString );
+
+    return 0;
+}
+
+
+BOARD_ITEM* SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector,
+                                             const wxString& aTitle )
 {
     BOARD_ITEM* current = NULL;
-    KIGFX::VIEW_GROUP highlightGroup;
+    SELECTION highlightGroup;
     CONTEXT_MENU menu;
 
     highlightGroup.SetLayer( LAYER_GP_OVERLAY );
@@ -1408,7 +1424,8 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         menu.Add( menuText, i + 1, item->GetMenuImage() );
     }
 
-    menu.SetTitle( _( "Clarify Selection" ) );
+    if( aTitle.Length() )
+        menu.SetTitle( aTitle );
     menu.SetIcon( info_xpm );
     menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
@@ -1418,12 +1435,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
         {
             if( current )
-            {
-                current->ClearBrightened();
-                getView()->Hide( current, false );
-                highlightGroup.Remove( current );
-                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-            }
+                unhighlight( current, BRIGHTENED, highlightGroup );
 
             int id = *evt->GetCommandId();
 
@@ -1431,10 +1443,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             if( id > 0 && id <= limit )
             {
                 current = ( *aCollector )[id - 1];
-                current->SetBrightened();
-                getView()->Hide( current, true );
-                highlightGroup.Add( current );
-                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+                highlight( current, BRIGHTENED, highlightGroup );
             }
             else
             {
@@ -1444,12 +1453,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
             if( current )
-            {
-                current->ClearBrightened();
-                getView()->Hide( current, false );
-                highlightGroup.Remove( current );
-                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-            }
+                unhighlight( current, BRIGHTENED, highlightGroup );
 
             OPT<int> id = evt->GetCommandId();
 
@@ -1463,7 +1467,6 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         }
     }
     getView()->Remove( &highlightGroup );
-
 
     return current;
 }
@@ -1743,8 +1746,8 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
             return;
     }
 
-    m_selection.Add( aItem );
-    selectVisually( aItem );
+    highlight( aItem, SELECTED, m_selection );
+    view()->Update( &m_selection );
 
     if( m_frame )
     {
@@ -1767,8 +1770,8 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
     if( !aItem->IsSelected() )
         return;
 
-    m_selection.Remove( aItem );
-    unselectVisually( aItem );
+    unhighlight( aItem, SELECTED, m_selection );
+    view()->Update( &m_selection );
 
     if( m_selection.Empty() )
     {
@@ -1781,49 +1784,77 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem )
+void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGroup )
 {
+    if( aMode == SELECTED )
+        aItem->SetSelected();
+    else if( aMode == BRIGHTENED )
+        aItem->SetBrightened();
+
     // Hide the original item, so it is shown only on overlay
-    aItem->SetSelected();
     view()->Hide( aItem, true );
+
+    aGroup.Add( aItem );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
-
     if( aItem->Type() == PCB_MODULE_T )
     {
         static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
         {
-            item->SetSelected();
+            if( aMode == SELECTED )
+                item->SetSelected();
+            else if( aMode == BRIGHTENED )
+            {
+                item->SetBrightened();
+                aGroup.Add( item );
+            }
             view()->Hide( item, true );
         });
     }
 
-    view()->Update( &m_selection );
+    // Many selections are very temporal and updating the display each time just
+    // creates noise.
+    if( aMode == BRIGHTENED )
+        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
 
 
-void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem )
+void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGroup )
 {
+    if( aMode == SELECTED )
+        aItem->ClearSelected();
+    else if( aMode == BRIGHTENED )
+        aItem->ClearBrightened();
+
+    aGroup.Remove( aItem );
+
     // Restore original item visibility
-    aItem->ClearSelected();
     view()->Hide( aItem, false );
     view()->Update( aItem );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
-
     if( aItem->Type() == PCB_MODULE_T )
     {
         static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
         {
-            item->ClearSelected();
+            if( aMode == SELECTED )
+                item->ClearSelected();
+            else if( aMode == BRIGHTENED )
+            {
+                item->ClearBrightened();
+                aGroup.Remove( item );
+            }
             view()->Hide( item, false );
             view()->Update( item );
         });
     }
 
-    view()->Update( &m_selection );
+    // Many selections are very temporal and updating the display each time just
+    // creates noise.
+    if( aMode == BRIGHTENED )
+        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
 
 

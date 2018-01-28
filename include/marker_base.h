@@ -73,6 +73,19 @@ public:
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
      * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aItem The first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bItem The second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
+                 EDA_ITEM* aItem, const wxPoint& aPos,
+                 EDA_ITEM* bItem, const wxPoint& bPos );
+
+    /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
      * @param aText Text describing the first of two objects
      * @param aPos The position of the first of two objects
      * @param bText Text describing the second of the two conflicting objects
@@ -157,6 +170,20 @@ public:
      * fills in all the reportable data associated with a MARKER.
      * @param aErrorCode The categorizing identifier for an error
      * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aItem The first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bItem The second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
+                  EDA_ITEM* aItem, const wxPoint& aPos,
+                  EDA_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
+
+    /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
      * @param aText Text describing the first of two objects
      * @param aPos The position of the first of two objects
      * @param bText Text describing the second of the two conflicting objects
@@ -164,18 +191,7 @@ public:
      */
     void SetData( int aErrorCode, const wxPoint& aMarkerPos,
                   const wxString& aText, const wxPoint& aPos,
-                  const wxString& bText, const wxPoint& bPos );
-
-    /**
-     * Function SetData
-     * fills in all the reportable data associated with a MARKER.
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
-     * @param aText Text describing the object
-     * @param aPos The position of the object
-     */
-    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
-                  const wxString& aText, const wxPoint& aPos );
+                  const wxString& bText = wxEmptyString, const wxPoint& bPos = wxPoint() );
 
     /**
      * Function SetAuxiliaryData
