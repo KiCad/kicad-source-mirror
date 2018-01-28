@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,13 +58,17 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
     m_canvas->Update();
 }
 
+
 void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 {
     if( IsGalCanvasActive() )
         return;
 
-    wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2; // relative screen position to center before zoom
-    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() ); // screen position of crosshair after zoom
+    // relative screen position to center before zoom
+    wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2;
+
+    // screen position of crosshair after zoom
+    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() );
     wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
 
     AdjustScrollBars( newCenter );
@@ -96,10 +100,6 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 }
 
 
-/** Compute the zoom factor and the new draw offset to draw the
- *  selected area (Rect) in full window screen
- *  @param Rect = selected area to show after zooming
- */
 void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 {
     // Compute the best zoom
@@ -118,10 +118,6 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 }
 
 
-/**
- * Function OnZoom
- * Called from any zoom event (toolbar , hotkey or popup )
- */
 void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 {
     if( m_canvas == NULL )
@@ -132,10 +128,13 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     BASE_SCREEN* screen = GetScreen();
     wxPoint      center = GetScrollCenterPosition();
 
-    if ( id == ID_KEY_ZOOM_IN ) {
+    if ( id == ID_KEY_ZOOM_IN )
+    {
         id = GetCanvas()->GetEnableZoomNoCenter() ?
              ID_OFFCENTER_ZOOM_IN : ID_POPUP_ZOOM_IN;
-    } else if ( id == ID_KEY_ZOOM_OUT ) {
+    }
+    else if ( id == ID_KEY_ZOOM_OUT )
+    {
         id = GetCanvas()->GetEnableZoomNoCenter() ?
              ID_OFFCENTER_ZOOM_OUT : ID_POPUP_ZOOM_OUT;
     }
@@ -144,6 +143,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     {
     case ID_OFFCENTER_ZOOM_IN:
         center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
+
         if( screen->SetPreviousZoom() )
             RedrawScreen2( center );
         break;
@@ -161,6 +161,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 
     case ID_OFFCENTER_ZOOM_OUT:
         center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
+
         if( screen->SetNextZoom() )
             RedrawScreen2( center );
         break;
@@ -241,9 +242,6 @@ void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
 }
 
 
-/* add the zoom list menu the the MasterMenu.
- *  used in OnRightClick(wxMouseEvent& event)
- */
 void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
     int         maxZoomIds;
