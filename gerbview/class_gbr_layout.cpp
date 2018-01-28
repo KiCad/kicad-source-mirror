@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <gerbview_frame.h>
 #include <class_drawpanel.h>
 #include <class_gbr_layout.h>

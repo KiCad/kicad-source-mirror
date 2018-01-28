@@ -33,7 +33,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <dialog_helpers.h>
 #include <macros.h>
 #include <base_units.h>

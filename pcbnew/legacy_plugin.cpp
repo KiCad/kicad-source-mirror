@@ -83,7 +83,6 @@
 #include <3d_cache/3d_info.h>
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
-#include <drawtxt.h>
 #include <convert_to_biu.h>
 #include <trigo.h>
 #include <build_version.h>

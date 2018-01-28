@@ -40,7 +40,7 @@
 #include <class_marker_pcb.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
+#include <drc.h>
 #include <math_for_graphics.h>
 
 #define STRAIGHT 0      // To be remove after math_for_graphics code cleanup

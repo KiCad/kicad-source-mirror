@@ -30,7 +30,7 @@
 #include <macros.h>
 #include <class_drawpanel.h>
 #include <plotter.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <trigo.h>
 #include <wxstruct.h>
 #include <base_units.h>

@@ -30,8 +30,8 @@
 #include <common.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
-#include <class_drc_item.h>
+#include <drc.h>
+#include <drc_item.h>
 #include <base_units.h>
 
 

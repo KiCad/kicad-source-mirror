@@ -41,7 +41,7 @@
 #include <class_marker_pcb.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
+#include <drc.h>
 
 
 bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )

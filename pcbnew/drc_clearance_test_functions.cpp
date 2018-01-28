@@ -36,7 +36,7 @@
 #include <trigo.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
+#include <drc.h>
 
 #include <class_board.h>
 #include <class_module.h>

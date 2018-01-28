@@ -34,7 +34,7 @@
 
 #include <vector>
 #include <math/box2.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <class_page_info.h>
 #include <eda_text.h>       // FILL_T
 

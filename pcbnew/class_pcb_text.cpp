@@ -32,7 +32,7 @@
 #include <wxstruct.h>
 #include <gr_basic.h>
 #include <base_struct.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <kicad_string.h>
 #include <trigo.h>
 #include <richio.h>

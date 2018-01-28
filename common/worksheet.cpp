@@ -36,7 +36,6 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
-#include <drawtxt.h>
 #include <draw_frame.h>
 #include <worksheet.h>
 #include <class_title_block.h>

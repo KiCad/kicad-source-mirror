@@ -27,7 +27,7 @@
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
 
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <kiway.h>
 #include <kicad_string.h>
 #include <richio.h>

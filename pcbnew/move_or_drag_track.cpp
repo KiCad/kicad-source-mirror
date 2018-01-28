@@ -40,7 +40,7 @@
 #include <class_board.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
+#include <drc.h>
 #include <drag.h>
 #include <pcbnew_id.h>
 

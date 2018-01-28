@@ -37,7 +37,7 @@
 #include <macros.h>
 #include <class_drawpanel.h>
 #include <class_pcb_screen.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <wxstruct.h>
 #include <wxBasePcbFrame.h>
 #include <class_board.h>

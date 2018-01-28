@@ -26,8 +26,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DRC_STUFF_H
-#define _DRC_STUFF_H
+#ifndef DRC_H
+#define DRC_H
 
 #include <vector>
 #include <memory>
@@ -554,6 +554,6 @@ public:
 };
 
 
-#endif  // _DRC_STUFF_H
+#endif  // DRC_H
 
 //EOF

@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <common.h>
 
-#include <class_drc_item.h>
+#include <drc_item.h>
 #include <erc.h>
 #include <base_units.h>
 

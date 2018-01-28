@@ -32,7 +32,7 @@
 #include <plotter.h>
 #include <worksheet.h>
 #include <class_base_screen.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <class_title_block.h>
 #include "worksheet_shape_builder.h"
 #include "class_worksheet_dataitem.h"

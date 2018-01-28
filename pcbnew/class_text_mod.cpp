@@ -33,7 +33,7 @@
 #include <wxstruct.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <kicad_string.h>
 #include <richio.h>
 #include <macros.h>

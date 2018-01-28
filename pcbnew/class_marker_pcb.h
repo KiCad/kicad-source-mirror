@@ -32,7 +32,7 @@
 
 
 #include <class_board_item.h>
-#include <class_marker_base.h>
+#include <marker_base.h>
 
 
 class MSG_PANEL_ITEM;

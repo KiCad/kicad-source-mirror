@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _CLASS_DRC_ITEM_H
-#define _CLASS_DRC_ITEM_H
+#ifndef DRC_ITEM_H
+#define DRC_ITEM_H
 
 #include <macros.h>
 
@@ -271,4 +271,4 @@ public:
 };
 
 
-#endif      // _CLASS_DRC_ITEM_H
+#endif      // DRC_ITEM_H

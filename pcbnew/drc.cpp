@@ -50,7 +50,7 @@
 #include <tools/pcb_actions.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
+#include <drc.h>
 
 #include <dialog_drc.h>
 #include <wx/progdlg.h>

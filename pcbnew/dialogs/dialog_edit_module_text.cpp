@@ -36,7 +36,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <confirm.h>
 #include <wxBasePcbFrame.h>
 #include <base_units.h>

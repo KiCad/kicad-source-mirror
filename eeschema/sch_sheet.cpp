@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <trigo.h>
 #include <richio.h>
 #include <schframe.h>

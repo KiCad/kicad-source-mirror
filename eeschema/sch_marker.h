@@ -31,7 +31,7 @@
 #define TYPE_SCH_MARKER_H_
 
 #include <sch_item_struct.h>
-#include <class_marker_base.h>
+#include <marker_base.h>
 
 
 /* Names for corresponding types of markers: */

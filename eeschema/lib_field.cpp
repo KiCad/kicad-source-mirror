@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <base_struct.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <kicad_string.h>
 #include <class_drawpanel.h>
 #include <plotter.h>

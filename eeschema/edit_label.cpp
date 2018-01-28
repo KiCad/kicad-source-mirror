@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <base_struct.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <schframe.h>

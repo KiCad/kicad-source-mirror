@@ -33,7 +33,7 @@
 #include <pcbnew.h>
 #include <class_drawpanel.h>
 #include <wxstruct.h>
-#include <drc_stuff.h>
+#include <drc.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
 

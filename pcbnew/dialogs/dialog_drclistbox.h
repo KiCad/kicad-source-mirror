@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #include <pcbnew.h>
 #include <class_drawpanel.h>
 #include <wxstruct.h>
-#include <drc_stuff.h>
+#include <drc.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
 

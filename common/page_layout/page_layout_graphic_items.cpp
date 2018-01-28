@@ -54,7 +54,7 @@
 
 #include <fctsys.h>
 #include <class_eda_rect.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>

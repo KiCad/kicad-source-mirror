@@ -41,6 +41,8 @@
 #include <wx/ffile.h>
 #include <dialog_plot.h>
 #include <wx_html_report_panel.h>
+#include <drc.h>
+
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
@@ -888,7 +890,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     }
 }
 
-#include <drc_stuff.h>
+
 void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
 {
     PCB_EDIT_FRAME* parent = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );

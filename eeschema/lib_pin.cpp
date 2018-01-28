@@ -35,7 +35,7 @@
 #include <macros.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <plotter.h>
 #include <schframe.h>
 #include <base_units.h>

@@ -37,7 +37,7 @@
 #include <class_board.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <drc_stuff.h>
+#include <drc.h>
 #include <class_pcb_layer_box_selector.h>
 
 

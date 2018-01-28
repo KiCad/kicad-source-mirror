@@ -51,7 +51,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>

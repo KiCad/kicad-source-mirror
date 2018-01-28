@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 #include "common.h"
 #include "macros.h"
 #include "class_drawpanel.h"
-#include "class_marker_base.h"
+#include "marker_base.h"
 #include "dialog_display_info_HTML_base.h"
 
 

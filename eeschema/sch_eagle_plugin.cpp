@@ -45,7 +45,7 @@
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <sch_text.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <sch_marker.h>
 #include <sch_bus_entry.h>
 #include <eagle_parser.h>

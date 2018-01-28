@@ -50,7 +50,6 @@
 #include <class_text_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
-#include <drawtxt.h>
 #include <utility>
 #include <vector>
 

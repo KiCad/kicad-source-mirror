@@ -33,7 +33,7 @@
 #include <vector>
 
 #include <fctsys.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>

@@ -34,7 +34,7 @@
 #include <wxPcbStruct.h>
 
 #include <pcbnew.h>
-#include <drc_stuff.h>
+#include <drc.h>
 #include <protos.h>
 
 #include <class_board.h>

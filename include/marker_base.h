@@ -23,10 +23,10 @@
  */
 
 
-#ifndef _CLASS_MARKER_BASE_H
-#define _CLASS_MARKER_BASE_H
+#ifndef MARKER_BASE_H
+#define MARKER_BASE_H
 
-#include <class_drc_item.h>
+#include <drc_item.h>
 #include <gr_basic.h>
 
 
@@ -230,4 +230,4 @@ public:
 };
 
 
-#endif      //  _CLASS_MARKER_BASE_H
+#endif      //  MARKER_BASE_H

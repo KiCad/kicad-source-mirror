@@ -40,7 +40,7 @@
 #include "class_track.h"
 #include "class_zone.h"
 #include "convert_to_biu.h"
-#include "drawtxt.h"
+#include "draw_graphic_text.h"
 #include "macros.h"
 #include "pgm_base.h"
 #include "plugins/3dapi/ifsg_all.h"

@@ -32,7 +32,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <drawtxt.h>
+#include <draw_graphic_text.h>
 #include <base_units.h>
 
 #include <gerbview.h>
