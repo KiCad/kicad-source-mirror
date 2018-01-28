@@ -91,7 +91,7 @@ principle should be easily implemented by adapting the current STL containers.
 
     #include <class_title_block.h>
     #include <class_colors_design_settings.h>
-    #include <class_marker_base.h>
+    #include <marker_base.h>
     #include <eda_text.h>
     #include <convert_to_biu.h>
 %}
@@ -109,7 +109,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include class_title_block.h
 %include gal/color4d.h
 %include class_colors_design_settings.h
-%include class_marker_base.h
+%include marker_base.h
 %include eda_text.h
 
 

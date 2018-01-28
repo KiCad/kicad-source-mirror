@@ -185,7 +185,7 @@ private:
         const auto p0 = aNodes[0]->Pos();
         const auto v0 = aNodes[1]->Pos() - p0;
 
-        for( int i = 2; i < aNodes.size(); i++ )
+        for( unsigned i = 2; i < aNodes.size(); i++ )
         {
             const auto v1 = aNodes[i]->Pos() - p0;
 
@@ -285,7 +285,7 @@ public:
             // special case: all nodes are on the same line - there's no
             // triangulation for such set. In this case, we sort along any coordinate
             // and chain the nodes together.
-            for(int i = 0; i < triNodes.size() - 1; i++ )
+            for(int i = 0; i < (int)triNodes.size() - 1; i++ )
             {
                 auto src = m_allNodes[ triNodes[i]->Id() ];
                 auto dst = m_allNodes[ triNodes[i + 1]->Id() ];
