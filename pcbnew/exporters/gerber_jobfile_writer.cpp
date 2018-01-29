@@ -32,7 +32,7 @@
 #include <vector>
 
 #include <plotter.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <build_version.h>
 
 #include <class_board.h>

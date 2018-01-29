@@ -37,11 +37,11 @@
 #include <eda_doc.h>
 #include <gestfich.h>
 #include <kicad_device_context.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <pcbnew_id.h>
 #include <pcbnew.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 #include <class_board.h>
 #include <class_module.h>

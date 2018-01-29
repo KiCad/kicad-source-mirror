@@ -31,10 +31,12 @@
 
 
 #include <wx/gdicmn.h>
+#include <pcb_base_frame.h>
 
 class wxSashLayoutWindow;
 class wxListBox;
 class FP_LIB_TABLE;
+class BOARD_ITEM;
 
 namespace PCB { struct IFACE; }
 

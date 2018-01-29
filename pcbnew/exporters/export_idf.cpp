@@ -27,7 +27,7 @@
 
 
 #include <list>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 #include <pcbnew.h>
 #include <class_board.h>

@@ -21,12 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <macros.h>
 #include <widgets/text_ctrl_eval.h>
 
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 #include "dialog_position_relative.h"
 #include "tools/pcb_actions.h"

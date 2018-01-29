@@ -36,7 +36,6 @@
 #include <pgm_base.h>
 #include <trigo.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <wxPcbStruct.h>
 #include <kicad_device_context.h>
 #include <macros.h>
 #include <invoke_pcb_dialog.h>
@@ -51,7 +50,7 @@
 #include <pcbnew.h>
 #include <protos.h>
 #include <pcbnew_id.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <modview_frame.h>
 #include <collectors.h>
 #include <tool/tool_manager.h>

@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <kiface_i.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <trigo.h>
 #include <build_version.h>
 #include <macros.h>

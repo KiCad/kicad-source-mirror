@@ -23,7 +23,7 @@
  */
 
 #include <dialog_dxf_import_base.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dxf2brd_items.h>
 
 class DIALOG_DXF_IMPORT : public DIALOG_DXF_IMPORT_BASE

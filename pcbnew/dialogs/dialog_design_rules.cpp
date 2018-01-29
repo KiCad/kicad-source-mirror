@@ -35,7 +35,7 @@
 #include <base_units.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board_design_settings.h>
 
 #include <pcbnew_id.h>

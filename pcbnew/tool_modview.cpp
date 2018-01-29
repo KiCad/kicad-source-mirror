@@ -29,7 +29,6 @@
 #include <dialog_helpers.h>
 #include <macros.h>
 #include <menus_helpers.h>
-#include <wxPcbStruct.h>
 
 #include "help_common_strings.h"
 #include "hotkeys.h"

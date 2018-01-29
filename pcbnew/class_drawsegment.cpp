@@ -39,7 +39,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <pcbnew.h>
 

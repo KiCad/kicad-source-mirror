@@ -46,7 +46,7 @@
 
 #include <board_netlist_updater.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 
 BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard ) :

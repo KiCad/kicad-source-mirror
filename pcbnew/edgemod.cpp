@@ -36,10 +36,10 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>

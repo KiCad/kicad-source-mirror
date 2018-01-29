@@ -32,7 +32,7 @@
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <board_commit.h>
 #include <view/view.h>
 

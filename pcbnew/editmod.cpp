@@ -32,8 +32,8 @@
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <module_editor_frame.h>
+#include <pcb_edit_frame.h>
+#include <footprint_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer.h>
 
 #include <class_module.h>

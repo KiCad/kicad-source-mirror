@@ -34,7 +34,7 @@
 #include <dialog_helpers.h>
 #include <html_messagebox.h>
 #include <base_units.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcb_netlist.h>
 #include <netlist_reader.h>
 #include <reporter.h>

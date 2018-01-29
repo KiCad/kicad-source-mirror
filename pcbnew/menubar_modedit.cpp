@@ -32,12 +32,10 @@
 
 #include <menus_helpers.h>
 #include <pgm_base.h>
-#include <wxPcbStruct.h>
-
 
 #include "help_common_strings.h"
 #include "hotkeys.h"
-#include "module_editor_frame.h"
+#include "footprint_edit_frame.h"
 #include "pcbnew.h"
 #include "pcbnew_id.h"
 

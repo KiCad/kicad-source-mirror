@@ -30,7 +30,7 @@
 #ifndef CLASS_ACTION_PLUGIN_H
 #define CLASS_ACTION_PLUGIN_H
 #include <vector>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 /**
  * Class ACTION_PLUGIN

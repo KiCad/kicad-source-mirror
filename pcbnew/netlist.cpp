@@ -36,7 +36,7 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcb_netlist.h>
 #include <netlist_reader.h>
 #include <reporter.h>

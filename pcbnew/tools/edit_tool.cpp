@@ -31,10 +31,10 @@
 #include <class_edge_mod.h>
 #include <class_zone.h>
 #include <collectors.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <kiway.h>
 #include <class_draw_panel_gal.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <array_creator.h>
 #include <pcbnew_id.h>
 

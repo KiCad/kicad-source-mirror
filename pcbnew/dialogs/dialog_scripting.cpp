@@ -30,7 +30,7 @@
 #include <Python.h>
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dialog_scripting.h>
 
 

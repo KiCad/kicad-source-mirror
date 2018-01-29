@@ -38,9 +38,9 @@
 #include <confirm.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board_design_settings.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <base_units.h>
 #include <wx/valnum.h>
 #include <board_commit.h>

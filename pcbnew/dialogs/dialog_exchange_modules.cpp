@@ -29,7 +29,7 @@
 #include <class_draw_panel_gal.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 #include <board_commit.h>
 #include <bitmaps.h>

@@ -29,7 +29,7 @@
 #include <wx/choicdlg.h>
 #include <wx/stdpaths.h>
 
-#include "wxPcbStruct.h"
+#include "pcb_edit_frame.h"
 #include "kiface_i.h"
 #include "confirm.h"
 

@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 
 #include <class_board.h>

@@ -33,7 +33,7 @@
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>
 #include <dialog_drc.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <class_board_design_settings.h>
 #include <class_draw_panel_gal.h>

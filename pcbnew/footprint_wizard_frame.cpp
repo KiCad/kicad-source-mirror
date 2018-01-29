@@ -4,7 +4,7 @@
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
  * Copyright (C) 2012-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcbnew.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
@@ -40,7 +40,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 #include <pcbnew_id.h>
 #include "footprint_wizard_frame.h"

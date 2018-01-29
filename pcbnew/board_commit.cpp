@@ -24,7 +24,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <ratsnest_data.h>
 #include <view/view.h>

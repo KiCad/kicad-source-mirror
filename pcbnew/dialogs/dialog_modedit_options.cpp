@@ -26,12 +26,12 @@
 
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board_design_settings.h>
 #include <base_units.h>
 #include <widgets/text_ctrl_eval.h>
 
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 #include <dialog_modedit_options_base.h>
 

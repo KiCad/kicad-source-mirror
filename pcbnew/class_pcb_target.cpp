@@ -38,7 +38,7 @@
 #include <macros.h>
 #include <richio.h>
 #include <bitmaps.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <class_board.h>
 #include <class_pcb_target.h>

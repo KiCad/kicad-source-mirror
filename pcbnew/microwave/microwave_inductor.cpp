@@ -27,7 +27,7 @@
 
 #include <base_units.h>
 #include <validators.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <class_pad.h>
 #include <class_edge_mod.h>

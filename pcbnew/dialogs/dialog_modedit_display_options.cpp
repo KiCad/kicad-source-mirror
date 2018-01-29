@@ -20,7 +20,7 @@
 #include <dialog_modedit_display_options.h>
 
 #include <class_drawpanel.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 #include <view/view.h>
 

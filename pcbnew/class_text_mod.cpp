@@ -36,7 +36,7 @@
 #include <kicad_string.h>
 #include <richio.h>
 #include <macros.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>

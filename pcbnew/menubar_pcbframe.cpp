@@ -26,14 +26,14 @@
 
 /**
  * @file menubar_pcbframe.cpp
- * Pcbnew editor menu bar
+ * board editor menubars
  */
 
 
 #include <menus_helpers.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include "help_common_strings.h"
 #include "hotkeys.h"

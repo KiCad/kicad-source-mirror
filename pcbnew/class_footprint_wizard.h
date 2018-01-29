@@ -31,7 +31,7 @@
 #ifndef CLASS_FOOTPRINT_WIZARD_H
 #define CLASS_FOOTPRINT_WIZARD_H
 #include <vector>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 // Allowable parameter types for PCB wizards
 const wxString WIZARD_PARAM_UNITS_MM        = "mm";          // Millimetres

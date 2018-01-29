@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pgm_base.h>
 #include <build_version.h>
 #include <macros.h>

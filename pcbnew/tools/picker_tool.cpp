@@ -26,7 +26,7 @@
 #include "pcb_actions.h"
 #include "grid_helper.h"
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 

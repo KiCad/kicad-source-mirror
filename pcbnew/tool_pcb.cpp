@@ -34,7 +34,7 @@
 #include <help_common_strings.h>
 #include <dialog_helpers.h>
 #include <class_layer_box_selector.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <bitmaps.h>

@@ -38,7 +38,7 @@
 #include <xnode.h>
 #include <common.h>
 #include <macros.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board_design_settings.h>
 #include <plotter.h>
 #include <worksheet.h>
@@ -52,7 +52,6 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
-#include <module_editor_frame.h>
 #include <modview_frame.h>
 
 #include <invoke_pcb_dialog.h>

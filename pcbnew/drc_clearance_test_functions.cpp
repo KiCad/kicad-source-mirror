@@ -32,7 +32,7 @@
  */
 
 #include <fctsys.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <trigo.h>
 
 #include <pcbnew.h>

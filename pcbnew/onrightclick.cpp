@@ -42,7 +42,7 @@
 #include <class_zone.h>
 
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <collectors.h>

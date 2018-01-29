@@ -24,7 +24,7 @@
 
 #include "dialog_gencad_export_options.h"
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <project.h>
 #include <confirm.h>

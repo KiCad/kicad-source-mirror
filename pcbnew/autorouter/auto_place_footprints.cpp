@@ -34,7 +34,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <msgpanel.h>

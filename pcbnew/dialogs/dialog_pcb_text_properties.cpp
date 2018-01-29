@@ -30,7 +30,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <draw_graphic_text.h>
 #include <confirm.h>
 #include <base_units.h>

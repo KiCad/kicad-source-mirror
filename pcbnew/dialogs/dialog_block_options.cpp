@@ -24,7 +24,7 @@
 
 #include <dialog_block_options.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 
 DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,

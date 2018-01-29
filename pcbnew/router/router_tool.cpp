@@ -28,7 +28,7 @@ using namespace std::placeholders;
 #include "class_draw_panel_gal.h"
 #include "class_board.h"
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <id.h>
 #include <macros.h>
 #include <pcbnew_id.h>

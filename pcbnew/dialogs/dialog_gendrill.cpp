@@ -30,7 +30,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcbplot.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>

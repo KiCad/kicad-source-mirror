@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <pcb_base_frame.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 
 #include <class_board.h>
@@ -42,8 +42,6 @@
 
 #include <connectivity_data.h>
 #include <ratsnest_data.h>
-
-#include <wxPcbStruct.h>
 
 /**
  * Function Compile_Ratsnest

@@ -29,7 +29,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 
 #include <class_board.h>

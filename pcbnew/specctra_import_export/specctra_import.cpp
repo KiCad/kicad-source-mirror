@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>    // m_canvas
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 
 #include <class_board.h>

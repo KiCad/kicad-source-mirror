@@ -28,7 +28,7 @@ using namespace std::placeholders;
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <ratsnest_data.h>
 #include <board_commit.h>
 

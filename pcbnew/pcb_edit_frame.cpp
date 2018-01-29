@@ -21,7 +21,7 @@
  */
 
 /**
- * @file pcbframe.cpp
+ * @file pcb_edit_frame.cpp
  * @brief PCB editor main window implementation.
  */
 
@@ -30,7 +30,7 @@
 #include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <collectors.h>
 #include <build_version.h>
 #include <macros.h>
@@ -47,7 +47,7 @@
 #include <class_pcb_layer_widget.h>
 #include <hotkeys.h>
 #include <config_params.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <dialog_exchange_modules.h>

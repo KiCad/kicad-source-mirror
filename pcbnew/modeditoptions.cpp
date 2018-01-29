@@ -26,15 +26,14 @@
 
 /**
  * @file modeditoptions.cpp
- * @brief Pcbnew footprint (module) editor options.
+ * @brief Pcbnew footprint editor options.
  */
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
 
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <class_board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 

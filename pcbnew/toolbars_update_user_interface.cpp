@@ -32,7 +32,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <class_board.h>
 #include <pcbnew.h>

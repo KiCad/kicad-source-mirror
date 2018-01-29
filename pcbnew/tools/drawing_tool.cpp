@@ -26,7 +26,7 @@
 #include "drawing_tool.h"
 #include "pcb_actions.h"
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_draw_panel_gal.h>
 #include <project.h>
 #include <id.h>

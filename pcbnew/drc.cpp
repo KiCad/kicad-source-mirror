@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <class_board_design_settings.h>

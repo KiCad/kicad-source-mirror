@@ -47,7 +47,7 @@
 
 #include <io_mgr.h>
 #include <sch_io_mgr.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <schframe.h>
 #include <netlist.h>
 

@@ -29,7 +29,6 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
 #include <gr_basic.h>
 
 #include <class_board.h>
@@ -41,7 +40,7 @@
 #include <pcbnew_id.h>
 #include <tools/pcbnew_control.h>
 #include <hotkeys.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
 #include <menus_helpers.h>
 

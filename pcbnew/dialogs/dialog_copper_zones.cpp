@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <PolyLine.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <zones.h>
 #include <base_units.h>
 #include <widgets/text_ctrl_eval.h>

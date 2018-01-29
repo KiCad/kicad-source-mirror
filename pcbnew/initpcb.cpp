@@ -28,12 +28,12 @@
 
 #include <fctsys.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <class_board.h>
 
 #include <pcbnew.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 
 bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )

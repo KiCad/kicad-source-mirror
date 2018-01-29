@@ -39,7 +39,7 @@
 #include <painter.h>
 #include <project.h>
 #include <pcbnew_id.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_zone.h>
 #include <pcb_draw_panel_gal.h>

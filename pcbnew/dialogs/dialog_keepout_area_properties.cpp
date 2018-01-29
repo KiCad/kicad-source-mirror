@@ -32,7 +32,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_zone.h>
 #include <zones.h>
 #include <base_units.h>

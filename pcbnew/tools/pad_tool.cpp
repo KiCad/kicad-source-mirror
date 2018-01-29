@@ -24,7 +24,7 @@
 
 #include "pad_tool.h"
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view.h>

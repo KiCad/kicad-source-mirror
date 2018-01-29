@@ -250,7 +250,7 @@ set( PCBNEW_CLASS_SRCS
     modedit.cpp
     modedit_onclick.cpp
     modeditoptions.cpp
-    moduleframe.cpp
+    footprint_edit_frame.cpp
     modules.cpp
     modview_frame.cpp
     move-drag_pads.cpp
@@ -263,7 +263,7 @@ set( PCBNEW_CLASS_SRCS
     pcb_base_edit_frame.cpp
 #    pcb_draw_panel_gal.cpp
 #    pcb_view.cpp
-    pcbframe.cpp
+    pcb_edit_frame.cpp
     pcbnew_config.cpp
     pcbplot.cpp
     plot_board_layers.cpp

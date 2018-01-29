@@ -41,7 +41,7 @@
 #include <tool/coroutine.h>
 #include <tool/action_manager.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_draw_panel_gal.h>
 
 /// Struct describing the current execution state of a TOOL

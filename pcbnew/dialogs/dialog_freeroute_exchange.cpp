@@ -33,7 +33,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 #include <class_board.h>
 

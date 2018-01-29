@@ -35,7 +35,7 @@
 #include <trigo.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <richio.h>
 #include <filter_reader.h>

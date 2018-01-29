@@ -18,12 +18,12 @@
  */
 
 /**
- * @file module_editor_frame.h
+ * @file footprint_edit_frame.h
  * @brief Definition of class FOOTPRINT_EDIT_FRAME.
  */
 
-#ifndef MODULE_EDITOR_FRAME_H_
-#define MODULE_EDITOR_FRAME_H_
+#ifndef FOOTPRINT_EDIT_FRAME_H
+#define FOOTPRINT_EDIT_FRAME_H
 
 #include <pcb_base_frame.h>
 #include <pcb_base_edit_frame.h>
@@ -535,4 +535,4 @@ private:
     void duplicateItems( bool aIncrement ) override;
 };
 
-#endif      // MODULE_EDITOR_FRAME_H_
+#endif      // FOOTPRINT_EDIT_FRAME_H

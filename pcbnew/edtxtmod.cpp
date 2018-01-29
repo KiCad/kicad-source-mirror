@@ -37,8 +37,8 @@
 #include <macros.h>
 
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <module_editor_frame.h>
+#include <pcb_edit_frame.h>
+#include <footprint_edit_frame.h>
 
 #include <class_board.h>
 #include <class_module.h>

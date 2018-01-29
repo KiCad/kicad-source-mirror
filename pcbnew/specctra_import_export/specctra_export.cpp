@@ -31,7 +31,7 @@
     Also see the comments at the top of the specctra.cpp file itself.
 */
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <trigo.h>              // RotatePoint()
@@ -71,7 +71,7 @@ using namespace DSN;
 static const double safetyMargin = 0.1;
 
 
-// see wxPcbStruct.h
+// see pcb_edit_frame.h
 void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 {
     wxString    fullFileName;

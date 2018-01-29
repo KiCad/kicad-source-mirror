@@ -38,7 +38,7 @@
 #include <pgm_base.h>
 #include <gestfich.h>
 #include <3d_viewer.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <project.h>
 #include <board_commit.h>

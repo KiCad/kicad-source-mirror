@@ -27,7 +27,7 @@
  */
 
 #include <wx_status_popup.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 WX_STATUS_POPUP::WX_STATUS_POPUP( PCB_EDIT_FRAME* aParent ) :
     wxPopupWindow( aParent )

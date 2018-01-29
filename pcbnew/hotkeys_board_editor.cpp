@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 

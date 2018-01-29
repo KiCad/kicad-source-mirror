@@ -14,7 +14,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <kiway_express.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <macros.h>
 

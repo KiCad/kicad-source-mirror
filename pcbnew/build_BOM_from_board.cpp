@@ -30,7 +30,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>

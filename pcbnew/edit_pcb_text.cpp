@@ -32,7 +32,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 
 #include <class_board.h>

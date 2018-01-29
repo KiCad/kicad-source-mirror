@@ -28,7 +28,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <class_board.h>
 #include <class_module.h>

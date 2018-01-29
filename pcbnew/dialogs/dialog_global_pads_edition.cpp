@@ -25,7 +25,7 @@
 #include <dialog_global_pads_edition.h>
 
 #include <class_pad.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 
 DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :

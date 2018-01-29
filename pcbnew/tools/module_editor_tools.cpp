@@ -45,7 +45,7 @@
 #include <hotkeys.h>
 #include <bitmaps.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>

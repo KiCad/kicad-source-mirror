@@ -33,7 +33,7 @@
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 #include <ratsnest_data.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 
 #include <class_board.h>

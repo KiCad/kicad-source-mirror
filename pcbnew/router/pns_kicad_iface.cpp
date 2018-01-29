@@ -27,7 +27,7 @@
 #include <board_commit.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <unordered_set>
 #include <unordered_map>

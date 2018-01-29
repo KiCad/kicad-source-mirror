@@ -26,7 +26,7 @@
  */
 
 #include <common.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcb_netlist.h>
 #include <dialog_update_pcb.h>
 #include <wx_html_report_panel.h>

@@ -44,7 +44,7 @@
 #include <class_zone.h>
 
 #include <pcb_painter.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 
 #include <connectivity_data.h>
 

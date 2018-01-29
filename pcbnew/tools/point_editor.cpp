@@ -37,7 +37,7 @@ using namespace std::placeholders;
 #include <board_commit.h>
 #include <bitmaps.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_edge_mod.h>
 #include <class_dimension.h>
 #include <class_zone.h>

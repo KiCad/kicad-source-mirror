@@ -38,7 +38,7 @@
 #include <kiface_i.h>
 #include <gestfich.h>
 #include <3d_viewer.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <macros.h>
 #include <validators.h>
@@ -49,7 +49,7 @@
 
 #include <class_module.h>
 #include <class_text_mod.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>

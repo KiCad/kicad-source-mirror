@@ -36,7 +36,7 @@ using namespace std::placeholders;
 #include <class_drawsegment.h>
 #include <class_zone.h>
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <collectors.h>
 #include <confirm.h>
 #include <dialog_find.h>

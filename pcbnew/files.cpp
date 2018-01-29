@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <richio.h>
@@ -52,8 +52,6 @@
 
 #include <class_board.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
-#include <module_editor_frame.h>
-#include <modview_frame.h>
 
 #include <wx/stdpaths.h>
 

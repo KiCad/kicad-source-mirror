@@ -30,7 +30,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <kicad_device_context.h>
 
 #include <class_board.h>

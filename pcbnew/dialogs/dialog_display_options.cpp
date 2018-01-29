@@ -26,7 +26,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
 #include <config_map.h>
 

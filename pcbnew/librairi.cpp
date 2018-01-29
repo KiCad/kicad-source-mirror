@@ -36,7 +36,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
 #include <macros.h>
@@ -47,7 +47,7 @@
 #include <class_module.h>
 
 #include <pcbnew.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>

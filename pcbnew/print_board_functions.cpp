@@ -27,7 +27,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <printout_controler.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -37,7 +37,7 @@
 
 #include <pcbnew.h>
 #include <pcbplot.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 
 
 static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,

@@ -36,7 +36,7 @@
 #include <painter.h>
 
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
 #include <layer_widget.h>
 #include <macros.h>

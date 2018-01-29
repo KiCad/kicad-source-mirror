@@ -29,7 +29,7 @@
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <base_units.h>
 
 #include <printout_controler.h>

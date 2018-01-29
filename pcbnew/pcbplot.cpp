@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <plotter.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcbplot.h>
 #include <base_units.h>
 #include <reporter.h>

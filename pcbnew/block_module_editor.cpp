@@ -37,8 +37,7 @@
 #include <block_commande.h>
 #include <macros.h>
 
-#include <wxPcbStruct.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <pcbplot.h>
 #include <trigo.h>
 

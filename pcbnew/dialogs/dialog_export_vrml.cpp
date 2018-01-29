@@ -29,7 +29,7 @@
 #include <wx/dir.h>
 
 #include <fctsys.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <kiface_i.h>
 
 #include <pcbnew.h>

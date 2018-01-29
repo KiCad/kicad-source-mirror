@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wxPcbStruct.h>
-#include <pcb_base_frame.h>
+#include <pcb_edit_frame.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>

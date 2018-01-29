@@ -32,7 +32,6 @@
 #include <kiway.h>
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
-#include <wxPcbStruct.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <dialog_helpers.h>
 #include <msgpanel.h>

@@ -30,7 +30,7 @@
  */
 #include <common.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <class_board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 

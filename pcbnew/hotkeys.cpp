@@ -28,7 +28,7 @@
 
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <modview_frame.h>
 #include <pcbnew_id.h>
 

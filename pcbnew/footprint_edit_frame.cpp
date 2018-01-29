@@ -34,7 +34,7 @@
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
@@ -50,7 +50,7 @@
 #include <hotkeys.h>
 #include <dialogs/dialog_modedit_display_options.h>
 #include <dialog_hotkeys_editor.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <class_pcb_layer_widget.h>

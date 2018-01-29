@@ -40,7 +40,7 @@
 #include <macros.h>
 #include <make_unique.h>
 #include <class_drawpanel.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <wx/stdpaths.h>
 
@@ -55,12 +55,13 @@
 #include <class_board.h>
 #include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
-#include <module_editor_frame.h>
+#include <footprint_edit_frame.h>
 #include <modview_frame.h>
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <gl_context_mgr.h>
+
 extern bool IsWxPythonLoaded();
 
 // Colors for layers and items

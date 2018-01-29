@@ -46,7 +46,7 @@
 #include <kicad_clipboard.h>
 
 #include <pcbnew_id.h>
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <pcb_draw_panel_gal.h>
 #include <connectivity_data.h>
 #include <tool/tool_manager.h>
