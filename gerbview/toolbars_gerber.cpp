@@ -108,80 +108,81 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 {
     wxWindowUpdateLocker dummy( this );
+    wxStaticText* text;
 
-#if 0
-    if( m_auxiliaryToolBar )
-    {
-        updateComponentListSelectBox();
-        updateNetnameListSelectBox();
-        updateAperAttributesSelectBox();
-        updateDCodeSelectBox();
-
-        // combobox sizes can have changed: apply new best sizes
-        wxSize size;
-        size = m_SelComponentBox->GetBestSize();
-        size.x = std::max( size.x, 100 );
-        m_SelComponentBox->SetMinSize( size );
-
-        size = m_SelNetnameBox->GetBestSize();
-        size.x = std::max( size.x, 100 );
-        m_SelNetnameBox->SetMinSize( size );
-
-        size = m_SelAperAttributesBox->GetBestSize();
-        size.x = std::max( size.x, 100 );
-        m_SelAperAttributesBox->SetMinSize( size );
-
-        size = m_DCodeSelector->GetBestSize();
-        size.x = std::max( size.x, 100 );
-        m_DCodeSelector->SetMinSize( size );
-
-        m_auimgr.Update();
-        return;
-    }
-#endif
-
-    if( m_auxiliaryToolBar )
-        m_auxiliaryToolBar->Clear();
-    else
+    if( !m_auxiliaryToolBar )
         m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Creates box to display and choose components:
-    wxStaticText* text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Cmp:") );
-    m_auxiliaryToolBar->AddControl( text );
-    m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-    m_SelComponentBox->SetToolTip( _("Select a component and highlight items belonging to this component") );
-    updateComponentListSelectBox();
-    m_auxiliaryToolBar->AddControl( m_SelComponentBox );
-    KiScaledSeparator( m_mainToolBar, this );
+    if( !m_SelComponentBox )
+    {
+        m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
+                                          ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+        m_SelComponentBox->SetToolTip( _("Select a component and highlight items belonging to this component") );
+    }
 
     // Creates choice box to display net names and highlight selected:
-    text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Net:") );
-    m_auxiliaryToolBar->AddControl( text );
-    m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-    m_SelNetnameBox->SetToolTip( _("Select a net name and highlight graphic items belonging to this net") );
-    m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
-    updateNetnameListSelectBox();
-    KiScaledSeparator( m_mainToolBar, this );
+    if( !m_SelNetnameBox )
+    {
+        m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
+                                        ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+        m_SelNetnameBox->SetToolTip( _("Select a net name and highlight graphic items belonging to this net") );
+    }
 
     // Creates choice box to display aperture attributes and highlight selected:
+    if( !m_SelAperAttributesBox )
+    {
+        m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
+                                          ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+        m_SelAperAttributesBox->SetToolTip( _("Select an aperture attribute and highlight graphic items having this attribute") );
+    }
+
+    if( !m_DCodeSelector )
+    {
+        m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
+                                                   ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+                                                   wxDefaultPosition, wxSize( 150, -1 ) );
+    }
+
+    updateComponentListSelectBox();
+    updateNetnameListSelectBox();
+    updateAperAttributesSelectBox();
+    updateDCodeSelectBox();
+
+    // combobox sizes can have changed: apply new best sizes
+    m_SelComponentBox->SetMinSize( m_SelComponentBox->GetBestSize() );
+    m_SelNetnameBox->SetMinSize( m_SelNetnameBox->GetBestSize() );
+    m_SelAperAttributesBox->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
+
+    // Because wxAuiToolBar doesn't actually clear things properly...
+    for( unsigned i = 0; i < m_auxiliaryToolBar->GetToolCount(); ++i )
+    {
+        auto item = m_auxiliaryToolBar->FindToolByIndex( i );
+        auto control = dynamic_cast<wxStaticText*>( item->GetWindow() );
+
+        if( control )
+        {
+            delete control;
+        }
+    }
+
+    m_auxiliaryToolBar->Clear();
+
+    text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Cmp:") );
+    m_auxiliaryToolBar->AddControl( text );
+    m_auxiliaryToolBar->AddControl( m_SelComponentBox );
+    KiScaledSeparator( m_auxiliaryToolBar, this );
+    text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Net:") );
+    m_auxiliaryToolBar->AddControl( text );
+    m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
+    KiScaledSeparator( m_auxiliaryToolBar, this );
     text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Attr:") );
     m_auxiliaryToolBar->AddControl( text );
-    m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-    m_SelAperAttributesBox->SetToolTip( _("Select an aperture attribute and highlight graphic items having this attribute") );
     m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
-    updateAperAttributesSelectBox();
-
-    KiScaledSeparator( m_mainToolBar, this );
+    KiScaledSeparator( m_auxiliaryToolBar, this );
     text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("DCode:") );
     m_auxiliaryToolBar->AddControl( text );
-    m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
-                                               ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
-                                               wxDefaultPosition, wxSize( 150, -1 ) );
-    updateDCodeSelectBox();
     m_auxiliaryToolBar->AddControl( m_DCodeSelector );
 
     // after adding the buttons to the toolbar, must call Realize()

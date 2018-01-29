@@ -86,6 +86,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_hotkeysDescrList = GerbviewHokeysDescr;
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
+    m_SelComponentBox = nullptr;
+    m_SelNetnameBox = nullptr;
+    m_SelAperAttributesBox = nullptr;
     m_displayMode   = 0;
     m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
     m_zipFileHistory.SetBaseId( ID_GERBVIEW_ZIP_FILE1 );
@@ -137,12 +140,12 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000;
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
+    m_auimgr.SetManagedWindow( this );
+
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateOptToolbar();
     ReCreateAuxiliaryToolbar();
-
-    m_auimgr.SetManagedWindow( this );
 
     EDA_PANEINFO    horiz;
     horiz.HorizontalToolbarPane();
