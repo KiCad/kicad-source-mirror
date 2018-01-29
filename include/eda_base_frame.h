@@ -24,7 +24,7 @@
  */
 
 /**
- * @file wxstruct.h
+ * @file eda_base_frame.h
  * @brief Base window classes and related definitions.
  */
 

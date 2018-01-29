@@ -24,7 +24,7 @@
  */
 
 /**
- * @file basicframe.cpp
+ * @file eda_base_frame.cpp
  * @brief EDA_BASE_FRAME class implementation.
  */
 

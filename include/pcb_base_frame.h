@@ -24,12 +24,12 @@
  */
 
 /**
- * @file wxBasePcbFrame.h
+ * @file pcb_base_frame.h
  * @brief Classes used in Pcbnew, CvPcb and GerbView.
  */
 
-#ifndef  WX_BASE_PCB_FRAME_H_
-#define  WX_BASE_PCB_FRAME_H_
+#ifndef  PCB_BASE_FRAME_H
+#define  PCB_BASE_FRAME_H
 
 
 #include <vector>
@@ -708,4 +708,4 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  // WX_BASE_PCB_FRAME_H_
+#endif  // PCB_BASE_FRAME_H
