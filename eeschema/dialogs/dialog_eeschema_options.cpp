@@ -27,7 +27,7 @@
  */
 
 #include <fctsys.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 
 #include <dialog_eeschema_options.h>
 #include <widgets/widget_hotkey_list.h>

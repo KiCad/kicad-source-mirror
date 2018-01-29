@@ -33,10 +33,10 @@
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <class_drawpanel.h>
-#include <class_title_block.h>
+#include <title_block.h>
 #include <draw_frame.h>
 #include <worksheet_shape_builder.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <wildcards_and_files_ext.h>
 
 #include <wx/valgen.h>

@@ -37,12 +37,12 @@
 #include <class_colors_design_settings.h>
 #include <common.h>                         // PAGE_INFO
 #include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
-#include <class_title_block.h>
+#include <title_block.h>
 #include <class_gerber_draw_item.h>
 #include <class_gbr_display_options.h>
 
 #include <gr_basic.h>
-#include <class_eda_rect.h>
+#include <eda_rect.h>
 
 class GERBER_FILE_IMAGE_LIST;
 

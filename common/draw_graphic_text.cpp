@@ -37,7 +37,7 @@
 #include <trigo.h>
 #include <macros.h>
 #include <class_drawpanel.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 
 #include <basic_gal.h>
 

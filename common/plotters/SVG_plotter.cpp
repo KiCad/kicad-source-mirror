@@ -93,7 +93,7 @@
 #include <fctsys.h>
 #include <trigo.h>
 #include <wxstruct.h>
-#include <class_eda_rect.h>
+#include <eda_rect.h>
 #include <base_struct.h>
 #include <common.h>
 #include <plotter.h>

@@ -24,11 +24,11 @@
  */
 
 /**
- * @file class_page_info.h
+ * @file page_info.h
  */
 
-#ifndef CLASS_PAGE_INFO_H_
-#define CLASS_PAGE_INFO_H_
+#ifndef PAGE_INFO_H
+#define PAGE_INFO_H
 
 #include <wx/wx.h>
 
@@ -234,4 +234,4 @@ private:
     void    setMargins();
 };
 
-#endif  // CLASS_PAGE_INFO_H_
+#endif  // PAGE_INFO_H

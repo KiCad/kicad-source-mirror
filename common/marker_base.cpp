@@ -23,18 +23,16 @@
  */
 
 /**
- * @file class_marker_base.cpp
+ * @file marker_base.cpp
  * @brief Implementation of MARKER_BASE class.
  * Markers are used to show something (usually a drc/erc problem).
  * Markers in Pcbnew and Eeschema are derived from this base class.
  */
 
-/* file class_marker_base.cpp
- */
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "class_base_screen.h"
+#include "base_screen.h"
 #include "common.h"
 #include "macros.h"
 #include "class_drawpanel.h"

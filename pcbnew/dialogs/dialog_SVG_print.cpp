@@ -32,7 +32,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <wxBasePcbFrame.h>
-#include <class_pcb_screen.h>
+#include <pcb_screen.h>
 #include <base_units.h>
 #include <convert_to_biu.h>
 #include <wildcards_and_files_ext.h>

@@ -28,7 +28,7 @@
 #include <common.h>
 #include <macros.h>
 #include <trigo.h>
-#include <class_pcb_screen.h>
+#include <pcb_screen.h>
 #include <eda_text.h>                // FILLED
 #include <base_units.h>
 

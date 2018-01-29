@@ -32,7 +32,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>
-#include <class_pcb_screen.h>
+#include <pcb_screen.h>
 #include <class_drawpanel.h>
 #include <draw_graphic_text.h>
 #include <layers_id_colors_and_visibility.h>

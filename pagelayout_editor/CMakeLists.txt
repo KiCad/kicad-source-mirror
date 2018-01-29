@@ -40,8 +40,8 @@ set( PL_EDITOR_EXTRA_SRCS
     ../common/base_screen.cpp
     ../common/base_units.cpp
     ../common/eda_text.cpp
-    ../common/class_page_info.cpp
     ../common/dialogs/dialog_page_settings.cpp
+    ../common/page_info.cpp
 )
 
 

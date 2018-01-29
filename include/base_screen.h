@@ -24,12 +24,12 @@
  */
 
 /**
- * @file class_base_screen.h
+ * @file base_screen.h
  * @brief BASE_SCREEN class implementation.
  */
 
-#ifndef  CLASS_BASE_SCREEN_H_
-#define  CLASS_BASE_SCREEN_H_
+#ifndef  BASE_SCREEN_H
+#define  BASE_SCREEN_H
 
 #include <draw_frame.h>
 #include <base_struct.h>
@@ -505,4 +505,4 @@ public:
 #endif
 };
 
-#endif  // CLASS_BASE_SCREEN_H_
+#endif  // BASE_SCREEN_H

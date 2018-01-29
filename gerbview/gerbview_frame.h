@@ -35,7 +35,7 @@
 #include <convert_to_biu.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
-#include <class_page_info.h>
+#include <page_info.h>
 #include <class_gbr_display_options.h>
 #include <class_colors_design_settings.h>
 

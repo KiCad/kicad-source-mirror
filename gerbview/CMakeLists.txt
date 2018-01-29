@@ -78,10 +78,10 @@ set( GERBVIEW_EXTRA_SRCS
     ../common/base_units.cpp
     ../common/eda_text.cpp
     ../common/class_layer_box_selector.cpp
-    ../common/class_page_info.cpp
     ../common/lset.cpp
     ../common/settings.cpp
     ../pcbnew/layer_widget.cpp
+    ../common/page_info.cpp
 )
 
 if( MINGW )

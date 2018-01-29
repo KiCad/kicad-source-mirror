@@ -34,7 +34,7 @@
 #include <wxstruct.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
-#include <class_pcb_screen.h>
+#include <pcb_screen.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <richio.h>

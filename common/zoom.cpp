@@ -34,7 +34,7 @@
 #include <id.h>
 #include <class_drawpanel.h>
 #include <view/view.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <draw_frame.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>

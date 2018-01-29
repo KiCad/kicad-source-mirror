@@ -36,7 +36,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <class_pcb_screen.h>
+#include <pcb_screen.h>
 
 #include <confirm.h>
 #include <hotkeys.h>

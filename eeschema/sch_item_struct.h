@@ -31,7 +31,7 @@
 #define SCH_ITEM_STRUCT_H
 
 #include <vector>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <general.h>
 
 class SCH_ITEM;

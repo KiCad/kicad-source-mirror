@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #define _LIB_ITEM_H_
 
 #include <base_struct.h>
-#include <class_eda_rect.h>
+#include <eda_rect.h>
 #include <transform.h>
 #include <gr_basic.h>
 

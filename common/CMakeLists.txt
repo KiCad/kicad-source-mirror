@@ -237,7 +237,6 @@ set( COMMON_SRCS
     build_version.cpp
     class_colors_design_settings.cpp
     class_layer_box_selector.cpp
-    class_marker_base.cpp
     class_undoredo_container.cpp
     colors.cpp
     commit.cpp
@@ -281,6 +280,7 @@ set( COMMON_SRCS
     lib_table_base.cpp
     lib_table_keywords.cpp
     lockfile.cpp
+    marker_base.cpp
     md5_hash.cpp
     msgpanel.cpp
     netlist_keywords.cpp
@@ -371,10 +371,10 @@ target_link_libraries( common
 
 set( PCB_COMMON_SRCS
     base_screen.cpp
-    class_page_info.cpp
     eda_text.cpp
     fp_lib_table.cpp
     lset.cpp
+    page_info.cpp
     pcb_keywords.cpp
     pcb_plot_params_keywords.cpp
     ../pcbnew/basepcbframe.cpp

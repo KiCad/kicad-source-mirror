@@ -34,9 +34,9 @@
 #include <dlist.h>
 #include <sch_item_struct.h>
 #include <lib_draw_item.h>
-#include <class_base_screen.h>
-#include <class_title_block.h>
-#include <class_page_info.h>
+#include <base_screen.h>
+#include <title_block.h>
+#include <page_info.h>
 #include <kiway_player.h>
 #include <sch_marker.h>
 

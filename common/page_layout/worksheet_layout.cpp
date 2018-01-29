@@ -53,7 +53,7 @@
 #include <kiface_i.h>
 #include <draw_graphic_text.h>
 #include <worksheet.h>
-#include <class_title_block.h>
+#include <title_block.h>
 #include <worksheet_shape_builder.h>
 #include <worksheet_dataitem.h>
 

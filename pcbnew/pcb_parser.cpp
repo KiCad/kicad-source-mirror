@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <macros.h>
 #include <trigo.h>
-#include <class_title_block.h>
+#include <title_block.h>
 
 #include <class_board.h>
 #include <class_dimension.h>

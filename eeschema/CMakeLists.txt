@@ -220,8 +220,8 @@ set( EESCHEMA_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
     ../common/base_screen.cpp
     ../common/base_units.cpp
-    ../common/class_page_info.cpp
     ../common/eda_text.cpp
+    ../common/page_info.cpp
     )
 
 

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2009-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,14 @@
  */
 
 /**
- * @file class_pcb_screen.h
+ * @file pcb_screen.h
  */
 
-#ifndef CLASS_PCB_SCREEN_H_
-#define CLASS_PCB_SCREEN_H_
+#ifndef PCB_SCREEN_H
+#define PCB_SCREEN_H
 
 
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <class_board_item.h>
 
 
@@ -102,4 +102,4 @@ public:
     void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 };
 
-#endif  // CLASS_PCB_SCREEN_H_
+#endif  // PCB_SCREEN_H

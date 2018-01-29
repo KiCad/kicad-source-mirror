@@ -33,7 +33,7 @@
 #include <common.h>
 #include <macros.h>
 #include <base_struct.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <block_commande.h>

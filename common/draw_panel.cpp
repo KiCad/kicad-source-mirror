@@ -37,7 +37,7 @@
 #include <id.h>
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <draw_frame.h>
 #include <view/view_controls.h>
 #include <gal/gal_display_options.h>

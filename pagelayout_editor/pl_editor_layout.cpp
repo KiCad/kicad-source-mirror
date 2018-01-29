@@ -31,7 +31,7 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <class_eda_rect.h>
+#include <eda_rect.h>
 #include <pl_editor_layout.h>
 
 PL_EDITOR_LAYOUT::PL_EDITOR_LAYOUT()

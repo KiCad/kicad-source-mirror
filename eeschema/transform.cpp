@@ -26,7 +26,7 @@
 #include <trigo.h>
 #include <transform.h>
 #include <common.h>
-#include <class_eda_rect.h>
+#include <eda_rect.h>
 
 
 bool TRANSFORM::operator==( const TRANSFORM& aTransform ) const

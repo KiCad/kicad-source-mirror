@@ -27,7 +27,7 @@
 #define WORKSHEET_H_
 
 #include <gal/color4d.h>
-#include <class_page_info.h>
+#include <page_info.h>
 
 // Forward declarations:
 class EDA_DRAW_PANEL;

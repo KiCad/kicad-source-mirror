@@ -32,7 +32,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <gr_basic.h>

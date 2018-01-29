@@ -33,7 +33,7 @@
 #include <macros.h>
 #include <common.h>
 #include <base_struct.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <id.h>
 #include <base_units.h>
 

@@ -32,7 +32,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 #include <layers_id_colors_and_visibility.h>
-#include <class_page_info.h>
+#include <page_info.h>
 #include <view/view.h>
 
 using namespace KIGFX;

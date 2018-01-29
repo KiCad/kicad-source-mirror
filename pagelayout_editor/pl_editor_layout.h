@@ -29,8 +29,8 @@
 #define CLASS_PL_EDITOR_LAYOUT_H
 
 #include <base_struct.h>
-#include <class_page_info.h>
-#include <class_title_block.h>
+#include <page_info.h>
+#include <title_block.h>
 
 class EDA_DRAW_PANEL;
 

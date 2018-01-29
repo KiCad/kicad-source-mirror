@@ -31,7 +31,7 @@
 
 
 #include <base_units.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 
 class WORKSHEET_DATAITEM;
 

@@ -25,7 +25,7 @@
 #include <tool/zoom_menu.h>
 #include <id.h>
 #include <draw_frame.h>
-#include <class_base_screen.h>
+#include <base_screen.h>
 #include <tool/actions.h>
 #include <bitmaps.h>
 

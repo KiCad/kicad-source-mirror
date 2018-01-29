@@ -39,7 +39,7 @@
 #include <base_struct.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <richio.h>
-#include <class_pcb_screen.h>
+#include <pcb_screen.h>
 #include <pcb_display_options.h>
 #include <pcb_general_settings.h>
 

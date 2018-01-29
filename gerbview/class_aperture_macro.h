@@ -35,7 +35,7 @@
 
 #include <base_struct.h>
 #include <class_am_param.h>
-#include <class_eda_rect.h>
+#include <eda_rect.h>
 
 class SHAPE_POLY_SET;
 
