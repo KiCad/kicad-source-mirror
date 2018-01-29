@@ -26,7 +26,6 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>

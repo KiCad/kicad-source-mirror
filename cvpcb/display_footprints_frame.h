@@ -27,7 +27,7 @@
  */
 
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 // The name (for wxWidgets) of the footprint viewer frame
 #define FOOTPRINTVIEWER_FRAME_NAME wxT( "FootprintViewerFrame" )

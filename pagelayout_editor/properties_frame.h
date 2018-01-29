@@ -29,7 +29,6 @@
 #ifndef  _PROPERTIES_FRAME_H
 #define  _PROPERTIES_FRAME_H
 
-#include <wxstruct.h>
 #include <pl_editor_frame.h>
 #include <dialogs/properties_frame_base.h>
 

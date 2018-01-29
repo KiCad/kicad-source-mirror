@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <trigo.h>
 #include <macros.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 #include <pcbnew.h>
 #include <class_board.h>

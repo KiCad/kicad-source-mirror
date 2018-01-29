@@ -31,7 +31,6 @@
 #include <fctsys.h>
 #include <PolyLine.h>
 #include <trigo.h>
-#include <wxstruct.h>
 #include <macros.h>
 #include <msgpanel.h>
 #include <base_units.h>

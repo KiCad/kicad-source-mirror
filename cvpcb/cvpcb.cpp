@@ -32,7 +32,7 @@
 #include <fp_lib_table.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <wxstruct.h>
+//#include <wxstruct.h>
 #include <confirm.h>
 
 #include <cvpcb.h>

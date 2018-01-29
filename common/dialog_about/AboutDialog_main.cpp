@@ -38,7 +38,7 @@
 #include <build_version.h>
 #include <common.h>
 #include <pgm_base.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 
 #include "aboutinfo.h"
 #include "dialog_about.h"

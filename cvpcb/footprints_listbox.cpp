@@ -28,7 +28,6 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
 #include <wx/wupdlock.h>
 
 #include <cvpcb.h>

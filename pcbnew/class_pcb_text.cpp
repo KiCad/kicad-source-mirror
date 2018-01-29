@@ -29,7 +29,6 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <draw_graphic_text.h>

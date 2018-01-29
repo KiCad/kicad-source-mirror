@@ -32,7 +32,7 @@
 #include <convert_to_biu.h>
 #include <common.h>
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 

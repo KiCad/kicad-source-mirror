@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <base_struct.h>
 #include <common.h>
 #include <macros.h>

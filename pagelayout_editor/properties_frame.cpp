@@ -27,7 +27,6 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <worksheet_shape_builder.h>
 #include <worksheet_dataitem.h>

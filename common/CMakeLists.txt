@@ -228,7 +228,6 @@ set( COMMON_SRCS
     ${COMMON_PREVIEW_ITEMS_SRCS}
     ${PLOTTERS_CONTROL_SRCS}
     base_struct.cpp
-    basicframe.cpp
     bezier_curves.cpp
     bin_mod.cpp
     bitmap.cpp
@@ -252,6 +251,7 @@ set( COMMON_SRCS
     draw_graphic_text.cpp
     dsnlexer.cpp
     eagle_parser.cpp
+    eda_base_frame.cpp
     eda_dde.cpp
     eda_doc.cpp
     eda_pattern_match.cpp
@@ -377,7 +377,7 @@ set( PCB_COMMON_SRCS
     page_info.cpp
     pcb_keywords.cpp
     pcb_plot_params_keywords.cpp
-    ../pcbnew/basepcbframe.cpp
+    ../pcbnew/pcb_base_frame.cpp
     ../pcbnew/board_commit.cpp
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/class_board.cpp

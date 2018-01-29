@@ -92,7 +92,7 @@
  */
 #include <fctsys.h>
 #include <trigo.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <eda_rect.h>
 #include <base_struct.h>
 #include <common.h>

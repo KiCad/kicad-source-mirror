@@ -37,7 +37,7 @@
 #include <id.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <menus_helpers.h>
 #include <bitmaps.h>
 

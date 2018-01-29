@@ -29,7 +29,7 @@
 #include <common.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <config_params.h>
 
 #include <wx/apptrait.h>

@@ -35,7 +35,7 @@
 #include <pcbnew.h>
 #include <trigo.h>
 #include <macros.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <base_units.h>
 #include <unit_format.h>
 #include <gr_basic.h>

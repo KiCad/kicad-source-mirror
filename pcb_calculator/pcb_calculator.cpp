@@ -24,7 +24,6 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
 

@@ -32,7 +32,7 @@
 #include <common.h>
 #include <macros.h>
 #include <kicad_string.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <class_drawpanel.h>
 #include <base_screen.h>
 #include <bitmaps.h>

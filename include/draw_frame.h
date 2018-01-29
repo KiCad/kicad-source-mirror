@@ -26,7 +26,7 @@
 #ifndef DRAW_FRAME_H_
 #define DRAW_FRAME_H_
 
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <kiway_player.h>
 #include <climits>
 #include <gal/gal_display_options.h>

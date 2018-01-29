@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <PolyLine.h>
 #include <trigo.h>
-#include <wxstruct.h>
 
 #include <pcbnew.h>
 

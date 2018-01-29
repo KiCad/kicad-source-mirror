@@ -30,7 +30,6 @@
 
 #include <fctsys.h>
 #include <confirm.h>
-#include <wxstruct.h>
 #include <wildcards_and_files_ext.h>
 
 #include <class_sch_screen.h>

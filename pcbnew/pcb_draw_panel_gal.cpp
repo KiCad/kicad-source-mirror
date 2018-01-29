@@ -36,7 +36,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>

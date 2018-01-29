@@ -197,7 +197,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <trigo.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <base_struct.h>
 #include <plotter.h>
 #include <macros.h>

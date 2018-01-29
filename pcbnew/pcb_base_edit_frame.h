@@ -25,7 +25,7 @@
 #ifndef BASE_EDIT_FRAME_H
 #define BASE_EDIT_FRAME_H
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 class BOARD_ITEM_CONTAINER;
 

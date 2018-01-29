@@ -24,7 +24,7 @@
  */
 
 #include <wxPcbStruct.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>

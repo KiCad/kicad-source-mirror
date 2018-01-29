@@ -34,7 +34,7 @@
 #include <pcb_netlist.h>
 #include <footprint_info.h>
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <config_params.h>
 #include <auto_associate.h>
 #include <memory>

@@ -11,7 +11,7 @@
 #include <class_drawpanel.h>
 #include <trigo.h>
 #include <block_commande.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 #include <class_board.h>
 #include <class_module.h>

@@ -33,7 +33,6 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <base_units.h>
-#include <wxstruct.h>
 #include <base_screen.h>
 
 #include <gerbview_frame.h>

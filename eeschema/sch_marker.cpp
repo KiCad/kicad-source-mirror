@@ -28,13 +28,11 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <trigo.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 
-#include <general.h>
 #include <sch_marker.h>
 #include <erc.h>
 

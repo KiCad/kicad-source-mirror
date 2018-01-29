@@ -31,7 +31,6 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <wxstruct.h>
 #include <gr_basic.h>
 #include <bezier_curves.h>
 #include <class_drawpanel.h>

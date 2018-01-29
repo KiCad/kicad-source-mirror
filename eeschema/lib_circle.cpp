@@ -33,7 +33,6 @@
 #include <class_drawpanel.h>
 #include <plotter.h>
 #include <trigo.h>
-#include <wxstruct.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>

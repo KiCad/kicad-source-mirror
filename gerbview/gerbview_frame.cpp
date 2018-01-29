@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
 #include <trigo.h>

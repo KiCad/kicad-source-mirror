@@ -38,7 +38,7 @@
 #include <pcbnew.h>
 #include <draw_graphic_text.h>
 #include <confirm.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <base_units.h>
 #include <wx/numformatter.h>
 #include <board_commit.h>

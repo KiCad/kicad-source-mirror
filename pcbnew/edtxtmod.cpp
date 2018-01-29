@@ -33,7 +33,7 @@
 #include <class_drawpanel.h>
 #include <draw_graphic_text.h>
 #include <trigo.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <macros.h>
 
 #include <pcbnew.h>

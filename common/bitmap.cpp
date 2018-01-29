@@ -37,7 +37,7 @@
 #include <common.h>
 #include <bitmaps.h>
 #include <pgm_base.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 
 
 struct SCALED_BITMAP_ID {

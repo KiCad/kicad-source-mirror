@@ -31,7 +31,6 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <wxstruct.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
 #include <pcb_screen.h>
@@ -40,7 +39,7 @@
 #include <richio.h>
 #include <macros.h>
 #include <math_for_graphics.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>

@@ -32,7 +32,6 @@
 #include <plotter.h>
 #include <draw_graphic_text.h>
 #include <trigo.h>
-#include <wxstruct.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>

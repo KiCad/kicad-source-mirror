@@ -35,7 +35,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <macros.h>
 #include <dialog_hotkeys_editor.h>
 #include <menus_helpers.h>

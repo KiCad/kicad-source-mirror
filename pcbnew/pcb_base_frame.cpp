@@ -30,12 +30,12 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <confirm.h>
 #include <kiface_i.h>
 #include <dialog_helpers.h>
 #include <kicad_device_context.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <base_units.h>
 #include <msgpanel.h>
 

@@ -29,14 +29,13 @@
  */
 
 #include <fctsys.h>
-#include <wxstruct.h>
 #include <trigo.h>
 #include <pcb_screen.h>
 #include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <richio.h>
 #include <macros.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 

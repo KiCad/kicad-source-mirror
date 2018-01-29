@@ -29,7 +29,7 @@
 #include <dialog_create_array_base.h>
 
 #include <class_board_item.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 #include <boost/bimap.hpp>
 

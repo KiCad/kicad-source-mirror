@@ -23,8 +23,8 @@
  */
 
 #include <fctsys.h>
+#include <wx/aui/aui.h>
 #include <pgm_base.h>
-#include <wxstruct.h>
 #include <dcode.h>
 
 #include <DCodeSelectionbox.h>

@@ -25,7 +25,7 @@
 #ifndef MODULE_EDITOR_FRAME_H_
 #define MODULE_EDITOR_FRAME_H_
 
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <pcb_base_edit_frame.h>
 #include <io_mgr.h>
 #include <config_params.h>

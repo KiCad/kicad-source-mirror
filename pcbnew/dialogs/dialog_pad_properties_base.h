@@ -35,7 +35,7 @@ class wxListView;
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
 #include <wx/dialog.h>
 #include <wx/spinctrl.h>

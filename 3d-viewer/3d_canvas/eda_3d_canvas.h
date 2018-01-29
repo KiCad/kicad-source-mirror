@@ -43,7 +43,7 @@
 #include <wx/wupdlock.h>
 #include <wx/timer.h>
 #include <wx/statusbr.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 
 
 /**

@@ -31,7 +31,6 @@
 #include <class_drawpanel.h>
 #include <plotter.h>
 #include <trigo.h>
-#include <wxstruct.h>
 #include <bezier_curves.h>
 #include <base_units.h>
 #include <msgpanel.h>

@@ -43,7 +43,7 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <wx/gdicmn.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <class_pcb_text.h>
 #include <class_drawsegment.h>
 #include <class_dimension.h>

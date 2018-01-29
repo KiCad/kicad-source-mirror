@@ -27,7 +27,7 @@
 
 #include <wx/frame.h>
 #include <vector>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 
 
 class KIWAY;

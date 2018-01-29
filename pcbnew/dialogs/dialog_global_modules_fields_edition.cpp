@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <wxBasePcbFrame.h>
+#include <pcb_base_frame.h>
 #include <base_units.h>
 #include <kicad_string.h>
 #include <macros.h>
