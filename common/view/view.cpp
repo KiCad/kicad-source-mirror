@@ -78,13 +78,10 @@ private:
     {
         int* layersPtr = aLayers;
 
-        for( unsigned int i = 0; i < m_layers.size(); ++i )
-        {
-            if( m_layers[i] )
-                *layersPtr++ = i;
-        }
+        for( auto layer : m_layers )
+            *layersPtr++ = layer;
 
-        aCount = m_layers.count();
+        aCount = m_layers.size();
     }
 
     VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
@@ -193,7 +190,7 @@ private:
     }
 
     /// Stores layer numbers used by the item.
-    std::bitset<VIEW::VIEW_MAX_LAYERS> m_layers;
+    std::vector<int> m_layers;
 
     /**
      * Function saveLayers()
@@ -204,14 +201,14 @@ private:
      */
     void saveLayers( int* aLayers, int aCount )
     {
-        m_layers.reset();
+        m_layers.clear();
 
         for( int i = 0; i < aCount; ++i )
         {
             // this fires on some eagle board after EAGLE_PLUGIN::Load()
             wxASSERT( unsigned( aLayers[i] ) <= unsigned( VIEW::VIEW_MAX_LAYERS ) );
 
-            m_layers.set( aLayers[i] );
+            m_layers.push_back( aLayers[i] );
         }
     }
 
