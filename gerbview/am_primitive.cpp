@@ -1,5 +1,5 @@
 /**
- * @file class_aperture_macro.cpp
+ * @file aperture_macro.cpp
  */
 
 /*
@@ -35,7 +35,7 @@
 #include <gr_basic.h>
 
 #include <gerbview.h>
-#include <class_gerber_file_image.h>
+#include <gerber_file_image.h>
 
 
 

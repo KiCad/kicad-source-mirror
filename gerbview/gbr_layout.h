@@ -23,13 +23,13 @@
  */
 
 /**
- * @file class_gbr_layout.h
+ * @file gbr_layout.h
  * @brief Class CLASS_GBR_LAYOUT to handle info to draw/print loaded Gerber images
  * and page frame reference
  */
 
-#ifndef CLASS_GBR_LAYOUT_H
-#define CLASS_GBR_LAYOUT_H
+#ifndef GBR_LAYOUT_H
+#define GBR_LAYOUT_H
 
 
 #include <dlist.h>
@@ -38,8 +38,8 @@
 #include <common.h>                         // PAGE_INFO
 #include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
 #include <title_block.h>
-#include <class_gerber_draw_item.h>
-#include <class_gbr_display_options.h>
+#include <gerber_draw_item.h>
+#include <gbr_display_options.h>
 
 #include <gr_basic.h>
 #include <eda_rect.h>
@@ -193,4 +193,4 @@ public:
 #endif
 };
 
-#endif      // #ifndef CLASS_GBR_LAYOUT_H
+#endif      // #ifndef GBR_LAYOUT_H

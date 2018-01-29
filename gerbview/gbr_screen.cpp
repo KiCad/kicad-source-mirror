@@ -23,13 +23,13 @@
  */
 
 /**
- * @file class_gbr_screen.cpp
+ * @file gbr_screen.cpp
  */
 
 #include <fctsys.h>
 #include <common.h>
 #include <macros.h>
-#include <class_gbr_screen.h>
+#include <gbr_screen.h>
 #include <gerbview_id.h>
 
 

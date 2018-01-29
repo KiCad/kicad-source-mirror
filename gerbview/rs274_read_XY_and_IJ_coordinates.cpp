@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <common.h>
 
-#include <class_gerber_file_image.h>
+#include <gerber_file_image.h>
 #include <base_units.h>
 
 

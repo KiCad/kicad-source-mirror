@@ -32,9 +32,9 @@
 #include <confirm.h>
 
 #include <gerbview_frame.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
-#include <class_gerbview_layer_widget.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
+#include <gerbview_layer_widget.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
 

@@ -28,8 +28,8 @@
 /* class_gerber_layer_widget.h : header for the layers manager */
 /************************************************************/
 
-#ifndef _CLASS_GERBER_LAYER_WIDGET_H_
-#define _CLASS_GERBER_LAYER_WIDGET_H_
+#ifndef GERBER_LAYER_WIDGET_H
+#define GERBER_LAYER_WIDGET_H
 
 #include <layer_widget.h>
 
@@ -138,4 +138,4 @@ protected:
     };
 };
 
-#endif  // _CLASS_GERBER_LAYER_WIDGET_H_
+#endif  // GERBER_LAYER_WIDGET_H

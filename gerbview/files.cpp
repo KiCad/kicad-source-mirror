@@ -38,8 +38,8 @@
 
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
-#include <class_gerber_file_image.h>
-#include <class_gerbview_layer_widget.h>
+#include <gerber_file_image.h>
+#include <gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
 
 // HTML Messages used more than one time:

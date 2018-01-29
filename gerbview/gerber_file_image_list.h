@@ -22,14 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CLASS_GERBER_FILE_IMAGE_LIST_H
-#define CLASS_GERBER_FILE_IMAGE_LIST_H
+#ifndef GERBER_FILE_IMAGE_LIST_H
+#define GERBER_FILE_IMAGE_LIST_H
 
 #include <vector>
 #include <set>
 
-#include <class_gerber_draw_item.h>
-#include <class_aperture_macro.h>
+#include <gerber_draw_item.h>
+#include <am_primitive.h>
 
 /* gerber files have different parameters to define units and how items must be plotted.
  *  some are for the entire file, and other can change along a file.
@@ -128,4 +128,4 @@ public:
     #endif
 };
 
-#endif  // ifndef CLASS_GERBER_FILE_IMAGE_LIST_H
+#endif  // ifndef GERBER_FILE_IMAGE_LIST_H

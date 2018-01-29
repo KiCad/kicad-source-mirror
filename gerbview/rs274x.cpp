@@ -32,8 +32,8 @@
 #include <base_units.h>
 
 #include <gerbview.h>
-#include <class_gerber_file_image.h>
-#include <class_X2_gerber_attributes.h>
+#include <gerber_file_image.h>
+#include <X2_gerber_attributes.h>
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );

@@ -31,8 +31,8 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 
 #include <select_layers_to_pcb.h>
 

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@
  */
 
 /**
- * @file class_X2_gerber_attributes.h
+ * @file X2_gerber_attributes.h
  */
 
-#ifndef _CLASS_X2_GERBER_ATTRIBUTE_H_
-#define _CLASS_X2_GERBER_ATTRIBUTE_H_
+#ifndef X2_GERBER_ATTRIBUTE_H
+#define X2_GERBER_ATTRIBUTE_H
 
 /*
  * Manage the gerber extensions (attributes) in the new X2 version
@@ -201,4 +201,4 @@ private:
     void set_Z_Order();
 };
 
-#endif      // _CLASS_X2_GERBER_ATTRIBUTE_H_
+#endif      // X2_GERBER_ATTRIBUTE_H

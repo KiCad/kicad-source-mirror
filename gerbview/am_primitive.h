@@ -1,9 +1,9 @@
 /**
- * @file class_aperture_macro.h
+ * @file aperture_macro.h
  */
 
-#ifndef _APERTURE_MACRO_H_
-#define _APERTURE_MACRO_H_
+#ifndef AM_PRIMITIVE_H
+#define AM_PRIMITIVE_H
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -34,7 +34,7 @@
 #include <set>
 
 #include <base_struct.h>
-#include <class_am_param.h>
+#include <am_param.h>
 #include <eda_rect.h>
 
 class SHAPE_POLY_SET;
@@ -259,4 +259,4 @@ typedef std::set<APERTURE_MACRO, APERTURE_MACRO_less_than> APERTURE_MACRO_SET;
 typedef std::pair<APERTURE_MACRO_SET::iterator, bool>      APERTURE_MACRO_SET_PAIR;
 
 
-#endif  // ifndef _APERTURE_MACRO_H_
+#endif  // ifndef AM_PRIMITIVE_H

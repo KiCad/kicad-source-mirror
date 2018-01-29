@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CLASS_EXCELLON_H
-#define CLASS_EXCELLON_H
+#ifndef EXCELLON_IMAGE_H
+#define EXCELLON_IMAGE_H
 
 
 enum drill_M_code_t {
@@ -318,4 +318,4 @@ private:
  *  M95             End of the header
  */
 
-#endif  // CLASS_EXCELLON_H
+#endif  // EXCELLON_IMAGE_H

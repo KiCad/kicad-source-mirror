@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_gbr_display_options.h
+ * @file gbr_display_options.h
  * @brief Class GBR_DISPLAY_OPTIONS is a helper class to handle display options
  * (filling modes and afew other options
  */

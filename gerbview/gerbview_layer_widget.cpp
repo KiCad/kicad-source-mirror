@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,13 +33,13 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <macros.h>
-#include <class_gbr_layer_box_selector.h>
+#include <gbr_layer_box_selector.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image_list.h>
 #include <layer_widget.h>
-#include <class_gerbview_layer_widget.h>
+#include <gerbview_layer_widget.h>
 
 #include <view/view.h>
 #include <gerbview_painter.h>

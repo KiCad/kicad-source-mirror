@@ -1,5 +1,5 @@
 /**
- * @file class_gerber_file_image.cpp
+ * @file gerber_file_image.cpp
  * a GERBER class handle for a given layer info about used D_CODES and how the layer is drawn
  */
 
@@ -35,8 +35,8 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_file_image.h>
-#include <class_X2_gerber_attributes.h>
+#include <gerber_file_image.h>
+#include <X2_gerber_attributes.h>
 
 #include <algorithm>
 #include <map>

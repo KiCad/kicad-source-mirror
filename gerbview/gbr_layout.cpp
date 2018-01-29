@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_gbr_layout.cpp
+ * @file gbr_layout.cpp
  * @brief  GBR_LAYOUT class functions.
  */
 
@@ -32,9 +32,9 @@
 #include <draw_graphic_text.h>
 #include <gerbview_frame.h>
 #include <class_drawpanel.h>
-#include <class_gbr_layout.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gbr_layout.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 
 GBR_LAYOUT::GBR_LAYOUT() :
     EDA_ITEM( (EDA_ITEM*)NULL, GERBER_LAYOUT_T )

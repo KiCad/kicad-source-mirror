@@ -26,8 +26,8 @@
 #include <convert_to_biu.h>
 #include <gerbview.h>
 
-#include <class_gerber_draw_item.h>
-#include <class_gerber_file_image.h>
+#include <gerber_draw_item.h>
+#include <gerber_file_image.h>
 
 using namespace KIGFX;
 

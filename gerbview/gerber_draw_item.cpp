@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_gerber_draw_item.cpp
+ * @file gerber_draw_item.cpp
  */
 
 #include <fctsys.h>
@@ -35,9 +35,9 @@
 #include <gerbview_frame.h>
 #include <convert_basic_shapes_to_polygon.h>
 
-#include <class_gerber_draw_item.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_draw_item.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :

@@ -1,5 +1,5 @@
 /**
- * @file class_am_param.h
+ * @file am_param.h
  */
 
 /*

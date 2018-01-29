@@ -27,7 +27,7 @@
 #include <wxstruct.h>
 #include <dcode.h>
 
-#include <class_DCodeSelectionbox.h>
+#include <DCodeSelectionbox.h>
 
 /*******************************************/
 /* Helper class for displaying DCodes list */

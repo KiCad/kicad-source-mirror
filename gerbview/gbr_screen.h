@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@
  */
 
 /**
- * @file class_gbr_screen.h
+ * @file gbr_screen.h
  */
 
-#ifndef CLASS_GBR_SCREEN_H_
-#define CLASS_GBR_SCREEN_H_
+#ifndef GBR_SCREEN_H
+#define GBR_SCREEN_H
 
 #include <base_units.h>
 
@@ -60,4 +60,4 @@ public:
 };
 
 
-#endif  // CLASS_GBR_SCREEN_H_
+#endif  // GBR_SCREEN_H

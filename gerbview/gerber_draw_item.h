@@ -23,11 +23,11 @@
  */
 
 /**
- * @file class_gerber_draw_item.h
+ * @file gerber_draw_item.h
  */
 
-#ifndef CLASS_GERBER_DRAW_ITEM_H
-#define CLASS_GERBER_DRAW_ITEM_H
+#ifndef GERBER_DRAW_ITEM_H
+#define GERBER_DRAW_ITEM_H
 
 #include <base_struct.h>
 #include <dlist.h>
@@ -332,4 +332,4 @@ class GERBER_NEGATIVE_IMAGE_BACKDROP : public EDA_ITEM
 
 };
 
-#endif /* CLASS_GERBER_DRAW_ITEM_H */
+#endif /* GERBER_DRAW_ITEM_H */

@@ -24,8 +24,8 @@
 
 // file class_DCodeSelectionbox.h
 
-#ifndef CLASS_DCODESELECTIONBOX_H
-#define CLASS_DCODESELECTIONBOX_H
+#ifndef DCODESELECTIONBOX_H
+#define DCODESELECTIONBOX_H
 
 /* helper class to display a DCode list and select a DCode id.
  */
@@ -59,4 +59,4 @@ public: DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
     void AppendDCodeList( const wxArrayString& aChoices );
 };
 
-#endif //CLASS_DCODESELECTIONBOX_H
+#endif //DCODESELECTIONBOX_H

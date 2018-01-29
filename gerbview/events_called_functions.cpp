@@ -36,11 +36,11 @@
 #include <gerbview_frame.h>
 #include <kicad_device_context.h>
 #include <gerbview_id.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 #include <dialog_helpers.h>
-#include <class_DCodeSelectionbox.h>
-#include <class_gerbview_layer_widget.h>
+#include <DCodeSelectionbox.h>
+#include <gerbview_layer_widget.h>
 #include <dialog_show_page_borders.h>
 
 #include <tool/tool_manager.h>

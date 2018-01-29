@@ -1,5 +1,5 @@
 /**
- * @file class_gbr_layer_box_selector.cpp
+ * @file gbr_layer_box_selector.cpp
  * @brief a derived class of LAYER_BOX_SELECTOR to handle the layer box selector
  * in GerbView
  */
@@ -31,9 +31,9 @@
 
 #include <common.h>
 #include <gerbview_frame.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image_list.h>
 
-#include <class_gbr_layer_box_selector.h>
+#include <gbr_layer_box_selector.h>
 
 void GBR_LAYER_BOX_SELECTOR::Resync()
 {

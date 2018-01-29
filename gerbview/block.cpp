@@ -32,9 +32,9 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <gerbview_frame.h>
-#include <class_gerber_draw_item.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_draw_item.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 
 // Call back function used in block command
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,

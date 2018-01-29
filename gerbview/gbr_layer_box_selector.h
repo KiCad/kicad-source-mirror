@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CLASS_GBR_LAYER_BOX_SELECTOR_H
-#define CLASS_GBR_LAYER_BOX_SELECTOR_H 1
+#ifndef GBR_LAYER_BOX_SELECTOR_H
+#define GBR_LAYER_BOX_SELECTOR_H 1
 
 #include <class_layer_box_selector.h>
 
@@ -56,4 +56,4 @@ public:
     wxString GetLayerName( int aLayer ) const override;
 };
 
-#endif //CLASS_GBR_LAYER_BOX_SELECTOR_H
+#endif //GBR_LAYER_BOX_SELECTOR_H

@@ -28,8 +28,8 @@
 #include <kicad_string.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 #include <view/view.h>
 
 #include <html_messagebox.h>

@@ -34,7 +34,7 @@
 #include <trigo.h>
 
 #include <gerbview_frame.h>
-#include <class_gerber_file_image.h>
+#include <gerber_file_image.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 

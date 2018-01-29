@@ -33,7 +33,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_drawpanel.h>
-#include <class_gerbview_layer_widget.h>
+#include <gerbview_layer_widget.h>
 #include <hotkeys.h>
 
 

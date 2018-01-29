@@ -30,7 +30,7 @@
 #include <build_version.h>
 #include <trigo.h>
 #include <base_units.h>
-#include <class_gbr_layer_box_selector.h>
+#include <gbr_layer_box_selector.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
@@ -39,11 +39,11 @@
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 #include <dialog_helpers.h>
-#include <class_DCodeSelectionbox.h>
-#include <class_gerbview_layer_widget.h>
+#include <DCodeSelectionbox.h>
+#include <gerbview_layer_widget.h>
 
 #include <gerbview_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>

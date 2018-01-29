@@ -33,8 +33,8 @@
 #include <gerbview.h>
 #include <richio.h>
 #include <class_drawpanel.h>
-#include <class_gerber_file_image.h>
-#include <class_gerber_file_image_list.h>
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 #include <gerbview_frame.h>
 #include <reporter.h>
 #include <plot_auxiliary_data.h>

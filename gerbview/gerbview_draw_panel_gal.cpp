@@ -24,7 +24,7 @@
 
 #include <class_colors_design_settings.h>
 #include <gerbview_frame.h>
-#include <class_gbr_display_options.h>
+#include <gbr_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 
 #include <functional>

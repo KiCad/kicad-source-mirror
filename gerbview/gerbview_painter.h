@@ -23,7 +23,7 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <painter.h>
-#include <class_gbr_display_options.h>
+#include <gbr_display_options.h>
 #include <geometry/shape_poly_set.h>
 
 #include <memory>
