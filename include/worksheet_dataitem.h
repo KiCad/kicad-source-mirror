@@ -23,16 +23,16 @@
  */
 
 /**
- * @file class_worksheet_dataitem.h
+ * @file worksheet_dataitem.h
  * @brief description of graphic items and texts to build a title block
  */
 
-#ifndef  CLASS_WORKSHEET_DATA_ITEM_H
-#define  CLASS_WORKSHEET_DATA_ITEM_H
+#ifndef  WORKSHEET_DATA_ITEM_H
+#define  WORKSHEET_DATA_ITEM_H
 
 #include <math/vector2d.h>
 #include <eda_text.h>
-#include <class_bitmap_base.h>
+#include <bitmap_base.h>
 
 class WS_DRAW_ITEM_TEXT;            // Forward declaration
 
@@ -534,4 +534,4 @@ public:
 };
 
 
-#endif      // CLASS_WORKSHEET_DATA_ITEM_H
+#endif      // WORKSHEET_DATA_ITEM_H

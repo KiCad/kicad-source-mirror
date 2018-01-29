@@ -1,5 +1,5 @@
 /**
- * @file class_pl_editor_layout.cpp
+ * @file pl_editor_layout.cpp
  * @brief  PL_EDITOR_LAYOUT class functions.
  */
 /*
@@ -32,7 +32,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_eda_rect.h>
-#include <class_pl_editor_layout.h>
+#include <pl_editor_layout.h>
 
 PL_EDITOR_LAYOUT::PL_EDITOR_LAYOUT()
 {

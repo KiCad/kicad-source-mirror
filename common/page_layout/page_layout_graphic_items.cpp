@@ -58,7 +58,7 @@
 #include <worksheet.h>
 #include <class_title_block.h>
 #include <worksheet_shape_builder.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <polygon_test_point_inside.h>
 
 /* a helper function to draw graphic symbols at start point or end point of

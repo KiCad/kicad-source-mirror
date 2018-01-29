@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 jean-pierre.charras jp.charras at wanadoo.fr
- * Copyright (C) 2013-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 jean-pierre.charras jp.charras at wanadoo.fr
+ * Copyright (C) 2013-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _BITMAP_BASE_H_
-#define _BITMAP_BASE_H_
+#ifndef BITMAP_BASE_H
+#define BITMAP_BASE_H
 
 /**
- * @file class_bitmap_base.h
+ * @file bitmap_base.h
  *
  */
 
@@ -226,4 +226,4 @@ public:
 };
 
 
-#endif    // _BITMAP_BASE_H_
+#endif    // BITMAP_BASE_H

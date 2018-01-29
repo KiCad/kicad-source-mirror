@@ -35,7 +35,7 @@
 #include "richio.h"
 #include "plotter.h"
 
-#include "class_bitmap_base.h"
+#include "bitmap_base.h"
 
 #include <wx/mstream.h>
 

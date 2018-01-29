@@ -36,7 +36,7 @@
 #include <properties_frame.h>
 #include <menus_helpers.h>
 #include <worksheet_shape_builder.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <hotkeys.h>
 
 // Helper function to add menuitems relative to items creation

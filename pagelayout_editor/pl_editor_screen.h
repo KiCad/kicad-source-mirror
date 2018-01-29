@@ -1,5 +1,5 @@
 /**
- * @file class_pl_editor_screen.h
+ * @file pl_editor_screen.h
  */
 
 /*

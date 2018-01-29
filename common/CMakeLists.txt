@@ -187,8 +187,8 @@ set( COMMON_WIDGET_SRCS
 
 set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/title_block_shapes.cpp
-    page_layout/class_worksheet_dataitem.cpp
-    page_layout/class_worksheet_layout.cpp
+    page_layout/worksheet_dataitem.cpp
+    page_layout/worksheet_layout.cpp
     page_layout/page_layout_default_description.cpp
     page_layout/page_layout_graphic_items.cpp
     page_layout/page_layout_reader_keywords.cpp
@@ -232,9 +232,9 @@ set( COMMON_SRCS
     bezier_curves.cpp
     bin_mod.cpp
     bitmap.cpp
+    bitmap_base.cpp
     block_commande.cpp
     build_version.cpp
-    class_bitmap_base.cpp
     class_colors_design_settings.cpp
     class_layer_box_selector.cpp
     class_marker_base.cpp
@@ -256,11 +256,11 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     eda_pattern_match.cpp
+    eda_graphic_text_ctrl.cpp
     env_paths.cpp
     exceptions.cpp
     executable_names.cpp
     filter_reader.cpp
-#    findkicadhelppath.cpp.notused      deprecated, use searchhelpfilefullpath.cpp
     footprint_filter.cpp
     footprint_info.cpp
     gbr_metadata.cpp
@@ -303,7 +303,6 @@ set( COMMON_SRCS
     worksheet.cpp
     wx_status_popup.cpp
     wxdataviewctrl_helpers.cpp
-    wxwineda.cpp
     xnode.cpp
     zoom.cpp
     )

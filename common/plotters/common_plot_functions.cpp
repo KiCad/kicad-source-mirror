@@ -35,7 +35,7 @@
 #include <draw_graphic_text.h>
 #include <class_title_block.h>
 #include "worksheet_shape_builder.h"
-#include "class_worksheet_dataitem.h"
+#include "worksheet_dataitem.h"
 #include <wx/filename.h>
 
 

@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>
 #include <pl_editor_frame.h>
 #include <design_tree_frame.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <hotkeys.h>
 #include <pl_editor_id.h>
 

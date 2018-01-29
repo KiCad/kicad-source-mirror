@@ -1,5 +1,5 @@
 /**
- * @file class_pl_editor_layout.h
+ * @file pl_editor_layout.h
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.

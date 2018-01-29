@@ -35,7 +35,7 @@
 #include <pl_editor_id.h>
 #include <dialog_helpers.h>
 #include <worksheet_shape_builder.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <dialog_page_settings.h>
 #include <invoke_pl_editor_dialog.h>
 

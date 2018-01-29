@@ -32,7 +32,7 @@
 #include <class_drawpanel.h>
 
 #include <pl_editor_frame.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <dialog_new_dataitem_base.h>
 
 class DIALOG_NEW_DATAITEM : public DIALOG_NEW_DATAITEM_BASE
@@ -43,7 +43,6 @@ public:
     DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WORKSHEET_DATAITEM* aItem );
 
 private:
-    void OnCancelClick( wxCommandEvent& event ) override;
     void OnOKClick( wxCommandEvent& event ) override;
 
     void initDlg();
@@ -67,10 +66,6 @@ DIALOG_NEW_DATAITEM::DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller,
     Centre();
 }
 
-void DIALOG_NEW_DATAITEM::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL);
-}
 
 void DIALOG_NEW_DATAITEM::OnOKClick( wxCommandEvent& event )
 {

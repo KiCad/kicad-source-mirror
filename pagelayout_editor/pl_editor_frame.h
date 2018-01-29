@@ -34,8 +34,8 @@
 #include <config_params.h>
 #include <draw_frame.h>
 #include <class_drawpanel.h>
-#include <class_pl_editor_screen.h>
-#include <class_pl_editor_layout.h>
+#include <pl_editor_screen.h>
+#include <pl_editor_layout.h>
 
 class PROPERTIES_FRAME;
 class DESIGN_TREE_FRAME;

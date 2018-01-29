@@ -39,9 +39,9 @@
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <hotkeys.h>
-#include <class_pl_editor_screen.h>
+#include <pl_editor_screen.h>
 #include <worksheet_shape_builder.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <design_tree_frame.h>
 #include <properties_frame.h>
 

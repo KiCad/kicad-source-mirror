@@ -37,7 +37,7 @@
 #include <design_tree_frame.h>
 #include <properties_frame.h>
 #include <dialog_helpers.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 
 /* Process the command triggered by the left button of the mouse when a tool
  * is already selected.

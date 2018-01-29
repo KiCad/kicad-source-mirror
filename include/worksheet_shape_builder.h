@@ -34,7 +34,7 @@
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <eda_text.h>
-#include <class_bitmap_base.h>
+#include <bitmap_base.h>
 
 class WORKSHEET_DATAITEM;        // Forward declaration
 class TITLE_BLOCK;

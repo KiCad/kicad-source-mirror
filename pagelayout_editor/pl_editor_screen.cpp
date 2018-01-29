@@ -1,5 +1,5 @@
 /**
- * @file class_pl_editor_screen.cpp
+ * @file pl_editor_screen.cpp
  */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <macros.h>
-#include <class_pl_editor_screen.h>
+#include <pl_editor_screen.h>
 #include <base_units.h>
 #include <pl_editor_id.h>
 

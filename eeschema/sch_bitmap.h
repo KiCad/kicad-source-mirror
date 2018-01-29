@@ -32,7 +32,7 @@
 
 
 #include <sch_item_struct.h>
-#include <class_bitmap_base.h>
+#include <bitmap_base.h>
 
 
 /**

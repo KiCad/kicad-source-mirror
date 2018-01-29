@@ -6,7 +6,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011-2016 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <class_bitmap_base.h>
+#include <bitmap_base.h>
 
 #include <dialog_image_editor.h>
 

@@ -33,7 +33,7 @@
 #include <base_struct.h>
 #include <worksheet.h>
 #include <worksheet_shape_builder.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <math/vector2d.h>
 #include <page_layout_reader_lexer.h>
 #include <macros.h>

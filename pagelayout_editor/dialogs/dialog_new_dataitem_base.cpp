@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_new_dataitem_base.h"
@@ -145,14 +145,12 @@ DIALOG_NEW_DATAITEM_BASE::DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_sdbSizerButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NEW_DATAITEM_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NEW_DATAITEM_BASE::OnOKClick ), NULL, this );
 }
 
 DIALOG_NEW_DATAITEM_BASE::~DIALOG_NEW_DATAITEM_BASE()
 {
 	// Disconnect Events
-	m_sdbSizerButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NEW_DATAITEM_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NEW_DATAITEM_BASE::OnOKClick ), NULL, this );
 	
 }

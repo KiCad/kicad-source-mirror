@@ -30,7 +30,7 @@
 #include <wx/wupdlock.h>
 #include <fctsys.h>
 #include <worksheet_shape_builder.h>
-#include <class_worksheet_dataitem.h>
+#include <worksheet_dataitem.h>
 #include <pl_editor_id.h>
 #include <design_tree_frame.h>
 
