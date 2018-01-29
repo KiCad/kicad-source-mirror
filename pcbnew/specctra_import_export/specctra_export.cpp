@@ -55,7 +55,7 @@
 
 #include <geometry/shape_poly_set.h>
 
-#include <specctra.h>
+#include "specctra.h"
 
 using namespace DSN;
 

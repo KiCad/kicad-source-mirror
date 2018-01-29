@@ -55,7 +55,7 @@
 #include <class_board.h>
 #include <class_track.h>
 
-#include <specctra.h>
+#include "specctra.h"
 #include <macros.h>
 
 

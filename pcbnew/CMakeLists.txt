@@ -46,6 +46,7 @@ include_directories(
     ./import_dxf
     ../utils/idftools
     ${GLM_INCLUDE_DIR}
+    ./specctra_import_export
     ${INC_AFTER}
     )
 
@@ -270,10 +271,10 @@ set( PCBNEW_CLASS_SRCS
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
-    specctra.cpp
-    specctra_export.cpp
-    specctra_import.cpp
-    specctra_keywords.cpp
+    specctra_import_export/specctra.cpp
+    specctra_import_export/specctra_export.cpp
+    specctra_import_export/specctra_import.cpp
+    specctra_import_export/specctra_keywords.cpp
     swap_layers.cpp
     target_edit.cpp
     tool_modedit.cpp
@@ -347,20 +348,20 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
 
 # auto-generate specctra_lexer.h and specctra_keywords.cpp
 make_lexer(
-    ${CMAKE_CURRENT_SOURCE_DIR}/specctra.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_keywords.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_import_export/specctra.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_import_export/specctra_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_import_export/specctra_keywords.cpp
     DSN
 
     # Pass header file with dependency on *_lexer.h as extra_arg
-    specctra.h
+    specctra_import_export/specctra.h
     )
 
 add_custom_target(
     specctra_lexer_source_files ALL
     DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/specctra_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/specctra_keywords.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/specctra_import_export/specctra_lexer.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/specctra_import_export/specctra_keywords.cpp
     )
 
 

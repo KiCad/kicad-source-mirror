@@ -47,7 +47,7 @@
 #include <connectivity_data.h>
 #include <view/view.h>
 
-#include <specctra.h>
+#include "specctra.h"
 
 
 using namespace DSN;

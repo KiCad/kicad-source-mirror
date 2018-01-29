@@ -34,7 +34,7 @@
 #include <cstdarg>
 #include <cstdio>
 
-#include <specctra.h>
+#include "specctra.h"
 #include <common.h>
 
 
