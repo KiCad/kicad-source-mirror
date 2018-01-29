@@ -54,11 +54,11 @@ bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 }
 
 
-#define PROGRESS_INTERVAL_MILLIS 50
+#define PROGRESS_INTERVAL_MILLIS 66
 
 void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
 {
-    wxLongLong nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
+    wxLongLong nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
 
     int libMgrHash = m_libMgr->GetHash();
 
@@ -75,7 +75,7 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
 
         if( wxGetUTCTimeMillis() > nextUpdate )
         {
-            aProgressCallback( i++, max, name );
+            aProgressCallback( i, max, name );
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
@@ -90,6 +90,7 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
         }
 
         ++it;
+        ++i;
     }
 
     // Look for new libraries

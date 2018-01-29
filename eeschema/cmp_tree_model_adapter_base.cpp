@@ -32,6 +32,8 @@ CMP_TREE_MODEL_ADAPTER_BASE::WIDTH_CACHE CMP_TREE_MODEL_ADAPTER_BASE::m_width_ca
 
 bool CMP_TREE_MODEL_ADAPTER_BASE::m_show_progress = true;
 
+#define PROGRESS_INTERVAL_MILLIS 66
+
 static const int kDataViewIndent = 20;
 
 
@@ -111,6 +113,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddLibrariesWithProgress(
         const std::vector<wxString>& aNicknames, wxWindow* aParent )
 {
     wxProgressDialog* prg = nullptr;
+    wxLongLong        nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
 
     if( m_show_progress )
         prg = new wxProgressDialog( _( "Loading Symbol Libraries" ),
@@ -122,10 +125,14 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddLibrariesWithProgress(
 
     for( const auto& nickname : aNicknames )
     {
-        if( prg )
-            prg->Update( ii++, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
+        if( prg && wxGetUTCTimeMillis() > nextUpdate )
+        {
+            prg->Update( ii, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
+            nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
+        }
 
         AddLibrary( nickname );
+        ii++;
     }
 
     if( prg )

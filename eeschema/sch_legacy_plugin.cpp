@@ -3136,20 +3136,24 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
     parseUnquotedString( name, aReader, line, &line );
     parseUnquotedString( number, aReader, line, &line );
 
-    pin->SetName( name, false );
-    pin->SetNumber( number );
+    // Unlike most of the other LIB_ITEMs, the SetXXX() routines on LIB_PINs are at the UI
+    // level, performing additional pin checking, multi-pin editing, and setting the modified
+    // flag.  So we must set the member fields directly.
+
+    pin->m_name = name;
+    pin->m_number = number;
 
     wxPoint pos;
 
     pos.x = parseInt( aReader, line, &line );
     pos.y = parseInt( aReader, line, &line );
-    pin->SetPosition( pos );
-    pin->SetLength( parseInt( aReader, line, &line ), false );
-    pin->SetOrientation( parseChar( aReader, line, &line ), false );
-    pin->SetNumberTextSize( parseInt( aReader, line, &line ), false );
-    pin->SetNameTextSize( parseInt( aReader, line, &line ), false );
-    pin->SetUnit( parseInt( aReader, line, &line ) );
-    pin->SetConvert( parseInt( aReader, line, &line ) );
+    pin->m_position = pos;
+    pin->m_length = parseInt( aReader, line, &line );
+    pin->m_orientation = parseChar( aReader, line, &line );
+    pin->m_numTextSize = parseInt( aReader, line, &line );
+    pin->m_nameTextSize = parseInt( aReader, line, &line );
+    pin->m_Unit = parseInt( aReader, line, &line );
+    pin->m_Convert = parseInt( aReader, line, &line );
 
     char type = parseChar( aReader, line, &line );
 
@@ -3161,47 +3165,47 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
     switch( type )
     {
     case 'I':
-        pin->SetType( PIN_INPUT, false );
+        pin->m_type = PIN_INPUT;
         break;
 
     case 'O':
-        pin->SetType( PIN_OUTPUT, false );
+        pin->m_type = PIN_OUTPUT;
         break;
 
     case 'B':
-        pin->SetType( PIN_BIDI, false );
+        pin->m_type = PIN_BIDI;
         break;
 
     case 'T':
-        pin->SetType( PIN_TRISTATE, false );
+        pin->m_type = PIN_TRISTATE;
         break;
 
     case 'P':
-        pin->SetType( PIN_PASSIVE, false );
+        pin->m_type = PIN_PASSIVE;
         break;
 
     case 'U':
-        pin->SetType( PIN_UNSPECIFIED, false );
+        pin->m_type = PIN_UNSPECIFIED;
         break;
 
     case 'W':
-        pin->SetType( PIN_POWER_IN, false );
+        pin->m_type = PIN_POWER_IN;
         break;
 
     case 'w':
-        pin->SetType( PIN_POWER_OUT, false );
+        pin->m_type = PIN_POWER_OUT;
         break;
 
     case 'C':
-        pin->SetType( PIN_OPENCOLLECTOR, false );
+        pin->m_type = PIN_OPENCOLLECTOR;
         break;
 
     case 'E':
-        pin->SetType( PIN_OPENEMITTER, false );
+        pin->m_type = PIN_OPENEMITTER;
         break;
 
     case 'N':
-        pin->SetType( PIN_NC, false );
+        pin->m_type = PIN_NC;
         break;
 
     default:
@@ -3230,7 +3234,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
                 break;
 
             case 'N':
-                pin->SetVisible( false );
+                pin->m_attributes |= PIN_INVISIBLE;
                 break;
 
             case 'I':
@@ -3265,39 +3269,39 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
         switch( flags )
         {
         case 0:
-            pin->SetShape( PINSHAPE_LINE );
+            pin->m_shape = PINSHAPE_LINE;
             break;
 
         case INVERTED:
-            pin->SetShape( PINSHAPE_INVERTED );
+            pin->m_shape = PINSHAPE_INVERTED;
             break;
 
         case CLOCK:
-            pin->SetShape( PINSHAPE_CLOCK );
+            pin->m_shape = PINSHAPE_CLOCK;
             break;
 
         case INVERTED | CLOCK:
-            pin->SetShape( PINSHAPE_INVERTED_CLOCK );
+            pin->m_shape = PINSHAPE_INVERTED_CLOCK;
             break;
 
         case LOWLEVEL_IN:
-            pin->SetShape( PINSHAPE_INPUT_LOW );
+            pin->m_shape = PINSHAPE_INPUT_LOW;
             break;
 
         case LOWLEVEL_IN | CLOCK:
-            pin->SetShape( PINSHAPE_CLOCK_LOW );
+            pin->m_shape = PINSHAPE_CLOCK_LOW;
             break;
 
         case LOWLEVEL_OUT:
-            pin->SetShape( PINSHAPE_OUTPUT_LOW );
+            pin->m_shape = PINSHAPE_OUTPUT_LOW;
             break;
 
         case FALLING_EDGE:
-            pin->SetShape( PINSHAPE_FALLING_EDGE_CLOCK );
+            pin->m_shape = PINSHAPE_FALLING_EDGE_CLOCK;
             break;
 
         case NONLOGIC:
-            pin->SetShape( PINSHAPE_NONLOGIC );
+            pin->m_shape = PINSHAPE_NONLOGIC;
             break;
 
         default:

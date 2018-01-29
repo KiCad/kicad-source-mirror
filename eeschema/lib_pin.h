@@ -67,6 +67,11 @@ enum LibPinDrawFlags {
 
 class LIB_PIN : public LIB_ITEM
 {
+    // Unlike most of the other LIB_ITEMs, the SetXXX() routines on LIB_PINs are at the UI
+    // level, performing additional pin checking, multi-pin editing, and setting the modified
+    // flag.  So the LEGACY_PLUGIN_CACHE needs direct access to the member variables.
+    friend class SCH_LEGACY_PLUGIN_CACHE;
+
     wxPoint  m_position;     ///< Position of the pin.
     int      m_length;       ///< Length of the pin.
     int      m_orientation;  ///< Pin orientation (Up, Down, Left, Right)
