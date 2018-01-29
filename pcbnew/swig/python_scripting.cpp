@@ -32,7 +32,7 @@
 #include <string.h>
 
 #include <fctsys.h>
-#include <wxstruct.h>
+#include <eda_base_frame.h>
 #include <common.h>
 #include <gal/color4d.h>
 #include <macros.h>
