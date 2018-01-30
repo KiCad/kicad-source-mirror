@@ -35,7 +35,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <eeschema_id.h>
 #include <class_libentry.h>
 #include <lib_pin.h>

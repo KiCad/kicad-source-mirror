@@ -37,7 +37,7 @@
 #include <general.h>
 #include <list_operations.h>
 #include <sch_line.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <netlist_object.h>
 
 #include <dialogs/dialog_edit_line_style.h>

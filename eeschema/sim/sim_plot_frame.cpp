@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <kiway.h>
 #include <confirm.h>
@@ -708,15 +708,15 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
 bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 {
-    
+
     wxString savePath = aPath;
-    
+
     if( !savePath.Lower().EndsWith(".wbk"))
     {
         savePath += ".wbk";
     };
-    
-    
+
+
     wxTextFile file( savePath );
 
     if( file.Exists() )

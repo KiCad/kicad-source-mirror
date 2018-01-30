@@ -29,7 +29,7 @@
 
 #include <sch_junction.h>
 #include <sch_sheet.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_screen.h>

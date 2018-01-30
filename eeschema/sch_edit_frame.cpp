@@ -23,7 +23,7 @@
  */
 
 /**
- * @file schframe.cpp
+ * @file sch_edit_frame.cpp
  */
 
 #include <fctsys.h>
@@ -43,12 +43,12 @@
 #include <netlist.h>
 #include <lib_pin.h>
 #include <class_library.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <symbol_lib_table.h>
 
 #include <dialog_helpers.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <hotkeys.h>
 #include <eeschema_config.h>

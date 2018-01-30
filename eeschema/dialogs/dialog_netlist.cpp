@@ -42,7 +42,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <gestfich.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 
 #include <general.h>
 #include <netlist.h>

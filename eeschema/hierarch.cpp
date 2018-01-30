@@ -34,7 +34,7 @@
 #include <bitmaps.h>
 #include <dialog_shim.h>
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <general.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>

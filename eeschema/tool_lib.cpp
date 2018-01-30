@@ -32,7 +32,7 @@
 #include <eeschema_id.h>
 
 #include <general.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 

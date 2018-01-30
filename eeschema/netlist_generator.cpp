@@ -32,7 +32,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pgm_base.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <reporter.h>
 #include <confirm.h>
 #include <kiway.h>

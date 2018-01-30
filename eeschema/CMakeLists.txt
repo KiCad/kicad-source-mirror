@@ -148,7 +148,7 @@ set( EESCHEMA_SRCS
     libedit_onrightclick.cpp
     libedit_plot_component.cpp
     libedit_undo_redo.cpp
-    libeditframe.cpp
+    lib_edit_frame.cpp
     libfield.cpp
     menubar.cpp
     menubar_libedit.cpp
@@ -191,7 +191,7 @@ set( EESCHEMA_SRCS
     sch_validators.cpp
     schedit.cpp
     schematic_undo_redo.cpp
-    schframe.cpp
+    sch_edit_frame.cpp
     selpart.cpp
     sheet.cpp
     sheetlab.cpp

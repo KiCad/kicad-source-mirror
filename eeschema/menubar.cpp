@@ -37,7 +37,7 @@
 #include "general.h"
 #include "help_common_strings.h"
 #include "hotkeys.h"
-#include "schframe.h"
+#include "sch_edit_frame.h"
 
 // helper functions that build specific submenus:
 

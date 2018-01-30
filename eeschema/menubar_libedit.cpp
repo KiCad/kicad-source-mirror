@@ -35,7 +35,7 @@
 #include "general.h"
 #include "help_common_strings.h"
 #include "hotkeys.h"
-#include "libeditframe.h"
+#include "lib_edit_frame.h"
 
 
 /**

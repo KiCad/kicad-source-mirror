@@ -34,7 +34,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <general.h>
 #include <viewlib_frame.h>

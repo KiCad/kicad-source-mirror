@@ -34,7 +34,7 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <sch_screen.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <invoke_sch_dialog.h>
 #include <project.h>
 #include <kiface_i.h>

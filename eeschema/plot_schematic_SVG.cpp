@@ -30,9 +30,9 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <base_units.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <sch_sheet_path.h>
 #include <project.h>
 #include <reporter.h>

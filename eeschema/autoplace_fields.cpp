@@ -52,7 +52,7 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <hotkeys_basic.h>
 #include <sch_component.h>
 #include <sch_line.h>

@@ -35,8 +35,8 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
-#include <schframe.h>
-#include <libeditframe.h>
+#include <sch_edit_frame.h>
+#include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <eda_text.h>
 

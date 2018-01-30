@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <invoke_sch_dialog.h>
 #include <dialog_rescue_each_base.h>

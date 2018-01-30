@@ -31,7 +31,7 @@
 #include <class_drawpanel.h>
 #include <general.h>
 #include <kicad_device_context.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <sch_text.h>
 

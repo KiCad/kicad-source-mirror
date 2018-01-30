@@ -26,12 +26,12 @@
  */
 
 /**
- * @file libeditframe.h
+ * @file lib_edit_frame.h
  * @brief Definition of class LIB_EDIT_FRAME
  */
 
-#ifndef LIBEDITFRM_H_
-#define LIBEDITFRM_H_
+#ifndef LIB_EDIT_FRAME_H
+#define LIB_EDIT_FRAME_H
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
@@ -772,4 +772,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  // LIBEDITFRM_H_
+#endif  // LIB_EDIT_FRAME_H

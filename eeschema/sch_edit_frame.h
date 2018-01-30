@@ -24,11 +24,11 @@
  */
 
 /**
- * @file schframe.h
+ * @file sch_edit_frame.h
  */
 
-#ifndef  _SCHFRAME_H_
-#define  _SCHFRAME_H_
+#ifndef  SCH_EDIT_FRAME_H
+#define  SCH_EDIT_FRAME_H
 
 #include <sch_base_frame.h>
 #include <config_params.h>
@@ -1488,4 +1488,4 @@ public:
 };
 
 
-#endif  // _SCHFRAME_H_
+#endif  // SCH_EDIT_FRAME_H

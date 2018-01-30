@@ -24,7 +24,7 @@
 
 #include "dialog_update_fields.h"
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <class_libentry.h>
 #include <algorithm>

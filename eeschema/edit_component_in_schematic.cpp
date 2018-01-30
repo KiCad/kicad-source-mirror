@@ -32,7 +32,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <msgpanel.h>
 
 #include <general.h>

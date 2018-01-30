@@ -33,7 +33,7 @@
 #include <gr_basic.h>
 #include <kicad_string.h>
 #include <richio.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <plotter.h>
 #include <msgpanel.h>
 #include <bitmaps.h>

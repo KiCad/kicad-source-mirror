@@ -27,7 +27,7 @@
 #include <component_tree.h>
 #include <eeschema_id.h>
 #include <lib_manager.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <menus_helpers.h>
 

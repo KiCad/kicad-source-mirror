@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <plotter.h>
 #include <sch_screen.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <dialog_plot_schematic_base.h>
 #include <reporter.h>
 

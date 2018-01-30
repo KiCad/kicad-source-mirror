@@ -30,11 +30,11 @@
 #include <fctsys.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <class_drawpanel.h>
 
 #include <general.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <class_libentry.h>
 #include <sch_junction.h>

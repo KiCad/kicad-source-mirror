@@ -30,7 +30,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 
 #include <sch_component.h>
 #include <netlist_object.h>

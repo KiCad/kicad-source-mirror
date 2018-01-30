@@ -31,7 +31,7 @@
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <menus_helpers.h>
 
 #include <general.h>

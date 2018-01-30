@@ -34,7 +34,7 @@
 #include <trigo.h>
 #include <class_drawpanel.h>
 #include <draw_graphic_text.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <plotter.h>
 #include <msgpanel.h>
 #include <gal/stroke_font.h>

@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 
 #include <general.h>
 #include <list_operations.h>

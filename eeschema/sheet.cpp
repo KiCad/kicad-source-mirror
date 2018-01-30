@@ -34,7 +34,7 @@
 #include <project.h>
 #include <wildcards_and_files_ext.h>
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <sch_legacy_plugin.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>

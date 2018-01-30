@@ -28,7 +28,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
 

@@ -32,14 +32,14 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <richio.h>
 
 #include <eeschema_id.h>
 #include <class_library.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>

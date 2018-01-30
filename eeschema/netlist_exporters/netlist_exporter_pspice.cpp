@@ -31,7 +31,7 @@
 #include <map>
 #include <search_stack.h>
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <netlist.h>
 #include <sch_reference_list.h>
 #include <env_paths.h>

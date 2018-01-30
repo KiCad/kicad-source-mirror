@@ -34,7 +34,7 @@
 
 #include <general.h>
 #include <class_library.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

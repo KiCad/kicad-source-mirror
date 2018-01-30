@@ -32,7 +32,7 @@
 #include <draw_graphic_text.h>
 #include <trigo.h>
 #include <richio.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <plotter.h>
 #include <kicad_string.h>
 #include <msgpanel.h>

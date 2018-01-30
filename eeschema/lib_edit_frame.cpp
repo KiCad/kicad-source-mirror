@@ -24,8 +24,8 @@
  */
 
 /**
- * @file libeditframe.cpp
- * @brief LIB_EDIT_FRAME class is the component library editor frame.
+ * @file lib_edit_frame.cpp
+ * @brief LIB_EDIT_FRAME class is the symbol library editor frame.
  */
 
 #include <fctsys.h>
@@ -36,13 +36,13 @@
 #include <confirm.h>
 #include <eda_doc.h>
 #include <gr_basic.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <msgpanel.h>
 #include <confirm.h>
 
 #include <general.h>
 #include <eeschema_id.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <class_library.h>
 #include <lib_polyline.h>
 #include <lib_pin.h>

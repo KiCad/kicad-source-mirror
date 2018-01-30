@@ -32,7 +32,7 @@
 
 #include <wx/dataview.h>
 
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>

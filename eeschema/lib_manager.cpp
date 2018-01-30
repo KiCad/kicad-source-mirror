@@ -25,7 +25,7 @@
 #include <lib_manager.h>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 
 #include <kiway.h>
 #include <profile.h>
@@ -320,7 +320,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
             bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
             libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
         }
-        catch( IO_ERROR& e ) 
+        catch( IO_ERROR& e )
         {
             bufferedPart = nullptr;
         }

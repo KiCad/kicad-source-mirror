@@ -26,7 +26,7 @@
 
 #include <fctsys.h>
 #include <plotter.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
 #include <project.h>

@@ -33,7 +33,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <kiface_i.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 

@@ -33,7 +33,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <wx/dynarray.h>
 
 #include <netlist.h>

@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <eda_dde.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <menus_helpers.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -39,7 +39,7 @@
 #include <eeschema_id.h>
 #include <general.h>
 #include <hotkeys.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <lib_draw_item.h>
 #include <lib_pin.h>

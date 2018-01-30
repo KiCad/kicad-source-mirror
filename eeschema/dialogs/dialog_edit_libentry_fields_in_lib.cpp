@@ -31,12 +31,12 @@
 #include <kiway.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <id.h>
 #include <base_units.h>
 
 #include <general.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>

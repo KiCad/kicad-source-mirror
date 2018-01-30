@@ -31,7 +31,7 @@
 #include <project_rescue.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <viewlib_frame.h>
 #include <wildcards_and_files_ext.h>

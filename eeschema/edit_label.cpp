@@ -33,7 +33,7 @@
 #include <draw_graphic_text.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <kicad_device_context.h>
 
 #include <general.h>

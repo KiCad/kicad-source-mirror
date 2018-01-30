@@ -23,7 +23,7 @@
  */
 
 #include <kiway.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include "sim_plot_frame.h"
 
 void SCH_EDIT_FRAME::OnSimulate( wxCommandEvent& event )

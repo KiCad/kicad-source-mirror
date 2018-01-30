@@ -29,7 +29,7 @@
 
 #include <class_library.h>
 #include <eeschema_id.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>

@@ -31,13 +31,13 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <invoke_sch_dialog.h>
 #include <common.h>
 
 #include <eeschema_id.h>
 #include <general.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <eeschema_config.h>
 #include <hotkeys.h>
 #include <sch_sheet.h>

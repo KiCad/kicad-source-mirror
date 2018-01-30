@@ -28,7 +28,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <sch_screen.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <base_units.h>
 
 #include <general.h>

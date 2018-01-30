@@ -34,7 +34,7 @@
 #include <plotter.h>
 #include <trigo.h>
 #include <richio.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <bitmaps.h>
 
 #include <general.h>

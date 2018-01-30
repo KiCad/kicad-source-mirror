@@ -34,7 +34,7 @@
 #include <confirm.h>
 
 #include <general.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
 #include <eeschema_id.h>

@@ -38,7 +38,7 @@
 #include <kiway.h>
 #include <class_drawpanel.h>
 #include <sch_item_struct.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <plotter.h>
 
 #include <netlist.h>

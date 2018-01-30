@@ -33,7 +33,7 @@
 #include <pgm_base.h>
 
 #include <general.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <class_library.h>
 #include <eeschema_id.h>    // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <symbol_lib_table.h>

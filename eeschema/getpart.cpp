@@ -35,14 +35,14 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <schframe.h>
+#include <sch_edit_frame.h>
 #include <kicad_device_context.h>
 #include <msgpanel.h>
 
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
-#include <libeditframe.h>
+#include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
 #include <symbol_lib_table.h>
