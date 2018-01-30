@@ -166,6 +166,7 @@ set( PCBNEW_DIALOGS
     dialogs/wizard_add_fplib_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
+    footprint_wizard_frame_functions.cpp
     ${GITHUB_3DLIBRARIES_WIZARD}
     )
 
@@ -208,7 +209,6 @@ set( PCBNEW_CLASS_SRCS
     block_module_editor.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
-    class_footprint_wizard.cpp
     class_pcb_layer_box_selector.cpp
     class_pcb_layer_widget.cpp
     clean.cpp
@@ -233,6 +233,7 @@ set( PCBNEW_CLASS_SRCS
     event_handlers_tracks_vias_sizes.cpp
     files.cpp
     footprint_info_impl.cpp
+    footprint_wizard.cpp
     globaleditpad.cpp
     highlight.cpp
     hotkeys.cpp

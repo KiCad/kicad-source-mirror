@@ -27,7 +27,7 @@
 #include <pcbnew_action_plugins.h>
 %}
 
-class PYTHON_FOOTPRINT_WIZARDS
+class PYTHON_FOOTPRINT_WIZARD_LIST
 {
 public:
     static void register_wizard( PyObject* wizard );

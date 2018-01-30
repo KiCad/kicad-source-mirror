@@ -31,7 +31,7 @@
 #define PCBNEW_FOOTPRINT_WIZARDS_H
 #include <Python.h>
 #include <vector>
-#include <class_footprint_wizard.h>
+#include <footprint_wizard.h>
 
 
 class PYTHON_FOOTPRINT_WIZARD : public FOOTPRINT_WIZARD
@@ -66,7 +66,7 @@ public:
 };
 
 
-class PYTHON_FOOTPRINT_WIZARDS
+class PYTHON_FOOTPRINT_WIZARD_LIST
 {
 public:
     static void register_wizard( PyObject* aPyWizard );

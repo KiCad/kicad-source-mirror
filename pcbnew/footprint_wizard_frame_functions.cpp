@@ -24,7 +24,7 @@
  */
 
 /**
- * @file footprint_wizard.cpp
+ * @file footprint_wizard_frame_functions.cpp
  */
 
 #include <fctsys.h>
@@ -165,7 +165,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
     if( m_wizardName.Length() == 0 )
         return NULL;
 
-    FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
+    FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARD_LIST::GetWizard( m_wizardName );
 
     if( !footprintWizard )
     {
@@ -179,7 +179,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
 
 MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
-    FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
+    FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARD_LIST::GetWizard( m_wizardName );
 
     if( footprintWizard && m_modal_ret_val )
     {

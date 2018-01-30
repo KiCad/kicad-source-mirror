@@ -24,7 +24,7 @@
 
 /**
  * @file  pcbnew_footprint_wizards.cpp
- * @brief Class PCBNEW_PYTHON_FOOTPRINT_WIZARDS
+ * @brief Class  and PYTHON_FOOTPRINT_WIZARD_LIST and PYTHON_FOOTPRINT_WIZARD_LIST
  */
 
 #include "pcbnew_footprint_wizards.h"
@@ -361,7 +361,7 @@ void* PYTHON_FOOTPRINT_WIZARD::GetObject()
 }
 
 
-void PYTHON_FOOTPRINT_WIZARDS::register_wizard( PyObject* aPyWizard )
+void PYTHON_FOOTPRINT_WIZARD_LIST::register_wizard( PyObject* aPyWizard )
 {
     PYTHON_FOOTPRINT_WIZARD* fw = new PYTHON_FOOTPRINT_WIZARD( aPyWizard );
 
@@ -369,8 +369,8 @@ void PYTHON_FOOTPRINT_WIZARDS::register_wizard( PyObject* aPyWizard )
 }
 
 
-void PYTHON_FOOTPRINT_WIZARDS::deregister_wizard( PyObject* aPyWizard )
+void PYTHON_FOOTPRINT_WIZARD_LIST::deregister_wizard( PyObject* aPyWizard )
 {
     // deregister also destroyes the previously created "PYTHON_FOOTPRINT_WIZARD object"
-    FOOTPRINT_WIZARDS::deregister_object( (void*) aPyWizard );
+    FOOTPRINT_WIZARD_LIST::deregister_object( (void*) aPyWizard );
 }

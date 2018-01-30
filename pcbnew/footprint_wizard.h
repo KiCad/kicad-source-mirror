@@ -24,12 +24,13 @@
 
 
 /**
- * @file  class_footprint_wizard.h
- * @brief Class PCBNEW_FOOTPRINT_WIZARDS
+ * @file  footprint_wizard.h
+ * @brief Class FOOTPRINT_WIZARD and FOOTPRINT_WIZARDS
  */
 
-#ifndef CLASS_FOOTPRINT_WIZARD_H
-#define CLASS_FOOTPRINT_WIZARD_H
+#ifndef FOOTPRINT_WIZARD_H
+#define FOOTPRINT_WIZARD_H
+
 #include <vector>
 #include <pcb_edit_frame.h>
 
@@ -162,13 +163,13 @@ public:
     /**
      * Function register_wizard
      * It's the standard method of a "FOOTPRINT_WIZARD" to register itself into
-     * the FOOTPRINT_WIZARDS singleton manager
+     * the FOOTPRINT_WIZARD_LIST singleton manager
      */
     void                    register_wizard();
 };
 
 
-class FOOTPRINT_WIZARDS
+class FOOTPRINT_WIZARD_LIST
 {
 private:
     /**

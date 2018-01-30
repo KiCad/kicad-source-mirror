@@ -394,8 +394,6 @@ set( PCB_COMMON_SRCS
     ../pcbnew/netinfo_item.cpp
     ../pcbnew/netinfo_list.cpp
     ../pcbnew/class_pad.cpp
-    ../pcbnew/class_pad_custom_shape_functions.cpp
-    ../pcbnew/class_pad_draw_functions.cpp
     ../pcbnew/class_pcb_target.cpp
     ../pcbnew/class_pcb_text.cpp
     ../pcbnew/class_text_mod.cpp
@@ -414,6 +412,8 @@ set( PCB_COMMON_SRCS
     ../pcbnew/legacy_netlist_reader.cpp
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/netlist_reader.cpp
+    ../pcbnew/pad_custom_shape_functions.cpp
+    ../pcbnew/pad_draw_functions.cpp
     ../pcbnew/pcb_display_options.cpp
     ../pcbnew/pcb_draw_panel_gal.cpp
     ../pcbnew/pcb_general_settings.cpp

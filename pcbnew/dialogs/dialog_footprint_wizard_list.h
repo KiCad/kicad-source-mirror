@@ -26,7 +26,7 @@
 #define _DIALOG_FOOTPRINT_WIZARD_LIST_H_
 
 #include <dialog_footprint_wizard_list_base.h>
-#include <class_footprint_wizard.h>
+#include <footprint_wizard.h>
 
 class DIALOG_FOOTPRINT_WIZARD_LIST: public DIALOG_FOOTPRINT_WIZARD_LIST_BASE
 {

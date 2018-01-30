@@ -24,11 +24,11 @@
 
 
 /**
- * @file  class_footprint_wizard.cpp
- * @brief Class FOOTPRINT_WIZARD and FOOTPRINT_WIZARDS
+ * @file  footprint_wizard.cpp
+ * @brief Class FOOTPRINT_WIZARD and FOOTPRINT_WIZARD_LIST
  */
 
-#include "class_footprint_wizard.h"
+#include "footprint_wizard.h"
 
 
 FOOTPRINT_WIZARD::~FOOTPRINT_WIZARD()
@@ -38,19 +38,19 @@ FOOTPRINT_WIZARD::~FOOTPRINT_WIZARD()
 
 void FOOTPRINT_WIZARD::register_wizard()
 {
-    FOOTPRINT_WIZARDS::register_wizard( this );
+    FOOTPRINT_WIZARD_LIST::register_wizard( this );
 }
 
 
-std::vector<FOOTPRINT_WIZARD*> FOOTPRINT_WIZARDS::m_FootprintWizards;
+std::vector<FOOTPRINT_WIZARD*> FOOTPRINT_WIZARD_LIST::m_FootprintWizards;
 
-FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( int aIndex )
+FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_LIST::GetWizard( int aIndex )
 {
     return m_FootprintWizards[aIndex];
 }
 
 
-FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( const wxString& aName )
+FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_LIST::GetWizard( const wxString& aName )
 {
     int max = GetWizardsCount();
 
@@ -68,13 +68,13 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( const wxString& aName )
 }
 
 
-int FOOTPRINT_WIZARDS::GetWizardsCount()
+int FOOTPRINT_WIZARD_LIST::GetWizardsCount()
 {
     return m_FootprintWizards.size();
 }
 
 
-void FOOTPRINT_WIZARDS::register_wizard( FOOTPRINT_WIZARD* aWizard )
+void FOOTPRINT_WIZARD_LIST::register_wizard( FOOTPRINT_WIZARD* aWizard )
 {
     // Search for this entry do not register twice this wizard):
     for( int ii = 0; ii < GetWizardsCount(); ii++ )
@@ -100,7 +100,7 @@ void FOOTPRINT_WIZARDS::register_wizard( FOOTPRINT_WIZARD* aWizard )
 }
 
 
-bool FOOTPRINT_WIZARDS::deregister_object( void* aObject )
+bool FOOTPRINT_WIZARD_LIST::deregister_object( void* aObject )
 {
     int max = GetWizardsCount();
 

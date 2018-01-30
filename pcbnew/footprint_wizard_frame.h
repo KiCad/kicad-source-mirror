@@ -32,7 +32,7 @@
 
 
 #include <wx/gdicmn.h>
-#include <class_footprint_wizard.h>
+#include <footprint_wizard.h>
 class wxSashLayoutWindow;
 class wxListBox;
 class wxGrid;
