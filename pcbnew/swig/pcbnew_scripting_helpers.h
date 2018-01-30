@@ -25,7 +25,7 @@
 #ifndef __PCBNEW_SCRIPTING_HELPERS_H
 #define __PCBNEW_SCRIPTING_HELPERS_H
 
-#include <wxPcbStruct.h>
+#include <pcb_edit_frame.h>
 #include <io_mgr.h>
 
 /* we could be including all these methods as static in a class, but
