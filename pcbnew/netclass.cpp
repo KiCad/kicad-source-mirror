@@ -31,7 +31,7 @@
 #include <macros.h>
 
 #include <class_board.h>
-#include <class_netclass.h>
+#include <netclass.h>
 
 /// Abbrevation for fomatting internal units to a string.
 #define FMT_IU     BOARD_ITEM::FormatInternalUnits

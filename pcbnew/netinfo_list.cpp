@@ -37,7 +37,7 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 
 
 // Constructor and destructor

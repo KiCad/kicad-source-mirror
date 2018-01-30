@@ -23,11 +23,11 @@
 
 
 /**
- * @file  class_action_plugin.cpp
+ * @file  action_plugin.cpp
  * @brief Class ACTION_PLUGIN and ACTION_PLUGINS
  */
 
-#include "class_action_plugin.h"
+#include "action_plugin.h"
 
 
 ACTION_PLUGIN::~ACTION_PLUGIN()

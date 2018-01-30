@@ -32,7 +32,7 @@
 #define BOARD_CONNECTED_ITEM_H
 
 #include <class_board_item.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 
 class NETCLASS;
 class TRACK;

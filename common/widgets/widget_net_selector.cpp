@@ -26,7 +26,7 @@
 #include <widgets/widget_net_selector.h>
 
 #include <class_board.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 #include <wx/arrstr.h>
 
 WIDGET_NET_SELECTOR::WIDGET_NET_SELECTOR( wxWindow *parent, wxWindowID id,

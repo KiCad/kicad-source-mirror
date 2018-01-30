@@ -38,7 +38,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <PolyLine.h>
 #include <geometry/shape_poly_set.h>
-#include <class_zone_settings.h>
+#include <zone_settings.h>
 
 
 class EDA_RECT;

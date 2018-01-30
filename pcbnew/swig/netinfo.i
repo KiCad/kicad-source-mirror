@@ -2,10 +2,10 @@
 %warnfilter(325) NETINFO_MAPPING::iterator;
 %ignore NETINFO_MAPPING;        // no code generation for this class
 
-%include class_netinfo.h
+%include netinfo.h
 
 %{
-#include <class_netinfo.h>
+#include <netinfo.h>
 %}
 
 %feature("notabstract")     NETINFO_ITEM;

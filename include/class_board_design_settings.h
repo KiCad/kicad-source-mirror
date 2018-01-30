@@ -27,7 +27,7 @@
 
 #include <class_pad.h>
 #include <class_track.h>
-#include <class_netclass.h>
+#include <netclass.h>
 #include <config_params.h>
 
 // Some default values for the board editor and the fp editor (given in mm)

@@ -30,7 +30,7 @@
 #define PCBNEW_ACTION_PLUGINS_H
 #include <Python.h>
 #include <vector>
-#include <class_action_plugin.h>
+#include <action_plugin.h>
 
 
 class PYTHON_ACTION_PLUGIN : public ACTION_PLUGIN

@@ -36,12 +36,12 @@
 
 #include <common.h>                         // PAGE_INFO
 #include <layers_id_colors_and_visibility.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 #include <class_pad.h>
 #include <class_colors_design_settings.h>
 #include <class_board_design_settings.h>
 #include <title_block.h>
-#include <class_zone_settings.h>
+#include <zone_settings.h>
 #include <pcb_plot_params.h>
 #include <board_item_container.h>
 

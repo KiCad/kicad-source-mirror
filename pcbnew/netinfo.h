@@ -35,7 +35,7 @@
 
 #include <macros.h>
 #include <gr_basic.h>
-#include <class_netclass.h>
+#include <netclass.h>
 #include <class_board_item.h>
 
 

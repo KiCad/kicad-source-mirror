@@ -37,7 +37,7 @@
 #include <zones.h>
 #include <base_units.h>
 
-#include <class_zone_settings.h>
+#include <zone_settings.h>
 #include <class_board.h>
 #include <dialog_keepout_area_properties_base.h>
 

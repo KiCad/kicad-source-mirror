@@ -23,7 +23,7 @@
 
 
 /**
- * @file  class_action_plugin.h
+ * @file  action_plugin.h
  * @brief Class PCBNEW_ACTION_PLUGINS
  */
 

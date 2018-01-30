@@ -21,7 +21,7 @@
 
 #include <class_board.h>
 #include <class_board_item.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 
 #include "pns_node.h"
 #include "pns_walkaround.h"

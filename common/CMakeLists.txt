@@ -390,9 +390,9 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_edge_mod.cpp
     ../pcbnew/class_marker_pcb.cpp
     ../pcbnew/class_module.cpp
-    ../pcbnew/class_netclass.cpp
-    ../pcbnew/class_netinfo_item.cpp
-    ../pcbnew/class_netinfolist.cpp
+    ../pcbnew/netclass.cpp
+    ../pcbnew/netinfo_item.cpp
+    ../pcbnew/netinfo_list.cpp
     ../pcbnew/class_pad.cpp
     ../pcbnew/class_pad_custom_shape_functions.cpp
     ../pcbnew/class_pad_draw_functions.cpp
@@ -401,8 +401,6 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp
     ../pcbnew/class_zone.cpp
-    ../pcbnew/class_zone_settings.cpp
-    ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/connectivity_algo.cpp
     ../pcbnew/connectivity_data.cpp
@@ -423,11 +421,13 @@ set( PCB_COMMON_SRCS
     ../pcbnew/pcb_painter.cpp
     ../pcbnew/pcb_parser.cpp
     ../pcbnew/pcb_plot_params.cpp
+    ../pcbnew/pcb_screen.cpp
     ../pcbnew/pcb_view.cpp
     ../pcbnew/plugin.cpp
     ../pcbnew/ratsnest_data.cpp
     ../pcbnew/ratsnest_viewitem.cpp
     ../pcbnew/sel_layer.cpp
+    ../pcbnew/zone_settings.cpp
     widgets/widget_net_selector.cpp
 )
 

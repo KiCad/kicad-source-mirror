@@ -200,6 +200,7 @@ set( PCBNEW_CLASS_SRCS
     autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp
 
+    action_plugin.cpp
     append_board_to_current.cpp
     array_creator.cpp
     attribut.cpp
@@ -207,7 +208,6 @@ set( PCBNEW_CLASS_SRCS
     block_module_editor.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
-    class_action_plugin.cpp
     class_footprint_wizard.cpp
     class_pcb_layer_box_selector.cpp
     class_pcb_layer_widget.cpp

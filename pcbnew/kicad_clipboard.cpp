@@ -25,7 +25,7 @@
 #include <wx/clipbrd.h>
 #include <common.h>
 #include <pcb_parser.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 #include <class_board.h>
 #include <build_version.h>
 

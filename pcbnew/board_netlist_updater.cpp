@@ -35,7 +35,7 @@
 #include <common.h>                         // for PAGE_INFO
 
 #include <class_board.h>
-#include <class_netinfo.h>
+#include <netinfo.h>
 #include <class_module.h>
 #include <class_pad.h>
 #include <class_zone.h>

@@ -32,7 +32,7 @@ the pointing.
 */
 
 %ignore NETCLASS;               // no code generation for it
-%include class_netclass.h
+%include netclass.h
 
 
 /*
@@ -86,5 +86,5 @@ public:
 
 
 %{
-#include <class_netclass.h>
+#include <netclass.h>
 %}
