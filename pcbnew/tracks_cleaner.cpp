@@ -24,7 +24,7 @@
  */
 
 /**
- * @file clean.cpp
+ * @file tracks_cleaner.cpp
  * @brief functions to clean tracks: remove null length and redundant segments
  */
 

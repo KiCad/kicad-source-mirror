@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_colors_design_settings.h
+ * @file colors_design_settings.h
  * @brief Handle colors used to draw all items or layers.
  */
 
