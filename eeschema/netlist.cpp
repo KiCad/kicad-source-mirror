@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,8 @@
  */
 
 /**
- * @file eeschema/netlist.cpp
+ * @file eeschema/netlist_object_list.cpp
  */
-
-#include <fctsys.h>
-#include <schframe.h>
-#include <confirm.h>
-#include <netlist_exporter_kicad.h>
-#include <kiway.h>
 
 #include <netlist.h>
 #include <netlist_object.h>
@@ -43,93 +37,11 @@
 #include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
+#include <sch_screen.h>
 #include <algorithm>
-#include <invoke_sch_dialog.h>
 
 #define IS_WIRE false
 #define IS_BUS true
-
-//Imported function:
-int TestDuplicateSheetNames( bool aCreateMarker );
-
-
-bool SCH_EDIT_FRAME::prepareForNetlist()
-{
-    SCH_SCREENS schematic;
-
-    // Ensure all symbol library links for all sheets valid:
-    schematic.UpdateSymbolLinks();
-
-    // Ensure all power symbols have a valid reference
-    SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.AnnotatePowerSymbols();
-
-    // Performs some controls:
-    if( CheckAnnotate( NULL, 0 ) )
-    {
-        // Schematic must be annotated: call Annotate dialog and tell
-        // the user why that is.
-        InvokeDialogAnnotate( this,  _( "Exporting the netlist requires a "
-                                        "completely\nannotated schematic." ) );
-
-        if( CheckAnnotate( NULL, 0 ) )
-            return false;
-    }
-
-    // Test duplicate sheet names:
-    if( TestDuplicateSheetNames( false ) > 0 )
-    {
-        if( !IsOK( NULL, _( "Error: duplicate sheet names. Continue?" ) ) )
-            return false;
-    }
-
-    return true;
-}
-
-
-void SCH_EDIT_FRAME::sendNetlist()
-{
-    NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-
-    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchSymbolLibTable() );
-
-    STRING_FORMATTER    formatter;
-
-    // @todo : trim GNL_ALL down to minimum for CVPCB
-    exporter.Format( &formatter, GNL_ALL );
-
-    Kiway().ExpressMail( FRAME_CVPCB,
-        MAIL_EESCHEMA_NETLIST,
-        formatter.GetString(),  // an abbreviated "kicad" (s-expr) netlist
-        this
-        );
-}
-
-
-bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-        unsigned aNetlistOptions, REPORTER* aReporter, bool aSilent )
-{
-    if( !aSilent ) // checks for errors and invokes annotation dialog as neccessary
-    {
-        if( !prepareForNetlist() )
-            return false;
-    }
-    else // performs similar function as prepareForNetlist but without a dialog.
-    {
-        SCH_SCREENS schematic;
-        schematic.UpdateSymbolLinks();
-        SCH_SHEET_LIST sheets( g_RootSheet );
-        sheets.AnnotatePowerSymbols();
-    }
-
-    std::unique_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
-
-    bool success = WriteNetListFile( connectedItemsList.release(), aFormat,
-            aFullFileName, aNetlistOptions, aReporter );
-
-    return success;
-}
-
 
 //#define NETLIST_DEBUG
 
@@ -162,33 +74,6 @@ void NETLIST_OBJECT_LIST::SortListbyNetcode()
 void NETLIST_OBJECT_LIST::SortListbySheet()
 {
     sort( this->begin(), this->end(), NETLIST_OBJECT_LIST::sortItemsBySheet );
-}
-
-
-NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase( bool updateStatusText )
-{
-    // I own this list until I return it to the new owner.
-    std::unique_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
-
-    // Creates the flattened sheet list:
-    SCH_SHEET_LIST aSheets( g_RootSheet );
-
-    // Build netlist info
-    bool success = ret->BuildNetListInfo( aSheets );
-
-    if( !success )
-    {
-        if( updateStatusText )
-            SetStatusText( _( "No Objects" ) );
-        return ret.release();
-    }
-
-    wxString msg = wxString::Format( _( "Net count = %d" ), int( ret->size() ) );
-
-    if( updateStatusText )
-         SetStatusText( msg );
-
-    return ret.release();
 }
 
 
