@@ -362,13 +362,37 @@ double PCB_BASE_FRAME::BestZoom()
 }
 
 
+// Find the first child dialog.
+wxWindow* findDialog( wxWindowList& aList )
+{
+    for( wxWindowList::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    {
+        if( dynamic_cast<DIALOG_SHIM*>( *iter ) )
+            return *iter;
+    }
+    return NULL;
+}
+
+
 void PCB_BASE_FRAME::FocusOnLocation( const wxPoint& aPos,
                                       bool aWarpMouseCursor, bool aCenterView )
 {
     if( IsGalCanvasActive() )
     {
         if( aCenterView )
-            GetGalCanvas()->GetView()->SetCenter( aPos );
+        {
+            wxWindow* dialog = findDialog( GetChildren() );
+
+            // If a dialog partly obscures the window, then center on the uncovered area.
+            if( dialog )
+            {
+                wxRect dialogRect( GetGalCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+                                   dialog->GetSize() );
+                GetGalCanvas()->GetView()->SetCenter( aPos, dialogRect );
+            }
+            else
+                GetGalCanvas()->GetView()->SetCenter( aPos );
+        }
 
         if( aWarpMouseCursor )
             GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );

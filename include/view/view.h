@@ -309,6 +309,15 @@ public:
     void SetCenter( const VECTOR2D& aCenter );
 
     /**
+     * Function SetCenter()
+     * Sets the center point of the VIEW, attempting to avoid \a occultingScreenRect (for
+     * instance, the screen rect of a modeless dialog in front of the VIEW).
+     * @param aCenter: the new center point, in world space coordinates.
+     * @param occultingScreenRect: the occulting rect, in screen space coordinates.
+     */
+    void SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect );
+
+    /**
      * Function GetCenter()
      * Returns the center point of this VIEW (in world space coordinates)
      * @return center point of the view

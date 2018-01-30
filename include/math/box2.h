@@ -58,6 +58,16 @@ public:
         Normalize();
     }
 
+#ifdef WX_COMPATIBILITY
+    /// Constructor with a wxRect as argument
+    BOX2( const wxRect& aRect ) :
+        m_Pos( aRect.GetPosition() ),
+        m_Size( aRect.GetSize() )
+    {
+        Normalize();
+    }
+#endif
+
     void SetMaximum()
     {
         m_Pos.x  = m_Pos.y = coord_limits::lowest() / 2 + coord_limits::epsilon();
@@ -247,6 +257,30 @@ public:
             rc = false;
 
         return rc;
+    }
+
+    /**
+     * Function Intersect
+     * Returns the intersection of this with another rectangle.
+     */
+    BOX2<Vec> Intersect( const BOX2<Vec>& aRect )
+    {
+        BOX2<Vec> me( *this );
+        BOX2<Vec> rect( aRect );
+        me.Normalize();         // ensure size is >= 0
+        rect.Normalize();       // ensure size is >= 0
+
+        Vec topLeft, bottomRight;
+
+        topLeft.x     = std::max( me.m_Pos.x, rect.m_Pos.x );
+        bottomRight.x = std::min( me.m_Pos.x + me.m_Size.x, rect.m_Pos.x + rect.m_Size.x );
+        topLeft.y     = std::max( me.m_Pos.y, rect.m_Pos.y );
+        bottomRight.y = std::min( me.m_Pos.y + me.m_Size.y, rect.m_Pos.y + rect.m_Size.y );
+
+        if ( topLeft.x < bottomRight.x && topLeft.y < bottomRight.y )
+            return BOX2<Vec>( topLeft, bottomRight - topLeft );
+        else
+            return BOX2<Vec>( Vec( 0, 0 ), Vec( 0, 0 ) );
     }
 
     const std::string Format() const

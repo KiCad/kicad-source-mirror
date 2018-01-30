@@ -807,7 +807,7 @@ unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I TRACK::ViewBBox() const
 {
-    BOX2I bbox( GetBoundingBox() );
+    BOX2I bbox = GetBoundingBox();
     bbox.Inflate( 2 * GetClearance() );
     return bbox;
 }

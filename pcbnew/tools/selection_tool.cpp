@@ -628,7 +628,7 @@ bool SELECTION_TOOL::selectMultiple()
 
                 if( windowSelection )
                 {
-                    BOX2I bbox( item->GetBoundingBox() );
+                    BOX2I bbox = item->GetBoundingBox();
 
                     if( selectionBox.Contains( bbox ) )
                     {

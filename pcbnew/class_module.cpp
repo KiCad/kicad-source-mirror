@@ -1017,7 +1017,7 @@ const BOX2I MODULE::ViewBBox() const
     }
 
 
-    return BOX2I( area );
+    return area;
 }
 
 

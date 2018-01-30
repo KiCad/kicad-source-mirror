@@ -609,6 +609,43 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
 }
 
 
+void VIEW::SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect )
+{
+    BOX2D screenRect( VECTOR2D( 0, 0 ), m_gal->GetScreenPixelSize() );
+
+    if( !screenRect.Intersects( occultingScreenRect ) )
+    {
+        SetCenter( aCenter );
+        return;
+    }
+
+    BOX2D occultedRect = screenRect.Intersect( occultingScreenRect );
+    VECTOR2D offset( occultedRect.GetWidth() / 2, occultedRect.GetHeight() / 2 );
+
+    double topExposed    = occultedRect.GetTop() - screenRect.GetTop();
+    double bottomExposed = screenRect.GetBottom() - occultedRect.GetBottom();
+    double leftExposed   = occultedRect.GetLeft() - screenRect.GetLeft();
+    double rightExposed  = screenRect.GetRight() - occultedRect.GetRight();
+
+    if( std::max( topExposed, bottomExposed ) > std::max( leftExposed, rightExposed ) )
+    {
+        if( topExposed > bottomExposed )
+            aCenter.y += ToWorld( occultedRect.GetHeight() / 2 );
+        else
+            aCenter.y -= ToWorld( occultedRect.GetHeight() / 2 );
+    }
+    else
+    {
+        if( leftExposed > rightExposed )
+            aCenter.x += ToWorld( occultedRect.GetWidth() / 2 );
+        else
+            aCenter.x -= ToWorld( occultedRect.GetWidth() / 2 );
+    }
+
+    SetCenter( aCenter );
+}
+
+
 void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
 {
     m_layers[aLayer].renderingOrder = aRenderingOrder;
