@@ -156,10 +156,81 @@ wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
     return ret;
 }
 
+
+wxString DRC_ITEM::ShowHtml() const
+{
+    wxString ret;
+    wxString mainText = m_MainText;
+    // a wxHtmlWindows does not like < and > in the text to display
+    // because these chars have a special meaning in html
+    mainText.Replace( wxT("<"), wxT("&lt;") );
+    mainText.Replace( wxT(">"), wxT("&gt;") );
+
+    wxString errText = GetErrorText();
+    errText.Replace( wxT("<"), wxT("&lt;") );
+    errText.Replace( wxT(">"), wxT("&gt;") );
+
+
+    if( m_noCoordinate )
+    {
+        // omit the coordinate, a NETCLASS has no location
+        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
+                    GetChars( errText ),
+                    GetChars( mainText ) );
+    }
+    else if( m_hasSecondItem )
+    {
+        wxString auxText = m_AuxiliaryText;
+        auxText.Replace( wxT("<"), wxT("&lt;") );
+        auxText.Replace( wxT(">"), wxT("&gt;") );
+
+        // an html fragment for the entire message in the listbox.  feel free
+        // to add color if you want:
+        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s:%s" ),
+                    GetChars( errText ),
+                    GetChars( ShowCoord( m_MainPosition )), GetChars( mainText ),
+                    GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( auxText ) );
+    }
+    else
+    {
+        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s: %s" ),
+                    GetChars( errText ),
+                    GetChars( ShowCoord( m_MainPosition ) ), GetChars( mainText ) );
+    }
+
+    return ret;
+}
+
+
+wxString DRC_ITEM::ShowReport() const
+{
+    wxString ret;
+
+    if( m_hasSecondItem )
+    {
+        ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+                    m_ErrorCode,
+                    GetChars( GetErrorText() ),
+                    GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ),
+                    GetChars( ShowCoord( m_AuxiliaryPosition ) ), GetChars( m_AuxiliaryText ) );
+    }
+    else
+    {
+        ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+                    m_ErrorCode,
+                    GetChars( GetErrorText() ),
+                    GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
+    }
+
+    return ret;
+}
+
+
 BOARD_ITEM* DRC_ITEM::GetMainItem( BOARD* aBoard ) const
 {
     return aBoard->GetItem( m_mainItemWeakRef, false /* copper only */ );
 }
+
 
 BOARD_ITEM* DRC_ITEM::GetAuxiliaryItem( BOARD* aBoard ) const
 {

@@ -93,8 +93,11 @@ private:
 
     void SetDrcParmeters( );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX_RPT_FILE
     void OnReportCheckBoxClicked( wxCommandEvent& event ) override;
+
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for m_RptFilenameCtrl
+    void OnReportFilenameEdited( wxCommandEvent &event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_BROWSE_RPT_FILE
     void OnButtonBrowseRptFileClick( wxCommandEvent& event ) override;
@@ -126,9 +129,6 @@ private:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event ) override;
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
-    void OnOkClick( wxCommandEvent& event ) override;
-
     /// handler for activate event, updating data which can be modified outside the dialog
     /// (DRC parameters)
     void OnActivateDlg( wxActivateEvent& event ) override;
@@ -148,6 +148,8 @@ private:
     DRC*                m_tester;
     PCB_EDIT_FRAME*     m_brdEditor;
     wxConfigBase*       m_config;
+    wxString            m_markersTitleTemplate;
+    wxString            m_unconnectedTitleTemplate;
 };
 
 #endif  // _DIALOG_DRC_H_

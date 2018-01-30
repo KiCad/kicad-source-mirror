@@ -170,53 +170,7 @@ public:
      * wxWidget's wxHtmlListBox class.
      * @return wxString - the html text.
      */
-    wxString ShowHtml() const
-    {
-        wxString ret;
-        wxString mainText = m_MainText;
-        // a wxHtmlWindows does not like < and > in the text to display
-        // because these chars have a special meaning in html
-        mainText.Replace( wxT("<"), wxT("&lt;") );
-        mainText.Replace( wxT(">"), wxT("&gt;") );
-
-        wxString errText = GetErrorText();
-        errText.Replace( wxT("<"), wxT("&lt;") );
-        errText.Replace( wxT(">"), wxT("&gt;") );
-
-
-        if( m_noCoordinate )
-        {
-            // omit the coordinate, a NETCLASS has no location
-            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>" ),
-                        m_ErrorCode,
-                        GetChars( errText ),
-                        GetChars( mainText ) );
-        }
-        else if( m_hasSecondItem )
-        {
-            wxString auxText = m_AuxiliaryText;
-            auxText.Replace( wxT("<"), wxT("&lt;") );
-            auxText.Replace( wxT(">"), wxT("&gt;") );
-
-            // an html fragment for the entire message in the listbox.  feel free
-            // to add color if you want:
-            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
-                        m_ErrorCode,
-                        GetChars( errText ),
-                        GetChars( ShowCoord( m_MainPosition )), GetChars( mainText ),
-                        GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( auxText ) );
-        }
-        else
-        {
-            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>" ),
-                        m_ErrorCode,
-                        GetChars( errText ),
-                        GetChars( ShowCoord( m_MainPosition ) ), GetChars( mainText ) );
-        }
-
-        return ret;
-    }
-
+    wxString ShowHtml() const;
 
     /**
      * Function ShowReport
@@ -224,29 +178,7 @@ public:
      * to disk in a report.
      * @return wxString - the simple multi-line report text.
      */
-    wxString ShowReport() const
-    {
-        wxString ret;
-
-        if( m_hasSecondItem )
-        {
-            ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                        m_ErrorCode,
-                        GetChars( GetErrorText() ),
-                        GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ),
-                        GetChars( ShowCoord( m_AuxiliaryPosition ) ), GetChars( m_AuxiliaryText ) );
-        }
-        else
-        {
-            ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
-                        m_ErrorCode,
-                        GetChars( GetErrorText() ),
-                        GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
-        }
-
-        return ret;
-    }
-
+    wxString ShowReport() const;
 
     /**
      * Function GetErrorCode

@@ -131,7 +131,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bottomSizer->Add( m_closeButton, 0, wxALL, 5 );
 	
 	
-	m_mainSizer->Add( bottomSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( bottomSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );

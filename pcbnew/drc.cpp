@@ -118,11 +118,7 @@ void DRC::DestroyDRCDialog( int aReason )
 {
     if( m_drcDialog )
     {
-        if( aReason == wxID_OK )
-        {
-            // if user clicked OK, save his choices in this DRC object.
-            m_drcDialog->GetRptSettings( &m_doCreateRptFile, m_rptFilename);
-        }
+        m_drcDialog->GetRptSettings( &m_doCreateRptFile, m_rptFilename);
 
         m_drcDialog->Destroy();
         m_drcDialog = NULL;
