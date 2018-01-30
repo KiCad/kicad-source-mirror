@@ -152,8 +152,8 @@ set( EESCHEMA_SRCS
     libfield.cpp
     menubar.cpp
     menubar_libedit.cpp
-    netform.cpp
-    netlist.cpp
+    netlist_generator.cpp
+    netlist_object_list.cpp
     netlist_object.cpp
     onleftclick.cpp
     onrightclick.cpp
