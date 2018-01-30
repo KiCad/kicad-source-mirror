@@ -30,7 +30,6 @@
 #include <schframe.h>
 #include <sch_reference_list.h>
 #include <class_library.h>
-#include <class_netlist_object.h>
 #include <symbol_lib_table.h>
 
 #include <netlist.h>

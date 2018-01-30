@@ -30,9 +30,8 @@
 
 #include <fctsys.h>
 
-#include <general.h>
 #include <dlist.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <sch_item_struct.h>
 
 #include <sch_reference_list.h>

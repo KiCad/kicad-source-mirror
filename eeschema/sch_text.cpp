@@ -42,7 +42,7 @@
 
 #include <list_operations.h>
 #include <sch_text.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );

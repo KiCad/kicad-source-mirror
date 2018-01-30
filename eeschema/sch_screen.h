@@ -23,12 +23,12 @@
  */
 
 /**
- * @file class_sch_screen.h
+ * @file sch_screen.h
  * @brief Definitions for the Eeschema program SCH_SCREEN class.
  */
 
-#ifndef CLASS_SCREEN_H
-#define CLASS_SCREEN_H
+#ifndef SCREEN_H
+#define SCREEN_H
 
 #include <macros.h>
 #include <dlist.h>
@@ -595,4 +595,4 @@ private:
     void buildScreenList( SCH_SHEET* aSheet);
 };
 
-#endif /* CLASS_SCREEN_H */
+#endif /* SCREEN_H */

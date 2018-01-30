@@ -28,7 +28,7 @@
 #include <lib_id.h>
 #include <draw_frame.h>
 
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 
 class PAGE_INFO;
 class TITLE_BLOCK;

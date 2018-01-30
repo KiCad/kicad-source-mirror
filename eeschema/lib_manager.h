@@ -32,7 +32,7 @@
 #include <memory>
 #include <wx/arrstr.h>
 #include <lib_manager_adapter.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 
 class LIB_ALIAS;
 class LIB_PART;

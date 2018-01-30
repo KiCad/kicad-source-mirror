@@ -29,15 +29,12 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <class_sch_screen.h>
 #include <base_units.h>
 #include <msgpanel.h>
 
 #include <eeschema_id.h>
-#include <general.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 #include <lib_arc.h>

@@ -32,7 +32,6 @@
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>
 
-#include <class_sch_screen.h>
 #include <schframe.h>
 #include <symbol_lib_table.h>
 #include <class_library.h>

@@ -29,15 +29,11 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiway.h>
-#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <class_sch_screen.h>
 #include <schframe.h>
 #include <base_units.h>
 
-#include <general.h>
-#include <sch_base_frame.h>
 #include <sch_reference_list.h>
 #include <class_library.h>
 #include <sch_component.h>
@@ -978,6 +974,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     // only user defined fields may be moved, and not the top most user defined
     // field since it would be moving up into the fixed fields, > not >=
     moveUpButton->Enable( fieldNdx > MANDATORY_FIELDS );
+    moveDownButton->Enable( ( fieldNdx >= MANDATORY_FIELDS ) && ( fieldNdx < ( m_FieldsBuf.size() - 1 ) ) );
 
     // may only delete user defined fields
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );

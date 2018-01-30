@@ -37,7 +37,7 @@
 
 #include <general.h>
 #include <sch_no_connect.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 
 
 SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :

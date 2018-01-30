@@ -103,10 +103,8 @@ set( EESCHEMA_SRCS
     bom_table_model.cpp
     bus-wire-junction.cpp
     busentry.cpp
-    class_drc_erc_item.cpp
     class_libentry.cpp
     class_library.cpp
-    class_netlist_object.cpp
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
     cmp_tree_model.cpp
@@ -115,6 +113,7 @@ set( EESCHEMA_SRCS
     component_references_lister.cpp
     controle.cpp
     cross-probing.cpp
+    drc_erc_item.cpp
     edit_bitmap.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
@@ -155,6 +154,7 @@ set( EESCHEMA_SRCS
     menubar_libedit.cpp
     netform.cpp
     netlist.cpp
+    netlist_object.cpp
     onleftclick.cpp
     onrightclick.cpp
     operations_on_items_lists.cpp

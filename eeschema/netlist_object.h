@@ -24,12 +24,12 @@
  */
 
 /**
- * @file class_netlist_object.h
+ * @file netlist_object.h
  * @brief Definition of the NETLIST_OBJECT class.
  */
 
-#ifndef _CLASS_NETLIST_OBJECT_H_
-#define _CLASS_NETLIST_OBJECT_H_
+#ifndef NETLIST_OBJECT_H
+#define NETLIST_OBJECT_H
 
 
 #include <sch_sheet_path.h>
@@ -503,4 +503,4 @@ private:
  */
 extern bool IsBusLabel( const wxString& aLabel );
 
-#endif    // _CLASS_NETLIST_OBJECT_H_
+#endif    // NETLIST_OBJECT_H

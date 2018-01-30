@@ -43,7 +43,7 @@
 #include <wx/tokenzr.h>
 
 #ifdef EESCHEMA
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <general.h>
 #endif
 

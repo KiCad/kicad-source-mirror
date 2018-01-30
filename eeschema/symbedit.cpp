@@ -36,8 +36,6 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 
-#include <class_sch_screen.h>
-#include <general.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 #include <wildcards_and_files_ext.h>

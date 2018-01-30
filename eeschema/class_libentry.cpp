@@ -33,7 +33,7 @@
 #include <class_drawpanel.h>
 #include <plotter.h>
 #include <gr_basic.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <richio.h>
 
 #include <general.h>

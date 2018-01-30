@@ -33,7 +33,7 @@
 
 #include <sch_component.h>
 #include <sch_reference_list.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 #include <template_fieldnames.h>
 
 #include "bom_table_column.h"

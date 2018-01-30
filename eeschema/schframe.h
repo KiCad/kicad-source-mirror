@@ -35,7 +35,6 @@
 #include <class_undoredo_container.h>
 #include <template_fieldnames.h>
 #include <block_commande.h>
-#include <class_sch_screen.h>
 #include <sch_collectors.h>
 
 // enum PINSHEETLABEL_SHAPE

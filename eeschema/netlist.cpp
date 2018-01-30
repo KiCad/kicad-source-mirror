@@ -34,7 +34,7 @@
 #include <kiway.h>
 
 #include <netlist.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 #include <class_library.h>
 #include <lib_pin.h>
 #include <sch_junction.h>

@@ -33,7 +33,7 @@
 #include <schframe.h>
 #include <erc.h>
 
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 
 
 bool SCH_EDIT_FRAME::HighlightConnectionAtPosition( wxPoint aPosition )

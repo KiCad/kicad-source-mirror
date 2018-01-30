@@ -47,8 +47,8 @@
 #include <sch_sheet_path.h>
 #include <sch_bitmap.h>
 
-#include <class_netlist_object.h>
-#include <class_library.h>      // fo class SCHLIB_FILTER to filter power parts
+#include <netlist_object.h>
+#include <class_library.h>      // for class SCHLIB_FILTER to filter power parts
 
 
 // TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want

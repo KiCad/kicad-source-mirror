@@ -34,7 +34,7 @@
 #include <wx/gdicmn.h>
 
 #include <sch_base_frame.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 
 class wxListBox;
 class SCHLIB_FILTER;

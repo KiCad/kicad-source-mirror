@@ -42,7 +42,7 @@
 #include <plotter.h>
 
 #include <netlist.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 #include <class_library.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>

@@ -31,7 +31,7 @@
 #include <eeschema_id.h>
 #include <hotkeys.h>
 #include <class_drawpanel.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <msgpanel.h>
 
 #include <general.h>

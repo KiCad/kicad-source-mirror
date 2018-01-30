@@ -37,7 +37,7 @@
 #include <bitmaps.h>
 
 #include <sch_junction.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 
 
 int SCH_JUNCTION::m_symbolSize = 40;    // Default diameter of the junction symbol

@@ -35,12 +35,7 @@
 #include <pgm_base.h>
 
 #include <sch_reference_list.h>
-#include <class_netlist_object.h>
 #include <class_library.h>
-#include <lib_pin.h>
-#include <sch_component.h>
-#include <sch_text.h>
-#include <sch_sheet.h>
 
 #include <netlist.h>
 #include <netlist_exporter.h>

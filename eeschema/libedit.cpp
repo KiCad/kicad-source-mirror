@@ -36,7 +36,6 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <class_sch_screen.h>
 
 #include <eeschema_id.h>
 #include <general.h>

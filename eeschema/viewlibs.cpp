@@ -28,14 +28,11 @@
 
 #include <fctsys.h>
 #include <kiway.h>
-#include <gr_basic.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
 
-#include <class_sch_screen.h>
-#include <general.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
 #include <class_library.h>

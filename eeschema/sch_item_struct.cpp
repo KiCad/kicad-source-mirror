@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <sch_item_struct.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <class_drawpanel.h>
 #include <schframe.h>
 

@@ -32,7 +32,7 @@
 #include <schframe.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <class_library.h>
 #include <class_libentry.h>
 #include <lib_draw_item.h>

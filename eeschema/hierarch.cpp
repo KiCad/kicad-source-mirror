@@ -42,7 +42,7 @@
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
 
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 #include <sch_sheet_path.h>
 
 

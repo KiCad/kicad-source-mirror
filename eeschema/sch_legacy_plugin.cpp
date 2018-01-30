@@ -46,7 +46,7 @@
 #include <sch_sheet.h>
 #include <sch_legacy_plugin.h>
 #include <template_fieldnames.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 #include <class_libentry.h>
 #include <class_library.h>
 #include <lib_arc.h>

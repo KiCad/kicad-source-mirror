@@ -34,8 +34,7 @@
 #define LIBEDITFRM_H_
 
 #include <sch_base_frame.h>
-#include <base_screen.h>
-#include <class_sch_screen.h>
+#include <sch_screen.h>
 
 #include <lib_draw_item.h>
 #include <lib_collectors.h>

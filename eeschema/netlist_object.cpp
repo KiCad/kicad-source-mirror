@@ -24,7 +24,7 @@
  */
 
 /**
- * @file class_netlist_object.cpp
+ * @file netlist_object.cpp
  * @brief Class NETLIST_OBJECT to handle 1 item connected (in netlist and erc calculations)
  */
 
@@ -33,7 +33,7 @@
 #include <schframe.h>
 
 #include <sch_component.h>
-#include <class_netlist_object.h>
+#include <netlist_object.h>
 
 #include <wx/regex.h>
 
