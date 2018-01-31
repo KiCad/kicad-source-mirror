@@ -50,7 +50,7 @@ private:
     wxBitmap     m_picPackagers;
     wxBitmap     m_picLicense;
 
-    ABOUT_APP_INFO m_info;
+    ABOUT_APP_INFO& m_info;
 
 public:
     DIALOG_ABOUT( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aAppInfo );

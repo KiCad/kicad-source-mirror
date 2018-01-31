@@ -29,6 +29,8 @@
 #include <wx/bitmap.h>
 #include <wx/dynarray.h>
 
+#include "bitmap_types.h"
+
 class CONTRIBUTOR;
 
 WX_DECLARE_OBJARRAY( CONTRIBUTOR, CONTRIBUTORS );
@@ -102,6 +104,13 @@ public:
     void SetAppIcon( const wxIcon& aIcon ) { m_appIcon = aIcon; }
     wxIcon& GetAppIcon() { return m_appIcon; }
 
+    ///> Wrapper to manage memory allocation for bitmaps
+    wxBitmap* CreateKiBitmap( BITMAP_DEF aBitmap )
+    {
+        m_bitmaps.emplace_back( KiBitmapNew( aBitmap ) );
+        return m_bitmaps.back().get();
+    }
+
 private:
     CONTRIBUTORS developers;
     CONTRIBUTORS docwriters;
@@ -118,6 +127,9 @@ private:
     wxString     libVersion;
 
     wxIcon       m_appIcon;
+
+    ///> Bitmaps to be freed when the dialog is closed
+    std::vector<std::unique_ptr<wxBitmap>> m_bitmaps;
 };
 
 
