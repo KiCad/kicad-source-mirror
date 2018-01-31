@@ -298,17 +298,6 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     return 0;
 }
 
-static bool compareX( const BOARD_ITEM* aA, const BOARD_ITEM* aB )
-{
-    return aA->GetBoundingBox().Centre().x < aB->GetBoundingBox().Centre().x;
-}
-
-
-static bool compareY( const BOARD_ITEM* aA, const BOARD_ITEM* aB )
-{
-    return aA->GetBoundingBox().Centre().y < aB->GetBoundingBox().Centre().y;
-}
-
 
 int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
@@ -320,31 +309,36 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
     commit.StageItems( selection, CHT_MODIFY );
 
-    // Prepare a list, so the items can be sorted by their X coordinate
-    std::vector<BOARD_ITEM*> itemsList;
+    auto alignMap = GetBoundingBoxesV( selection );
 
-    for( auto item : selection )
-        itemsList.push_back( static_cast<BOARD_ITEM*>( item ) );
+    // find the last item by reverse sorting
+    std::sort( alignMap.begin(), alignMap.end(), SortRightmostX );
+    const auto maxRight = alignMap.begin()->second.GetRight();
+    const auto lastItem = alignMap.begin()->first;
 
-    // Sort items by X coordinate
-    std::sort(itemsList.begin(), itemsList.end(), compareX );
+    // sort to get starting order
+    std::sort( alignMap.begin(), alignMap.end(), SortLeftmostX );
 
-    // Expected X coordinate for the next item (=minX)
-    int position = itemsList.front()->GetBoundingBox().Centre().x;
+    auto totalGap = maxRight - alignMap.begin()->second.GetX();
 
-    // X coordinate for the last item
-    const int maxX = itemsList.back()->GetBoundingBox().Centre().x;
-
-    // Distance between items
-    const int distance = ( maxX - position ) / ( itemsList.size() - 1 );
-
-    for( auto item : itemsList )
+    for( auto& i : alignMap )
     {
-        int difference = position - item->GetBoundingBox().Centre().x;
+        totalGap -= i.second.GetWidth();
+    }
 
-        item->Move( wxPoint( difference, 0 ) );
+    const auto itemGap = totalGap / ( alignMap.size() - 1 );
 
-        position += distance;
+    auto targetX = alignMap.begin()->second.GetX();
+
+    for( auto& i : alignMap )
+    {
+        // cover the corner case where the last item is wider than the previous item and gap
+        if( lastItem == i.first )
+            continue;
+
+        int difference = targetX - i.second.GetX();
+        i.first->Move( wxPoint( difference, 0 ) );
+        targetX += ( i.second.GetWidth() + itemGap );
     }
 
     commit.Push( _( "Distribute horizontally" ) );
@@ -363,31 +357,36 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
     commit.StageItems( selection, CHT_MODIFY );
 
-    // Prepare a list, so the items can be sorted by their Y coordinate
-    std::vector<BOARD_ITEM*> itemsList;
+    auto alignMap = GetBoundingBoxesV( selection );
 
-    for( auto item : selection )
-        itemsList.push_back( static_cast<BOARD_ITEM*>( item ) );
+    // find the last item by reverse sorting
+    std::sort( alignMap.begin(), alignMap.end(), SortBottommostY );
+    const auto maxBottom = alignMap.begin()->second.GetBottom();
+    const auto lastItem = alignMap.begin()->first;
 
-    // Sort items by Y coordinate
-    std::sort( itemsList.begin(), itemsList.end(), compareY );
+    // sort to get starting order
+    std::sort( alignMap.begin(), alignMap.end(), SortTopmostY );
 
-    // Expected Y coordinate for the next item (=minY)
-    int position = (*itemsList.begin())->GetBoundingBox().Centre().y;
+    auto totalGap = maxBottom - alignMap.begin()->second.GetY();
 
-    // Y coordinate for the last item
-    const int maxY = (*itemsList.rbegin())->GetBoundingBox().Centre().y;
-
-    // Distance between items
-    const int distance = ( maxY - position ) / ( itemsList.size() - 1 );
-
-    for( auto item : itemsList )
+    for( auto& i : alignMap )
     {
-        int difference = position - item->GetBoundingBox().Centre().y;
+        totalGap -= i.second.GetHeight();
+    }
 
-        item->Move( wxPoint( 0, difference ) );
+    const auto itemGap = totalGap / ( alignMap.size() - 1 );
 
-        position += distance;
+    auto targetY = alignMap.begin()->second.GetY();
+
+    for( auto& i : alignMap )
+    {
+        // cover the corner case where the last item is wider than the previous item and gap
+        if( lastItem == i.first )
+            continue;
+
+        int difference = targetY - i.second.GetY();
+        i.first->Move( wxPoint( 0, difference ) );
+        targetY += ( i.second.GetHeight() + itemGap );
     }
 
     commit.Push( _( "Distribute vertically" ) );
