@@ -52,7 +52,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 
 #include <invoke_pcb_dialog.h>
 #include <dialog_mask_clearance.h>

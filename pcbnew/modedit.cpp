@@ -51,7 +51,7 @@
 #include <protos.h>
 #include <pcbnew_id.h>
 #include <footprint_edit_frame.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 #include <collectors.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

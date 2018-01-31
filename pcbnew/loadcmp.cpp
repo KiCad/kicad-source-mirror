@@ -56,7 +56,7 @@ using namespace std::placeholders;
 #include <footprint_info.h>
 #include <footprint_info_impl.h>
 #include <dialog_get_component.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 
 

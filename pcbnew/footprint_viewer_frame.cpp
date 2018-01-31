@@ -24,7 +24,7 @@
  */
 
 /**
- * @file modview_frame.cpp
+ * @file footprint_viewer_frame.cpp
  */
 
 #include <fctsys.h>
@@ -45,7 +45,7 @@
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 #include <footprint_info.h>
 
 #include <hotkeys.h>

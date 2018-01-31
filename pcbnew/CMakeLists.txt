@@ -250,7 +250,7 @@ set( PCBNEW_CLASS_SRCS
     modeditoptions.cpp
     footprint_edit_frame.cpp
     modules.cpp
-    modview_frame.cpp
+    footprint_viewer_frame.cpp
     move-drag_pads.cpp
     move_or_drag_track.cpp
     muwave_command.cpp
@@ -278,7 +278,7 @@ set( PCBNEW_CLASS_SRCS
     swap_layers.cpp
     target_edit.cpp
     tool_modedit.cpp
-    tool_modview.cpp
+    tool_footprint_viewer.cpp
     tool_onrightclick.cpp
     tool_pcb.cpp
     toolbars_update_user_interface.cpp

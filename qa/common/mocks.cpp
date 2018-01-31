@@ -47,7 +47,7 @@
 #include <class_board.h>
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
 
 #include <pcb_edit_frame.h>

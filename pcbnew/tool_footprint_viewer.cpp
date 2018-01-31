@@ -21,8 +21,8 @@
  */
 
 /**
- * @file tool_modview.cpp
- * @brief Build the toolbars for the library browser.
+ * @file tool_footprint_viewer.cpp
+ * @brief Build the toolbars for the footprint library browser.
  */
 
 
@@ -32,7 +32,7 @@
 
 #include "help_common_strings.h"
 #include "hotkeys.h"
-#include "modview_frame.h"
+#include "footprint_viewer_frame.h"
 #include "pcbnew.h"
 #include "pcbnew_id.h"
 

@@ -51,7 +51,7 @@
 #include <dialogs/dialog_modedit_display_options.h>
 #include <dialog_hotkeys_editor.h>
 #include <footprint_edit_frame.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_layer_widget.h>
 #include <invoke_pcb_dialog.h>

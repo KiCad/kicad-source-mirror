@@ -29,7 +29,7 @@
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <modview_frame.h>
+#include <footprint_viewer_frame.h>
 #include <pcbnew_id.h>
 
 #include <hotkeys.h>
