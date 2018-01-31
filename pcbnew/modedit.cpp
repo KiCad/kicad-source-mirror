@@ -988,6 +988,55 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 }
 
 
+void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
+{
+    if( Item == NULL )
+        return;
+
+    switch( Item->Type() )
+    {
+    case PCB_PAD_T:
+        DeletePad( (D_PAD*) Item, false );
+        break;
+
+    case PCB_MODULE_TEXT_T:
+    {
+        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( Item );
+
+        switch( text->GetType() )
+        {
+        case TEXTE_MODULE::TEXT_is_REFERENCE:
+            DisplayError( this, _( "Cannot delete REFERENCE!" ) );
+            break;
+
+        case TEXTE_MODULE::TEXT_is_VALUE:
+            DisplayError( this, _( "Cannot delete VALUE!" ) );
+            break;
+
+        case TEXTE_MODULE::TEXT_is_DIVERS:
+            DeleteTextModule( text );
+        }
+    }
+    break;
+
+    case PCB_MODULE_EDGE_T:
+        Delete_Edge_Module( (EDGE_MODULE*) Item );
+        m_canvas->Refresh();
+        break;
+
+    case PCB_MODULE_T:
+        break;
+
+    default:
+    {
+        wxString Line;
+        Line.Printf( wxT( " RemoveStruct: item type %d unknown." ), Item->Type() );
+        wxMessageBox( Line );
+    }
+    break;
+    }
+}
+
 COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor()
 {
     return Settings().Colors().GetItemColor( LAYER_GRID );

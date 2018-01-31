@@ -876,7 +876,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
-        InstallModuleOptionsFrame( (MODULE*) GetCurItem(), &dc );
+        InstallFootprintPropertiesDialog( (MODULE*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 

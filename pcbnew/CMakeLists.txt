@@ -223,7 +223,6 @@ set( PCBNEW_CLASS_SRCS
     edit_pcb_text.cpp
     edit_track_width.cpp
     editedge.cpp
-    editmod.cpp
     editrack-part2.cpp
     editrack.cpp
     edtxtmod.cpp

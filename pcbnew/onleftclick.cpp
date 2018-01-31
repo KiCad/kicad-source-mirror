@@ -586,7 +586,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_T:
-        InstallModuleOptionsFrame( static_cast<MODULE*>( aItem ), aDC );
+        InstallFootprintPropertiesDialog( static_cast<MODULE*>( aItem ), aDC );
         break;
 
     case PCB_TARGET_T:

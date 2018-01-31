@@ -1092,7 +1092,7 @@ public:
     void InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
 
     // Footprint edition (see also PCB_BASE_FRAME)
-    void InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
+    void InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC );
 
     /**
      * Function StartMoveModule

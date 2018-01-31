@@ -51,6 +51,7 @@
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <dialog_exchange_modules.h>
+#include <dialog_edit_module_for_BoardEditor.h>
 #include <convert_to_biu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -1277,6 +1278,59 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
         RebuildActionPluginMenus();
     #endif
 #endif
+}
+
+
+void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC )
+{
+    if( Module == NULL )
+        return;
+
+#ifdef __WXMAC__
+    // avoid Avoid "writes" in the dialog, creates errors with WxOverlay and NSView & Modal
+    // Raising an Exception - Fixes #764678
+    DC = NULL;
+#endif
+
+    DIALOG_MODULE_BOARD_EDITOR* dlg = new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
+
+    int retvalue = dlg->ShowModal();
+    /* retvalue =
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_ABORT if abort,
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_EXCHANGE_FP if exchange module,
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edition
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_MODEDIT for a goto editor command
+     */
+
+    dlg->Close();
+    dlg->Destroy();
+
+#ifdef __WXMAC__
+    // If something edited, push a refresh request
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
+        m_canvas->Refresh();
+#endif
+
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_MODEDIT )
+    {
+        FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
+
+        editor->Load_Module_From_BOARD( Module );
+        SetCurItem( NULL );
+
+        editor->Show( true );
+        editor->Raise();        // Iconize( false );
+    }
+
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_UPDATE_FP )
+    {
+        InstallExchangeModuleFrame( Module, true );
+    }
+
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
+    {
+        InstallExchangeModuleFrame( Module, false );
+    }
 }
 
 
