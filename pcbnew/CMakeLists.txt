@@ -230,6 +230,11 @@ set( PCBNEW_CLASS_SRCS
     files.cpp
     footprint_info_impl.cpp
     footprint_wizard.cpp
+    footprint_editor_utils.cpp
+    footprint_editor_onclick.cpp
+    footprint_editor_options.cpp
+    footprint_edit_frame.cpp
+    footprint_viewer_frame.cpp
     globaleditpad.cpp
     highlight.cpp
     hotkeys.cpp
@@ -244,12 +249,6 @@ set( PCBNEW_CLASS_SRCS
     menubar_pcbframe.cpp
     microwave.cpp
     minimun_spanning_tree.cpp
-    modedit.cpp
-    modedit_onclick.cpp
-    modeditoptions.cpp
-    footprint_edit_frame.cpp
-    modules.cpp
-    footprint_viewer_frame.cpp
     move-drag_pads.cpp
     move_or_drag_track.cpp
     muwave_command.cpp
@@ -258,12 +257,14 @@ set( PCBNEW_CLASS_SRCS
     onrightclick.cpp
     pad_edition_functions.cpp
     pcb_base_edit_frame.cpp
+    pcb_footprint_edit_utils.cpp
     pcb_layer_box_selector.cpp
     pcb_layer_widget.cpp
 #    pcb_draw_panel_gal.cpp
 #    pcb_view.cpp
     pcb_edit_frame.cpp
     pcbnew_config.cpp
+    pcb_legacy_draw_utils.cpp
     pcbplot.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
@@ -276,13 +277,11 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra_keywords.cpp
     swap_layers.cpp
     target_edit.cpp
-    tool_modedit.cpp
+    tool_footprint_editor.cpp
     tool_footprint_viewer.cpp
     tool_onrightclick.cpp
-    tool_pcb.cpp
+    tool_pcb_editor.cpp
     toolbars_update_user_interface.cpp
-    tr_modif.cpp
-    tracepcb.cpp
     tracks_cleaner.cpp
     undo_redo.cpp
     zone_filler.cpp

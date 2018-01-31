@@ -23,7 +23,7 @@
  */
 
 /**
- * @file modedit.cpp
+ * @file footprint_editor_utils.cpp
  */
 
 #include <fctsys.h>

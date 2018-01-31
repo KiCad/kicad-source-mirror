@@ -25,8 +25,8 @@
  */
 
 /**
- * @file tracepcb.cpp
- * @brief Functions to redraw the current board.
+ * @file pcb_legacy_draw_utils.cpp
+ * @brief functions (and helper functions) to redraw the current board in legacy canvas.
  */
 
 #include <fctsys.h>

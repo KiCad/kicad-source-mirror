@@ -25,8 +25,8 @@
  */
 
 /**
- * @file tool_pcb.cpp
- * @brief PCB editor tool bars
+ * @file tool_pcb_editor.cpp
+ * @brief PCB editor toolbars build/rebuild functions
  */
 
 #include <fctsys.h>

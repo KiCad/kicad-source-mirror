@@ -25,8 +25,8 @@
  */
 
 /**
- * @file modeditoptions.cpp
- * @brief Pcbnew footprint editor options.
+ * @file footprint_editor_options.cpp
+ * @brief footprint editor options (events from left vertical option toolbar).
  */
 
 #include <fctsys.h>

@@ -23,7 +23,7 @@
  */
 
 /**
- * @file modedit_onclick.cpp
+ * @file footprint_editor_onclick.cpp
  */
 
 #include <fctsys.h>

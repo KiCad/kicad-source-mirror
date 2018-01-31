@@ -21,7 +21,7 @@
  */
 
 /**
- * @file tool_modedit.cpp
+ * @file tool_footprint_editor.cpp
  * @brief Footprint editor tool bars
  */
 
