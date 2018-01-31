@@ -1207,15 +1207,16 @@ wxString D_PAD::GetSelectMenuText() const
 
     if( padname.IsEmpty() )
     {
-        text.Printf( _( "Pad on %s of %s" ),
-                     GetChars( padlayers ),
-                     GetChars(GetParent()->GetReference() ) );
+        text.Printf( _( "Pad of %s on %s" ),
+                     GetChars( GetParent()->GetReference() ),
+                     GetChars( padlayers ) );
     }
     else
     {
-        text.Printf( _( "Pad %s on %s of %s" ),
-                     GetChars(GetName() ), GetChars( padlayers ),
-                     GetChars(GetParent()->GetReference() ) );
+        text.Printf( _( "Pad %s of %s on %s" ),
+                     GetChars( GetName() ),
+                     GetChars( GetParent()->GetReference() ),
+                     GetChars( padlayers ) );
     }
 
     return text;
@@ -1355,38 +1356,31 @@ const BOX2I D_PAD::ViewBBox() const
 
 wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
 {
-    // Try the single or no- layer case (easy)
-    PCB_LAYER_ID layer = aMask.ExtractLayer();
+    // Try to be smart and useful.  Check all copper first.
+    if( aMask[F_Cu] && aMask[B_Cu] )
+        return wxT( "all copper layers" );
 
-    switch( (int) layer )
+    // Check for single copper.
+    LSEQ cu = aBoard->GetEnabledLayers().CuStack();
+
+    if( cu )
+        return aBoard->GetLayerName( *cu );
+
+    // No copper; check for single techincal.
+    LSEQ tech = aBoard->GetEnabledLayers().Technicals();
+
+    if( tech )
     {
-    case UNSELECTED_LAYER:
-        return _( "No layers" );
+        wxString layerInfo = aBoard->GetLayerName( *tech );
 
-    case UNDEFINED_LAYER:
-        break;
+        if( tech.size() > 1 )
+            layerInfo << _( " & others" );
 
-    default:
-        return aBoard->GetLayerName( layer );
+        return layerInfo;
     }
 
-    // Try to be smart and useful, starting with outer copper
-    // (which are more important than internal ones)
-    wxString layerInfo;
-
-    if( aMask[F_Cu] )
-        AccumulateDescription( layerInfo, aBoard->GetLayerName( F_Cu ) );
-
-    if( aMask[B_Cu] )
-        AccumulateDescription( layerInfo, aBoard->GetLayerName( B_Cu ) );
-
-    if( ( aMask & LSET::InternalCuMask() ).any() )
-        AccumulateDescription( layerInfo, _("Internal" ) );
-
-    if( ( aMask & LSET::AllNonCuMask() ).any() )
-        AccumulateDescription( layerInfo, _("Non-copper" ) );
-
-    return layerInfo;
+    // No copper, no technicals: no layer
+    return _( "no layers" );
 }
 
 

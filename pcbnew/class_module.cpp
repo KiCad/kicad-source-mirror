@@ -869,9 +869,15 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
 
 wxString MODULE::GetSelectMenuText() const
 {
+    wxString reference = GetReference();
+
+    if( reference.IsEmpty() )
+        reference = _( "<no reference>" );
+
     wxString text;
+
     text.Printf( _( "Footprint %s on %s" ),
-                 GetChars ( GetReference() ),
+                 GetChars ( reference ),
                  GetChars ( GetLayerName() ) );
 
     return text;

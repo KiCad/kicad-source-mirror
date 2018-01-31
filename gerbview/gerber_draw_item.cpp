@@ -988,8 +988,11 @@ wxString GERBER_DRAW_ITEM::GetSelectMenuText() const
 
     layerName = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
 
-    text.Printf( _( "%s (D%d) on layer %d: %s" ), ShowGBRShape(), m_DCode,
-                 GetLayer() + 1, layerName );
+    text.Printf( _( "%s (D%d) on layer %d: %s" ),
+                 ShowGBRShape(),
+                 m_DCode,
+                 GetLayer() + 1,
+                 layerName );
 
     return text;
 }

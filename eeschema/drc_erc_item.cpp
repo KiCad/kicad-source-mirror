@@ -71,9 +71,9 @@ wxString DRC_ITEM::GetErrorText() const
 
 wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
 {
-    wxString ret;
-    ret << aPos;
-    return ret;
+    return wxString::Format( _( "@(%s, %s)" ),
+                             GetChars( CoordinateToString( aPos.x ) ),
+                             GetChars( CoordinateToString( aPos.y ) ) );
 }
 
 

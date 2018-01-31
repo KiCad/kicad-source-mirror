@@ -360,7 +360,7 @@ void LIB_TEXT::SetText( const wxString& aText )
 wxString LIB_TEXT::GetSelectMenuText() const
 {
     wxString msg;
-    msg.Printf( _( "Graphic Text %s" ), GetChars( ShortenedShownText() ) );
+    msg.Printf( _( "Graphic Text \"%s\"" ), GetChars( ShortenedShownText() ) );
     return msg;
 }
 

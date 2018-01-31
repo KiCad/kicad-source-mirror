@@ -497,7 +497,7 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 wxString SCH_TEXT::GetSelectMenuText() const
 {
     wxString msg;
-    msg.Printf( _( "Graphic Text %s" ), GetChars( ShortenedShownText() ) );
+    msg.Printf( _( "Graphic Text \"%s\"" ), GetChars( ShortenedShownText() ) );
     return msg;
 }
 

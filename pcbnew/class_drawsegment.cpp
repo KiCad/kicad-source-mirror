@@ -724,11 +724,11 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 wxString DRAWSEGMENT::GetSelectMenuText() const
 {
     wxString text;
-    wxString temp = ::LengthDoubleToString( GetLength() );
 
-    text.Printf( _( "Pcb Graphic: %s, length %s on %s" ),
+    text.Printf( _( "Pcb Graphic %s, length %s on %s" ),
                  GetChars( ShowShape( m_Shape ) ),
-                 GetChars( temp ), GetChars( GetLayerName() ) );
+                 GetChars( ::LengthDoubleToString( GetLength() ) ),
+                 GetChars( GetLayerName() ) );
 
     return text;
 }

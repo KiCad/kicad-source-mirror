@@ -183,7 +183,8 @@ wxString TEXTE_PCB::GetSelectMenuText() const
     wxString text;
 
     text.Printf( _( "Pcb Text \"%s\" on %s"),
-                 GetChars ( ShortenedShownText() ), GetChars( GetLayerName() ) );
+                 GetChars ( ShortenedShownText() ),
+                 GetChars( GetLayerName() ) );
 
     return text;
 }

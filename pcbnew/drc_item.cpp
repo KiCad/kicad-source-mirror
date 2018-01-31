@@ -150,10 +150,9 @@ wxString DRC_ITEM::GetErrorText() const
 
 wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
 {
-    wxString ret;
-
-    ret << aPos;
-    return ret;
+    return wxString::Format( _( "@(%s, %s)" ),
+                             GetChars( CoordinateToString( aPos.x ) ),
+                             GetChars( CoordinateToString( aPos.y ) ) );
 }
 
 
@@ -186,7 +185,7 @@ wxString DRC_ITEM::ShowHtml() const
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s:%s" ),
+        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s: %s" ),
                     GetChars( errText ),
                     GetChars( ShowCoord( m_MainPosition )), GetChars( mainText ),
                     GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( auxText ) );

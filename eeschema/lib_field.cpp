@@ -534,7 +534,7 @@ void LIB_FIELD::SetText( const wxString& aText )
 
 wxString LIB_FIELD::GetSelectMenuText() const
 {
-    return wxString::Format( _( "Field %s %s" ),
+    return wxString::Format( _( "Field %s \"%s\"" ),
                              GetChars( GetName() ),
                              GetChars( ShortenedShownText() ) );
 }

@@ -426,12 +426,16 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
         break;
 
     case TEXT_is_VALUE:
-        text.Printf( _( "Value %s of %s" ), GetChars( GetShownText() ), reference );
+        text.Printf( _( "Value %s of %s" ),
+                     GetChars( GetShownText() ),
+                     reference );
         break;
 
     default:    // wrap this one in quotes:
-        text.Printf( _( "Text \"%s\" on %s of %s" ), GetChars( ShortenedShownText() ),
-                     GetChars( GetLayerName() ), reference );
+        text.Printf( _( "Text \"%s\" of %s on %s" ),
+                     GetChars( ShortenedShownText() ),
+                     reference,
+                     GetChars( GetLayerName() ) );
         break;
     }
 

@@ -125,6 +125,26 @@ public:
     }
 
     /**
+     * Function GetNetnameMsg
+     * @return wxString - the full netname or "<no net>" in square braces, followed by
+     * "(Not Found)" if the netcode is undefined.
+     */
+    wxString GetNetnameMsg() const
+    {
+        if( !GetBoard() )
+            return wxT( "[** NO BOARD DEFINED **]" );
+
+        wxString netname = GetNetname();
+
+        if( !netname.length() )
+            return wxT( "[<no net>]" );
+        else if( GetNetCode() < 0 )
+            return wxT( "[" + netname + "](" + _( "Not Found" ) + ")" );
+        else
+            return wxT( "[" + netname + "]" );
+    }
+
+    /**
      * Function GetShortNetname
      * @return wxString - the short netname
      */

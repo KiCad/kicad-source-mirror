@@ -619,19 +619,19 @@ wxString SCH_LINE::GetSelectMenuText() const
     switch( m_Layer )
     {
     case LAYER_NOTES:
-        txtfmt = _( "%s Graphic Line from (%s,%s) to (%s,%s)" );
+        txtfmt = _( "%s Graphic Line from (%s, %s) to (%s, %s)" );
         break;
 
     case LAYER_WIRE:
-        txtfmt = _( "%s Wire from (%s,%s) to (%s,%s)" );
+        txtfmt = _( "%s Wire from (%s, %s) to (%s, %s)" );
         break;
 
     case LAYER_BUS:
-        txtfmt = _( "%s Bus from (%s,%s) to (%s,%s)" );
+        txtfmt = _( "%s Bus from (%s, %s) to (%s, %s)" );
         break;
 
     default:
-        txtfmt += _( "%s Line on Unknown Layer from (%s,%s) to (%s,%s)" );
+        txtfmt += _( "%s Line on Unknown Layer from (%s, %s) to (%s, %s)" );
     }
 
     menuText.Printf( txtfmt, GetChars( orient ),

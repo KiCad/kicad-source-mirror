@@ -489,7 +489,8 @@ wxString DIMENSION::GetSelectMenuText() const
 {
     wxString text;
     text.Printf( _( "Dimension \"%s\" on %s" ),
-                GetChars( GetText() ), GetChars( GetLayerName() ) );
+                 GetChars( GetText() ),
+                 GetChars( GetLayerName() ) );
 
     return text;
 }

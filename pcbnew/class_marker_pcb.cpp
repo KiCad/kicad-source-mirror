@@ -34,6 +34,7 @@
 #include <trigo.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <class_marker_pcb.h>
@@ -132,10 +133,9 @@ void MARKER_PCB::Flip(const wxPoint& aCentre )
 
 wxString MARKER_PCB::GetSelectMenuText() const
 {
-    wxString text;
-    text.Printf( _( "Marker @(%d,%d)" ), GetPos().x, GetPos().y );
-
-    return text;
+    return wxString::Format( _( "Marker @(%s, %s)" ),
+                             GetChars( CoordinateToString( m_Pos.x ) ),
+                             GetChars( CoordinateToString( m_Pos.y ) ) );
 }
 
 
