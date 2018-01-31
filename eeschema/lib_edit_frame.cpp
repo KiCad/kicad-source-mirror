@@ -349,14 +349,9 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( saveAllLibraries() )
-    {
-        saveSymbolLibTables( true, true );
         Destroy();
-    }
     else
-    {
         Event.Veto();
-    }
 }
 
 
@@ -1569,6 +1564,9 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
         if( !res )
             DisplayError( this, _( "Could not open the library file." ) );
     }
+
+    bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
+    saveSymbolLibTables( globalTable, !globalTable );
 
     return res;
 }
