@@ -26,6 +26,9 @@
 #define ALIGN_DISTRIBUTE_TOOL_H_
 
 #include <tool/tool_interactive.h>
+#include <class_board_item.h>
+
+typedef std::vector<std::pair<BOARD_ITEM*, EDA_RECT>> ALIGNMENT_SET;
 
 class SELECTION_TOOL;
 

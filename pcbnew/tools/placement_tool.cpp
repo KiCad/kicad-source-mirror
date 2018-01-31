@@ -21,7 +21,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
+#include "tool/selection.h"
 #include "placement_tool.h"
 #include "pcb_actions.h"
 #include "selection_tool.h"
@@ -111,6 +111,47 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
 }
 
 
+bool SortLeftmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+{
+    return ( left.second.GetX() < right.second.GetX() );
+}
+
+bool SortRightmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+{
+    return ( left.second.GetRight() > right.second.GetRight() );
+}
+
+bool SortTopmostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+{
+    return ( left.second.GetY() < right.second.GetY() );
+}
+
+bool SortBottommostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+{
+    return ( left.second.GetBottom() > right.second.GetBottom() );
+}
+
+ALIGNMENT_SET GetBoundingBoxesV( const SELECTION& sel )
+{
+    const SELECTION& selection = sel;
+
+    ALIGNMENT_SET aSet;
+
+    for( auto item : selection )
+    {
+        if( item->Type() == PCB_MODULE_T )
+        {
+            aSet.push_back( std::make_pair( static_cast<BOARD_ITEM*>( item ), static_cast<MODULE*>( item )->GetFootprintRect() ) );
+        }
+        else
+        {
+            aSet.push_back( std::make_pair( static_cast<BOARD_ITEM*>( item ), static_cast<MODULE*>( item )->GetBoundingBox() ) );
+        }
+    }
+    return aSet;
+}
+
+
 int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
@@ -121,25 +162,17 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
     commit.StageItems( selection, CHT_MODIFY );
 
-    // Compute the highest point of selection - it will be the edge of alignment
-    int top = selection.Front()->GetBoundingBox().GetY();
+    // Compute the topmost point of selection - it will be the edge of alignment
+    auto alignMap = GetBoundingBoxesV( selection );
+    std::sort( alignMap.begin(), alignMap.end(), SortTopmostY );
 
-    for( int i = 1; i < selection.Size(); ++i )
-    {
-        int currentTop = selection[i]->GetBoundingBox().GetY();
-
-        if( top > currentTop )      // Y decreases when going up
-            top = currentTop;
-    }
+    int top = alignMap.begin()->second.GetY();
 
     // Move the selected items
-    for( auto i : selection )
+    for( auto& i : alignMap )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
-
-        int difference = top - item->GetBoundingBox().GetY();
-
-        item->Move( wxPoint( 0, difference ) );
+        int difference = top - i.second.GetY();
+        i.first->Move( wxPoint( 0, difference ) );
     }
 
     commit.Push( _( "Align to top" ) );
@@ -159,24 +192,16 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     commit.StageItems( selection, CHT_MODIFY );
 
     // Compute the lowest point of selection - it will be the edge of alignment
-    int bottom = selection.Front()->GetBoundingBox().GetBottom();
+    auto alignMap = GetBoundingBoxesV( selection );
+    std::sort( alignMap.begin(), alignMap.end(), SortBottommostY );
 
-    for( int i = 1; i < selection.Size(); ++i )
-    {
-        int currentBottom = selection[i]->GetBoundingBox().GetBottom();
-
-        if( bottom < currentBottom )      // Y increases when going down
-            bottom = currentBottom;
-    }
+   int bottom = alignMap.begin()->second.GetBottom();
 
     // Move the selected items
-    for( auto i : selection )
+    for( auto& i : alignMap )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
-
-        int difference = bottom - item->GetBoundingBox().GetBottom();
-
-        item->Move( wxPoint( 0, difference ) );
+        int difference = bottom - i.second.GetBottom();
+        i.first->Move( wxPoint( 0, difference ) );
     }
 
     commit.Push( _( "Align to bottom" ) );
@@ -211,24 +236,17 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
     commit.StageItems( selection, CHT_MODIFY );
 
     // Compute the leftmost point of selection - it will be the edge of alignment
-    int left = selection.Front()->GetBoundingBox().GetX();
+   auto alignMap = GetBoundingBoxesV( selection );
 
-    for( int i = 1; i < selection.Size(); ++i )
-    {
-        int currentLeft = selection[i]->GetBoundingBox().GetX();
+   std::sort( alignMap.begin(), alignMap.end(), SortLeftmostX );
 
-        if( left > currentLeft )      // X decreases when going left
-            left = currentLeft;
-    }
+   int left = alignMap.begin()->second.GetX();
 
     // Move the selected items
-    for( auto i : selection )
+    for( auto& i : alignMap )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
-
-        int difference = left - item->GetBoundingBox().GetX();
-
-        item->Move( wxPoint( difference, 0 ) );
+        int difference = left - i.second.GetX();
+        i.first->Move( wxPoint( difference, 0 ) );
     }
 
     commit.Push( _( "Align to left" ) );
@@ -263,31 +281,22 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     commit.StageItems( selection, CHT_MODIFY );
 
     // Compute the rightmost point of selection - it will be the edge of alignment
-    int right = selection.Front()->GetBoundingBox().GetRight();
+    auto alignMap = GetBoundingBoxesV( selection );
+    std::sort( alignMap.begin(), alignMap.end(), SortRightmostX );
 
-    for( int i = 1; i < selection.Size(); ++i )
-    {
-        int currentRight = selection[i]->GetBoundingBox().GetRight();
-
-        if( right < currentRight )      // X increases when going right
-            right = currentRight;
-    }
+    int right = alignMap.begin()->second.GetRight();
 
     // Move the selected items
-    for( auto i : selection )
+    for( auto& i : alignMap )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
-
-        int difference = right - item->GetBoundingBox().GetRight();
-
-        item->Move( wxPoint( difference, 0 ) );
+        int difference = right - i.second.GetRight();
+        i.first->Move( wxPoint( difference, 0 ) );
     }
 
     commit.Push( _( "Align to right" ) );
 
     return 0;
 }
-
 
 static bool compareX( const BOARD_ITEM* aA, const BOARD_ITEM* aB )
 {
