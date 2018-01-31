@@ -77,7 +77,7 @@ set( GERBVIEW_EXTRA_SRCS
     ../common/base_screen.cpp
     ../common/base_units.cpp
     ../common/eda_text.cpp
-    ../common/class_layer_box_selector.cpp
+    ../common/layer_box_selector.cpp
     ../common/lset.cpp
     ../common/settings.cpp
     ../pcbnew/layer_widget.cpp

@@ -34,7 +34,7 @@
 #include <boost/bind.hpp>
 #include <utility>
 #include <make_unique.h>
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 
 #include <wx/stattext.h>
 

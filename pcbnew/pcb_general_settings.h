@@ -24,7 +24,7 @@
 #ifndef __PCBNEW_GENERAL_SETTINGS_H
 #define __PCBNEW_GENERAL_SETTINGS_H
 
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 
 class wxConfigBase;
 class wxString;

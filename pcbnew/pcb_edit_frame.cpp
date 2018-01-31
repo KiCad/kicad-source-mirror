@@ -22,7 +22,7 @@
 
 /**
  * @file pcb_edit_frame.cpp
- * @brief PCB editor main window implementation.
+ * @brief PCB editor main frame implementation.
  */
 
 #include <fctsys.h>
@@ -44,7 +44,7 @@
 #include <drc.h>
 #include <layer_widget.h>
 #include <dialog_design_rules.h>
-#include <class_pcb_layer_widget.h>
+#include <pcb_layer_widget.h>
 #include <hotkeys.h>
 #include <config_params.h>
 #include <footprint_edit_frame.h>

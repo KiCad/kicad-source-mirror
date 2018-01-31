@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>

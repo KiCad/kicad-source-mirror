@@ -43,7 +43,7 @@
 #include <vector>
 #include <wx/wx.h>
 #include <dialog_pcb_text_properties_base.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <board_commit.h>
 
 

@@ -30,7 +30,7 @@
 #include <dialog_dxf_import.h>
 #include <kiface_i.h>
 #include <convert_to_biu.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 
 #include <class_board.h>

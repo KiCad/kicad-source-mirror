@@ -38,7 +38,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <netinfo.h>
 #include <class_pad.h>
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 #include <class_board_design_settings.h>
 #include <title_block.h>
 #include <zone_settings.h>

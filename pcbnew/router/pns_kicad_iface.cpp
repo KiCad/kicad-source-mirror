@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <class_undoredo_container.h>
+#include <undo_redo_container.h>
 #include <class_board.h>
 #include <class_board_connected_item.h>
 #include <class_module.h>

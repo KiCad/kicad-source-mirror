@@ -27,7 +27,7 @@
 
 #include "pcb_base_edit_frame.h"
 #include "config_params.h"
-#include "class_undoredo_container.h"
+#include "undo_redo_container.h"
 #include "zones.h"
 
 

@@ -33,7 +33,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <confirm.h>
-#include <class_undoredo_container.h>
+#include <undo_redo_container.h>
 
 #include <class_board.h>
 #include <class_zone.h>

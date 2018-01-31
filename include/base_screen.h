@@ -33,7 +33,7 @@
 
 #include <draw_frame.h>
 #include <base_struct.h>
-#include <class_undoredo_container.h>
+#include <undo_redo_container.h>
 #include <block_commande.h>
 #include <common.h>
 #include <id.h>

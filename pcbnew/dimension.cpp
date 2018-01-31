@@ -46,7 +46,7 @@
 
 #include <pcbnew.h>
 #include <dialog_dimension_editor_base.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 
 /* Local functions */
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,

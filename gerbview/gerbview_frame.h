@@ -37,7 +37,7 @@
 #include <gbr_screen.h>
 #include <page_info.h>
 #include <gbr_display_options.h>
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 
 extern COLORS_DESIGN_SETTINGS g_ColorsSettings;
 

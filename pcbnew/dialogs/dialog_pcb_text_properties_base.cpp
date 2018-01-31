@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "class_pcb_layer_box_selector.h"
+#include "pcb_layer_box_selector.h"
 #include "widgets/text_ctrl_eval.h"
 
 #include "dialog_pcb_text_properties_base.h"

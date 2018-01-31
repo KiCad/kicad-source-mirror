@@ -24,9 +24,10 @@
  */
 
 
-/******************************************************/
-/* class_pcb_layer_widget.cpp - Pcbnew layers manager */
-/******************************************************/
+/**
+ * @file pcb_layer_widget.cpp
+ * @brief  Pcbnew specialization of LAYER_WIDGET layers manager
+ */
 
 #include <fctsys.h>
 #include <pgm_base.h>
@@ -43,7 +44,7 @@
 #include <menus_helpers.h>
 
 #include <class_board.h>
-#include <class_pcb_layer_widget.h>
+#include <pcb_layer_widget.h>
 
 #include <pcbnew.h>
 #include <collectors.h>

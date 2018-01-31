@@ -5,7 +5,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "class_pcb_layer_box_selector.h"
+#include "pcb_layer_box_selector.h"
 #include "widgets/text_ctrl_eval.h"
 
 #include "dialog_edit_module_text_base.h"

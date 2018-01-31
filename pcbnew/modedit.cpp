@@ -39,7 +39,7 @@
 #include <kicad_device_context.h>
 #include <macros.h>
 #include <invoke_pcb_dialog.h>
-#include <class_pcb_layer_widget.h>
+#include <pcb_layer_widget.h>
 #include <board_commit.h>
 
 #include <class_board.h>

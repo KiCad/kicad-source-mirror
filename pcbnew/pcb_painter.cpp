@@ -30,7 +30,7 @@
 #include <class_drawsegment.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_pcb_target.h>

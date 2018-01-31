@@ -33,7 +33,7 @@
 
 
 #include <base_struct.h>
-#include <class_undoredo_container.h>
+#include <undo_redo_container.h>
 #include <gr_basic.h>
 #include <eda_rect.h>
 

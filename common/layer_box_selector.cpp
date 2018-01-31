@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <common.h>
 #include <layers_id_colors_and_visibility.h>
 #include <bitmaps.h>
 
@@ -30,8 +29,7 @@
 #include <wx/ownerdrw.h>
 #include <wx/menuitem.h>
 
-#include <class_layer_box_selector.h>
-
+#include <layer_box_selector.h>
 
 LAYER_SELECTOR::LAYER_SELECTOR()
 {
@@ -73,8 +71,10 @@ void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
 }
 
+
 /* class to display a layer list in a wxBitmapComboBox.
  */
+
 LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                                         const wxPoint& pos, const wxSize& size,
                                         int n, const wxString choices[] ) :

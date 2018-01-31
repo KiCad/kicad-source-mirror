@@ -31,7 +31,7 @@
 #include <ratsnest_data.h>
 #include <connectivity_data.h>
 
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>

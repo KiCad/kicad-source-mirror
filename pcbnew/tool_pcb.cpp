@@ -33,7 +33,6 @@
 #include <kiface_i.h>
 #include <help_common_strings.h>
 #include <dialog_helpers.h>
-#include <class_layer_box_selector.h>
 #include <pcb_edit_frame.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -44,7 +43,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 
 #include <wx/wupdlock.h>
 #include <memory>

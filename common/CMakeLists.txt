@@ -234,9 +234,7 @@ set( COMMON_SRCS
     bitmap_base.cpp
     block_commande.cpp
     build_version.cpp
-    class_colors_design_settings.cpp
-    class_layer_box_selector.cpp
-    class_undoredo_container.cpp
+    colors_design_settings.cpp
     colors.cpp
     commit.cpp
     common.cpp
@@ -276,6 +274,7 @@ set( COMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     kiway_player.cpp
+    layer_box_selector.cpp
     lib_id.cpp
     lib_table_base.cpp
     lib_table_keywords.cpp
@@ -297,6 +296,7 @@ set( COMMON_SRCS
     settings.cpp
     systemdirsappend.cpp
     trigo.cpp
+    undo_redo_container.cpp
     utf8.cpp
     validators.cpp
     wildcards_and_files_ext.cpp
@@ -386,7 +386,6 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_board_item.cpp
     ../pcbnew/class_dimension.cpp
     ../pcbnew/class_drawsegment.cpp
-    ../pcbnew/class_drc_item.cpp
     ../pcbnew/class_edge_mod.cpp
     ../pcbnew/class_marker_pcb.cpp
     ../pcbnew/class_module.cpp
@@ -403,6 +402,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/connectivity_algo.cpp
     ../pcbnew/connectivity_data.cpp
     ../pcbnew/convert_drawsegment_list_to_polygon.cpp
+    ../pcbnew/drc_item.cpp
     ../pcbnew/eagle_plugin.cpp
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/io_mgr.cpp

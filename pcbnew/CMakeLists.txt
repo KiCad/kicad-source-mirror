@@ -209,9 +209,6 @@ set( PCBNEW_CLASS_SRCS
     block_module_editor.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
-    class_pcb_layer_box_selector.cpp
-    class_pcb_layer_widget.cpp
-    clean.cpp
     connect.cpp
     controle.cpp
     cross-probing.cpp
@@ -262,6 +259,8 @@ set( PCBNEW_CLASS_SRCS
     onrightclick.cpp
     pad_edition_functions.cpp
     pcb_base_edit_frame.cpp
+    pcb_layer_box_selector.cpp
+    pcb_layer_widget.cpp
 #    pcb_draw_panel_gal.cpp
 #    pcb_view.cpp
     pcb_edit_frame.cpp
@@ -285,6 +284,7 @@ set( PCBNEW_CLASS_SRCS
     toolbars_update_user_interface.cpp
     tr_modif.cpp
     tracepcb.cpp
+    tracks_cleaner.cpp
     undo_redo.cpp
     zone_filler.cpp
     zones_by_polygon.cpp

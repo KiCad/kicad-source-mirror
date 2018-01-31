@@ -53,7 +53,7 @@
 #include <footprint_edit_frame.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <class_pcb_layer_widget.h>
+#include <pcb_layer_widget.h>
 #include <invoke_pcb_dialog.h>
 
 #include <tool/tool_manager.h>

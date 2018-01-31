@@ -49,7 +49,7 @@
 #include <class_zone.h>
 #include <class_pcb_text.h>
 #include <modview_frame.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
 #include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>

@@ -48,7 +48,7 @@
 #include <class_text_mod.h>
 #include <class_board.h>
 
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <dialog_edit_module_text.h>
 
 

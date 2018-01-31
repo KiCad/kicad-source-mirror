@@ -52,7 +52,7 @@
 #include <class_drawsegment.h>
 
 #include <dialog_graphic_item_properties_base.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <html_messagebox.h>
 #include <widgets/text_ctrl_eval.h>
 

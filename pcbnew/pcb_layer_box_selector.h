@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CLASS_PCB_PCB_LAYER_BOX_SELECTOR_H
-#define CLASS_PCB_PCB_LAYER_BOX_SELECTOR_H 1
+#ifndef PCB_LAYER_BOX_SELECTOR_H
+#define PCB_LAYER_BOX_SELECTOR_H
 
-#include <class_layer_box_selector.h>
+#include <layer_box_selector.h>
 
 class PCB_BASE_FRAME;
 
@@ -102,4 +102,4 @@ private:
     LSET getEnabledLayers() const;
 };
 
-#endif // CLASS_PCB_PCB_LAYER_BOX_SELECTOR_H
+#endif // PCB_LAYER_BOX_SELECTOR_H

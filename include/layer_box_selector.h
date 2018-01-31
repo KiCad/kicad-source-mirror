@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CLASS_LAYER_BOX_SELECTOR_H
-#define CLASS_LAYER_BOX_SELECTOR_H 1
+#ifndef LAYER_BOX_SELECTOR_H
+#define LAYER_BOX_SELECTOR_H
 
 #include <wx/bmpcbox.h>
 #include <gal/color4d.h>
@@ -104,4 +104,4 @@ public:
     void ResyncBitmapOnly();
 };
 
-#endif // CLASS_LAYER_BOX_SELECTOR_H
+#endif // LAYER_BOX_SELECTOR_H

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 2018 jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,8 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
 #include <base_struct.h>
-#include <class_undoredo_container.h>
+#include <undo_redo_container.h>
 
 
 ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
@@ -100,8 +99,6 @@ void PICKED_ITEMS_LIST::ClearItemsList()
 
 void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 {
-    bool show_error_message = true;
-
     // Delete items is they are not flagged UR_NEW, or if this is a block operation
     while( GetCount() > 0 )
     {

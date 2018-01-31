@@ -23,7 +23,7 @@
  */
 
 #include <dialogs/dialog_track_via_properties.h>
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <tools/selection_tool.h>
 #include <class_track.h>
 #include <pcb_edit_frame.h>

@@ -23,13 +23,13 @@
  */
 
 /**
- * @file class_colors_design_settings.cpp
+ * @file colors_design_settings.cpp
  * @brief Handle colors used to draw all items or layers.
  */
 #include <fctsys.h>
 #include <macros.h>
 
-#include <class_colors_design_settings.h>
+#include <colors_design_settings.h>
 
 /* Class for handle list of color settings for designs
  * in Eeschema, Pcbnew and GerbView

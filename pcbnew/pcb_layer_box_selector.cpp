@@ -37,7 +37,7 @@
 #include <class_board.h>
 #include <hotkeys.h>
 
-#include <class_pcb_layer_box_selector.h>
+#include <pcb_layer_box_selector.h>
 
 // translate aLayer to its hotkey
 static int layer2hotkey_id( PCB_LAYER_ID aLayer )

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2018 KiCad Developers, see cAUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,11 @@
 
 
 /************************************************************/
-/* class_pcb_layer_widget.h : header for the layers manager */
+/* pcb_layer_widget.h : header for the layers manager */
 /************************************************************/
 
-#ifndef CLASS_PCB_LAYER_WIDGET_H_
-#define CLASS_PCB_LAYER_WIDGET_H_
+#ifndef PCB_LAYER_WIDGET_H
+#define PCB_LAYER_WIDGET_H
 
 #include <layer_widget.h>
 
@@ -177,4 +177,4 @@ protected:
     void installRightLayerClickHandler();
 };
 
-#endif  // CLASS_PCB_LAYER_WIDGET_H_
+#endif  // PCB_LAYER_WIDGET_H

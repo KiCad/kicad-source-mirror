@@ -32,7 +32,7 @@
 
 #include <sch_base_frame.h>
 #include <config_params.h>
-#include <class_undoredo_container.h>
+#include <undo_redo_container.h>
 #include <template_fieldnames.h>
 #include <block_commande.h>
 #include <sch_collectors.h>
