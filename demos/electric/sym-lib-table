@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name elec-unifil)(type Legacy)(uri ${KIPRJMOD}/elec-unifil.lib)(options "")(descr ""))
+)

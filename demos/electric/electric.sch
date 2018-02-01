@@ -1,8 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:elec-unifil
-LIBS:device
-LIBS:conn
+EESchema Schematic File Version 4
 LIBS:electric-cache
 EELAYER 26 0
 EELAYER END
@@ -24,17 +20,15 @@ Wire Notes Line
 	3850 2850 4700 2850
 Connection ~ 8250 2900
 Wire Wire Line
-	5250 2400 8350 2400
+	5250 2400 8250 2400
 Wire Wire Line
-	5250 2900 8350 2900
+	5250 2900 8250 2900
 Wire Wire Line
 	4450 2400 4850 2400
 Wire Wire Line
-	4450 1900 4850 1900
+	4450 1900 4550 1900
 Wire Wire Line
 	5250 1900 5700 1900
-Wire Notes Line
-	5500 550  5600 550 
 Wire Notes Line
 	5500 1650 5500 550 
 Wire Notes Line
@@ -51,7 +45,7 @@ Connection ~ 4550 1900
 Wire Wire Line
 	2600 800  2600 1900
 Wire Wire Line
-	2600 800  5700 800 
+	2600 800  5600 800 
 Wire Wire Line
 	4550 800  4550 1900
 Wire Wire Line
@@ -65,9 +59,9 @@ Wire Wire Line
 Wire Wire Line
 	3150 1950 4050 1950
 Wire Wire Line
-	3100 1900 4050 1900
+	3100 1900 3950 1900
 Wire Wire Line
-	3000 2450 3350 2450
+	3000 2450 3150 2450
 Wire Wire Line
 	3150 2450 3150 1950
 Wire Wire Line
@@ -119,11 +113,11 @@ Wire Wire Line
 Wire Wire Line
 	1700 2150 1750 2150
 Wire Wire Line
-	1700 3350 5700 3350
+	1700 3350 5600 3350
 Wire Wire Line
 	1700 3850 5400 3850
 Wire Wire Line
-	1700 4350 2350 4350
+	1700 4350 2250 4350
 Wire Wire Line
 	1700 4850 2050 4850
 Wire Wire Line
@@ -135,7 +129,7 @@ Wire Wire Line
 Wire Wire Line
 	850  3350 1200 3350
 $Comp
-L R_16A_30mA ER1
+L elec-unifil:R_16A_30mA ER1
 U 1 1 416242BF
 P 1450 2150
 F 0 "ER1" H 1400 2380 40  0000 C CNN
@@ -148,7 +142,7 @@ $EndComp
 Wire Wire Line
 	850  2750 1200 2750
 $Comp
-L C_3x2.5mm2 EC102
+L elec-unifil:C_3x2.5mm2 EC102
 U 1 1 41652EC2
 P 2950 6950
 F 0 "EC102" H 2780 7080 40  0000 C CNN
@@ -174,7 +168,7 @@ Connection ~ 2050 7300
 Connection ~ 2050 6950
 Connection ~ 2050 6600
 Wire Wire Line
-	2050 4850 2050 7550
+	2050 4850 2050 6600
 Wire Wire Line
 	2050 7550 2350 7550
 Wire Wire Line
@@ -194,7 +188,7 @@ Wire Notes Line
 Wire Notes Line
 	2150 4100 2150 6300
 Wire Wire Line
-	5400 6100 8350 6100
+	5400 6100 8250 6100
 Wire Wire Line
 	5400 3850 5400 6100
 Wire Notes Line
@@ -210,13 +204,13 @@ Wire Notes Line
 Wire Notes Line
 	8150 4200 11100 4200
 Wire Wire Line
-	8250 4450 8250 6100
+	8250 4450 8250 4800
 Wire Wire Line
 	8750 5100 8750 5400
 Wire Wire Line
 	9250 5100 8750 5100
 $Comp
-L P_10A EP4
+L elec-unifil:P_10A EP4
 U 1 1 41652537
 P 9450 5100
 F 0 "EP4" H 9600 5220 40  0000 C CNN
@@ -252,14 +246,8 @@ Wire Notes Line
 	8100 1700 8100 2200
 Wire Notes Line
 	8100 1650 8100 550 
-Wire Notes Line
-	8100 550  5550 550 
-Wire Notes Line
-	11100 500  8150 500 
-Wire Notes Line
-	11050 500  11050 500 
 $Comp
-L D_06A ED30
+L elec-unifil:D_06A ED30
 U 1 1 41642C2F
 P 8550 2900
 F 0 "ED30" H 8390 3020 40  0000 C CNN
@@ -270,7 +258,7 @@ F 3 "" H 8550 2900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x6mm2 EC27
+L elec-unifil:C_3x6mm2 EC27
 U 1 1 4164215E
 P 6300 3350
 F 0 "EC27" H 6130 3480 40  0000 C CNN
@@ -281,7 +269,7 @@ F 3 "" H 6300 3350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC101
+L elec-unifil:C_3x2.5mm2 EC101
 U 1 1 41642129
 P 2950 6600
 F 0 "EC101" H 2780 6730 40  0000 C CNN
@@ -292,7 +280,7 @@ F 3 "" H 2950 6600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC28
+L elec-unifil:C_3x2.5mm2 EC28
 U 1 1 4164211E
 P 2950 6100
 F 0 "EC28" H 2780 6230 40  0000 C CNN
@@ -303,7 +291,7 @@ F 3 "" H 2950 6100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC22
+L elec-unifil:C_3x2.5mm2 EC22
 U 1 1 4164211C
 P 2950 5750
 F 0 "EC22" H 2780 5880 40  0000 C CNN
@@ -314,7 +302,7 @@ F 3 "" H 2950 5750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC37
+L elec-unifil:C_3x2.5mm2 EC37
 U 1 1 41642119
 P 2950 5400
 F 0 "EC37" H 2780 5530 40  0000 C CNN
@@ -325,7 +313,7 @@ F 3 "" H 2950 5400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC33
+L elec-unifil:C_3x2.5mm2 EC33
 U 1 1 41642116
 P 2950 5050
 F 0 "EC33" H 2780 5180 40  0000 C CNN
@@ -336,7 +324,7 @@ F 3 "" H 2950 5050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC21
+L elec-unifil:C_3x2.5mm2 EC21
 U 1 1 41642114
 P 2950 4700
 F 0 "EC21" H 2780 4830 40  0000 C CNN
@@ -347,7 +335,7 @@ F 3 "" H 2950 4700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC20
+L elec-unifil:C_3x2.5mm2 EC20
 U 1 1 41642111
 P 2950 4350
 F 0 "EC20" H 2780 4480 40  0000 C CNN
@@ -358,7 +346,7 @@ F 3 "" H 2950 4350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC32
+L elec-unifil:C_3x2.5mm2 EC32
 U 1 1 41642105
 P 6300 5800
 F 0 "EC32" H 6130 5930 40  0000 C CNN
@@ -369,7 +357,7 @@ F 3 "" H 6300 5800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC29
+L elec-unifil:C_3x2.5mm2 EC29
 U 1 1 41642102
 P 6300 5450
 F 0 "EC29" H 6130 5580 40  0000 C CNN
@@ -380,7 +368,7 @@ F 3 "" H 6300 5450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC30
+L elec-unifil:C_3x2.5mm2 EC30
 U 1 1 416420FE
 P 6300 5100
 F 0 "EC30" H 6130 5230 40  0000 C CNN
@@ -391,7 +379,7 @@ F 3 "" H 6300 5100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC23
+L elec-unifil:C_3x2.5mm2 EC23
 U 1 1 416420FB
 P 6300 4750
 F 0 "EC23" H 6130 4880 40  0000 C CNN
@@ -402,7 +390,7 @@ F 3 "" H 6300 4750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC26
+L elec-unifil:C_3x2.5mm2 EC26
 U 1 1 416420F8
 P 6300 4400
 F 0 "EC26" H 6130 4530 40  0000 C CNN
@@ -413,7 +401,7 @@ F 3 "" H 6300 4400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC25
+L elec-unifil:C_3x2.5mm2 EC25
 U 1 1 416420F5
 P 6300 4050
 F 0 "EC25" H 6130 4180 40  0000 C CNN
@@ -424,7 +412,7 @@ F 3 "" H 6300 4050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC24
+L elec-unifil:C_3x2.5mm2 EC24
 U 1 1 416420F1
 P 6300 3700
 F 0 "EC24" H 6130 3830 40  0000 C CNN
@@ -435,7 +423,7 @@ F 3 "" H 6300 3700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC39
+L elec-unifil:C_3x2.5mm2 EC39
 U 1 1 416420E1
 P 8950 6100
 F 0 "EC39" H 8780 6230 40  0000 C CNN
@@ -446,7 +434,7 @@ F 3 "" H 8950 6100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC38
+L elec-unifil:C_3x2.5mm2 EC38
 U 1 1 416420DF
 P 8950 5750
 F 0 "EC38" H 8780 5880 40  0000 C CNN
@@ -457,7 +445,7 @@ F 3 "" H 8950 5750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC35
+L elec-unifil:C_3x2.5mm2 EC35
 U 1 1 416420DC
 P 8950 5400
 F 0 "EC35" H 8900 5560 40  0000 C CNN
@@ -468,7 +456,7 @@ F 3 "" H 8950 5400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC36
+L elec-unifil:C_3x2.5mm2 EC36
 U 1 1 416420D9
 P 8950 4800
 F 0 "EC36" H 8780 4930 40  0000 C CNN
@@ -479,7 +467,7 @@ F 3 "" H 8950 4800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x2.5mm2 EC34
+L elec-unifil:C_3x2.5mm2 EC34
 U 1 1 416420D1
 P 8950 4450
 F 0 "EC34" H 8780 4580 40  0000 C CNN
@@ -490,7 +478,7 @@ F 3 "" H 8950 4450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC44
+L elec-unifil:C_3x1.5mm2 EC44
 U 1 1 416420B8
 P 8950 3950
 F 0 "EC44" H 8780 4080 40  0000 C CNN
@@ -501,7 +489,7 @@ F 3 "" H 8950 3950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC19
+L elec-unifil:C_3x1.5mm2 EC19
 U 1 1 416420B5
 P 8950 2900
 F 0 "EC19" H 8780 3030 40  0000 C CNN
@@ -512,7 +500,7 @@ F 3 "" H 8950 2900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC43
+L elec-unifil:C_3x1.5mm2 EC43
 U 1 1 416420B2
 P 8950 3600
 F 0 "EC43" H 8780 3730 40  0000 C CNN
@@ -523,7 +511,7 @@ F 3 "" H 8950 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC42
+L elec-unifil:C_3x1.5mm2 EC42
 U 1 1 416420A7
 P 8950 2400
 F 0 "EC42" H 8780 2530 40  0000 C CNN
@@ -534,7 +522,7 @@ F 3 "" H 8950 2400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC16
+L elec-unifil:C_3x1.5mm2 EC16
 U 1 1 416420A1
 P 8950 2050
 F 0 "EC16" H 8780 2180 40  0000 C CNN
@@ -545,7 +533,7 @@ F 3 "" H 8950 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC15
+L elec-unifil:C_3x1.5mm2 EC15
 U 1 1 41642099
 P 8950 1700
 F 0 "EC15" H 8780 1830 40  0000 C CNN
@@ -556,7 +544,7 @@ F 3 "" H 8950 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC14
+L elec-unifil:C_3x1.5mm2 EC14
 U 1 1 41642094
 P 8950 1350
 F 0 "EC14" H 8780 1480 40  0000 C CNN
@@ -567,7 +555,7 @@ F 3 "" H 8950 1350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC13
+L elec-unifil:C_3x1.5mm2 EC13
 U 1 1 41642090
 P 8950 1000
 F 0 "EC13" H 8780 1130 40  0000 C CNN
@@ -578,7 +566,7 @@ F 3 "" H 8950 1000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC18
+L elec-unifil:C_3x1.5mm2 EC18
 U 1 1 41642083
 P 6300 1900
 F 0 "EC18" H 6130 2030 40  0000 C CNN
@@ -589,7 +577,7 @@ F 3 "" H 6300 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC31
+L elec-unifil:C_3x1.5mm2 EC31
 U 1 1 41642074
 P 6300 1500
 F 0 "EC31" H 6130 1630 40  0000 C CNN
@@ -600,7 +588,7 @@ F 3 "" H 6300 1500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC17
+L elec-unifil:C_3x1.5mm2 EC17
 U 1 1 4164206D
 P 6300 1150
 F 0 "EC17" H 6130 1280 40  0000 C CNN
@@ -611,7 +599,7 @@ F 3 "" H 6300 1150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L I_25A_LUM EI11
+L elec-unifil:I_25A_LUM EI11
 U 1 1 4163DF39
 P 9350 650
 F 0 "EI11" H 9190 770 40  0000 C CNN
@@ -686,7 +674,7 @@ EC31
 Text HLabel 6500 1150 2    60   Output ~ 0
 EC17
 $Comp
-L C_3x1.5mm2 EC41
+L elec-unifil:C_3x1.5mm2 EC41
 U 1 1 4163D7A2
 P 8950 3250
 F 0 "EC41" H 8780 3380 40  0000 C CNN
@@ -697,7 +685,7 @@ F 3 "" H 8950 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_3x1.5mm2 EC11
+L elec-unifil:C_3x1.5mm2 EC11
 U 1 1 4163D79F
 P 8950 650
 F 0 "EC11" H 8780 780 40  0000 C CNN
@@ -714,15 +702,15 @@ Wire Wire Line
 Wire Wire Line
 	8250 3950 8350 3950
 Wire Wire Line
-	8250 2900 8250 3950
+	8250 2900 8250 3250
 Wire Wire Line
 	8350 3250 8250 3250
 Wire Wire Line
-	8250 650  8250 2400
+	8250 650  8250 1000
 Text HLabel 6500 800  2    60   Output ~ 0
 EC12
 $Comp
-L C_3x1.5mm2 EC12
+L elec-unifil:C_3x1.5mm2 EC12
 U 1 1 4163D458
 P 6300 800
 F 0 "EC12" H 6150 900 40  0000 C CNN
@@ -761,9 +749,9 @@ Wire Wire Line
 Wire Wire Line
 	2250 6100 2350 6100
 Wire Wire Line
-	2250 4350 2250 6100
+	2250 4350 2250 4700
 $Comp
-L D_10A ED73
+L elec-unifil:D_10A ED73
 U 1 1 4162F22A
 P 2550 7550
 F 0 "ED73" H 2390 7670 40  0000 C CNN
@@ -774,7 +762,7 @@ F 3 "" H 2550 7550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED72
+L elec-unifil:D_10A ED72
 U 1 1 4162F1F7
 P 2550 7300
 F 0 "ED72" H 2390 7420 40  0000 C CNN
@@ -785,7 +773,7 @@ F 3 "" H 2550 7300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED71
+L elec-unifil:D_10A ED71
 U 1 1 4162F1F0
 P 2550 6950
 F 0 "ED71" H 2390 7070 40  0000 C CNN
@@ -796,7 +784,7 @@ F 3 "" H 2550 6950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED70
+L elec-unifil:D_10A ED70
 U 1 1 4162F1CA
 P 2550 6600
 F 0 "ED70" H 2390 6720 40  0000 C CNN
@@ -807,7 +795,7 @@ F 3 "" H 2550 6600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED55
+L elec-unifil:D_16A ED55
 U 1 1 4162F8B1
 P 2550 6100
 F 0 "ED55" H 2390 6220 40  0000 C CNN
@@ -818,7 +806,7 @@ F 3 "" H 2550 6100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED54
+L elec-unifil:D_16A ED54
 U 1 1 5831E95C
 P 2550 5750
 F 0 "ED54" H 2390 5870 40  0000 C CNN
@@ -829,7 +817,7 @@ F 3 "" H 2550 5750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED53
+L elec-unifil:D_16A ED53
 U 1 1 4162F862
 P 2550 5400
 F 0 "ED53" H 2390 5520 40  0000 C CNN
@@ -840,7 +828,7 @@ F 3 "" H 2550 5400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED52
+L elec-unifil:D_16A ED52
 U 1 1 4162F856
 P 2550 5050
 F 0 "ED52" H 2390 5170 40  0000 C CNN
@@ -851,7 +839,7 @@ F 3 "" H 2550 5050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED51
+L elec-unifil:D_16A ED51
 U 1 1 4162F84D
 P 2550 4700
 F 0 "ED51" H 2390 4820 40  0000 C CNN
@@ -862,7 +850,7 @@ F 3 "" H 2550 4700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED50
+L elec-unifil:D_16A ED50
 U 1 1 5831E958
 P 2550 4350
 F 0 "ED50" H 2390 4470 40  0000 C CNN
@@ -873,7 +861,7 @@ F 3 "" H 2550 4350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED64
+L elec-unifil:D_16A ED64
 U 1 1 4162F875
 P 8550 6100
 F 0 "ED64" H 8390 6220 40  0000 C CNN
@@ -884,7 +872,7 @@ F 3 "" H 8550 6100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED63
+L elec-unifil:D_16A ED63
 U 1 1 5831E95B
 P 8550 5750
 F 0 "ED63" H 8390 5870 40  0000 C CNN
@@ -895,7 +883,7 @@ F 3 "" H 8550 5750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED62
+L elec-unifil:D_16A ED62
 U 1 1 5831E95A
 P 8550 5400
 F 0 "ED62" H 8390 5520 40  0000 C CNN
@@ -906,7 +894,7 @@ F 3 "" H 8550 5400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED61
+L elec-unifil:D_16A ED61
 U 1 1 5831E959
 P 8550 4800
 F 0 "ED61" H 8390 4920 40  0000 C CNN
@@ -917,7 +905,7 @@ F 3 "" H 8550 4800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED60
+L elec-unifil:D_16A ED60
 U 1 1 4162F848
 P 8550 4450
 F 0 "ED60" H 8390 4570 40  0000 C CNN
@@ -949,9 +937,9 @@ Wire Wire Line
 Wire Wire Line
 	5600 5800 5700 5800
 Wire Wire Line
-	5600 3350 5600 5800
+	5600 3350 5600 3700
 $Comp
-L D_10A ED47
+L elec-unifil:D_10A ED47
 U 1 1 4162F76B
 P 5900 5800
 F 0 "ED47" H 5740 5920 40  0000 C CNN
@@ -962,7 +950,7 @@ F 3 "" H 5900 5800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED46
+L elec-unifil:D_16A ED46
 U 1 1 4162F75D
 P 5900 5450
 F 0 "ED46" H 5740 5570 40  0000 C CNN
@@ -973,7 +961,7 @@ F 3 "" H 5900 5450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED45
+L elec-unifil:D_16A ED45
 U 1 1 4162F74E
 P 5900 5100
 F 0 "ED45" H 5740 5220 40  0000 C CNN
@@ -984,7 +972,7 @@ F 3 "" H 5900 5100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED44
+L elec-unifil:D_10A ED44
 U 1 1 4162F745
 P 5900 4750
 F 0 "ED44" H 5740 4870 40  0000 C CNN
@@ -995,7 +983,7 @@ F 3 "" H 5900 4750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED43
+L elec-unifil:D_10A ED43
 U 1 1 4162F739
 P 5900 4400
 F 0 "ED43" H 5740 4520 40  0000 C CNN
@@ -1006,7 +994,7 @@ F 3 "" H 5900 4400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED42
+L elec-unifil:D_16A ED42
 U 1 1 4162F729
 P 5900 4050
 F 0 "ED42" H 5740 4170 40  0000 C CNN
@@ -1017,7 +1005,7 @@ F 3 "" H 5900 4050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_16A ED41
+L elec-unifil:D_16A ED41
 U 1 1 4162F71F
 P 5900 3700
 F 0 "ED41" H 5740 3820 40  0000 C CNN
@@ -1028,7 +1016,7 @@ F 3 "" H 5900 3700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_32A ED40
+L elec-unifil:D_32A ED40
 U 1 1 4162F6F8
 P 5900 3350
 F 0 "ED40" H 5740 3470 40  0000 C CNN
@@ -1039,7 +1027,7 @@ F 3 "" H 5900 3350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED32
+L elec-unifil:D_06A ED32
 U 1 1 5831E955
 P 8550 3600
 F 0 "ED32" H 8390 3720 40  0000 C CNN
@@ -1050,7 +1038,7 @@ F 3 "" H 8550 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED33
+L elec-unifil:D_06A ED33
 U 1 1 5831E954
 P 8550 3950
 F 0 "ED33" H 8390 4070 40  0000 C CNN
@@ -1080,11 +1068,11 @@ Wire Wire Line
 Wire Wire Line
 	5600 1150 5700 1150
 Wire Wire Line
-	5600 800  5600 1500
+	5600 800  5600 1150
 Wire Wire Line
 	5600 1500 5700 1500
 $Comp
-L D_06A ED15
+L elec-unifil:D_06A ED15
 U 1 1 4162F301
 P 8550 2050
 F 0 "ED15" H 8390 2170 40  0000 C CNN
@@ -1095,7 +1083,7 @@ F 3 "" H 8550 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED16
+L elec-unifil:D_06A ED16
 U 1 1 4162F2F6
 P 8550 2400
 F 0 "ED16" H 8390 2520 40  0000 C CNN
@@ -1106,7 +1094,7 @@ F 3 "" H 8550 2400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED31
+L elec-unifil:D_06A ED31
 U 1 1 5831E953
 P 8550 3250
 F 0 "ED31" H 8390 3370 40  0000 C CNN
@@ -1117,7 +1105,7 @@ F 3 "" H 8550 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED11
+L elec-unifil:D_06A ED11
 U 1 1 5831E957
 P 8550 650
 F 0 "ED11" H 8390 770 40  0000 C CNN
@@ -1128,7 +1116,7 @@ F 3 "" H 8550 650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED12
+L elec-unifil:D_06A ED12
 U 1 1 5831E956
 P 8550 1000
 F 0 "ED12" H 8390 1120 40  0000 C CNN
@@ -1139,7 +1127,7 @@ F 3 "couloir1, wc1, sdb, entrée" H 10180 980 40  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED13
+L elec-unifil:D_06A ED13
 U 1 1 4162F2EE
 P 8550 1350
 F 0 "ED13" H 8390 1470 40  0000 C CNN
@@ -1150,7 +1138,7 @@ F 3 "sam, escalier, bureau" H 10100 1320 40  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_06A ED14
+L elec-unifil:D_06A ED14
 U 1 1 4162F2D8
 P 8550 1700
 F 0 "ED14" H 8390 1820 40  0000 C CNN
@@ -1161,7 +1149,7 @@ F 3 "wc2, douche, lingerie" H 10180 1680 40  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED25
+L elec-unifil:D_10A ED25
 U 1 1 5831E952
 P 5900 1900
 F 0 "ED25" H 5740 2020 40  0000 C CNN
@@ -1172,7 +1160,7 @@ F 3 "" H 5900 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED22
+L elec-unifil:D_10A ED22
 U 1 1 5831E951
 P 5900 1500
 F 0 "ED22" H 5740 1620 40  0000 C CNN
@@ -1183,7 +1171,7 @@ F 3 "" H 5900 1500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED21
+L elec-unifil:D_10A ED21
 U 1 1 5831E950
 P 5900 1150
 F 0 "ED21" H 5750 1250 40  0000 C CNN
@@ -1194,7 +1182,7 @@ F 3 "" H 5900 1150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_10A ED20
+L elec-unifil:D_10A ED20
 U 1 1 5831E94F
 P 5900 800
 F 0 "ED20" H 5740 920 40  0000 C CNN
@@ -1209,9 +1197,9 @@ Connection ~ 850  4350
 Connection ~ 850  3850
 Connection ~ 850  3350
 Wire Wire Line
-	850  1350 850  4850
+	850  1350 850  1500
 $Comp
-L O_600VA EO2
+L elec-unifil:O_600VA EO2
 U 1 1 4162E0E4
 P 5050 2900
 F 0 "EO2" H 5300 3000 40  0000 C CNN
@@ -1222,7 +1210,7 @@ F 3 "" H 5050 2900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L O_900VA EO1
+L elec-unifil:O_900VA EO1
 U 1 1 4162E0D5
 P 5050 2400
 F 0 "EO1" H 5300 2300 40  0000 C CNN
@@ -1234,7 +1222,7 @@ F 4 "rallongée" H 5050 2100 30  0000 C CNN "Champ4"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Q_2A_12O_40KV EQ4
+L elec-unifil:Q_2A_12O_40KV EQ4
 U 1 1 4162DE98
 P 5050 1350
 F 0 "EQ4" H 4850 700 40  0000 C CNN
@@ -1244,9 +1232,8 @@ F 3 "isolation HT " H 5150 600 30  0000 C CNN
 	1    5050 1350
 	1    0    0    -1  
 $EndComp
-Connection ~ 4350 1900
 $Comp
-L V_F50Hz EV2
+L elec-unifil:V_F50Hz EV2
 U 1 1 4162DD75
 P 2400 1400
 F 0 "EV2" H 2400 1550 40  0000 C CNN
@@ -1257,7 +1244,7 @@ F 3 "" H 2400 1400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L V_U400V EV3
+L elec-unifil:V_U400V EV3
 U 1 1 4162DD5E
 P 2400 1900
 F 0 "EV3" H 2400 2050 40  0000 C CNN
@@ -1268,7 +1255,7 @@ F 3 "" H 2400 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Y_ELC EY2
+L elec-unifil:Y_ELC EY2
 U 1 1 4162DC78
 P 3550 2750
 F 0 "EY2" H 3650 2800 40  0000 C CNN
@@ -1279,7 +1266,7 @@ F 3 "" H 3550 2750 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L A_1KVA EA1
+L elec-unifil:A_1KVA EA1
 U 1 1 4162DC5B
 P 3550 2450
 F 0 "EA1" H 3550 2650 40  0000 C CNN
@@ -1290,7 +1277,7 @@ F 3 "d'ondes" H 3550 2750 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Q_25A_2F2O EQ2
+L elec-unifil:Q_25A_2F2O EQ2
 U 1 1 4162DB86
 P 4250 1900
 F 0 "EQ2" H 4090 2020 40  0000 C CNN
@@ -1301,7 +1288,7 @@ F 3 "" H 4250 1900 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Q_25A_2F2O EQ3
+L elec-unifil:Q_25A_2F2O EQ3
 U 1 1 4162DB5E
 P 4250 2400
 F 0 "EQ3" H 4090 2520 40  0000 C CNN
@@ -1312,7 +1299,7 @@ F 3 "" H 4250 2400 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Q_25A_2F2O EQ1b101
+L elec-unifil:Q_25A_2F2O EQ1b101
 U 1 1 416245A7
 P 2800 2400
 F 0 "EQ1b101" H 2700 2550 40  0000 C CNN
@@ -1323,7 +1310,7 @@ F 3 "" H 2800 2400 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L V_A10A EV1
+L elec-unifil:V_A10A EV1
 U 1 1 4162458B
 P 2400 2400
 F 0 "EV1" H 2400 2550 40  0000 C CNN
@@ -1334,7 +1321,7 @@ F 3 "" H 2400 2400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Q_25A_2F2O EQ1a101
+L elec-unifil:Q_25A_2F2O EQ1a101
 U 1 1 41624555
 P 2000 2400
 F 0 "EQ1a101" H 1900 2550 40  0000 C CNN
@@ -1345,7 +1332,7 @@ F 3 "" H 2000 2400 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L J_40A_30mA EJ4
+L elec-unifil:J_40A_30mA EJ4
 U 1 1 4162432C
 P 1450 4850
 F 0 "EJ4" H 1240 5030 40  0000 C CNN
@@ -1356,7 +1343,7 @@ F 3 "" H 1450 4850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L J_40A_30mA EJ3
+L elec-unifil:J_40A_30mA EJ3
 U 1 1 41624321
 P 1450 4350
 F 0 "EJ3" H 1240 4530 40  0000 C CNN
@@ -1367,7 +1354,7 @@ F 3 "" H 1450 4350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L J_40A_30mA EJ2
+L elec-unifil:J_40A_30mA EJ2
 U 1 1 41624310
 P 1450 3850
 F 0 "EJ2" H 1240 4030 40  0000 C CNN
@@ -1378,7 +1365,7 @@ F 3 "" H 1450 3850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L J_40A_30mA EJ1
+L elec-unifil:J_40A_30mA EJ1
 U 1 1 41624306
 P 1450 3350
 F 0 "EJ1" H 1240 3530 40  0000 C CNN
@@ -1389,7 +1376,7 @@ F 3 "" H 1450 3350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R_16A_30mA ER2
+L elec-unifil:R_16A_30mA ER2
 U 1 1 416242F0
 P 1450 2750
 F 0 "ER2" H 1240 2930 40  0000 C CNN
@@ -1400,7 +1387,7 @@ F 3 "" H 1450 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L G_Th_3KVA EG1
+L elec-unifil:G_Th_3KVA EG1
 U 1 1 4162428A
 P 1000 2150
 F 0 "EG1" H 1050 2300 40  0000 C CNN
@@ -1413,7 +1400,7 @@ F 5 "diesel" H 640 2080 30  0000 C CNN "Champ5"
 	1    0    0    -1  
 $EndComp
 $Comp
-L S_63A ES1
+L elec-unifil:S_63A ES1
 U 1 1 416241E5
 P 850 1100
 F 0 "ES1" V 800 1350 40  0000 C CNN
@@ -1424,7 +1411,7 @@ F 3 "TGBT" V 600 1350 30  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Y_ELC EY1
+L elec-unifil:Y_ELC EY1
 U 1 1 41623FE0
 P 1800 1550
 F 0 "EY1" H 1900 1600 40  0000 C CNN
@@ -1437,7 +1424,7 @@ $EndComp
 Wire Wire Line
 	1350 1350 1350 1500
 $Comp
-L W_15KA EW1
+L elec-unifil:W_15KA EW1
 U 1 1 41618802
 P 1800 1150
 F 0 "EW1" H 1800 1300 40  0000 C CNN
@@ -1448,7 +1435,7 @@ F 3 "" H 1800 1150 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D_10A ED10
+L elec-unifil:D_10A ED10
 U 1 1 41618699
 P 1350 1150
 F 0 "ED10" H 1190 1270 40  0000 C CNN
@@ -1458,4 +1445,82 @@ F 3 "" H 1350 1150 60  0001 C CNN
 	1    1350 1150
 	0    -1   -1   0   
 $EndComp
+Wire Wire Line
+	8250 2900 8350 2900
+Wire Wire Line
+	3950 1900 4050 1900
+Wire Wire Line
+	3150 2450 3350 2450
+Wire Wire Line
+	4550 1900 4850 1900
+Wire Wire Line
+	2050 7300 2050 7550
+Wire Wire Line
+	2050 6950 2050 7300
+Wire Wire Line
+	2050 6600 2050 6950
+Wire Wire Line
+	8250 3600 8250 3950
+Wire Wire Line
+	8250 3250 8250 3600
+Wire Wire Line
+	850  2750 850  3350
+Wire Wire Line
+	8250 6100 8350 6100
+Wire Wire Line
+	8250 4800 8250 5400
+Wire Wire Line
+	8250 5400 8250 5750
+Wire Wire Line
+	8250 5750 8250 6100
+Wire Wire Line
+	2250 4350 2350 4350
+Wire Wire Line
+	2250 5750 2250 6100
+Wire Wire Line
+	2250 5400 2250 5750
+Wire Wire Line
+	2250 5050 2250 5400
+Wire Wire Line
+	2250 4700 2250 5050
+Wire Wire Line
+	5600 5450 5600 5800
+Wire Wire Line
+	5600 5100 5600 5450
+Wire Wire Line
+	5600 4750 5600 5100
+Wire Wire Line
+	5600 4400 5600 4750
+Wire Wire Line
+	5600 4050 5600 4400
+Wire Wire Line
+	5600 3700 5600 4050
+Wire Wire Line
+	5600 3350 5700 3350
+Wire Wire Line
+	5600 800  5700 800 
+Wire Wire Line
+	5600 1150 5600 1500
+Wire Wire Line
+	8250 2400 8350 2400
+Wire Wire Line
+	8250 2050 8250 2400
+Wire Wire Line
+	8250 1700 8250 2050
+Wire Wire Line
+	8250 1350 8250 1700
+Wire Wire Line
+	8250 1000 8250 1350
+Wire Wire Line
+	850  1500 850  2750
+Wire Wire Line
+	850  4350 850  4850
+Wire Wire Line
+	850  3850 850  4350
+Wire Wire Line
+	850  3350 850  3850
+Wire Notes Line
+	5500 550  8100 550 
+Wire Notes Line
+	8150 500  11100 500 
 $EndSCHEMATC

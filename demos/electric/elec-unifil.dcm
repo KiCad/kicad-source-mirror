@@ -1,0 +1,183 @@
+EESchema-DOCLIB  Version 2.0  Date: 24/11/2004-17:23:54
+#
+$CMP A_1KVA
+D Absorbeur d'ondes 1KVA
+K Parafoudre
+$ENDCMP
+#
+$CMP B_8
+D Boite de connexion
+K Boite
+$ENDCMP
+#
+$CMP C_3x1.5mm2
+D Cable 3 conducteurs 1,5 mm2
+K Cable
+$ENDCMP
+#
+$CMP C_3x2.5mm2
+D Cable 3 conducteurs 2,5 mm2
+K Cable
+$ENDCMP
+#
+$CMP C_3x6mm2
+D Cable 3 conducteurs 6 mm2
+K Cable
+$ENDCMP
+#
+$CMP D_06A
+D Disjoncteur thermique 6A
+K Disjoncteur
+$ENDCMP
+#
+$CMP D_10A
+D Disjoncteur thermique 10A
+K Disjoncteur
+$ENDCMP
+#
+$CMP D_16A
+D Disjoncteur thermique 16A
+K Disjoncteur
+$ENDCMP
+#
+$CMP D_32A
+D Disjoncteur thermique 32A
+K Disjoncteur
+$ENDCMP
+#
+$CMP E_09W
+D Eclairage 9W (basse consommation)
+K Eclairage
+$ENDCMP
+#
+$CMP F_10A
+D Fusible 10A
+K Fusible
+$ENDCMP
+#
+$CMP G_Th_3KVA
+D Groupe electrogene diesel 3KVA
+K Groupe
+$ENDCMP
+#
+$CMP I_25A_LUM
+D Interrupteur 6A
+K Interrupteur
+$ENDCMP
+#
+$CMP I_6A
+D Interrupteur 6A
+K Interrupteur
+$ENDCMP
+#
+$CMP J_40A_30mA
+D Interrupteur 40A differentiel 30mA avec signalisation
+K Interrupteur
+$ENDCMP
+#
+$CMP M_1.5KVA
+D Moteur electrique 1,5 KVA
+K Moteur
+$ENDCMP
+#
+$CMP O_600VA
+D Onduleur 600VA batterie 24V 48A (1100W)
+K Onduleur
+$ENDCMP
+#
+$CMP O_900VA
+D Onduleur 900VA batterie 24V 48A (1100W)
+K Onduleur
+$ENDCMP
+#
+$CMP P_10A
+D Prise 10A
+K Prise
+$ENDCMP
+#
+$CMP P_10A_LUM
+D Prise 10A avec temoin
+K Prise
+$ENDCMP
+#
+$CMP P_10A_ROU
+D Prise 10A rouge (circuit protege)
+K Prise
+$ENDCMP
+#
+$CMP P_16A
+D Prise 16A
+K Prise
+$ENDCMP
+#
+$CMP Q_25A_2F2O
+D Contacteur 25A 2 fermes et 2 ouverts avec signalisation
+K Contacteur
+$ENDCMP
+#
+$CMP Q_2A_12O_40KV
+D Contacteur 2A 12 ouverts a grand cartement 40000V
+K Contacteur
+$ENDCMP
+#
+$CMP R_16A_30mA
+D Disjoncteur 16A differentiel 30mA avec motorisation et signalisation
+K Disjoncteur
+$ENDCMP
+#
+$CMP R_45A_500mA
+D Disjoncteur 45A differentiel 500mA avec motorisation et signalisation
+K Disjoncteur
+$ENDCMP
+#
+$CMP S_63A
+D Sectionneur 63A avec signalisation
+K Sectionneur
+$ENDCMP
+#
+$CMP V_A10A
+D Amperemetre 10A
+K Mesure
+$ENDCMP
+#
+$CMP V_F50Hz
+D Frequencemetre 50Hz
+K Mesure
+$ENDCMP
+#
+$CMP V_U400V
+D Voltmetre 400V
+K Mesure
+$ENDCMP
+#
+$CMP W_15KA
+D Parafoudre 15 KA avec signalisation
+K Parafoudre
+$ENDCMP
+#
+$CMP W_40KA
+D Parafoudre 40KA avec signalisation
+K Parafoudre
+$ENDCMP
+#
+$CMP W_65KA
+D Parafoudre 65KA avec signalisation
+K Parafoudre
+$ENDCMP
+#
+$CMP X_Sati
+D Bloc de secours SATI
+K Secours
+$ENDCMP
+#
+$CMP Y_ELC
+D Terre electrique
+K Terre
+$ENDCMP
+#
+$CMP Y_RAD
+D Terre radio
+K Terre
+$ENDCMP
+#
+#End Doc Library

@@ -1,4 +1,4 @@
-update=02/08/2015 19:59:42
+update=01/02/2018 13:06:29
 last_client=kicad
 [general]
 version=1
@@ -7,8 +7,3 @@ BoardNm=electric.brd
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=power
-LibName2=elec-unifil
-LibName3=device
-LibName4=conn

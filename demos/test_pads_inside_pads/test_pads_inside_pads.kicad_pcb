@@ -1,9 +1,6 @@
-(kicad_pcb (version 4) (host pcbnew "(2015-04-25 BZR 5623)-product")
+(kicad_pcb (version 20171130) (host pcbnew "(2018-01-31 revision c758e72)-master")
 
   (general
-    (links 12)
-    (no_connects 0)
-    (area 79.121 35.179 111.052429 65.3542)
     (thickness 1.6002)
     (drawings 0)
     (tracks 4)
@@ -29,6 +26,11 @@
     (42 Eco1.User user)
     (43 Eco2.User user)
     (44 Edge.Cuts user)
+    (45 Margin user)
+    (46 B.CrtYd user)
+    (47 F.CrtYd user)
+    (48 B.Fab user)
+    (49 F.Fab user)
   )
 
   (setup
@@ -61,6 +63,9 @@
     (pcbplotparams
       (layerselection 0x00030_80000001)
       (usegerberextensions true)
+      (usegerberattributes false)
+      (usegerberadvancedattributes false)
+      (creategerberjobfile false)
       (excludeedgelayer true)
       (linewidth 0.150000)
       (plotframeref false)
@@ -70,7 +75,6 @@
       (hpglpennumber 1)
       (hpglpenspeed 20)
       (hpglpendiameter 15)
-      (hpglpenoverlay 0)
       (psnegative false)
       (psa4output false)
       (plotreference true)
