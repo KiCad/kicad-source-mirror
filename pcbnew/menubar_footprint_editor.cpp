@@ -25,8 +25,8 @@
  */
 
 /**
- * @file pcbnew/menubar_modedit.cpp
- * @brief (Re)Create the main menubar for the module editor
+ * @file pcbnew/menubar_footprint_editor.cpp
+ * @brief (Re)Create the main menubar for the footprint editor
  */
 
 

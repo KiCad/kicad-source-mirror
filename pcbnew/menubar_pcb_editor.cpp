@@ -25,7 +25,7 @@
  */
 
 /**
- * @file menubar_pcbframe.cpp
+ * @file menubar_pcb_editor.cpp
  * board editor menubars
  */
 

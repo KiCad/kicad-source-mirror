@@ -234,6 +234,7 @@ set( PCBNEW_CLASS_SRCS
     footprint_editor_onclick.cpp
     footprint_editor_options.cpp
     footprint_edit_frame.cpp
+    footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
     globaleditpad.cpp
     highlight.cpp
@@ -242,11 +243,10 @@ set( PCBNEW_CLASS_SRCS
     hotkeys_module_editor.cpp
     initpcb.cpp
     layer_widget.cpp
-    librairi.cpp
-    loadcmp.cpp
+    load_select_footprint.cpp
     magnetic_tracks_functions.cpp
-    menubar_modedit.cpp
-    menubar_pcbframe.cpp
+    menubar_footprint_editor.cpp
+    menubar_pcb_editor.cpp
     microwave.cpp
     minimun_spanning_tree.cpp
     move-drag_pads.cpp
