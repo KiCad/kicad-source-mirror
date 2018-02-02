@@ -207,34 +207,25 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
         sheet->RemovePin( (SCH_SHEET_PIN*) aItem );
         m_canvas->RefreshDrawingRect( sheet->GetBoundingBox() );
     }
+    else if( aItem->Type() == SCH_JUNCTION_T )
+    {
+        DeleteJunction( aItem, aAppend );
+    }
     else
     {
-        PICKED_ITEMS_LIST itemsList;
-        ITEM_PICKER picker( aItem, UR_DELETED );
-
         aItem->SetFlags( STRUCT_DELETED );
-        itemsList.PushItem( picker );
+        SaveCopyInUndoList( aItem, UR_DELETED, aAppend );
         screen->Remove( aItem );
 
-        if( aItem->IsConnectable() && aItem->Type() != SCH_JUNCTION_T )
+        std::vector< wxPoint > pts;
+        aItem->GetConnectionPoints( pts );
+        for( auto point : pts )
         {
-            std::vector< wxPoint > pts;
-            aItem->GetConnectionPoints( pts );
-            for( auto point : pts )
-            {
-                SCH_ITEM* junction;
-                if( !screen->IsJunctionNeeded( point )
-                        && ( junction = screen->GetItem( point, 0, SCH_JUNCTION_T ) ) )
-                {
-                    ITEM_PICKER picker_juction( junction, UR_DELETED );
-                    junction->SetFlags( STRUCT_DELETED );
-                    itemsList.PushItem( picker_juction );
-                    screen->Remove( junction );
-                }
-            }
+            SCH_ITEM* junction = screen->GetItem( point, 0, SCH_JUNCTION_T );
+            if( junction && !screen->IsJunctionNeeded( point ) )
+                DeleteJunction( junction, true );
         }
 
-        SaveCopyInUndoList( itemsList, UR_DELETED, aAppend );
         m_canvas->RefreshDrawingRect( aItem->GetBoundingBox() );
     }
 }

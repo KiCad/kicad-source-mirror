@@ -658,6 +658,71 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( bool aAppend )
 }
 
 
+void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
+{
+    SCH_SCREEN* screen = GetScreen();
+    PICKED_ITEMS_LIST itemList;
+
+    auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
+    {
+        aItem->SetFlags( STRUCT_DELETED );
+        itemList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
+        screen->Remove( aItem );
+    };
+
+    remove_item( aJunction );
+
+    for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+    {
+        SCH_LINE* firstLine = dynamic_cast<SCH_LINE*>( item );
+
+        if( !firstLine || !firstLine->IsEndPoint( aJunction->GetPosition() )
+                  || ( firstLine->GetFlags() & STRUCT_DELETED ) )
+            continue;
+
+        for( SCH_ITEM* secondItem = item->Next(); secondItem; secondItem = secondItem->Next() )
+        {
+            SCH_LINE* secondLine = dynamic_cast<SCH_LINE*>( secondItem );
+
+            if( !secondLine || !secondLine->IsEndPoint( aJunction->GetPosition() )
+                    || ( secondItem->GetFlags() & STRUCT_DELETED )
+                    || !secondLine->IsParallel( firstLine ) )
+                continue;
+
+
+            // Remove identical lines
+            if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
+                && firstLine->IsEndPoint( secondLine->GetEndPoint() ) )
+            {
+                remove_item( secondItem );
+                continue;
+            }
+
+            // Try to merge the remaining lines
+            if( SCH_LINE* line = (SCH_LINE*) secondLine->MergeOverlap( firstLine ) )
+            {
+                remove_item( item );
+                remove_item( secondItem );
+                itemList.PushItem( ITEM_PICKER( line, UR_NEW ) );
+                screen->Append( (SCH_ITEM*) line );
+                break;
+            }
+        }
+    }
+
+    SaveCopyInUndoList( itemList, UR_DELETED, aAppend );
+
+    SCH_ITEM* nextitem;
+    for( SCH_ITEM* item = screen->GetDrawItems(); item; item = nextitem )
+    {
+        nextitem = item->Next();
+
+        if( item->GetFlags() & STRUCT_DELETED )
+            screen->Remove( item );
+    }
+}
+
+
 SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppend )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );

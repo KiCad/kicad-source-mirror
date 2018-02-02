@@ -1158,6 +1158,14 @@ public:
     void DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
 
     /**
+     * Removes a given junction and heals any wire segments under the junction
+     *
+     * @param aItem The junction to delete
+     * @param aAppend True if we are updating an ongoing commit
+     */
+    void DeleteJunction( SCH_ITEM* aItem, bool aAppend = false );
+
+    /**
      * Adds junctions if needed to each item in the list after they have been
      * moved.
      *
