@@ -679,12 +679,10 @@ void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
     {
         controls->ForceCursorPosition( true, aPoint->GetPosition() );
         controls->ShowCursor( true );
-        controls->SetSnapping( true );
     }
     else
     {
         controls->ShowCursor( false );
-        controls->SetSnapping( false );
         controls->ForceCursorPosition( false );
     }
 
