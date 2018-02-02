@@ -73,14 +73,14 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_staticTextSizeX = new wxStaticText( sbUserGridSizer->GetStaticBox(), wxID_ANY, _("Size X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeX->Wrap( -1 );
-	fgSizer31->Add( m_staticTextSizeX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizer31->Add( m_staticTextSizeX, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_OptGridSizeX = new wxTextCtrl( sbUserGridSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer31->Add( m_OptGridSizeX, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_TextSizeXUnits = new wxStaticText( sbUserGridSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextSizeXUnits->Wrap( -1 );
-	fgSizer31->Add( m_TextSizeXUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer31->Add( m_TextSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	m_staticTextSizeY = new wxStaticText( sbUserGridSizer->GetStaticBox(), wxID_ANY, _("Size Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeY->Wrap( -1 );

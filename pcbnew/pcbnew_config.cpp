@@ -302,11 +302,6 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 
     if( m_configParams.empty() )
     {
-
-        // Units used in dialogs and toolbars
-        m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
-                                                       (int*)&g_UserUnit, MILLIMETRES ) );
-
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayPolarCoords" ),
                                                         &displ_opts->m_DisplayPolarCood, false ) );
         // Display options and modes:

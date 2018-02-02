@@ -77,9 +77,6 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
-                                                   (int*) &g_UserUnit, 0, 0, 1 ) );
-
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "DrawModeOption" ),
                                                    &m_displayMode, 2, 0, 2 ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,

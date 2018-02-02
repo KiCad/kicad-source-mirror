@@ -601,7 +601,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     int             ii, jj;
     wxString        Line;
     wxArrayString   list;
-    double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
+    double          scale = GetUserUnits() == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
     int       curr_layer = GetActiveLayer();
 
     for( int layer = 0; layer < (int)ImagesMaxCount(); ++layer )
@@ -621,7 +621,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
         list.Add( Line );
 
-        const char* units = g_UserUnit == INCHES ? "\"" : "mm";
+        const char* units = GetUserUnits() == INCHES ? "\"" : "mm";
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
@@ -1119,7 +1119,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
         ro = hypot( dx, dy );
         wxString formatter;
-        switch( g_UserUnit )
+        switch( GetUserUnits() )
         {
         case INCHES:
             formatter = wxT( "r %.6f  theta %.1f" );
@@ -1138,18 +1138,18 @@ void GERBVIEW_FRAME::UpdateStatusBar()
             break;
         }
 
-        line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
+        line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
 
         SetStatusText( line, 3 );
     }
 
     // Display absolute coordinates:
-    dXpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().x );
-    dYpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().y );
+    dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
+    dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
 
     wxString absformatter;
 
-    switch( g_UserUnit )
+    switch( GetUserUnits() )
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
@@ -1179,8 +1179,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         // Display relative coordinates:
         dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
         dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
-        dXpos = To_User_Unit( g_UserUnit, dx );
-        dYpos = To_User_Unit( g_UserUnit, dy );
+        dXpos = To_User_Unit( GetUserUnits(), dx );
+        dYpos = To_User_Unit( GetUserUnits(), dy );
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );

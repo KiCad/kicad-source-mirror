@@ -97,8 +97,7 @@ PARAM_CFG_ARRAY& PL_EDITOR_FRAME::GetConfigurationSettings()
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
-                                                   (int*) &g_UserUnit, 0, 0, 1 ) );
+    // Add settings here....
 
     return m_configSettings;
 }

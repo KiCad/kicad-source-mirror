@@ -89,8 +89,6 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
     m_configParams.clear();   // boost::ptr_vector destroys the pointers inside
 
     // Display options:
-    m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorUnits" ),
-                                                    (int*)&g_UserUnit, MILLIMETRES ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorDisplayPolarCoords" ),
                                                     &displ_opts->m_DisplayPolarCood, false ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),

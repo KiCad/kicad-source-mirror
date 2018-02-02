@@ -231,7 +231,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     units.Add( GetUnitsLabel( INCHES ) );
     units.Add( GetUnitsLabel( MILLIMETRES ) );
 
-    dlg.SetUnits( units, g_UserUnit );
+    dlg.SetUnits( units, GetUserUnits() );
     dlg.SetGridSizes( grid_list, GetScreen()->GetGridCmdId() );
     dlg.SetBusWidth( GetDefaultBusThickness() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
@@ -262,7 +262,10 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    g_UserUnit = (EDA_UNITS_T)dlg.GetUnitsSelection();
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetId( (dlg.GetUnitsSelection() == MILLIMETRES) ?
+                ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
+    GetEventHandler()->ProcessEvent( cmd );
 
     wxRealPoint  gridsize = grid_list[ (size_t) dlg.GetGridSelection() ].m_Size;
     m_LastGridSizeId = GetScreen()->SetGrid( gridsize );
@@ -484,7 +487,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowPageLimitsEntry,
                                                     &m_showPageLimits, true ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, UnitsEntry,
-                                                   (int*)&g_UserUnit, MILLIMETRES ) );
+                                                   (int*)&m_UserUnits, MILLIMETRES ) );
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintMonochromeEntry,
                                                     &m_printMonochrome, true ) );

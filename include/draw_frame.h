@@ -101,6 +101,7 @@ protected:
                                             // is at scale = 1
     int         m_UndoRedoCountMax;         ///< default Undo/Redo command Max depth, to be handed
                                             // to screens
+    EDA_UNITS_T m_UserUnits;
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
@@ -252,6 +253,13 @@ public:
      * the internal units of this particular view.
      */
     virtual const wxSize GetPageSizeIU() const = 0;
+
+    /**
+     * Function GetUserUnits
+     * returns the user unit currently in use
+     */
+    EDA_UNITS_T GetUserUnits() const { return m_UserUnits; }
+    void SetUserUnits( EDA_UNITS_T aUnits ) { m_UserUnits = aUnits; }
 
     /**
      * Function GetAuxOrigin

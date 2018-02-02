@@ -207,7 +207,9 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_UNITS:
-        g_UserUnit = (g_UserUnit == INCHES ) ? MILLIMETRES : INCHES;
+        cmd.SetId( (GetUserUnits() == INCHES) ?
+                    ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_GBR_LINES_DISPLAY_MODE:

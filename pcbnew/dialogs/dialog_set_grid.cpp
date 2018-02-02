@@ -53,6 +53,7 @@ class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
     PCB_BASE_FRAME* m_parent;
     wxArrayString   m_fast_grid_opts;
+    EDA_UNITS_T     m_units;
 
 public:
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
@@ -72,14 +73,8 @@ private:
         FinishDialogSettings();
     }
 
-    void            setGridSize( const wxPoint& grid );
-    bool            getGridSize( wxPoint& aGrisSize );
-
-    void            setGridOrigin( const wxPoint& grid );
-    bool            getGridOrigin( wxPoint& aGridOrigin );
-
-    void            setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2 );
-    void            getGridForFastSwitching( int& aGrid1, int& aGrid2 );
+    bool getGridSize( wxPoint& aGrisSize );
+    bool getGridOrigin( wxPoint& aGridOrigin );
 };
 
 
@@ -90,11 +85,13 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
 {
     m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
 
-    m_TextPosXUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_TextPosYUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_units = m_parent->GetUserUnits();
 
-    m_TextSizeXUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_TextSizeYUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_TextPosXUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
+    m_TextPosYUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
+
+    m_TextSizeXUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units, true ) );
+    m_TextSizeYUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units, true ) );
 }
 
 
@@ -105,10 +102,9 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
     if( !getGridOrigin( gridOrigin ) )
     {
-        wxMessageBox( wxString::Format( _( "Incorrect grid origin "
-                        "(coordinates must be >= %.3f mm and <= %.3f mm)" ),
-                        -MAX_GRID_OFFSET/IU_PER_MM, MAX_GRID_OFFSET/IU_PER_MM ) );
-
+        wxMessageBox( wxString::Format( _( "Invalid grid origin (must be between %.3f mm and %.3f mm)" ),
+                                        -MAX_GRID_OFFSET/IU_PER_MM,
+                                        MAX_GRID_OFFSET/IU_PER_MM ) );
         return false;
     }
 
@@ -116,24 +112,20 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
     if( !getGridSize( gridSize ) )
     {
-        wxMessageBox( wxString::Format( _( "Incorrect grid size "
-                        "(size must be >= %.3f mm and <= %.3f mm)" ),
-                        MIN_GRID_SIZE/IU_PER_MM, MAX_GRID_SIZE/IU_PER_MM ) );
-
+        wxMessageBox( wxString::Format( _( "Invalid grid size (must be between %.3f mm and %.3f mm)" ),
+                                        MIN_GRID_SIZE/IU_PER_MM,
+                                        MAX_GRID_SIZE/IU_PER_MM ) );
         return false;
     }
 
-    int fastGrid1, fastGrid2;
-    getGridForFastSwitching( fastGrid1, fastGrid2 );
-
     // Apply the new settings
 
-     // Because grid origin is saved in board, show as modified
+    // Because grid origin is saved in board, show as modified
     m_parent->OnModify();
     m_parent->SetGridOrigin( gridOrigin );
     m_parent->m_UserGridSize = gridSize;
-    m_parent->m_FastGrid1 = fastGrid1;
-    m_parent->m_FastGrid2 = fastGrid2;
+    m_parent->m_FastGrid1 = m_comboBoxGrid1->GetSelection();
+    m_parent->m_FastGrid2 = m_comboBoxGrid2->GetSelection();
 
     // User grid
     BASE_SCREEN* screen = m_parent->GetScreen();
@@ -163,49 +155,31 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
 bool DIALOG_SET_GRID::TransferDataToWindow()
 {
-    setGridSize( m_parent->m_UserGridSize );
-    setGridOrigin( m_parent->GetGridOrigin() );
-    setGridForFastSwitching( m_fast_grid_opts, m_parent->m_FastGrid1, m_parent->m_FastGrid2 );
+    m_OptGridSizeX->SetValue( StringFromValue( m_units, m_parent->m_UserGridSize.x, false, true ) );
+    m_OptGridSizeY->SetValue( StringFromValue( m_units, m_parent->m_UserGridSize.y, false, true ) );
+
+    m_GridOriginXCtrl->SetValue( StringFromValue( m_units, m_parent->GetGridOrigin().x ) );
+    m_GridOriginYCtrl->SetValue( StringFromValue( m_units, m_parent->GetGridOrigin().y ) );
+
+    m_comboBoxGrid1->Append( m_fast_grid_opts );
+    m_comboBoxGrid2->Append( m_fast_grid_opts );
+
+    m_comboBoxGrid1->SetSelection( m_parent->m_FastGrid1 );
+    m_comboBoxGrid2->SetSelection( m_parent->m_FastGrid2 );
 
     return wxDialog::TransferDataToWindow();
 }
 
 
-void DIALOG_SET_GRID::setGridSize( const wxPoint& grid )
-{
-    wxString msg;
-
-    msg.Printf( wxT( "%.10g" ), To_User_Unit( g_UserUnit, grid.x ) );
-    m_OptGridSizeX->SetValue( msg );
-
-    msg.Printf( wxT( "%.10g" ), To_User_Unit( g_UserUnit, grid.y ) );
-    m_OptGridSizeY->SetValue( msg );
-}
-
-
 bool DIALOG_SET_GRID::getGridSize( wxPoint& aGridSize )
 {
-    double x, y;
+    double x = DoubleValueFromString( m_units, m_OptGridSizeX->GetValue(), true );
 
-    const wxString& x_str = m_OptGridSizeX->GetValue();
-
-    if( !x_str.ToDouble( &x ) )
-        return false;
-
-    x = DoubleValueFromString( g_UserUnit, x_str );
-
-    // Some error checking here is a good thing.
     if( x < MIN_GRID_SIZE || x > MAX_GRID_SIZE )
         return false;
 
-    const wxString& y_str = m_OptGridSizeY->GetValue();
+    double y = DoubleValueFromString( m_units, m_OptGridSizeY->GetValue(), true );
 
-    if( !y_str.ToDouble( &y ) )
-        return false;
-
-    y = DoubleValueFromString( g_UserUnit, y_str );
-
-    // Some error checking here is a good thing.
     if( y < MIN_GRID_SIZE || y > MAX_GRID_SIZE )
         return false;
 
@@ -218,30 +192,16 @@ bool DIALOG_SET_GRID::getGridSize( wxPoint& aGridSize )
 
 bool DIALOG_SET_GRID::getGridOrigin( wxPoint& aGridOrigin )
 {
-    double x, y;
-
-    const wxString& x_str = m_GridOriginXCtrl->GetValue();
-
-    if( !x_str.ToDouble( &x ) )
-        return false;
-
-    x = DoubleValueFromString( g_UserUnit, x_str );
+    double x = DoubleValueFromString( m_units, m_GridOriginXCtrl->GetValue() );
 
     // Some error checking here is a good thing.
     if( x < -MAX_GRID_OFFSET || x > MAX_GRID_OFFSET )
         return false;
 
-
-    const wxString& y_str = m_GridOriginYCtrl->GetValue();
-
-    if( !y_str.ToDouble( &y ) )
-        return false;
-
-    y = DoubleValueFromString( g_UserUnit, y_str );
+    double y = DoubleValueFromString( m_units, m_GridOriginYCtrl->GetValue() );
 
     if( y < -MAX_GRID_OFFSET || y > MAX_GRID_OFFSET )
         return false;
-
 
     aGridOrigin.x = KiROUND( x );
     aGridOrigin.y = KiROUND( y );
@@ -250,33 +210,10 @@ bool DIALOG_SET_GRID::getGridOrigin( wxPoint& aGridOrigin )
 }
 
 
-void DIALOG_SET_GRID::setGridOrigin( const wxPoint& grid )
-{
-    PutValueInLocalUnits( *m_GridOriginXCtrl, grid.x );
-    PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y );
-}
-
-
-void DIALOG_SET_GRID::setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2 )
-{
-    m_comboBoxGrid1->Append( aGrids );
-    m_comboBoxGrid2->Append( aGrids );
-
-    m_comboBoxGrid1->SetSelection( aGrid1 );
-    m_comboBoxGrid2->SetSelection( aGrid2 );
-}
-
-
-void DIALOG_SET_GRID::getGridForFastSwitching( int& aGrid1, int& aGrid2 )
-{
-    aGrid1 = m_comboBoxGrid1->GetSelection();
-    aGrid2 = m_comboBoxGrid2->GetSelection();
-}
-
-
 void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 {
-    setGridOrigin( wxPoint( 0, 0 ) );
+    m_GridOriginXCtrl->SetValue( wxT( "0" ) );
+    m_GridOriginYCtrl->SetValue( wxT( "0" ) );
 }
 
 

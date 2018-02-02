@@ -977,8 +977,8 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = GetName();
 
-    aCfg->Write( baseCfgName + UserGridSizeXEntry, To_User_Unit( g_UserUnit, m_UserGridSize.x ) );
-    aCfg->Write( baseCfgName + UserGridSizeYEntry, To_User_Unit( g_UserUnit, m_UserGridSize.y ) );
+    aCfg->Write( baseCfgName + UserGridSizeXEntry, To_User_Unit( m_UserUnits, m_UserGridSize.x ) );
+    aCfg->Write( baseCfgName + UserGridSizeYEntry, To_User_Unit( m_UserUnits, m_UserGridSize.y ) );
     aCfg->Write( baseCfgName + UserGridUnitsEntry, ( long )g_UserUnit );
     aCfg->Write( baseCfgName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
     aCfg->Write( baseCfgName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );

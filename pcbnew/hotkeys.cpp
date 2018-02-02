@@ -587,7 +587,7 @@ bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
         break;
 
     case HK_SWITCH_UNITS:
-        cmd.SetId( (g_UserUnit == INCHES) ?
+        cmd.SetId( (GetUserUnits() == INCHES) ?
                     ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
         GetEventHandler()->ProcessEvent( cmd );
         break;

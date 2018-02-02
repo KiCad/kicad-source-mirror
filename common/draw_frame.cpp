@@ -66,6 +66,9 @@ static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 ///@{
 /// \ingroup config
 
+/// User units
+static const wxString UserUnitsEntryKeyword( wxT( "Units" ) );
+static const wxString FpEditorUserUnitsEntryKeyword( wxT( "FpEditorUnits" ) );
 /// Nonzero to show grid (suffix)
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 /// Grid color ID (suffix)
@@ -350,14 +353,16 @@ wxAuiToolBarItem* EDA_DRAW_FRAME::GetToolbarTool( int aToolId )
 
 void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 {
-    if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && g_UserUnit != MILLIMETRES )
+    if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && m_UserUnits != MILLIMETRES )
     {
-        g_UserUnit = MILLIMETRES;
+        g_UserUnit = MILLIMETRES;   // JEY TODO: double-up while in transition...
+        m_UserUnits = MILLIMETRES;
         unitsChangeRefresh();
     }
-    else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && g_UserUnit != INCHES )
+    else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && m_UserUnits != INCHES )
     {
-        g_UserUnit = INCHES;
+        g_UserUnit = INCHES;   // JEY TODO: double-up while in transition...
+        m_UserUnits = INCHES;
         unitsChangeRefresh();
     }
 }
@@ -394,8 +399,8 @@ void EDA_DRAW_FRAME::OnUpdateUnits( wxUpdateUIEvent& aEvent )
 {
     bool enable;
 
-    enable = ( ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM) && (g_UserUnit == MILLIMETRES))
-            || ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH) && (g_UserUnit == INCHES)) );
+    enable = ( ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM) && (m_UserUnits == MILLIMETRES))
+            || ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH) && (m_UserUnits == INCHES)) );
 
     aEvent.Check( enable );
     DisplayUnitsMsg();
@@ -559,7 +564,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
     wxString msg;
 
-    switch( g_UserUnit )
+    switch( m_UserUnits )
     {
     case INCHES:
         msg = _( "Inches" );
@@ -763,6 +768,17 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
+    // Read units used in dialogs and toolbars
+    EDA_UNITS_T unitsTmp;
+
+    if( aCfg->Read( baseCfgName + UserUnitsEntryKeyword, (int*) &unitsTmp ) )
+        SetUserUnits( unitsTmp );
+    else
+        SetUserUnits( MILLIMETRES );
+
+    g_UserUnit = GetUserUnits();  // JEY TODO: double-up while in transition
+
+    // Read show/hide grid entry
     bool btmp;
     if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
@@ -795,6 +811,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
+    aCfg->Write( baseCfgName + UserUnitsEntryKeyword, (int) m_UserUnits );
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
     aCfg->Write( baseCfgName + GridColorEntryKeyword,
                  GetGridColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
