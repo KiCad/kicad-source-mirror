@@ -114,6 +114,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
     const double wheelPanSpeed = 0.001;
+    const double zoomLevelScale = 1.2;      // The minimal step value when changing the current zoom level
 
     // mousewheelpan disabled:
     //      wheel + ctrl    -> horizontal scrolling;
@@ -184,12 +185,15 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         {
             zoomScale = 2.05 - timeDiff / 500;
 
+            // be sure zoomScale value is significant
+            zoomScale = std::max( zoomScale, zoomLevelScale );
+
             if( rotation < 0 )
                 zoomScale = 1.0 / zoomScale;
         }
         else
         {
-            zoomScale = ( rotation > 0 ) ? 1.05 : 1/1.05;
+            zoomScale = ( rotation > 0 ) ? zoomLevelScale : 1/zoomLevelScale;
         }
 #endif
 
