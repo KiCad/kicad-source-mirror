@@ -29,7 +29,6 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <base_units.h>
 #include <kiface_i.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
@@ -50,51 +49,13 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     SCH_SHEET_LIST hierarchy( g_RootSheet );       // This is the schematic sheet hierarchy.
 
     // Get the new texts
-    DIALOG_SCH_SHEET_PROPS dlg( this );
-
-    wxString units = GetUnitsLabel( g_UserUnit );
-    dlg.SetFileName( aSheet->GetFileName() );
-    dlg.SetFileNameTextSize( StringFromValue( g_UserUnit, aSheet->GetFileNameSize() ) );
-    dlg.SetFileNameTextSizeUnits( units );
-    dlg.SetSheetName( aSheet->GetName() );
-    dlg.SetSheetNameTextSize( StringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
-    dlg.SetSheetNameTextSizeUnits( units );
-    dlg.SetSheetTimeStamp( wxString::Format( wxT( "%8.8lX" ),
-                           (unsigned long) aSheet->GetTimeStamp() ) );
-
-    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
-     * versions for the flex grid sizer in wxGTK that prevents the last
-     * column from being sized correctly.  It doesn't cause any problems
-     * on win32 so it doesn't need to wrapped in ugly #ifdef __WXGTK__
-     * #endif.
-     * Still present in wxWidgets 3.0.2
-     */
-    dlg.Layout();
-    dlg.Fit();
-    dlg.SetMinSize( dlg.GetSize() );
-    dlg.GetSizer()->Fit( &dlg );
+    DIALOG_SCH_SHEET_PROPS dlg( this, aSheet );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
     wxFileName fileName = dlg.GetFileName();
     fileName.SetExt( SchematicFileExtension );
-
-    if( !fileName.IsOk() )
-    {
-        DisplayError( this, _( "File name is not valid!" ) );
-        return false;
-    }
-
-    // Duplicate sheet names are not valid.
-    const SCH_SHEET* sheet = hierarchy.FindSheetByName( dlg.GetSheetName() );
-
-    if( sheet && (sheet != aSheet) )
-    {
-        DisplayError( this, wxString::Format( _( "A sheet named \"%s\" already exists." ),
-                                              dlg.GetSheetName() ) );
-        return false;
-    }
 
     wxString msg;
     bool loadFromFile = false;
@@ -122,8 +83,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     if( !g_RootSheet->SearchHierarchy( newFilename, &useScreen ) )
     {
         loadFromFile = wxFileExists( newFilename );
-        wxLogDebug( "Sheet requested file \"%s\", %s", newFilename,
-                ( loadFromFile ) ? "found" : "not found" );
+        wxLogDebug( "Sheet requested file \"%s\", %s",
+                    newFilename,
+                    ( loadFromFile ) ? "found" : "not found" );
     }
 
     // Inside Eeschema, filenames are stored using unix notation
@@ -273,9 +235,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
             if( !pi->GetError().IsEmpty() )
             {
                 DisplayErrorMessage( this,
-                                     _( "The entire schematic could not be load.  Errors "
-                                        "occurred attempting to load hierarchical sheet "
-                                        "schematics." ),
+                                     _( "The entire schematic could not be loaded.\n"
+                                        "Errors occurred loading hierarchical sheets." ),
                                      pi->GetError() );
             }
         }
@@ -291,9 +252,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         }
     }
 
-    aSheet->SetFileNameSize( ValueFromString( g_UserUnit, dlg.GetFileNameTextSize() ) );
+    aSheet->SetFileNameSize( dlg.GetFileNameTextSize() );
     aSheet->SetName( dlg.GetSheetName() );
-    aSheet->SetSheetNameSize( ValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
+    aSheet->SetSheetNameSize( dlg.GetSheetNameTextSize() );
 
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ),

@@ -44,7 +44,7 @@ class RULER_ITEM : public EDA_ITEM
 {
 public:
 
-    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr );
+    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS_T userUnits );
 
     ///> @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
@@ -74,6 +74,7 @@ public:
 private:
 
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
+    const EDA_UNITS_T                 m_userUnits;
 };
 
 } // PREVIEW

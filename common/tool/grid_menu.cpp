@@ -35,13 +35,13 @@ using namespace std::placeholders;
 
 GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
-    BASE_SCREEN* screen = aParent->GetScreen();
+    BASE_SCREEN* screen = m_parent->GetScreen();
 
     SetTitle( _( "Grid" ) );
     SetIcon( grid_select_xpm );
 
     wxArrayString gridsList;
-    screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
+    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != INCHES );
 
     for( unsigned int i = 0; i < gridsList.GetCount(); ++i )
     {
@@ -67,7 +67,7 @@ void GRID_MENU::update()
     int           currentId = screen->GetGridCmdId();
     wxArrayString gridsList;
 
-    screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
+    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != INCHES );
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
     {

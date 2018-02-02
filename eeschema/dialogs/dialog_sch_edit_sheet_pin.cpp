@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <sch_edit_frame.h>
 #include <dialog_sch_edit_sheet_pin.h>
 
 
@@ -35,14 +36,15 @@ static wxString sheetPinTypes[] =
 };
 
 
-#define SHEET_PIN_TYPE_CNT   ( sizeof( sheetPinTypes ) / sizeof( wxString ) )
-
-
-DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent ) :
-    DIALOG_SCH_EDIT_SHEET_PIN_BASE( parent )
+DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
+    DIALOG_SCH_EDIT_SHEET_PIN_BASE( parent ),
+    m_frame( parent ),
+    m_sheetPin( aPin ),
+    m_textWidth( parent, m_widthLabel, m_widthCtrl, m_widthUnits, true ),
+    m_textHeight( parent, m_heightLabel, m_heightCtrl, m_heightUnits, true )
 {
-    for( size_t i = 0;  i < SHEET_PIN_TYPE_CNT;  i++ )
-        m_choiceConnectionType->Append( sheetPinTypes[ i ] );
+    for( const wxString& sheetPinType : sheetPinTypes )
+        m_choiceConnectionType->Append( sheetPinType );
 
     m_choiceConnectionType->SetSelection( 0 );
     m_textName->SetFocus();
@@ -55,12 +57,51 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent ) :
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 
+    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
+     * the flex grid sizer in wxGTK that prevents the last column from being sized
+     * correctly.  It doesn't cause any problems on win32 so it doesn't need to wrapped
+     * in ugly #ifdef __WXGTK__ #endif.
+     */
+    Layout();
+    Fit();
+    SetMinSize( GetSize() );
+
     // On some windows manager (Unity, XFCE), this dialog is
     // not always raised, depending on this dialog is run.
     // Force it to be raised
     Raise();
 }
 
+
+bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataToWindow()
+{
+    m_textName->SetValue( m_sheetPin->GetText() );
+    m_textWidth.SetValue( m_sheetPin->GetTextWidth() );
+    m_textHeight.SetValue( m_sheetPin->GetTextHeight() );
+    m_choiceConnectionType->SetSelection( m_sheetPin->GetShape() );
+
+    return true;
+}
+
+
+bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataFromWindow()
+{
+    if( !m_sheetPin->IsNew() )
+    {
+        m_frame->SaveCopyInUndoList( (SCH_ITEM*) m_sheetPin->GetParent(), UR_CHANGED );
+        m_frame->GetScreen()->SetCurItem( nullptr );
+    }
+
+    m_sheetPin->SetText( m_textName->GetValue() );
+    m_sheetPin->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+
+    auto shape = static_cast<PINSHEETLABEL_SHAPE>( m_choiceConnectionType->GetCurrentSelection() );
+    m_sheetPin->SetShape( shape );
+
+    m_frame->OnModify();
+
+    return true;
+}
 
 
 void DIALOG_SCH_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )

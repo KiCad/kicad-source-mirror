@@ -832,7 +832,7 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                         _( "Measure distance" ) );
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr );
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, m_frame->GetUserUnits() );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );

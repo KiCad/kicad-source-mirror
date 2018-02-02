@@ -88,7 +88,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME*  a
 
     aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
 
-    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D,
+    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->GetUserUnits(),
                                        aParent->Prj().Get3DCacheManager(),
                                        m_currentModuleCopy,
                                        &aParent->Settings().Colors(),

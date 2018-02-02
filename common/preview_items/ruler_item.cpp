@@ -40,12 +40,12 @@ static const double majorTickLengthFactor = 2.5;
 
 
 static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
-    const VECTOR2D& aRulerVec )
+                               const VECTOR2D& aRulerVec, EDA_UNITS_T aUnits )
 {
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
 
-    cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), g_UserUnit ) );
+    cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
     cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
@@ -73,7 +73,7 @@ struct TICK_FORMAT
 };
 
 
-static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace )
+static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA_UNITS_T aUnits )
 {
     // simple 1/2/5 scales per decade
     static std::vector<TICK_FORMAT> tickFormats =
@@ -87,7 +87,7 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace )
     aTickSpace = 1;
 
     // convert to a round (mod-10) number of mils
-    if( g_UserUnit == INCHES )
+    if( aUnits == INCHES )
     {
         aTickSpace *= 2.54;
     }
@@ -119,12 +119,12 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace )
  * @param aMinorTickLen length of minor ticks in IU
  */
 void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
-        const VECTOR2D& aLine, double aMinorTickLen )
+                         const VECTOR2D& aLine, double aMinorTickLen, EDA_UNITS_T aUnits )
 {
     VECTOR2D tickLine = aLine.Rotate( -M_PI_2 );
     auto gal = aView->GetGAL();
     double tickSpace;
-    TICK_FORMAT tickF = getTickFormatForScale( gal->GetWorldScale(), tickSpace );
+    TICK_FORMAT tickF = getTickFormatForScale( gal->GetWorldScale(), tickSpace, aUnits );
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     // number of ticks in whole ruler
@@ -170,7 +170,7 @@ void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
 
         if( drawLabel )
         {
-            wxString label = DimensionLabel( "", tickSpace * i, g_UserUnit );
+            wxString label = DimensionLabel( "", tickSpace * i, aUnits );
 
             // FIXME: spaces choke OpenGL lp:1668455
             label.erase( std::remove( label.begin(), label.end(), ' ' ), label.end() );
@@ -205,9 +205,10 @@ void drawBacksideTicks( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
 }
 
 
-RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr ):
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS_T userUnits ):
     EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
-    m_geomMgr( aGeomMgr )
+    m_geomMgr( aGeomMgr ),
+    m_userUnits( userUnits )
 {}
 
 
@@ -254,7 +255,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // constant text size on screen
     SetConstantGlyphHeight( gal, 14.0 );
 
-    drawCursorStrings( aView, end, rulerVec );
+    drawCursorStrings( aView, end, rulerVec, m_userUnits );
 
     // tick label size
     SetConstantGlyphHeight( gal, 12.0 );
@@ -262,7 +263,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // basic tick size
     const double minorTickLen = 5.0 / gal.GetWorldScale();
 
-    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen );
+    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_userUnits );
 
     gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
     drawBacksideTicks( gal, origin, rulerVec, minorTickLen * majorTickLengthFactor, 2 );

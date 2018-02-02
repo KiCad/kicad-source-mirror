@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_sch_sheet_props_base.h"
@@ -25,55 +25,55 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&File name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_filenameLabel = new wxStaticText( this, wxID_ANY, _("&File name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_filenameLabel->Wrap( -1 );
+	fgSizer1->Add( m_filenameLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textFileName->SetMinSize( wxSize( 200,-1 ) );
 	
-	fgSizer1->Add( m_textFileName, 5, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer1->Add( m_textFileName, 5, wxEXPAND|wxTOP, 5 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 3 );
+	fgSizer1->Add( 0, 0, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 10 );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Si&ze:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_filenameSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_filenameSizeLabel->Wrap( -1 );
+	fgSizer1->Add( m_filenameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_textFileNameSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textFileNameSize, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
+	m_filenameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_filenameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 	
-	m_staticFileNameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticFileNameSizeUnits->Wrap( -1 );
-	fgSizer1->Add( m_staticFileNameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_filenameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_filenameSizeUnits->Wrap( -1 );
+	fgSizer1->Add( m_filenameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("&Sheet name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_sheetnameLabel = new wxStaticText( this, wxID_ANY, _("&Sheet name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sheetnameLabel->Wrap( -1 );
+	fgSizer1->Add( m_sheetnameLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textSheetName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textSheetName, 5, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer1->Add( m_textSheetName, 5, wxEXPAND|wxTOP, 5 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgSizer1->Add( 0, 0, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_sheetnameSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sheetnameSizeLabel->Wrap( -1 );
+	fgSizer1->Add( m_sheetnameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_textSheetNameSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textSheetNameSize, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
+	m_sheetnameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_sheetnameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 	
-	m_staticSheetNameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticSheetNameSizeUnits->Wrap( -1 );
-	fgSizer1->Add( m_staticSheetNameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_sheetnameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sheetnameSizeUnits->Wrap( -1 );
+	fgSizer1->Add( m_sheetnameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
 	
-	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	
+	
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -98,13 +98,10 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	bupperSizer->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	mainSizer->Add( bupperSizer, 0, wxEXPAND, 5 );
-	
-	
-	mainSizer->Add( 0, 0, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -118,6 +115,7 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

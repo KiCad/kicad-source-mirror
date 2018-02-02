@@ -72,7 +72,7 @@ class COLORS_DESIGN_SETTINGS;
 class PANEL_PREV_3D: public PANEL_PREV_3D_BASE
 {
 public:
-    PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
+    PANEL_PREV_3D( wxWindow* aParent, EDA_UNITS_T aUnits, S3D_CACHE* aCacheManager,
                      MODULE* aModuleCopy,
                      COLORS_DESIGN_SETTINGS *aColors,
                      std::vector<MODULE_3D_SETTINGS> *aParentInfoList = NULL );
@@ -103,6 +103,8 @@ private:
 
     /// Current MODULE_3D_SETTINGS that is being edited
     MODULE_3D_SETTINGS        m_modelInfo;
+
+    EDA_UNITS_T     m_userUnits;
 
     // Methods of the class
 private:

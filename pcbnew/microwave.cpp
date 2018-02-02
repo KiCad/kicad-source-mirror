@@ -266,7 +266,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         break;
     }
 
-    wxString             value = StringFromValue( g_UserUnit, gap_size );
+    wxString value = StringFromValue( GetUserUnits(), gap_size );
     WX_TEXT_ENTRY_DIALOG dlg( this, msg, _( "Create microwave module" ), value );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -276,7 +276,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     }
 
     value    = dlg.GetValue();
-    gap_size = ValueFromString( g_UserUnit, value );
+    gap_size = ValueFromString( GetUserUnits(), value );
 
     bool abort = false;
 
@@ -472,7 +472,8 @@ MWAVE_POLYGONAL_SHAPE_DLG::MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent,
                                         wxRA_SPECIFY_COLS );
     LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
 
-    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize, g_UserUnit, LeftBoxSizer );
+    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize, parent->GetUserUnits(),
+                                    LeftBoxSizer );
 
     GetSizer()->SetSizeHints( this );
 }
@@ -721,14 +722,14 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     gap_size = next_pad->GetPos0().x - pad->GetPos0().x - pad->GetSize().x;
 
     // Entrer the desired length of the gap.
-    msg = StringFromValue( g_UserUnit, gap_size );
+    msg = StringFromValue( GetUserUnits(), gap_size );
     WX_TEXT_ENTRY_DIALOG dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
     msg = dlg.GetValue();
-    gap_size = ValueFromString( g_UserUnit, msg );
+    gap_size = ValueFromString( GetUserUnits(), msg );
 
     // Updating sizes of pads forming the gap.
     int tw = GetDesignSettings().GetCurrentTrackWidth();

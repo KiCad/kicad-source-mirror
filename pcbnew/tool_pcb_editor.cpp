@@ -639,7 +639,7 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         return;
 
     wxString msg;
-    bool mmFirst = g_UserUnit != INCHES;
+    bool mmFirst = GetUserUnits() != INCHES;
 
     m_SelTrackWidthBox->Clear();
 
@@ -679,7 +679,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
     wxString msg;
 
     m_SelViaSizeBox->Clear();
-    bool mmFirst = g_UserUnit != INCHES;
+    bool mmFirst = GetUserUnits() != INCHES;
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {

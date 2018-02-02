@@ -1175,7 +1175,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
 
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr );
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, frame()->GetUserUnits() );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );

@@ -34,9 +34,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
-#include <base_units.h>
 
-#include <general.h>
 #include <sch_sheet.h>
 #include <dialog_helpers.h>
 
@@ -63,42 +61,10 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
     if( aSheetPin == NULL )
         return wxID_CANCEL;
 
-    DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
-
-    dlg.SetLabelName( aSheetPin->GetText() );
-    dlg.SetTextHeight( StringFromValue( g_UserUnit, aSheetPin->GetTextHeight() ) );
-    dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetTextWidth( StringFromValue( g_UserUnit, aSheetPin->GetTextWidth() ) );
-    dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetConnectionType( aSheetPin->GetShape() );
-
-    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
-     * the flex grid sizer in wxGTK that prevents the last column from being sized
-     * correctly.  It doesn't cause any problems on win32 so it doesn't need to wrapped
-     * in ugly #ifdef __WXGTK__ #endif.
-     */
-    dlg.Layout();
-    dlg.Fit();
-    dlg.SetMinSize( dlg.GetSize() );
+    DIALOG_SCH_EDIT_SHEET_PIN dlg( this, aSheetPin );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxID_CANCEL;
-
-    if( !aSheetPin->IsNew() )
-    {
-        SaveCopyInUndoList( (SCH_ITEM*) aSheetPin->GetParent(), UR_CHANGED );
-        GetScreen()->SetCurItem( NULL );
-    }
-
-    aSheetPin->SetText( dlg.GetLabelName() );
-
-    aSheetPin->SetTextSize( wxSize(
-            ValueFromString( g_UserUnit, dlg.GetTextWidth() ),
-            ValueFromString( g_UserUnit, dlg.GetTextHeight() ) ) );
-
-    aSheetPin->SetShape( dlg.GetConnectionType() );
-
-    OnModify();
 
     if( aRedraw )
         m_canvas->Refresh();

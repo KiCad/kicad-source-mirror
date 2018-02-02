@@ -344,8 +344,8 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
     // Build the aperture list of the current layer, and add it to the combo box:
     wxArrayString dcode_list;
     wxString msg;
-    const char* units = g_UserUnit == INCHES ? "mils" : "mm";
-    double scale = g_UserUnit == INCHES ? IU_PER_MILS : IU_PER_MM;
+    const char* units = GetUserUnits() == INCHES ? "mils" : "mm";
+    double scale = GetUserUnits() == INCHES ? IU_PER_MILS : IU_PER_MM;
 
     for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
     {

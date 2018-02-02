@@ -42,12 +42,14 @@
 #include <class_board.h>
 
 
-PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
+PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, EDA_UNITS_T aUnits, S3D_CACHE* aCacheManager,
                               MODULE* aModuleCopy,
                               COLORS_DESIGN_SETTINGS *aColors,
                               std::vector<MODULE_3D_SETTINGS> *aParentInfoList ) :
     PANEL_PREV_3D_BASE( aParent, wxID_ANY )
 {
+    m_userUnits = aUnits;
+
     initPanel();
 
     // Initialize the color settings to draw the board and the footprint
@@ -133,7 +135,7 @@ void PANEL_PREV_3D::initPanel()
 
     wxString units;
 
-    switch( g_UserUnit )
+    switch( m_userUnits )
     {
     case INCHES:
         units = _( "inches" );
@@ -243,7 +245,7 @@ void PANEL_PREV_3D::SetModelDataIdx( int idx, bool aReloadPreviewModule )
 
             double scaler = 1;
 
-            switch( g_UserUnit )
+            switch( m_userUnits )
             {
             case MILLIMETRES:
                 scaler = 1.0f;
@@ -486,7 +488,7 @@ void PANEL_PREV_3D::onIncrementOffset( wxSpinEvent& event )
 
     double step = OFFSET_INCREMENT_MM;
 
-    if( g_UserUnit == INCHES )
+    if( m_userUnits == INCHES )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
     incrementTextCtrl( textCtrl, step, -MAX_OFFSET, MAX_OFFSET );
@@ -506,7 +508,7 @@ void PANEL_PREV_3D::onDecrementOffset( wxSpinEvent& event )
 
     double step = OFFSET_INCREMENT_MM;
 
-    if( g_UserUnit == INCHES )
+    if( m_userUnits == INCHES )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
     incrementTextCtrl( textCtrl, -step, -MAX_OFFSET, MAX_OFFSET );
@@ -556,7 +558,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
     if( event.ShiftDown( ) )
         step = OFFSET_INCREMENT_MM_FINE;
 
-    if( g_UserUnit == INCHES )
+    if( m_userUnits == INCHES )
     {
         step = OFFSET_INCREMENT_MIL/1000.0;
         if( event.ShiftDown( ) )
@@ -599,7 +601,7 @@ void PANEL_PREV_3D::getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGP
 
     double scaler = 1.0f;
 
-    switch( g_UserUnit )
+    switch( m_userUnits )
     {
     case MILLIMETRES:
         scaler = 1.0f;

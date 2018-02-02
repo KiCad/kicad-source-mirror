@@ -360,7 +360,7 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
     aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
 
-    if( g_UserUnit == INCHES )
+    if( aMainFrame->GetUserUnits() == INCHES )
         msg.Printf( wxT( "X=%f Y=%f" ), Iu2Mils( m_ImageJustifyOffset.x ) / 1000.0,
                                         Iu2Mils( m_ImageJustifyOffset.y ) / 1000.0 );
     else
