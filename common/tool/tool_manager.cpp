@@ -195,7 +195,9 @@ TOOL_MANAGER::TOOL_MANAGER() :
     m_viewControls( NULL ),
     m_editFrame( NULL ),
     m_passEvent( false ),
-    m_menuActive( false )
+    m_menuActive( false ),
+    m_menuOwner( -1 ),
+    m_activeState( nullptr )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 }
@@ -369,6 +371,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         return false;
     }
 
+    m_activeState = m_toolIdIndex[id];
     aTool->Reset( TOOL_INTERACTIVE::RUN );
 
     // Add the tool on the front of the processing queue (it gets events first)
@@ -414,6 +417,7 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 
     for( auto& state : m_toolState )
     {
+        m_activeState = state.second;
         TOOL_BASE* tool = state.first;
         tool->Reset( aReason );
 
@@ -430,6 +434,7 @@ void TOOL_MANAGER::InitTools()
         TOOL_BASE* tool = it->first;
         TOOL_STATE* state = it->second;
         ++it;   // keep the iterator valid if the element is going to be erased
+        m_activeState = state;
 
         if( !tool->Init() )
         {
@@ -541,6 +546,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 if( st->cofunc )
                 {
                     applyViewControls( st );
+                    m_activeState = st;
                     bool end = !st->cofunc->Resume();
                     saveViewControls( st );
 
@@ -637,9 +643,6 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 {
-    // Store the current tool ID to decide whether to restore the cursor position
-    TOOL_ID activeTool = GetCurrentToolId();
-
     for( TOOL_ID toolId : m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
@@ -661,14 +664,23 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         if( st->contextMenuTrigger == CMENU_NOW )
             st->contextMenuTrigger = CMENU_OFF;
 
-        VECTOR2D cursor = m_viewControls->GetCursorPosition();
-
-        // Temporarily store the cursor position, so the tools could execute actions
+        // Store the cursor position, so the tools could execute actions
         // using the point where the user has invoked a context menu
-        if( m_viewControls->ForcedCursorPosition() )
-            m_origCursor = cursor;
+        m_menuCursor = m_viewControls->GetCursorPosition();
 
-        m_viewControls->ForceCursorPosition( true, cursor );
+        // Save all tools cursor settings, as they will be overridden
+        for( auto idState : m_toolIdIndex )
+        {
+            TOOL_STATE* s = idState.second;
+            const auto& vc = s->vcSettings;
+
+            if( vc.m_forceCursorPosition )
+                m_cursorSettings[idState.first] = vc.m_forcedPosition;
+            else
+                m_cursorSettings[idState.first] = NULLOPT;
+        }
+
+        m_viewControls->ForceCursorPosition( true, m_menuCursor );
 
         // Display a copy of menu
         std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
@@ -681,13 +693,11 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         auto frame = dynamic_cast<wxFrame*>( m_editFrame );
 
         if( frame )
-        {
             frame->PopupMenu( menu.get() );
-        }
 
         // Warp the cursor as long as the menu wasn't clicked out of
         if( menu->GetSelected() >= 0 )
-            m_viewControls->WarpCursor( cursor, true, false );
+            m_viewControls->WarpCursor( m_menuCursor, true, false );
         // Otherwise notify the tool of a cancelled menu
         else
         {
@@ -704,14 +714,21 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuActive = false;
         m_menuOwner = -1;
 
-        // Restore the cursor settings if the tool is still active
-        if( activeTool == GetCurrentToolId() )
+        // Restore cursor settings
+        for( auto cursorSetting : m_cursorSettings )
         {
-            m_viewControls->ForceCursorPosition( (bool) m_origCursor,
-                    m_origCursor ? *m_origCursor : VECTOR2D( 0, 0  ) );
+            auto it = m_toolIdIndex.find( cursorSetting.first );
+            wxASSERT( it != m_toolIdIndex.end() );
+
+            if( it == m_toolIdIndex.end() )
+                continue;
+
+            KIGFX::VC_SETTINGS& vc = it->second->vcSettings;
+            vc.m_forceCursorPosition = (bool) cursorSetting.second;
+            vc.m_forcedPosition = cursorSetting.second ? *cursorSetting.second : VECTOR2D( 0, 0 );
         }
 
-        m_origCursor = NULLOPT;
+        m_cursorSettings.clear();
         break;
     }
 }
@@ -720,6 +737,9 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     auto it = std::find( m_activeTools.begin(), m_activeTools.end(), aState->theTool->GetId() );
+
+    if( aState == m_activeState )
+        m_activeState = nullptr;
 
     if( !aState->Pop() )
     {
@@ -843,18 +863,37 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 {
     aState->vcSettings = m_viewControls->GetSettings();
 
-    // If context menu has overridden the cursor position, restore the original position
-    // (see dispatchContextMenu())
     if( m_menuActive )
     {
-        if( m_origCursor )
+        // Context menu is active, so the cursor settings are overridden (see dispatchContextMenu())
+        auto it = m_cursorSettings.find( aState->theTool->GetId() );
+
+        if( it != m_cursorSettings.end() )
         {
-            aState->vcSettings.m_forceCursorPosition = true;
-            aState->vcSettings.m_forcedPosition = *m_origCursor;
-        }
-        else
-        {
-            aState->vcSettings.m_forceCursorPosition = false;
+            const KIGFX::VC_SETTINGS& curr = m_viewControls->GetSettings();
+
+            // Tool has overridden the cursor position, so store the new settings
+            if( !curr.m_forceCursorPosition || curr.m_forcedPosition != m_menuCursor )
+            {
+                if( !curr.m_forceCursorPosition )
+                    it->second = NULLOPT;
+                else
+                    it->second = curr.m_forcedPosition;
+            }
+            else
+            {
+                OPT<VECTOR2D> cursor = it->second;
+
+                if( cursor )
+                {
+                    aState->vcSettings.m_forceCursorPosition = true;
+                    aState->vcSettings.m_forcedPosition = *cursor;
+                }
+                else
+                {
+                    aState->vcSettings.m_forceCursorPosition = false;
+                }
+            }
         }
     }
 }
@@ -863,6 +902,10 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 {
     m_viewControls->ApplySettings( aState->vcSettings );
+
+    // Override the cursor position if menu is active
+    if( m_menuActive )
+        m_viewControls->ForceCursorPosition( true, m_menuCursor );
 }
 
 
@@ -886,6 +929,7 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 
     return false;
 }
+
 
 bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
 {

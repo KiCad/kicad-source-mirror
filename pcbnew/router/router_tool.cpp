@@ -1120,8 +1120,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
 
-    controls()->SetAutoPan( false );
-    controls()->ShowCursor( false );
     frame()->UndoRedoBlock( false );
 
     return 0;

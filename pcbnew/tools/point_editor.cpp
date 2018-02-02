@@ -288,7 +288,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         return 0;
 
     view->Add( m_editPoints.get() );
-    m_editedPoint = NULL;
+    setEditedPoint( nullptr );
     bool modified = false;
     bool revert = false;
 

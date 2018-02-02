@@ -502,7 +502,7 @@ private:
     ACTION_MANAGER* m_actionMgr;
 
     /// Original cursor position, if overridden by the context menu handler
-    OPT<VECTOR2D> m_origCursor;
+    std::map<TOOL_ID, OPT<VECTOR2D>> m_cursorSettings;
 
     EDA_ITEM* m_model;
     KIGFX::VIEW* m_view;
@@ -515,11 +515,17 @@ private:
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;
 
+    /// Right click context menu position.
+    VECTOR2D m_menuCursor;
+
     /// Flag indicating whether a context menu is currently displayed.
     bool m_menuActive;
 
     /// Tool currently displaying a popup menu. It is negative when there is no menu displayed.
     TOOL_ID m_menuOwner;
+
+    /// Pointer to the state object corresponding to the currently executed tool.
+    TOOL_STATE* m_activeState;
 };
 
 #endif
