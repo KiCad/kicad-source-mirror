@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,8 +68,6 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
-	m_sdbSizerOK = new wxButton( this, wxID_OK );
-	m_sdbSizer->AddButton( m_sdbSizerOK );
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizerHelp = new wxButton( this, wxID_HELP );

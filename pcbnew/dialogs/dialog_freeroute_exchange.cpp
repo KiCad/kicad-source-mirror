@@ -58,9 +58,18 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
     DIALOG_FREEROUTE_BASE( parent )
 {
     m_Parent = parent;
-    MyInit();
+    init();
 
-    m_sdbSizerOK->SetDefault();
+    m_sdbSizerCancel->SetDefault();
+
+    // Rename "Cancel" button label to "Close", because:
+    // wxFormBuilder has no option to create/rename a Close button in the wxStdDialogButtonSizer
+    // and a Cancel button (id = wxID_CANCEL) is mandatory to allow dismiss dialog by ESC key
+    wxButton* button = dynamic_cast<wxButton*>( wxWindow::FindWindowById( wxID_CANCEL, this ) );
+
+    if( button )
+        button->SetLabel( _( "Close" ) );
+
     GetSizer()->SetSizeHints( this );
     Centre();
 }
@@ -68,7 +77,7 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
 
 
 // Specific data initialization
-void DIALOG_FREEROUTE::MyInit()
+void DIALOG_FREEROUTE::init()
 {
     SetFocus();
     m_freeRouterFound = false;

@@ -59,6 +59,9 @@
 
 using namespace DSN;
 
+// Uncomment to export CUSTOM pads. Currently, the code exists, but is not tested
+// because Freerouter does not handle them and I (JPC) have no way to test it
+// #define EXPORT_CUSTOM_PADS
 
 // Add .1 mil to the requested clearances as a safety margin.
 // There has been disagreement about interpretation of clearance in the past
@@ -479,6 +482,52 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             padstack->SetPadstackId( name );
         }
         break;
+
+    #ifdef EXPORT_CUSTOM_PADS
+    case PAD_SHAPE_CUSTOM:
+        {
+            const SHAPE_POLY_SET& pad_shape = aPad->GetCustomShapeAsPolygon();
+            int c_count = 0;
+
+            for( int ndx=0; ndx<reportedLayers; ++ndx )
+            {
+                SHAPE* shape = new SHAPE( padstack );
+
+                padstack->Append( shape );
+
+                // a T_polygon exists as a PATH
+                PATH* polygon = new PATH( shape, T_polygon );
+
+                shape->SetShape( polygon );
+
+                polygon->SetLayerId( layerName[ndx] );
+
+                // Output all corners:
+                const SHAPE_LINE_CHAIN& poly = pad_shape.COutline( 0 );
+                c_count = poly.PointCount();
+
+                // The polygon must be closed. so the last point index
+                // is idx = poly.PointCount() that is the same as idx = 0
+                for( int idx = 0; idx <= poly.PointCount(); idx++ )
+                {
+                    POINT corner( scale( poly.CPoint(idx ).x ), scale( poly.CPoint(idx ).y ) );
+                    corner += dsnOffset;
+                    polygon->AppendPoint( corner );
+                }
+            }
+
+            // this string _must_ be unique for a given physical shape, so try to make it unique
+            EDA_RECT rect = aPad->GetBoundingBox();
+            snprintf( name, sizeof(name), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um",
+                     uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
+                     IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ),
+                     c_count );
+            name[ sizeof(name)-1 ] = 0;
+
+            padstack->SetPadstackId( name );
+        }
+        break;
+    #endif
     }
 
     return padstack;
@@ -641,13 +690,11 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
                 double radius = GetLineLength( graphic->GetStart(), graphic->GetEnd() );
 
-                // better if evenly divisible into 360
-                const int DEGREE_INTERVAL = 18;         // 18 means 20 line segments
+                const int SEG_PER_CIRCLE = 36;         // seg count to approximate circle by line segments
 
-                for( double radians = 0.0;
-                     radians < 2 * M_PI;
-                     radians += DEGREE_INTERVAL * M_PI / 180.0 )
+                for( int ii = 0; ii < SEG_PER_CIRCLE; ++ii )
                 {
+                    double radians =  2*M_PI / SEG_PER_CIRCLE * ii;
                     wxPoint point( KiROUND( radius * cos( radians ) ),
                                    KiROUND( radius * sin( radians ) ) );
 
@@ -655,6 +702,10 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
                     path->AppendPoint( mapPt( point ) );
                 }
+                // The shape must be closed
+                wxPoint point( radius , 0 );
+                point += graphic->m_Start0;
+                path->AppendPoint( mapPt( point ) );
             }
             break;
 
@@ -1012,14 +1063,28 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             // Handle the main outlines
             SHAPE_POLY_SET::ITERATOR iterator;
+            wxPoint startpoint;
+            bool is_first_point = true;
+
             for( iterator = item->IterateWithHoles(); iterator; iterator++ )
             {
                 wxPoint point( iterator->x, iterator->y );
-                mainPolygon->AppendPoint( mapPt(point) );
+
+                if( is_first_point )
+                {
+                    startpoint = point;
+                    is_first_point = false;
+                }
+
+                mainPolygon->AppendPoint( mapPt( point ) );
 
                 // this was the end of the main polygon
                 if( iterator.IsEndContour() )
+                {
+                    // Close polygon
+                    mainPolygon->AppendPoint( mapPt( startpoint ) );
                     break;
+                }
             }
 
             WINDOW* window  = 0;
@@ -1032,6 +1097,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             {
                 if( isStartContour )
                 {
+                    is_first_point = true;
                     window = new WINDOW( plane );
 
                     plane->AddWindow( window );
@@ -1051,7 +1117,18 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 wxASSERT( cutout );
 
                 wxPoint point(iterator->x, iterator->y );
+
+                if( is_first_point )
+                {
+                    startpoint = point;
+                    is_first_point = false;
+                }
+
                 cutout->AppendPoint( mapPt(point) );
+
+                // Close the polygon
+                if( iterator.IsEndContour() )
+                    cutout->AppendPoint( mapPt( startpoint ) );
             }
         }
     }
@@ -1105,18 +1182,31 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 // Handle the main outlines
                 SHAPE_POLY_SET::ITERATOR iterator;
+                bool is_first_point = true;
+                wxPoint startpoint;
+
                 for( iterator = item->IterateWithHoles(); iterator; iterator++ )
                 {
                     wxPoint point( iterator->x, iterator->y );
+
+                    if( is_first_point )
+                    {
+                        startpoint = point;
+                        is_first_point = false;
+                    }
+
                     mainPolygon->AppendPoint( mapPt(point) );
 
                     // this was the end of the main polygon
                     if( iterator.IsEndContour() )
+                    {
+                        mainPolygon->AppendPoint( mapPt( startpoint ) );
                         break;
+                    }
                 }
 
-                WINDOW* window = 0;
-                PATH*   cutout = 0;
+                WINDOW* window = nullptr;
+                PATH*   cutout = nullptr;
 
                 bool isStartContour = true;
 
@@ -1125,6 +1215,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 {
                     if( isStartContour )
                     {
+                        is_first_point = true;
                         window = new WINDOW( keepout );
                         keepout->AddWindow( window );
 
@@ -1141,7 +1232,18 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     wxASSERT( cutout );
 
                     wxPoint point(iterator->x, iterator->y );
+
+                    if( is_first_point )
+                    {
+                        startpoint = point;
+                        is_first_point = false;
+                    }
+
                     cutout->AppendPoint( mapPt(point) );
+
+                    // Close the polygon
+                    if( iterator.IsEndContour() )
+                        cutout->AppendPoint( mapPt( startpoint ) );
                 }
             }
         }

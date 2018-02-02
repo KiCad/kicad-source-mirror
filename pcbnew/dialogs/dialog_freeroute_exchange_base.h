@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,7 +42,6 @@ class DIALOG_FREEROUTE_BASE : public DIALOG_SHIM
 		wxButton* m_buttonImport;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
-		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		wxButton* m_sdbSizerHelp;
 		

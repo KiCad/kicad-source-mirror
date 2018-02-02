@@ -585,7 +585,7 @@
                         <property name="ContextHelp">0</property>
                         <property name="Help">1</property>
                         <property name="No">0</property>
-                        <property name="OK">1</property>
+                        <property name="OK">0</property>
                         <property name="Save">0</property>
                         <property name="Yes">0</property>
                         <property name="minimum_size"></property>

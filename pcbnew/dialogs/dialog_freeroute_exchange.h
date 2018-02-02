@@ -40,7 +40,7 @@ private:
     void OnImportButtonClick( wxCommandEvent& event ) override;
     void OnHelpButtonClick( wxCommandEvent& event ) override;
 
-    void MyInit ( );
+    void init ( );
     const wxString createDSN_File();
 
 public:
