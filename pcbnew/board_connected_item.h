@@ -24,7 +24,7 @@
  */
 
 /**
- * @file  class_board_connected_item.h
+ * @file  board_connected_item.h
  * @brief Class BOARD_CONNECTED_ITEM.
  */
 

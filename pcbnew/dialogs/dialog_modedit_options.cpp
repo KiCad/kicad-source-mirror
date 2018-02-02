@@ -27,7 +27,7 @@
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <base_units.h>
 #include <widgets/text_ctrl_eval.h>
 

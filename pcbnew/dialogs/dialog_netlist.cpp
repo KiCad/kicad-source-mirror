@@ -39,7 +39,7 @@
 #include <netlist_reader.h>
 #include <reporter.h>
 
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <connectivity_data.h>

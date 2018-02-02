@@ -379,10 +379,10 @@ set( PCB_COMMON_SRCS
     pcb_plot_params_keywords.cpp
     ../pcbnew/pcb_base_frame.cpp
     ../pcbnew/board_commit.cpp
+    ../pcbnew/board_connected_item.cpp
+    ../pcbnew/board_design_settings.cpp
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/class_board.cpp
-    ../pcbnew/class_board_connected_item.cpp
-    ../pcbnew/class_board_design_settings.cpp
     ../pcbnew/class_board_item.cpp
     ../pcbnew/class_dimension.cpp
     ../pcbnew/class_drawsegment.cpp

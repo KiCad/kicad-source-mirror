@@ -35,7 +35,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <pcbnew.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 
 #include <drc.h>
 #include <class_pad.h>

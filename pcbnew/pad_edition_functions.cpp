@@ -39,7 +39,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 
 /* Exports the current pad settings to board design settings.
  */

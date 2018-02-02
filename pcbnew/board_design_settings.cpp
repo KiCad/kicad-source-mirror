@@ -22,7 +22,7 @@
  */
 
 /**
- * @file class_board_design_settings.cpp
+ * @file board_design_settings.cpp
  * BOARD_DESIGN_SETTINGS class functions.
  */
 
@@ -31,7 +31,7 @@
 #include <layers_id_colors_and_visibility.h>
 
 #include <pcbnew.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 
 #include <class_track.h>
 #include <convert_to_biu.h>

@@ -35,7 +35,7 @@
 #include <dialog_drc.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 

@@ -39,7 +39,7 @@
 #include <class_drawpanel.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <footprint_edit_frame.h>
 #include <base_units.h>
 #include <wx/valnum.h>

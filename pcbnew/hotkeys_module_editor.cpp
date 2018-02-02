@@ -32,7 +32,7 @@
 #include <pcbnew_id.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <origin_viewitem.h>
 #include <tools/pcbnew_control.h>
 

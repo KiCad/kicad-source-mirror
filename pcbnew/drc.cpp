@@ -31,7 +31,7 @@
 #include <pcb_edit_frame.h>
 #include <trigo.h>
 #include <base_units.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 
 #include <class_module.h>
 #include <class_track.h>

@@ -33,10 +33,9 @@
 
 #include <pcbnew.h>
 #include <class_board_item.h>
-#include <class_board_connected_item.h>
+#include <board_connected_item.h>
 #include <pcb_display_options.h>
 
-//#include <PolyLine.h>
 #include <trigo.h>
 
 

@@ -39,7 +39,7 @@
 #include <common.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <plotter.h>
 #include <worksheet.h>
 #include <dialog_hotkeys_editor.h>

@@ -24,7 +24,7 @@
  */
 
 /**
- * @file class_board_connected_item.cpp
+ * @file board_connected_item.cpp
  * @brief BOARD_CONNECTED_ITEM class functions.
  */
 

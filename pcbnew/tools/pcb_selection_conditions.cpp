@@ -24,7 +24,7 @@
 
 #include "pcb_selection_conditions.h"
 #include "selection_tool.h"
-#include <class_board_connected_item.h>
+#include <board_connected_item.h>
 
 #include <functional>
 using namespace std::placeholders;

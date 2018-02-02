@@ -23,10 +23,10 @@
 
 
 
-%include class_board_connected_item.h
+%include board_connected_item.h
 
 %{
-#include <class_board_connected_item.h>
+#include <board_connected_item.h>
 %}
 
 %typemap(out) std::list<BOARD_CONNECTED_ITEM*> {
@@ -34,18 +34,18 @@
     std::list<BOARD_CONNECTED_ITEM*>::const_iterator iter;
 
     PyObject * retval = $result = PyList_New(0);
-  
+
     for( iter=list.begin(); iter!=list.end(); iter++ ) {
         BOARD_CONNECTED_ITEM* aItem = *iter;
         PyObject* obj = 0x0;
-    
+
         switch( aItem->Type() ) {
-        case PCB_PAD_T:  
+        case PCB_PAD_T:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
                                       SWIGTYPE_p_D_PAD,
                                       0 | 0 );
             break;
-    
+
         case PCB_TRACE_T:
         case PCB_VIA_T:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
@@ -58,7 +58,7 @@
                                       SWIGTYPE_p_ZONE_CONTAINER,
                                       0 | 0 );
             break;
-    
+
         default:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
                                       SWIGTYPE_p_BOARD_CONNECTED_ITEM,

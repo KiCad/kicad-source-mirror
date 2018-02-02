@@ -39,7 +39,7 @@
 #include <netinfo.h>
 #include <class_pad.h>
 #include <colors_design_settings.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <title_block.h>
 #include <zone_settings.h>
 #include <pcb_plot_params.h>

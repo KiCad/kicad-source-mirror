@@ -33,7 +33,7 @@
 #include <base_units.h>
 
 #include <pcbnew.h>
-#include <class_board_design_settings.h>
+#include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <pcbnew_id.h>

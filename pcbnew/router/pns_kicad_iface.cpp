@@ -21,7 +21,7 @@
 
 #include <undo_redo_container.h>
 #include <class_board.h>
-#include <class_board_connected_item.h>
+#include <board_connected_item.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <board_commit.h>

@@ -32,7 +32,7 @@
 
 
 #include <class_board_item.h>
-#include <class_board_connected_item.h>
+#include <board_connected_item.h>
 #include <pad_shapes.h>
 #include <PolyLine.h>
 #include <config_params.h>       // PARAM_CFG_ARRAY

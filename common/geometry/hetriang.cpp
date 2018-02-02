@@ -45,7 +45,7 @@
 #include <algorithm>
 #include <fstream>
 #include <limits>
-#include <class_board_connected_item.h>
+#include <board_connected_item.h>
 #include <memory>
 
 using namespace hed;
