@@ -54,14 +54,20 @@
 #include <collectors.h>
 
 #include <geometry/shape_poly_set.h>
+#include <geometry/convex_hull.h>
 
 #include "specctra.h"
 
 using namespace DSN;
 
-// Uncomment to export CUSTOM pads. Currently, the code exists, but is not tested
-// because Freerouter does not handle them and I (JPC) have no way to test it
-// #define EXPORT_CUSTOM_PADS
+// comment the line #define EXPORT_CUSTOM_PADS_CONVEX_HULL to export CUSTOM pads exact shapes.
+// Keep in mind shapes can be non convex polygons with holes (linked to outline)
+// that can create issues.
+// Especially Freerouter does not handle them very well:
+// - too complex shapes are not accepted, especially shapes with holes (dsn files are not loaded).
+// - and Freerouter actually uses something like a convex hull of the shape (that works not very well).
+// I am guessing non convex polygons with holes linked could create issues with any Router.
+#define EXPORT_CUSTOM_PADS_CONVEX_HULL
 
 // Add .1 mil to the requested clearances as a safety margin.
 // There has been disagreement about interpretation of clearance in the past
@@ -483,13 +489,24 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
-    #ifdef EXPORT_CUSTOM_PADS
     case PAD_SHAPE_CUSTOM:
         {
+            std::vector<wxPoint> polygonal_shape;
             const SHAPE_POLY_SET& pad_shape = aPad->GetCustomShapeAsPolygon();
-            int c_count = 0;
 
-            for( int ndx=0; ndx<reportedLayers; ++ndx )
+            #ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
+            BuildConvexHull( polygonal_shape, pad_shape );
+            #else
+            const SHAPE_LINE_CHAIN& p_outline = pad_shape.COutline( 0 );
+            for( int ii = 0; ii < p_outline.PointCount(); ++ii )
+                polygonal_shape.push_back( wxPoint( p_outline.CPoint( ii ) ) );
+            #endif
+
+            // The polygon must be closed
+            if( polygonal_shape.front() != polygonal_shape.back() )
+                polygonal_shape.push_back( polygonal_shape.front() );
+
+            for( int ndx=0; ndx < reportedLayers; ++ndx )
             {
                 SHAPE* shape = new SHAPE( padstack );
 
@@ -502,15 +519,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
                 polygon->SetLayerId( layerName[ndx] );
 
-                // Output all corners:
-                const SHAPE_LINE_CHAIN& poly = pad_shape.COutline( 0 );
-                c_count = poly.PointCount();
-
-                // The polygon must be closed. so the last point index
-                // is idx = poly.PointCount() that is the same as idx = 0
-                for( int idx = 0; idx <= poly.PointCount(); idx++ )
+                for( unsigned idx = 0; idx <= polygonal_shape.size(); idx++ )
                 {
-                    POINT corner( scale( poly.CPoint(idx ).x ), scale( poly.CPoint(idx ).y ) );
+                    POINT corner( scale( polygonal_shape[idx].x ), scale( -polygonal_shape[idx].y ) );
                     corner += dsnOffset;
                     polygon->AppendPoint( corner );
                 }
@@ -521,13 +532,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             snprintf( name, sizeof(name), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um",
                      uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
                      IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ),
-                     c_count );
+                     (int)polygonal_shape.size() );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
         }
         break;
-    #endif
     }
 
     return padstack;
