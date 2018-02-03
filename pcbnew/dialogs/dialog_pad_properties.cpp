@@ -41,6 +41,7 @@
 #include <base_units.h>
 #include <unit_format.h>
 #include <board_commit.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -543,7 +544,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_primitives = m_dummyPad->GetPrimitives();
 
-    m_staticTextWarningPadFlipped->Show(m_isFlipped);
+    m_FlippedWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+    m_FlippedWarningSizer->Show(m_isFlipped);
 
     m_PadNumCtrl->SetValue( m_dummyPad->GetName() );
     m_PadNetNameCtrl->SetValue( m_dummyPad->GetNetname() );

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_PAD_PROPERTIES_BASE_H__
@@ -11,9 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
-class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -27,11 +25,12 @@ class wxListView;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
-#include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/statbmp.h>
+#include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
@@ -111,6 +110,12 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextCornerRadius;
 		wxStaticText* m_staticTextCornerRadiusValue;
 		wxStaticText* m_staticTextCornerSizeUnit;
+		wxStaticLine* m_staticline91;
+		wxStaticLine* m_staticline92;
+		wxStaticLine* m_staticline93;
+		wxStaticText* m_staticModuleSideValue;
+		wxStaticText* m_staticTitleModuleRot;
+		wxStaticText* m_staticModuleRotValue;
 		wxStaticText* m_staticText47;
 		wxChoice* m_DrillShapeCtrl;
 		wxStaticText* m_staticText51;
@@ -120,6 +125,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textPadDrillY;
 		TEXT_CTRL_EVAL* m_PadDrill_Y_Ctrl;
 		wxStaticText* m_PadDrill_Y_Unit;
+		wxBoxSizer* m_FlippedWarningSizer;
+		wxStaticBitmap* m_FlippedWarningIcon;
+		wxStaticText* m_staticText86;
 		wxStaticText* m_staticText511;
 		wxChoice* m_rbCopperLayersSel;
 		wxCheckBox* m_PadLayerAdhCmp;
@@ -133,10 +141,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_PadLayerDraft;
 		wxCheckBox* m_PadLayerECO1;
 		wxCheckBox* m_PadLayerECO2;
-		wxStaticText* m_staticTitleModuleRot;
-		wxStaticText* m_staticModuleRotValue;
-		wxStaticText* m_staticTitleModuleSide;
-		wxStaticText* m_staticModuleSideValue;
 		wxPanel* m_localSettingsPanel;
 		wxStaticText* m_staticTextWarning;
 		wxStaticText* m_staticTextNetClearance;
@@ -180,7 +184,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
 		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
 		wxCheckBox* m_cbShowPadOutline;
-		wxStaticText* m_staticTextWarningPadFlipped;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
