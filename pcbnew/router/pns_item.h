@@ -76,6 +76,7 @@ public:
         m_owner = NULL;
         m_marker = 0;
         m_rank = -1;
+        m_routable = true;
     }
 
     ITEM( const ITEM& aOther )
@@ -88,6 +89,7 @@ public:
         m_owner = NULL;
         m_marker = aOther.m_marker;
         m_rank = aOther.m_rank;
+        m_routable = aOther.m_routable;
     }
 
     virtual ~ITEM();
@@ -338,6 +340,16 @@ public:
         return Marker() & MK_LOCKED;
     }
 
+    void SetRoutable( bool aRoutable )
+    {
+        m_routable = aRoutable;
+    }
+
+    bool IsRoutable() const
+    {
+        return m_routable;
+    }
+
 private:
     bool collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV,
             VECTOR2I& aMTV, bool aDifferentNetsOnly ) const;
@@ -353,6 +365,7 @@ protected:
     int                     m_net;
     int                     m_marker;
     int                     m_rank;
+    bool                    m_routable;
 };
 
 template< typename T, typename S >

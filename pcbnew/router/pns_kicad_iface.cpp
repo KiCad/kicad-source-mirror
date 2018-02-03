@@ -24,6 +24,8 @@
 #include <board_connected_item.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <class_zone.h>
+#include <class_drawsegment.h>
 #include <board_commit.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
@@ -84,7 +86,7 @@ private:
     };
 
     int localPadClearance( const PNS::ITEM* aItem ) const;
-    int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
+    int matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
     PNS::ROUTER* m_router;
     BOARD*       m_board;
@@ -225,7 +227,7 @@ void PNS_PCBNEW_RULE_RESOLVER::OverrideClearance( bool aEnable, int aNetA, int a
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName )
+int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName )
 {
     int rv = 0;
 
@@ -474,7 +476,6 @@ PNS_KICAD_IFACE::PNS_KICAD_IFACE()
     m_tool = nullptr;
     m_view = nullptr;
     m_previewItems = nullptr;
-    m_world = nullptr;
     m_router = nullptr;
     m_debugDecorator = nullptr;
     m_dispOptions = nullptr;
@@ -789,6 +790,57 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
     return via;
 }
 
+bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
+{
+    SHAPE_POLY_SET poly;
+
+    if( !aZone->GetIsKeepout() )
+        return false;
+
+    aZone->BuildSmoothedPoly( poly );
+    poly.CacheTriangulation();
+
+    LSET layers = aZone->GetLayerSet();
+
+    for ( int layer = F_Cu; layer <= B_Cu; layer++ )
+    {
+        if ( ! layers[layer] )
+            continue;
+
+        for ( int outline = 0; outline < poly.OutlineCount(); outline++ )
+        {
+            auto tri = poly.TriangulatedPolygon( outline );
+
+            for( int i = 0; i < tri->GetTriangleCount(); i++)
+            {
+                VECTOR2I a, b, c;
+                tri->GetTriangle( i, a, b, c );
+                auto triShape = new SHAPE_CONVEX;
+
+                triShape->Append( a );
+                triShape->Append( b );
+                triShape->Append( c );
+
+                std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+
+                solid->SetLayer( layer );
+                solid->SetNet( 0 );
+                solid->SetParent( aZone );
+                solid->SetShape( triShape );
+                solid->SetRoutable( false );
+
+                aWorld->Add( std::move( solid ) );
+            }
+        }
+    }
+
+    return true;
+}
+
+std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncGraphicalItem( DRAWSEGMENT* aItem )
+{
+    return nullptr;
+}
 
 void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
 {
@@ -805,6 +857,19 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
     {
         wxLogTrace( "PNS", "No board attached, aborting sync." );
         return;
+    }
+
+    for( auto gitem : m_board->Drawings() )
+    {
+        auto solid = syncGraphicalItem( static_cast<DRAWSEGMENT*>( gitem ) );
+
+    	if ( solid )
+    	    aWorld->Add( std::move( solid ) );
+    }
+
+    for( auto zone : m_board->Zones() )
+    {
+        syncZone( aWorld, zone );
     }
 
     for( auto module : m_board->Modules() )

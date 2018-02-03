@@ -67,15 +67,16 @@ private:
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;
     PNS_PCBNEW_DEBUG_DECORATOR* m_debugDecorator;
 
-    std::unique_ptr<PNS::SOLID>   syncPad( D_PAD* aPad );
+    std::unique_ptr<PNS::SOLID> syncPad( D_PAD* aPad );
     std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
-    std::unique_ptr<PNS::VIA>     syncVia( VIA* aVia );
+    std::unique_ptr<PNS::VIA> syncVia( VIA* aVia );
+    std::unique_ptr<PNS::SOLID> syncGraphicalItem( DRAWSEGMENT* aItem );
+    bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone );
 
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;
     std::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;
 
-    PNS::NODE* m_world;
     PNS::ROUTER* m_router;
     BOARD* m_board;
     PCB_TOOL* m_tool;

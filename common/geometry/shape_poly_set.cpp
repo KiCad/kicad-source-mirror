@@ -57,6 +57,12 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
 {
 }
 
+
+SHAPE_POLY_SET::~SHAPE_POLY_SET()
+{
+}
+
+
 SHAPE* SHAPE_POLY_SET::Clone() const
 {
     return new SHAPE_POLY_SET( *this );
@@ -1033,9 +1039,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
         n++;
     }
 
-    assert( outline >= 0 );
-
-    if( outline !=0 )
+    if( outline > 0 )
         std::swap( result[0], result[outline] );
 
     aPoly = result;
@@ -1970,7 +1974,7 @@ private:
         }
         else
         {
-            auto lastId = m_triPoly->VertexCount();
+            auto lastId = m_triPoly->GetVertexCount();
             auto p = new p2t::Point( aP.x, aP.y, lastId );
             m_triPoly->AddVertex( aP );
             m_uniquePoints.insert ( p );

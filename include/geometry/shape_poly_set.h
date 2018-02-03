@@ -100,14 +100,14 @@ class SHAPE_POLY_SET : public SHAPE
                 return (m_vertexCount++);
             }
 
-            int VertexCount() const
-            {
-                return m_vertexCount;
-            }
-
-            int TriangleCount() const
+            int GetTriangleCount() const
             {
                 return m_triangleCount;
+            }
+
+            int GetVertexCount() const
+            {
+                return m_vertexCount;
             }
 
         private:
@@ -426,6 +426,8 @@ class SHAPE_POLY_SET : public SHAPE
          * @param aOther is the SHAPE_POLY_SET object that will be copied.
          */
         SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther );
+
+        ~SHAPE_POLY_SET();
 
         /**
          * Function GetRelativeIndices

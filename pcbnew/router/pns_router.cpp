@@ -152,9 +152,30 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem, int aDragMode 
     return true;
 }
 
+bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
+{
+    auto candidates = QueryHoverItems( aWhere );
+
+    for( ITEM* item : candidates.Items() )
+    {
+        if( ! item->IsRoutable() && item->Layers().Overlaps( aLayer ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {
+
+    if( ! isStartingPointRoutable( aP, aLayer ) )
+    {
+        SetFailureReason( _("Cannot start routing inside a keepout area." ) );
+        return false;
+    }
+
     m_forceMarkObstaclesMode = false;
 
     switch( m_mode )

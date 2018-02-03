@@ -245,6 +245,7 @@ private:
     void highlightCurrent( bool enabled );
 
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
+    bool isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer );
 
     VECTOR2I m_currentEnd;
     RouterState m_state;

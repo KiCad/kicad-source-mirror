@@ -129,6 +129,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
 
     for( ITEM* item : candidates.Items() )
     {
+        if( !item->IsRoutable() )
+            continue;
+
         if( !IsCopperLayer( item->Layers().Start() ) )
             continue;
 

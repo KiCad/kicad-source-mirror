@@ -184,6 +184,8 @@ INDEX::ITEM_SHAPE_INDEX* INDEX::getSubindex( const ITEM* aItem )
                 idx_n = SI_PadsTop;
             else if( l.Start() == F_Cu )
                 idx_n = SI_PadsBottom;
+            else
+                idx_n = SI_Traces + 2 * l.Start() + SI_SegStraight;
         }
         break;
 
