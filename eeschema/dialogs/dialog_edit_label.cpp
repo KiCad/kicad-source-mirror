@@ -40,6 +40,7 @@
 #include <confirm.h>
 #include <sch_text.h>
 #include <typeinfo>
+#include <widgets/unit_binder.h>
 
 #include <dialog_edit_label_base.h>
 
@@ -78,16 +79,16 @@ public:
     }
 
 private:
-    void InitDialog( ) override;
     virtual void OnEnterKey( wxCommandEvent& aEvent ) override;
-    virtual void OnOkClick( wxCommandEvent& aEvent ) override;
-    virtual void OnCancelClick( wxCommandEvent& aEvent ) override;
     void OnCharHook( wxKeyEvent& aEvent );
-    void TextPropertiesAccept( wxCommandEvent& aEvent );
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
     SCH_EDIT_FRAME* m_Parent;
     SCH_TEXT*       m_CurrentText;
-    wxTextCtrl*     m_textLabel;
+    wxTextCtrl*     m_activeTextCtrl;
+    UNIT_BINDER     m_textSize;
 };
 
 
@@ -106,24 +107,61 @@ void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
 }
 
 
+// Conservative limits 0.01 to 250mm
+const int minSize = (int)( 0.01 * IU_PER_MM );
+const int maxSize = (int)( 250 * IU_PER_MM );
+
+
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
-    DIALOG_LABEL_EDITOR_BASE( aParent )
+    DIALOG_LABEL_EDITOR_BASE( aParent ),
+    m_textSize( aParent, m_SizeTitle, m_TextSizeCtrl, m_staticSizeUnits, false, minSize, maxSize )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
-    InitDialog();
 
-    // Conservative limits 0.0 to 10.0 inches
-    const int minSize = 0;  // a value like 0.01 is better, but if > 0, creates
-                            // annoying issues when trying to enter a value starting by 0 or .0
-    const int maxSize = 10 * 1000 * IU_PER_MILS;
+    switch( m_CurrentText->Type() )
+    {
+    case SCH_GLOBAL_LABEL_T:
+        SetTitle( _( "Global Label Properties" ) );
+        break;
 
-    wxFloatingPointValidator<double> textSizeValidator( NULL, wxNUM_VAL_NO_TRAILING_ZEROES );
-    textSizeValidator.SetPrecision( 4 );
-    textSizeValidator.SetRange( To_User_Unit( g_UserUnit, minSize ),
-                                To_User_Unit( g_UserUnit, maxSize ) );
+    case SCH_HIERARCHICAL_LABEL_T:
+        SetTitle( _( "Hierarchical Label Properties" ) );
+        break;
 
-    m_TextSize->SetValidator( textSizeValidator );
+    case SCH_LABEL_T:
+        SetTitle( _( "Label Properties" ) );
+        break;
+
+    case SCH_SHEET_PIN_T:
+        SetTitle( _( "Hierarchical Sheet Pin Properties." ) );
+        break;
+
+    default:
+        SetTitle( _( "Text Properties" ) );
+        break;
+    }
+
+    if( m_CurrentText->IsMultilineAllowed() )
+    {
+        m_activeTextCtrl = m_textLabelMultiLine;
+        m_textLabelSingleLine->Show( false );
+        m_textControlSizer->AddGrowableRow( 0 );
+    }
+    else
+    {
+        m_activeTextCtrl = m_textLabelSingleLine;
+        m_textLabelMultiLine->Show( false );
+    }
+
+    if( m_CurrentText->Type() != SCH_TEXT_T )
+        ( (wxTextValidator*) m_activeTextCtrl->GetValidator() )->SetCharExcludes( wxT( " /" ) );
+
+    m_TextShape->Show( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T ||
+                       m_CurrentText->Type() == SCH_HIERARCHICAL_LABEL_T );
+
+    m_sdbSizer1OK->SetDefault();
+    Layout();
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
@@ -165,93 +203,13 @@ static int mapOrientation( KICAD_T labelType, int aOrientation )
 }
 
 
-void DIALOG_LABEL_EDITOR::InitDialog()
+bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 {
-    wxString msg;
-    bool multiLine = false;
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
 
-    if( m_CurrentText->IsMultilineAllowed() )
-    {
-        m_textLabel = m_textLabelMultiLine;
-        m_textLabelSingleLine->Show( false );
-        m_textControlSizer->AddGrowableRow( 0 );
-        multiLine = true;
-    }
-    else
-    {
-        m_textLabel = m_textLabelSingleLine;
-        m_textLabelMultiLine->Show( false );
-        wxTextValidator* validator = (wxTextValidator*) m_textLabel->GetValidator();
-
-        // Add invalid label characters to this list.
-        // for any label type but SCH_TEXT_T (that has the multiline allowed)
-        validator->SetCharExcludes( wxT( " /" ) );
-    }
-
-    m_textLabel->SetValue( m_CurrentText->GetText() );
-    m_textLabel->SetFocus();
-
-    switch( m_CurrentText->Type() )
-    {
-    case SCH_GLOBAL_LABEL_T:
-        SetTitle( _( "Global Label Properties" ) );
-        break;
-
-    case SCH_HIERARCHICAL_LABEL_T:
-        SetTitle( _( "Hierarchical Label Properties" ) );
-        break;
-
-    case SCH_LABEL_T:
-        SetTitle( _( "Label Properties" ) );
-        break;
-
-    case SCH_SHEET_PIN_T:
-        SetTitle( _( "Hierarchical Sheet Pin Properties." ) );
-        break;
-
-    default:
-        SetTitle( _( "Text Properties" ) );
-        break;
-    }
-
-    const int MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
-
-    int max_len = 0;
-
-    if ( !multiLine )
-    {
-        max_len = m_CurrentText->GetText().Length();
-    }
-    else
-    {
-        // calculate the length of the biggest line
-        // we cannot use the length of the entire text that has no meaning
-        int curr_len = MINTEXTWIDTH;
-        int imax = m_CurrentText->GetText().Length();
-
-        for( int count = 0; count < imax; count++ )
-        {
-            if( m_CurrentText->GetText()[count] == '\n' ||
-                m_CurrentText->GetText()[count] == '\r' ) // new line
-            {
-                curr_len = 0;
-            }
-            else
-            {
-                curr_len++;
-
-                if ( max_len < curr_len )
-                    max_len = curr_len;
-            }
-        }
-    }
-
-    if( max_len < MINTEXTWIDTH )
-        max_len = MINTEXTWIDTH;
-
-    wxString textWidth;
-    textWidth.Append( 'M', MINTEXTWIDTH );
-    EnsureTextCtrlWidth( m_textLabel, &textWidth );
+    m_activeTextCtrl->SetValue( m_CurrentText->GetText() );
+    m_activeTextCtrl->SetFocus();
 
     // Set text options:
     int orientation = mapOrientation( m_CurrentText->Type(), m_CurrentText->GetLabelSpinStyle() );
@@ -269,35 +227,24 @@ void DIALOG_LABEL_EDITOR::InitDialog()
 
     m_TextStyle->SetSelection( style );
 
-    wxString units = ReturnUnitSymbol( g_UserUnit, wxT( "(%s)" ) );
-    msg.Printf( _( "H%s x W%s" ), GetChars( units ), GetChars( units ) );
-    m_staticSizeUnits->SetLabel( msg );
+    m_textSize.SetValue( m_CurrentText->GetTextWidth() );
 
-    msg = StringFromValue( g_UserUnit, m_CurrentText->GetTextWidth() );
-    m_TextSize->SetValue( msg );
-
-    if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T
-     && m_CurrentText->Type() != SCH_HIERARCHICAL_LABEL_T )
-    {
-        m_TextShape->Show( false );
-    }
-
-    m_sdbSizer1OK->SetDefault();
+    return true;
 }
 
 
 /*!
- * wxEVT_COMMAND_ENTER event handler for m_textLabel
+ * wxEVT_COMMAND_ENTER event handler for single-line control
  */
 
 void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
 {
-    TextPropertiesAccept( aEvent );
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
 /*!
- * wxEVT_CHAR_HOOK event handler for m_textLabel
+ * wxEVT_CHAR_HOOK event handler for multi-line control
  */
 
 void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvent )
@@ -313,8 +260,7 @@ void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
     {
-        wxCommandEvent cmdEvent( wxEVT_COMMAND_ENTER );
-        TextPropertiesAccept( cmdEvent );
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
     else
     {
@@ -323,31 +269,12 @@ void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvent )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
- */
-
-void DIALOG_LABEL_EDITOR::OnOkClick( wxCommandEvent& aEvent )
+bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 {
-    TextPropertiesAccept( aEvent );
-}
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
 
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
- */
-
-void DIALOG_LABEL_EDITOR::OnCancelClick( wxCommandEvent& aEvent )
-{
-    m_Parent->GetCanvas()->MoveCursorToCrossHair();
-    EndModal( wxID_CANCEL );
-}
-
-
-void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
-{
     wxString text;
-    int      value;
 
     /* save old text in undo list if not already in edit */
     /* or the label to be edited is part of a block */
@@ -357,22 +284,20 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
 
-    text = m_textLabel->GetValue();
+    text = m_activeTextCtrl->GetValue();
 
     if( !text.IsEmpty() )
         m_CurrentText->SetText( text );
     else if( !m_CurrentText->IsNew() )
     {
         DisplayError( this, _( "Empty Text!" ) );
-        return;
+        return false;
     }
 
     int orientation = m_TextOrient->GetSelection();
     m_CurrentText->SetLabelSpinStyle( mapOrientation( m_CurrentText->Type(), orientation ) );
 
-    text  = m_TextSize->GetValue();
-    value = ValueFromString( g_UserUnit, text );
-    m_CurrentText->SetTextSize( wxSize( value, value ) );
+    m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     if( m_TextShape )
         /// @todo move cast to widget
@@ -401,5 +326,6 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->GetCanvas()->MoveCursorToCrossHair();
-    EndModal( wxID_OK );
+
+    return true;
 }

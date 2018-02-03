@@ -70,6 +70,15 @@ public:
     PROJECT& Prj() const;
 
     /**
+     * Function GetUserUnits
+     * Allows participation in KEYWAY_PLAYER/DIALOG_SHIM userUnits inheritance.
+     *
+     * This would fit better in KEYWAY_PLAYER, but DIALOG_SHIMs can only use mix-ins
+     * because their primary superclass must be wxDialog.
+     */
+    VTBL_ENTRY EDA_UNITS_T GetUserUnits() const;
+
+    /**
      * Function SetKiway
      *
      * @param aDest is the recipient of aKiway pointer.

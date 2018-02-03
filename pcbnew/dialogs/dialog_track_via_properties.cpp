@@ -28,40 +28,32 @@
 #include <class_track.h>
 #include <pcb_edit_frame.h>
 #include <confirm.h>
-#include <widgets/text_ctrl_eval.h>
 
 #include <widgets/widget_net_selector.h>
 #include <board_commit.h>
 
-DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const SELECTION& aItems ) :
-    DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ), m_items( aItems ),
-    m_trackStartX( aParent, m_TrackStartXCtrl, m_TrackStartXUnit ),
-    m_trackStartY( aParent, m_TrackStartYCtrl, m_TrackStartYUnit ),
-    m_trackEndX( aParent, m_TrackEndXCtrl, m_TrackEndXUnit ),
-    m_trackEndY( aParent, m_TrackEndYCtrl, m_TrackEndYUnit ),
-    m_trackWidth( aParent, m_TrackWidthCtrl, m_TrackWidthUnit ),
-    m_viaX( aParent, m_ViaXCtrl, m_ViaXUnit ), m_viaY( aParent, m_ViaYCtrl, m_ViaYUnit ),
-    m_viaDiameter( aParent, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
-    m_viaDrill( aParent, m_ViaDrillCtrl, m_ViaDrillUnit ),
-    m_tracks( false ), m_vias( false )
+#define MIN_SIZE ( int )( 0.001 * IU_PER_MM )
+
+DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
+                                                          const SELECTION& aItems,
+                                                          COMMIT& aCommit ) :
+    DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
+    m_items( aItems ), m_commit( aCommit ),
+    m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, m_TrackStartXUnit ),
+    m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
+    m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, m_TrackEndXUnit ),
+    m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
+    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, false, MIN_SIZE ),
+    m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, m_ViaXUnit ),
+    m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
+    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, false, MIN_SIZE ),
+    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, false, MIN_SIZE ),
+    m_tracks( false ),
+    m_vias( false )
 {
     wxASSERT( !m_items.Empty() );
 
-    // This is a way to trick gcc into considering these variables as initialized
-    OPT<int> trackStartX( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> trackStartY( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> trackEndX( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> trackEndY( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> trackWidth( []()->OPT<int> { return NULLOPT; }() );
-    OPT<PCB_LAYER_ID> trackLayer( []()->OPT<PCB_LAYER_ID> { return NULLOPT; }() );
-    OPT<int> viaX( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> viaY( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> viaDiameter( []()->OPT<int> { return NULLOPT; }() );
-    OPT<int> viaDrill( []()->OPT<int> { return NULLOPT; }() );
-
-    VIATYPE_T viaType = VIA_NOT_DEFINED;
-    PCB_LAYER_ID viaStartLayer = UNDEFINED_LAYER;
-    PCB_LAYER_ID viaEndLayer = UNDEFINED_LAYER;
+    VIATYPE_T    viaType = VIA_NOT_DEFINED;
 
     m_haveUniqueNet = true;
     int prevNet = -1;
@@ -87,13 +79,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     }
 
     if ( m_haveUniqueNet )
-    {
         m_NetComboBox->SetSelectedNet( prevNet );
-    }
     else
-    {
         m_NetComboBox->SetMultiple( true );
-    }
 
 
     // Look for values that are common for every item that is selected
@@ -107,33 +95,33 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                 if( !m_tracks )     // first track in the list
                 {
-                    trackStartX = t->GetStart().x;
-                    trackStartY = t->GetStart().y;
-                    trackEndX   = t->GetEnd().x;
-                    trackEndY   = t->GetEnd().y;
-                    trackWidth  = t->GetWidth();
-                    trackLayer  = t->GetLayer();
+                    m_trackStartX.SetValue( t->GetStart().x );
+                    m_trackStartY.SetValue( t->GetStart().y );
+                    m_trackEndX.SetValue( t->GetEnd().x );
+                    m_trackEndY.SetValue( t->GetEnd().y );
+                    m_trackWidth.SetValue( t->GetWidth() );
+                    m_TrackLayerCtrl->SetLayerSelection( t->GetLayer() );
                     m_tracks    = true;
                 }
                 else        // check if values are the same for every selected track
                 {
-                    if( trackStartX && ( *trackStartX != t->GetStart().x ) )
-                        trackStartX = NULLOPT;
+                    if( m_trackStartX.GetValue() != t->GetStart().x )
+                        m_trackStartX.SetValue( INDETERMINATE );
 
-                    if( trackStartY && ( *trackStartY != t->GetStart().y ) )
-                        trackStartY = NULLOPT;
+                    if( m_trackStartY.GetValue() != t->GetStart().y )
+                        m_trackStartY.SetValue( INDETERMINATE );
 
-                    if( trackEndX && ( *trackEndX != t->GetEnd().x ) )
-                        trackEndX = NULLOPT;
+                    if( m_trackEndX.GetValue() != t->GetEnd().x )
+                        m_trackEndX.SetValue( INDETERMINATE );
 
-                    if( trackEndY && ( *trackEndY != t->GetEnd().y ) )
-                        trackEndY = NULLOPT;
+                    if( m_trackEndY.GetValue() != t->GetEnd().y )
+                        m_trackEndY.SetValue( INDETERMINATE );
 
-                    if( trackWidth && ( *trackWidth != t->GetWidth() ) )
-                        trackWidth = NULLOPT;
+                    if( m_trackWidth.GetValue() != t->GetWidth() )
+                        m_trackWidth.SetValue( INDETERMINATE );
 
-                    if( trackLayer && ( *trackLayer != t->GetLayer() ) )
-                        trackLayer = NULLOPT;
+                    if( m_TrackLayerCtrl->GetLayerSelection() != t->GetLayer() )
+                        m_TrackLayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
                 }
 
                 if( t->IsLocked() )
@@ -150,37 +138,37 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                 if( !m_vias )       // first via in the list
                 {
-                    viaX = v->GetPosition().x;
-                    viaY = v->GetPosition().y;
-                    viaDiameter = v->GetWidth();
-                    viaDrill = v->GetDrillValue();
+                    m_viaX.SetValue( v->GetPosition().x );
+                    m_viaY.SetValue( v->GetPosition().y );
+                    m_viaDiameter.SetValue( v->GetWidth() );
+                    m_viaDrill.SetValue( v->GetDrillValue() );
                     m_vias = true;
                     viaType = v->GetViaType();
-                    viaStartLayer = v->TopLayer();
-                    viaEndLayer = v->BottomLayer();
+                    m_ViaStartLayer->SetLayerSelection( v->TopLayer() );
+                    m_ViaEndLayer->SetLayerSelection( v->BottomLayer() );
                 }
                 else        // check if values are the same for every selected via
                 {
-                    if( viaX && ( *viaX != v->GetPosition().x ) )
-                        viaX = NULLOPT;
+                    if( m_viaX.GetValue() != v->GetPosition().x )
+                        m_viaX.SetValue( INDETERMINATE );
 
-                    if( viaY && ( *viaY != v->GetPosition().y ) )
-                        viaY = NULLOPT;
+                    if( m_viaY.GetValue() != v->GetPosition().y )
+                        m_viaY.SetValue( INDETERMINATE );
 
-                    if( viaDiameter && ( *viaDiameter != v->GetWidth() ) )
-                        viaDiameter = NULLOPT;
+                    if( m_viaDiameter.GetValue() != v->GetWidth() )
+                        m_viaDiameter.SetValue( INDETERMINATE );
 
-                    if( viaDrill && ( *viaDrill != v->GetDrillValue() ) )
-                        viaDrill = NULLOPT;
+                    if( m_viaDrill.GetValue() != v->GetDrillValue() )
+                        m_viaDrill.SetValue( INDETERMINATE );
 
                     if( viaType != v->GetViaType() )
                         viaType = VIA_NOT_DEFINED;
 
-                    if( viaStartLayer != v->TopLayer() )
-                        viaStartLayer = UNDEFINED_LAYER;
+                    if( m_ViaStartLayer->GetLayerSelection() != v->TopLayer() )
+                        m_ViaStartLayer->SetLayerSelection( UNDEFINED_LAYER );
 
-                    if( viaEndLayer != v->BottomLayer() )
-                        viaEndLayer = UNDEFINED_LAYER;
+                    if( m_ViaEndLayer->GetLayerSelection() != v->BottomLayer() )
+                        m_ViaEndLayer->SetLayerSelection( UNDEFINED_LAYER );
                 }
 
                 if( v->IsLocked() )
@@ -203,24 +191,20 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_vias )
     {
-        setCommonVal( viaX, m_ViaXCtrl, m_viaX );
-        setCommonVal( viaY, m_ViaYCtrl, m_viaY );
-        setCommonVal( viaDiameter, m_ViaDiameterCtrl, m_viaDiameter );
-        setCommonVal( viaDrill, m_ViaDrillCtrl, m_viaDrill );
-
-        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 
         int viaSelection = wxNOT_FOUND;
 
         for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString msg = StringFromValue( g_UserUnit, viaDimension->m_Diameter, false )
-                + " / " + StringFromValue( g_UserUnit, viaDimension->m_Drill, false );
+            wxString msg = StringFromValue( m_units, viaDimension->m_Diameter, false )
+                + " / " + StringFromValue( m_units, viaDimension->m_Drill, false );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
 
-            if( viaSelection == wxNOT_FOUND && viaDiameter == viaDimension->m_Diameter
-                && viaDrill == viaDimension->m_Drill )
+            if( viaSelection == wxNOT_FOUND
+                && m_viaDiameter.GetValue() == viaDimension->m_Diameter
+                && m_viaDrill.GetValue() == viaDimension->m_Drill )
             {
                 viaSelection = ii;
             }
@@ -246,7 +230,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         else if( viaType == VIA_NOT_DEFINED )
             m_ViaTypeChoice->SetSelection( 3 );
 
-
         m_ViaStartLayer->SetLayersHotkeys( false );
         m_ViaStartLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
         m_ViaStartLayer->SetBoardFrame( aParent );
@@ -256,19 +239,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_ViaEndLayer->SetBoardFrame( aParent );
         m_ViaEndLayer->Resync();
 
-
-        m_ViaStartLayer->SetLayerSelection( viaStartLayer );
-        m_ViaEndLayer->SetLayerSelection( viaEndLayer );
-
-        m_ViaStartLayer->Enable( false );
-        m_ViaEndLayer->Enable( false );
-
-        if( viaType != VIA_THROUGH ) // check if selected type isnt through.
-        {
-            m_ViaStartLayer->Enable();
-            m_ViaEndLayer->Enable();
-        }
-
+        m_ViaStartLayer->Enable( viaType != VIA_THROUGH );
+        m_ViaEndLayer->Enable( viaType != VIA_THROUGH );
     }
     else
     {
@@ -277,16 +249,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
-        setCommonVal( trackStartX, m_TrackStartXCtrl, m_trackStartX );
-        setCommonVal( trackStartY, m_TrackStartYCtrl, m_trackStartY );
-        setCommonVal( trackEndX, m_TrackEndXCtrl, m_trackEndX );
-        setCommonVal( trackEndY, m_TrackEndYCtrl, m_trackEndY );
-        setCommonVal( trackWidth, m_TrackWidthCtrl, m_trackWidth );
-
         for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = StringFromValue( g_UserUnit, width, false );
+            wxString msg = StringFromValue( m_units, width, false );
             m_TrackWidthCtrl->Append( msg );
         }
 
@@ -294,9 +260,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
         m_TrackLayerCtrl->SetBoardFrame( aParent );
         m_TrackLayerCtrl->Resync();
-
-        if( trackLayer )
-            m_TrackLayerCtrl->SetLayerSelection( *trackLayer );
 
         m_TrackWidthCtrl->SetFocus();
     }
@@ -306,38 +269,60 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     }
 
     if( hasLocked && hasUnlocked )
-    {
          m_lockedCbox->Set3StateValue( wxCHK_UNDETERMINED );
-    }
     else if( hasLocked )
-    {
         m_lockedCbox->Set3StateValue( wxCHK_CHECKED );
-    }
     else
-    {
         m_lockedCbox->Set3StateValue( wxCHK_UNCHECKED );
-    }
-
 
     m_StdButtonsOK->SetDefault();
 
-    // Pressing ENTER when any of the text input fields is active applies changes
-    Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onOkClick ),
-             NULL, this );
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
-bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
+bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
-    if( !check() )
-        return false;
+    // Run validations:
+
+    if( m_vias )
+    {
+        if( !m_viaDiameter.Validate( true ) )
+            return false;
+
+        if( !m_viaDrill.Validate( true ) )
+            return false;
+
+        if( !m_trackNetclass->IsChecked() && m_viaDiameter.GetValue() <= m_viaDrill.GetValue() )
+        {
+            DisplayError( GetParent(), _( "Via drill size must be smaller than via diameter" ) );
+            m_ViaDrillCtrl->SelectAll();
+            m_ViaDrillCtrl->SetFocus();
+            return false;
+        }
+
+        if( m_ViaStartLayer->GetLayerSelection() == m_ViaEndLayer->GetLayerSelection() )
+        {
+            DisplayError( GetParent(), _( "Via start layer and end layer cannot be the same" ) );
+            return false;
+        }
+    }
+
+    if( m_tracks )
+    {
+        if( !m_trackWidth.Validate( true ) )
+            return false;
+    }
+
+    // If we survived that, then save the changes:
 
     bool changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
     bool setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
 
     for( auto item : m_items )
     {
-        aCommit.Modify( item );
+        m_commit.Modify( item );
 
         switch( item->Type() )
         {
@@ -346,40 +331,22 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                 wxASSERT( m_tracks );
                 TRACK* t = static_cast<TRACK*>( item );
 
-                if( m_trackStartX.Valid() || m_trackStartY.Valid() )
-                {
-                    wxPoint start = t->GetStart();
+                if( !m_trackStartX.IsIndeterminate() )
+                    t->SetStart( wxPoint( m_trackStartX.GetValue(), t->GetStart().y ) );
 
-                    if( m_trackStartX.Valid() )
-                        start.x = m_trackStartX.GetValue();
+                if( !m_trackStartY.IsIndeterminate() )
+                    t->SetStart( wxPoint( t->GetStart().x, m_trackStartY.GetValue() ) );
 
-                    if( m_trackStartY.Valid() )
-                        start.y = m_trackStartY.GetValue();
+                if( !m_trackEndX.IsIndeterminate() )
+                    t->SetEnd( wxPoint( m_trackEndX.GetValue(), t->GetEnd().y ) );
 
-                    t->SetStart( start );
-                }
-
-                if( m_trackEndX.Valid() || m_trackEndY.Valid() )
-                {
-                    wxPoint end = t->GetEnd();
-
-                    if( m_trackEndX.Valid() )
-                        end.x = m_trackEndX.GetValue();
-
-                    if( m_trackEndY.Valid() )
-                        end.y = m_trackEndY.GetValue();
-
-                    t->SetEnd( end );
-                }
+                if( !m_trackEndY.IsIndeterminate() )
+                    t->SetEnd( wxPoint( t->GetEnd().x, m_trackEndY.GetValue() ) );
 
                 if( m_trackNetclass->IsChecked() )
-                {
                     t->SetWidth( t->GetNetClass()->GetTrackWidth() );
-                }
-                else if( m_trackWidth.Valid() )
-                {
+                else if( !m_trackWidth.IsIndeterminate() )
                     t->SetWidth( m_trackWidth.GetValue() );
-                }
 
                 LAYER_NUM layer = m_TrackLayerCtrl->GetLayerSelection();
 
@@ -395,28 +362,15 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                     t->SetNetCode( m_NetComboBox->GetSelectedNet() );
                 }
 
-
                 break;
             }
 
             case PCB_VIA_T:
             {
                 wxASSERT( m_vias );
-
                 VIA* v = static_cast<VIA*>( item );
 
-                if( m_viaX.Valid() || m_viaY.Valid() )
-                {
-                    wxPoint pos = v->GetPosition();
-
-                    if( m_viaX.Valid() )
-                        pos.x = m_viaX.GetValue();
-
-                    if( m_viaY.Valid() )
-                        pos.y = m_viaY.GetValue();
-
-                    v->SetPosition( pos );
-                }
+                v->SetPosition( wxPoint( m_viaX.GetValue(), m_viaY.GetValue() ) );
 
                 if( m_ViaTypeChoice->GetSelection() != 3)
                 {
@@ -435,7 +389,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                         default:
                             break;
                     }
-
                 }
 
                 auto startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
@@ -472,12 +425,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                 }
                 else
                 {
-                    if( m_viaDiameter.Valid() )
+                    if( !m_viaDiameter.IsIndeterminate() )
                         v->SetWidth( m_viaDiameter.GetValue() );
 
-                    if( m_viaDrill.Valid() )
+                    if( !m_viaDrill.IsIndeterminate() )
                         v->SetDrill( m_viaDrill.GetValue() );
-
                 }
 
                 if ( m_NetComboBox->IsUniqueNetSelected() )
@@ -498,13 +450,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
         }
     }
 
+    m_commit.Push( _( "Edit track/via properties" ) );
+
     return true;
-}
-
-
-void DIALOG_TRACK_VIA_PROPERTIES::onClose( wxCloseEvent& aEvent )
-{
-    EndModal( 0 );
 }
 
 
@@ -512,9 +460,7 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTrackNetclassCheck( wxCommandEvent& aEvent )
 {
     bool enableNC = aEvent.IsChecked();
 
-    m_TrackWidthLabel->Enable( !enableNC );
-    m_TrackWidthCtrl->Enable( !enableNC );
-    m_TrackWidthUnit->Enable( !enableNC );
+    m_trackWidth.Enable( !enableNC );
 }
 
 
@@ -526,26 +472,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaNetclassCheck( wxCommandEvent& aEvent )
     m_DesignRuleViasCtrl->Enable( !enableNC );
     m_DesignRuleViasUnit->Enable( !enableNC );
 
-    m_ViaDiameterLabel->Enable( !enableNC );
-    m_ViaDiameterCtrl->Enable( !enableNC );
-    m_ViaDiameterUnit->Enable( !enableNC );
-
-    m_ViaDrillLabel->Enable( !enableNC );
-    m_ViaDrillCtrl->Enable( !enableNC );
-    m_ViaDrillUnit->Enable( !enableNC );
-}
-
-
-void DIALOG_TRACK_VIA_PROPERTIES::onCancelClick( wxCommandEvent& aEvent )
-{
-    EndModal( 0 );
-}
-
-
-void DIALOG_TRACK_VIA_PROPERTIES::onOkClick( wxCommandEvent& aEvent )
-{
-    if( check() )
-        EndModal( 1 );
+    m_viaDiameter.Enable( !enableNC );
+    m_viaDrill.Enable( !enableNC );
 }
 
 
@@ -553,11 +481,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaSelect( wxCommandEvent& aEvent )
 {
     VIA_DIMENSION* viaDimension = static_cast<VIA_DIMENSION*> ( aEvent.GetClientData() );
 
-    wxString msg = StringFromValue( g_UserUnit, viaDimension->m_Diameter, false );
-    m_ViaDiameterCtrl->ChangeValue( msg );
-
-    msg = StringFromValue( g_UserUnit, viaDimension->m_Drill, false );
-    m_ViaDrillCtrl->ChangeValue( msg );
+    m_viaDiameter.SetValue( viaDimension->m_Diameter );
+    m_viaDrill.SetValue( viaDimension->m_Drill );
 }
 
 
@@ -581,55 +506,4 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
             m_ViaEndLayer->Enable( false );
         }
     }
-
-}
-
-
-bool DIALOG_TRACK_VIA_PROPERTIES::check() const
-{
-    bool trackNetclass = m_trackNetclass->IsChecked();
-    bool viaNetclass = m_trackNetclass->IsChecked();
-
-    if( m_tracks && !trackNetclass && m_trackWidth.Valid() && m_trackWidth.GetValue() <= 0 )
-    {
-        DisplayError( GetParent(), _( "Invalid track width" ) );
-        m_TrackWidthCtrl->SetFocus();
-        return false;
-    }
-
-    if( m_vias && !viaNetclass )
-    {
-        if( m_viaDiameter.Valid() && m_viaDiameter.GetValue() <= 0 )
-        {
-            DisplayError( GetParent(), _( "Invalid via diameter" ) );
-            m_ViaDiameterCtrl->SetFocus();
-            return false;
-        }
-
-        if( m_viaDrill.Valid() && m_viaDrill.GetValue() <= 0 )
-        {
-            DisplayError( GetParent(), _( "Invalid via drill size" ) );
-            m_ViaDrillCtrl->SetFocus();
-            return false;
-        }
-
-        if( m_viaDiameter.Valid() && m_viaDrill.Valid() && m_viaDiameter.GetValue() <= m_viaDrill.GetValue() )
-        {
-            DisplayError( GetParent(), _( "Via drill size has to be smaller than via diameter" ) );
-            m_ViaDrillCtrl->SetFocus();
-            return false;
-        }
-
-    }
-
-    if( m_vias)
-    {
-        if( m_ViaStartLayer->GetLayerSelection() == m_ViaEndLayer->GetLayerSelection() )
-        {
-            DisplayError( GetParent(), _( "Via start layer and end layer cannot be the same" ) );
-            return false;
-        }
-    }
-
-    return true;
 }

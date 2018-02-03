@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,7 +47,7 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textLabelSingleLine;
 		wxTextCtrl* m_textLabelMultiLine;
 		wxStaticText* m_SizeTitle;
-		wxTextCtrl* m_TextSize;
+		wxTextCtrl* m_TextSizeCtrl;
 		wxStaticText* m_staticSizeUnits;
 		wxRadioBox* m_TextOrient;
 		wxRadioBox* m_TextStyle;
@@ -58,8 +58,6 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnEnterKey( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

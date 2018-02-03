@@ -52,13 +52,13 @@ class DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_targetLengthText;
 		wxStaticText* m_targetLengthUnit;
 		wxStaticBitmap* m_legend;
-		wxStaticText* m_staticText9;
+		wxStaticText* m_minAmplLabel;
 		TEXT_CTRL_EVAL* m_minAmplText;
 		wxStaticText* m_minAmplUnit;
-		wxStaticText* m_staticText91;
+		wxStaticText* m_maxAmplLabel;
 		TEXT_CTRL_EVAL* m_maxAmplText;
 		wxStaticText* m_maxAmplUnit;
-		wxStaticText* m_staticText11;
+		wxStaticText* m_spacingLabel;
 		TEXT_CTRL_EVAL* m_spacingText;
 		wxStaticText* m_spacingUnit;
 		wxStaticText* m_staticText14;

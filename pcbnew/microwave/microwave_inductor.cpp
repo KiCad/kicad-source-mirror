@@ -306,14 +306,14 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     inductorPattern.m_length = min_len;
 
     // Enter the desired length.
-    msg = StringFromValue( g_UserUnit, inductorPattern.m_length );
-    WX_TEXT_ENTRY_DIALOG dlg( nullptr, _( "Length of Trace:" ), wxEmptyString, msg );
+    msg = StringFromValue( aPcbFrame->GetUserUnits(), inductorPattern.m_length, true );
+    WX_TEXT_ENTRY_DIALOG dlg( aPcbFrame, _( "Length of Trace:" ), wxEmptyString, msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return nullptr; // canceled by user
 
     msg = dlg.GetValue();
-    inductorPattern.m_length = ValueFromString( g_UserUnit, msg );
+    inductorPattern.m_length = ValueFromString( aPcbFrame->GetUserUnits(), msg );
 
     // Control values (ii = minimum length)
     if( inductorPattern.m_length < min_len )
@@ -336,7 +336,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Generate footprint. the value is also used as footprint name.
     msg = "L";
-    WX_TEXT_ENTRY_DIALOG cmpdlg( nullptr, _( "Component Value:" ), wxEmptyString, msg );
+    WX_TEXT_ENTRY_DIALOG cmpdlg( aPcbFrame, _( "Component Value:" ), wxEmptyString, msg );
     cmpdlg.SetTextValidator( FILE_NAME_CHAR_VALIDATOR( &msg ) );
 
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )

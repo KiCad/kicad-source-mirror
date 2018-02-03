@@ -27,14 +27,18 @@
 #include <confirm.h>
 #include <widgets/text_ctrl_eval.h>
 #include <core/optional.h>
+#include <draw_frame.h>
 
 #include "board_design_settings.h"
 
-DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SETTINGS& aSettings ) :
+const int minSize = (int)( 0.01 * IU_PER_MM );
+
+DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( EDA_DRAW_FRAME* aParent,
+                                              BOARD_DESIGN_SETTINGS& aSettings ) :
     DIALOG_TRACK_VIA_SIZE_BASE( aParent ),
-    m_trackWidth( aParent, m_trackWidthText, m_trackWidthLabel ),
-    m_viaDiameter( aParent, m_viaDiameterText, m_viaDiameterLabel ),
-    m_viaDrill( aParent, m_viaDrillText, m_viaDrillLabel ),
+    m_trackWidth( aParent, m_trackWidthLabel, m_trackWidthText, m_trackWidthLabel, false, minSize ),
+    m_viaDiameter( aParent, m_viaDiameterLabel, m_viaDiameterText, m_viaDiameterLabel, false, minSize ),
+    m_viaDrill( aParent, m_viaDrillLabel, m_viaDrillText, m_viaDrillLabel, false, minSize ),
     m_settings( aSettings )
 {
     m_stdButtonsOK->SetDefault();
@@ -49,8 +53,12 @@ bool DIALOG_TRACK_VIA_SIZE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    if( !check() )
+    if( m_viaDrill.GetValue() >= m_viaDiameter.GetValue() )
+    {
+        DisplayError( GetParent(), _( "Via drill size has to be smaller than via diameter" ) );
+        m_viaDrillText->SetFocus();
         return false;
+    }
 
     // Store dialog values to the router settings
     m_settings.SetCustomTrackWidth( m_trackWidth.GetValue() );
@@ -74,36 +82,3 @@ bool DIALOG_TRACK_VIA_SIZE::TransferDataToWindow()
     return true;
 }
 
-
-bool DIALOG_TRACK_VIA_SIZE::check()
-{
-    if( m_trackWidth.GetValue() <= 0 )
-    {
-        DisplayError( GetParent(), _( "Invalid track width" ) );
-        m_trackWidthText->SetFocus();
-        return false;
-    }
-
-    if( m_viaDiameter.GetValue() <= 0 )
-    {
-        DisplayError( GetParent(), _( "Invalid via diameter" ) );
-        m_viaDiameterText->SetFocus();
-        return false;
-    }
-
-    if( m_viaDrill.GetValue() <= 0 )
-    {
-        DisplayError( GetParent(), _( "Invalid via drill size" ) );
-        m_viaDrillText->SetFocus();
-        return false;
-    }
-
-    if( m_viaDrill.GetValue() >= m_viaDiameter.GetValue() )
-    {
-        DisplayError( GetParent(), _( "Via drill size has to be smaller than via diameter" ) );
-        m_viaDrillText->SetFocus();
-        return false;
-    }
-
-    return true;
-}

@@ -37,6 +37,14 @@
 #include <common.h>
 #include <convert_to_biu.h>
 
+
+/**
+ * Used for holding indeterminate values, such as with multiple selections
+ * holding different values or controls which do not wish to set a value.
+ */
+#define INDETERMINATE wxString( "<...>" )
+
+
 /// Convert mm to mils.
 inline int Mm2mils( double x ) { return KiROUND( x * 1000./25.4 ); }
 

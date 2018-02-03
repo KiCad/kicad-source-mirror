@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,9 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/combobox.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,6 @@ class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextGridPosY;
 		wxTextCtrl* m_GridOriginYCtrl;
 		wxStaticText* m_TextPosYUnits;
-		wxButton* m_buttonReset;
 		wxStaticText* m_staticTextSizeX;
 		wxTextCtrl* m_OptGridSizeX;
 		wxStaticText* m_TextSizeXUnits;
@@ -53,6 +52,7 @@ class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 		wxComboBox* m_comboBoxGrid1;
 		wxStaticText* m_staticTextGrid2;
 		wxComboBox* m_comboBoxGrid2;
+		wxButton* m_buttonReset;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -66,7 +66,7 @@ class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_SET_GRID_BASE();
 	
 };

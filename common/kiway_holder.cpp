@@ -37,6 +37,12 @@ PROJECT& KIWAY_HOLDER::Prj() const
 }
 
 
+EDA_UNITS_T KIWAY_HOLDER::GetUserUnits() const
+{
+    return MILLIMETRES;
+}
+
+
 // this is not speed critical, hide it out of line.
 void KIWAY_HOLDER::SetKiway( wxWindow* aDest, KIWAY* aKiway )
 {

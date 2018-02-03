@@ -36,7 +36,7 @@ class DIALOG_TRACK_VIA_SIZE : public DIALOG_TRACK_VIA_SIZE_BASE
 {
 public:
     /** Constructor */
-    DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SETTINGS& aSettings );
+    DIALOG_TRACK_VIA_SIZE( EDA_DRAW_FRAME* aParent, BOARD_DESIGN_SETTINGS& aSettings );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -48,9 +48,6 @@ protected:
 
     // Routings settings that are modified by the dialog.
     BOARD_DESIGN_SETTINGS& m_settings;
-
-    ///> Checks if values given in the dialog are sensible.
-    bool check();
 };
 
 #endif // __dialog_track_via_size__

@@ -95,9 +95,9 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText9 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Min amplitude (Amin):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	fgSizer3->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_minAmplLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Min amplitude (Amin):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minAmplLabel->Wrap( -1 );
+	fgSizer3->Add( m_minAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_minAmplText = new TEXT_CTRL_EVAL( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_minAmplText, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -106,9 +106,9 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_minAmplUnit->Wrap( -1 );
 	fgSizer3->Add( m_minAmplUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 	
-	m_staticText91 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Max amplitude (Amax):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText91->Wrap( -1 );
-	fgSizer3->Add( m_staticText91, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_maxAmplLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Max amplitude (Amax):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxAmplLabel->Wrap( -1 );
+	fgSizer3->Add( m_maxAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_maxAmplText = new TEXT_CTRL_EVAL( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_maxAmplText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -117,9 +117,9 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_maxAmplUnit->Wrap( -1 );
 	fgSizer3->Add( m_maxAmplUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 	
-	m_staticText11 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Spacing (s):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	fgSizer3->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_spacingLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Spacing (s):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spacingLabel->Wrap( -1 );
+	fgSizer3->Add( m_spacingLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_spacingText = new TEXT_CTRL_EVAL( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_spacingText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -165,7 +165,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 	
-	bMainSizer->Add( m_stdButtons, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_stdButtons, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

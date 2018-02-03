@@ -14,7 +14,6 @@
         <property name="file">dialog_edit_label_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_edit_label_base</property>
         <property name="namespace"></property>
@@ -112,7 +111,7 @@
                         <property name="vgap">3</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                            <property name="flag">wxALIGN_TOP|wxRIGHT|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -204,7 +203,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxEXPAND|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -240,7 +239,7 @@
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size"></property>
+                                        <property name="minimum_size">360,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_textLabelSingleLine</property>
                                         <property name="pane_border">1</property>
@@ -295,7 +294,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxEXPAND|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT</property>
                                     <property name="proportion">1</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -331,7 +330,7 @@
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">-1,60</property>
+                                        <property name="minimum_size">480,72</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_textLabelMultiLine</property>
                                         <property name="pane_border">1</property>
@@ -388,7 +387,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -480,7 +479,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -518,7 +517,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_TextSize</property>
+                                        <property name="name">m_TextSizeCtrl</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -570,8 +569,8 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                                    <property name="border">2</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -667,7 +666,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">3</property>
-                            <property name="flag">wxRIGHT|wxTOP</property>
+                            <property name="flag">wxRIGHT|wxTOP|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxRadioBox" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -698,7 +697,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">O&amp;rientation:</property>
+                                <property name="label">Orientation</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -757,7 +756,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">3</property>
-                            <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
+                            <property name="flag">wxLEFT|wxRIGHT|wxTOP|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxRadioBox" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -788,7 +787,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">St&amp;yle:</property>
+                                <property name="label">Style</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -847,7 +846,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">3</property>
-                            <property name="flag">wxALL|wxLEFT|wxTOP</property>
+                            <property name="flag">wxALL|wxLEFT|wxTOP|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxRadioBox" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -863,7 +862,7 @@
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
-                                <property name="choices">&quot;Input&quot; &quot;Output&quot; &quot;Bidirectional&quot; &quot;Tri-State&quot; &quot;Passive&quot;</property>
+                                <property name="choices">&quot;Input&quot; &quot;Output&quot; &quot;Bidirectional&quot; &quot;Tri-state&quot; &quot;Passive&quot;</property>
                                 <property name="close_button">1</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
@@ -878,7 +877,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">S&amp;hape:</property>
+                                <property name="label">Shape</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -895,7 +894,7 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
-                                <property name="selection">0</property>
+                                <property name="selection">3</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style">wxRA_SPECIFY_COLS</property>
@@ -954,11 +953,11 @@
                         <property name="name">m_sdbSizer1</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick">OnCancelClick</event>
+                        <event name="OnCancelButtonClick"></event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">OnOkClick</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>

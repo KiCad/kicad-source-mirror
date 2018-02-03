@@ -39,7 +39,7 @@ class SIZES_SETTINGS;
 class DIALOG_PNS_DIFF_PAIR_DIMENSIONS : public DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE
 {
 public:
-    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::SIZES_SETTINGS& aSizes );
+    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( EDA_DRAW_FRAME* aParent, PNS::SIZES_SETTINGS& aSizes );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;

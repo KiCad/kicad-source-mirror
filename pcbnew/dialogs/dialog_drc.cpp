@@ -39,7 +39,6 @@
 #include <board_design_settings.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
-#include <bitmaps.h>
 #include <collectors.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -88,7 +87,10 @@ protected:
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
                                         wxWindow* aParent ) :
-    DIALOG_DRC_CONTROL_BASE( aParent )
+    DIALOG_DRC_CONTROL_BASE( aParent ),
+    m_trackMinWidth( aEditorFrame, m_TrackMinWidthTitle, m_SetTrackMinWidthCtrl, m_TrackMinWidthUnit, true ),
+    m_viaMinSize( aEditorFrame, m_ViaMinTitle, m_SetViaMinSizeCtrl, m_ViaMinUnit, true ),
+    m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl, m_MicroViaMinUnit, true )
 {
     m_config = Kiface().KifaceSettings();
     m_tester = aTester;
@@ -168,13 +170,9 @@ void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
 
 void DIALOG_DRC_CONTROL::DisplayDRCValues()
 {
-    m_TrackMinWidthUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_ViaMinUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_MicroViaMinUnit->SetLabel(GetAbbreviatedUnitsLabel( g_UserUnit ) );
-
-    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings.m_TrackMinWidth );
-    PutValueInLocalUnits( *m_SetViaMinSizeCtrl, m_BrdSettings.m_ViasMinSize );
-    PutValueInLocalUnits( *m_SetMicroViakMinSizeCtrl, m_BrdSettings.m_MicroViasMinSize );
+    m_trackMinWidth.SetValue( m_BrdSettings.m_TrackMinWidth );
+    m_viaMinSize.SetValue( m_BrdSettings.m_ViasMinSize );
+    m_uviaMinSize.SetValue( m_BrdSettings.m_MicroViasMinSize );
 }
 
 
@@ -205,9 +203,9 @@ void DIALOG_DRC_CONTROL::InitValues()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-    m_BrdSettings.m_TrackMinWidth = ValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
-    m_BrdSettings.m_ViasMinSize = ValueFromTextCtrl( *m_SetViaMinSizeCtrl );
-    m_BrdSettings.m_MicroViasMinSize = ValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl );
+    m_BrdSettings.m_TrackMinWidth = m_trackMinWidth.GetValue();
+    m_BrdSettings.m_ViasMinSize = m_viaMinSize.GetValue();
+    m_BrdSettings.m_MicroViasMinSize = m_uviaMinSize.GetValue();
 
     m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 }

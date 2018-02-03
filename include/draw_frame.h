@@ -256,9 +256,9 @@ public:
 
     /**
      * Function GetUserUnits
-     * returns the user unit currently in use
+     * returns the user units currently in use
      */
-    EDA_UNITS_T GetUserUnits() const { return m_UserUnits; }
+    EDA_UNITS_T GetUserUnits() const override { return m_UserUnits; }
     void SetUserUnits( EDA_UNITS_T aUnits ) { m_UserUnits = aUnits; }
 
     /**

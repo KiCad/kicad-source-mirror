@@ -63,13 +63,27 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     m_qmodal_showing( false ),
     m_qmodal_parent_disabler( 0 )
 {
-    // pray that aParent is either a KIWAY_PLAYER or DIALOG_SHIM derivation.
     KIWAY_HOLDER* h = dynamic_cast<KIWAY_HOLDER*>( aParent );
-
-    // wxASSERT_MSG( h, wxT( "DIALOG_SHIM's parent is NULL or not derived from KIWAY_PLAYER nor DIALOG_SHIM" ) );
+    while( !h && aParent->GetParent() )
+    {
+        aParent = aParent->GetParent();
+        h = dynamic_cast<KIWAY_HOLDER*>( aParent );
+    }
 
     if( h )
+    {
+        // Inherit units from parent
+        m_units = h->GetUserUnits();
+
+        // Set up the message bus
         SetKiway( this, &h->Kiway() );
+    }
+    else
+    {
+        wxFAIL_MSG( wxString::Format( "No KIWAY_HOLDER in parent chain.  Top window is a %s.",
+                    aParent->GetClassInfo()->GetClassName() ) );
+        m_units = MILLIMETRES;
+    }
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
@@ -77,7 +91,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 #ifdef __WINDOWS__
     // On Windows, the app top windows can be brought to the foreground
     // (at least temporary) in certain circumstances,
-    // for instance when calling an external tool in Eeschema boom generation.
+    // for instance when calling an external tool in Eeschema BOM generation.
     // So set the parent KIWAY_PLAYER kicad frame (if exists) to top window
     // to avoid this annoying behavior
     KIWAY_PLAYER* parent_kiwayplayer = dynamic_cast<KIWAY_PLAYER*>( aParent );

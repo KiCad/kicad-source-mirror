@@ -38,6 +38,7 @@
 
 #include <dialog_drc_base.h>
 #include <dialog_drclistbox.h>
+#include <widgets/unit_binder.h>
 
 // forward declarations
 class DRCLISTBOX;
@@ -148,8 +149,13 @@ private:
     DRC*                m_tester;
     PCB_EDIT_FRAME*     m_brdEditor;
     wxConfigBase*       m_config;
+
     wxString            m_markersTitleTemplate;
     wxString            m_unconnectedTitleTemplate;
+
+    UNIT_BINDER         m_trackMinWidth;
+    UNIT_BINDER         m_viaMinSize;
+    UNIT_BINDER         m_uviaMinSize;
 };
 
 #endif  // _DIALOG_DRC_H_

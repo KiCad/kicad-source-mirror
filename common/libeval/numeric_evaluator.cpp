@@ -55,7 +55,9 @@ namespace numEval
 
 } /* namespace numEval */
 
-NumericEvaluator :: NumericEvaluator() : pClParser(0)
+// JEY TODO: remove this version;
+NumericEvaluator :: NumericEvaluator() :
+    pClParser( 0 )
 {
    struct lconv* lc = localeconv();
    cClDecSep = *lc->decimal_point;
@@ -65,7 +67,47 @@ NumericEvaluator :: NumericEvaluator() : pClParser(0)
    bClError = false;
    bClParseFinished = false;
 
-   init();
+   if( pClParser == nullptr )
+      pClParser = numEval::ParseAlloc(malloc);
+
+   switch( g_UserUnit )
+   {
+   case INCHES:
+       eClUnitDefault = Unit::Inch;
+       break;
+   case MILLIMETRES:
+       eClUnitDefault = Unit::Metric;
+       break;
+   default:
+       eClUnitDefault = Unit::Metric;
+       break;
+   }
+}
+
+NumericEvaluator::NumericEvaluator( EDA_UNITS_T aUnits, bool aUseMils ) :
+    pClParser( 0 )
+{
+   struct lconv* lc = localeconv();
+   cClDecSep = *lc->decimal_point;
+
+   bClTextInputStorage = true;
+   pClParser = numEval::ParseAlloc(malloc);
+
+   switch( aUnits )
+   {
+   case INCHES:
+       if( aUseMils )
+           eClUnitDefault = Unit::Mil;
+       else
+           eClUnitDefault = Unit::Inch;
+       break;
+   case MILLIMETRES:
+       eClUnitDefault = Unit::Metric;
+       break;
+   default:
+       eClUnitDefault = Unit::Metric;
+       break;
+   }
 }
 
 NumericEvaluator :: ~NumericEvaluator()
@@ -79,26 +121,6 @@ NumericEvaluator :: ~NumericEvaluator()
 }
 
 void
-NumericEvaluator :: init()
-{
-   if (pClParser == nullptr)
-      pClParser = numEval::ParseAlloc(malloc);
-
-   //numEval::ParseTrace(stdout, "lib");
-
-#if TESTMODE
-   eClUnitDefault = Unit::Metric;
-#else
-   switch (g_UserUnit)
-   {
-   case INCHES      : eClUnitDefault = Unit::Inch;   break;
-   case MILLIMETRES : eClUnitDefault = Unit::Metric; break;
-   default:           eClUnitDefault = Unit::Metric; break;
-   }
-#endif
-}
-
-void
 NumericEvaluator :: clear(const void* pObj)
 {
    free(clToken.token);
@@ -106,7 +128,8 @@ NumericEvaluator :: clear(const void* pObj)
    clToken.input = nullptr;
    bClError = true;
 
-   if (bClTextInputStorage && pObj) clObjMap.erase(pObj);
+   if (bClTextInputStorage)
+      clObjMap.clear();
 }
 
 void
@@ -151,7 +174,9 @@ NumericEvaluator :: process(const char* s)
 
    newString(s);
 
-   if (pClParser == nullptr) init();
+   if (pClParser == nullptr)
+       pClParser = numEval::ParseAlloc(malloc);
+
    bClError = false;
    bClParseFinished = false;
 
@@ -191,8 +216,7 @@ NumericEvaluator :: newString(const char* s)
    bClParseFinished = false;
 }
 
-NumericEvaluator::Token
-NumericEvaluator :: getToken()
+NumericEvaluator::Token NumericEvaluator::getToken()
 {
    Token retval;
    size_t idx;
@@ -227,32 +251,35 @@ NumericEvaluator :: getToken()
       for (int i = strlen(clToken.token); i; i--) if (isDecSep(clToken.token[i-1])) clToken.token[i-1] = cClDecSep;
    };
 
-   /* Lamda: Get unit for current token. Returns Unit::Invalid if token is not a unit.
-    * '"', "in", "th", "mi", "mil" or "mm"
-    */
+   // Lamda: Get unit for current token.
+   // Valid units are ", in, mm, mil and thou.  Returns Unit::Invalid otherwise.
    auto checkUnit = [this]() -> Unit {
-      const int sizeLeft = clToken.inputLen - clToken.pos;
-      Unit convertFrom = Unit::Invalid;
-      char unit[2] = { 0, 0 };
-      for (int i = 0; i < sizeLeft && i < int(sizeof(unit)/sizeof(unit[0])); i++) unit[i] = tolower(clToken.input[clToken.pos+i]);
-      auto tokcmp = [sizeLeft, unit](const char* s, int len) -> int {
-         if (len > sizeLeft) return 0;
-         if (!strncmp(unit, s, len)) return len;
-         return 0;
-      };
-      int size = 0;
-      if ((size = tokcmp("\"", 1)))       convertFrom = Unit::Inch;
-      else if ((size = tokcmp("in",  2))) convertFrom = Unit::Inch;
-      else if ((size = tokcmp("mi",  2))) convertFrom = Unit::Mil;
-      else if ((size = tokcmp("th",  2))) convertFrom = Unit::Mil;
-      else if ((size = tokcmp("mm",  2))) convertFrom = Unit::Metric;
-      clToken.pos += size;
-
-      if (size) {
-         while (clToken.pos < clToken.inputLen && isalnum(clToken.input[clToken.pos])) clToken.pos++;
+      char ch = clToken.input[clToken.pos];
+      if (ch == '"') {
+         clToken.pos++;
+         return Unit::Inch;
+      }
+      // Do not use strcasecmp() as it is not available on all platforms
+      const char* cptr = &clToken.input[clToken.pos];
+      const auto sizeLeft = clToken.inputLen - clToken.pos;
+      if (sizeLeft >= 2 && ch == 'm' && tolower(cptr[1]) == 'm' && !isalnum(cptr[2])) {
+         clToken.pos += 2;
+         return Unit::Metric;
+      }
+      if (sizeLeft >= 2 && ch == 'i' && tolower(cptr[1]) == 'n' && !isalnum(cptr[2])) {
+         clToken.pos += 2;
+         return Unit::Inch;
+      }
+      if (sizeLeft >= 3 && ch == 'm' && tolower(cptr[1]) == 'i' && tolower(cptr[2]) == 'l' && !isalnum(cptr[3])) {
+         clToken.pos += 3;
+         return Unit::Mil;
+      }
+      if (sizeLeft >= 4 && ch == 't' && tolower(cptr[1]) == 'h' && tolower(cptr[2]) == 'o' && tolower(cptr[2]) == 'u' && !isalnum(cptr[3])) {
+         clToken.pos += 4;
+         return Unit::Mil;
       }
 
-      return convertFrom;
+      return Unit::Invalid;
    };
 
    // Start processing of first/next token: Remove whitespace
@@ -299,6 +326,16 @@ NumericEvaluator :: getToken()
             case Unit::Mil     : retval.value.dValue =  1.0/1000.0;  break;
             case Unit::Metric  : retval.value.dValue =  1.0/25.4;    break;
             case Unit::Invalid : break;
+         }
+      }
+      else if (eClUnitDefault == Unit::Mil)
+      {
+         switch (convertFrom)
+         {
+         case Unit::Inch    : retval.value.dValue =  1.0*1000.0;  break;
+         case Unit::Mil     : retval.value.dValue =  1.0;         break;
+         case Unit::Metric  : retval.value.dValue =  1000.0/25.4; break;
+         case Unit::Invalid : break;
          }
       }
    }

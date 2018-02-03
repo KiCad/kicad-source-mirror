@@ -74,6 +74,8 @@ Supported units are millimeters (mm), Mil (mil) and inch (")
 #include <string>
 #include <map>
 
+#include <base_units.h>
+
 // This namespace is used for the lemon parser
 namespace numEval
 {
@@ -96,14 +98,12 @@ class NumericEvaluator {
 
 public:
     NumericEvaluator();
+    NumericEvaluator( EDA_UNITS_T aUnits, bool aUseMils );
     ~NumericEvaluator();
 
-    /* Initialization and destruction. init() is invoked be the constructor and should not be needed
-     * by the user.
-     * clear() should be invoked by the user if a new input string is to be processed. It will reset
-     * the parser and clear the original expression value for a requested object (if pObj != null).
+    /* clear() should be invoked by the client if a new input string is to be processed. It
+     * will reset the parser. User defined variables are retained.
      */
-    void init();
     void clear(const void* pObj = nullptr);
 
     /* Set the decimal separator for the input string. Defaults to '.' */
@@ -124,6 +124,9 @@ public:
 
     /* Result of string processing. Undefined if !isValid() */
     inline const char* result() const { return clToken.token; }
+
+    /* Numeric result of string processing, in default units. */
+    inline const double value() const { return resultValue; }
 
     /* Evaluate input string.
      * Result can be retrieved by result().
@@ -183,6 +186,9 @@ private:
     /* Parse progress. Set by parser actions. */
     bool bClError;
     bool bClParseFinished;
+
+    /* The result (in eClUnitDefault units) */
+    int resultValue;
 
     bool bClTextInputStorage; // Enable input string storage used by process(const char*, const void*)
 

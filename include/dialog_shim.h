@@ -108,6 +108,8 @@ public:
 
     void OnPaint( wxPaintEvent &event );
 
+    EDA_UNITS_T GetUserUnits() const override { return m_units; }
+
 protected:
 
     /**
@@ -146,9 +148,9 @@ protected:
      */
     int VertPixelsFromDU( int y );
 
-    bool m_fixupsRun;
-
-    std::string m_hash_key;     // alternate for class_map when classname re-used.
+    EDA_UNITS_T         m_units;        // userUnits for display and parsing
+    bool                m_fixupsRun;    // indicates various wxWidgets fixups have run
+    std::string         m_hash_key;     // alternate for class_map when classname re-used
 
     // variables for quasi-modal behavior support, only used by a few derivatives.
     EVENT_LOOP*         m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
