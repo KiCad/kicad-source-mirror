@@ -581,7 +581,7 @@ public:
     void ReCreateAuxiliaryToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateMicrowaveVToolbar();
-    void ReCreateOptToolbar();
+    void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
 
     /**

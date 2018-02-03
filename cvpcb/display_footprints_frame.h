@@ -54,7 +54,7 @@ public:
 
     void    ReCreateHToolbar() override;
     void    ReCreateVToolbar() override;
-    void    ReCreateOptToolbar();
+    void    ReCreateOptToolbar() override;
     void    RecreateMenuBar();
 
     void OnSelectOptionToolbar( wxCommandEvent& event );

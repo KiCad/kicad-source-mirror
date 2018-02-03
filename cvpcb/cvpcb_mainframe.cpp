@@ -954,6 +954,14 @@ void CVPCB_MAINFRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 }
 
 
+void CVPCB_MAINFRAME::ShowChangedLanguage()
+{
+    EDA_BASE_FRAME::ShowChangedLanguage();
+    ReCreateHToolbar();
+    DisplayStatus();
+}
+
+
 void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();

@@ -1032,13 +1032,26 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     // call my base class
     PCB_BASE_FRAME::ShowChangedLanguage();
 
-    m_Layers->SetLayersManagerTabsText();
+    // update the layer manager
+    m_Layers->Freeze();
 
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
-
     pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
+
+    m_Layers->SetLayersManagerTabsText();
     ReFillLayerWidget();
+    m_Layers->ReFillRender();
+
+    // upate the layer widget to match board visibility states, both layers and render columns.
+    syncLayerVisibilities();
+    syncLayerWidgetLayer();
+    syncRenderStates();
+
+    m_Layers->Thaw();
+
+    // pcbnew-specific toolbars
+    ReCreateMicrowaveVToolbar();
 }
 
 

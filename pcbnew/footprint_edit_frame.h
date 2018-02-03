@@ -102,7 +102,7 @@ public:
     void ReCreateHToolbar() override;
 
     void ReCreateVToolbar() override;
-    void ReCreateOptToolbar();
+    void ReCreateOptToolbar() override;
     void ReCreateAuxiliaryToolbar() override;
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
 

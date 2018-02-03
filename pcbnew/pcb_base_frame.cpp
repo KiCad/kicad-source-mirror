@@ -386,6 +386,22 @@ void PCB_BASE_FRAME::ReCreateMenuBar( void )
 }
 
 
+void PCB_BASE_FRAME::ShowChangedLanguage()
+{
+    // call my base class
+    EDA_DRAW_FRAME::ShowChangedLanguage();
+
+    // tooltips in toolbars
+    ReCreateHToolbar();
+    ReCreateAuxiliaryToolbar();
+    ReCreateVToolbar();
+    ReCreateOptToolbar();
+
+    // status bar
+    UpdateMsgPanel();
+}
+
+
 // Virtual functions: Do nothing for PCB_BASE_FRAME window
 void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
