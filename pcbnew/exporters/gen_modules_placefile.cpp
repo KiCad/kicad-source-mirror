@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -520,12 +520,12 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             LAYER_NUM layer = list[ii].m_Module->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
-            wxString line = list[ii].m_Reference;
-            line << csv_sep;
-            line << list[ii].m_Value;
-            line << csv_sep;
-            line << list[ii].m_Module->GetFPID().GetLibItemName().wx_str();
-            line << csv_sep;
+            wxString line = "\"" + list[ii].m_Reference;
+            line << "\"" << csv_sep;
+            line << "\"" << list[ii].m_Value;
+            line << "\"" << csv_sep;
+            line << "\"" << list[ii].m_Module->GetFPID().GetLibItemName().wx_str();
+            line << "\"" << csv_sep;
 
             line << wxString::Format( "%f%c%f%c%f",
                                     footprint_pos.x * conv_unit, csv_sep,
