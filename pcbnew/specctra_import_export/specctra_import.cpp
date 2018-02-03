@@ -152,7 +152,7 @@ namespace DSN {
  * @param distance The session file length to convert.
  * @param aResolution The session UNIT_RES which holds the engineering unit
  *  specifier
- * @return int - The KiCad length in deci-mils
+ * @return int - The KiCad length in internal unit
  */
 static int scale( double distance, UNIT_RES* aResolution )
 {

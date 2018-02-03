@@ -55,6 +55,7 @@
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #include "specctra.h"
 
@@ -489,6 +490,70 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
+    case PAD_SHAPE_ROUNDRECT:
+        {
+            // Export the shape as as polygon, round rect does not exist as primitive
+            const int circleToSegmentsCount = 36;
+            int rradius = aPad->GetRoundRectCornerRadius();
+            SHAPE_POLY_SET cornerBuffer;
+            // Use a slightly bigger shape because the round corners are approximated by
+            // segments, giving to the polygon a slightly smaller shape than the actual shape
+
+            /* calculates the coeff to compensate radius reduction of holes clearance
+             * due to the segment approx.
+             * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
+             * correctionFactor is 1 /cos( PI/s_CircleToSegmentsCount  )
+             */
+            double correctionFactor = 1.0 / cos( M_PI / (double) circleToSegmentsCount );
+            int extra_clearance = KiROUND( rradius * (1.0 - correctionFactor ) ) + 1;
+            wxSize psize = aPad->GetSize();
+            psize.x += extra_clearance*2;
+            psize.y += extra_clearance*2;
+            rradius += extra_clearance;
+            TransformRoundRectToPolygon( cornerBuffer, wxPoint(0,0), psize,
+                                         0, rradius, circleToSegmentsCount );
+            SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
+
+            for( int ndx=0; ndx < reportedLayers; ++ndx )
+            {
+                SHAPE* shape = new SHAPE( padstack );
+
+                padstack->Append( shape );
+
+                // a T_polygon exists as a PATH
+                PATH* polygon = new PATH( shape, T_polygon );
+
+                shape->SetShape( polygon );
+
+                polygon->SetLayerId( layerName[ndx] );
+                // append a closed polygon
+                POINT first_corner;
+
+                for( int idx = 0; idx < polygonal_shape.PointCount(); idx++ )
+                {
+                    POINT corner( scale( polygonal_shape.Point( idx ).x ),
+                                  scale( -polygonal_shape.Point( idx ).y ) );
+                    corner += dsnOffset;
+                    polygon->AppendPoint( corner );
+
+                    if( idx == 0 )
+                        first_corner = corner;
+                }
+                polygon->AppendPoint( first_corner );   // Close polygon
+            }
+
+            // this string _must_ be unique for a given physical shape
+            snprintf( name, sizeof(name), "RoundRect%sPad_%.6gx%.6g_%.6g_um",
+                      uniqifier.c_str(),
+                      IU2um( aPad->GetSize().x ),
+                      IU2um( aPad->GetSize().y ), IU2um( rradius ) );
+
+            name[ sizeof(name) - 1 ] = 0;
+
+            padstack->SetPadstackId( name );
+        }
+        break;
+
     case PAD_SHAPE_CUSTOM:
         {
             std::vector<wxPoint> polygonal_shape;
@@ -519,7 +584,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
                 polygon->SetLayerId( layerName[ndx] );
 
-                for( unsigned idx = 0; idx <= polygonal_shape.size(); idx++ )
+                for( unsigned idx = 0; idx < polygonal_shape.size(); idx++ )
                 {
                     POINT corner( scale( polygonal_shape[idx].x ), scale( -polygonal_shape[idx].y ) );
                     corner += dsnOffset;
