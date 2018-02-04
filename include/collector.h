@@ -23,7 +23,7 @@
  */
 
 /**
- * @file class_collector.h
+ * @file collector.h
  * @brief COLLECTOR class definition.
  */
 

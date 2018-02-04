@@ -20,7 +20,7 @@
 #ifndef GERBER_COLLECTORS_H
 #define GERBER_COLLECTORS_H
 
-#include <class_collector.h>
+#include <collector.h>
 
 /**
  * Class GERBER_COLLECTOR
