@@ -141,6 +141,12 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     LSET save_visible_brd_layers = Pcb->GetVisibleLayers();
     Pcb->SetVisibleLayers( LSET::AllLayersMask() );
 
+    int save_visible_brd_elements = Pcb->GetVisibleElements();
+    Pcb->SetElementVisibility( LAYER_PAD_FR, true );
+    Pcb->SetElementVisibility( LAYER_PAD_BK, true );
+    Pcb->SetElementVisibility( LAYER_MOD_TEXT_FR, true );
+    Pcb->SetElementVisibility( LAYER_PAD_FR, LAYER_MOD_TEXT_BK );
+
     if( !( aPrintMask & LSET::AllCuMask() ).any() )
     {
         if( onePagePerLayer )
@@ -311,6 +317,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     // Restore settings:
     *displ_opts = save_opt;
     Pcb->SetVisibleLayers( save_visible_brd_layers );
+    Pcb->SetVisibleElements( save_visible_brd_elements );
     GetScreen()->m_Active_Layer = activeLayer;
 
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, nctmp );
