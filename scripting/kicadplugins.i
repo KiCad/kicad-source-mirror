@@ -260,7 +260,7 @@ class KiCadPlugin:
             pass # register to file plugins in C++
 
         if isinstance(self,FootprintWizardPlugin):
-            PYTHON_FOOTPRINT_WIZARDS.register_wizard(self)
+            PYTHON_FOOTPRINT_WIZARD_LIST.register_wizard(self)
             return
 
         if isinstance(self,ActionPlugin):
@@ -274,7 +274,7 @@ class KiCadPlugin:
             pass # deregister to file plugins in C++
 
         if isinstance(self,FootprintWizardPlugin):
-            PYTHON_FOOTPRINT_WIZARDS.deregister_wizard(self)
+            PYTHON_FOOTPRINT_WIZARD_LIST.deregister_wizard(self)
             return
 
         if isinstance(self,ActionPlugin):
