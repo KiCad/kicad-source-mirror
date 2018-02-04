@@ -282,6 +282,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         drawInfo.m_ShowNotPlatedHole = true;
         drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_NON_PLATEDHOLES );
     }
+    // Don't let pads that *should* be NPTHs get lost
+    else if ( PadShouldBeNPTH() )
+    {
+        drawInfo.m_ShowNotPlatedHole = true;
+        drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
+    }
 
     drawInfo.m_DrawMode    = aDraw_mode;
     drawInfo.m_Color       = color;

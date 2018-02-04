@@ -1213,6 +1213,13 @@ EDA_ITEM* D_PAD::Clone() const
 }
 
 
+bool D_PAD::PadShouldBeNPTH() const
+{
+    return( m_Attribute == PAD_ATTRIB_STANDARD
+            && m_Drill.x >= m_Size.x && m_Drill.y >= m_Size.y );
+}
+
+
 void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 0;

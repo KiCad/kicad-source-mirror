@@ -222,6 +222,10 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
             return m_selectionCandidateColor;
         }
 
+        // Don't let pads that *should* be NPTHs get lost
+        if( item->Type() == PCB_PAD_T && dyn_cast<const D_PAD*>( item )->PadShouldBeNPTH() )
+            aLayer = LAYER_MOD_TEXT_INVISIBLE;
+
         if( item->IsSelected() )
         {
             return m_layerColorsSel[aLayer];
@@ -674,9 +678,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     {
         // Hole color is the background color for plated holes, but a specific color
         // for not plated holes (LAYER_NON_PLATEDHOLES color layer )
-        if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED /*&&
-            brd->IsElementVisible( LAYER_NON_PLATEDHOLES )*/ )
+        if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
             color = m_pcbSettings.GetColor( nullptr, LAYER_NON_PLATEDHOLES );
+        // Don't let pads that *should* be NPTH get lost
+        else if( aPad->PadShouldBeNPTH() )
+            color = m_pcbSettings.GetColor( aPad, aLayer );
         else
             color = m_pcbSettings.GetBackgroundColor();
     }

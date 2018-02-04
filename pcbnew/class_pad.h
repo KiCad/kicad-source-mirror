@@ -708,6 +708,13 @@ public:
         return (D_PAD*) Clone();
     }
 
+    /**
+     * A pad whose hole is the same size as the pad is a NPTH.  However, if the user
+     * fails to mark this correctly then the pad will become invisible on the board.
+     * This check allows us to special-case this error-condition.
+     */
+    bool PadShouldBeNPTH() const;
+
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
