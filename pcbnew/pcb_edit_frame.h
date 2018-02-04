@@ -938,7 +938,7 @@ public:
      *              optional library name to create, stops dialog call.
      *              must be called with aStoreInNewLib as true
      */
-    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString );
+    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString ,  wxString* aLibPath = NULL );
 
     /**
      * Function RecreateBOMFileFromBoard

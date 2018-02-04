@@ -588,7 +588,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 }
 
 
-void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName )
+void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName,  wxString* aLibPath )
 {
     if( GetBoard()->m_Modules == NULL )
     {
@@ -633,6 +633,9 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
 
         if( libPath.IsEmpty() )     // Aborted
             return;
+
+
+        if( aLibPath ) *aLibPath = libPath;
 
         IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );

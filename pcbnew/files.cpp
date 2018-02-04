@@ -879,7 +879,49 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
             GetBoard()->SetFileName( newfilename.GetFullPath() );
             UpdateTitle();
 
-            ArchiveModulesOnBoard( true, newfilename.GetName() );
+            wxString newLibPath;
+            ArchiveModulesOnBoard( true, newfilename.GetName(), &newLibPath );
+
+            if( newLibPath.Length()>0 )
+            {
+                FP_LIB_TABLE* prjlibtable = Prj().PcbFootprintLibs();
+                const wxString& project_env = PROJECT_VAR_NAME;
+                wxString rel_path;
+                wxString env_path;
+
+                wxGetEnv( project_env, &env_path );
+
+                wxString result( newLibPath );
+                rel_path =  result.Replace( env_path, wxString( "$(" + project_env + ")" ) ) ? result : "" ;
+
+                if( !rel_path.IsEmpty() ) newLibPath = rel_path;
+
+                FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( newfilename.GetName(),
+                                                          newLibPath,
+                                                          wxT( "KiCad" ),
+                                                          wxEmptyString );     // options
+                prjlibtable->InsertRow( row );
+            }
+
+            if( !GetBoard()->GetFileName().IsEmpty() )
+            {
+                wxString    tblName   = Prj().FootprintLibTblName();
+
+                try
+                {
+                    Prj().PcbFootprintLibs()->Save( tblName );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxString msg = wxString::Format( _(
+                        "Error occurred saving project specific footprint library "
+                        "table:\n\n%s" ),
+                        GetChars( ioe.What() )
+                        );
+                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                }
+            }
+
 
             return true;
         }
