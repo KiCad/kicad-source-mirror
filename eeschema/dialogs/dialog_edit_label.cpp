@@ -144,6 +144,27 @@ DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 }
 
 
+// Sadly we store the orientation of hierarchical and global labels using a different
+// int encoding than that for local labels:
+//                   Global      Local
+// Left justified      0           2
+// Up                  1           3
+// Right justified     2           0
+// Down                3           1
+static int mapOrientation( KICAD_T labelType, int aOrientation )
+{
+    if( labelType == SCH_LABEL_T )
+        return aOrientation;
+
+    switch( aOrientation )
+    {
+    case 0: return 2;
+    case 2: return 0;
+    default: return aOrientation;
+    }
+}
+
+
 void DIALOG_LABEL_EDITOR::InitDialog()
 {
     wxString msg;
@@ -233,7 +254,9 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     EnsureTextCtrlWidth( m_textLabel, &textWidth );
 
     // Set text options:
-    m_TextOrient->SetSelection( m_CurrentText->GetLabelSpinStyle() );
+    int orientation = mapOrientation( m_CurrentText->Type(), m_CurrentText->GetLabelSpinStyle() );
+    m_TextOrient->SetSelection( orientation );
+
     m_TextShape->SetSelection( m_CurrentText->GetShape() );
 
     int style = 0;
@@ -344,7 +367,9 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
         return;
     }
 
-    m_CurrentText->SetLabelSpinStyle( m_TextOrient->GetSelection() );
+    int orientation = m_TextOrient->GetSelection();
+    m_CurrentText->SetLabelSpinStyle( mapOrientation( m_CurrentText->Type(), orientation ) );
+
     text  = m_TextSize->GetValue();
     value = ValueFromString( g_UserUnit, text );
     m_CurrentText->SetTextSize( wxSize( value, value ) );
