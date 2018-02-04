@@ -515,7 +515,11 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
         double endAngle = startAngle + aEdge->GetAngle();
 
-        m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
+        // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
+        if( std::abs( aEdge->GetAngle() ) == 3600.0 )
+            m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        else
+            m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
     }
     break;
 
@@ -752,7 +756,12 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         radius = KiROUND( GetLineLength( end, start ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aSeg->GetAngle();
-        m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
+
+        // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
+        if( std::abs( aSeg->GetAngle() ) == 3600.0 )
+            m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        else
+            m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
         break;
 
     case S_CURVE:

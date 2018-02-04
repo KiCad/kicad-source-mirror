@@ -314,8 +314,13 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         }
         else    // Mirrored mode: arc orientation is reversed
         {
+#ifdef __WXMAC__    // wxWidgets OSX print driver handles arc mirroring for us
+            if( StAngle > EndAngle )
+                std::swap( StAngle, EndAngle );
+#else
             if( StAngle < EndAngle )
                 std::swap( StAngle, EndAngle );
+#endif
         }
 
         if( filled )
