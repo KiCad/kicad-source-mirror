@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2016-2017 CERN
+ * Copyright (C) 2016-2018 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -1070,15 +1070,50 @@ bool CN_ANCHOR::IsDangling() const
     if( !m_cluster )
         return true;
 
-    int validCount = 0;
+    // Calculate the item count connected to this anchor.
+    // m_cluster groups all items connected, but they are not necessary connected
+    // at this coordinate point (they are only candidates)
+    BOARD_CONNECTED_ITEM* item_ref = Parent();
+    LSET layers = item_ref->GetLayerSet() & LSET::AllCuMask();
 
-    for( auto item : *m_cluster )
+    // the number of items connected to item_ref at ths anchor point
+    int connected_items_count = 0;
+
+    // the minimal number of items connected to item_ref
+    // at this anchor point to decide the anchor is *not* dangling
+    int minimal_count = 1;
+
+    // a via can be removed if connected to only one other item.
+    // the minimal_count is therefore 2
+    if( item_ref->Type() == PCB_VIA_T )
+        minimal_count = 2;
+
+    for( CN_ITEM* item : *m_cluster )
     {
-        if( item->Valid() )
-            validCount++;
+        if( !item->Valid() )
+            continue;
+
+        BOARD_CONNECTED_ITEM* brd_item = item->Parent();
+
+        if( brd_item == item_ref )
+            continue;
+
+        // count only items on the same layer at this coordinate (especially for zones)
+        if( !( brd_item->GetLayerSet() & layers ).any() )
+            continue;
+
+        if( brd_item->Type() == PCB_ZONE_AREA_T )
+        {
+            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( brd_item );
+
+            if( zone->HitTestInsideZone( wxPoint( Pos() ) ) )
+                connected_items_count++;
+        }
+        else if( brd_item->HitTest( wxPoint( Pos() ) ) )
+            connected_items_count++;
     }
 
-    return validCount <= 1;
+    return connected_items_count < minimal_count;
 }
 
 void CN_CONNECTIVITY_ALGO::SetProgressReporter( PROGRESS_REPORTER* aReporter )

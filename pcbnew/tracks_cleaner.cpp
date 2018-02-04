@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,9 @@
 #include <board_commit.h>
 #include <connectivity_data.h>
 #include <connectivity_algo.h>
+
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 
 // Helper class used to clean tracks and vias
 class TRACKS_CLEANER
@@ -153,6 +156,9 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     BOARD_COMMIT commit( this );
     TRACKS_CLEANER cleaner( GetBoard(), commit );
 
+    // Clear current selection list to avoid selection of deleted items
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
     bool modified = cleaner.CleanupBoard( dlg.m_deleteShortCircuits, dlg.m_cleanVias,
                             dlg.m_mergeSegments, dlg.m_deleteUnconnectedSegm );
 
@@ -252,7 +258,6 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
 TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit )
     : m_brd( aPcb ), m_commit( aCommit )
 {
-
 }
 
 
