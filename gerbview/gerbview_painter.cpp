@@ -92,6 +92,7 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS* aO
 const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     const GERBER_DRAW_ITEM* item = static_cast<const GERBER_DRAW_ITEM*>( aItem );
+    static const COLOR4D transparent = COLOR4D( 0, 0, 0, 0 );
 
     // All DCODE layers stored under a single color setting
     if( IsDCodeLayer( aLayer ) )
@@ -101,6 +102,14 @@ const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int a
     {
         if( item->IsSelected() )
             return m_layerColorsSel[aLayer];
+
+        if( item->GetLayerPolarity() )
+        {
+            if( m_showNegativeItems )
+                return m_layerColors[LAYER_NEGATIVE_OBJECTS];
+            else
+                return transparent;
+        }
     }
 
     if( !m_netHighlightString.IsEmpty() && item &&
@@ -219,14 +228,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     if( aItem->IsBrightened() )
         color = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
-    if( isNegative )
-    {
-        if( m_gerbviewSettings.m_showNegativeItems )
-            color = m_gerbviewSettings.GetLayerColor( LAYER_NEGATIVE_OBJECTS );
-        else
-            color = COLOR4D( 0, 0, 0, 0 );
-    }
-    else if( m_gerbviewSettings.m_diffMode )
+    if( m_gerbviewSettings.m_diffMode )
     {
         color.a = 0.75;
     }
