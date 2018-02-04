@@ -45,8 +45,9 @@ enum SHAPE_TYPE
     SH_LINE_CHAIN,      ///> line chain (polyline)
     SH_CIRCLE,          ///> circle
     SH_CONVEX,          ///> convex polygon
-    SH_POLY_SET,         ///> any polygon (with holes, etc.)
-    SH_COMPOUND         ///> compound shape, consisting of multiple simple shapes
+    SH_POLY_SET,        ///> set of polygons (with holes, etc.)
+    SH_COMPOUND,        ///> compound shape, consisting of multiple simple shapes
+    SH_ARC              ///> circular arc
 };
 
 /**

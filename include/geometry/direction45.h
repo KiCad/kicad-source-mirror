@@ -25,6 +25,9 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 
+// believe or not, X11 headers have a F****ING macro called Opposite...
+#undef Opposite
+
 /**
  * Class DIRECTION_45.
  * Represents route directions & corner angles in a 45-degree metric.

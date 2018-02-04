@@ -172,7 +172,7 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 
     if( ! isStartingPointRoutable( aP, aLayer ) )
     {
-        SetFailureReason( _("Cannot start routing inside a keepout area." ) );
+        SetFailureReason( _("Cannot start routing inside a keepout area or board outline." ) );
         return false;
     }
 

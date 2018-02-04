@@ -46,6 +46,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_convex.h>
+#include <geometry/shape_arc.h>
 #include <geometry/convex_hull.h>
 
 #include "tools/pcb_tool.h"
@@ -802,12 +803,12 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
 
     LSET layers = aZone->GetLayerSet();
 
-    for ( int layer = F_Cu; layer <= B_Cu; layer++ )
+    for( int layer = F_Cu; layer <= B_Cu; layer++ )
     {
         if ( ! layers[layer] )
             continue;
 
-        for ( int outline = 0; outline < poly.OutlineCount(); outline++ )
+        for( int outline = 0; outline < poly.OutlineCount(); outline++ )
         {
             auto tri = poly.TriangulatedPolygon( outline );
 
@@ -837,9 +838,59 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
     return true;
 }
 
-std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncGraphicalItem( DRAWSEGMENT* aItem )
+bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 {
-    return nullptr;
+    std::vector<SHAPE_SEGMENT*> segs;
+
+
+    if( aItem->GetLayer() != Edge_Cuts )
+        return false;
+
+    switch( aItem->GetShape() )
+    {
+        case S_ARC:
+        {
+            SHAPE_ARC arc( aItem->GetArcStart(), aItem->GetArcEnd(), aItem->GetCenter() );
+            auto l = arc.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+            {
+                SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( l.CSegment(i), aItem->GetWidth() );
+                segs.push_back( seg );
+            }
+
+            break;
+        }
+        case S_SEGMENT:
+        {
+            SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( aItem->GetStart(), aItem->GetEnd(), aItem->GetWidth() );
+            segs.push_back( seg );
+
+            break;
+        }
+        default:
+            break;
+    }
+
+    for( auto seg : segs )
+    {
+        for( int layer = F_Cu; layer <= B_Cu; layer++ )
+        {
+            std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+
+            solid->SetLayer( layer );
+            solid->SetNet( -1 );
+            solid->SetParent( nullptr );
+            solid->SetShape( seg->Clone() );
+            solid->SetRoutable( false );
+
+            aWorld->Add( std::move( solid ) );
+        }
+
+        delete seg;
+    }
+
+    return true;
 }
 
 void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
@@ -861,10 +912,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 
     for( auto gitem : m_board->Drawings() )
     {
-        auto solid = syncGraphicalItem( static_cast<DRAWSEGMENT*>( gitem ) );
-
-    	if ( solid )
-    	    aWorld->Add( std::move( solid ) );
+        syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( gitem ) );
     }
 
     for( auto zone : m_board->Zones() )

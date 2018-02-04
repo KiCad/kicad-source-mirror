@@ -70,7 +70,7 @@ private:
     std::unique_ptr<PNS::SOLID> syncPad( D_PAD* aPad );
     std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
     std::unique_ptr<PNS::VIA> syncVia( VIA* aVia );
-    std::unique_ptr<PNS::SOLID> syncGraphicalItem( DRAWSEGMENT* aItem );
+    bool syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone );
 
     KIGFX::VIEW* m_view;
