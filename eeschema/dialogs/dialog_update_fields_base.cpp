@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Feb  6 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,6 +40,11 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
 	
 	m_mainSizer->Add( m_removeExtraBox, 0, wxALL, 5 );
+	
+	m_omitEmpty = new wxCheckBox( this, wxID_ANY, _("Omit empty fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_omitEmpty->SetToolTip( _("Do not clear existing entries if library field is empty") );
+	
+	m_mainSizer->Add( m_omitEmpty, 0, wxALL, 5 );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_mainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );

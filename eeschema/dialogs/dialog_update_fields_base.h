@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Feb  6 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,6 +41,7 @@ class DIALOG_UPDATE_FIELDS_BASE : public DIALOG_SHIM
 		wxButton* m_selAllBtn;
 		wxButton* m_selNoneBtn;
 		wxCheckBox* m_removeExtraBox;
+		wxCheckBox* m_omitEmpty;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
