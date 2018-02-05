@@ -165,9 +165,18 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
         }
 
         // clear the deleted parts buffer only if data is saved to the original file
+        wxFileName original, destination( aFileName );
         auto row = symTable()->FindRow( aLibrary );
 
-        if( res && row && row->GetFullURI( true ) == aFileName )
+        if( row )
+        {
+            original = row->GetFullURI( true );
+            original.Normalize();
+        }
+
+        destination.Normalize();
+
+        if( res && original == destination )
             libBuf.ClearDeletedBuffer();
     }
     else
