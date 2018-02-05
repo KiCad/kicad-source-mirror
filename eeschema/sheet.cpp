@@ -100,19 +100,31 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     bool loadFromFile = false;
     SCH_SCREEN* useScreen = NULL;
 
+    // Relative file names are relative to the path of the current sheet.  This allows for
+    // nesting of schematic files in subfolders.
+    if( !fileName.IsAbsolute() )
+    {
+        const SCH_SCREEN* currentScreen = aHierarchy->LastScreen();
+
+        wxCHECK_MSG( currentScreen, false, "Invalid sheet path object." );
+
+        wxFileName currentSheetFileName = currentScreen->GetFileName();
+
+        wxCHECK_MSG( fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() ), false,
+                     "Cannot normalize new sheet schematic file path." );
+    }
+
     wxString newFilename = fileName.GetFullPath();
 
     // Search for a schematic file having the same filename
     // already in use in the hierarchy or on disk, in order to reuse it.
-    if( !g_RootSheet->SearchHierarchy( fileName.GetFullName(), &useScreen ) )
+    if( !g_RootSheet->SearchHierarchy( newFilename, &useScreen ) )
     {
-        // if user entered a relative path, allow that to stay, but do the
-        // file existence test with an absolute (full) path.  This transformation
-        // is local to this scope, but is the same one used at load time later.
-        newFilename  = Prj().AbsolutePath( newFilename );
-
         loadFromFile = wxFileExists( newFilename );
     }
+
+    wxLogDebug( "Sheet requested file \"%s\", %s", newFilename,
+                (loadFromFile) ? "found" : "not found" );
 
     // Inside Eeschema, filenames are stored using unix notation
     newFilename.Replace( wxT( "\\" ), wxT( "/" ) );
@@ -236,7 +248,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         }
     }
 
-    aSheet->SetFileName( fileName.GetFullPath( wxPATH_UNIX ) );
+    wxFileName userFileName = dlg.GetFileName();
+    aSheet->SetFileName( userFileName.GetFullPath( wxPATH_UNIX ) );
 
     if( useScreen )
     {
