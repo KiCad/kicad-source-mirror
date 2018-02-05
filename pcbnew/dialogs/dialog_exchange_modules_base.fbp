@@ -142,7 +142,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_MATCH_FP_ALL</property>
+                                <property name="id">wxID_ANY</property>
                                 <property name="label">%s all footprints on board</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -233,7 +233,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_MATCH_FP_REF</property>
+                                <property name="id">wxID_ANY</property>
                                 <property name="label">%s current footprint (%s)</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -324,7 +324,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_MATCH_FP_REF</property>
+                                <property name="id">wxID_ANY</property>
                                 <property name="label">%s footprint with reference:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -509,7 +509,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_MATCH_FP_VAL</property>
+                                <property name="id">wxID_ANY</property>
                                 <property name="label">%s footprints with matching value (%s)</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -600,7 +600,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_MATCH_FP_VAL</property>
+                                <property name="id">wxID_ANY</property>
                                 <property name="label">%s footprints with value:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -785,7 +785,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_MATCH_FP_ID</property>
+                                <property name="id">wxID_ANY</property>
                                 <property name="label">%s footprints with identifier:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>

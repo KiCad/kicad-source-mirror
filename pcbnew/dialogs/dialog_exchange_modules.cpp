@@ -48,6 +48,11 @@
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 
 
+#define wxID_MATCH_FP_ALL 4200
+#define wxID_MATCH_FP_REF 4201
+#define wxID_MATCH_FP_VAL 4202
+#define wxID_MATCH_FP_ID  4203
+
 int DIALOG_EXCHANGE_MODULE::m_matchModeForUpdate           = wxID_MATCH_FP_ALL;
 int DIALOG_EXCHANGE_MODULE::m_matchModeForExchange         = wxID_MATCH_FP_REF;
 int DIALOG_EXCHANGE_MODULE::m_matchModeForUpdateSelected   = wxID_MATCH_FP_REF;
