@@ -152,6 +152,12 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname );
 
     /**
+     * Generate a checksum of the last-mod-date of \a aNickname's directory, or a checksum
+     * of all the libraries' directories if \a aNickname is NULL.
+     */
+    long long GenLastModifiedChecksum( const wxString* aNickname );
+
+    /**
      * Function PrefetchLib
      * If possible, prefetches the specified library (e.g. performing downloads). Does not parse.
      * Threadsafe.

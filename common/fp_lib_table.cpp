@@ -235,6 +235,28 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 }
 
 
+long long FP_LIB_TABLE::GenLastModifiedChecksum( const wxString* aNickname )
+{
+    if( aNickname )
+    {
+        const FP_LIB_TABLE_ROW* row = FindRow( *aNickname );
+        wxASSERT( (PLUGIN*) row->plugin );
+        return row->plugin->GetLibModificationTime( *aNickname ).GetValue().GetValue();
+    }
+
+    long long hash = 0;
+
+    for( wxString const& nickname : GetLogicalLibs() )
+    {
+        const FP_LIB_TABLE_ROW* row = FindRow( nickname );
+        wxASSERT( (PLUGIN*) row->plugin );
+        hash += row->plugin->GetLibModificationTime( nickname ).GetValue().GetValue();
+    }
+
+    return hash;
+}
+
+
 void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );

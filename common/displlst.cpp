@@ -33,6 +33,15 @@
 #include <kicad_string.h>
 #include <dialog_helpers.h>
 
+
+// wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
+// not, in repeatedly creating/destorying a wxDC to do the measurement in).
+// Use default column widths instead.  (Note that these will be scaled down proportionally
+// to fit the available space when the dialog is instantiated.)
+static int DEFAULT_COL_WIDTHS[] = { 400, 200 };
+
+
+
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
@@ -64,19 +73,11 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 }
 
 
-void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
-                                  const wxString& aSelection)
+void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection)
 {
-
     for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
-    {
-        wxListItem column;
-
-        column.SetId( i );
-        column.SetText( aItemHeaders.Item( i ) );
-
-        m_listBox->InsertColumn( i, column );
-    }
+        m_listBox->InsertColumn( i, aItemHeaders.Item( i ),
+                                 wxLIST_FORMAT_LEFT, DEFAULT_COL_WIDTHS[ i ] );
 
     InsertItems( *m_itemsListCp, 0 );
 
@@ -84,15 +85,6 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
     {
         m_messages->Show( false );
         m_staticTextMsg->Show( false );
-    }
-
-    for( unsigned col = 0; col < aItemHeaders.Count();  ++col )
-    {
-        m_listBox->SetColumnWidth( col, wxLIST_AUTOSIZE );
-        int columnwidth = m_listBox->GetColumnWidth( col );
-        m_listBox->SetColumnWidth( col, wxLIST_AUTOSIZE_USEHEADER );
-        int headerwidth = m_listBox->GetColumnWidth( col );
-        m_listBox->SetColumnWidth( col, std::max( columnwidth, headerwidth ) );
     }
 
     if( !!aSelection )
@@ -177,18 +169,25 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
     {
         wxASSERT( (int) itemList[row].GetCount() == m_listBox->GetColumnCount() );
 
-        long itemIndex = 0;
         for( unsigned col = 0; col < itemList[row].GetCount(); col++ )
         {
+            wxListItem info;
+            info.m_itemId = row + position;
+            info.m_col = col;
+            info.m_text = itemList[row].Item( col );
+            info.m_width = DEFAULT_COL_WIDTHS[ col ];
+            info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_WIDTH;
 
             if( col == 0 )
             {
-                itemIndex = m_listBox->InsertItem( row+position, itemList[row].Item( col ) );
-                m_listBox->SetItemPtrData( itemIndex, wxUIntPtr( &itemList[row].Item( col ) ) );
+                info.m_data = wxUIntPtr( &itemList[row].Item( col ) );
+                info.m_mask |= wxLIST_MASK_DATA;
+
+                m_listBox->InsertItem( info );
             }
             else
             {
-                m_listBox->SetItem( itemIndex, col, itemList[row].Item( col ) );
+                m_listBox->SetItem( info );
             }
         }
     }

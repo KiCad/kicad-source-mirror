@@ -200,6 +200,7 @@ public:
 
 
 FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
+    : m_mod_time( 0.0 )
 {
     m_owner = aOwner;
     m_lib_path.SetPath( aLibraryPath );
@@ -208,6 +209,9 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 
 wxDateTime FP_CACHE::GetLibModificationTime() const
 {
+    if( !m_lib_path.DirExists() )
+        return wxDateTime::Now();
+
     return m_lib_path.GetModificationTime();
 }
 
@@ -368,57 +372,7 @@ bool FP_CACHE::IsPath( const wxString& aPath ) const
 
 bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintName ) const
 {
-    // The library is modified if the library path got deleted or changed.
-    if( !m_lib_path.DirExists() || !IsPath( aLibPath ) )
-        return true;
-
-    wxLogTrace( traceFootprintLibrary, wxT( "File '%s', m_mod_time %s-%s, file mod time: %s-%s." ),
-                GetChars( m_lib_path.GetPath() ),
-                GetChars( m_mod_time.FormatDate() ), GetChars( m_mod_time.FormatTime() ),
-                GetChars( m_lib_path.GetModificationTime().FormatDate() ),
-                GetChars( m_lib_path.GetModificationTime().FormatTime() ) );
-
-    // If a file is added to or remove from the library path, the cache needs reloaded.
-    if( m_mod_time != m_lib_path.GetModificationTime() )
-        return true;
-
-    // If no footprint was specified, check every file modification time against the time
-    // it was loaded.
-    if( aFootprintName.IsEmpty() )
-    {
-        for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
-        {
-            wxFileName fn = m_lib_path;
-
-            fn.SetName( it->second->GetFileName().GetName() );
-            fn.SetExt( KiCadFootprintFileExtension );
-
-            if( !fn.FileExists() )
-            {
-                wxLogTrace( traceFootprintLibrary,
-                            wxT( "Footprint cache file '%s' does not exist." ),
-                            fn.GetFullPath().GetData() );
-                return true;
-            }
-
-            if( it->second->IsModified() )
-            {
-                wxLogTrace( traceFootprintLibrary,
-                            wxT( "Footprint cache file '%s' has been modified." ),
-                            fn.GetFullPath().GetData() );
-                return true;
-            }
-        }
-    }
-    else
-    {
-        MODULE_CITER it = m_modules.find( aFootprintName );
-
-        if( it == m_modules.end() || it->second->IsModified() )
-            return true;
-    }
-
-    return false;
+    return GetLibModificationTime() > m_mod_time;
 }
 
 
@@ -2147,6 +2101,16 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
     }
 
     m_cache->Remove( aFootprintName );
+}
+
+
+
+wxDateTime PCB_IO::GetLibModificationTime( const wxString& aLibraryPath ) const
+{
+    if( !m_cache )
+        return wxDateTime::Now();     // force a load
+
+    return m_cache->GetLibModificationTime();
 }
 
 

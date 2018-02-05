@@ -123,11 +123,18 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname )
 {
+    if( aTable->GenLastModifiedChecksum( aNickname ) == m_libraries_last_mod_checksum )
+        return true;
+
     FOOTPRINT_ASYNC_LOADER loader;
 
     loader.SetList( this );
     loader.Start( aTable, aNickname );
-    return loader.Join();
+    bool retval = loader.Join();
+
+    m_libraries_last_mod_checksum = aTable->GenLastModifiedChecksum( aNickname );
+
+    return retval;
 }
 
 

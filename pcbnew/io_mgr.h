@@ -28,6 +28,7 @@
 #include <richio.h>
 #include <map>
 #include <functional>
+#include <wx/time.h>
 
 class BOARD;
 class PLUGIN;
@@ -351,6 +352,15 @@ public:
      */
     virtual void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                                      const PROPERTIES* aProperties = NULL );
+
+    /**
+     * Return the footprint lib last-mod-time, if available.
+     */
+    virtual wxDateTime GetLibModificationTime( const wxString& aLibraryPath ) const
+    {
+        // Default implementation.
+        return wxDateTime::Now();   // If we don't know then we must assume the worst.
+    }
 
     /**
      * Function PrefetchLib

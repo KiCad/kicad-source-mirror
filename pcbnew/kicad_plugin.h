@@ -130,6 +130,8 @@ public:
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const PROPERTIES* aProperties = NULL ) override;
 
+    wxDateTime GetLibModificationTime( const wxString& aLibraryPath ) const override;
+
     void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;

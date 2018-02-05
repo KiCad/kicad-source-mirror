@@ -62,6 +62,7 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
     SYNC_QUEUE<wxString>     m_queue_out;
     std::atomic_bool         m_first_to_finish;
     std::atomic_size_t       m_count_finished;
+    long long                m_libraries_last_mod_checksum;
 
     /**
      * Call aFunc, pushing any IO_ERRORs and std::exceptions it throws onto m_errors.
