@@ -1072,8 +1072,25 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->DrawPolygon( *outline );
 
+        // Draw each contour (main contour and holes)
+
+        /* This line:
+         * m_gal->DrawPolygon( *outline );
+         * should be enough, but currently does not work to draw holes contours in a complex polygon
+         * so each contour is draw as a simple polygon
+         */
+
+        // Draw the main contour
+        m_gal->DrawPolyline( outline->COutline( 0 ) );
+
+        // Draw holes
+        int holes_count = outline->HoleCount( 0 );
+
+        for( int ii = 0; ii < holes_count; ++ii )
+            m_gal->DrawPolyline(  outline->CHole( 0, ii ) );
+
+        // Draw hatch lines
         for( const SEG& hatchLine : aZone->GetHatchLines() )
             m_gal->DrawLine( hatchLine.A, hatchLine.B );
     }
