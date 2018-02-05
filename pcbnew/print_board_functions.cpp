@@ -145,7 +145,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     Pcb->SetElementVisibility( LAYER_PAD_FR, true );
     Pcb->SetElementVisibility( LAYER_PAD_BK, true );
     Pcb->SetElementVisibility( LAYER_MOD_TEXT_FR, true );
-    Pcb->SetElementVisibility( LAYER_PAD_FR, LAYER_MOD_TEXT_BK );
+    Pcb->SetElementVisibility( LAYER_MOD_TEXT_BK, true );
 
     if( !( aPrintMask & LSET::AllCuMask() ).any() )
     {
