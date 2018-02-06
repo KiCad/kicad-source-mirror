@@ -108,9 +108,9 @@ void C3D_RENDER_OGL_LEGACY::generate_ring_contour( const SFVEC2F &aCenter,
 
     for( int ii = 0; ii < 3600; ii += delta )
     {
-        const SFVEC2F rotatedDir = glm::rotate( SFVEC2F( 1.0f, 0.0f ),
-                                                (float)(aInvertOrder?(3600 - ii):ii) *
-                                                2.0f * glm::pi<float>() / 3600.0f );
+        float angle = (float)( aInvertOrder ? ( 3600 - ii ) : ii )
+                            * 2.0f * glm::pi<float>() / 3600.0f;
+        const SFVEC2F rotatedDir = SFVEC2F( cos( angle ), sin( angle ) );
 
         aInnerContourResult.push_back( SFVEC2F( aCenter.x + rotatedDir.x * aInnerRadius,
                                                 aCenter.y + rotatedDir.y * aInnerRadius ) );

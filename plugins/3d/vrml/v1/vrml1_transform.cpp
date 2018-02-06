@@ -364,19 +364,19 @@ SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     rY = rotation.y;
     rZ = rotation.z;
     rW = rotation.w;
-    glm::mat4 rM = glm::rotate( rW, glm::vec3( rX, rY, rZ ) );
+    glm::mat4 rM = glm::rotate( glm::mat4( 1.0f ), rW, glm::vec3( rX, rY, rZ ) );
     // translation
     float dX, dY, dZ;
     dX = translation.x;
     dY = translation.y;
     dZ = translation.z;
-    glm::mat4 tM = glm::translate( glm::vec3( dX, dY, dZ ) );
+    glm::mat4 tM = glm::translate( glm::mat4( 1.0f ), glm::vec3( dX, dY, dZ ) );
     // center
     dX = center.x;
     dY = center.y;
     dZ = center.z;
-    glm::mat4 cM = glm::translate( glm::vec3( dX, dY, dZ ) );
-    glm::mat4 ncM = glm::translate( glm::vec3( -dX, -dY, -dZ ) );
+    glm::mat4 cM = glm::translate( glm::mat4( 1.0f ), glm::vec3( dX, dY, dZ ) );
+    glm::mat4 ncM = glm::translate( glm::mat4( 1.0f ), glm::vec3( -dX, -dY, -dZ ) );
     // scale
     glm::mat4 sM = glm::scale( glm::mat4( 1.0 ), glm::vec3( scale.x, scale.y, scale.z ) );
     // scaleOrientation
@@ -384,8 +384,8 @@ SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     rY = scaleOrientation.y;
     rZ = scaleOrientation.z;
     rW = scaleOrientation.w;
-    glm::mat4 srM = glm::rotate( rW, glm::vec3( rX, rY, rZ ) );
-    glm::mat4 nsrM = glm::rotate( -rW, glm::vec3( rX, rY, rZ ) );
+    glm::mat4 srM = glm::rotate( glm::mat4( 1.0f ), rW, glm::vec3( rX, rY, rZ ) );
+    glm::mat4 nsrM = glm::rotate( glm::mat4( 1.0f ), -rW, glm::vec3( rX, rY, rZ ) );
 
     // resultant transform:
     // tx' = tM * cM * rM * srM * sM * nsrM * ncM
