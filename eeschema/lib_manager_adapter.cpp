@@ -24,6 +24,7 @@
 
 #include <lib_manager_adapter.h>
 #include <lib_manager.h>
+#include <symbol_lib_table.h>
 #include <class_libentry.h>
 
 
@@ -104,7 +105,9 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
                 nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
             }
 
-            auto& lib_node = m_tree.AddLib( libName );
+            SYMBOL_LIB_TABLE_ROW* library = m_libMgr->GetLibrary( libName );
+
+            auto& lib_node = m_tree.AddLib( libName, library->GetDescr() );
             updateLibrary( lib_node );
             m_tree.AssignIntrinsicRanks();
         }

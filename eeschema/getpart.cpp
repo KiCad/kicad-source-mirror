@@ -145,7 +145,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
                 history_list.push_back( alias );
         }
 
-        adapter->AddAliasList( "-- " + _( "History" ) + " --", history_list );
+        adapter->AddAliasList( "-- " + _( "History" ) + " --", _( "Recently used items" ), history_list );
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
     }
 

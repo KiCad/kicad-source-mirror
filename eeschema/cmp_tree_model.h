@@ -243,8 +243,9 @@ public:
      *
      * @param aParent   parent node, should be a CMP_TREE_NODE_ROOT
      * @param aName     display name of the library
+     * @param aDesc     a description of the library
      */
-    CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aName );
+    CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aName, wxString const& aDesc );
 
     /**
      * Construct a new alias node, add it to this library, and return it.
@@ -278,7 +279,7 @@ public:
     /**
      * Construct an empty library node, add it to the root, and return it.
      */
-    CMP_TREE_NODE_LIB& AddLib( wxString const& aName );
+    CMP_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
 };

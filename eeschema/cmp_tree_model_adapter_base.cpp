@@ -143,11 +143,10 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddLibrariesWithProgress(
 }
 
 
-void CMP_TREE_MODEL_ADAPTER_BASE::AddAliasList(
-            wxString const&         aNodeName,
-            std::vector<LIB_ALIAS*> const&  aAliasList )
+void CMP_TREE_MODEL_ADAPTER_BASE::AddAliasList( wxString const& aNodeName, wxString const& aDesc,
+                                                std::vector<LIB_ALIAS*> const&  aAliasList )
 {
-    auto& lib_node = m_tree.AddLib( aNodeName );
+    auto& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
     for( auto a: aAliasList )
     {

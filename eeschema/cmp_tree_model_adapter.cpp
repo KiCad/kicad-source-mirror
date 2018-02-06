@@ -62,7 +62,7 @@ void CMP_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
 
     if( alias_list.size() > 0 )
     {
-        AddAliasList( aLibNickname, alias_list );
+        AddAliasList( aLibNickname, m_libs->GetDescription( aLibNickname ), alias_list );
         m_tree.AssignIntrinsicRanks();
     }
 }
@@ -94,5 +94,5 @@ void CMP_TREE_MODEL_ADAPTER::AddAliasList(
     }
 
     if( alias_list.size() > 0 )
-        AddAliasList( aNodeName, alias_list );
+        AddAliasList( aNodeName, m_libs->GetDescription( aNodeName ), alias_list );
 }

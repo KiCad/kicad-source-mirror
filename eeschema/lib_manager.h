@@ -41,6 +41,7 @@ class PART_LIB;
 class SCH_PLUGIN;
 class LIB_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
+class SYMBOL_LIB_TABLE_ROW;
 
 /**
  * Class to handle modifications to the symbol libraries.
@@ -71,6 +72,11 @@ public:
      * Returns the array of library names.
      */
     wxArrayString GetLibraryNames() const;
+
+    /**
+     * Finds a single library within the (aggregate) library table.
+     */
+    SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary );
 
     /**
      * Returns a set containing all part names for a specific library.

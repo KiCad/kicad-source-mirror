@@ -176,10 +176,12 @@ public:
      * phase.
      *
      * @param aNodeName     the parent node the components will appear under
+     * @param aDesc         the description field of the parent node
      * @param aAliasList    list of aliases
      */
     void AddAliasList(
             wxString const&                 aNodeName,
+            wxString const&                 aDesc,
             std::vector<LIB_ALIAS*> const&  aAliasList );
 
     /**

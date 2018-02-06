@@ -256,11 +256,13 @@ void CMP_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 }
 
 
-CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aName )
+CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent,
+                                      wxString const& aName, wxString const& aDesc )
 {
     Type = LIB;
     Name = aName;
     MatchName = aName.Lower();
+    Desc = aDesc;
     Parent = aParent;
     LibId.SetLibNickname( aName );
 }
@@ -292,9 +294,9 @@ CMP_TREE_NODE_ROOT::CMP_TREE_NODE_ROOT()
 }
 
 
-CMP_TREE_NODE_LIB& CMP_TREE_NODE_ROOT::AddLib( wxString const& aName )
+CMP_TREE_NODE_LIB& CMP_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString const& aDesc )
 {
-    CMP_TREE_NODE_LIB* lib = new CMP_TREE_NODE_LIB( this, aName );
+    CMP_TREE_NODE_LIB* lib = new CMP_TREE_NODE_LIB( this, aName, aDesc );
     Children.push_back( std::unique_ptr<CMP_TREE_NODE>( lib ) );
     return *lib;
 }

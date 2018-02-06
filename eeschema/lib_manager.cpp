@@ -90,6 +90,12 @@ wxArrayString LIB_MANAGER::GetLibraryNames() const
 }
 
 
+SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary )
+{
+    return symTable()->FindRow( aLibrary );
+}
+
+
 bool LIB_MANAGER::FlushAll()
 {
     bool result = true;
