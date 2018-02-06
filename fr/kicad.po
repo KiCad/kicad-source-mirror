@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-06 17:31+0100\n"
-"PO-Revision-Date: 2018-02-06 17:33+0100\n"
+"POT-Creation-Date: 2018-02-06 18:07+0100\n"
+"PO-Revision-Date: 2018-02-06 18:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -102,7 +102,7 @@ msgstr "[BUG] Pas de résolveur valide; les données ne seront pas mis à jour"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:135
 msgid "Update 3D search path list"
-msgstr "Mise a jour le la liste des chemins de recherche 3D"
+msgstr "Mise a jour de la liste des chemins de recherche 3D"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:194
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:234
@@ -18163,12 +18163,12 @@ msgstr "Impossible de créer le fichier \"%s\""
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:24
 #, c-format
 msgid "%s all footprints on board"
-msgstr "%sr toutes les empreintes du PCB"
+msgstr "%s toutes les empreintes du PCB"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:30
 #, c-format
 msgid "%s current footprint (%s)"
-msgstr "%sr empreinte courante (%s)"
+msgstr "%s empreinte courante (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:35
 #, c-format
