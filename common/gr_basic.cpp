@@ -849,7 +849,7 @@ static bool clipCircle( EDA_RECT* aClipBox, int xc, int yc, int r, int aWidth )
 
 void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int r, int width, COLOR4D Color )
 {
-    if( clipCircle( ClipBox, xc, yc, r, width ) )
+    if( clipCircle( ClipBox, xc, yc, r, width ) || r <= 0 )
         return;
 
     GRSetBrush( DC, Color, NOT_FILLED );
@@ -873,7 +873,7 @@ void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWi
 void GRFilledCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r,
                      int width, COLOR4D Color, COLOR4D BgColor )
 {
-    if( clipCircle( ClipBox, x, y, r, width ) )
+    if( clipCircle( ClipBox, x, y, r, width ) || r <= 0 )
         return;
 
     GRSetBrush( DC, BgColor, FILLED );
