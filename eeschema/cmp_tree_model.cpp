@@ -199,6 +199,8 @@ void CMP_TREE_NODE_LIB_ID::Update( LIB_ALIAS* aAlias )
         for( int u = 1; u <= part->GetUnitCount(); ++u )
             AddUnit( u );
     }
+
+    SearchTextNormalized = false;
 }
 
 
