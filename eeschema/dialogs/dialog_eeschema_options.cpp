@@ -296,11 +296,6 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
         m_scaleSlider->SetValue( scale_fourths * 25 );
     }
 
-    m_stIconScale->SetLabel(
-            _( "Icon scale:" ) +
-            wxString::Format( " (diag: %d)",
-                GetParent()->ConvertDialogToPixels( wxSize( 0, 8 ) ).y ) );
-
     Layout();
     return true;
 }
