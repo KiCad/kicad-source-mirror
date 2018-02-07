@@ -121,6 +121,14 @@ public:
         return m_cluster;
     }
 
+    /**
+     * has meaning only for tracks and vias.
+     * @return true if this anchor is dangling
+     * The anchor point is dangling if the parent is a track
+     * and this anchor point is not connected to an other item
+     * ( track, vas pad or zone) or if the parent is a via and this anchor point
+     * is connected to only one track and not to an other item
+     */
     bool IsDangling() const;
 
     // Tag used for unconnected items.
