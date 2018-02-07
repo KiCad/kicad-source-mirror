@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
  */
 
 /**
- * @file class_treeproject_item.cpp
+ * @file treeproject_item.cpp
  *
  * @brief Class TREEPROJECT_ITEM is a derived  class from wxTreeItemData and
  * store info about a file or directory shown in the KiCad tree project files
@@ -34,11 +34,11 @@
 #include <gestfich.h>
 #include <executable_names.h>
 
-#include "class_treeprojectfiles.h"
+#include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 
-#include "class_treeproject_item.h"
+#include "treeproject_item.h"
 
 
 TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data,

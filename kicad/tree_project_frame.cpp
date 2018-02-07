@@ -40,8 +40,8 @@
 #include <menus_helpers.h>
 #include <wildcards_and_files_ext.h>
 
-#include "class_treeproject_item.h"
-#include "class_treeprojectfiles.h"
+#include "treeproject_item.h"
+#include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 
 #include "tree_project_frame.h"

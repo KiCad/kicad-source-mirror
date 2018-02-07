@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@
  */
 
 /*
- * file class_treeprojectfiles.h
+ * file treeprojectfiles.h
  */
 
-#ifndef CLASS_TREEPROJECTFILES_H
-#define CLASS_TREEPROJECTFILES_H
+#ifndef TREEPROJECTFILES_H
+#define TREEPROJECTFILES_H
 
 
 #include <wx/treectrl.h>
@@ -60,4 +60,4 @@ private:
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
 };
 
-#endif  // CLASS_TREEPROJECTFILES_H
+#endif  // TREEPROJECTFILES_H

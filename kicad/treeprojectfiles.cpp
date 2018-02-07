@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2012 Jean-Pierre Charras
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,10 @@
 
 #include <bitmaps.h>
 
-#include "class_treeproject_item.h"
+#include "treeproject_item.h"
 #include "tree_project_frame.h"
 
-#include "class_treeprojectfiles.h"
+#include "treeprojectfiles.h"
 
 
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )
