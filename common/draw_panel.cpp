@@ -226,7 +226,14 @@ void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, COLOR4D aColor )
 
     wxPoint cursor = GetParent()->GetCrossHairPosition();
 
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    // Normally cursor color is set to white, so when it is xored with white
+    // background, it is painted black effectively. wxGraphicsContext does not have
+    // xor operation, so we need to invert the color manually.
+    aColor.Invert();
+#else
     GRSetDrawMode( aDC, GR_XOR );
+#endif
 
     if( GetParent()->GetGalDisplayOptions().m_fullscreenCursor )
     {
@@ -687,8 +694,6 @@ void EDA_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
 
 void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
 {
-    COLOR4D axis_color = COLOR4D( BLUE );
-
     GRSetDrawMode( DC, GR_COPY );
 
     if( GetParent()->IsGridVisible() )
@@ -697,6 +702,7 @@ void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
     // Draw axis
     if( GetParent()->m_showAxis )
     {
+        COLOR4D axis_color = COLOR4D( BLUE );
         wxSize  pageSize = GetParent()->GetPageSizeIU();
 
         // Draw the Y axis
@@ -765,10 +771,12 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     double right = ( double ) m_ClipBox.GetRight();
     double bottom = ( double ) m_ClipBox.GetBottom();
 
-#if defined( __WXMAC__ ) && defined( USE_WX_GRAPHICS_CONTEXT )
+#if defined( USE_WX_GRAPHICS_CONTEXT )
     wxGCDC *gcdc = wxDynamicCast( aDC, wxGCDC );
+
     if( gcdc )
     {
+        // Much faster grid drawing on systems using wxGraphicsContext
         wxGraphicsContext *gc = gcdc->GetGraphicsContext();
 
         // Grid point size
@@ -1363,23 +1371,21 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         }
     }
 
-#if 0
-    wxString msg_debug;
-    msg_debug.Printf( " block state %d, cmd %d",
-                      screen->m_BlockLocate.GetState(),
-                      screen->m_BlockLocate.GetCommand() );
-    GetParent()->PrintMsg( msg_debug );
-#endif
-
     lastPanel = this;
-}
 
+#ifdef WXGTK3
+    // Screen has to be updated on every operation, otherwise the cursor leaves a trail (when xor
+    // operation is changed to copy) or is not updated at all.
+    Refresh();
+#endif
+}
 
 
 void EDA_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
 {
     event.Skip();
 }
+
 
 void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
