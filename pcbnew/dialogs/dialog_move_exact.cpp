@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,10 +267,13 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
 
     if( entry )
         entry->SetValue( "0" );
+
+    // Keep m_stdButtonsOK focused to allow enter key actiavte the OK button
+    m_stdButtonsOK->SetFocus();
 }
 
 
-void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
+bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
 {
     m_rotation = DoubleValueFromString( DEGREES, m_rotEntry->GetValue() );
     m_origin = static_cast<MOVE_EXACT_ORIGIN>( m_originChooser->GetSelection() );
@@ -326,8 +328,10 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         m_options.origin = m_origin;
         m_options.anchor = static_cast<MOVE_EXACT_ANCHOR>( m_anchorChoice->GetSelection() );
         m_options.overrideAnchor = m_cbOverride->IsChecked();
-        event.Skip();
+        return true;
     }
+
+    return false;
 }
 
 

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -112,10 +112,8 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_MOVE_EXACT_BASE::OnClose ) );
 	m_polarCoords->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnPolarChanged ), NULL, this );
 	m_xEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_MOVE_EXACT_BASE::OnTextFocusLost ), NULL, this );
 	m_clearX->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnClear ), NULL, this );
@@ -125,13 +123,11 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	m_clearRot->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnClear ), NULL, this );
 	m_originChooser->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnOriginChanged ), NULL, this );
 	m_cbOverride->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnOverrideChanged ), NULL, this );
-	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_MOVE_EXACT_BASE::~DIALOG_MOVE_EXACT_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_MOVE_EXACT_BASE::OnClose ) );
 	m_polarCoords->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnPolarChanged ), NULL, this );
 	m_xEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_MOVE_EXACT_BASE::OnTextFocusLost ), NULL, this );
 	m_clearX->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnClear ), NULL, this );
@@ -141,6 +137,5 @@ DIALOG_MOVE_EXACT_BASE::~DIALOG_MOVE_EXACT_BASE()
 	m_clearRot->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnClear ), NULL, this );
 	m_originChooser->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnOriginChanged ), NULL, this );
 	m_cbOverride->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnOverrideChanged ), NULL, this );
-	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MOVE_EXACT_BASE::OnOkClick ), NULL, this );
 	
 }

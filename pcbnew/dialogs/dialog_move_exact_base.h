@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_MOVE_EXACT_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -64,18 +65,16 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 		wxButton* m_stdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnPolarChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextFocusLost( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnClear( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOriginChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOverrideChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 427,250 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_MOVE_EXACT_BASE();
 	
 };

@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +25,8 @@
 #ifndef __DIALOG_MOVE_EXACT__
 #define __DIALOG_MOVE_EXACT__
 
-// Include the wxFormBuider header base:
 #include <vector>
+// Include the wxFormBuider header base:
 #include <dialog_move_exact_base.h>
 
 enum MOVE_EXACT_ORIGIN
@@ -89,7 +88,8 @@ private:
     void OnOriginChanged( wxCommandEvent& event ) override;
     void OnOverrideChanged( wxCommandEvent& event ) override;
 
-    void OnOkClick( wxCommandEvent& event ) override;
+    // Automatically called when clicking on the OK button
+    bool TransferDataFromWindow() override;
 
     /**
      * Convert a given Cartesian point into a polar representation.
