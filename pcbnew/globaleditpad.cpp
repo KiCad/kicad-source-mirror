@@ -180,7 +180,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
 
             bool   saveMe = false;
 
-            for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
+            for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
             {
                 // Filters changes prohibited.
                 if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )
@@ -192,6 +192,10 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
                     continue;
 
                 if( aPadLayerFilter  &&  pad->GetLayerSet() != aPad->GetLayerSet() )
+                    continue;
+
+                // Do not copy a pad into it, it can create issue, and this is useless
+                if( pad == aPad )
                     continue;
 
                 saveMe = true;
@@ -231,7 +235,8 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )
                 continue;
 
-            if( aPadOrientFilter &&  (pad->GetOrientation() - module->GetOrientation()) != pad_orient )
+            if( aPadOrientFilter &&
+                (pad->GetOrientation() - module->GetOrientation()) != pad_orient )
                 continue;
 
             if( aPadLayerFilter )
@@ -240,49 +245,18 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
                     continue;
             }
 
-            // Change characteristics:
-            pad->SetAttribute( aPad->GetAttribute() );
-            pad->SetShape( aPad->GetShape() );
+            // Do not copy a pad into it, it can create issue in custom pads
+            // and primitive list.
+            if( pad == aPad )
+                continue;
 
-            pad->SetLayerSet( aPad->GetLayerSet() );
+            // Copy physical characteristics:
+            pad->ImportSettingsFromMaster( *aPad );
 
-            pad->SetSize( aPad->GetSize() );
-            pad->SetDelta( aPad->GetDelta() );
-            pad->SetOffset( aPad->GetOffset() );
-
-            pad->SetDrillSize( aPad->GetDrillSize() );
-            pad->SetDrillShape( aPad->GetDrillShape() );
-
-            pad->SetOrientation( pad_orient + module->GetOrientation() );
-
-            // copy also local mask margins, because these parameters usually depend on
-            // pad sizes and layers
+            // copy also local mask margins:
             pad->SetLocalSolderMaskMargin( aPad->GetLocalSolderMaskMargin() );
             pad->SetLocalSolderPasteMargin( aPad->GetLocalSolderPasteMargin() );
             pad->SetLocalSolderPasteMarginRatio( aPad->GetLocalSolderPasteMarginRatio() );
-
-            if( pad->GetShape() != PAD_SHAPE_TRAPEZOID )
-            {
-                pad->SetDelta( wxSize( 0, 0 ) );
-            }
-
-            if( pad->GetShape() == PAD_SHAPE_CIRCLE )
-            {
-                // Ensure pad size.y = pad size.x
-                int size = pad->GetSize().x;
-                pad->SetSize( wxSize( size, size ) );
-            }
-
-            switch( pad->GetAttribute() )
-            {
-            case PAD_ATTRIB_SMD:
-            case PAD_ATTRIB_CONN:
-                pad->SetDrillSize( wxSize( 0, 0 ) );
-                break;
-
-            default:
-                break;
-            }
         }
 
         module->CalculateBoundingBox();
