@@ -48,7 +48,8 @@
 FOOTPRINT_ASYNC_LOADER          DIALOG_CHOOSE_COMPONENT::m_fp_loader;
 std::unique_ptr<FOOTPRINT_LIST> DIALOG_CHOOSE_COMPONENT::m_fp_list;
 
-wxSize DIALOG_CHOOSE_COMPONENT::m_default_size( -1, -1 );
+wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
+int DIALOG_CHOOSE_COMPONENT::m_tree_canvas_sash_position = 0;
 
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
         CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
@@ -72,7 +73,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     auto vsplitter = aShowFootprints ? nullptr : new wxSplitterWindow(
         this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
-    auto splitter = new wxSplitterWindow(
+    m_splitter_tree_canvas = new wxSplitterWindow(
         vsplitter ? static_cast<wxWindow *>( vsplitter ) : static_cast<wxWindow *>( this ),
         wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
@@ -80,16 +81,16 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
 
-    m_tree = new COMPONENT_TREE( splitter, Prj().SchSymbolLibTable(), aAdapter,
-                                 COMPONENT_TREE::WIDGETS::ALL, details );
-    auto right_panel = ConstructRightPanel( splitter );
+    m_tree = new COMPONENT_TREE( m_splitter_tree_canvas, Prj().SchSymbolLibTable(),
+                                 aAdapter, COMPONENT_TREE::WIDGETS::ALL, details );
+    m_symbol_view_panel = ConstructRightPanel( m_splitter_tree_canvas );
     auto buttons = new wxStdDialogButtonSizer();
     m_dbl_click_timer = new wxTimer( this );
 
     if( vsplitter )
         sizer->Add( vsplitter, 1, wxEXPAND | wxALL, 5 );
     else
-        sizer->Add( splitter, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_splitter_tree_canvas, 1, wxEXPAND | wxALL, 5 );
 
     buttons->AddButton( new wxButton( this, wxID_OK ) );
     buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
@@ -112,20 +113,24 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Layout();
 
-    if( m_default_size == wxSize( -1, -1 ) )
+    if( m_last_dlg_size == wxSize( -1, -1 ) )
         SetSizeInDU( 320, 256 );
     else
-        SetSize( m_default_size );
+        SetSize( m_last_dlg_size );
 
-    splitter->SetSashGravity( 0.9 );
-    splitter->SetMinimumPaneSize( 1 );
-    splitter->SplitVertically( m_tree, right_panel, HorizPixelsFromDU( -100 ) );
+    m_splitter_tree_canvas->SetSashGravity( 0.8 );
+    m_splitter_tree_canvas->SetMinimumPaneSize( 20 );
+    // We specify the width of the right window (m_symbol_view_panel), because specify
+    // the width of the left window does not work as expected when SetSashGravity() is called
+    m_splitter_tree_canvas->SplitVertically( m_tree,  m_symbol_view_panel,
+                               m_tree_canvas_sash_position ? -m_tree_canvas_sash_position
+                                                           : HorizPixelsFromDU( -100 ) );
 
     if( vsplitter )
     {
         vsplitter->SetSashGravity( 0.5 );
-        vsplitter->SetMinimumPaneSize( 1 );
-        vsplitter->SplitHorizontally( splitter, details, VertPixelsFromDU( -80 ) );
+        vsplitter->SetMinimumPaneSize( 20 );
+        vsplitter->SplitHorizontally( m_splitter_tree_canvas, details, VertPixelsFromDU( -80 ) );
     }
 }
 
@@ -139,7 +144,9 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 
     delete m_dbl_click_timer;
 
-    m_default_size = GetSize();
+    m_last_dlg_size = GetSize();
+    m_tree_canvas_sash_position = m_splitter_tree_canvas->GetClientSize().x
+                                  - m_splitter_tree_canvas->GetSashPosition();
 }
 
 

@@ -189,6 +189,13 @@ protected:
 
     wxTimer*        m_dbl_click_timer;
     wxPanel*        m_sch_view_ctrl;
+    // the wxSplitterWindow that manages the symbol tree and symbol canvas viewer
+    wxSplitterWindow* m_splitter_tree_canvas;
+    // the symbol canvas viewer
+    wxPanel*        m_symbol_view_panel;
+    // the sash position separation between symbol tree and symbol canvas viewer
+    // (remember the sash position during a session)
+    static int      m_tree_canvas_sash_position;
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_view_ctrl;
@@ -205,7 +212,8 @@ protected:
     static std::unique_ptr<FOOTPRINT_LIST> m_fp_list;
     std::vector<std::pair<int, wxString>> m_field_edits;
 
-    static wxSize m_default_size;
+    // Remember the dialog size during a session
+    static wxSize m_last_dlg_size;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */
