@@ -138,6 +138,8 @@ set( BMAPS_MID
     add_zone_cutout
     add_zone
     align_items
+    align_items_center
+    align_items_middle
     anchor
     annotate_down_right
     annotate_right_down

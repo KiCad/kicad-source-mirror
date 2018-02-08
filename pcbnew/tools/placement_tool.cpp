@@ -57,6 +57,16 @@ TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
         _( "Align to Right" ),
         _( "Aligns selected items to the right edge" ), right_xpm );
 
+TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX",
+        AS_GLOBAL, 0,
+        _( "Align to Middle" ),
+        _( "Aligns selected items to the vertical center" ), align_items_middle_xpm );
+
+TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY",
+        AS_GLOBAL, 0,
+        _( "Align to Center" ),
+        _( "Aligns selected items to the horizontal center" ), align_items_center_xpm );
+
 TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.AlignAndDistribute.distributeHorizontally",
         AS_GLOBAL, 0,
         _( "Distribute Horizontally" ),
@@ -100,6 +110,8 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_placementMenu->Add( PCB_ACTIONS::alignBottom );
     m_placementMenu->Add( PCB_ACTIONS::alignLeft );
     m_placementMenu->Add( PCB_ACTIONS::alignRight );
+    m_placementMenu->Add( PCB_ACTIONS::alignCenterX );
+    m_placementMenu->Add( PCB_ACTIONS::alignCenterY );
     m_placementMenu->AppendSeparator();
     m_placementMenu->Add( PCB_ACTIONS::distributeHorizontally );
     m_placementMenu->Add( PCB_ACTIONS::distributeVertically );
@@ -124,6 +136,16 @@ bool SortRightmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pai
 bool SortTopmostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
 {
     return ( left.second.GetY() < right.second.GetY() );
+}
+
+bool SortCenterX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+{
+    return ( left.second.GetCenter().x < right.second.GetCenter().x );
+}
+
+bool SortCenterY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+{
+    return ( left.second.GetCenter().y < right.second.GetCenter().y );
 }
 
 bool SortBottommostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
@@ -298,6 +320,64 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 }
 
 
+int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
+{
+    const SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.StageItems( selection, CHT_MODIFY );
+
+    auto itemsToAlign = GetBoundingBoxes( selection );
+    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterX );
+
+    // after sorting use the x coordinate of the middle item as a target for all other items
+    const int targetX = itemsToAlign.at( itemsToAlign.size() / 2 ).second.GetCenter().x;
+
+    // Move the selected items
+    for( auto& i : itemsToAlign )
+    {
+        int difference = targetX - i.second.GetCenter().x;
+        i.first->Move( wxPoint( difference, 0 ) );
+    }
+
+    commit.Push( _( "Align to middle" ) );
+
+    return 0;
+}
+
+
+int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
+{
+    const SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.StageItems( selection, CHT_MODIFY );
+
+    auto itemsToAlign = GetBoundingBoxes( selection );
+    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterY );
+
+    // after sorting use the y coordinate of the middle item as a target for all other items
+    const int targetY = itemsToAlign.at( itemsToAlign.size() / 2 ).second.GetCenter().y;
+
+    // Move the selected items
+    for( auto& i : itemsToAlign )
+    {
+        int difference = targetY - i.second.GetCenter().y;
+        i.first->Move( wxPoint( 0, difference ) );
+    }
+
+    commit.Push( _( "Align to center" ) );
+
+    return 0;
+}
+
+
 int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
@@ -401,6 +481,8 @@ void ALIGN_DISTRIBUTE_TOOL::setTransitions()
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignBottom, PCB_ACTIONS::alignBottom.MakeEvent() );
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignLeft,   PCB_ACTIONS::alignLeft.MakeEvent() );
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignRight,  PCB_ACTIONS::alignRight.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::AlignCenterX,  PCB_ACTIONS::alignCenterX.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::AlignCenterY,  PCB_ACTIONS::alignCenterY.MakeEvent() );
 
     Go( &ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally,  PCB_ACTIONS::distributeHorizontally.MakeEvent() );
     Go( &ALIGN_DISTRIBUTE_TOOL::DistributeVertically,    PCB_ACTIONS::distributeVertically.MakeEvent() );

@@ -234,6 +234,12 @@ public:
     /// Align items to the right edge of selection bounding box
     static TOOL_ACTION alignRight;
 
+    /// Align items to the middle of selection bounding box
+    static TOOL_ACTION alignCenterX;
+
+    /// Align items to the center of selection bounding box
+    static TOOL_ACTION alignCenterY;
+
     /// Distributes items evenly along the horizontal axis
     static TOOL_ACTION distributeHorizontally;
 

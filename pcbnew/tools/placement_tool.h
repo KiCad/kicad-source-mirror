@@ -69,6 +69,20 @@ public:
     int AlignRight( const TOOL_EVENT& aEvent );
 
     /**
+     * Function AlignCenterX()
+     * Sets the x coordinate of the midpoint of each of the selected items to
+     * the value of the x coordinate of the center of the middle selected item.
+     */
+    int AlignCenterX( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function AlignCenterX()
+     * Sets the y coordinate of the midpoint of each of the selected items to
+     * the value of the y coordinate of the center of the middle selected item.
+     */
+    int AlignCenterY( const TOOL_EVENT& aEvent );
+
+    /**
      * Function DistributeHorizontally()
      * Distributes the selected items along the X axis.
      */
