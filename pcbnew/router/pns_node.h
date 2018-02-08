@@ -272,9 +272,10 @@ public:
      * Adds an item to the current node.
      * @param aSegment item to add
      * @param aAllowRedundant if true, duplicate items are allowed (e.g. a segment or via
+     * @return true if added
      * at the same coordinates as an existing one)
      */
-    void Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant = false );
+    bool Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant = false );
     void Add( std::unique_ptr< SOLID >   aSolid );
     void Add( std::unique_ptr< VIA >     aVia );
 

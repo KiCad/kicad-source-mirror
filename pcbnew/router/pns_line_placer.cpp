@@ -1006,22 +1006,25 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
     else
         lastV = std::max( 1, l.SegmentCount() - 1 );
 
-    SEGMENT* lastSeg = NULL;
+    SEGMENT* lastSeg = nullptr;
 
     for( int i = 0; i < lastV; i++ )
     {
         const SEG& s = pl.CSegment( i );
-        std::unique_ptr< SEGMENT > seg( new SEGMENT( s, m_currentNet ) );
+        lastSeg = new SEGMENT( s, m_currentNet );
+        std::unique_ptr< SEGMENT > seg( lastSeg );
         seg->SetWidth( pl.Width() );
         seg->SetLayer( m_currentLayer );
-        lastSeg = seg.get();
-        m_lastNode->Add( std::move( seg ) );
+        if( ! m_lastNode->Add( std::move( seg ) ) )
+        {
+            lastSeg = nullptr;
+        }
     }
 
     if( pl.EndsWithVia() )
         m_lastNode->Add( Clone( pl.Via() ) );
 
-    if( realEnd )
+    if( realEnd && lastSeg )
         simplifyNewLine( m_lastNode, lastSeg );
 
     Router()->CommitRouting( m_lastNode );

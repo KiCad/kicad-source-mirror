@@ -591,19 +591,21 @@ void NODE::addSegment( SEGMENT* aSeg )
     m_index->Add( aSeg );
 }
 
-void NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
+bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
 {
     if( aSegment->Seg().A == aSegment->Seg().B )
     {
         wxLogTrace( "PNS", "attempting to add a segment with same end coordinates, ignoring." );
-        return;
+        return false;
     }
 
     if( !aAllowRedundant && findRedundantSegment( aSegment.get() ) )
-        return;
+        return false;
 
     aSegment->SetOwner( this );
     addSegment( aSegment.release() );
+
+    return true;
 }
 
 void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
