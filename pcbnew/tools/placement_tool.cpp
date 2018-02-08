@@ -40,22 +40,22 @@
 TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",
         AS_GLOBAL, 0,
         _( "Align to Top" ),
-        _( "Aligns selected items to the top edge" ), up_xpm );
+        _( "Aligns selected items to the top edge" ), align_items_top_xpm );
 
 TOOL_ACTION PCB_ACTIONS::alignBottom( "pcbnew.AlignAndDistribute.alignBottom",
         AS_GLOBAL, 0,
         _( "Align to Bottom" ),
-        _( "Aligns selected items to the bottom edge" ), down_xpm );
+        _( "Aligns selected items to the bottom edge" ), align_items_bottom_xpm );
 
 TOOL_ACTION PCB_ACTIONS::alignLeft( "pcbnew.AlignAndDistribute.alignLeft",
         AS_GLOBAL, 0,
         _( "Align to Left" ),
-        _( "Aligns selected items to the left edge" ), left_xpm );
+        _( "Aligns selected items to the left edge" ), align_items_left_xpm );
 
 TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
         AS_GLOBAL, 0,
         _( "Align to Right" ),
-        _( "Aligns selected items to the right edge" ), right_xpm );
+        _( "Aligns selected items to the right edge" ), align_items_right_xpm );
 
 TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX",
         AS_GLOBAL, 0,
