@@ -33,6 +33,7 @@
 #include <common.h>
 #include <gr_basic.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <view/view_controls.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -208,6 +209,8 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     {
         m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
         m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+        m_panelShowPadGal->GetViewControls()->
+                EnableMousewheelPan( m_parent->GetCanvas()->GetEnableMousewheelPan() );
 
         m_panelShowPadGal->Show();
         m_panelShowPad->Hide();
