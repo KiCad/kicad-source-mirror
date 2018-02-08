@@ -28,7 +28,7 @@
 #include <tool/tool_interactive.h>
 #include <class_board_item.h>
 
-typedef std::vector<std::pair<BOARD_ITEM*, EDA_RECT>> ALIGNMENT_SET;
+typedef std::vector<std::pair<BOARD_ITEM*, EDA_RECT>> ALIGNMENT_RECTS;
 
 class SELECTION_TOOL;
 
