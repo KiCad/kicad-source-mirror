@@ -1519,12 +1519,15 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
+    SaveCopyInUndoList( part );
 
-    DIALOG_LIB_EDIT_PIN_TABLE dlg( this, *part );
+    DIALOG_LIB_EDIT_PIN_TABLE dlg( this, part );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    OnModify();
+    m_canvas->Refresh();
     return;
 }
 

@@ -1727,7 +1727,7 @@ void LIB_PIN::getMsgPanelInfoBase( MSG_PANEL_ITEMS& aList )
     text = StringFromValue( g_UserUnit, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
-    text = getPinOrientationName( (unsigned) GetOrientationCodeIndex( m_orientation ) );
+    text = getPinOrientationName( (unsigned) GetOrientationIndex( m_orientation ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
@@ -1903,7 +1903,7 @@ int LIB_PIN::GetOrientationCode( int index )
 }
 
 
-int LIB_PIN::GetOrientationCodeIndex( int code )
+int LIB_PIN::GetOrientationIndex( int code )
 {
     size_t i;
 

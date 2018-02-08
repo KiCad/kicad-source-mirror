@@ -451,7 +451,7 @@ public:
      * @return  The index of the orientation code if found.  Otherwise,
      *          return wxNOT_FOUND.
      */
-    static int GetOrientationCodeIndex( int aCode );
+    static int GetOrientationIndex( int aCode );
 
     void SetOffset( const wxPoint& aOffset ) override;
 

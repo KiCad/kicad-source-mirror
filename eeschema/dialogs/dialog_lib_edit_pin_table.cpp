@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,560 +24,593 @@
 #include "dialog_lib_edit_pin_table.h"
 #include "lib_pin.h"
 #include "pin_number.h"
+#include "grid_tricks.h"
+#include <widgets/grid_icon_text_helpers.h>
 
-#include <boost/algorithm/string/join.hpp>
 #include <queue>
-#include <list>
-#include <map>
+#include <base_units.h>
+#include <bitmaps.h>
+#include <wx/bmpcbox.h>
+#include <kiface_i.h>
 
-/* Avoid wxWidgets bug #16906 -- http://trac.wxwidgets.org/ticket/16906
- *
- * If multiple elements live in the root of a wxDataViewCtrl, using
- * ItemsAdded() can run into an assertion failure. To avoid this, we avoid
- * notifying the widget of changes, but rather reinitialize it.
- *
- * When a fix for this exists in wxWidgets, this is the place to turn it
- * off.
- */
-#define REASSOCIATE_HACK
 
-class DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel :
-    public wxDataViewModel
+// Indicator that multiple values exist in child rows
+#define ROW_MULT_ITEMS wxString( "< ... >" )
+
+#define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
+
+
+static std::vector<BITMAP_DEF> g_typeIcons;
+static wxArrayString           g_typeNames;
+
+static std::vector<BITMAP_DEF> g_shapeIcons;
+static wxArrayString           g_shapeNames;
+
+static std::vector<BITMAP_DEF> g_orientationIcons;
+static wxArrayString           g_orientationNames;
+
+
+class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
-public:
-    DataViewModel( LIB_PART& aPart );
-
-    // wxDataViewModel
-    virtual unsigned int    GetColumnCount() const override;
-    virtual wxString        GetColumnType( unsigned int col ) const override;
-    virtual void            GetValue( wxVariant&, const wxDataViewItem&, unsigned int ) const override;
-    virtual bool            SetValue( const wxVariant&, const wxDataViewItem&, unsigned int ) override;
-    virtual wxDataViewItem  GetParent( const wxDataViewItem& ) const override;
-    virtual bool            IsContainer( const wxDataViewItem& ) const override;
-    virtual bool            HasContainerColumns( const wxDataViewItem& ) const override;
-    virtual unsigned int    GetChildren( const wxDataViewItem&, wxDataViewItemArray& ) const override;
-
-    virtual int Compare( const wxDataViewItem& lhs,
-            const wxDataViewItem& rhs,
-            unsigned int col,
-            bool ascending ) const override;
-
-    void    SetGroupingColumn( int aCol );
-    void    CalculateGrouping();
-    void    Refresh();
-
-    PinNumbers GetAllPinNumbers();
-
-#ifdef REASSOCIATE_HACK
-    void SetWidget( wxDataViewCtrl* aWidget ) { m_Widget = aWidget; }
-#endif
-
-    enum
-    {
-        NONE            = -1,
-        PIN_NUMBER      = 0,
-        PIN_NAME        = 1,
-        PIN_TYPE        = 2,
-        PIN_POSITION    = 3
-    };
 
 private:
-    LIB_PART& m_Part;
-    LIB_PINS m_Backing;
-    int m_GroupingColumn;
-    int m_UnitCount;
+    // Because the rows of the grid can either be a single pin or a group of pins, the
+    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
+    // contains only a single pin.
+    std::vector<LIB_PINS> m_rows;
 
-    class Item;
-    class Group;
-    class Pin;
+    EDA_UNITS_T           m_userUnits;
 
-    mutable std::list<Pin> m_Pins;
-    mutable std::map<wxString, Group> m_Groups;
-
-    // like GetValue, but always returns a string
-    wxString GetString( const wxDataViewItem&, unsigned int ) const;
-
-#ifdef REASSOCIATE_HACK
-    wxDataViewCtrl* m_Widget;
-#endif
-};
-
-class DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Item
-{
 public:
-    virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const = 0;
-    virtual wxString        GetString( unsigned int aCol ) const = 0;
-    virtual wxDataViewItem  GetParent() const = 0;
-    virtual bool            IsContainer() const = 0;
-    virtual unsigned int    GetChildren( wxDataViewItemArray& ) const = 0;
-};
+    PIN_TABLE_DATA_MODEL( EDA_UNITS_T aUserUnits ) :
+            m_userUnits( aUserUnits )
+    {}
 
-class DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group :
-    public Item
-{
-public:
-    Group( unsigned int aGroupingColumn ) : m_GroupingColumn( aGroupingColumn ) {}
+    int GetNumberRows() override { return (int) m_rows.size(); }
+    int GetNumberCols() override { return COL_COUNT; }
 
-    virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const override;
-    virtual wxString        GetString( unsigned int aCol ) const override;
-    virtual wxDataViewItem  GetParent() const override { return wxDataViewItem(); }
-    virtual bool            IsContainer() const override { return true; }
-    virtual unsigned int    GetChildren( wxDataViewItemArray& aItems ) const override
+    wxString GetColLabelValue( int aCol ) override
     {
-        /// @todo C++11
-        for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
-            aItems.push_back( wxDataViewItem( *i ) );
-
-        return aItems.size();
+        switch( aCol )
+        {
+        case COL_NUMBER:       return _( "Number" );
+        case COL_NAME:         return _( "Name" );
+        case COL_TYPE:         return _( "Electrical Type" );
+        case COL_SHAPE:        return _( "Graphic Style" );
+        case COL_ORIENTATION:  return _( "Orientation" );
+        case COL_NUMBER_SIZE:  return _( "Number Text Size" );
+        case COL_NAME_SIZE:    return _( "Name Text Size" );
+        case COL_LENGTH:       return _( "Length" );
+        case COL_POSX:         return _( "X Position" );
+        case COL_POSY:         return _( "Y Position" );
+        default:               wxFAIL; return wxEmptyString;
+        }
     }
 
-    unsigned int            GetCount() const { return m_Members.size(); }
-    void                    Add( Pin* aPin );
-
-private:
-    std::list<Pin*> m_Members;
-    unsigned int m_GroupingColumn;
-};
-
-class DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin :
-    public Item
-{
-public:
-    Pin( DataViewModel& aModel,
-            LIB_PIN* aBacking ) : m_Model( aModel ), m_Backing( aBacking ), m_Group( 0 ) {}
-
-    virtual void GetValue( wxVariant& aValue, unsigned int aCol ) const override;
-    virtual wxString        GetString( unsigned int aCol ) const override;
-    virtual wxDataViewItem GetParent() const override { return wxDataViewItem( m_Group ); }
-    virtual bool IsContainer() const override { return false; }
-    virtual unsigned int GetChildren( wxDataViewItemArray& ) const override { return 0; }
-
-    void SetGroup( Group* aGroup ) { m_Group = aGroup; }
-
-    static bool Compare( const Pin& lhs, const Pin& rhs )
+    bool IsEmptyCell( int row, int col ) override
     {
-        return PinNumbers::Compare( lhs.m_Backing->GetNumber(), rhs.m_Backing->GetNumber() ) < 0;
+        return false;   // don't allow adjacent cell overflow, even if we are actually empty
     }
 
-private:
-    DataViewModel& m_Model;
-    LIB_PIN* m_Backing;
-    Group* m_Group;
+    wxString GetValue( int aRow, int aCol ) override
+    {
+        return GetValue( m_rows[ aRow ], aCol, m_userUnits );
+    }
+
+    static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_UNITS_T aUserUnits )
+    {
+        wxString fieldValue;
+
+        if( pins.empty())
+            return fieldValue;
+
+        for( LIB_PIN* pin : pins )
+        {
+            wxString val;
+
+            switch( aCol )
+            {
+            case COL_NUMBER:
+                val = pin->GetNumber();
+                break;
+            case COL_NAME:
+                val = pin->GetName();
+                break;
+            case COL_TYPE:
+                val = g_typeNames[ pin->GetType() ];
+                break;
+            case COL_SHAPE:
+                val = g_shapeNames[ pin->GetShape() ];
+                break;
+            case COL_ORIENTATION:
+                val = g_orientationNames[ LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) ];
+                break;
+            case COL_NUMBER_SIZE:
+                val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true, true );
+                break;
+            case COL_NAME_SIZE:
+                val = StringFromValue( aUserUnits, pin->GetNameTextSize(), true, true );
+                break;
+            case COL_LENGTH:
+                val = StringFromValue( aUserUnits, pin->GetLength(), true );
+                break;
+            case COL_POSX:
+                val = StringFromValue( aUserUnits, pin->GetPosition().x, true );
+                break;
+            case COL_POSY:
+                val = StringFromValue( aUserUnits, pin->GetPosition().y, true );
+                break;
+            default:
+                wxFAIL;
+                break;
+            }
+
+            if( aCol == COL_NUMBER )
+            {
+                if( fieldValue.length() )
+                    fieldValue += wxT( ", " );
+                fieldValue += val;
+            }
+            else
+            {
+                if( !fieldValue.Length() )
+                    fieldValue = val;
+                else if( val != fieldValue )
+                    fieldValue = ROW_MULT_ITEMS;
+            }
+        }
+
+        return fieldValue;
+    }
+
+    void SetValue( int aRow, int aCol, const wxString &aValue ) override
+    {
+        if( aValue == ROW_MULT_ITEMS )
+            return;
+
+        LIB_PINS pins = m_rows[ aRow ];
+
+        for( LIB_PIN* pin : pins )
+        {
+            switch( aCol )
+            {
+            case COL_NUMBER:
+                pin->SetNumber( aValue );
+                break;
+            case COL_NAME:
+                pin->SetName( aValue );
+                break;
+            case COL_TYPE:
+                pin->SetType( (ELECTRICAL_PINTYPE) g_typeNames.Index( aValue ), false );
+                break;
+            case COL_SHAPE:
+                pin->SetShape( (GRAPHIC_PINSHAPE) g_shapeNames.Index( aValue ) );
+                break;
+            case COL_ORIENTATION:
+                pin->SetOrientation( LIB_PIN::GetOrientationCode(
+                                              g_orientationNames.Index( aValue ) ), false );
+                break;
+            case COL_NUMBER_SIZE:
+                pin->SetNumberTextSize( ValueFromString( m_userUnits, aValue, true ) );
+                break;
+            case COL_NAME_SIZE:
+                pin->SetNameTextSize( ValueFromString( m_userUnits, aValue, true ) );
+                break;
+            case COL_LENGTH:
+                pin->SetLength( ValueFromString( m_userUnits, aValue ) );
+                break;
+            case COL_POSX:
+                pin->SetPinPosition( wxPoint( ValueFromString( m_userUnits, aValue ),
+                                              pin->GetPosition().y ) );
+                break;
+            case COL_POSY:
+                pin->SetPinPosition( wxPoint( pin->GetPosition().x,
+                                              ValueFromString( m_userUnits, aValue ) ) );
+                break;
+            default:
+                wxFAIL;
+                break;
+            }
+        }
+    }
+
+    static int findRow( const std::vector<LIB_PINS>& aRowSet, const wxString& aName )
+    {
+        for( size_t i = 0; i < aRowSet.size(); ++i )
+        {
+            if( aRowSet[ i ][ 0 ] && aRowSet[ i ][ 0 ]->GetName() == aName )
+                return i;
+        }
+
+        return -1;
+    }
+
+    static bool compare( const LIB_PINS& lhs, const LIB_PINS& rhs,
+                         int sortCol, bool ascending, EDA_UNITS_T units )
+    {
+        wxString lhStr = GetValue( lhs, sortCol, units );
+        wxString rhStr = GetValue( rhs, sortCol, units );
+        bool     retVal;
+
+        if( lhStr == rhStr )
+        {
+            // Secondary sort key is always COL_NUMBER
+            retVal = GetValue( lhs, COL_NUMBER, units ) < GetValue( rhs, COL_NUMBER, units );
+        }
+        else
+            retVal = lhStr < rhStr;
+
+        return ascending == retVal;
+    }
+
+    void RebuildRows( LIB_PINS& aPins, bool groupByName )
+    {
+        if ( GetView() )
+        {
+            // Commit any pending in-place edits before the row gets moved out from under
+            // the editor.
+            GetView()->DisableCellEditControl();
+
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
+            GetView()->ProcessTableMessage( msg );
+        }
+
+        m_rows.clear();
+
+        for( LIB_PIN* pin : aPins )
+        {
+            int      rowIndex = -1;
+
+            if( groupByName )
+                rowIndex = findRow( m_rows, pin->GetName() );
+
+            if( rowIndex < 0 )
+            {
+                m_rows.emplace_back( LIB_PINS() );
+                rowIndex = m_rows.size() - 1;
+            }
+
+            m_rows[ rowIndex ].push_back( pin );
+        }
+
+        int sortCol = 0;
+        bool ascending = true;
+
+        if( GetView() && GetView()->GetSortingColumn() != wxNOT_FOUND )
+        {
+            sortCol = GetView()->GetSortingColumn();
+            ascending = GetView()->IsSortOrderAscending();
+        }
+
+        SortRows( sortCol, ascending );
+
+        if ( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
+            GetView()->ProcessTableMessage( msg );
+        }
+    }
+
+    void SortRows( int aSortCol, bool ascending )
+    {
+        std::sort( m_rows.begin(), m_rows.end(),
+                   [ aSortCol, ascending, this ]( LIB_PINS lhs, LIB_PINS rhs ) -> bool
+                        { return compare( lhs, rhs, aSortCol, ascending, m_userUnits ); } );
+    }
+
+    void AppendRow( LIB_PIN* aPin )
+    {
+        LIB_PINS row;
+        row.push_back( aPin );
+        m_rows.push_back( row );
+
+        if ( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+            GetView()->ProcessTableMessage( msg );
+        }
+    }
+
+    LIB_PINS RemoveRow( int aRow )
+    {
+        LIB_PINS removedRow = m_rows[ aRow ];
+
+        m_rows.erase( m_rows.begin() + aRow );
+
+        if ( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow, 1 );
+            GetView()->ProcessTableMessage( msg );
+        }
+
+        return removedRow;
+    }
 };
 
-DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent,
-        LIB_PART& aPart ) :
+
+DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART* aPart ) :
     DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
-    m_Model( new DataViewModel( aPart ) )
+    m_part( aPart )
 {
-#ifdef REASSOCIATE_HACK
-    m_Model->SetWidget( m_Pins );
-#endif
-    m_Pins->AssociateModel( m_Model.get() );
+    m_config = Kiface().KifaceSettings();
 
-    /// @todo wxFormBuilder bug #61 -- move to base once supported
-    wxDataViewTextRenderer* rend0 = new wxDataViewTextRenderer( wxT( "string" ), wxDATAVIEW_CELL_INERT );
-    wxDataViewColumn* col0 = new wxDataViewColumn( _( "Number" ),
-            rend0,
-            DataViewModel::PIN_NUMBER,
-            100,
-            wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
-            wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
-    wxDataViewTextRenderer* rend1 = new wxDataViewTextRenderer( wxT( "string" ), wxDATAVIEW_CELL_INERT );
-    wxDataViewColumn* col1 = new wxDataViewColumn( _( "Name" ),
-            rend1,
-            DataViewModel::PIN_NAME,
-            100,
-            wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
-            wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
-    wxDataViewIconTextRenderer* rend2 = new wxDataViewIconTextRenderer( wxT( "wxDataViewIconText" ), wxDATAVIEW_CELL_INERT );
-    wxDataViewColumn* col2 = new wxDataViewColumn( _( "Type" ),
-            rend2,
-            DataViewModel::PIN_TYPE,
-            100,
-            wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
-            wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
-    wxDataViewTextRenderer* rend3 = new wxDataViewTextRenderer( wxT( "string" ), wxDATAVIEW_CELL_INERT );
-    wxDataViewColumn* col3 = new wxDataViewColumn( _( "Position" ),
-            rend3,
-            DataViewModel::PIN_POSITION,
-            100,
-            wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
-            wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
-    m_Pins->AppendColumn( col0 );
-    m_Pins->SetExpanderColumn( col0 );
-    m_Pins->AppendColumn( col1 );
-    m_Pins->AppendColumn( col2 );
-    m_Pins->AppendColumn( col3 );
+    if( g_typeNames.empty())
+    {
+        for( unsigned i = 0; i < PINTYPE_COUNT; ++i )
+            g_typeIcons.push_back( GetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+        for( unsigned i = 0; i < PINTYPE_COUNT; ++i )
+            g_typeNames.push_back( GetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+        g_typeNames.push_back( ROW_MULT_ITEMS );
 
-    UpdateSummary();
+        for( unsigned i = 0; i < PINSHAPE_COUNT; ++i )
+            g_shapeIcons.push_back( GetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+        for( unsigned i = 0; i < PINSHAPE_COUNT; ++i )
+            g_shapeNames.push_back( GetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+        g_shapeNames.push_back( ROW_MULT_ITEMS );
+
+        for( unsigned i = 0; i < LIB_PIN::GetOrientationNames().size(); ++i )
+            g_orientationIcons.push_back( LIB_PIN::GetOrientationSymbols()[ i ] );
+        g_orientationNames = LIB_PIN::GetOrientationNames();
+        g_orientationNames.push_back( ROW_MULT_ITEMS );
+    }
+
+    m_dataModel = new PIN_TABLE_DATA_MODEL( GetUserUnits() );
+
+    // Save original columns widths so we can do proportional sizing.
+    for( int i = 0; i < COL_COUNT; ++i )
+        m_originalColWidths[ i ] = m_grid->GetColSize( i );
+
+    // Give a bit more room for combobox editors
+    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
+
+    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
+    GRID_TRICKS::SetGridTable( m_grid, m_dataModel );
+
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+    // Show/hide columns according to the user's preference
+    m_config->Read( PinTableShownColumnsKey, &m_columnsShown, wxT( "0 1 2 3 4 8 9" ) );
+    GRID_TRICKS::ShowHideGridColumns( m_grid, m_columnsShown );
+
+    // Set special attributes
+    wxGridCellAttr* attr;
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_typeIcons, g_typeNames ) );
+    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_typeIcons, g_typeNames ) );
+    m_grid->SetColAttr( COL_TYPE, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_shapeIcons, g_shapeNames ) );
+    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_shapeIcons, g_shapeNames ) );
+    m_grid->SetColAttr( COL_SHAPE, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( g_orientationIcons, g_orientationNames ) );
+    attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( g_orientationIcons, g_orientationNames ) );
+    m_grid->SetColAttr( COL_ORIENTATION, attr );
+
+    /* Right-aligned position values look much better, but only MSW and GTK2+
+     * currently support righ-aligned textEditCtrls, so the text jumps on all
+     * the other platforms when you edit it.
+    attr = new wxGridCellAttr;
+    attr->SetAlignment( wxALIGN_RIGHT, wxALIGN_TOP );
+    m_grid->SetColAttr( COL_POSX, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetAlignment( wxALIGN_RIGHT, wxALIGN_TOP );
+    m_grid->SetColAttr( COL_POSY, attr );
+    */
+
+    m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_deleteButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_refreshButton->SetBitmap( KiBitmap( refresh_xpm ) );
 
     GetSizer()->SetSizeHints(this);
     Centre();
+
+    m_ButtonsOK->SetDefault();
+    m_initialized = true;
+
+    // Connect Events
+    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
 }
 
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
+    m_config->Write( PinTableShownColumnsKey, GRID_TRICKS::GetShownColumns( m_grid ) );
+
+    // Disconnect Events
+    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
+
+    // Prevents crash bug in wxGrid's d'tor
+    GRID_TRICKS::DestroyGridTable( m_grid, m_dataModel );
+
+    // Delete the GRID_TRICKS.
+    m_grid->PopEventHandler( true );
+
+    // This is our copy of the pins.  If they were transfered to the part on an OK, then
+    // m_pins will already be empty.
+    for( auto pin : m_pins )
+        delete pin;
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::UpdateSummary()
+bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 {
-    PinNumbers pins = m_Model->GetAllPinNumbers();
+    // Make a copy of the pins for editing
+    for( LIB_PIN* pin = m_part->GetNextPin( nullptr ); pin; pin = m_part->GetNextPin( pin ) )
+        m_pins.push_back( new LIB_PIN( *pin ) );
 
-    m_Summary->SetValue( pins.GetSummary() );
-}
+    m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
 
+    updateSummary();
 
-void DIALOG_LIB_EDIT_PIN_TABLE::OnColumnHeaderRightClicked( wxDataViewEvent& event )
-{
-    m_Model->SetGroupingColumn( event.GetDataViewColumn()->GetModelColumn() );
-    event.Skip();
-}
-
-
-DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::DataViewModel( LIB_PART& aPart ) :
-    m_Part( aPart ),
-    m_GroupingColumn( 1 ),
-    m_UnitCount( m_Part.GetUnitCount() )
-{
-#ifdef REASSOCIATE_HACK
-    m_Widget = NULL;
-#endif
-    aPart.GetPins( m_Backing );
-    /// @todo C++11
-    for( LIB_PINS::const_iterator i = m_Backing.begin(); i != m_Backing.end(); ++i )
-        m_Pins.push_back( Pin( *this, *i ) );
-
-    m_Pins.sort(Pin::Compare);
-
-    CalculateGrouping();
-}
-
-
-unsigned int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetColumnCount() const
-{
-    return 4;
-}
-
-
-wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetColumnType( unsigned int aCol ) const
-{
-    switch( aCol )
-    {
-    case PIN_NUMBER:
-        return wxT( "string" );
-
-    case PIN_NAME:
-        return wxT( "string" );
-
-    case PIN_TYPE:
-        return wxT( "wxDataViewIconText" );
-
-    case PIN_POSITION:
-        return wxT( "string" );
-    }
-
-    assert( ! "Unhandled column" );
-    return wxT( "" );
-}
-
-
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetValue( wxVariant& aVal,
-        const wxDataViewItem& aItem,
-        unsigned int aCol ) const
-{
-    assert( aItem.IsOk() );
-
-    reinterpret_cast<Item const*>( aItem.GetID() )->GetValue( aVal, aCol );
-}
-
-
-bool DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::SetValue( const wxVariant&,
-        const wxDataViewItem&,
-        unsigned int )
-{
-    return false;
-}
-
-
-wxDataViewItem DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetParent( const wxDataViewItem& aItem )
-const
-{
-    assert( aItem.IsOk() );
-
-    return reinterpret_cast<Item const*>( aItem.GetID() )->GetParent();
-}
-
-
-bool DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::IsContainer( const wxDataViewItem& aItem ) const
-{
-    if( aItem.IsOk() )
-        return reinterpret_cast<Item const*>( aItem.GetID() )->IsContainer();
-    else
-        return true;
-}
-
-
-bool DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::HasContainerColumns( const wxDataViewItem& ) const
-{
     return true;
 }
 
 
-unsigned int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetChildren( const wxDataViewItem& aItem,
-        wxDataViewItemArray& aItems ) const
+bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
 {
-    if( !aItem.IsOk() )
+    // Commit any pending in-place edits and close the editor
+    m_grid->DisableCellEditControl();
+
+    // Delete the part's pins
+    while( LIB_PIN* pin = m_part->GetNextPin( nullptr ) )
+        m_part->RemoveDrawItem( pin );
+
+    // Transfer our pins to the part
+    for( LIB_PIN* pin : m_pins )
     {
-        for( std::map<wxString, Group>::iterator i = m_Groups.begin(); i != m_Groups.end(); ++i )
-            if( i->second.GetCount() > 1 )
-                aItems.push_back( wxDataViewItem( &i->second ) );
-
-        for( std::list<Pin>::iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
-            if( !i->GetParent().IsOk() )
-                aItems.push_back( wxDataViewItem( &*i ) );
-
-        return aItems.size();
+        pin->SetParent( m_part );
+        m_part->AddDrawItem( pin );
     }
+
+    m_pins.clear();
+
+    return true;
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnColSort( wxGridEvent& aEvent )
+{
+    int sortCol = aEvent.GetCol();
+    bool ascending;
+
+    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the
+    // event, and if we ask it will give us pre-event info.
+    if( m_grid->IsSortingBy( sortCol ) )
+        // same column; invert ascending
+        ascending = !m_grid->IsSortOrderAscending();
     else
-        return reinterpret_cast<Item const*>( aItem.GetID() )->GetChildren( aItems );
+        // different column; start with ascending
+        ascending = true;
+
+    m_dataModel->SortRows( sortCol, ascending );
 }
 
 
-int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Compare( const wxDataViewItem& aItem1,
-        const wxDataViewItem& aItem2,
-        unsigned int aCol,
-        bool aAscending ) const
+void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 {
-    wxString str1 = GetString( aItem1, aCol );
-    wxString str2 = GetString( aItem2, aCol );
-    int res = PinNumbers::Compare( str1, str2 );
+    m_pins.push_back( new LIB_PIN( nullptr ) );
 
-    if( res == 0 )
-        res = ( aItem1.GetID() < aItem2.GetID() ) ? -1 : 1;
+    m_dataModel->AppendRow( m_pins[ m_pins.size() - 1 ] );
 
-    return res * ( aAscending ? 1 : -1 );
+    m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 0 );
+    m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 0 );
+
+    m_grid->EnableCellEditControl( true );
+    m_grid->ShowCellEditControl();
+
+    updateSummary();
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::SetGroupingColumn( int aCol )
+void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 {
-    if( m_GroupingColumn == aCol )
-        m_GroupingColumn = NONE;
-    else
-        m_GroupingColumn = aCol;
+    int curRow = m_grid->GetGridCursorRow();
 
-    Cleared();
-    CalculateGrouping();
-    Refresh();
+    if( curRow < 0 )
+        return;
+
+    LIB_PINS removedRow = m_dataModel->RemoveRow( curRow );
+
+    for( auto pin : removedRow )
+        m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
+
+    curRow = std::max( 0, curRow - 1 );
+    m_grid->MakeCellVisible( curRow, m_grid->GetGridCursorCol() );
+    m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
+
+    updateSummary();
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::CalculateGrouping()
+void DIALOG_LIB_EDIT_PIN_TABLE::OnCellEdited( wxGridEvent& event )
 {
-    m_Groups.clear();
+    updateSummary();
+}
 
-    if( m_GroupingColumn != -1 )
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
+{
+    m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
+
+    adjustGridColumns( m_grid->GetRect().GetWidth() );
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns( int aWidth )
+{
+    // Account for scroll bars
+    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+
+    wxGridUpdateLocker deferRepaintsTillLeavingScope;
+
+    // The Number and Name columns must be at least wide enough to hold their contents, but
+    // no less wide than their original widths.
+
+    m_grid->AutoSizeColumn( COL_NUMBER );
+
+    if( m_grid->GetColSize( COL_NUMBER ) < m_originalColWidths[ COL_NUMBER ] )
+        m_grid->SetColSize( COL_NUMBER, m_originalColWidths[ COL_NUMBER ] );
+
+    m_grid->AutoSizeColumn( COL_NAME );
+
+    if( m_grid->GetColSize( COL_NAME ) < m_originalColWidths[ COL_NAME ] )
+        m_grid->SetColSize( COL_NAME, m_originalColWidths[ COL_NAME ] );
+
+    // If the grid is still wider than the columns, then stretch the Number and Name columns
+    // to fit.
+
+    for( int i = 0; i < COL_COUNT; ++i )
+        aWidth -= m_grid->GetColSize( i );
+
+    if( aWidth > 0 )
     {
-        wxVariant value;
-
-        for( std::list<Pin>::iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
-        {
-            wxString str = i->GetString( m_GroupingColumn );
-            std::map<wxString, Group>::iterator j = m_Groups.find( str );
-
-            if( j == m_Groups.end() )
-                j = m_Groups.insert( std::make_pair( str, m_GroupingColumn ) ).first;
-
-            j->second.Add( &*i );
-        }
-    }
-    else
-    {
-        for( std::list<Pin>::iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
-            i->SetGroup( 0 );
-    }
-}
-
-
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Refresh()
-{
-#ifdef REASSOCIATE_HACK
-    m_Widget->AssociateModel( this );
-#else
-    std::queue<wxDataViewItem> todo;
-    todo.push( wxDataViewItem() );
-
-    while( !todo.empty() )
-    {
-        wxDataViewItem current = todo.front();
-        wxDataViewItemArray items;
-
-        GetChildren( current, items );
-        ItemsAdded( current, items );
-
-        for( wxDataViewItemArray::const_iterator i = items.begin(); i != items.end(); ++i )
-        {
-            if( IsContainer( *i ) )
-                todo.push( *i );
-        }
-
-        todo.pop();
-    }
-
-#endif
-}
-
-
-PinNumbers DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetAllPinNumbers()
-{
-    PinNumbers ret;
-
-    for( std::list<Pin>::const_iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
-        ret.insert( i->GetString( PIN_NUMBER ) );
-
-    return ret;
-}
-
-
-wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetString( const wxDataViewItem& aItem, unsigned int aCol ) const
-{
-    assert( aItem.IsOk() );
-
-    return reinterpret_cast<Item const*>( aItem.GetID() )->GetString( aCol );
-}
-
-
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetValue( wxVariant& aValue,
-        unsigned int aCol ) const
-{
-    if( aCol == m_GroupingColumn )
-        // shortcut
-        m_Members.front()->GetValue( aValue, aCol );
-    else if( aCol != PIN_TYPE )
-        aValue = GetString( aCol );
-    else
-    {
-        PinNumbers values;
-
-        for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
-            values.insert( (*i)->GetString( aCol ) );
-
-        if( values.size() > 1 )
-        {
-            // when multiple pins are grouped, thes have not necessary the same electrical type
-            // therefore use a neutral icon to show a type.
-            // Do Not use a null icon, because on some OS (Linux), for an obscure reason,
-            // if a null icon is used somewhere, no other icon is displayed
-            wxIcon icon_notype;
-            icon_notype.CopyFromBitmap( KiBitmap ( pintype_notspecif_xpm ) );   // could be tree_nosel_xpm
-            aValue << wxDataViewIconText( boost::algorithm::join( values, "," ), icon_notype );
-        }
-        else
-            m_Members.front()->GetValue( aValue, aCol );
+        m_grid->SetColSize( COL_NUMBER, m_grid->GetColSize( COL_NUMBER ) + aWidth / 2 );
+        m_grid->SetColSize( COL_NAME, m_grid->GetColSize( COL_NAME ) + aWidth / 2 );
     }
 }
 
 
-wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetString( unsigned int aCol ) const
+void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 {
-    if( aCol == m_GroupingColumn )
-        return m_Members.front()->GetString( aCol );
+    if( m_initialized )
+        adjustGridColumns( event.GetSize().GetX() );
 
-    PinNumbers values;
-
-    for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
-        values.insert( (*i)->GetString( aCol ) );
-
-    if( values.size() > 1 )
-        return boost::algorithm::join( values, "," );
-    else
-        return m_Members.front()->GetString( aCol );
+    event.Skip();
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::Add( Pin* aPin )
+void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    switch( GetCount() )
+    wxString columnsShown = GRID_TRICKS::GetShownColumns( m_grid );
+
+    if( columnsShown != m_columnsShown )
     {
-    case 0:
-        aPin->SetGroup( 0 );
-        break;
+        m_columnsShown = columnsShown;
 
-    case 1:
-        m_Members.front()->SetGroup( this );
-        // fall through
-
-    default:
-        aPin->SetGroup( this );
-    }
-
-    m_Members.push_back( aPin );
-}
-
-
-void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetValue( wxVariant& aValue,
-        unsigned int aCol ) const
-{
-    switch( aCol )
-    {
-    case PIN_NUMBER:
-    case PIN_NAME:
-    case PIN_POSITION:
-        aValue = GetString( aCol );
-        break;
-
-    case PIN_TYPE:
-        {
-            wxIcon icon;
-            icon.CopyFromBitmap( KiBitmap ( GetBitmap( m_Backing->GetType() ) ) );
-            aValue << wxDataViewIconText( m_Backing->GetElectricalTypeName(), icon );
-        }
-        break;
+        if( !m_grid->IsCellEditControlShown() )
+            adjustGridColumns( m_grid->GetRect().GetWidth() );
     }
 }
 
 
-wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetString( unsigned int aCol ) const
+void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
 {
-    switch( aCol )
+    PinNumbers pinNumbers;
+
+    for( LIB_PIN* pin : m_pins )
     {
-    case PIN_NUMBER:
-        return m_Backing->GetNumber();
-
-    case PIN_NAME:
-        if( m_Model.m_UnitCount > 1 )
-        {
-            wxString name;
-            int unit = m_Backing->GetPartNumber();
-
-            if( unit )
-                name << unit;
-            else
-                name << "com";
-
-            name << ':';
-            name << m_Backing->GetName();
-            return name;
-        }
-        else
-        {
-            return m_Backing->GetName();
-        }
-
-    case PIN_TYPE:
-        return m_Backing->GetElectricalTypeName();
-
-    case PIN_POSITION:
-        {
-            wxPoint position = m_Backing->GetPosition();
-            wxString value;
-            value << "(" << position.x << "," << position.y << ")";
-            return value;
-        }
+        if( pin->GetNumber().Length() )
+            pinNumbers.insert( pin->GetNumber() );
     }
 
-    return wxEmptyString;
+    m_summary->SetLabel( pinNumbers.GetSummary() );
 }
+
+
+
+

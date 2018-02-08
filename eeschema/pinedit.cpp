@@ -105,7 +105,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetDlgUnitsLabel( units );
 
     dlg.SetOrientationList( LIB_PIN::GetOrientationNames(), LIB_PIN::GetOrientationSymbols() );
-    dlg.SetOrientation( LIB_PIN::GetOrientationCodeIndex( pin->GetOrientation() ) );
+    dlg.SetOrientation( LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) );
     dlg.SetStyle( pin->GetShape() );
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetPinName( pin->GetName() );
