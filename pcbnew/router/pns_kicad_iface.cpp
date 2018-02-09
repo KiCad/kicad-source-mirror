@@ -912,7 +912,10 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 
     for( auto gitem : m_board->Drawings() )
     {
-        syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( gitem ) );
+        if ( gitem->Type() == PCB_LINE_T )
+        {
+            syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( gitem ) );
+        }
     }
 
     for( auto zone : m_board->Zones() )
