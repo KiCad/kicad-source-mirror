@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,8 +47,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN = 1000,
-			ID_PRINT_REF,
+			ID_PRINT_REF = 1000,
+			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
 			ID_MIROR_OPT,
 			ID_CREATE_DRILL_FILE,
 			ID_LAYER_FAB,
@@ -68,12 +68,12 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
-		wxCheckBox* m_plotPads_on_Silkscreen;
 		wxCheckBox* m_plotModuleValueOpt;
 		wxCheckBox* m_plotModuleRefOpt;
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_excludeEdgeLayerOpt;
+		wxCheckBox* m_excludePadsFromSilkscreen;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,7 +61,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bupperSizer->Add( bSizerOutDir, 1, 0, 5 );
 	
 	
-	m_MainSizer->Add( bupperSizer, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( bupperSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -91,11 +91,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotSheetRef = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot sheet reference on all layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotSheetRef, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
-	m_plotPads_on_Silkscreen = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Plot pads on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotPads_on_Silkscreen->SetToolTip( _("Enable plotting of pads on silkscreen layers\nWhen disabled, pads are never plotted on silkscreen layers\nWhen enabled, pads are plotted only if they appear on silkscreen layers") );
-	
-	bSizerPlotItems->Add( m_plotPads_on_Silkscreen, 0, wxALL, 2 );
-	
 	m_plotModuleValueOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotModuleValueOpt->SetValue(true); 
 	bSizerPlotItems->Add( m_plotModuleValueOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
@@ -115,9 +110,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerPlotItems->Add( m_plotNoViaOnMaskOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_excludeEdgeLayerOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Exclude PCB edge layer from other layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_excludeEdgeLayerOpt->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
+	m_excludeEdgeLayerOpt->SetToolTip( _("Do not plot the contents of the PCB edge layer on any other layers.") );
 	
 	bSizerPlotItems->Add( m_excludeEdgeLayerOpt, 0, wxALL, 2 );
+	
+	m_excludePadsFromSilkscreen = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Exclude pads from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_excludePadsFromSilkscreen->SetToolTip( _("Do not plot pads on silkscreen layers, even when they are assigned to them.\nUncheck this if you wish to create assembly drawings from silkscreen layers.") );
+	
+	bSizerPlotItems->Add( m_excludePadsFromSilkscreen, 0, wxALL, 2 );
 	
 	m_plotMirrorOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotMirrorOpt, 0, wxALL, 2 );
@@ -361,7 +361,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 5 );
 	
 	
-	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxBoxSizer* sbSizerMsg;
 	sbSizerMsg = new wxBoxSizer( wxVERTICAL );
@@ -394,7 +394,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerButtons->Add( m_buttonQuit, 0, wxALL, 5 );
 	
 	
-	m_MainSizer->Add( bSizerButtons, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( bSizerButtons, 0, wxALIGN_RIGHT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
