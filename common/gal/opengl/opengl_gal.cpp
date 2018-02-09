@@ -1774,6 +1774,10 @@ void OPENGL_GAL::init()
 
     GLenum err = glewInit();
 
+#ifdef __WXDEBUG__
+    enableGlDebug( true );
+#endif
+
     try
     {
         if( GLEW_OK != err )
