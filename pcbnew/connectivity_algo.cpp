@@ -32,6 +32,10 @@
 #include <profile.h>
 #endif
 
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif /* USE_OPENMP */
+
 using namespace std::placeholders;
 
 bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b )
@@ -521,7 +525,8 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
         }
 
         #ifdef USE_OPENMP
-            #pragma omp parallel
+            // launch at least two threads, one to compute, second to update UI
+            #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
         #endif
         {
             #ifdef USE_OPENMP

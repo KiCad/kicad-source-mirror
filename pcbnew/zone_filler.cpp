@@ -116,7 +116,8 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
 
 
     #ifdef USE_OPENMP
-        #pragma omp parallel
+        // launch at least two threads, one to compute, second to update UI
+        #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
     #endif
     {
         #ifdef USE_OPENMP
@@ -177,7 +178,8 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
     #ifdef USE_OPENMP
-        #pragma omp parallel
+        // launch at least two threads, one to compute, second to update UI
+        #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
     #endif
     {
         #ifdef USE_OPENMP
