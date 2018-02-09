@@ -513,6 +513,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         if( m_isFlipped )
             m_staticModuleSideValue->SetLabel( _( "Back side (footprint is mirrored)" ) );
+        else
+            m_staticModuleSideValue->SetLabel( _( "Front side" ) );
 
         // Diplay footprint rotation ( angles are in 0.1 degree )
         MODULE* footprint = m_currentPad->GetParent();

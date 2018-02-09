@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -276,17 +276,17 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticModuleSideValue = new wxStaticText( sbSizeModuleInfo->GetStaticBox(), wxID_ANY, _("Front side (footprint is mirrored)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticModuleSideValue = new wxStaticText( sbSizeModuleInfo->GetStaticBox(), wxID_ANY, _("Back side (footprint is mirrored)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticModuleSideValue->Wrap( -1 );
-	fgSizer4->Add( m_staticModuleSideValue, 0, wxBOTTOM, 5 );
+	fgSizer4->Add( m_staticModuleSideValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTitleModuleRot = new wxStaticText( sbSizeModuleInfo->GetStaticBox(), wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTitleModuleRot->Wrap( -1 );
-	fgSizer4->Add( m_staticTitleModuleRot, 1, wxBOTTOM, 5 );
+	fgSizer4->Add( m_staticTitleModuleRot, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticModuleRotValue = new wxStaticText( sbSizeModuleInfo->GetStaticBox(), wxID_ANY, _("180.0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticModuleRotValue->Wrap( -1 );
-	fgSizer4->Add( m_staticModuleRotValue, 0, wxBOTTOM, 5 );
+	fgSizer4->Add( m_staticModuleRotValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	sbSizeModuleInfo->Add( fgSizer4, 0, wxEXPAND, 5 );
@@ -361,12 +361,12 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_FlippedWarningSizer->Add( m_FlippedWarningIcon, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 6 );
 	
-	m_staticText86 = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Parent footprint on board is flipped.\nLayers will be reversed."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText86->Wrap( 150 );
-	m_FlippedWarningSizer->Add( m_staticText86, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 10 );
+	m_staticTextFlippedWarning = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Parent footprint on board is flipped.\nLayers will be reversed."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFlippedWarning->Wrap( 150 );
+	m_FlippedWarningSizer->Add( m_staticTextFlippedWarning, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 10 );
 	
 	
-	m_LayersSizer->Add( m_FlippedWarningSizer, 1, wxEXPAND, 5 );
+	m_LayersSizer->Add( m_FlippedWarningSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
