@@ -23,12 +23,12 @@
  */
 
 /**
- * @file eeschema/dialogs/dialog_bom_editor.cpp
+ * @file eeschema/dialogs/dialog_fields_editor_global.cpp
  * @brief Dialog box for creating bom and other documents from generic netlist.
  */
 
-#ifndef DIALOG_BOM_EDITOR_H
-#define DIALOG_BOM_EDITOR_H
+#ifndef DIALOG_FIELDS_EDITOR_GLOBAL_H
+#define DIALOG_FIELDS_EDITOR_GLOBAL_H
 
 #include <wx/dataview.h>
 
@@ -37,25 +37,25 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <invoke_sch_dialog.h>
-#include <dialog_bom_editor_base.h>
+#include <dialog_fields_editor_global_base.h>
 #include <netlist_object.h>
 #include <sch_reference_list.h>
 #include <vector>
 
-#include <bom_table_model.h>
+#include <fields_editor_table_model.h>
 
-class DIALOG_BOM_EDITOR : public DIALOG_BOM_EDITOR_BASE
+class DIALOG_FIELDS_EDITOR_GLOBAL : public DIALOG_FIELDS_EDITOR_GLOBAL_BASE
 {
 
 public:
-    DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent );
-    virtual ~DIALOG_BOM_EDITOR();
+    DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent );
+    virtual ~DIALOG_FIELDS_EDITOR_GLOBAL();
 
 private:
     //! Parent object (Schematic)
     SCH_EDIT_FRAME* m_parent;
 
-    BOM_TABLE_MODEL::MODEL_PTR m_bom;
+    FIELDS_EDITOR_TABLE_MODEL::MODEL_PTR m_bom;
 
     void LoadComponents();
 
@@ -95,4 +95,4 @@ private:
 
 };
 
-#endif /* DIALOG_BOM_EDITOR_H */
+#endif /* DIALOG_FIELDS_EDITOR_GLOBAL_H */

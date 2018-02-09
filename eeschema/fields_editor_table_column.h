@@ -22,20 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EESCHEMA_BOM_TABLE_COLUMN_H_
-#define EESCHEMA_BOM_TABLE_COLUMN_H_
+#ifndef FIELDS_EDITOR_TABLE_COLUMN_H
+#define FIELDS_EDITOR_TABLE_COLUMN_H
 
 #include <wx/regex.h>
 #include <wx/string.h>
 #include <vector>
 
 // Default column names (translated)
-#define BOM_COL_TITLE_REFERENCE    _( "Reference" )
-#define BOM_COL_TITLE_DESCRIPTION  _( "Description" )
-#define BOM_COL_TITLE_FOOTPRINT    _( "Footprint" )
-#define BOM_COL_TITLE_VALUE        _( "Value" )
-#define BOM_COL_TITLE_DATASHEET    _( "Datasheet" )
-#define BOM_COL_TITLE_QUANTITY     _( "Quantity" )
+#define FIELDS_EDITOR_COL_TITLE_REFERENCE    _( "Reference" )
+#define FIELDS_EDITOR_COL_TITLE_DESCRIPTION  _( "Description" )
+#define FIELDS_EDITOR_COL_TITLE_FOOTPRINT    _( "Footprint" )
+#define FIELDS_EDITOR_COL_TITLE_VALUE        _( "Value" )
+#define FIELDS_EDITOR_COL_TITLE_DATASHEET    _( "Datasheet" )
+#define FIELDS_EDITOR_COL_TITLE_QUANTITY     _( "Quantity" )
 
 /**
  * Column type enumeration
@@ -43,12 +43,12 @@
  * in the future the different column 'types' might
  * be used for something...
  */
-enum BOM_COLUMN_TYPE
+enum FIELDS_EDITOR_COLUMN_TYPE
 {
-    BOM_COL_TYPE_KICAD = 0,     ///< Default column (editable)
-    BOM_COL_TYPE_LIBRARY,       ///< Default column (non-editable)
-    BOM_COL_TYPE_GENERATED,     ///< Generated column (e.g. Quantity)
-    BOM_COL_TYPE_USER,          ///< User data
+    FIELDS_EDITOR_COL_TYPE_KICAD = 0,     ///< Default column (editable)
+    FIELDS_EDITOR_COL_TYPE_LIBRARY,       ///< Default column (non-editable)
+    FIELDS_EDITOR_COL_TYPE_GENERATED,     ///< Generated column (e.g. Quantity)
+    FIELDS_EDITOR_COL_TYPE_USER,          ///< User data
 };
 
 
@@ -56,33 +56,33 @@ enum BOM_COLUMN_TYPE
  * Predefined column ID values for default columns.
  * User columns are assigned IDs of 1000 and above
  */
-enum BOM_COLUMN_ID
+enum FIELDS_EDITOR_COLUMN_ID
 {
     // Default component fields
-    BOM_COL_ID_REFERENCE = 0,
-    BOM_COL_ID_DESCRIPTION,
-    BOM_COL_ID_FOOTPRINT,
-    BOM_COL_ID_VALUE,
-    BOM_COL_ID_DATASHEET,
+    FIELDS_EDITOR_COL_ID_REFERENCE = 0,
+    FIELDS_EDITOR_COL_ID_DESCRIPTION,
+    FIELDS_EDITOR_COL_ID_FOOTPRINT,
+    FIELDS_EDITOR_COL_ID_VALUE,
+    FIELDS_EDITOR_COL_ID_DATASHEET,
 
     // Meta-data fields
-    BOM_COL_ID_QUANTITY = 100,
+    FIELDS_EDITOR_COL_ID_QUANTITY = 100,
 
     // Custom data fields
-    BOM_COL_ID_USER = 1000,
+    FIELDS_EDITOR_COL_ID_USER = 1000,
 };
 
 /**
- * BOM_COLUMN class
+ * FIELDS_EDITOR_COLUMN class
  * Models a single column in the BOM view
  * Each column can be used to group components,
  * and can be hidden from the output BOM
  */
-class BOM_COLUMN
+class FIELDS_EDITOR_COLUMN
 {
 protected:
     unsigned int        m_id;       ///< Unique column ID
-    BOM_COLUMN_TYPE     m_Type;     ///< Column type
+    FIELDS_EDITOR_COLUMN_TYPE     m_Type;     ///< Column type
 
     wxString    m_Title;        ///< The column (field) title
     bool        m_Show;         ///< Is this column visible?
@@ -91,7 +91,7 @@ protected:
     bool        m_sort;         ///< Is this column used for sorting?
 
 public:
-    BOM_COLUMN( unsigned int aId, BOM_COLUMN_TYPE aType, const wxString aTitle, bool aShow, bool aReadOnly = false, bool aSort = true ) :
+    FIELDS_EDITOR_COLUMN( unsigned int aId, FIELDS_EDITOR_COLUMN_TYPE aType, const wxString aTitle, bool aShow, bool aReadOnly = false, bool aSort = true ) :
             m_id( aId ),
             m_Type( aType ),
             m_Title( aTitle.Strip( wxString::both ) ),
@@ -102,7 +102,7 @@ public:
     }
 
     unsigned int Id() const { return m_id; }
-    BOM_COLUMN_TYPE Type() const { return m_Type; }
+    FIELDS_EDITOR_COLUMN_TYPE Type() const { return m_Type; }
     wxString Title() const { return m_Title; }
     bool IsVisible() const { return m_Show; }
     bool IsReadOnly() const { return m_ReadOnly; }
@@ -117,36 +117,36 @@ public:
 };
 
 /*
- * The BOM_COLUMN_LIST class contains information
+ * The FIELDS_EDITOR_COLUMN_LIST class contains information
  * on all columns existing in the BOM
  */
-class BOM_COLUMN_LIST
+class FIELDS_EDITOR_COLUMN_LIST
 {
 protected:
 
     unsigned int m_nextFieldId;
 
 public:
-    std::vector< BOM_COLUMN* > Columns;
+    std::vector< FIELDS_EDITOR_COLUMN* > Columns;
 
-    BOM_COLUMN_LIST();
+    FIELDS_EDITOR_COLUMN_LIST();
 
     void Clear();
 
     unsigned int NextFieldId() const { return m_nextFieldId; }
     unsigned int ColumnCount( bool aIncludeHidden = true ) const;
 
-    BOM_COLUMN* GetColumnByIndex( unsigned int aColIndex );
-    BOM_COLUMN* GetColumnById( unsigned int aColId );
-    BOM_COLUMN* GetColumnByTitle( const wxString& aColTitle ) ;
+    FIELDS_EDITOR_COLUMN* GetColumnByIndex( unsigned int aColIndex );
+    FIELDS_EDITOR_COLUMN* GetColumnById( unsigned int aColId );
+    FIELDS_EDITOR_COLUMN* GetColumnByTitle( const wxString& aColTitle ) ;
 
     bool ContainsColumn( unsigned int aColId );
     bool ContainsColumn( const wxString& aColTitle );
 
-    bool AddColumn( BOM_COLUMN* aCol );
+    bool AddColumn( FIELDS_EDITOR_COLUMN* aCol );
 
 };
 
 
 
-#endif /* EESCHEMA_BOM_TABLE_COLUMN_H_ */
+#endif /* FIELDS_EDITOR_TABLE_COLUMN_H */

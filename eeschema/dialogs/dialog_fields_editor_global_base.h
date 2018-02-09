@@ -1,16 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_BOM_EDITOR_BASE_H__
-#define __DIALOG_BOM_EDITOR_BASE_H__
+#ifndef __DIALOG_FIELDS_EDITOR_GLOBAL_BASE_H__
+#define __DIALOG_FIELDS_EDITOR_GLOBAL_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -31,9 +33,9 @@
 #define OPT_GROUP_COMPONENTS 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_BOM_EDITOR_BASE
+/// Class DIALOG_FIELDS_EDITOR_GLOBAL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
+class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -69,15 +71,15 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
-		~DIALOG_BOM_EDITOR_BASE();
+		DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
+		~DIALOG_FIELDS_EDITOR_GLOBAL_BASE();
 		
 		void m_splitter1OnIdle( wxIdleEvent& )
 		{
 			m_splitter1->SetSashPosition( 231 );
-			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_BOM_EDITOR_BASE::m_splitter1OnIdle ), NULL, this );
+			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::m_splitter1OnIdle ), NULL, this );
 		}
 	
 };
 
-#endif //__DIALOG_BOM_EDITOR_BASE_H__
+#endif //__DIALOG_FIELDS_EDITOR_GLOBAL_BASE_H__

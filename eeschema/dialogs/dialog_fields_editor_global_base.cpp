@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_bom_editor_base.h"
+#include "dialog_fields_editor_global_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -24,7 +24,7 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	m_splitter1 = new wxSplitterWindow( m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
-	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_BOM_EDITOR_BASE::m_splitter1OnIdle ), NULL, this );
+	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::m_splitter1OnIdle ), NULL, this );
 	m_splitter1->SetMinimumPaneSize( 120 );
 	
 	m_leftPanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -89,23 +89,23 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	bSizer7->Fit( m_panel );
 	bSizer61->Add( m_panel, 1, wxEXPAND | wxALL, 5 );
 	
-	wxBoxSizer* bSizer71;
-	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerButtonsBottom;
+	bSizerButtonsBottom = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_applyChangesButton = new wxButton( this, wxID_ANY, _("Apply Changes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer71->Add( m_applyChangesButton, 0, wxALL, 5 );
+	bSizerButtonsBottom->Add( m_applyChangesButton, 0, wxALL, 5 );
 	
 	m_revertChangesButton = new wxButton( this, wxID_ANY, _("Revert Changes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer71->Add( m_revertChangesButton, 0, wxALL, 5 );
+	bSizerButtonsBottom->Add( m_revertChangesButton, 0, wxALL, 5 );
 	
 	
-	bSizer71->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerButtonsBottom->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_closeButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer71->Add( m_closeButton, 0, wxALL, 5 );
+	bSizerButtonsBottom->Add( m_closeButton, 0, wxALL, 5 );
 	
 	
-	bSizer61->Add( bSizer71, 0, wxEXPAND, 5 );
+	bSizer61->Add( bSizerButtonsBottom, 0, wxEXPAND, 5 );
 	
 	
 	bHorizontalSizer->Add( bSizer61, 1, wxEXPAND, 5 );
@@ -118,38 +118,38 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_BOM_EDITOR_BASE::OnDialogClosed ) );
-	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_BOM_EDITOR_BASE::OnUpdateUI ) );
-	m_groupComponentsBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnGroupComponentsToggled ), NULL, this );
-	m_regroupComponentsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnRegroupComponents ), NULL, this );
-	m_columnListCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnColumnItemToggled ), NULL, this );
-	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnBomColumReordered ), NULL, this );
-	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnBomColumnSorted ), NULL, this );
-	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnTableItemActivated ), NULL, this );
-	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnTableItemContextMenu ), NULL, this );
-	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnTableValueChanged ), NULL, this );
-	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnSelectionChanged ), NULL, this );
-	m_applyChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnApplyFieldChanges ), NULL, this );
-	m_revertChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnRevertFieldChanges ), NULL, this );
-	m_closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnCloseButton ), NULL, this );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnDialogClosed ) );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnUpdateUI ) );
+	m_groupComponentsBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnGroupComponentsToggled ), NULL, this );
+	m_regroupComponentsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnRegroupComponents ), NULL, this );
+	m_columnListCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnColumnItemToggled ), NULL, this );
+	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnBomColumReordered ), NULL, this );
+	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnBomColumnSorted ), NULL, this );
+	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableItemActivated ), NULL, this );
+	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableItemContextMenu ), NULL, this );
+	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableValueChanged ), NULL, this );
+	m_bomView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSelectionChanged ), NULL, this );
+	m_applyChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnApplyFieldChanges ), NULL, this );
+	m_revertChangesButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnRevertFieldChanges ), NULL, this );
+	m_closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnCloseButton ), NULL, this );
 }
 
-DIALOG_BOM_EDITOR_BASE::~DIALOG_BOM_EDITOR_BASE()
+DIALOG_FIELDS_EDITOR_GLOBAL_BASE::~DIALOG_FIELDS_EDITOR_GLOBAL_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_BOM_EDITOR_BASE::OnDialogClosed ) );
-	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_BOM_EDITOR_BASE::OnUpdateUI ) );
-	m_groupComponentsBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnGroupComponentsToggled ), NULL, this );
-	m_regroupComponentsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnRegroupComponents ), NULL, this );
-	m_columnListCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnColumnItemToggled ), NULL, this );
-	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnBomColumReordered ), NULL, this );
-	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnBomColumnSorted ), NULL, this );
-	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnTableItemActivated ), NULL, this );
-	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnTableItemContextMenu ), NULL, this );
-	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnTableValueChanged ), NULL, this );
-	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_BOM_EDITOR_BASE::OnSelectionChanged ), NULL, this );
-	m_applyChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnApplyFieldChanges ), NULL, this );
-	m_revertChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnRevertFieldChanges ), NULL, this );
-	m_closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_EDITOR_BASE::OnCloseButton ), NULL, this );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnDialogClosed ) );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnUpdateUI ) );
+	m_groupComponentsBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnGroupComponentsToggled ), NULL, this );
+	m_regroupComponentsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnRegroupComponents ), NULL, this );
+	m_columnListCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnColumnItemToggled ), NULL, this );
+	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnBomColumReordered ), NULL, this );
+	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnBomColumnSorted ), NULL, this );
+	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableItemActivated ), NULL, this );
+	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableItemContextMenu ), NULL, this );
+	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableValueChanged ), NULL, this );
+	m_bomView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSelectionChanged ), NULL, this );
+	m_applyChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnApplyFieldChanges ), NULL, this );
+	m_revertChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnRevertFieldChanges ), NULL, this );
+	m_closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnCloseButton ), NULL, this );
 	
 }

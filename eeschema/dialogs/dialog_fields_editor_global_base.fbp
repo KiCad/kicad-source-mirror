@@ -11,11 +11,11 @@
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">dialog_bom_editor_base</property>
+        <property name="file">dialog_fields_editor_global_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
-        <property name="name">dialog_bom_editor_base</property>
+        <property name="name">dialog_fields_editor_global_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -42,12 +42,12 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">DIALOG_BOM_EDITOR_BASE</property>
+            <property name="name">DIALOG_FIELDS_EDITOR_GLOBAL_BASE</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">BOM editor</property>
+            <property name="title">Fields editor</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -641,8 +641,8 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="splitteritem" expanded="0">
-                                                <object class="wxPanel" expanded="0">
+                                            <object class="splitteritem" expanded="1">
+                                                <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -716,7 +716,7 @@
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="wxBoxSizer" expanded="0">
+                                                    <object class="wxBoxSizer" expanded="1">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizer5</property>
                                                         <property name="orient">wxVERTICAL</property>
@@ -803,7 +803,7 @@
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
-                                <property name="name">bSizer71</property>
+                                <property name="name">bSizerButtonsBottom</property>
                                 <property name="orient">wxHORIZONTAL</property>
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">

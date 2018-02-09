@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "bom_table_model.h"
+#include "fields_editor_table_model.h"
 
 // Indicator that multiple values exist in child rows
 #define ROW_MULT_ITEMS wxString( "<...>" )
@@ -32,18 +32,18 @@ static const wxColor ROW_COLOUR_MULTIPLE_ITEMS( 60, 90, 200 );
 
 
 /**
- * Convert BOM_TABLE_ROW -> wxDataViewItem
+ * Convert FIELDS_EDITOR_TABLE_ROW -> wxDataViewItem
  */
-static wxDataViewItem RowToItem( BOM_TABLE_ROW const* aRow )
+static wxDataViewItem RowToItem( FIELDS_EDITOR_TABLE_ROW const* aRow )
 {
     return wxDataViewItem( const_cast<void*>( static_cast<void const*>( aRow ) ) );
 }
 
 
 /**
- * Convert wxDataViewItem -> BOM_TABEL_ROW
+ * Convert wxDataViewItem -> FIELDS_EDITOR_TABEL_ROW
  */
-static BOM_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
+static FIELDS_EDITOR_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
 {
     if( !aItem.IsOk() )
     {
@@ -51,19 +51,19 @@ static BOM_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
     }
     else
     {
-        return static_cast<BOM_TABLE_ROW const*>( aItem.GetID() );
+        return static_cast<FIELDS_EDITOR_TABLE_ROW const*>( aItem.GetID() );
     }
 }
 
 
-BOM_FIELD_VALUES::BOM_FIELD_VALUES( const wxString& aRefDes, FIELD_VALUE_MAP* aTemplate ) :
+FIELDS_EDITOR_FIELD_VALUES::FIELDS_EDITOR_FIELD_VALUES( const wxString& aRefDes, FIELD_VALUE_MAP* aTemplate ) :
         m_refDes( aRefDes ),
         m_templateValues( aTemplate )
 {
 }
 
 
-bool BOM_FIELD_VALUES::GetFieldValue( unsigned int aFieldId, wxString& aValue ) const
+bool FIELDS_EDITOR_FIELD_VALUES::GetFieldValue( unsigned int aFieldId, wxString& aValue ) const
 {
     auto search = m_currentValues.find( aFieldId );
 
@@ -76,7 +76,7 @@ bool BOM_FIELD_VALUES::GetFieldValue( unsigned int aFieldId, wxString& aValue ) 
 }
 
 
-bool BOM_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue ) const
+bool FIELDS_EDITOR_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue ) const
 {
     auto search = m_backupValues.find( aFieldId );
 
@@ -89,7 +89,7 @@ bool BOM_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue )
 }
 
 
-bool BOM_FIELD_VALUES::GetTemplateValue( unsigned int aFieldId, wxString& aValue ) const
+bool FIELDS_EDITOR_FIELD_VALUES::GetTemplateValue( unsigned int aFieldId, wxString& aValue ) const
 {
     if( !m_templateValues )
         return false;
@@ -105,7 +105,7 @@ bool BOM_FIELD_VALUES::GetTemplateValue( unsigned int aFieldId, wxString& aValue
 }
 
 
-void BOM_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, const wxString& aValue,
+void FIELDS_EDITOR_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, const wxString& aValue,
                                       bool aOverwrite )
 {
     if( aOverwrite || m_currentValues.count( aFieldId ) == 0 ||
@@ -116,7 +116,7 @@ void BOM_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, const wxString& aVa
 }
 
 
-bool BOM_FIELD_VALUES::HasValueChanged( unsigned int aFieldId) const
+bool FIELDS_EDITOR_FIELD_VALUES::HasValueChanged( unsigned int aFieldId) const
 {
     wxString currentValue, backupValue;
 
@@ -127,7 +127,7 @@ bool BOM_FIELD_VALUES::HasValueChanged( unsigned int aFieldId) const
 }
 
 
-void BOM_FIELD_VALUES::RevertChanges( unsigned int aFieldId )
+void FIELDS_EDITOR_FIELD_VALUES::RevertChanges( unsigned int aFieldId )
 {
     wxString backupValue;
 
@@ -136,7 +136,7 @@ void BOM_FIELD_VALUES::RevertChanges( unsigned int aFieldId )
     SetFieldValue( aFieldId, backupValue, true );
 }
 
-void BOM_FIELD_VALUES::SetBackupPoint()
+void FIELDS_EDITOR_FIELD_VALUES::SetBackupPoint()
 {
     for( auto it = m_currentValues.begin(); it != m_currentValues.end(); ++it )
     {
@@ -145,7 +145,7 @@ void BOM_FIELD_VALUES::SetBackupPoint()
 }
 
 
-BOM_TABLE_ROW::BOM_TABLE_ROW() : m_columnList( nullptr )
+FIELDS_EDITOR_TABLE_ROW::FIELDS_EDITOR_TABLE_ROW() : m_columnList( nullptr )
 {
 }
 
@@ -154,7 +154,7 @@ BOM_TABLE_ROW::BOM_TABLE_ROW() : m_columnList( nullptr )
  * Update cell attributes based on parameters of the cell
  * Default implementation highlights cells that have been altered
  */
-bool BOM_TABLE_ROW::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const
+bool FIELDS_EDITOR_TABLE_ROW::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const
 {
     auto field = m_columnList->GetColumnById( aFieldId );
 
@@ -170,7 +170,7 @@ bool BOM_TABLE_ROW::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) 
 }
 
 
-bool BOM_TABLE_ROW::HasChanged() const
+bool FIELDS_EDITOR_TABLE_ROW::HasChanged() const
 {
     if( !m_columnList )
         return false;
@@ -190,13 +190,13 @@ bool BOM_TABLE_ROW::HasChanged() const
 /**
  * Create a new group (which contains one or more components)
  */
-BOM_TABLE_GROUP::BOM_TABLE_GROUP( BOM_COLUMN_LIST* aColumnList )
+FIELDS_EDITOR_TABLE_GROUP::FIELDS_EDITOR_TABLE_GROUP( FIELDS_EDITOR_COLUMN_LIST* aColumnList )
 {
     m_columnList = aColumnList;
 }
 
 
-bool BOM_TABLE_GROUP::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const
+bool FIELDS_EDITOR_TABLE_GROUP::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const
 {
     if( GetFieldValue( aFieldId ).Cmp( ROW_MULT_ITEMS ) == 0 )
     {
@@ -205,7 +205,7 @@ bool BOM_TABLE_GROUP::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr 
         return true;
     }
 
-    return BOM_TABLE_ROW::GetAttr( aFieldId, aAttr );
+    return FIELDS_EDITOR_TABLE_ROW::GetAttr( aFieldId, aAttr );
 }
 
 
@@ -213,7 +213,7 @@ bool BOM_TABLE_GROUP::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr 
  * Return the value associated with a given field in the group.
  * Some fields require special attention.
  */
-wxString BOM_TABLE_GROUP::GetFieldValue( unsigned int aFieldId ) const
+wxString FIELDS_EDITOR_TABLE_GROUP::GetFieldValue( unsigned int aFieldId ) const
 {
     wxString value;
 
@@ -221,12 +221,12 @@ wxString BOM_TABLE_GROUP::GetFieldValue( unsigned int aFieldId ) const
     switch( aFieldId )
     {
     // QUANTITY returns the size of the group
-    case BOM_COL_ID_QUANTITY:
+    case FIELDS_EDITOR_COL_ID_QUANTITY:
         value = wxString::Format( "%u", (unsigned int) GroupSize() );
         break;
 
     // REFERENCE field returns consolidated list of references
-    case BOM_COL_ID_REFERENCE:
+    case FIELDS_EDITOR_COL_ID_REFERENCE:
         value = wxJoin( GetReferences(), ' ' );
         break;
 
@@ -267,7 +267,7 @@ wxString BOM_TABLE_GROUP::GetFieldValue( unsigned int aFieldId ) const
  * Set the value of a field in a group
  * The new value is pushed to all components that are children of this group
  */
-bool BOM_TABLE_GROUP::SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite )
+bool FIELDS_EDITOR_TABLE_GROUP::SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite )
 {
     bool result = false;
 
@@ -289,7 +289,7 @@ bool BOM_TABLE_GROUP::SetFieldValue( unsigned int aFieldId, const wxString aValu
  * @param aField - The field to test
  * @param aComponent - The component being tested
  */
-bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aComponent ) const
+bool FIELDS_EDITOR_TABLE_GROUP::TestField( FIELDS_EDITOR_COLUMN* aField, FIELDS_EDITOR_TABLE_COMPONENT* aComponent ) const
 {
     if( !aField || !aComponent )
         return false;
@@ -305,11 +305,11 @@ bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aCompo
     switch( aField->Id() )
     {
     // These fields should NOT be compared (return True)
-    case BOM_COL_ID_QUANTITY:
+    case FIELDS_EDITOR_COL_ID_QUANTITY:
         return true;
 
     // Reference matching is done only on prefix
-    case BOM_COL_ID_REFERENCE:
+    case FIELDS_EDITOR_COL_ID_REFERENCE:
         componentValue = aComponent->GetPrefix();
         comparisonValue = Components[0]->GetPrefix();
         break;
@@ -331,7 +331,7 @@ bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aCompo
  * It is assumed at this stage that the component is a good match for the group.
  * @param aComponent is the new component to add
  */
-bool BOM_TABLE_GROUP::AddComponent( BOM_TABLE_COMPONENT* aComponent )
+bool FIELDS_EDITOR_TABLE_GROUP::AddComponent( FIELDS_EDITOR_TABLE_COMPONENT* aComponent )
 {
     if( !aComponent )
         return false;
@@ -372,7 +372,7 @@ bool BOM_TABLE_GROUP::AddComponent( BOM_TABLE_COMPONENT* aComponent )
 /**
  * Adds each child row to the supplied list, and returns the total child count
  */
-unsigned int BOM_TABLE_GROUP::GetChildren( wxDataViewItemArray& aChildren ) const
+unsigned int FIELDS_EDITOR_TABLE_GROUP::GetChildren( wxDataViewItemArray& aChildren ) const
 {
     // Show drop-down for child components
     for( auto& row : Components )
@@ -392,7 +392,7 @@ unsigned int BOM_TABLE_GROUP::GetChildren( wxDataViewItemArray& aChildren ) cons
  * @param aField is the field to test
  * @return true if any children have changed else false
  */
-bool BOM_TABLE_GROUP::HasValueChanged( BOM_COLUMN* aField ) const
+bool FIELDS_EDITOR_TABLE_GROUP::HasValueChanged( FIELDS_EDITOR_COLUMN* aField ) const
 {
 
     bool changed = false;
@@ -425,7 +425,7 @@ bool BOM_TABLE_GROUP::HasValueChanged( BOM_COLUMN* aField ) const
  *
  * @param aSort - Sort the references
  */
-wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort ) const
+wxArrayString FIELDS_EDITOR_TABLE_GROUP::GetReferences( bool aSort ) const
 {
     wxArrayString refs;
 
@@ -433,7 +433,7 @@ wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort ) const
     {
         if( cmp )
         {
-            refs.Add( cmp->GetFieldValue( BOM_COL_ID_REFERENCE ) );
+            refs.Add( cmp->GetFieldValue( FIELDS_EDITOR_COL_ID_REFERENCE ) );
         }
     }
 
@@ -452,7 +452,7 @@ wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort ) const
  * e.g. "R100" is lower (alphabetically) than "R19"
  * BUT should be placed after R19
  */
-int BOM_TABLE_GROUP::SortReferences( const wxString& aFirst, const wxString& aSecond )
+int FIELDS_EDITOR_TABLE_GROUP::SortReferences( const wxString& aFirst, const wxString& aSecond )
 {
     // Default sorting
     int defaultSort = aFirst.Cmp( aSecond );
@@ -512,7 +512,7 @@ int BOM_TABLE_GROUP::SortReferences( const wxString& aFirst, const wxString& aSe
  * Cases a) to d) should be detected and converted to a common representation
  * Values that do not match this pattern should revert to standard string comparison
  */
-int BOM_TABLE_GROUP::SortValues( const wxString& aFirst, const wxString& aSecond )
+int FIELDS_EDITOR_TABLE_GROUP::SortValues( const wxString& aFirst, const wxString& aSecond )
 {
     //TODO - Intelligent comparison of component values
     // e.g. 4K > 499
@@ -528,9 +528,9 @@ int BOM_TABLE_GROUP::SortValues( const wxString& aFirst, const wxString& aSecond
  * Create a new COMPONENT row
  * Each COMPONENT row is associated with a single component item.
  */
-BOM_TABLE_COMPONENT::BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent,
-                                          BOM_COLUMN_LIST* aColumnList,
-                                          BOM_FIELD_VALUES* aFieldValues )
+FIELDS_EDITOR_TABLE_COMPONENT::FIELDS_EDITOR_TABLE_COMPONENT( FIELDS_EDITOR_TABLE_GROUP* aParent,
+                                          FIELDS_EDITOR_COLUMN_LIST* aColumnList,
+                                          FIELDS_EDITOR_FIELD_VALUES* aFieldValues )
 {
     m_parent = aParent;
     m_columnList = aColumnList;
@@ -542,7 +542,7 @@ BOM_TABLE_COMPONENT::BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent,
  * Try to add a unit to this component
  * If the references match, it will be added
  */
-bool BOM_TABLE_COMPONENT::AddUnit( const SCH_REFERENCE& aUnit )
+bool FIELDS_EDITOR_TABLE_COMPONENT::AddUnit( const SCH_REFERENCE& aUnit )
 {
     // Addition is successful if the references match or there are currently no units in the group
     if( Units.size() == 0  || Units[0].GetRef().Cmp( aUnit.GetRef() ) == 0 )
@@ -558,15 +558,15 @@ bool BOM_TABLE_COMPONENT::AddUnit( const SCH_REFERENCE& aUnit )
 
             switch( column->Id() )
             {
-            case BOM_COL_ID_QUANTITY:
+            case FIELDS_EDITOR_COL_ID_QUANTITY:
                 value = wxEmptyString;
                 break;
 
-            case BOM_COL_ID_DESCRIPTION:
+            case FIELDS_EDITOR_COL_ID_DESCRIPTION:
                 value = cmp->GetAliasDescription();
                 break;
 
-            case BOM_COL_ID_DATASHEET:
+            case FIELDS_EDITOR_COL_ID_DATASHEET:
                 value = cmp->GetField( DATASHEET )->GetText();
                 if( value.IsEmpty() )
                 {
@@ -574,15 +574,15 @@ bool BOM_TABLE_COMPONENT::AddUnit( const SCH_REFERENCE& aUnit )
                 }
                 break;
 
-            case BOM_COL_ID_REFERENCE:
+            case FIELDS_EDITOR_COL_ID_REFERENCE:
                 value = aUnit.GetRef();
                 break;
 
-            case BOM_COL_ID_VALUE:
+            case FIELDS_EDITOR_COL_ID_VALUE:
                 value = cmp->GetField( VALUE )->GetText();
                 break;
 
-            case BOM_COL_ID_FOOTPRINT:
+            case FIELDS_EDITOR_COL_ID_FOOTPRINT:
                 value = cmp->GetField( FOOTPRINT )->GetText();
                 break;
 
@@ -606,16 +606,16 @@ bool BOM_TABLE_COMPONENT::AddUnit( const SCH_REFERENCE& aUnit )
  * Return the value associated with a particular field
  * If no field is found, return an empty string
  */
-wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
+wxString FIELDS_EDITOR_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
 {
     wxString value;
 
     switch ( aFieldId )
     {
-    case BOM_COL_ID_QUANTITY:
+    case FIELDS_EDITOR_COL_ID_QUANTITY:
         return wxEmptyString;
 
-    case BOM_COL_ID_REFERENCE:
+    case FIELDS_EDITOR_COL_ID_REFERENCE:
         return GetReference();
 
     default:
@@ -642,7 +642,7 @@ wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
  * @param aValue is the new value
  * @param aOverwrite enforces writing even if a value exists
  */
-bool BOM_TABLE_COMPONENT::SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite )
+bool FIELDS_EDITOR_TABLE_COMPONENT::SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite )
 {
     if( m_fieldValues )
     {
@@ -654,7 +654,7 @@ bool BOM_TABLE_COMPONENT::SetFieldValue( unsigned int aFieldId, const wxString a
 }
 
 
-wxString BOM_TABLE_COMPONENT::GetPrefix() const
+wxString FIELDS_EDITOR_TABLE_COMPONENT::GetPrefix() const
 {
     // Return the prefix of a component e.g. "R23" -> "R"
     if( Units.size() == 0 )
@@ -667,7 +667,7 @@ wxString BOM_TABLE_COMPONENT::GetPrefix() const
 /**
  * Return the reference of a component e.g. "R23"
  */
-wxString BOM_TABLE_COMPONENT::GetReference() const
+wxString FIELDS_EDITOR_TABLE_COMPONENT::GetReference() const
 {
     if( Units.size() == 0 )
         return wxEmptyString;
@@ -679,7 +679,7 @@ wxString BOM_TABLE_COMPONENT::GetReference() const
 /**
  * Determines if the given field has been changed for this component
  */
-bool BOM_TABLE_COMPONENT::HasValueChanged( BOM_COLUMN* aField ) const
+bool FIELDS_EDITOR_TABLE_COMPONENT::HasValueChanged( FIELDS_EDITOR_COLUMN* aField ) const
 {
     if( !aField )
     {
@@ -694,7 +694,7 @@ bool BOM_TABLE_COMPONENT::HasValueChanged( BOM_COLUMN* aField ) const
  * If any changes have been made to this component,
  * they are now applied to the schematic component
  */
-void BOM_TABLE_COMPONENT::ApplyFieldChanges()
+void FIELDS_EDITOR_TABLE_COMPONENT::ApplyFieldChanges()
 {
     for( auto& unit : Units )
     {
@@ -715,19 +715,19 @@ void BOM_TABLE_COMPONENT::ApplyFieldChanges()
                 switch( column->Id() )
                 {
                 // Ignore read-only fields
-                case BOM_COL_ID_REFERENCE:
-                case BOM_COL_ID_QUANTITY:
+                case FIELDS_EDITOR_COL_ID_REFERENCE:
+                case FIELDS_EDITOR_COL_ID_QUANTITY:
                     continue;
 
                 // Special field considerations
-                case BOM_COL_ID_FOOTPRINT:
+                case FIELDS_EDITOR_COL_ID_FOOTPRINT:
                     field = cmp->GetField( FOOTPRINT );
                     break;
 
-                case BOM_COL_ID_VALUE:
+                case FIELDS_EDITOR_COL_ID_VALUE:
                     field = cmp->GetField( VALUE );
                     break;
-                case BOM_COL_ID_DATASHEET:
+                case FIELDS_EDITOR_COL_ID_DATASHEET:
                     field = cmp->GetField( DATASHEET );
                     break;
 
@@ -758,14 +758,14 @@ void BOM_TABLE_COMPONENT::ApplyFieldChanges()
  * Revert the displayed fields for this component
  * to their original values (matching the schematic data)
  */
-void BOM_TABLE_COMPONENT::RevertFieldChanges()
+void FIELDS_EDITOR_TABLE_COMPONENT::RevertFieldChanges()
 {
     for( auto& column : m_columnList->Columns )
     {
         switch( column->Id() )
         {
-        case BOM_COL_ID_REFERENCE:
-        case BOM_COL_ID_QUANTITY:
+        case FIELDS_EDITOR_COL_ID_REFERENCE:
+        case FIELDS_EDITOR_COL_ID_QUANTITY:
             continue;
         default:
             break;
@@ -776,9 +776,9 @@ void BOM_TABLE_COMPONENT::RevertFieldChanges()
 }
 
 
-BOM_TABLE_MODEL::BOM_TABLE_MODEL() :
+FIELDS_EDITOR_TABLE_MODEL::FIELDS_EDITOR_TABLE_MODEL() :
         m_widget( nullptr ),
-        m_sortingColumn( BOM_COL_ID_REFERENCE ),
+        m_sortingColumn( FIELDS_EDITOR_COL_ID_REFERENCE ),
         m_sortingOrder( true )
 {
     //TODO
@@ -786,26 +786,26 @@ BOM_TABLE_MODEL::BOM_TABLE_MODEL() :
 
 
 /**
- * Create a container for the BOM_TABLE_MODEL
+ * Create a container for the FIELDS_EDITOR_TABLE_MODEL
  * This is required for reference counting by wxDataViewCtrl
  */
-BOM_TABLE_MODEL::MODEL_PTR BOM_TABLE_MODEL::Create()
+FIELDS_EDITOR_TABLE_MODEL::MODEL_PTR FIELDS_EDITOR_TABLE_MODEL::Create()
 {
-    auto model = new BOM_TABLE_MODEL();
+    auto model = new FIELDS_EDITOR_TABLE_MODEL();
 
-    auto container = BOM_TABLE_MODEL::MODEL_PTR( model );
+    auto container = FIELDS_EDITOR_TABLE_MODEL::MODEL_PTR( model );
 
     return container;
 }
 
 
-BOM_TABLE_MODEL::~BOM_TABLE_MODEL()
+FIELDS_EDITOR_TABLE_MODEL::~FIELDS_EDITOR_TABLE_MODEL()
 {
    //TODO
 }
 
 
-wxDataViewColumn* BOM_TABLE_MODEL::AddColumn( BOM_COLUMN* aColumn, int aPosition )
+wxDataViewColumn* FIELDS_EDITOR_TABLE_MODEL::AddColumn( FIELDS_EDITOR_COLUMN* aColumn, int aPosition )
 {
     static const unsigned int flags = wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE;
 
@@ -875,7 +875,7 @@ wxDataViewColumn* BOM_TABLE_MODEL::AddColumn( BOM_COLUMN* aColumn, int aPosition
  * Gracefully remove the given column from the wxDataViewCtrl
  * Removing columns individually prevents bad redraw of entire table
  */
-bool BOM_TABLE_MODEL::RemoveColumn( BOM_COLUMN* aColumn )
+bool FIELDS_EDITOR_TABLE_MODEL::RemoveColumn( FIELDS_EDITOR_COLUMN* aColumn )
 {
     if( !m_widget || !aColumn )
         return false;
@@ -899,7 +899,7 @@ bool BOM_TABLE_MODEL::RemoveColumn( BOM_COLUMN* aColumn )
  * Attach the MODEL to a particular VIEW
  * This function causes the view to be updated appropriately
  */
-void BOM_TABLE_MODEL::AttachTo( wxDataViewCtrl* aView )
+void FIELDS_EDITOR_TABLE_MODEL::AttachTo( wxDataViewCtrl* aView )
 {
     if( !aView )
     {
@@ -929,7 +929,7 @@ void BOM_TABLE_MODEL::AttachTo( wxDataViewCtrl* aView )
 /**
  * Return the total number of components displayed by the model
  */
-unsigned int BOM_TABLE_MODEL::ComponentCount() const
+unsigned int FIELDS_EDITOR_TABLE_MODEL::ComponentCount() const
 {
     unsigned int count = 0;
 
@@ -943,7 +943,7 @@ unsigned int BOM_TABLE_MODEL::ComponentCount() const
 }
 
 
-void BOM_TABLE_MODEL::ClearColumns()
+void FIELDS_EDITOR_TABLE_MODEL::ClearColumns()
 {
     ColumnList.Clear();
 }
@@ -954,45 +954,45 @@ void BOM_TABLE_MODEL::ClearColumns()
  * These columns are ALWAYS available in the table
  * They are immutable - can be hidden by user but not removed
  */
-void BOM_TABLE_MODEL::AddDefaultColumns()
+void FIELDS_EDITOR_TABLE_MODEL::AddDefaultColumns()
 {
     // Reference column is read-only
-    ColumnList.AddColumn( new BOM_COLUMN(
-                BOM_COL_ID_REFERENCE,
-                BOM_COL_TYPE_GENERATED,
-                BOM_COL_TITLE_REFERENCE,
+    ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN(
+                FIELDS_EDITOR_COL_ID_REFERENCE,
+                FIELDS_EDITOR_COL_TYPE_GENERATED,
+                FIELDS_EDITOR_COL_TITLE_REFERENCE,
                 true, true ) );
 
-    ColumnList.AddColumn( new BOM_COLUMN(
-               BOM_COL_ID_VALUE,
-               BOM_COL_TYPE_KICAD,
-               BOM_COL_TITLE_VALUE,
+    ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN(
+               FIELDS_EDITOR_COL_ID_VALUE,
+               FIELDS_EDITOR_COL_TYPE_KICAD,
+               FIELDS_EDITOR_COL_TITLE_VALUE,
                true, false ) );
 
-    ColumnList.AddColumn( new BOM_COLUMN(
-               BOM_COL_ID_FOOTPRINT,
-               BOM_COL_TYPE_KICAD,
-               BOM_COL_TITLE_FOOTPRINT,
+    ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN(
+               FIELDS_EDITOR_COL_ID_FOOTPRINT,
+               FIELDS_EDITOR_COL_TYPE_KICAD,
+               FIELDS_EDITOR_COL_TITLE_FOOTPRINT,
                true, false ) );
 
-    ColumnList.AddColumn( new BOM_COLUMN(
-               BOM_COL_ID_DATASHEET,
-               BOM_COL_TYPE_KICAD,
-               BOM_COL_TITLE_DATASHEET,
+    ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN(
+               FIELDS_EDITOR_COL_ID_DATASHEET,
+               FIELDS_EDITOR_COL_TYPE_KICAD,
+               FIELDS_EDITOR_COL_TITLE_DATASHEET,
                true, false ) );
 
     // Description comes from .dcm file and is read-only
-    ColumnList.AddColumn( new BOM_COLUMN(
-               BOM_COL_ID_DESCRIPTION,
-               BOM_COL_TYPE_LIBRARY,
-               BOM_COL_TITLE_DESCRIPTION,
+    ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN(
+               FIELDS_EDITOR_COL_ID_DESCRIPTION,
+               FIELDS_EDITOR_COL_TYPE_LIBRARY,
+               FIELDS_EDITOR_COL_TITLE_DESCRIPTION,
                true, true ) );
 
     // Quantity column is read-only
-    ColumnList.AddColumn( new BOM_COLUMN(
-               BOM_COL_ID_QUANTITY,
-               BOM_COL_TYPE_GENERATED,
-               BOM_COL_TITLE_QUANTITY,
+    ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN(
+               FIELDS_EDITOR_COL_ID_QUANTITY,
+               FIELDS_EDITOR_COL_TYPE_GENERATED,
+               FIELDS_EDITOR_COL_TITLE_QUANTITY,
                true, true ) );
 }
 
@@ -1001,7 +1001,7 @@ void BOM_TABLE_MODEL::AddDefaultColumns()
  * Extract field data from all components
  * Compiles an inclusive list of all field names from all components
  */
-void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
+void FIELDS_EDITOR_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
 {
     std::vector< SCH_FIELD* > fields;
 
@@ -1036,7 +1036,7 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
 
             if( col->Title().Cmp( fieldName ) == 0 )
             {
-                if( col->Id() >= BOM_COL_ID_USER )
+                if( col->Id() >= FIELDS_EDITOR_COL_ID_USER )
                 {
                     userMatchFound = true;
                     break;
@@ -1050,8 +1050,8 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
             continue;
         }
 
-        ColumnList.AddColumn( new BOM_COLUMN( ColumnList.NextFieldId(),
-                                              BOM_COL_TYPE_USER,
+        ColumnList.AddColumn( new FIELDS_EDITOR_COLUMN( ColumnList.NextFieldId(),
+                                              FIELDS_EDITOR_COL_TYPE_USER,
                                               field->GetName(),
                                               true, false ) );
     }
@@ -1062,7 +1062,7 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
  * Add a list of component items to the BOM manager
  * Creates consolidated groups of components as required
  */
-void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FIELDNAMES& aTemplateFields )
+void FIELDS_EDITOR_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FIELDNAMES& aTemplateFields )
 {
 
     // Add default columns
@@ -1083,14 +1083,14 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FI
     // Add template fields if they are not already added
     for( auto field : aTemplateFields )
     {
-        BOM_COLUMN* col;
+        FIELDS_EDITOR_COLUMN* col;
 
         col = ColumnList.GetColumnByTitle( field.m_Name );
 
         if( !col )
         {
-            col = new BOM_COLUMN( ColumnList.NextFieldId(),
-                                       BOM_COL_TYPE_USER,
+            col = new FIELDS_EDITOR_COLUMN( ColumnList.NextFieldId(),
+                                       FIELDS_EDITOR_COL_TYPE_USER,
                                        field.m_Name,
                                        true, false );
 
@@ -1129,7 +1129,7 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FI
 
             bool dataFound = false;
 
-            BOM_FIELD_VALUES* values;
+            FIELDS_EDITOR_FIELD_VALUES* values;
 
             for( auto& data : m_fieldValues )
             {
@@ -1143,14 +1143,14 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FI
 
             if( !dataFound )
             {
-                values = new BOM_FIELD_VALUES( refDes, &m_fieldTemplates );
-                m_fieldValues.push_back( std::unique_ptr<BOM_FIELD_VALUES>( values ) );
+                values = new FIELDS_EDITOR_FIELD_VALUES( refDes, &m_fieldTemplates );
+                m_fieldValues.push_back( std::unique_ptr<FIELDS_EDITOR_FIELD_VALUES>( values ) );
             }
 
-            auto* newComponent = new BOM_TABLE_COMPONENT( nullptr, &ColumnList, values );
+            auto* newComponent = new FIELDS_EDITOR_TABLE_COMPONENT( nullptr, &ColumnList, values );
             newComponent->AddUnit( ref );
 
-            m_components.push_back( std::unique_ptr<BOM_TABLE_COMPONENT>( newComponent ) );
+            m_components.push_back( std::unique_ptr<FIELDS_EDITOR_TABLE_COMPONENT>( newComponent ) );
         }
     }
 
@@ -1158,7 +1158,7 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FI
 }
 
 
-void BOM_TABLE_MODEL::SetBackupPoint()
+void FIELDS_EDITOR_TABLE_MODEL::SetBackupPoint()
 {
     // Mark backup locations for all values
     for( auto& vals : m_fieldValues )
@@ -1171,7 +1171,7 @@ void BOM_TABLE_MODEL::SetBackupPoint()
 /**
  *  Recalculate grouping of components and reload table
  **/
-void BOM_TABLE_MODEL::ReloadTable()
+void FIELDS_EDITOR_TABLE_MODEL::ReloadTable()
 {
     if( m_widget )
     {
@@ -1202,11 +1202,11 @@ void BOM_TABLE_MODEL::ReloadTable()
         // No suitable group was found for this component
         if( !grouped )
         {
-            auto* newGroup = new BOM_TABLE_GROUP( &ColumnList );
+            auto* newGroup = new FIELDS_EDITOR_TABLE_GROUP( &ColumnList );
 
             newGroup->AddComponent( &*cmp );
 
-            Groups.push_back( std::unique_ptr<BOM_TABLE_GROUP>( newGroup ) );
+            Groups.push_back( std::unique_ptr<FIELDS_EDITOR_TABLE_GROUP>( newGroup ) );
         }
     }
 
@@ -1223,7 +1223,7 @@ void BOM_TABLE_MODEL::ReloadTable()
 /**
  * Return a string array of data from a given row
  */
-wxArrayString BOM_TABLE_MODEL::GetRowData( unsigned int aRow, std::vector<BOM_COLUMN*> aColumns ) const
+wxArrayString FIELDS_EDITOR_TABLE_MODEL::GetRowData( unsigned int aRow, std::vector<FIELDS_EDITOR_COLUMN*> aColumns ) const
 {
     wxArrayString row;
 
@@ -1255,7 +1255,7 @@ wxArrayString BOM_TABLE_MODEL::GetRowData( unsigned int aRow, std::vector<BOM_CO
 /**
  * Get the value of a particular item in the model
  */
-void BOM_TABLE_MODEL::GetValue( wxVariant& aVariant, const wxDataViewItem& aItem,
+void FIELDS_EDITOR_TABLE_MODEL::GetValue( wxVariant& aVariant, const wxDataViewItem& aItem,
                                 unsigned int aFieldId ) const
 {
     auto row = ItemToRow( aItem );
@@ -1270,7 +1270,7 @@ void BOM_TABLE_MODEL::GetValue( wxVariant& aVariant, const wxDataViewItem& aItem
 /**
  * Set the value of a particular item in the model
  */
-bool BOM_TABLE_MODEL::SetValue( const wxVariant& aVariant, const wxDataViewItem& aItem,
+bool FIELDS_EDITOR_TABLE_MODEL::SetValue( const wxVariant& aVariant, const wxDataViewItem& aItem,
                                 unsigned int aFieldId )
 {
     if( !aItem.IsOk() || !m_widget )
@@ -1292,7 +1292,7 @@ bool BOM_TABLE_MODEL::SetValue( const wxVariant& aVariant, const wxDataViewItem&
 
         for( auto item : selectedItems )
         {
-            auto selectedRow = static_cast<BOM_TABLE_ROW*>( item.GetID() );
+            auto selectedRow = static_cast<FIELDS_EDITOR_TABLE_ROW*>( item.GetID() );
 
             if( selectedRow )
             {
@@ -1317,7 +1317,7 @@ bool BOM_TABLE_MODEL::SetValue( const wxVariant& aVariant, const wxDataViewItem&
  * Return the parent item for a given item in the model.
  * If no parent is found (or the item is invalid) return an invalid item.
  */
-wxDataViewItem BOM_TABLE_MODEL::GetParent( const wxDataViewItem& aItem ) const
+wxDataViewItem FIELDS_EDITOR_TABLE_MODEL::GetParent( const wxDataViewItem& aItem ) const
 {
     auto row = ItemToRow( aItem );
     auto parent = row ? row->GetParent() : nullptr;
@@ -1335,7 +1335,7 @@ wxDataViewItem BOM_TABLE_MODEL::GetParent( const wxDataViewItem& aItem ) const
 /**
  * Returns true if the supplied item has children
  */
-bool BOM_TABLE_MODEL::IsContainer( const wxDataViewItem& aItem ) const
+bool FIELDS_EDITOR_TABLE_MODEL::IsContainer( const wxDataViewItem& aItem ) const
 {
     auto row = ItemToRow( aItem );
 
@@ -1352,7 +1352,7 @@ bool BOM_TABLE_MODEL::IsContainer( const wxDataViewItem& aItem ) const
  * Push all children of the supplied item into the list
  * If the supplied item is invalid, push all the top-level items
  */
-unsigned int BOM_TABLE_MODEL::GetChildren( const wxDataViewItem& aItem,
+unsigned int FIELDS_EDITOR_TABLE_MODEL::GetChildren( const wxDataViewItem& aItem,
                                            wxDataViewItemArray& aChildren ) const
 {
     auto row = aItem.IsOk() ? ItemToRow( aItem ) : nullptr;
@@ -1374,7 +1374,7 @@ unsigned int BOM_TABLE_MODEL::GetChildren( const wxDataViewItem& aItem,
 }
 
 
-bool BOM_TABLE_MODEL::GetAttr( const wxDataViewItem& aItem,
+bool FIELDS_EDITOR_TABLE_MODEL::GetAttr( const wxDataViewItem& aItem,
                            unsigned int aFieldId,
                            wxDataViewItemAttr& aAttr ) const
 {
@@ -1394,7 +1394,7 @@ bool BOM_TABLE_MODEL::GetAttr( const wxDataViewItem& aItem,
  * Alphanumeric sorting is not sufficient for correct ordering of some fields
  * Some columns are sorted numerically, others with more complex rules.
  */
-int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
+int FIELDS_EDITOR_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
                           const wxDataViewItem& aItem2,
                           unsigned int aColumnId,
                           bool aAscending ) const
@@ -1422,16 +1422,16 @@ int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
     switch( aColumnId )
     {
     // Reference column sorted by reference val
-    case BOM_COL_ID_REFERENCE:
-        result = BOM_TABLE_GROUP::SortReferences( strVal1, strVal2 );
+    case FIELDS_EDITOR_COL_ID_REFERENCE:
+        result = FIELDS_EDITOR_TABLE_GROUP::SortReferences( strVal1, strVal2 );
         break;
 
-    case BOM_COL_ID_VALUE:
-        result = BOM_TABLE_GROUP::SortValues( strVal1, strVal2 );
+    case FIELDS_EDITOR_COL_ID_VALUE:
+        result = FIELDS_EDITOR_TABLE_GROUP::SortValues( strVal1, strVal2 );
         break;
 
     // These columns are sorted numerically
-    case BOM_COL_ID_QUANTITY:
+    case FIELDS_EDITOR_COL_ID_QUANTITY:
         if( strVal1.ToLong( &numVal1 ) && strVal2.ToLong( &numVal2 ) )
         {
             result = numVal1 - numVal2;
@@ -1449,19 +1449,19 @@ int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
     }
 
     // If initial sorting failed, sort secondly by reference
-    if( result == 0 && aColumnId != BOM_COL_ID_REFERENCE )
+    if( result == 0 && aColumnId != FIELDS_EDITOR_COL_ID_REFERENCE )
     {
-        result = BOM_TABLE_GROUP::SortReferences(
-                row1->GetFieldValue( BOM_COL_ID_REFERENCE ),
-                row2->GetFieldValue( BOM_COL_ID_REFERENCE ) );
+        result = FIELDS_EDITOR_TABLE_GROUP::SortReferences(
+                row1->GetFieldValue( FIELDS_EDITOR_COL_ID_REFERENCE ),
+                row2->GetFieldValue( FIELDS_EDITOR_COL_ID_REFERENCE ) );
     }
 
     // If sorting still failed, sort thirdly by value
-    if( result == 0 && aColumnId != BOM_COL_ID_VALUE )
+    if( result == 0 && aColumnId != FIELDS_EDITOR_COL_ID_VALUE )
     {
-        result = BOM_TABLE_GROUP::SortValues(
-                row1->GetFieldValue( BOM_COL_ID_VALUE ),
-                row2->GetFieldValue( BOM_COL_ID_VALUE ) );
+        result = FIELDS_EDITOR_TABLE_GROUP::SortValues(
+                row1->GetFieldValue( FIELDS_EDITOR_COL_ID_VALUE ),
+                row2->GetFieldValue( FIELDS_EDITOR_COL_ID_VALUE ) );
     }
 
     if( !aAscending )
@@ -1477,7 +1477,7 @@ int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
  * Revert all component data back to the original values.
  * The table view is updated accordingly
  */
-void BOM_TABLE_MODEL::RevertFieldChanges()
+void FIELDS_EDITOR_TABLE_MODEL::RevertFieldChanges()
 {
     for( auto& group : Groups )
     {
@@ -1512,7 +1512,7 @@ void BOM_TABLE_MODEL::RevertFieldChanges()
  * Apply all outstanding field changes.
  * This is performed only when the window is closed
  */
-void BOM_TABLE_MODEL::ApplyFieldChanges()
+void FIELDS_EDITOR_TABLE_MODEL::ApplyFieldChanges()
 {
     for( auto& group : Groups )
     {
@@ -1536,7 +1536,7 @@ void BOM_TABLE_MODEL::ApplyFieldChanges()
 /**
  * Tests if any component values in the table have been altered
  */
-bool BOM_TABLE_MODEL::HaveFieldsChanged() const
+bool FIELDS_EDITOR_TABLE_MODEL::HaveFieldsChanged() const
 {
     for( auto const& group : Groups )
     {
@@ -1562,7 +1562,7 @@ bool BOM_TABLE_MODEL::HaveFieldsChanged() const
 /**
  * Returns a list of only those components that have been changed
  */
-std::vector<SCH_REFERENCE> BOM_TABLE_MODEL::GetChangedComponents()
+std::vector<SCH_REFERENCE> FIELDS_EDITOR_TABLE_MODEL::GetChangedComponents()
 {
     std::vector<SCH_REFERENCE> components;
 
@@ -1593,7 +1593,7 @@ std::vector<SCH_REFERENCE> BOM_TABLE_MODEL::GetChangedComponents()
 /**
  * Returns a count of the components that have been changed
  */
-unsigned int BOM_TABLE_MODEL::CountChangedComponents()
+unsigned int FIELDS_EDITOR_TABLE_MODEL::CountChangedComponents()
 {
     unsigned int count = 0;
 

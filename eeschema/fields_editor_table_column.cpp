@@ -22,28 +22,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "bom_table_column.h"
+#include "fields_editor_table_column.h"
 
-BOM_COLUMN_LIST::BOM_COLUMN_LIST() : m_nextFieldId( BOM_COL_ID_USER )
+FIELDS_EDITOR_COLUMN_LIST::FIELDS_EDITOR_COLUMN_LIST() : m_nextFieldId( FIELDS_EDITOR_COL_ID_USER )
 {
 
 }
 
-void BOM_COLUMN_LIST::Clear()
+void FIELDS_EDITOR_COLUMN_LIST::Clear()
 {
     Columns.clear();
-    m_nextFieldId = BOM_COL_ID_USER;
+    m_nextFieldId = FIELDS_EDITOR_COL_ID_USER;
 }
 
 /**
  * Return the number of columns
  * @param aIncludeHidden - If this is false, only visible columns will be included
  */
-unsigned int BOM_COLUMN_LIST::ColumnCount( bool aIncludeHidden ) const
+unsigned int FIELDS_EDITOR_COLUMN_LIST::ColumnCount( bool aIncludeHidden ) const
 {
     unsigned int count = 0;
 
-    for( BOM_COLUMN* col : Columns )
+    for( FIELDS_EDITOR_COLUMN* col : Columns )
     {
         if( col && ( col->IsVisible() || aIncludeHidden ) )
         {
@@ -57,7 +57,7 @@ unsigned int BOM_COLUMN_LIST::ColumnCount( bool aIncludeHidden ) const
 /**
  * Return a column based on its stored position
  */
-BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByIndex( unsigned int aColId )
+FIELDS_EDITOR_COLUMN* FIELDS_EDITOR_COLUMN_LIST::GetColumnByIndex( unsigned int aColId )
 {
     if( aColId < Columns.size() )
         return Columns[aColId];
@@ -68,7 +68,7 @@ BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByIndex( unsigned int aColId )
 /**
  * Return a column based on its unique ID
  */
-BOM_COLUMN* BOM_COLUMN_LIST::GetColumnById( unsigned int aColId )
+FIELDS_EDITOR_COLUMN* FIELDS_EDITOR_COLUMN_LIST::GetColumnById( unsigned int aColId )
 {
     for( unsigned int ii=0; ii<Columns.size(); ii++ )
     {
@@ -82,7 +82,7 @@ BOM_COLUMN* BOM_COLUMN_LIST::GetColumnById( unsigned int aColId )
 /**
  * Return a column based on its string title
  */
-BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByTitle( const wxString& aColTitle )
+FIELDS_EDITOR_COLUMN* FIELDS_EDITOR_COLUMN_LIST::GetColumnByTitle( const wxString& aColTitle )
 {
     for( unsigned int ii=0; ii<Columns.size(); ii++ )
     {
@@ -96,9 +96,9 @@ BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByTitle( const wxString& aColTitle )
 /**
  * Test if the list includes a column with the given unique ID
  */
-bool BOM_COLUMN_LIST::ContainsColumn( unsigned int aColId )
+bool FIELDS_EDITOR_COLUMN_LIST::ContainsColumn( unsigned int aColId )
 {
-    for( BOM_COLUMN* col : Columns )
+    for( FIELDS_EDITOR_COLUMN* col : Columns )
     {
         if( col && col->Id() == aColId )
             return true;
@@ -110,7 +110,7 @@ bool BOM_COLUMN_LIST::ContainsColumn( unsigned int aColId )
 /**
  * Test if the list includes a column with the given title
  */
-bool BOM_COLUMN_LIST::ContainsColumn( const wxString& aColTitle )
+bool FIELDS_EDITOR_COLUMN_LIST::ContainsColumn( const wxString& aColTitle )
 {
     return nullptr != GetColumnByTitle( aColTitle );
 }
@@ -118,7 +118,7 @@ bool BOM_COLUMN_LIST::ContainsColumn( const wxString& aColTitle )
 /**
  * Add a new column to the list
  */
-bool BOM_COLUMN_LIST::AddColumn( BOM_COLUMN* aCol )
+bool FIELDS_EDITOR_COLUMN_LIST::AddColumn( FIELDS_EDITOR_COLUMN* aCol )
 {
     if( nullptr == aCol )
         return false;
@@ -129,7 +129,7 @@ bool BOM_COLUMN_LIST::AddColumn( BOM_COLUMN* aCol )
     Columns.push_back( aCol );
 
     // If this is a user field, increment the counter
-    if( aCol->Id() >= BOM_COL_ID_USER )
+    if( aCol->Id() >= FIELDS_EDITOR_COL_ID_USER )
         m_nextFieldId++;
 
     return true;

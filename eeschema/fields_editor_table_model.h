@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _EESCHEMA_BOM_TABLE_MODEL_H_
-#define _EESCHEMA_BOM_TABLE_MODEL_H_
+#ifndef FIELDS_EDITOR_TABLE_MODEL_H
+#define FIELDS_EDITOR_TABLE_MODEL_H
 
 #include <wx/dataview.h>
 #include <wx/regex.h>
@@ -36,29 +36,29 @@
 #include <netlist_object.h>
 #include <template_fieldnames.h>
 
-#include "bom_table_column.h"
+#include "fields_editor_table_column.h"
 
 // Forward-declare classes
-class BOM_TABLE_ROW;        // Base-class for table row data model
-class BOM_TABLE_GROUP;      // Class for displaying a group of components
-class BOM_TABLE_COMPONENT;  // Class for displaying a single component
+class FIELDS_EDITOR_TABLE_ROW;        // Base-class for table row data model
+class FIELDS_EDITOR_TABLE_GROUP;      // Class for displaying a group of components
+class FIELDS_EDITOR_TABLE_COMPONENT;  // Class for displaying a single component
 
 // Map column IDs to field values (for quick lookup)
 typedef std::map<unsigned int, wxString> FIELD_VALUE_MAP;
 
 
 /**
- * The BOM_FIELD_VALUES class provides quick lookup of component values
+ * The FIELDS_EDITOR_FIELD_VALUES class provides quick lookup of component values
  * (based on Field ID)
  * This is done for the following reasons:
  * - Increase lookup speed for table values
  * - Allow field values to be reverted to original values
  * - Allow duplicate components to reference the same data
  */
-class BOM_FIELD_VALUES
+class FIELDS_EDITOR_FIELD_VALUES
 {
 public:
-    BOM_FIELD_VALUES( const wxString& aRefDes, FIELD_VALUE_MAP* aTemplate );
+    FIELDS_EDITOR_FIELD_VALUES( const wxString& aRefDes, FIELD_VALUE_MAP* aTemplate );
 
     /**
      * Return the current value for the provided field ID
@@ -122,11 +122,11 @@ protected:
  * COMPONENT - Displays a single component
  * UNIT - Child of COMPONENT for multi-unit components
  */
-class BOM_TABLE_ROW
+class FIELDS_EDITOR_TABLE_ROW
 {
 public:
-    BOM_TABLE_ROW();
-    virtual ~BOM_TABLE_ROW() {}
+    FIELDS_EDITOR_TABLE_ROW();
+    virtual ~FIELDS_EDITOR_TABLE_ROW() {}
 
     /// Set display properties for a cell
     virtual bool GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const;
@@ -138,7 +138,7 @@ public:
     virtual bool SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite = false ) = 0;
 
     /// Return parent item
-    virtual BOM_TABLE_ROW* GetParent() const { return nullptr; }
+    virtual FIELDS_EDITOR_TABLE_ROW* GetParent() const { return nullptr; }
 
     /// Test if row has any child rows
     virtual bool HasChildren() const { return false; }
@@ -147,7 +147,7 @@ public:
     virtual unsigned int GetChildren( wxDataViewItemArray& aChildren ) const { return 0; }
 
     /// Determine if a value has changed
-    virtual bool HasValueChanged( BOM_COLUMN* aField ) const { return false; }
+    virtual bool HasValueChanged( FIELDS_EDITOR_COLUMN* aField ) const { return false; }
 
     /// Determine if any values have changed
     bool HasChanged() const;
@@ -155,22 +155,22 @@ public:
 protected:
 
     /// Pointer to list of columns
-    BOM_COLUMN_LIST* m_columnList;
+    FIELDS_EDITOR_COLUMN_LIST* m_columnList;
 };
 
 /**
- * BOM_TABLE_GROUP class displays a group of similar components
+ * FIELDS_EDITOR_TABLE_GROUP class displays a group of similar components
  * If the group contains more than one component,
  * they are each displayed as child items of the group
  */
-class BOM_TABLE_GROUP : public BOM_TABLE_ROW
+class FIELDS_EDITOR_TABLE_GROUP : public FIELDS_EDITOR_TABLE_ROW
 {
 public:
     /// List of components stored in this group
-    std::vector<BOM_TABLE_COMPONENT*> Components;
+    std::vector<FIELDS_EDITOR_TABLE_COMPONENT*> Components;
 
-    BOM_TABLE_GROUP( BOM_COLUMN_LIST* aColumnList );
-    virtual ~BOM_TABLE_GROUP() {}
+    FIELDS_EDITOR_TABLE_GROUP( FIELDS_EDITOR_COLUMN_LIST* aColumnList );
+    virtual ~FIELDS_EDITOR_TABLE_GROUP() {}
 
     /// Set display properties for a group row
     virtual bool GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const override;
@@ -182,7 +182,7 @@ public:
     virtual bool SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite = false ) override;
 
     /// Attempt to add a new component to the group
-    bool AddComponent( BOM_TABLE_COMPONENT* aComponent );
+    bool AddComponent( FIELDS_EDITOR_TABLE_COMPONENT* aComponent );
 
     /// Test if this group should display children
     virtual bool HasChildren() const override { return Components.size() > 1; }
@@ -191,7 +191,7 @@ public:
     virtual unsigned int GetChildren( wxDataViewItemArray& aChildren ) const override;
 
     /// Test if any children have changed
-    virtual bool HasValueChanged( BOM_COLUMN* aField ) const override;
+    virtual bool HasValueChanged( FIELDS_EDITOR_COLUMN* aField ) const override;
 
     /// Return the number of child items in this group
     unsigned int GroupSize( void ) const { return Components.size(); }
@@ -207,16 +207,16 @@ public:
 
 protected:
     /// Test if a particular field matches against another component
-    bool TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aComponent ) const;
+    bool TestField( FIELDS_EDITOR_COLUMN* aField, FIELDS_EDITOR_TABLE_COMPONENT* aComponent ) const;
 };
 
-class BOM_TABLE_COMPONENT : public BOM_TABLE_ROW
+class FIELDS_EDITOR_TABLE_COMPONENT : public FIELDS_EDITOR_TABLE_ROW
 {
 public:
     // List of units associated with this component
     std::vector<SCH_REFERENCE> Units;
 
-    BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent, BOM_COLUMN_LIST* aColumnList, BOM_FIELD_VALUES* aValues );
+    FIELDS_EDITOR_TABLE_COMPONENT( FIELDS_EDITOR_TABLE_GROUP* aParent, FIELDS_EDITOR_COLUMN_LIST* aColumnList, FIELDS_EDITOR_FIELD_VALUES* aValues );
 
     bool AddUnit( const SCH_REFERENCE& aUnit );
 
@@ -224,7 +224,7 @@ public:
 
     virtual bool SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite = false ) override;
 
-    virtual bool HasValueChanged( BOM_COLUMN* aField ) const override;
+    virtual bool HasValueChanged( FIELDS_EDITOR_COLUMN* aField ) const override;
 
     /// Return the reference of the first unit (all units must be the same
     wxString GetReference() const;
@@ -238,33 +238,33 @@ public:
 
     void RevertFieldChanges();
 
-    void SetParent( BOM_TABLE_GROUP* aParent ) { m_parent = aParent; }
+    void SetParent( FIELDS_EDITOR_TABLE_GROUP* aParent ) { m_parent = aParent; }
 
-    virtual BOM_TABLE_ROW* GetParent() const override { return m_parent; }
+    virtual FIELDS_EDITOR_TABLE_ROW* GetParent() const override { return m_parent; }
 
 protected:
-    BOM_TABLE_GROUP* m_parent;
+    FIELDS_EDITOR_TABLE_GROUP* m_parent;
 
-    BOM_FIELD_VALUES* m_fieldValues;
+    FIELDS_EDITOR_FIELD_VALUES* m_fieldValues;
 };
 
 /**
- * BOM_TABLE_MODEL class
+ * FIELDS_EDITOR_TABLE_MODEL class
  *
  * Contains complete BOM information:
  * a) List of columns (fields) to display
  * b) List of groups of consolidated components
  */
-class BOM_TABLE_MODEL : public wxDataViewModel
+class FIELDS_EDITOR_TABLE_MODEL : public wxDataViewModel
 {
 protected:
-    BOM_TABLE_MODEL();
+    FIELDS_EDITOR_TABLE_MODEL();
 
     // Vector of unique component rows
-    std::vector<std::unique_ptr<BOM_TABLE_COMPONENT>> m_components;
+    std::vector<std::unique_ptr<FIELDS_EDITOR_TABLE_COMPONENT>> m_components;
 
     // Vector of field values mapped to field IDs
-    std::vector<std::unique_ptr<BOM_FIELD_VALUES>> m_fieldValues;
+    std::vector<std::unique_ptr<FIELDS_EDITOR_FIELD_VALUES>> m_fieldValues;
 
     // Template field values
     FIELD_VALUE_MAP m_fieldTemplates;
@@ -304,21 +304,21 @@ protected:
 
 public:
 
-    virtual ~BOM_TABLE_MODEL();
+    virtual ~FIELDS_EDITOR_TABLE_MODEL();
 
-    BOM_COLUMN_LIST ColumnList;
+    FIELDS_EDITOR_COLUMN_LIST ColumnList;
 
     /// List of component groups
-    std::vector<std::unique_ptr<BOM_TABLE_GROUP>> Groups;
+    std::vector<std::unique_ptr<FIELDS_EDITOR_TABLE_GROUP>> Groups;
 
-    typedef wxObjectDataPtr<BOM_TABLE_MODEL> MODEL_PTR;
+    typedef wxObjectDataPtr<FIELDS_EDITOR_TABLE_MODEL> MODEL_PTR;
 
     static MODEL_PTR Create();
 
     void AttachTo( wxDataViewCtrl* aView );
 
-    wxDataViewColumn* AddColumn( BOM_COLUMN* aColumn, int aPosition = -1 );
-    bool RemoveColumn( BOM_COLUMN* aColumn );
+    wxDataViewColumn* AddColumn( FIELDS_EDITOR_COLUMN* aColumn, int aPosition = -1 );
+    bool RemoveColumn( FIELDS_EDITOR_COLUMN* aColumn );
 
     // wxDataViewModel functions
     virtual bool            GetAttr( const wxDataViewItem& aItem, unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const override;
@@ -343,7 +343,7 @@ public:
     void SetBlankMerging( const bool aMerge = true ) { m_mergeBlankFields = aMerge; }
     bool GetBlankMerging() const { return m_mergeBlankFields; }
 
-    wxArrayString GetRowData( unsigned int aRow, std::vector<BOM_COLUMN*> aColumns ) const;
+    wxArrayString GetRowData( unsigned int aRow, std::vector<FIELDS_EDITOR_COLUMN*> aColumns ) const;
 
     void SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FIELDNAMES& aTemplateFields );
     void AddComponentFields( SCH_COMPONENT* aCmp );
@@ -359,4 +359,4 @@ public:
     unsigned int CountChangedComponents();
 };
 
-#endif // _EESCHEMA_BOM_TABLE_MODEL_H_
+#endif // FIELDS_EDITOR_TABLE_MODEL_H

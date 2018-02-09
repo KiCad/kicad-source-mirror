@@ -26,8 +26,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
     dialogs/dialog_bom_cfg_keywords.cpp
-    dialogs/dialog_bom_editor.cpp
-    dialogs/dialog_bom_editor_base.cpp
+    dialogs/dialog_fields_editor_global.cpp
+    dialogs/dialog_fields_editor_global_base.cpp
     dialogs/dialog_choose_component.cpp
     dialogs/dialog_edit_component_in_lib.cpp
     dialogs/dialog_edit_component_in_lib_base.cpp
@@ -99,8 +99,6 @@ set( EESCHEMA_SRCS
     backanno.cpp
     block.cpp
     block_libedit.cpp
-    bom_table_column.cpp
-    bom_table_model.cpp
     bus-wire-junction.cpp
     busentry.cpp
     class_libentry.cpp
@@ -122,6 +120,8 @@ set( EESCHEMA_SRCS
     eeschema_config.cpp
     erc.cpp
     events_called_functions_for_edit.cpp
+    fields_editor_table_column.cpp
+    fields_editor_table_model.cpp
     files-io.cpp
     find.cpp
     generate_alias_info.cpp

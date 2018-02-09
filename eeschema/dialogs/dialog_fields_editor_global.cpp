@@ -35,25 +35,23 @@
 #include <general.h>
 #include <class_library.h>
 
-#include "dialog_bom_editor.h"
-#include <bom_table_model.h>
-
-/* BOM Table Colours */
+#include "dialog_fields_editor_global.h"
+#include <fields_editor_table_model.h>
 
 
-// Create and show BOM editor
+// Create and show fields editor
 void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
 {
-    DIALOG_BOM_EDITOR dlg( aCaller );
+    DIALOG_FIELDS_EDITOR_GLOBAL dlg( aCaller );
     dlg.ShowQuasiModal();
 }
 
 
-DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
-        DIALOG_BOM_EDITOR_BASE( parent ),
+DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent ) :
+        DIALOG_FIELDS_EDITOR_GLOBAL_BASE( parent ),
         m_parent( parent )
 {
-    m_bom = BOM_TABLE_MODEL::Create();
+    m_bom = FIELDS_EDITOR_TABLE_MODEL::Create();
 
     auto nameColumn = m_columnListCtrl->AppendTextColumn( _( "Field" ) );
 
@@ -104,24 +102,24 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
 }
 
 
-DIALOG_BOM_EDITOR::~DIALOG_BOM_EDITOR()
+DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
 {
     // Nothing to do.
 }
 
 
-void DIALOG_BOM_EDITOR::OnCloseButton( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnCloseButton( wxCommandEvent& event )
 {
-    // DIALOG_BOM_EDITOR::OnDialogClosed() will be called,
+    // DIALOG_FIELDS_EDITOR_GLOBAL::OnDialogClosed() will be called,
     // when closing this dialog.
     // The default wxID_CANCEL handler is not suitable for us,
     // because it calls DIALOG_SHIM::EndQuasiModal() without calling
-    // DIALOG_BOM_EDITOR::OnDialogClosed()
+    // DIALOG_FIELDS_EDITOR_GLOBAL::OnDialogClosed()
     Close();
 }
 
 
-bool DIALOG_BOM_EDITOR::CanCloseDialog()
+bool DIALOG_FIELDS_EDITOR_GLOBAL::CanCloseDialog()
 {
     if( !m_bom->HaveFieldsChanged() )
         return true;
@@ -145,7 +143,7 @@ bool DIALOG_BOM_EDITOR::CanCloseDialog()
 }
 
 
-void DIALOG_BOM_EDITOR::OnDialogClosed( wxCloseEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnDialogClosed( wxCloseEvent& event )
 {
     if( !CanCloseDialog() )
     {
@@ -171,7 +169,7 @@ typedef struct
 } SheetUndoList;
 
 
-void DIALOG_BOM_EDITOR::ApplyAllChanges()
+void DIALOG_FIELDS_EDITOR_GLOBAL::ApplyAllChanges()
 {
     if( !m_bom->HaveFieldsChanged() )
         return;
@@ -253,7 +251,7 @@ void DIALOG_BOM_EDITOR::ApplyAllChanges()
 }
 
 
-void DIALOG_BOM_EDITOR::UpdateTitle()
+void DIALOG_FIELDS_EDITOR_GLOBAL::UpdateTitle()
 {
     wxString title;
 
@@ -281,7 +279,7 @@ void DIALOG_BOM_EDITOR::UpdateTitle()
 }
 
 
-void DIALOG_BOM_EDITOR::LoadComponents()
+void DIALOG_FIELDS_EDITOR_GLOBAL::LoadComponents()
 {
     if( !m_parent ) return;
 
@@ -297,7 +295,7 @@ void DIALOG_BOM_EDITOR::LoadComponents()
 }
 
 
-void DIALOG_BOM_EDITOR::LoadColumnNames()
+void DIALOG_FIELDS_EDITOR_GLOBAL::LoadColumnNames()
 {
     m_columnListCtrl->DeleteAllItems();
 
@@ -319,14 +317,14 @@ void DIALOG_BOM_EDITOR::LoadColumnNames()
 }
 
 
-void DIALOG_BOM_EDITOR::ReloadColumns()
+void DIALOG_FIELDS_EDITOR_GLOBAL::ReloadColumns()
 {
     m_bom->AttachTo( m_bomView );
     UpdateTitle();
 }
 
 
-void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 {
     wxDataViewItem item = event.GetItem();
 
@@ -336,7 +334,7 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
     if( row == wxNOT_FOUND || row < 0 || row >= (int) m_bom->ColumnCount() )
         return;
 
-    BOM_COLUMN* bomColumn = m_bom->ColumnList.GetColumnByIndex( row );
+    FIELDS_EDITOR_COLUMN* bomColumn = m_bom->ColumnList.GetColumnByIndex( row );
 
     if( nullptr == bomColumn )
         return;
@@ -370,7 +368,7 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
 }
 
 
-void DIALOG_BOM_EDITOR::OnGroupComponentsToggled( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnGroupComponentsToggled( wxCommandEvent& event )
 {
     bool group = m_groupComponentsBox->GetValue();
 
@@ -381,7 +379,7 @@ void DIALOG_BOM_EDITOR::OnGroupComponentsToggled( wxCommandEvent& event )
 }
 
 
-void DIALOG_BOM_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_regroupComponentsButton->Enable( m_bom->GetColumnGrouping() );
 
@@ -394,27 +392,27 @@ void DIALOG_BOM_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_BOM_EDITOR::OnTableValueChanged( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableValueChanged( wxDataViewEvent& event )
 {
     Update();
 }
 
 
-void DIALOG_BOM_EDITOR::OnRegroupComponents( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& event )
 {
     m_bom->ReloadTable();
     Update();
 }
 
 
-void DIALOG_BOM_EDITOR::OnApplyFieldChanges( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnApplyFieldChanges( wxCommandEvent& event )
 {
     ApplyAllChanges();
     Update();
 }
 
 
-void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnRevertFieldChanges( wxCommandEvent& event )
 {
     if( m_bom->HaveFieldsChanged() )
     {
@@ -427,7 +425,7 @@ void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
 }
 
 
-void DIALOG_BOM_EDITOR::OnTableItemActivated( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemActivated( wxDataViewEvent& event )
 {
     /* TODO
      * - Focus on component selected in SCH_FRAME
@@ -437,7 +435,7 @@ void DIALOG_BOM_EDITOR::OnTableItemActivated( wxDataViewEvent& event )
 }
 
 
-void DIALOG_BOM_EDITOR::OnTableItemContextMenu( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxDataViewEvent& event )
 {
     /* TODO
      * - Display contect menu
