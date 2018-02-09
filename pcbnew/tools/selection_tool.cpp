@@ -1944,7 +1944,9 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         }
     }
 
-    if( aCollector.CountType( PCB_MODULE_T ) > 0 )
+    int moduleCount = aCollector.CountType( PCB_MODULE_T );
+
+    if( moduleCount > 0 )
     {
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
         BOX2D viewportD = getView()->GetViewport();
@@ -1964,7 +1966,8 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 // if a footprint is much smaller than the largest overlapping
                 // footprint then it should be considered for selection; reject
                 // all other footprints
-                else if( calcRatio( calcArea( mod ), maxArea ) > footprintToFootprintMinRatio )
+                else if( moduleCount > 1
+                        && calcRatio( calcArea( mod ), maxArea ) > footprintToFootprintMinRatio )
                     rejected.insert( mod );
             }
         }
