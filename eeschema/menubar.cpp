@@ -55,9 +55,6 @@ static void prepareToolsMenu( wxMenu* aParentMenu );
 // Build the help menu
 static void prepareHelpMenu( wxMenu* aParentMenu );
 
-// Build the import/export submenu
-static void prepareImportExportMenu( wxMenu* aParentMenu );
-
 // Build the edit menu
 static void prepareEditMenu( wxMenu* aParentMenu );
 
@@ -304,11 +301,11 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         AddMenuItem( aParentMenu,
                      ID_NEW_PROJECT,
-                     _( "&New" ),
+                     _( "&New..." ),
                      _( "Clear current schematic hierarchy and start new schematic root sheet" ),
                      KiBitmap( new_document_xpm ) );
 
-        text = AddHotkeyName( _( "&Open" ), g_Schematic_Hokeys_Descr, HK_LOAD_SCH );
+        text = AddHotkeyName( _( "&Open..." ), g_Schematic_Hokeys_Descr, HK_LOAD_SCH );
         AddMenuItem( aParentMenu,
                      ID_LOAD_PROJECT, text,
                      _( "Open existing schematic" ),
@@ -338,12 +335,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     }
 
     AddMenuItem( aParentMenu,
-                 ID_APPEND_PROJECT, _( "App&end Schematic Sheet" ),
+                 ID_APPEND_PROJECT, _( "App&end Schematic Sheet..." ),
                  _( "Import schematic sheet content from another project to current sheet" ),
                  KiBitmap( add_document_xpm ) );
 
     AddMenuItem( aParentMenu,
-                 ID_IMPORT_NON_KICAD_SCH, _( "&Import Non-Kicad Schematic File" ),
+                 ID_IMPORT_NON_KICAD_SCH, _( "&Import Non-Kicad Schematic File..." ),
                 _( "Import schematic file from other applications" ),
                  KiBitmap( import_document_xpm ) );   // TODO needs a different icon
 
@@ -366,7 +363,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         AddMenuItem( aParentMenu,
                      ID_SAVE_ONE_SHEET_UNDER_NEW_NAME,
-                     _( "Save C&urrent Sheet As" ),
+                     _( "Save C&urrent Sheet As..." ),
                      _( "Save current schematic sheet with new name" ),
                      KiBitmap( save_as_xpm ) );
     }
@@ -375,34 +372,25 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     // Edit page layout:
     AddMenuItem( aParentMenu, ID_SHEET_SET,
-                 _( "Pa&ge Settings" ),
+                 _( "Pa&ge Settings..." ),
                  _( "Settings for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
     AddMenuItem( aParentMenu,
                  wxID_PRINT,
-                 _( "Pri&nt" ),
+                 _( "Pri&nt..." ),
                  _( "Print schematic sheet" ),
                  KiBitmap( print_button_xpm ) );
 
-    // Plot submenu
-    wxMenu* choice_plot_fmt = new wxMenu;
-
-    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC, _( "&Plot" ),
+    AddMenuItem( aParentMenu, ID_GEN_PLOT_SCHEMATIC, _( "&Plot..." ),
                  _( "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format" ),
                  KiBitmap( plot_xpm ) );
 
     // Plot to Clipboard
-    AddMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
+    AddMenuItem( aParentMenu, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
                  _( "Plot to C&lipboard" ),
                  _( "Export drawings to clipboard" ),
                  KiBitmap( copy_xpm ) );
-
-    // Add plot submenu
-    AddMenuItem( aParentMenu, choice_plot_fmt,
-                 ID_GEN_PLOT, _( "&Plot" ),
-                 _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
-                 KiBitmap( plot_xpm ) );
 
     // Quit
     aParentMenu->AppendSeparator();
@@ -433,11 +421,11 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     // Find
     aParentMenu->AppendSeparator();
-    text = AddHotkeyName( _( "&Find" ), g_Schematic_Hokeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find..." ), g_Schematic_Hokeys_Descr, HK_FIND_ITEM );
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND, KiBitmap( find_xpm ) );
 
     // Find/Replace
-    text = AddHotkeyName( _( "Find and Re&place" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Find and Re&place..." ), g_Schematic_Hokeys_Descr,
                           HK_FIND_REPLACE );
     AddMenuItem( aParentMenu, wxID_REPLACE, text, HELP_REPLACE,
                  KiBitmap( find_replace_xpm ) );
@@ -445,20 +433,20 @@ void prepareEditMenu( wxMenu* aParentMenu )
     // Import footprint association .cmp file which can be created by Pcbnew:
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_BACKANNO_ITEMS,
-                 _( "Import Footprint Association File" ),
+                 _( "Import Footprint Association File..." ),
                  HELP_IMPORT_FOOTPRINTS,
                  KiBitmap( import_footprint_names_xpm ) );
 
     // Update field values
     AddMenuItem( aParentMenu, ID_UPDATE_FIELDS,
-                 _( "Update Field Values" ),
+                 _( "Update Field Values..." ),
                  _( "Sets symbol fields to original library values" ),
                  KiBitmap( update_fields_xpm ) );
 
     // Edit components to symbols library links (change LIB_ID values)
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-                 _( "Edit Symbol Library Links" ),
+                 _( "Edit Symbol Library Links..." ),
                  _( "Edit schematic symbol's symbol library links" ),
                  KiBitmap( edit_cmp_symb_links_xpm ) );
 }
@@ -468,7 +456,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "Update PCB from Schematic" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Update PCB from Schematic..." ), g_Schematic_Hokeys_Descr,
                           HK_UPDATE_PCB_FROM_SCH );
 
     AddMenuItem( aParentMenu,
@@ -497,13 +485,13 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_RESCUE_CACHED,
-                 _( "&Rescue Symbols" ),
+                 _( "&Rescue Symbols..." ),
                  _( "Find old symbols in project and rename/rescue them" ),
                  KiBitmap( rescue_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_REMAP_SYMBOLS,
-                 _( "Remap Symbols" ),
+                 _( "Remap Symbols..." ),
                  _( "Remap legacy library symbols to symbol library table" ),
                  KiBitmap( rescue_xpm ) );
 
@@ -511,7 +499,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_GET_ANNOTATE,
-                 _( "&Annotate Schematic" ), HELP_ANNOTATE,
+                 _( "&Annotate Schematic..." ), HELP_ANNOTATE,
                  KiBitmap( annotate_xpm ) );
 
     // ERC
@@ -523,18 +511,18 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_GET_NETLIST,
-                 _( "Generate &Netlist File" ),
+                 _( "Generate &Netlist File..." ),
                  _( "Generate netlist file" ),
                  KiBitmap( netlist_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_OPEN_CMP_TABLE,
-                 _( "Symbol Table &View" ),
+                 _( "S&ymbol Table..." ),
                  KiBitmap( spreadsheet_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_GET_TOOLS,
-                 _( "Generate Bill of &Materials" ),
+                 _( "Generate Bill of &Materials..." ),
                  HELP_GENERATE_BOM,
                  KiBitmap( bom_xpm ) );
 
@@ -545,7 +533,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
     // Run CvPcb
     AddMenuItem( aParentMenu,
                  ID_RUN_CVPCB,
-                 _( "A&ssign Footprint" ),
+                 _( "A&ssign Footprints" ),
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
 
@@ -578,7 +566,7 @@ void prepareHelpMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys" ),
+                 _( "&List Hotkeys..." ),
                  _( "Displays current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
@@ -597,48 +585,19 @@ void prepareHelpMenu( wxMenu* aParentMenu )
 }
 
 
-void prepareImportExportMenu( wxMenu* aParentMenu )
-{
-    AddMenuItem( aParentMenu,
-                 ID_CONFIG_SAVE,
-                 _( "&Save Preferences" ),
-                 _( "Save application preferences" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( aParentMenu,
-                 ID_CONFIG_READ,
-                 _( "Load Prefe&rences" ),
-                 _( "Load application preferences" ),
-                 KiBitmap( import_setup_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu,
-                 ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
-                 _( "E&xport Hotkeys" ),
-                 _( "Create hotkey configuration file with current hotkeys" ),
-                 KiBitmap( hotkeys_export_xpm ) );
-
-    AddMenuItem( aParentMenu,
-                 ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
-                 _( "&Import Hotkeys" ),
-                 _( "Load existing hotkey configuration file" ),
-                 KiBitmap( hotkeys_import_xpm ) );
-}
-
 static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 {
     // Library
     AddMenuItem( aParentMenu,
                  ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage Symbol Library Tables" ),
+                 _( "Manage Symbol Library Tables..." ),
                  _( "Edit the global and project symbol library tables (list of active libraries)." ),
                  KiBitmap( library_table_xpm ) );
 
     // Path configuration edit dialog.
     AddMenuItem( aParentMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure &Paths" ),
+                 _( "Configure &Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
@@ -660,14 +619,31 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
     // Icons options submenu
     aFrame->AddMenuIconsOptions( aParentMenu );
 
-    // Import/export (submenu in preferences menu)
+    // Import/export
     aParentMenu->AppendSeparator();
-    wxMenu* importExportSubmenu = new wxMenu();
-    prepareImportExportMenu( importExportSubmenu );
-
-    AddMenuItem( aParentMenu, importExportSubmenu,
-                 wxID_ANY,
-                 _( "&Import and Export" ),
-                 _( "Import and export settings" ),
+    AddMenuItem( aParentMenu,
+                 ID_CONFIG_SAVE,
+                 _( "&Save Preferences..." ),
+                 _( "Save application preferences" ),
                  KiBitmap( save_setup_xpm ) );
+
+    AddMenuItem( aParentMenu,
+                 ID_CONFIG_READ,
+                 _( "Load Prefe&rences..." ),
+                 _( "Load application preferences" ),
+                 KiBitmap( import_setup_xpm ) );
+
+    aParentMenu->AppendSeparator();
+
+    AddMenuItem( aParentMenu,
+                 ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+                 _( "E&xport Hotkeys..." ),
+                 _( "Create hotkey configuration file with current hotkeys" ),
+                 KiBitmap( hotkeys_export_xpm ) );
+
+    AddMenuItem( aParentMenu,
+                 ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+                 _( "&Import Hotkeys..." ),
+                 _( "Load existing hotkey configuration file" ),
+                 KiBitmap( hotkeys_import_xpm ) );
 }

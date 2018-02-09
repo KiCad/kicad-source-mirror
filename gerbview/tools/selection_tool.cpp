@@ -71,7 +71,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Cle
 
 TOOL_ACTION GERBVIEW_ACTIONS::measureTool( "gerbview.InteractiveSelection.measureTool",
         AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
-        _( "Measure tool" ), _( "Interactively measure distance between points" ),
+        _( "Measure Tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 
 
@@ -81,7 +81,7 @@ public:
     HIGHLIGHT_MENU()
     {
         SetIcon( net_highlight_schematic_xpm );
-        SetTitle( _( "Highlight..." ) );
+        SetTitle( _( "Highlight" ) );
     }
 
 private:
@@ -101,7 +101,7 @@ private:
                 ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightComponent );
-                menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of component \"%s\"" ),
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight Items of Component \"%s\"" ),
                                          GetChars( net_attr.m_Cmpref ) ) );
                 addSeparator = true;
             }
@@ -109,7 +109,7 @@ private:
             if( ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightNet );
-                menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of net \"%s\"" ),
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight Items of Net \"%s\"" ),
                                          GetChars( net_attr.m_Netname ) ) );
                 addSeparator = true;
             }
@@ -119,7 +119,7 @@ private:
             if( apertDescr && !apertDescr->m_AperFunction.IsEmpty() )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightAttribute );
-                menuEntry->SetItemLabel( wxString::Format( _( "Highlight aperture type \"%s\"" ),
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight Aperture Type \"%s\"" ),
                                          GetChars( apertDescr->m_AperFunction ) ) );
                 addSeparator = true;
             }

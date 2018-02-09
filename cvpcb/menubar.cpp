@@ -78,19 +78,19 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenu* preferencesMenu = new wxMenu;
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Manage Footprint &Libraries" ), _( "Manage footprint libraries" ),
+                 _( "Manage Footprint &Libraries..." ), _( "Manage footprint libraries" ),
                  KiBitmap( library_table_xpm ) );
 
     // Path configuration edit dialog.
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure &Paths" ),
+                 _( "Configure &Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( editor_xpm ) );
 
     preferencesMenu->AppendSeparator();
     AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
-                 _( "Footprint &Association Files" ),
+                 _( "Footprint &Association Files..." ),
                  _( "Configure footprint association file (.equ) list."
                     "These files are used to automatically assign "
                     "the footprint name from the symbol value" ),

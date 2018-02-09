@@ -111,12 +111,12 @@ TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIn
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
-        _( "Move Exactly" ), _( "Moves the selected item(s) by an exact amount" ),
+        _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
         move_exactly_xpm );
 
 TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
-        _( "Create Array" ), _( "Create array" ), array_xpm, AF_ACTIVATE );
+        _( "Create Array..." ), _( "Create array" ), array_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, MD_SHIFT + 'R',
@@ -148,17 +148,17 @@ TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
 
 TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.InteractiveEdit.updateFootprints",
         AS_GLOBAL, 0,
-        _( "Update Footprint" ), _( "Update the footprint from the library" ),
+        _( "Update Footprint..." ), _( "Update the footprint from the library" ),
         reload_xpm );
 
 TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
         AS_GLOBAL, 0,
-        _( "Change Footprint" ), _( "Assign a different footprint from the library" ),
+        _( "Change Footprint..." ), _( "Assign a different footprint from the library" ),
         exchange_xpm );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
-        _( "Properties" ), _( "Displays item properties dialog" ), config_xpm );
+        _( "Properties..." ), _( "Displays item properties dialog" ), config_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSelection",
         AS_GLOBAL, 0,
@@ -166,7 +166,7 @@ TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSele
 
 TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
-        _( "Measuring tool" ), _( "Interactively measure distance between points" ),
+        _( "Measuring Tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::copyToClipboard( "pcbnew.InteractiveEdit.CopyToClipboard",

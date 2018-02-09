@@ -145,7 +145,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( move_rectangle_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Circle Options" ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Circle Options..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg,
                      KiBitmap( options_circle_xpm ) );
 
@@ -166,7 +166,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( move_rectangle_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Rectangle Options" ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Rectangle Options..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg,
                      KiBitmap( options_rectangle_xpm ) );
 
@@ -191,7 +191,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( move_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
 
         msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
@@ -221,7 +221,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( checked_ok_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Line Options" ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Line Options..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg,
                      KiBitmap( options_segment_xpm ) );
 
@@ -255,7 +255,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
         msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
-        msg = AddHotkeyName( _( "Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
         break;
 
@@ -285,7 +285,7 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, KiBitmap( move_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT);
+    msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hokeys_Descr, HK_EDIT);
     AddMenuItem( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, KiBitmap( edit_xpm ) );
 
     msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
@@ -303,16 +303,16 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
                  _( "Global" ), KiBitmap( pin_to_xpm ) );
     AddMenuItem( global_pin_change,
                  ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM,
-                 selected ? _( "Pin Size to selected pins" ) :
-                 _( "Pin Size to Others" ), KiBitmap( pin_size_to_xpm ) );
+                 selected ? _( "Push Pin Size to Selected Pin" ) :
+                 _( "Push Pin Size to Others" ), KiBitmap( pin_size_to_xpm ) );
     AddMenuItem( global_pin_change,
                  ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM,
-                 selected ? _( "Pin Name Size to selected pin" ) :
-                 _( "Pin Name Size to Others" ), KiBitmap( pin_name_to_xpm ) );
+                 selected ? _( "Push Pin Name Size to Selected Pin" ) :
+                 _( "Push Pin Name Size to Others" ), KiBitmap( pin_name_to_xpm ) );
     AddMenuItem( global_pin_change,
                  ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM,
-                 selected ? _( "Pin Num Size to selected pin" ) :
-                 _( "Pin Num Size to Others" ), KiBitmap( pin_number_to_xpm ) );
+                 selected ? _( "Push Pin Num Size to Selected Pin" ) :
+                 _( "Push Pin Num Size to Others" ), KiBitmap( pin_number_to_xpm ) );
 }
 
 
@@ -326,7 +326,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
 
     if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
         AddMenuItem( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                     _( "Zoom Block (drag middle mouse)" ),
+                     _( "Zoom Block" ),
                      KiBitmap( zoom_area_xpm ) );
 
     PopMenu->AppendSeparator();

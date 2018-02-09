@@ -61,25 +61,25 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Load Gerber files
     AddMenuItem( fileMenu, wxID_FILE,
-                 _( "Load &Gerber File" ),
+                 _( "Load &Gerber File..." ),
                  _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
                  KiBitmap( load_gerber_xpm ) );
 
     // Load Excellon drill files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
-                 _( "Load &EXCELLON Drill File" ),
+                 _( "Load &EXCELLON Drill File..." ),
                  _( "Load excellon drill file" ),
                  KiBitmap( gerbview_drill_file_xpm ) );
 
     // Load Gerber job files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_JOB_FILE,
-                 _( "Load Gerber &Job File" ),
+                 _( "Load Gerber &Job File..." ),
                  _( "Load a Gerber job file, and load gerber files depending on the job" ),
                  KiBitmap( gerber_job_file_xpm ) );
 
     // Load Zip archive files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE,
-                 _( "Load &Zip Archive File" ),
+                 _( "Load &Zip Archive File..." ),
                  _( "Load a zipped archive (Gerber and drill) file" ),
                  KiBitmap( zip_xpm ) );
 
@@ -159,7 +159,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Export to Pcbnew
     AddMenuItem( fileMenu,
                  ID_GERBVIEW_EXPORT_TO_PCBNEW,
-                 _( "E&xport to Pcbnew" ),
+                 _( "E&xport to Pcbnew..." ),
                  _( "Export data in Pcbnew format" ),
                  KiBitmap( export_xpm ) );
 
@@ -168,7 +168,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Print
     AddMenuItem( fileMenu, wxID_PRINT,
-                 _( "&Print" ), _( "Print gerber" ),
+                 _( "&Print..." ), _( "Print gerber" ),
                  KiBitmap( print_button_xpm ) );
 
     // Separator
@@ -211,7 +211,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Canvas selection
     configMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy graphic&s" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Legacy Graphic&s" ), GerbviewHokeysDescr,
                           HK_CANVAS_LEGACY );
 
     configMenu->Append(
@@ -264,7 +264,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Text editor (usefull to browse source files)
     AddMenuItem( miscellaneousMenu, ID_MENU_GERBVIEW_SELECT_PREFERED_EDITOR,
-                 _( "&Text Editor" ),
+                 _( "Set &Text Editor..." ),
                  _( "Select your preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 
@@ -277,7 +277,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys" ),
+                 _( "&List Hotkeys..." ),
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 

@@ -42,16 +42,16 @@
 // Helper function to add menuitems relative to items creation
 void AddNewItemsCommand( wxMenu* aMainMenu )
 {
-    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_LINE, _( "Add Line" ),
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_LINE, _( "Add Line..." ),
                  KiBitmap( add_dashed_line_xpm ) );
-    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_RECT, _( "Add Rectangle" ),
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_RECT, _( "Add Rectangle..." ),
                  KiBitmap( add_rectangle_xpm ) );
-    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add Text" ),
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add Text..." ),
                  KiBitmap( text_xpm ) );
-    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_BITMAP, _( "Add Bitmap" ),
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_BITMAP, _( "Add Bitmap..." ),
                  KiBitmap( image_xpm ) );
     AddMenuItem( aMainMenu, ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
-                 _( "Append Existing Page Layout Design File" ),
+                 _( "Append Existing Page Layout Design File..." ),
                  KiBitmap( pagelayout_load_xpm ) );
 }
 

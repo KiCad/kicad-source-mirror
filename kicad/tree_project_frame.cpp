@@ -679,14 +679,14 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
     {
         case TREE_PROJECT:
             AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
-                         _( "New D&irectory" ),
+                         _( "New D&irectory..." ),
                          _( "Create a New Directory" ),
                          KiBitmap( directory_xpm ) );
             break;
 
         case TREE_DIRECTORY:
             AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
-                         _( "New D&irectory" ),
+                         _( "New D&irectory..." ),
                          _( "Create a New Directory" ),
                          KiBitmap( directory_xpm ) );
             AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
@@ -697,11 +697,11 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
         default:
             AddMenuItem( &popupMenu, ID_PROJECT_TXTEDIT,
-                         _( "&Edit in a text editor" ),
+                         _( "&Edit in a Text Editor" ),
                          _( "Open the file in a Text Editor" ),
                          KiBitmap( editor_xpm ) );
             AddMenuItem( &popupMenu, ID_PROJECT_RENAME,
-                         _( "&Rename file" ),
+                         _( "&Rename File..." ),
                          _( "Rename file" ),
                          KiBitmap( right_xpm ) );
             AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,

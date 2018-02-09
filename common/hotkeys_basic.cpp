@@ -796,7 +796,7 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
 
     // Call hotkeys editor
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
-                 _( "&Edit Hotkeys" ),
+                 _( "&Edit Hotkeys..." ),
                  _( "Edit hotkeys list" ),
                  KiBitmap( config_xpm ) );
 
@@ -804,13 +804,13 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
 
     // create hotkey file to export current hotkeys config
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
-                 _( "E&xport Hotkeys" ),
+                 _( "E&xport Hotkeys..." ),
                  _( "Export current hotkeys into configuration file" ),
                  KiBitmap( hotkeys_export_xpm ) );
 
     // Reload hotkey file
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
-                 _( "&Import Hotkeys" ),
+                 _( "&Import Hotkeys..." ),
                  _( "Load existing hotkey configuration file" ),
                  KiBitmap( hotkeys_import_xpm ) );
 

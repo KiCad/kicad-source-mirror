@@ -138,7 +138,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
     wxMenu* fileMenu = new wxMenu;
 
     // Active library selection
-    AddMenuItem( fileMenu, ID_MODVIEW_SELECT_LIB, _("Set Current Library"),
+    AddMenuItem( fileMenu, ID_MODVIEW_SELECT_LIB, _("Set Active Library..."),
                  _( "Select library to be displayed" ), KiBitmap( open_library_xpm ) );
     fileMenu->AppendSeparator();
 

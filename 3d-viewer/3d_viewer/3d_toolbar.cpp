@@ -141,28 +141,30 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     wxMenuBar* menuBar   = new wxMenuBar;
     wxMenu*    fileMenu  = new wxMenu;
+    wxMenu*    editMenu  = new wxMenu;
     wxMenu*    prefsMenu = new wxMenu;
     wxMenu*    helpMenu  = new wxMenu;
 
     menuBar->Append( fileMenu, _( "&File" ) );
 
     AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_PNG,
-                  _( "Create Image (png format)" ),
+                  _( "Export Current View as PNG..." ),
                   KiBitmap( export_xpm ) );
 
     AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_JPEG,
-                 _( "Create Image (jpeg format)" ),
+                 _( "Export Current View as JPEG..." ),
                  KiBitmap( export_xpm ) );
-
-    fileMenu->AppendSeparator();
-    AddMenuItem( fileMenu, ID_TOOL_SCREENCOPY_TOCLIBBOARD,
-                 _( "Copy 3D Image to Clipboard" ),
-                 KiBitmap( copy_xpm ) );
 
     fileMenu->AppendSeparator();
     AddMenuItem( fileMenu, wxID_EXIT,
                  _( "&Exit" ),
                  KiBitmap( exit_xpm ) );
+
+    menuBar->Append( editMenu, _( "&Edit" ) );
+
+    AddMenuItem( editMenu, ID_TOOL_SCREENCOPY_TOCLIBBOARD,
+                 _( "Copy 3D Image" ),
+                 KiBitmap( copy_xpm ) );
 
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
 
@@ -203,15 +205,15 @@ void EDA_3D_VIEWER::CreateMenuBar()
                 _( "Material Properties" ), KiBitmap( color_materials_xpm ) );
 
     materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
-                                    _( "Use all properties" ),
+                                    _( "Use All Properties" ),
                                     _( "Use all material properties from each 3D model file" ) );
 
     materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
-                                    _( "Use diffuse only" ),
+                                    _( "Use Diffuse Only" ),
                                     _( "Use only the diffuse color property from model 3D model file " ) );
 
     materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
-                                    _( "CAD color style" ),
+                                    _( "CAD Color Style" ),
                                     _( "Use a CAD color style based on the diffuse color of the material" ) );
 
     // Add specific preferences for OpenGL
@@ -247,7 +249,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_BACKFLOOR,
-                _( "Add floor" ),
+                _( "Add Floor" ),
                 _( "Adds a floor plane below the board (slow)"),
                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
@@ -287,25 +289,25 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  _( "Background Color" ), KiBitmap( palette_xpm ) );
 
     AddMenuItem( setBgColorMenu, ID_MENU3D_BGCOLOR_TOP_SELECTION,
-                 _( "Background Top Color" ), KiBitmap( setcolor_3d_bg_xpm ) );
+                 _( "Background Top Color..." ), KiBitmap( setcolor_3d_bg_xpm ) );
 
     AddMenuItem( setBgColorMenu, ID_MENU3D_BGCOLOR_BOTTOM_SELECTION,
-                 _( "Background Bottom Color" ), KiBitmap( setcolor_3d_bg_xpm ) );
+                 _( "Background Bottom Color..." ), KiBitmap( setcolor_3d_bg_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_SILKSCREEN_COLOR_SELECTION,
-                 _( "Silkscreen Color" ), KiBitmap( setcolor_silkscreen_xpm ) );
+                 _( "Silkscreen Color..." ), KiBitmap( setcolor_silkscreen_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_SOLDERMASK_COLOR_SELECTION,
-                 _( "Solder Mask Color" ), KiBitmap( setcolor_soldermask_xpm ) );
+                 _( "Solder Mask Color..." ), KiBitmap( setcolor_soldermask_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_SOLDERPASTE_COLOR_SELECTION,
-                 _( "Solder Paste Color" ), KiBitmap( setcolor_solderpaste_xpm ) );
+                 _( "Solder Paste Color..." ), KiBitmap( setcolor_solderpaste_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_COPPER_COLOR_SELECTION,
-                 _( "Copper/Surface Finish Color" ), KiBitmap( setcolor_copper_xpm ) );
+                 _( "Copper/Surface Finish Color..." ), KiBitmap( setcolor_copper_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_PCB_BODY_COLOR_SELECTION,
-                 _( "Board Body Color" ), KiBitmap( setcolor_board_body_xpm ) );
+                 _( "Board Body Color..." ), KiBitmap( setcolor_board_body_xpm ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
                  _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
@@ -349,11 +351,11 @@ void EDA_3D_VIEWER::CreateMenuBar()
     AddMenuItem( prefsMenu, moduleAttributes, ID_MENU3D_MODULE_ONOFF,
                 _( "Show 3D M&odels" ), KiBitmap( shape_3d_xpm ) );
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL,
-                                       _( "Through hole" ),
+                                       _( "Through Hole" ),
                                        _( "Footprint Properties -> Placement type -> Through hole" ) );
 
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL_INSERT,
-                                       _( "Surface mount" ),
+                                       _( "Surface Mount" ),
                                        _( "Footprint Properties -> Placement type -> Surface mount" ) );
 
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_VIRTUAL,
@@ -393,7 +395,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     prefsMenu->AppendSeparator();
 
     AddMenuItem( prefsMenu, ID_MENU3D_RESET_DEFAULTS,
-                _( "Reset to default settings" ),
+                _( "Reset to Default Settings" ),
                 KiBitmap( tools_xpm ) );
 
     // Help menu
@@ -401,7 +403,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     AddMenuItem( helpMenu, ID_MENU3D_HELP_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys" ),
+                 _( "&List Hotkeys..." ),
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 

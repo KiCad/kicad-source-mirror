@@ -275,7 +275,7 @@ TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
-        _( "Properties" ), _( "Displays item properties dialog" ), nullptr );
+        _( "Properties..." ), _( "Displays item properties dialog" ), nullptr );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL, 0,

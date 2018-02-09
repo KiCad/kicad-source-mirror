@@ -94,7 +94,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  _( "Save current page layout design file" ),
                  KiBitmap( save_xpm ) );
 
-    msg = AddHotkeyName( _( "Save &As" ), PlEditorHokeysDescr, HK_SAVEAS );
+    msg = AddHotkeyName( _( "Save &As..." ), PlEditorHokeysDescr, HK_SAVEAS );
     AddMenuItem( fileMenu, wxID_SAVEAS, msg,
                  _( "Save current page layout design file with a different name" ),
                  KiBitmap( save_as_xpm ) );
@@ -131,21 +131,21 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // View Menu:
     wxMenu* viewMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "Zoom in" ), PlEditorHokeysDescr, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "Zoom In" ), PlEditorHokeysDescr, HK_ZOOM_IN );
     AddMenuItem( viewMenu, ID_ZOOM_IN, msg, wxEmptyString, KiBitmap( zoom_in_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom out" ), PlEditorHokeysDescr, HK_ZOOM_OUT );
+    msg = AddHotkeyName( _( "Zoom Out" ), PlEditorHokeysDescr, HK_ZOOM_OUT );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, msg, wxEmptyString, KiBitmap( zoom_out_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom all" ), PlEditorHokeysDescr, HK_ZOOM_AUTO );
+    msg = AddHotkeyName( _( "Zoom All" ), PlEditorHokeysDescr, HK_ZOOM_AUTO );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, msg, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom to selection" ), PlEditorHokeysDescr, HK_ZOOM_SELECTION );
+    msg = AddHotkeyName( _( "Zoom to Selection" ), PlEditorHokeysDescr, HK_ZOOM_SELECTION );
     AddMenuItem( viewMenu, ID_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ) );
 
     viewMenu->AppendSeparator();
 
-    msg = AddHotkeyName( _( "Redraw view" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "Redraw View" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, msg, wxEmptyString, KiBitmap( zoom_redraw_xpm ) );
 
 
@@ -188,7 +188,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Text editor selection
     AddMenuItem( preferencesMenu,
                  ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR,
-                 _( "&Text Editor" ),
+                 _( "Set &Text Editor..." ),
                  _( "Select your preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 

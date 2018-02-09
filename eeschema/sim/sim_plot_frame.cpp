@@ -1223,17 +1223,17 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
 
-    AddMenuItem( this, HIDE_SIGNAL, _( "Hide signal" ),
+    AddMenuItem( this, HIDE_SIGNAL, _( "Hide Signal" ),
                  _( "Erase the signal from plot screen" ),
                  KiBitmap( delete_xpm ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
 
     if( trace->HasCursor() )
-        AddMenuItem( this, HIDE_CURSOR, _( "Hide cursor" ),
+        AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ),
                      wxEmptyString, KiBitmap( pcb_target_xpm ) );
     else
-        AddMenuItem( this, SHOW_CURSOR, _( "Show cursor" ),
+        AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ),
                      wxEmptyString, KiBitmap( pcb_target_xpm ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );

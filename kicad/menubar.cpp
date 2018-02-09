@@ -269,7 +269,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     wxMenu* importprjSubMenu = new wxMenu();
 
-    AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "Eagle CAD" ),
+    AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "Eagle CAD..." ),
             _( "Import Eagle CAD XML schematic and board" ),
             KiBitmap( import_project_xpm ) );
 
@@ -329,7 +329,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // View file
     AddMenuItem( browseMenu,
                  ID_BROWSE_AN_SELECT_FILE,
-                 _( "&Open Local File" ),
+                 _( "&Open Local File..." ),
                  _( "Edit local file" ),
                  KiBitmap( browse_files_xpm ) );
 
@@ -339,14 +339,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Path configuration edit dialog.
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure Pa&ths" ),
+                 _( "Configure Pa&ths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
     // Text editor
     AddMenuItem( preferencesMenu,
                  ID_SELECT_PREFERED_EDITOR,
-                 _( "&Set Text Editor" ),
+                 _( "&Set Text Editor..." ),
                  _( "Set your preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 
@@ -375,7 +375,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Append PDF Viewer submenu to preferences
     AddMenuItem( SubMenuPdfBrowserChoice,
                  ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-                 _( "Set &PDF Viewer" ),
+                 _( "Set &PDF Viewer..." ),
                  _( "Set favourite PDF viewer" ),
                  KiBitmap( datasheet_xpm ) );
 

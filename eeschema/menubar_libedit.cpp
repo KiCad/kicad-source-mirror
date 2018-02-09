@@ -65,13 +65,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Creating/loading libraries
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_NEW_LIBRARY,
-                 _( "&New Library" ),
+                 _( "&New Library..." ),
                  _( "Creates an empty library" ),
                  KiBitmap( new_library_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_ADD_LIBRARY,
-                 _( "&Add Library" ),
+                 _( "&Add Library..." ),
                  _( "Adds a previously created library" ),
                  KiBitmap( add_library_xpm ) );
 
@@ -103,8 +103,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Export as png file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
-                 _( "Create &PNG File from Screen..." ),
-                 _( "Create a PNG file from the current symbol" ),
+                 _( "Export Current View as &PNG..." ),
+                 _( "Create a PNG file from the current view" ),
                  KiBitmap( plot_xpm ) );
 
     // Export as SVG file
@@ -190,7 +190,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_NEW_PART,
-                 _( "&New Symbol" ),
+                 _( "&New Symbol..." ),
                  _( "Create a new empty symbol" ),
                  KiBitmap( new_component_xpm ) );
 
@@ -205,13 +205,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_IMPORT_PART,
-                 _( "&Import Symbol" ),
+                 _( "&Import Symbol..." ),
                  _( "Import a symbol to the current library" ),
                  KiBitmap( import_part_xpm ) );
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_EXPORT_PART,
-                 _( "&Export Symbol" ),
+                 _( "&Export Symbol..." ),
                  _( "Export the current symbol" ),
                  KiBitmap( export_part_xpm ) );
 
@@ -219,13 +219,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_GET_FRAME_EDIT_PART,
-                 _( "&Properties" ),
+                 _( "&Properties..." ),
                  _( "Edit symbol properties" ),
                  KiBitmap( part_properties_xpm ) );
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
-                 _( "&Fields" ),
+                 _( "&Fields..." ),
                  _( "Edit field properties" ),
                  KiBitmap( edit_text_xpm ) );
 
@@ -233,13 +233,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_EDIT_PIN_BY_TABLE,
-                 _( "Pi&n Table" ),
+                 _( "Pi&n Table..." ),
                  _( "Show pin table" ),
                  KiBitmap( pin_table_xpm ) );
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_CHECK_PART,
-                 _( "ERC" ),
+                 _( "Electrical Rules Checker" ),
                  _( "Check duplicate and off grid pins" ),
                  KiBitmap( erc_xpm ) );
 
@@ -294,14 +294,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Library list
     AddMenuItem( preferencesMenu,
                  ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage Symbol Libraries" ),
+                 _( "Manage Symbol Libraries..." ),
                  _( "Edit the global and project symbol library tables." ),
                  KiBitmap( library_table_xpm ) );
 
     // Default values and options
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
-                 _( "General &Options" ),
+                 _( "General &Options..." ),
                  _( "Set Symbol Editor default values and options" ),
                  KiBitmap( preference_xpm ) );
 
@@ -329,7 +329,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( helpMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys" ),
+                 _( "&List Hotkeys..." ),
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 

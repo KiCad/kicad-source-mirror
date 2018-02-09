@@ -248,7 +248,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                              _( "Cancel Block" ), KiBitmap( cancel_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                             _( "Zoom Block (drag middle mouse)" ),
+                             _( "Zoom Block" ),
                              KiBitmap( zoom_area_xpm ) );
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
@@ -266,7 +266,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                              _( "Delete Block (shift+ctrl + drag mouse)" ),
                              KiBitmap( delete_xpm ) );
 
-                msg = AddHotkeyName( _("Move Block Exactly" ),
+                msg = AddHotkeyName( _("Move Block Exactly..." ),
                         g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
                 AddMenuItem( PopMenu, ID_POPUP_MOVE_BLOCK_EXACT,
                              msg, KiBitmap( move_xpm ) );
@@ -296,7 +296,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                          KiBitmap( rotate_ccw_xpm ) );
             AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ),
                          KiBitmap( mirror_h_xpm ) );
-            AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MOVE_EXACT, _( "Move Exactly" ),
+            AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MOVE_EXACT, _( "Move Exactly..." ),
                          KiBitmap( move_exactly_xpm ) );
 
             msg = AddHotkeyName( _( "Edit Footprint" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
@@ -314,7 +314,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST, msg, KiBitmap( move_pad_xpm ) );
             }
 
-            msg = AddHotkeyName( _("Edit Pad" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            msg = AddHotkeyName( _("Edit Pad..." ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_PAD, msg, KiBitmap( options_pad_xpm ) );
             AddMenuItem( PopMenu, ID_POPUP_PCB_COPY_PAD_SETTINGS,
                          _( "Copy Pad Settings" ), KiBitmap( copy_pad_settings_xpm ) );
@@ -326,10 +326,10 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             msg = AddHotkeyName( _( "Duplicate Pad" ), g_Module_Editor_Hokeys_Descr, HK_DUPLICATE_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
 
-            msg = AddHotkeyName( _("Move Pad Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+            msg = AddHotkeyName( _("Move Pad Exactly..." ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
             AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_pad_xpm ) );
 
-            msg = AddHotkeyName( _("Create Pad Array" ), g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
+            msg = AddHotkeyName( _("Create Pad Array..." ), g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
             AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ARRAY, msg, KiBitmap( array_xpm ) );
 
 
@@ -337,7 +337,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             {
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                             _( "Push Pad Settings" ), KiBitmap( push_pad_settings_xpm ) );
+                             _( "Push Pad Settings..." ), KiBitmap( push_pad_settings_xpm ) );
             }
 
             break;
@@ -369,19 +369,19 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                     AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                                  msg, KiBitmap( duplicate_xpm ) );
 
-                    msg = AddHotkeyName( _("Create Array" ),
+                    msg = AddHotkeyName( _("Create Array..." ),
                                          g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
                     AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ARRAY,
                                  msg, KiBitmap( array_xpm ) );
                 }
             }
 
-            msg = AddHotkeyName( _("Move Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+            msg = AddHotkeyName( _("Move Exactly..." ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
             AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_exactly_xpm ) );
 
             if( !flags )
             {
-                msg = AddHotkeyName( _("Edit" ), g_Module_Editor_Hokeys_Descr,
+                msg = AddHotkeyName( _("Edit..." ), g_Module_Editor_Hokeys_Descr,
                                      HK_EDIT_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE, msg, KiBitmap( edit_text_xpm ) );
 
@@ -398,7 +398,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         case PCB_MODULE_EDGE_T:
         {
             if( (flags & IS_NEW) )
-                AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End edge" ),
+                AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End Edge" ),
                              KiBitmap( checked_ok_xpm ) );
 
             if( !flags )
@@ -410,17 +410,17 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             msg = AddHotkeyName( _( "Duplicate" ), g_Module_Editor_Hokeys_Descr, HK_DUPLICATE_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
 
-            msg = AddHotkeyName( _("Move Exactly" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
+            msg = AddHotkeyName( _("Move Exactly..." ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM_EXACT );
             AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EXACT, msg, KiBitmap( move_exactly_xpm ) );
 
-            msg = AddHotkeyName( _("Create Array" ), g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
+            msg = AddHotkeyName( _("Create Array..." ), g_Module_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
             AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ARRAY, msg, KiBitmap( array_xpm ) );
 
             if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
-                AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ),
+                AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place Edge" ),
                              KiBitmap( checked_ok_xpm ) );
 
-            msg = AddHotkeyName( _("Edit" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            msg = AddHotkeyName( _("Edit..." ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_MODEDIT_EDIT_BODY_ITEM,
                          msg, KiBitmap( options_segment_xpm  ) );
 
@@ -433,7 +433,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             AddMenuItem( edit_global_mnu, ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE,
                          _( "Change Body Items Width" ), KiBitmap( width_segment_xpm ) );
             AddMenuItem( edit_global_mnu, ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE,
-                         _( "Change Body Items Layer" ), KiBitmap( select_layer_pair_xpm ) );
+                         _( "Change Body Items Layer..." ), KiBitmap( select_layer_pair_xpm ) );
         }
         break;
 
@@ -471,7 +471,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         ( GetToolId() == ID_MODEDIT_CIRCLE_TOOL ) ||
         ( GetToolId() == ID_MODEDIT_ARC_TOOL ) )
     {
-        AddMenuItem( PopMenu, ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH, _("Set Line Width" ),
+        AddMenuItem( PopMenu, ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH, _("Set Line Width..." ),
                      KiBitmap( width_segment_xpm ) );
         PopMenu->AppendSeparator();
     }

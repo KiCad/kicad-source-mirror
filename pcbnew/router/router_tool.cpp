@@ -90,12 +90,12 @@ TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffP
 
 TOOL_ACTION PCB_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL, 0,
-        _( "Interactive Router Settings" ),
+        _( "Interactive Router Settings..." ),
         _( "Open Interactive Router settings" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
         AS_GLOBAL, 0,
-        _( "Differential Pair Dimension settings" ),
+        _( "Differential Pair Dimension Settings..." ),
         _( "Open Differential Pair Dimension settings" ), ps_diff_pair_gap_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
@@ -166,7 +166,7 @@ static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicro
 static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
     "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_THROUGH_VIA ),
-    _( "Select Layer and Place Through Via" ),
+    _( "Select Layer and Place Through Via..." ),
     _( "Select a layer, then add a through-hole via at the end of currently routed track." ),
     select_w_layer_xpm, AF_NONE,
     (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
@@ -174,14 +174,14 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
 static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
     "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA ),
-    _( "Select Layer and Place Blind/Buried Via" ),
+    _( "Select Layer and Place Blind/Buried Via..." ),
     _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
     select_w_layer_xpm, AF_NONE,
     (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_CUSTOM_TRACK_WIDTH ),
-    _( "Custom Track/Via Size" ),
+    _( "Custom Track/Via Size..." ),
     _( "Shows a dialog for changing the track width and via size." ),
     width_track_xpm );
 
@@ -219,13 +219,13 @@ public:
 
         Clear();
 
-        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ),
+        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom Size" ),
                 wxEmptyString, wxITEM_CHECK );
 
-        Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use the starting track width" ),
+        Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use Starting Track Width" ),
                 _( "Route using the width of the starting track." ), wxITEM_CHECK );
 
-        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use net class values" ),
+        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use Net Class Values" ),
                 _( "Use track and via sizes from the net class" ), wxITEM_CHECK );
 
         AppendSeparator();

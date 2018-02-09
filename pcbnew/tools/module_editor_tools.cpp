@@ -70,13 +70,13 @@ TOOL_ACTION PCB_ACTIONS::createPadFromShapes( "pcbnew.ModuleEditor.createPadFrom
 
 TOOL_ACTION PCB_ACTIONS::explodePadToShapes( "pcbnew.ModuleEditor.explodePadToShapes",
         AS_CONTEXT, 0,
-        _( "Explode Selected Pad to Graphical Shapes" ),
+        _( "Explode Pad to Graphic Shapes" ),
         _( "Converts a custom-shaped pads to a set of graphical shapes" ),
         custom_pad_to_primitives_xpm );
 
 TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
-        _( "Enumerate Pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
+        _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ), pad_enumerate_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
         AS_GLOBAL, 0,

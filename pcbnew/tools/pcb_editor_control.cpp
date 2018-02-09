@@ -97,7 +97,7 @@ TOOL_ACTION PCB_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
 
 TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
         AS_GLOBAL, 0,
-        _( "Duplicate Zone onto Layer" ), _( "Duplicate zone outline onto a different layer" ),
+        _( "Duplicate Zone onto Layer..." ), _( "Duplicate zone outline onto a different layer" ),
         zone_duplicate_xpm );
 
 

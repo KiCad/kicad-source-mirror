@@ -62,14 +62,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* fileMenu = new wxMenu;
 
     // Active library selection
-    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB, _("Set Acti&ve Library"),
+    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB, _("Set Acti&ve Library..."),
                            _( "Select active library" ),
                            KiBitmap( open_library_xpm ) );
     fileMenu->AppendSeparator();
 
     // New module
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
-                 _( "&New Footprint" ), _( "Create new footprint" ),
+                 _( "&New Footprint..." ), _( "Create new footprint" ),
                  KiBitmap( new_footprint_xpm ) );
 
     // Open submenu
@@ -77,19 +77,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // from File
     AddMenuItem( openSubmenu, ID_MODEDIT_IMPORT_PART,
-                 _( "&Import Footprint From File" ),
+                 _( "&Import Footprint From File..." ),
                  _( "Import footprint from an existing file" ),
                  KiBitmap( import_module_xpm ) );
 
     // from Library
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE,
-                 _( "Load Footprint From Current Li&brary" ),
-                 _( "Open footprint from library" ),
+                 _( "Load Footprint From Active Li&brary..." ),
+                 _( "Open footprint from active library" ),
                  KiBitmap( module_xpm ) );
 
     // from current Board
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-                 _( "Load Footprint From &Current Board" ),
+                 _( "Load Footprint From &Current Board..." ),
                  _( "Load footprint from current board" ),
                  KiBitmap( load_module_board_xpm ) );
 
@@ -102,8 +102,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save the currently loaded legacy library as an s-expression library.
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
-                 _( "Save &Current Library As..." ),
-                 _( "Save entire current library under a new name" ),
+                 _( "Save A&ctive Library As..." ),
+                 _( "Save entire active library under a new name" ),
                  KiBitmap( copy_library_xpm ) );
 
     // Save module
@@ -116,19 +116,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Footprint in New Library" ),
+                 _( "S&ave Footprint in New Library..." ),
                  _( "Create new library and save current footprint in it" ),
                  KiBitmap( new_library_xpm ) );
 
     // Export module
     AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Export Footprint" ),
+                 _( "&Export Footprint..." ),
                  _( "Save currently loaded footprint into file" ),
                  KiBitmap( export_module_xpm ) );
 
     // Import DXF File
     AddMenuItem( fileMenu, ID_GEN_IMPORT_DXF_FILE,
-                 _( "&Import DXF File" ),
+                 _( "&Import DXF File..." ),
                  _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
@@ -136,7 +136,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Print
     AddMenuItem( fileMenu, wxID_PRINT,
-                 _( "&Print" ),
+                 _( "&Print..." ),
                  _( "Print current footprint" ),
                  KiBitmap( plot_xpm ) );
 
@@ -188,7 +188,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Properties
     AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
-                 _( "Footprint &Properties" ),
+                 _( "Footprint &Properties..." ),
                  _( "Edit footprint properties" ),
                  KiBitmap( module_options_xpm ) );
 
@@ -197,18 +197,18 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // User grid size
     AddMenuItem( dimensions_Submenu, ID_PCB_USER_GRID_SETUP,
-                 _( "Set Custom &User Grid" ), _( "Set custom user grid size" ),
+                 _( "Set Custom &User Grid..." ), _( "Set custom user grid size" ),
                  KiBitmap( grid_xpm ) );
 
     // Sizes and Widths
     AddMenuItem( dimensions_Submenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
-                 _( "Text &Size and Width" ),
+                 _( "Text &Size and Width..." ),
                  _( "Adjust width for text and drawing" ),
                  KiBitmap( text_xpm ) );
 
     // Pad settings
     AddMenuItem( dimensions_Submenu, ID_MODEDIT_PAD_SETTINGS,
-                 _( "&Pad Properties" ), _( "Edit settings for new pads" ),
+                 _( "Default &Pad Properties..." ), _( "Edit settings for new pads" ),
                  KiBitmap( pad_dimensions_xpm ) );
 
     //--------- View menu ----------------
@@ -252,7 +252,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Add canvas selection
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy graphic&s" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Legacy Graphic&s" ), m_hotkeysDescrList,
                           HK_CANVAS_LEGACY );
 
     viewMenu->Append(
@@ -320,27 +320,27 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* prefs_menu = new wxMenu;
 
     AddMenuItem( prefs_menu, ID_PCB_LIB_WIZARD,
-                _( "&Footprint Library Wizard" ), _( "Add footprint libraries with wizard" ),
+                _( "&Footprint Library Wizard..." ), _( "Add footprint libraries with wizard" ),
                 KiBitmap( wizard_add_fplib_small_xpm ) );
 
     AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Footprint Li&brary Table" ), _( "Configure footprint library table" ),
+                _( "Footprint Li&brary Table..." ), _( "Configure footprint library table" ),
                 KiBitmap( library_table_xpm ) );
 
     // Path configuration edit dialog.
     AddMenuItem( prefs_menu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure Pa&ths" ),
+                 _( "Configure Pa&ths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
     // Settings
     AddMenuItem( prefs_menu, wxID_PREFERENCES,
-                 _( "General &Settings" ), _( "Change footprint editor settings." ),
+                 _( "General &Settings..." ), _( "Change footprint editor settings." ),
                  KiBitmap( preference_xpm ) );
 
     AddMenuItem( prefs_menu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display Settings" ),
+                 _( "&Display Settings..." ),
                  _( "Change footprint editor display settings" ),
                  KiBitmap( display_options_xpm ) );
 

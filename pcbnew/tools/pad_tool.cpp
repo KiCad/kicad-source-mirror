@@ -60,7 +60,7 @@ TOOL_ACTION PCB_ACTIONS::applyPadSettings(
 TOOL_ACTION PCB_ACTIONS::pushPadSettings(
         "pcbnew.PadTool.PushPadSettings",
         AS_GLOBAL, 0,
-        _( "Push Pad Settings" ), _( "Copy the current pad settings to other pads" ),
+        _( "Push Pad Settings..." ), _( "Copy the current pad settings to other pads" ),
         push_pad_settings_xpm );
 
 

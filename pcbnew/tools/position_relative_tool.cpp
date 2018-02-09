@@ -41,7 +41,7 @@ using namespace std::placeholders;
 
 TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRelative",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_POSITION_RELATIVE ),
-        _( "Position Relative to..." ), _(
+        _( "Position Relative To..." ), _(
                 "Positions the selected item(s) by an exact amount relative to another" ),
         move_relative_xpm );
 

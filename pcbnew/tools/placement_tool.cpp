@@ -93,7 +93,7 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_placementMenu = new CONTEXT_MENU;
     m_placementMenu->SetIcon( align_items_xpm );
-    m_placementMenu->SetTitle( _( "Align/distribute" ) );
+    m_placementMenu->SetTitle( _( "Align/Distribute" ) );
 
     // Add all align/distribute commands
     m_placementMenu->Add( PCB_ACTIONS::alignTop );

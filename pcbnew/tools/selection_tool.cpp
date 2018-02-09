@@ -114,14 +114,14 @@ TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSam
 
 TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
-        _( "Find Item" ),_( "Searches the document for an item" ), find_xpm );
+        _( "Find Item..." ),_( "Searches the document for an item" ), find_xpm );
 
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0,
-        _( "Filter Selection" ), _( "Filter the types of items in the selection" ),
+        _( "Filter Selection..." ), _( "Filter the types of items in the selection" ),
         nullptr );
 
 class SELECT_MENU: public CONTEXT_MENU
@@ -129,7 +129,7 @@ class SELECT_MENU: public CONTEXT_MENU
 public:
     SELECT_MENU()
     {
-        SetTitle( _( "Select..." ) );
+        SetTitle( _( "Select" ) );
 
         Add( PCB_ACTIONS::filterSelection );
 
