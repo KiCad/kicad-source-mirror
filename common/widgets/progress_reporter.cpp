@@ -32,7 +32,8 @@ PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
     m_progress( 0 ),
     m_maxProgress( 1 )
 {
-};
+}
+
 
 void PROGRESS_REPORTER::BeginPhase( int aPhase )
 {
@@ -41,6 +42,7 @@ void PROGRESS_REPORTER::BeginPhase( int aPhase )
     updateUI();
 }
 
+
 void PROGRESS_REPORTER::AdvancePhase( )
 {
     m_phase++;
@@ -48,30 +50,35 @@ void PROGRESS_REPORTER::AdvancePhase( )
     updateUI();
 }
 
+
 void PROGRESS_REPORTER::Report( const wxString& aMessage )
 {
-    m_rptMessage   = aMessage;
+    m_rptMessage = aMessage;
     updateUI();
 }
 
-void PROGRESS_REPORTER::SetMaxProgress ( int aMaxProgress )
+
+void PROGRESS_REPORTER::SetMaxProgress( int aMaxProgress )
 {
     m_maxProgress = aMaxProgress;
     updateUI();
 }
 
-void PROGRESS_REPORTER::AdvanceProgress( )
+
+void PROGRESS_REPORTER::AdvanceProgress()
 {
     m_progress++;
 }
 
+
 int PROGRESS_REPORTER::currentProgress() const
 {
-    double current = ( 1.0 / (double)m_numPhases ) *
+    double current = ( 1.0 / (double) m_numPhases ) *
                      ( (double) m_phase + ( (double) m_progress.load() / (double) m_maxProgress ) );
 
-    return (int)(current * 1000);
+    return (int)( current * 1000 );
 }
+
 
 // Please, *DO NOT* use wxPD_APP_MODAL style: it is not necessary
 // (without this option the PROGRESS_REPORTER is modal for the parent frame)
@@ -103,14 +110,16 @@ void WX_PROGRESS_REPORTER::updateUI()
     wxProgressDialog::Update( cur, m_rptMessage );
 }
 
+
 void PROGRESS_REPORTER::KeepRefreshing( bool aWait )
 {
     #ifdef USE_OPENMP
-        while ( m_progress < m_maxProgress && m_maxProgress > 0)
+        while( m_progress < m_maxProgress && m_maxProgress > 0 )
         {
             updateUI();
-            wxMilliSleep(10);
-            if ( !aWait )
+            wxMilliSleep( 10 );
+
+            if( !aWait )
                 return;
         }
     #else
