@@ -247,7 +247,12 @@ static void fixOSXCancelButtonIssue( wxWindow *aWindow )
     wxButton* button = dynamic_cast<wxButton*>( wxWindow::FindWindowById( wxID_CANCEL, aWindow ) );
 
     if( button )
-        button->SetLabel( _( "Cancel" ) );
+    {
+        wxString buttonLabel = button->GetLabel();
+        buttonLabel.Replace( wxT( "&C" ), wxT( "C" ) );
+        buttonLabel.Replace( wxT( "&c" ), wxT( "c" ) );
+        button->SetLabel( buttonLabel );
+    }
 }
 #endif
 

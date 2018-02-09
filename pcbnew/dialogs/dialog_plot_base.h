@@ -23,15 +23,16 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/checklst.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/radiobox.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/dialog.h>
 
@@ -63,7 +64,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_plotFormatOpt;
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
-		wxButton* m_browseButton;
+		wxBitmapButton* m_browseButton;
 		wxStaticBoxSizer* m_LayersSizer;
 		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
@@ -111,9 +112,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_DXF_plotModeOpt;
 		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
+		wxButton* m_buttonDRC;
 		wxButton* m_plotButton;
 		wxButton* m_buttonDrill;
-		wxButton* m_buttonDRC;
 		wxButton* m_buttonQuit;
 		wxMenu* m_popMenu;
 		
@@ -126,9 +127,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPopUpLayers( wxCommandEvent& event ) { event.Skip(); }
 		

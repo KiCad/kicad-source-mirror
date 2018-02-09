@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,6 +26,10 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -43,8 +47,7 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		{
 			ID_READ_NETLIST_FILE = 1000,
 			ID_TEST_NETLIST,
-			ID_COMPILE_RATSNEST,
-			ID_OPEN_NELIST
+			ID_COMPILE_RATSNEST
 		};
 		
 		wxRadioBox* m_Select_By_Timestamp;
@@ -56,14 +59,12 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxButton* m_buttonClose;
 		wxButton* m_buttonFPTest;
 		wxButton* m_buttonRebild;
-		wxButton* m_buttonSaveMessages;
 		wxStaticLine* m_staticline11;
 		wxCheckBox* m_checkDryRun;
 		wxCheckBox* m_checkBoxSilentMode;
 		wxStaticLine* m_staticline1;
-		wxStaticText* m_staticTextNetfilename;
 		wxTextCtrl* m_NetlistFilenameCtrl;
-		wxButton* m_buttonBrowse;
+		wxBitmapButton* m_browseButton;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -72,15 +73,13 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTestFootprintsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCompileRatsnestClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSaveMessagesToFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnClickSilentMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_CANCEL, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_NETLIST_FBP();
 	
 };

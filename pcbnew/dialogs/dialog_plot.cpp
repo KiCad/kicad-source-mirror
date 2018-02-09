@@ -36,6 +36,7 @@
 #include <macros.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <wx/ffile.h>
@@ -64,6 +65,8 @@ void DIALOG_PLOT::init_Dialog()
 
     m_config->Read( OPTKEY_PLOT_X_FINESCALE_ADJ, &m_XScaleAdjust );
     m_config->Read( OPTKEY_PLOT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
+
+    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
 
     // m_PSWidthAdjust is stored in mm in user config
     double dtmp;

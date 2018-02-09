@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,6 +86,9 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bRightSizerButtons;
 	bRightSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
+	
+	bRightSizerButtons->Add( 0, 0, 1, wxALL|wxEXPAND, 5 );
+	
 	m_buttonRead = new wxButton( this, ID_READ_NETLIST_FILE, _("Read Current Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonRead->SetDefault(); 
 	m_buttonRead->SetToolTip( _("Read the current netlist and update connections and connectivity info") );
@@ -105,11 +108,8 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bRightSizerButtons->Add( m_buttonRebild, 0, wxEXPAND|wxALL, 5 );
 	
-	m_buttonSaveMessages = new wxButton( this, wxID_ANY, _("Save Messages to File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizerButtons->Add( m_buttonSaveMessages, 0, wxALL|wxEXPAND, 5 );
 	
-	
-	bUpperSizer->Add( bRightSizerButtons, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bUpperSizer->Add( bRightSizerButtons, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
 	
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -139,18 +139,19 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextNetfilename = new wxStaticText( this, wxID_ANY, _("Netlist file:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextNetfilename->Wrap( -1 );
-	bLowerSizer->Add( m_staticTextNetfilename, 0, wxRIGHT|wxLEFT, 5 );
-	
 	wxBoxSizer* bSizerNetlistFilename;
 	bSizerNetlistFilename = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	wxStaticText* staticTextNetlistFile;
+	staticTextNetlistFile = new wxStaticText( this, wxID_ANY, _("Netlist file:"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticTextNetlistFile->Wrap( -1 );
+	bSizerNetlistFilename->Add( staticTextNetlistFile, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_buttonBrowse = new wxButton( this, ID_OPEN_NELIST, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizerNetlistFilename->Add( m_buttonBrowse, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerNetlistFilename->Add( m_NetlistFilenameCtrl, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	
+	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizerNetlistFilename->Add( m_browseButton, 0, 0, 5 );
 	
 	
 	bLowerSizer->Add( bSizerNetlistFilename, 0, wxEXPAND, 5 );
@@ -176,10 +177,8 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_buttonFPTest->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
 	m_buttonRebild->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
 	m_buttonRebild->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
-	m_buttonSaveMessages->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnSaveMessagesToFile ), NULL, this );
-	m_buttonSaveMessages->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUISaveMessagesToFile ), NULL, this );
 	m_checkBoxSilentMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
-	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 }
 
 DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
@@ -192,9 +191,7 @@ DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
 	m_buttonFPTest->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
 	m_buttonRebild->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
 	m_buttonRebild->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUIValidNetlistFile ), NULL, this );
-	m_buttonSaveMessages->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnSaveMessagesToFile ), NULL, this );
-	m_buttonSaveMessages->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUISaveMessagesToFile ), NULL, this );
 	m_checkBoxSilentMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
-	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 	
 }

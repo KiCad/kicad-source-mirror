@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	bRightSizer->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bRightSizer, 2, wxEXPAND, 5 );
+	bUpperSizer->Add( bRightSizer, 5, wxEXPAND, 5 );
 	
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
@@ -43,16 +43,16 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	
 	bLeftSizer->Add( 0, 0, 0, wxTOP, 15 );
 	
-	m_buttonNetlist = new wxButton( this, ID_CREATE_NETLIST, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonNetlist = new wxButton( this, ID_CREATE_NETLIST, _("Generate Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_buttonNetlist, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_buttonAddPlugin, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonDelPlugin = new wxButton( this, ID_DEL_PLUGIN, _("Remove Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonDelPlugin = new wxButton( this, ID_DEL_PLUGIN, _("Remove Plugin..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_buttonDelPlugin, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -62,7 +62,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	bLeftSizer->Add( m_cbUseDefaultNetlistName, 0, wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 2, wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );

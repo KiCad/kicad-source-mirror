@@ -31,17 +31,17 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
-	bSizerPlotFmt->Add( m_plotFormatOpt, 0, 0, 5 );
+	bSizerPlotFmt->Add( m_plotFormatOpt, 0, wxTOP, 6 );
 	
 	
-	bupperSizer->Add( bSizerPlotFmt, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bupperSizer->Add( bSizerPlotFmt, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	wxBoxSizer* bSizerOutDir;
 	bSizerOutDir = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
-	bSizerOutDir->Add( m_staticTextDir, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bSizerOutDir->Add( m_staticTextDir, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
@@ -49,19 +49,19 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	
-	bSizer29->Add( m_outputDirectoryName, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer29->Add( m_outputDirectoryName, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 	
-	m_browseButton = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer29->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer29->Add( m_browseButton, 0, wxRIGHT, 5 );
 	
 	
 	bSizerOutDir->Add( bSizer29, 1, wxEXPAND, 5 );
 	
 	
-	bupperSizer->Add( bSizerOutDir, 1, 0, 5 );
+	bupperSizer->Add( bSizerOutDir, 1, wxLEFT|wxRIGHT, 5 );
 	
 	
-	m_MainSizer->Add( bupperSizer, 0, wxALL|wxEXPAND, 5 );
+	m_MainSizer->Add( bupperSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 	
 	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -198,11 +198,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_SolderMaskMarginLabel->Wrap( -1 );
 	m_SolderMaskMarginLabel->SetToolTip( _("Margin between pads and solder mask") );
 	
-	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_SolderMaskMarginCurrValue = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("val"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginCurrValue->Wrap( -1 );
-	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginCurrValue, 0, wxALL, 5 );
+	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginCurrValue, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_solderMaskMinWidthLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMinWidthLabel->Wrap( -1 );
@@ -251,7 +251,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerGbrOpt->Add( m_subtractMaskFromSilk, 0, wxALL, 2 );
 	
 	
-	m_GerberOptionsSizer->Add( bSizerGbrOpt, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_GerberOptionsSizer->Add( bSizerGbrOpt, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_rbGerberFormatChoices[] = { _("4.5, unit mm"), _("4.6, unit mm") };
 	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
@@ -259,7 +259,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_rbGerberFormat->SetSelection( 0 );
 	m_rbGerberFormat->SetToolTip( _("Resolution of coordinates in Gerber files.\nUse the higher value if possible.") );
 	
-	m_GerberOptionsSizer->Add( m_rbGerberFormat, 1, wxEXPAND|wxALL, 5 );
+	m_GerberOptionsSizer->Add( m_rbGerberFormat, 0, wxALIGN_LEFT|wxALIGN_TOP|wxALL, 5 );
 	
 	
 	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 3 );
@@ -320,7 +320,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer191;
 	bSizer191 = new wxBoxSizer( wxVERTICAL );
 	
-	m_textPSFineAdjustWidth = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Width correction:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textPSFineAdjustWidth = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Width correction"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPSFineAdjustWidth->Wrap( -1 );
 	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -361,7 +361,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 5 );
 	
 	
-	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 	
 	wxBoxSizer* sbSizerMsg;
 	sbSizerMsg = new wxBoxSizer( wxVERTICAL );
@@ -377,24 +377,24 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_plotButton = new wxButton( this, wxID_ANY, _("Plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotButton->SetDefault(); 
-	bSizerButtons->Add( m_plotButton, 0, wxALL, 5 );
-	
-	m_buttonDrill = new wxButton( this, ID_CREATE_DRILL_FILE, _("Generate Drill File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonDrill, 0, wxALL, 5 );
+	m_buttonDRC = new wxButton( this, wxID_ANY, _("Run DRC..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonDRC, 0, wxALL, 5 );
 	
 	
 	bSizerButtons->Add( 10, 0, 1, wxEXPAND, 5 );
 	
-	m_buttonDRC = new wxButton( this, wxID_ANY, _("Run DRC"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonDRC, 0, wxALL, 5 );
+	m_plotButton = new wxButton( this, wxID_ANY, _("Plot"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotButton->SetDefault(); 
+	bSizerButtons->Add( m_plotButton, 0, wxALL, 5 );
+	
+	m_buttonDrill = new wxButton( this, ID_CREATE_DRILL_FILE, _("Generate Drill File..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonDrill, 0, wxALL, 5 );
 	
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonQuit, 0, wxALL, 5 );
 	
 	
-	m_MainSizer->Add( bSizerButtons, 0, wxALIGN_RIGHT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_MainSizer->Add( bSizerButtons, 0, wxALIGN_RIGHT|wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
@@ -436,9 +436,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_scaleOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
 	m_useGerberX2Attributes->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
 	m_DXF_plotModeOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
+	m_buttonDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_plotButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 	m_buttonDrill->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
-	m_buttonDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_buttonQuit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
 	this->Connect( m_menuItem1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );
 	this->Connect( m_menuItem2->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );
@@ -459,9 +459,9 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_scaleOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
 	m_useGerberX2Attributes->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
 	m_DXF_plotModeOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
+	m_buttonDRC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_plotButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 	m_buttonDrill->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
-	m_buttonDRC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
 	this->Disconnect( ID_LAYER_FAB, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );
 	this->Disconnect( ID_SELECT_COPPER_LAYERS, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );

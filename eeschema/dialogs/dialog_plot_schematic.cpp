@@ -30,6 +30,7 @@
 
 #include <pgm_base.h>
 #include <kiface_i.h>
+#include <bitmaps.h>
 #include <worksheet.h>
 #include <base_units.h>
 #include <sch_sheet.h>
@@ -79,6 +80,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
 // Initialize the dialog options:
 void DIALOG_PLOT_SCHEMATIC::initDlg()
 {
+    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
+
     // Set paper size option
     m_PaperSizeOption->SetSelection( m_pageSizeSelect );
 

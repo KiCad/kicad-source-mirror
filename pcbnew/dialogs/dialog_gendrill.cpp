@@ -34,6 +34,7 @@
 #include <pcbplot.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_track.h>
@@ -121,7 +122,7 @@ void DIALOG_GENDRILL::initDialog()
 
 void DIALOG_GENDRILL::InitDisplayParams()
 {
-    wxString msg;
+    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
 
     m_rbFileFormat->SetSelection( m_drillFileType );
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
@@ -203,25 +204,11 @@ void DIALOG_GENDRILL::InitDisplayParams()
     }
 
     // Display hole counts:
-    msg = m_PlatedPadsCountInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_platedPadsHoleCount;
-    m_PlatedPadsCountInfoMsg->SetLabel( msg );
-
-    msg = m_NotPlatedPadsCountInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_notplatedPadsHoleCount;
-    m_NotPlatedPadsCountInfoMsg->SetLabel( msg );
-
-    msg = m_ThroughViasInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_throughViasCount;
-    m_ThroughViasInfoMsg->SetLabel( msg );
-
-    msg = m_MicroViasInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_microViasCount;
-    m_MicroViasInfoMsg->SetLabel( msg );
-
-    msg = m_BuriedViasInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_blindOrBuriedViasCount;
-    m_BuriedViasInfoMsg->SetLabel( msg );
+    m_PlatedPadsCountInfoMsg->   SetLabel( wxString() << m_platedPadsHoleCount );
+    m_NotPlatedPadsCountInfoMsg->SetLabel( wxString() << m_notplatedPadsHoleCount );
+    m_ThroughViasInfoMsg->       SetLabel( wxString() << m_throughViasCount );
+    m_MicroViasInfoMsg->         SetLabel( wxString() << m_microViasCount );
+    m_BuriedViasInfoMsg->        SetLabel( wxString() << m_blindOrBuriedViasCount );
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );

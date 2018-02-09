@@ -38,6 +38,7 @@
 #include <pcb_netlist.h>
 #include <netlist_reader.h>
 #include <reporter.h>
+#include <bitmaps.h>
 
 #include <board_design_settings.h>
 #include <class_board.h>
@@ -105,6 +106,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
     bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );
     m_rbSingleNets->SetSelection( tmp == 0 ? 0 : 1);
+    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
     m_checkBoxSilentMode->SetValue( m_silentMode );
 
@@ -341,51 +343,6 @@ void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 void DIALOG_NETLIST::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
-}
-
-
-void DIALOG_NETLIST::OnSaveMessagesToFile( wxCommandEvent& aEvent )
-{
-    wxFileName fn;
-
-    if( !m_parent->GetLastNetListRead().IsEmpty() )
-    {
-        fn = m_parent->GetLastNetListRead();
-        fn.SetExt( "txt" );
-    }
-    else
-    {
-        fn = wxPathOnly( Prj().GetProjectFullName() );
-    }
-
-    wxFileDialog dlg( this, _( "Save Contents of Message Window" ), fn.GetPath(), fn.GetFullName(),
-                      TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    fn = dlg.GetPath();
-
-    if( fn.GetExt().IsEmpty() )
-        fn.SetExt( wxT( "txt" ) );
-
-    wxFile f( fn.GetFullPath(), wxFile::write );
-
-    if( !f.IsOpened() )
-    {
-        wxString msg;
-
-        msg.Printf( _( "Cannot write message contents to file \"%s\"." ),
-                    GetChars( fn.GetFullPath() ) );
-        wxMessageBox( msg, _( "File Write Error" ), wxOK | wxICON_ERROR, this );
-        return;
-    }
-}
-
-
-void DIALOG_NETLIST::OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& aEvent )
-{
-    //aEvent.Enable( !m_MessageWindow->IsEmpty() );
 }
 
 
