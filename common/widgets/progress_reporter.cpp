@@ -37,37 +37,34 @@ PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
 
 void PROGRESS_REPORTER::BeginPhase( int aPhase )
 {
-    m_phase = aPhase;
-    m_progress = 0;
-    updateUI();
+    m_phase.store( aPhase );
+    m_progress.store( 0 );
 }
 
 
 void PROGRESS_REPORTER::AdvancePhase( )
 {
-    m_phase++;
-    m_progress = 0;
-    updateUI();
+    m_phase.fetch_add( 1 );
+    m_progress.store( 0 );
 }
 
 
 void PROGRESS_REPORTER::Report( const wxString& aMessage )
 {
+    std::lock_guard<std::mutex> guard( m_mutex );
     m_rptMessage = aMessage;
-    updateUI();
 }
 
 
 void PROGRESS_REPORTER::SetMaxProgress( int aMaxProgress )
 {
-    m_maxProgress = aMaxProgress;
-    updateUI();
+    m_maxProgress.store( aMaxProgress );
 }
 
 
 void PROGRESS_REPORTER::AdvanceProgress()
 {
-    m_progress++;
+    m_progress.fetch_add( 1 );
 }
 
 
@@ -80,14 +77,38 @@ int PROGRESS_REPORTER::currentProgress() const
 }
 
 
-// Please, *DO NOT* use wxPD_APP_MODAL style: it is not necessary
-// (without this option the PROGRESS_REPORTER is modal for the parent frame)
-// and PROGRESS_REPORTER works fine on OSX only without this style
-// when called from a quasi modal dialog
-WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent,
-        const wxString& aTitle, int aNumPhases ) :
+bool PROGRESS_REPORTER::KeepRefreshing( bool aWait )
+{
+    if( aWait )
+    {
+        while( m_progress < m_maxProgress && m_maxProgress > 0 )
+        {
+            if( !updateUI() )
+                return false;
+
+            wxMilliSleep( 20 );
+        }
+        return true;
+    }
+    else
+    {
+        wxMilliSleep( 20 );
+
+        return updateUI();
+    }
+}
+
+
+WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle,
+                                            int aNumPhases ) :
     PROGRESS_REPORTER( aNumPhases ),
-    wxProgressDialog( aTitle, wxT( "" ), 1, aParent, wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
+    wxProgressDialog( aTitle, wxT( "" ), 1, aParent,
+                      // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
+                                            // quasi-modal dialog
+                      wxPD_AUTO_HIDE |      // *MUST* use; otherwise wxWidgets will spin
+                                            // up another event loop on completion which
+                                            // causes all sorts of grief
+                      wxPD_CAN_ABORT |
                       wxPD_ELAPSED_TIME )
 {
 }
@@ -99,30 +120,21 @@ WX_PROGRESS_REPORTER::~WX_PROGRESS_REPORTER()
 }
 
 
-void WX_PROGRESS_REPORTER::updateUI()
+bool WX_PROGRESS_REPORTER::updateUI()
 {
     int cur = currentProgress();
 
     if( cur < 0 || cur > 1000 )
         cur = 0;
 
+    wxString message;
+    {
+        std::lock_guard<std::mutex> guard( m_mutex );
+        message = m_rptMessage;
+    }
+
     SetRange( 1000 );
-    wxProgressDialog::Update( cur, m_rptMessage );
+    return wxProgressDialog::Update( cur, message );
 }
 
 
-void PROGRESS_REPORTER::KeepRefreshing( bool aWait )
-{
-    #ifdef USE_OPENMP
-        while( m_progress < m_maxProgress && m_maxProgress > 0 )
-        {
-            updateUI();
-            wxMilliSleep( 10 );
-
-            if( !aWait )
-                return;
-        }
-    #else
-        updateUI();
-    #endif
-}

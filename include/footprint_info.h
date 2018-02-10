@@ -50,6 +50,7 @@ class FP_LIB_TABLE;
 class FOOTPRINT_LIST;
 class FOOTPRINT_LIST_IMPL;
 class FOOTPRINT_ASYNC_LOADER;
+class WX_PROGRESS_REPORTER;
 class wxTopLevelWindow;
 class KIWAY;
 
@@ -247,11 +248,14 @@ public:
      * @param aTable defines all the libraries.
      * @param aNickname is the library to read from, or if NULL means read all
      *         footprints from all known libraries in aTable.
+     * @param aProgressReporter is an optional progress reporter.  ReadFootprintFiles()
+     *         will use 2 phases within the reporter.
      * @return bool - true if it ran to completion, else false if it aborted after
      *  some number of errors.  If true, it does not mean there were no errors, check
      *  GetErrorCount() for that, should be zero to indicate success.
      */
-    virtual bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL ) = 0;
+    virtual bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
+                                     WX_PROGRESS_REPORTER* aProgressReporter = nullptr ) = 0;
 
     void DisplayErrors( wxTopLevelWindow* aCaller = NULL );
 

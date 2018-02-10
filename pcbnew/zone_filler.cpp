@@ -114,23 +114,9 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
-
-    #ifdef USE_OPENMP
-        // launch at least two threads, one to compute, second to update UI
-        #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
-    #endif
+    m_count_done = 0;
+    std::thread fillWorker( [ this, toFill ]()
     {
-        #ifdef USE_OPENMP
-            #pragma omp master
-            if( m_progressReporter )
-            {
-                m_progressReporter->KeepRefreshing( true );
-            }
-        #endif
-
-        #ifdef USE_OPENMP
-            #pragma omp for schedule(dynamic)
-        #endif
         for( unsigned i = 0; i < toFill.size(); i++ )
         {
             SHAPE_POLY_SET rawPolys, finalPolys;
@@ -142,17 +128,28 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
             toFill[i].m_zone->SetIsFilled( true );
 
             if( m_progressReporter )
-            {
                 m_progressReporter->AdvanceProgress();
-            }
+
+            m_count_done.fetch_add( 1 );
         }
+    } );
+
+    while( m_count_done.load() < toFill.size() )
+    {
+        if( m_progressReporter )
+            m_progressReporter->KeepRefreshing();
+        else
+            wxMilliSleep( 20 );
     }
+
+    fillWorker.join();
 
     // Now remove insulated copper islands
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Removing insulated copper islands..." ) );
+        m_progressReporter->KeepRefreshing();
     }
 
     connectivity->SetProgressReporter( m_progressReporter );
@@ -177,32 +174,30 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         m_progressReporter->Report( _( "Caching polygon triangulations..." ) );
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
-    #ifdef USE_OPENMP
-        // launch at least two threads, one to compute, second to update UI
-        #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
-    #endif
-    {
-        #ifdef USE_OPENMP
-            #pragma omp master
-            if( m_progressReporter )
-            {
-                m_progressReporter->KeepRefreshing( true );
-            }
-        #endif
 
-        #ifdef USE_OPENMP
-            #pragma omp for schedule(dynamic)
-        #endif
+    m_count_done = 0;
+    std::thread triangulationWorker( [ this, toFill ]()
+    {
         for( unsigned i = 0; i < toFill.size(); i++ )
         {
             if( m_progressReporter )
-            {
                 m_progressReporter->AdvanceProgress();
-            }
 
             toFill[i].m_zone->CacheTriangulation();
+
+            m_count_done.fetch_add( 1 );
         }
+    } );
+
+    while( m_count_done.load() < toFill.size() )
+    {
+        if( m_progressReporter )
+            m_progressReporter->KeepRefreshing();
+        else
+            wxMilliSleep( 10 );
     }
+
+    triangulationWorker.join();
 
     // If some zones must be filled by segments, create the filling segments
     // (note, this is a outdated option, but it exists)

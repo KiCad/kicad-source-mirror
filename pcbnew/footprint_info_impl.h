@@ -28,6 +28,7 @@
 
 #include <footprint_info.h>
 #include <sync_queue.h>
+#include <widgets/progress_reporter.h>
 
 class LOCALE_IO;
 
@@ -60,9 +61,10 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
     std::vector<std::thread> m_threads;
     SYNC_QUEUE<wxString>     m_queue_in;
     SYNC_QUEUE<wxString>     m_queue_out;
-    std::atomic_bool         m_first_to_finish;
     std::atomic_size_t       m_count_finished;
     long long                m_libraries_last_mod_checksum;
+    WX_PROGRESS_REPORTER*    m_progress_reporter;
+    std::atomic_bool         m_cancelled;
 
     /**
      * Call aFunc, pushing any IO_ERRORs and std::exceptions it throws onto m_errors.
@@ -87,8 +89,8 @@ public:
     FOOTPRINT_LIST_IMPL();
     virtual ~FOOTPRINT_LIST_IMPL();
 
-    virtual bool ReadFootprintFiles(
-            FP_LIB_TABLE* aTable, const wxString* aNickname = NULL ) override;
+    virtual bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
+                                     WX_PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 };
 
 #endif // FOOTPRINT_INFO_IMPL_H

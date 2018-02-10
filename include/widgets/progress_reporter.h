@@ -30,6 +30,12 @@
 
 #include <wx/progdlg.h>
 
+/**
+ * A progress reporter for use in multi-threaded environments.  The various advancement
+ * and message methods can be called from sub-threads.  The KeepRefreshing method *MUST*
+ * be called only from the main thread (primarily a MSW requirement, which won't allow
+ * access to UI objects allocated from a separate thread).
+ */
 class PROGRESS_REPORTER
 {
     public:
@@ -64,28 +70,26 @@ class PROGRESS_REPORTER
         void AdvanceProgress();
 
         /**
-         * Update the UI dialog.
-         * This function is compatible with OPENMP use.
+         * Update the UI dialog.  *MUST* only be called from the main thread.
+         * Returns false if the user clicked Cancel.
          */
-        void KeepRefreshing( bool aWait = false );
+        bool KeepRefreshing( bool aWait = false );
 
     protected:
 
         int currentProgress() const;
-        virtual void updateUI() = 0;
 
-        wxString m_rptMessage;
-        int m_phase;
-        int m_numPhases;
-        std::atomic_int m_progress;
-        int m_maxProgress;
+        virtual bool updateUI() = 0;
+
+        wxString           m_rptMessage;
+        mutable std::mutex m_mutex;
+        std::atomic_int    m_phase;
+        std::atomic_int    m_numPhases;
+        std::atomic_int    m_progress;
+        std::atomic_int    m_maxProgress;
 };
 
-/**
- * This class implements a wxProgressDialog that can be used in a OPENMP environment
- * (i.e. the progress bar update can be called from different theads).
- * It is mainly used in Zone fill calculations
- */
+
 class WX_PROGRESS_REPORTER : public PROGRESS_REPORTER, public wxProgressDialog
 {
 public:
@@ -104,7 +108,7 @@ public:
 
 private:
 
-    virtual void updateUI() override;
+    virtual bool updateUI() override;
 };
 
 #endif

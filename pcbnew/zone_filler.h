@@ -119,6 +119,7 @@ private:
     BOARD* m_board;
     COMMIT* m_commit;
     PROGRESS_REPORTER* m_progressReporter;
+    std::atomic_size_t m_count_done;
 };
 
 #endif

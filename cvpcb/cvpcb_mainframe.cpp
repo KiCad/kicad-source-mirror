@@ -42,6 +42,7 @@
 #include <fp_lib_table.h>
 #include <netlist_reader.h>
 #include <bitmaps.h>
+#include <widgets/progress_reporter.h>
 
 #include <cvpcb_mainframe.h>
 #include <cvpcb.h>
@@ -713,11 +714,9 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         return false;
     }
 
-    {
-    wxBusyCursor dummy;  // Let the user know something is happening.
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
 
-    m_FootprintsList->ReadFootprintFiles( fptbl );
-    }
+    m_FootprintsList->ReadFootprintFiles( fptbl, nullptr, &progressReporter );
 
     if( m_FootprintsList->GetErrorCount() )
     {

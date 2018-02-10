@@ -36,6 +36,7 @@
 #include <make_unique.h>
 #include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/progress_reporter.h>
 
 #include <thread>
 
@@ -100,7 +101,7 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 {
     wxString nickname;
 
-    while( m_queue_in.pop( nickname ) )
+    while( m_queue_in.pop( nickname ) && !m_cancelled )
     {
         CatchErrors( [this, &nickname]() {
             m_lib_table->PrefetchLib( nickname );
@@ -108,33 +109,68 @@ void FOOTPRINT_LIST_IMPL::loader_job()
         } );
 
         m_count_finished.fetch_add( 1 );
-    }
 
-    if( !m_first_to_finish.exchange( true ) )
-    {
-        // yay, we're first to finish!
-        if( m_loader->m_completion_cb )
-        {
-            m_loader->m_completion_cb();
-        }
+        if( m_progress_reporter )
+            m_progress_reporter->AdvanceProgress();
     }
 }
 
 
-bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname )
+bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
+                                              WX_PROGRESS_REPORTER* aProgressReporter )
 {
     if( aTable->GenLastModifiedChecksum( aNickname ) == m_libraries_last_mod_checksum )
         return true;
+
+    m_progress_reporter = aProgressReporter;
+    m_cancelled = false;
 
     FOOTPRINT_ASYNC_LOADER loader;
 
     loader.SetList( this );
     loader.Start( aTable, aNickname );
-    bool retval = loader.Join();
+
+    if( m_progress_reporter )
+    {
+        m_progress_reporter->SetMaxProgress( m_queue_in.size() );
+        m_progress_reporter->Report( _( "Fetching Footprint Libraries" ) );
+    }
+
+    while( !m_cancelled && loader.GetProgress() < 100 )
+    {
+        if( m_progress_reporter )
+            m_cancelled = !m_progress_reporter->KeepRefreshing();
+        else
+            wxMilliSleep( 20 );
+    }
+
+    if( m_progress_reporter )
+        m_progress_reporter->AdvancePhase();
+
+    if( !m_cancelled )
+    {
+        if( m_progress_reporter )
+        {
+            m_progress_reporter->SetMaxProgress( m_queue_out.size() );
+            m_progress_reporter->Report( _( "Loading Footprints" ) );
+        }
+
+        loader.Join();
+    }
+
+    if( m_progress_reporter )
+        m_progress_reporter->AdvancePhase();
+
+    if( m_cancelled )
+    {
+        m_errors.move_push( std::make_unique<IO_ERROR>
+                    ( _( "Loading incomplete; cancelled by user." ), nullptr, nullptr, 0 ) );
+    }
 
     m_libraries_last_mod_checksum = aTable->GenLastModifiedChecksum( aNickname );
+    m_progress_reporter = nullptr;
 
-    return retval;
+    return m_errors.empty();
 }
 
 
@@ -145,7 +181,6 @@ void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aN
     m_lib_table = aTable;
 
     // Clear data before reading files
-    m_first_to_finish.store( false );
     m_count_finished.store( 0 );
     m_errors.clear();
     m_list.clear();
@@ -176,6 +211,9 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
     m_threads.clear();
     m_queue_in.clear();
+    m_count_finished.store( 0 );
+
+    size_t total_count = m_queue_out.size();
 
     LOCALE_IO toggle_locale;
 
@@ -194,7 +232,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
         threads.push_back( std::thread( [this, &queue_parsed]() {
             wxString nickname;
 
-            while( this->m_queue_out.pop( nickname ) )
+            while( this->m_queue_out.pop( nickname ) && !m_cancelled )
             {
                 wxArrayString fpnames;
 
@@ -220,13 +258,27 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
                     }
                 }
 
-                for( auto const& fpname : fpnames )
+                for( int i = 0; i < fpnames.size() && !m_cancelled; i++ )
                 {
+                    wxString fpname = fpnames[ i ];
                     FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
                     queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
                 }
+
+                if( m_progress_reporter )
+                    m_progress_reporter->AdvanceProgress();
+
+                m_count_finished.fetch_add( 1 );
             }
         } ) );
+    }
+
+    while( !m_cancelled && m_count_finished.load() < total_count )
+    {
+        if( m_progress_reporter )
+            m_cancelled = !m_progress_reporter->KeepRefreshing();
+        else
+            wxMilliSleep( 20 );
     }
 
     for( auto& thr : threads )
@@ -251,7 +303,10 @@ size_t FOOTPRINT_LIST_IMPL::CountFinished()
 }
 
 
-FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() : m_loader( nullptr ), m_first_to_finish( false ), m_count_finished( 0 )
+FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
+    m_loader( nullptr ),
+    m_count_finished( 0 ),
+    m_progress_reporter( nullptr )
 {
 }
 
