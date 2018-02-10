@@ -135,8 +135,8 @@ void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
     aEvent.Check( state );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
                                         Settings().m_legacyDrcOn ?
-                                        _( "Disable design rule checking while routing/editing tracks" ) :
-                                        _( "Enable design rule checking while routing/editing tracks" ) );
+                                        _( "Disable design rule checking while routing/editing tracks using Legacy Graphics.\nUse Preferences > Interactive Routing... for Modern Canvas." ) :
+                                        _( "Enable design rule checking while routing/editing tracks using Legacy Graphics.\nUse Preferences > Interactive Routing... for Modern Canvas." ) );
 }
 
 void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
