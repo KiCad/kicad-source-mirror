@@ -115,6 +115,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <gal/color4d.h>
 %include <id.h>
 
+HANDLE_EXCEPTIONS(LoadBoard)
 %include <pcbnew_scripting_helpers.h>
 
 
