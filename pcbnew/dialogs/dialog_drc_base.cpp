@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Feb  9 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_drclistbox.h"
@@ -105,8 +105,11 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizerOptSettings->Add( fgMinValuesSizer, 0, wxEXPAND, 5 );
 	
+	m_cbRefillZones = new wxCheckBox( this, wxID_ANY, _("Refill all zones before performing DRC"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerOptSettings->Add( m_cbRefillZones, 0, wxLEFT|wxRIGHT, 5 );
+	
 	m_cbCourtyardOverlap = new wxCheckBox( this, wxID_ANY, _("Check footprint courtyard overlap"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerOptSettings->Add( m_cbCourtyardOverlap, 0, wxALL, 5 );
+	bSizerOptSettings->Add( m_cbCourtyardOverlap, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_cbCourtyardMissing = new wxCheckBox( this, wxID_ANY, _("Check courtyard missing in footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerOptSettings->Add( m_cbCourtyardMissing, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );

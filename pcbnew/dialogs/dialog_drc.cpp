@@ -46,6 +46,7 @@
 // Keywords for read and write config
 #define TestMissingCourtyardKey     wxT( "TestMissingCourtyard" )
 #define TestFootprintCourtyardKey   wxT( "TestFootprintCourtyard" )
+#define RefillZonesBeforeDrc        wxT( "RefillZonesBeforeDrc" )
 
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
@@ -68,6 +69,8 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
     m_config->Write( TestMissingCourtyardKey, m_cbCourtyardMissing->GetValue() );
     m_config->Write( TestFootprintCourtyardKey,  m_cbCourtyardOverlap->GetValue() );
+    m_config->Write( RefillZonesBeforeDrc, m_cbRefillZones->GetValue() );
+
     // Disonnect events
     m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
                                     wxMouseEventHandler(
@@ -134,7 +137,8 @@ void DIALOG_DRC_CONTROL::InitValues()
                                    wxMouseEventHandler(
                                        DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
 
-    this->Connect( wxEVT_MENU, wxCommandEventHandler( DIALOG_DRC_CONTROL::OnPopupMenu ), NULL, this );
+    this->Connect( wxEVT_MENU, wxCommandEventHandler( DIALOG_DRC_CONTROL::OnPopupMenu ), NULL,
+                   this );
 
 
     m_DeleteCurrentMarkerButton->Enable( false );
@@ -147,7 +151,8 @@ void DIALOG_DRC_CONTROL::InitValues()
     m_cbCourtyardMissing->SetValue( value );
     m_config->Read( TestFootprintCourtyardKey, &value, false );
     m_cbCourtyardOverlap->SetValue( value );
-
+    m_config->Read( RefillZonesBeforeDrc, &value, false );
+    m_cbRefillZones->SetValue( value );
 
     // Set the initial "enabled" status of the browse button and the text
     // field for report name
@@ -179,11 +184,13 @@ void DIALOG_DRC_CONTROL::SetRptSettings( bool aEnable, const wxString& aFileName
     m_RptFilenameCtrl->SetValue( aFileName );
 }
 
+
 void DIALOG_DRC_CONTROL::GetRptSettings( bool* aEnable, wxString& aFileName )
 {
     *aEnable = m_CreateRptCtrl->GetValue();
     aFileName = m_RptFilenameCtrl->GetValue();
 }
+
 
 void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
 {
@@ -210,6 +217,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
                            true,        // unconnected pads DRC test enabled
                            true,        // DRC test for zones enabled
                            true,        // DRC test for keepout areas enabled
+                           m_cbRefillZones->GetValue(),
                            m_cbCourtyardOverlap->GetValue(),
                            m_cbCourtyardMissing->GetValue(),
                            reportName, make_report );
@@ -283,6 +291,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
                            true,        // unconnected pads DRC test enabled
                            true,        // DRC test for zones enabled
                            true,        // DRC test for keepout areas enabled
+                           m_cbRefillZones->GetValue(),
                            m_cbCourtyardOverlap->GetValue(),
                            m_cbCourtyardMissing->GetValue(),
                            reportName, make_report );
@@ -359,10 +368,6 @@ void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
     m_tester->DestroyDRCDialog( wxID_CANCEL );
 }
 
-
-/*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX1
- */
 
 void DIALOG_DRC_CONTROL::OnReportCheckBoxClicked( wxCommandEvent& event )
 {
@@ -541,6 +546,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
     }
 }
 
+
 /* called when switching from Error list to Unconnected list
  * To avoid mistakes, the current marker is selection is cleared
  */
@@ -593,6 +599,7 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
         // Find the selected DRC_ITEM in the listbox, position cursor there,
         // at the first of the two pads.
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
+
         if( item )
         {
             // When selecting a item, center it on GAL and just move the graphic

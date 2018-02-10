@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,8 +106,7 @@ class NETCLASS;
 
 
 /**
- * Class DRC_ITEM_LIST
- * provides an abstract interface of a DRC_ITEM* list manager.  The details
+ * Provide an abstract interface of a DRC_ITEM* list manager.  The details
  * of the actual list architecture are hidden from the caller.  Any class
  * that implements this interface can then be used by a DRCLISTBOX class without
  * it knowing the actual architecture of the list.
@@ -153,8 +152,7 @@ typedef std::vector<DRC_ITEM*> DRC_LIST;
 
 
 /**
- * Class DRC
- * is the Design Rule Checker, and performs all the DRC tests.  The output of
+ * Design Rule Checker object that performs all the DRC tests.  The output of
  * the checking goes to the BOARD file in the form of two MARKER lists.  Those
  * two lists are displayable in the drc dialog box.  And they can optionally
  * be sent to a text file on disk.
@@ -168,7 +166,6 @@ class DRC
 private:
 
     //  protected or private functions() are lowercase first character.
-
     bool     m_doPad2PadTest;
     bool     m_doUnconnectedTest;
     bool     m_doZonesTest;
@@ -176,6 +173,7 @@ private:
     bool     m_doCreateRptFile;
     bool     m_doFootprintOverlapping;
     bool     m_doNoCourtyardDefined;
+    bool     m_refillZones;
 
     wxString m_rptFilename;
 
@@ -215,18 +213,15 @@ private:
 
 
     /**
-     * Function updatePointers
-     * is a private helper function used to update needed pointers from the
-     * one pointer which is known not to change, m_pcbEditorFrame.
+     * Update needed pointers from the one pointer which is known not to change.
      */
     void updatePointers();
 
 
     /**
-     * Function fillMarker
-     * optionally creates a marker and fills it in with information,
-     * but does not add it to the BOARD.  Use this to report any kind of
-     * DRC problem, or unconnected pad problem.
+     * Creates a marker and fills it in with information but does not add it to the BOARD.
+     *
+     * Use this to report any kind of DRC problem or unconnected pad problem.
      *
      * @param aTrack The reference track.
      * @param aItem  Another item on the BOARD, such as a VIA, SEGZONE,
@@ -236,7 +231,8 @@ private:
      * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
      *               first be allocated, then filled.
      */
-    MARKER_PCB* fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* fillMarker( const TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode,
+                            MARKER_PCB* fillMe );
 
     MARKER_PCB* fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
@@ -246,10 +242,9 @@ private:
                             const wxString& aMessage, MARKER_PCB* fillMe );
 
     /**
-     * Function fillMarker
-     * optionally creates a marker and fills it in with information,
-     * but does not add it to the BOARD.  Use this to report any kind of
-     * DRC problem, or unconnected pad problem.
+     * Create a marker and fills it in with information but do not add it to the BOARD.
+     *
+     * Use this to report any kind of DRC problem, or unconnected pad problem.
      *
      * @param aArea The zone to test
      * @param aPos position of error
@@ -263,24 +258,21 @@ private:
                             MARKER_PCB*           fillMe );
 
     /**
-     * Function fillMarker
-     * fills a MARKER which will report on a generic problem with the board which is
+     * Fill a MARKER which will report on a generic problem with the board which is
      * not geographically locatable.
      */
     MARKER_PCB* fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe );
 
     /**
-     * Function addMarkerToPcb
-     * Adds a DRC marker to the PCB throught the COMMIT mechanism.
+     * Adds a DRC marker to the PCB through the COMMIT mechanism.
      */
     void addMarkerToPcb( MARKER_PCB* aMarker );
 
     //-----<categorical group tests>-----------------------------------------
 
     /**
-     * Function testNetClasses
-     * goes through each NETCLASS and verifies that its clearance, via size,
-     * track width, and track clearance are larger than those in board.m_designSettings.
+     * Go through each NETCLASS and verifies that its clearance, via size, track width, and
+     * track clearance are larger than those in board.m_designSettings.
      * This is necessary because the actual DRC checks are run against the NETCLASS
      * limits, so in order enforce global limits, we first check the NETCLASSes against
      * the global limits.
@@ -290,9 +282,9 @@ private:
     bool testNetClasses();
 
     /**
-     * Function testTracks
-     * performs the DRC on all tracks.
-     * because this test can take a while, a progress bar can be displayed
+     * Perform the DRC on all tracks.
+     *
+     * This test can take a while, a progress bar can be displayed
      * @param aActiveWindow = the active window ued as parent for the progress bar
      * @param aShowProgressBar = true to show a progress bar
      * (Note: it is shown only if there are many tracks)
@@ -314,9 +306,10 @@ private:
     bool doNetClass( const std::shared_ptr<NETCLASS>& aNetClass, wxString& msg );
 
     /**
-     * Function doPadToPadsDrc
-     * tests the clearance between aRefPad and other pads.
+     * Test the clearance between aRefPad and other pads.
+     *
      * The pad list must be sorted by x coordinate.
+     *
      * @param aRefPad The pad to test
      * @param aStart The start of the pad list to test against
      * @param aEnd Marks the end of the list and is not included
@@ -325,31 +318,31 @@ private:
     bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
 
     /**
-     * Function DoTrackDrc
-     * tests the current segment.
+     * Test the current segment.
+     *
      * @param aRefSeg The segment to test
      * @param aStart The head of a list of tracks to test against (usually BOARD::m_Track)
      * @param doPads true if should do pads test
-     * @return bool - true if no poblems, else false and m_currentMarker is
+     * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
     bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
 
     /**
-     * Function doTrackKeepoutDrc
-     * tests the current segment or via.
+     * Test the current segment or via.
+     *
      * @param aRefSeg The segment to test
-     * @return bool - true if no poblems, else false and m_currentMarker is
+     * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
     bool doTrackKeepoutDrc( TRACK* aRefSeg );
 
 
     /**
-     * Function doEdgeZoneDrc
-     * tests a segment in ZONE_CONTAINER * aArea:
+     * Test a segment in ZONE_CONTAINER * aArea:
      *      Test Edge inside other areas
      *      Test Edge too close other areas
+     *
      * @param aArea The current area.
      * @param aCornerIndex The first corner of the segment to test.
      * @return bool - false if DRC error  or true if OK
@@ -357,8 +350,8 @@ private:
     bool doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex );
 
     /**
-     * Function doFootprintOverlappingDrc
-     * tests for footprint courtyard overlaps
+     * Test for footprint courtyard overlaps.
+     *
      * @return bool - false if DRC error  or true if OK
      */
     bool doFootprintOverlappingDrc();
@@ -366,7 +359,6 @@ private:
     //-----<single tests>----------------------------------------------
 
     /**
-     * Function checkClearancePadToPad
      * @param aRefPad The reference pad to check
      * @param aPad Another pad to check against
      * @return bool - true if clearance between aRefPad and aPad is >= dist_min, else false
@@ -375,8 +367,7 @@ private:
 
 
     /**
-     * Function checkClearanceSegmToPad
-     * check the distance from a pad to segment.  This function uses several
+     * Check the distance from a pad to segment.  This function uses several
      * instance variable not passed in:
      *      m_segmLength = length of the segment being tested
      *      m_segmAngle  = angle of the segment with the X axis;
@@ -393,8 +384,8 @@ private:
 
 
     /**
-     * Helper function checkMarginToCircle
      * Check the distance from a point to a segment.
+     *
      * The segment is expected starting at 0,0, and on the X axis
      * (used to test DRC between a segment and a round pad, via or round end of a track
      * @param aCentre The coordinate of the circle's center
@@ -447,9 +438,9 @@ public:
     int Drc( ZONE_CONTAINER* aArea, int aCornerIndex );
 
     /**
-     * Function DrcBlind
-     * tests the current segment and returns the result.  Any error is not
+     * Test the current segment and returns the result.  Any error is not
      * displayed in the status panel.
+     *
      * @param aRefSeg The current segment to test.
      * @param aList The track list to test (usually m_Pcb->m_Track)
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
@@ -475,10 +466,10 @@ public:
     int TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers );
 
     /**
-     * Function ShowDRCDialog
-     * opens a dialog and prompts the user, then if a test run button is
+     * Open a dialog and prompts the user, then if a test run button is
      * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
      * created if it is not already in existence.
+     *
      * @param aParent is the parent window for wxWidgets. Usually the PCB editor frame
      * but can be an other dialog
      * if aParent == NULL (default), the parent will be the PCB editor frame
@@ -490,22 +481,23 @@ public:
     void ShowDRCDialog( wxWindow* aParent = NULL );
 
     /**
-     * Function DestroyDRCDialog
-     * deletes this ui dialog box and zeros out its pointer to remember
+     * Deletes this ui dialog box and zeros out its pointer to remember
      * the state of the dialog's existence.
+     *
      * @param aReason Indication of which button was clicked to cause the destruction.
-     * if aReason == wxID_OK, design parameters values which can be entered from the dialog will bbe saved
-     * in design parameters list
+     * if aReason == wxID_OK, design parameters values which can be entered from the dialog
+     * will bbe saved in design parameters list
      */
     void DestroyDRCDialog( int aReason );
 
 
     /**
-     * Function SetSettings
-     * saves all the UI or test settings and may be called before running the tests.
+     * Save all the UI or test settings and may be called before running the tests.
+     *
      * @param aPad2PadTest Tells whether to test pad to pad distances.
      * @param aUnconnectedTest Tells whether to list unconnected pads.
      * @param aZonesTest Tells whether to test zones.
+     * @param aRefillZones Refill zones before performing DRC.
      * @param aKeepoutTest Tells whether to test keepout areas.
      * @param aCourtyardTest Tells whether to test footprint courtyard overlap.
      * @param aCourtyardMissingTest Tells whether to test missing courtyard definition in footprint.
@@ -513,7 +505,7 @@ public:
      * @param aSaveReport A boolean telling whether to generate disk file report.
      */
     void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
-                      bool aZonesTest, bool aKeepoutTest,
+                      bool aZonesTest, bool aKeepoutTest, bool aRefillZones,
                       bool aCourtyardTest, bool aCourtyardMissingTest,
                       const wxString& aReportName, bool aSaveReport )
     {
@@ -525,20 +517,19 @@ public:
         m_doCreateRptFile       = aSaveReport;
         m_doFootprintOverlapping = aCourtyardTest;
         m_doNoCourtyardDefined  = aCourtyardMissingTest;
+        m_refillZones           = aRefillZones;
     }
 
 
     /**
-     * Function RunTests
-     * will actually run all the tests specified with a previous call to
+     * Run all the tests specified with a previous call to
      * SetSettings()
      * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
     void RunTests( wxTextCtrl* aMessages = NULL );
 
     /**
-     * Function ListUnconnectedPad
-     * gathers a list of all the unconnected pads and shows them in the
+     * Gather a list of all the unconnected pads and shows them in the
      * dialog, and optionally prints a report of such.
      */
     void ListUnconnectedPads();
@@ -555,5 +546,3 @@ public:
 
 
 #endif  // DRC_H
-
-//EOF

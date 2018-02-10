@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         m_drcDialog = new DIALOG_DRC_CONTROL( this, m_pcbEditorFrame, aParent );
         updatePointers();
 
-        m_drcDialog->SetRptSettings( m_doCreateRptFile, m_rptFilename);
+        m_drcDialog->SetRptSettings( m_doCreateRptFile, m_rptFilename );
 
         if( show_dlg_modal )
             m_drcDialog->ShowModal();
@@ -130,7 +130,7 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_doNoCourtyardDefined = true;  // enable missing courtyard in footprint warning
     m_abortDRC = false;
     m_drcInProgress = false;
-
+    m_refillZones = false;            // Only fill zones if requested by user.
     m_doCreateRptFile = false;
 
     // m_rptFilename set to empty by its constructor
@@ -252,7 +252,7 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                         wxString msg1 = zoneRef->GetSelectMenuText();
                         wxString msg2 = zoneToTest->GetSelectMenuText();
                         MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
-                                                              pt, msg1, pt, msg2, pt );
+                                                             pt, msg1, pt, msg2, pt );
                         commit.Add( marker );
                     }
 
@@ -281,7 +281,6 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                     nerrors++;
                 }
             }
-
 
             // Iterate through all the segments of refSmoothedPoly
             for( auto refIt = refSmoothedPoly.IterateSegmentsWithHoles(); refIt; refIt++ )
@@ -323,7 +322,7 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                             wxString msg1 = zoneRef->GetSelectMenuText();
                             wxString msg2 = zoneToTest->GetSelectMenuText();
                             MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_CLOSE_TO_COPPERAREA,
-                                                              pt, msg1, pt, msg2, pt );
+                                                                 pt, msg1, pt, msg2, pt );
                             commit.Add( marker );
                         }
 
@@ -410,7 +409,12 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
     wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
-    m_pcbEditorFrame->Fill_All_Zones( caller );
+
+    if( m_refillZones )
+    {
+        aMessages->AppendText( _( "Refilling all zones...\n" ) );
+        m_pcbEditorFrame->Fill_All_Zones( caller );
+    }
 
     // test zone clearances to other zones
     if( aMessages )
@@ -454,7 +458,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     testTexts();
 
-    // find overlaping courtyard ares.
+    // find overlapping courtyard ares.
     if( m_doFootprintOverlapping || m_doNoCourtyardDefined )
     {
         if( aMessages )
@@ -632,6 +636,7 @@ void DRC::testPad2Pad()
 
         // GetBoundingRadius() is the radius of the minimum sized circle fully containing the pad
         int radius = pad->GetBoundingRadius();
+
         if( radius > max_size )
             max_size = radius;
     }
@@ -662,6 +667,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
     const int delta = 500;  // This is the number of tests between 2 calls to the
                             // progress bar
     int count = 0;
+
     for( TRACK* segm = m_pcb->m_Track; segm && segm->Next(); segm = segm->Next() )
         count++;
 
@@ -682,7 +688,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 
     for( TRACK* segm = m_pcb->m_Track; segm; segm = segm->Next() )
     {
-        if ( ii++ > delta )
+        if( ii++ > delta )
         {
             ii = 0;
             count++;
@@ -718,7 +724,7 @@ void DRC::testUnconnected()
     auto connectivity = m_pcb->GetConnectivity();
 
     connectivity->Clear();
-    connectivity->Build(m_pcb); // just in case. This really needs to be reliable.
+    connectivity->Build( m_pcb ); // just in case. This really needs to be reliable.
     connectivity->RecalculateRatsnest();
 
     std::vector<CN_EDGE> edges;
@@ -750,7 +756,7 @@ void DRC::testZones()
     // This is allowed, but i am not sure this is a good idea
     //
     // In recent Pcbnew versions, the netcode is always >= 0, but an internal net name
-    // is stored, and initalized from the file or the zone properpies editor.
+    // is stored, and initialized from the file or the zone properties editor.
     // if it differs from the net name from net code, there is a DRC issue
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
@@ -796,7 +802,7 @@ void DRC::testKeepoutAreas()
         {
             if( segm->Type() == PCB_TRACE_T )
             {
-                if( ! area->GetDoNotAllowTracks()  )
+                if( !area->GetDoNotAllowTracks()  )
                     continue;
 
                 // Ignore if the keepout zone is not on the same layer
@@ -843,7 +849,7 @@ void DRC::testTexts()
     for( auto item : m_pcb->Drawings() )
     {
         // Drc test only items on copper layers
-        if( ! IsCopperLayer( item->GetLayer() ) )
+        if( !IsCopperLayer( item->GetLayer() ) )
             continue;
 
         // only texts on copper layers are tested
@@ -861,7 +867,7 @@ void DRC::testTexts()
 
         for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
         {
-            if( ! track->IsOnLayer( item->GetLayer() ) )
+            if( !track->IsOnLayer( item->GetLayer() ) )
                     continue;
 
             // Test the distance between each segment and the current track/via
@@ -913,7 +919,7 @@ void DRC::testTexts()
         {
             D_PAD* pad = padList[ii];
 
-            if( ! pad->IsOnLayer( item->GetLayer() ) )
+            if( !pad->IsOnLayer( item->GetLayer() ) )
                     continue;
 
             wxPoint shape_pos = pad->ShapePos();
@@ -970,7 +976,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
 
         if( aRefSeg->Type() == PCB_TRACE_T )
         {
-            if( ! area->GetDoNotAllowTracks()  )
+            if( !area->GetDoNotAllowTracks()  )
                 continue;
 
             if( !area->IsOnLayer( aRefSeg->GetLayer() ) )
@@ -986,7 +992,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
         }
         else if( aRefSeg->Type() == PCB_VIA_T )
         {
-            if( ! area->GetDoNotAllowVias()  )
+            if( !area->GetDoNotAllowVias() )
                 continue;
 
             auto viaLayers = aRefSeg->GetLayerSet();
@@ -1203,7 +1209,8 @@ bool DRC::doFootprintOverlappingDrc()
             courtyard.Append( footprint->GetPolyCourtyardFront() );
 
             // Build the common area between footprint and the candidate:
-            courtyard.BooleanIntersection( candidate->GetPolyCourtyardFront(), SHAPE_POLY_SET::PM_FAST );
+            courtyard.BooleanIntersection( candidate->GetPolyCourtyardFront(),
+                                           SHAPE_POLY_SET::PM_FAST );
 
             // If no overlap, courtyard is empty (no common area).
             // Therefore if a common polygon exists, this is a DRC error
@@ -1215,7 +1222,8 @@ bool DRC::doFootprintOverlappingDrc()
                             candidate->GetReference().GetData() );
                 VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
                 wxPoint loc( pos.x, pos.y );
-                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg, m_currentMarker );
+                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg,
+                                              m_currentMarker );
                 addMarkerToPcb( m_currentMarker );
                 m_currentMarker = nullptr;
                 success = false;
@@ -1238,7 +1246,8 @@ bool DRC::doFootprintOverlappingDrc()
             courtyard.Append( footprint->GetPolyCourtyardBack() );
 
             // Build the common area between footprint and the candidate:
-            courtyard.BooleanIntersection( candidate->GetPolyCourtyardBack(), SHAPE_POLY_SET::PM_FAST );
+            courtyard.BooleanIntersection( candidate->GetPolyCourtyardBack(),
+                                           SHAPE_POLY_SET::PM_FAST );
 
             // If no overlap, courtyard is empty (no common area).
             // Therefore if a common polygon exists, this is a DRC error
@@ -1250,7 +1259,8 @@ bool DRC::doFootprintOverlappingDrc()
                             candidate->GetReference().GetData() );
                 VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
                 wxPoint loc( pos.x, pos.y );
-                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg, m_currentMarker );
+                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg,
+                                              m_currentMarker );
                 addMarkerToPcb( m_currentMarker );
                 m_currentMarker = nullptr;
                 success = false;
@@ -1260,4 +1270,3 @@ bool DRC::doFootprintOverlappingDrc()
 
     return success;
 }
-

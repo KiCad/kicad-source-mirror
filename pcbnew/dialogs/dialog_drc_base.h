@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Feb  9 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_DRC_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class DRCLISTBOX;
 
 #include "dialog_shim.h"
@@ -63,6 +62,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaMinUnit;
 		wxStaticText* m_MicroViaMinTitle;
 		wxStaticText* m_MicroViaMinUnit;
+		wxCheckBox* m_cbRefillZones;
 		wxCheckBox* m_cbCourtyardOverlap;
 		wxCheckBox* m_cbCourtyardMissing;
 		wxStaticText* m_staticTextRpt;
