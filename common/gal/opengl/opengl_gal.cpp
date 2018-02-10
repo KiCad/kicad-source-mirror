@@ -1774,8 +1774,10 @@ void OPENGL_GAL::init()
 
     GLenum err = glewInit();
 
-#ifdef __WXDEBUG__
+#if defined (__LINUX__)      // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
+#ifdef DEBUG
     enableGlDebug( true );
+#endif
 #endif
 
     try
