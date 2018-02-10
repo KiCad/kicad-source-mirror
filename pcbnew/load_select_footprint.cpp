@@ -58,6 +58,7 @@ using namespace std::placeholders;
 #include <dialog_get_component.h>
 #include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/progress_reporter.h>
 
 
 static void DisplayCmpDoc( wxString& aName, void* aData );
@@ -197,6 +198,18 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
+
+    // While some of the search methods can load a libraray at a time (and stop when
+    // a match is found), the async loader gives much better feedback and loads the
+    // libraries in parallel.
+    // If the footprints are already in the cache, ReadFootprintFiles() will return
+    // immediately.
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+    MList.ReadFootprintFiles( aTable, libName.length() ? &libName : nullptr, &progressReporter );
+    progressReporter.Show( false );
+
+    if( MList.GetErrorCount() )
+        MList.DisplayErrors( this );
 
     if( dlg.IsKeyword() )       // Selection by keywords
     {
