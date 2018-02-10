@@ -73,9 +73,12 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
     // because the update and change versions of this dialog have different controls.
     m_hash_key = TO_UTF8( GetTitle() );
 
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Center();
+    // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
+    // (to fix automatic renaming of button label )
+    m_closeButton->SetLabel( _( "Close" ) );
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
@@ -244,14 +247,27 @@ wxRadioButton* DIALOG_EXCHANGE_MODULE::getRadioButtonForMode()
 
 void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 {
-    wxRadioButton* button = getRadioButtonForMode();
+    wxRadioButton* rb_button = getRadioButtonForMode();
 
-    m_matchAll->SetValue( m_matchAll == button );
-    m_matchCurrentRef->SetValue( m_matchCurrentRef == button );
-    m_matchSpecifiedRef->SetValue( m_matchSpecifiedRef == button );
-    m_matchCurrentValue->SetValue( m_matchCurrentValue == button );
-    m_matchSpecifiedValue->SetValue( m_matchSpecifiedValue == button );
-    m_matchSpecifiedID->SetValue(m_matchSpecifiedID == button );
+    wxRadioButton* rb_butt_list[] =
+    {
+        m_matchCurrentRef, m_matchSpecifiedRef,
+        m_matchCurrentValue, m_matchCurrentValue,
+        m_matchSpecifiedValue, m_matchSpecifiedValue,
+        m_matchSpecifiedID, m_matchSpecifiedID,
+        nullptr     // end of list
+    };
+
+    // Ensure the button state is ok. Only one button can be checked
+    // Change button state only if its state is incorrect, otherwise
+    // we have issues depending on the platform.
+    for( int ii = 0; rb_butt_list[ii]; ++ii )
+    {
+        bool state = rb_butt_list[ii] == rb_button;
+
+        if( rb_butt_list[ii]->GetValue() != state )
+            rb_butt_list[ii]->SetValue( state );
+    }
 }
 
 
@@ -260,6 +276,7 @@ void DIALOG_EXCHANGE_MODULE::OnMatchAllClicked( wxCommandEvent& event )
     setMatchMode( ID_MATCH_FP_ALL );
     m_matchAll->SetFocus();
 }
+
 
 void DIALOG_EXCHANGE_MODULE::OnMatchRefClicked( wxCommandEvent& event )
 {
@@ -288,7 +305,7 @@ void DIALOG_EXCHANGE_MODULE::OnMatchIDClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
+void DIALOG_EXCHANGE_MODULE::OnApplyClick( wxCommandEvent& event )
 {
     bool result = false;
 

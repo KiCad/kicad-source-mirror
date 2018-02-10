@@ -53,7 +53,7 @@ private:
     void OnMatchRefClicked( wxCommandEvent& event ) override;
     void OnMatchValueClicked( wxCommandEvent& event ) override;
     void OnMatchIDClicked( wxCommandEvent& event ) override;
-    void OnOkClick( wxCommandEvent& event ) override;
+    void OnApplyClick( wxCommandEvent& event ) override;
     void OnQuit( wxCommandEvent& event ) override;
     void ViewAndSelectFootprint( wxCommandEvent& event ) override;
     void RebuildCmpList( wxCommandEvent& event ) override;

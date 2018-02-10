@@ -112,7 +112,7 @@
                             <property name="border">5</property>
                             <property name="colspan">2</property>
                             <property name="column">0</property>
-                            <property name="flag">wxLEFT|wxRIGHT|wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxALL</property>
                             <property name="row">0</property>
                             <property name="rowspan">1</property>
                             <object class="wxRadioButton" expanded="0">
@@ -149,7 +149,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,26</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_matchAll</property>
                                 <property name="pane_border">1</property>
@@ -161,15 +161,15 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxRB_SINGLE</property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="style"></property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
                                 <property name="validator_variable"></property>
-                                <property name="value">1</property>
+                                <property name="value">0</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
@@ -203,7 +203,7 @@
                             <property name="border">5</property>
                             <property name="colspan">2</property>
                             <property name="column">0</property>
-                            <property name="flag">wxLEFT|wxRIGHT|wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxALL</property>
                             <property name="row">1</property>
                             <property name="rowspan">1</property>
                             <object class="wxRadioButton" expanded="0">
@@ -240,7 +240,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,26</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_matchCurrentRef</property>
                                 <property name="pane_border">1</property>
@@ -252,8 +252,8 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxRB_SINGLE</property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="style"></property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -331,7 +331,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,26</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_matchSpecifiedRef</property>
                                 <property name="pane_border">1</property>
@@ -343,8 +343,8 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxRB_SINGLE</property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="style"></property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -435,7 +435,7 @@
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -479,7 +479,7 @@
                             <property name="border">5</property>
                             <property name="colspan">2</property>
                             <property name="column">0</property>
-                            <property name="flag">wxLEFT|wxRIGHT|wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxALL</property>
                             <property name="row">3</property>
                             <property name="rowspan">1</property>
                             <object class="wxRadioButton" expanded="0">
@@ -516,7 +516,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,26</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_matchCurrentValue</property>
                                 <property name="pane_border">1</property>
@@ -528,8 +528,8 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxRB_SINGLE</property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="style"></property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -570,7 +570,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
-                            <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxALL</property>
                             <property name="row">4</property>
                             <property name="rowspan">1</property>
                             <object class="wxRadioButton" expanded="0">
@@ -607,7 +607,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,26</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_matchSpecifiedValue</property>
                                 <property name="pane_border">1</property>
@@ -619,8 +619,8 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxRB_SINGLE</property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="style"></property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -661,7 +661,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">1</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT</property>
                             <property name="row">4</property>
                             <property name="rowspan">1</property>
                             <object class="wxTextCtrl" expanded="0">
@@ -711,7 +711,7 @@
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -804,8 +804,8 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxRB_SINGLE</property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="style"></property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -863,7 +863,7 @@
                                 <property name="vgap">0</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
+                                    <property name="flag">wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -912,7 +912,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass">; forward_declare</property>
+                                        <property name="subclass">; </property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
@@ -954,7 +954,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">0</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1190,7 +1190,7 @@
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -1240,7 +1240,7 @@
                                 <property name="vgap">0</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                    <property name="flag">wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1289,7 +1289,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass">; forward_declare</property>
+                                        <property name="subclass">; </property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
@@ -1331,7 +1331,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">0</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1648,7 +1648,7 @@
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -1744,7 +1744,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass">; forward_declare</property>
+                                        <property name="subclass">; </property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
@@ -1823,14 +1823,14 @@
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
-                                <property name="permission">private</property>
+                                <property name="permission">protected</property>
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>
@@ -1840,7 +1840,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnOkClick</event>
+                                <event name="OnButtonClick">OnApplyClick</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -1898,7 +1898,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">wxID_CANCEL</property>
                                 <property name="label">Close</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -1911,14 +1911,14 @@
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
-                                <property name="permission">private</property>
+                                <property name="permission">protected</property>
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style"></property>
-                                <property name="subclass">; forward_declare</property>
+                                <property name="subclass">; </property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="validator_data_type"></property>

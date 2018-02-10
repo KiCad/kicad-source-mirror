@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,8 +43,6 @@ class WX_HTML_REPORT_PANEL;
 class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 {
 	private:
-		wxButton* m_applyButton;
-		wxButton* m_closeButton;
 	
 	protected:
 		wxBoxSizer* m_mainSizer;
@@ -64,6 +62,8 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_newIDBrowseButton;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxButton* m_exportButton;
+		wxButton* m_applyButton;
+		wxButton* m_closeButton;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -73,7 +73,7 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 		virtual void OnMatchIDClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ViewAndSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RebuildCmpList( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		
 	
