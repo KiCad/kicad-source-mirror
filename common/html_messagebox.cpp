@@ -35,7 +35,7 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle) :
     ListClear();
 
     // Gives a default logical size (the actual size depends on the display definition)
-    SetSizeInDU( 240, 150 );
+    SetSizeInDU( 320, 120 );
 
     Center();
 }

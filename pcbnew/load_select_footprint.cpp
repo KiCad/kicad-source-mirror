@@ -390,19 +390,14 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
     MList.ReadFootprintFiles( aTable, !aLibraryName ? NULL : &aLibraryName );
 
     if( MList.GetErrorCount() )
-    {
         MList.DisplayErrors( this );
-        return wxEmptyString;
-    }
 
     if( MList.GetCount() == 0 )
     {
         wxString tmp;
 
         for( unsigned i = 0;  i < libraries.GetCount();  i++ )
-        {
             tmp += libraries[i] + wxT( "\n" );
-        }
 
         msg.Printf( _( "No footprints could be read from library file(s):\n\n%s\nin any of "
                        "the library search paths.  Verify your system is configured properly "

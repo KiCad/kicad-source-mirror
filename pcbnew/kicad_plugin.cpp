@@ -148,6 +148,12 @@ class FP_CACHE
     wxDateTime      m_mod_time;     /// Footprint library path modified time stamp.
     MODULE_MAP      m_modules;      /// Map of footprint file name per MODULE*.
 
+    bool m_represents_non_existant_dir;  // Indicates this cache represents a directory
+                                         // which does not exist. This forces
+                                         // GetLibModificationTime() to return 0 (at least
+                                         // until the directory is found, at which point it
+                                         // will return Now).
+
 public:
     FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath );
 
@@ -204,13 +210,19 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 {
     m_owner = aOwner;
     m_lib_path.SetPath( aLibraryPath );
+    m_represents_non_existant_dir = false;
 }
 
 
 wxDateTime FP_CACHE::GetLibModificationTime() const
 {
     if( !m_lib_path.DirExists() )
-        return wxDateTime::Now();
+    {
+        if( m_represents_non_existant_dir )
+            return wxDateTime( 0.0 );
+        else
+            return wxDateTime::Now();
+    }
 
     return m_lib_path.GetModificationTime();
 }
@@ -280,10 +292,14 @@ void FP_CACHE::Save()
 
 void FP_CACHE::Load()
 {
+    m_represents_non_existant_dir = false;
+
     wxDir dir( m_lib_path.GetPath() );
 
     if( !dir.IsOpened() )
     {
+        m_represents_non_existant_dir = true;
+
         wxString msg = wxString::Format(
                 _( "Footprint library path \"%s\" does not exist" ),
                 GetChars( m_lib_path.GetPath() )
@@ -1958,18 +1974,10 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
     LOCALE_IO     toggle;     // toggles on, then off, the C locale.
     wxDir         dir( aLibraryPath );
 
-    if( !dir.IsOpened() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
-                                          GetChars( aLibraryPath ) ) );
-    }
-
     init( aProperties );
 
     wxString errorMsg;
 
-    // Some of the files may have been parsed correctly so we want to add the valid files to
-    // the library.
     try
     {
         cacheLib( aLibraryPath );
@@ -1978,6 +1986,9 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
     {
         errorMsg = ioe.What();
     }
+
+    // Some of the files may have been parsed correctly so we want to add the valid files to
+    // the library.
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
