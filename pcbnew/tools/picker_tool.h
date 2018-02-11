@@ -40,6 +40,9 @@ public:
     ///> Mouse event click handler type.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
 
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
+
     ///> @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override {}
 

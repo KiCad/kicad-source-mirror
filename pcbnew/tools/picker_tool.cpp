@@ -29,6 +29,9 @@
 #include <pcb_edit_frame.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
+#include "tool_event_utils.h"
+#include "selection_tool.h"
+
 
 TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
@@ -37,6 +40,29 @@ PICKER_TOOL::PICKER_TOOL()
     : PCB_TOOL( "pcbnew.Picker" )
 {
     reset();
+}
+
+
+bool PICKER_TOOL::Init()
+{
+    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( frame()->GetToolId() != ID_NO_TOOL_SELECTED );
+    };
+
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    // We delegate our context menu to the Selection tool, so make sure it has a
+    // "Cancel" item at the top.
+    if( selTool )
+    {
+        auto& toolMenu = selTool->GetToolMenu();
+        auto& menu = toolMenu.GetMenu();
+
+        menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1000 );
+        menu.AddSeparator( activeToolCondition, 1000 );
+    }
+
+    return true;
 }
 
 
@@ -83,7 +109,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( evt->IsCancel() || evt->IsActivate() )
+        else if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             break;
 
         else

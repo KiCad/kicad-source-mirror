@@ -287,6 +287,10 @@ bool EDIT_TOOL::Init()
     auto singleModuleCondition = SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T )
                                     && SELECTION_CONDITIONS::Count( 1 );
 
+    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
+        return ( frame()->GetToolId() == ID_NO_TOOL_SELECTED );
+    };
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
@@ -309,8 +313,10 @@ bool EDIT_TOOL::Init()
 
     menu.AddItem( PCB_ACTIONS::copyToClipboard, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::cutToClipboard, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::pasteFromClipboard );
-    menu.AddSeparator();
+    // Selection tool handles the context menu for some other tools, such as the Picker.
+    // Don't add things like Paste when another tool is active.
+    menu.AddItem( PCB_ACTIONS::pasteFromClipboard, noActiveToolCondition );
+    menu.AddSeparator( noActiveToolCondition );
 
     // Mirror only available in modedit
     menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );

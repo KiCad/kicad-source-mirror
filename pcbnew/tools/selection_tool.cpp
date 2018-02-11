@@ -117,7 +117,9 @@ TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         _( "Find Item..." ),_( "Searches the document for an item" ), find_xpm );
 
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ),
+        _( "Get and Move Footprint" ),
+        _( "Selects a footprint by reference and places it under the cursor for moving"));
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0,
@@ -204,7 +206,6 @@ bool SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     menu.AddMenu( selectMenu.get(), false, SELECTION_CONDITIONS::NotEmpty );
-    // only show separator if there is a Select menu to show above it
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
 
     auto frame = getEditFrame<PCB_BASE_FRAME>();

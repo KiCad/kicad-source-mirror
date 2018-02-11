@@ -226,7 +226,8 @@ public:
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     PCB_TOOL( "pcbnew.EditorControl" ),
-    m_frame( nullptr )
+    m_frame( nullptr ),
+    m_menu( *this )
 {
     m_placeOrigin.reset( new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
                                                 KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS ) );
@@ -255,6 +256,31 @@ void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 
 bool PCB_EDITOR_CONTROL::Init()
 {
+    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
+    };
+
+    auto inactiveStateCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED && aSel.Size() == 0 );
+    };
+
+    auto placeModuleCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_PCB_MODULE_BUTT && aSel.GetSize() == 0 );
+    };
+
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // "Cancel" goes at the top of the context menu when a tool is active
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1000 );
+    ctxMenu.AddSeparator( activeToolCondition, 1000 );
+
+    // "Get and Place Footprint" should be available for Place Footprint tool
+    ctxMenu.AddItem( PCB_ACTIONS::findMove, placeModuleCondition, 1000 );
+    ctxMenu.AddSeparator( placeModuleCondition, 1000 );
+
+    // Finally, add the standard zoom & grid items
+    m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
+
     auto zoneMenu = std::make_shared<ZONE_CONTEXT_MENU>();
     zoneMenu->SetTool( this );
 
@@ -269,6 +295,10 @@ bool PCB_EDITOR_CONTROL::Init()
     {
         auto& toolMenu = selTool->GetToolMenu();
         auto& menu = toolMenu.GetMenu();
+
+        // Add "Get and Place Footprint" when Selection tool is in an inactive state
+        menu.AddItem( PCB_ACTIONS::findMove, inactiveStateCondition );
+        menu.AddSeparator( inactiveStateCondition );
 
         toolMenu.AddSubMenu( zoneMenu );
         toolMenu.AddSubMenu( lockMenu );
@@ -413,7 +443,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         if( reselect && module )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( module )
             {
@@ -457,6 +487,11 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
             controls->SetAutoPan( placing );
             controls->CaptureCursor( placing );
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selTool->GetSelection() );
         }
 
         else if( module && evt->IsMotion() )
@@ -541,6 +576,7 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
 int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
+    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD* board = getModel<BOARD>();
@@ -569,7 +605,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     {
         cursorPos = controls->GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             break;
 
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
@@ -603,6 +639,11 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             // Create next PCB_TARGET
             target = new PCB_TARGET( *target );
             preview.Add( target );
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selTool->GetSelection() );
         }
 
         else if( evt->IsMotion() )

@@ -26,6 +26,7 @@
 #define PCB_EDITOR_CONTROL_H
 
 #include <tools/pcb_tool.h>
+#include <tool/tool_menu.h>
 
 namespace KIGFX {
     class ORIGIN_VIEWITEM;
@@ -127,6 +128,9 @@ private:
 
     ///> Pointer to the currently used edit frame.
     PCB_EDIT_FRAME* m_frame;
+
+    /// Menu model displayed by the tool.
+    TOOL_MENU m_menu;
 
     ///> Place & drill origin marker.
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;
