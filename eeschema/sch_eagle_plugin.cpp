@@ -811,7 +811,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             if( m_netCounts[netName.ToStdString()] > 1 )
             {
                 std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
-                glabel->SetPosition( wire->MidPoint() );
+                glabel->SetPosition( wire->GetStartPoint() );
                 glabel->SetText( netname );
                 glabel->SetTextSize( wxSize( 10, 10 ) );
                 glabel->SetLabelSpinStyle( 0 );
@@ -820,7 +820,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             else if( segmentCount > 1 )
             {
                 std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
-                label->SetPosition( wire->MidPoint() );
+                label->SetPosition( wire->GetStartPoint() );
                 label->SetText( netname );
                 label->SetTextSize( wxSize( 10, 10 ) );
                 label->SetLabelSpinStyle( 0 );
