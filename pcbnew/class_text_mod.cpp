@@ -244,6 +244,12 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
       || ( IsBackLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_BK ) ) )
         return;
 
+    if( !brd->IsElementVisible( LAYER_MOD_REFERENCES ) && GetText() == wxT( "%R" ) )
+        return;
+
+    if( !brd->IsElementVisible( LAYER_MOD_VALUES ) && GetText() == wxT( "%V" ) )
+        return;
+
     // Invisible texts are still drawn (not plotted) in LAYER_MOD_TEXT_INVISIBLE
     // Just because we must have to edit them (at least to make them visible)
     if( !IsVisible() )
@@ -472,10 +478,12 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( !aView )
         return 0;
 
-    if( m_Type == TEXT_is_VALUE && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
+    if( ( m_Type == TEXT_is_VALUE || m_Text == wxT( "%V" ) )
+            && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
         return MAX;
 
-    if( m_Type == TEXT_is_REFERENCE && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+    if( ( m_Type == TEXT_is_REFERENCE || m_Text == wxT( "%R" ) )
+            && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
         return MAX;
 
     if( IsFrontLayer( m_Layer ) && ( !aView->IsLayerVisible( LAYER_MOD_TEXT_FR ) ||
