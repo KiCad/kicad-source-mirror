@@ -187,6 +187,9 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
         return false;
 
     LoadProjectFile();
+
+    wxSafeYield();
+
     LoadFootprintFiles();
 
     BuildFOOTPRINTS_LISTBOX();

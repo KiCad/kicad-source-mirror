@@ -32,11 +32,9 @@
 #include <fp_lib_table.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-//#include <wxstruct.h>
 #include <confirm.h>
 
 #include <cvpcb.h>
-#include <zones.h>
 #include <cvpcb_mainframe.h>
 #include <cvpcb_id.h>
 

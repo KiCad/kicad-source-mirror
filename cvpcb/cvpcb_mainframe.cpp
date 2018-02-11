@@ -51,8 +51,8 @@
 #include <cvpcb_id.h>
 
 
-wxSize const FRAME_MIN_SIZE_DU( 300, 120 );
-wxSize const FRAME_DEFAULT_SIZE_DU( 500, 250 );
+wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
+wxSize const FRAME_DEFAULT_SIZE_DU( 450, 300 );
 
 ///@{
 /// \ingroup config
@@ -136,10 +136,11 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( config() );
 
     wxSize const frame_min( ConvertDialogToPixels( FRAME_MIN_SIZE_DU ) );
-    wxSize const frame_default( ConvertDialogToPixels( FRAME_DEFAULT_SIZE_DU ) );
 
-    m_FrameSize = frame_default;
     SetSizeHints( frame_min );
+
+    // Frame size and position
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // create the status bar
     static const int dims[3] = { -1, -1, 250 };
@@ -184,9 +185,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxAuiPaneInfo( info ).Name( wxT( "m_footprintListBox" ) ).
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
-    // Frame size and position
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     m_auimgr.Update();
 }
 
@@ -200,6 +198,11 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
+
+    wxSize const frame_default( ConvertDialogToPixels( FRAME_DEFAULT_SIZE_DU ) );
+
+    if( m_FrameSize == wxDefaultSize )
+        m_FrameSize = frame_default;
 
     aCfg->Read( KeepCvpcbOpenEntry, &m_keepCvpcbOpen, true );
     aCfg->Read( FilterFootprintEntry, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
