@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2018 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -774,9 +774,9 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
     {
         auto f = dynamic_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
 
-    if( f )
-        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
-#ifdef __WXMAC__
+        if( f )
+            f->GetGalCanvas()->Refresh(); // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+#ifndef __UNIX__
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
 #endif
     }
