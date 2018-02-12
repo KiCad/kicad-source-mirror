@@ -776,7 +776,8 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
         if( f )
             f->GetGalCanvas()->Refresh(); // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
-#ifndef __UNIX__
+
+#if defined( __WXMAC__ ) || defined( __WINDOWS__ )
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
 #endif
     }
