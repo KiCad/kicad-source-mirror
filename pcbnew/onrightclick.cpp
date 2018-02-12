@@ -945,16 +945,16 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     sub_menu_Pad->AppendSeparator();
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_COPY_PAD_SETTINGS,
-                 _( "Copy Pad Settings" ),
+                 _( "Copy Pad Properties" ),
                  wxEmptyString,
                  KiBitmap( copy_pad_settings_xpm ) );
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_APPLY_PAD_SETTINGS,
-                 _( "Apply Pad Settings" ),
+                 _( "Apply Pad Properties" ),
                  wxEmptyString,
                  KiBitmap( apply_pad_settings_xpm ) );
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                 _( "Push Pad Settings..." ),
-                 _( "Copy this pad's settings to all pads in this footprint (or similar footprints)" ),
+                 _( "Push Pad Properties..." ),
+                 _( "Copy this pad's properties to all pads in this footprint (or similar footprints)" ),
                  KiBitmap( push_pad_settings_xpm ) );
     sub_menu_Pad->AppendSeparator();
 

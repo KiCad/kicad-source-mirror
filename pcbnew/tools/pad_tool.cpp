@@ -48,19 +48,19 @@
 TOOL_ACTION PCB_ACTIONS::copyPadSettings(
         "pcbnew.PadTool.CopyPadSettings",
         AS_GLOBAL, 0,
-        _( "Copy Pad Settings" ), _( "Copy current pad's settings to the board design settings" ),
+        _( "Copy Pad Properties" ), _( "Copy current pad's properties to the default pad properties" ),
         copy_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::applyPadSettings(
         "pcbnew.PadTool.ApplyPadSettings",
         AS_GLOBAL, 0,
-        _( "Apply Pad Settings" ), _( "Copy the board design settings pad properties to the current pad" ),
+        _( "Apply Pad Properties" ), _( "Copy the default pad properties to the current pad" ),
         apply_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::pushPadSettings(
         "pcbnew.PadTool.PushPadSettings",
         AS_GLOBAL, 0,
-        _( "Push Pad Settings..." ), _( "Copy the current pad settings to other pads" ),
+        _( "Push Pad Properties..." ), _( "Copy the current pad settings to other pads" ),
         push_pad_settings_xpm );
 
 
@@ -195,7 +195,7 @@ bool PAD_TOOL::Init()
                         ( SELECTION_CONDITIONS::HasType( PCB_PAD_T )
                             || SELECTION_CONDITIONS::Count( 0 ) );
 
-        menu.AddMenu( contextMenu.get(), false, showCond );
+        menu.AddMenu( contextMenu.get(), false, showCond, 1000 );
     }
 
     return true;
@@ -225,7 +225,7 @@ int PAD_TOOL::applyPadSettings( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Apply Pad Settings" ) );
+    commit.Push( _( "Apply Pad Properties" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();
@@ -378,7 +378,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter,
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter );
 
-    commit.Push( _( "Apply Pad Settings" ) );
+    commit.Push( _( "Apply Pad Properties" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();

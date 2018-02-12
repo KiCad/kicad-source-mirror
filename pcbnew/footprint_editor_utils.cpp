@@ -966,7 +966,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         }
         else
         {
-            SetToolID( id, wxCURSOR_ARROW, _( "Pad settings" ) );
+            SetToolID( id, wxCURSOR_ARROW, _( "Pad properties" ) );
             InstallPadOptionsFrame( NULL );
             SetNoToolSelected();
         }

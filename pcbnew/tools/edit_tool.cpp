@@ -80,18 +80,19 @@ TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFo
 
 TOOL_ACTION PCB_ACTIONS::copyPadToSettings( "pcbnew.InteractiveEdit.copyPadToSettings",
         AS_GLOBAL, 0,
-        _( "Copy Pad Settings to Current Settings" ),
-        _( "Copies the properties of selected pad to the current template pad settings." ) );
+        _( "Copy Pad Properties to Default Pad Properties" ),
+        _( "Copies the properties of the selected pad to the default pad properties." ) );
 
 TOOL_ACTION PCB_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySettingsToPads",
         AS_GLOBAL, 0,
-        _( "Copy Current Settings to Pads" ),
-        _( "Copies the current template pad settings to the selected pad(s)." ) );
+        _( "Copy Default Pad Properties to Pads" ),
+        _( "Copies the default pad properties to the selected pad(s)." ) );
 
 TOOL_ACTION PCB_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
         AS_GLOBAL, 0,
-        _( "Global Pad Edition" ),
-        _( "Changes pad properties globally." ), push_pad_settings_xpm );
+        _( "Push Pad Settings..." ),
+        _( "Copies the selected pad's properties to all pads in its footprint (or similar footprints)." ),
+        push_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 0,

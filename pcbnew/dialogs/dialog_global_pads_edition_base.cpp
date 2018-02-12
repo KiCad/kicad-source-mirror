@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_global_pads_edition_base.h"
@@ -22,13 +22,13 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pad Filter :") ), wxVERTICAL );
 	
-	m_Pad_Shape_Filter_CB = new wxCheckBox( this, wxID_ANY, _("Do not modify pads having a different shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Pad_Shape_Filter_CB = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Do not modify pads having a different shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_Pad_Shape_Filter_CB, 0, wxALL, 5 );
 	
-	m_Pad_Layer_Filter_CB = new wxCheckBox( this, wxID_ANY, _("Do not modify pads having different layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Pad_Layer_Filter_CB = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Do not modify pads having different layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_Pad_Layer_Filter_CB, 0, wxALL, 5 );
 	
-	m_Pad_Orient_Filter_CB = new wxCheckBox( this, wxID_ANY, _("Do not modify pads having a different orientation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Pad_Orient_Filter_CB = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Do not modify pads having a different orientation"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_Pad_Orient_Filter_CB, 0, wxALL, 5 );
 	
 	
@@ -40,7 +40,7 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonPadEditor = new wxButton( this, ID_CHANGE_GET_PAD_SETTINGS, _("Pad Editor"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPadEditor = new wxButton( this, ID_CHANGE_GET_PAD_SETTINGS, _("Pad Properties..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonPadEditor, 0, wxALL|wxEXPAND, 5 );
 	
 	

@@ -317,9 +317,9 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             msg = AddHotkeyName( _("Edit Pad..." ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_PAD, msg, KiBitmap( options_pad_xpm ) );
             AddMenuItem( PopMenu, ID_POPUP_PCB_COPY_PAD_SETTINGS,
-                         _( "Copy Pad Settings" ), KiBitmap( copy_pad_settings_xpm ) );
+                         _( "Copy Pad Properties" ), KiBitmap( copy_pad_settings_xpm ) );
             AddMenuItem( PopMenu, ID_POPUP_PCB_APPLY_PAD_SETTINGS,
-                         _( "Apply Pad Settings" ), KiBitmap( apply_pad_settings_xpm ) );
+                         _( "Apply Pad Properties" ), KiBitmap( apply_pad_settings_xpm ) );
             msg = AddHotkeyName( _("Delete Pad" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_PAD, msg, KiBitmap( delete_pad_xpm ) );
 
@@ -337,7 +337,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             {
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                             _( "Push Pad Settings..." ), KiBitmap( push_pad_settings_xpm ) );
+                             _( "Push Pad Properties..." ), KiBitmap( push_pad_settings_xpm ) );
             }
 
             break;
