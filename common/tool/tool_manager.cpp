@@ -903,10 +903,6 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 {
     m_viewControls->ApplySettings( aState->vcSettings );
-
-    // Override the cursor position if menu is active
-    if( m_menuActive )
-        m_viewControls->ForceCursorPosition( true, m_menuCursor );
 }
 
 
