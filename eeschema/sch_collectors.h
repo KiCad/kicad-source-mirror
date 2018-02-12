@@ -32,6 +32,7 @@
 
 #include <collector.h>
 #include <sch_item_struct.h>
+#include <sch_sheet_path.h>
 #include <dialogs/dialog_schematic_find.h>
 
 
@@ -236,8 +237,11 @@ class SCH_FIND_COLLECTOR : public COLLECTOR
     /// The criteria used to test for matching items.
     SCH_FIND_REPLACE_DATA m_findReplaceData;
 
-    /// The path of the sheet currently being iterated over.
-    SCH_SHEET_PATH* m_sheetPath;
+    /// The path of the sheet *currently* being iterated over.
+    SCH_SHEET_PATH* m_currentSheetPath;
+
+    /// The paths of the all the sheets in the collector.
+    SCH_SHEET_PATHS m_sheetPaths;
 
     /// The current found item list index.
     int     m_foundIndex;
@@ -268,7 +272,7 @@ public:
         SetScanTypes( aScanTypes );
         m_foundIndex = 0;
         SetForceSearch( false );
-        m_sheetPath = NULL;
+        m_currentSheetPath = NULL;
         m_lib_hash = 0;
     }
 
@@ -278,6 +282,9 @@ public:
         COLLECTOR::Empty();
         m_data.clear();
     }
+
+    SCH_ITEM* GetItem( int ndx ) const;
+    SCH_ITEM* operator[]( int ndx ) const;
 
     void SetForceSearch( bool doSearch = true ) { m_forceSearch = doSearch; }
 

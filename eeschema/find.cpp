@@ -316,20 +316,6 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     {
         if( m_foundItems.GetCount() == 0 )
             return;
-
-        // Refresh the search cache in case something has changed.  This prevents any stale
-        // pointers from crashing Eeschema when the wxEVT_FIND_CLOSE event is handled.
-        if( IsSearchCacheObsolete( searchCriteria ) )
-        {
-            if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
-            {
-                m_foundItems.Collect( searchCriteria, m_CurrentSheet );
-            }
-            else
-            {
-                m_foundItems.Collect( searchCriteria );
-            }
-        }
     }
     else if( IsSearchCacheObsolete( searchCriteria ) )
     {
@@ -358,7 +344,6 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 {
-    static int              nextFoundIndex = 0;
     SCH_ITEM*               item;
     SCH_SHEET_PATH*         sheet;
     SCH_SHEET_LIST          schematic( g_RootSheet );
@@ -380,10 +365,6 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
         {
             m_foundItems.Collect( searchCriteria );
         }
-
-        // Restore the next found index on cache refresh.  Prevents single replace events
-        // from starting back at the beginning of the cache.
-        m_foundItems.SetFoundIndex( nextFoundIndex );
     }
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
@@ -437,10 +418,12 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
             OnModify();
             SaveUndoItemInUndoList( undoItem );
             updateFindReplaceView( aEvent );
+
+            // A single replace is part of the search; it does not dirty it.
+            m_foundItems.SetForceSearch( false );
         }
 
         m_foundItems.IncrementIndex();
-        nextFoundIndex = m_foundItems.GetFoundIndex();
     }
 
     // End the replace if we are at the end if the list.  This prevents an infinite loop if

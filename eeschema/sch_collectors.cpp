@@ -333,6 +333,65 @@ bool SCH_COLLECTOR::IsDraggableJunction() const
 }
 
 
+/**
+ * A singleton item of this class is returned for a weak reference that no longer exists.
+ * Its sole purpose is to flag the item as having been deleted.
+ */
+class DELETED_SCH_ITEM : public SCH_ITEM
+{
+public:
+    DELETED_SCH_ITEM() :
+        SCH_ITEM( nullptr, NOT_USED )
+    {}
+
+    wxString GetSelectMenuText() const override { return _( "(Deleted Item)" ); }
+    wxString GetClass() const override { return wxT( "DELETED_SCH_ITEM" ); }
+
+    // define pure virtuals:
+    wxPoint GetPosition() const override { return wxPoint(); }
+    void SetPosition( const wxPoint& ) override {}
+    void Draw( EDA_DRAW_PANEL* , wxDC* , const wxPoint& , GR_DRAWMODE , COLOR4D ) override {}
+    void Show( int , std::ostream&  ) const override {}
+    void Move( const wxPoint&  ) override {}
+    void MirrorY( int  ) override {}
+    void MirrorX( int  ) override {}
+    void Rotate( wxPoint  ) override {}
+};
+
+
+DELETED_SCH_ITEM g_DeletedSchItem;
+
+
+SCH_ITEM* SCH_FIND_COLLECTOR::GetItem( int ndx ) const
+{
+    if( (unsigned)ndx >= (unsigned)GetCount() )
+        return NULL;
+
+    // Do not simply return m_List[ ndx ] as it might have been deleted.  Instead
+    // treat it as a weak reference and search the sheets for an item with the same
+    // pointer value.
+
+    void* weakRef = m_List[ ndx ];
+
+    for( unsigned i = 0; i < m_sheetPaths.size(); i++ )
+    {
+        for( EDA_ITEM* item = m_sheetPaths[ i ].LastDrawList(); item; item = item->Next() )
+        {
+            if( (void*) item == weakRef )
+                return (SCH_ITEM*) item;
+        }
+    }
+
+    return &g_DeletedSchItem;
+}
+
+
+SCH_ITEM* SCH_FIND_COLLECTOR::operator[]( int ndx ) const
+{
+    return GetItem( ndx );
+}
+
+
 bool SCH_FIND_COLLECTOR::PassedEnd() const
 {
     bool retv = false;
@@ -415,9 +474,7 @@ wxString SCH_FIND_COLLECTOR::GetText()
                  wxT( "Cannot get found item at invalid index." ) );
 
     SCH_FIND_COLLECTOR_DATA data = m_data[ m_foundIndex ];
-    EDA_ITEM* foundItem = m_List[ m_foundIndex ];
-
-    wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Invalid found item pointer." ) );
+    EDA_ITEM* foundItem = GetItem( m_foundIndex );
 
     wxString msg;
 
@@ -445,7 +502,7 @@ EDA_ITEM* SCH_FIND_COLLECTOR::GetItem( SCH_FIND_COLLECTOR_DATA& aData )
         return NULL;
 
     aData = m_data[ m_foundIndex ];
-    return m_List[ m_foundIndex ];
+    return GetItem( m_foundIndex );
 }
 
 
@@ -457,12 +514,9 @@ bool SCH_FIND_COLLECTOR::ReplaceItem( SCH_SHEET_PATH* aSheetPath )
     wxCHECK_MSG( IsValidIndex( m_foundIndex ), false,
                  wxT( "Invalid replace list index in SCH_FIND_COLLECTOR." ) );
 
-    EDA_ITEM* item = m_List[ m_foundIndex ];
+    EDA_ITEM* item = GetItem( m_foundIndex );
 
     bool replaced = item->Replace( m_findReplaceData, aSheetPath );
-
-    if( replaced )
-        SetForceSearch();
 
     return replaced;
 }
@@ -472,7 +526,7 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     wxPoint position;
 
-    if( aItem->Matches( m_findReplaceData, m_sheetPath, &position ) )
+    if( aItem->Matches( m_findReplaceData, m_currentSheetPath, &position ) )
     {
         if( aItem->Type() == LIB_PIN_T )
         {
@@ -489,7 +543,8 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
         }
 
         Append( aItem );
-        m_data.push_back( SCH_FIND_COLLECTOR_DATA( position, m_sheetPath->PathHumanReadable(),
+        m_data.push_back( SCH_FIND_COLLECTOR_DATA( position,
+                                                   m_currentSheetPath->PathHumanReadable(),
                                                    (SCH_ITEM*) aTestData ) );
     }
 
@@ -513,11 +568,13 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
     Empty();                 // empty the collection just in case
     m_data.clear();
     m_foundIndex = 0;
+    m_sheetPaths.clear();
     SetForceSearch( false );
 
     if( aSheetPath )
     {
-        m_sheetPath = aSheetPath;
+        m_currentSheetPath = aSheetPath;
+        m_sheetPaths.push_back( *m_currentSheetPath );
         EDA_ITEM::IterateForward( aSheetPath->LastDrawList(), m_inspector, NULL, m_ScanTypes );
     }
     else
@@ -526,8 +583,9 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
 
         for( unsigned i = 0; i < schematic.size(); i++ )
         {
-            m_sheetPath = &schematic[i];
-            EDA_ITEM::IterateForward( m_sheetPath->LastDrawList(), m_inspector, NULL, m_ScanTypes );
+            m_currentSheetPath = &schematic[i];
+            m_sheetPaths.push_back( *m_currentSheetPath );
+            EDA_ITEM::IterateForward( m_currentSheetPath->LastDrawList(), m_inspector, NULL, m_ScanTypes );
         }
     }
 
