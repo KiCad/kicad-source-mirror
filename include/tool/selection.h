@@ -168,6 +168,23 @@ public:
         return nullptr;
     }
 
+    /**
+     * Checks if there is at least one item of requested kind.
+     *
+     * @param aType is the type to check for.
+     * @return True if there is at least one item of such kind.
+     */
+    bool HasType( KICAD_T aType ) const
+    {
+        for( auto item : m_items )
+        {
+            if( item->Type() == aType )
+                return true;
+        }
+
+        return false;
+    }
+
     virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
 
     bool HasReferencePoint() const

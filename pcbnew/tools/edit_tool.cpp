@@ -843,29 +843,26 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
-    if( selection.Empty() )
-        return 0;
-
     // is this "alternative" remove?
-    const bool isAlt = aEvent.Parameter<intptr_t>() ==
-            (int) PCB_ACTIONS::REMOVE_FLAGS::ALT;
+    const bool isAlt = aEvent.Parameter<intptr_t>() == (int) PCB_ACTIONS::REMOVE_FLAGS::ALT;
 
-    // in "alternative" mode, deletion is not just a simple list
-    // of selected items, it is:
-    //   - whole tracks, not just segments
-    if( isAlt && selection.IsHover() )
+    // in "alternative" mode, deletion is not just a simple list of selected items,
+    // it removes whole tracks, not just segments
+    if( isAlt && selection.IsHover()
+            && ( selection.HasType( PCB_TRACE_T ) || selection.HasType( PCB_VIA_T ) ) )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
         selection = m_selectionTool->RequestSelection( SELECTION_DELETABLE | SELECTION_SANITIZE_PADS );
     }
 
+    if( selection.Empty() )
+        return 0;
+
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     for( auto item : selection )
-    {
         m_commit->Remove( item );
-    }
 
     m_commit->Push( _( "Delete" ) );
 
