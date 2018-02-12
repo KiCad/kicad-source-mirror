@@ -41,10 +41,12 @@ class DIALOG_PNS_DIFF_PAIR_DIMENSIONS : public DIALOG_PNS_DIFF_PAIR_DIMENSIONS_B
 public:
     DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::SIZES_SETTINGS& aSizes );
 
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
+
 private:
     void updateCheckbox();
 
-    virtual void OnOkClick( wxCommandEvent& aEvent ) override;
     virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event ) override;
 
     UNIT_BINDER m_traceWidth;

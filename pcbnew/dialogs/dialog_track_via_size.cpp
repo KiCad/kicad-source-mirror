@@ -37,20 +37,41 @@ DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SE
     m_viaDrill( aParent, m_viaDrillText, m_viaDrillLabel ),
     m_settings( aSettings )
 {
+    m_stdButtonsOK->SetDefault();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
+}
+
+
+bool DIALOG_TRACK_VIA_SIZE::TransferDataFromWindow()
+{
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !check() )
+        return false;
+
+    // Store dialog values to the router settings
+    m_settings.SetCustomTrackWidth( m_trackWidth.GetValue() );
+    m_settings.SetCustomViaSize( m_viaDiameter.GetValue() );
+    m_settings.SetCustomViaDrill( m_viaDrill.GetValue() );
+
+    return true;
+}
+
+
+bool DIALOG_TRACK_VIA_SIZE::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
     // Load router settings to dialog fields
     m_trackWidth.SetValue( m_settings.GetCustomTrackWidth() );
     m_viaDiameter.SetValue( m_settings.GetCustomViaSize() );
     m_viaDrill.SetValue( m_settings.GetCustomViaDrill() );
 
-    m_trackWidthText->SetFocus();
-    m_trackWidthText->SetSelection( -1, -1 );
-    m_stdButtonsOK->SetDefault();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
-
-    // Pressing ENTER when any of the text input fields is active applies changes
-    Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( DIALOG_TRACK_VIA_SIZE::onOkClick ), NULL, this );
+    return true;
 }
 
 
@@ -85,29 +106,4 @@ bool DIALOG_TRACK_VIA_SIZE::check()
     }
 
     return true;
-}
-
-
-void DIALOG_TRACK_VIA_SIZE::onClose( wxCloseEvent& aEvent )
-{
-    EndModal( 0 );
-}
-
-
-void DIALOG_TRACK_VIA_SIZE::onOkClick( wxCommandEvent& aEvent )
-{
-    if( check() )
-    {
-        // Store dialog values to the router settings
-        m_settings.SetCustomTrackWidth( m_trackWidth.GetValue() );
-        m_settings.SetCustomViaSize( m_viaDiameter.GetValue() );
-        m_settings.SetCustomViaDrill( m_viaDrill.GetValue() );
-        EndModal( 1 );
-    }
-}
-
-
-void DIALOG_TRACK_VIA_SIZE::onCancelClick( wxCommandEvent& aEvent )
-{
-    EndModal( 0 );
 }

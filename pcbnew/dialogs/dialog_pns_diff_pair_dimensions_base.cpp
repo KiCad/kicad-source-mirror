@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -92,15 +92,11 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	
 	// Connect Events
 	m_viaTraceGapEqual->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnViaTraceGapEqualCheck ), NULL, this );
-	m_stdButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnCancelClick ), NULL, this );
-	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::~DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE()
 {
 	// Disconnect Events
 	m_viaTraceGapEqual->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnViaTraceGapEqualCheck ), NULL, this );
-	m_stdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnCancelClick ), NULL, this );
-	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnOkClick ), NULL, this );
 	
 }

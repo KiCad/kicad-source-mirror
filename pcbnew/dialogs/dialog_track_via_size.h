@@ -38,6 +38,9 @@ public:
     /** Constructor */
     DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SETTINGS& aSettings );
 
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
+
 protected:
     UNIT_BINDER m_trackWidth;
     UNIT_BINDER m_viaDiameter;
@@ -48,11 +51,6 @@ protected:
 
     ///> Checks if values given in the dialog are sensible.
     bool check();
-
-    // Handlers for DIALOG_TRACK_VIA_SIZE_BASE events.
-    void onClose( wxCloseEvent& aEvent ) override;
-    void onOkClick( wxCommandEvent& aEvent ) override;
-    void onCancelClick( wxCommandEvent& aEvent ) override;
 };
 
 #endif // __dialog_track_via_size__

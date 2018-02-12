@@ -34,53 +34,53 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aPar
     m_viaGap( this, m_viaGapText, m_viaGapUnit ),
     m_sizes( aSizes )
 {
-    m_traceWidth.SetValue( aSizes.DiffPairWidth() );
-    m_traceGap.SetValue( aSizes.DiffPairGap() );
-    m_viaGap.SetValue( aSizes.DiffPairViaGap() );
-    m_viaTraceGapEqual->SetValue( m_sizes.DiffPairViaGapSameAsTraceGap() );
-
-    updateCheckbox();
-
     Layout();
     GetSizer()->SetSizeHints( this );
     Centre();
+
+    m_stdButtonsOK->SetDefault();
+}
+
+
+bool DIALOG_PNS_DIFF_PAIR_DIMENSIONS::TransferDataFromWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    // Save widgets' values to settings
+    m_sizes.SetDiffPairGap( m_traceGap.GetValue() );
+    m_sizes.SetDiffPairViaGap( m_viaGap.GetValue() );
+    m_sizes.SetDiffPairWidth( m_traceWidth.GetValue() );
+
+    return true;
+}
+
+
+bool DIALOG_PNS_DIFF_PAIR_DIMENSIONS::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    m_traceWidth.SetValue( m_sizes.DiffPairWidth() );
+    m_traceGap.SetValue( m_sizes.DiffPairGap() );
+    m_viaGap.SetValue( m_sizes.DiffPairViaGap() );
+    m_viaTraceGapEqual->SetValue( m_sizes.DiffPairViaGapSameAsTraceGap() );
+    updateCheckbox();
+
+    return true;
 }
 
 
 void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::updateCheckbox()
 {
-    if( m_viaTraceGapEqual->GetValue() )
-    {
-        m_sizes.SetDiffPairViaGapSameAsTraceGap( true );
-        m_viaGapText->Disable();
-        m_viaGapLabel->Disable();
-        m_viaGapUnit->Disable();
-    }
-    else
-    {
-        m_sizes.SetDiffPairViaGapSameAsTraceGap( false );
-        m_viaGapText->Enable();
-        m_viaGapLabel->Enable();
-        m_viaGapUnit->Enable();
-    }
-}
-
-
-void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnOkClick( wxCommandEvent& aEvent )
-{
-    // Save widgets' values to settings
-    m_sizes.SetDiffPairGap ( m_traceGap.GetValue() );
-    m_sizes.SetDiffPairViaGap ( m_viaGap.GetValue() );
-    m_sizes.SetDiffPairWidth ( m_traceWidth.GetValue() );
-
-    // todo: verify against design rules
-    EndModal( wxID_OK );
+    m_sizes.SetDiffPairViaGapSameAsTraceGap( m_viaTraceGapEqual->GetValue() );
+    m_viaGapText->Enable( !m_viaTraceGapEqual->GetValue() );
+    m_viaGapLabel->Enable( !m_viaTraceGapEqual->GetValue() );
+    m_viaGapUnit->Enable( !m_viaTraceGapEqual->GetValue() );
 }
 
 
 void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnViaTraceGapEqualCheck( wxCommandEvent& event )
 {
-    event.Skip();
     updateCheckbox();
 }
-

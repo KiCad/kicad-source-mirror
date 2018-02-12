@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_TRACK_VIA_SIZE_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -50,12 +51,6 @@ class DIALOG_TRACK_VIA_SIZE_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		

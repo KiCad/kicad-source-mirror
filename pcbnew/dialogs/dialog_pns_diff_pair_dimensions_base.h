@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -55,8 +56,6 @@ class DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -78,18 +78,8 @@ DIALOG_TRACK_VIA_SIZE_BASE::DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWind
 	bSizes->Fit( this );
 	
 	this->Centre( wxBOTH );
-	
-	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_TRACK_VIA_SIZE_BASE::onClose ) );
-	m_stdButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_SIZE_BASE::onCancelClick ), NULL, this );
-	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_SIZE_BASE::onOkClick ), NULL, this );
 }
 
 DIALOG_TRACK_VIA_SIZE_BASE::~DIALOG_TRACK_VIA_SIZE_BASE()
 {
-	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_TRACK_VIA_SIZE_BASE::onClose ) );
-	m_stdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_SIZE_BASE::onCancelClick ), NULL, this );
-	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_SIZE_BASE::onOkClick ), NULL, this );
-	
 }

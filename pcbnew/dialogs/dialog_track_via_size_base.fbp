@@ -61,7 +61,7 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose">onClose</event>
+            <event name="OnClose"></event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -980,11 +980,11 @@
                         <property name="name">m_stdButtons</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick">onCancelClick</event>
+                        <event name="OnCancelButtonClick"></event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">onOkClick</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>
