@@ -351,7 +351,11 @@ public:
     wxPoint GetPosition() const override { return wxPoint(); }
     void SetPosition( const wxPoint& ) override {}
     void Draw( EDA_DRAW_PANEL* , wxDC* , const wxPoint& , GR_DRAWMODE , COLOR4D ) override {}
+
+#if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}
+#endif
+
     void Move( const wxPoint&  ) override {}
     void MirrorY( int  ) override {}
     void MirrorX( int  ) override {}
