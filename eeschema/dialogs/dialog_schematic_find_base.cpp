@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_schematic_find_base.h"
@@ -29,7 +29,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_staticText1->Wrap( -1 );
 	leftGridSizer->Add( m_staticText1, 0, wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
-	m_comboFind = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN ); 
+	m_comboFind = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER ); 
 	m_comboFind->SetToolTip( _("Text with optional wildcards") );
 	m_comboFind->SetMinSize( wxSize( 125,-1 ) );
 	
@@ -41,7 +41,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	leftGridSizer->Add( m_staticReplace, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_comboReplace = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	m_comboReplace = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER ); 
 	m_comboReplace->Hide();
 	
 	leftGridSizer->Add( m_comboReplace, 0, wxALL|wxEXPAND, 5 );
@@ -137,7 +137,9 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SCH_FIND_BASE::OnClose ) );
+	m_comboFind->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
 	m_comboFind->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
+	m_comboReplace->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
 	m_comboReplace->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
 	m_checkWholeWord->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateWholeWordUI ), NULL, this );
 	m_checkWildcardMatch->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateWildcardUI ), NULL, this );
@@ -154,7 +156,9 @@ DIALOG_SCH_FIND_BASE::~DIALOG_SCH_FIND_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SCH_FIND_BASE::OnClose ) );
+	m_comboFind->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
 	m_comboFind->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
+	m_comboReplace->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
 	m_comboReplace->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
 	m_checkWholeWord->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateWholeWordUI ), NULL, this );
 	m_checkWildcardMatch->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateWildcardUI ), NULL, this );

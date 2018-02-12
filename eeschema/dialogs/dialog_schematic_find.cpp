@@ -132,6 +132,12 @@ void DIALOG_SCH_FIND::OnUpdateWildcardUI( wxUpdateUIEvent& aEvent )
 }
 
 
+void DIALOG_SCH_FIND::OnTextEnter( wxCommandEvent& aEvent )
+{
+    OnFind( aEvent );
+}
+
+
 void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
 {
     int index = m_comboFind->FindString( m_comboFind->GetValue(), true );
