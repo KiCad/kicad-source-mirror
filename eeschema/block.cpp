@@ -187,6 +187,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 {
     bool            nextcmd = false;
     bool            zoom_command = false;
+    bool            append = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     if( block->GetCount() )
@@ -273,17 +274,31 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             }
             break;
 
+        case BLOCK_CUT:
         case BLOCK_DELETE:
             GetScreen()->UpdatePickList();
             DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
-            if( block->GetCount() )
+            // The CUT variant needs to copy the items from their originial position
+            if( ( block->GetCommand() == BLOCK_CUT ) && block->GetCount() )
             {
-                DeleteItemsInList( block->GetItems() );
+                wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
+                copyBlockItems( block->GetItems() );
+                MoveItemsInList( m_blockItems.GetItems(), move_vector );
+            }
+
+            // We set this in a while loop to catch any newly created items
+            // as a result of the delete (e.g. merged wires)
+            while( block->GetCount() )
+            {
+                DeleteItemsInList( block->GetItems(), append );
                 SchematicCleanUp( true );
                 OnModify();
+                block->ClearItemsList();
+                GetScreen()->UpdatePickList();
+                append = true;
             }
-            block->ClearItemsList();
+
             GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
@@ -300,25 +315,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             }
 
             block->ClearItemsList();
-            break;
-
-        case BLOCK_CUT:
-            GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
-
-            if( block->GetCount() )
-            {
-                wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
-                copyBlockItems( block->GetItems() );
-                MoveItemsInList( m_blockItems.GetItems(), move_vector );
-                DeleteItemsInList( block->GetItems() );
-                SchematicCleanUp( true );
-                OnModify();
-            }
-
-            block->ClearItemsList();
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh();
             break;
 
         case BLOCK_PASTE:
