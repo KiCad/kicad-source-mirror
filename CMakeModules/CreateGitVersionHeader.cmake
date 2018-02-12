@@ -1,8 +1,8 @@
 #
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
-#  Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
-#  Copyright (C) 2010-2016 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
+#  Copyright (C) 2010-2018 KiCad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -23,10 +23,6 @@
 #
 
 macro( create_git_version_header _git_src_path )
-    # If an error occurs using the git commands to determine the repo
-    # version, set the build version string to "git-error".
-    set( KICAD_GIT_BUILD_VERSION "git-error" )
-
     # Include Git support to automagically create version header file.
     find_package( Git )
 
@@ -34,72 +30,24 @@ macro( create_git_version_header _git_src_path )
         set( _Git_SAVED_LC_ALL "$ENV{LC_ALL}" )
         set( ENV{LC_ALL} C )
 
-        # Get latest commit hash
+        # Use `git describe --dirty` to create the KiCad version string.
         execute_process(
             COMMAND
-            ${GIT_EXECUTABLE} --no-pager log -1 HEAD
-            --pretty=format:%H
+            ${GIT_EXECUTABLE} describe --dirty
             WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_LONG_HASH
+            OUTPUT_VARIABLE _git_DESCRIBE
             ERROR_VARIABLE _git_log_error
             RESULT_VARIABLE _git_log_result
             OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-        if( ${_git_log_result} EQUAL 0 )
-            execute_process(
-            COMMAND
-            ${GIT_EXECUTABLE} --no-pager log -1 HEAD
-            --pretty=format:%h
-            WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_SHORT_HASH
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-            execute_process(
-            COMMAND
-            ${GIT_EXECUTABLE} --no-pager log -1 HEAD
-            --pretty=format:%cn
-            WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_LAST_COMITTER
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-            execute_process(
-            COMMAND
-            ${GIT_EXECUTABLE} --no-pager log -1 HEAD
-            --pretty=format:%cd --date=short
-            WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_LAST_CHANGE_LOG
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-            execute_process(
-            COMMAND
-            ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-            WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_BRANCH
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-            message(STATUS "Git hash: ${_git_LONG_HASH}")
-            message(STATUS "Git branch: ${_git_BRANCH}")
-
-            if( ${_git_log_result} EQUAL 0 )
-                string( REGEX REPLACE "^(.*\n)?revno: ([^ \n]+).*"
-                        "\\2" Kicad_REPO_REVISION "revision ${_git_SHORT_HASH}" )
-                string( REGEX REPLACE "^(.*\n)?committer: ([^\n]+).*"
-                        "\\2" Kicad_REPO_LAST_CHANGED_AUTHOR "${_git_LAST_COMITTER}")
-                string( REGEX REPLACE "^(.*\n)?timestamp: [a-zA-Z]+ ([^ \n]+).*"
-                        "\\2" Kicad_REPO_LAST_CHANGED_DATE "${_git_LAST_CHANGE_LOG}")
-            endif()
         endif()
 
         set( ENV{LC_ALL} ${_Git_SAVED_LC_ALL} )
     endif( GIT_FOUND )
 
     # Check to make sure 'git' command did not fail.  Otherwise fallback
-    # to "no-git" as the revision.
-    if( Kicad_REPO_LAST_CHANGED_DATE )
-        string( REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+)" "\\1-\\2-\\3"
-                _kicad_git_date ${Kicad_REPO_LAST_CHANGED_DATE} )
-        set( KICAD_VERSION "(${_kicad_git_date} ${Kicad_REPO_REVISION})" )
-        set( KICAD_BRANCH_NAME ${_git_BRANCH} )
+    # to KiCadVersion.cmake as the revision level.
+    if( _git_DESCRIBE )
+        set( KICAD_VERSION "(${_git_DESCRIBE})" )
     endif()
 
 endmacro()

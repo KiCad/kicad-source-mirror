@@ -1,8 +1,8 @@
 #
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
-#  Copyright (C) 2016 Wayne Stambaugh <stambaughw@verizon.net>
-#  Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
+#  Copyright (C) 2016 - 2018 KiCad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -29,9 +29,10 @@
 #       releases is a shooting offense.
 #
 # This file gets included in the WriteVersionHeader.cmake file to set
-# the KiCad version when the source is provided in an archive file.
-# When KiCad is cloned using git, the git version is used.  The only
-# time this should be set to a value other than "no-vcs-found" is when
-# a source archive is created.  This eliminates the need to set
-# KICAD_VERSION during the build configuration step.
-set( KICAD_VERSION "no-vcs-found" )
+# the default KiCad version when the source is provided in an archive
+# file or git is not available on the build system.   When KiCad is
+# cloned using git, the git version is used.  This version string should
+# be set after each version tag is added to the git repo.  This will
+# give developers a reasonable idea where which branch was used to build
+# KiCad.
+set( KICAD_VERSION "5.0-dev-unknown" )
