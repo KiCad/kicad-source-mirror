@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Feb  9 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -690,7 +690,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	m_MainSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
