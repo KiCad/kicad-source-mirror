@@ -149,6 +149,8 @@ protected:
 
     void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
+    double bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre );
+
     /**
      * Function unitsChangeRefresh
      * is called when when the units setting has changed to allow for any derived classes

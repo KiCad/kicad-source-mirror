@@ -533,7 +533,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         loadedBoard->SynchronizeNetsAndNetClasses();
 
         SetStatusText( wxEmptyString );
-        BestZoom();
+        Zoom_Automatique( false );
 
         // update the layer names in the listbox
         ReCreateLayerBox( false );

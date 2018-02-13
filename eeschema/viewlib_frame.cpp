@@ -237,7 +237,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
 #ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetZoom( BestZoom() );
+    GetScreen()->SetScalingFactor( BestZoom() );
 #else
     Zoom_Automatique( false );
 #endif
@@ -369,20 +369,13 @@ void LIB_VIEW_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 
 double LIB_VIEW_FRAME::BestZoom()
 {
-    /* Please, note: wxMSW before version 2.9 seems have
-     * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
-     * edit file <wxWidgets>/src/msw/dc.cpp
-     * search for line static const int VIEWPORT_EXTENT = 1000;
-     * and replace by static const int VIEWPORT_EXTENT = 10000;
-     */
-
     LIB_PART*   part = NULL;
-    double      bestzoom = 16.0;      // default value for bestzoom
+    double      defaultLibraryZoom = 7.33;
 
     if( m_libraryName.IsEmpty() || m_entryName.IsEmpty() )
     {
         SetScrollCenterPosition( wxPoint( 0, 0 ) );
-        return bestzoom;
+        return defaultLibraryZoom;
     }
 
     LIB_ALIAS* alias = nullptr;
@@ -401,29 +394,19 @@ double LIB_VIEW_FRAME::BestZoom()
     if( !part )
     {
         SetScrollCenterPosition( wxPoint( 0, 0 ) );
-        return bestzoom;
+        return defaultLibraryZoom;
     }
-
-    wxSize size = m_canvas->GetClientSize();
 
     EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
 
-    // Reserve a 10% margin around component bounding box.
-    double margin_scale_factor = 0.8;
-    double zx =(double) boundingBox.GetWidth() / ( margin_scale_factor * (double)size.x );
-    double zy = (double) boundingBox.GetHeight() / ( margin_scale_factor * (double)size.y);
+    double  sizeX  = (double) boundingBox.GetWidth();
+    double  sizeY  = (double) boundingBox.GetHeight();
+    wxPoint centre = boundingBox.Centre();
 
-    // Calculates the best zoom
-    bestzoom = std::max( zx, zy );
+    // Reserve a 20% margin around component bounding box.
+    double  margin_scale_factor = 1.2;
 
-    // keep it >= minimal existing zoom (can happen for very small components
-    // like small power symbols
-    if( bestzoom  < GetScreen()->m_ZoomList[0] )
-        bestzoom  = GetScreen()->m_ZoomList[0];
-
-    SetScrollCenterPosition( boundingBox.Centre() );
-
-    return bestzoom;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 

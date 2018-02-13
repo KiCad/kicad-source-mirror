@@ -78,6 +78,27 @@ void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 }
 
 
+// Factor out the calculation portion of the various BestZoom() implementations.
+//
+// Note that like it's forerunners this routine has an intentional side-effect: it
+// sets the scroll centre position.  While I'm not happy about that, it's probably
+// not worth fixing as its days are numbered (GAL canvases use a different method).
+double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre )
+{
+    double bestzoom = std::max( sizeX * scaleFactor / (double) m_canvas->GetClientSize().x,
+                                sizeY * scaleFactor / (double) m_canvas->GetClientSize().y );
+
+    // Take scrollbars into account
+    DSIZE scrollbarSize = m_canvas->GetSize() - m_canvas->GetClientSize();
+    centre.x -= int( bestzoom * scrollbarSize.x / 2.0 );
+    centre.y -= int( bestzoom * scrollbarSize.y / 2.0 );
+
+    SetScrollCenterPosition( centre );
+
+    return bestzoom;
+}
+
+
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     BASE_SCREEN* screen = GetScreen();

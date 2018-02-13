@@ -207,7 +207,7 @@ bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
     GetBoard()->SynchronizeNetsAndNetClasses();
 
     SetStatusText( wxEmptyString );
-    BestZoom();
+    Zoom_Automatique( false );
 
     // Finish block move command:
     wxPoint cpos = GetNearestGridPosition( bbox.Centre() );

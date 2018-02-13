@@ -435,9 +435,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_auimgr.Update();
 
-    // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
-    GetScreen()->SetZoom( BestZoom() );
-
     Zoom_Automatique( false );
 
     // Net list generator
@@ -718,25 +715,15 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
 double SCH_EDIT_FRAME::BestZoom()
 {
-    int    dx, dy;
-    wxSize size;
+    double  sizeX = (double) GetScreen()->GetPageSettings().GetWidthIU();
+    double  sizeY = (double) GetScreen()->GetPageSettings().GetHeightIU();
+    wxPoint centre( wxPoint( sizeX / 2, sizeY / 2 ) );
 
-    dx = GetScreen()->GetPageSettings().GetWidthIU();
-    dy = GetScreen()->GetPageSettings().GetHeightIU();
+    // The sheet boundary already affords us some margin, so add only an
+    // additional 5%.
+    double margin_scale_factor = 1.05;
 
-    size = m_canvas->GetClientSize();
-
-    // Reserve no margin because best zoom shows the full page
-    // and margins are already included in function that draws the sheet refernces
-    double margin_scale_factor = 1.0;
-    double zx =(double) dx / ( margin_scale_factor * (double)size.x );
-    double zy = (double) dy / ( margin_scale_factor * (double)size.y );
-
-    double bestzoom = std::max( zx, zy );
-
-    SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
-
-    return bestzoom;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 

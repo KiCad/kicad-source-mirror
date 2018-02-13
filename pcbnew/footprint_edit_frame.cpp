@@ -532,6 +532,21 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
+double FOOTPRINT_EDIT_FRAME::BestZoom()
+{
+    EDA_RECT    ibbbox  = GetBoardBoundingBox();
+
+    double sizeX = (double) ibbbox.GetWidth();
+    double sizeY = (double) ibbbox.GetHeight();
+
+    wxPoint centre = ibbbox.Centre();
+
+    // Reserve a 20% margin around "board" bounding box.
+    double margin_scale_factor = 1.2;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
+}
+
+
 void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )

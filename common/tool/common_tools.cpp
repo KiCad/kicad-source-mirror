@@ -107,6 +107,7 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = getView();
     EDA_DRAW_PANEL_GAL* galCanvas = m_frame->GetGalCanvas();
     EDA_ITEM* model = getModel<EDA_ITEM>();
+    EDA_BASE_FRAME* frame = getEditFrame<EDA_BASE_FRAME>();
 
     BOX2I bBox = model->ViewBBox();
     VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
@@ -121,7 +122,18 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
                                                 fabs( vsize.y / screenSize.y ) );
 
-    view->SetScale( scale );
+    // Reserve a 10% margin around component bounding box.
+    double margin_scale_factor = 1.1;
+
+    // Leave 20% for library editors & viewers
+    if( frame->IsType( FRAME_PCB_MODULE_VIEWER ) || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
+            || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL )
+            || frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
+    {
+        margin_scale_factor = 1.2;
+    }
+
+    view->SetScale( scale / margin_scale_factor );
     view->SetCenter( bBox.Centre() );
 
     // Take scrollbars into account

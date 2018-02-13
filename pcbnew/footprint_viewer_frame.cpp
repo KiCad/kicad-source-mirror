@@ -294,7 +294,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
 #ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetZoom( BestZoom() );
+    GetScreen()->SetScalingFactor( BestZoom() );
 #else
     Zoom_Automatique( false );
 #endif

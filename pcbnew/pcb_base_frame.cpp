@@ -322,21 +322,16 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
 double PCB_BASE_FRAME::BestZoom()
 {
-    if( m_Pcb == NULL )
-        return 1.0;
-
     EDA_RECT    ibbbox  = GetBoardBoundingBox();
-    DSIZE       clientz = m_canvas->GetClientSize();
-    DSIZE       boardz( ibbbox.GetWidth(), ibbbox.GetHeight() );
 
-    double iu_per_du_X = clientz.x ? boardz.x / clientz.x : 1.0;
-    double iu_per_du_Y = clientz.y ? boardz.y / clientz.y : 1.0;
+    double  sizeX = (double) ibbbox.GetWidth();
+    double  sizeY = (double) ibbbox.GetHeight();
+    wxPoint centre = ibbbox.Centre();
 
-    double bestzoom = std::max( iu_per_du_X, iu_per_du_Y );
+    // Reserve a 10% margin around board bounding box.
+    double margin_scale_factor = 1.1;
 
-    SetScrollCenterPosition( ibbbox.Centre() );
-
-    return bestzoom;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 

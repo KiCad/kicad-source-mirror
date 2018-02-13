@@ -64,6 +64,8 @@ public:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 
+    double BestZoom() override;
+
     /**
      * Function GetConfigurationSettings
      * returns the footpr�int editor settings list.

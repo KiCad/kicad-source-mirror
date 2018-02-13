@@ -361,24 +361,23 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
 double GERBVIEW_FRAME::BestZoom()
 {
+    double   defaultGerberZoom = 1.0;
     EDA_RECT bbox = GetGerberLayout()->ComputeBoundingBox();
 
-    // gives a size to bbox (current page size), if no item in list
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
     {
-        wxSize pagesize = GetPageSettings().GetSizeMils();
-        bbox.SetSize( wxSize( Mils2iu( pagesize.x ), Mils2iu( pagesize.y ) ) );
+        SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        return defaultGerberZoom;
     }
 
-    // Compute best zoom:
-    wxSize  size = m_canvas->GetClientSize();
-    double  x   = (double) bbox.GetWidth() / (double) size.x;
-    double  y   = (double) bbox.GetHeight() / (double) size.y;
-    double  best_zoom = std::max( x, y ) * 1.1;
+    double  sizeX = (double) bbox.GetWidth();
+    double  sizeY = (double) bbox.GetHeight();
+    wxPoint centre = bbox.Centre();
 
-    SetScrollCenterPosition( bbox.Centre() );
+    // Reserve no margin because GetGerberLayout()->ComputeBoundingBox() builds one in.
+    double margin_scale_factor = 1.0;
 
-    return best_zoom;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 

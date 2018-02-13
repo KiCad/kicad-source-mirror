@@ -277,25 +277,15 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 double PL_EDITOR_FRAME::BestZoom()
 {
-    int    dx, dy;
-    wxSize size;
+    double  sizeX = (double) GetPageLayout().GetPageSettings().GetWidthIU();
+    double  sizeY = (double) GetPageLayout().GetPageSettings().GetHeightIU();
+    wxPoint centre( sizeX / 2, sizeY / 2 );
 
-    dx = GetPageLayout().GetPageSettings().GetWidthIU();
-    dy = GetPageLayout().GetPageSettings().GetHeightIU();
+    // The sheet boundary already affords us some margin, so add only an
+    // additional 5%.
+    double margin_scale_factor = 1.05;
 
-    size = m_canvas->GetClientSize();
-
-    // Reserve no margin because best zoom shows the full page
-    // and margins are already included in function that draws the sheet refernces
-    double margin_scale_factor = 1.0;
-    double zx =(double) dx / ( margin_scale_factor * (double)size.x );
-    double zy = (double) dy / ( margin_scale_factor * (double)size.y );
-
-    double bestzoom = std::max( zx, zy );
-
-    SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
-
-    return bestzoom;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 

@@ -357,49 +357,25 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 double LIB_EDIT_FRAME::BestZoom()
 {
-    /* Please, note: wxMSW before version 2.9 seems have
-     * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
-     * edit file <wxWidgets>/src/msw/dc.cpp
-     * search for line static const int VIEWPORT_EXTENT = 1000;
-     * and replace by static const int VIEWPORT_EXTENT = 10000;
-     */
-    int      dx, dy;
+    LIB_PART*  part = GetCurPart();
+    double     defaultLibraryZoom = 7.33;
 
-    LIB_PART*      part = GetCurPart();
-
-    if( part )
+    if( !part )
     {
-        EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
-
-        dx = boundingBox.GetWidth();
-        dy = boundingBox.GetHeight();
         SetScrollCenterPosition( wxPoint( 0, 0 ) );
-    }
-    else
-    {
-        const PAGE_INFO& pageInfo = GetScreen()->GetPageSettings();
-
-        dx = pageInfo.GetSizeIU().x;
-        dy = pageInfo.GetSizeIU().y;
-
-        SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        return defaultLibraryZoom;
     }
 
-    wxSize size = m_canvas->GetClientSize();
+    EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
 
-    // Reserve a 10% margin around component bounding box.
-    double margin_scale_factor = 0.8;
-    double zx =(double) dx / ( margin_scale_factor * (double)size.x );
-    double zy = (double) dy / ( margin_scale_factor * (double)size.y );
+    double  sizeX  = (double) boundingBox.GetWidth();
+    double  sizeY  = (double) boundingBox.GetHeight();
+    wxPoint centre = boundingBox.Centre();
 
-    double bestzoom = std::max( zx, zy );
+    // Reserve a 20% margin around component bounding box.
+    double margin_scale_factor = 1.2;
 
-    // keep it >= minimal existing zoom (can happen for very small components
-    // for instance when starting a new component
-    if( bestzoom  < GetScreen()->m_ZoomList[0] )
-        bestzoom  = GetScreen()->m_ZoomList[0];
-
-    return bestzoom;
+    return bestZoom( sizeX, sizeY, margin_scale_factor, centre);
 }
 
 
