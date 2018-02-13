@@ -425,12 +425,15 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
+    // Eagle sheets do not use a worksheet frame by default
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SetEmptyLayout(  );
+    pglayout.SetEmptyLayout();
 
-    wxFileName layoutfn( m_kiway->Prj().GetProjectPath(), "empty.kicad_wks");
+    wxFileName layoutfn( m_kiway->Prj().GetProjectPath(), "empty.kicad_wks" );
     wxFile layoutfile;
-    if( layoutfile.Create( layoutfn.GetFullPath() ) ) {
+
+    if( layoutfile.Create( layoutfn.GetFullPath() ) )
+    {
         layoutfile.Write( WORKSHEET_LAYOUT::EmptyLayout() );
         layoutfile.Close();
     }
