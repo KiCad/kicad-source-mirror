@@ -718,6 +718,21 @@ public:
     void SetDefaultLayout();
 
     /**
+     * Fills the list with an empty layout shape
+     */
+    void SetEmptyLayout();
+
+    /**
+     * Returns a string containing the empty layout shape
+     */
+    static wxString EmptyLayout();
+
+    /**
+     * Returns a string containing the empty layout shape
+     */
+    static wxString DefaultLayout();
+
+    /**
      * Populates the list with a custom layout, or
      * the default layout, if no custom layout available
      * @param aFullFileName = the custom page layout description file.
@@ -732,10 +747,12 @@ public:
     /**
      * Populates the list from a S expr description stored in a string
      * @param aPageLayout = the S expr string
-     * @param Append Do not delete old layout if true and append \a aPageLayout
+     * @param aAppend Do not delete old layout if true and append \a aPageLayout
      *               the existing one.
+       @param aSource is the layout source description.
      */
-    void SetPageLayout( const char* aPageLayout, bool Append = false );
+    void SetPageLayout( const char* aPageLayout, bool aAppend = false,
+            const wxString& aSource = wxT( "Sexpr_string" )  );
 
     /**
      * @return a short filename  from a full filename:

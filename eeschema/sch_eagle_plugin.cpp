@@ -30,6 +30,7 @@
 #include <sch_junction.h>
 #include <sch_sheet.h>
 #include <sch_edit_frame.h>
+#include <worksheet_shape_builder.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_screen.h>
@@ -423,6 +424,21 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     loadDrawing( children["drawing"] );
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
+
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    pglayout.SetEmptyLayout(  );
+
+    wxFileName layoutfn( m_kiway->Prj().GetProjectPath(), "empty.kicad_wks");
+    wxFile layoutfile;
+    if( layoutfile.Create( layoutfn.GetFullPath() ) ) {
+        layoutfile.Write( WORKSHEET_LAYOUT::EmptyLayout() );
+        layoutfile.Close();
+    }
+
+    BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
+
+    SCH_EDIT_FRAME* editor = (SCH_EDIT_FRAME*) m_kiway->Player( FRAME_SCH, true );
+    editor->SaveProjectSettings( false );
 
     return m_rootSheet;
 }

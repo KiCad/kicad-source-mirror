@@ -760,24 +760,38 @@ extern const char defaultPageLayout[];
 
 void WORKSHEET_LAYOUT::SetDefaultLayout()
 {
-    ClearList();
-    PAGE_LAYOUT_READER_PARSER lp_parser( defaultPageLayout, wxT( "default page" ) );
-
-    try
-    {
-        lp_parser.Parse( this );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxLogMessage( ioe.What() );
-    }
+    SetPageLayout( defaultPageLayout, false, wxT( "default page" ) );
 }
+
+// Returns defaultPageLayout as a string;
+wxString WORKSHEET_LAYOUT::DefaultLayout()
+{
+    return wxString(defaultPageLayout);
+}
+
+// emptyPageLayout is a "empty" page layout description
+// there is a 0 length line to fool something somewhere.
+// using the S expr.
+// see page_layout_empty_description.cpp
+extern const char emptyPageLayout[];
+
+void WORKSHEET_LAYOUT::SetEmptyLayout()
+{
+    SetPageLayout( emptyPageLayout, false, wxT( "empty page" ) );
+}
+
+// Returns emptyPageLayout as a string;
+wxString WORKSHEET_LAYOUT::EmptyLayout()
+{
+    return wxString(emptyPageLayout);
+}
+
 
 /**
  * Populates the list from a S expr description stored in a string
  * @param aPageLayout = the S expr string
  */
-void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append )
+void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append, const wxString& aSource )
 {
     if( ! Append )
         ClearList();
@@ -859,4 +873,3 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
 
     delete[] buffer;
 }
-
