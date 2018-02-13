@@ -129,7 +129,7 @@ bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
     catch( const IO_ERROR& e )
     {
         DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot flush "
-                        "library changes ('%s')" ), aLibrary ), e.What() );
+                        "library changes (\"%s\")" ), aLibrary ), e.What() );
     }
 
     // Assume all libraries are successfully saved
@@ -287,7 +287,7 @@ wxArrayString LIB_MANAGER::GetAliasNames( const wxString& aLibrary ) const
         catch( const IO_ERROR& e )
         {
             DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate "
-                    "library '%s'" ), aLibrary ), e.What() );
+                    "library \"%s\"" ), aLibrary ), e.What() );
         }
     }
     else
@@ -325,7 +325,7 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
         catch( const IO_ERROR& e )
         {
             DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot load "
-                "aliases from library '%s'" ), aLibrary ), e.What() );
+                "aliases from library \"%s\"" ), aLibrary ), e.What() );
         }
 
         std::copy( aliases.begin(), aliases.end(), std::back_inserter( ret ) );
@@ -356,7 +356,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
         catch( const IO_ERROR& e )
         {
             DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot load "
-                    "symbol '%s' from library '%s'" ), aAlias, aLibrary ), e.What() );
+                    "symbol \"%s\" from library \"%s\"" ), aAlias, aLibrary ), e.What() );
             bufferedPart = nullptr;
         }
     }
@@ -521,7 +521,7 @@ LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibra
     catch( const IO_ERROR& e )
     {
         DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot load "
-                "symbol '%s' from library '%s'" ), aAlias, aLibrary ), e.What() );
+                "symbol \"%s\" from library \"%s\"" ), aAlias, aLibrary ), e.What() );
     }
 
     return alias;
@@ -667,7 +667,7 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
     } catch( const IO_ERROR& e )
     {
         DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate "
-                "library '%s'" ), aLibrary ), e.What() );
+                "library \"%s\"" ), aLibrary ), e.What() );
     }
 
     return parts;
