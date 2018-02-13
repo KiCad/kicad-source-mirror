@@ -299,7 +299,7 @@ public:
      * specified in the world coordinates and its not visible in the current viewport).
      */
     virtual void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
-            bool aWarpView = false ) const = 0;
+            bool aWarpView = false ) = 0;
 
     /**
      * Function EnableCursorWarping()

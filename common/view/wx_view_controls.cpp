@@ -153,6 +153,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         VECTOR2D delta( scrollX, scrollY );
 
         m_view->SetCenter( m_view->GetCenter() + delta );
+        refreshMouse();
     }
     else
     {
@@ -413,12 +414,12 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 
 VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 {
-    wxPoint msp = wxGetMousePosition();
-    m_parentPanel->ScreenToClient( &msp.x, &msp.y );
+    wxPoint msp = getMouseScreenPosition();
     VECTOR2D screenPos( msp.x, msp.y );
 
     return aWorldCoordinates ? m_view->ToWorld( screenPos ) : screenPos;
 }
+
 
 VECTOR2D WX_VIEW_CONTROLS::GetRawCursorPosition( bool aEnableSnapping ) const
 {
@@ -431,6 +432,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetRawCursorPosition( bool aEnableSnapping ) const
         return m_cursorPos;
     }
 }
+
 
 VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 {
@@ -463,7 +465,7 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bo
 
     if( !screen.Contains( screenPos ) )
     {
-            m_view->SetCenter( aPosition );
+        m_view->SetCenter( aPosition );
     }
 
     m_cursorPos = aPosition;
@@ -471,7 +473,7 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bo
 
 
 void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
-                                    bool aWarpView ) const
+                                    bool aWarpView )
 {
     if( aWorldCoordinates )
     {
@@ -575,10 +577,13 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 }
 
 
-void WX_VIEW_CONTROLS::refreshMouse() const
+void WX_VIEW_CONTROLS::refreshMouse()
 {
     // Notify tools that the cursor position has changed in the world coordinates
     wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
+    wxPoint msp = getMouseScreenPosition();
+    moveEvent.SetX( msp.x );
+    moveEvent.SetY( msp.y );
 
     // Set the modifiers state
 #if wxCHECK_VERSION( 3, 0, 0 )
@@ -593,6 +598,15 @@ void WX_VIEW_CONTROLS::refreshMouse() const
 #endif
 
     wxPostEvent( m_parentPanel, moveEvent );
+    onMotion( moveEvent );
+}
+
+
+wxPoint WX_VIEW_CONTROLS::getMouseScreenPosition() const
+{
+    wxPoint msp = wxGetMousePosition();
+    m_parentPanel->ScreenToClient( &msp.x, &msp.y );
+    return msp;
 }
 
 

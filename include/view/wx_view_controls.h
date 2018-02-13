@@ -88,7 +88,7 @@ public:
 
     /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
-            bool aWarpView = false ) const override;
+            bool aWarpView = false ) override;
 
     /// @copydoc VIEW_CONTROLS::CenterOnCursor()
     void CenterOnCursor() const override;
@@ -124,7 +124,12 @@ private:
      * that the cursor position in the world coordinates has changed, whereas the screen coordinates
      * remained the same (e.g. frame edge autopanning).
      */
-    void refreshMouse() const;
+    void refreshMouse();
+
+    /**
+     * Gets the cursor position in the screen coordinates.
+     */
+    wxPoint getMouseScreenPosition() const;
 
     /// Current state of VIEW_CONTROLS
     STATE       m_state;
