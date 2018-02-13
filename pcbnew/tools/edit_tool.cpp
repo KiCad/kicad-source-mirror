@@ -858,8 +858,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( isAlt && selection.IsHover()
             && ( selection.HasType( PCB_TRACE_T ) || selection.HasType( PCB_VIA_T ) ) )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
-        selection = m_selectionTool->RequestSelection( SELECTION_DELETABLE | SELECTION_SANITIZE_PADS );
+        m_toolMgr->RunAction( PCB_ACTIONS::expandSelectedConnection, true );
+        selection = m_selectionTool->GetSelection();
     }
 
     if( selection.Empty() )

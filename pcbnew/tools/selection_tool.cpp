@@ -99,6 +99,11 @@ TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_COPPER_CONNECTION ),
         _( "Copper Connection" ), _( "Selects whole copper connection." ) );
 
+TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.ExpandConnection",
+        AS_GLOBAL, 0,
+        _( "Expand Selected Connection" ),
+        _( "Expands the current selection to select a connection between two junctions." ) );
+
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
         _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
@@ -660,6 +665,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::findMove, PCB_ACTIONS::findMove.MakeEvent() );
     Go( &SELECTION_TOOL::filterSelection, PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &SELECTION_TOOL::selectConnection, PCB_ACTIONS::selectConnection.MakeEvent() );
+    Go( &SELECTION_TOOL::expandSelectedConnection, PCB_ACTIONS::expandSelectedConnection.MakeEvent() );
     Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
@@ -832,6 +838,12 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
     if( !selectCursor( true, connectedTrackFilter ) )
         return 0;
 
+    return expandSelectedConnection( aEvent );
+}
+
+
+int SELECTION_TOOL::expandSelectedConnection( const TOOL_EVENT& aEvent )
+{
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
 

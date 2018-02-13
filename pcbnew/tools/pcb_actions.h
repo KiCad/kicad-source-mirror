@@ -67,6 +67,9 @@ public:
     /// Selects a connection between junctions.
     static TOOL_ACTION selectConnection;
 
+    /// Expands the current selection to select a connection between two junctions
+    static TOOL_ACTION expandSelectedConnection;
+
     /// Selects whole copper connection.
     static TOOL_ACTION selectCopper;
 

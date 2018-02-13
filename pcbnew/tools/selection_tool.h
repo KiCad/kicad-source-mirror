@@ -181,6 +181,9 @@ private:
     ///> Selects a trivial connection (between two junctions) of items in selection
     int selectConnection( const TOOL_EVENT& aEvent );
 
+    ///> Expands the current selection to select a connection between two junctions
+    int expandSelectedConnection( const TOOL_EVENT& aEvent );
+
     ///> Selects items with a continuous copper connection to items in selection
     int selectCopper( const TOOL_EVENT& aEvent );
 
