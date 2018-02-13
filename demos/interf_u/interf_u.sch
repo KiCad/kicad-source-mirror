@@ -1353,12 +1353,12 @@ Wire Wire Line
 	8100 2350 8050 2350
 Connection ~ 8100 1950
 Wire Wire Line
-	4150 4300 4700 4300
+	4250 4300 4700 4300
 Wire Wire Line
 	4750 2350 4750 2450
 Connection ~ 4750 2450
 Wire Wire Line
-	4150 4400 4700 4400
+	4250 4400 4700 4400
 Wire Wire Line
 	7000 8000 6600 8000
 Wire Wire Line
@@ -2612,7 +2612,7 @@ F 3 "" H 13500 4550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L device:Crystal X1
+L interf_u_schlib:Crystal X1
 U 1 1 32307EC0
 P 13950 4150
 F 0 "X1" H 13950 4350 70  0000 C CNN
@@ -2994,7 +2994,7 @@ Wire Bus Line
 Wire Bus Line
 	3300 5350 3300 6600
 Wire Bus Line
-	4100 2450 4100 3950
+	4100 2450 4100 4000
 Wire Bus Line
 	3750 3450 3750 5350
 $EndSCHEMATC

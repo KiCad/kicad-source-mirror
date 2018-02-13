@@ -1,11 +1,57 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# 24C16
+# device:D_ALT
 #
-DEF 24C16 U 0 30 Y Y 1 F N
+DEF device:D_ALT D 0 40 N N 1 F N
+F0 "D" 0 100 50 H V C CNN
+F1 "device:D_ALT" 0 -100 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ TO-???*
+ *SingleDiode
+ *_Diode_*
+ *SingleDiode*
+ D_*
+$ENDFPLIST
+DRAW
+P 2 0 1 8 -50 50 -50 -50 N
+P 2 0 1 0 50 0 -50 0 N
+P 4 0 1 8 50 50 50 -50 -50 0 50 50 F
+X K 1 -150 0 100 R 50 50 1 1 P
+X A 2 150 0 100 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# device:D_Schottky_ALT
+#
+DEF device:D_Schottky_ALT D 0 40 N N 1 F N
+F0 "D" 0 100 50 H V C CNN
+F1 "device:D_Schottky_ALT" 0 -100 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ TO-???*
+ *SingleDiode
+ *_Diode_*
+ *SingleDiode*
+ D_*
+$ENDFPLIST
+DRAW
+P 2 0 1 0 50 0 -50 0 N
+P 4 0 1 8 50 50 50 -50 -50 0 50 50 F
+P 6 0 1 8 -75 25 -75 50 -50 50 -50 -50 -25 -50 -25 -25 N
+X K 1 -150 0 100 R 50 50 1 1 P
+X A 2 150 0 100 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# flat_hierarchy_schlib:24C16
+#
+DEF flat_hierarchy_schlib:24C16 U 0 30 Y Y 1 F N
 F0 "U" 150 350 60 H V C CNN
-F1 "24C16" 200 -350 60 H V C CNN
+F1 "flat_hierarchy_schlib:24C16" 200 -350 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS 24C512
@@ -22,11 +68,11 @@ X WP 7 700 100 300 L 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# 74LS125
+# flat_hierarchy_schlib:74LS125
 #
-DEF 74LS125 U 0 30 Y Y 4 F N
+DEF flat_hierarchy_schlib:74LS125 U 0 30 Y Y 4 F N
 F0 "U" 0 100 50 H V L BNN
-F1 "74LS125" 50 -150 40 H V L TNN
+F1 "flat_hierarchy_schlib:74LS125" 50 -150 40 H V L TNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -48,11 +94,11 @@ X D 12 -450 0 300 R 50 30 4 1 I
 ENDDRAW
 ENDDEF
 #
-# 7805
+# flat_hierarchy_schlib:7805
 #
-DEF 7805 U 0 30 N Y 1 F N
+DEF flat_hierarchy_schlib:7805 U 0 30 N Y 1 F N
 F0 "U" 150 -196 60 H V C CNN
-F1 "7805" 0 200 60 H V C CNN
+F1 "flat_hierarchy_schlib:7805" 0 200 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS LM7805 LM7812 78L05
@@ -64,11 +110,11 @@ X VO VO 400 50 200 L 40 40 1 1 w
 ENDDRAW
 ENDDEF
 #
-# C
+# flat_hierarchy_schlib:C
 #
-DEF C C 0 10 N Y 1 F N
+DEF flat_hierarchy_schlib:C C 0 10 N Y 1 F N
 F0 "C" 0 100 40 H V L CNN
-F1 "C" 6 -85 40 H V L CNN
+F1 "flat_hierarchy_schlib:C" 6 -85 40 H V L CNN
 F2 "" 38 -150 30 H V C CNN
 F3 "" 0 100 30 H V C CNN
 $FPLIST
@@ -84,11 +130,11 @@ X ~ 2 0 -200 170 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CONN_2
+# flat_hierarchy_schlib:CONN_2
 #
-DEF CONN_2 P 0 40 Y N 1 F N
+DEF flat_hierarchy_schlib:CONN_2 P 0 40 Y N 1 F N
 F0 "P" -50 0 40 V V C CNN
-F1 "CONN_2" 50 0 40 V V C CNN
+F1 "flat_hierarchy_schlib:CONN_2" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -98,11 +144,11 @@ X PM 2 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CP
+# flat_hierarchy_schlib:CP
 #
-DEF CP C 0 10 N N 1 F N
+DEF flat_hierarchy_schlib:CP C 0 10 N N 1 F N
 F0 "C" 50 100 40 H V L CNN
-F1 "CP" 50 -100 40 H V L CNN
+F1 "flat_hierarchy_schlib:CP" 50 -100 40 H V L CNN
 F2 "" 100 -150 30 H V C CNN
 F3 "" 50 100 30 H V C CNN
 ALIAS CAPAPOL
@@ -118,11 +164,11 @@ X ~ 2 0 -200 150 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DB9
+# flat_hierarchy_schlib:DB9
 #
-DEF DB9 J 0 40 Y N 1 F N
+DEF flat_hierarchy_schlib:DB9 J 0 40 Y N 1 F N
 F0 "J" 0 550 70 H V C CNN
-F1 "DB9" 0 -550 70 H V C CNN
+F1 "flat_hierarchy_schlib:DB9" 0 -550 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -171,49 +217,11 @@ X P9 9 -450 300 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DIODE
+# flat_hierarchy_schlib:GND
 #
-DEF DIODE D 0 40 N N 1 F N
-F0 "D" 0 100 40 H V C CNN
-F1 "DIODE" 0 -100 40 H V C CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
-$FPLIST
- D?
- S*
-$ENDFPLIST
-DRAW
-P 2 0 1 6 50 50 50 -50 N
-P 3 0 1 0 -50 50 50 0 -50 -50 F
-X A 1 -200 0 150 R 40 40 1 1 P
-X K 2 200 0 150 L 40 40 1 1 P
-ENDDRAW
-ENDDEF
-#
-# DIODESCH
-#
-DEF DIODESCH D 0 40 N N 1 F N
-F0 "D" 0 100 40 H V C CNN
-F1 "DIODESCH" 0 -100 40 H V C CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
-$FPLIST
- D?
- S*
-$ENDFPLIST
-DRAW
-P 3 0 1 0 -50 50 50 0 -50 -50 F
-P 6 0 1 8 75 25 75 50 50 50 50 -50 25 -50 25 -25 N
-X A 1 -200 0 150 R 40 40 1 1 P
-X K 2 200 0 150 L 40 40 1 1 P
-ENDDRAW
-ENDDEF
-#
-# GND
-#
-DEF ~GND #PWR 0 0 Y Y 1 F P
+DEF ~flat_hierarchy_schlib:GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "GND" 0 -70 30 H I C CNN
+F1 "flat_hierarchy_schlib:GND" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -222,11 +230,11 @@ X GND 1 0 0 0 U 30 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# INDUCTOR
+# flat_hierarchy_schlib:INDUCTOR
 #
-DEF INDUCTOR L 0 40 N N 1 F N
+DEF flat_hierarchy_schlib:INDUCTOR L 0 40 N N 1 F N
 F0 "L" -50 0 40 V V C CNN
-F1 "INDUCTOR" 100 0 40 V V C CNN
+F1 "flat_hierarchy_schlib:INDUCTOR" 100 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -239,11 +247,11 @@ X 2 2 0 -300 100 U 70 70 1 1 P
 ENDDRAW
 ENDDEF
 #
-# JUMPER
+# flat_hierarchy_schlib:JUMPER
 #
-DEF JUMPER JP 0 30 Y N 1 F N
+DEF flat_hierarchy_schlib:JUMPER JP 0 30 Y N 1 F N
 F0 "JP" 0 150 60 H V C CNN
-F1 "JUMPER" 0 -80 40 H V C CNN
+F1 "flat_hierarchy_schlib:JUMPER" 0 -80 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -255,11 +263,11 @@ X 2 2 300 0 165 L 60 60 0 1 P
 ENDDRAW
 ENDDEF
 #
-# LED
+# flat_hierarchy_schlib:LED
 #
-DEF LED D 0 40 Y N 1 F N
+DEF flat_hierarchy_schlib:LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "LED" 0 -100 50 H V C CNN
+F1 "flat_hierarchy_schlib:LED" 0 -100 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -281,11 +289,11 @@ X K 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# LT1372
+# flat_hierarchy_schlib:LT1373
 #
-DEF LT1372 U 0 30 Y Y 1 F N
+DEF flat_hierarchy_schlib:LT1373 U 0 30 Y Y 1 F N
 F0 "U" 600 500 60 H V C CNN
-F1 "LT1372" -500 500 60 H V C CNN
+F1 "flat_hierarchy_schlib:LT1373" -500 500 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS LT1373
@@ -302,11 +310,11 @@ X Vsw 8 1000 250 300 L 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# NPN
+# flat_hierarchy_schlib:NPN
 #
-DEF NPN Q 0 0 Y Y 1 F N
+DEF flat_hierarchy_schlib:NPN Q 0 0 Y Y 1 F N
 F0 "Q" 0 -150 50 H V R CNN
-F1 "NPN" 0 150 50 H V R CNN
+F1 "flat_hierarchy_schlib:NPN" 0 150 50 H V R CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -322,11 +330,11 @@ X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# PIC12C508A
+# flat_hierarchy_schlib:PIC12C508A
 #
-DEF PIC12C508A U 0 40 Y Y 1 F N
+DEF flat_hierarchy_schlib:PIC12C508A U 0 40 Y Y 1 F N
 F0 "U" 0 700 60 H V C CNN
-F1 "PIC12C508A" 0 -650 60 H V C CNN
+F1 "flat_hierarchy_schlib:PIC12C508A" 0 -650 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS PIC12C509A
@@ -351,11 +359,11 @@ X VSS 8 700 500 300 L 50 50 1 2 W
 ENDDRAW
 ENDDEF
 #
-# PIC16F54
+# flat_hierarchy_schlib:PIC16F54
 #
-DEF PIC16F54 U? 0 40 Y Y 1 F N
+DEF flat_hierarchy_schlib:PIC16F54 U? 0 40 Y Y 1 F N
 F0 "U?" 0 -750 60 H V C CNN
-F1 "PIC16F54" 0 800 60 H V C CNN
+F1 "flat_hierarchy_schlib:PIC16F54" 0 800 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -399,11 +407,11 @@ X RB3 9 -800 -600 300 R 50 50 1 2 B
 ENDDRAW
 ENDDEF
 #
-# PNP
+# flat_hierarchy_schlib:PNP
 #
-DEF PNP Q 0 0 Y Y 1 F N
+DEF flat_hierarchy_schlib:PNP Q 0 0 Y Y 1 F N
 F0 "Q" 0 -150 60 H V R CNN
-F1 "PNP" 0 150 60 H V R CNN
+F1 "flat_hierarchy_schlib:PNP" 0 150 60 H V R CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -419,11 +427,11 @@ X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# POT
+# flat_hierarchy_schlib:POT
 #
-DEF POT RV 0 40 Y N 1 F N
+DEF flat_hierarchy_schlib:POT RV 0 40 Y N 1 F N
 F0 "RV" 0 -100 50 H V C CNN
-F1 "POT" 0 0 50 H V C CNN
+F1 "flat_hierarchy_schlib:POT" 0 0 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -435,11 +443,11 @@ X 3 3 250 0 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# PWR_FLAG
+# flat_hierarchy_schlib:PWR_FLAG
 #
-DEF PWR_FLAG #FLG 0 0 N N 1 F P
+DEF flat_hierarchy_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 95 30 H I C CNN
-F1 "PWR_FLAG" 0 180 30 H V C CNN
+F1 "flat_hierarchy_schlib:PWR_FLAG" 0 180 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -448,11 +456,11 @@ X pwr 1 0 0 0 U 20 20 0 0 w
 ENDDRAW
 ENDDEF
 #
-# R
+# flat_hierarchy_schlib:R
 #
-DEF R R 0 0 N Y 1 F N
+DEF flat_hierarchy_schlib:R R 0 0 N Y 1 F N
 F0 "R" 80 0 40 V V C CNN
-F1 "R" 7 1 40 V V C CNN
+F1 "flat_hierarchy_schlib:R" 7 1 40 V V C CNN
 F2 "" -70 0 30 V V C CNN
 F3 "" 0 0 30 H V C CNN
 $FPLIST
@@ -469,11 +477,11 @@ X ~ 2 0 -250 100 U 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# SUPP28
+# flat_hierarchy_schlib:SUPP28
 #
-DEF SUPP28 J 0 40 Y Y 1 F N
+DEF flat_hierarchy_schlib:SUPP28 J 0 40 Y Y 1 F N
 F0 "J" 0 100 70 H V C CNN
-F1 "SUPP28" 0 -100 70 H V C CNN
+F1 "flat_hierarchy_schlib:SUPP28" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -509,11 +517,11 @@ X 9 9 -600 -150 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# SUPP40
+# flat_hierarchy_schlib:SUPP40
 #
-DEF SUPP40 P 0 40 Y Y 1 F N
+DEF flat_hierarchy_schlib:SUPP40 P 0 40 Y Y 1 F N
 F0 "P" 0 1100 70 H V C CNN
-F1 "SUPP40" 0 -1100 70 H V C CNN
+F1 "flat_hierarchy_schlib:SUPP40" 0 -1100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -561,11 +569,11 @@ X 9 9 -600 150 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# VCC
+# flat_hierarchy_schlib:VCC
 #
-DEF VCC #PWR 0 0 Y Y 1 F P
+DEF flat_hierarchy_schlib:VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 30 H I C CNN
-F1 "VCC" 0 100 30 H V C CNN
+F1 "flat_hierarchy_schlib:VCC" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -575,11 +583,11 @@ X VCC 1 0 0 0 U 20 20 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# VPP
+# flat_hierarchy_schlib:VPP
 #
-DEF VPP #PWR 0 0 Y Y 1 F N
+DEF flat_hierarchy_schlib:VPP #PWR 0 0 Y Y 1 F N
 F0 "#PWR" 0 200 40 H I C CNN
-F1 "VPP" 0 150 40 H V C CNN
+F1 "flat_hierarchy_schlib:VPP" 0 150 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW

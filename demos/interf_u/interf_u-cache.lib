@@ -1,27 +1,6 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# device:Crystal
-#
-DEF device:Crystal Y 0 40 N N 1 F N
-F0 "Y" 0 150 50 H V C CNN
-F1 "device:Crystal" 0 -150 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Crystal*
-$ENDFPLIST
-DRAW
-S -45 100 45 -100 0 1 12 N
-P 2 0 1 0 -100 0 -75 0 N
-P 2 0 1 20 -75 -50 -75 50 N
-P 2 0 1 20 75 -50 75 50 N
-P 2 0 1 0 100 0 75 0 N
-X 1 1 -150 0 50 R 50 50 1 1 P
-X 2 2 150 0 50 L 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
 # interf_u_schlib:4003APG120
 #
 DEF interf_u_schlib:4003APG120 U 0 40 Y Y 1 F N
@@ -470,6 +449,27 @@ X Pin_6 6 250 150 150 L 50 50 1 1 P
 X Pin_7 7 -250 50 150 R 50 50 1 1 P
 X Pin_8 8 250 50 150 L 50 50 1 1 P
 X Pin_9 9 -250 -50 150 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# interf_u_schlib:Crystal
+#
+DEF interf_u_schlib:Crystal Y 0 40 N N 1 F N
+F0 "Y" 0 150 50 H V C CNN
+F1 "interf_u_schlib:Crystal" 0 -150 50 H V C CNN
+F2 "" -100 50 30 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Crystal*
+$ENDFPLIST
+DRAW
+S -45 100 45 -100 0 1 12 N
+P 2 0 1 0 -100 0 -75 0 N
+P 2 0 1 20 -75 -50 -75 50 N
+P 2 0 1 20 75 -50 75 50 N
+P 2 0 1 0 100 0 75 0 N
+X 1 1 -150 0 50 R 50 50 1 1 P
+X 2 2 150 0 50 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
