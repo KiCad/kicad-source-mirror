@@ -1033,7 +1033,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
     }
 
     // Selection meets criteria; trim it to the reference item.
-    for( int i = aCollector.GetCount()-1; i >= 0; i-- )
+    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
         if( dynamic_cast<TRACK*>( aCollector[i] ) != reference )
             aCollector.Remove( i );
@@ -1049,20 +1049,21 @@ bool ROUTER_TOOL::CanInlineDrag()
     if( selection.Size() == 1 )
     {
         const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+
         if( item->Type() == PCB_TRACE_T || item->Type() == PCB_VIA_T )
             return true;
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor ); // restore selection to unfiltered state
     return false;
 }
 
 
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
-    // Get the item under the cursor
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
     const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Empty() )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
 
     if( selection.Size() != 1 )
         return 0;
