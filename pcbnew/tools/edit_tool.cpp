@@ -1149,6 +1149,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     controls.ShowCursor( true );
     controls.SetSnapping( true );
+    controls.SetAutoPan( false );
 
     while( auto evt = Wait() )
     {

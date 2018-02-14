@@ -227,6 +227,7 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     m_editPoints.reset();
     m_altConstraint.reset();
+    getViewControls()->SetAutoPan( false );
 }
 
 
