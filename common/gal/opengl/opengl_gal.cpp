@@ -338,8 +338,6 @@ void OPENGL_GAL::BeginDrawing()
     wxLogTrace( "GAL_PROFILE",
                 wxT( "OPENGL_GAL::BeginDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
-
-    //enableGlDebug( true );
 }
 
 
@@ -1774,12 +1772,6 @@ void OPENGL_GAL::init()
 
     GLenum err = glewInit();
 
-#if defined (__LINUX__)      // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
-#ifdef DEBUG
-    enableGlDebug( true );
-#endif
-#endif
-
     try
     {
         if( GLEW_OK != err )
@@ -1788,6 +1780,13 @@ void OPENGL_GAL::init()
         // Check the OpenGL version (minimum 2.1 is required)
         if( !GLEW_VERSION_2_1 )
             throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
+
+#if defined (__LINUX__)      // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
+#ifdef DEBUG
+        if( GLEW_ARB_debug_output )
+            enableGlDebug( true );
+#endif
+#endif
 
         // Framebuffers have to be supported
         if( !GLEW_EXT_framebuffer_object )
