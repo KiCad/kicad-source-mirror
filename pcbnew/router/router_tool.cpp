@@ -859,9 +859,10 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
     m_router->SetMode( aMode );
 
-    controls()->ShowCursor( true );
-
-    m_startSnapPoint = getViewControls()->GetCursorPosition();
+    VIEW_CONTROLS* ctls = getViewControls();
+    ctls->ShowCursor( true );
+    ctls->ForceCursorPosition( false );
+    m_startSnapPoint = ctls->GetCursorPosition();
 
     std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, *frame, aMode ) );
     SetContextMenu( ctxMenu.get() );
