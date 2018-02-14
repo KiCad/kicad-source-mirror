@@ -297,9 +297,15 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
         event.SetParameter( aParam );
 
     if( aNow )
+    {
+        TOOL_STATE* current = m_activeState;
         processEvent( event );
+        setActiveState( current );
+    }
     else
+    {
         PostEvent( event );
+    }
 }
 
 
@@ -321,6 +327,9 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
     processEvent( evt );
+
+    if( TOOL_STATE* active = GetCurrentToolState() )
+        setActiveState( active );
 
     return true;
 }
@@ -371,7 +380,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         return false;
     }
 
-    m_activeState = m_toolIdIndex[id];
+    setActiveState( m_toolIdIndex[id] );
     aTool->Reset( TOOL_INTERACTIVE::RUN );
 
     // Add the tool on the front of the processing queue (it gets events first)
@@ -417,8 +426,8 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 
     for( auto& state : m_toolState )
     {
-        m_activeState = state.second;
         TOOL_BASE* tool = state.first;
+        setActiveState( state.second );
         tool->Reset( aReason );
 
         if( tool->GetType() == INTERACTIVE )
@@ -433,8 +442,8 @@ void TOOL_MANAGER::InitTools()
     {
         TOOL_BASE* tool = it->first;
         TOOL_STATE* state = it->second;
+        setActiveState( state );
         ++it;   // keep the iterator valid if the element is going to be erased
-        m_activeState = state;
 
         if( !tool->Init() )
         {
@@ -442,6 +451,7 @@ void TOOL_MANAGER::InitTools()
                     wxString::Format( "Initialization of tool \"%s\" failed", tool->GetName() ) );
 
             // Unregister the tool
+            setActiveState( nullptr );
             m_toolState.erase( tool );
             m_toolNameIndex.erase( tool->GetName() );
             m_toolIdIndex.erase( tool->GetId() );
@@ -490,12 +500,12 @@ void TOOL_MANAGER::ClearTransitions( TOOL_BASE* aTool )
 void TOOL_MANAGER::RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc )
 {
     TOOL_STATE* st = m_toolState[aTool];
+    setActiveState( st );
     st->cofunc->RunMainStack( std::move( aFunc ) );
 }
 
 
-OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
-                                                 const TOOL_EVENT_LIST& aConditions )
+OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE* st = m_toolState[aTool];
 
@@ -515,9 +525,6 @@ OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
-    // Save current settings before overwriting with the dispatched tool
-    auto vc_settings = m_viewControls->GetSettings();
-
     // iterate over all registered tools
     for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
@@ -545,10 +552,8 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
                 if( st->cofunc )
                 {
-                    applyViewControls( st );
-                    m_activeState = st;
+                    setActiveState( st );
                     bool end = !st->cofunc->Resume();
-                    saveViewControls( st );
 
                     if( end )
                         it = finishTool( st );
@@ -577,9 +582,14 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 {
                     auto func_copy = tr.second;
 
-                    // if there is already a context, then store it
+                    // if there is already a context, then push it on the stack
+                    // and transfer the previous view control settings to the new context
                     if( st->cofunc )
+                    {
+                        auto vc = st->vcSettings;
                         st->Push();
+                        st->vcSettings = vc;
+                    }
 
                     st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );
 
@@ -587,10 +597,9 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     st->transitions.clear();
 
                     // got match? Run the handler.
-                    applyViewControls( st );
+                    setActiveState( st );
                     st->idle = false;
                     st->cofunc->Call( aEvent );
-                    saveViewControls( st );
 
                     if( !st->cofunc->Running() )
                         finishTool( st ); // The couroutine has finished immediately?
@@ -607,8 +616,6 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         if( finished )
             break;      // only the first tool gets the event
     }
-
-    m_viewControls->ApplySettings( vc_settings );
 }
 
 
@@ -738,15 +745,15 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     auto it = std::find( m_activeTools.begin(), m_activeTools.end(), aState->theTool->GetId() );
 
-    if( aState == m_activeState )
-        m_activeState = nullptr;
-
     if( !aState->Pop() )
     {
         // Deactivate the tool if there are no other contexts saved on the stack
         if( it != m_activeTools.end() )
             it = m_activeTools.erase( it );
     }
+
+    if( aState == m_activeState )
+        setActiveState( nullptr );
 
     // Set transitions to be ready for future TOOL_EVENTs
     TOOL_BASE* tool = aState->theTool;
@@ -762,13 +769,10 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
-    if( TOOL_STATE* active = GetCurrentToolState() )
-        saveViewControls( active );
-
     bool hotkey_handled = processEvent( aEvent );
 
     if( TOOL_STATE* active = GetCurrentToolState() )
-        applyViewControls( active );
+        setActiveState( active );
 
     if( m_view->IsDirty() )
     {
@@ -925,6 +929,18 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
     }
 
     return false;
+}
+
+
+void TOOL_MANAGER::setActiveState( TOOL_STATE* aState )
+{
+    if( m_activeState )
+        saveViewControls( m_activeState );
+
+    m_activeState = aState;
+
+    if( m_activeState )
+        applyViewControls( aState );
 }
 
 

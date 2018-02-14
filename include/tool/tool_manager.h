@@ -483,6 +483,13 @@ private:
     ///> @return true if a hotkey was handled
     bool processEvent( const TOOL_EVENT& aEvent );
 
+    /**
+     * Saves the previous active state and sets a new one.
+     * @param aState is the new active state. Might be null to indicate there is no new
+     * active state.
+     */
+    void setActiveState( TOOL_STATE* aState );
+
     /// Index of registered tools current states, associated by tools' objects.
     TOOL_STATE_MAP m_toolState;
 
