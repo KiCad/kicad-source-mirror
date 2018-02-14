@@ -28,11 +28,7 @@ DIALOG_GET_COMPONENT::DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent,
     DIALOG_GET_COMPONENT_BASE( parent, -1, Title )
 {
 
-#ifdef __WXMAC__
-    m_auxToolSelector = false;
-#else
     m_auxToolSelector = show_extra_tool;
-#endif
     initDialog( HistoryList );
 
     m_textCmpNameCtrl->SetFocus();
