@@ -471,6 +471,26 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
     text  = AddHotkeyName( _( "&Redo" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_REDO );
     AddMenuItem( aParentMenu, wxID_REDO, text, HELP_REDO, KiBitmap( redo_xpm ) );
 
+    aParentMenu->AppendSeparator();
+
+    if( aUseGal )
+    {
+        text = AddHotkeyName( _( "&Cut" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_EDIT_CUT );
+        AddMenuItem( aParentMenu, ID_EDIT_CUT, text,
+                     _( "Cuts the selected item(s) to the Clipboard" ),
+                     KiBitmap( cut_xpm ) );
+
+        text = AddHotkeyName( _( "&Copy" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_EDIT_COPY );
+        AddMenuItem( aParentMenu, ID_EDIT_COPY, text,
+                     _( "Copies the selected item(s) to the Clipboard" ),
+                     KiBitmap( copy_xpm ) );
+
+        text = AddHotkeyName( _( "&Paste" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_EDIT_PASTE );
+        AddMenuItem( aParentMenu, ID_EDIT_PASTE, text,
+                     _( "Pastes item(s) from the Clipboard" ),
+                     KiBitmap( paste_xpm ) );
+    }
+
     AddMenuItem( aParentMenu, ID_PCB_DELETE_ITEM_BUTT,
                  _( "&Delete" ), _( "Delete items" ),
                  KiBitmap( delete_xpm ) );

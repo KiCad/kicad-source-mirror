@@ -192,19 +192,6 @@ static EDA_HOTKEY Hk3DViewer( _HKI( "3D Viewer" ), HK_3D_VIEWER, GR_KB_ALT + '3'
 
 static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 
-
-/* Undo */
-static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
-
-/* Redo */
-#if !defined( __WXMAC__ )
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
-#else
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO,
-                          GR_KB_SHIFT + GR_KB_CTRL + 'Z',
-                          (int) wxID_REDO );
-#endif
-
 static EDA_HOTKEY HkSwitchTrackWidthToNext( _HKI( "Switch Track Width To Next" ),
                                             HK_SWITCH_TRACK_WIDTH_TO_NEXT, 'W' );
 
@@ -251,13 +238,29 @@ static EDA_HOTKEY HkViaSizeInc( _HKI( "Increase Via Size" ), HK_VIA_SIZE_INC, '\
 
 static EDA_HOTKEY HkViaSizeDec( _HKI( "Decrease Via Size" ), HK_VIA_SIZE_DEC, '\\' );
 
+
+static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+
+#if !defined( __WXMAC__ )
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+#else
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO,
+                          GR_KB_SHIFT + GR_KB_CTRL + 'Z',
+                          (int) wxID_REDO );
+#endif
+
+static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int) wxID_CUT );
+static EDA_HOTKEY HkEditCopy( _HKI( "Copy" ), HK_EDIT_COPY, GR_KB_CTRL + 'C', (int) wxID_COPY );
+static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V', (int) wxID_PASTE );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
+    &HkUndo,        &HkRedo,
+    &HkEditCut,     &HkEditCopy,        &HkEditPaste,
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,      &HkZoomSelection, &Hk3DViewer,
     &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin, &HkResetGridOrigin,
-    &HkUndo,        &HkRedo,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     &HkIncLayerAlhpa, &HkDecLayerAlhpa,

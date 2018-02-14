@@ -110,10 +110,7 @@ enum hotkey_id_commnand {
     HK_CUSTOM_TRACK_WIDTH,
     HK_DP_DIMENSIONS,
     HK_VIA_SIZE_INC,
-    HK_VIA_SIZE_DEC,
-    HK_EDIT_CUT,
-    HK_EDIT_PASTE,
-    HK_EDIT_COPY
+    HK_VIA_SIZE_DEC
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor

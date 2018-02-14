@@ -239,6 +239,11 @@ enum common_hotkey_id_commnand {
     HK_SAVE,
     HK_SAVEAS,
     HK_PRINT,
+    HK_UNDO,
+    HK_REDO,
+    HK_EDIT_CUT,
+    HK_EDIT_COPY,
+    HK_EDIT_PASTE,
     HK_RESET_LOCAL_COORD,
     HK_SET_GRID_ORIGIN,
     HK_RESET_GRID_ORIGIN,
@@ -249,8 +254,6 @@ enum common_hotkey_id_commnand {
     HK_ZOOM_CENTER,
     HK_ZOOM_AUTO,
     HK_ZOOM_SELECTION,
-    HK_UNDO,
-    HK_REDO,
     HK_COMMON_END
 };
 
