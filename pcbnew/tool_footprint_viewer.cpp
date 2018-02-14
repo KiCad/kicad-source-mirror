@@ -75,22 +75,22 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Viewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Viewer_Hotkeys_Descr,
                             HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_IN, wxEmptyString,
                             KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Viewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Viewer_Hotkeys_Descr,
                             HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_OUT, wxEmptyString,
                             KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hotkeys_Descr,
                             HK_ZOOM_REDRAW );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_REDRAW, wxEmptyString,
                             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Viewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Viewer_Hotkeys_Descr,
                             HK_ZOOM_AUTO );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
@@ -151,27 +151,27 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
     // View menu
     wxMenu* viewMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "Zoom &In" ), g_Module_Viewer_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &In" ), g_Module_Viewer_Hotkeys_Descr,
                           HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_VIEWER_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Module_Viewer_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &Out" ), g_Module_Viewer_Hotkeys_Descr,
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_VIEWER_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Viewer_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Viewer_Hotkeys_Descr,
                           HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_VIEWER_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Module_Viewer_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_VIEWER_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     viewMenu->AppendSeparator();
 
     // 3D view
-    text = AddHotkeyName( _( "3&D Viewer" ), g_Module_Viewer_Hokeys_Descr, HK_3D_VIEWER );
+    text = AddHotkeyName( _( "3&D Viewer" ), g_Module_Viewer_Hotkeys_Descr, HK_3D_VIEWER );
     AddMenuItem( viewMenu, ID_MODVIEW_SHOW_3D_VIEW, text, _( "Show footprint in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 

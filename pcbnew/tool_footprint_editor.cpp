@@ -116,17 +116,17 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Print footprint" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_REDRAW,
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW,
                          IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
     m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),

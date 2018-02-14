@@ -85,7 +85,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         return false;
 
     case HK_HELP:                   // Display Current hotkey list
-        DisplayHotkeyList( this, g_Module_Editor_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Module_Editor_Hotkeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin

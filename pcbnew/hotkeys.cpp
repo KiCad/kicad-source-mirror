@@ -336,7 +336,7 @@ static wxString moduleEditSectionTitle( _HKI( "Footprint Editor" ) );
 
 // list of sections and corresponding hotkey list for Pcbnew
 // (used to create an hotkey config file, and edit hotkeys )
-struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
+struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hotkeys_Descr[] = {
     { &g_CommonSectionTag,      common_Hotkey_List,         &commonSectionTitle      },
     { &boardEditorSectionTag,   board_edit_Hotkey_List,     &boardEditorSectionTitle },
     { &moduleEditSectionTag,  module_edit_Hotkey_List,    &moduleEditSectionTitle  },
@@ -345,7 +345,7 @@ struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
 
 // list of sections and corresponding hotkey list for the board editor
 // (used to list current hotkeys in the board editor)
-struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[] = {
+struct EDA_HOTKEY_CONFIG g_Board_Editor_Hotkeys_Descr[] = {
     { &g_CommonSectionTag,      common_Hotkey_List,      &commonSectionTitle },
     { &boardEditorSectionTag,   board_edit_Hotkey_List,  &boardEditorSectionTitle },
     { NULL, NULL, NULL }
@@ -353,7 +353,7 @@ struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[] = {
 
 // list of sections and corresponding hotkey list for the footprint editor
 // (used to list current hotkeys in the module editor)
-struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
+struct EDA_HOTKEY_CONFIG g_Module_Editor_Hotkeys_Descr[] = {
     { &g_CommonSectionTag,     common_Hotkey_List,      &commonSectionTitle },
     { &moduleEditSectionTag, module_edit_Hotkey_List, &moduleEditSectionTitle },
     { NULL,                    NULL,                    NULL }
@@ -361,7 +361,7 @@ struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
 
 // list of sections and corresponding hotkey list for the footprint viewer
 // (used to list current hotkeys in the module viewer)
-struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[] = {
+struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hotkeys_Descr[] = {
     { &g_CommonSectionTag, common_basic_Hotkey_List, &commonSectionTitle },
     { NULL,                NULL,                     NULL }
 };
@@ -407,7 +407,7 @@ bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
         return false;
 
     case HK_HELP:                   // Display Current hotkey list
-        DisplayHotkeyList( this, g_Module_Viewer_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Module_Viewer_Hotkeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin

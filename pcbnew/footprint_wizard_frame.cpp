@@ -127,7 +127,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
     SetIcon( icon );
 
-    m_hotkeysDescrList = g_Module_Viewer_Hokeys_Descr;
+    m_hotkeysDescrList = g_Module_Viewer_Hotkeys_Descr;
     m_wizardName.Empty();
 
     SetBoard( new BOARD() );
@@ -684,22 +684,22 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                                 _( "Show footprint in 3D viewer" ) );
 
         m_mainToolBar->AddSeparator();
-        msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hotkeys_Descr,
                              HK_ZOOM_IN, IS_COMMENT );
         m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                                 KiBitmap( zoom_in_xpm ), msg );
 
-        msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hotkeys_Descr,
                              HK_ZOOM_OUT, IS_COMMENT );
         m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                                 KiBitmap( zoom_out_xpm ), msg );
 
-        msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hotkeys_Descr,
                              HK_ZOOM_REDRAW, IS_COMMENT );
         m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                                 KiBitmap( zoom_redraw_xpm ), msg );
 
-        msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hotkeys_Descr,
                              HK_ZOOM_AUTO, IS_COMMENT );
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );

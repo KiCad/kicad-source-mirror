@@ -322,7 +322,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( PCB_EDIT_FRAME_NAME, g_Board_Editor_Hokeys_Descr );
+    ReadHotkeyConfig( PCB_EDIT_FRAME_NAME, g_Board_Editor_Hotkeys_Descr );
 
     try
     {

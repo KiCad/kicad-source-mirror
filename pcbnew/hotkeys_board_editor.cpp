@@ -218,7 +218,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_HELP: // Display Current hotkey list
-        DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Board_Editor_Hotkeys_Descr );
         break;
 
     case HK_ZOOM_IN:

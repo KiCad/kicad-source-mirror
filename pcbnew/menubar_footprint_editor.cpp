@@ -174,13 +174,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     if( IsGalCanvasActive() )
     {
-        text = AddHotkeyName( _( "&Cut" ), g_Module_Viewer_Hokeys_Descr, HK_EDIT_CUT );
+        text = AddHotkeyName( _( "&Cut" ), g_Module_Viewer_Hotkeys_Descr, HK_EDIT_CUT );
         AddMenuItem( editMenu, ID_EDIT_CUT, text, _(
                         "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
-        text = AddHotkeyName( _( "&Copy" ), g_Module_Viewer_Hokeys_Descr, HK_EDIT_COPY );
+        text = AddHotkeyName( _( "&Copy" ), g_Module_Viewer_Hotkeys_Descr, HK_EDIT_COPY );
         AddMenuItem( editMenu, ID_EDIT_COPY, text, _(
                         "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
-        text = AddHotkeyName( _( "&Paste" ), g_Module_Viewer_Hokeys_Descr, HK_EDIT_PASTE );
+        text = AddHotkeyName( _( "&Paste" ), g_Module_Viewer_Hotkeys_Descr, HK_EDIT_PASTE );
         AddMenuItem( editMenu, ID_EDIT_PASTE, text, _(
                         "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
         editMenu->AppendSeparator();
@@ -364,7 +364,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Pcbnew_Editor_Hokeys_Descr, HK_HELP );
+    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_HELP );
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  text,
                  _( "Displays current hotkeys table and corresponding commands" ),

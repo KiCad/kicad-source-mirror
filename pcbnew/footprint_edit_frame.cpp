@@ -227,7 +227,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
-    m_hotkeysDescrList = g_Module_Editor_Hokeys_Descr;
+    m_hotkeysDescrList = g_Module_Editor_Hotkeys_Descr;
 
     // Give an icon
     wxIcon icon;
@@ -890,20 +890,20 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr, "pcbnew" );
+        ExportHotkeyConfigToFile( g_Module_Editor_Hotkeys_Descr, "pcbnew" );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr, "pcbnew" );
+        ImportHotkeyConfigFromFile( g_Module_Editor_Hotkeys_Descr, "pcbnew" );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Module_Editor_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Module_Editor_Hotkeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for the footprint editor.
-        DisplayHotkeyList( this, g_Module_Editor_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Module_Editor_Hotkeys_Descr );
         break;
 
     case ID_PCB_LIB_WIZARD:

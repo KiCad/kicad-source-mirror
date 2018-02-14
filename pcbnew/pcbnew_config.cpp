@@ -238,20 +238,20 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Board_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
+        ExportHotkeyConfigToFile( g_Board_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Board_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
+        ImportHotkeyConfigFromFile( g_Board_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Board_Editor_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Board_Editor_Hotkeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for Pcbnew.
-        DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Board_Editor_Hotkeys_Descr );
         break;
 
     default:
