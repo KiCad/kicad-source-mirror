@@ -600,7 +600,8 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 
     if( aAppendToMe )
     {
-        wxLogDebug( "Append \"%s\" to sheet \"%s\".", aFileName, aAppendToMe->GetFileName() );
+        wxLogTrace( traceSchLegacyPlugin, "Append \"%s\" to sheet \"%s\".",
+                    aFileName, aAppendToMe->GetFileName() );
 
         wxFileName normedFn = aAppendToMe->GetFileName();
 
@@ -609,6 +610,8 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
             if( aFileName.Right( normedFn.GetFullPath().Length() ) == normedFn.GetFullPath() )
                 m_path = aFileName.Left( aFileName.Length() - normedFn.GetFullPath().Length() );
         }
+
+        wxLogTrace( traceSchLegacyPlugin, "Normalized append path \"%s\".", m_path );
     }
     else
     {
@@ -652,16 +655,20 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         // stores the file name and extension.  Add the project path to the file name and
         // extension to compare when calling SCH_SHEET::SearchHierarchy().
         wxFileName fileName = aSheet->GetFileName();
+        size_t dirCount = 0;
 
         if( !fileName.IsAbsolute() )
+        {
+            dirCount = fileName.GetDirCount();
             fileName.MakeAbsolute( m_path );
+        }
 
         // Save the current path so that it gets restored when decending and ascending the
         // sheet hierarchy which allows for sheet schematic files to be nested in folders
         // relative to the last path a schematic was loaded from.
         m_path = fileName.GetPath();
 
-        wxLogDebug( "Saving last path \"%s\"", m_path );
+        wxLogTrace( traceSchLegacyPlugin, "Saving last path \"%s\"", m_path );
 
         m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
 
@@ -716,7 +723,14 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
             }
         }
 
-        wxLogDebug( "Restoring last path \"%s\"", fileName.GetPath() );
+        // Back out any relative paths so the last sheet file path is correct.
+        while( dirCount )
+        {
+            fileName.RemoveLastDir();
+            dirCount--;
+        }
+
+        wxLogTrace( traceSchLegacyPlugin, "Restoring last path \"%s\"", fileName.GetPath() );
         m_path = fileName.GetPath();
     }
 }
