@@ -246,10 +246,12 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 // Build the route menu
 void prepareRouteMenu( wxMenu* aParentMenu )
 {
-    AddMenuItem( aParentMenu, ID_TRACK_BUTT,
-                 _( "&Single Track" ),
-                 _( "Interactively route single track" ),
-                 KiBitmap( add_tracks_xpm ) );
+    wxString text;
+
+    text = AddHotkeyName( _( "&Single Track" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ADD_NEW_TRACK, IS_ACCELERATOR );
+    AddMenuItem( aParentMenu, ID_TRACK_BUTT, text,
+                 _( "Interactively route single track" ), KiBitmap( add_tracks_xpm ) );
 
     AddMenuItem( aParentMenu, ID_DIFF_PAIR_BUTT,
                  _( "&Differential Pair" ),
@@ -311,11 +313,6 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                           HK_ADD_MODULE );
     AddMenuItem( aParentMenu, ID_PCB_MODULE_BUTT, text,
                  _( "Add footprints" ), KiBitmap( module_xpm ) );
-
-    text = AddHotkeyName( _( "&Track" ), g_Pcbnew_Editor_Hotkeys_Descr,
-                          HK_ADD_NEW_TRACK, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_TRACK_BUTT, text,
-                 _( "Add tracks and vias" ), KiBitmap( add_tracks_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ZONES_BUTT,
                  _( "&Zone" ), _( "Add filled zones" ), KiBitmap( add_zone_xpm ) );
