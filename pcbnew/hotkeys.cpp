@@ -93,10 +93,6 @@ static EDA_HOTKEY HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
 static EDA_HOTKEY HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
                                                 HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
-static EDA_HOTKEY HkSaveModule( _HKI( "Save Footprint" ), HK_SAVE_MODULE, 'S' + GR_KB_CTRL );
-static EDA_HOTKEY HkSavefile( _HKI( "Save Board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
-static EDA_HOTKEY HkSavefileAs( _HKI( "Save Board As" ), HK_SAVE_BOARD_AS, 'S' + GR_KB_CTRL + GR_KB_SHIFT );
-static EDA_HOTKEY HkLoadfile( _HKI( "Load Board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static EDA_HOTKEY HkBackspace( _HKI( "Delete Track Segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( _HKI( "Add New Track" ), HK_ADD_NEW_TRACK, 'X' );
@@ -238,6 +234,12 @@ static EDA_HOTKEY HkViaSizeInc( _HKI( "Increase Via Size" ), HK_VIA_SIZE_INC, '\
 
 static EDA_HOTKEY HkViaSizeDec( _HKI( "Decrease Via Size" ), HK_VIA_SIZE_DEC, '\\' );
 
+// Common: hotkeys_basic.h
+static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
+static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
+static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S', (int) wxID_SAVEAS );
+static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
 
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
 
@@ -256,6 +258,7 @@ static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V',
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
+    &HkNew,         &HkOpen,            &HkSave,          &HkSaveAs,        &HkPrint,
     &HkUndo,        &HkRedo,
     &HkEditCut,     &HkEditCopy,        &HkEditPaste,
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
@@ -294,8 +297,8 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkRotateItem,             &HkMoveItemExact, &HkPositionItemRelative,
     &HkDuplicateItem,          &HkDuplicateItemAndIncrement, &HkCreateArray,
     &HkDragFootprint,
-    &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile, &HkSavefileAs,
-    &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,
+    &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,
+    &HkFindItem,               &HkEditBoardItem,
     &HkEditWithModedit,
     &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
@@ -316,7 +319,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
     &HkMoveItemExact,          &HkDuplicateItem,             &HkDuplicateItemAndIncrement,
-    &HkCreateArray,            &HkDelete,                    &HkSaveModule,
+    &HkCreateArray,            &HkDelete,
     &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     NULL
  };

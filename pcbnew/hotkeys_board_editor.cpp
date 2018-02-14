@@ -335,13 +335,13 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
         break;
 
-    case HK_LOAD_BOARD:
+    case HK_OPEN:
         if( !itemCurrentlyEdited )
             evt_type = ID_LOAD_FILE ;
 
         break;
 
-    case HK_SAVE_BOARD:
+    case HK_SAVE:
         if( !itemCurrentlyEdited )
             evt_type = ID_SAVE_BOARD;
 

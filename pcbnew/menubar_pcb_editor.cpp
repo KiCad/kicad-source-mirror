@@ -653,18 +653,6 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     // Some commands are available only if Pcbnew is run outside a project (run alone).
     // aIsOutsideProject is false when Pcbnew is run from Kicad manager.
-    if( aIsOutsideProject )
-    {
-        AddMenuItem( aParentMenu, ID_NEW_BOARD,
-                _( "&New" ),
-                _( "Create new board" ),
-                KiBitmap( new_board_xpm ) );
-
-        text = AddHotkeyName( _( "&Open..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_LOAD_BOARD );
-        AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
-                _( "Open existing board" ),
-                KiBitmap( open_brd_file_xpm ) );
-    }
 
     wxFileHistory&  fhist = Kiface().GetFileHistory();
 
@@ -683,25 +671,25 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     if( aIsOutsideProject )
     {
+        text = AddHotkeyName( _( "&New" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_NEW );
+        AddMenuItem( aParentMenu, ID_NEW_BOARD,
+                text, _( "Create new board" ),
+                KiBitmap( new_board_xpm ) );
+
+        text = AddHotkeyName( _( "&Open..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_OPEN );
+        AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
+                _( "Open existing board" ),
+                KiBitmap( open_brd_file_xpm ) );
+
         AddMenuItem( aParentMenu, openRecentMenu,
                      -1, _( "Open &Recent" ),
                      _( "Open recently opened board" ),
                      KiBitmap( recent_xpm ) );
 
-        AddMenuItem( aParentMenu, ID_APPEND_FILE,
-                     _( "&Append Board..." ),
-                     _( "Append another board to currently loaded board" ),
-                     KiBitmap( add_board_xpm ) );
-
-        AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
-                _( "Import Non-Kicad Board File..." ),
-                _( "Import board file from other applications" ),
-                KiBitmap( import_brd_file_xpm ) );
-
         aParentMenu->AppendSeparator();
     }
 
-    text = AddHotkeyName( _( "&Save" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVE_BOARD );
+    text = AddHotkeyName( _( "&Save" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVE );
     AddMenuItem( aParentMenu, ID_SAVE_BOARD, text,
                  _( "Save current board" ),
                  KiBitmap( save_xpm ) );
@@ -713,7 +701,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // when not under a project mgr, we are free to change filenames, cwd ...
     if( Kiface().IsSingle() )      // not when under a project mgr (pcbnew is run as stand alone)
     {
-        text = AddHotkeyName( _( "Sa&ve As..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVE_BOARD_AS );
+        text = AddHotkeyName( _( "Sa&ve As..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVEAS );
         AddMenuItem( aParentMenu, ID_SAVE_BOARD_AS, text,
                      _( "Save current board with new name" ),
                      KiBitmap( save_as_xpm ) );
@@ -722,7 +710,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // but do not change the current board file name
     else
     {
-        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVE_BOARD_AS );
+        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVEAS );
         AddMenuItem( aParentMenu, ID_COPY_BOARD_AS, text,
                      _( "Save copy of the current board" ),
                      KiBitmap( save_as_xpm ) );
@@ -730,15 +718,29 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     aParentMenu->AppendSeparator();
 
+    AddMenuItem( aParentMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE,
+                 _( "Resc&ue" ),
+                 _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
+                 KiBitmap( rescue_xpm ) );
+
+    if( aIsOutsideProject )
+    {
+        AddMenuItem( aParentMenu, ID_APPEND_FILE,
+                     _( "&Append Board..." ),
+                     _( "Append another board to currently loaded board" ),
+                     KiBitmap( add_board_xpm ) );
+
+        AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
+                _( "Import Non-Kicad Board File..." ),
+                _( "Import board file from other applications" ),
+                KiBitmap( import_brd_file_xpm ) );
+    }
+
     AddMenuItem( aParentMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
                  _( "Revert to Las&t Backup" ),
                  _( "Clear board and get previous backup version of board" ),
                  KiBitmap( undo_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE,
-            _( "Resc&ue" ),
-            _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-            KiBitmap( rescue_xpm ) );
     aParentMenu->AppendSeparator();
 
     //----- Fabrication Outputs submenu -----------------------------------------
@@ -806,14 +808,10 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Settings for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
-    AddMenuItem( aParentMenu, wxID_PRINT,
-                 _( "&Print..." ), _( "Print board" ),
+    text = AddHotkeyName( _( "&Print..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_PRINT );
+    AddMenuItem( aParentMenu, wxID_PRINT, text,
+                 _( "Print board" ),
                  KiBitmap( print_button_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_PLOT_SVG,
-                 _( "Export SV&G..." ),
-                 _( "Export board file in Scalable Vector Graphics format" ),
-                 KiBitmap( plot_svg_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_PLOT,
                  _( "P&lot..." ),
@@ -852,7 +850,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 void prepareExportMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_SPECCTRA,
-                 _( "&Specctra DSN..." ),
+                 _( "S&pecctra DSN..." ),
                  _( "Export current board to \"Specctra DSN\" file" ),
                  KiBitmap( export_dsn_xpm ) );
 
@@ -872,6 +870,11 @@ void prepareExportMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_STEP,
                  _( "S&TEP..." ), _( "STEP export" ),
                  KiBitmap( export_step_xpm ) );
+
+    AddMenuItem( aParentMenu, ID_GEN_PLOT_SVG,
+                 _( "&SVG..." ),
+                 _( "Export board file in Scalable Vector Graphics format" ),
+                 KiBitmap( plot_svg_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_GEN_CMP_FILE,
                  _( "&Footprint Association (.cmp) File..." ),

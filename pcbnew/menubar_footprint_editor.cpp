@@ -108,7 +108,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module
     text = AddHotkeyName( _( "&Save Footprint in Active Library" ),
-                          m_hotkeysDescrList, HK_SAVE_MODULE );
+                          m_hotkeysDescrList, HK_SAVE );
 
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
                  _( "Save footprint in active library" ),
