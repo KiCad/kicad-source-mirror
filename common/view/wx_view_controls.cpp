@@ -306,7 +306,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     {
     case AUTO_PANNING:
     {
-        if ( !m_settings.m_autoPanEnabled )
+        if( !m_settings.m_autoPanEnabled )
         {
             m_state = IDLE;
             return;
@@ -597,8 +597,8 @@ void WX_VIEW_CONTROLS::refreshMouse()
     moveEvent.m_altDown = wxGetKeyState( WXK_ALT );
 #endif
 
+    m_cursorPos = m_view->ToWorld( VECTOR2D( msp.x, msp.y ) );
     wxPostEvent( m_parentPanel, moveEvent );
-    onMotion( moveEvent );
 }
 
 
