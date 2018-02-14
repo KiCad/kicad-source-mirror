@@ -156,12 +156,11 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     int padNumber = settingsDlg.GetStartNumber();
     wxString padPrefix = settingsDlg.GetPrefix();
 
-    frame()->DisplayToolMsg( _(
-                    "Hold left mouse button and move cursor over pads to enumerate them" ) );
+    frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_HAND,
+                        _( "Click on successive pads to renumber them" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     getViewControls()->ShowCursor( true );
-    frame()->GetGalCanvas()->SetCursor( wxCURSOR_HAND );
 
     KIGFX::VIEW* view = m_toolMgr->GetView();
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
@@ -244,14 +243,20 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
                    evt->IsDblClick( BUT_LEFT ) )
         {
-            commit.Push( _( "Enumerate pads" ) );
+            commit.Push( _( "Renumber pads" ) );
             break;
         }
 
-        else if( evt->IsCancel() || evt->IsActivate() )
+        else if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             commit.Revert();
             break;
+        }
+
+        else
+        {
+            // Delegate BUT_RIGHT, etc. to SELECTION_TOOL
+            m_toolMgr->PassEvent();
         }
 
         // Prepare the next loop by updating the old cursor mouse position
@@ -265,7 +270,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         view->Update( p );
     }
 
-    frame()->DisplayToolMsg( wxEmptyString );
+    frame()->SetNoToolSelected();
     frame()->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
 
     return 0;

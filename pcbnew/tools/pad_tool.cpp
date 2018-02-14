@@ -185,9 +185,11 @@ bool PAD_TOOL::Init()
 
         toolMenu.AddSubMenu( contextMenu );
 
-        SELECTION_CONDITION canShowMenuCond = [this, contextMenu] ( const SELECTION& aSel ) {
+        auto canShowMenuCond = [this, contextMenu] ( const SELECTION& aSel ) {
             contextMenu->UpdateAll();
-            return haveFootprints() && contextMenu->HasEnabledItems();
+            return frame()->GetToolId() == ID_NO_TOOL_SELECTED
+                       && haveFootprints()
+                       && contextMenu->HasEnabledItems();
         };
 
         // show menu when there is a footprint, and the menu has any items
@@ -196,6 +198,10 @@ bool PAD_TOOL::Init()
                             || SELECTION_CONDITIONS::Count( 0 ) );
 
         menu.AddMenu( contextMenu.get(), false, showCond, 1000 );
+
+        // we need a separator only when the selection is empty
+        auto separatorCond = canShowMenuCond && SELECTION_CONDITIONS::Count( 0 );
+        menu.AddSeparator( separatorCond, 1000 );
     }
 
     return true;
