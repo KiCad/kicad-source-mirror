@@ -170,8 +170,9 @@ wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
     return bitmap;
 }
 
+
 wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
-                         const wxBitmap&  aImage, wxItemKind aType = wxITEM_NORMAL )
+                         const wxBitmap& aImage, wxItemKind aType = wxITEM_NORMAL )
 {
     wxMenuItem* item;
 
@@ -182,14 +183,14 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
 
     if( useImagesInMenus )
     {
-        if( aType == wxITEM_CHECK )
+        if( aType == wxITEM_CHECK || aType == wxITEM_RADIO )
         {
     #if defined(  __WINDOWS__ )
             item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
             // A workaround to a strange bug on Windows, wx Widgets 3.0:
-            // size of bitmaps is not taken in account for wxITEM_CHECK menu
+            // size of bitmaps is not taken in account for wxITEM_{CHECK,RADIO} menu
             // unless we call SetFont
-            item->SetFont(*wxNORMAL_FONT);
+            item->SetFont( *wxNORMAL_FONT );
     #endif
         }
         else
@@ -200,6 +201,7 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
 
     return item;
 }
+
 
 wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
                          const wxString& aHelpText, const wxBitmap& aImage,
@@ -214,14 +216,14 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
 
     if( useImagesInMenus )
     {
-        if( aType == wxITEM_CHECK )
+        if( aType == wxITEM_CHECK || aType == wxITEM_RADIO )
         {
     #if defined(  __WINDOWS__ )
             item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
             // A workaround to a strange bug on Windows, wx Widgets 3.0:
-            // size of bitmaps is not taken in account for wxITEM_CHECK menu
+            // size of bitmaps is not taken in account for wxITEM_{CHECK,RADIO} menu
             // unless we call SetFont
-            item->SetFont(*wxNORMAL_FONT);
+            item->SetFont( *wxNORMAL_FONT );
     #endif
         }
         else
@@ -232,6 +234,7 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
 
     return item;
 }
+
 
 wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
                          const wxString& aText, const wxBitmap& aImage )
@@ -255,7 +258,7 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
 
 wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
                          const wxString& aText, const wxString& aHelpText,
-                         const wxBitmap&  aImage )
+                         const wxBitmap& aImage )
 {
     wxMenuItem* item;
 
