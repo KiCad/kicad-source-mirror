@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  9 2018)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -405,6 +405,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerClearance->Add( m_staticTextWarning, 0, wxALL, 5 );
+	
+	m_staticTextInfoPosValue = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Positive clearance means area bigger than the pad  (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoPosValue->Wrap( -1 );
+	m_staticTextInfoPosValue->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	
+	bSizerClearance->Add( m_staticTextInfoPosValue, 0, wxALL, 5 );
+	
+	m_staticTextInfoNegVal = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoNegVal->Wrap( -1 );
+	m_staticTextInfoNegVal->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	
+	bSizerClearance->Add( m_staticTextInfoNegVal, 0, wxALL, 5 );
 	
 	wxStaticBoxSizer* sbClearancesSizer;
 	sbClearancesSizer = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Clearances") ), wxVERTICAL );

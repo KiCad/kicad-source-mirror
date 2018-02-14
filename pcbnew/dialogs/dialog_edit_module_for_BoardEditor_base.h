@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -89,6 +90,8 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
 		wxStaticText* m_staticTextInfo;
+		wxStaticText* m_staticTextInfoValPos;
+		wxStaticText* m_staticTextInfoValNeg;
 		wxStaticText* m_staticTextNetClearance;
 		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;

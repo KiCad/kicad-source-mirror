@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  9 2018)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_PAD_PROPERTIES_BASE_H__
@@ -11,7 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
+class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -137,6 +139,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_PadLayerECO2;
 		wxPanel* m_localSettingsPanel;
 		wxStaticText* m_staticTextWarning;
+		wxStaticText* m_staticTextInfoPosValue;
+		wxStaticText* m_staticTextInfoNegVal;
 		wxStaticText* m_staticTextNetClearance;
 		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;

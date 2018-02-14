@@ -470,6 +470,15 @@ bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
         }
     }
 
+    // Check if footprint local clerance is acceptable (i.e. >= 0 )
+    int localNetClearance = ValueFromTextCtrl( *m_NetClearanceValueCtrl );
+
+    if( localNetClearance < 0 )
+    {
+        wxMessageBox( _( "Error: footprint local net clearance is < 0" ) );
+        return false;
+    }
+
     if( !m_PreviewPane->ValidateWithMessage( msg ) )
     {
         DisplayError( NULL, msg );
@@ -515,7 +524,7 @@ bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
     value = *m_valueCopy;
 
     // Initialize masks clearances
-    m_currentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    m_currentModule->SetLocalClearance( localNetClearance );
     m_currentModule->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
     m_currentModule->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
     double   dtmp;

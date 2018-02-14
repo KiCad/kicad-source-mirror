@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -155,6 +155,18 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	sbSizer8->Add( m_staticTextInfo, 0, wxALL, 5 );
 	
+	m_staticTextInfoValPos = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoValPos->Wrap( -1 );
+	m_staticTextInfoValPos->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	
+	sbSizer8->Add( m_staticTextInfoValPos, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextInfoValNeg = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoValNeg->Wrap( -1 );
+	m_staticTextInfoValNeg->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	
+	sbSizer8->Add( m_staticTextInfoValNeg, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 5, 3, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
@@ -233,7 +245,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_PanelProperties->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelProperties->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelProperties );
-	m_NoteBook->AddPage( m_PanelProperties, _("Properties"), false );
+	m_NoteBook->AddPage( m_PanelProperties, _("Properties"), true );
 	m_Panel3D = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMain3D;
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
@@ -289,7 +301,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_Panel3D->SetSizer( bSizerMain3D );
 	m_Panel3D->Layout();
 	bSizerMain3D->Fit( m_Panel3D );
-	m_NoteBook->AddPage( m_Panel3D, _("3D Settings"), true );
+	m_NoteBook->AddPage( m_Panel3D, _("3D Settings"), false );
 	
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
 	
