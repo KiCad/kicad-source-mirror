@@ -43,7 +43,7 @@
 #include <limits.h>
 
 // Max values for grid size
-static const double MAX_GRID_SIZE =  50.0 * IU_PER_MM;
+static const double MAX_GRID_SIZE =  1000.0 * IU_PER_MM;
 static const double MIN_GRID_SIZE = 0.001 * IU_PER_MM;
 
 // Min/Max value for grid offset
