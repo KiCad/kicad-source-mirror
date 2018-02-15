@@ -67,7 +67,7 @@ class SHAPE_POLY_SET : public SHAPE
         public:
             struct TRI
             {
-                TRI()
+                TRI() : a(0), b(0), c(0)
                 {
                 }
 

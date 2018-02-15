@@ -483,9 +483,6 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     dc.SetBackground( wxBrush( bgColor.ToColour() ) );
     dc.Clear();
 
-    if( !aComponent )
-        return;
-
     int unit = aUnit > 0 ? aUnit : 1;
     int convert = m_deMorganConvert > 0 ? m_deMorganConvert : 1;
 

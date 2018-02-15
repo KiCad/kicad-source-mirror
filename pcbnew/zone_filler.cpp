@@ -64,7 +64,7 @@ static double s_thermalRot = 450;    // angle of stubs in thermal reliefs for ro
 static const bool s_DumpZonesWhenFilling = false;
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr )
+    m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr ), m_count_done( 0 )
 {
 }
 

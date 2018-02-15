@@ -45,6 +45,7 @@ public:
         m_p0 = aOther.m_p0;
         m_p1 = aOther.m_p1;
         m_pc = aOther.m_pc;
+        m_width = aOther.m_width;
     }
 
     ~SHAPE_ARC() {};

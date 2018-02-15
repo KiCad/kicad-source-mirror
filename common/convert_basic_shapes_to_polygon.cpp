@@ -102,7 +102,7 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     double delta_angle = atan2( (double)endp.y, (double)endp.x );
     int seg_len        = KiROUND( EuclideanNorm( endp ) );
 
-    double delta = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
+    double delta = 3600.0 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
 
     // Compute the outlines of the segment, and creates a polygon
     // Note: the polygonal shape is built from the equivalent horizontal
@@ -162,7 +162,6 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     // Rotate and move the polygon to its right location
     polyshape.Rotate( delta_angle, VECTOR2I( 0, 0 ) );
     polyshape.Move( startp );
-
 
     aCornerBuffer.Append( polyshape);
 }
