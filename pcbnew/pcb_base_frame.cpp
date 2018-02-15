@@ -110,7 +110,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_Pcb                 = NULL;
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
-    m_UserGridUnit        = INCHES;
     m_Collector           = new GENERAL_COLLECTOR();
 
     m_FastGrid1           = 0;
@@ -843,14 +842,12 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( baseCfgName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
     aCfg->Read( baseCfgName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
 
-    long itmp;
-    aCfg->Read( baseCfgName + UserGridUnitsEntry, &itmp, ( long )INCHES );
-    m_UserGridUnit = (EDA_UNITS_T) itmp;
     aCfg->Read( baseCfgName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
     aCfg->Read( baseCfgName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
     aCfg->Read( baseCfgName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
     aCfg->Read( baseCfgName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdgeFill, true );
 
+    long itmp;
     aCfg->Read( baseCfgName + FastGrid1Entry, &itmp, ( long )0);
     m_FastGrid1 = itmp;
     aCfg->Read( baseCfgName + FastGrid2Entry, &itmp, ( long )0);
@@ -868,7 +865,6 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( baseCfgName + UserGridSizeXEntry, m_UserGridSize.x );
     aCfg->Write( baseCfgName + UserGridSizeYEntry, m_UserGridSize.y );
-    aCfg->Write( baseCfgName + UserGridUnitsEntry, ( long )m_UserGridUnit );
     aCfg->Write( baseCfgName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
     aCfg->Write( baseCfgName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
     aCfg->Write( baseCfgName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );

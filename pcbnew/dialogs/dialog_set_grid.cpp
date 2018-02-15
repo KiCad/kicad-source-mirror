@@ -72,9 +72,6 @@ private:
         FinishDialogSettings();
     }
 
-    void            setGridUnits( EDA_UNITS_T units );
-    EDA_UNITS_T     getGridUnits();
-
     void            setGridSize( const wxRealPoint& grid );
     bool            getGridSize( wxRealPoint& aGrisSize );
 
@@ -93,25 +90,17 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
 {
     m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
 
-    m_TextPosXUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
-    m_TextPosYUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
+    m_TextPosXUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_TextPosYUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
+    m_TextSizeXUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_TextSizeYUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 }
 
 
 bool DIALOG_SET_GRID::TransferDataFromWindow()
 {
     // Validate new settings
-    wxRealPoint gridSize;
-    if( !getGridSize( gridSize ) )
-    {
-        wxMessageBox( wxString::Format( _( "Incorrect grid size "
-                        "(size must be >= %.3f mm and <= %.3f mm)" ),
-                        MIN_GRID_SIZE/IU_PER_MM, MAX_GRID_SIZE/IU_PER_MM ) );
-
-        return false;
-    }
-
     wxPoint gridOrigin;
 
     if( !getGridOrigin( gridOrigin ) )
@@ -123,24 +112,32 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
         return false;
     }
 
+    wxRealPoint gridSize;
+
+    if( !getGridSize( gridSize ) )
+    {
+        wxMessageBox( wxString::Format( _( "Incorrect grid size "
+                        "(size must be >= %.3f mm and <= %.3f mm)" ),
+                        MIN_GRID_SIZE/IU_PER_MM, MAX_GRID_SIZE/IU_PER_MM ) );
+
+        return false;
+    }
+
     int fastGrid1, fastGrid2;
     getGridForFastSwitching( fastGrid1, fastGrid2 );
-
-    EDA_UNITS_T units = getGridUnits();
 
     // Apply the new settings
 
      // Because grid origin is saved in board, show as modified
     m_parent->OnModify();
     m_parent->SetGridOrigin( gridOrigin );
-    m_parent->m_UserGridUnit = units;
     m_parent->m_UserGridSize = gridSize;
     m_parent->m_FastGrid1 = fastGrid1;
     m_parent->m_FastGrid2 = fastGrid2;
 
     // User grid
     BASE_SCREEN* screen = m_parent->GetScreen();
-    screen->AddGrid( gridSize, units, ID_POPUP_GRID_USER );
+    screen->AddGrid( gridSize, g_UserUnit, ID_POPUP_GRID_USER );
 
     // If the user grid is the current option, recall SetGrid()
     // to force new values put in list as current grid value
@@ -166,7 +163,6 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
 bool DIALOG_SET_GRID::TransferDataToWindow()
 {
-    setGridUnits( m_parent->m_UserGridUnit );
     setGridSize( m_parent->m_UserGridSize );
     setGridOrigin( m_parent->GetGridOrigin() );
     setGridForFastSwitching( m_fast_grid_opts, m_parent->m_FastGrid1, m_parent->m_FastGrid2 );
@@ -175,54 +171,47 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
 }
 
 
-void DIALOG_SET_GRID::setGridUnits( EDA_UNITS_T aUnits )
-{
-    m_UnitGrid->SetSelection( aUnits != INCHES );
-}
-
-
-EDA_UNITS_T DIALOG_SET_GRID::getGridUnits()
-{
-    return m_UnitGrid->GetSelection() == 0 ? INCHES : MILLIMETRES;
-}
-
-
 void DIALOG_SET_GRID::setGridSize( const wxRealPoint& grid )
 {
     wxString msg;
 
-    msg.Printf( wxT( "%.10g" ), grid.x );
+    msg.Printf( wxT( "%.10g" ), To_User_Unit( g_UserUnit, grid.x ) );
     m_OptGridSizeX->SetValue( msg );
 
-    msg.Printf( wxT( "%.10g" ), grid.y );
+    msg.Printf( wxT( "%.10g" ), To_User_Unit( g_UserUnit, grid.y ) );
     m_OptGridSizeY->SetValue( msg );
 }
 
 
-bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGrisSize )
+bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGridSize )
 {
-    wxRealPoint grid;
-    wxString val = m_OptGridSizeX->GetValue();
-    double grid_unit_to_iu = ( getGridUnits() == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM );
-    double tmp;
+    double x, y;
 
-    if( !val.ToDouble( &tmp ) ||
-        tmp * grid_unit_to_iu < MIN_GRID_SIZE || tmp * grid_unit_to_iu > MAX_GRID_SIZE )
-    {
+    const wxString& x_str = m_OptGridSizeX->GetValue();
+
+    if( !x_str.ToDouble( &x ) )
         return false;
-    }
-    else
-        aGrisSize.x = tmp;
 
-    val = m_OptGridSizeY->GetValue();
+    x = DoubleValueFromString( g_UserUnit, x_str );
 
-    if( !val.ToDouble( &tmp ) ||
-        tmp*grid_unit_to_iu < MIN_GRID_SIZE || tmp*grid_unit_to_iu > MAX_GRID_SIZE )
-    {
+    // Some error checking here is a good thing.
+    if( x < MIN_GRID_SIZE || x > MAX_GRID_SIZE )
         return false;
-    }
-    else
-        aGrisSize.y = tmp;
+
+    aGridSize.x = x;
+
+    const wxString& y_str = m_OptGridSizeY->GetValue();
+
+    if( !y_str.ToDouble( &y ) )
+        return false;
+
+    y = DoubleValueFromString( g_UserUnit, y_str );
+
+    // Some error checking here is a good thing.
+    if( y < MIN_GRID_SIZE || y > MAX_GRID_SIZE )
+        return false;
+
+    aGridSize.y = y;
 
     return true;
 }
