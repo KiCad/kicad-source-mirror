@@ -50,22 +50,30 @@
 class DIALOG_SELECT_NET_FROM_LIST: public DIALOG_SELECT_NET_FROM_LIST_BASE
 {
 private:
-    wxString m_selection;
-    bool m_wasSelected;
-    BOARD* m_brd;
-
 public:
-    DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME * aParent );
+    DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent );
     ~DIALOG_SELECT_NET_FROM_LIST();
 
     // returns true if a net was selected, and its name in aName
     bool GetNetName( wxString& aName );
 
+    /**
+     * Visually highlights a net.
+     * @param aEnabled true to enable highlight mode, false to disable.
+     * @param aNetName is the name of net to be highlighted.
+     */
+    void HighlightNet( bool aEnabled, const wxString& aNetName );
+
 private:
     void onCellClick( wxGridEvent& event ) override;
-	void onFilterChange( wxCommandEvent& event ) override;
+    void onFilterChange( wxCommandEvent& event ) override;
 
     void buildNetsList();
+
+    wxString m_selection;
+    bool m_wasSelected;
+    BOARD* m_brd;
+    PCB_EDIT_FRAME* m_frame;
 };
 
 
@@ -74,38 +82,16 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
     DIALOG_SELECT_NET_FROM_LIST dlg( this );
     wxString netname;
 
-    if( dlg.ShowModal() == wxID_CANCEL || !dlg.GetNetName( netname ) )
-        return;
-
-    // Search for the net selected.
-    NETINFO_ITEM* net = GetBoard()->FindNet( netname );
-
-    if( net == NULL )   // Should not occur.
-        return;
-
-    if( IsGalCanvasActive() )
+    if( dlg.ShowModal() == wxID_CANCEL )
     {
-        KIGFX::RENDER_SETTINGS* render = GetGalCanvas()->GetView()->GetPainter()->GetSettings();
-        render->SetHighlight( true, net->GetNet() );
-
-        GetGalCanvas()->GetView()->UpdateAllLayersColor();
-        GetGalCanvas()->Refresh();
-    }
-    else
-    {
-        INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
-        if( GetBoard()->IsHighLightNetON() )
-            HighLight( &dc );
-
-        GetBoard()->SetHighLightNet( net->GetNet() );
-        HighLight( &dc );
+        // Clear highlight
+        dlg.HighlightNet( false, "" );
     }
 }
 
 
 DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent )
-    : DIALOG_SELECT_NET_FROM_LIST_BASE( aParent )
+    : DIALOG_SELECT_NET_FROM_LIST_BASE( aParent ), m_frame( aParent )
 {
     m_brd = aParent->GetBoard();
     m_wasSelected = false;
@@ -119,6 +105,7 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     GetSizer()->SetSizeHints( this );
     Center();
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 {
@@ -180,9 +167,38 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 }
 
 
+void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( bool aEnabled, const wxString& aNetName )
+{
+    // Search for the net selected.
+    NETINFO_ITEM* net = aEnabled ? m_brd->FindNet( aNetName ) : nullptr;
+    int netCode = net ? net->GetNet() : -1;
+
+    if( m_frame->IsGalCanvasActive() )
+    {
+        auto galCanvas = m_frame->GetGalCanvas();
+        KIGFX::RENDER_SETTINGS* render = galCanvas->GetView()->GetPainter()->GetSettings();
+        render->SetHighlight( aEnabled, netCode );
+
+        galCanvas->GetView()->UpdateAllLayersColor();
+        galCanvas->Refresh();
+    }
+    else
+    {
+        INSTALL_UNBUFFERED_DC( dc, m_frame->GetCanvas() );
+
+        if( m_brd->IsHighLightNetON() )
+            m_frame->HighLight( &dc );
+
+        m_brd->SetHighLightNet( netCode );
+        m_frame->HighLight( &dc );
+    }
+}
+
+
 DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
 {
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::onFilterChange( wxCommandEvent& event )
 {
@@ -199,6 +215,8 @@ void DIALOG_SELECT_NET_FROM_LIST::onCellClick( wxGridEvent& event )
     // Select the full row when clicking on any cell off the row
     m_netsListGrid->SelectRow( selected_row, false );
     m_netsListGrid->SetGridCursor(selected_row, COL_NETNAME );
+
+    HighlightNet( true, m_selection );
 }
 
 
