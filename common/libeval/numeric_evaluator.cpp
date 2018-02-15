@@ -150,12 +150,12 @@ NumericEvaluator :: process(const char* s)
    bClParseFinished = false;
 
    Token tok;
-   numEval::TokenType parseTok;
    do {
       tok = getToken();
       parse(tok.token, tok.value);
       if (bClParseFinished || tok.token == ENDS) {
-         numEval::Parse(pClParser, 0, parseTok, this);
+         // Reset parser by passing zero as token ID, value is ignored.
+         numEval::Parse(pClParser, 0, tok.value, this);
          break;
       }
      //usleep(200000);

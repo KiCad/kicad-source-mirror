@@ -114,7 +114,6 @@ public:
    void enableTextInputStorage(bool w) { bClTextInputStorage = w; }
 
    /* Used by the lemon parser */
-   void parse(int token, numEval::TokenType value);
    void parseError(const char* s);
    void parseOk();
    void parseSetResult(double);
@@ -161,6 +160,9 @@ protected:
 
    /* Tokenizer: Next token/value taken from input string. */
    Token getToken();
+
+   /* Used by processing loop */
+   void parse(int token, numEval::TokenType value);
 
 private:
    void* pClParser; // the current lemon parser state machine
