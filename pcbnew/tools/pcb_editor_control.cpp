@@ -482,11 +482,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 commit.Push( _( "Place a module" ) );
                 module = NULL;  // to indicate that there is no module that we currently modify
             }
-
-            bool placing = ( module != NULL );
-
-            controls->SetAutoPan( placing );
-            controls->CaptureCursor( placing );
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -506,6 +501,10 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             // Calling 'Properties' action clears the selection, so we need to restore it
             reselect = true;
         }
+
+        // Enable autopanning and cursor capture only when there is a module to be placed
+        controls->SetAutoPan( !!module );
+        controls->CaptureCursor( !!module );
     }
 
     m_frame->SetNoToolSelected();
