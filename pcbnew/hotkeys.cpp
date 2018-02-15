@@ -138,13 +138,13 @@ static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Canvas" ),
                                    GR_KB_ALT +
 #endif
                                    WXK_F9 );
-static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to OpenGL Canvas" ),
+static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Canvas (hardware accelerated)" ),
                                   HK_CANVAS_OPENGL,
 #ifdef __WXMAC__
                                   GR_KB_ALT +
 #endif
                                   WXK_F11 );
-static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Cairo Canvas" ),
+static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Modern Canvas (software renderer)" ),
                                  HK_CANVAS_CAIRO,
 #ifdef __WXMAC__
                                  GR_KB_ALT +
