@@ -62,6 +62,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     ITEM_PICKER redoWrapper = redoCommand->PopItem();
     delete redoCommand;
     LIB_PART* part = (LIB_PART*) redoWrapper.GetItem();
+    wxCHECK( part, /* void */ );
     part->SetFlags( part->GetFlags() & ~UR_TRANSIENT );
     UNDO_REDO_T undoRedoType = redoWrapper.GetStatus();
 
@@ -78,9 +79,6 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     // <previous part> is now put in undo list and is owned by this list
     // Just set the current part to the part which come from the redo list
     m_my_part = part;
-
-    if( !part )
-        return;
 
     if( undoRedoType == UR_LIB_RENAME )
     {
@@ -115,6 +113,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     ITEM_PICKER undoWrapper = undoCommand->PopItem();
     delete undoCommand;
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
+    wxCHECK( part, /* void */ );
     part->SetFlags( part->GetFlags() & ~UR_TRANSIENT );
     UNDO_REDO_T undoRedoType = undoWrapper.GetStatus();
 
@@ -126,16 +125,11 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     redoCommand->PushItem( redoWrapper );
     GetScreen()->PushCommandToRedoList( redoCommand );
 
-    printf("RestoreCopy [%p]\n", part);
-
     // Do not delete the previous part by calling SetCurPart( part ),
     // which calls delete <previous part>.
     // <previous part> is now put in redo list and is owned by this list.
     // Just set the current part to the part which come from the undo list
     m_my_part = part;
-
-    if( !part )
-        return;
 
     if( undoRedoType == UR_LIB_RENAME )
     {

@@ -105,15 +105,15 @@ public:
     double  GetEndAngle() const;
 
 
-    bool ConstructFromCorners( VECTOR2I aP0, VECTOR2I aP1, double aCenterAngle );
+    bool ConstructFromCorners( const VECTOR2I& aP0, const VECTOR2I& aP1, double aCenterAngle );
 
 
-    bool ConstructFromCornerAndAngles( VECTOR2I aP0,
+    bool ConstructFromCornerAndAngles( const VECTOR2I& aP0,
             double aStartAngle,
             double aCenterAngle,
             double aRadius );
 
-    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 0.02f ) const;
+    SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 0.02 ) const;
 
 private:
 

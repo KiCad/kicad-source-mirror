@@ -74,11 +74,11 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
 }
 
 
-bool SHAPE_ARC::ConstructFromCorners( VECTOR2I aP0, VECTOR2I aP1, double aCenterAngle )
+bool SHAPE_ARC::ConstructFromCorners( const VECTOR2I& aP0, const VECTOR2I& aP1, double aCenterAngle )
 {
     VECTOR2D mid = ( VECTOR2D( aP0 ) + VECTOR2D( aP1 ) ) * 0.5;
     VECTOR2D chord = VECTOR2D( aP1 ) - VECTOR2D( aP0 );
-    double c = (aP1 - aP0).EuclideanNorm() / 2;
+    double c = (aP1 - aP0).EuclideanNorm() / 2.0;
     VECTOR2D d = chord.Rotate( M_PI / 2.0 ).Resize( c );
 
     m_pc = mid + d * ( 1.0 / tan( aCenterAngle / 2.0 * M_PI / 180.0 ) );
@@ -88,7 +88,8 @@ bool SHAPE_ARC::ConstructFromCorners( VECTOR2I aP0, VECTOR2I aP1, double aCenter
     return true;
 }
 
-bool SHAPE_ARC::ConstructFromCornerAndAngles( VECTOR2I aP0,
+
+bool SHAPE_ARC::ConstructFromCornerAndAngles( const VECTOR2I& aP0,
         double aStartAngle,
         double aCenterAngle,
         double aRadius )
@@ -148,7 +149,8 @@ double SHAPE_ARC::GetCentralAngle() const
     return ea - sa;
 }
 
-const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
+
+SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 {
     SHAPE_LINE_CHAIN rv;
     double ca = GetCentralAngle();
@@ -158,15 +160,10 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     int n;
 
     if( r == 0.0 )
-    {
-        ca = 0;
-        n = 0;
-    }
-    else
-    {
-        step = 180 / M_PI * acos( r * ( 1 - aAccuracy ) / r );
-        n = (int) ceil(ca / step);
-    }
+        return rv;
+
+    step = 180.0 / M_PI * acos( r * ( 1.0 - aAccuracy ) / r );
+    n = (int) ceil( ca / step );
 
     for( int i = 0; i <= n ; i++ )
     {
