@@ -669,10 +669,13 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     BOARD*  brd = myframe->GetBoard();
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    // The layer visibility status is saved in the board file so set the board modified
-    // state so the user has the option to save the changes.
-    if( brd->IsElementVisible( static_cast<GAL_LAYER_ID>( aId ) ) != isEnabled )
-        myframe->OnModify();
+    if( myframe->IsType( FRAME_PCB ) )
+    {
+        // The layer visibility status is saved in the board file so set the board
+        // modified state so the user has the option to save the changes.
+        if( brd->IsElementVisible( static_cast<GAL_LAYER_ID>( aId ) ) != isEnabled )
+            myframe->OnModify();
+    }
 
     brd->SetElementVisibility( static_cast<GAL_LAYER_ID>( aId ), isEnabled );
 
