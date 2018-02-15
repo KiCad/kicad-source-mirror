@@ -169,6 +169,10 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     // Rebuild the board connectivity:
     board->GetConnectivity()->Build( board );
 
+    // TODO is there a way to extract information about which nets were modified?
+    for( auto track : board->Tracks() )
+        view->Update( track );
+
     SetMsgPanel( board );
     m_canvas->Refresh();
 }

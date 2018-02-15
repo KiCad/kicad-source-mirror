@@ -37,14 +37,15 @@
 #include <class_drawpanel.h>
 #include <class_board.h>
 #include <ratsnest_data.h>
+#include <view/view.h>
 
 #include <functional>
 using namespace std::placeholders;
 
-DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist ) :
-    DIALOG_UPDATE_PCB_BASE ( aParent ),
-    m_frame (aParent),
-    m_netlist (aNetlist)
+DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist ) :
+    DIALOG_UPDATE_PCB_BASE( aParent ),
+    m_frame( aParent ),
+    m_netlist( aNetlist )
 {
     m_messagePanel->SetLabel( _("Changes to be applied:") );
     m_messagePanel->SetLazyUpdate( true );
@@ -98,7 +99,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
     updater.SetReporter ( &reporter );
-    updater.SetIsDryRun( aDryRun);
+    updater.SetIsDryRun( aDryRun );
     updater.SetLookupByTimestamp( m_matchByTimestamp->GetValue() );
     updater.SetDeleteUnusedComponents ( true );
     updater.SetReplaceFootprints( true );
@@ -112,6 +113,13 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     m_frame->SetCurItem( NULL );
     m_frame->SetMsgPanel( board );
+
+    // Update rendered tracks and vias net labels
+    auto view = m_frame->GetGalCanvas()->GetView();
+
+    // TODO is there a way to extract information about which nets were modified?
+    for( auto track : board->Tracks() )
+        view->Update( track );
 
     std::vector<MODULE*> newFootprints = updater.GetAddedComponents();
 
