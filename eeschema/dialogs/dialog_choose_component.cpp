@@ -78,8 +78,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
     auto details = aShowFootprints ? nullptr : new wxHtmlWindow(
-        vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-        wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
+        vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 
     m_tree = new COMPONENT_TREE( m_splitter_tree_canvas, Prj().SchSymbolLibTable(),
                                  aAdapter, COMPONENT_TREE::WIDGETS::ALL, details );
@@ -156,7 +155,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     m_sch_view_ctrl = new wxPanel( panel, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-            wxFULL_REPAINT_ON_RESIZE | wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
+            wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL );
     m_sch_view_ctrl->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )

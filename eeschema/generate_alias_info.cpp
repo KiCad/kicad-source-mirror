@@ -42,7 +42,7 @@ static const wxString FieldFormat =
     "   <td><b>__NAME__</b></td>"
     "   <td>__VALUE__</td>"
     "</tr>";
-static const wxString DatasheetLinkFormat = "<a href=\"__VALUE__\">__VALUE__</a>";
+static const wxString DatasheetLinkFormat = "<a href=\"__HREF__\">__TEXT__</a>";
 
 
 class ALIAS_INFO_GENERATOR
@@ -170,8 +170,17 @@ protected:
         {
         case DATASHEET:
             {
+                if( text.IsEmpty() )
+                    text = m_alias->GetDocFileName();
+
                 wxString datasheetlink = DatasheetLinkFormat;
-                datasheetlink.Replace( "__VALUE__", EscapedHTML( text ) );
+                datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
+
+                if( text.Length() > 75 )
+                    text = text.Left( 72 ) + wxT( "..." );
+
+                datasheetlink.Replace( "__TEXT__", EscapedHTML( text ) );
+
                 fieldhtml.Replace( "__VALUE__", datasheetlink );
             }
             break;
