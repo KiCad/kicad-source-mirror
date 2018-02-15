@@ -188,6 +188,7 @@ void PCB_DRAW_PANEL_GAL::UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings
     KIGFX::PCB_RENDER_SETTINGS* rs;
     rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
     rs->ImportLegacyColors( aSettings );
+    m_gal->SetGridColor( aSettings->GetLayerColor( LAYER_GRID ) );
     m_gal->SetCursorColor( aSettings->GetItemColor( LAYER_CURSOR ) );
 }
 
