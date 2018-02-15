@@ -44,7 +44,7 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_backPressure->SetValue( m_settings.JumpOverObstacles() );
     m_removeLoops->SetValue( m_settings.RemoveLoops() );
     m_suggestEnding->SetValue( m_settings.SuggestFinish() );
-    m_autoNeckdown->SetValue( m_settings.SmartPads() );
+    m_smartPads->SetValue( m_settings.SmartPads() );
     m_effort->SetValue( m_settings.OptimizerEffort() );
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
@@ -65,7 +65,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetJumpOverObstacles( m_backPressure->GetValue() );
     m_settings.SetRemoveLoops( m_removeLoops->GetValue() );
     m_settings.SetSuggestFinish ( m_suggestEnding->GetValue() );
-    m_settings.SetSmartPads( m_autoNeckdown->GetValue() );
+    m_settings.SetSmartPads( m_smartPads->GetValue() );
     m_settings.SetOptimizerEffort( (PNS::PNS_OPTIMIZATION_EFFORT) m_effort->GetValue() );
     m_settings.SetSmoothDraggedSegments( m_smoothDragged->GetValue() );
     m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,7 +46,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_shoveVias;
 		wxCheckBox* m_backPressure;
 		wxCheckBox* m_removeLoops;
-		wxCheckBox* m_autoNeckdown;
+		wxCheckBox* m_smartPads;
 		wxCheckBox* m_smoothDragged;
 		wxCheckBox* m_violateDrc;
 		wxCheckBox* m_suggestEnding;

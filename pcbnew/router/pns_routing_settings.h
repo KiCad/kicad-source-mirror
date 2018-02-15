@@ -92,10 +92,10 @@ public:
     ///> Enables displaying suggestions for finishing the currently placed track.
     void SetSuggestFinish( bool aSuggestFinish ) { m_suggestFinish = aSuggestFinish; }
 
-    ///> Returns true if Smart Pads (automatic neckdown) is enabled.
+    ///> Returns true if Smart Pads (optimized connections) is enabled.
     bool SmartPads() const { return m_smartPads; }
 
-    ///> Enables/disables Smart Pads (automatic neckdown).
+    ///> Enables/disables Smart Pads (optimized connections).
     void SetSmartPads( bool aSmartPads ) { m_smartPads = aSmartPads; }
 
     ///> Returns true if follow mouse mode is active (permanently on for the moment).

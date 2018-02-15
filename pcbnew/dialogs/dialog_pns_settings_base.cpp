@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -63,10 +63,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	bOptions->Add( m_removeLoops, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_autoNeckdown = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Automatic neckdown"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_autoNeckdown->SetToolTip( _("When enabled, the router tries to break out pads/vias in a clean way, avoiding acute angles and jagged breakout traces.") );
+	m_smartPads = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize pad connections"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_smartPads->SetToolTip( _("When enabled, the router tries to break out pads/vias in a clean way, avoiding acute angles and jagged breakout traces.") );
 	
-	bOptions->Add( m_autoNeckdown, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bOptions->Add( m_smartPads, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_smoothDragged = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Smooth dragged segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_smoothDragged->SetToolTip( _("When enabled, the router attempts to merge several jagged segments into a single straight one (dragging mode).") );

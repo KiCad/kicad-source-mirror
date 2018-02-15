@@ -838,7 +838,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
 
     SOLID* solid = dyn_cast<SOLID*>( aPad );
 
-    // don't do auto-neckdown for offset pads
+    // don't do optimized connections for offset pads
     if( solid && solid->Offset() != VECTOR2I( 0, 0 ) )
         return -1;
 
