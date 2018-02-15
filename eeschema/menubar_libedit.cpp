@@ -327,9 +327,10 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
+    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Eeschema_Hokeys_Descr, HK_HELP );
     AddMenuItem( helpMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys..." ),
+                 text,
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 

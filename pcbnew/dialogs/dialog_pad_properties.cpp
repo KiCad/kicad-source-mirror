@@ -1137,7 +1137,6 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     #if 0
     if( m_dummyPad->GetLocalSolderPasteMargin() > 0 )
     {
-        //error_msgs.Add( _( "Pad local solder paste clearance must be zero or less than zero" ) );
         if( !IsOK( this, _( "Pad local solder paste clearance is greater than 0\n"
                          "The solder paste area will be bigger than the pad area.\n"
                          "This is unusual. Are you sure?)" ) ) )

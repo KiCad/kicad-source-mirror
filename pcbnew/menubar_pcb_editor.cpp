@@ -438,8 +438,9 @@ void prepareHelpMenu( wxMenu* aParentMenu )
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
+    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_Pcbnew_Editor_Hokeys_Descr, HK_HELP );
     AddMenuItem( aParentMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys" ),
+                 text,
                  _( "Display current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
