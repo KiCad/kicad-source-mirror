@@ -68,16 +68,16 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_display_options_base.cpp
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
-    dialogs/dialog_edit_module_for_BoardEditor.cpp
-    dialogs/dialog_edit_module_for_BoardEditor_base.cpp
-    dialogs/dialog_edit_module_for_Modedit.cpp
-    dialogs/dialog_edit_module_for_Modedit_base.cpp
-    dialogs/dialog_edit_module_text.cpp
-    dialogs/dialog_edit_module_text_base.cpp
+    dialogs/dialog_edit_footprint_for_BoardEditor.cpp
+    dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp
+    dialogs/dialog_edit_footprint_for_Modedit.cpp
+    dialogs/dialog_edit_footprint_for_Modedit_base.cpp
+    dialogs/dialog_edit_footprint_text.cpp
+    dialogs/dialog_edit_footprint_text_base.cpp
     dialogs/dialog_enum_pads.cpp
     dialogs/dialog_enum_pads_base.cpp
-    dialogs/dialog_exchange_modules.cpp
-    dialogs/dialog_exchange_modules_base.cpp
+    dialogs/dialog_exchange_footprints.cpp
+    dialogs/dialog_exchange_footprints_base.cpp
     dialogs/dialog_export_idf.cpp
     dialogs/dialog_export_idf_base.cpp
     dialogs/dialog_export_step.cpp
@@ -94,7 +94,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_fp_plugin_options_base.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
-    dialogs/dialog_gen_module_position_file_base.cpp
+    dialogs/dialog_gen_footprint_position_file_base.cpp
     dialogs/dialog_gencad_export_options.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
@@ -105,8 +105,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_deletion_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
-    dialogs/dialog_global_modules_fields_edition.cpp
-    dialogs/dialog_global_modules_fields_edition_base.cpp
+    dialogs/dialog_global_footprints_fields_edition.cpp
+    dialogs/dialog_global_footprints_fields_edition_base.cpp
     dialogs/dialog_global_pads_edition.cpp
     dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
@@ -182,7 +182,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_idf.cpp
     exporters/export_vrml.cpp
     exporters/gen_drill_report_files.cpp
-    exporters/gen_modules_placefile.cpp
+    exporters/gen_footprints_placefile.cpp
     exporters/gendrill_Excellon_writer.cpp
     exporters/gendrill_file_writer_base.cpp
     exporters/gendrill_gerber_writer.cpp
@@ -206,7 +206,7 @@ set( PCBNEW_CLASS_SRCS
     array_creator.cpp
     attribut.cpp
     block.cpp
-    block_module_editor.cpp
+    block_footprint_editor.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
     connect.cpp
@@ -240,7 +240,7 @@ set( PCBNEW_CLASS_SRCS
     highlight.cpp
     hotkeys.cpp
     hotkeys_board_editor.cpp
-    hotkeys_module_editor.cpp
+    hotkeys_footprint_editor.cpp
     initpcb.cpp
     layer_widget.cpp
     load_select_footprint.cpp
@@ -296,7 +296,7 @@ set( PCBNEW_CLASS_SRCS
     tools/edit_tool.cpp
     tools/grid_helper.cpp
     tools/microwave_tool.cpp
-    tools/module_editor_tools.cpp
+    tools/footprint_editor_tools.cpp
     tools/pad_tool.cpp
     tools/pcb_actions.cpp
     tools/pcb_bright_box.cpp
@@ -417,7 +417,7 @@ endif()
 if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
 
     # We deliberately do not use the CMake support for swig here,
-    # i.e. swig_add_module()) because we want full control.
+    # i.e. swig_add_footprint()) because we want full control.
 
     set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
@@ -444,7 +444,7 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/edge_mod.i
         DEPENDS swig/marker_pcb.i
         DEPENDS swig/pcb_target.i
-        DEPENDS swig/module.i
+        DEPENDS swig/footprint.i
         DEPENDS swig/netclass.i
         DEPENDS swig/netinfo.i
         DEPENDS swig/pad.i
