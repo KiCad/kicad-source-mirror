@@ -842,7 +842,6 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 {
     std::vector<SHAPE_SEGMENT*> segs;
 
-
     if( aItem->GetLayer() != Edge_Cuts )
         return false;
 
@@ -850,7 +849,8 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
     {
         case S_ARC:
         {
-            SHAPE_ARC arc( aItem->GetArcStart(), aItem->GetArcEnd(), aItem->GetCenter() );
+            SHAPE_ARC arc( aItem->GetStart(), aItem->GetEnd(), (double) aItem->GetAngle() / 10.0 );
+
             auto l = arc.ConvertToPolyline();
 
             for( int i = 0; i < l.SegmentCount(); i++ )
