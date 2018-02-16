@@ -817,7 +817,7 @@ EELEMENT::EELEMENT( wxXmlNode* aElement )
     library = parseRequiredAttribute<wxString>( aElement, "library" );
     value   = parseRequiredAttribute<wxString>( aElement, "value" );
     std::string p = parseRequiredAttribute<std::string>( aElement, "package" );
-    ReplaceIllegalFileNameChars( &p );
+    ReplaceIllegalFileNameChars( &p, '_' );
     package = wxString::FromUTF8( p.c_str() );
 
     x       = parseRequiredAttribute<ECOORD>( aElement, "x" );
@@ -966,16 +966,23 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice )
               >
 */
     name = parseRequiredAttribute<wxString>( aDevice, "name" );
-    package = parseOptionalAttribute<wxString>( aDevice, "package" );
+    opt_wxString pack = parseOptionalAttribute<wxString>( aDevice, "package" );
 
-    NODE_MAP aDeviceChildren = MapChildren(aDevice);
-    wxXmlNode* connectNode = getChildrenNodes(aDeviceChildren, "connects");
-
-    while(connectNode){
-        connects.push_back(ECONNECT(connectNode));
-        connectNode = connectNode->GetNext();
+    if( pack )
+    {
+        std::string p( pack->c_str() );
+        ReplaceIllegalFileNameChars( &p, '_' );
+        package.Set( wxString::FromUTF8( p.c_str() ) );
     }
 
+    NODE_MAP   aDeviceChildren = MapChildren( aDevice );
+    wxXmlNode* connectNode = getChildrenNodes( aDeviceChildren, "connects" );
+
+    while( connectNode )
+    {
+        connects.push_back( ECONNECT( connectNode ) );
+        connectNode = connectNode->GetNext();
+    }
 }
 
 

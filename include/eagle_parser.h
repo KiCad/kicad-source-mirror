@@ -285,6 +285,7 @@ public:
     void Set( const wxString& aString )
     {
         m_data = Convert<T>( aString );
+        m_isAvailable = !aString.IsEmpty();
     }
 
     /**

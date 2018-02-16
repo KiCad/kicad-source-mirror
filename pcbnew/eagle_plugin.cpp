@@ -766,7 +766,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         const wxString& pack_ref = package->GetAttribute( "name" );
         std::string pack_name( pack_ref );
-        ReplaceIllegalFileNameChars( &pack_name );
+        ReplaceIllegalFileNameChars( &pack_name, '_' );
 
         m_xpath->Value( pack_name.c_str() );
 
