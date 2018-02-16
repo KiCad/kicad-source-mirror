@@ -241,7 +241,8 @@ void LIB_EDIT_FRAME::OnSaveLibrary( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSaveAllLibraries( wxCommandEvent& event )
 {
-    saveAllLibraries();
+    saveAllLibraries( false );
+    m_treePane->Refresh();
 }
 
 
@@ -590,7 +591,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 }
 
 
-bool LIB_EDIT_FRAME::saveAllLibraries()
+bool LIB_EDIT_FRAME::saveAllLibraries( bool aClosing )
 {
     wxArrayString unsavedLibraries;
     // There are two stages: first try to save libraries to the original files.
@@ -609,22 +610,41 @@ bool LIB_EDIT_FRAME::saveAllLibraries()
                 unsavedLibraries.Add( lib );
         }
 
-        if( !unsavedLibraries.IsEmpty() )
+        if( unsavedLibraries.IsEmpty() )
+            break;
+
+        std::vector<int> libIdxs;
+
+        // Show a list of unsaved libraries when:
+        // - library editor is closed
+        // - there are multiple libraries modified
+        // - another library is opened
+        // - an error occurred when saving a library
+        if( aClosing || unsavedLibraries.Count() > 1
+                || GetCurLib() != unsavedLibraries[0] || !firstRun )
         {
-            auto res = SelectMultipleOptions( this, _( "Save Libraries" ),
-                    firstRun ? _( "Select libraries to save before closing" )
-                             : _( "Some libraries could not be saved to their original files.\n\n"
-                                  "Do you want to save them to a new file?" ),
+            bool accepted;
+
+            std::tie( accepted, libIdxs ) = SelectMultipleOptions( this, _( "Save Libraries" ),
+                    firstRun ? _( "Select libraries to save" )
+                            : _( "Some libraries could not be saved to their original files.\n\n"
+                                "Do you want to save them to a new file?" ),
                     unsavedLibraries, true );
 
-            if( !res.first )
+            if( !accepted )
                 return false;       // dialog has been cancelled
-
-            for( auto libIndex : res.second )
-                allSaved &= saveLibrary( unsavedLibraries[libIndex], !firstRun );
-
-            firstRun = false;
         }
+
+        else if( unsavedLibraries.Count() == 1 || GetCurLib() == unsavedLibraries[0] )
+        {
+            // Save just current library, no questions asked
+            libIdxs.push_back( 0 );
+        }
+
+        for( auto libIndex : libIdxs )
+            allSaved &= saveLibrary( unsavedLibraries[libIndex], !firstRun );
+
+        firstRun = false;
     }
 
     return true;

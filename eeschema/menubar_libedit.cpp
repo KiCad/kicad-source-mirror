@@ -79,9 +79,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     // Save library variants
-    text = AddHotkeyName( _( "&Save Library" ), g_Libedit_Hokeys_Descr, HK_SAVE_LIB );
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_LIBRARY, text,
+                 ID_LIBEDIT_SAVE_LIBRARY,
+                 _( "&Save Library" ),
                  _( "Save the current active library" ),
                  KiBitmap( save_library_xpm ) );
 
@@ -91,10 +91,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Save the current library to a new file" ),
                  KiBitmap( save_as_xpm ) );
 
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_ALL_LIBS,
-                 _( "Save All &Libraries" ),
-                 _( "Save all library changes" ),
+    text = AddHotkeyName( _( "Save All &Libraries" ), g_Libedit_Hokeys_Descr, HK_SAVE_ALL_LIBS );
+    AddMenuItem( fileMenu, ID_LIBEDIT_SAVE_ALL_LIBS, text, _( "Save all library changes" ),
                  KiBitmap( save_xpm ) );
 
     // Separator
@@ -194,10 +192,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Create a new empty symbol" ),
                  KiBitmap( new_component_xpm ) );
 
-    text = AddHotkeyName( _( "&Save Symbol" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
     AddMenuItem( partMenu,
                  ID_LIBEDIT_SAVE_PART,
-                 text,
+                 _( "&Save Symbol" ),
                  _( "Saves the current symbol to the library" ),
                  KiBitmap( save_part_xpm ) );
 
