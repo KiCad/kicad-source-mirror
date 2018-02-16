@@ -63,7 +63,7 @@ using namespace std::placeholders;
 
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
-#include <dialogs/dialog_exchange_modules.h>
+#include <dialogs/dialog_exchange_footprints.h>
 
 #include <tools/tool_event_utils.h>
 
@@ -1120,7 +1120,7 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
     // invoke the exchange dialog process
     {
-        DIALOG_EXCHANGE_MODULE dialog( frame(), mod, updateMode );
+        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode );
         dialog.ShowQuasiModal();
     }
 

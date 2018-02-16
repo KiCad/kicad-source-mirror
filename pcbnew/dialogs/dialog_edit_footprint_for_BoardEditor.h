@@ -32,7 +32,7 @@
 
 class PANEL_PREV_3D;
 
-class DIALOG_MODULE_BOARD_EDITOR: public DIALOG_MODULE_BOARD_EDITOR_BASE
+class DIALOG_FOOTPRINT_BOARD_EDITOR: public DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
 {
 private:
     PCB_EDIT_FRAME *            m_Parent;
@@ -63,8 +63,8 @@ public:
 
 public:
     // Constructor and destructor
-    DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule, wxDC* aDC );
-    ~DIALOG_MODULE_BOARD_EDITOR();
+    DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule, wxDC* aDC );
+    ~DIALOG_FOOTPRINT_BOARD_EDITOR();
 
 private:
     void BrowseAndAdd3DShapeFile();

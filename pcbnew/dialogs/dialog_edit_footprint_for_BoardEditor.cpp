@@ -1,5 +1,5 @@
 /**
- * Module editor: Dialog for editing module properties in the pcb editor.
+ * Module editor: Dialog for editing footprint properties in the pcb editor.
  */
 
 /*
@@ -58,13 +58,13 @@
 
 #include <dialog_edit_footprint_text.h>
 
-size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
+size_t DIALOG_FOOTPRINT_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
 
-DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
+DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
                                                         MODULE*          aModule,
                                                         wxDC*            aDC ) :
-    DIALOG_MODULE_BOARD_EDITOR_BASE( aParent ),
+    DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( aParent ),
     m_OrientValidator( 1, &m_OrientValue )
 {
     wxASSERT( aParent != NULL );
@@ -108,7 +108,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
 
 
 
-DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
+DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 {
     m_shapes3D_list.clear();
 
@@ -137,7 +137,7 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
 
 
 // Creation of the panel properties of the module editor.
-void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
+void DIALOG_FOOTPRINT_BOARD_EDITOR::InitBoardProperties()
 {
     PutValueInLocalUnits( *m_ModPositionX, m_CurrentModule->GetPosition().x );
     m_XPosUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
@@ -230,7 +230,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
 {
     if( m_CurrentModule->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
     {
@@ -242,19 +242,19 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::UpdateModule( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::UpdateModule( wxCommandEvent& event )
 {
     EndModal( PRM_EDITOR_WANT_UPDATE_FP );
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
 {
     EndModal( PRM_EDITOR_WANT_EXCHANGE_FP );
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
 {
     bool custom_orientation = false;
 
@@ -286,7 +286,7 @@ void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
+void DIALOG_FOOTPRINT_BOARD_EDITOR::InitModeditProperties()
 {
     wxString default_path;
     wxGetEnv( KISYS3DMOD, &default_path );
@@ -411,7 +411,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::On3DShapeNameSelected( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DShapeNameSelected( wxCommandEvent& event )
 {
     m_LastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetSelection();
 
@@ -442,7 +442,7 @@ void DIALOG_MODULE_BOARD_EDITOR::On3DShapeNameSelected( wxCommandEvent& event )
 
 
 
-void DIALOG_MODULE_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
 {
     int ii = m_3D_ShapeNameListBox->GetSelection();
 
@@ -479,7 +479,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Remove3DShape( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::Edit3DShapeFileName()
+void DIALOG_FOOTPRINT_BOARD_EDITOR::Edit3DShapeFileName()
 {
     int idx = m_3D_ShapeNameListBox->GetSelection();
 
@@ -531,7 +531,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Edit3DShapeFileName()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
+void DIALOG_FOOTPRINT_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT& prj = Prj();
     MODULE_3D_SETTINGS model;
@@ -598,7 +598,7 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 }
 
 
-bool DIALOG_MODULE_BOARD_EDITOR::TransferDataToWindow()
+bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() ||
         !m_PanelProperties->TransferDataToWindow() )
@@ -621,12 +621,12 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataToWindow()
 }
 
 
-bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
+bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
 {
     wxPoint  modpos;
     wxString msg;
 
-    if( !Validate() || !DIALOG_MODULE_BOARD_EDITOR_BASE::TransferDataFromWindow() ||
+    if( !Validate() || !DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::TransferDataFromWindow() ||
         !m_PanelProperties->TransferDataFromWindow() )
     {
         wxMessageBox( _( "Error: invalid or missing footprint parameter" ) );
@@ -781,7 +781,7 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
 {
     wxPoint tmp = m_Parent->GetCrossHairPosition();
 
@@ -796,7 +796,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
 {
     wxPoint tmp = m_Parent->GetCrossHairPosition();
 
@@ -811,7 +811,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::Cfg3DPath( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::Cfg3DPath( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
         if( m_LastSelected3DShapeIndex >= 0 )

@@ -32,7 +32,7 @@
 #include <id.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
-#include <dialog_edit_module_text.h>
+#include <dialog_edit_footprint_text.h>
 #include <import_dxf/dialog_dxf_import.h>
 
 #include <view/view_group.h>

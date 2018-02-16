@@ -50,8 +50,8 @@
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
-#include <dialog_exchange_modules.h>
-#include <dialog_edit_module_for_BoardEditor.h>
+#include <dialog_exchange_footprints.h>
+#include <dialog_edit_footprint_for_BoardEditor.h>
 #include <convert_to_biu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -1292,7 +1292,7 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
     DC = NULL;
 #endif
 
-    DIALOG_MODULE_BOARD_EDITOR* dlg = new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
+    DIALOG_FOOTPRINT_BOARD_EDITOR* dlg = new DIALOG_FOOTPRINT_BOARD_EDITOR( this, Module, DC );
 
     int retvalue = dlg->ShowModal();
     /* retvalue =
@@ -1307,11 +1307,11 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
 
 #ifdef __WXMAC__
     // If something edited, push a refresh request
-    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
+    if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
         m_canvas->Refresh();
 #endif
 
-    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_MODEDIT )
+    if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_MODEDIT )
     {
         FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
@@ -1322,12 +1322,12 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
         editor->Raise();        // Iconize( false );
     }
 
-    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_UPDATE_FP )
+    if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_UPDATE_FP )
     {
         InstallExchangeModuleFrame( Module, true );
     }
 
-    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
+    if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
     {
         InstallExchangeModuleFrame( Module, false );
     }
@@ -1336,7 +1336,7 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
 
 int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module, bool updateMode )
 {
-    DIALOG_EXCHANGE_MODULE dialog( this, Module, updateMode );
+    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, Module, updateMode );
 
     return dialog.ShowQuasiModal();
 }

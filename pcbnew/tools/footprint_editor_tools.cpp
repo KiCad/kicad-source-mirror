@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "module_editor_tools.h"
+#include "footprint_editor_tools.h"
 #include "kicad_clipboard.h"
 #include "selection_tool.h"
 #include "pcb_actions.h"

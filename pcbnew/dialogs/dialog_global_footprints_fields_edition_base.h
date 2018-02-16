@@ -32,9 +32,9 @@ class DIALOG_SHIM;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE
+/// Class DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
+class DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -60,8 +60,8 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Set Text Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE();
+		DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Set Text Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE();
 	
 };
 

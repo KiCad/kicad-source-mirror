@@ -121,7 +121,7 @@ HANDLE_EXCEPTIONS(LoadBoard)
 
 
 %include board.i
-%include module.i
+%include footprint.i
 %include plugins.i
 %include units.i
 

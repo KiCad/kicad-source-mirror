@@ -91,11 +91,11 @@ public:
  * The dialog to create footprint position files,
  * and choose options (one or 2 files, units and force all SMD footprints in list)
  */
-class DIALOG_GEN_MODULE_POSITION : public DIALOG_GEN_MODULE_POSITION_BASE
+class DIALOG_GEN_FOOTPRINT_POSITION : public DIALOG_GEN_FOOTPRINT_POSITION_BASE
 {
 public:
-    DIALOG_GEN_MODULE_POSITION( PCB_EDIT_FRAME * aParent ):
-        DIALOG_GEN_MODULE_POSITION_BASE( aParent ),
+    DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME * aParent ):
+        DIALOG_GEN_FOOTPRINT_POSITION_BASE( aParent ),
         m_parent( aParent ),
         m_plotOpts( aParent->GetPlotSettings() )
     {
@@ -146,16 +146,16 @@ private:
 
 
 // Static members to remember choices
-int DIALOG_GEN_MODULE_POSITION::m_unitsOpt = 0;
-int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
-int DIALOG_GEN_MODULE_POSITION::m_fileFormat = 0;
+int DIALOG_GEN_FOOTPRINT_POSITION::m_unitsOpt = 0;
+int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
+int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
 
 // Use standard board side name. do not translate them,
 // they are keywords in place file
 const wxString frontSideName = wxT( "top" );
 const wxString backSideName = wxT( "bottom" );
 
-void DIALOG_GEN_MODULE_POSITION::initDialog()
+void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
     m_config = Kiface().KifaceSettings();
     m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
@@ -171,7 +171,7 @@ void DIALOG_GEN_MODULE_POSITION::initDialog()
     m_sdbSizerButtonsOK->SetDefault();
 }
 
-void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output plot directory
     // to preselect it when opening the dialog.
@@ -200,7 +200,7 @@ void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent&
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
 }
 
-void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
+void DIALOG_GEN_FOOTPRINT_POSITION::OnOKButton( wxCommandEvent& event )
 {
     m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
@@ -226,7 +226,7 @@ void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
 }
 
 
-bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
+bool DIALOG_GEN_FOOTPRINT_POSITION::CreateFiles()
 {
     BOARD * brd = m_parent->GetBoard();
     wxFileName  fn;
@@ -401,7 +401,7 @@ static bool HasNonSMDPins( MODULE* aModule )
 
 void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
 {
-    DIALOG_GEN_MODULE_POSITION dlg( this );
+    DIALOG_GEN_FOOTPRINT_POSITION dlg( this );
     dlg.ShowModal();
 }
 

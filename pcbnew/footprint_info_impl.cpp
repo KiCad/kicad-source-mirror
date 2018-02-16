@@ -227,7 +227,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
     SYNC_QUEUE<std::unique_ptr<FOOTPRINT_INFO>> queue_parsed;
     std::vector<std::thread>                    threads;
 
-    for( size_t i = 0; i < std::thread::hardware_concurrency() + 1; ++i )
+    for( size_t ii = 0; ii < std::thread::hardware_concurrency() + 1; ++ii )
     {
         threads.push_back( std::thread( [this, &queue_parsed]() {
             wxString nickname;
@@ -258,9 +258,9 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
                     }
                 }
 
-                for( int i = 0; i < fpnames.size() && !m_cancelled; i++ )
+                for( unsigned jj = 0; jj < fpnames.size() && !m_cancelled; ++jj )
                 {
-                    wxString fpname = fpnames[ i ];
+                    wxString fpname = fpnames[jj];
                     FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
                     queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
                 }

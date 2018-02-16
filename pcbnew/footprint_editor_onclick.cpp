@@ -41,7 +41,7 @@
 #include <tools/pcbnew_control.h>
 #include <hotkeys.h>
 #include <footprint_edit_frame.h>
-#include <dialog_edit_module_for_Modedit.h>
+#include <dialog_edit_footprint_for_fp_editor.h>
 #include <menus_helpers.h>
 
 
@@ -531,7 +531,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
 
     case PCB_MODULE_T:
         {
-        DIALOG_MODULE_MODULE_EDITOR dialog( this, static_cast<MODULE*>( aItem ) );
+        DIALOG_FOOTPRINT_FP_EDITOR dialog( this, static_cast<MODULE*>( aItem ) );
         dialog.ShowModal();
         GetScreen()->GetCurItem()->ClearFlags();
         m_canvas->MoveCursorToCrossHair();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-201_ KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
  */
 
 /**
- * @file dialog_global_modules_fields_edition.cpp
- * @brief global module fields edition.
+ * @file dialog_global_footprints_fields_edition.cpp
+ * @brief global footprint fields edition.
  */
 
 #include <fctsys.h>
@@ -42,14 +42,14 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_text_mod.h>
-#include <dialog_global_modules_fields_edition_base.h>
+#include <dialog_global_footprints_fields_edition_base.h>
 
 
 // The dialog to set options for global fields edition:
 // optionas are:
 // - edited fields (ref, value, others
 // - the footprint filter, for selective edition
-class DIALOG_GLOBAL_MODULES_FIELDS_EDITION : public DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE
+class DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION : public DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE
 {
     PCB_EDIT_FRAME* m_parent;
     BOARD_DESIGN_SETTINGS* m_brdSettings;
@@ -61,8 +61,8 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION : public DIALOG_GLOBAL_MODULES_FIELDS
 
 
 public:
-    DIALOG_GLOBAL_MODULES_FIELDS_EDITION( PCB_EDIT_FRAME* parent )
-        : DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE( parent )
+    DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION( PCB_EDIT_FRAME* parent )
+        : DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE( parent )
     {
         m_parent = parent;
         initDialog();
@@ -74,12 +74,12 @@ private:
     bool TransferDataFromWindow() override;
 };
 
-bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::m_refSelection = false;
-bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::m_valueSelection = false;
-bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::m_othersSelection = false;
-wxString DIALOG_GLOBAL_MODULES_FIELDS_EDITION::m_filterString;
+bool DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::m_refSelection = false;
+bool DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::m_valueSelection = false;
+bool DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::m_othersSelection = false;
+wxString DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::m_filterString;
 
-void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::initDialog()
+void DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::initDialog()
 {
     m_sdbSizerButtonsOK->SetDefault();
 
@@ -105,7 +105,7 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::initDialog()
 }
 
 
-bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::TransferDataFromWindow()
+bool DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::TransferDataFromWindow()
 {
     m_refSelection = m_ReferenceOpt->GetValue();
     m_valueSelection = m_ValueOpt->GetValue();
@@ -130,7 +130,7 @@ bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::TransferDataFromWindow()
 
 void PCB_EDIT_FRAME::OnResetModuleTextSizes( wxCommandEvent& event )
 {
-    DIALOG_GLOBAL_MODULES_FIELDS_EDITION dlg( this );
+    DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION dlg( this );
     dlg.ShowModal();
 }
 

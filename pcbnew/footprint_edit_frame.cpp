@@ -66,7 +66,7 @@
 #include "tools/drawing_tool.h"
 #include "tools/point_editor.h"
 #include "tools/pcbnew_control.h"
-#include "tools/module_editor_tools.h"
+#include "tools/footprint_editor_tools.h"
 #include "tools/placement_tool.h"
 #include "tools/picker_tool.h"
 #include "tools/pad_tool.h"

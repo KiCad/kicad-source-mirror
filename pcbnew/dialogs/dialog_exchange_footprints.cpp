@@ -40,7 +40,7 @@
 #include <wx_html_report_panel.h>
 
 #include <pcbnew.h>
-#include <dialog_exchange_footprint.h>
+#include <dialog_exchange_footprints.h>
 #include <wildcards_and_files_ext.h>
 #include <kiway.h>
 
@@ -53,15 +53,15 @@ static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 #define ID_MATCH_FP_VAL 4202
 #define ID_MATCH_FP_ID  4203
 
-int DIALOG_EXCHANGE_MODULE::m_matchModeForUpdate           = ID_MATCH_FP_ALL;
-int DIALOG_EXCHANGE_MODULE::m_matchModeForExchange         = ID_MATCH_FP_REF;
-int DIALOG_EXCHANGE_MODULE::m_matchModeForUpdateSelected   = ID_MATCH_FP_REF;
-int DIALOG_EXCHANGE_MODULE::m_matchModeForExchangeSelected = ID_MATCH_FP_REF;
+int DIALOG_EXCHANGE_FOOTPRINTS::m_matchModeForUpdate           = ID_MATCH_FP_ALL;
+int DIALOG_EXCHANGE_FOOTPRINTS::m_matchModeForExchange         = ID_MATCH_FP_REF;
+int DIALOG_EXCHANGE_FOOTPRINTS::m_matchModeForUpdateSelected   = ID_MATCH_FP_REF;
+int DIALOG_EXCHANGE_FOOTPRINTS::m_matchModeForExchangeSelected = ID_MATCH_FP_REF;
 
 
-DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* Module,
+DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* parent, MODULE* Module,
                                                 bool updateMode ) :
-    DIALOG_EXCHANGE_MODULE_BASE( parent ), m_commit( parent )
+    DIALOG_EXCHANGE_FOOTPRINTS_BASE( parent ), m_commit( parent )
 {
     m_parent = parent;
     m_currentModule = Module;
@@ -82,14 +82,14 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnQuit( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnQuit( wxCommandEvent& event )
 {
     Show( false );
     EndQuasiModal( wxID_CANCEL );
 }
 
 
-void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
+void DIALOG_EXCHANGE_FOOTPRINTS::init( bool updateMode )
 {
     SetFocus();
 
@@ -174,7 +174,7 @@ void DIALOG_EXCHANGE_MODULE::init( bool updateMode )
 }
 
 
-int DIALOG_EXCHANGE_MODULE::getMatchMode()
+int DIALOG_EXCHANGE_FOOTPRINTS::getMatchMode()
 {
     if( m_updateMode )
         return( m_currentModule ? m_matchModeForUpdateSelected : m_matchModeForUpdate );
@@ -183,7 +183,7 @@ int DIALOG_EXCHANGE_MODULE::getMatchMode()
 }
 
 
-void DIALOG_EXCHANGE_MODULE::setMatchMode( int aMatchMode )
+void DIALOG_EXCHANGE_FOOTPRINTS::setMatchMode( int aMatchMode )
 {
     if( m_updateMode )
     {
@@ -202,7 +202,7 @@ void DIALOG_EXCHANGE_MODULE::setMatchMode( int aMatchMode )
 }
 
 
-bool DIALOG_EXCHANGE_MODULE::isMatch( MODULE* aModule )
+bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
 {
     switch( getMatchMode() )
     {
@@ -227,7 +227,7 @@ bool DIALOG_EXCHANGE_MODULE::isMatch( MODULE* aModule )
 }
 
 
-wxRadioButton* DIALOG_EXCHANGE_MODULE::getRadioButtonForMode()
+wxRadioButton* DIALOG_EXCHANGE_FOOTPRINTS::getRadioButtonForMode()
 {
     switch( getMatchMode() )
     {
@@ -245,7 +245,7 @@ wxRadioButton* DIALOG_EXCHANGE_MODULE::getRadioButtonForMode()
 }
 
 
-void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons( wxUpdateUIEvent& )
+void DIALOG_EXCHANGE_FOOTPRINTS::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 {
     wxRadioButton* rb_button = getRadioButtonForMode();
 
@@ -271,14 +271,14 @@ void DIALOG_EXCHANGE_MODULE::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnMatchAllClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchAllClicked( wxCommandEvent& event )
 {
     setMatchMode( ID_MATCH_FP_ALL );
     m_matchAll->SetFocus();
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnMatchRefClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchRefClicked( wxCommandEvent& event )
 {
     setMatchMode( ID_MATCH_FP_REF );
 
@@ -287,7 +287,7 @@ void DIALOG_EXCHANGE_MODULE::OnMatchRefClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnMatchValueClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchValueClicked( wxCommandEvent& event )
 {
     setMatchMode( ID_MATCH_FP_VAL );
 
@@ -296,7 +296,7 @@ void DIALOG_EXCHANGE_MODULE::OnMatchValueClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnMatchIDClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& event )
 {
     setMatchMode( ID_MATCH_FP_ID );
 
@@ -305,7 +305,7 @@ void DIALOG_EXCHANGE_MODULE::OnMatchIDClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnApplyClick( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClick( wxCommandEvent& event )
 {
     bool result = false;
 
@@ -329,7 +329,7 @@ void DIALOG_EXCHANGE_MODULE::OnApplyClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::RebuildCmpList( wxCommandEvent& event )
 {
     wxString    msg;
     REPORTER& reporter = m_MessageWindow->Reporter();
@@ -354,7 +354,7 @@ void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 }
 
 
-bool DIALOG_EXCHANGE_MODULE::changeCurrentFootprint()
+bool DIALOG_EXCHANGE_FOOTPRINTS::changeCurrentFootprint()
 {
     if( m_updateMode )
         return change_1_Module( m_currentModule, m_currentModule->GetFPID(), true );
@@ -368,7 +368,7 @@ bool DIALOG_EXCHANGE_MODULE::changeCurrentFootprint()
 }
 
 
-bool DIALOG_EXCHANGE_MODULE::changeSameFootprints()
+bool DIALOG_EXCHANGE_FOOTPRINTS::changeSameFootprints()
 {
     MODULE*  Module;
     MODULE*  PtBack;
@@ -414,7 +414,7 @@ bool DIALOG_EXCHANGE_MODULE::changeSameFootprints()
 }
 
 
-bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
+bool DIALOG_EXCHANGE_FOOTPRINTS::change_1_Module( MODULE*            aModule,
                                               const LIB_ID&      aNewFootprintFPID,
                                               bool               aShowError )
 {
@@ -500,7 +500,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
 }
 
 
-void DIALOG_EXCHANGE_MODULE::ViewAndSelectFootprint( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname;
 

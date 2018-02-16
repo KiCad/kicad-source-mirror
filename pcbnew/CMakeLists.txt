@@ -70,8 +70,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp
-    dialogs/dialog_edit_footprint_for_Modedit.cpp
-    dialogs/dialog_edit_footprint_for_Modedit_base.cpp
+    dialogs/dialog_edit_footprint_for_fp_editor.cpp
+    dialogs/dialog_edit_footprint_for_fp_editor_base.cpp
     dialogs/dialog_edit_footprint_text.cpp
     dialogs/dialog_edit_footprint_text_base.cpp
     dialogs/dialog_enum_pads.cpp

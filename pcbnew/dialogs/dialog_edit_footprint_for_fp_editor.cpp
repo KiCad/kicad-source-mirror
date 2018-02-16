@@ -1,5 +1,5 @@
 /**
- * @file dialog_edit_module_for_Modedit.cpp
+ * @file dialog_edit_footprint_for_fp_editor.cpp
  *
  * @brief Dialog for editing a module properties in module editor (modedit)
  */
@@ -50,7 +50,7 @@
 #include <class_module.h>
 #include <class_text_mod.h>
 #include <footprint_edit_frame.h>
-#include <dialog_edit_footprint_for_Modedit.h>
+#include <dialog_edit_footprint_for_fp_editor.h>
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
@@ -60,12 +60,12 @@
 
 #include <dialog_edit_footprint_text.h>
 
-size_t DIALOG_MODULE_MODULE_EDITOR::m_page = 0;     // remember the last open page during session
+size_t DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page during session
 
 
-DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
+DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
                                                           MODULE* aModule ) :
-    DIALOG_MODULE_MODULE_EDITOR_BASE( aParent )
+    DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent )
 {
     m_parent = aParent;
     m_currentModule = aModule;
@@ -99,7 +99,7 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
 }
 
 
-DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
+DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
 {
     m_shapes3D_list.clear();
 
@@ -127,7 +127,7 @@ DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
+void DIALOG_FOOTPRINT_FP_EDITOR::initModeditProperties()
 {
     SetFocus();
 
@@ -268,7 +268,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
+void DIALOG_FOOTPRINT_FP_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
 {
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetSelection();
 
@@ -295,7 +295,7 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::Remove3DShape( wxCommandEvent& event )
 {
     int ii = m_3D_ShapeNameListBox->GetSelection();
 
@@ -332,7 +332,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
+void DIALOG_FOOTPRINT_FP_EDITOR::Edit3DShapeFileName()
 {
     int idx = m_3D_ShapeNameListBox->GetSelection();
 
@@ -384,7 +384,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
+void DIALOG_FOOTPRINT_FP_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT&        prj = Prj();
     MODULE_3D_SETTINGS model;
@@ -449,7 +449,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 }
 
 
-bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
+bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 {
     wxString msg;
     // First, test for invalid chars in module name
@@ -553,7 +553,7 @@ bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::OnEditReference( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::OnEditReference( wxCommandEvent& event )
 {
     wxPoint tmp = m_parent->GetCrossHairPosition();
     m_parent->SetCrossHairPosition( m_referenceCopy->GetTextPos() );
@@ -566,7 +566,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditReference( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::OnEditValue( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::OnEditValue( wxCommandEvent& event )
 {
     wxPoint tmp = m_parent->GetCrossHairPosition();
     m_parent->SetCrossHairPosition( m_valueCopy->GetTextPos() );
@@ -579,7 +579,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditValue( wxCommandEvent& event )
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::Cfg3DPath( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::Cfg3DPath( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
         if( m_lastSelected3DShapeIndex >= 0 )

@@ -56,7 +56,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 
-#include <dialog_edit_module_for_Modedit.h>
+#include <dialog_edit_footprint_for_fp_editor.h>
 #include <dialog_move_exact.h>
 #include <dialog_create_array.h>
 #include <wildcards_and_files_ext.h>
@@ -578,7 +578,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             SetCurItem( GetBoard()->m_Modules );
 
-            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
+            DIALOG_FOOTPRINT_FP_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
 
             dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
@@ -607,7 +607,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:
         {
-            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
+            DIALOG_FOOTPRINT_FP_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
             dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
             m_canvas->MoveCursorToCrossHair();

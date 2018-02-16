@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EDIT_MODULE_TEXT_BASE_H__
-#define __DIALOG_EDIT_MODULE_TEXT_BASE_H__
+#ifndef __DIALOG_EDIT_FOOTPRINT_TEXT_BASE_H__
+#define __DIALOG_EDIT_FOOTPRINT_TEXT_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -81,4 +81,4 @@ class DIALOG_EDIT_FPTEXT_BASE : public DIALOG_SHIM
 	
 };
 
-#endif //__DIALOG_EDIT_MODULE_TEXT_BASE_H__
+#endif //__DIALOG_EDIT_FOOTPRINT_TEXT_BASE_H__

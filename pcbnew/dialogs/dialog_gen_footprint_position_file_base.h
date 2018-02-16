@@ -31,9 +31,9 @@ class WX_HTML_REPORT_PANEL;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GEN_MODULE_POSITION_BASE
+/// Class DIALOG_GEN_FOOTPRINT_POSITION_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GEN_MODULE_POSITION_BASE : public DIALOG_SHIM
+class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -58,8 +58,8 @@ class DIALOG_GEN_MODULE_POSITION_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Footprint Position Files"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_GEN_MODULE_POSITION_BASE();
+		DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Footprint Position Files"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_GEN_FOOTPRINT_POSITION_BASE();
 	
 };
 

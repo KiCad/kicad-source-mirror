@@ -22,17 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_EXCHANGE_MODULES_H_
-#define DIALOG_EXCHANGE_MODULES_H_
+#ifndef DIALOG_EXCHANGE_FOOTPRINTS_H_
+#define DIALOG_EXCHANGE_FOOTPRINTS_H_
 
-#include <dialog_exchange_footprint_base.h>
+#include <dialog_exchange_footprints_base.h>
 
 #include <board_commit.h>
 
 class PCB_EDIT_FRAME;
 class MODULE;
 
-class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
+class DIALOG_EXCHANGE_FOOTPRINTS : public DIALOG_EXCHANGE_FOOTPRINTS_BASE
 {
 private:
     PCB_EDIT_FRAME* m_parent;
@@ -44,8 +44,8 @@ private:
     static          int m_matchModeForExchangeSelected; // remember last match-mode
 
 public:
-    DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode );
-    ~DIALOG_EXCHANGE_MODULE() { };
+    DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode );
+    ~DIALOG_EXCHANGE_FOOTPRINTS() { };
 
 private:
     void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) override;
@@ -75,4 +75,4 @@ private:
     BOARD_COMMIT m_commit;
 };
 
-#endif // DIALOG_EXCHANGE_MODULES_H_
+#endif // DIALOG_EXCHANGE_FOOTPRINTS_H_

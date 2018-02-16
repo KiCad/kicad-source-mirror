@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE::DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -124,6 +124,6 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	bMainSizer->Fit( this );
 }
 
-DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::~DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE()
+DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE::~DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE()
 {
 }
