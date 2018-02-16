@@ -1133,16 +1133,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     // Hovewer, a positive value can create issues if the resulting shape is too big.
     // (like a solder paste creating a solder paste area on a neighbour pad or on the solder mask)
     // So we could ask for user to confirm the choice
-    // However this option is not enabled
-    #if 0
-    if( m_dummyPad->GetLocalSolderPasteMargin() > 0 )
-    {
-        if( !IsOK( this, _( "Pad local solder paste clearance is greater than 0\n"
-                         "The solder paste area will be bigger than the pad area.\n"
-                         "This is unusual. Are you sure?)" ) ) )
-            return false;
-    }
-    #endif
+    // Currently there are no test
 
     LSET padlayers_mask = m_dummyPad->GetLayerSet();
 
