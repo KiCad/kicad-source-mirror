@@ -28,7 +28,7 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV,
         VECTOR2I& aMTV, bool aDifferentNetsOnly ) const
 {
     // same nets? no collision!
-    if( aDifferentNetsOnly && m_net == aOther->m_net )
+    if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
         return false;
 
     // check if we are not on completely different layers first
