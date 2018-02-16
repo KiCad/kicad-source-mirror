@@ -1550,7 +1550,7 @@ public:
                          bool             aDeleteExtraFootprints,
                          bool             aSelectByTimestamp,
                          bool             aDeleteSinglePadNets,
-                         bool             aIsDryRun ) override;
+                         bool             aIsDryRun );
 
     /**
      * Function RemoveMisConnectedTracks

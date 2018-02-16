@@ -550,7 +550,7 @@ public:
                         const wxString& aFullFileName,
                         unsigned        aNetlistOptions,
                         REPORTER*       aReporter = NULL,
-                        bool silent = false ) override;
+                        bool silent = false );
 
     /**
      * Create a netlist file.

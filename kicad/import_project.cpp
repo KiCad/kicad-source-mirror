@@ -115,8 +115,6 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         }
     }
 
-
-
     wxFileName pcb( sch );
     wxFileName netlist( pro );
     pro.SetExt( ProjectFileExtension );         // enforce extension
@@ -127,9 +125,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         pro.MakeAbsolute();
 
     SetProjectFileName( pro.GetFullPath() );
-
     wxString prj_filename = GetProjectFileName();
-
     wxString sch_filename = sch.GetFullPath();
 
     if( sch.FileExists() )
@@ -162,9 +158,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             schframe->Iconize( false );
 
         schframe->Raise();
-
-        schframe->CreateNetlist( NET_TYPE_PCBNEW, netlist.GetFullPath(), 0, NULL,  true );
     }
+
 
     if( pcb.FileExists() )
     {
@@ -189,7 +184,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         // if the frame is not visible, the board is not yet loaded
         if( !pcbframe->IsVisible() )
         {
-            pcbframe->ImportFile(  pcb.GetFullPath(), IO_MGR::EAGLE );
+            pcbframe->ImportFile( pcb.GetFullPath(), IO_MGR::EAGLE );
             pcbframe->Show( true );
         }
 
@@ -199,18 +194,11 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
         pcbframe->Raise();
 
-        if( netlist.FileExists() )
-        {
-            pcbframe->ReadPcbNetlist( netlist.GetFullPath(),
-                    wxEmptyString,
-                    NULL,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false );
-        }
+        // Two stage project update:
+        // - first, assign valid timestamps to footprints
+        // - second, perform schematic annotation and update footprint references
+        pcbframe->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "no-annotate;by-reference", this );
+        pcbframe->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "quiet-annotate;by-timestamp", this );
     }
 
     ReCreateTreePrj();
