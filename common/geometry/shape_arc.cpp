@@ -29,6 +29,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
 {
     int minDist = aClearance + m_width / 2;
     auto centerDist = aSeg.Distance( m_pc );
+    auto p1 = GetP1();
 
     if( centerDist < minDist )
         return true;
@@ -53,7 +54,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
         if( p0pdist < minDist )
             return true;
 
-        auto p1pdist = ( m_p1 - p ).EuclideanNorm();
+        auto p1pdist = ( p1 - p ).EuclideanNorm();
 
         if( p1pdist < minDist )
             return true;
@@ -64,7 +65,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
     if( p0dist > minDist )
         return true;
 
-    auto p1dist = aSeg.Distance( m_p1 );
+    auto p1dist = aSeg.Distance( p1 );
 
     if( p1dist > minDist )
         return false;
@@ -73,12 +74,12 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
     return true;
 }
 
-
-bool SHAPE_ARC::ConstructFromCorners( const VECTOR2I& aP0, const VECTOR2I& aP1, double aCenterAngle )
+#if 0
+bool SHAPE_ARC::ConstructFromCorners( VECTOR2I aP0, VECTOR2I aP1, double aCenterAngle )
 {
     VECTOR2D mid = ( VECTOR2D( aP0 ) + VECTOR2D( aP1 ) ) * 0.5;
     VECTOR2D chord = VECTOR2D( aP1 ) - VECTOR2D( aP0 );
-    double c = (aP1 - aP0).EuclideanNorm() / 2.0;
+    double c = (aP1 - aP0).EuclideanNorm() / 2;
     VECTOR2D d = chord.Rotate( M_PI / 2.0 ).Resize( c );
 
     m_pc = mid + d * ( 1.0 / tan( aCenterAngle / 2.0 * M_PI / 180.0 ) );
@@ -88,8 +89,7 @@ bool SHAPE_ARC::ConstructFromCorners( const VECTOR2I& aP0, const VECTOR2I& aP1, 
     return true;
 }
 
-
-bool SHAPE_ARC::ConstructFromCornerAndAngles( const VECTOR2I& aP0,
+bool SHAPE_ARC::ConstructFromCornerAndAngles( VECTOR2I aP0,
         double aStartAngle,
         double aCenterAngle,
         double aRadius )
@@ -108,6 +108,43 @@ bool SHAPE_ARC::ConstructFromCornerAndAngles( const VECTOR2I& aP0,
     return true;
 }
 
+bool SHAPE_ARC::ConstructFromCenterAndAngles( VECTOR2I aCenter, double aRadius, double aStartAngle, double aCenterAngle )
+{
+    double ea = aStartAngle + aCenterAngle;
+
+    m_fullCircle = false;
+    m_pc = aCenter;
+    m_p0.x = (int) ( (double) aCenter.x + aRadius * cos( aStartAngle * M_PI / 180.0 ) );
+    m_p0.y = (int) ( (double) aCenter.y + aRadius * sin( aStartAngle * M_PI / 180.0 ) );
+    m_p1.x = (int) ( (double) aCenter.x + aRadius * cos( ea * M_PI / 180.0 ) );
+    m_p1.y = (int) ( (double) aCenter.y + aRadius * sin( ea * M_PI / 180.0 ) );
+
+    if( aCenterAngle == 360.0 )
+    {
+        m_fullCircle = true;
+        return true;
+    }
+    else if ( aCenterAngle < 0.0 )
+    {
+        std::swap(m_p0, m_p1);
+    }
+
+    return true;
+}
+#endif
+
+
+const VECTOR2I SHAPE_ARC::GetP1() const
+{
+    VECTOR2D rvec = m_p0 - m_pc;
+    auto ca = m_centralAngle * M_PI / 180.0;
+    VECTOR2I p1;
+
+    p1.x = (int) ( m_pc.x + rvec.x * cos( ca ) - rvec.y * sin( ca ) );
+    p1.y = (int) ( m_pc.y + rvec.x * sin( ca ) + rvec.y * cos( ca ) );
+
+    return p1;
+}
 
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance ) const
 {
@@ -120,54 +157,55 @@ double SHAPE_ARC::GetStartAngle() const
 {
     VECTOR2D d( m_p0 - m_pc );
 
-    return 180.0 / M_PI * atan2( d.y, d.x );
-}
+    auto ang = 180.0 / M_PI * atan2( d.y, d.x );
 
+    return ang;
+}
 
 double SHAPE_ARC::GetEndAngle() const
 {
-    VECTOR2D d( m_p1 - m_pc );
+    double a =  GetStartAngle() + m_centralAngle;
 
-    return 180.0 / M_PI * atan2( d.y, d.x );
+    if( a < 0.0 )
+        a += 360.0;
+    else if ( a >= 360.0 )
+        a -= 360.0;
+
+    return a;
 }
-
 
 double SHAPE_ARC::GetCentralAngle() const
 {
-    auto ea = GetEndAngle();
-    auto sa = GetStartAngle();
-
-    if( ea < sa )
-        ea += 360.0;
-
-    while( sa < 0.0 )
-    {
-        sa  += 360.0;
-        ea  += 360.0;
-    }
-
-    return ea - sa;
+    return m_centralAngle;
 }
 
+int SHAPE_ARC::GetRadius() const
+{
+    return (m_p0 - m_pc).EuclideanNorm();
+}
 
-SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
+const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 {
     SHAPE_LINE_CHAIN rv;
-    double ca = GetCentralAngle();
     double r = GetRadius();
+    double sa = GetStartAngle();
     double step;
     auto c = GetCenter();
     int n;
 
     if( r == 0.0 )
-        return rv;
-
-    step = 180.0 / M_PI * acos( r * ( 1.0 - aAccuracy ) / r );
-    n = (int) ceil( ca / step );
+    {
+        n = 0;
+    }
+    else
+    {
+        step = 180 / M_PI * acos( r * ( 1.0 - aAccuracy ) / r );
+        n = std::abs( (int) ceil(m_centralAngle / step) );
+    }
 
     for( int i = 0; i <= n ; i++ )
     {
-        double a = GetStartAngle() + ca * (double) i / (double) n;
+        double a = sa + m_centralAngle * (double) i / (double) n;
         double x = c.x + r * cos( a * M_PI / 180.0 );
         double y = c.y + r * sin( a * M_PI / 180.0 );
 
