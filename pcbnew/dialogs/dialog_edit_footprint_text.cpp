@@ -49,7 +49,7 @@
 #include <class_board.h>
 
 #include <pcb_layer_box_selector.h>
-#include <dialog_edit_module_text.h>
+#include <dialog_edit_footprint_text.h>
 
 
 extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod.cpp

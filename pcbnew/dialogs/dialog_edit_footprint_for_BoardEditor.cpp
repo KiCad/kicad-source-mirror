@@ -49,14 +49,14 @@
 #include <validators.h>
 #include <widgets/text_ctrl_eval.h>
 
-#include <dialog_edit_module_for_BoardEditor.h>
+#include <dialog_edit_footprint_for_BoardEditor.h>
 #include <wildcards_and_files_ext.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include "3d_cache/3d_cache.h"
 #include "3d_cache/3d_filename_resolver.h"
 
-#include <dialog_edit_module_text.h>
+#include <dialog_edit_footprint_text.h>
 
 size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 

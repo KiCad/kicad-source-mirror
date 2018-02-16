@@ -23,11 +23,11 @@
  */
 
 
-#ifndef __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR__
-#define __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR__
+#ifndef DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_H
+#define DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_H
 
 
-#include <dialog_edit_module_for_BoardEditor_base.h>
+#include <dialog_edit_footprint_for_BoardEditor_base.h>
 #include <wx/valnum.h>
 
 class PANEL_PREV_3D;
@@ -106,4 +106,4 @@ private:
 };
 
 
-#endif      // __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR__
+#endif      // DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_H

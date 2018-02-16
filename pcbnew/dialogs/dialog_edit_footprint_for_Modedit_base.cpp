@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -7,7 +7,7 @@
 
 #include "widgets/text_ctrl_eval.h"
 
-#include "dialog_edit_module_for_Modedit_base.h"
+#include "dialog_edit_footprint_for_Modedit_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 

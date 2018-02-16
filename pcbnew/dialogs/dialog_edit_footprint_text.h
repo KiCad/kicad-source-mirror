@@ -24,10 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_EDIT_MODULE_TEXT_H
-#define DIALOG_EDIT_MODULE_TEXT_H
+#ifndef DIALOG_EDIT_FOOTPRINT_TEXT_H
+#define DIALOG_EDIT_FOOTPRINT_TEXT_H
 
-#include <dialog_edit_module_text_base.h>
+#include <dialog_edit_footprint_text_base.h>
 #include <wx/valnum.h>
 
 /*************** **************/
@@ -66,4 +66,4 @@ private:
     }
 };
 
-#endif /* DIALOG_EDIT_MODULE_TEXT_H */
+#endif /* DIALOG_EDIT_FOOTPRINT_TEXT_H */

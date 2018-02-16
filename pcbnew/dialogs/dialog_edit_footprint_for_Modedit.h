@@ -22,12 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_EDIT_MODULE_FOR_MODEDIT__
-#define __DIALOG_EDIT_MODULE_FOR_MODEDIT__
+#ifndef DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
+#define DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
 
 // Include the wxFormBuider header base:
 #include <vector>
-#include <dialog_edit_module_for_Modedit_base.h>
+#include <dialog_edit_footprint_for_Modedit_base.h>
 
 class PANEL_PREV_3D;
 class MODULE;
@@ -88,4 +88,4 @@ private:
 };
 
 
-#endif      //  __DIALOG_EDIT_MODULE_FOR_MODEDIT__
+#endif      //  DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H

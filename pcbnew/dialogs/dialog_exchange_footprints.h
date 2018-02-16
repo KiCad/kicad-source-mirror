@@ -25,7 +25,7 @@
 #ifndef DIALOG_EXCHANGE_MODULES_H_
 #define DIALOG_EXCHANGE_MODULES_H_
 
-#include <dialog_exchange_modules_base.h>
+#include <dialog_exchange_footprint_base.h>
 
 #include <board_commit.h>
 

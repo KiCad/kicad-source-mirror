@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR_BASE_H__
-#define __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR_BASE_H__
+#ifndef __DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_BASE_H__
+#define __DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -141,4 +141,4 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 	
 };
 
-#endif //__DIALOG_EDIT_MODULE_FOR_BOARDEDITOR_BASE_H__
+#endif //__DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_BASE_H__

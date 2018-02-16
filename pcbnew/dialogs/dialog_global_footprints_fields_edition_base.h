@@ -1,16 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE_H__
-#define __DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE_H__
+#ifndef __DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE_H__
+#define __DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -51,7 +53,7 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText9;
 		wxTextCtrl* m_ThicknessValue;
 		wxStaticText* m_ThicknessUnit;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
@@ -63,4 +65,4 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
 	
 };
 
-#endif //__DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE_H__
+#endif //__DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE_H__

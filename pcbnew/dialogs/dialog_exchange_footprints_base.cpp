@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -7,7 +7,7 @@
 
 #include "wx_html_report_panel.h"
 
-#include "dialog_exchange_modules_base.h"
+#include "dialog_exchange_footprints_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 

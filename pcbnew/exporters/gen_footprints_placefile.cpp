@@ -48,7 +48,7 @@
 #include <wx_html_report_panel.h>
 
 
-#include <dialog_gen_module_position_file_base.h>
+#include <dialog_gen_footprint_position_file_base.h>
 /*
  * The ASCII format of the kicad place file is:
  *      ### Module positions - created on 04/12/2012 15:24:24 ###

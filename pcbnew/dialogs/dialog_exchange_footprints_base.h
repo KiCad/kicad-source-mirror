@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EXCHANGE_MODULES_BASE_H__
-#define __DIALOG_EXCHANGE_MODULES_BASE_H__
+#ifndef __DIALOG_EXCHANGE_FOOTPRINTS_BASE_H__
+#define __DIALOG_EXCHANGE_FOOTPRINTS_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -84,4 +84,4 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 	
 };
 
-#endif //__DIALOG_EXCHANGE_MODULES_BASE_H__
+#endif //__DIALOG_EXCHANGE_FOOTPRINTS_BASE_H__

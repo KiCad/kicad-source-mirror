@@ -40,7 +40,7 @@
 #include <wx_html_report_panel.h>
 
 #include <pcbnew.h>
-#include <dialog_exchange_modules.h>
+#include <dialog_exchange_footprint.h>
 #include <wildcards_and_files_ext.h>
 #include <kiway.h>
 
