@@ -153,7 +153,7 @@ public:
 
 
         // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
-        int cnt;
+        int cnt = 0;
 
         Search( m_root, &rect, a_visitor, cnt );
 
@@ -718,7 +718,6 @@ int RTREE_QUAL::Search( const ELEMTYPE a_min[NUMDIMS],
 
     int foundCount = 0;
     Search( m_root, &rect, foundCount, a_resultCallback, a_context );
-
     return foundCount;
 }
 
