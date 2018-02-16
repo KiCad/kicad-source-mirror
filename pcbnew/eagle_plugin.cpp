@@ -1717,7 +1717,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
         zones.clear();
 
-        const wxString& netName = net->GetAttribute( "name" );
+        const wxString& netName = escapeName( net->GetAttribute( "name" ) );
         m_board->Add( new NETINFO_ITEM( m_board, netName, netCode ) );
 
         m_xpath->Value( netName.c_str() );

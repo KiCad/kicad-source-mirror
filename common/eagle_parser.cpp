@@ -34,6 +34,17 @@
 constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
 
 
+wxString escapeName( const wxString& aNetName )
+{
+    wxString ret( aNetName );
+
+    ret.Replace( "~", "~~" );
+    ret.Replace( "!", "~" );
+
+    return ret;
+}
+
+
 template<> template<>
 OPTIONAL_XML_ATTRIBUTE<wxString>::OPTIONAL_XML_ATTRIBUTE( wxString aData )
 {

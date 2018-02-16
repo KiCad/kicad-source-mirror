@@ -2295,14 +2295,3 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
         }   // for ( line ..
     }       // for ( bus ..
 }
-
-
-wxString SCH_EAGLE_PLUGIN::escapeName( const wxString& aNetName )
-{
-    wxString ret( aNetName );
-
-    ret.Replace( "~", "~~" );
-    ret.Replace( "!", "~" );
-
-    return ret;
-}
