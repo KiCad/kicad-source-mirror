@@ -684,6 +684,7 @@ bool ROUTER_TOOL::prepareInteractive()
     {
         DisplayError( frame(), m_router->FailureReason() );
         highlightNet( false );
+        controls()->SetAutoPan( false );
         return false;
     }
 
