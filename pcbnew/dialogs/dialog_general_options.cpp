@@ -40,13 +40,17 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <collectors.h>
+#include <pgm_base.h>
 #include <dialog_general_options.h>
 
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
-    DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
+    DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent ),
+    m_last_scale( -1 )
 {
     init();
+
+    m_scaleSlider->SetStep( 25 );
 
     GetSizer()->SetSizeHints( this );
     Center();
@@ -85,6 +89,45 @@ void DIALOG_GENERALOPTIONS::init()
     m_MagneticPadOptCtrl->SetSelection( GetParent()->Settings().m_magneticPads );
     m_MagneticTrackOptCtrl->SetSelection( GetParent()->Settings().m_magneticTracks );
     m_UseEditKeyForWidth->SetValue( GetParent()->Settings().m_editActionChangesTrackWidth );
+
+    m_Show_Page_Limits->SetValue( GetParent()->ShowPageLimits() );
+
+    const int scale_fourths = GetParent()->GetIconScale();
+
+    if( scale_fourths <= 0 )
+    {
+        m_scaleAuto->SetValue( true );
+        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        m_scaleAuto->SetValue( false );
+        m_scaleSlider->SetValue( scale_fourths * 25 );
+    }
+
+    m_checkBoxIconsInMenus->SetValue( Pgm().GetUseIconsInMenus() );
+}
+
+
+void DIALOG_GENERALOPTIONS::OnScaleSlider( wxScrollEvent& aEvent )
+{
+    m_scaleAuto->SetValue( false );
+    aEvent.Skip();
+}
+
+
+void DIALOG_GENERALOPTIONS::OnScaleAuto( wxCommandEvent& aEvent )
+{
+    if( m_scaleAuto->GetValue() )
+    {
+        m_last_scale = m_scaleSlider->GetValue();
+        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+    }
+    else
+    {
+        if( m_last_scale >= 0 )
+            m_scaleSlider->SetValue( m_last_scale );
+    }
 }
 
 
@@ -132,5 +175,20 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     GetParent()->Settings().m_magneticTracks = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticTrackOptCtrl->GetSelection();
     GetParent()->Settings().m_editActionChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
 
+    GetParent()->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
+
+    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
+
+    if( GetParent()->GetIconScale() != scale_fourths )
+        GetParent()->SetIconScale( scale_fourths );
+
+    if( Pgm().GetUseIconsInMenus() != m_checkBoxIconsInMenus->GetValue() )
+    {
+        Pgm().SetUseIconsInMenus( m_checkBoxIconsInMenus->GetValue() );
+        GetParent()->ReCreateMenuBar();
+    }
+
     EndModal( wxID_OK );
 }
+
+

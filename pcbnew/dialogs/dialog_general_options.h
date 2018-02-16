@@ -31,12 +31,18 @@ class DIALOG_GENERALOPTIONS : public DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE
 {
 private:
     BOARD* m_Board;
+    int    m_last_scale;
 
     void init();
 
 public:
     DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent );
     ~DIALOG_GENERALOPTIONS() {};
+
+protected:
+    void OnScaleSlider( wxScrollEvent& aEvent ) override;
+    void OnScaleAuto( wxCommandEvent& aEvent ) override;
+
     void OnOkClick( wxCommandEvent& event ) override;
     void OnCancelClick( wxCommandEvent& event ) override;
 

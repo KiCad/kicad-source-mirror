@@ -61,15 +61,12 @@ void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 
 DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_DISPLAY_OPTIONS_BASE( parent ),
-    m_parent( parent ),
-    m_last_scale( -1 )
+    m_parent( parent )
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_parent->GetGalDisplayOptions();
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
 
     sLeftSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
-
-    m_scaleSlider->SetStep( 25 );
 
     SetFocus();
 
@@ -84,36 +81,13 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     const PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_parent->GetDisplayOptions();
 
-    m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
-
     m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
             traceClearanceSelectMap, displ_opts->m_ShowTrackClearanceMode ) );
 
-    m_OptDisplayPads->SetValue( displ_opts->m_DisplayPadFill == SKETCH );
-    m_OptDisplayVias->SetValue( displ_opts->m_DisplayViaFill == SKETCH );
-
-    m_Show_Page_Limits->SetValue( m_parent->ShowPageLimits() );
-
-    m_OptDisplayModTexts->SetValue( displ_opts->m_DisplayModTextFill == SKETCH );
-    m_OptDisplayModOutlines->SetValue( displ_opts->m_DisplayModEdgeFill == SKETCH );
     m_OptDisplayPadClearence->SetValue( displ_opts->m_DisplayPadIsol );
     m_OptDisplayPadNumber->SetValue( displ_opts->m_DisplayPadNum );
     m_OptDisplayPadNoConn->SetValue( m_parent->IsElementVisible( LAYER_NO_CONNECTS ) );
-    m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
-
-    const int scale_fourths = m_parent->GetIconScale();
-
-    if( scale_fourths <= 0 )
-    {
-        m_scaleAuto->SetValue( true );
-        m_scaleSlider->SetValue( 25 * KiIconScale( m_parent ) );
-    }
-    else
-    {
-        m_scaleAuto->SetValue( false );
-        m_scaleSlider->SetValue( scale_fourths * 25 );
-    }
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -128,18 +102,8 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_parent->GetDisplayOptions();
 
-    m_parent->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
-
-    displ_opts->m_DisplayPcbTrackFill = not m_OptDisplayTracks->GetValue();
-
     displ_opts->m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
             traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
-
-    displ_opts->m_DisplayModTextFill = not m_OptDisplayModTexts->GetValue();
-    displ_opts->m_DisplayModEdgeFill = not m_OptDisplayModOutlines->GetValue();
-
-    displ_opts->m_DisplayPadFill = not m_OptDisplayPads->GetValue();
-    displ_opts->m_DisplayViaFill = not m_OptDisplayVias->GetValue();
 
     displ_opts->m_DisplayPadIsol = m_OptDisplayPadClearence->GetValue();
 
@@ -148,7 +112,6 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_parent->SetElementVisibility( LAYER_NO_CONNECTS,
                                     m_OptDisplayPadNoConn->GetValue() );
 
-    displ_opts->m_DisplayDrawItemsFill = not m_OptDisplayDrawings->GetValue();
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
     m_galOptsPanel->TransferDataFromWindow();
@@ -162,34 +125,9 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataFromWindow()
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
-    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
-
-    if( m_parent->GetIconScale() != scale_fourths )
-        m_parent->SetIconScale( scale_fourths );
-
     m_parent->GetCanvas()->Refresh();
 
     return true;
 }
 
 
-void DIALOG_DISPLAY_OPTIONS::OnScaleSlider( wxScrollEvent& aEvent )
-{
-    m_scaleAuto->SetValue( false );
-    aEvent.Skip();
-}
-
-
-void DIALOG_DISPLAY_OPTIONS::OnScaleAuto( wxCommandEvent& aEvent )
-{
-    if( m_scaleAuto->GetValue() )
-    {
-        m_last_scale = m_scaleSlider->GetValue();
-        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-    }
-    else
-    {
-        if( m_last_scale >= 0 )
-            m_scaleSlider->SetValue( m_last_scale );
-    }
-}

@@ -34,13 +34,8 @@ public:
    bool TransferDataFromWindow() override;
    bool TransferDataToWindow() override;
 
-protected:
-   void OnScaleSlider( wxScrollEvent& aEvent ) override;
-   void OnScaleAuto( wxCommandEvent& aEvent ) override;
-
 private:
    PCB_EDIT_FRAME* m_parent;
-   int m_last_scale;
 
    GAL_OPTIONS_PANEL* m_galOptsPanel;
 };

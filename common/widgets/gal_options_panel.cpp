@@ -113,7 +113,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         };
         int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
         m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(),
-                wxID_ANY, _( "Grid Style" ),
+                wxID_ANY, _( "Grid style:" ),
                 wxDefaultPosition, wxDefaultSize,
                 m_gridStyleNChoices, m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
         sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
@@ -197,7 +197,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
             _( "Full window crosshair" )
         };
 
-        wxString cursorShapeTitle = _( "Cursor Shape" );
+        wxString cursorShapeTitle = _( "Cursor shape:" );
 
         int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
         m_cursorShape = new wxRadioBox( this, wxID_ANY,
