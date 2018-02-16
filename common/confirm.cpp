@@ -190,9 +190,11 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
     }
 
     wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
-    m_sdboxSizer->AddButton( new wxButton( dlg, wxID_OK ) );
+    wxButton* btnOk = new wxButton( dlg, wxID_OK );
+    m_sdboxSizer->AddButton( btnOk );
     m_sdboxSizer->AddButton( new wxButton( dlg, wxID_CANCEL ) );
     m_sdboxSizer->Realize();
+    btnOk->SetDefault();
     boxSizer->Add( m_sdboxSizer, 1, wxEXPAND | wxALL, 5 );
 
     dlg->SetSizer( boxSizer );
@@ -252,9 +254,11 @@ public:
         boxSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 5 );
 
         wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
-        m_sdboxSizer->AddButton( new wxButton( this, wxID_OK ) );
+        wxButton* btnOk = new wxButton( this, wxID_OK );
+        m_sdboxSizer->AddButton( btnOk );
         m_sdboxSizer->AddButton( new wxButton( this, wxID_CANCEL ) );
         m_sdboxSizer->Realize();
+        btnOk->SetDefault();
         boxSizer->Add( m_sdboxSizer, 0, wxEXPAND | wxALL, 5 );
 
         SetSizer( boxSizer );
