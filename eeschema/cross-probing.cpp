@@ -234,9 +234,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_SCH_PCB_UPDATE_REQUEST:
     {
-        wxCommandEvent dummy;
-
-        OnUpdatePCB( dummy );
+        doUpdatePcb( payload );
         break;
     }
 

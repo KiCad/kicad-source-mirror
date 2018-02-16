@@ -847,6 +847,12 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
+    doUpdatePcb( "" );
+}
+
+
+void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
+{
     wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 
     fn.SetExt( PcbFileExtension );
@@ -879,12 +885,22 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
         frame->Raise();
     }
 
-    // Ensure the schematic is OK for a netlist creation
-    // (especially all components are annotated):
-    bool success = prepareForNetlist();
+    if( aUpdateOptions.Contains( "quiet-annotate" ) )
+    {
+        SCH_SCREENS schematic;
+        schematic.UpdateSymbolLinks();
+        SCH_SHEET_LIST sheets( g_RootSheet );
+        sheets.AnnotatePowerSymbols();
+        AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, false, false, true );
+    }
 
-    if( !success )
-        return;
+    if( !aUpdateOptions.Contains( "no-annotate" ) )
+    {
+        // Ensure the schematic is OK for a netlist creation
+        // (especially all components are annotated):
+        if( !prepareForNetlist() )
+            return;
+    }
 
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
     NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchSymbolLibTable() );
@@ -894,7 +910,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 
     // Now, send the "kicad" (s-expr) netlist to Pcbnew
     Kiway().ExpressMail( FRAME_PCB, MAIL_SCH_PCB_UPDATE,
-                         formatter.GetString(), this );
+        wxString::Format("%s\n%s", aUpdateOptions, formatter.GetString() ).ToStdString(), this );
 }
 
 

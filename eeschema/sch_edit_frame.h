@@ -1483,6 +1483,16 @@ public:
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
 
+    /**
+     * Updates netlist and sends it to pcbnew.
+     * @param aUpdateOptions is a string defining update options:
+     * - "no-annotate" does not perform schematic annotation
+     * - "quiet-annotate" performs schematic annotation without showing annotation dialog
+     * aUpdateOptions may also contain other options accepted for netlist reader.
+     * @see PCB_EDIT_FRAME::KiwayMailIn()
+     */
+    void doUpdatePcb( const wxString& aUpdateOptions = "" );
+
     int GetIconScale() override;
     void SetIconScale( int aScale ) override;
 
