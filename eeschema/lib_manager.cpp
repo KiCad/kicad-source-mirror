@@ -73,7 +73,7 @@ int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
     if( libBufIt != m_libs.end() )
         return libBufIt->second.GetHash();
 
-    auto row = symTable()->FindRow( aLibrary );
+    auto row = GetLibrary( aLibrary );
 
     // return -1 if library does not exist or 0 if not modified
     return row ? std::hash<std::string>{}( aLibrary.ToStdString() + row->GetFullURI( true ).ToStdString() ) : -1;
@@ -91,9 +91,21 @@ wxArrayString LIB_MANAGER::GetLibraryNames() const
 }
 
 
-SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary )
+SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
 {
-    return symTable()->FindRow( aLibrary );
+    SYMBOL_LIB_TABLE_ROW* row = nullptr;
+
+    try
+    {
+        row = symTable()->FindRow( aLibrary );
+    }
+    catch( const IO_ERROR& e )
+    {
+        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot find library \"%s\" in "
+                "the Symbol Library Table" ), aLibrary ), e.What() );
+    }
+
+    return row;
 }
 
 
@@ -179,7 +191,7 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
 
         // clear the deleted parts buffer only if data is saved to the original file
         wxFileName original, destination( aFileName );
-        auto row = symTable()->FindRow( aLibrary );
+        auto row = GetLibrary( aLibrary );
 
         if( row )
         {

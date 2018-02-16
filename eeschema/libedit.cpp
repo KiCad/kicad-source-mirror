@@ -249,7 +249,8 @@ void LIB_EDIT_FRAME::OnSaveAllLibraries( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnRevertLibrary( wxCommandEvent& aEvent )
 {
     wxString libName = getTargetLib();
-    bool currentLib = ( libName == GetCurLib() );
+    wxString curLib = GetCurLib();
+    bool currentLib = ( libName == curLib || curLib.IsEmpty() );
 
     // Save the current part name/unit to reload after revert
     wxString alias = m_aliasName;

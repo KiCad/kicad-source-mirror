@@ -76,7 +76,7 @@ public:
     /**
      * Finds a single library within the (aggregate) library table.
      */
-    SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary );
+    SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary ) const;
 
     /**
      * Returns a set containing all part names for a specific library.
