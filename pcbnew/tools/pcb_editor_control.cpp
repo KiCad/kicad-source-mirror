@@ -864,6 +864,10 @@ int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
         // Otherwise simply select the corresponding item
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
+            // Ensure the display is refreshed, because in some installs
+            // the refresh is done only when the gal canvas has the focus, and
+            // that is not the case when crossprobing from Eeschema:
+            m_frame->GetGalCanvas()->Refresh();
         }
     }
 
