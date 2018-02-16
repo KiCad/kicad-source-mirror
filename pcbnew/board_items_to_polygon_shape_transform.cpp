@@ -33,6 +33,7 @@
 #include <vector>
 
 #include <fctsys.h>
+#include <base_units.h>     // for IU_PER_MM
 #include <draw_graphic_text.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
@@ -500,6 +501,20 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 {
     // The full width of the lines to create:
     int linewidth = m_Width + (2 * aClearanceValue);
+
+    // The aCircleSegmentsCount parameter is intended for use with small features such as
+    // pads and vias.  It can be way too coarse for larger draw items, such as silkscreen
+    // drawings, which use this routine for DXF-specific sketch-mode plotting.  Scale the
+    // number of segments by the size of the circle/arc.
+    if( m_Shape == S_CIRCLE || m_Shape == S_ARC )
+    {
+        double multiple = (double) GetRadius() / IU_PER_MM;
+        if( multiple > 1 )
+        {
+            aCircleToSegmentsCount = int( aCircleToSegmentsCount * multiple );
+            aCorrectionFactor      = 1.0 / cos( M_PI / (aCircleToSegmentsCount * 2) );
+        }
+    }
 
     switch( m_Shape )
     {

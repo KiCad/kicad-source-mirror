@@ -343,7 +343,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF options") ), wxVERTICAL );
 	
-	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot  all layers in outline (polygon) mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot all layers in outline (polygon) mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotModeOpt->SetValue(true); 
 	m_DXF_plotModeOpt->SetToolTip( _("DXF only:\nCheck to plot all layers in polygon mode.\nUncheck to plot in sketch mode layers that don't support polygons (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\nand plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)") );
 	
