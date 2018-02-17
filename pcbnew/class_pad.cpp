@@ -1276,6 +1276,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     const int HIDE = std::numeric_limits<unsigned int>::max();
+    BOARD* board = GetBoard();
 
     // Handle Render tab switches
     if( ( GetAttribute() == PAD_ATTRIB_STANDARD || GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
@@ -1292,6 +1293,10 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     if( IsBackLayer( ( PCB_LAYER_ID )aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
+        return HIDE;
+
+    // Only draw the pad if at least one of the layers it crosses is being displayed
+    if( board && !( board->GetVisibleLayers() & GetLayerSet() ).any() )
         return HIDE;
 
     // Netnames will be shown only if zoom is appropriate

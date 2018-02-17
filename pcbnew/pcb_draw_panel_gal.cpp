@@ -446,10 +446,12 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS_TH );
 
     // Front modules
+    m_view->SetRequired( LAYER_PAD_FR, F_Cu );
     m_view->SetRequired( LAYER_MOD_TEXT_FR, LAYER_MOD_FR );
     m_view->SetRequired( LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR );
 
     // Back modules
+    m_view->SetRequired( LAYER_PAD_BK, B_Cu );
     m_view->SetRequired( LAYER_MOD_TEXT_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );
 
