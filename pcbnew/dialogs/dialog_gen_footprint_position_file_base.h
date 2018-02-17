@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_GEN_FOOTPRINT_POSITION_FILE_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -22,9 +21,14 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
+#include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -41,19 +45,18 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
-		wxButton* m_browseButton;
+		wxBitmapButton* m_browseButton;
 		wxRadioBox* m_rbFormat;
 		wxRadioBox* m_radioBoxUnits;
 		wxRadioBox* m_radioBoxFilesCount;
 		wxRadioBox* m_radioBoxForceSmd;
+		wxButton* m_generateButton;
+		wxButton* m_closeButton;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
-		wxStdDialogButtonSizer* m_sdbSizerButtons;
-		wxButton* m_sdbSizerButtonsOK;
-		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOKButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGenerate( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

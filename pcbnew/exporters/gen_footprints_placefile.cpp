@@ -35,6 +35,7 @@
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
+#include <bitmaps.h>
 #include <build_version.h>
 #include <macros.h>
 #include <reporter.h>
@@ -118,7 +119,7 @@ private:
 
     void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-    void OnOKButton( wxCommandEvent& event ) override;
+    void OnGenerate( wxCommandEvent& event ) override;
 
     bool CreateFiles();
 
@@ -157,6 +158,8 @@ const wxString backSideName = wxT( "bottom" );
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
+    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
+
     m_config = Kiface().KifaceSettings();
     m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
     m_config->Read( PLACEFILE_OPT_KEY, &m_fileOpt, 0 );
@@ -168,7 +171,11 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
     m_rbFormat->SetSelection( m_fileFormat );
 
-    m_sdbSizerButtonsOK->SetDefault();
+    // Update sizes and sizers:
+    m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
+    GetSizer()->SetSizeHints( this );
+
+    m_generateButton->SetDefault();
 }
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
@@ -200,7 +207,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
 }
 
-void DIALOG_GEN_FOOTPRINT_POSITION::OnOKButton( wxCommandEvent& event )
+void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
     m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
