@@ -690,6 +690,30 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
     #message( STATUS "/ INC_AFTER:${INC_AFTER}" )
 
+
+    # Compare wxPython and wxWidgets toolkits
+    set( _py_cmd "import wx; print(wx.version().split(' ')[1])" )
+
+    # Add user specified Python site package path.
+    if( PYTHON_SITE_PACKAGE_PATH )
+        set( _py_cmd
+            "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}\");${_py_cmd}" )
+    endif()
+
+    execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_cmd}"
+        RESULT_VARIABLE WXPYTHON_TOOLKIT_RESULT
+        OUTPUT_VARIABLE WXPYTHON_TOOLKIT_FOUND
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if( NOT wxWidgets_TOOLKIT_FOUND STREQUAL WXPYTHON_TOOLKIT_FOUND )
+        message( FATAL_ERROR "\nwxWidgets and wxPython use different toolkits "
+            "(${wxWidgets_TOOLKIT_FOUND} vs ${WXPYTHON_TOOLKIT_FOUND}). "
+            "It will result in a broken build. Please either install wxPython built using "
+            "${wxWidgets_TOOLKIT_FOUND} or add '-DKICAD_SCRIPTING_WXPYTHON=OFF' to cmake "
+            "parameters to disable wxPython support." )
+    endif()
+
 endif()
 
 if( APPLE )
