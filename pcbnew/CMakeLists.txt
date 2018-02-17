@@ -370,6 +370,12 @@ if( COMPILER_SUPPORTS_WSHADOW )
         ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_DIALOGS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
         PROPERTIES COMPILE_FLAGS ${WSHADOW_FLAGS}
     )
+
+    # There is a lot of 'local variable shadowed' warnings,
+    # but we have no control over the generated code
+    set_source_files_properties( pcbnew_wrap.cxx pcbnewPYTHON_wrap.cxx
+        PROPERTIES COMPILE_FLAGS -Wno-shadow
+    )
 endif()
 
 
