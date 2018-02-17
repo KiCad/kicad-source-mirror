@@ -70,7 +70,7 @@ private:
     // Double click on a marker info:
     void OnLeftDblClickMarkersList( wxMouseEvent& event ) override;
 
-    void TestErc( wxArrayString* aMessagesList );
+    void TestErc( REPORTER& aReporter );
     void DisplayERC_MarkersList();
     void SelLocal( wxCommandEvent& event );
     void SelNewCmp( wxCommandEvent& event );

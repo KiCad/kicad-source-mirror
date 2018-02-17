@@ -48,6 +48,7 @@
 #include <symbol_lib_table.h>
 
 #include <dialog_helpers.h>
+#include <reporter.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <hotkeys.h>
@@ -891,7 +892,8 @@ void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
         schematic.UpdateSymbolLinks();
         SCH_SHEET_LIST sheets( g_RootSheet );
         sheets.AnnotatePowerSymbols();
-        AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, false, false, true );
+        AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, false, false, true,
+                            NULL_REPORTER::GetInstance() );
     }
 
     if( !aUpdateOptions.Contains( "no-annotate" ) )

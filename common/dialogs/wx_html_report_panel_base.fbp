@@ -98,9 +98,9 @@
                         <property name="growablerows">0</property>
                         <property name="hgap">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">fgSizer4</property>
+                        <property name="name">m_fgSizer</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <property name="rows">2</property>
                         <property name="vgap">0</property>
                         <object class="sizeritem" expanded="0">
@@ -140,7 +140,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,200</property>
+                                <property name="minimum_size">-1,100</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_htmlView</property>
                                 <property name="pane_border">1</property>

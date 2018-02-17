@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_ANNOTATE_BASE_H__
@@ -11,7 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
+class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -20,27 +20,24 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/radiobox.h>
 #include <wx/radiobut.h>
-#include <wx/statline.h>
-#include <wx/sizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_ENTIRE_SCHEMATIC 1000
-#define ID_CURRENT_PAGE 1001
-#define ID_KEEP_ANNOTATION 1002
-#define ID_RESET_ANNOTATION 1003
-#define ID_RESET_BUT_LOCK 1004
-#define ID_SORT_BY_X_POSITION 1005
-#define ID_SORT_BY_Y_POSITION 1006
-#define ID_CLEAR_ANNOTATION_CMP 1007
+#define ID_SORT_BY_X_POSITION 1000
+#define ID_SORT_BY_Y_POSITION 1001
+#define ID_CLEAR_ANNOTATION_CMP 1002
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ANNOTATE_BASE
@@ -51,37 +48,23 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_userMessage;
-		wxStaticText* m_staticTextScope;
-		wxRadioButton* m_rbEntireSchematic;
-		wxRadioButton* m_rbCurrPage;
-		wxStaticLine* m_staticline1;
-		wxRadioButton* m_rbKeepAnnotation;
-		wxRadioButton* m_rbResetAnnotation;
-		wxRadioButton* m_rbResetButLock;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticTextOrder;
+		wxRadioBox* m_rbScope;
 		wxRadioButton* m_rbSortBy_X_Position;
 		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_Y_Position;
 		wxStaticBitmap* annotate_right_down_bitmap;
-		wxStaticLine* m_staticline5;
-		wxStaticText* m_staticTextAnnotateAlgo;
-		wxRadioButton* m_rbUseIncremental;
-		wxRadioButton* m_rbUseSheetNum;
-		wxRadioButton* m_rbStartSheetNumLarge;
-		wxStaticLine* m_staticline4;
-		wxStaticText* m_staticTextDlgOpts;
+		wxRadioBox* m_rbOptions;
+		wxRadioBox* m_rbNumbering;
 		wxCheckBox* m_cbKeepDlgOpen;
 		wxCheckBox* m_cbAskForConfirmation;
-		wxStaticLine* m_staticline41;
-		wxButton* m_btnClose;
-		wxButton* m_btnClear;
 		wxButton* m_btnApply;
+		wxButton* m_btnClear;
+		wxButton* m_btnClose;
+		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnClearAnnotationCmpClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnClearAnnotationCmpClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,18 +13,17 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 {
 	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output messages:") ), wxVERTICAL );
 	
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 2, 1, 0, 0 );
-	fgSizer4->AddGrowableCol( 0 );
-	fgSizer4->AddGrowableRow( 0 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgSizer = new wxFlexGridSizer( 2, 1, 0, 0 );
+	m_fgSizer->AddGrowableCol( 0 );
+	m_fgSizer->AddGrowableRow( 0 );
+	m_fgSizer->SetFlexibleDirection( wxBOTH );
+	m_fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_htmlView = new wxHtmlWindow( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_htmlView->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	m_htmlView->SetMinSize( wxSize( -1,200 ) );
+	m_htmlView->SetMinSize( wxSize( -1,100 ) );
 	
-	fgSizer4->Add( m_htmlView, 1, wxEXPAND, 5 );
+	m_fgSizer->Add( m_htmlView, 1, wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 1, 7, 0, 0 );
@@ -60,14 +59,14 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	
 	fgSizer3->Add( m_checkBoxShowActions, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-    m_btnSaveReportToFile = new wxButton( m_box->GetStaticBox(), wxID_ANY, _("Save Report File..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnSaveReportToFile = new wxButton( m_box->GetStaticBox(), wxID_ANY, _("Save Report File"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_btnSaveReportToFile, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxLEFT, 5 );
 	
 	
-	fgSizer4->Add( fgSizer3, 1, wxEXPAND, 5 );
+	m_fgSizer->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	
-	m_box->Add( fgSizer4, 1, wxEXPAND|wxALL, 5 );
+	m_box->Add( m_fgSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( m_box );

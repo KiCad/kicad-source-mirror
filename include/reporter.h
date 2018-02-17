@@ -87,6 +87,12 @@ public:
     REPORTER& operator <<( const wxChar* aText ) { return Report( wxString( aText ) ); }
     REPORTER& operator <<( wxChar aChar ) { return Report( wxString( aChar ) ); }
     REPORTER& operator <<( const char* aText ) { return Report( aText ); }
+
+    /**
+     * Function HasMessage
+     * Returns true if the reporter client is non-empty.
+     */
+    virtual bool HasMessage() const = 0;
 };
 
 
@@ -106,6 +112,8 @@ public:
     }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+
+    bool HasMessage() const override;
 };
 
 
@@ -125,6 +133,8 @@ public:
     }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+
+    bool HasMessage() const override;
 };
 
 
@@ -144,6 +154,8 @@ public:
     }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+
+    bool HasMessage() const override;
 };
 
 /**
@@ -154,14 +166,16 @@ public:
  */
 class NULL_REPORTER : public REPORTER
 {
-    public:
-        NULL_REPORTER()
-        {
-        };
+public:
+    NULL_REPORTER()
+    {
+    }
 
-        static REPORTER& GetInstance();
+    static REPORTER& GetInstance();
 
-        REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+
+    bool HasMessage() const override { return false; }
 };
 
 #endif     // _REPORTER_H_

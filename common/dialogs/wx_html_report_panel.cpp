@@ -47,7 +47,7 @@ WX_HTML_REPORT_PANEL::~WX_HTML_REPORT_PANEL()
 
 void WX_HTML_REPORT_PANEL::MsgPanelSetMinSize( const wxSize& aMinSize )
 {
-    m_htmlView->SetMinSize( aMinSize );
+    m_fgSizer->SetMinSize( aMinSize );
     GetSizer()->SetSizeHints( this );
 }
 
@@ -123,6 +123,18 @@ wxString WX_HTML_REPORT_PANEL::addHeader( const wxString& aBody )
     s += "</body></html>";
 
     return s;
+}
+
+
+int WX_HTML_REPORT_PANEL::Count( int severityMask )
+{
+    int count = 0;
+
+    for( const REPORT_LINE& reportLine : m_report )
+        if( severityMask & reportLine.severity )
+            count++;
+
+    return count;
 }
 
 

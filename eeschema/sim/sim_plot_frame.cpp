@@ -67,6 +67,11 @@ public:
         return *this;
     }
 
+    bool HasMessage() const
+    {
+        return false;       // Technically "indeterminate" rather than false.
+    }
+
     void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) override
     {
         wxCommandEvent* event = NULL;

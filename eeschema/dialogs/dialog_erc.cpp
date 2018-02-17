@@ -39,6 +39,7 @@
 #include <project.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
+#include <reporter.h>
 #include <wildcards_and_files_ext.h>
 
 #include <netlist.h>
@@ -181,11 +182,9 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 
     m_MessagesList->Clear();
     wxSafeYield();      // m_MarkersList must be redraw
-    wxArrayString messageList;
-    TestErc( &messageList );
 
-    for( unsigned ii = 0; ii < messageList.GetCount(); ii++ )
-        m_MessagesList->AppendText( messageList[ii] );
+    WX_TEXT_CTRL_REPORTER reporter( m_MessagesList );
+    TestErc( reporter );
 }
 
 
@@ -449,7 +448,7 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 }
 
 
-void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
+void DIALOG_ERC::TestErc( REPORTER& aReporter )
 {
     wxFileName fn;
 
@@ -461,14 +460,10 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     SCH_SHEET_LIST sheets( g_RootSheet );
     sheets.AnnotatePowerSymbols();
 
-    if( m_parent->CheckAnnotate( aMessagesList, false ) )
+    if( m_parent->CheckAnnotate( aReporter, false ) )
     {
-        if( aMessagesList )
-        {
-            wxString msg = _( "Annotation required!" );
-            msg += wxT( "\n" );
-            aMessagesList->Add( msg );
-        }
+        if( aReporter.HasMessage() )
+            aReporter.Report( _( "Annotation required!" ), REPORTER::RPT_ERROR );
 
         return;
     }
@@ -584,9 +579,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     m_parent->GetCanvas()->Refresh();
 
     // Display message
-    wxString msg = _( "Finished" );
-    msg += wxT( "\n" );
-    aMessagesList->Add( msg );
+    aReporter.Report( _( "Finished" ), REPORTER::RPT_INFO );
 
     if( m_writeErcFile )
     {

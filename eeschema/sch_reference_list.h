@@ -311,10 +311,10 @@ public:
      * <li>Components with multiple parts per package with invalid part count.</li>
      * </ul>
      * </p>
-     * @param aMessageList A wxArrayString to store error messages.
+     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      * @return The number of errors found.
      */
-    int CheckAnnotation( wxArrayString* aMessageList );
+    int CheckAnnotation( REPORTER& aReporter );
 
     /**
      * Function sortByXCoordinate

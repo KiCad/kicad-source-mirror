@@ -45,6 +45,11 @@ REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, REPORTER::SEVERI
     return *this;
 }
 
+bool WX_TEXT_CTRL_REPORTER::HasMessage() const
+{
+    return !m_textCtrl->IsEmpty();
+}
+
 REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, REPORTER::SEVERITY aSeverity )
 {
     wxCHECK_MSG( m_string != NULL, *this,
@@ -54,6 +59,11 @@ REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, REPORTER::SEVERITY 
     return *this;
 }
 
+bool WX_STRING_REPORTER::HasMessage() const
+{
+    return !m_string->IsEmpty();
+}
+
 REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     wxCHECK_MSG( m_panel != NULL, *this,
@@ -61,6 +71,11 @@ REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSever
 
     m_panel->Report( aText, aSeverity );
     return *this;
+}
+
+bool WX_HTML_PANEL_REPORTER::HasMessage() const
+{
+    return m_panel->Count( REPORTER::RPT_ERROR | REPORTER::RPT_WARNING ) > 0;
 }
 
 REPORTER& NULL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )

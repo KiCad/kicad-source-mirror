@@ -36,11 +36,13 @@
 #include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>
 #include <kiface_i.h>
+#include <wx_html_report_panel.h>
 
 #define KEY_ANNOTATE_SORT_OPTION          wxT( "AnnotateSortOption" )
 #define KEY_ANNOTATE_ALGO_OPTION          wxT( "AnnotateAlgoOption" )
 #define KEY_ANNOTATE_KEEP_OPEN_OPTION     wxT( "AnnotateKeepOpenOption" )
 #define KEY_ANNOTATE_ASK_FOR_CONFIRMATION wxT( "AnnotateRequestConfirmation" )
+#define KEY_ANNOTATE_MESSAGES_FILTER      wxT( "AnnotateFilterMsg" )
 
 
 class wxConfigBase;
@@ -53,7 +55,7 @@ class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
 {
 public:
     DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& message );
-
+    ~DIALOG_ANNOTATE();
 
 private:
     SCH_EDIT_FRAME* m_Parent;
@@ -61,7 +63,6 @@ private:
 
     /// Initialises member variables
     void InitValues();
-    void OnCancelClick( wxCommandEvent& event ) override;
     void OnClearAnnotationCmpClick( wxCommandEvent& event ) override;
     void OnApplyClick( wxCommandEvent& event ) override;
 
@@ -74,15 +75,14 @@ private:
      * Function GetSortOrder
      * @return 0 if annotation by X position,
      *         1 if annotation by Y position,
-     *         2 if annotation by value
      */
     int GetSortOrder();
 
     /**
      * Function GetAnnotateAlgo
-     * @return 0 if annotation using first not used Id value
-     *         1 if annotation using first not used Id value inside sheet num * 100 to  sheet num * 100 + 99
-     *         2 if annotation using first nhot used Id value inside sheet num * 1000 to  sheet num * 1000 + 999
+     * @return 0 if annotation using first free Id value
+     *         1 for first free Id value inside sheet num * 100 to sheet num * 100 + 99
+     *         2 for first free Id value inside sheet num * 1000 to sheet num * 1000 + 999
      */
     int GetAnnotateAlgo();
 
@@ -102,8 +102,16 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
     : DIALOG_ANNOTATE_BASE( parent )
 {
     m_Parent = parent;
-    m_userMessage->SetLabelText( message );
-    m_userMessage->Show( !message.empty() );
+
+    if( !message.IsEmpty() )
+    {
+        m_userMessage->SetLabelText( message );
+        m_userMessage->Show( true );
+
+        m_rbScope->Enable( false );
+    }
+
+    m_MessageWindow->SetLabel( _( "Annotation Messages:" ) );
 
     InitValues();
     Layout();
@@ -113,59 +121,56 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
 }
 
 
+DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
+{
+    m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
+    m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, m_rbNumbering->GetSelection() );
+    m_Config->Write( KEY_ANNOTATE_KEEP_OPEN_OPTION, GetAnnotateKeepOpen() );
+    m_Config->Write( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, GetAnnotateAskForConfirmation() );
+
+    m_Config->Write( KEY_ANNOTATE_MESSAGES_FILTER,
+                    (long) m_MessageWindow->GetVisibleSeverities() );
+}
+
+
 void DIALOG_ANNOTATE::InitValues()
 {
     m_Config = Kiface().KifaceSettings();
+    long option;
 
-    if( m_Config )
+    // These are always reset to attempt to keep the user out of trouble...
+    m_rbScope->SetSelection( 0 );
+    m_rbOptions->SetSelection( 0 );
+
+    m_Config->Read( KEY_ANNOTATE_SORT_OPTION, &option, 0L );
+    switch( option )
     {
-        long option;
+    default:
+    case 0:
+        m_rbSortBy_X_Position->SetValue( 1 );
+        break;
 
-        m_Config->Read( KEY_ANNOTATE_SORT_OPTION, &option, 0L );
-        switch( option )
-        {
-        default:
-        case 0:
-            m_rbSortBy_X_Position->SetValue( 1 );
-            break;
-
-        case 1:
-            m_rbSortBy_Y_Position->SetValue( 1 );
-            break;
-
-        case 2:
-            m_rbUseIncremental->SetValue( 1 );
-            break;
-        }
-
-        m_Config->Read( KEY_ANNOTATE_ALGO_OPTION, &option, 0L );
-        switch( option )
-        {
-        default:
-        case 0:
-            m_rbUseIncremental->SetValue( 1 );
-            break;
-
-        case 1:
-            m_rbUseSheetNum->SetValue( 1 );
-            break;
-
-        case 2:
-            m_rbStartSheetNumLarge->SetValue( 1 );
-            break;
-        }
-
-
-        m_Config->Read( KEY_ANNOTATE_KEEP_OPEN_OPTION, &option, 0L );
-        m_cbKeepDlgOpen->SetValue( option );
-
-
-        m_Config->Read( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, &option, 1L );
-        m_cbAskForConfirmation->SetValue( option );
+    case 1:
+        m_rbSortBy_Y_Position->SetValue( 1 );
+        break;
     }
+
+    m_Config->Read( KEY_ANNOTATE_ALGO_OPTION, &option, 0L );
+    m_rbNumbering->SetSelection( option );
+
+    m_Config->Read( KEY_ANNOTATE_KEEP_OPEN_OPTION, &option, 0L );
+    m_cbKeepDlgOpen->SetValue( option );
+
+    m_Config->Read( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, &option, 1L );
+    m_cbAskForConfirmation->SetValue( option );
 
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
     annotate_right_down_bitmap->SetBitmap( KiBitmap( annotate_right_down_xpm ) );
+
+    int severities = m_Config->Read( KEY_ANNOTATE_MESSAGES_FILTER, -1l );
+    m_MessageWindow->SetVisibleSeverities( severities );
+
+    m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 160 ) );
 
     m_btnApply->SetDefault();
 }
@@ -175,14 +180,6 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
     int         response;
     wxString    message;
-
-    if( m_Config )
-    {
-        m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
-        m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo() );
-        m_Config->Write( KEY_ANNOTATE_KEEP_OPEN_OPTION, GetAnnotateKeepOpen() );
-        m_Config->Write( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, GetAnnotateAskForConfirmation() );
-    }
 
     // Display a message info if we always ask for confirmation
     // or if a reset of the previous annotation is asked.
@@ -218,22 +215,25 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
             return;
     }
 
+    m_MessageWindow->Clear();
+    REPORTER& reporter = m_MessageWindow->Reporter();
+    m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
+
     m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
                                   (ANNOTATE_OPTION_T) GetAnnotateAlgo(),
-                                  GetResetItems() , true, GetLockUnits() );
+                                  GetResetItems() , true, GetLockUnits(), reporter );
+
+    m_MessageWindow->Flush();                   // Now update to show all messages
+
     m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
 
-    if( !GetAnnotateKeepOpen() )
+    if( !GetAnnotateKeepOpen() && !reporter.HasMessage() )
     {
-        if( IsModal() )
-            EndModal( wxID_OK );
-        else
-        {
-            SetReturnCode( wxID_OK );
-            this->Show( false );
-        }
+        // Close the dialog by calling the default dialog handler for a wxID_OK event
+        event.SetId( wxID_OK );
+        event.Skip();
     }
 }
 
@@ -259,61 +259,50 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_ANNOTATE::OnCancelClick( wxCommandEvent& event )
-{
-    if( IsModal() )
-        EndModal( wxID_CANCEL );
-    else
-    {
-        SetReturnCode( wxID_CANCEL );
-        this->Show( false );
-    }
-}
-
-
 bool DIALOG_ANNOTATE::GetLevel()
 {
-    return m_rbEntireSchematic->GetValue();
+    return m_rbScope->GetSelection() == 0;
 }
 
 
 bool DIALOG_ANNOTATE::GetResetItems()
 {
-    return m_rbResetAnnotation->GetValue() || m_rbResetButLock->GetValue();
+    return m_rbOptions->GetSelection() >= 1;
 }
+
 
 bool DIALOG_ANNOTATE::GetLockUnits()
 {
-    return m_rbResetButLock->GetValue();
+    return m_rbOptions->GetSelection() == 2;
 }
+
 
 int DIALOG_ANNOTATE::GetSortOrder()
 {
-    if( m_rbSortBy_X_Position->GetValue() )
-        return 0;
-
     if( m_rbSortBy_Y_Position->GetValue() )
         return 1;
-
-    return 2;
+    else
+        return 0;
 }
 
 
 int DIALOG_ANNOTATE::GetAnnotateAlgo()
 {
-    if( m_rbUseIncremental->GetValue() )
-        return 0;
-
-    if( m_rbUseSheetNum->GetValue() )
-        return 1;
-
-    return 2;
+    return m_rbNumbering->GetSelection();
 }
 
 
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, const wxString& message )
+void InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller )
 {
-    DIALOG_ANNOTATE dlg( aCaller, message );
+    DIALOG_ANNOTATE dlg( aCaller, wxT( "" ) );
+
+    dlg.ShowModal();
+}
+
+
+int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, const wxString& aMessage )
+{
+    DIALOG_ANNOTATE dlg( aCaller, aMessage );
 
     return dlg.ShowModal();
 }

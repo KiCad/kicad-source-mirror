@@ -61,7 +61,7 @@ public:
         return *this;
     }
 
-    bool HasMessage() const { return m_hasMessage; }
+    bool HasMessage() const override { return m_hasMessage; }
 };
 
 

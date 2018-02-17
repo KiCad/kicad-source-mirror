@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,6 +36,7 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 	
 	protected:
 		wxStaticBoxSizer* m_box;
+		wxFlexGridSizer* m_fgSizer;
 		wxHtmlWindow* m_htmlView;
 		wxStaticText* m_staticText3;
 		wxCheckBox* m_checkBoxShowAll;

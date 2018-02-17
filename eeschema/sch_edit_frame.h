@@ -604,6 +604,7 @@ public:
      *                          usual behavior of annotating each part individually is
      *                          performed.
      *                          When aResetAnnotation is false, this option has no effect.
+     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      *
      * When the sheet number is used in annotation, each sheet annotation starts from sheet
      * number * 100.  In other words the first sheet uses 100 to 199, the second sheet uses
@@ -611,7 +612,7 @@ public:
      */
     void AnnotateComponents( bool aAnnotateSchematic, ANNOTATE_ORDER_T aSortOption,
                              ANNOTATE_OPTION_T aAlgoOption, bool aResetAnnotation,
-                             bool aRepairTimestamps, bool aLockUnits );
+                             bool aRepairTimestamps, bool aLockUnits, REPORTER& aReporter );
 
     /**
      * Check for annotation errors.
@@ -625,11 +626,11 @@ public:
      *   between parts.
      *
      * @return Number of annotation errors found.
-     * @param aMessageList A wxArrayString to store error messages.
+     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      * @param aOneSheetOnly Check the current sheet only if true.  Otherwise check
      *                      the entire schematic.
      */
-    int CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly );
+    int CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly );
 
     // Functions used for hierarchy handling
     SCH_SHEET_PATH& GetCurrentSheet();

@@ -31,10 +31,30 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
+#include <reporter.h>
 #include <sch_edit_frame.h>
 
 #include <sch_reference_list.h>
 #include <class_library.h>
+
+
+void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
+{
+    SCH_SHEET_LIST     sheets( g_RootSheet );
+    SCH_REFERENCE_LIST references;
+
+    sheets.GetComponents( references );
+
+    for( size_t i = 0; i < references.GetCount(); i++ )
+    {
+        SCH_COMPONENT* comp = references[ i ].GetComp();
+        wxString       ref = comp->GetField( REFERENCE )->GetFullyQualifiedText();
+
+        if( !ref.Contains( wxT( "?" ) ) )
+            aMap[ comp->GetTimeStamp() ] = ref;
+    }
+}
+
 
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 {
@@ -62,7 +82,8 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                                          ANNOTATE_OPTION_T aAlgoOption,
                                          bool              aResetAnnotation,
                                          bool              aRepairTimestamps,
-                                         bool              aLockUnits )
+                                         bool              aLockUnits,
+                                         REPORTER&         aReporter )
 {
     SCH_REFERENCE_LIST references;
 
@@ -73,6 +94,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // Map of locked components
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
+
+    // Map of previous annotation for building info messages
+    std::map<timestamp_t, wxString> previousAnnotation;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
@@ -85,7 +109,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         {
             wxString msg;
             msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
-            DisplayInfoMessage( NULL, msg );
+            aReporter.Report( msg, REPORTER::RPT_INFO );
         }
     }
 
@@ -101,6 +125,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
             m_CurrentSheet->GetMultiUnitComponents( lockedComponents );
         }
     }
+
+    // Store previous annotations for building info messages
+    mapExistingAnnotation( previousAnnotation );
 
     // If it is an annotation for all the components, reset previous annotation.
     if( aResetAnnotation )
@@ -158,21 +185,49 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     references.Annotate( useSheetNum, idStep, lockedComponents );
     references.UpdateAnnotation();
 
-    wxArrayString errors;
+    for( size_t i = 0; i < references.GetCount(); i++ )
+    {
+        SCH_COMPONENT* comp = references[ i ].GetComp();
+        wxString       prevRef = previousAnnotation[ comp->GetTimeStamp() ];
+        wxString       newRef  = comp->GetField( REFERENCE )->GetFullyQualifiedText();
+        wxString       msg;
+
+        if( prevRef.Length() )
+        {
+            if( newRef == prevRef )
+                continue;
+
+            if( comp->GetUnitCount() > 1 )
+                msg.Printf( _( "Updated %s (unit %d) from %s to %s" ),
+                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            comp->GetUnit(),
+                            GetChars( prevRef ),
+                            GetChars( newRef ) );
+            else
+                msg.Printf( _( "Updated %s from %s to %s" ),
+                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            GetChars( prevRef ),
+                            GetChars( newRef ) );
+        }
+        else
+        {
+            if( comp->GetUnitCount() > 1 )
+                msg.Printf( _( "Annotated %s (unit %d) as %s" ),
+                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            comp->GetUnit(),
+                            GetChars( newRef ) );
+            else
+                msg.Printf( _( "Annotated %s as %s" ),
+                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            GetChars( newRef ) );
+        }
+
+        aReporter.Report( msg, REPORTER::RPT_INFO );
+    }
 
     // Final control (just in case ... ).
-    if( CheckAnnotate( &errors, !aAnnotateSchematic ) )
-    {
-        wxString msg;
-
-        for( size_t i = 0; i < errors.GetCount(); i++ )
-            msg += errors[i];
-
-        // wxLogWarning is a cheap and dirty way to dump a potentially long list of
-        // strings to a dialog that can be saved to a file.  This should be replaced
-        // by a more elegant solution.
-        wxLogWarning( msg );
-    }
+    if( !CheckAnnotate( aReporter, !aAnnotateSchematic ) )
+        aReporter.Report( _( "Annotation complete." ), REPORTER::RPT_INFO );
 
     OnModify();
 
@@ -184,7 +239,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 }
 
 
-int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
+int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
 {
     // build the screen list
     SCH_SHEET_LIST      sheetList( g_RootSheet );
@@ -196,5 +251,5 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     else
         m_CurrentSheet->GetComponents( componentsList );
 
-    return componentsList.CheckAnnotation( aMessageList );
+    return componentsList.CheckAnnotation( aReporter );
 }
