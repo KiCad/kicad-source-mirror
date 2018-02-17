@@ -281,7 +281,6 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
 
     fn = fullFilename;
     m_mruPath = fn.GetPath();
-    m_buttonExport->Enable( true );
     SetStatusText( fullFilename );
     Refresh();
 }
@@ -345,6 +344,7 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_NB_Image  = m_Greyscale_Image;
     Binarize( (double) m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
 
+    m_buttonExport->Enable( true );
     return true;
 }
 
