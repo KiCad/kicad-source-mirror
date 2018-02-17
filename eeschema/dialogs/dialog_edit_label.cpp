@@ -181,11 +181,12 @@ void DIALOG_LABEL_EDITOR::InitDialog()
         m_textLabel = m_textLabelSingleLine;
         m_textLabelMultiLine->Show( false );
         wxTextValidator* validator = (wxTextValidator*) m_textLabel->GetValidator();
-        wxArrayString excludes;
 
         // Add invalid label characters to this list.
-        excludes.Add( wxT( " " ) );
-        validator->SetExcludes( excludes );
+        if( m_CurrentText->GetClass() == wxT( "SCH_LABEL" ) )
+            validator->SetCharExcludes( wxT( " /" ) );
+        else
+            validator->SetCharExcludes( wxT( " " ) );
     }
 
     m_textLabel->SetValue( m_CurrentText->GetText() );
