@@ -88,6 +88,8 @@ public:
      */
     void Flip( const wxPoint& aCentre ) override;
 
+    bool IsParentFlipped() const;
+
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
     const wxPoint& GetStart0() const            { return m_Start0; }
 
@@ -126,6 +128,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

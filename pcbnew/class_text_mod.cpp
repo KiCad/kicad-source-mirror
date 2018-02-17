@@ -145,6 +145,13 @@ void TEXTE_MODULE::Flip( const wxPoint& aCentre )
     SetLocalCoord();
 }
 
+bool TEXTE_MODULE::IsParentFlipped() const
+{
+    if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
+        return true;
+    return false;
+}
+
 
 void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
@@ -473,27 +480,33 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    const int MAX = std::numeric_limits<unsigned int>::max();
+    const int HIDE = std::numeric_limits<unsigned int>::max();
 
     if( !aView )
         return 0;
 
+    // Handle Render tab switches
     if( ( m_Type == TEXT_is_VALUE || m_Text == wxT( "%V" ) )
             && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
-        return MAX;
+        return HIDE;
 
     if( ( m_Type == TEXT_is_REFERENCE || m_Text == wxT( "%R" ) )
             && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
-        return MAX;
+        return HIDE;
 
-    if( IsFrontLayer( m_Layer ) && ( !aView->IsLayerVisible( LAYER_MOD_TEXT_FR ) ||
-                                     !aView->IsLayerVisible( LAYER_MOD_FR ) ) )
-        return MAX;
+    if( !IsParentFlipped() && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        return HIDE;
 
-    if( IsBackLayer( m_Layer ) && ( !aView->IsLayerVisible( LAYER_MOD_TEXT_BK ) ||
-                                    !aView->IsLayerVisible( LAYER_MOD_BK ) ) )
-        return MAX;
+    if( IsParentFlipped() && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        return HIDE;
 
+    if( IsFrontLayer( m_Layer ) && !aView->IsLayerVisible( LAYER_MOD_TEXT_FR ) )
+        return HIDE;
+
+    if( IsBackLayer( m_Layer ) && !aView->IsLayerVisible( LAYER_MOD_TEXT_BK ) )
+        return HIDE;
+
+    // Other layers are shown without any conditions
     return 0;
 }
 

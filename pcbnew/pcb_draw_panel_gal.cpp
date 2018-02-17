@@ -446,26 +446,12 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS_TH );
 
     // Front modules
-    m_view->SetRequired( LAYER_PAD_FR, LAYER_MOD_FR );
     m_view->SetRequired( LAYER_MOD_TEXT_FR, LAYER_MOD_FR );
     m_view->SetRequired( LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR );
-    m_view->SetRequired( F_Adhes, LAYER_PAD_FR );
-    m_view->SetRequired( F_Paste, LAYER_PAD_FR );
-    m_view->SetRequired( F_Mask, LAYER_PAD_FR );
-    m_view->SetRequired( F_CrtYd, LAYER_MOD_FR );
-    m_view->SetRequired( F_Fab, LAYER_MOD_FR );
-    m_view->SetRequired( F_SilkS, LAYER_MOD_FR );
 
     // Back modules
-    m_view->SetRequired( LAYER_PAD_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_MOD_TEXT_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );
-    m_view->SetRequired( B_Adhes, LAYER_PAD_BK );
-    m_view->SetRequired( B_Paste, LAYER_PAD_BK );
-    m_view->SetRequired( B_Mask, LAYER_PAD_BK );
-    m_view->SetRequired( B_CrtYd, LAYER_MOD_BK );
-    m_view->SetRequired( B_Fab, LAYER_MOD_BK );
-    m_view->SetRequired( B_SilkS, LAYER_MOD_BK );
 
     m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY ) ;

@@ -104,6 +104,8 @@ public:
     /// Flip entity during module flip
     void Flip( const wxPoint& aCentre ) override;
 
+    bool IsParentFlipped() const;
+
     /// Mirror text position in footprint edition
     /// the text itself is not mirrored, and the layer not modified,
     /// only position is mirrored.

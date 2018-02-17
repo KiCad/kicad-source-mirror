@@ -49,6 +49,8 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 
+#include <view/view.h>
+
 #include <stdio.h>
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
@@ -321,6 +323,12 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
     SetLayer( FlipLayer( GetLayer() ) );
 }
 
+bool EDGE_MODULE::IsParentFlipped() const
+{
+    if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
+        return true;
+    return false;
+}
 
 void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
 {
@@ -393,4 +401,22 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
     }
 
     SetDrawCoord();
+}
+
+unsigned int EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    const int HIDE = std::numeric_limits<unsigned int>::max();
+
+    if( !aView )
+        return 0;
+
+    // Handle Render tab switches
+    if( !IsParentFlipped() && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        return HIDE;
+
+    if( IsParentFlipped() && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        return HIDE;
+
+    // Other layers are shown without any conditions
+    return 0;
 }

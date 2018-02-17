@@ -36,6 +36,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 
+#include <view/view.h>
 #include <pcbnew.h>
 
 #include <class_board.h>
@@ -1274,6 +1275,25 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
+    const int HIDE = std::numeric_limits<unsigned int>::max();
+
+    // Handle Render tab switches
+    if( ( GetAttribute() == PAD_ATTRIB_STANDARD || GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+         && !aView->IsLayerVisible( LAYER_PADS_TH ) )
+        return HIDE;
+
+    if( !IsFlipped() && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        return HIDE;
+
+    if( IsFlipped() && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        return HIDE;
+
+    if( IsFrontLayer( ( PCB_LAYER_ID )aLayer ) && !aView->IsLayerVisible( LAYER_PAD_FR ) )
+        return HIDE;
+
+    if( IsBackLayer( ( PCB_LAYER_ID )aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
+        return HIDE;
+
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
@@ -1282,7 +1302,7 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         // Pad sizes can be zero briefly when someone is typing a number like "0.5"
         // in the pad properties dialog
         if( divisor == 0 )
-            return UINT_MAX;
+            return HIDE;
 
         return ( Millimeter2iu( 100 ) / divisor );
     }
