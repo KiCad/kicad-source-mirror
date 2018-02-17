@@ -267,6 +267,22 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         else
             color = DARKDARKGRAY;
     }
+    // If use asks for masks to be printed, then print them.
+    else if( screen->m_IsPrinting )
+    {
+        if( ( IsOnLayer( B_Paste ) && brd->IsLayerVisible( B_Paste ) ) ||
+            ( IsOnLayer( F_Paste ) && brd->IsLayerVisible( F_Paste ) ) )
+        {
+            mask_margin = GetSolderPasteMargin();
+        }
+
+        if( ( IsOnLayer( B_Mask ) && brd->IsLayerVisible( B_Mask ) ) ||
+            ( IsOnLayer( F_Mask ) && brd->IsLayerVisible( F_Mask ) ) )
+        {
+            mask_margin.x = std::max( mask_margin.x, GetSolderMaskMargin() );
+            mask_margin.y = std::max( mask_margin.y, GetSolderMaskMargin() );
+        }
+    }
 
     if( ( aDraw_mode & GR_HIGHLIGHT ) && !( aDraw_mode & GR_AND ) )
         color.SetToLegacyHighlightColor();

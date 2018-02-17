@@ -139,7 +139,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     // Set all board layers as visible, because the print dialog has itself
     // a layer selection, that have priority over the layer manager setup
     LSET save_visible_brd_layers = Pcb->GetVisibleLayers();
-    Pcb->SetVisibleLayers( LSET::AllLayersMask() );
+    Pcb->SetVisibleLayers( aPrintMask );
 
     int save_visible_brd_elements = Pcb->GetVisibleElements();
     Pcb->SetElementVisibility( LAYER_PAD_FR, true );
@@ -147,40 +147,11 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     Pcb->SetElementVisibility( LAYER_MOD_TEXT_FR, true );
     Pcb->SetElementVisibility( LAYER_MOD_TEXT_BK, true );
 
-    if( !( aPrintMask & LSET::AllCuMask() ).any() )
-    {
-        if( onePagePerLayer )
-        {
-            // We can print mask layers (solder mask and solder paste) with the actual
-            // pad sizes.  To do that, we must set ContrastModeDisplay to true and set
-            // the GetScreen()->m_Active_Layer to the current printed layer
-            displ_opts->m_ContrastModeDisplay = true;
-            displ_opts->m_DisplayPadFill = true;
+    PCB_LAYER_ID layer = aPrintMask.ExtractLayer();
 
-            // Calculate the active layer number to print from its mask layer:
-            GetScreen()->m_Active_Layer = B_Cu;
-
-            for( LAYER_NUM id = PCB_LAYER_ID_COUNT-1; id >= 0; --id )
-            {
-                if( aPrintMask[id] )
-                {
-                    GetScreen()->m_Active_Layer = PCB_LAYER_ID( id );
-                    break;
-                }
-            }
-
-            // pads on Silkscreen layer are usually plot in sketch mode:
-            if( GetScreen()->m_Active_Layer == B_SilkS ||
-                GetScreen()->m_Active_Layer == F_SilkS )
-            {
-                displ_opts->m_DisplayPadFill = false;
-            }
-        }
-        else
-        {
-            displ_opts->m_DisplayPadFill = false;
-        }
-    }
+    // pads on Silkscreen layer are usually printed in sketch mode:
+    if( layer == B_SilkS || layer == F_SilkS )
+        displ_opts->m_DisplayPadFill = false;
 
     displ_opts->m_DisplayPadNum = false;
 
