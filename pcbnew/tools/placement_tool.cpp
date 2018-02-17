@@ -128,30 +128,36 @@ bool SortLeftmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair
     return ( left.second.GetX() < right.second.GetX() );
 }
 
+
 bool SortRightmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
 {
     return ( left.second.GetRight() > right.second.GetRight() );
 }
+
 
 bool SortTopmostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
 {
     return ( left.second.GetY() < right.second.GetY() );
 }
 
+
 bool SortCenterX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
 {
     return ( left.second.GetCenter().x < right.second.GetCenter().x );
 }
+
 
 bool SortCenterY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
 {
     return ( left.second.GetCenter().y < right.second.GetCenter().y );
 }
 
+
 bool SortBottommostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
 {
     return ( left.second.GetBottom() > right.second.GetBottom() );
 }
+
 
 ALIGNMENT_RECTS GetBoundingBoxes( const SELECTION &sel )
 {
@@ -161,13 +167,15 @@ ALIGNMENT_RECTS GetBoundingBoxes( const SELECTION &sel )
 
     for( auto item : selection )
     {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
         if( item->Type() == PCB_MODULE_T )
         {
-            rects.emplace_back( std::make_pair( dynamic_cast<BOARD_ITEM*>( item ), dynamic_cast<MODULE*>( item )->GetFootprintRect() ) );
+            rects.emplace_back( std::make_pair( boardItem, static_cast<MODULE*>( item )->GetFootprintRect() ) );
         }
         else
         {
-            rects.emplace_back( std::make_pair( dynamic_cast<BOARD_ITEM*>( item ), dynamic_cast<MODULE*>( item )->GetBoundingBox() ) );
+            rects.emplace_back( std::make_pair( boardItem, item->GetBoundingBox() ) );
         }
     }
     return rects;
