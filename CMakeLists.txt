@@ -508,8 +508,14 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
 
-string( FIND "${wxWidgets_LIBRARIES}" "gtk3" GTK3_DETECTED )
-if( NOT ${GTK3_DETECTED} EQUAL -1 )
+# Check the toolkit used to build wxWidgets
+execute_process( COMMAND ${wxWidgets_CONFIG_EXECUTABLE} --query-toolkit
+    RESULT_VARIABLE wxWidgets_TOOLKIT_RESULT
+    OUTPUT_VARIABLE wxWidgets_TOOLKIT_FOUND
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+if( wxWidgets_TOOLKIT_FOUND STREQUAL "gtk3" )
     message( WARNING "\nwxWidgets library has been built against GTK3, it causes a lot of problems in KiCad" )
     add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
     add_definitions( -DWXGTK3 )
