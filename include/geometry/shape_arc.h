@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 CERN
+ * Copyright (C) 2018 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,8 +36,9 @@ public:
     SHAPE_ARC() :
         SHAPE( SH_ARC ), m_width( 0 ) {};
 
-    SHAPE_ARC( const VECTOR2I& pc, const VECTOR2I& p0, double aCenterAngle, int aWidth = 0 ) :
-        SHAPE( SH_ARC ), m_p0( p0 ), m_pc( pc ), m_centralAngle( aCenterAngle )
+    SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
+               double aCenterAngle, int aWidth = 0 ) :
+        SHAPE( SH_ARC ), m_p0( aArcStartPoint ), m_pc( aArcCenter ), m_centralAngle( aCenterAngle )
         {
         };
 

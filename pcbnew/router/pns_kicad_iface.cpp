@@ -849,7 +849,7 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
     {
         case S_ARC:
         {
-            SHAPE_ARC arc( aItem->GetStart(), aItem->GetEnd(), (double) aItem->GetAngle() / 10.0 );
+            SHAPE_ARC arc( aItem->GetCenter(), aItem->GetArcStart(), (double) aItem->GetAngle() / 10.0 );
 
             auto l = arc.ConvertToPolyline();
 
@@ -861,6 +861,7 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 
             break;
         }
+
         case S_SEGMENT:
         {
             SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( aItem->GetStart(), aItem->GetEnd(), aItem->GetWidth() );
@@ -868,6 +869,23 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 
             break;
         }
+
+        case S_CIRCLE:
+        {
+            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
+            SHAPE_ARC circle( aItem->GetCenter(), aItem->GetEnd(), 360.0 );
+
+            auto l = circle.ConvertToPolyline();
+
+            for( int i = 0; i < l.SegmentCount(); i++ )
+            {
+                SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( l.CSegment(i), aItem->GetWidth() );
+                segs.push_back( seg );
+            }
+
+            break;
+        }
+
         default:
             break;
     }
