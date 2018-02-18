@@ -80,6 +80,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                                          ANNOTATE_ORDER_T  aSortOption,
                                          ANNOTATE_OPTION_T aAlgoOption,
+                                         int               aStartNumber,
                                          bool              aResetAnnotation,
                                          bool              aRepairTimestamps,
                                          bool              aLockUnits,
@@ -109,7 +110,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         {
             wxString msg;
             msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
-            aReporter.Report( msg, REPORTER::RPT_INFO );
+            aReporter.Report( msg, REPORTER::RPT_WARNING );
         }
     }
 
@@ -182,7 +183,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     }
 
     // Recalculate and update reference numbers in schematic
-    references.Annotate( useSheetNum, idStep, lockedComponents );
+    references.Annotate( useSheetNum, idStep, aStartNumber, lockedComponents );
     references.UpdateAnnotation();
 
     for( size_t i = 0; i < references.GetCount(); i++ )
@@ -222,12 +223,12 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                             GetChars( newRef ) );
         }
 
-        aReporter.Report( msg, REPORTER::RPT_INFO );
+        aReporter.Report( msg, REPORTER::RPT_ACTION );
     }
 
     // Final control (just in case ... ).
     if( !CheckAnnotate( aReporter, !aAnnotateSchematic ) )
-        aReporter.Report( _( "Annotation complete." ), REPORTER::RPT_INFO );
+        aReporter.Report( _( "Annotation complete." ), REPORTER::RPT_ACTION );
 
     OnModify();
 

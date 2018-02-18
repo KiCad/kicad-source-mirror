@@ -86,6 +86,8 @@ private:
      */
     int GetAnnotateAlgo();
 
+    int GetStartNumber();
+
     bool GetAnnotateKeepOpen()
     {
         return m_cbKeepDlgOpen->GetValue();
@@ -109,6 +111,7 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
         m_userMessage->Show( true );
 
         m_rbScope->Enable( false );
+        m_cbKeepDlgOpen->Show( false );
     }
 
     m_MessageWindow->SetLabel( _( "Annotation Messages:" ) );
@@ -124,7 +127,7 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
 DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 {
     m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
-    m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, m_rbNumbering->GetSelection() );
+    m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo() );
     m_Config->Write( KEY_ANNOTATE_KEEP_OPEN_OPTION, GetAnnotateKeepOpen() );
     m_Config->Write( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, GetAnnotateAskForConfirmation() );
 
@@ -156,7 +159,22 @@ void DIALOG_ANNOTATE::InitValues()
     }
 
     m_Config->Read( KEY_ANNOTATE_ALGO_OPTION, &option, 0L );
-    m_rbNumbering->SetSelection( option );
+    switch( option )
+    {
+    default:
+    case 0:
+        m_rbFirstFree->SetValue( 1 );
+        break;
+
+    case 1:
+        m_rbSheetX100->SetValue( 100 );
+        break;
+
+    case 2:
+        m_rbSheetX1000->SetValue( 1000 );
+        break;
+    }
+    m_textNumberAfter->SetValue( wxT( "0" ) );
 
     m_Config->Read( KEY_ANNOTATE_KEEP_OPEN_OPTION, &option, 0L );
     m_cbKeepDlgOpen->SetValue( option );
@@ -220,7 +238,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
     m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
-                                  (ANNOTATE_OPTION_T) GetAnnotateAlgo(),
+                                  (ANNOTATE_OPTION_T) GetAnnotateAlgo(), GetStartNumber(),
                                   GetResetItems() , true, GetLockUnits(), reporter );
 
     m_MessageWindow->Flush();                   // Now update to show all messages
@@ -229,9 +247,13 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
     m_btnClear->Enable();
 
-    if( !GetAnnotateKeepOpen() && !reporter.HasMessage() )
+    // Don't close dialog if there are things the user needs to address
+    if( reporter.HasMessage() )
+        return;
+
+    if( m_userMessage->IsShown() || !GetAnnotateKeepOpen() )
     {
-        // Close the dialog by calling the default dialog handler for a wxID_OK event
+        // Close the dialog by calling the default handler for a wxID_OK event
         event.SetId( wxID_OK );
         event.Skip();
     }
@@ -288,21 +310,38 @@ int DIALOG_ANNOTATE::GetSortOrder()
 
 int DIALOG_ANNOTATE::GetAnnotateAlgo()
 {
-    return m_rbNumbering->GetSelection();
+    if( m_rbSheetX100->GetValue() )
+        return 1;
+    else if( m_rbSheetX1000->GetValue() )
+        return 2;
+    else
+        return 0;
 }
 
 
-void InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller )
+int DIALOG_ANNOTATE::GetStartNumber()
 {
-    DIALOG_ANNOTATE dlg( aCaller, wxT( "" ) );
-
-    dlg.ShowModal();
+    return ValueFromString( EDA_UNITS_T::UNSCALED_UNITS, m_textNumberAfter->GetValue() );
 }
 
 
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, const wxString& aMessage )
+void SCH_EDIT_FRAME::OnAnnotate( wxCommandEvent& event )
 {
-    DIALOG_ANNOTATE dlg( aCaller, aMessage );
+    if( !m_annotateDialog )
+    {
+        m_annotateDialog = new DIALOG_ANNOTATE( this, wxEmptyString );
+        m_annotateDialog->Show( true );
+    }
+    else    // The dialog is just not visible
+    {
+        m_annotateDialog->Show( true );
+    }
+}
+
+
+int SCH_EDIT_FRAME::ModalAnnotate( const wxString& aMessage )
+{
+    DIALOG_ANNOTATE dlg( this, aMessage );
 
     return dlg.ShowModal();
 }

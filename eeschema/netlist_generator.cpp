@@ -173,10 +173,8 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
     // Performs some controls:
     if( CheckAnnotate( NULL_REPORTER::GetInstance(), 0 ) )
     {
-        // Schematic must be annotated: call Annotate dialog and tell
-        // the user why that is.
-        InvokeDialogAnnotate( this,
-                   _( "Exporting the netlist requires a completely annotated schematic." ) );
+        // Schematic must be annotated: call Annotate dialog and tell the user why.
+        ModalAnnotate( _( "Exporting the netlist requires a completely annotated schematic." ) );
 
         if( CheckAnnotate( NULL_REPORTER::GetInstance(), 0 ) )
             return false;

@@ -60,6 +60,7 @@ class SCH_FIELD;
 class LIB_PIN;
 class SCH_JUNCTION;
 class DIALOG_SCH_FIND;
+class DIALOG_ANNOTATE;
 class wxFindDialogEvent;
 class wxFindReplaceData;
 class SCHLIB_FILTER;
@@ -131,6 +132,7 @@ private:
     wxSize                  m_printDialogSize;
     bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
+    DIALOG_ANNOTATE*        m_annotateDialog;
     DIALOG_SCH_FIND*        m_dlgFindReplace;
     wxPoint                 m_findDialogPosition;
     wxSize                  m_findDialogSize;
@@ -590,6 +592,7 @@ public:
      *                           the current sheet only.
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
      * @param aAlgoOption Define the annotation style.  See #ANNOTATE_OPTION_T.
+     * @param aStartNumber The start number for non-sheet-based annotation styles.
      * @param aResetAnnotation Clear any previous annotation if true.  Otherwise, keep the
      *                         existing component annotation.
      * @param aRepairTimestamps Test for and repair any duplicate time stamps if true.
@@ -611,8 +614,9 @@ public:
      * 200 to 299, and so on.
      */
     void AnnotateComponents( bool aAnnotateSchematic, ANNOTATE_ORDER_T aSortOption,
-                             ANNOTATE_OPTION_T aAlgoOption, bool aResetAnnotation,
-                             bool aRepairTimestamps, bool aLockUnits, REPORTER& aReporter );
+                             ANNOTATE_OPTION_T aAlgoOption, int aStartNumber,
+                             bool aResetAnnotation, bool aRepairTimestamps, bool aLockUnits,
+                             REPORTER& aReporter );
 
     /**
      * Check for annotation errors.
@@ -631,6 +635,13 @@ public:
      *                      the entire schematic.
      */
     int CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly );
+
+    /**
+     * Run a modal version of the Annotate dialog for a specific purpose.
+     * @param aMessage A user message indicating the purpose.
+     * @return the result of ShowModal()
+     */
+    int ModalAnnotate( const wxString& aMessage );
 
     // Functions used for hierarchy handling
     SCH_SHEET_PATH& GetCurrentSheet();

@@ -65,15 +65,6 @@ class SCH_EDIT_FRAME;
  */
 int InvokeDialogRescueEach( SCH_EDIT_FRAME* aCaller, RESCUER& aRescuer, bool aAskShowAgain );
 
-/// Create and show DIALOG_ANNOTATE.
-void InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller );
-
-/// Create and show a modal DIALOG_ANNOTATE for a particular purpose. This version
-/// forces scope to Full Schematic.
-/// @param aMessage - indicates the purpose
-/// @return the ShowModal() result
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, const wxString& aMessage );
-
 /// Create the modeless DIALOG_ERC and show it, return something to
 /// destroy or close it.  The dialog will have ID_DIALOG_ERC from id.h
 wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller );

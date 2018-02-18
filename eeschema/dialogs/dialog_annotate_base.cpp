@@ -44,9 +44,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Order") ), wxVERTICAL );
 	
-	wxBoxSizer* b_orderOptSizer;
-	b_orderOptSizer = new wxBoxSizer( wxVERTICAL );
-	
 	wxBoxSizer* bSizerXpos;
 	bSizerXpos = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -60,7 +57,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerXpos->Add( annotate_down_right_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
 	
-	b_orderOptSizer->Add( bSizerXpos, 0, wxEXPAND, 5 );
+	sbSizer1->Add( bSizerXpos, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerYpos;
 	bSizerYpos = new wxBoxSizer( wxHORIZONTAL );
@@ -75,10 +72,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerYpos->Add( annotate_right_down_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
 	
-	b_orderOptSizer->Add( bSizerYpos, 0, wxEXPAND, 5 );
-	
-	
-	sbSizer1->Add( b_orderOptSizer, 0, wxEXPAND|wxLEFT, 5 );
+	sbSizer1->Add( bSizerYpos, 0, wxEXPAND, 5 );
 	
 	
 	fgSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
@@ -89,11 +83,31 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	m_rbOptions->SetSelection( 0 );
 	fgSizer1->Add( m_rbOptions, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_rbNumberingChoices[] = { _("Use first free number in schematic"), _("First free above sheet number * 100"), _("First free above sheet number * 1000") };
-	int m_rbNumberingNChoices = sizeof( m_rbNumberingChoices ) / sizeof( wxString );
-	m_rbNumbering = new wxRadioBox( this, wxID_ANY, _("Numbering"), wxDefaultPosition, wxDefaultSize, m_rbNumberingNChoices, m_rbNumberingChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbNumbering->SetSelection( 1 );
-	fgSizer1->Add( m_rbNumbering, 0, wxALL|wxEXPAND, 5 );
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Numbering") ), wxVERTICAL );
+	
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_rbFirstFree = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_FIRST_FREE, _("Use first free number after:"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	gbSizer1->Add( m_rbFirstFree, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxTOP, 2 );
+	
+	m_textNumberAfter = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 60,-1 ), 0 );
+	gbSizer1->Add( m_textNumberAfter, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxLEFT, 2 );
+	
+	m_rbSheetX100 = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_SHEET_X_100, _("First free after sheet number X 100"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_rbSheetX100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxTOP, 4 );
+	
+	m_rbSheetX1000 = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_SHEET_X_1000, _("First free after sheet number X 1000"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_rbSheetX1000, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxTOP, 2 );
+	
+	
+	sbSizer2->Add( gbSizer1, 1, wxEXPAND, 5 );
+	
+	
+	fgSizer1->Add( sbSizer2, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bupperSizer->Add( fgSizer1, 0, wxBOTTOM|wxEXPAND, 5 );

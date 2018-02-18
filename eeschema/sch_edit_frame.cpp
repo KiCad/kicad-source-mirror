@@ -363,6 +363,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_printMonochrome = true;
     m_printSheetReference = true;
     SetShowPageLimits( true );
+    m_annotateDialog = nullptr;
     m_hotkeysDescrList = g_Schematic_Hokeys_Descr;
     m_dlgFindReplace = NULL;
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
@@ -829,12 +830,6 @@ void SCH_EDIT_FRAME::OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent )
 }
 
 
-void SCH_EDIT_FRAME::OnAnnotate( wxCommandEvent& event )
-{
-    InvokeDialogAnnotate( this );
-}
-
-
 void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 {
     // See if it's already open...
@@ -894,7 +889,7 @@ void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
         schematic.UpdateSymbolLinks();
         SCH_SHEET_LIST sheets( g_RootSheet );
         sheets.AnnotatePowerSymbols();
-        AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, false, false, true,
+        AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
                             NULL_REPORTER::GetInstance() );
     }
 

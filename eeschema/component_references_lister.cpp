@@ -271,7 +271,7 @@ int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFi
 }
 
 
-void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
+void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
       SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap )
 {
     if ( componentFlatList.size() == 0 )
@@ -297,11 +297,13 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
 
     LastReferenceNumber = GetLastReference( first, minRefId );
 #else
-    int minRefId = 1;
+    int minRefId;
 
     // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
     if( aUseSheetNum )
         minRefId = componentFlatList[first].m_SheetNum * aSheetIntervalId + 1;
+    else
+        minRefId = aStartNumber + 1;
 
     // This is the list of all Id already in use for a given reference prefix.
     // Will be refilled for each new reference prefix.
@@ -345,11 +347,11 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
 
             LastReferenceNumber = componentFlatList.GetLastReference( ii, minRefId );
 #else
-            minRefId = 1;
-
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
                 minRefId = componentFlatList[ii].m_SheetNum * aSheetIntervalId + 1;
+            else
+                minRefId = aStartNumber + 1;
 
             GetRefsInUse( first, idList, minRefId );
 #endif

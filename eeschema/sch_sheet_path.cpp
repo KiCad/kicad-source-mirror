@@ -583,7 +583,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     }
 
     // Recalculate and update reference numbers in schematic
-    references.Annotate( false, 100, lockedComponents );
+    references.Annotate( false, 0, 100, lockedComponents );
     references.UpdateAnnotation();
 }
 

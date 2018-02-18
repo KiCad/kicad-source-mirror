@@ -28,6 +28,8 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/statbmp.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/textctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/panel.h>
@@ -37,7 +39,10 @@ class WX_HTML_REPORT_PANEL;
 
 #define ID_SORT_BY_X_POSITION 1000
 #define ID_SORT_BY_Y_POSITION 1001
-#define ID_CLEAR_ANNOTATION_CMP 1002
+#define wxID_FIRST_FREE 1002
+#define wxID_SHEET_X_100 1003
+#define wxID_SHEET_X_1000 1004
+#define ID_CLEAR_ANNOTATION_CMP 1005
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ANNOTATE_BASE
@@ -54,7 +59,10 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbSortBy_Y_Position;
 		wxStaticBitmap* annotate_right_down_bitmap;
 		wxRadioBox* m_rbOptions;
-		wxRadioBox* m_rbNumbering;
+		wxRadioButton* m_rbFirstFree;
+		wxTextCtrl* m_textNumberAfter;
+		wxRadioButton* m_rbSheetX100;
+		wxRadioButton* m_rbSheetX1000;
 		wxCheckBox* m_cbKeepDlgOpen;
 		wxCheckBox* m_cbAskForConfirmation;
 		wxButton* m_btnApply;
