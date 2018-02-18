@@ -67,7 +67,7 @@ public:
         return *this;
     }
 
-    bool HasMessage() const
+    bool HasMessage() const override
     {
         return false;       // Technically "indeterminate" rather than false.
     }
