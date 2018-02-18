@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_TRACK_VIA_PROPERTIES_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
 class TEXT_CTRL_EVAL;
 class WIDGET_NET_SELECTOR;
@@ -24,9 +23,8 @@ class WIDGET_NET_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/combobox.h>
-#include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/checkbox.h>
+#include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
@@ -49,7 +47,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_sbCommonSizer;
 		wxStaticText* m_staticText24;
 		WIDGET_NET_SELECTOR* m_NetComboBox;
-		wxStaticLine* m_staticline3;
 		wxCheckBox* m_lockedCbox;
 		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;
@@ -64,7 +61,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackEndYLabel;
 		TEXT_CTRL_EVAL* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
-		wxStaticLine* m_trackStaticLine;
 		wxStaticText* m_TrackWidthLabel;
 		wxComboBox* m_TrackWidthCtrl;
 		wxStaticText* m_TrackWidthUnit;
@@ -78,16 +74,15 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaYLabel;
 		TEXT_CTRL_EVAL* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
-		wxStaticLine* m_viaStaticLine;
-		wxStaticText* m_DesignRuleVias;
-		wxChoice* m_DesignRuleViasCtrl;
-		wxStaticText* m_DesignRuleViasUnit;
 		wxStaticText* m_ViaDiameterLabel;
 		TEXT_CTRL_EVAL* m_ViaDiameterCtrl;
 		wxStaticText* m_ViaDiameterUnit;
 		wxStaticText* m_ViaDrillLabel;
 		TEXT_CTRL_EVAL* m_ViaDrillCtrl;
 		wxStaticText* m_ViaDrillUnit;
+		wxStaticText* m_DesignRuleVias;
+		wxChoice* m_DesignRuleViasCtrl;
+		wxStaticText* m_DesignRuleViasUnit;
 		wxStaticText* m_ViaTypeLabel;
 		wxChoice* m_ViaTypeChoice;
 		wxStaticText* m_ViaStartLayerLabel;
