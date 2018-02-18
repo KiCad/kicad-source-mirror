@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,6 +205,21 @@ public:
 
         m_ZoneMinThickness = aMinThickness;
     }
+
+    int GetHatchFillTypeThickness() const { return m_HatchFillTypeThickness; }
+    void SetHatchFillTypeThickness( int aThickness ) { m_HatchFillTypeThickness = aThickness; }
+
+    int GetHatchFillTypeGap() const { return m_HatchFillTypeGap; }
+    void SetHatchFillTypeGap( int aStep ) { m_HatchFillTypeGap = aStep; }
+
+    double GetHatchFillTypeOrientation() const { return m_HatchFillTypeOrientation; }
+    void SetHatchFillTypeOrientation( double aStep ) { m_HatchFillTypeOrientation = aStep; }
+
+    int GetHatchFillTypeSmoothingLevel() const { return m_HatchFillTypeSmoothingLevel; }
+    void SetHatchFillTypeSmoothingLevel( int aLevel ) { m_HatchFillTypeSmoothingLevel = aLevel; }
+
+    double GetHatchFillTypeSmoothingValue() const { return m_HatchFillTypeSmoothingValue; }
+    void SetHatchFillTypeSmoothingValue( double aValue ) { m_HatchFillTypeSmoothingValue = aValue; }
 
     int GetSelectedCorner() const
     {
@@ -765,8 +780,29 @@ private:
     int                   m_ThermalReliefCopperBridge;
 
 
-    /// How to fill areas: ZFM_POLYGONS => use filled polygons, ZFM_SEGMENTS => fill with segments.
+    /** How to fill areas:
+     * ZFM_POLYGONS => use solid polygons
+     * ZFM_SEGMENTS => fill by segments (deprecated).
+     * ZFM_HATCH_PATTERN => use a grid pattern as shape
+     */
     ZONE_FILL_MODE        m_FillMode;
+
+    /// Grid style shape: thickness of lines (if 0 -> solid shape)
+    int m_HatchFillTypeThickness;
+
+    /// Grid style shape: dist between center of lines (grid size) (0 -> solid shape)
+    int m_HatchFillTypeGap;
+
+    /// Grid style shape: orientation in degrees of the grid lines
+    double m_HatchFillTypeOrientation;
+
+    /// Grid pattern smoothing type, similar to corner smoothing type
+    ///< 0 = no smoothing, 1 = fillet, >= 2 = arc
+    int  m_HatchFillTypeSmoothingLevel;
+
+    /// Grid pattern smoothing value for smoothing shape size calculations
+    /// this is the ratio between the gap and the chamfer size
+    double m_HatchFillTypeSmoothingValue;
 
     /// The index of the corner being moved or nullptr if no corner is selected.
     SHAPE_POLY_SET::VERTEX_INDEX* m_CornerSelection;

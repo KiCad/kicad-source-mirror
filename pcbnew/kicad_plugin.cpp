@@ -1700,8 +1700,10 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     m_out->Print( 0, " (clearance %s))\n",
                   FormatInternalUnits( aZone->GetZoneClearance() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(min_thickness %s)\n",
+    m_out->Print( aNestLevel+1, "(min_thickness %s)",
                   FormatInternalUnits( aZone->GetMinThickness() ).c_str() );
+
+    m_out->Print( 0, "\n" );
 
     if( aZone->GetIsKeepout() )
     {
@@ -1718,8 +1720,10 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( 0, " yes" );
 
     // Default is polygon filled.
-    if( aZone->GetFillMode() )
+    if( aZone->GetFillMode() == ZFM_SEGMENTS )  // Now deprecated. Should not be used
         m_out->Print( 0, " (mode segment)" );
+    else if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+        m_out->Print( 0, " (mode hatch)" );
 
     m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)",
                   aZone->GetArcSegmentCount(),
@@ -1749,6 +1753,23 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         if( aZone->GetCornerRadius() != 0 )
             m_out->Print( 0, " (radius %s)",
                           FormatInternalUnits( aZone->GetCornerRadius() ).c_str() );
+    }
+
+    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",
+                         FormatInternalUnits( aZone->GetHatchFillTypeThickness() ).c_str(),
+                         FormatInternalUnits( aZone->GetHatchFillTypeGap() ).c_str(),
+                         Double2Str( aZone->GetHatchFillTypeOrientation() ).c_str() );
+
+        if( aZone->GetHatchFillTypeSmoothingLevel() > 0 )
+        {
+            m_out->Print( 0, "\n" );
+            m_out->Print( aNestLevel+2, "(hatch_smoothing_level %d) (hatch_smoothing_value %s)",
+                             aZone->GetHatchFillTypeSmoothingLevel(),
+                             Double2Str( aZone->GetHatchFillTypeSmoothingValue() ).c_str() );
+        }
     }
 
     m_out->Print( 0, ")\n" );

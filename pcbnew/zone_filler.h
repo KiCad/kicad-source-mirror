@@ -114,6 +114,15 @@ private:
     bool fillSingleZone( ZONE_CONTAINER* aZone,
             SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys ) const;
 
+    /**
+     * for zones having the ZONE_FILL_MODE::ZFM_HATCH_PATTERN, create a grid pattern
+     * in filled areas of aZone, giving to the filled polygons a fill style like a grid
+     * @param aZone is the zone to modify
+     * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
+     * filled areas, and after adding the grid pattern, the modified filled areas with holes
+     */
+    void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys ) const;
+
     BOARD* m_board;
     COMMIT* m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;

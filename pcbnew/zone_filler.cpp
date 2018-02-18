@@ -53,15 +53,11 @@
 
 
 extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
-        const D_PAD& aPad,
-        int aThermalGap,
-        int aCopperThickness,
-        int aMinThicknessValue,
-        int aCircleToSegmentsCount,
-        double aCorrectionFactor,
-        double aThermalRot );
+        const D_PAD& aPad, int aThermalGap, int aCopperThickness,
+        int aMinThicknessValue, int aCircleToSegmentsCount,
+        double aCorrectionFactor, double aThermalRot );
 
-static double s_thermalRot = 450;    // angle of stubs in thermal reliefs for round pads
+static double s_thermalRot = 450;   // angle of stubs in thermal reliefs for round pads
 static const bool s_DumpZonesWhenFilling = false;
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
@@ -751,8 +747,29 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
     // needed by Gerber files and Fracture()
     solidAreas.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
+    // Now remove the non filled areas due to the hatch pattern
+    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+        addHatchFillTypeOnZone( aZone, solidAreas );
+
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
+
+    if( !aZone->IsOnCopperLayer() )
+    {
+        SHAPE_POLY_SET areas_fractured = solidAreas;
+        areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        if( s_DumpZonesWhenFilling )
+            dumper->Write( &areas_fractured, "areas_fractured" );
+
+        aFinalPolys = areas_fractured;
+        aRawPolys = aFinalPolys;
+
+        if( s_DumpZonesWhenFilling )
+            dumper->EndGroup();
+
+        return;
+    }
 
     // Test thermal stubs connections and add polygons to remove unconnected stubs.
     // (this is a refinement for thermal relief shapes)
@@ -824,6 +841,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
     if ( !aZone->BuildSmoothedPoly( smoothedPoly ) )
         return false;
 
+#if 0
     if( aZone->IsOnCopperLayer() )
     {
         computeRawFilledAreas( aZone, smoothedPoly, aRawPolys, aFinalPolys );
@@ -835,7 +853,9 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
         aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
         aFinalPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
     }
-
+#else
+    computeRawFilledAreas( aZone, smoothedPoly, aRawPolys, aFinalPolys );
+#endif
     aZone->SetNeedRefill( false );
     return true;
 }
@@ -1176,4 +1196,150 @@ void ZONE_FILLER::buildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCorn
             }
         }
     }
+}
+
+
+void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys ) const
+{
+    // Build grid:
+
+    // obvously line thickness must be > zone min thickness. However, it should be
+    // the case because the zone dialog setup ensure that. However, it can happens
+    // if a board file was edited by hand by a python script
+    int thickness = std::max( aZone->GetHatchFillTypeThickness(), aZone->GetMinThickness()+2 );
+    int linethickness = thickness - aZone->GetMinThickness();
+    int gridsize = thickness + aZone->GetHatchFillTypeGap();
+    double orientation = aZone->GetHatchFillTypeOrientation();
+
+    SHAPE_POLY_SET filledPolys = aRawPolys;
+    // Use a area that contains the rotated bbox by orientation,
+    // and after rotate the result by -orientation.
+    if( orientation != 0.0 )
+    {
+        filledPolys.Rotate( M_PI/180.0 * orientation, VECTOR2I( 0,0 ) );
+    }
+
+    BOX2I bbox = filledPolys.BBox( 0 );
+
+    // Build hole shape
+    // the hole size is aZone->GetHatchFillTypeGap(), but because the outline thickness
+    // is aZone->GetMinThickness(), the hole shape size must be larger
+    SHAPE_LINE_CHAIN hole_base;
+    int hole_size = aZone->GetHatchFillTypeGap() + aZone->GetMinThickness();
+    VECTOR2I corner( 0, 0 );;
+    hole_base.Append( corner );
+    corner.x += hole_size;
+    hole_base.Append( corner );
+    corner.y += hole_size;
+    hole_base.Append( corner );
+    corner.x = 0;
+    hole_base.Append( corner );
+    hole_base.SetClosed( true );
+
+    // Calculate minimal area of a grid hole.
+    // All holes smaller than a threshold will be removed
+    double minimal_hole_area = hole_base.Area() / 2;
+
+    // Now convert this hole to a smoothed shape:
+    if( aZone->GetHatchFillTypeSmoothingLevel()  > 0 )
+    {
+        // the actual size of chamfer, or rounded corner radius is the half size
+        // of the HatchFillTypeGap scaled by aZone->GetHatchFillTypeSmoothingValue()
+        // aZone->GetHatchFillTypeSmoothingValue() = 1.0 is the max value for the chamfer or the
+        // radius of corner (radius = half size of the hole)
+        int smooth_value = KiROUND( aZone->GetHatchFillTypeGap()
+                                    * aZone->GetHatchFillTypeSmoothingValue() / 2 );
+
+        // Minimal optimization:
+        // make smoothing only for reasonnable smooth values, to avoid a lot of useless segments
+        // and if the smooth value is small, use chamfer even if fillet is requested
+        #define SMOOTH_MIN_VAL_MM 0.02
+        #define SMOOTH_SMALL_VAL_MM 0.04
+        if( smooth_value > Millimeter2iu( SMOOTH_MIN_VAL_MM ) )
+        {
+            SHAPE_POLY_SET smooth_hole;
+            smooth_hole.AddOutline( hole_base );
+            int smooth_level = aZone->GetHatchFillTypeSmoothingLevel();
+
+            if( smooth_value < Millimeter2iu( SMOOTH_SMALL_VAL_MM ) && smooth_level > 1 )
+                smooth_level = 1;
+            // Use a larger smooth_value to compensate the outline tickness
+            // (chamfer is not visible is smooth value < outline thickess)
+            smooth_value += aZone->GetMinThickness()/2;
+
+            // smooth_value cannot be bigger than the half size oh the hole:
+            smooth_value = std::min( smooth_value, aZone->GetHatchFillTypeGap()/2 );
+            // the error to approximate a circle by segments when smoothing corners by a arc
+            int error_max = std::max( Millimeter2iu( 0.01), smooth_value/20 );
+
+            switch( smooth_level )
+            {
+            case 1:
+                // Chamfer() uses the distance from a corner to create a end point
+                // for the chamfer.
+                hole_base = smooth_hole.Chamfer( smooth_value ).Outline( 0 );
+                break;
+
+            default:
+                if( aZone->GetHatchFillTypeSmoothingLevel() > 2 )
+                    error_max /= 2;    // Force better smoothing
+                hole_base = smooth_hole.Fillet( smooth_value, error_max ).Outline( 0 );
+                break;
+
+            case 0:
+                break;
+            };
+        }
+    }
+
+    // Build holes
+    SHAPE_POLY_SET holes;
+
+    for( int xx = 0; ; xx++ )
+    {
+        int xpos = xx * gridsize;
+
+        if( xpos > bbox.GetWidth() )
+            break;
+
+        for( int yy = 0; ; yy++ )
+        {
+            int ypos = yy * gridsize;
+
+            if( ypos > bbox.GetHeight() )
+                break;
+
+            // Generate hole
+            SHAPE_LINE_CHAIN hole( hole_base );
+            hole.Move( VECTOR2I( xpos, ypos ) );
+            holes.AddOutline( hole );
+        }
+    }
+
+    holes.Move( bbox.GetPosition() );
+
+    // Clamp holes to the area of filled zones with a outline thickness
+    // > aZone->GetMinThickness() to be sure the thermal pads can be built
+    int outline_margin = std::max( (aZone->GetMinThickness()*10)/9, linethickness/2 );
+    filledPolys.Inflate( -outline_margin, 16 );
+    holes.BooleanIntersection( filledPolys, SHAPE_POLY_SET::PM_FAST );
+
+    if( orientation != 0.0 )
+        holes.Rotate( -M_PI/180.0 * orientation, VECTOR2I( 0,0 ) );
+
+    // Now filter truncated holes to avoid small holes in pattern
+    // It happens for holes near the zone outline
+    for( int ii = 0; ii < holes.OutlineCount(); )
+    {
+        double area = holes.Outline( ii ).Area();
+
+        if( area < minimal_hole_area ) // The current hole is too small: remove it
+            holes.DeletePolygon( ii );
+        else
+            ++ii;
+    }
+
+    // create grid. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
+    // generate strictly simple polygons needed by Gerber files and Fracture()
+    aRawPolys.BooleanSubtract( aRawPolys, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 }

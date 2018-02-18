@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3116,11 +3116,40 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
                 case T_mode:
                     token = NextTok();
 
-                    if( token != T_segment && token != T_polygon )
-                        Expecting( "segment or polygon" );
+                    if( token != T_segment && token != T_hatch && token != T_polygon )
+                        Expecting( "segment, hatch or polygon" );
 
-                    // @todo Create an enum for fill modes.
-                    zone->SetFillMode( token == T_polygon ? ZFM_POLYGONS : ZFM_SEGMENTS );
+                    if( token == T_segment )    // deprecated
+                        zone->SetFillMode( ZFM_SEGMENTS );
+                    else if( token == T_hatch )
+                        zone->SetFillMode( ZFM_HATCH_PATTERN );
+                    else
+                        zone->SetFillMode( ZFM_POLYGONS );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_thickness:
+                    zone->SetHatchFillTypeThickness( parseBoardUnits( T_hatch_thickness ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_gap:
+                    zone->SetHatchFillTypeGap( parseBoardUnits( T_hatch_gap ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_orientation:
+                    zone->SetHatchFillTypeOrientation( parseDouble( T_hatch_orientation ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_smoothing_level:
+                    zone->SetHatchFillTypeSmoothingLevel( parseDouble( T_hatch_smoothing_level ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_hatch_smoothing_value:
+                    zone->SetHatchFillTypeSmoothingValue( parseDouble( T_hatch_smoothing_value ) );
                     NeedRIGHT();
                     break;
 
@@ -3171,7 +3200,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
 
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
-                               "smoothing, or radius" );
+                               "hatch_thickness, hatch_gap, hatch_orientation, "
+                               "hatch_smoothing_level, hatch_smoothing_value, smoothing, or radius" );
                 }
             }
             break;
@@ -3295,7 +3325,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
     {
         if( !zone->IsOnCopperLayer() )
         {
-            zone->SetFillMode( ZFM_POLYGONS );
+            //zone->SetFillMode( ZFM_POLYGONS );
             zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
         }
 

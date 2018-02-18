@@ -698,8 +698,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
             if( GetPlotMode() == FILLED )
             {
                 // Plot the filled area polygon.
-                // The area can be filled by segments or uses solid polygons
-                if( aZone->GetFillMode() == ZONE_FILL_MODE::ZFM_POLYGONS ) // We are using solid polygons
+                // The area can be filled by segments (outdated) or uses solid polygons
+                if( aZone->GetFillMode() != ZONE_FILL_MODE::ZFM_SEGMENTS ) // We are using solid polygons
                 {
                     m_plotter->PlotPoly( cornerList, FILLED_SHAPE, aZone->GetMinThickness(), &gbr_metadata );
                 }

@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -44,10 +44,14 @@ private:
     ZONE_SETTINGS*  m_ptr;
     ZONE_SETTINGS   m_settings;     // working copy of zone settings
     UNIT_BINDER     m_minWidth;
+    UNIT_BINDER     m_gridStyleRotation;
+    UNIT_BINDER     m_gridStyleThickness;
+    UNIT_BINDER     m_gridStyleGap;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void OnStyleSelection( wxCommandEvent& event ) override;
     void OnLayerSelection( wxDataViewEvent& event ) override;
 
 public:
@@ -62,11 +66,17 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
     return dlg.ShowModal();
 }
 
+#define MIN_THICKNESS 10*IU_PER_MILS
 
 DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
                                                                 ZONE_SETTINGS* aSettings ) :
     DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( aParent ),
-    m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true )
+    m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true ),
+    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits,
+                         false ),
+    m_gridStyleThickness( aParent, m_staticTextStyleThickness,
+                          m_tcGridStyleThickness, m_GridStyleThicknessUnits, false),
+    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false )
 {
     m_parent = aParent;
 
@@ -94,7 +104,56 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 
     SetInitialFocus( m_OutlineAppearanceCtrl );
 
+    switch( m_settings.m_FillMode )
+    {
+    case ZFM_HATCH_PATTERN:
+        m_GridStyleCtrl->SetSelection( 1 ); break;
+    default:
+        m_GridStyleCtrl->SetSelection( 0 ); break;
+    }
+
+    m_gridStyleRotation.SetUnits( DEGREES );
+    m_gridStyleRotation.SetValue( m_settings.m_HatchFillTypeOrientation*10 ); // IU is decidegree
+
+    // Gives a reasonable value to grid style parameters, if currently there are no defined
+    // parameters for grid pattern thickness and gap (if the value is 0)
+    // the grid pattern thickness default value is (arbitrary) m_ZoneMinThickness * 4
+    // or 1mm
+    // the grid pattern gap default value is (arbitrary) m_ZoneMinThickness * 6
+    // or 1.5 mm
+    int bestvalue = m_settings.m_HatchFillTypeThickness;
+
+    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeThickness
+        bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, Millimeter2iu( 1.0 ) );
+
+    m_gridStyleThickness.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+
+    bestvalue = m_settings.m_HatchFillTypeGap;
+
+    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeGap
+        bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, Millimeter2iu( 1.5 ) );
+
+    m_gridStyleGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+
+    m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchFillTypeSmoothingLevel );
+    m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchFillTypeSmoothingValue );
+
+    // Enable/Disable some widgets
+    wxCommandEvent event;
+    OnStyleSelection( event );
+
     return true;
+}
+
+
+void DIALOG_NON_COPPER_ZONES_EDITOR::OnStyleSelection( wxCommandEvent& event )
+{
+    bool enable = m_GridStyleCtrl->GetSelection() >= 1;
+    m_tcGridStyleThickness->Enable( enable );
+    m_tcGridStyleGap->Enable( enable );
+    m_tcGridStyleOrientation->Enable( enable );
+    m_spinCtrlSmoothLevel->Enable( enable );
+    m_spinCtrlSmoothValue->Enable( enable );
 }
 
 
@@ -123,9 +182,10 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnLayerSelection( wxDataViewEvent& event )
 
 bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 {
-    m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
+    if( !m_gridStyleRotation.Validate( -1800, 1800 ) )
+        return false;
 
-    m_settings.m_FillMode = ZFM_POLYGONS;  // Use always polygon fill mode
+    m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
@@ -133,6 +193,30 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     case 1: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE; break;
     case 2: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_FULL; break;
     }
+
+    if( m_GridStyleCtrl->GetSelection() > 0 )
+        m_settings.m_FillMode = ZFM_HATCH_PATTERN;
+    else
+        m_settings.m_FillMode = ZFM_POLYGONS;
+
+
+    if( m_settings.m_FillMode == ZFM_HATCH_PATTERN )
+    {
+        int minThickness = m_minWidth.GetValue();
+
+        if( !m_gridStyleThickness.Validate( minThickness, INT_MAX ) )
+            return false;
+
+        if( !m_gridStyleGap.Validate( minThickness, INT_MAX ) )
+            return false;
+    }
+
+
+    m_settings.m_HatchFillTypeOrientation = m_gridStyleRotation.GetValue()/10.0; // value is returned in deci-degree
+    m_settings.m_HatchFillTypeThickness = m_gridStyleThickness.GetValue();
+    m_settings.m_HatchFillTypeGap = m_gridStyleGap.GetValue();
+    m_settings.m_HatchFillTypeSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
+    m_settings.m_HatchFillTypeSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
     wxConfigBase* cfg = Kiface().KifaceSettings();
     wxASSERT( cfg );

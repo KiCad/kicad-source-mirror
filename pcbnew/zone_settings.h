@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2008-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +35,9 @@
 
 enum ZONE_FILL_MODE
 {
-    ZFM_POLYGONS = 0, // fill zone with polygons
-    ZFM_SEGMENTS = 1  // fill zone with segments (legacy)
+    ZFM_POLYGONS = 0,       // fill zone with polygons
+    ZFM_SEGMENTS = 1,       // fill zone with segments (legacy)
+    ZFM_HATCH_PATTERN = 2    // fill zone using a grid pattern
 };
 
 /**
@@ -62,6 +63,14 @@ public:
 
     int  m_ZoneClearance;               ///< Clearance value
     int  m_ZoneMinThickness;            ///< Min thickness value in filled areas
+    int  m_HatchFillTypeThickness;       ///< Grid style shape: thickness of lines (if 0 -> solid shape)
+    int  m_HatchFillTypeGap;             ///< Grid style shape: clearance between lines (0 -> solid shape)
+    double m_HatchFillTypeOrientation;   ///< Grid style shape: orientation of grid lines in degrees
+    int  m_HatchFillTypeSmoothingLevel;  ///< Grid pattern smoothing type, similar to corner smoothing type
+                                        ///< 0 = no smoothing, 1 = fillet, >= 2 = arc
+    double m_HatchFillTypeSmoothingValue; ///< Grid pattern chamfer distance/fillet value
+                                        ///< this is the ratio between the gap and the chamfer size
+
     int  m_NetcodeSelection;            ///< Net code selection for the current zone
 
     LSET m_Layers;

@@ -58,6 +58,12 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     m_hatchStyle = DIAGONAL_EDGE;
     m_hatchPitch = GetDefaultHatchPitch();
     m_hv45 = false;
+    m_HatchFillTypeThickness = 0;
+    m_HatchFillTypeGap = 0;
+    m_HatchFillTypeOrientation = 0.0;
+    m_HatchFillTypeSmoothingLevel = 0;          // Grid pattern smoothing type. 0 = no smoothing
+    m_HatchFillTypeSmoothingValue = 0.1;        // Grid pattern chamfer value relative to the gap value
+                                                // used only if m_HatchFillTypeSmoothingLevel > 0
     m_priority = 0;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
     SetIsKeepout( false );
@@ -495,12 +501,12 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         }
 
         // Draw areas:
-        if( m_FillMode == ZFM_POLYGONS && !outline_mode )
+        if( m_FillMode != ZFM_SEGMENTS && !outline_mode )
             GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
                     true, 0, color, color );
     }
 
-    if( m_FillMode == 1  && !outline_mode )     // filled with segments
+    if( m_FillMode == ZFM_SEGMENTS && !outline_mode )     // filled with segments
     {
         for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
         {
@@ -871,12 +877,19 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
 
     msg.Printf( wxT( "%d" ), (int) m_Poly->TotalVertices() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Corners" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Vertices" ), msg, BLUE ) );
 
-    if( m_FillMode )
-        msg = _( "Segments" );
-    else
-        msg = _( "Polygons" );
+    switch( m_FillMode )
+    {
+    case ZFM_POLYGONS:
+        msg = _( "Polygons" ); break;
+    case ZFM_HATCH_PATTERN:
+        msg = _( "Hatch Fill" ); break;
+    case ZFM_SEGMENTS:  // Deprecated: found in old boards
+        msg = _( "Segments" ); break;
+    default:
+        msg = _( "Unknown" ); break;
+    }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
 

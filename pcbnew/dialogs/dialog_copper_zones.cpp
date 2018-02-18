@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -62,6 +62,10 @@ private:
     UNIT_BINDER     m_antipadClearance ;
     UNIT_BINDER     m_spokeWidth;
 
+    UNIT_BINDER     m_gridStyleRotation;
+    UNIT_BINDER     m_gridStyleThickness;
+    UNIT_BINDER     m_gridStyleGap;
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
@@ -72,6 +76,7 @@ private:
      */
     bool AcceptOptions( bool aUseExportableSetupOnly = false );
 
+    void OnStyleSelection( wxCommandEvent& event ) override;
     void OnLayerSelection( wxDataViewEvent& event ) override;
     void OnNetSortingOptionSelected( wxCommandEvent& event ) override;
     void ExportSetupToOtherCopperZones( wxCommandEvent& event ) override;
@@ -95,6 +100,7 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
     return dlg.ShowModal();
 }
 
+#define MIN_THICKNESS ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS
 
 DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
     DIALOG_COPPER_ZONE_BASE( aParent ),
@@ -103,7 +109,12 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true ),
     m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true ),
     m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits, true ),
-    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true )
+    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true ),
+    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits,
+                         false ),
+    m_gridStyleThickness( aParent, m_staticTextStyleThickness,
+                          m_tcGridStyleThickness, m_GridStyleThicknessUnits, false ),
+    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false )
 {
     m_Parent = aParent;
     m_Config = Kiface().KifaceSettings();
@@ -177,6 +188,44 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 
     SetInitialFocus( m_ListNetNameSelection );
 
+    switch( m_settings.m_FillMode )
+    {
+    case ZFM_HATCH_PATTERN:
+        m_GridStyleCtrl->SetSelection( 1 ); break;
+    default:
+        m_GridStyleCtrl->SetSelection( 0 ); break;
+    }
+
+    m_gridStyleRotation.SetUnits( DEGREES );
+    m_gridStyleRotation.SetValue( m_settings.m_HatchFillTypeOrientation*10 ); // IU is decidegree
+
+    // Gives a reasonable value to grid style parameters, if currently there are no defined
+    // parameters for grid pattern thickness and gap (if the value is 0)
+    // the grid pattern thickness default value is (arbitrary) m_ZoneMinThickness * 4
+    // or 1mm
+    // the grid pattern gap default value is (arbitrary) m_ZoneMinThickness * 6
+    // or 1.5 mm
+    int bestvalue = m_settings.m_HatchFillTypeThickness;
+
+    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeThickness
+        bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, Millimeter2iu( 1.0 ) );
+
+    m_gridStyleThickness.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+
+    bestvalue = m_settings.m_HatchFillTypeGap;
+
+    if( bestvalue <= 0 )     // No defined value for m_HatchFillTypeGap
+        bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, Millimeter2iu( 1.5 ) );
+
+    m_gridStyleGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+
+    m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchFillTypeSmoothingLevel );
+    m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchFillTypeSmoothingValue );
+
+    // Enable/Disable some widgets
+    wxCommandEvent event;
+    OnStyleSelection( event );
+
     return true;
 }
 
@@ -212,8 +261,19 @@ bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
+    if( m_GridStyleCtrl->GetSelection() > 0 )
+        m_settings.m_FillMode = ZFM_HATCH_PATTERN;
+    else
+        m_settings.m_FillMode = ZFM_POLYGONS;
+
     if( !AcceptOptions() )
         return false;
+
+    m_settings.m_HatchFillTypeOrientation = m_gridStyleRotation.GetValue()/10.0; // value is returned in deci-degree
+    m_settings.m_HatchFillTypeThickness = m_gridStyleThickness.GetValue();
+    m_settings.m_HatchFillTypeGap = m_gridStyleGap.GetValue();
+    m_settings.m_HatchFillTypeSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
+    m_settings.m_HatchFillTypeSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
     *m_ptr = m_settings;
     return true;
@@ -230,22 +290,28 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 {
     if( !m_clearance.Validate( 0, Mils2iu( ZONE_CLEARANCE_MAX_VALUE_MIL ) ) )
         return false;
+
     if( !m_minWidth.Validate( Mils2iu( ZONE_THICKNESS_MIN_VALUE_MIL ), INT_MAX ) )
         return false;
+
     if( !m_cornerRadius.Validate( 0, INT_MAX ) )
         return false;
+
     if( !m_spokeWidth.Validate( 0, INT_MAX ) )
         return false;
 
-    if( m_settings.m_FillMode == ZFM_SEGMENTS )
-    {
-        KIDIALOG dlg( this, _( "The legacy segment fill mode is not recommended."
-                               "Convert zone to polygon fill? "), _( "Legacy Warning" ),
-                      wxYES_NO | wxICON_WARNING );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+    if( !m_gridStyleRotation.Validate( -1800, 1800 ) )
+        return false;
 
-        if( dlg.ShowModal() == wxYES )
-            m_settings.m_FillMode = ZFM_POLYGONS;
+    if( m_settings.m_FillMode == ZFM_HATCH_PATTERN )
+    {
+        int minThickness = m_minWidth.GetValue();
+
+        if( !m_gridStyleThickness.Validate( minThickness, INT_MAX ) )
+            return false;
+
+        if( !m_gridStyleGap.Validate( minThickness, INT_MAX ) )
+            return false;
     }
 
     switch( m_PadInZoneOpt->GetSelection() )
@@ -273,7 +339,6 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
     m_settings.m_ZoneClearance = m_clearance.GetValue();
-
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
@@ -335,6 +400,17 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings.m_NetcodeSelection = net ? net->GetNet() : 0;
 
     return true;
+}
+
+
+void DIALOG_COPPER_ZONE::OnStyleSelection( wxCommandEvent& event )
+{
+    bool enable = m_GridStyleCtrl->GetSelection() >= 1;
+    m_tcGridStyleThickness->Enable( enable );
+    m_tcGridStyleGap->Enable( enable );
+    m_tcGridStyleOrientation->Enable( enable );
+    m_spinCtrlSmoothLevel->Enable( enable );
+    m_spinCtrlSmoothValue->Enable( enable );
 }
 
 

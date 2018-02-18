@@ -95,6 +95,11 @@ gr_line
 gr_poly
 gr_text
 hatch
+hatch_thickness
+hatch_gap
+hatch_orientation
+hatch_smoothing_level
+hatch_smoothing_value
 hide
 italic
 justify

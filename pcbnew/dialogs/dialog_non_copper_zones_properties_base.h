@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_NON_COPPER_ZONES_PROPERTIES_BASE_H__
-#define __DIALOG_NON_COPPER_ZONES_PROPERTIES_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -25,6 +24,7 @@
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
+#include <wx/spinctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -36,7 +36,7 @@
 class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextLayerSelection;
 		wxDataViewListCtrl* m_layers;
@@ -46,20 +46,37 @@ class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_MinWidthLabel;
 		wxTextCtrl* m_MinWidthCtrl;
 		wxStaticText* m_MinWidthUnits;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_staticTextGridStyle;
+		wxStaticText* m_staticTextGridFillType;
+		wxChoice* m_GridStyleCtrl;
+		wxStaticText* m_staticTextGrindOrient;
+		wxTextCtrl* m_tcGridStyleOrientation;
+		wxStaticText* m_staticTextRotUnits;
+		wxStaticText* m_staticTextStyleThickness;
+		wxTextCtrl* m_tcGridStyleThickness;
+		wxStaticText* m_GridStyleThicknessUnits;
+		wxStaticText* m_staticTextGridGap;
+		wxTextCtrl* m_tcGridStyleGap;
+		wxStaticText* m_GridStyleGapUnits;
+		wxStaticText* m_staticTextGridSmoothingLevel;
+		wxSpinCtrl* m_spinCtrlSmoothLevel;
+		wxStaticText* m_staticTextGridSmootingVal;
+		wxSpinCtrlDouble* m_spinCtrlSmoothValue;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
-		
-	
+		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
-		
-		DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non-copper Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN ); 
+
+		DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non Copper Zones Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 547,379 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN );
 		~DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE();
-	
+
 };
 
-#endif //__DIALOG_NON_COPPER_ZONES_PROPERTIES_BASE_H__
