@@ -801,6 +801,13 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
     aZone->BuildSmoothedPoly( poly );
     poly.CacheTriangulation();
 
+    if( !poly.IsTriangulationUpToDate() )
+    {
+        wxFAIL_MSG( wxString::Format( "Zone triangulation failed for %s",
+                    aZone->GetSelectMenuText() ) );
+        return false;
+    }
+
     LSET layers = aZone->GetLayerSet();
 
     for( int layer = F_Cu; layer <= B_Cu; layer++ )
