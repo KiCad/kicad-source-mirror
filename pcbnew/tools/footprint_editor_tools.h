@@ -69,20 +69,6 @@ public:
     int CreateArray( TOOL_EVENT& aEvent );
 
     /**
-     * Function ModuleTextOutlines()
-     *
-     * Toggles display mode for module texts (outline/filled).
-     */
-    int ModuleTextOutlines( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function ModuleEdgeOutlines()
-     *
-     * Toggles display mode for module edges (outline/filled).
-     */
-    int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
-
-    /**
      * Function CreatePadFromShapes()
      *
      * Creates a custom-shaped pad from a set of selected graphical shapes

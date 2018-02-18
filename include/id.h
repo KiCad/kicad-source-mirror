@@ -278,6 +278,7 @@ enum main_id
     // Common to Pcbnew and CvPcb
     ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
     ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+    ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH,
     ID_TB_OPTIONS_SHOW_PADS_SKETCH,
 
     ID_DIALOG_ERC,      ///< eeschema ERC modeless dialog ID

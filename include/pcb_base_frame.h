@@ -646,12 +646,18 @@ public:
 
     void OnTogglePolarCoords( wxCommandEvent& aEvent );
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
+    void OnToggleGraphicDrawMode( wxCommandEvent& aEvent );
+    void OnToggleEdgeDrawMode( wxCommandEvent& aEvent );
+    void OnToggleTextDrawMode( wxCommandEvent& aEvent );
 
     virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
 
     // User interface update event handlers.
     void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
     void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateGraphicDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateEdgeDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 

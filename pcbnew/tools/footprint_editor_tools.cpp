@@ -78,14 +78,6 @@ TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
         _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ), pad_enumerate_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
-        AS_GLOBAL, 0,
-        "", "" );
-
-TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutlines",
-       AS_GLOBAL, 0,
-       "", "" );
-
 
 MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
     PCB_TOOL( "pcbnew.ModuleEditor" )
@@ -276,61 +268,6 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
-int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
-{
-    KIGFX::PCB_VIEW* pcbview = view();
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)frame()->GetDisplayOptions();
-
-    // Switch the render mode:
-    bool enable = !displ_opts->m_DisplayModTextFill == SKETCH;
-    displ_opts->m_DisplayModTextFill = enable ? SKETCH : FILLED;
-
-    pcbview->UpdateDisplayOptions( displ_opts );
-
-    for( auto module : board()->Modules() )
-    {
-        for( auto item : module->GraphicalItems() )
-        {
-            if( item->Type() == PCB_MODULE_TEXT_T )
-                pcbview->Update( item, KIGFX::GEOMETRY );
-        }
-
-        pcbview->Update( &module->Reference(), KIGFX::GEOMETRY );
-        pcbview->Update( &module->Value(), KIGFX::GEOMETRY );
-    }
-
-    frame()->GetGalCanvas()->Refresh();
-
-    return 0;
-}
-
-
-int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
-{
-    KIGFX::PCB_VIEW* pcbview = view();
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)frame()->GetDisplayOptions();
-    // switch the render mode:
-    bool enable_outline_mode = !displ_opts->m_DisplayModEdgeFill == SKETCH;
-    displ_opts->m_DisplayModEdgeFill = enable_outline_mode ? SKETCH : FILLED;
-
-    pcbview->UpdateDisplayOptions( displ_opts );
-
-    for( auto module : board()->Modules() )
-    {
-        for( auto item : module->GraphicalItems() )
-        {
-            if( item->Type() == PCB_MODULE_EDGE_T )
-                pcbview->Update( item, KIGFX::GEOMETRY );
-        }
-    }
-
-    frame()->GetGalCanvas()->Refresh();
-
-    return 0;
-}
 
 int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 {
@@ -530,6 +467,4 @@ void MODULE_EDITOR_TOOLS::setTransitions()
     Go( &MODULE_EDITOR_TOOLS::CreatePadFromShapes, PCB_ACTIONS::createPadFromShapes.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ExplodePadToShapes,  PCB_ACTIONS::explodePadToShapes.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       PCB_ACTIONS::enumeratePads.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ModuleTextOutlines,  PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ModuleEdgeOutlines,  PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
 }

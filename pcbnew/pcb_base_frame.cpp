@@ -81,9 +81,15 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
 
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnTogglePolarCoords )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnTogglePadDrawMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnToggleGraphicDrawMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnToggleEdgeDrawMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnToggleTextDrawMode )
 
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnUpdateGraphicDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnUpdateEdgeDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnUpdateTextDrawMode )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
     // Switching canvases
@@ -475,6 +481,30 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 }
 
 
+void PCB_BASE_FRAME::OnToggleGraphicDrawMode( wxCommandEvent& aEvent )
+{
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    displ_opts->m_DisplayDrawItemsFill = !displ_opts->m_DisplayDrawItemsFill;
+    m_canvas->Refresh();
+}
+
+
+void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
+{
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    displ_opts->m_DisplayModEdgeFill = !displ_opts->m_DisplayModEdgeFill;
+    m_canvas->Refresh();
+}
+
+
+void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
+{
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    displ_opts->m_DisplayModTextFill = !displ_opts->m_DisplayModTextFill;
+    m_canvas->Refresh();
+}
+
+
 void PCB_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
@@ -515,6 +545,27 @@ void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
                                         displ_opts->m_DisplayPadFill ?
                                         _( "Show pads in outline mode" ) :
                                         _( "Show pads in fill mode" ) );
+}
+
+
+void PCB_BASE_FRAME::OnUpdateGraphicDrawMode( wxUpdateUIEvent& aEvent )
+{
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayDrawItemsFill);
+}
+
+
+void PCB_BASE_FRAME::OnUpdateEdgeDrawMode( wxUpdateUIEvent& aEvent )
+{
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayModEdgeFill );
+}
+
+
+void PCB_BASE_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
+{
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    aEvent.Check( !displ_opts->m_DisplayModTextFill );
 }
 
 

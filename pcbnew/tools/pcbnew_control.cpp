@@ -80,6 +80,18 @@ TOOL_ACTION PCB_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION PCB_ACTIONS::graphicDisplayMode( "pcbnew.Control.graphicDisplayMode",
+      AS_GLOBAL, 0,
+      "", "" );
+
+TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.Control.textOutlines",
+       AS_GLOBAL, 0,
+       "", "" );
+
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0,
         "", "" );
@@ -310,6 +322,71 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_VIA_T )
             view()->Update( track, KIGFX::GEOMETRY );
+    }
+
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::GraphicDisplayMode( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    Flip( opts->m_DisplayDrawItemsFill );
+    view()->UpdateDisplayOptions( opts );
+
+    for( auto item : board()->Drawings() )
+    {
+        view()->Update( item, KIGFX::GEOMETRY );
+    }
+
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    Flip( opts->m_DisplayModEdgeFill );
+    view()->UpdateDisplayOptions( opts );
+
+    for( auto module : board()->Modules() )
+    {
+        for( auto item : module->GraphicalItems() )
+        {
+            if( item->Type() == PCB_MODULE_EDGE_T )
+                view()->Update( item, KIGFX::GEOMETRY );
+        }
+    }
+
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::ModuleTextOutlines( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    Flip( opts->m_DisplayModTextFill );
+    view()->UpdateDisplayOptions( opts );
+
+    for( auto module : board()->Modules() )
+    {
+        for( auto item : module->GraphicalItems() )
+        {
+            if( item->Type() == PCB_MODULE_TEXT_T )
+                view()->Update( item, KIGFX::GEOMETRY );
+        }
+
+        view()->Update( &module->Reference(), KIGFX::GEOMETRY );
+        view()->Update( &module->Value(), KIGFX::GEOMETRY );
     }
 
     canvas()->Refresh();
@@ -1013,6 +1090,9 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::TrackDisplayMode,   PCB_ACTIONS::trackDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::PadDisplayMode,     PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ViaDisplayMode,     PCB_ACTIONS::viaDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GraphicDisplayMode, PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ModuleEdgeOutlines, PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ModuleTextOutlines, PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,    PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,    PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,    PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
