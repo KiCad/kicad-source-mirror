@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-17 18:24+0100\n"
-"PO-Revision-Date: 2018-02-17 18:29+0100\n"
+"POT-Creation-Date: 2018-02-18 03:19+0100\n"
+"PO-Revision-Date: 2018-02-18 03:19+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -410,7 +410,7 @@ msgstr "pollici"
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:157
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#: pcbnew/dialogs/dialog_export_step_base.cpp:107
+#: pcbnew/dialogs/dialog_export_step_base.cpp:79
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:198
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:209
@@ -2984,7 +2984,7 @@ msgstr "Altezza foglio personalizzata"
 #: common/dialogs/dialog_page_settings_base.cpp:85
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:36
 #: pcbnew/dialogs/dialog_edit_footprint_text_base.cpp:53
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:119
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_global_footprints_fields_edition_base.cpp:64
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:27
@@ -4591,16 +4591,16 @@ msgstr "Unità %s"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:107
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:118
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:78
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:71
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:82
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:93
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:104
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:126
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:169
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:180
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:204
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:215
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:226
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:51
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:62
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:73
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:84
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:103
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:146
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:157
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:168
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:179
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:200
 msgid "Unit"
 msgstr "Unità"
 
@@ -4875,7 +4875,8 @@ msgstr "%s Linea su strato sconosciuto da (%s,%s) a (%s,%s) "
 #: eeschema/lib_manager.cpp:104
 #, c-format
 msgid "Cannot find library \"%s\" in the Symbol Library Table"
-msgstr "Impossibile trovare la libreria \"%s\" nella tabella librerie di simboli"
+msgstr ""
+"Impossibile trovare la libreria \"%s\" nella tabella librerie di simboli"
 
 #: eeschema/lib_manager.cpp:143
 #, c-format
@@ -10858,8 +10859,8 @@ msgstr "Unità intercambiabili:"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:175
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:183
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:191
-#: pcbnew/dialogs/dialog_export_step_base.cpp:120
-#: pcbnew/dialogs/dialog_export_step_base.cpp:138
+#: pcbnew/dialogs/dialog_export_step_base.cpp:92
+#: pcbnew/dialogs/dialog_export_step_base.cpp:110
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:64
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:85
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:134
@@ -11074,7 +11075,7 @@ msgstr "Dimensione font dei campi selezionati"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:260
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:86
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:162
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:139
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
 msgid "Position X:"
 msgstr "Posizione X:"
@@ -11086,7 +11087,7 @@ msgstr "Coordinata X del campo selezionato"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:273
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:97
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:173
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:150
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:82
 msgid "Position Y:"
 msgstr "Posizione Y:"
@@ -11929,7 +11930,7 @@ msgstr ""
 "Seleziona un nome collegamento ed evidenzia tutti i suoi elementi grafici"
 
 #: gerbview/toolbars_gerber.cpp:135 gerbview/gerber_draw_item.cpp:727
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:30
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:24
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:52
 msgid "Net:"
 msgstr "Collegamento:"
@@ -14798,7 +14799,7 @@ msgstr "mil"
 #: pcb_calculator/UnitSelector.cpp:42 pcb_calculator/UnitSelector.cpp:74
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:111
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
-#: pcbnew/dialogs/dialog_export_step_base.cpp:107
+#: pcbnew/dialogs/dialog_export_step_base.cpp:79
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:205
 msgid "inch"
@@ -17256,7 +17257,7 @@ msgstr "Codice collegamento"
 
 #: pcbnew/netinfo_item.cpp:140 pcbnew/class_board.cpp:1125
 #: pcbnew/pcb_draw_panel_gal.cpp:337
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:155
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
@@ -20381,7 +20382,7 @@ msgstr "Origine DXF su griglia C.S., coordinata Y"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:107
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:59
-#: pcbnew/dialogs/dialog_export_step_base.cpp:103
+#: pcbnew/dialogs/dialog_export_step_base.cpp:75
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
 msgid "Units:"
@@ -22039,22 +22040,22 @@ msgstr ""
 "di distanza."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:30
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:64
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:44
 msgid "Start point X:"
 msgstr "Punto iniziale X:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:41
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:75
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:55
 msgid "Start point Y:"
 msgstr "Punto iniziale Y:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:52
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:86
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:66
 msgid "End point X:"
 msgstr "Punto finale X:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:63
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:97
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:77
 msgid "End point Y:"
 msgstr "Punto finale Y:"
 
@@ -22072,7 +22073,7 @@ msgstr "Spessore predefinito"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_edit_footprint_text_base.cpp:88
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:139
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 msgid "Layer:"
@@ -22783,68 +22784,42 @@ msgstr "Seleziona un nome file per l'esportazione STEP"
 msgid "Coordinate origin options:"
 msgstr "Opzioni coordinate di origine:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:51
-msgid "Drill and plot axis origin"
-msgstr "Origine assi forature e tracciatura"
+#: pcbnew/dialogs/dialog_export_step_base.cpp:43
+msgid "Drill and plot origin"
+msgstr "Origine forature e tracciatura"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:52
-msgid ""
-"Use the auxiliary axis origin (used in plot and drill geneation) as STEP "
-"coordinates origin."
-msgstr ""
-"Usa l'origine assi ausiliaria (usata nel tracciamento e nella generazione "
-"forature) come origine coordinate STEP."
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:59
+#: pcbnew/dialogs/dialog_export_step_base.cpp:46
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
 msgid "Grid origin"
 msgstr "Origine griglia"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:60
-msgid "Use the grid origin as STEP coordinates origin."
-msgstr "Usa la griglia come origine coordinate STEP."
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:67
+#: pcbnew/dialogs/dialog_export_step_base.cpp:49
 msgid "User defined origin"
 msgstr "Origine personalizzata"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:68
-msgid ""
-"Use this option if you want to define a specific coordinate origin value."
-msgstr ""
-"Usare questa opzione se si vuole definire un valore di origine coordinate "
-"specifico."
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:75
+#: pcbnew/dialogs/dialog_export_step_base.cpp:52
 msgid "Board center origin"
 msgstr "Origine centro scheda"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:76
-msgid ""
-"Use this option if you want to define coordinate origin at board center."
-msgstr ""
-"Usare questa opzione se si vuole definire l'origine coordinate al centro "
-"della scheda."
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:89
+#: pcbnew/dialogs/dialog_export_step_base.cpp:61
 msgid "User defined origin:"
 msgstr "Origine personalizzata:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:116
+#: pcbnew/dialogs/dialog_export_step_base.cpp:88
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
 msgid "X position:"
 msgstr "Posizione X:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:134
+#: pcbnew/dialogs/dialog_export_step_base.cpp:106
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:81
 msgid "Y position:"
 msgstr "Posizione Y:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:158
+#: pcbnew/dialogs/dialog_export_step_base.cpp:130
 msgid "Other options:"
 msgstr "Altre opzioni:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:172
+#: pcbnew/dialogs/dialog_export_step_base.cpp:144
 msgid "Ignore virtual components"
 msgstr "Ignora componenti virtuali"
 
@@ -23812,7 +23787,7 @@ msgstr "Impossibile creare il file di rapporto \"%s\""
 msgid "Save DRC Report File"
 msgstr "Salva file rapporto DRC"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:173
+#: pcbnew/dialogs/dialog_export_step.cpp:174
 #, c-format
 msgid ""
 "File: %s\n"
@@ -23821,15 +23796,15 @@ msgstr ""
 "Il file: %s\n"
 "Esiste già. Sovrascrivere questo file?"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:177
+#: pcbnew/dialogs/dialog_export_step.cpp:178
 msgid "STEP Export"
 msgstr "Esportazione STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:237
+#: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Esportazione STEP fallita; salvare la scheda e riprovare"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:338
+#: pcbnew/dialogs/dialog_export_step.cpp:315
 msgid ""
 "Unable to create STEP file.  Check that the board has a valid outline and "
 "models."
@@ -24179,7 +24154,7 @@ msgid "Library nickname"
 msgstr "Denominazione libreria"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:108
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:48
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:31
 msgid "Locked"
 msgstr "Bloccato"
 
@@ -25837,56 +25812,56 @@ msgstr "Sposta Y vettore:"
 msgid "Plot: \"%s\" OK."
 msgstr "Tracciatura: \"%s\" OK."
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:34
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:28
 msgid "Combo!"
 msgstr "Combo!"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:57
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:37
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks"
 msgstr "Piste"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:133
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:110
 msgid "Use net class width"
 msgstr "Usa larghezza net class"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:195
-msgid "Design rule vias:"
-msgstr "Regole di progettazione via:"
-
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:161
 msgid "Diameter:"
 msgstr "Diametro:"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:219
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:172
 msgid "Drill:"
 msgstr "Foro:"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:191
+msgid "Design rule vias:"
+msgstr "Regole di progettazione via:"
+
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:204
 msgid "Via type:"
 msgstr "Tipo via:"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:234
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208
 msgid "Through"
 msgstr "Passante"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:234
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208
 msgid "Micro"
 msgstr "Micro"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:234
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208
 msgid "Blind/buried"
 msgstr "Cieco/sepolto"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:245
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:219
 msgid "Start layer:"
 msgstr "Strato iniziale:"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:229
 msgid "End layer:"
 msgstr "Strato finale:"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:268
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:242
 msgid "Use net class size"
 msgstr "Usa dimensione net class"
 
@@ -27741,7 +27716,7 @@ msgstr "Applica proprietà piazzola"
 msgid "Pads Mask Clearance"
 msgstr "Distanza piazzole dalle maschere"
 
-#: pcbnew/dialogs/dialog_export_step_base.h:71
+#: pcbnew/dialogs/dialog_export_step_base.h:74
 msgid "Export STEP"
 msgstr "Esporta STEP"
 
@@ -27851,7 +27826,7 @@ msgstr "Testi e grafica"
 msgid "Global Edition of Tracks and Vias"
 msgstr "Impostazioni globali di piste e via"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.h:113
+#: pcbnew/dialogs/dialog_track_via_properties_base.h:108
 msgid "Track & Via Properties"
 msgstr "Proprietà piste e via"
 
@@ -27902,3 +27877,25 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
+
+#~ msgid ""
+#~ "Use the auxiliary axis origin (used in plot and drill geneation) as STEP "
+#~ "coordinates origin."
+#~ msgstr ""
+#~ "Usa l'origine assi ausiliaria (usata nel tracciamento e nella generazione "
+#~ "forature) come origine coordinate STEP."
+
+#~ msgid "Use the grid origin as STEP coordinates origin."
+#~ msgstr "Usa la griglia come origine coordinate STEP."
+
+#~ msgid ""
+#~ "Use this option if you want to define a specific coordinate origin value."
+#~ msgstr ""
+#~ "Usare questa opzione se si vuole definire un valore di origine coordinate "
+#~ "specifico."
+
+#~ msgid ""
+#~ "Use this option if you want to define coordinate origin at board center."
+#~ msgstr ""
+#~ "Usare questa opzione se si vuole definire l'origine coordinate al centro "
+#~ "della scheda."
