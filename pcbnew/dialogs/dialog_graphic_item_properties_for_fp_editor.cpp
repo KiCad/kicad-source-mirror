@@ -23,7 +23,7 @@
  */
 
 /**
- * @file dialog_graphic_item_properties_for_Modedit.cpp
+ * @file dialog_graphic_item_properties_for_fp_editor.cpp
  */
 
 /* Edit parameters values of graphic items in a footprint body:

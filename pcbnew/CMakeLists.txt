@@ -111,7 +111,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
     dialogs/dialog_graphic_item_properties_base.cpp
-    dialogs/dialog_graphic_item_properties_for_Modedit.cpp
+    dialogs/dialog_graphic_item_properties_for_fp_editor.cpp
     dialogs/dialog_graphic_items_options.cpp
     dialogs/dialog_graphic_items_options_base.cpp
     dialogs/dialog_keepout_area_properties.cpp
