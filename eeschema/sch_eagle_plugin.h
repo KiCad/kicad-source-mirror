@@ -137,6 +137,7 @@ private:
     void loadSheet( wxXmlNode* aSheetNode, int sheetcount );
     void loadInstance( wxXmlNode* aInstanceNode );
     EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* aEagleLib );
+    void countNets( wxXmlNode* aSchematicNode );
 
     /// Moves any labels on the wire to the new end point of the wire.
     void moveLabels( SCH_ITEM* aWire, const wxPoint& aNewEndPoint );
@@ -184,6 +185,7 @@ private:
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
     std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties.
 
+    std::map<wxString, int> m_netCounts;
     std::map<int, SCH_LAYER_ID> m_layerMap;
 };
 
