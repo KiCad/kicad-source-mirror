@@ -638,7 +638,6 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         break;
 
     case S_ARC:
-
         // Test for full containment of this arc in the rect
         if( aContained )
         {
@@ -657,6 +656,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
                    arcRect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
         }
         break;
+
     case S_SEGMENT:
         if( aContained )
         {
@@ -671,9 +671,41 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
         break;
 
-    case S_CURVE:
-    case S_POLYGON:     // not yet handled
+    case S_POLYGON:
+        if( aContained )
+        {
+            return arect.Contains( bb );
+        }
+        else
+        {
+            // Fast test: if aRect is outside the polygon bounding box,
+            // rectangles cannot intersect
+            if( !arect.Intersects( bb ) )
+                return false;
+
+            // Account for the width of the line
+            arect.Inflate( GetWidth() / 2 );
+            int count = m_Poly.TotalVertices();
+
+            for( int ii = 0; ii < count; ii++ )
+            {
+                auto vertex = m_Poly.CVertex( ii );
+                auto vertexNext = m_Poly.CVertex( ( ii + 1 ) % count );
+
+                // Test if the point is within aRect
+                if( arect.Contains( ( wxPoint ) vertex ) )
+                    return true;
+
+                // Test if this edge intersects aRect
+                if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+                    return true;
+            }
+        }
         break;
+
+    case S_CURVE:     // not yet handled
+        break;
+
 
     default:
         wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
