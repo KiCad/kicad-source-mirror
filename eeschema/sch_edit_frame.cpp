@@ -519,6 +519,8 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
                                                  * path */
     }
 
+    m_CurrentSheet->SetPageNumber( SheetNumber );
+
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
     {
         screen->m_NumberOfScreens = sheet_count;
