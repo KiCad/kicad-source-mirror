@@ -22,11 +22,12 @@ class TEXT_CTRL_EVAL;
 #include <wx/settings.h>
 #include <wx/filepicker.h>
 #include <wx/statline.h>
-#include <wx/checkbox.h>
+#include <wx/radiobut.h>
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -44,10 +45,10 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxFilePickerCtrl* m_filePickerSTEP;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText6;
-		wxCheckBox* m_cbPlotOrigin;
-		wxCheckBox* m_cbGridOrigin;
-		wxCheckBox* m_cbUserOrigin;
-		wxCheckBox* m_cbBoardCenter;
+		wxRadioButton* m_rbDrillAndPlotOrigin;
+		wxRadioButton* m_rbGridOrigin;
+		wxRadioButton* m_rbUserDefinedOrigin;
+		wxRadioButton* m_rbBoardCenterOrigin;
 		wxStaticText* m_staticText2;
 		wxStaticText* m_staticText5;
 		wxChoice* m_STEP_OrgUnitChoice;
@@ -63,7 +64,9 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onSelectOrigin( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:

@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,11 @@ private:
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
 
+protected:
+    void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
+    void onUpdateXPos( wxUpdateUIEvent& aEvent ) override;
+    void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
+
 public:
     DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent );
 
@@ -110,11 +115,11 @@ public:
     }
 
     bool TransferDataFromWindow() override;
-	void onSelectOrigin( wxCommandEvent& event ) override;
 };
 
+
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
-        DIALOG_EXPORT_STEP_BASE( parent )
+    DIALOG_EXPORT_STEP_BASE( parent )
 {
     m_parent = parent;
     m_config = Kiface().KifaceSettings();
@@ -129,10 +134,10 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
     switch( m_STEP_org_opt )
     {
         default: break;
-        case STEP_ORG_PLOT_AXIS: m_cbPlotOrigin->SetValue( true ); break;
-        case STEP_ORG_GRID_AXIS: m_cbGridOrigin->SetValue( true ); break;
-        case STEP_ORG_USER: m_cbUserOrigin->SetValue( true ); break;
-        case STEP_ORG_BOARD_CENTER: m_cbBoardCenter->SetValue( true ); break;
+        case STEP_ORG_PLOT_AXIS: m_rbDrillAndPlotOrigin->SetValue( true ); break;
+        case STEP_ORG_GRID_AXIS: m_rbGridOrigin->SetValue( true ); break;
+        case STEP_ORG_USER: m_rbUserDefinedOrigin->SetValue( true ); break;
+        case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true ); break;
     }
 
     m_config->Read( OPTKEY_STEP_UORG_UNITS, &m_OrgUnits, 0 );
@@ -148,10 +153,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
     tmpStr = "";
     tmpStr << m_YOrg;
     m_STEP_Yorg->SetValue( tmpStr );
-
-    m_STEP_OrgUnitChoice->Enable( m_cbUserOrigin->IsChecked() );
-    m_STEP_Xorg->Enable( m_cbUserOrigin->IsChecked() );
-    m_STEP_Yorg->Enable( m_cbUserOrigin->IsChecked() );
 
     m_sdbSizerOK->SetDefault();
 
@@ -182,41 +183,17 @@ bool DIALOG_EXPORT_STEP::TransferDataFromWindow()
 }
 
 
-void DIALOG_EXPORT_STEP::onSelectOrigin( wxCommandEvent& event )
-{
-    // If a new checkbox was checked: ensure other options are disabled
-    wxCheckBox* cbList[]
-    {
-		m_cbPlotOrigin, m_cbGridOrigin, m_cbUserOrigin, m_cbBoardCenter, NULL
-    };
-
-    if( event.IsChecked() )
-    {
-        for( int ii = 0; cbList[ii]; ii++ )
-        {
-            if( cbList[ii] != event.GetEventObject() )
-                cbList[ii]->SetValue( false );
-        }
-    }
-
-    // Enable/disable the user origin widgets:
-    m_STEP_OrgUnitChoice->Enable( m_cbUserOrigin->IsChecked() );
-    m_STEP_Xorg->Enable( m_cbUserOrigin->IsChecked() );
-    m_STEP_Yorg->Enable( m_cbUserOrigin->IsChecked() );
-}
-
-
 DIALOG_EXPORT_STEP::STEP_ORG_OPT DIALOG_EXPORT_STEP::GetOriginOption()
 {
     m_STEP_org_opt = STEP_ORG_0;
 
-    if( m_cbPlotOrigin->IsChecked() )
+    if( m_rbDrillAndPlotOrigin->GetValue() )
         m_STEP_org_opt = STEP_ORG_PLOT_AXIS;
-    else if( m_cbGridOrigin->IsChecked() )
+    else if( m_rbGridOrigin->GetValue() )
         m_STEP_org_opt = STEP_ORG_GRID_AXIS;
-    else if( m_cbUserOrigin->IsChecked() )
+    else if( m_rbUserDefinedOrigin->GetValue() )
         m_STEP_org_opt = STEP_ORG_USER;
-    else if( m_cbBoardCenter->IsChecked() )
+    else if( m_rbBoardCenterOrigin->GetValue() )
         m_STEP_org_opt = STEP_ORG_BOARD_CENTER;
 
     return m_STEP_org_opt;
@@ -338,4 +315,22 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
         DisplayErrorMessage( this, _( "Unable to create STEP file.  Check that the board has a "
                                       "valid outline and models." ), cmdK2S );
     }
+}
+
+
+void DIALOG_EXPORT_STEP::onUpdateUnits( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
+}
+
+
+void DIALOG_EXPORT_STEP::onUpdateXPos( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
+}
+
+
+void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
 }

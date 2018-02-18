@@ -40,45 +40,17 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizer7->Add( m_staticText6, 0, wxALL, 5 );
 	
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_rbDrillAndPlotOrigin = new wxRadioButton( this, wxID_ANY, _("Drill and plot origin"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer7->Add( m_rbDrillAndPlotOrigin, 0, wxALL, 5 );
 	
+	m_rbGridOrigin = new wxRadioButton( this, wxID_ANY, _("Grid origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_rbGridOrigin, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_rbUserDefinedOrigin = new wxRadioButton( this, wxID_ANY, _("User defined origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_rbUserDefinedOrigin, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_cbPlotOrigin = new wxCheckBox( this, wxID_ANY, _("Drill and plot axis origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbPlotOrigin->SetToolTip( _("Use the auxiliary axis origin (used in plot and drill geneation) as STEP coordinates origin.") );
-	
-	fgSizer2->Add( m_cbPlotOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	
-	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_cbGridOrigin = new wxCheckBox( this, wxID_ANY, _("Grid origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbGridOrigin->SetToolTip( _("Use the grid origin as STEP coordinates origin.") );
-	
-	fgSizer2->Add( m_cbGridOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	
-	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_cbUserOrigin = new wxCheckBox( this, wxID_ANY, _("User defined origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbUserOrigin->SetToolTip( _("Use this option if you want to define a specific coordinate origin value.") );
-	
-	fgSizer2->Add( m_cbUserOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	
-	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_cbBoardCenter = new wxCheckBox( this, wxID_ANY, _("Board center origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbBoardCenter->SetToolTip( _("Use this option if you want to define coordinate origin at board center.") );
-	
-	fgSizer2->Add( m_cbBoardCenter, 0, wxALL, 5 );
-	
-	
-	bSizer7->Add( fgSizer2, 1, wxEXPAND, 5 );
+	m_rbBoardCenterOrigin = new wxRadioButton( this, wxID_ANY, _("Board center origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_rbBoardCenterOrigin, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizer2->Add( bSizer7, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -201,18 +173,16 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_cbPlotOrigin->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
-	m_cbGridOrigin->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
-	m_cbUserOrigin->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
-	m_cbBoardCenter->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_STEP_OrgUnitChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
+	m_STEP_Xorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
+	m_STEP_Yorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
 }
 
 DIALOG_EXPORT_STEP_BASE::~DIALOG_EXPORT_STEP_BASE()
 {
 	// Disconnect Events
-	m_cbPlotOrigin->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
-	m_cbGridOrigin->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
-	m_cbUserOrigin->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
-	m_cbBoardCenter->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_STEP_OrgUnitChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
+	m_STEP_Xorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
+	m_STEP_Yorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
 	
 }
