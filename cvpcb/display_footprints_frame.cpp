@@ -196,7 +196,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 #else
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiBitmap( cursor_shape_xpm ),
-                               _( "Change cursor shape (not supported in Legacy graphics)" ),
+                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
                                wxITEM_CHECK  );
 #endif
 

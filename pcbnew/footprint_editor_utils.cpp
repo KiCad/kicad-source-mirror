@@ -977,7 +977,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         break;
 
     case ID_MODEDIT_MEASUREMENT_TOOL:
-        DisplayError( this, wxT( "Unsupported tool in legacy canvas" ) );
+        DisplayError( this, wxT( "Measurement Tool not available in Legacy Toolset" ) );
         SetNoToolSelected();
         break;
 

@@ -230,6 +230,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
+    m_iconScale = -1;
 
     // Show a title (frame title + footprint name):
     updateTitle();
@@ -1028,20 +1029,19 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
 int FOOTPRINT_EDIT_FRAME::GetIconScale()
 {
-    int scale = 0;
-    Kiface().KifaceSettings()->Read( IconScaleEntry, &scale, 0 );
-    return scale;
+    // All environmental settings will move to app for 6.0, so just inherit from pcbnew
+    // for now.
+    if( m_iconScale == -1 )
+    {
+        bool isBoardEditorRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
+        PCB_BASE_FRAME* pcbFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
+        m_iconScale = pcbFrame->GetIconScale();
+
+        if( !isBoardEditorRunning )
+            pcbFrame->Destroy();
+    }
+
+    return m_iconScale;
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SetIconScale( int aScale )
-{
-    Kiface().KifaceSettings()->Write( IconScaleEntry, aScale );
-    ReCreateMenuBar();
-    ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
-    Layout();
-    SendSizeEvent();
-}

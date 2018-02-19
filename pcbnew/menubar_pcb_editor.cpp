@@ -178,7 +178,8 @@ void prepareSetupMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
                  _( "&Design Rules..." ),
-                 _( "Open design rules editor" ), KiBitmap( config_xpm ) );
+                 _( "Open design rules editor" ),
+                 KiBitmap( config_xpm ) );
 
     aParentMenu->AppendSeparator();
 
@@ -218,33 +219,29 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  KiBitmap( preference_xpm ) );
 #endif
 
-    aParentMenu->AppendSeparator();
-
+    // Display Settings
     AddMenuItem( aParentMenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
                  _( "&Display Options..." ),
                  _( "Graphics acceleration, grid, cursor, annotation and clearance outline settings." ),
                  KiBitmap( display_options_xpm ) );
 
-    text = AddHotkeyName( _( "&Legacy Toolset" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Legacy Tool&set" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_CANVAS_LEGACY );
-    aParentMenu->Append(
-        new wxMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Use legacy graphics mode (not all features will be available)" ),
-                        wxITEM_RADIO ) );
+    AddMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY, text,
+                 _( "Use Legacy Toolset (not all features will be available)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
-    aParentMenu->Append(
-        new wxMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
-                        wxITEM_RADIO ) );
+    AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
+                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (&Fallback)" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
-    aParentMenu->Append(
-        new wxMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Use modern fallback (Cairo) graphics mode" ),
-                        wxITEM_RADIO ) );
+    AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
+                 _( "Use Modern Toolset with software graphics (fall-back)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     aParentMenu->AppendSeparator();
 
@@ -686,7 +683,7 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
 #else
     AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
                  _( "Full Window Crosshair" ),
-                 _( "Change cursor shape (not supported in Legacy graphics)" ),
+                 _( "Change cursor shape (not supported in Legacy Toolset)" ),
                  KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
 #endif
 
@@ -726,8 +723,8 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
 
     text = AddHotkeyName( _( "Sketch &Tracks" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_SWITCH_TRACK_DISPLAY_MODE );
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                 text, _( "Show tracks in outline mode" ),
+    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, text,
+                 _( "Show tracks in outline mode" ),
                  KiBitmap( showtrack_xpm ), wxITEM_CHECK );
 
     AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH,

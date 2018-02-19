@@ -242,7 +242,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 #else
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape (not supported in Legacy graphics)" ),
+                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
                                wxITEM_CHECK  );
 #endif
 

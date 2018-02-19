@@ -21,8 +21,6 @@
 
 class GAL_OPTIONS_PANEL;
 class FOOTPRINT_EDIT_FRAME;
-class STEPPED_SLIDER;
-class wxCheckBox;
 
 class DIALOG_MODEDIT_DISPLAY_OPTIONS : public DIALOG_SHIM
 {
@@ -30,10 +28,6 @@ public:
     DIALOG_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRAME& aParent );
 
     static bool Invoke( FOOTPRINT_EDIT_FRAME& aCaller );
-
-protected:
-    void OnScaleSlider( wxScrollEvent& aEvent );
-    void OnScaleAuto( wxCommandEvent& aEvent );
 
 private:
 
@@ -44,8 +38,4 @@ private:
 
     // subpanel
     GAL_OPTIONS_PANEL* m_galOptsPanel;
-
-    int m_last_scale;
-    wxCheckBox* m_scaleAuto;
-    STEPPED_SLIDER* m_scaleSlider;
 };

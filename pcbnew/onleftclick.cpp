@@ -444,8 +444,12 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DRAW_VIA_BUTT:
+        DisplayError( this, _( "Via Tool not available in Legacy Toolset" ) );
+        SetNoToolSelected();
+        break;
+
     case ID_PCB_MEASUREMENT_TOOL:
-        DisplayError( this, _( "This tool is not available in the legacy canvas" ) );
+        DisplayError( this, _( "Measurement Tool not available in Legacy Toolset" ) );
         SetNoToolSelected();
         break;
 

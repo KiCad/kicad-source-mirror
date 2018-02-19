@@ -128,19 +128,19 @@ static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ),
 static EDA_HOTKEY HkSetGridOrigin( _HKI( "Set Grid Origin" ), HK_SET_GRID_ORIGIN, 'S' );
 static EDA_HOTKEY HkResetGridOrigin( _HKI( "Reset Grid Origin" ), HK_RESET_GRID_ORIGIN, 'Z' );
 
-static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Canvas" ),
+static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Toolset (not all features will be available" ),
                                    HK_CANVAS_LEGACY,
 #ifdef __WXMAC__
                                    GR_KB_ALT +
 #endif
                                    WXK_F9 );
-static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Canvas (hardware accelerated)" ),
+static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
                                   HK_CANVAS_OPENGL,
 #ifdef __WXMAC__
                                   GR_KB_ALT +
 #endif
                                   WXK_F11 );
-static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Modern Canvas (software renderer)" ),
+static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Modern Toolset with software graphics (fall-back)" ),
                                  HK_CANVAS_CAIRO,
 #ifdef __WXMAC__
                                  GR_KB_ALT +
@@ -319,7 +319,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
     &HkMoveItemExact,          &HkDuplicateItem,             &HkDuplicateItemAndIncrement,
-    &HkCreateArray,            &HkDelete,
+    &HkCreateArray,            &HkDelete,                    &HkSwitchHighContrastMode,
     &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     NULL
  };

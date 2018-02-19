@@ -62,90 +62,100 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* fileMenu = new wxMenu;
 
     // Active library selection
-    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB, _("Set Acti&ve Library..."),
-                           _( "Select active library" ),
-                           KiBitmap( open_library_xpm ) );
+    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB,
+                 _("Set Acti&ve Library..."),
+                 _( "Select active library" ),
+                 KiBitmap( open_library_xpm ) );
+
     fileMenu->AppendSeparator();
 
     // New module
+    text = AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW );
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
-                 _( "&New Footprint..." ), _( "Create new footprint" ),
+                 text, _( "Create new footprint" ),
                  KiBitmap( new_footprint_xpm ) );
 
-    // Open submenu
-    wxMenu* openSubmenu = new wxMenu;
-
-    // from File
-    AddMenuItem( openSubmenu, ID_MODEDIT_IMPORT_PART,
-                 _( "&Import Footprint From File..." ),
-                 _( "Import footprint from an existing file" ),
-                 KiBitmap( import_module_xpm ) );
-
-    // from Library
-    AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE,
-                 _( "Load Footprint From Active Li&brary..." ),
-                 _( "Open footprint from active library" ),
+    text = AddHotkeyName( _( "&Open Footprint..." ), m_hotkeysDescrList, HK_OPEN );
+    AddMenuItem( fileMenu, ID_MODEDIT_LOAD_MODULE, text,
+                 _( "Open a footprint from a library" ),
                  KiBitmap( module_xpm ) );
 
-    // from current Board
-    AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-                 _( "Load Footprint From &Current Board..." ),
-                 _( "Load footprint from current board" ),
-                 KiBitmap( load_module_board_xpm ) );
-
-    /* Append openSubmenu to fileMenu */
-    AddMenuItem( fileMenu, openSubmenu, -1,
-                 _( "&Load Footprint" ),
-                 _( "Load footprint" ),
-                 KiBitmap( load_module_lib_xpm ) );
     fileMenu->AppendSeparator();
 
-    // Save the currently loaded legacy library as an s-expression library.
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
-                 _( "Save A&ctive Library As..." ),
-                 _( "Save entire active library under a new name" ),
-                 KiBitmap( copy_library_xpm ) );
-
     // Save module
-    text = AddHotkeyName( _( "&Save Footprint in Active Library" ),
-                          m_hotkeysDescrList, HK_SAVE );
-
+    text = AddHotkeyName( _( "&Save" ), m_hotkeysDescrList, HK_SAVE );
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
-                 _( "Save footprint in active library" ),
+                 _( "Save footprint" ),
                  KiBitmap( save_library_xpm ) );
 
-    // Save module in new lib
-    AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Footprint in New Library..." ),
-                 _( "Create new library and save current footprint in it" ),
-                 KiBitmap( new_library_xpm ) );
+    fileMenu->AppendSeparator();
 
-    // Export module
-    AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Export Footprint..." ),
-                 _( "Save currently loaded footprint into file" ),
+
+    wxMenu* importSubMenu = new wxMenu();
+
+    // from current Board
+    AddMenuItem( importSubMenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
+                 _( "Footprint from &Current Board..." ),
+                 _( "Import a footprint from the current board" ),
+                 KiBitmap( load_module_board_xpm ) );
+
+    AddMenuItem( importSubMenu, ID_MODEDIT_IMPORT_PART,
+                 _( "Footprint from &KiCad File..." ),
+                 _( "Import a footprint from an existing file" ),
+                 KiBitmap( import_module_xpm ) );
+
+    AddMenuItem( importSubMenu, ID_GEN_IMPORT_DXF_FILE,
+                 _( "Footprint from &DXF File..." ),
+                 _( "Import 2D Drawing DXF file to Footprint Editor on Drawings layer" ),
+                 KiBitmap( import_xpm ) );
+
+    AddMenuItem( fileMenu, importSubMenu, -1,
+                 _( "&Import" ),
+                 _( "Import files" ),
+                 KiBitmap( import_xpm ) );
+
+
+    wxMenu* exportSubMenu = new wxMenu();
+
+    AddMenuItem( exportSubMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
+                 _( "&Active Library..." ),
+                 _( "Export active library" ),
+                 KiBitmap( library_archive_xpm ) );
+
+    AddMenuItem( exportSubMenu, ID_MODEDIT_EXPORT_PART,
+                 _( "&Footprint..." ),
+                 _( "Export current footprint to a file" ),
                  KiBitmap( export_module_xpm ) );
 
-    // Import DXF File
-    AddMenuItem( fileMenu, ID_GEN_IMPORT_DXF_FILE,
-                 _( "&Import DXF File..." ),
-                 _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
-                 KiBitmap( import_xpm ) );
+    AddMenuItem( fileMenu, exportSubMenu, -1,
+                 _( "E&xport" ),
+                 _( "Export files" ),
+                 KiBitmap( export_xpm ) );
+
+
 
     fileMenu->AppendSeparator();
 
     // Print
-    AddMenuItem( fileMenu, wxID_PRINT,
-                 _( "&Print..." ),
+    text = AddHotkeyName( _( "&Print..." ), m_hotkeysDescrList, HK_PRINT );
+    AddMenuItem( fileMenu, wxID_PRINT, text,
                  _( "Print current footprint" ),
-                 KiBitmap( plot_xpm ) );
+                 KiBitmap( print_button_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
 
+    // Properties
+    AddMenuItem( fileMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
+                 _( "P&roperties..." ),
+                 _( "Edit footprint properties" ),
+                 KiBitmap( module_options_xpm ) );
+
+    fileMenu->AppendSeparator();
+
     // Close editor
     AddMenuItem( fileMenu, wxID_EXIT,
-                 _( "Cl&ose" ),
+                 _( "&Exit" ),
                  _( "Close footprint editor" ),
                  KiBitmap( exit_xpm ) );
 
@@ -164,55 +174,43 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  text, _( "Redo last action" ),
                  KiBitmap( redo_xpm ) );
 
-    // Delete items
-    AddMenuItem( editMenu, ID_MODEDIT_DELETE_TOOL,
-                 _( "&Delete" ), _( "Delete objects with eraser" ),
-                 KiBitmap( delete_xpm ) );
-
     // Separator
     editMenu->AppendSeparator();
 
     if( IsGalCanvasActive() )
     {
-        text = AddHotkeyName( _( "&Cut" ), g_Module_Viewer_Hotkeys_Descr, HK_EDIT_CUT );
+        text = AddHotkeyName( _( "Cu&t" ), m_hotkeysDescrList, HK_EDIT_CUT );
         AddMenuItem( editMenu, ID_EDIT_CUT, text, _(
                         "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
-        text = AddHotkeyName( _( "&Copy" ), g_Module_Viewer_Hotkeys_Descr, HK_EDIT_COPY );
+        text = AddHotkeyName( _( "&Copy" ), m_hotkeysDescrList, HK_EDIT_COPY );
         AddMenuItem( editMenu, ID_EDIT_COPY, text, _(
                         "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
-        text = AddHotkeyName( _( "&Paste" ), g_Module_Viewer_Hotkeys_Descr, HK_EDIT_PASTE );
+        text = AddHotkeyName( _( "&Paste" ), m_hotkeysDescrList, HK_EDIT_PASTE );
         AddMenuItem( editMenu, ID_EDIT_PASTE, text, _(
                         "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
-        editMenu->AppendSeparator();
     }
 
-    // Properties
-    AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
-                 _( "Footprint &Properties..." ),
-                 _( "Edit footprint properties" ),
-                 KiBitmap( module_options_xpm ) );
+    // Delete items
+    AddMenuItem( editMenu, ID_MODEDIT_DELETE_TOOL,
+                 _( "&Delete" ), _( "Delete items" ),
+                 KiBitmap( delete_xpm ) );
 
-    // Dimensions submenu
-    wxMenu* dimensions_Submenu = new wxMenu;
-
-    // User grid size
-    AddMenuItem( dimensions_Submenu, ID_PCB_USER_GRID_SETUP,
-                 _( "Set Custom &User Grid..." ), _( "Set custom user grid size" ),
-                 KiBitmap( grid_xpm ) );
-
-    // Sizes and Widths
-    AddMenuItem( dimensions_Submenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
-                 _( "Text &Size and Width..." ),
-                 _( "Adjust width for text and drawing" ),
-                 KiBitmap( text_xpm ) );
-
-    // Pad settings
-    AddMenuItem( dimensions_Submenu, ID_MODEDIT_PAD_SETTINGS,
-                 _( "Default &Pad Properties..." ), _( "Edit settings for new pads" ),
-                 KiBitmap( pad_dimensions_xpm ) );
+    editMenu->AppendSeparator();
 
     //--------- View menu ----------------
     wxMenu* viewMenu = new wxMenu;
+
+    AddMenuItem( viewMenu, ID_OPEN_MODULE_VIEWER,
+                 _( "&Library Browser" ),
+                 _( "Open the Library Browser" ),
+                 KiBitmap( modview_icon_xpm ) );
+
+    text = AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER );
+    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
+                 text, _( "Show footprint in 3D viewer" ),
+                 KiBitmap( three_d_xpm ) );
+
+    viewMenu->AppendSeparator();
 
     /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
      * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
@@ -244,37 +242,92 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    // 3D view
-    text = AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER );
-    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME, text, _( "Show footprint in 3D viewer" ),
-                 KiBitmap( three_d_xpm ) );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GRID,
+                 _( "Show &Grid" ), wxEmptyString,
+                 KiBitmap( grid_xpm ), wxITEM_CHECK );
 
-    // Add canvas selection
+    AddMenuItem( viewMenu, ID_PCB_USER_GRID_SETUP,
+                 _( "Grid &Settings..." ),_( "Adjust custom user-defined grid dimensions" ),
+                 KiBitmap( grid_xpm ) );
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                 _( "Display &Polar Coordinates" ), wxEmptyString,
+                 KiBitmap( polar_coord_xpm ), wxITEM_CHECK );
+
+    // Units submenu
+    wxMenu* unitsSubMenu = new wxMenu;
+    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
+                 _( "&Imperial" ), _( "Use imperial units" ),
+                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
+
+    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
+                 _( "&Metric" ), _( "Use metric units" ),
+                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
+
+    AddMenuItem( viewMenu, unitsSubMenu,
+                 -1, _( "&Units" ),
+                 _( "Select which units are displayed" ),
+                 KiBitmap( unit_mm_xpm ) );
+
+#ifndef __APPLE__
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SELECT_CURSOR,
+                 _( "Full Window Crosshair" ),
+                 _( "Change cursor shape" ),
+                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
+#else
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SELECT_CURSOR,
+                 _( "Full Window Crosshair" ),
+                 _( "Change cursor shape (not supported in Legacy Toolset)" ),
+                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
+#endif
+
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Graphic&s" ), m_hotkeysDescrList,
-                          HK_CANVAS_LEGACY );
+    // Drawing Mode Submenu
+    wxMenu* drawingModeSubMenu = new wxMenu;
 
-    viewMenu->Append(
-        new wxMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Use legacy graphics mode (not all features will be available)" ),
-                        wxITEM_RADIO ) );
+    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                 _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
+                 KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "Modern (&Accelerated)" ), m_hotkeysDescrList,
-                          HK_CANVAS_OPENGL );
+    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+                 _( "Sketch Footprint &Edges" ), _( "Show footprint edges in outline mode" ),
+                 KiBitmap( show_mod_edge_xpm ), wxITEM_CHECK );
+    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+                 _( "Sketch Footprint Te&xt" ), _( "Show footprint text in outline mode" ),
+                 KiBitmap( text_sketch_xpm ), wxITEM_CHECK );
 
-    viewMenu->Append(
-        new wxMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
-                        wxITEM_RADIO ) );
+    AddMenuItem( viewMenu, drawingModeSubMenu,
+                 -1, _( "&Drawing Mode" ),
+                 _( "Select how items are displayed" ),
+                 KiBitmap( add_zone_xpm ) );
 
-    text = AddHotkeyName( _( "Modern (Fallba&ck)" ), m_hotkeysDescrList,
-                          HK_CANVAS_CAIRO );
 
-    viewMenu->Append(
-        new wxMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Use modern fallback (Cairo) graphics mode" ),
-                        wxITEM_RADIO ) );
+    text = AddHotkeyName( _( "&High Contrast Mode" ), m_hotkeysDescrList,
+                          HK_SWITCH_HIGHCONTRAST_MODE );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, text,
+                 _( "Use high contrast display mode" ),
+                 KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
+
+#ifdef __APPLE__
+    viewMenu->AppendSeparator();
+#endif
+
+
+    //-------- Setup menu --------------------
+    wxMenu* setupMenu = new wxMenu;
+
+    // Sizes and Widths
+    AddMenuItem( setupMenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
+                 _( "Te&xts and Drawings..." ),
+                 _( "Adjust dimensions for texts and drawings" ),
+                 KiBitmap( text_xpm ) );
+
+    // Pad settings
+    AddMenuItem( setupMenu, ID_MODEDIT_PAD_SETTINGS,
+                 _( "Default &Pad Properties..." ),
+                 _( "Edit settings for new pads" ),
+                 KiBitmap( pad_dimensions_xpm ) );
 
     //-------- Place menu --------------------
     wxMenu* placeMenu = new wxMenu;
@@ -286,26 +339,30 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->AppendSeparator();
 
-    // Circle
-    AddMenuItem( placeMenu, ID_MODEDIT_CIRCLE_TOOL,
-                 _( "&Circle" ), _( "Add graphic circle" ),
-                 KiBitmap( add_circle_xpm ) );
-
-    // Line or Polygon
-    AddMenuItem( placeMenu, ID_MODEDIT_LINE_TOOL,
-                 _( "&Line or Polygon" ),
-                 _( "Add graphic line or polygon" ),
-                 KiBitmap( add_polygon_xpm ) );
+    // Text
+    AddMenuItem( placeMenu, ID_MODEDIT_TEXT_TOOL,
+                 _( "&Text" ), _( "Add graphic text" ),
+                 KiBitmap( text_xpm ) );
 
     // Arc
     AddMenuItem( placeMenu, ID_MODEDIT_ARC_TOOL,
                  _( "&Arc" ), _( "Add graphic arc" ),
                  KiBitmap( add_arc_xpm ) );
 
-    // Text
-    AddMenuItem( placeMenu, ID_MODEDIT_TEXT_TOOL,
-                 _( "&Text" ), _( "Add graphic text" ),
-                 KiBitmap( text_xpm ) );
+    // Circle
+    AddMenuItem( placeMenu, ID_MODEDIT_CIRCLE_TOOL,
+                 _( "&Circle" ), _( "Add graphic circle" ),
+                 KiBitmap( add_circle_xpm ) );
+
+    // Line
+    AddMenuItem( placeMenu, ID_MODEDIT_LINE_TOOL,
+                 _( "&Lines" ), _( "Add graphic line" ),
+                 KiBitmap( add_graphical_segments_xpm ) );
+
+    // Polygon
+    AddMenuItem( placeMenu, ID_MODEDIT_POLYGON_TOOL,
+                 _( "&Polygon" ), _( "Add graphic polygon" ),
+                 KiBitmap( add_graphical_polygon_xpm ) );
 
     placeMenu->AppendSeparator();
 
@@ -314,6 +371,41 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "A&nchor" ),
                  _( "Place footprint reference anchor" ),
                  KiBitmap( anchor_xpm ) );
+
+    // Origin
+    AddMenuItem( placeMenu, ID_MODEDIT_PLACE_GRID_COORD,
+                 _( "&Grid Origin" ),
+                 _( "Set grid origin point" ),
+                 KiBitmap( grid_select_axis_xpm ) );
+
+
+    //----- Inspect menu ---------------------
+    wxMenu* inspectMenu = new wxMenu;
+
+    AddMenuItem( inspectMenu, ID_MODEDIT_MEASUREMENT_TOOL,
+                 _( "&Measure" ),
+                 _( "Measure distance" ),
+                 KiBitmap( measurement_xpm ) );
+
+    //----- Tools menu ---------------------
+    wxMenu* toolsMenu = new wxMenu;
+
+    AddMenuItem( toolsMenu, ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
+                 _( "&Update Footprint on PCB" ),
+                 _( "Push updated footprint through to current board" ),
+                 KiBitmap( update_module_board_xpm ) );
+
+    AddMenuItem( toolsMenu, ID_MODEDIT_INSERT_MODULE_IN_BOARD,
+                 _( "&Insert Footprint on PCB" ),
+                 _( "Insert footprint onto current board" ),
+                 KiBitmap( insert_module_board_xpm ) );
+
+    toolsMenu->AppendSeparator();
+
+    AddMenuItem( toolsMenu, ID_MODEDIT_DELETE_PART,
+                 _( "&Delete a Footprint in Active Library" ),
+                 _( "Choose and delete a footprint from the active library" ),
+                 KiBitmap( delete_xpm ) );
 
 
     //----- Preferences menu -----------------
@@ -339,10 +431,32 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "General &Settings..." ), _( "Change footprint editor settings." ),
                  KiBitmap( preference_xpm ) );
 
+    prefs_menu->AppendSeparator();
+
     AddMenuItem( prefs_menu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display Settings..." ),
-                 _( "Change footprint editor display settings" ),
-                 KiBitmap( display_options_xpm ) );
+              _( "&Display Options..." ),
+              _( "Graphics acceleration, grid and cursor settings." ),
+              KiBitmap( display_options_xpm ) );
+
+    text = AddHotkeyName( _( "Legacy Tool&set" ), m_hotkeysDescrList,
+                          HK_CANVAS_LEGACY );
+    AddMenuItem( prefs_menu, ID_MENU_CANVAS_LEGACY, text,
+                 _( "Use Legacy Toolset (not all features will be available)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ),
+                          m_hotkeysDescrList, HK_CANVAS_OPENGL );
+    AddMenuItem( prefs_menu, ID_MENU_CANVAS_OPENGL, text,
+                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+
+    text = AddHotkeyName( _( "Modern Toolset (&Fallback)" ),
+                          m_hotkeysDescrList, HK_CANVAS_CAIRO );
+    AddMenuItem( prefs_menu, ID_MENU_CANVAS_CAIRO, text,
+                 _( "Use Modern Toolset with software graphics (fallback)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+
+    prefs_menu->AppendSeparator();
 
     // Language submenu
     Pgm().AddMenuLanguageList( prefs_menu );
@@ -364,7 +478,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_HELP );
+    text = AddHotkeyName( _( "&List Hotkeys..." ), m_hotkeysDescrList, HK_HELP );
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  text,
                  _( "Displays current hotkeys table and corresponding commands" ),
@@ -388,9 +502,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( setupMenu, _( "&Setup" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( inspectMenu, _( "&Inspect" ) );
+    menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( prefs_menu, _( "P&references" ) );
-    menuBar->Append( dimensions_Submenu, _( "Di&mensions" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();

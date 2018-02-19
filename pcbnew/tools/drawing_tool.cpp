@@ -662,7 +662,8 @@ int DRAWING_TOOL::DrawGraphicPolygon( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::GRAPHIC_POLYGON );
 
-    m_frame->SetToolID( ID_PCB_ADD_POLYGON_BUTT, wxCURSOR_PENCIL, _( "Add graphic polygon" ) );
+    m_frame->SetToolID( m_editModules ? ID_MODEDIT_POLYGON_TOOL : ID_PCB_ADD_POLYGON_BUTT,
+                        wxCURSOR_PENCIL, _( "Add graphic polygon" ) );
 
     return drawZone( false, ZONE_MODE::GRAPHIC_POLYGON );
 }

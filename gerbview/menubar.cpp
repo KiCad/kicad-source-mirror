@@ -211,29 +211,23 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Canvas selection
     configMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Graphic&s" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHokeysDescr,
                           HK_CANVAS_LEGACY );
+    AddMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
+                 text, _( "Use Legacy Toolset (not all features will be available)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    configMenu->Append(
-        new wxMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Use legacy graphics mode (not all features will be available)" ),
-                        wxITEM_RADIO ) );
-
-    text = AddHotkeyName( _( "Modern (&Accelerated)" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHokeysDescr,
                           HK_CANVAS_OPENGL );
+    AddMenuItem( configMenu, ID_MENU_CANVAS_OPENGL, text,
+                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    configMenu->Append(
-        new wxMenuItem( configMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
-                        wxITEM_RADIO ) );
-
-    text = AddHotkeyName( _( "Modern (Fallba&ck)" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHokeysDescr,
                           HK_CANVAS_CAIRO );
-
-    configMenu->Append(
-        new wxMenuItem( configMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Use modern fallback (Cairo) graphics mode" ),
-                        wxITEM_RADIO ) );
+    AddMenuItem( configMenu, ID_MENU_CANVAS_CAIRO, text,
+                 _( "Use Modern Toolset with software graphics (fall-back)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     // Menu miscellaneous
     wxMenu* miscellaneousMenu = new wxMenu;

@@ -72,7 +72,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     m_mainSizer->Add( sLeftSizer, 1, wxALL | wxEXPAND, 0 );
 
     // @todo LEGACY: not required when legacy is gone
-    const wxString galOnlySuffix = _( " (not supported in Legacy graphics)" );
+    const wxString galOnlySuffix = _( " (not supported in Legacy Toolset)" );
 
     /*
      * Anti-aliasing subpanel

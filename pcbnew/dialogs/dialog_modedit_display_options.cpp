@@ -42,8 +42,7 @@ bool DIALOG_MODEDIT_DISPLAY_OPTIONS::Invoke( FOOTPRINT_EDIT_FRAME& aCaller )
 
 DIALOG_MODEDIT_DISPLAY_OPTIONS::DIALOG_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRAME& aParent ) :
     DIALOG_SHIM( &aParent, wxID_ANY, _( "Display Options" ) ),
-    m_parent( aParent ),
-    m_last_scale( -1 )
+    m_parent( aParent )
 {
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
@@ -54,28 +53,6 @@ DIALOG_MODEDIT_DISPLAY_OPTIONS::DIALOG_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_F
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
     mainSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
-    auto fgsizer = new wxFlexGridSizer( 3 );
-    fgsizer->AddGrowableCol( 1 );
-    fgsizer->SetFlexibleDirection( wxBOTH );
-    fgsizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-    fgsizer->Add(
-            new wxStaticText( this, wxID_ANY, _( "Icon scale:" ) ),
-            0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 3 );
-    m_scaleSlider = new STEPPED_SLIDER( this, wxID_ANY, 50, 50, 275,
-            wxDefaultPosition, wxDefaultSize,
-            wxSL_AUTOTICKS | wxSL_HORIZONTAL | wxSL_LABELS );
-    m_scaleSlider->SetStep( 25 );
-    fgsizer->Add( m_scaleSlider, 1, wxLEFT | wxRIGHT | wxEXPAND, 3 );
-    fgsizer->Add(
-            new wxStaticText( this, wxID_ANY, "%" ),
-            0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 3 );
-    fgsizer->AddSpacer( 0 );
-    m_scaleAuto = new wxCheckBox( this, wxID_ANY, _( "Auto" ) );
-    fgsizer->Add( m_scaleAuto, wxLEFT | wxRIGHT | wxEXPAND, 3 );
-    fgsizer->AddSpacer( 0 );
-
-    mainSizer->Add( fgsizer, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
-
     auto btnSizer = new wxStdDialogButtonSizer();
     mainSizer->Add( btnSizer, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
 
@@ -83,21 +60,6 @@ DIALOG_MODEDIT_DISPLAY_OPTIONS::DIALOG_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_F
     btnSizer->AddButton( new wxButton( this, wxID_CANCEL ) );
 
     btnSizer->Realize();
-
-    std::vector<wxEventTypeTag<wxScrollEvent>> scroll_events = {
-        wxEVT_SCROLL_TOP, wxEVT_SCROLL_BOTTOM, wxEVT_SCROLL_LINEUP, wxEVT_SCROLL_LINEDOWN,
-        wxEVT_SCROLL_PAGEUP, wxEVT_SCROLL_PAGEDOWN, wxEVT_SCROLL_THUMBTRACK,
-        wxEVT_SCROLL_THUMBRELEASE };
-
-    for( auto evt : scroll_events )
-        m_scaleSlider->Connect(
-                evt, wxScrollEventHandler( DIALOG_MODEDIT_DISPLAY_OPTIONS::OnScaleSlider ),
-                NULL, this );
-
-    m_scaleAuto->Connect(
-            wxEVT_COMMAND_CHECKBOX_CLICKED,
-            wxCommandEventHandler( DIALOG_MODEDIT_DISPLAY_OPTIONS::OnScaleAuto ),
-            NULL, this );
 
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -108,20 +70,6 @@ bool DIALOG_MODEDIT_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     // update GAL options
     m_galOptsPanel->TransferDataToWindow();
-
-    const int scale_fourths = m_parent.GetIconScale();
-
-    if( scale_fourths <= 0 )
-    {
-        m_scaleAuto->SetValue( true );
-        m_scaleSlider->SetValue( 25 * KiIconScale( &m_parent ) );
-    }
-    else
-    {
-        m_scaleAuto->SetValue( false );
-        m_scaleSlider->SetValue( scale_fourths * 25 );
-    }
-
     return true;
 }
 
@@ -131,11 +79,6 @@ bool DIALOG_MODEDIT_DISPLAY_OPTIONS::TransferDataFromWindow()
     // update GAL options
     m_galOptsPanel->TransferDataFromWindow();
 
-    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
-
-    if( m_parent.GetIconScale() != scale_fourths )
-        m_parent.SetIconScale( scale_fourths );
-
     // refresh view
     KIGFX::VIEW* view = m_parent.GetGalCanvas()->GetView();
     view->RecacheAllItems();
@@ -143,26 +86,4 @@ bool DIALOG_MODEDIT_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_parent.GetCanvas()->Refresh();
 
     return true;
-}
-
-
-void DIALOG_MODEDIT_DISPLAY_OPTIONS::OnScaleSlider( wxScrollEvent& aEvent )
-{
-    m_scaleAuto->SetValue( false );
-    aEvent.Skip();
-}
-
-
-void DIALOG_MODEDIT_DISPLAY_OPTIONS::OnScaleAuto( wxCommandEvent& aEvent )
-{
-    if( m_scaleAuto->GetValue() )
-    {
-        m_last_scale = m_scaleSlider->GetValue();
-        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-    }
-    else
-    {
-        if( m_last_scale >= 0 )
-            m_scaleSlider->SetValue( m_last_scale );
-    }
 }

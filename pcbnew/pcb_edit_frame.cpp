@@ -477,8 +477,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                               "and faster experience. This option is turned off by "
                               "default since it is not compatible with all computers.\n\n"
                               "Would you like to try enabling graphics acceleration?\n\n"
-                              "If you'd like to choose later, select the Modern "
-                              "(Accelerated) graphics mode in the View menu." );
+                              "If you'd like to choose later, select Modern Toolset "
+                              "(Accelerated) in the Preferences menu." );
 
             wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ),
                                  wxYES_NO );
