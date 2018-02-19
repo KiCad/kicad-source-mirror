@@ -170,6 +170,9 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     LastPinCommonUnit = dlg.GetAddToAllParts();
     LastPinVisible = dlg.GetVisible();
 
+    if( !pin->InEditMode() )
+        SaveCopyInUndoList( pin->GetParent() );
+
     pin->EnableEditMode( true, SynchronizePins()? false : true );
     pin->SetName( dlg.GetPinName() );
     pin->SetNameTextSize( GetLastPinNameSize() );
@@ -187,9 +190,6 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 
     if( pin->IsModified() || pin->IsNew() )
     {
-        if( !pin->InEditMode() )
-            SaveCopyInUndoList( pin->GetParent() );
-
         OnModify( );
 
         MSG_PANEL_ITEMS items;
