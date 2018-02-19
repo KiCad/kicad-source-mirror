@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __BITMAP2CMP_GUI_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class KIWAY_PLAYER;
-
 #include "kiway_player.h"
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
@@ -31,6 +29,7 @@ class KIWAY_PLAYER;
 #include <wx/button.h>
 #include <wx/radiobox.h>
 #include <wx/slider.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
@@ -69,9 +68,9 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxButton* m_buttonLoad;
 		wxButton* m_buttonExport;
 		wxRadioBox* m_radioBoxFormat;
-		wxRadioBox* m_rbOptions;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
+		wxCheckBox* m_checkNegative;
 		wxRadioBox* m_radio_PCBLayer;
 		wxStatusBar* m_statusBar;
 		
@@ -83,8 +82,8 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOptionsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnThresholdChange( wxScrollEvent& event ) { event.Skip(); }
+		virtual void OnNegativeClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

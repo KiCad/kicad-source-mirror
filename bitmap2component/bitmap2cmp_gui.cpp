@@ -74,6 +74,7 @@ private:
     wxBitmap        m_BN_Bitmap;
     wxSize          m_imageDPI;     // The initial image resolution. When unknown,
                                     // set to DEFAULT_DPI x DEFAULT_DPI per Inch
+    bool            m_Negative;
     wxString        m_BitmapFileName;
     wxString        m_ConvertedFileName;
     wxSize          m_frameSize;
@@ -117,7 +118,7 @@ private:
     void OnExportLogo();
 
     void Binarize( double aThreshold );     // aThreshold = 0.0 (black level) to 1.0 (white level)
-    void OnOptionsSelection( wxCommandEvent& event ) override;
+    void OnNegativeClicked( wxCommandEvent& event ) override;
     void OnThresholdChange( wxScrollEvent& event ) override;
     void OnResolutionChange( wxCommandEvent& event ) override;
 
@@ -160,8 +161,8 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( m_config->Read( KEYWORD_BINARY_THRESHOLD, &tmp ) )
         m_sliderThreshold->SetValue( tmp );
 
-    if( m_config->Read( KEYWORD_BW_NEGATIVE, &tmp ) )
-        m_rbOptions->SetSelection( tmp  ? 1 : 0 );
+    m_config->Read( KEYWORD_BW_NEGATIVE, &tmp, 0 );
+    m_checkNegative->SetValue( tmp != 0 );
 
     if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
     {
@@ -217,7 +218,7 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
     m_config->Write( KEYWORD_LAST_INPUT_FILE, m_BitmapFileName );
     m_config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
     m_config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
-    m_config->Write( KEYWORD_BW_NEGATIVE, m_rbOptions->GetSelection() );
+    m_config->Write( KEYWORD_BW_NEGATIVE, m_checkNegative->IsChecked() ? 1 : 0 );
     m_config->Write( KEYWORD_LAST_FORMAT,  m_radioBoxFormat->GetSelection() );
     m_config->Write( KEYWORD_LAST_MODLAYER,  m_radio_PCBLayer->GetSelection() );
 
@@ -336,7 +337,7 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_Greyscale_Image.Destroy();
     m_Greyscale_Image = m_Pict_Image.ConvertToGreyscale( );
 
-    if( m_rbOptions->GetSelection() > 0 )
+    if( m_Negative > 0 )
         NegateGreyscaleImage( );
 
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
@@ -430,12 +431,17 @@ void BM2CMP_FRAME::NegateGreyscaleImage( )
 }
 
 
-void BM2CMP_FRAME::OnOptionsSelection( wxCommandEvent& event )
+void BM2CMP_FRAME::OnNegativeClicked( wxCommandEvent&  )
 {
-    NegateGreyscaleImage();
-    m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
-    Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
-    Refresh();
+    if( m_checkNegative->GetValue() != m_Negative )
+    {
+        NegateGreyscaleImage();
+        m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
+        Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
+        m_Negative = !m_Negative;
+
+        Refresh();
+    }
 }
 
 

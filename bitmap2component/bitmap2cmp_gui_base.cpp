@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "bitmap2cmp_gui_base.h"
@@ -47,68 +47,68 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	fgSizerInfo->SetFlexibleDirection( wxBOTH );
 	fgSizerInfo->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextSize = new wxStaticText( m_panelRight, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSize = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSize->Wrap( -1 );
 	fgSizerInfo->Add( m_staticTextSize, 0, wxALIGN_RIGHT|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_SizeXValue = new wxStaticText( m_panelRight, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXValue = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXValue->Wrap( -1 );
 	fgSizerInfo->Add( m_SizeXValue, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_SizeYValue = new wxStaticText( m_panelRight, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYValue = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYValue->Wrap( -1 );
 	fgSizerInfo->Add( m_SizeYValue, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_SizePixUnits = new wxStaticText( m_panelRight, wxID_ANY, _("pixels"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizePixUnits = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("pixels"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizePixUnits->Wrap( -1 );
 	fgSizerInfo->Add( m_SizePixUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_staticTextSize1 = new wxStaticText( m_panelRight, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSize1 = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSize1->Wrap( -1 );
 	fgSizerInfo->Add( m_staticTextSize1, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_RIGHT, 5 );
 	
-	m_SizeXValue_mm = new wxStaticText( m_panelRight, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXValue_mm = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXValue_mm->Wrap( -1 );
 	fgSizerInfo->Add( m_SizeXValue_mm, 0, wxBOTTOM|wxRIGHT, 5 );
 	
-	m_SizeYValue_mm = new wxStaticText( m_panelRight, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYValue_mm = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYValue_mm->Wrap( -1 );
 	fgSizerInfo->Add( m_SizeYValue_mm, 0, wxBOTTOM|wxRIGHT, 5 );
 	
-	m_Size_mmxUnits = new wxStaticText( m_panelRight, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Size_mmxUnits = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Size_mmxUnits->Wrap( -1 );
 	fgSizerInfo->Add( m_Size_mmxUnits, 0, wxBOTTOM|wxRIGHT, 5 );
 	
-	m_staticTextBPP = new wxStaticText( m_panelRight, wxID_ANY, _("BPP:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBPP = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("BPP:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBPP->Wrap( -1 );
 	fgSizerInfo->Add( m_staticTextBPP, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_BPPValue = new wxStaticText( m_panelRight, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BPPValue = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BPPValue->Wrap( -1 );
 	fgSizerInfo->Add( m_BPPValue, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_BPPunits = new wxStaticText( m_panelRight, wxID_ANY, _("bits"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BPPunits = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("bits"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BPPunits->Wrap( -1 );
 	fgSizerInfo->Add( m_BPPunits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	fgSizerInfo->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_staticTextBPI = new wxStaticText( m_panelRight, wxID_ANY, _("Resolution:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBPI = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Resolution:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBPI->Wrap( -1 );
 	fgSizerInfo->Add( m_staticTextBPI, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DPIValueX = new wxTextCtrl( m_panelRight, wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DPIValueX = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DPIValueX->SetMinSize( wxSize( 40,-1 ) );
 	
 	fgSizerInfo->Add( m_DPIValueX, 0, wxBOTTOM|wxRIGHT, 5 );
 	
-	m_DPIValueY = new wxTextCtrl( m_panelRight, wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DPIValueY = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DPIValueY->SetMinSize( wxSize( 40,-1 ) );
 	
 	fgSizerInfo->Add( m_DPIValueY, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_DPI_Units = new wxStaticText( m_panelRight, wxID_ANY, _("DPI"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DPI_Units = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("DPI"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DPI_Units->Wrap( -1 );
 	fgSizerInfo->Add( m_DPI_Units, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
@@ -132,25 +132,28 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_radioBoxFormat->SetSelection( 1 );
 	brightSizer->Add( m_radioBoxFormat, 0, wxEXPAND|wxALL, 5 );
 	
-	wxString m_rbOptionsChoices[] = { _("Normal"), _("Negative") };
-	int m_rbOptionsNChoices = sizeof( m_rbOptionsChoices ) / sizeof( wxString );
-	m_rbOptions = new wxRadioBox( m_panelRight, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, m_rbOptionsNChoices, m_rbOptionsChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbOptions->SetSelection( 0 );
-	brightSizer->Add( m_rbOptions, 0, wxEXPAND|wxALL, 5 );
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options") ), wxVERTICAL );
 	
-	m_ThresholdText = new wxStaticText( m_panelRight, wxID_ANY, _("Threshold Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThresholdText = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Black / White Threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThresholdText->Wrap( -1 );
-	brightSizer->Add( m_ThresholdText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizer2->Add( m_ThresholdText, 0, 0, 5 );
 	
-	m_sliderThreshold = new wxSlider( m_panelRight, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sliderThreshold = new wxSlider( sbSizer2->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sliderThreshold->SetToolTip( _("Adjust the level to convert the greyscale picture to a black and white picture.") );
 	
-	brightSizer->Add( m_sliderThreshold, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer2->Add( m_sliderThreshold, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_radio_PCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User Layer Eco2") };
+	m_checkNegative = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Negative"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer2->Add( m_checkNegative, 0, wxBOTTOM|wxTOP, 10 );
+	
+	
+	brightSizer->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
+	
+	wxString m_radio_PCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User layer Eco2") };
 	int m_radio_PCBLayerNChoices = sizeof( m_radio_PCBLayerChoices ) / sizeof( wxString );
 	m_radio_PCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline:"), wxDefaultPosition, wxDefaultSize, m_radio_PCBLayerNChoices, m_radio_PCBLayerChoices, 1, wxRA_SPECIFY_COLS );
-	m_radio_PCBLayer->SetSelection( 0 );
+	m_radio_PCBLayer->SetSelection( 3 );
 	m_radio_PCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe 2 invisible fields reference and value are always placed on the silk screen layer.") );
 	
 	brightSizer->Add( m_radio_PCBLayer, 0, wxALL|wxEXPAND, 5 );
@@ -177,8 +180,8 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_buttonLoad->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
 	m_buttonExport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExport ), NULL, this );
 	m_radioBoxFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnFormatChange ), NULL, this );
-	m_rbOptions->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnOptionsSelection ), NULL, this );
 	m_sliderThreshold->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( BM2CMP_FRAME_BASE::OnThresholdChange ), NULL, this );
+	m_checkNegative->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnNegativeClicked ), NULL, this );
 }
 
 BM2CMP_FRAME_BASE::~BM2CMP_FRAME_BASE()
@@ -194,7 +197,7 @@ BM2CMP_FRAME_BASE::~BM2CMP_FRAME_BASE()
 	m_buttonLoad->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
 	m_buttonExport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExport ), NULL, this );
 	m_radioBoxFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnFormatChange ), NULL, this );
-	m_rbOptions->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnOptionsSelection ), NULL, this );
 	m_sliderThreshold->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( BM2CMP_FRAME_BASE::OnThresholdChange ), NULL, this );
+	m_checkNegative->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnNegativeClicked ), NULL, this );
 	
 }
