@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-19 01:50+0100\n"
-"PO-Revision-Date: 2018-02-19 02:16+0100\n"
+"POT-Creation-Date: 2018-02-19 17:50+0100\n"
+"PO-Revision-Date: 2018-02-19 17:51+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1313,7 +1313,7 @@ msgstr "Negativo"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:137
 #: eeschema/dialogs/dialog_erc_base.cpp:147
-#: eeschema/dialogs/dialog_annotate_base.cpp:88
+#: eeschema/dialogs/dialog_annotate_base.cpp:82
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:35
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
@@ -1570,7 +1570,7 @@ msgstr "Imposta griglia"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_erc_base.cpp:101
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:128
-#: eeschema/dialogs/dialog_annotate_base.cpp:145
+#: eeschema/dialogs/dialog_annotate_base.cpp:159
 #: eeschema/dialogs/dialog_bom_base.cpp:62
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:104
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
@@ -3700,7 +3700,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:419 cvpcb/cvpcb_mainframe.cpp:439
 #: eeschema/sch_base_frame.cpp:328 eeschema/sch_base_frame.cpp:346
-#: pcbnew/footprint_edit_frame.cpp:925 pcbnew/footprint_edit_frame.cpp:945
+#: pcbnew/footprint_edit_frame.cpp:926 pcbnew/footprint_edit_frame.cpp:946
 #: pcbnew/pcbnew_config.cpp:120 pcbnew/pcbnew_config.cpp:142
 #: pcbnew/files.cpp:921
 msgid "File Save Error"
@@ -3775,8 +3775,8 @@ msgstr "Errore di configurazione"
 msgid "Loading Footprint Libraries"
 msgstr "Caricamento librerie di impronte"
 
-#: cvpcb/cvpcb_mainframe.cpp:742 eeschema/sch_edit_frame.cpp:1492
-#: kicad/prjconfig.cpp:87 pcbnew/footprint_edit_frame.cpp:831
+#: cvpcb/cvpcb_mainframe.cpp:742 eeschema/sch_edit_frame.cpp:1489
+#: kicad/prjconfig.cpp:87 pcbnew/footprint_edit_frame.cpp:832
 #: pcbnew/pcb_edit_frame.cpp:1080
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -4037,7 +4037,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Mostra contorni in modalità schizzo"
 
 #: cvpcb/display_footprints_frame.cpp:413 pcbnew/hotkeys.cpp:187
-#: pcbnew/footprint_viewer_frame.cpp:689 pcbnew/footprint_edit_frame.cpp:742
+#: pcbnew/footprint_viewer_frame.cpp:692 pcbnew/footprint_edit_frame.cpp:743
 #: pcbnew/pcb_edit_frame.cpp:748
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
@@ -4343,7 +4343,7 @@ msgstr "Unità in pollici"
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:312 eeschema/sch_edit_frame.cpp:793
+#: eeschema/tool_sch.cpp:312 eeschema/sch_edit_frame.cpp:796
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
@@ -5500,32 +5500,32 @@ msgstr "Fallita l'apertura del file di associazione componenti-impronte \"%s\""
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Punto di connessione gerarchico %s"
 
-#: eeschema/annotate.cpp:111
+#: eeschema/annotate.cpp:112
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d marcature temporali duplicate trovate e sostituite."
 
-#: eeschema/annotate.cpp:201
+#: eeschema/annotate.cpp:202
 #, c-format
 msgid "Updated %s (unit %d) from %s to %s"
 msgstr "Aggiornato %s (unità %d) da %s a %s"
 
-#: eeschema/annotate.cpp:207
+#: eeschema/annotate.cpp:208
 #, c-format
 msgid "Updated %s from %s to %s"
 msgstr "Aggiornato %s da %s a %s"
 
-#: eeschema/annotate.cpp:215
+#: eeschema/annotate.cpp:216
 #, c-format
 msgid "Annotated %s (unit %d) as %s"
 msgstr "Annotato %s (unità %d) come %s"
 
-#: eeschema/annotate.cpp:220
+#: eeschema/annotate.cpp:221
 #, c-format
 msgid "Annotated %s as %s"
 msgstr "Annotato %s come %s"
 
-#: eeschema/annotate.cpp:230
+#: eeschema/annotate.cpp:231
 msgid "Annotation complete."
 msgstr "annotazione completa."
 
@@ -6132,7 +6132,7 @@ msgid "Symbol Library Browser -- %s"
 msgstr "Esploratore di librerie di simboli -- %s"
 
 #: eeschema/viewlibs.cpp:178 eeschema/libedit.cpp:73
-#: pcbnew/footprint_viewer_frame.cpp:746
+#: pcbnew/footprint_viewer_frame.cpp:749
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
 
@@ -6160,7 +6160,7 @@ msgstr "Non trovato"
 msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
-#: eeschema/sch_edit_frame.cpp:651 pagelayout_editor/pl_editor_frame.cpp:227
+#: eeschema/sch_edit_frame.cpp:654 pagelayout_editor/pl_editor_frame.cpp:227
 #: pcbnew/pcb_edit_frame.cpp:655
 #, c-format
 msgid ""
@@ -6172,19 +6172,19 @@ msgstr ""
 "\"%s\"\n"
 "prima di chiudere?"
 
-#: eeschema/sch_edit_frame.cpp:782
+#: eeschema/sch_edit_frame.cpp:785
 msgid "Draw wires and buses in any direction"
 msgstr "Disegna fili e bus in ogni direzione"
 
-#: eeschema/sch_edit_frame.cpp:783
+#: eeschema/sch_edit_frame.cpp:786
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 
-#: eeschema/sch_edit_frame.cpp:792
+#: eeschema/sch_edit_frame.cpp:795
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/sch_edit_frame.cpp:863
+#: eeschema/sch_edit_frame.cpp:860
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, you need to launch "
@@ -6195,39 +6195,39 @@ msgstr ""
 "stampato da uno schema elettrico, è necessario eseguire il gestore progetti "
 "KiCad e creare un progetto di circuito stampato."
 
-#: eeschema/sch_edit_frame.cpp:1007
+#: eeschema/sch_edit_frame.cpp:1004
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/sch_edit_frame.cpp:1040
+#: eeschema/sch_edit_frame.cpp:1037
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/sch_edit_frame.cpp:1053
+#: eeschema/sch_edit_frame.cpp:1050
 #, c-format
 msgid "Schematic file \"%s\" already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/sch_edit_frame.cpp:1074
+#: eeschema/sch_edit_frame.cpp:1071
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/sch_edit_frame.cpp:1173
+#: eeschema/sch_edit_frame.cpp:1170
 msgid "Could not open CvPcb"
 msgstr "Impossibile aprire CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1210
+#: eeschema/sch_edit_frame.cpp:1207
 msgid "Error: not a symbol or no symbol."
 msgstr "Errore: non è un simbolo o nessun simbolo."
 
-#: eeschema/sch_edit_frame.cpp:1246 eeschema/selpart.cpp:63
+#: eeschema/sch_edit_frame.cpp:1243 eeschema/selpart.cpp:63
 #: eeschema/libedit.cpp:117
 #, c-format
 msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 msgstr ""
 "Errore durante il caricamento del simbolo \"%s\" dalla libreria \"%s\"."
 
-#: eeschema/sch_edit_frame.cpp:1495
+#: eeschema/sch_edit_frame.cpp:1492
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -6650,7 +6650,7 @@ msgstr ""
 msgid "sym-lib-table files contain no library with nickname \"%s\""
 msgstr "i file sym-lib-table non contengono librerie con denominazione \"%s\""
 
-#: eeschema/viewlib_frame.cpp:117 pcbnew/footprint_viewer_frame.cpp:743
+#: eeschema/viewlib_frame.cpp:117 pcbnew/footprint_viewer_frame.cpp:746
 msgid "Library Browser"
 msgstr "Esploratore librerie"
 
@@ -7670,39 +7670,39 @@ msgstr ""
 msgid "library \"%s\" cannot be deleted"
 msgstr "La libreria \"%s\" non può essere cancellata"
 
-#: eeschema/component_references_lister.cpp:504
+#: eeschema/component_references_lister.cpp:506
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Elemento non annotato: %s%s (unità %d)\n"
 
-#: eeschema/component_references_lister.cpp:511
+#: eeschema/component_references_lister.cpp:513
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Elemento non annotato: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:532
+#: eeschema/component_references_lister.cpp:534
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
 msgstr "Errore: simbolo %s%s unità %d e il simbolo ha solo %d unità definite\n"
 
-#: eeschema/component_references_lister.cpp:570
-#: eeschema/component_references_lister.cpp:600
+#: eeschema/component_references_lister.cpp:572
+#: eeschema/component_references_lister.cpp:602
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Elemento multiplo %s%s (unità %d)\n"
 
-#: eeschema/component_references_lister.cpp:577
-#: eeschema/component_references_lister.cpp:607
+#: eeschema/component_references_lister.cpp:579
+#: eeschema/component_references_lister.cpp:609
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Elemento multiplo %s%s\n"
 
-#: eeschema/component_references_lister.cpp:621
+#: eeschema/component_references_lister.cpp:623
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:654
+#: eeschema/component_references_lister.cpp:656
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Duplicata marcatura temporale (%s) per %s%d e %s%d"
@@ -8245,19 +8245,20 @@ msgstr "Messaggi informativi:"
 msgid "Error messages:"
 msgstr "Messaggi d'errore:"
 
-#: eeschema/netlist_generator.cpp:179
+#: eeschema/netlist_generator.cpp:177
 msgid "Exporting the netlist requires a completely annotated schematic."
-msgstr "L'esportazione della netlist richiede uno schema completamente annotato."
+msgstr ""
+"L'esportazione della netlist richiede uno schema completamente annotato."
 
-#: eeschema/netlist_generator.cpp:188
+#: eeschema/netlist_generator.cpp:186
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Errore: Nome foglio duplicato. Continuare?"
 
-#: eeschema/netlist_generator.cpp:254
+#: eeschema/netlist_generator.cpp:252
 msgid "No Objects"
 msgstr "Nessun oggetto"
 
-#: eeschema/netlist_generator.cpp:258
+#: eeschema/netlist_generator.cpp:256
 #, c-format
 msgid "Net count = %d"
 msgstr "Numero collegamenti = %d"
@@ -9594,55 +9595,55 @@ msgstr "Ambito"
 msgid "Order"
 msgstr "Ordine"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:53
+#: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
 msgstr "Ordina componenti per posizione &X"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:68
+#: eeschema/dialogs/dialog_annotate_base.cpp:65
 msgid "Sort components by &Y position"
 msgstr "Ordina componenti per posizione &Y"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:86
+#: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Keep existing annotations"
 msgstr "Mantieni le annotazioni esistenti"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:86
+#: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset existing annotations"
 msgstr "Reimposta le annotazioni esistenti"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:86
+#: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset, but keep order of multi-unit parts"
 msgstr "Reimposta, ma mantieni l'ordine delle parti multiple"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:92
-msgid "Use first free number in schematic"
-msgstr "Usa il primo numero libero dello schema"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:92
-msgid "First free above sheet number * 100"
-msgstr "Primo libero sopra numero foglio * 100"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:92
-msgid "First free above sheet number * 1000"
-msgstr "Primo libero sopra numero foglio * 1000"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:94
+#: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Numbering"
 msgstr "Numerazione"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:110
+#: eeschema/dialogs/dialog_annotate_base.cpp:94
+msgid "Use first free number after:"
+msgstr "Usa il primo numero libero dopo:"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:100
+msgid "First free after sheet number X 100"
+msgstr "Primo libero sopra il numero foglio X 100"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:103
+msgid "First free after sheet number X 1000"
+msgstr "Primo libero sopra il numero foglio X 1000"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:124
 msgid "Keep this dialog open"
 msgstr "Mantieni questa finestra aperta"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:122
+#: eeschema/dialogs/dialog_annotate_base.cpp:136
 msgid "Always ask for confirmation"
 msgstr "Chiedi sempre conferma"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:139
+#: eeschema/dialogs/dialog_annotate_base.cpp:153
 msgid "Annotate"
 msgstr "Annota"
 
-#: eeschema/dialogs/dialog_annotate_base.cpp:142
+#: eeschema/dialogs/dialog_annotate_base.cpp:156
 msgid "Clear Annotation"
 msgstr "Cancella annotazione "
 
@@ -9675,27 +9676,27 @@ msgstr "Tutti e %u i collegamenti risolti"
 msgid "Invalid symbol library identifier"
 msgstr "Identificatore di libreria di simboli non valido"
 
-#: eeschema/dialogs/dialog_annotate.cpp:114
+#: eeschema/dialogs/dialog_annotate.cpp:117
 msgid "Annotation Messages:"
 msgstr "Messaggi di annotazione:"
 
-#: eeschema/dialogs/dialog_annotate.cpp:191
+#: eeschema/dialogs/dialog_annotate.cpp:209
 msgid "Clear and annotate all of the symbols on the entire schematic?"
 msgstr "Cancellare e annotare tutti i simboli dell'intero schema?"
 
-#: eeschema/dialogs/dialog_annotate.cpp:193
+#: eeschema/dialogs/dialog_annotate.cpp:211
 msgid "Clear and annotate all of the symbols on the current sheet?"
 msgstr "Cancellare e annotare tutti i simboli del foglio corrente?"
 
-#: eeschema/dialogs/dialog_annotate.cpp:199
+#: eeschema/dialogs/dialog_annotate.cpp:217
 msgid "Annotate only the unannotated symbols on the entire schematic?"
 msgstr "Annotare soltanto i simboli non annotati dell'intero schema?"
 
-#: eeschema/dialogs/dialog_annotate.cpp:201
+#: eeschema/dialogs/dialog_annotate.cpp:219
 msgid "Annotate only the unannotated symbols on the current sheet?"
 msgstr "Annotare soltanto i simboli non annotati del foglio corrente?"
 
-#: eeschema/dialogs/dialog_annotate.cpp:204
+#: eeschema/dialogs/dialog_annotate.cpp:222
 msgid ""
 "\n"
 "\n"
@@ -9706,15 +9707,15 @@ msgstr ""
 "Questa operazione sovrascriverà la corrente annotazione e non potrà essere "
 "annullata."
 
-#: eeschema/dialogs/dialog_annotate.cpp:247
+#: eeschema/dialogs/dialog_annotate.cpp:269
 msgid "Clear the existing annotation for the entire schematic?"
 msgstr "Ripulire l'annotazione esistente dell'intero schema?"
 
-#: eeschema/dialogs/dialog_annotate.cpp:249
+#: eeschema/dialogs/dialog_annotate.cpp:271
 msgid "Clear the existing annotation for the current sheet?"
 msgstr "Ripulire l'annotazione esistente del foglio corrente?"
 
-#: eeschema/dialogs/dialog_annotate.cpp:251
+#: eeschema/dialogs/dialog_annotate.cpp:273
 msgid ""
 "\n"
 "\n"
@@ -11879,7 +11880,7 @@ msgstr "Proprietà foglio schema"
 msgid "Schematic Editor Options"
 msgstr "Opzioni editor schemi"
 
-#: eeschema/dialogs/dialog_annotate_base.h:72
+#: eeschema/dialogs/dialog_annotate_base.h:80
 msgid "Annotate Schematic"
 msgstr "Annota schema"
 
@@ -12414,7 +12415,7 @@ msgid "Sort Layers if X2 Mode"
 msgstr "Ordina gli strati se in modalità X2"
 
 #: gerbview/gerbview_frame.cpp:165 gerbview/events_called_functions.cpp:442
-#: pcbnew/footprint_edit_frame.cpp:313 pcbnew/pcb_edit_frame.cpp:411
+#: pcbnew/footprint_edit_frame.cpp:314 pcbnew/pcb_edit_frame.cpp:411
 #: pcbnew/pcb_edit_frame.cpp:1005
 msgid "Visibles"
 msgstr "Visibili"
@@ -17666,7 +17667,9 @@ msgstr "Opzioni &di visualizzazione..."
 msgid ""
 "Graphics acceleration, grid, cursor, annotation and clearance outline "
 "settings."
-msgstr "Impostazioni di accelerazione grafica, griglia, puntatore, annotazioni e contorni distanze."
+msgstr ""
+"Impostazioni di accelerazione grafica, griglia, puntatore, annotazioni e "
+"contorni distanze."
 
 #: pcbnew/menubar_pcb_editor.cpp:253
 msgid "&Display Settings"
@@ -20302,7 +20305,7 @@ msgstr "Diminuisci dimensione via"
 msgid "Board Editor"
 msgstr "Editor scheda"
 
-#: pcbnew/hotkeys.cpp:341 pcbnew/footprint_edit_frame.cpp:829
+#: pcbnew/hotkeys.cpp:341 pcbnew/footprint_edit_frame.cpp:830
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:137
 msgid "Footprint Editor"
 msgstr "Editor impronte"
@@ -20372,7 +20375,7 @@ msgstr "Curva"
 msgid "Segment"
 msgstr "Segmento"
 
-#: pcbnew/class_drawsegment.cpp:692
+#: pcbnew/class_drawsegment.cpp:724
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Elemento grafico: %s, lunghezza %s su %s"
@@ -20732,11 +20735,11 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
 
-#: pcbnew/footprint_viewer_frame.cpp:131
+#: pcbnew/footprint_viewer_frame.cpp:132
 msgid "Footprint Library Browser"
 msgstr "Esploratore librerie impronte"
 
-#: pcbnew/footprint_viewer_frame.cpp:487
+#: pcbnew/footprint_viewer_frame.cpp:490
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -21245,19 +21248,19 @@ msgstr "Informazioni su Pcbnew progettazione circuiti stampati"
 msgid "Delete Pad (footprint %s %s) ?"
 msgstr "Cancellare piazzola (impronta %s %s)?"
 
-#: pcbnew/footprint_edit_frame.cpp:551
+#: pcbnew/footprint_edit_frame.cpp:552
 msgid "Save the changes to the footprint before closing?"
 msgstr "Salvare le modifiche all'impronta prima di chiudere?"
 
-#: pcbnew/footprint_edit_frame.cpp:572
+#: pcbnew/footprint_edit_frame.cpp:573
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Nessuna libreria selezionata. L'impronta non può esere salvata."
 
-#: pcbnew/footprint_edit_frame.cpp:799
+#: pcbnew/footprint_edit_frame.cpp:800
 msgid "no active library"
 msgstr "nessuna libreria attiva"
 
-#: pcbnew/footprint_edit_frame.cpp:921 pcbnew/pcbnew_config.cpp:116
+#: pcbnew/footprint_edit_frame.cpp:922 pcbnew/pcbnew_config.cpp:116
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -21268,7 +21271,7 @@ msgstr ""
 "\n"
 "\"%s\""
 
-#: pcbnew/footprint_edit_frame.cpp:941 pcbnew/pcbnew_config.cpp:138
+#: pcbnew/footprint_edit_frame.cpp:942 pcbnew/pcbnew_config.cpp:138
 #: pcbnew/files.cpp:917
 #, c-format
 msgid ""
@@ -27987,91 +27990,3 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
-
-#~ msgid "Start to  sheet number*100 and use first free number"
-#~ msgstr "Inizia dal foglio numero 100 e usa il primo numero libero"
-
-#~ msgid "Start to  sheet number*1000 and use first free number"
-#~ msgstr "Inizia dal foglio numero 1000 e usa il primo numero libero"
-
-#~ msgid "Dialog"
-#~ msgstr "Dialogo"
-
-#~ msgid "Hide La&yers Manager"
-#~ msgstr "Nascondi gestione li&velli"
-
-#~ msgid "Hide Microwa&ve Toolbar"
-#~ msgstr "Nascondi barra str&umenti microonde"
-
-#~ msgid "D&imensions"
-#~ msgstr "D&imensioni"
-
-#~ msgid "&Design Rules"
-#~ msgstr "Regole &di progettazione"
-
-#~ msgid "&Interactive Routing..."
-#~ msgstr "Sbroglio &interattivo..."
-
-#~ msgid "User Defined G&rid..."
-#~ msgstr "G&riglia personalizzata..."
-
-#~ msgid "Save dimension preferences"
-#~ msgstr "Salva preferenze delle dimensioni"
-
-#~ msgid "Export SV&G..."
-#~ msgstr "Esporta SV&G..."
-
-#~ msgid "Save Board"
-#~ msgstr "Salva scheda"
-
-#~ msgid "Save Board As"
-#~ msgstr "Salva scheda come"
-
-#~ msgid "Load Board"
-#~ msgstr "Carica scheda"
-
-#~ msgid "Ascii"
-#~ msgstr "Ascii"
-
-#~ msgid "Tracks and Vias:"
-#~ msgstr "Piste e via:"
-
-#~ msgid "Show tracks in sketch mode"
-#~ msgstr "Mostra piste in modalità schizzo"
-
-#~ msgid "Show vias in sketch mode"
-#~ msgstr "Mostra via in modalità schizzo"
-
-#~ msgid "Show text in sketch mode"
-#~ msgstr "Mostra testo in modalità schizzo"
-
-#~ msgid "Show pads in sketch mode"
-#~ msgstr "Mostra piazzole in modalità schizzo"
-
-#~ msgid "Other:"
-#~ msgstr "Altro:"
-
-#~ msgid "Grid Properties"
-#~ msgstr "Proprietà griglia"
-
-#~ msgid ""
-#~ "Use the auxiliary axis origin (used in plot and drill geneation) as STEP "
-#~ "coordinates origin."
-#~ msgstr ""
-#~ "Usa l'origine assi ausiliaria (usata nel tracciamento e nella generazione "
-#~ "forature) come origine coordinate STEP."
-
-#~ msgid "Use the grid origin as STEP coordinates origin."
-#~ msgstr "Usa la griglia come origine coordinate STEP."
-
-#~ msgid ""
-#~ "Use this option if you want to define a specific coordinate origin value."
-#~ msgstr ""
-#~ "Usare questa opzione se si vuole definire un valore di origine coordinate "
-#~ "specifico."
-
-#~ msgid ""
-#~ "Use this option if you want to define coordinate origin at board center."
-#~ msgstr ""
-#~ "Usare questa opzione se si vuole definire l'origine coordinate al centro "
-#~ "della scheda."
