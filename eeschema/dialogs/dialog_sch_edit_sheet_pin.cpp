@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,10 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent ) :
     m_textName->SetFocus();
     m_sdbSizerOK->SetDefault();
 
+    // Set invalid label characters list:
+    wxTextValidator* validator = static_cast<wxTextValidator*>( m_textName->GetValidator() );
+    validator->SetCharExcludes( " /" );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 
@@ -55,4 +59,16 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent ) :
     // not always raised, depending on this dialog is run.
     // Force it to be raised
     Raise();
+}
+
+
+
+void DIALOG_SCH_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
+{
+    // Disable wxWidgets message if a pin name has not allowed chars
+    // (It happens only when editing a old sheet pin name that can contains not allowed chars)
+    wxTextValidator* validator = static_cast<wxTextValidator*>( m_textName->GetValidator() );
+    validator->SetCharExcludes( "" );
+
+    event.Skip();
 }

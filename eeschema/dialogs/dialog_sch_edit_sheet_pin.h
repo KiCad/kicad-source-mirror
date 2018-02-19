@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,10 @@ class DIALOG_SCH_EDIT_SHEET_PIN : public DIALOG_SCH_EDIT_SHEET_PIN_BASE
 public:
     DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent );
 
-    void SetLabelName( const wxString& aName ) { m_textName->SetValue( aName ); }
+    // Set the label text in m_textName.
+    // Because m_textName uses a wxTextValidator, the label text must be stored in the
+    // validator string
+    void SetLabelName( const wxString& aName ) { m_labelString = aName; }
     wxString GetLabelName() const { return m_textName->GetValue(); }
 
     void SetTextHeight( const wxString& aHeight ) { m_textHeight->SetValue( aHeight ); }
@@ -56,6 +59,9 @@ public:
 
     void SetTextHeightUnits( const wxString& aUnit ) { m_staticHeightUnits->SetLabel( aUnit ); }
     void SetTextWidthUnits( const wxString& aUnit ) { m_staticWidthUnits->SetLabel( aUnit ); }
+
+private:
+	void onOKButton( wxCommandEvent& event ) override;
 };
 
 #endif // __dialog_sch_edit_sheet_pin__

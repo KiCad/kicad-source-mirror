@@ -183,10 +183,8 @@ void DIALOG_LABEL_EDITOR::InitDialog()
         wxTextValidator* validator = (wxTextValidator*) m_textLabel->GetValidator();
 
         // Add invalid label characters to this list.
-        if( m_CurrentText->GetClass() == wxT( "SCH_LABEL" ) )
-            validator->SetCharExcludes( wxT( " /" ) );
-        else
-            validator->SetCharExcludes( wxT( " " ) );
+        // for any label type but SCH_TEXT_T (that has the multiline allowed)
+        validator->SetCharExcludes( wxT( " /" ) );
     }
 
     m_textLabel->SetValue( m_CurrentText->GetText() );

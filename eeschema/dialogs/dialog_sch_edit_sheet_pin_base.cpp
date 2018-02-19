@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_sch_edit_sheet_pin_base.h"
@@ -30,6 +30,8 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 6 );
 	
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textName->SetValidator( wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, &m_labelString ) );
+	
 	fgSizer1->Add( m_textName, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 6 );
 	
 	
@@ -93,8 +95,14 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	m_mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
+	
+	// Connect Events
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
 }
 
 DIALOG_SCH_EDIT_SHEET_PIN_BASE::~DIALOG_SCH_EDIT_SHEET_PIN_BASE()
 {
+	// Disconnect Events
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
+	
 }
