@@ -205,19 +205,12 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
             return false;
 
         dlg.GetPaths( filenamesList );
-
-        // @todo Take a closer look at the CWD switching here.  The current working directory
-        // gets changed by wxFileDialog because the wxFD_CHANGE_DIR flag is set.  Is this the
-        // appropriate behavior?  The current working directory is not returned to the previous
-        // value so this may be an issue elsewhere.
-        currentPath = wxGetCwd();
-        m_mruPath = currentPath;
+        m_mruPath = currentPath = dlg.GetDirectory();
     }
     else
     {
         filenamesList.Add( aFullFileName );
-        currentPath = filename.GetPath();
-        m_mruPath = currentPath;
+        m_mruPath = currentPath = filename.GetPath();
     }
 
     // Set the busy cursor
