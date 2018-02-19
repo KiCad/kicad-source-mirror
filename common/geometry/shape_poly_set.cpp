@@ -1855,8 +1855,8 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
 
                 for( unsigned int j = 0; j < segments; j++ )
                 {
-                    nx  = xc + cos( startAngle + (j + 1) * deltaAngle ) * radius;
-                    ny  = yc - sin( startAngle + (j + 1) * deltaAngle ) * radius;
+                    nx = xc + cos( startAngle + ( j + 1 ) * deltaAngle ) * radius;
+                    ny = yc - sin( startAngle + ( j + 1 ) * deltaAngle ) * radius;
 
                     // Sanity check: the rounding can produce repeated corners; do not add them.
                     if( KiROUND( nx ) != prevX || KiROUND( ny ) != prevY )
@@ -1878,7 +1878,7 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
 }
 
 
-SHAPE_POLY_SET &SHAPE_POLY_SET::operator=(const SHAPE_POLY_SET & aOther)
+SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
 {
     static_cast<SHAPE&>(*this) = aOther;
     m_polys = aOther.m_polys;
@@ -1889,7 +1889,6 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=(const SHAPE_POLY_SET & aOther)
     m_triangulatedPolys.clear();
     return *this;
 }
-
 
 
 
@@ -1947,20 +1946,20 @@ public:
 
 private:
 
-	class comparePoints
-	{
-	public:
-	    bool operator()( p2t::Point* a, p2t::Point* b ) const
-	    {
-		if (a->x < b->x)
-		    return true;
+    class comparePoints
+    {
+    public:
+        bool operator()( p2t::Point* a, p2t::Point* b ) const
+        {
+        if (a->x < b->x)
+            return true;
 
-		if( a->x == b->x )
-		    return ( a->y > b->y );
+        if( a->x == b->x )
+            return ( a->y > b->y );
 
-		return false;
-	    }
-	};
+        return false;
+        }
+    };
 
 
     p2t::Point* addPoint( const VECTOR2I& aP )
@@ -2051,6 +2050,7 @@ void SHAPE_POLY_SET::triangulateSingle( const POLYGON& aPoly,
     ctx.Triangulate();
 }
 
+
 bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 {
     if( !m_triangulationValid )
@@ -2090,11 +2090,11 @@ void SHAPE_POLY_SET::CacheTriangulation()
     SHAPE_POLY_SET tmpSet = *this;
 
     if( !tmpSet.HasHoles() )
-	tmpSet.Unfracture( PM_FAST );
+        tmpSet.Unfracture( PM_FAST );
 
     m_triangulatedPolys.clear();
 
-    if ( tmpSet.HasTouchingHoles() )
+    if( tmpSet.HasTouchingHoles() )
     {
         // temporary workaround for overlapping hole vertices that poly2tri doesn't handle
         m_triangulationValid = false;
@@ -2139,6 +2139,7 @@ MD5_HASH SHAPE_POLY_SET::checksum() const
     return hash;
 }
 
+
 bool SHAPE_POLY_SET::HasTouchingHoles() const
 {
     for( int i = 0; i < OutlineCount(); i++ )
@@ -2152,17 +2153,18 @@ bool SHAPE_POLY_SET::HasTouchingHoles() const
     return false;
 }
 
+
 bool SHAPE_POLY_SET::hasTouchingHoles( const POLYGON& aPoly ) const
 {
     std::vector< VECTOR2I > pts;
 
-    for ( const auto& lc : aPoly )
+    for( const auto& lc : aPoly )
     {
         for( int i = 0; i < lc.PointCount(); i++ )
         {
             const auto p = lc.CPoint( i );
 
-            if ( std::find( pts.begin(), pts.end(), p) != pts.end() )
+            if( std::find( pts.begin(), pts.end(), p ) != pts.end() )
             {
                 return true;
             }
