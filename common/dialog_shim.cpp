@@ -168,16 +168,21 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
 
         // classname is key, returns a zeroed out default EDA_RECT if none existed before.
-        EDA_RECT r = class_map[ hash_key ];
+        EDA_RECT savedDialogRect = class_map[ hash_key ];
 
-        if( r.GetSize().x != 0 && r.GetSize().y != 0 )
-            SetSize( r.GetPosition().x, r.GetPosition().y, r.GetSize().x, r.GetSize().y, 0 );
+        if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
+        {
+            SetSize( savedDialogRect.GetPosition().x,
+                     savedDialogRect.GetPosition().y,
+                     std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
+                     std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ),
+                     0 );
+        }
     }
     else
     {
         // Save the dialog's position & size before hiding, using classname as key
-        EDA_RECT  r( wxDialog::GetPosition(), wxDialog::GetSize() );
-        class_map[ hash_key ] = r;
+        class_map[ hash_key ] = EDA_RECT( wxDialog::GetPosition(), wxDialog::GetSize() );
 
 #ifdef __WXMAC__
         if ( m_eventLoop )

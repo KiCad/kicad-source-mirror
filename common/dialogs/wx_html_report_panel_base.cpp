@@ -13,6 +13,7 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 {
 	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output messages:") ), wxVERTICAL );
 	
+	m_box->SetMinSize( wxSize( -1,130 ) ); 
 	m_fgSizer = new wxFlexGridSizer( 2, 1, 0, 0 );
 	m_fgSizer->AddGrowableCol( 0 );
 	m_fgSizer->AddGrowableRow( 0 );
@@ -21,9 +22,8 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	
 	m_htmlView = new wxHtmlWindow( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_htmlView->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	m_htmlView->SetMinSize( wxSize( -1,100 ) );
 	
-	m_fgSizer->Add( m_htmlView, 1, wxEXPAND, 5 );
+	m_fgSizer->Add( m_htmlView, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 2 );
 	
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 1, 7, 0, 0 );
@@ -66,7 +66,7 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	m_fgSizer->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	
-	m_box->Add( m_fgSizer, 1, wxEXPAND|wxALL, 5 );
+	m_box->Add( m_fgSizer, 1, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( m_box );
