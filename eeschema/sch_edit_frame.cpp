@@ -1520,3 +1520,12 @@ void SCH_EDIT_FRAME::SetIconScale( int aScale )
     Layout();
     SendSizeEvent();
 }
+
+wxArrayString SCH_EDIT_FRAME::ListNets()
+{
+    NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
+
+    wxArrayString netnames = net_atoms->ListNets();
+
+    return netnames;
+}

@@ -882,7 +882,7 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 
             if( !GetBoard()->GetFileName().IsEmpty() )
             {
-                wxString    tblName   = Prj().FootprintLibTblName();
+                wxString tblName = Prj().FootprintLibTblName();
 
                 try
                 {
@@ -891,14 +891,13 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                 catch( const IO_ERROR& ioe )
                 {
                     wxString msg = wxString::Format( _(
-                        "Error occurred saving project specific footprint library "
-                        "table:\n\n%s" ),
-                        GetChars( ioe.What() )
-                        );
+                                    "Error occurred saving project specific footprint library "
+                                    "table:\n\n%s" ),
+                            GetChars( ioe.What() )
+                            );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
-
 
             return true;
         }
@@ -910,4 +909,59 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
     }
 
     return false;
+}
+
+
+bool PCB_EDIT_FRAME::FixEagleNets()
+{
+    KIWAY_PLAYER* schematicFrame = Kiway().Player( FRAME_SCH, false );
+
+    // if the schematic file was also loaded. Fix any instances of ophaned zones and vias.
+    if( schematicFrame )
+    {
+        // Get list of nets from schematic.
+        wxArrayString nets = schematicFrame->ListNets();
+
+        // perform netlist matching to prevent ophaned zones.
+        for( auto zone : GetBoard()->Zones() )
+        {
+            wxString    zoneNet     = zone->GetNet()->GetNetname();
+            wxString    localNet    = "/" + zoneNet;
+
+            for( int i = 0; i < nets.GetCount(); i++ )
+            {
+                if( nets[i].EndsWith( localNet ) )
+                {
+                    NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
+
+                    if( net )
+                    {
+                        zone->SetNetCode( net->GetNet() );
+                    }
+                }
+            }
+        }
+
+        // perform netlist matching to prevent ophaned tracks/vias.
+        for( auto track : GetBoard()->Tracks() )
+        {
+            wxString    trackNet    = track->GetNet()->GetNetname();
+            wxString    localNet    = "/" + trackNet;
+
+            for( int i = 0; i < nets.GetCount(); i++ )
+            {
+                if( nets[i].EndsWith( localNet ) )
+                {
+                    NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
+
+                    if( net )
+                    {
+                        track->SetNetCode( net->GetNet() );
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
 }

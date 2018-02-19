@@ -193,6 +193,25 @@ public:
     }
 
     /**
+     * Rematch ophaned zones and vias to schematic nets.
+     */
+    VTBL_ENTRY bool FixEagleNets()
+    {
+        return false;
+    };
+
+
+    /**
+     * Create a list of net names currently in use by the player .
+     */
+    VTBL_ENTRY wxArrayString ListNets()
+    {
+        wxArrayString a;
+        return a;
+    };
+
+
+    /**
      * Function ShowModal
      * puts up this wxFrame as if it were a modal dialog, with all other instantiated
      * wxFrames disabled until this KIWAY_PLAYER derivative calls DismissModal().

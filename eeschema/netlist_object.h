@@ -403,6 +403,12 @@ public:
      */
     void TestforSimilarLabels();
 
+    /**
+     * Function ListNets
+     * return a the list of net names. 
+     */
+    wxArrayString ListNets();
+
 
     #if defined(DEBUG)
     void DumpNetTable()

@@ -878,6 +878,11 @@ public:
     bool ImportFile( const wxString& aFileName, int aFileType ) override;
 
     /**
+     * Rematch ophaned zones and vias to schematic nets.
+     */
+    bool FixEagleNets() override;
+
+    /**
      * Function SavePcbFile
      * writes the board data structures to \a a aFileName
      * Creates backup when requested and update flags (modified and saved flgs)

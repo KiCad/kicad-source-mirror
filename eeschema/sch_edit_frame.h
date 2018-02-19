@@ -578,6 +578,11 @@ public:
                            REPORTER*       aReporter = NULL );
 
     /**
+     * Create a list of net names currently in the schematic.
+     */
+    wxArrayString ListNets() override;
+
+    /**
      * Clear the current component annotation.
      *
      * @param aCurrentSheetOnly Clear only the annotation for the current sheet if true.

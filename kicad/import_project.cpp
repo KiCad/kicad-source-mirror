@@ -116,10 +116,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     }
 
     wxFileName pcb( sch );
-    wxFileName netlist( pro );
     pro.SetExt( ProjectFileExtension );         // enforce extension
     pcb.SetExt( LegacyPcbFileExtension );       // enforce extension
-    netlist.SetExt( NetlistFileExtension );
 
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
@@ -199,6 +197,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         // - second, perform schematic annotation and update footprint references
         pcbframe->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "no-annotate;by-reference", this );
         pcbframe->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "quiet-annotate;by-timestamp", this );
+        pcbframe->FixEagleNets();
     }
 
     ReCreateTreePrj();
