@@ -260,6 +260,22 @@ public:
         return m_points[aIndex];
     }
 
+    /**
+     * Returns the last point in the line chain.
+     */
+    VECTOR2I& LastPoint()
+    {
+        return m_points[PointCount() - 1];
+    }
+
+    /**
+     * Returns the last point in the line chain.
+     */
+    const VECTOR2I& CLastPoint() const
+    {
+        return m_points[PointCount() - 1];
+    }
+
     /// @copydoc SHAPE::BBox()
     const BOX2I BBox( int aClearance = 0 ) const override
     {

@@ -239,7 +239,7 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
 {
     auto& finalPoints = aMgr.GetLockedInPoints();
 
-    if( finalPoints.size() < 3 )
+    if( finalPoints.PointCount() < 3 )
     {
         // just scrap the zone in progress
         m_zone = nullptr;
@@ -250,9 +250,9 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         // will be merged to the existing zone as a new hole.
         m_zone->Outline()->NewOutline();
 
-        for( const auto& pt : finalPoints )
+        for( int i = 0; i < finalPoints.PointCount(); ++i )
         {
-            m_zone->Outline()->Append( pt );
+            m_zone->Outline()->Append( finalPoints.CPoint( i ) );
         }
 
         m_zone->Outline()->Outline( 0 ).SetClosed( true );

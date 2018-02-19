@@ -62,8 +62,8 @@ public:
      * @param aLeaderPts - the lines from the last fixed point to
      *        another point, eg the cursor.
      */
-    void SetPoints( const std::vector<VECTOR2I>& aLockedInPts,
-                    const std::vector<VECTOR2I>& aLeaderPts );
+    void SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts,
+                    const SHAPE_LINE_CHAIN& aLeaderPts );
 
 private:
 
