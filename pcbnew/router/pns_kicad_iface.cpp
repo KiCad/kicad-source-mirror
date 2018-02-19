@@ -791,11 +791,13 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
     return via;
 }
 
+
 bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
 {
     SHAPE_POLY_SET poly;
 
-    if( !aZone->GetIsKeepout() )
+    // TODO handle no-via restriction
+    if( !aZone->GetIsKeepout() || !aZone->GetDoNotAllowTracks() )
         return false;
 
     aZone->BuildSmoothedPoly( poly );
