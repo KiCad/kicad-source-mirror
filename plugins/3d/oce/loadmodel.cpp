@@ -80,6 +80,7 @@
 
 // precision for mesh creation; 0.07 should be good enough for ECAD viewing
 #define USER_PREC (0.14)
+
 // angular deflection for meshing
 // 10 deg (36 faces per circle) = 0.17453293
 // 20 deg (18 faces per circle) = 0.34906585
@@ -399,12 +400,8 @@ bool readIGES( Handle(TDocStd_Document)& m_doc, const char* fname )
     if( stat != IFSelect_RetDone )
         return false;
 
-    // Enable user-defined shape precision
-    if( !Interface_Static::SetIVal( "read.precision.mode", 1 ) )
-        return false;
-
-    // Set the shape conversion precision to USER_PREC (default 0.0001 has too many triangles)
-    if( !Interface_Static::SetRVal( "read.precision.val", USER_PREC ) )
+    // Enable file-defined shape precision
+    if( !Interface_Static::SetIVal( "read.precision.mode", 0 ) )
         return false;
 
     // set other translation options
