@@ -60,6 +60,7 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 #define NOCOLOR COLOR4D::UNSPECIFIED    // specify rows that do not have a color selector icon
 
          // text                id                      color       tooltip
+    RR( _( "Tracks" ),          LAYER_TRACKS,         NOCOLOR,  _( "Show tracks" ) ),
     RR( _( "Through Via" ),     LAYER_VIA_THROUGH,    WHITE,    _( "Show through vias" ) ),
     RR( _( "Bl/Buried Via" ),   LAYER_VIA_BBLIND,     WHITE,    _( "Show blind or buried vias" )  ),
     RR( _( "Micro Via" ),       LAYER_VIA_MICROVIA,   WHITE,    _( "Show micro vias") ),

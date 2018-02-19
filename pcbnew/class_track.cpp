@@ -45,6 +45,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <view/view.h>
 
 /**
  * Function ShowClearance
@@ -670,7 +671,8 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
     auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
 
-    if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
+    if( ( !brd->IsLayerVisible( m_Layer ) || !brd->IsElementVisible( LAYER_TRACKS ) )
+        && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
 
 #ifdef USE_WX_OVERLAY
@@ -798,6 +800,11 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
+    const int HIDE = std::numeric_limits<unsigned int>::max();
+
+    if( !aView->IsLayerVisible( LAYER_TRACKS ) )
+        return HIDE;
+
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
