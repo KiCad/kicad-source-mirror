@@ -23,8 +23,8 @@
 #include "pns_router.h"
 #include "pns_meander_placer.h"
 
-PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP( PCB_EDIT_FRAME* aParent ) :
-    WX_STATUS_POPUP( aParent )
+PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
+    STATUS_POPUP( aParent )
 {
     m_panel->SetBackgroundColour( wxColour( 64, 64, 64 ) );
     m_statusLine = new wxStaticText( m_panel, wxID_ANY, wxEmptyString ) ;

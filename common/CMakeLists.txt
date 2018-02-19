@@ -294,6 +294,7 @@ set( COMMON_SRCS
     searchhelpfilefullpath.cpp
     selcolor.cpp
     settings.cpp
+    status_popup.cpp
     systemdirsappend.cpp
     trigo.cpp
     undo_redo_container.cpp
@@ -301,7 +302,6 @@ set( COMMON_SRCS
     validators.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp
-    wx_status_popup.cpp
     wxdataviewctrl_helpers.cpp
     xnode.cpp
     zoom.cpp

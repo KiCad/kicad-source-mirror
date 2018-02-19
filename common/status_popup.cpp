@@ -22,37 +22,54 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __WX_STATUS_POPUP_H_
-#define __WX_STATUS_POPUP_H_
-
-
-#include <common.h>
-#include <wx/popupwin.h>
-
-class PCB_EDIT_FRAME;
-
 /**
- * Class WX_STATUS_POPUP
- *
- * A tiny, headerless popup window used to display useful status (e.g. line length
- * tuning info) next to the mouse cursor.
+ * Transient mouse following popup window implementation.
  */
 
-class WX_STATUS_POPUP: public wxPopupWindow
+#include <status_popup.h>
+#include <draw_frame.h>
+
+STATUS_POPUP::STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
+    wxPopupWindow( aParent ), m_expireTimer( this )
 {
-public:
-    WX_STATUS_POPUP( PCB_EDIT_FRAME* aParent );
-    virtual ~WX_STATUS_POPUP();
+    m_panel = new wxPanel( this, wxID_ANY );
+    m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
-    virtual void Popup(wxWindow* aFocus = NULL);
-    virtual void Move( const wxPoint &aWhere );
+    m_topSizer = new wxBoxSizer( wxVERTICAL );
+    m_panel->SetSizer( m_topSizer );
+    m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-protected:
+    Connect( wxEVT_TIMER, wxTimerEventHandler( STATUS_POPUP::onExpire ), NULL, this );
+}
 
-    void updateSize();
 
-    wxPanel* m_panel;
-    wxBoxSizer* m_topSizer;
-};
+void STATUS_POPUP::Popup( wxWindow* )
+{
+    Show( true );
+    Raise();
+}
 
-#endif /* __WX_STATUS_POPUP_H_*/
+
+void STATUS_POPUP::Move( const wxPoint& aWhere )
+{
+    SetPosition( aWhere );
+}
+
+
+void STATUS_POPUP::Expire( int aMsecs )
+{
+    m_expireTimer.StartOnce( aMsecs );
+}
+
+
+void STATUS_POPUP::updateSize()
+{
+    m_topSizer->Fit( m_panel );
+    SetClientSize( m_panel->GetSize() );
+}
+
+
+void STATUS_POPUP::onExpire( wxTimerEvent& aEvent )
+{
+    Hide();
+}
