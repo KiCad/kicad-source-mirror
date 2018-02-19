@@ -193,8 +193,10 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
             item->SetFont( *wxNORMAL_FONT );
     #endif
         }
-        else
+        else if( aType != wxITEM_RADIO )
+        {
             item->SetBitmap( aImage );
+        }
     }
 
     aMenu->Append( item );
@@ -226,8 +228,10 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
             item->SetFont( *wxNORMAL_FONT );
     #endif
         }
-        else
+        else if( aType != wxITEM_RADIO )
+        {
             item->SetBitmap( aImage );
+        }
     }
 
     aMenu->Append( item );
