@@ -218,45 +218,37 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  KiBitmap( preference_xpm ) );
 #endif
 
-    // Display Settings submenu
-    wxMenu* displaySettingsSubMenu = new wxMenu;
+    aParentMenu->AppendSeparator();
 
-    AddMenuItem( displaySettingsSubMenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
+    AddMenuItem( aParentMenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
                  _( "&Display Options..." ),
                  _( "Graphics acceleration, grid, cursor, annotation and clearance outline settings." ),
                  KiBitmap( display_options_xpm ) );
 
-    displaySettingsSubMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "Legacy Graphic&s" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Legacy Toolset" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_CANVAS_LEGACY );
-    displaySettingsSubMenu->Append(
-        new wxMenuItem( displaySettingsSubMenu, ID_MENU_CANVAS_LEGACY,
+    aParentMenu->Append(
+        new wxMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY,
                         text, _( "Use legacy graphics mode (not all features will be available)" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Modern (&Accelerated)" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
-    displaySettingsSubMenu->Append(
-        new wxMenuItem( displaySettingsSubMenu, ID_MENU_CANVAS_OPENGL,
+    aParentMenu->Append(
+        new wxMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL,
                         text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Modern (Fallba&ck)" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (&Fallback)" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
-    displaySettingsSubMenu->Append(
-        new wxMenuItem( displaySettingsSubMenu, ID_MENU_CANVAS_CAIRO,
+    aParentMenu->Append(
+        new wxMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO,
                         text, _( "Use modern fallback (Cairo) graphics mode" ),
                         wxITEM_RADIO ) );
 
-    AddMenuItem( aParentMenu, displaySettingsSubMenu, -1,
-                 _( "&Display Settings" ),
-                 _( "Select toolset and other display options" ),
-                 KiBitmap( display_options_xpm ) );
-
+    aParentMenu->AppendSeparator();
 
     // Language submenu
-    aParentMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( aParentMenu );
 
     // Hotkey submenu
@@ -616,6 +608,11 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                  HELP_SHOW_HIDE_MICROWAVE_TOOLS,
                  KiBitmap( mw_toolbar_xpm ), wxITEM_CHECK );
 
+    AddMenuItem( aParentMenu, ID_OPEN_MODULE_VIEWER,
+                 _( "&Library Browser" ),
+                 _( "Open the Library Browser" ),
+                 KiBitmap( modview_icon_xpm ) );
+
     text = AddHotkeyName( _( "&3D Viewer" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_3D_VIEWER );
     AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_3D_FRAME,
                  text, _( "Show board in 3D viewer" ),
@@ -727,10 +724,12 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Sketch &Vias" ), _( "Show vias in outline mode" ),
                  KiBitmap( via_sketch_xpm ), wxITEM_CHECK );
 
+    text = AddHotkeyName( _( "Sketch &Tracks" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_SWITCH_TRACK_DISPLAY_MODE );
     AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                 _( "Sketch &Tracks" ), _( "Show tracks in outline mode" ),
+                 text, _( "Show tracks in outline mode" ),
                  KiBitmap( showtrack_xpm ), wxITEM_CHECK );
-                 
+
     AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH,
                  _( "Sketch &Graphic Items" ), _( "Show graphic items in outline mode" ),
                  KiBitmap( text_sketch_xpm ), wxITEM_CHECK );
@@ -962,7 +961,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( library_archive_xpm ) );
 
     aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, wxID_EXIT, _( "&Close" ), _( "Close Pcbnew" ), KiBitmap( exit_xpm ) );
+    AddMenuItem( aParentMenu, wxID_EXIT, _( "&Exit" ), _( "Close Pcbnew" ), KiBitmap( exit_xpm ) );
 }
 
 
