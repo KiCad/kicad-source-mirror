@@ -39,6 +39,7 @@
 #include <lib_id.h>
 #include <confirm.h>
 #include <bitmaps.h>
+#include <gal/graphics_abstraction_layer.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -177,6 +178,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings( config() );
+    GetGalDisplayOptions().m_axesEnabled = true;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -299,6 +301,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     Zoom_Automatique( false );
 #endif
 
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
     UseGalCanvas( switchToGalCanvas );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame

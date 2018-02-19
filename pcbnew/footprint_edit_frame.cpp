@@ -271,6 +271,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
+    GetGalDisplayOptions().m_axesEnabled = true;
 
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
