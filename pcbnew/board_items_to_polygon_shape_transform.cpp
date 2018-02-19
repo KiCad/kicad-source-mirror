@@ -138,7 +138,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
     wxSize margin;
     for( ; pad != NULL; pad = pad->Next() )
     {
-        if( !pad->IsOnLayer(aLayer) )
+        if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
             continue;
 
         // NPTH pads are not drawn on layers if the shape size and pos is the same
@@ -206,7 +206,8 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                         int             aInflateValue,
                         int             aCircleToSegmentsCount,
                         double          aCorrectionFactor,
-                        int             aCircleToSegmentsCountForTexts ) const
+                        int             aCircleToSegmentsCountForTexts,
+                        bool            aIncludeText ) const
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
@@ -219,7 +220,8 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
             {
                 TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
-                if( text->GetLayer() == aLayer && text->IsVisible() )
+                if( ( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
+                    && text->IsVisible() )
                     texts.push_back( text );
 
                 break;
@@ -228,7 +230,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
         case PCB_MODULE_EDGE_T:
             outline = (EDGE_MODULE*) item;
 
-            if( outline->GetLayer() != aLayer )
+            if( aLayer != UNDEFINED_LAYER && outline->GetLayer() != aLayer )
                 break;
 
             outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
@@ -239,6 +241,9 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                 break;
         }
     }
+
+    if( !aIncludeText )
+        return;
 
     // Convert texts sur modules
     if( Reference().GetLayer() == aLayer && Reference().IsVisible() )

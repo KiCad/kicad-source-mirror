@@ -512,6 +512,25 @@ const EDA_RECT MODULE::GetBoundingBox() const
 }
 
 
+SHAPE_POLY_SET MODULE::GetBoundingPoly() const
+{
+    const int segcountforcircle = 8;
+    double    correctionFactor  = 1.0 / cos( M_PI / (segcountforcircle * 2) );
+    SHAPE_POLY_SET poly;
+
+    TransformPadsShapesWithClearanceToPolygon( UNDEFINED_LAYER,
+            poly, 0, segcountforcircle, correctionFactor );
+
+    TransformGraphicShapesWithClearanceToPolygonSet( UNDEFINED_LAYER,
+            poly, 0, segcountforcircle, correctionFactor, 0, false );
+
+    poly.NormalizeAreaOutlines();
+    poly.Inflate( Millimeter2iu( 0.01 ), segcountforcircle );
+
+    return poly;
+}
+
+
 void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int      nbpad;
@@ -604,6 +623,13 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 bool MODULE::HitTest( const wxPoint& aPosition ) const
 {
     return m_BoundaryBox.Contains( aPosition );
+}
+
+
+bool MODULE::HitTestAccurate( const wxPoint& aPosition ) const
+{
+    auto shape = GetBoundingPoly();
+    return shape.Contains( aPosition, -1, true );
 }
 
 

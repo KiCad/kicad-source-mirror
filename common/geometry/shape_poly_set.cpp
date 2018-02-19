@@ -1402,19 +1402,19 @@ bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
 }
 
 
-bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex ) const
+bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles ) const
 {
     if( m_polys.size() == 0 ) // empty set?
         return false;
 
     // If there is a polygon specified, check the condition against that polygon
     if( aSubpolyIndex >= 0 )
-        return containsSingle( aP, aSubpolyIndex );
+        return containsSingle( aP, aSubpolyIndex, aIgnoreHoles );
 
     // In any other case, check it against all polygons in the set
     for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        if( containsSingle( aP, polygonIdx ) )
+        if( containsSingle( aP, polygonIdx, aIgnoreHoles ) )
             return true;
     }
 
@@ -1440,20 +1440,23 @@ void SHAPE_POLY_SET::RemoveVertex( VERTEX_INDEX aIndex )
 }
 
 
-bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex ) const
+bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles ) const
 {
     // Check that the point is inside the outline
     if( pointInPolygon( aP, m_polys[aSubpolyIndex][0] ) )
     {
-        // Check that the point is not in any of the holes
-        for( int holeIdx = 0; holeIdx < HoleCount( aSubpolyIndex ); holeIdx++ )
+        if( !aIgnoreHoles )
         {
-            const SHAPE_LINE_CHAIN hole = CHole( aSubpolyIndex, holeIdx );
+            // Check that the point is not in any of the holes
+            for( int holeIdx = 0; holeIdx < HoleCount( aSubpolyIndex ); holeIdx++ )
+            {
+                const SHAPE_LINE_CHAIN hole = CHole( aSubpolyIndex, holeIdx );
 
-            // If the point is inside a hole (and not on its edge),
-            // it is outside of the polygon
-            if( pointInPolygon( aP, hole ) && !hole.PointOnEdge( aP ) )
-                return false;
+                // If the point is inside a hole (and not on its edge),
+                // it is outside of the polygon
+                if( pointInPolygon( aP, hole ) && !hole.PointOnEdge( aP ) )
+                    return false;
+            }
         }
 
         return true;

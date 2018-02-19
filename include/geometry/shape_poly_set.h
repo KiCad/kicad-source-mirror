@@ -933,9 +933,15 @@ class SHAPE_POLY_SET : public SHAPE
         bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
                 int aClearance = 0 );
 
-        ///> Returns true if a given subpolygon contains the point aP. If aSubpolyIndex < 0
-        ///> (default value), checks all polygons in the set
-        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1 ) const;
+        /**
+         * Returns true if a given subpolygon contains the point aP
+         *
+         * @param aP is the point to check
+         * @param aSubpolyIndex is the subpolygon to check, or -1 to check all
+         * @param aIgnoreHoles controls whether or not internal holes are considered
+         * @return true if the polygon contains the point
+         */
+        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, bool aIgnoreHoles = false ) const;
 
         ///> Returns true if the set is empty (no polygons at all)
         bool IsEmpty() const
@@ -1112,10 +1118,11 @@ class SHAPE_POLY_SET : public SHAPE
          *                       the aSubpolyIndex-th polygon will be tested.
          * @param  aSubpolyIndex is an integer specifying which polygon in the set has to be
          *                       checked.
+         * @param  aIgnoreHoles  can be set to true to ignore internal holes in the polygon
          * @return bool - true if aP is inside aSubpolyIndex-th polygon; false in any other
          *         case.
          */
-        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex ) const;
+        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles = false ) const;
 
         /**
          * Operations ChamferPolygon and FilletPolygon are computed under the private chamferFillet
