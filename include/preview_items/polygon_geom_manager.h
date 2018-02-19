@@ -96,6 +96,24 @@ public:
     void SetLeaderMode( LEADER_MODE aMode );
 
     /**
+     * Enables/disables self-intersecting polygons.
+     * @param aEnabled true if self-intersecting polygons are enabled.
+     */
+    void AllowIntersections( bool aEnabled )
+    {
+        m_intersectionsAllowed = true;
+    }
+
+    /**
+     * Checks whether self-intersecting polygons are enabled.
+     * @return true if self-intersecting polygons are enabled.
+     */
+    bool IntersectionsAllowed() const
+    {
+        return m_intersectionsAllowed;
+    }
+
+    /**
      * Set the current cursor position
      */
     void SetCursorPosition( const VECTOR2I& aPos, LEADER_MODE aModifier );
@@ -154,6 +172,9 @@ private:
 
     ///> The current mode of the leader line
     LEADER_MODE m_leaderMode;
+
+    ///> Flag enabling self-intersecting polygons
+    bool m_intersectionsAllowed;
 
     ///> Point that have been "locked in"
     SHAPE_LINE_CHAIN m_lockedPoints;

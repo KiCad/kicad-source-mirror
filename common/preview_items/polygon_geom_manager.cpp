@@ -28,7 +28,8 @@
 
 POLYGON_GEOM_MANAGER::POLYGON_GEOM_MANAGER( CLIENT& aClient ):
     m_client( aClient ),
-    m_leaderMode( LEADER_MODE::DIRECT )
+    m_leaderMode( LEADER_MODE::DIRECT ),
+    m_intersectionsAllowed( false )
 {}
 
 
@@ -50,6 +51,17 @@ bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
     {
         // no leader lines, directly add the cursor
         m_lockedPoints.Append( aPt );
+    }
+
+    // check for self-intersections (line chain needs to be set as closed for proper checks)
+    m_lockedPoints.SetClosed( true );
+    bool selfIntersect = !!m_lockedPoints.SelfIntersecting();
+    m_lockedPoints.SetClosed( false );
+
+    if( !m_intersectionsAllowed && selfIntersect )
+    {
+        m_lockedPoints.Remove( m_lockedPoints.PointCount() - 1 );
+        return false;
     }
 
     m_client.OnGeometryChange( *this );
@@ -117,8 +129,6 @@ void POLYGON_GEOM_MANAGER::Reset()
 void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER_MODE aModifier )
 {
     wxCHECK( m_lockedPoints.PointCount() > 0, /*void*/ );
-    SHAPE_LINE_CHAIN newChain;
-
     const VECTOR2I& lastPt = m_lockedPoints.CLastPoint();
 
     if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
@@ -129,6 +139,7 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
 
         // Can also add chain back to start, but this rearely produces
         // usable result
+        //SHAPE_LINE_CHAIN newChain;
         //DIRECTION_45 directionToStart( aEndPoint - m_lockedPoints.front() );
         //newChain.Append( directionToStart.BuildInitialTrace( aEndPoint, m_lockedPoints.front() ) );
     }

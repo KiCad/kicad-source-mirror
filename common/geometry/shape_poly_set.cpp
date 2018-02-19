@@ -387,11 +387,8 @@ bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int*
 
 bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex )
 {
-    // Get polygon
-    const POLYGON poly = CPolygon( aPolygonIndex );
-
-    SEGMENT_ITERATOR    iterator = IterateSegmentsWithHoles( aPolygonIndex );
-    SEGMENT_ITERATOR    innerIterator;
+    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
+    SEGMENT_ITERATOR innerIterator;
 
     for( iterator = IterateSegmentsWithHoles( aPolygonIndex ); iterator; iterator++ )
     {
