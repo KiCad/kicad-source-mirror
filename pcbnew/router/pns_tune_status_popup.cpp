@@ -24,16 +24,9 @@
 #include "pns_meander_placer.h"
 
 PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
-    STATUS_POPUP( aParent )
+    STATUS_TEXT_POPUP( aParent )
 {
     m_panel->SetBackgroundColour( wxColour( 64, 64, 64 ) );
-    m_statusLine = new wxStaticText( m_panel, wxID_ANY, wxEmptyString ) ;
-    m_topSizer->Add( m_statusLine, 1, wxALL | wxEXPAND, 5 );
-}
-
-
-PNS_TUNE_STATUS_POPUP::~PNS_TUNE_STATUS_POPUP()
-{
 }
 
 
@@ -44,25 +37,19 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
     if( !placer )
         return;
 
-    m_statusLine->SetLabel( placer->TuningInfo() );
-
-    wxColour color;
+    SetText( placer->TuningInfo() );
 
     switch( placer->TuningStatus() )
     {
     case PNS::MEANDER_PLACER::TUNED:
-        color = wxColour( 0, 255, 0 );
+        SetTextColor( wxColour( 0, 255, 0 ) );
         break;
     case PNS::MEANDER_PLACER::TOO_SHORT:
-        color = wxColour( 255, 128, 128 );
+        SetTextColor( wxColour( 255, 128, 128 ) );
         break;
     case PNS::MEANDER_PLACER::TOO_LONG:
-        color = wxColour( 128, 128, 255 );
+        SetTextColor( wxColour( 128, 128, 255 ) );
         break;
     }
-
-    m_statusLine->SetForegroundColour( color );
-
-    updateSize();
 }
 

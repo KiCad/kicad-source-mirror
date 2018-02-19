@@ -65,4 +65,32 @@ protected:
     wxTimer m_expireTimer;
 };
 
+
+/**
+ * Class STATUS_TEXT_POPUP
+ *
+ * Extension of STATUS_POPUP, displaying a single line text.
+ */
+class STATUS_TEXT_POPUP : public STATUS_POPUP
+{
+public:
+    STATUS_TEXT_POPUP( EDA_DRAW_FRAME* aParent );
+    virtual ~STATUS_TEXT_POPUP() {}
+
+    /**
+     * Display a text.
+     * @param aText is the text to be displayed.
+     */
+    void SetText( const wxString& aText );
+
+    /**
+     * Change text color.
+     * @param aColor is the new text color.
+     */
+    void SetTextColor( const wxColour& aColor );
+
+protected:
+    wxStaticText* m_statusLine;
+};
+
 #endif /* __STATUS_POPUP_H_*/
