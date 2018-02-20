@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,6 +13,7 @@
 
 BEGIN_EVENT_TABLE( DIALOG_COPPER_ZONE_BASE, DIALOG_SHIM )
 	EVT_CLOSE( DIALOG_COPPER_ZONE_BASE::_wxFB_OnClose )
+	EVT_UPDATE_UI( ID_NETNAME_SELECTION, DIALOG_COPPER_ZONE_BASE::_wxFB_OnUpdateUI )
 	EVT_CHOICE( ID_M_NETDISPLAYOPTION, DIALOG_COPPER_ZONE_BASE::_wxFB_OnNetSortingOptionSelected )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
@@ -240,6 +241,18 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OutlineAppearanceCtrl = new wxChoice( m_ExportableSetupSizer->GetStaticBox(), ID_M_OUTLINEAPPEARANCECTRL, wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 0 );
 	m_OutlineAppearanceCtrl->SetSelection( 0 );
 	bSizerLowerRight->Add( m_OutlineAppearanceCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	m_bNoNetWarning = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_bitmapNoNetWarning = new wxStaticBitmap( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bNoNetWarning->Add( m_bitmapNoNetWarning, 0, wxTOP|wxBOTTOM|wxLEFT, 8 );
+	
+	m_staticText18 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("No net will result\nin an unconnected \ncopper island."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	m_bNoNetWarning->Add( m_staticText18, 0, wxALL, 5 );
+	
+	
+	bSizerLowerRight->Add( m_bNoNetWarning, 1, wxEXPAND|wxTOP, 25 );
 	
 	
 	m_ExportableSetupSizer->Add( bSizerLowerRight, 0, wxEXPAND, 5 );

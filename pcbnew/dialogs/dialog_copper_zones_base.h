@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,6 +28,10 @@ class TEXT_CTRL_EVAL;
 #include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/spinctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,6 +46,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		
 		// Private event handlers
 		void _wxFB_OnClose( wxCloseEvent& event ){ OnClose( event ); }
+		void _wxFB_OnUpdateUI( wxUpdateUIEvent& event ){ OnUpdateUI( event ); }
 		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
 		void _wxFB_OnRunFiltersButtonClick( wxCommandEvent& event ){ OnRunFiltersButtonClick( event ); }
 		void _wxFB_OnCornerSmoothingModeChoice( wxCommandEvent& event ){ OnCornerSmoothingModeChoice( event ); }
@@ -108,6 +113,9 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxChoice* m_OrientEdgesOpt;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineAppearanceCtrl;
+		wxBoxSizer* m_bNoNetWarning;
+		wxStaticBitmap* m_bitmapNoNetWarning;
+		wxStaticText* m_staticText18;
 		wxButton* m_ExportSetupButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -115,6 +123,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunFiltersButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCornerSmoothingModeChoice( wxCommandEvent& event ) { event.Skip(); }

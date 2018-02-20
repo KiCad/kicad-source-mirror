@@ -37,6 +37,7 @@
 #include <zones.h>
 #include <base_units.h>
 #include <widgets/text_ctrl_eval.h>
+#include <bitmaps.h>
 
 #include <class_zone.h>
 #include <class_board.h>
@@ -88,6 +89,7 @@ private:
     void OnButtonCancelClick( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
     void OnCornerSmoothingModeChoice( wxCommandEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& ) override;
 
     /**
      * Function AcceptOptions
@@ -167,6 +169,8 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 void DIALOG_COPPER_ZONE::initDialog()
 {
     BOARD* board = m_Parent->GetBoard();
+
+    m_bitmapNoNetWarning->SetBitmap( KiBitmap( dialog_warning_xpm ) );
 
     wxString msg;
 
@@ -302,6 +306,11 @@ void DIALOG_COPPER_ZONE::initDialog()
     OnCornerSmoothingModeChoice( event );
 }
 
+
+void DIALOG_COPPER_ZONE::OnUpdateUI( wxUpdateUIEvent& )
+{
+    m_bNoNetWarning->Show( m_ListNetNameSelection->GetSelection() == 0 );
+}
 
 void DIALOG_COPPER_ZONE::OnButtonCancelClick( wxCommandEvent& event )
 {
@@ -473,13 +482,6 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     {
         DisplayError( this, _( "No net selected." ) );
         return false;
-    }
-
-    if( ii == 0 )   // the not connected option was selected: this is not a good practice: warn:
-    {
-        if( !IsOK( this, _( "You have chosen the \"not connected\" option. This will create "
-                            "insulated copper islands. Are you sure ?" ) ) )
-            return false;
     }
 
     wxString net_name = m_ListNetNameSelection->GetString( ii );
