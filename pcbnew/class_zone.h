@@ -658,6 +658,8 @@ public:
 
     const std::vector<SEG>& GetHatchLines() const { return m_HatchLines; }
 
+    bool   GetHV45() const { return m_hv45; }
+    void   SetHV45( bool aConstrain ) { m_hv45 = aConstrain; }
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
@@ -738,6 +740,8 @@ private:
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
     std::vector<SEG>      m_HatchLines;     // hatch lines
     std::vector<int>      m_insulatedIslands;
+
+    bool                  m_hv45;           // constrain edges to horizontal, vertical or 45º
 
     /**
      * Union to handle conversion between references to wxPoint and to VECTOR2I.

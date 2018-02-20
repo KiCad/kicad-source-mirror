@@ -36,7 +36,7 @@ bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
 {
     // if this is the first point, make sure the client is happy
     // for us to continue
-    if( !IsPolygonInProgress() && !m_client.OnFirstPoint() )
+    if( !IsPolygonInProgress() && !m_client.OnFirstPoint( *this ) )
         return false;
 
     if( m_leaderPts.size() > 1 )
@@ -69,9 +69,9 @@ void POLYGON_GEOM_MANAGER::SetLeaderMode( LEADER_MODE aMode )
 }
 
 
-void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos )
+void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos, LEADER_MODE aModifier )
 {
-    updateLeaderPoints( aPos );
+    updateLeaderPoints( aPos, aModifier );
 }
 
 
@@ -114,11 +114,11 @@ void POLYGON_GEOM_MANAGER::Reset()
 }
 
 
-void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint )
+void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER_MODE aModifier )
 {
     SHAPE_LINE_CHAIN newChain;
 
-    if( m_leaderMode == LEADER_MODE::DEG45 )
+    if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
     {
         // get a restricted 45/H/V line from the last fixed point to the cursor
         DIRECTION_45 direction( m_lockedPoints.back() - aEndPoint );

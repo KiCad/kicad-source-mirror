@@ -189,7 +189,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 }
 
 
-bool ZONE_CREATE_HELPER::OnFirstPoint()
+bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 {
     // if we don't have a zone, create one
     // the user's choice here can affect things like the colour
@@ -211,6 +211,10 @@ bool ZONE_CREATE_HELPER::OnFirstPoint()
             m_previewItem.SetFillColor( color.WithAlpha( 0.2 ) );
 
             m_parentView.SetVisible( &m_previewItem, true );
+
+            aMgr.SetLeaderMode( m_zone.get()->GetHV45()
+                                ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
+                                : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
         }
     }
 

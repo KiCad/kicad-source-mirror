@@ -52,7 +52,7 @@ public:
          *
          * @return false to veto start of new polygon
          */
-        virtual bool OnFirstPoint() = 0;
+        virtual bool OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
         ///> Sent when the polygon geometry changes
         virtual void OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr ) = 0;
@@ -99,7 +99,7 @@ public:
     /**
      * Set the current cursor position
      */
-    void SetCursorPosition( const VECTOR2I& aPos );
+    void SetCursorPosition( const VECTOR2I& aPos, LEADER_MODE aModifier );
 
     /**
      * @return true if the polygon in "in progress", i.e. it has at least
@@ -141,7 +141,8 @@ private:
      * Update the leader line points based on a new endpoint (probably
      * a cursor position)
      */
-    void updateLeaderPoints( const VECTOR2I& aEndPoint );
+    void updateLeaderPoints( const VECTOR2I& aEndPoint,
+                             LEADER_MODE aModifier = LEADER_MODE::DIRECT );
 
     ///> The "user" of the polygon data that is informed when the geometry changes
     CLIENT& m_client;

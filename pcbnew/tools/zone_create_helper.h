@@ -73,7 +73,7 @@ public:
 
     void OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr ) override;
 
-    bool OnFirstPoint() override;
+    bool OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr ) override;
 
     void OnComplete( const POLYGON_GEOM_MANAGER& aMgr ) override;
 

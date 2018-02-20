@@ -1325,10 +1325,9 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
         else if( polyGeomMgr.IsPolygonInProgress()
                  && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            bool draw45 = evt->Modifier( MD_CTRL );
-            polyGeomMgr.SetLeaderMode( draw45 ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
-                    : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
-            polyGeomMgr.SetCursorPosition( cursorPos );
+            polyGeomMgr.SetCursorPosition( cursorPos, evt->Modifier( MD_CTRL )
+                                                      ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
+                                                      : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
         }
     }    // end while
 }
