@@ -815,7 +815,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
 
         case S_POLYGON:         // polygon
             bs_info[0] = "Polygon";
-            bs_info[1] = wxString::Format( _( "corners count %d" ), primitive.m_Poly.size() );
+            bs_info[1] = wxString::Format( _( "corners count %d" ), (int) primitive.m_Poly.size() );
             break;
 
         default:
