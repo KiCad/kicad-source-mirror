@@ -247,7 +247,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
             popupWindow.ShowModal();
         }
         else
-            DisplayError( this, wxString::Format( _( "Unable to create report file \"%s\" "),
+            DisplayError( this, wxString::Format( _( "Unable to create report file \"%s\""),
                           GetChars( reportName ) ) );
     }
 
