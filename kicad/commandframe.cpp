@@ -29,6 +29,7 @@
 
 
 #include <bitmaps.h>
+#include <wx/statline.h>
 
 #include "kicad.h"
 
@@ -62,6 +63,8 @@ int LAUNCHER_PANEL::GetPanelWidth() const
  */
 void LAUNCHER_PANEL::CreateCommandToolbar()
 {
+    wxStaticLine* separator;
+
     m_buttonSizer = new wxBoxSizer( wxHORIZONTAL );
 
     AddButton( ID_TO_SCH,
@@ -72,6 +75,9 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
                KiBitmap( icon_libedit_xpm ),
                _( "Symbol library editor" ) );
 
+    separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+    m_buttonSizer->Add( separator, 0, wxEXPAND | wxALL, 8 );
+
     AddButton( ID_TO_PCB,
                KiBitmap( icon_pcbnew_xpm ),
                _( "PCB layout editor" ) );
@@ -79,6 +85,9 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
     AddButton( ID_TO_PCB_FP_EDITOR,
                KiBitmap( icon_modedit_xpm ),
                _( "Footprint library editor" ) );
+
+    separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+    m_buttonSizer->Add( separator, 0, wxEXPAND | wxALL, 8 );
 
     AddButton( ID_TO_GERBVIEW,
                KiBitmap( icon_gerbview_xpm ),
