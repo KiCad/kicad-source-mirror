@@ -542,7 +542,6 @@ bool SELECTION_TOOL::selectMultiple()
     bool cancelled = false;     // Was the tool cancelled while it was running?
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
-    getViewControls()->SetAutoPan( true );
 
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
@@ -565,10 +564,13 @@ bool SELECTION_TOOL::selectMultiple()
 
             view->SetVisible( &area, true );
             view->Update( &area );
+            getViewControls()->SetAutoPan( true );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
+            getViewControls()->SetAutoPan( false );
+
             // End drawing the selection box
             view->SetVisible( &area, false );
 
@@ -643,7 +645,6 @@ bool SELECTION_TOOL::selectMultiple()
     // Stop drawing the selection box
     view->Remove( &area );
     m_multiple = false;         // Multiple selection mode is inactive
-    getViewControls()->SetAutoPan( false );
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
