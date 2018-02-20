@@ -44,8 +44,11 @@ Oliver Walters <oliver.henry.walters[at]gmail-dot-com>
 Jon Evans <jon[at]craftyjon-dot-com>
 Russell Oliver <roliver8143[at]gmail-dot-com>
 Seth Hillbrand <hillbrand[at]ucdavis-dot-edu>
+Jeff Young <jeff[at]rokeby-dot-ie>
+Kevin Cozens <kevin[at]ve3syb-dot-ca>
 
-See also CHANGELOG.txt for contributors.
+See git repo on launchpad for contributors at
+https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref/master.
 
 
 == Document Writers

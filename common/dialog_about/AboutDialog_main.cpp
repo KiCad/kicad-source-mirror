@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2010-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2010-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -210,6 +210,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // alphabetically by last name after main 3 above:
     aInfo.AddDeveloper( new CONTRIBUTOR( "Frank Bennett" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Cirilo Bernardo" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Kevin Cozens" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jonas Diemer" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jon Evans" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Seth Hillbrand" ) );
@@ -235,6 +236,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( "Oliver Walters" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Tomasz Wlostowski" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Adam Wolf" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jeff Young" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Alexander Zakamaldin" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Henner Zeller" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Andrew Zonenberg" ) );
