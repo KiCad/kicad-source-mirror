@@ -519,11 +519,13 @@ inline void geom_transf( wxPoint& aCoord, wxPoint& aMove, double aScale, double 
 void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* aList, int aDuplicateCount )
 {
     // Get parameters from dlg:
-    wxPoint moveVect;
-    moveVect.x = ValueFromString( g_UserUnit, m_textCtrMoveX->GetValue() );
-    moveVect.y = ValueFromString( g_UserUnit, m_textCtrMoveY->GetValue() );
+    wxPoint move_vect;
+    move_vect.x = ValueFromString( g_UserUnit, m_textCtrMoveX->GetValue() );
+    move_vect.y = ValueFromString( g_UserUnit, m_textCtrMoveY->GetValue() );
+    wxPoint currMoveVect = move_vect;
 
     double rotation = DoubleValueFromString( DEGREES, m_textCtrAngle->GetValue() );
+    double curr_rotation = rotation;
     double scale = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlScalingFactor->GetValue() );
 
     // Avoid too small /too large scale, which could create issues:
@@ -553,8 +555,8 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* 
 
             // Transform parameters common to all shape types (some can be unused)
             shape->m_Thickness = KiROUND( shape->m_Thickness * scale );
-            geom_transf( shape->m_Start, moveVect, scale, rotation );
-            geom_transf( shape->m_End, moveVect, scale, rotation );
+            geom_transf( shape->m_Start, currMoveVect, scale, curr_rotation );
+            geom_transf( shape->m_End, currMoveVect, scale, curr_rotation );
 
             // specific parameters:
             switch( shape->m_Shape )
@@ -571,7 +573,7 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* 
 
             case S_POLYGON:         // polygon
                 for( unsigned ii = 0; ii < shape->m_Poly.size(); ++ii )
-                    geom_transf( shape->m_Poly[ii], moveVect, scale, rotation );
+                    geom_transf( shape->m_Poly[ii], currMoveVect, scale, curr_rotation );
                 break;
 
             default:
@@ -581,8 +583,8 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* 
 
         // Prepare new transform on duplication:
         // Each new item is rotated (or moved) by the transform from the last duplication
-        rotation += rotation;
-        moveVect += moveVect;
+        curr_rotation += rotation;
+        currMoveVect += move_vect;
     } while( aList && --aDuplicateCount > 0 );
 }
 
