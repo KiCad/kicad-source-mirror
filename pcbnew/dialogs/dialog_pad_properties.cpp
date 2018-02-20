@@ -2036,8 +2036,12 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    // Transfert new settings:
-    dlg.Transform( &m_primitives, dlg.GetDuplicateCount() );
+    // Transfer new settings
+    // save duplicates to a separate vector to avoid m_primitives reallocation,
+    // as shapeList contains pointers to its elements
+    std::vector<PAD_CS_PRIMITIVE> duplicates;
+    dlg.Transform( &duplicates, dlg.GetDuplicateCount() );
+    std::move( duplicates.begin(), duplicates.end(), std::back_inserter( m_primitives ) );
 
     displayPrimitivesList();
 
