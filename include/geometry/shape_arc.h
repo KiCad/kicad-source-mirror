@@ -38,9 +38,10 @@ public:
 
     SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
                double aCenterAngle, int aWidth = 0 ) :
-        SHAPE( SH_ARC ), m_p0( aArcStartPoint ), m_pc( aArcCenter ), m_centralAngle( aCenterAngle )
-        {
-        };
+        SHAPE( SH_ARC ), m_p0( aArcStartPoint ), m_pc( aArcCenter ), m_centralAngle( aCenterAngle ),
+        m_width( aWidth )
+    {
+    }
 
     SHAPE_ARC( const SHAPE_ARC& aOther )
         : SHAPE( SH_ARC )
@@ -51,7 +52,7 @@ public:
         m_width = aOther.m_width;
     }
 
-    ~SHAPE_ARC() {};
+    ~SHAPE_ARC() {}
 
     SHAPE* Clone() const override
     {
@@ -68,8 +69,8 @@ public:
         return BOX2I();    // fixme
     }
 
-    bool    Collide( const SEG& aSeg, int aClearance = 0 ) const override;
-    bool    Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
+    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
 
     void SetWidth( int aWidth )
     {

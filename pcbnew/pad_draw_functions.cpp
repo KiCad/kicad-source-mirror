@@ -535,8 +535,6 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             SHAPE_POLY_SET clearance_outline;
             clearance_outline.Append( outline );
             clearance_outline.Inflate( aDrawInfo.m_Mask_margin.x, segmentToCircleCount );
-
-            poly = &clearance_outline.Outline( 0 );
         }
         else
         {

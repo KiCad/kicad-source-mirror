@@ -306,7 +306,9 @@ size_t FOOTPRINT_LIST_IMPL::CountFinished()
 FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
     m_loader( nullptr ),
     m_count_finished( 0 ),
-    m_progress_reporter( nullptr )
+    m_libraries_last_mod_checksum( 0 ),
+    m_progress_reporter( nullptr ),
+    m_cancelled( false )
 {
 }
 
