@@ -1990,17 +1990,11 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
     }
 
     // Multiple selections are allowed. Build selected shapes list
-    std::vector<long> indexes;
-    indexes.push_back( select );
-
     std::vector<PAD_CS_PRIMITIVE*> shapeList;
     shapeList.push_back( &m_primitives[select] );
 
     while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-    {
-        indexes.push_back( select );
         shapeList.push_back( &m_primitives[select] );
-    }
 
     DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, shapeList, false );
 
@@ -2031,17 +2025,11 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
     }
 
     // Multiple selections are allowed. Build selected shapes list
-    std::vector<long> indexes;
-    indexes.push_back( select );
-
     std::vector<PAD_CS_PRIMITIVE*> shapeList;
     shapeList.push_back( &m_primitives[select] );
 
     while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-    {
-        indexes.push_back( select );
         shapeList.push_back( &m_primitives[select] );
-    }
 
     DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, shapeList, true );
 
