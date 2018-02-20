@@ -22,6 +22,7 @@
 #include "wx_html_report_panel.h"
 
 #include <wildcards_and_files_ext.h>
+#include <gal/color4d.h>
 
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow*      parent,
@@ -96,6 +97,95 @@ void WX_HTML_REPORT_PANEL::scrollToBottom()
     m_htmlView->GetVirtualSize( &x, &y );
     m_htmlView->GetScrollPixelsPerUnit( &xUnit, &yUnit );
     m_htmlView->Scroll( 0, y / yUnit );
+
+    updateBadges();
+}
+
+
+const static wxSize BADGE_SIZE_DU( 9, 9 );
+const static int BADGE_FONT_SIZE = 9;
+
+static wxBitmap makeBadge( REPORTER::SEVERITY aStyle, int aCount, wxWindow *aWindow )
+{
+    wxSize      size( aWindow->ConvertDialogToPixels( BADGE_SIZE_DU ) );
+    wxBitmap    bitmap( size );
+    wxBrush     brush;
+    wxMemoryDC  badgeDC;
+    wxColour    badgeColour;
+    wxColour    textColour;
+    int         fontSize = BADGE_FONT_SIZE;
+
+    if( aCount > 99 )
+        fontSize--;
+
+    badgeDC.SelectObject( bitmap );
+
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    // We're one level deep in staticBoxes; each level is darkened by 210
+    brush.SetColour( aWindow->GetParent()->GetBackgroundColour().MakeDisabled( 210 ) );
+    badgeDC.SetBackground( brush );
+    badgeDC.Clear();
+
+    switch( aStyle )
+    {
+    case REPORTER::RPT_ERROR:
+        badgeColour = *wxRED;
+        textColour = *wxWHITE;
+        break;
+    case REPORTER::RPT_WARNING:
+        badgeColour = *wxYELLOW;
+        textColour = *wxBLACK;
+        break;
+    case REPORTER::RPT_ACTION:
+        badgeColour = *wxGREEN;
+        textColour = *wxWHITE;
+        break;
+    case REPORTER::RPT_INFO:
+    default:
+        badgeColour = *wxLIGHT_GREY;
+        textColour = *wxBLACK;
+        break;
+    }
+
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    brush.SetColour( badgeColour );
+    badgeDC.SetBrush( brush );
+    badgeDC.SetPen( wxPen( badgeColour, 0 ) );
+    badgeDC.DrawCircle( size.x / 2 - 1, size.y / 2, ( std::max( size.x, size.y ) / 2 ) - 1 );
+
+    wxFont   font( BADGE_FONT_SIZE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD );
+    wxString text = wxString::Format( wxT( "%d" ), aCount );
+    wxSize   textExtent = badgeDC.GetTextExtent( text );
+
+    badgeDC.SetFont( font );
+    badgeDC.SetTextForeground( textColour );
+    badgeDC.DrawText( text, size.x / 2 - textExtent.x / 2, size.y / 2 - textExtent.y / 2 + 2 );
+
+    return bitmap;
+}
+
+
+void WX_HTML_REPORT_PANEL::updateBadges()
+{
+    int count = Count( REPORTER::RPT_ERROR );
+
+    if( count > 0 )
+    {
+        m_errorsBadge->SetBitmap( makeBadge( REPORTER::RPT_ERROR, count, m_errorsBadge ) );
+        m_errorsBadge->Show( true );
+    }
+    else
+        m_errorsBadge->Show( false );
+
+    count = Count( REPORTER::RPT_WARNING );
+
+    if( count > 0 )
+    {
+        m_warningsBadge->SetBitmap( makeBadge( REPORTER::RPT_WARNING, count, m_errorsBadge ) );
+        m_errorsBadge->Show( true );
+    }
+    else
+        m_warningsBadge->Show( false );
 }
 
 
@@ -201,13 +291,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::syncCheckboxes()
 {
     m_checkBoxShowAll->SetValue( m_showAll );
-    m_checkBoxShowWarnings->Enable( !m_showAll );
     m_checkBoxShowWarnings->SetValue( m_severities & REPORTER::RPT_WARNING );
-    m_checkBoxShowErrors->Enable( !m_showAll );
     m_checkBoxShowErrors->SetValue( m_severities & REPORTER::RPT_ERROR );
-    m_checkBoxShowInfos->Enable( !m_showAll );
     m_checkBoxShowInfos->SetValue( m_severities & REPORTER::RPT_INFO );
-    m_checkBoxShowActions->Enable( !m_showAll );
     m_checkBoxShowActions->SetValue( m_severities & REPORTER::RPT_ACTION );
 }
 

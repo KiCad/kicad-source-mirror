@@ -92,6 +92,7 @@ private:
     wxString addHeader( const wxString& aBody );
     wxString generateHtml( const REPORT_LINE& aLine );
     wxString generatePlainText( const REPORT_LINE& aLine );
+    void updateBadges();
 
     void refreshView();
     void scrollToBottom();

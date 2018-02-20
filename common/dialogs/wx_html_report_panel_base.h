@@ -19,6 +19,10 @@
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -40,16 +44,18 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		wxHtmlWindow* m_htmlView;
 		wxStaticText* m_staticText3;
 		wxCheckBox* m_checkBoxShowAll;
-		wxCheckBox* m_checkBoxShowWarnings;
 		wxCheckBox* m_checkBoxShowErrors;
+		wxStaticBitmap* m_errorsBadge;
+		wxCheckBox* m_checkBoxShowWarnings;
+		wxStaticBitmap* m_warningsBadge;
 		wxCheckBox* m_checkBoxShowInfos;
 		wxCheckBox* m_checkBoxShowActions;
 		wxButton* m_btnSaveReportToFile;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowWarnings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowErrors( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckBoxShowWarnings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowInfos( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowActions( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnSaveToFile( wxCommandEvent& event ) { event.Skip(); }
