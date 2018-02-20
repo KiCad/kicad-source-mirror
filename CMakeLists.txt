@@ -509,7 +509,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 include( ${wxWidgets_USE_FILE} )
 
 # Check the toolkit used to build wxWidgets
-execute_process( COMMAND ${wxWidgets_CONFIG_EXECUTABLE} --query-toolkit
+execute_process( COMMAND sh -c "${wxWidgets_CONFIG_EXECUTABLE} --query-toolkit"
     RESULT_VARIABLE wxWidgets_TOOLKIT_RESULT
     OUTPUT_VARIABLE wxWidgets_TOOLKIT_FOUND
     OUTPUT_STRIP_TRAILING_WHITESPACE
