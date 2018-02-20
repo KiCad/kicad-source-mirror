@@ -162,7 +162,8 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_sliderThreshold->SetValue( tmp );
 
     m_config->Read( KEYWORD_BW_NEGATIVE, &tmp, 0 );
-    m_checkNegative->SetValue( tmp != 0 );
+    m_Negative = tmp != 0;
+    m_checkNegative->SetValue( m_Negative );
 
     if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
     {
@@ -337,7 +338,7 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_Greyscale_Image.Destroy();
     m_Greyscale_Image = m_Pict_Image.ConvertToGreyscale( );
 
-    if( m_Negative > 0 )
+    if( m_Negative )
         NegateGreyscaleImage( );
 
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
@@ -438,7 +439,7 @@ void BM2CMP_FRAME::OnNegativeClicked( wxCommandEvent&  )
         NegateGreyscaleImage();
         m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
         Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
-        m_Negative = !m_Negative;
+        m_Negative = m_checkNegative->GetValue();
 
         Refresh();
     }
