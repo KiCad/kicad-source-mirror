@@ -133,9 +133,8 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerChoiceSilentMode;
 	bSizerChoiceSilentMode = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_cbAskForConfirmation = new wxCheckBox( this, wxID_ANY, _("Always ask for confirmation"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbAskForConfirmation->SetValue(true); 
-	bSizerChoiceSilentMode->Add( m_cbAskForConfirmation, 0, wxALL, 5 );
+	m_cbSkipConfirmation = new wxCheckBox( this, wxID_ANY, _("Don't ask for confirmation"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerChoiceSilentMode->Add( m_cbSkipConfirmation, 0, wxALL, 5 );
 	
 	
 	bSizerChoiceSilentMode->Add( 0, 0, 1, wxEXPAND, 5 );

@@ -41,7 +41,7 @@
 #define KEY_ANNOTATE_SORT_OPTION          wxT( "AnnotateSortOption" )
 #define KEY_ANNOTATE_ALGO_OPTION          wxT( "AnnotateAlgoOption" )
 #define KEY_ANNOTATE_KEEP_OPEN_OPTION     wxT( "AnnotateKeepOpenOption" )
-#define KEY_ANNOTATE_ASK_FOR_CONFIRMATION wxT( "AnnotateRequestConfirmation" )
+#define KEY_ANNOTATE_SKIP_CONFIRMATION    wxT( "AnnotateSkipConfirmation" )
 #define KEY_ANNOTATE_MESSAGES_FILTER      wxT( "AnnotateFilterMsg" )
 
 
@@ -93,9 +93,9 @@ private:
         return m_cbKeepDlgOpen->GetValue();
     }
 
-    bool GetAnnotateAskForConfirmation()
+    bool GetAnnotateSkipConfirmation()
     {
-        return m_cbAskForConfirmation->GetValue();
+        return m_cbSkipConfirmation->GetValue();
     }
 };
 
@@ -129,7 +129,7 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
     m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
     m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo() );
     m_Config->Write( KEY_ANNOTATE_KEEP_OPEN_OPTION, GetAnnotateKeepOpen() );
-    m_Config->Write( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, GetAnnotateAskForConfirmation() );
+    m_Config->Write( KEY_ANNOTATE_SKIP_CONFIRMATION, GetAnnotateSkipConfirmation() );
 
     m_Config->Write( KEY_ANNOTATE_MESSAGES_FILTER,
                     (long) m_MessageWindow->GetVisibleSeverities() );
@@ -179,8 +179,8 @@ void DIALOG_ANNOTATE::InitValues()
     m_Config->Read( KEY_ANNOTATE_KEEP_OPEN_OPTION, &option, 0L );
     m_cbKeepDlgOpen->SetValue( option );
 
-    m_Config->Read( KEY_ANNOTATE_ASK_FOR_CONFIRMATION, &option, 1L );
-    m_cbAskForConfirmation->SetValue( option );
+    m_Config->Read( KEY_ANNOTATE_SKIP_CONFIRMATION, &option, 0L );
+    m_cbSkipConfirmation->SetValue( option );
 
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
     annotate_right_down_bitmap->SetBitmap( KiBitmap( annotate_right_down_xpm ) );
@@ -199,34 +199,16 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     int         response;
     wxString    message;
 
-    // Display a message info if we always ask for confirmation
-    // or if a reset of the previous annotation is asked.
-    bool promptUser = GetAnnotateAskForConfirmation();
-
-    if( GetResetItems() )
+    // Ask for confirmation of destructive actions unless the user asked us not to.
+    if( GetResetItems() && !GetAnnotateSkipConfirmation() )
     {
         if( GetLevel() )
             message += _( "Clear and annotate all of the symbols on the entire schematic?" );
         else
             message += _( "Clear and annotate all of the symbols on the current sheet?" );
-        promptUser = true;
-    }
-    else
-    {
-        if( GetLevel() )
-            message += _( "Annotate only the unannotated symbols on the entire schematic?" );
-        else
-            message += _( "Annotate only the unannotated symbols on the current sheet?" );
-    }
 
-    message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
+        message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
 
-    if( promptUser )
-    {
-        // TODO(hzeller): ideally, this would be a wxMessageDialog that contains
-        // a checkbox asking the 'ask for confirmation' flag for better
-        // discoverability (and it should only show in the 'benign' case, so if
-        // !GetResetItems())
         response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
 
         if( response == wxCANCEL )
@@ -265,16 +247,19 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
     int         response;
     wxString    message;
 
-    if( GetLevel() )
-        message = _( "Clear the existing annotation for the entire schematic?" );
-    else
-        message = _( "Clear the existing annotation for the current sheet?" );
+    if( !GetAnnotateSkipConfirmation() )
+    {
+        if( GetLevel() )
+            message = _( "Clear the existing annotation for the entire schematic?" );
+        else
+            message = _( "Clear the existing annotation for the current sheet?" );
 
-    message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
-    response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
+        message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
+        response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
 
-    if( response == wxCANCEL )
-        return;
+        if( response == wxCANCEL )
+            return;
+    }
 
     m_Parent->DeleteAnnotation( GetLevel() ? false : true );
     m_btnClear->Enable( false );

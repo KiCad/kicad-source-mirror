@@ -64,7 +64,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbSheetX100;
 		wxRadioButton* m_rbSheetX1000;
 		wxCheckBox* m_cbKeepDlgOpen;
-		wxCheckBox* m_cbAskForConfirmation;
+		wxCheckBox* m_cbSkipConfirmation;
 		wxButton* m_btnApply;
 		wxButton* m_btnClear;
 		wxButton* m_btnClose;
