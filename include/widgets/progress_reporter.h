@@ -102,8 +102,10 @@ public:
      * aNumPhases = 1 is the usual progress bar
      * aNumPhases = n creates n virtual progress bar zones: a 0 to 100 percent width
      * of a virtual zone fills 0 to 1/n progress bar full size of the nth virtual zone index
+     * @param aCanAbort is true if the abort button should be shown
      */
-    WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
+    WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases,
+                          bool aCanAbort = true );
     ~WX_PROGRESS_REPORTER();
 
 private:

@@ -216,6 +216,15 @@ private:
     /// Updates the GAL with display settings changes
     void applyDisplaySettingsToGAL();
 
+    /**
+     * Loads a list of Gerber files and updates the view based on them
+     * @param aPath is the base path for the filenames if they are relative
+     * @param aFilenameList is a list of filenames to load
+     * @return true if every file loaded successfully
+     */
+    bool                loadListOfGerberFiles( const wxString& aPath,
+                                               const wxArrayString& aFilenameList );
+
 public:
     GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~GERBVIEW_FRAME();

@@ -144,6 +144,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 {
     wxFileName filename = aFullFileName;
     wxString currentPath;
+    bool success = true;
 
     if( !filename.IsOk() )
     {
@@ -189,41 +190,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 
             wxArrayString& gbrfiles = gbjReader.GetGerberFiles();
 
-            wxFileName gbr_fn = filename;
-            bool read_ok;
-            int layer = 0;
-            SetActiveLayer( layer, false );
-
-            for( unsigned ii = 0; ii < gbrfiles.GetCount(); ii++ )
-            {
-                gbr_fn.SetFullName( gbrfiles[ii] );
-
-                if( gbr_fn.FileExists() )
-                {
-                    //LoadGerberFiles( gbr_fn.GetFullPath() );
-                    read_ok = Read_GERBER_File( gbr_fn.GetFullPath() );
-
-                    if( read_ok )
-                    {
-                        layer = getNextAvailableLayer( layer );
-                        SetActiveLayer( layer, false );
-                    }
-                }
-                else
-                    read_ok = false;
-
-                if( !read_ok )
-                {
-                    wxString err;
-                    err.Printf( _( "Can't load Gerber file:<br><i>%s</i><br>" ), gbr_fn.GetFullPath() );
-                    reporter.Report( err, REPORTER::RPT_WARNING );
-                }
-            }
-
-            GetImagesList()->SortImagesByZOrder();
-            ReFillLayerWidget();
-            syncLayerBox( true );
-            GetCanvas()->Refresh();
+            success = loadListOfGerberFiles( currentPath, gbrfiles );
         }
     }
 
@@ -238,7 +205,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
         mbox.ShowModal();
     }
 
-    return true;
+    return success;
 }
 
 

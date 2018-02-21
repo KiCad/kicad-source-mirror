@@ -39,8 +39,10 @@
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 #include <gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/progress_reporter.h>
 
 // HTML Messages used more than one time:
 #define MSG_NO_MORE_LAYER\
@@ -216,6 +218,15 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     // Set the busy cursor
     wxBusyCursor wait;
 
+    return loadListOfGerberFiles( currentPath, filenamesList );
+}
+
+
+bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
+                                            const wxArrayString& aFilenameList )
+{
+    wxFileName filename;
+
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();
@@ -224,12 +235,30 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     wxString msg;
     WX_STRING_REPORTER reporter( &msg );
 
-    for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
+    // Show progress dialog after 1 second of loading
+    static const long long progressShowDelay = 1000;
+
+    auto startTime = wxGetUTCTimeMillis();
+    std::unique_ptr<WX_PROGRESS_REPORTER> progress = nullptr;
+
+    for( unsigned ii = 0; ii < aFilenameList.GetCount(); ii++ )
     {
-        filename = filenamesList[ii];
+        if( !progress && wxGetUTCTimeMillis() - startTime > progressShowDelay )
+        {
+            progress = std::make_unique<WX_PROGRESS_REPORTER>( this,
+                            _( "Loading Gerber files..." ), 1, false );
+            progress->SetMaxProgress( aFilenameList.GetCount() - 1 );
+            progress->Report( _("Loading Gerber files..." ) );
+        }
+        else if( progress )
+        {
+            progress->KeepRefreshing();
+        }
+
+        filename = aFilenameList[ii];
 
         if( !filename.IsAbsolute() )
-            filename.SetPath( currentPath );
+            filename.SetPath( aPath );
 
         m_lastFileName = filename.GetFullPath();
 
@@ -241,16 +270,16 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
             layer = getNextAvailableLayer( layer );
 
-            if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
+            if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount()-1 )
             {
                 success = false;
                 reporter.Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
 
                 // Report the name of not loaded files:
                 ii += 1;
-                while( ii < filenamesList.GetCount() )
+                while( ii < aFilenameList.GetCount() )
                 {
-                    filename = filenamesList[ii++];
+                    filename = aFilenameList[ii++];
                     wxString txt;
                     txt.Printf( MSG_NOT_LOADED,
                                 GetChars( filename.GetFullName() ) );
@@ -261,10 +290,15 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
             SetActiveLayer( layer, false );
         }
+
+        if( progress )
+            progress->AdvanceProgress();
     }
 
     if( !success )
     {
+        wxSafeYield();  // Allows slice of time to redraw the screen
+                        // to refresh widgets, before displaying messages
         HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
         mbox.ListSet( msg );
         mbox.ShowModal();
@@ -272,11 +306,14 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
     Zoom_Automatique( false );
 
+    GetImagesList()->SortImagesByZOrder();
+
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
     SetActiveLayer( GetActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
-    syncLayerBox();
+    syncLayerBox( true );
+
     return success;
 }
 

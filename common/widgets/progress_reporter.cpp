@@ -100,7 +100,7 @@ bool PROGRESS_REPORTER::KeepRefreshing( bool aWait )
 
 
 WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle,
-                                            int aNumPhases ) :
+                                            int aNumPhases, bool aCanAbort ) :
     PROGRESS_REPORTER( aNumPhases ),
     wxProgressDialog( aTitle, wxT( "" ), 1, aParent,
                       // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
@@ -108,7 +108,7 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                       wxPD_AUTO_HIDE |      // *MUST* use; otherwise wxWidgets will spin
                                             // up another event loop on completion which
                                             // causes all sorts of grief
-                      wxPD_CAN_ABORT |
+                      ( aCanAbort ? wxPD_CAN_ABORT : 0 ) |
                       wxPD_ELAPSED_TIME )
 {
 }
