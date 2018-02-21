@@ -267,10 +267,10 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
         if( !m_layerMask[textLayer] )
             continue;
 
-        if( textModule->GetText() == wxT( "%R" ) && !trace_ref )
+        if( textModule->GetText() == wxT( "%R" ) && !GetPlotReference() )
             continue;
 
-        if( textModule->GetText() == wxT( "%V" ) && !trace_val )
+        if( textModule->GetText() == wxT( "%V" ) && !GetPlotValue() )
             continue;
 
         PlotTextModule( textModule, getColor( textLayer ) );
