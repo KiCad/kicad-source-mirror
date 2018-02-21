@@ -101,11 +101,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( importSubMenu, ID_MODEDIT_IMPORT_PART,
                  _( "Footprint from &KiCad File..." ),
-                 _( "Import a footprint from an existing file" ),
+                 _( "Import a footprint from an existing footprint file" ),
                  KiBitmap( import_module_xpm ) );
 
     AddMenuItem( importSubMenu, ID_GEN_IMPORT_DXF_FILE,
-                 _( "Footprint from &DXF File..." ),
+                 _( "Footprint Outlines from &DXF File..." ),
                  _( "Import 2D Drawing DXF file to Footprint Editor on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
@@ -453,7 +453,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "Modern Toolset (&Fallback)" ),
                           m_hotkeysDescrList, HK_CANVAS_CAIRO );
     AddMenuItem( prefs_menu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use Modern Toolset with software graphics (fallback)" ),
+                 _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     prefs_menu->AppendSeparator();
