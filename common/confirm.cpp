@@ -36,6 +36,173 @@
 #include <dialog_exit_base.h>
 
 #include <functional>
+#include <unordered_map>
+
+// Set of dialogs that have been chosen not to be shown again
+static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
+
+
+KI_DIALOG::KI_DIALOG( wxWindow* aParent, const wxString& aMessage )
+    : wxDialog( aParent, wxID_ANY, wxEmptyString ),
+    m_btnSizer( nullptr ), m_cbDoNotShow( nullptr ), m_icon( nullptr )
+{
+    SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+    m_sizerMain = new wxBoxSizer( wxVERTICAL );
+    m_sizerUpper = new wxBoxSizer( wxHORIZONTAL );
+
+    wxStaticText* message = new wxStaticText( this, wxID_ANY, aMessage );
+    message->Wrap( -1 );
+    //message->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+    m_sizerUpper->Add( message, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
+    m_sizerMain->Add( m_sizerUpper, 1, wxALL | wxEXPAND, 5 );
+
+    Type( NONE );
+    Buttons( wxOK );
+
+    SetSizer( m_sizerMain );
+    Connect( wxEVT_BUTTON, wxCommandEventHandler( KI_DIALOG::onButtonClick ), NULL, this );
+}
+
+
+KI_DIALOG& KI_DIALOG::Type( TYPE aType )
+{
+    m_type = aType;
+
+    const std::unordered_map<TYPE, wxString> stdTitle = {
+        { NONE, _( "Message" ) }, { INFO, _( "Information" ) }, { QUESTION, _( "Question" ) },
+        { WARNING, _( "Warning" ) }, { ERROR, _( "Error" ) }
+    };
+
+    const std::unordered_map<TYPE, wxArtID> icons = {
+        { INFO, wxART_INFORMATION }, { QUESTION, wxART_QUESTION },
+        { WARNING, wxART_WARNING }, { ERROR, wxART_ERROR }
+    };
+
+    if( m_icon )
+    {
+        m_sizerUpper->Remove( 0 );
+        m_icon->Destroy();
+        m_icon = nullptr;
+    }
+
+    if( aType != NONE )
+    {
+        m_icon = new wxStaticBitmap( this, wxID_ANY,
+                wxArtProvider::GetBitmap( icons.at( aType ), wxART_CMN_DIALOG ) );
+        m_sizerUpper->Prepend( m_icon, 0, wxALL, 5 );
+    }
+
+    if( !m_customTitle )
+        SetTitle( stdTitle.at( aType ) );
+
+    return *this;
+}
+
+
+KI_DIALOG& KI_DIALOG::Title( const wxString& aTitle )
+{
+    m_customTitle = m_title;
+    SetTitle( aTitle );
+    return *this;
+}
+
+
+KI_DIALOG& KI_DIALOG::Buttons( long aButtons )
+{
+    wxASSERT( aButtons );
+
+    if( !aButtons )
+        aButtons = wxOK;
+
+    const std::map<long, long> btnTypes = { { wxOK, wxID_OK }, { wxCANCEL, wxID_CANCEL },
+        { wxYES, wxID_YES }, { wxNO, wxID_NO }, { wxAPPLY, wxID_APPLY }, { wxCLOSE, wxID_CLOSE },
+        { wxHELP, wxID_HELP } };
+
+    if( m_btnSizer )
+    {
+        m_sizerMain->Remove( m_btnSizer );   // also deletes m_btnSizer
+
+        for( auto btn : m_buttons )
+            btn->Destroy();
+    }
+
+    m_btnSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    for( auto type : btnTypes )
+    {
+        if( !( aButtons & type.first ) )
+            continue;
+
+        wxButton* btn = new wxButton( this, type.second );
+        m_btnSizer->Add( btn, 1, wxALL | wxEXPAND | wxALIGN_RIGHT );
+        m_buttons.push_back( btn );
+    }
+
+    m_sizerMain->Add( m_btnSizer, 0, wxALL | wxALIGN_RIGHT, 5 );
+
+    return *this;
+}
+
+
+KI_DIALOG& KI_DIALOG::DoNotShowCheckbox()
+{
+    if( !m_cbDoNotShow )
+    {
+        m_cbDoNotShow = new wxCheckBox( this, wxID_ANY, _( "Do not show again" ) );
+        m_sizerMain->Insert( 1, m_cbDoNotShow, 1, wxALL | wxEXPAND, 5 );
+    }
+
+    return *this;
+}
+
+
+bool KI_DIALOG::DoNotShowAgain() const
+{
+    return doNotShowAgainDlgs.count( hash() ) > 0;
+}
+
+
+void KI_DIALOG::ForceShowAgain()
+{
+    doNotShowAgainDlgs.erase( hash() );
+}
+
+
+int KI_DIALOG::ShowModal()
+{
+    // Check if this dialog should be shown to the user
+    auto it = doNotShowAgainDlgs.find( hash() );
+
+    if( it != doNotShowAgainDlgs.end() )
+        return it->second;
+
+    Layout();
+    m_sizerMain->Fit( this );
+    int ret = wxDialog::ShowModal();
+
+    // Has the user asked not to show the dialog again
+    if( m_cbDoNotShow && m_cbDoNotShow->IsChecked() )
+        doNotShowAgainDlgs[hash()] = ret;
+
+    return ret;
+}
+
+
+void KI_DIALOG::onButtonClick( wxCommandEvent& aEvent )
+{
+    EndModal( aEvent.GetId() );
+}
+
+
+unsigned long KI_DIALOG::hash() const
+{
+    std::size_t h1 = std::hash<wxString>{}( m_message );
+    std::size_t h2 = std::hash<wxString>{}( m_customTitle );
+    std::size_t h3 = std::hash<int>{}( m_type );
+
+    return h1 ^ ( h2 << 1 ) ^ ( h3 << 2 );
+}
 
 
 class DIALOG_EXIT: public DIALOG_EXIT_BASE

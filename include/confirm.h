@@ -31,8 +31,69 @@
 #ifndef __INCLUDE__CONFIRM_H__
 #define __INCLUDE__CONFIRM_H__
 
-#include <wx/window.h>
+#include <wx/dialog.h>
 #include <vector>
+
+class wxCheckBox;
+class wxStaticBitmap;
+
+/**
+ * Helper class to create more flexible dialogs, e.g:
+ *
+ *  KI_DIALOG dlg( "Test ");
+ *  dlg.Title( "Title" ).Buttons( wxOK | wxCANCEL ).Type( WARNING ).DoNotShowCheckBox();
+ *  int res = dlg.ShowModal();
+ */
+class KI_DIALOG : wxDialog
+{
+public:
+    ///> Dialog type. Selects appropriate icon and default dialog title
+    enum TYPE { NONE, INFO, QUESTION, WARNING, ERROR };
+
+    KI_DIALOG( wxWindow* aParent, const wxString& aMessage );
+
+    ///> Sets the dialog type
+    KI_DIALOG& Type( TYPE aType );
+
+    ///> Sets the dialog title
+    KI_DIALOG& Title( const wxString& aTitle );
+
+    ///> Selects the button set (combination of wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE, wxHELP)
+    KI_DIALOG& Buttons( long aButtons );
+
+    ///> Shows the 'do not show again' checkbox
+    KI_DIALOG& DoNotShowCheckbox();
+
+    ///> Checks the 'do not show again' setting for the dialog
+    bool DoNotShowAgain() const;
+    void ForceShowAgain();
+
+    int ShowModal() override;
+
+protected:
+    void onButtonClick( wxCommandEvent& aEvent );
+
+    ///> Unique identifier of the dialog
+    unsigned long hash() const;
+
+    ///> Text message shown in the dialog
+    wxString m_message;
+
+    ///> Dialog type
+    TYPE m_type;
+
+    ///> Custom title requested, if any was requested
+    wxString m_customTitle;
+
+    // Widgets
+    wxBoxSizer* m_sizerMain;
+    wxBoxSizer* m_sizerUpper;
+    wxBoxSizer* m_btnSizer;
+    wxCheckBox* m_cbDoNotShow;
+    wxStaticBitmap* m_icon;
+    std::vector<wxButton*> m_buttons;
+};
+
 
 /**
  * Function DisplayExitDialog
