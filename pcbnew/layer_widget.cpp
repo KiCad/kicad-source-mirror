@@ -47,11 +47,6 @@
 
 const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
 
-/*
- * Icon providers for the row icons
- */
-static ROW_ICON_PROVIDER defaultRowIcons( false );
-static ROW_ICON_PROVIDER alternativeRowIcons( true );
 
 /**
  * Function shrinkFont
@@ -322,13 +317,10 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     int         index = aRow * LYR_COLUMN_COUNT;
     const int   flags = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
 
-    auto& iconProvider = useAlternateBitmap(aRow) ? alternativeRowIcons : defaultRowIcons;
-
     // column 0
     col = COLUMN_ICON_ACTIVE;
-    auto sbm = new INDICATOR_ICON( m_LayerScrolledWindow, iconProvider,
-                                   ROW_ICON_PROVIDER::STATE::OFF,
-                                   encodeId( col, aSpec.id ) );
+    auto sbm = new INDICATOR_ICON( m_LayerScrolledWindow, *m_IconProvider,
+                                   ROW_ICON_PROVIDER::STATE::OFF, encodeId( col, aSpec.id ) );
     sbm->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
@@ -357,6 +349,12 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     st->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     st->SetToolTip( aSpec.tooltip );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags );
+
+    // column 4 (COLUMN_ALPHA_INDICATOR)
+    col = COLUMN_ALPHA_INDICATOR;
+    sbm = new INDICATOR_ICON( m_LayerScrolledWindow, *m_IconProvider,
+                              ROW_ICON_PROVIDER::STATE::OFF, wxID_ANY );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
     // Bind right click eventhandler to all columns
     wxString layerName( aSpec.rowName );
@@ -462,6 +460,9 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
         m_notebook->SetMeasuringFont( font );
     }
 
+    int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
+    m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize );
+
     m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
     wxBoxSizer* bSizer3;
@@ -469,7 +470,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
 
     m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
     m_LayerScrolledWindow->SetScrollRate( 5, 5 );
-    m_LayersFlexGridSizer = new wxFlexGridSizer( 0, 4, 0, 1 );
+    m_LayersFlexGridSizer = new wxFlexGridSizer( 0, LYR_COLUMN_COUNT, 0, 1 );
     m_LayersFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
     m_LayersFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
@@ -489,7 +490,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
 
     m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
     m_RenderScrolledWindow->SetScrollRate( 5, 5 );
-    m_RenderFlexGridSizer = new wxFlexGridSizer( 0, 2, 0, 1 );
+    m_RenderFlexGridSizer = new wxFlexGridSizer( 0, RND_COLUMN_COUNT, 0, 1 );
     m_RenderFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
     m_RenderFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
@@ -520,6 +521,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
 
 LAYER_WIDGET::~LAYER_WIDGET()
 {
+    delete m_IconProvider;
 }
 
 
@@ -627,7 +629,12 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
 
     INDICATOR_ICON* oldIndicator = (INDICATOR_ICON*) getLayerComp( m_CurrentRow, 0 );
     if( oldIndicator )
-        oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
+    {
+        if( useAlternateBitmap( m_CurrentRow ) )
+            oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::DIMMED );
+        else
+            oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
+    }
 
     INDICATOR_ICON* newIndicator = (INDICATOR_ICON*) getLayerComp( aRow, 0 );
     if( newIndicator )
@@ -771,8 +778,15 @@ void LAYER_WIDGET::UpdateLayerIcons()
 
         if( indicator )
         {
-            auto state = ( row == m_CurrentRow ) ? ROW_ICON_PROVIDER::STATE::ON
-                                                 : ROW_ICON_PROVIDER::STATE::OFF;
+            ROW_ICON_PROVIDER::STATE state;
+
+            if( row == m_CurrentRow )
+                state = ROW_ICON_PROVIDER::STATE::ON;
+            else if( useAlternateBitmap( row ) )
+                state = ROW_ICON_PROVIDER::STATE::DIMMED;
+            else
+                state = ROW_ICON_PROVIDER::STATE::OFF;
+
             indicator->SetIndicatorState( state );
         }
     }

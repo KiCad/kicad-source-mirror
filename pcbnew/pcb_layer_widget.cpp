@@ -39,9 +39,13 @@
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
+#include <tool/tool_manager.h>
 #include <layer_widget.h>
+#include <widgets/indicator_icon.h>
 #include <macros.h>
 #include <menus_helpers.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <pcb_painter.h>
 
 #include <class_board.h>
 #include <pcb_layer_widget.h>
@@ -447,6 +451,42 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 
         // this does not fire a UI event
         SetLayerVisible( layerId, board->IsLayerVisible( layerId ) );
+    }
+}
+
+
+#define ALPHA_EPSILON 0.04
+
+void PCB_LAYER_WIDGET::SyncLayerAlphaIndicators()
+{
+    int count = GetLayerRowCount();
+    TOOL_MANAGER* mgr = myframe->GetToolManager();
+    KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( mgr->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+
+    for( int row = 0; row < count; ++row )
+    {
+        // this utilizes more implementation knowledge than ideal, eventually
+        // add member ROW getRow() or similar to base LAYER_WIDGET.
+
+        wxWindow* w = getLayerComp( row, COLUMN_ICON_ACTIVE );
+        PCB_LAYER_ID layerId = ToLAYER_ID( getDecodedId( w->GetId() ) );
+        KIGFX::COLOR4D screenColor = settings->GetLayerColor( layerId );
+
+        COLOR_SWATCH* swatch = static_cast<COLOR_SWATCH*>( getLayerComp( row, COLUMN_COLORBM ) );
+        KIGFX::COLOR4D layerColor = swatch->GetSwatchColor();
+
+        INDICATOR_ICON* indicator = static_cast<INDICATOR_ICON*>( getLayerComp( row, COLUMN_ALPHA_INDICATOR ) );
+
+        if( std::abs( screenColor.a - layerColor.a ) > ALPHA_EPSILON )
+        {
+            if( screenColor.a < layerColor.a )
+                indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::DOWN );
+            else
+                indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::UP );
+        }
+        else
+            indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
     }
 }
 

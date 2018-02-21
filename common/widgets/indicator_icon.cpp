@@ -24,9 +24,8 @@
 #include <widgets/indicator_icon.h>
 
 
-INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent,
-                              ICON_PROVIDER& aIconProvider,
-                              ICON_ID aInitialIcon, int aID ):
+INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
+                                ICON_ID aInitialIcon, int aID ):
         wxPanel( aParent, aID ),
         m_iconProvider( aIconProvider ),
         m_currentId( aInitialIcon )
@@ -34,12 +33,9 @@ INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent,
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    const wxBitmap& initBitmap = m_iconProvider.GetIndicatorIcon( m_currentId );
-    wxBitmap scaled = ScaledIcon( initBitmap );
+    const wxBitmap& icon = m_iconProvider.GetIndicatorIcon( m_currentId );
 
-    m_bitmap = new wxStaticBitmap( this, aID,
-                                   scaled, wxDefaultPosition,
-                                   scaled.GetSize() );
+    m_bitmap = new wxStaticBitmap( this, aID, icon, wxDefaultPosition, icon.GetSize() );
 
     sizer->Add( m_bitmap, 0, 0 );
 
@@ -58,7 +54,9 @@ void INDICATOR_ICON::SetIndicatorState( ICON_ID aIconId )
 
     m_currentId = aIconId;
 
-    m_bitmap->SetBitmap( ScaledIcon( m_iconProvider.GetIndicatorIcon( m_currentId ) ) );
+    const wxBitmap& icon = m_iconProvider.GetIndicatorIcon( m_currentId );
+    m_bitmap->SetBitmap( icon );
+    m_bitmap->SetSize( icon.GetSize() );
 }
 
 
@@ -68,145 +66,116 @@ INDICATOR_ICON::ICON_ID INDICATOR_ICON::GetIndicatorState() const
 }
 
 
-// Uses wxImage::Rescale to provide a bitmap scaled to a fixed size relative to
-// the system font.  This doesn't work particularly well in the general case
-// and so is not an answer to DPI-independent scaling of e.g. toolbar icons,
-// but it gives perfectly acceptable results for the simple icons embedded in
-// this file.
-wxBitmap INDICATOR_ICON::ScaledIcon( wxBitmap const& aSource ) const
+wxImage createBlankImage( int size )
 {
-    int dest_height = ConvertDialogToPixels( wxSize( 0, 4 ) ).y;
-    wxSize source_size = aSource.GetSize();
-    double scale = (double) dest_height / (double) source_size.y;
+    wxImage image( size, size );
 
-    wxImage source = aSource.ConvertToImage();
-    source.Rescale( scale * source_size.x, scale * source_size.y, wxIMAGE_QUALITY_HIGH );
+    image.InitAlpha();
+    for( int y = 0; y < size; ++y )
+        for( int x = 0; x < size; ++x )
+            image.SetAlpha( x, y, wxIMAGE_ALPHA_TRANSPARENT );
 
-    wxBitmap dest( source );
+#ifdef __WXWINDOWS__
+    // wxWidgets on Windows chokes on an empty fully transparent bitmap and draws it
+    // as a black box
+    image.SetRGB( size / 2, size / 2, 128, 128, 128 );
+    image.SetAlpha( size / 2, size / 2, 10 );
+#endif
 
-    return dest;
+    return image;
 }
 
-// ====================================================================
-// Common icon providers
 
-/* XPM
- * This bitmap is used for not selected layers
- */
-static const char * clear_xpm[] = {
-"10 14 1 1",
-" 	c None",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          "};
-
-/* XPM
- * This bitmap can be used to show a not selected layer
- * with special property (mainly not selected layers not in use in GerbView)
- */
-static const char * clear_alternate_xpm[] = {
-"10 14 4 1",
-"       c None",
-"X      c #008080",
-"o      c GREEN",
-"O      c #00B080",
-"          ",
-"          ",
-"          ",
-"          ",
-"    X     ",
-"   XXX    ",
-"  XXXXX   ",
-" OOOOOOO  ",
-"  ooooo   ",
-"   ooo    ",
-"    o     ",
-"          ",
-"          ",
-"          "};
-
-
-/* XPM
- * This bitmap  is used for a normale selected layer
- */
-static const char * rightarrow_xpm[] = {
-"10 14 4 1",
-"       c None",
-"X      c #8080ff",
-"o      c BLUE",
-"O      c gray56",
-"  X       ",
-"  XX      ",
-"  XXX     ",
-"  XXXX    ",
-"  XXXXX   ",
-"  XXXXXX  ",
-"  XXXXXXX ",
-"  oooooooO",
-"  ooooooO ",
-"  oooooO  ",
-"  ooooO   ",
-"  oooO    ",
-"  ooO     ",
-"  oO      "};
-
-/* XPM
- * This bitmap can be used to show the selected layer
- * with special property (mainly a layer in use in GerbView)
- */
-static const char * rightarrow_alternate_xpm[] = {
-"10 14 5 1",
-"       c None",
-".      c #00B000",
-"X      c #8080ff",
-"o      c BLUE",
-"O      c gray56",
-"..X       ",
-"..XX      ",
-"..XXX     ",
-"..XXXX    ",
-"..XXXXX   ",
-"..XXXXXX  ",
-"..XXXXXXX ",
-"..oooooooO",
-"..ooooooO ",
-"..oooooO  ",
-"..ooooO   ",
-"..oooO    ",
-"..ooO     ",
-"..oO      "};
-
-
-ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( bool aAlt ):
-        m_alt( aAlt )
-{}
-
-
-const wxBitmap& ROW_ICON_PROVIDER::GetIndicatorIcon(
-            INDICATOR_ICON::ICON_ID aIconId ) const
+// Create an arrow icon of a particular size, colour and direction.  0 points up, 1 points
+// right, and so forth.
+wxBitmap createArrow( int size, int aDirection, wxColour aColour )
 {
-    // need to wait until UI is ready before construction
-    // so can't go in the global scope
-    static const wxBitmap rightArrowBitmap( rightarrow_xpm );
-    static const wxBitmap rightArrowAlternateBitmap( rightarrow_alternate_xpm );
-    static const wxBitmap blankBitmap( clear_xpm );
-    static const wxBitmap blankAlternateBitmap( clear_alternate_xpm );
+    wxImage image = createBlankImage( size );
 
-    const bool on = ( aIconId == STATE::ON );
+    int startX = size / 2 - 1;
+    int len = 1;
 
-    if( m_alt )
-        return ( on ? rightArrowAlternateBitmap : blankAlternateBitmap );
+    int startY = aDirection % 2;
 
-    return ( on ? rightArrowBitmap : blankBitmap );
+    for( int y = startY; y < startY + ( size / 2 ); ++y )
+    {
+        for( int x = startX; x < startX + len; ++x )
+        {
+            image.SetRGB( x, y, aColour.Red(), aColour.Green(), aColour.Blue() );
+            image.SetAlpha( x, y, wxIMAGE_ALPHA_OPAQUE );
+        }
+
+        // Next row will start one pixel back and be two pixels longer
+        startX -= 1;
+        len += 2;
+    }
+
+    for( int i = 0; i < aDirection; ++i )
+        image = image.Rotate90();
+
+    return wxBitmap( image );
+}
+
+
+// Create a diamond icon of a particular size and colour.
+wxBitmap createDiamond( int size, wxColour aColour )
+{
+    wxImage image = createBlankImage( size );
+
+    int startX = size / 2 - 1;
+    int len = 1;
+
+    int startY = 2;
+
+    for( int y = startY; y < size && len > 0; ++y )
+    {
+        for( int x = startX; x < startX + len; ++x )
+        {
+            image.SetRGB( x, y, aColour.Red(), aColour.Green(), aColour.Blue() );
+            image.SetAlpha( x, y, wxIMAGE_ALPHA_OPAQUE );
+        }
+
+        // Next row will start one pixel back and be two pixels longer
+        if( y <  ( size / 2) - 1  )
+        {
+            startX -= 1;
+            len += 2;
+        }
+        else
+        {
+            startX += 1;
+            len -= 2;
+        }
+    }
+
+    return wxBitmap( image );
+}
+
+
+ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSize )
+{
+    m_blankBitmap = wxBitmap( createBlankImage( aSize ) );
+    m_rightArrowBitmap = createArrow( aSize, 1, wxColour( 64, 72, 255 ) );
+    m_upArrowBitmap = createArrow( aSize - 2, 0, wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW ) );
+    m_downArrowBitmap = createArrow( aSize - 2, 2, wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW ) );
+    m_dotBitmap = createDiamond( aSize, wxColour( 128, 144, 255 ) );
+}
+
+
+const wxBitmap& ROW_ICON_PROVIDER::GetIndicatorIcon( INDICATOR_ICON::ICON_ID aId ) const
+{
+    switch( aId )
+    {
+    case STATE::UP:
+        return m_upArrowBitmap;
+    case STATE::DOWN:
+        return m_downArrowBitmap;
+    case STATE::ON:
+        return m_rightArrowBitmap;
+    case STATE::DIMMED:
+        return m_dotBitmap;
+    case STATE::OFF:
+    default:
+        return m_blankBitmap;
+    }
 }

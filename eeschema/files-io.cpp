@@ -297,8 +297,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( !pi->GetError().IsEmpty() )
             {
                 DisplayErrorMessage( this,
-                                     _( "The entire schematic could not be load.  Errors "
-                                        "occurred attempting to load hierarchical sheet "
+                                     _( "The entire schematic could not be loaded.  Errors "
+                                        "occurred attempting to load \nhierarchical sheet "
                                         "schematics." ),
                                      pi->GetError() );
             }

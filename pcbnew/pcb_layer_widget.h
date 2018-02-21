@@ -81,6 +81,13 @@ public:
     void SyncLayerVisibilities();
 
     /**
+     * Function SyncLayerAlphaIndicators
+     * updates each "Layer"s alpha indicator to show if the board is currently being
+     * rendered with more transparency or less.
+     */
+    void SyncLayerAlphaIndicators();
+
+    /**
      * Function SetLayersManagerTabsText
      * Update the layer manager tabs labels
      * Useful when changing Language or to set labels to a non default value

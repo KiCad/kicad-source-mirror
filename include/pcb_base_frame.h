@@ -660,6 +660,8 @@ public:
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
+    virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}
+
     /**
      * Function SetFastGrid1()
      *

@@ -605,6 +605,11 @@ public:
     virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
     /**
+     * Update the UI to reflect changes to the current layer's transparency.
+     */
+    void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
+
+    /**
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.

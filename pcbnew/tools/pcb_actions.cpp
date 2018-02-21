@@ -145,6 +145,12 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         return PCB_ACTIONS::highContrastMode.MakeEvent();
 
+    case ID_DEC_LAYER_ALPHA:
+        return PCB_ACTIONS::layerAlphaDec.MakeEvent();
+
+    case ID_INC_LAYER_ALPHA:
+        return PCB_ACTIONS::layerAlphaInc.MakeEvent();
+
     case ID_FIND_ITEMS:
         return PCB_ACTIONS::find.MakeEvent();
 

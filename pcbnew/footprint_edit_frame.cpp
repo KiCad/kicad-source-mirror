@@ -873,6 +873,12 @@ void FOOTPRINT_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNe
 }
 
 
+void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
+{
+    m_Layers->SyncLayerAlphaIndicators();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
 {
     int id = event.GetId();

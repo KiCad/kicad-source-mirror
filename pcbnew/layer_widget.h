@@ -44,14 +44,16 @@
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
 #include <widgets/color_swatch.h>
+#include <widgets/indicator_icon.h>
 
-#define LYR_COLUMN_COUNT        4           ///< Layer tab column count
+#define LYR_COLUMN_COUNT        5           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
 
 #define COLUMN_ICON_ACTIVE 0
 #define COLUMN_COLORBM 1
 #define COLUMN_COLOR_LYR_CB 2
 #define COLUMN_COLOR_LYRNAME 3
+#define COLUMN_ALPHA_INDICATOR 4
 
 using KIGFX::COLOR4D;
 
@@ -118,6 +120,8 @@ protected:
     wxWindow*           m_FocusOwner;
     int                 m_CurrentRow;           ///< selected row of layer list
     int                 m_PointSize;
+
+    ROW_ICON_PROVIDER*  m_IconProvider;
 
     /**
      * Virtual Function useAlternateBitmap

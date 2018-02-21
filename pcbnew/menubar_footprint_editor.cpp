@@ -302,12 +302,33 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Select how items are displayed" ),
                  KiBitmap( add_zone_xpm ) );
 
+    // Contrast Mode Submenu
+    wxMenu* contrastModeSubMenu = new wxMenu;
 
     text = AddHotkeyName( _( "&High Contrast Mode" ), m_hotkeysDescrList,
                           HK_SWITCH_HIGHCONTRAST_MODE );
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, text,
+    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, text,
                  _( "Use high contrast display mode" ),
                  KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
+
+    contrastModeSubMenu->AppendSeparator();
+
+    text = AddHotkeyName( _( "&Dim Current Layer" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_DEC_LAYER_ALHPA );
+    AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
+                 text, _( "Dim the current layer" ),
+                 KiBitmap( contrast_mode_xpm ) );
+
+    text = AddHotkeyName( _( "&Brighten Current Layer" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_INC_LAYER_ALHPA );
+    AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
+                 text, _( "Brighten the current layer" ),
+                 KiBitmap( contrast_mode_xpm ) );
+
+    AddMenuItem( viewMenu, contrastModeSubMenu,
+                 -1, _( "&Contrast Mode" ),
+                 _( "Select how items are displayed" ),
+                 KiBitmap( contrast_mode_xpm ) );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();

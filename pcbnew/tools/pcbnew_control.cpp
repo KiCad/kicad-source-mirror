@@ -528,6 +528,9 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
         currentColor.a += 0.05;
         settings->SetLayerColor( currentLayer, currentColor );
         m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
+
+        wxUpdateUIEvent dummy;
+        static_cast<PCB_EDIT_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
     }
 
     return 0;
@@ -547,6 +550,9 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
         currentColor.a -= 0.05;
         settings->SetLayerColor( currentLayer, currentColor );
         m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
+
+        wxUpdateUIEvent dummy;
+        static_cast<PCB_BASE_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
     }
 
     return 0;
