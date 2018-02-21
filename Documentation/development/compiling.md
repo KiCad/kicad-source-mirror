@@ -7,7 +7,7 @@ from source on the supported platforms.  It is not intended as a guide for insta
 [library dependencies](#library_dependencies).  Please consult your platforms documentation for
 installing packages or the source code when building the library dependencies.  Currently the
 supported platforms are Windows Versions 7-10, just about any version of Linux, and macOS
-10.9-10.12.  You may be able to build KiCad on other platforms but it is not supported.  On
+10.9-10.13.  You may be able to build KiCad on other platforms but it is not supported.  On
 Windows and Linux the [GNU GCC][] is the only supported compiler and on macOS [Clang][] is the
 only supported compiler.
 
@@ -345,20 +345,18 @@ building and packaging KiCad on macOS, see the [macOS bundle build scripts][].
 In the following set of commands, replace the macOS version number (i.e. 10.9) with the desired
 minimum version.  It may be easiest to build for the same version you are running.
 
-Download the wxPython source and build using the following commands:
+KiCad currently won't work with a stock version of wxWidgets that can be downloaded or installed by
+package managers like MacPorts or Homebrew. To avoid having to deal with patches a [KiCad fork of
+wxWidgets][] is being maintained on GitHub. All the needed patches and some other fixes/improvements
+are contained in the `kicad/macos-wx-3.0` branch.
 
-    cd path-to-wxwidgets-src
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx.patch
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_soname.patch
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_yosemite.patch
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_scrolledwindow.patch
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_sierra.patch
-    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_unicode_pasteboard.patch
-    mkdir build
-    cd build
-    export MAC_OS_X_VERSION_MIN_REQUIRED=10.9
-    ../configure \
+To perform a wxWidgets build, execute the following commands:
+
+    cd <your wxWidgets build folder>
+    git clone -b kicad/macos-wx-3.0 https://github.com/KiCad/wxWidgets
+    mkdir wx-build
+    cd wx-build
+    ../wxWidgets/configure \
         --prefix=`pwd`/../wx-bin \
         --with-opengl \
         --enable-aui \
@@ -376,27 +374,51 @@ Download the wxPython source and build using the following commands:
         --enable-universal-binary=i386,x86_64 \
         CC=clang \
         CXX=clang++
+    make
+    make install
 
-Build KiCad using the following commands:
+If everything works you will find the wxWidgets binaries in `<your wxWidgets build folder>/wx-bin`.
+Now, build a basic KiCad without Python scripting using the following commands:
 
-    cd kicad-source
+    cd <your kicad source mirror>
     mkdir -p build/release
     mkdir build/debug               # Optional for debug build.
     cd build/release
     cmake -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
-          -DwxWidgets_CONFIG_EXECUTABLE=path-to-wx-install/bin/wx-config \
-          -DKICAD_SCRIPTING=ON \
-          -DKICAD_SCRIPTING_MODULES=ON \
-          -DKICAD_SCRIPTING_WXPYTHON=ON \
-          -DPYTHON_EXECUTABLE=path-to-python-exe/python \
-          -DPYTHON_SITE_PACKAGE_PATH=wx/wx-bin/lib/python2.7/site-packages \
+          -DwxWidgets_CONFIG_EXECUTABLE=<your wxWidgets build folder>/wx-bin/bin/wx-config \
+          -DKICAD_SCRIPTING=OFF \
+          -DKICAD_SCRIPTING_MODULES=OFF \
+          -DKICAD_SCRIPTING_WXPYTHON=OFF \
           -DCMAKE_INSTALL_PREFIX=../bin \
           -DCMAKE_BUILD_TYPE=Release \
           ../../
     make
     make install
+
+If the CMake configuration fails, determine the missing dependencies and install them on your
+system or disable the corresponding KiCad feature. If everything works you will get self-contained
+application bundles in the `build/bin` folder.
+
+Building KiCad with Python scripting is more complex and won't be covered in detail here.
+You will have to build wxPython against the wxWidgets source of the KiCad fork - a stock wxWidgets
+that might be bundled with the wxPython package won't work. Please see wxPython documentation
+or [macOS bundle build scripts][] (`compile_wx.sh`) on how to do this. Then, use a CMake
+configuration as follows to point it to your own wxWidgets/wxPython:
+
+    cmake -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_COMPILER=clang++ \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
+          -DwxWidgets_CONFIG_EXECUTABLE=<your wxWidgets build folder>/wx-bin/bin/wx-config \
+          -DKICAD_SCRIPTING=ON \
+          -DKICAD_SCRIPTING_MODULES=ON \
+          -DKICAD_SCRIPTING_WXPYTHON=ON \
+          -DPYTHON_EXECUTABLE=<path-to-python-exe>/python \
+          -DPYTHON_SITE_PACKAGE_PATH=<your wxWidgets build folder>/wx-bin/lib/python2.7/site-packages \
+          -DCMAKE_INSTALL_PREFIX=../bin \
+          -DCMAKE_BUILD_TYPE=Release \
+          ../../
 
 # Known Issues # {#known_issues}
 
@@ -438,7 +460,8 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [MSYS2 32-bit Installer]: http://repo.msys2.org/distrib/i686/msys2-i686-20150916.exe
 [MSYS2 64-bit Installer]: http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20150916.exe
 [PKGBUILD]: https://github.com/Alexpux/MINGW-packages/blob/master/mingw-w64-kicad-git/PKGBUILD
-[OSX bundle build scripts]:http://bazaar.launchpad.net/~adamwolf/+junk/kicad-mac-packaging/files
+[macOS bundle build scripts]:http://bazaar.launchpad.net/~adamwolf/+junk/kicad-mac-packaging/files
+[KiCad fork of wxWidgets]:https://github.com/KiCad/wxWidgets
 [MinGW]: http://mingw.org/
 [build Boost]: http://www.boost.org/doc/libs/1_59_0/more/getting_started/index.html
 [MSYS2 64-bit SourceForge repo]: http://sourceforge.net/projects/msys2/files/REPOS/MINGW/x86_64/
