@@ -706,7 +706,8 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
-    if( NOT wxWidgets_TOOLKIT_FOUND STREQUAL WXPYTHON_TOOLKIT_FOUND )
+    # Check if wxWidgets toolkits match, it is a Linux-only issue
+    if( UNIX AND NOT APPLE AND NOT wxWidgets_TOOLKIT_FOUND STREQUAL WXPYTHON_TOOLKIT_FOUND )
         message( FATAL_ERROR "\nwxWidgets and wxPython use different toolkits "
             "(${wxWidgets_TOOLKIT_FOUND} vs ${WXPYTHON_TOOLKIT_FOUND}). "
             "It will result in a broken build. Please either install wxPython built using "
