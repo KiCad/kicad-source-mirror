@@ -199,40 +199,42 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         return NULL;
     }
 
-    // While some of the search methods can load a libraray at a time (and stop when
-    // a match is found), the async loader gives much better feedback and loads the
-    // libraries in parallel.
-    // If the footprints are already in the cache, ReadFootprintFiles() will return
-    // immediately.
-    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
-    MList.ReadFootprintFiles( aTable, libName.length() ? &libName : nullptr, &progressReporter );
-    progressReporter.Show( false );
-
-    if( MList.GetErrorCount() )
-        MList.DisplayErrors( this );
-
-    if( dlg.IsKeyword() )       // Selection by keywords
+    if( dlg.IsKeyword() || moduleName.Contains( wxT( "?" ) ) || moduleName.Contains( wxT( "*" ) ) )
     {
-        allowWildSeach = false;
-        keys = moduleName;
-        moduleName = SelectFootprint( this, libName, wxEmptyString, keys, aTable );
+        // While SelectFootprint() can load a library at a time (and stop when a match
+        // is found), the async loader gives much better feedback and loads the libraries
+        // in parallel.
+        // If the footprints are already in the cache, ReadFootprintFiles() will return
+        // immediately.
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+        MList.ReadFootprintFiles( aTable, libName.length() ? &libName : NULL, &progressReporter );
+        progressReporter.Show( false );
 
-        if( moduleName.IsEmpty() )  // Cancel command
+        if( MList.GetErrorCount() )
+            MList.DisplayErrors( this );
+
+        if( dlg.IsKeyword() )       // Selection by keywords
         {
-            m_canvas->MoveCursorToCrossHair();
-            return NULL;
+            allowWildSeach = false;
+            keys = moduleName;
+            moduleName = SelectFootprint( this, libName, wxEmptyString, keys, aTable );
+
+            if( moduleName.IsEmpty() )  // Cancel command
+            {
+                m_canvas->MoveCursorToCrossHair();
+                return NULL;
+            }
         }
-    }
-    else if( moduleName.Contains( wxT( "?" ) )
-           || moduleName.Contains( wxT( "*" ) ) )  // Selection wild card
-    {
-        allowWildSeach = false;
-        moduleName     = SelectFootprint( this, libName, moduleName, wxEmptyString, aTable );
-
-        if( moduleName.IsEmpty() )
+        else                        // Selection wild card
         {
-            m_canvas->MoveCursorToCrossHair();
-            return NULL;                           // Cancel command.
+            allowWildSeach = false;
+            moduleName     = SelectFootprint( this, libName, moduleName, wxEmptyString, aTable );
+
+            if( moduleName.IsEmpty() )
+            {
+                m_canvas->MoveCursorToCrossHair();
+                return NULL;                           // Cancel command.
+            }
         }
     }
 
