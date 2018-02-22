@@ -105,7 +105,7 @@ void WX_HTML_REPORT_PANEL::scrollToBottom()
 const static wxSize BADGE_SIZE_DU( 9, 9 );
 const static int BADGE_FONT_SIZE = 9;
 
-static wxBitmap makeBadge( REPORTER::SEVERITY aStyle, int aCount, wxWindow *aWindow )
+static wxBitmap makeBadge( REPORTER::SEVERITY aStyle, int aCount, wxWindow* aWindow )
 {
     wxSize      size( aWindow->ConvertDialogToPixels( BADGE_SIZE_DU ) );
     wxBitmap    bitmap( size );
@@ -181,8 +181,8 @@ void WX_HTML_REPORT_PANEL::updateBadges()
 
     if( count > 0 )
     {
-        m_warningsBadge->SetBitmap( makeBadge( REPORTER::RPT_WARNING, count, m_errorsBadge ) );
-        m_errorsBadge->Show( true );
+        m_warningsBadge->SetBitmap( makeBadge( REPORTER::RPT_WARNING, count, m_warningsBadge ) );
+        m_warningsBadge->Show( true );
     }
     else
         m_warningsBadge->Show( false );
