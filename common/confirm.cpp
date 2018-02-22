@@ -102,7 +102,7 @@ KI_DIALOG& KI_DIALOG::Type( TYPE aType )
 
 KI_DIALOG& KI_DIALOG::Title( const wxString& aTitle )
 {
-    m_customTitle = m_title;
+    m_customTitle = aTitle;
     SetTitle( aTitle );
     return *this;
 }
