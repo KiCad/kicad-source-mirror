@@ -477,15 +477,15 @@ msgstr "Rückansicht"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:661
 msgid "Move Left <-"
-msgstr "Nach links bewegen <-"
+msgstr "Nach links bewegen ←"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:666
 msgid "Move Right ->"
-msgstr "Nach rechts bewegen ->"
+msgstr "Nach rechts bewegen →"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:671
 msgid "Move Up ^"
-msgstr "Nach oben bewegen ^"
+msgstr "Nach oben bewegen ↑"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:366
 msgid "Load OpenGL: board"
@@ -885,7 +885,7 @@ msgstr "&Erste Schritte mit KiCad"
 #: eeschema/menubar.cpp:643 kicad/menubar.cpp:446
 #: pagelayout_editor/menubar.cpp:208 pcbnew/menubar_pcb_editor.cpp:473
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Das Handbuch für Anfänger \"Erste Schritte mit KiCad\" öffnen"
+msgstr "Das Handbuch für Anfänger „Erste Schritte mit KiCad“ öffnen"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:331 eeschema/menubar.cpp:646
 #: eeschema/menubar_libedit.cpp:333 gerbview/menubar.cpp:368
@@ -925,7 +925,7 @@ msgstr "&Über KiCad"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:348 pcbnew/menubar_pcb_editor.cpp:493
 msgid "Display KiCad About dialog"
-msgstr "Anzeige \"Über KiCad\""
+msgstr "Anzeige „Über KiCad“"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
@@ -1196,7 +1196,7 @@ msgstr "Logodatei erstellen"
 #: bitmap2component/bitmap2cmp_gui.cpp:621
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr "Konnte die Datei \"%s\" nicht erstellen."
+msgstr "Konnte die Datei „%s“ nicht erstellen."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:527
 msgid "Create Postscript File"
@@ -1403,7 +1403,7 @@ msgstr "in"
 #: common/base_units.cpp:247 common/base_units.cpp:434
 #: common/preview_items/preview_utils.cpp:41
 msgid "\""
-msgstr "\""
+msgstr "″"
 
 #: common/base_units.cpp:255 common/base_units.cpp:503
 #: common/preview_items/preview_utils.cpp:47
@@ -1612,17 +1612,17 @@ msgstr "Gelb 4"
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
 msgstr ""
-"Kann den absoluten Pfad '%s' nicht erstellen unter Berücksichtigung von '%s'."
+"Kann den absoluten Pfad „%s“ nicht erstellen unter Berücksichtigung von „%s“."
 
 #: common/common.cpp:313
 #, c-format
 msgid "Output directory \"%s\" created.\n"
-msgstr "Das Ausgabeverzeichnis '%s' wurde erstellt.\n"
+msgstr "Das Ausgabeverzeichnis „%s“ wurde erstellt.\n"
 
 #: common/common.cpp:322
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
-msgstr "Konnte das Ausgabeverzeichnis '%s' nicht erstellen.\n"
+msgstr "Konnte das Ausgabeverzeichnis „%s“ nicht erstellen.\n"
 
 #: common/confirm.cpp:125
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:234
@@ -1836,7 +1836,7 @@ msgstr "Pfad existiert bereits."
 #: common/dialogs/dialog_env_var_config.cpp:261
 #, c-format
 msgid "Environment variable \"%s\" cannot be renamed."
-msgstr "Die Umgebungsvariable '%s' kann nicht umbenannt werden."
+msgstr "Die Umgebungsvariable „%s“ kann nicht umbenannt werden."
 
 #: common/dialogs/dialog_env_var_config.cpp:264
 msgid ""
@@ -2223,7 +2223,7 @@ msgstr "Hochformat"
 #, c-format
 msgid "Page layout description file \"%s\" not found. Abort"
 msgstr ""
-"Datei '%s' mit Seitenlayoutbeschreibung konnte nicht gefunden werden. "
+"Datei „%s“ mit Seitenlayoutbeschreibung konnte nicht gefunden werden. "
 "Abbruch!"
 
 #: common/dialogs/dialog_page_settings.cpp:466
@@ -2263,9 +2263,9 @@ msgid ""
 msgstr ""
 "Der Dateiname für die Seitenlayoutbeschreibung wurde geändert.\n"
 "Möchte Sie den folgenden relativen Pfad verwenden:\n"
-"\"%s\"\n"
+"„%s“\n"
 "statt\n"
-"\"%s\"?"
+"„%s“"
 
 #: common/dialogs/dialog_page_settings_base.cpp:25
 msgid "Paper"
@@ -2411,7 +2411,7 @@ msgstr "Speichere in Protokolldatei"
 #: common/dialogs/wx_html_report_panel.cpp:404
 #, c-format
 msgid "Cannot write report to file \"%s\"."
-msgstr "Kann Protokolldatei '%s' nicht erstellen."
+msgstr "Kann Protokolldatei „%s“ nicht erstellen."
 
 #: common/dialogs/wx_html_report_panel.cpp:406
 msgid "File save error"
@@ -2482,12 +2482,12 @@ msgstr "Zwischenablage"
 #: common/dsnlexer.cpp:356 common/dsnlexer.cpp:364
 #, c-format
 msgid "Expecting \"%s\""
-msgstr "Erwartete Zeichen '%s'"
+msgstr "Erwartete Zeichen „%s“"
 
 #: common/dsnlexer.cpp:372 common/dsnlexer.cpp:388
 #, c-format
 msgid "Unexpected \"%s\""
-msgstr "Unerwartete Zeichen '%s'"
+msgstr "Unerwartete Zeichen „%s“"
 
 #: common/dsnlexer.cpp:380
 #, c-format
@@ -2497,7 +2497,7 @@ msgstr "%s ist ein Duplikat"
 #: common/dsnlexer.cpp:433
 #, c-format
 msgid "need a NUMBER for \"%s\""
-msgstr "benötige eine Zahl für '%s'"
+msgstr "benötige eine Zahl für „%s“"
 
 #: common/dsnlexer.cpp:705 common/dsnlexer.cpp:765
 msgid "Un-terminated delimited string"
@@ -2603,12 +2603,12 @@ msgstr "Doc Dateien"
 #: common/eda_doc.cpp:163
 #, c-format
 msgid "Doc File \"%s\" not found"
-msgstr "Die Dokumentationsdatei '%s' wurde nicht gefunden"
+msgstr "Die Dokumentationsdatei „%s“ wurde nicht gefunden"
 
 #: common/eda_doc.cpp:206
 #, c-format
 msgid "Unknown MIME type for doc file \"%s\""
-msgstr "Unbekannter MIME-Typ für Doc-Datei '%s'"
+msgstr "Unbekannter MIME-Typ für Doc-Datei „%s“"
 
 #: common/eda_graphic_text_ctrl.cpp:61
 #, c-format
@@ -2681,7 +2681,7 @@ msgid ""
 "line %d, offset %d"
 msgstr ""
 "%s in Eingang/Quelle\n"
-"'%s'\n"
+"„%s“\n"
 "Zeile %d, Offset %d"
 
 #: common/exceptions.cpp:104
@@ -2719,7 +2719,7 @@ msgid ""
 "Duplicate library nickname \"%s\" found in footprint library table file line "
 "%d"
 msgstr ""
-"Doppelter Bibliotheks-Nickname '%s' in der Tabelle der Footprintbibliotheken "
+"Doppelter Bibliotheks-Nickname „%s“ in der Tabelle der Footprintbibliotheken "
 "in Zeile '%d gefunden."
 
 #: common/fp_lib_table.cpp:283
@@ -2727,7 +2727,7 @@ msgstr ""
 msgid "fp-lib-table files contain no library with nickname \"%s\""
 msgstr ""
 "Die Footprint-Bibliothekstabelle enthält keine Bibliothek mit dem Nicknamen "
-"'%s'"
+"„%s“"
 
 #: common/fp_lib_table.cpp:459
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:135
@@ -2735,13 +2735,13 @@ msgstr ""
 #, c-format
 msgid "Cannot create global library table path \"%s\"."
 msgstr ""
-"Der Pfad '%s' für die globale Bibliothekstabelle konnte nicht erstellen "
+"Der Pfad „%s“ für die globale Bibliothekstabelle konnte nicht erstellen "
 "werden."
 
 #: common/gestfich.cpp:233
 #, c-format
 msgid "Command \"%s\" could not found"
-msgstr "Programm '%s' nicht gefunden."
+msgstr "Programm „%s“ nicht gefunden."
 
 #: common/gestfich.cpp:377
 #, c-format
@@ -2750,12 +2750,12 @@ msgid ""
 "Command is \"%s\""
 msgstr ""
 "Es ist ein Problem beim Starten des PDF-Betrachters aufgetreten.\n"
-"Ausgeführter Befehl: '%s'"
+"Ausgeführter Befehl: „%s“"
 
 #: common/gestfich.cpp:384
 #, c-format
 msgid "Unable to find a PDF viewer for \"%s\""
-msgstr "Konnte keinen PDF-Betrachter für '%s' finden."
+msgstr "Konnte keinen PDF-Betrachter für „%s“ finden."
 
 #: common/grid_tricks.cpp:176
 msgid "Cut\tCTRL+X"
@@ -2839,7 +2839,7 @@ msgstr "Konfiguration und Einstellungen der Tastaturbefehle"
 #: common/kiway.cpp:184
 #, c-format
 msgid "Failed to load kiface library \"%s\"."
-msgstr "Konnte die kiface-Bibliothek '%s' nicht laden."
+msgstr "Konnte die kiface-Bibliothek „%s“ nicht laden."
 
 #: common/kiway.cpp:193
 #, c-format
@@ -2847,7 +2847,7 @@ msgid ""
 "Could not read instance name and version symbol form kiface library \"%s\"."
 msgstr ""
 "Konnte den Instanzierungsnamen und die Symbolversionsform nicht von der "
-"kiface Bibliothek '%s' lesen"
+"kiface Bibliothek „%s“ lesen"
 
 #: common/kiway.cpp:227
 #, c-format
@@ -2857,7 +2857,7 @@ msgid ""
 "could not be loaded\n"
 msgstr ""
 "Schwerer Installationsfehler. Die Datei:\n"
-"'%s'\n"
+"„%s“\n"
 "konnte nicht geladen werden.\n"
 
 #: common/kiway.cpp:231
@@ -2895,7 +2895,7 @@ msgstr "Marker Info"
 #: common/page_layout/page_layout_reader.cpp:847
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr "Die Datei \"%s\" wurde nicht vollständig gelesen"
+msgstr "Die Datei „%s“ wurde nicht vollständig gelesen"
 
 #: common/pgm_base.cpp:112 common/widgets/footprint_select_widget.cpp:257
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:56
@@ -3048,7 +3048,7 @@ msgstr "Diese Meldung nicht erneut zeigen."
 #: common/project.cpp:258
 #, c-format
 msgid "Unable to find \"%s\" template config file."
-msgstr "Konnte die Vorgaben Konfigurationsdatei '%s' nicht finden."
+msgstr "Konnte die Vorgaben Konfigurationsdatei „%s“ nicht finden."
 
 #: common/project.cpp:261
 msgid "Error copying project file template"
@@ -3058,7 +3058,7 @@ msgstr "Beim Kopieren der Projektvorlage ist ein Fehler aufgetreten"
 #, c-format
 msgid "Cannot create prj file \"%s\" (Directory not writable)"
 msgstr ""
-"Projektdatei '%s' konnte nicht erstellt werden (Ordner ist nicht "
+"Projektdatei „%s“ konnte nicht erstellt werden (Ordner ist nicht "
 "beschreibbar)"
 
 #: common/project.cpp:428
@@ -3070,7 +3070,7 @@ msgstr ""
 #: common/richio.cpp:167 tools/io_benchmark/stdstream_line_reader.cpp:76
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr "Konnte Datei '%s' nicht zum Lesen öffnen"
+msgstr "Konnte Datei „%s“ nicht zum Lesen öffnen"
 
 #: common/richio.cpp:201 common/richio.cpp:296
 msgid "Maximum line length exceeded"
@@ -3083,12 +3083,12 @@ msgstr "Zeilenlänge überschritten"
 #: common/richio.cpp:527
 #, c-format
 msgid "cannot open or save file \"%s\""
-msgstr "Konnte Datei '%s' nicht öffnen oder speichern."
+msgstr "Konnte Datei „%s“ nicht öffnen oder speichern."
 
 #: common/richio.cpp:546
 #, c-format
 msgid "error writing to file \"%s\""
-msgstr "Es ist ein Fehler ist beim Schreiben von Datei '%s' aufgetreten."
+msgstr "Es ist ein Fehler ist beim Schreiben von Datei „%s“ aufgetreten."
 
 #: common/richio.cpp:567
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
@@ -3350,7 +3350,7 @@ msgid ""
 "\"%s\" is already assigned to \"%s\" in section \"%s\". Are you sure you "
 "want to change its assignment?"
 msgstr ""
-"'%s' ist bereits zu '%s' in Sektion '%s' zugewiesen. Sind Sie sicher diese "
+"„%s“ ist bereits zu „%s“ in Sektion „%s“ zugewiesen. Sind Sie sicher diese "
 "Zuweisung ändern zu wollen?"
 
 #: common/widgets/widget_hotkey_list.cpp:489
@@ -3586,13 +3586,13 @@ msgstr "Schließen"
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
 msgstr ""
-"Äquivalenz Datei '%s' konnte nicht in den voreingestellten Suchpfaden "
+"Äquivalenz Datei „%s“ konnte nicht in den voreingestellten Suchpfaden "
 "gefunden werden."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
-msgstr "Ein Fehler ist beim Öffnen der Äquivalenzdatei '%s' aufgetreten."
+msgstr "Ein Fehler ist beim Öffnen der Äquivalenzdatei „%s“ aufgetreten."
 
 #: cvpcb/auto_associate.cpp:179
 msgid "Equivalence File Load Error"
@@ -3619,7 +3619,7 @@ msgstr "CvPcb Warnung"
 #: cvpcb/cfg.cpp:77
 #, c-format
 msgid "Project file \"%s\" is not writable"
-msgstr "Projektdatei '%s' ist nicht beschreibbar."
+msgstr "Projektdatei „%s“ ist nicht beschreibbar."
 
 #: cvpcb/common_help_msg.h:28
 msgid "Save footprint associations in schematic symbol footprint fields"
@@ -3684,7 +3684,7 @@ msgid ""
 msgstr ""
 "Bei dem Versuch die globale Bibliothekstabelle für Footprints zu speichern "
 "ist ein Fehler aufgetreten:\n"
-"'%s'\n"
+"„%s“\n"
 "%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:468 cvpcb/cvpcb_mainframe.cpp:488
@@ -3704,7 +3704,7 @@ msgid ""
 msgstr ""
 "Bei dem Versuch die Projektbibliothek für Footprints zu speichern ist ein "
 "Fehler aufgetreten:\n"
-"'%s'\n"
+"„%s“\n"
 "%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:678
@@ -3764,7 +3764,7 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:52
 #, c-format
 msgid "Project file: \"%s\""
-msgstr "Projektdatei: '%s'"
+msgstr "Projektdatei: „%s“"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:104
 msgid "No editor defined in KiCad. Please choose it."
@@ -3778,7 +3778,7 @@ msgstr "Footprints Assoziierungsdatei"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:294
 #, c-format
 msgid "File \"%s\" already exists in list"
-msgstr "Datei '%s' existiert bereits in der Liste"
+msgstr "Datei „%s“ existiert bereits in der Liste"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -4069,7 +4069,7 @@ msgstr ""
 msgid ""
 "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
 msgstr ""
-"Das Bauteil '%s' mit dem Footprint '%s' konnte in <b>keiner</b> der "
+"Das Bauteil „%s“ mit dem Footprint „%s“ konnte in <b>keiner</b> der "
 "Bibliotheken gefunden werden.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:248
@@ -4077,7 +4077,7 @@ msgstr ""
 msgid ""
 "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Das Bauteil '%s' mit dem Footprint '%s' wurde in <b>mehreren</b> "
+"Das Bauteil „%s“ mit dem Footprint „%s“ wurde in <b>mehreren</b> "
 "Bibliotheken gefunden.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:261
@@ -4203,7 +4203,7 @@ msgstr "Sichtbarkeit umstellen"
 #: eeschema/backanno.cpp:248
 #, c-format
 msgid "Failed to open component-footprint link file \"%s\""
-msgstr "Konnte Bauteil-Footprint Zuordnungsdatei '%s' nicht öffnen."
+msgstr "Konnte Bauteil-Footprint Zuordnungsdatei „%s“ nicht öffnen."
 
 #: eeschema/block.cpp:471
 msgid "No item to paste."
@@ -4217,8 +4217,8 @@ msgid ""
 "schematic hierarchy."
 msgstr ""
 "Die Änderungen am Blatt konnten nicht durchgeführt werden, da das Zielblatt "
-"bereits das Batt \"%s\" (oder eines seiner Unterblätter) in seiner "
-"Hierarchie enthält."
+"bereits das Batt „%s“ (oder eines seiner Unterblätter) in seiner Hierarchie "
+"enthält."
 
 #: eeschema/class_libentry.cpp:104 eeschema/class_libentry.cpp:250
 msgid "none"
@@ -4245,7 +4245,7 @@ msgstr ""
 #: eeschema/class_library.cpp:537
 #, c-format
 msgid "Unable to load project's \"%s\" file"
-msgstr "Kann die Datei \"%s\" des Projektes nicht laden."
+msgstr "Kann die Datei „%s“ des Projektes nicht laden."
 
 #: eeschema/class_library.cpp:577 eeschema/cmp_tree_model_adapter_base.cpp:120
 #: eeschema/lib_edit_frame.cpp:1669
@@ -4328,7 +4328,7 @@ msgstr ""
 #: eeschema/lib_edit_frame.cpp:1673
 #, c-format
 msgid "Loading library \"%s\""
-msgstr "Lade Bibliothek \"%s\""
+msgstr "Lade Bibliothek „%s“"
 
 #: eeschema/cmp_tree_model_adapter_base.cpp:207 eeschema/libedit.cpp:697
 msgid "Symbol"
@@ -4524,7 +4524,7 @@ msgstr "Annotation des Schaltplans"
 #: eeschema/dialogs/dialog_bom.cpp:356
 #, c-format
 msgid "Failed to open file \"%s\""
-msgstr "Konnte Datei %s\" nicht öffnen\t"
+msgstr "Konnte Datei „%s“ nicht öffnen\t"
 
 #: eeschema/dialogs/dialog_bom.cpp:489
 msgid "Plugin name in plugin list"
@@ -4651,7 +4651,7 @@ msgstr "Alle Pseudonyme aus der Liste entfernen?"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:325
 #, c-format
 msgid "Current alias \"%s\" cannot be edited."
-msgstr "Aktueller Alias \"%s\" kann nicht bearbeitet werden."
+msgstr "Aktueller Alias „%s“ kann nicht bearbeitet werden."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:330
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:346
@@ -4666,17 +4666,17 @@ msgstr "Symbol Alias:"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:366
 #, c-format
 msgid "Alias \"%s\" already exists."
-msgstr "Alias \"%s\" existiert bereits."
+msgstr "Alias „%s“ existiert bereits."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:376
 #, c-format
 msgid "Symbol name \"%s\" already exists in library \"%s\"."
-msgstr "Bauteilsymbolname \"%s\" existiert bereits in Bibliothek \"%s\"."
+msgstr "Bauteilsymbolname „%s“ existiert bereits in Bibliothek „%s“."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:397
 #, c-format
 msgid "Current alias \"%s\" cannot be removed."
-msgstr "Aktueller Alias \"%s\" kann nicht entfernt werden."
+msgstr "Aktueller Alias „%s“ kann nicht entfernt werden."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:417
 msgid "Delete extra parts from component?"
@@ -4709,7 +4709,7 @@ msgstr "Footprint-Filter"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:541
 #, c-format
 msgid "Footprint filter \"%s\" is already defined."
-msgstr "Footprintfilter \"%s\" ist bereits definiert."
+msgstr "Footprintfilter „%s“ ist bereits definiert."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:577
 msgid "Edit footprint filter"
@@ -4931,28 +4931,28 @@ msgstr "Eigenschaften Symbolbibliothek"
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:263
 #, c-format
 msgid "\"%s\" is not a valid library symbol identifier."
-msgstr "\"%s\" ist keine gültige Bezeichnung für ein Bibliothekssymbol."
+msgstr "„%s“ ist keine gültige Bezeichnung für ein Bibliothekssymbol."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:280
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\""
-msgstr "Bauteilsymbol \"%s\" wurde in Bibliothek \"%s\" nicht gefunden."
+msgstr "Bauteilsymbol „%s“ wurde in Bibliothek „%s“ nicht gefunden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:286
 #, c-format
 msgid "Symbol \"%s\" found in library \"%s\""
-msgstr "Bauteilsymbol \"%s\" wurde in Bibliothek \"%s\" gefunden."
+msgstr "Bauteilsymbol „%s“ wurde in Bibliothek „%s“ gefunden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:373
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid!"
 msgstr ""
-"Bezeichner \"%s\" ist für eine Schaltplansymbolbibliothek nicht zulässig."
+"Bezeichner „%s“ ist für eine Schaltplansymbolbibliothek nicht zulässig."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:390
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\"!"
-msgstr "Bauteilsymbol \"%s\" wurde in Bibliothek \"%s\" nicht gefunden."
+msgstr "Bauteilsymbol „%s“ wurde in Bibliothek „%s“ nicht gefunden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:465
 msgid "Illegal reference. References must start with a letter"
@@ -4966,7 +4966,7 @@ msgid ""
 "template list.  Empty field values are invalid an will be removed from the "
 "component.  Do you wish to remove this and all remaining undefined fields?"
 msgstr ""
-"Das Feld \"%s\" hat keinen gültigen Wert und wird auch nicht in der Vorlage "
+"Das Feld „%s“ hat keinen gültigen Wert und wird auch nicht in der Vorlage "
 "definiert. Felder mit leeren Werten sind ungültig und werden vom "
 "Bauteilsymbol entfernt. Soll dieses und alle weiteren undefinierten Felder "
 "entfernt werden?"
@@ -5363,8 +5363,8 @@ msgstr "Bauteileigenschaften"
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid at row %d!"
 msgstr ""
-"Bezeichner \"%s\" in Zeile \"%d\" ist für eine Schaltplansymbolbibliothek "
-"nicht zulässig."
+"Bezeichner „%s“ in Zeile „%d“ ist für eine Schaltplansymbolbibliothek nicht "
+"zulässig."
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:486
 #, c-format
@@ -6561,7 +6561,7 @@ msgstr "Wähle das Ausgabeverzeichnis"
 msgid ""
 "Do you want to use a path relative to\n"
 "\"%s\""
-msgstr "Soll ein Pfad relativ zu \"%s\" verwendet werden"
+msgstr "Soll ein Pfad relativ zu „%s“ verwendet werden"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:185
 #: eeschema/dialogs/dialog_plot_schematic.cpp:193
@@ -6587,7 +6587,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:264
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
-msgstr "Konnte die Plotdateien nicht in dem Verzeichnis \"%s\" anlegen."
+msgstr "Konnte die Plotdateien nicht in dem Verzeichnis „%s“ anlegen."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:21
@@ -6858,8 +6858,8 @@ msgid ""
 msgstr ""
 "Dieser Schaltplan wurde mit älteren Symbolbibliotheken erstellt welche den "
 "Schaltplan unbenutzbar machen können. Manche Symbole müssen eventuell mit "
-"anderen Symbolnamen verlinkt werden. Eventuell müssen Bauteile \"gerettet"
-"\" (in eine neue Bibliothek kopiert und umbenannt) werden."
+"anderen Symbolnamen verlinkt werden. Eventuell müssen Bauteile "
+"„gerettet“ (in eine neue Bibliothek kopiert und umbenannt) werden."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:90
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:199
@@ -7653,7 +7653,7 @@ msgstr "Spice-Modell Editor"
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:359
 #, c-format
 msgid "Illegal character \"%c\" found in Nickname: \"%s\" in row %d"
-msgstr "Unzulässiges Zeichen \"%c\" im Nicknamen \"%s\" und Zeile %d gefunden."
+msgstr "Unzulässiges Zeichen „%c“ im Nicknamen „%s“ und Zeile %d gefunden."
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:288
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:373
@@ -7664,7 +7664,7 @@ msgstr "Kein Doppelpunkt in Nicknamen"
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:403
 #, c-format
 msgid "Duplicate Nickname: \"%s\" in rows %d and %d"
-msgstr "Doppelter Nickname: \"%s\" in Zeile %d und %d"
+msgstr "Doppelter Nickname: „%s“ in Zeile %d und %d"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:333
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:418
@@ -7686,7 +7686,7 @@ msgstr "Warnung: Doppelt vergebener Nickname"
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:657
 #, c-format
 msgid "A library nicknamed \"%s\" already exists."
-msgstr "Eine Bibliothek mit dem Namen \"%s\" existiert bereits."
+msgstr "Eine Bibliothek mit dem Namen „%s“ existiert bereits."
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:385
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:658
@@ -7799,7 +7799,7 @@ msgid ""
 "project folder \"%s\"."
 msgstr ""
 "Ein Remapping ist wegen fehlender Schreibberechtigungen auf den "
-"Projektordner \"%s\" nicht möglich."
+"Projektordner „%s“ nicht möglich."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:62
 msgid ""
@@ -7817,7 +7817,7 @@ msgstr ""
 "über die neue Bauteilbibliothekstabelle neu zuzuordnen. Diese Änderung der "
 "Projekt- und Schaltplandateien macht diese eventuell inkompatibel mit alten "
 "Versionen von KiCad. Unveränderte Kopien aller veränderten Dateien werden im "
-"\"remap_backup\"-Ordner erstellt, falls Sie Änderungen zurücknehmen wollen. "
+"„remap_backup“-Ordner erstellt, falls Sie Änderungen zurücknehmen wollen. "
 "Sollten Sie die automatische Neuzuordnung überspringen müssen Sie die "
 "Bauteilsymbole manuell neu zuordnen."
 
@@ -7825,13 +7825,13 @@ msgstr ""
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
-"Füge Bibliothek \"%s\", Datei \"%s\" der Symbolbibliothekstabelle des "
-"Projektes hinzu."
+"Füge Bibliothek „%s“, Datei „%s“ der Symbolbibliothekstabelle des Projektes "
+"hinzu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:198
 #, c-format
 msgid "Library \"%s\" not found."
-msgstr "Bibliothek \"%s\" wurde nicht gefunden."
+msgstr "Bibliothek „%s“ wurde nicht gefunden."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -7850,12 +7850,12 @@ msgstr "Erstellt eine leere projektspezifische Symbolbibliothekstabelle.\n"
 #, c-format
 msgid "No symbol \"%s\" found in symbol library table."
 msgstr ""
-"Bauteilsymbol \"%s\" wurde in der Symbolbibliothekstabelle nicht gefunden."
+"Bauteilsymbol „%s“ wurde in der Symbolbibliothekstabelle nicht gefunden."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:254
 #, c-format
 msgid "Symbol \"%s\" mapped to symbol library \"%s\"."
-msgstr "Bauteilsymbol \"%s\" wurde der Bibliothek \"%s\" zugeordnet."
+msgstr "Bauteilsymbol „%s“ wurde der Bibliothek „%s“ zugeordnet."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:263
 msgid "Symbol library table mapping complete!"
@@ -7864,7 +7864,7 @@ msgstr "Kartierung der Symbolbibliothekstabelle ist fertig gestellt!"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:333
 #, c-format
 msgid "Cannot create project remap back up folder \"%s\"."
-msgstr "Konnte die Projekt Sicherungskopie \"%s\" nicht erstellen."
+msgstr "Konnte die Projekt Sicherungskopie „%s“ nicht erstellen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:336
 #: eeschema/dialogs/dialog_symbol_remap.cpp:477
@@ -7889,7 +7889,7 @@ msgstr "Abbrechen Wiederherstellen"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:463
 #, c-format
 msgid "Backing up file \"%s\" to file \"%s\"."
-msgstr "Erstelle Sicherungskopie von Datei \"%s\" in Datei \"%s\"."
+msgstr "Erstelle Sicherungskopie von Datei „%s“ in Datei „%s“."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:363
 #: eeschema/dialogs/dialog_symbol_remap.cpp:403
@@ -7899,12 +7899,12 @@ msgstr "Erstelle Sicherungskopie von Datei \"%s\" in Datei \"%s\"."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:470
 #, c-format
 msgid "Failed to back up file \"%s\".\n"
-msgstr "Konnte kein Backup der Datei \"%s\" erstellen.\n"
+msgstr "Konnte kein Backup der Datei „%s“ erstellen.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:395
 #, c-format
 msgid "Failed to create backup folder \"%s\"\n"
-msgstr "Konnte den Sicherungsordner \"%s\" nicht erstellen\n"
+msgstr "Konnte den Sicherungsordner „%s“ nicht erstellen\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:476
 msgid "Some of the project files could not be backed up."
@@ -8014,7 +8014,7 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:643
 #, c-format
 msgid "Couldn't load image from \"%s\""
-msgstr "Konnte keine Bilddatei von \"%s\" laden."
+msgstr "Konnte keine Bilddatei von „%s“ laden."
 
 #: eeschema/edit_component_in_schematic.cpp:65
 #, c-format
@@ -8042,7 +8042,7 @@ msgstr "Projektdatei speichern"
 #, c-format
 msgid "An error occurred loading the symbol library table \"%s\"."
 msgstr ""
-"Bei dem Versuch die Symbolbibliothekstabelle \"%s\" zu laden ist ein Fehler "
+"Bei dem Versuch die Symbolbibliothekstabelle „%s“ zu laden ist ein Fehler "
 "aufgetreten."
 
 #: eeschema/erc.cpp:89 eeschema/erc.cpp:105
@@ -8097,8 +8097,7 @@ msgstr "Doppelter Schaltplanname"
 #, c-format
 msgid "Unit %s has '%s' assigned, whereas unit %s has '%s' assigned"
 msgstr ""
-"Einheit %s ist \"%s\" zugewiesen, wohingegen Einheit %s zu \"%s\" zugewiesen "
-"ist."
+"Einheit %s ist „%s“ zugewiesen, wohingegen Einheit %s zu „%s“ zugewiesen ist."
 
 #: eeschema/erc.cpp:319
 #, c-format
@@ -8174,22 +8173,22 @@ msgstr ""
 #: eeschema/erc.cpp:883
 #, c-format
 msgid "Global label \"%s\" (sheet \"%s\") looks like:"
-msgstr "Globales Label \"%s\" (Schaltplanblatt \"%s\") sieht wie folgt aus:"
+msgstr "Globales Label „%s“ (Schaltplanblatt „%s“) sieht wie folgt aus:"
 
 #: eeschema/erc.cpp:884
 #, c-format
 msgid "Local label \"%s\" (sheet \"%s\") looks like:"
-msgstr "Lokales Label \"%s\" (Schaltplanblatt \"%s\") sieht wie folgt aus:"
+msgstr "Lokales Label „%s“ (Schaltplanblatt „%s“) sieht wie folgt aus:"
 
 #: eeschema/erc.cpp:892
 #, c-format
 msgid "Global label \"%s\" (sheet \"%s\")"
-msgstr "Globales Label \"%s\" (Schaltplanblatt \"%s\")"
+msgstr "Globales Label „%s“ (Schaltplanblatt „%s“)"
 
 #: eeschema/erc.cpp:893
 #, c-format
 msgid "Local label \"%s\" (sheet \"%s\")"
-msgstr "Lokales Label \"%s\" (Schaltplanblatt \"%s\")"
+msgstr "Lokales Label „%s“ (Schaltplanblatt „%s“)"
 
 #: eeschema/files-io.cpp:76
 msgid "Schematic Files"
@@ -8198,7 +8197,7 @@ msgstr "Schaltplan Dateien"
 #: eeschema/files-io.cpp:106
 #, c-format
 msgid "Could not save backup of file \"%s\""
-msgstr "Konnte die Sicherungskopie der Datei \"%s\" nicht erstellen."
+msgstr "Konnte die Sicherungskopie der Datei „%s“ nicht erstellen."
 
 #: eeschema/files-io.cpp:125
 #, c-format
@@ -8212,7 +8211,7 @@ msgstr ""
 #: eeschema/files-io.cpp:129
 #, c-format
 msgid "Failed to save \"%s\""
-msgstr "Fehler beim Speichern von \"%s\""
+msgstr "Fehler beim Speichern von „%s“"
 
 #: eeschema/files-io.cpp:157
 #, c-format
@@ -8226,12 +8225,12 @@ msgstr "Konnte Datei nicht schreiben."
 #: eeschema/files-io.cpp:212 eeschema/files-io.cpp:779
 #, c-format
 msgid "Schematic file \"%s\" is already open."
-msgstr "Die Schaltplandatei \"%s\" ist bereits geöffnet."
+msgstr "Die Schaltplandatei „%s“ ist bereits geöffnet."
 
 #: eeschema/files-io.cpp:232
 #, c-format
 msgid "Schematic \"%s\" does not exist.  Do you wish to create it?"
-msgstr "Schaltplan \"%s\" existiert nicht. Soll er angelegt werden?"
+msgstr "Schaltplan „%s“ existiert nicht. Soll er angelegt werden?"
 
 #: eeschema/files-io.cpp:302
 msgid ""
@@ -8254,7 +8253,7 @@ msgstr ""
 #: eeschema/files-io.cpp:320 eeschema/files-io.cpp:886
 #, c-format
 msgid "Failed to load \"%s\""
-msgstr "Fehler beim Laden von \"%s\""
+msgstr "Fehler beim Laden von „%s“"
 
 #: eeschema/files-io.cpp:335
 msgid ""
@@ -8282,12 +8281,12 @@ msgstr ""
 #: eeschema/files-io.cpp:456 eeschema/sheet.cpp:275
 #, c-format
 msgid "Error occurred loading schematic file \"%s\"."
-msgstr "Fehler beim Laden der Schaltplandatei \"%s\"."
+msgstr "Fehler beim Laden der Schaltplandatei „%s“."
 
 #: eeschema/files-io.cpp:459 eeschema/sheet.cpp:278
 #, c-format
 msgid "Failed to load schematic \"%s\""
-msgstr "Konnte Schaltplan \"%s\" nicht laden"
+msgstr "Konnte Schaltplan „%s“ nicht laden"
 
 #: eeschema/files-io.cpp:652
 msgid ""
@@ -8306,7 +8305,7 @@ msgstr "Schaltplanimport"
 #: eeschema/files-io.cpp:703
 #, c-format
 msgid "Directory \"%s\" is not writable."
-msgstr "Das Verzeichnis \"%s\" ist nicht schreibbar."
+msgstr "Das Verzeichnis „%s“ ist nicht schreibbar."
 
 #: eeschema/files-io.cpp:912
 msgid ""
@@ -8412,8 +8411,7 @@ msgstr "Symbolauswahl (%d Elemente geladen)"
 #, c-format
 msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
 msgstr ""
-"Keine alternative Körperform für Symbol \"%s\" in der Bibliothek \"%s\" "
-"gefunden."
+"Keine alternative Körperform für Symbol „%s“ in der Bibliothek „%s“ gefunden."
 
 #: eeschema/help_common_strings.h:40
 msgid "Undo last command"
@@ -8659,7 +8657,7 @@ msgstr "Spannungsquelle hinzufügen"
 
 #: eeschema/hotkeys.cpp:143
 msgid "Add No Connect Flag"
-msgstr "Symbol \"Keine Verbindung\" hinzufügen"
+msgstr "Symbol „Keine Verbindung“ hinzufügen"
 
 #: eeschema/hotkeys.cpp:145
 msgid "Add Sheet"
@@ -8982,7 +8980,7 @@ msgstr "Importieren"
 #: eeschema/lib_edit_frame.cpp:1569
 #, c-format
 msgid "Library \"%s\" already exists"
-msgstr "Bibliothek \"%s\" existiert bereits"
+msgstr "Bibliothek „%s“ existiert bereits"
 
 #: eeschema/lib_edit_frame.cpp:1584
 msgid "Could not create the library file. Check write permission."
@@ -9025,17 +9023,17 @@ msgstr "Symbol importieren"
 #: eeschema/lib_export.cpp:80 eeschema/symbedit.cpp:90
 #, c-format
 msgid "Cannot import symbol library \"%s\"."
-msgstr "Kann Schaltplansymboltabelle \"%s\" nicht importieren."
+msgstr "Kann Schaltplansymboltabelle „%s“ nicht importieren."
 
 #: eeschema/lib_export.cpp:87 eeschema/symbedit.cpp:97
 #, c-format
 msgid "Symbol library file \"%s\" is empty."
-msgstr "Die Symbolbibliothek \"%s\" ist leer."
+msgstr "Die Symbolbibliothek „%s“ ist leer."
 
 #: eeschema/lib_export.cpp:97
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\"."
-msgstr "Bauteilsymbol \"%s\" existiert bereits in Bibliothek \"%s\"."
+msgstr "Bauteilsymbol „%s“ existiert bereits in Bibliothek „%s“."
 
 #: eeschema/lib_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -9048,18 +9046,17 @@ msgstr "Symbol exportieren"
 #: eeschema/lib_export.cpp:147
 #, c-format
 msgid "Error occurred attempting to load symbol library file \"%s\""
-msgstr ""
-"Beim Laden der Schaltplansymboltabelle \"%s\" ist ein Fehler aufgetreten"
+msgstr "Beim Laden der Schaltplansymboltabelle „%s“ ist ein Fehler aufgetreten"
 
 #: eeschema/lib_export.cpp:155
 #, c-format
 msgid "Symbol \"%s\" already exists. Overwrite it?"
-msgstr "Bauteilsymbol \"%s\" existiert bereits. Soll es überschrieben werden?"
+msgstr "Bauteilsymbol „%s“ existiert bereits. Soll es überschrieben werden?"
 
 #: eeschema/lib_export.cpp:164
 #, c-format
 msgid "Write permissions are required to save library \"%s\"."
-msgstr "Keine Schreibrechte zum Speichern der Bibliothek \"%s\"."
+msgstr "Keine Schreibrechte zum Speichern der Bibliothek „%s“."
 
 #: eeschema/lib_export.cpp:178
 msgid "Failed to create symbol library file "
@@ -9068,12 +9065,12 @@ msgstr "Konnte die Bauteilbibliothek nicht erstellen "
 #: eeschema/lib_export.cpp:180
 #, c-format
 msgid "Error creating symbol library \"%s\""
-msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek \"%s\"."
+msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek „%s“."
 
 #: eeschema/lib_export.cpp:189
 #, c-format
 msgid "Symbol \"%s\" saved in library \"%s\""
-msgstr "Bauteilsymbol \"%s\" wurde in der Bibliothek \"%s\" gespeichert"
+msgstr "Bauteilsymbol „%s“ wurde in der Bibliothek „%s“ gespeichert"
 
 #: eeschema/lib_field.cpp:470
 #, c-format
@@ -9106,28 +9103,28 @@ msgstr "Höhe"
 #, c-format
 msgid "Cannot find library \"%s\" in the Symbol Library Table"
 msgstr ""
-"Symbolbibliothek \"%s\" konnte nicht in der Tabelle der Symbolbibliotheken "
+"Symbolbibliothek „%s“ konnte nicht in der Tabelle der Symbolbibliotheken "
 "gefunden werden"
 
 #: eeschema/lib_manager.cpp:143
 #, c-format
 msgid "Cannot flush library changes (\"%s\")"
-msgstr "Änderungen der Bibliothek können nicht eingespielt werden (\"%s\")"
+msgstr "Änderungen der Bibliothek können nicht eingespielt werden („%s“)"
 
 #: eeschema/lib_manager.cpp:299 eeschema/lib_manager.cpp:679
 #, c-format
 msgid "Cannot enumerate library \"%s\""
-msgstr "Kann Bibliothek \"%s\" nicht auflisten."
+msgstr "Kann Bibliothek „%s“ nicht auflisten."
 
 #: eeschema/lib_manager.cpp:337
 #, c-format
 msgid "Cannot load aliases from library \"%s\""
-msgstr "Konnte Aliases nicht von Bibliothek \"%s\" laden."
+msgstr "Konnte Aliases nicht von Bibliothek „%s“ laden."
 
 #: eeschema/lib_manager.cpp:368 eeschema/lib_manager.cpp:533
 #, c-format
 msgid "Cannot load symbol \"%s\" from library \"%s\""
-msgstr "Konnte Schaltplansymbol \"%s\" aus Bibliothek \"%s\" nicht laden."
+msgstr "Konnte Schaltplansymbol „%s“ aus Bibliothek „%s“ nicht laden."
 
 #: eeschema/lib_pin.cpp:1728 pcbnew/class_drawsegment.cpp:436
 #: pcbnew/class_track.cpp:1096
@@ -9191,8 +9188,7 @@ msgstr "Text"
 #: eeschema/libarch.cpp:102
 #, c-format
 msgid "Failed to add symbol \"%s\" to library file \"%s\"."
-msgstr ""
-"Konnte das Symbol \"%s\" nicht zur Bauteilbibliothek \"%s\" hinzufügen."
+msgstr "Konnte das Symbol „%s“ nicht zur Bauteilbibliothek „%s“ hinzufügen."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -9212,7 +9208,7 @@ msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek '%s'."
 #: eeschema/libarch.cpp:153
 #, c-format
 msgid "Failed to save symbol library file \"%s\""
-msgstr "Fehler beim Speichern der Symbolbibliothek \"%s\""
+msgstr "Fehler beim Speichern der Symbolbibliothek „%s“"
 
 #: eeschema/libedit.cpp:61
 msgid "Symbol Library Editor - "
@@ -9263,12 +9259,12 @@ msgstr ""
 #: eeschema/libedit.cpp:305
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\""
-msgstr "Bauteilsymbol \"%s\" existiert bereits in Bibliothek \"%s\"."
+msgstr "Bauteilsymbol „%s“ existiert bereits in Bibliothek „%s“."
 
 #: eeschema/libedit.cpp:491
 #, c-format
 msgid "Symbol name \"%s\" not found in library \"%s\""
-msgstr "Symbolname \"%s\" nicht in der Bibliothek \"%s\" gefunden"
+msgstr "Symbolname „%s“ nicht in der Bibliothek „%s“ gefunden"
 
 #: eeschema/libedit.cpp:521
 msgid "No library specified."
@@ -9277,12 +9273,12 @@ msgstr "Keine Bibliothek angegeben."
 #: eeschema/libedit.cpp:538
 #, c-format
 msgid "Save Library \"%s\" As..."
-msgstr "Bibliothek \"%s\" speichern als..."
+msgstr "Bibliothek „%s“ speichern als..."
 
 #: eeschema/libedit.cpp:576
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
-msgstr "Fehler beim Speichern der Symbolbibliothekstabelle \"%s\""
+msgstr "Fehler beim Speichern der Symbolbibliothekstabelle „%s“"
 
 #: eeschema/libedit.cpp:578
 msgid "Error saving library"
@@ -9291,12 +9287,12 @@ msgstr "Fehler beim Speichern der Bibliothek"
 #: eeschema/libedit.cpp:585
 #, c-format
 msgid "Symbol library file \"%s\" saved"
-msgstr "Bibliothek \"%s\" gespeichert"
+msgstr "Bibliothek „%s“ gespeichert"
 
 #: eeschema/libedit.cpp:587
 #, c-format
 msgid "Symbol library documentation file \"%s\" saved"
-msgstr "Symbolbibliothek Dokumentationsdatei \"%s\" gespeichert"
+msgstr "Symbolbibliothek Dokumentationsdatei „%s“ gespeichert"
 
 #: eeschema/libedit.cpp:631
 msgid "Save Libraries"
@@ -9519,7 +9515,7 @@ msgstr "Dateiname:"
 #: eeschema/libedit_plot_component.cpp:137
 #, c-format
 msgid "Can't save file \"%s\""
-msgstr "Datei \"%s\" konnte nicht geschrieben werden."
+msgstr "Datei „%s“ konnte nicht geschrieben werden."
 
 #: eeschema/libfield.cpp:56
 msgid "Component Name"
@@ -9536,8 +9532,8 @@ msgid ""
 "The name \"%s\" conflicts with an existing entry in the symbol library \"%s"
 "\"."
 msgstr ""
-"Der Name \"%s\" erzeugt einen Konflikt mit einem existierenden Eintrag in "
-"der Symbolbibliothek \"%s\"."
+"Der Name „%s“ erzeugt einen Konflikt mit einem existierenden Eintrag in der "
+"Symbolbibliothek „%s“."
 
 #: eeschema/menubar.cpp:117 eeschema/menubar_libedit.cpp:360
 #: pagelayout_editor/menubar.cpp:236 pcbnew/menubar_footprint_editor.cpp:519
@@ -10203,13 +10199,13 @@ msgstr "Das Eeschema-Benutzerhandbuch öffnen"
 #: eeschema/menubar_libedit.cpp:330 eeschema/tool_viewlib.cpp:211
 #: pcbnew/menubar_footprint_editor.cpp:491 pcbnew/tool_footprint_viewer.cpp:181
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
-msgstr "Das Handbuch für Anfänger \"Erste Schritte mit KiCad\" öffnen"
+msgstr "Das Handbuch für Anfänger „Erste Schritte mit KiCad“ öffnen"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:47
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:53
 #, c-format
 msgid "Failed to create file \"%s\""
-msgstr "Konnte \"%s\" nicht erstellen"
+msgstr "Konnte „%s“ nicht erstellen"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:103
 #, c-format
@@ -10523,11 +10519,11 @@ msgstr "Buseingang verschieben"
 
 #: eeschema/onrightclick.cpp:958
 msgid "Set Bus Entry Shape /"
-msgstr "Buseingang ändern zu /"
+msgstr "Buseingang ändern zu ╱"
 
 #: eeschema/onrightclick.cpp:961
 msgid "Set Bus Entry Shape \\"
-msgstr "Buseingang ändern zu \\"
+msgstr "Buseingang ändern zu ╲"
 
 #: eeschema/onrightclick.cpp:963
 msgid "Delete Bus Entry"
@@ -10632,8 +10628,8 @@ msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
 "with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
-"<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"<b>Pin-Duplikat %s</b> „%s“ an Position <b>(%.3f, %.3f)</b> steht in "
+"Konflikt mit Pin %s „%s“ an Position <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:742
 #, c-format
@@ -10652,7 +10648,7 @@ msgstr "  in normaler Darstellung"
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
-"<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"<b>Pin %s außerhalb des Rasters</b> „%s“ an Position <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:784
 #, c-format
@@ -10669,18 +10665,18 @@ msgstr ""
 #: eeschema/plot_schematic_SVG.cpp:82
 #, c-format
 msgid "Plot: \"%s\" OK.\n"
-msgstr "Plot: \"%s\" OK.\n"
+msgstr "Plot: „%s“ OK.\n"
 
 #: eeschema/plot_schematic_DXF.cpp:84 eeschema/plot_schematic_HPGL.cpp:181
 #: eeschema/plot_schematic_PDF.cpp:90 eeschema/plot_schematic_PS.cpp:112
 #, c-format
 msgid "Unable to create file \"%s\".\n"
-msgstr "Kann Datei \"%s\" nicht erstellen.\n"
+msgstr "Kann Datei „%s“ nicht erstellen.\n"
 
 #: eeschema/plot_schematic_SVG.cpp:76
 #, c-format
 msgid "Cannot create file \"%s\".\n"
-msgstr "Kann Datei \"%s\" nicht erstellen.\n"
+msgstr "Kann Datei „%s“ nicht erstellen.\n"
 
 #: eeschema/project_rescue.cpp:188
 #, c-format
@@ -10718,7 +10714,7 @@ msgstr "Keine Symbole wiederhergestellt."
 #: eeschema/project_rescue.cpp:662
 #, c-format
 msgid "Failed to create symbol library file \"%s\""
-msgstr "Konnte Schaltplansymboldatei \"%s\" nicht erstellen"
+msgstr "Konnte Schaltplansymboldatei „%s“ nicht erstellen"
 
 #: eeschema/project_rescue.cpp:786
 #, c-format
@@ -10734,7 +10730,7 @@ msgstr ""
 #: eeschema/sch_base_frame.cpp:62
 #, c-format
 msgid "Could not load symbol \"%s\" from library \"%s\"."
-msgstr "Konnte Schaltplansymbol \"%s\" aus Bibliothek \"%s\" nicht laden."
+msgstr "Konnte Schaltplansymbol „%s“ aus Bibliothek „%s“ nicht laden."
 
 #: eeschema/sch_base_frame.cpp:332
 #, c-format
@@ -10823,7 +10819,7 @@ msgstr "Symbol %s, %s"
 #: pcbnew/eagle_plugin.cpp:2310
 #, c-format
 msgid "Unable to read file \"%s\""
-msgstr "Kann Datei \"%s\" nicht lesen"
+msgstr "Kann Datei „%s“ nicht lesen"
 
 #: eeschema/sch_eagle_plugin.cpp:1088
 #, fuzzy, c-format
@@ -10889,8 +10885,7 @@ msgstr "Neuer Schaltplan"
 #, c-format
 msgid "Schematic file \"%s\" already exists, use Open instead"
 msgstr ""
-"Die Schaltplan Datei \"%s\" existiert bereits, statt dessen \"Öffnen\" "
-"benutzen."
+"Die Schaltplan Datei „%s“ existiert bereits, statt dessen „Öffnen“ benutzen."
 
 #: eeschema/sch_edit_frame.cpp:1074
 msgid "Open Schematic"
@@ -10926,12 +10921,12 @@ msgstr "Feld %s"
 #: pcbnew/plugin.cpp:29
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr "Das Plugin \"%s\" hat die Funktion \"%s\" nicht implementiert."
+msgstr "Das Plugin „%s“ hat die Funktion „%s“ nicht implementiert."
 
 #: eeschema/sch_io_mgr.cpp:33 pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr "Plugintyp \"%s\" wurde nicht gefunden."
+msgstr "Plugintyp „%s“ wurde nicht gefunden."
 
 #: eeschema/sch_io_mgr.cpp:85
 #, c-format
@@ -10959,7 +10954,7 @@ msgstr "nicht gequotete Zeichenkette erwartet"
 #: eeschema/sch_legacy_plugin.cpp:779
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
-msgstr "\"%s\" scheint keine Eeschema-Datei zu sein"
+msgstr "„%s“ scheint keine Eeschema-Datei zu sein"
 
 #: eeschema/sch_legacy_plugin.cpp:807
 msgid "Missing 'EELAYER END'"
@@ -10985,8 +10980,7 @@ msgstr "Bauteil Textfeld Attribut muss 3 Buchstaben lang sein"
 #: eeschema/sch_legacy_plugin.cpp:2395
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
-msgstr ""
-"Keine Berechtigung zum Lesen der Bibliotheks-Dokumentationsdatei \"%s\"."
+msgstr "Keine Berechtigung zum Lesen der Bibliotheks-Dokumentationsdatei „%s“."
 
 #: eeschema/sch_legacy_plugin.cpp:2403
 msgid "symbol document library file is empty"
@@ -11001,13 +10995,13 @@ msgstr "Die Bibliothek %s enthält keinen Alias %s."
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
-"Symbolbibliothek \"%s\" existiert bereits, neue Bibliothek kann nicht "
-"erstellt werden."
+"Symbolbibliothek „%s“ existiert bereits, neue Bibliothek kann nicht erstellt "
+"werden."
 
 #: eeschema/sch_legacy_plugin.cpp:4242 pcbnew/legacy_plugin.cpp:3469
 #, c-format
 msgid "library \"%s\" cannot be deleted"
-msgstr "bibliothek \"%s\" kann nicht gelöscht werden"
+msgstr "bibliothek „%s“ kann nicht gelöscht werden"
 
 #: eeschema/sch_line.cpp:615
 msgid "Vert."
@@ -11331,7 +11325,7 @@ msgstr "Wähle Symbolbibliothek"
 #: eeschema/selpart.cpp:144
 #, c-format
 msgid "Error occurred loading symbol library \"%s\"."
-msgstr "Beim Laden der Symbolbibliothek \"%s\" ist ein Fehler aufgetreten."
+msgstr "Beim Laden der Symbolbibliothek „%s“ ist ein Fehler aufgetreten."
 
 #: eeschema/selpart.cpp:150
 msgid "Library:Symbol"
@@ -11348,27 +11342,27 @@ msgstr "Kein gültiger Dateiname!"
 #: eeschema/sheet.cpp:94
 #, c-format
 msgid "A sheet named \"%s\" already exists."
-msgstr "Eine Schaltplan mit dem Namen \"%s\" existiert bereits."
+msgstr "Eine Schaltplan mit dem Namen „%s“ existiert bereits."
 
 #: eeschema/sheet.cpp:142
 #, c-format
 msgid "\"%s\" already exists."
-msgstr "\"%s\" existiert bereits."
+msgstr "„%s“ existiert bereits."
 
 #: eeschema/sheet.cpp:143
 #, c-format
 msgid "Link \"%s\" to this file?"
-msgstr "\"%s\" zu dieser Datei verlinken?"
+msgstr "„%s“ zu dieser Datei verlinken?"
 
 #: eeschema/sheet.cpp:166
 #, c-format
 msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
-msgstr "Ändere \"%s\" Verlinkung von \"%s\" nach \"%s\"?"
+msgstr "Ändere „%s“ Verlinkung von „%s“ nach „%s“?"
 
 #: eeschema/sheet.cpp:168
 #, c-format
 msgid "Create new file \"%s\" with contents of \"%s\"?"
-msgstr "Neu Datei \"%s\" mit dem Inhalt von \"%s\" erstellen?"
+msgstr "Neu Datei „%s“ mit dem Inhalt von „%s“ erstellen?"
 
 #: eeschema/sheet.cpp:170
 msgid "This action cannot be undone."
@@ -11377,12 +11371,12 @@ msgstr "Diese Änderung kann nicht rückgängig gemacht werden."
 #: eeschema/sheet.cpp:230
 #, c-format
 msgid "Error occurred saving schematic file \"%s\"."
-msgstr "Beim Speichern der Schaltplandatei \"%s\" ist ein Fehler aufgetreten."
+msgstr "Beim Speichern der Schaltplandatei „%s“ ist ein Fehler aufgetreten."
 
 #: eeschema/sheet.cpp:233
 #, c-format
 msgid "Failed to save schematic \"%s\""
-msgstr "Konnte Schaltplan \"%s\" nicht speichern"
+msgstr "Konnte Schaltplan „%s“ nicht speichern"
 
 #: eeschema/sheet.cpp:317
 #, c-format
@@ -11391,7 +11385,7 @@ msgid ""
 "if not all of the symbol library links will be broken.  Do you want to "
 "continue?"
 msgstr ""
-"Der Schaltplan \"%s\" ist noch nicht neu zur Symbol-Bibliotheks-Tabelle "
+"Der Schaltplan „%s“ ist noch nicht neu zur Symbol-Bibliotheks-Tabelle "
 "zugeordnet worden. Der überwiegende Teil oder gar alle Symbolbibliotheken "
 "werden nicht benutzbar sein.  Möchten Sie fortfahren?"
 
@@ -11641,31 +11635,30 @@ msgstr "Bitte benötigte Felder ausfüllen."
 #: eeschema/sim/spice_value.cpp:270
 #, c-format
 msgid "\"%s\" is not a valid Spice value"
-msgstr "\"%s\" ist kein gültiger Spice-Wert"
+msgstr "„%s“ ist kein gültiger Spice-Wert"
 
 #: eeschema/symbedit.cpp:104
 #, c-format
 msgid "More than one symbol found in symbol file \"%s\"."
-msgstr "Mehr als ein Symbol in der Symboldatei \"%s\" gefunden."
+msgstr "Mehr als ein Symbol in der Symboldatei „%s“ gefunden."
 
 #: eeschema/symbedit.cpp:194
 #, c-format
 msgid "Saving symbol in \"%s\""
-msgstr "Schaltplansymbol wird in \"%s\" gespeichert"
+msgstr "Schaltplansymbol wird in „%s“ gespeichert"
 
 #: eeschema/symbedit.cpp:211
 #, c-format
 msgid "An error occurred attempting to save symbol file \"%s\""
 msgstr ""
-"Bei dem Versuch die Symboldatei \"%s\" zu speichern ist ein Fehler "
-"aufgetreten."
+"Bei dem Versuch die Symboldatei „%s“ zu speichern ist ein Fehler aufgetreten."
 
 #: eeschema/symbol_lib_table.cpp:210
 #, c-format
 msgid ""
 "Duplicate library nickname \"%s\" found in symbol library table file line %d"
 msgstr ""
-"Doppelter Bibliothek Nicknamen \"%s\" in der Symbol-Bibliotheks-Tabelle in "
+"Doppelter Bibliothek Nicknamen „%s“ in der Symbol-Bibliotheks-Tabelle in "
 "Zeile %d gefunden"
 
 #: eeschema/symbol_lib_table.cpp:297
@@ -11673,7 +11666,7 @@ msgstr ""
 msgid "sym-lib-table files contain no library with nickname \"%s\""
 msgstr ""
 "Die Symbol-Bibliotheks-Tabelle enthält keine Bibliothek mit dem Nicknamen "
-"\"%s\""
+"„%s“"
 
 #: eeschema/tool_lib.cpp:58
 msgid "Deselect current tool"
@@ -11721,11 +11714,11 @@ msgstr "Bauteil exportieren"
 
 #: eeschema/tool_lib.cpp:196 eeschema/tool_viewlib.cpp:89
 msgid "Show as \"De Morgan\" normal symbol"
-msgstr "Symbol in \"De Morgan\" Normaldarstellung"
+msgstr "Symbol in „De Morgan“ Normaldarstellung"
 
 #: eeschema/tool_lib.cpp:199 eeschema/tool_viewlib.cpp:94
 msgid "Show as \"De Morgan\" convert symbol"
-msgstr "Symbol in \"De Morgan\" Darstellung konvertieren"
+msgstr "Symbol in „De Morgan“ Darstellung konvertieren"
 
 #: eeschema/tool_lib.cpp:205
 msgid "Show associated datasheet or document"
@@ -12405,7 +12398,7 @@ msgstr "Nicht unterstütztes Werkzeug in dieser Darstellung"
 #: gerbview/events_called_functions.cpp:388
 #, c-format
 msgid "Source file \"%s\" is not available"
-msgstr "Quelldatei \"%s\" ist nicht vorhanden"
+msgstr "Quelldatei „%s“ ist nicht vorhanden"
 
 #: gerbview/events_called_functions.cpp:396
 msgid "No editor defined. Please select one"
@@ -12472,7 +12465,7 @@ msgstr "Dateiname für Platine"
 #: gerbview/export_to_pcbnew.cpp:219
 #, c-format
 msgid "Cannot create file \"%s\""
-msgstr "Datei \"%s\" konnte nicht erstellt werden."
+msgstr "Datei „%s“ konnte nicht erstellt werden."
 
 #: gerbview/files.cpp:49
 msgid "<b>No more available free graphic layer</b> in Gerbview to load files"
@@ -12572,17 +12565,17 @@ msgstr "Öffnen Excellon Bohrdatei(en)"
 #: gerbview/files.cpp:454
 #, c-format
 msgid "Zip file \"%s\" cannot be opened"
-msgstr "Zip-Datei \"%s\" kann nicht geöffnet werden"
+msgstr "Zip-Datei „%s“ kann nicht geöffnet werden"
 
 #: gerbview/files.cpp:496
 #, c-format
 msgid "Info: skip file <i>\"%s\"</i> (unknown type)\n"
-msgstr "Info: Überspringe <i>\"%s\"</i> (unbekannter Typ)\n"
+msgstr "Info: Überspringe <i>„%s“</i> (unbekannter Typ)\n"
 
 #: gerbview/files.cpp:538
 #, c-format
 msgid "<b>Unable to create temporary file \"%s\"</b>\n"
-msgstr "<b>Kann temporäre Datei \"%s\" nicht erzeugen</b>\n"
+msgstr "<b>Kann temporäre Datei „%s“ nicht erzeugen</b>\n"
 
 #: gerbview/files.cpp:568
 #, c-format
@@ -12732,7 +12725,7 @@ msgstr " (mit X2 Attributen)"
 #: gerbview/gerbview_frame.cpp:787
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
-msgstr "Bildname: \"%s\",  Lagenname: \"%s\""
+msgstr "Bildname: „%s“,  Lagenname: „%s“"
 
 #: gerbview/gerbview_frame.cpp:801
 msgid "X2 attr"
@@ -13144,17 +13137,17 @@ msgstr "&Sonstiges"
 #: gerbview/onrightclick.cpp:106 gerbview/tools/selection_tool.cpp:104
 #, c-format
 msgid "Highlight Items of Component \"%s\""
-msgstr "Elemente vom Bauteil \"%s\" hervorheben"
+msgstr "Elemente vom Bauteil „%s“ hervorheben"
 
 #: gerbview/onrightclick.cpp:115 gerbview/tools/selection_tool.cpp:112
 #, c-format
 msgid "Highlight Items of Net \"%s\""
-msgstr "Elemente vom Netz \"%s\" hervorheben"
+msgstr "Elemente vom Netz „%s“ hervorheben"
 
 #: gerbview/onrightclick.cpp:126 gerbview/tools/selection_tool.cpp:122
 #, c-format
 msgid "Highlight Aperture Type \"%s\""
-msgstr "Öffnungstype \"%s\" hervorheben"
+msgstr "Öffnungstype „%s“ hervorheben"
 
 #: gerbview/onrightclick.cpp:137 gerbview/tools/gerbview_control.cpp:42
 msgid "Clear Highlight"
@@ -13163,7 +13156,7 @@ msgstr "Hervorhebung löschen"
 #: gerbview/readgerb.cpp:61 pcbnew/footprint_libraries_utils.cpp:65
 #, c-format
 msgid "File \"%s\" not found"
-msgstr "Datei \"%s\" nicht gefunden"
+msgstr "Datei „%s“ nicht gefunden"
 
 #: gerbview/readgerb.cpp:79
 msgid ""
@@ -13178,17 +13171,16 @@ msgstr ""
 #: gerbview/rs274x.cpp:272
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr ""
-"RS274X: Ungültiges GERBER Formatierungskommando '%c' in Zeile %d: \"%s\""
+msgstr "RS274X: Ungültiges GERBER Formatierungskommando ‚%c‘ in Zeile %d: „%s“"
 
 #: gerbview/rs274x.cpp:275
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr "GERBER Datei \"%s\" wird eventuell nicht dargestellt wie beabsichtigt."
+msgstr "GERBER Datei „%s“ wird eventuell nicht dargestellt wie beabsichtigt."
 
 #: gerbview/rs274x.cpp:550
 msgid "RS274X: Command \"IR\" rotation value not allowed"
-msgstr "RS274X: Rotationswert für \"IR\"-Befehl nicht zulässig"
+msgstr "RS274X: Rotationswert für „IR“-Befehl nicht zulässig"
 
 #: gerbview/rs274x.cpp:641
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
@@ -13507,12 +13499,12 @@ msgstr "Zielverzeichnis"
 #: kicad/files-io.cpp:80
 #, c-format
 msgid "Unzipping project in \"%s\"\n"
-msgstr "Entpacke Projekt in \"%s\"\n"
+msgstr "Entpacke Projekt in „%s“\n"
 
 #: kicad/files-io.cpp:104
 #, c-format
 msgid "Extract file \"%s\""
-msgstr "Entpacke Datei \"%s\""
+msgstr "Entpacke Datei „%s“"
 
 #: kicad/files-io.cpp:113
 msgid " OK\n"
@@ -13529,12 +13521,12 @@ msgstr "Projektdateien archivieren"
 #: kicad/files-io.cpp:174
 #, c-format
 msgid "Unable to create zip archive file \"%s\""
-msgstr "Kann Zip-Archiv \"%s\" nicht erstellen"
+msgstr "Kann Zip-Archiv „%s“ nicht erstellen"
 
 #: kicad/files-io.cpp:201
 #, c-format
 msgid "Archive file \"%s\""
-msgstr "Archivdatei \"%s\""
+msgstr "Archivdatei „%s“"
 
 #: kicad/files-io.cpp:215
 #, c-format
@@ -13956,7 +13948,7 @@ msgstr "Neuer Projektordner"
 #: kicad/prjconfig.cpp:334
 #, c-format
 msgid "Cannot write to folder \"%s\"."
-msgstr "Kann nicht in Ordner \"%s\" schreiben."
+msgstr "Kann nicht in Ordner „%s“ schreiben."
 
 #: kicad/prjconfig.cpp:335
 msgid "Error!"
@@ -14009,12 +14001,12 @@ msgstr "Konnte keine HTML Metainformation für diese Vorlage finden!"
 #: kicad/project_template.cpp:205
 #, c-format
 msgid "Cannot create folder \"%s\"."
-msgstr "Kann Ordner \"%s\" nicht erstellen."
+msgstr "Kann Ordner „%s“ nicht erstellen."
 
 #: kicad/project_template.cpp:227
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr "Datei \"%s\" konnte nicht kopiert werden."
+msgstr "Datei „%s“ konnte nicht kopiert werden."
 
 #: kicad/tree_project_frame.cpp:220
 #, c-format
@@ -14068,7 +14060,7 @@ msgstr "Datei &löschen"
 #: kicad/tree_project_frame.cpp:758
 #, c-format
 msgid "Change filename: \"%s\""
-msgstr "Ändere Dateiname: \"%s\""
+msgstr "Ändere Dateiname: „%s“"
 
 #: kicad/tree_project_frame.cpp:761
 msgid "Change filename"
@@ -14097,7 +14089,7 @@ msgstr "Möglicherweise aufgrund von fehlenden Zugriffsrechten?"
 #: kicad/treeproject_item.cpp:132
 #, c-format
 msgid "Do you really want to delete \"%s\""
-msgstr "Wollen Sie \"%s\" wirklich löschen?"
+msgstr "Wollen Sie „%s“ wirklich löschen?"
 
 #: kicad/treeproject_item.cpp:137
 msgid "Delete File"
@@ -14328,7 +14320,7 @@ msgstr ""
 #: pagelayout_editor/files.cpp:63 pagelayout_editor/files.cpp:151
 #, c-format
 msgid "File \"%s\" loaded"
-msgstr "Datei \"%s\" geladen"
+msgstr "Datei „%s“ geladen"
 
 #: pagelayout_editor/files.cpp:108
 msgid "Append Existing Page Layout File"
@@ -14342,24 +14334,24 @@ msgstr "Datei %s kann nicht geladen werden"
 #: pagelayout_editor/files.cpp:127
 #, c-format
 msgid "File \"%s\" inserted"
-msgstr "Datei \"%s\" eingefügt"
+msgstr "Datei „%s“ eingefügt"
 
 #: pagelayout_editor/files.cpp:160
 #, c-format
 msgid "Unable to write \"%s\""
-msgstr "Kann \"%s\" nicht schreiben"
+msgstr "Kann „%s“ nicht schreiben"
 
 #: pagelayout_editor/files.cpp:165 pagelayout_editor/files.cpp:196
 #, c-format
 msgid "File \"%s\" written"
-msgstr "Datei \"%s\" geschrieben"
+msgstr "Datei „%s“ geschrieben"
 
 #: pagelayout_editor/files.cpp:190 pagelayout_editor/pl_editor_frame.cpp:257
 #: pcbnew/exporters/export_gencad.cpp:287
 #: pcbnew/exporters/gen_footprints_placefile.cpp:644
 #, c-format
 msgid "Unable to create \"%s\""
-msgstr "Kann \"%s\" nicht erzeugen"
+msgstr "Kann „%s“ nicht erzeugen"
 
 #: pagelayout_editor/hotkeys.cpp:84 pagelayout_editor/onrightclick.cpp:114
 #: pcbnew/dialogs/dialog_move_exact_base.h:77 pcbnew/hotkeys.cpp:127
@@ -14492,7 +14484,7 @@ msgstr "pl_editor ist bereits gestartet? Fortsetzen?"
 #: pagelayout_editor/pl_editor_frame.cpp:202
 #, c-format
 msgid "Error when loading file \"%s\""
-msgstr "Fehler beim Laden von \"%s\""
+msgstr "Fehler beim Laden von „%s“"
 
 #: pagelayout_editor/pl_editor_frame.cpp:116
 msgid "coord origin: Right Bottom page corner"
@@ -14639,7 +14631,7 @@ msgstr "Zoll"
 
 #: pcb_calculator/UnitSelector.cpp:75
 msgid "oz/ft^2"
-msgstr "oz/ft^2"
+msgstr "oz/ft²"
 
 #: pcb_calculator/UnitSelector.cpp:104
 msgid "GHz"
@@ -14665,13 +14657,13 @@ msgstr "Grad"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:391
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:480
 msgid "Ohm"
-msgstr "Ohm"
+msgstr "Ω"
 
 #: pcb_calculator/UnitSelector.cpp:159
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:96
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:110
 msgid "KOhm"
-msgstr "kOhm"
+msgstr "kΩ"
 
 #: pcb_calculator/attenuators.cpp:114
 #, c-format
@@ -14827,7 +14819,7 @@ msgstr "Parameter:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
 msgid "Current:"
-msgstr "Aktuell:"
+msgstr "Strom:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:275
 msgid "Temperature rise:"
@@ -15083,7 +15075,7 @@ msgstr "Er:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
 #: pcbnew/dialogs/dialog_drc_base.cpp:160
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:659
 #: pcb_calculator/transline_ident.cpp:145
@@ -15281,7 +15273,7 @@ msgstr "10% / 5%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1200
 msgid "<= 2%"
-msgstr "<= 2%"
+msgstr "≤ 2%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1202
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1231
@@ -15387,7 +15379,7 @@ msgid ""
 "Unable to write file \"%s\"\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
-"Datei \"%s\" kann nicht geschrieben werden.\n"
+"Datei „%s“ kann nicht geschrieben werden.\n"
 "Möchten Sie beenden und ihre Veränderungen verwerfen?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:161
@@ -15417,7 +15409,7 @@ msgstr ""
 #: pcb_calculator/regulators_funct.cpp:263
 #, c-format
 msgid "Unable to read data file \"%s\""
-msgstr "Datei \"%s\" nicht lesbar"
+msgstr "Datei „%s“ nicht lesbar"
 
 #: pcb_calculator/regulators_funct.cpp:294
 msgid "This regulator is already in list. Aborted"
@@ -15517,7 +15509,7 @@ msgid ""
 "(Ohm*meter)"
 msgstr ""
 "Elektrischer Widerstand oder spezifischer elektrischer Widerstand des "
-"Leiters (Ohm pro Meter)"
+"Leiters (Ω/m)"
 
 #: pcb_calculator/transline_ident.cpp:156
 msgid "Frequency of the input signal"
@@ -15916,7 +15908,7 @@ msgstr "Gruppierung"
 #: pcbnew/board_netlist_updater.cpp:125 pcbnew/class_board.cpp:2482
 #, c-format
 msgid "Adding new symbol \"%s:%s\" footprint \"%s\".\n"
-msgstr "Füge neues Bauteil \"%s:%s\" mit Footprint \"%s\" hinzu.\n"
+msgstr "Füge neues Bauteil „%s:%s“ mit Footprint „%s“ hinzu.\n"
 
 #: pcbnew/board_netlist_updater.cpp:131
 #, c-format
@@ -15933,8 +15925,8 @@ msgstr ""
 #, c-format
 msgid "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
-"Neues Bauteil \"%s:%s\" konnte nicht hinzugefügt werden, wegen fehlendem "
-"Footprint \"%s\".\n"
+"Neues Bauteil „%s:%s“ konnte nicht hinzugefügt werden, wegen fehlendem "
+"Footprint „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:186
 #, c-format
@@ -15944,20 +15936,19 @@ msgstr "Ändere Bauteil-Footprint %s (von %s) nach %s.\n"
 #: pcbnew/board_netlist_updater.cpp:193 pcbnew/class_board.cpp:2524
 #, c-format
 msgid "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
-msgstr "Ersetze von Bauteil \"%s:%s\" den Footprint \"%s\" mit \"%s\".\n"
+msgstr "Ersetze von Bauteil „%s:%s“ den Footprint „%s“ mit „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:223
 #, c-format
 msgid "Cannot change symbol %s footprint due to missing footprint %s.\n"
 msgstr ""
-"Symbol %s konnte wegen fehlendem Footprint \"%s\" nicht verändert werden.\n"
+"Symbol %s konnte wegen fehlendem Footprint „%s“ nicht verändert werden.\n"
 
 #: pcbnew/board_netlist_updater.cpp:230 pcbnew/class_board.cpp:2535
 #, c-format
 msgid "Cannot replace symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
-"Symbol \"%s:%s\" konnte wegen fehlendem Footprint \"%s\" nicht ersetzt "
-"werden.\n"
+"Symbol „%s:%s“ konnte wegen fehlendem Footprint „%s“ nicht ersetzt werden.\n"
 
 #: pcbnew/board_netlist_updater.cpp:259
 #, c-format
@@ -15967,7 +15958,7 @@ msgstr "Ändere die Referenz von Symbol %s zu %s.\n"
 #: pcbnew/board_netlist_updater.cpp:265
 #, c-format
 msgid "Changing symbol \"%s:%s\" reference to \"%s\".\n"
-msgstr "Ändere die Referenz von Symbol \"%s:%s\" zu \"%s\".\n"
+msgstr "Ändere die Referenz von Symbol „%s:%s“ zu „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:282
 #, c-format
@@ -15977,12 +15968,12 @@ msgstr "Ändere Wert von Symbol %s von %s zu %s.\n"
 #: pcbnew/board_netlist_updater.cpp:289
 #, c-format
 msgid "Changing symbol \"%s:%s\" value from \"%s\" to \"%s\".\n"
-msgstr "Ändere Wert von Symbol \"%s:%s\" von \"%s\" zu \"%s\".\n"
+msgstr "Ändere Wert von Symbol „%s:%s“ von „%s“ zu „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:307
 #, c-format
 msgid "Changing symbol path \"%s:%s\" to \"%s\".\n"
-msgstr "Ändere Symbolpfad \"%s:%s\" zu \"%s\".\n"
+msgstr "Ändere Symbolpfad „%s:%s“ zu „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:347
 #, c-format
@@ -15992,7 +15983,7 @@ msgstr "Entferne vom Symbol %s den Pin %s.\n"
 #: pcbnew/board_netlist_updater.cpp:352
 #, c-format
 msgid "Clearing symbol \"%s:%s\" pin \"%s\" net name.\n"
-msgstr "Bereinige Netznamen von Symbol \"%s:%s\" Pin \"%s\".\n"
+msgstr "Bereinige Netznamen von Symbol „%s:%s“ Pin „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:392
 #, c-format
@@ -16012,22 +16003,22 @@ msgstr "Verbinde am Symbol %s den Pin %s zum Netz %s.\n"
 #: pcbnew/board_netlist_updater.cpp:413
 #, c-format
 msgid "Changing symbol \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
-msgstr "Ändere Symbol \"%s:%s\" Pin \"%s\" Netzname von \"%s\" zu \"%s\".\n"
+msgstr "Ändere Symbol „%s:%s“ Pin „%s“ Netzname von „%s“ zu „%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:497
 #, c-format
 msgid "Reconnect copper zone from net \"%s\" to net \"%s\"."
-msgstr "Verbinde Kupferfläche von Netz \"%s\" zu Netz \"%s\"."
+msgstr "Verbinde Kupferfläche von Netz „%s“ zu Netz „%s“."
 
 #: pcbnew/board_netlist_updater.cpp:501
 #, c-format
 msgid "Changing copper zone net name from \"%s\" to \"%s\"."
-msgstr "Ändere Kupferflächenname von \"%s\" zu \"%s\"."
+msgstr "Ändere Kupferflächenname von „%s“ zu „%s“."
 
 #: pcbnew/board_netlist_updater.cpp:521
 #, c-format
 msgid "Copper zone (net \"%s\") has no pads connected."
-msgstr "Kupferfläche (Netz \"%s\") hat keine verbundenen Pads."
+msgstr "Kupferfläche (Netz „%s“) hat keine verbundenen Pads."
 
 #: pcbnew/board_netlist_updater.cpp:552
 #, c-format
@@ -16042,7 +16033,7 @@ msgstr "Entferne Footprint %s."
 #: pcbnew/board_netlist_updater.cpp:562 pcbnew/class_board.cpp:2716
 #, c-format
 msgid "Removing unused footprint \"%s:%s\".\n"
-msgstr "Entferne unbenutzten Footprint \"%s:%s\".\n"
+msgstr "Entferne unbenutzten Footprint „%s:%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:631
 #, c-format
@@ -16052,7 +16043,7 @@ msgstr "Entferne einzelnes Pad Netz %s."
 #: pcbnew/board_netlist_updater.cpp:635 pcbnew/class_board.cpp:2782
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n"
-msgstr "Entferne einzelnes Padnetz \"%s\" auf \"%s\" Pad \"%s\"\n"
+msgstr "Entferne einzelnes Padnetz „%s“ auf „%s“ Pad „%s“\n"
 
 #: pcbnew/board_netlist_updater.cpp:700
 #, c-format
@@ -16063,7 +16054,7 @@ msgstr ""
 #: pcbnew/board_netlist_updater.cpp:731
 #, c-format
 msgid "Processing component \"%s:%s:%s\".\n"
-msgstr "Verarbeite Bauteil \"%s:%s:%s\".\n"
+msgstr "Verarbeite Bauteil „%s:%s:%s“.\n"
 
 #: pcbnew/board_netlist_updater.cpp:771
 msgid "Update netlist"
@@ -16099,7 +16090,7 @@ msgstr "Stückliste speichern (BOM)"
 #: pcbnew/dialogs/dialog_export_vrml.cpp:253
 #, c-format
 msgid "Unable to create file \"%s\""
-msgstr "Konnte Datei \"%s\" nicht erstellen"
+msgstr "Konnte Datei „%s“ nicht erstellen"
 
 #: pcbnew/build_BOM_from_board.cpp:115
 msgid "Id"
@@ -16162,49 +16153,48 @@ msgstr "Nicht geroutet"
 #: pcbnew/class_board.cpp:2464
 #, c-format
 msgid "Checking netlist symbol footprint \"%s:%s:%s\".\n"
-msgstr "Überprüfe aus der Netzliste den Symbolfootprint \"%s:%s:%s\".\n"
+msgstr "Überprüfe aus der Netzliste den Symbolfootprint „%s:%s:%s“.\n"
 
 #: pcbnew/class_board.cpp:2588
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
-msgstr "Ändere die Referenz von Footprint \"%s:%s\" zu \"%s\".\n"
+msgstr "Ändere die Referenz von Footprint „%s:%s“ zu „%s“.\n"
 
 #: pcbnew/class_board.cpp:2604
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
-msgstr "Ändere Wert von Footprint \"%s:%s\" von \"%s\" zu \"%s\".\n"
+msgstr "Ändere Wert von Footprint „%s:%s“ von „%s“ zu „%s“.\n"
 
 #: pcbnew/class_board.cpp:2621
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
-msgstr "Ändere Bauteilpfad \"%s:%s\" zu \"%s\".\n"
+msgstr "Ändere Bauteilpfad „%s:%s“ zu „%s“.\n"
 
 #: pcbnew/class_board.cpp:2645
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
-msgstr "Bereinige Netznamen von Bauteil \"%s:%s\" Pin \"%s\".\n"
+msgstr "Bereinige Netznamen von Bauteil „%s:%s“ Pin „%s“.\n"
 
 #: pcbnew/class_board.cpp:2664
 #, c-format
 msgid ""
 "Changing footprint \"%s:%s\" pad \"%s\" net name from \"%s\" to \"%s\".\n"
-msgstr ""
-"Ändere Netzname von Footprint \"%s:%s\" Pin \"%s\" von \"%s\" zu \"%s\".\n"
+msgstr "Ändere Netzname von Footprint „%s:%s“ Pin „%s“ von „%s“ zu \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2821
 #, c-format
 msgid "Component \"%s\" pad \"%s\" not found in footprint \"%s\"\n"
-msgstr "Bauteil \"%s\" mit Pad \"%s\" nicht im Footprint \"%s\" gefunden\n"
+msgstr "Bauteil „%s“ mit Pad „%s“ nicht im Footprint „%s“ gefunden\n"
 
 #: pcbnew/class_board.cpp:2858
 #, c-format
 msgid "Updating copper zone (net name \"%s\") to net name \"%s\"."
-msgstr "Aktualisiere Kupferfläche (Netzname \"%s\") zu Netzname \"%s\"."
+msgstr "Aktualisiere Kupferfläche (Netzname „%s“) zu Netzname „%s“."
 
 #: pcbnew/class_board.cpp:2864
 #, c-format
 msgid "Copper zone (net name \"%s\") has no pads connected."
-msgstr "Kupferfläche (Netz \"%s\") hat keine verbundenen Pads."
+msgstr "Kupferfläche (Netz „%s“) hat keine verbundenen Pads."
 
 #: pcbnew/class_board_item.cpp:44 pcbnew/class_pad.cpp:1163
 msgid "Rect"
@@ -16222,7 +16212,7 @@ msgstr "Polygon"
 #: pcbnew/class_dimension.cpp:491
 #, c-format
 msgid "Dimension \"%s\" on %s"
-msgstr "Abmessungen\"%s\" auf %s"
+msgstr "Abmessungen „%s“ auf %s"
 
 #: pcbnew/class_drawsegment.cpp:403
 msgid "Drawing"
@@ -16435,7 +16425,7 @@ msgstr "Stärke"
 #: pcbnew/class_pcb_text.cpp:185
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
-msgstr "PCB Text \"%s\" auf %s"
+msgstr "PCB Text „%s“ auf %s"
 
 #: pcbnew/class_text_mod.cpp:374
 msgid "Ref."
@@ -16454,7 +16444,7 @@ msgstr "Wert %s auf %s"
 #: pcbnew/class_text_mod.cpp:433
 #, c-format
 msgid "Text \"%s\" on %s of %s"
-msgstr "Text \"%s\" auf %s von %s"
+msgstr "Text „%s“ auf %s von %s"
 
 #: pcbnew/class_track.cpp:145
 #, c-format
@@ -16668,7 +16658,7 @@ msgstr "%s nicht gefunden"
 #: pcbnew/cross-probing.cpp:169
 #, c-format
 msgid "Selecting all from sheet \"%s\""
-msgstr "Wähle alles vom Blatt \"%s\""
+msgstr "Wähle alles vom Blatt „%s“"
 
 #: pcbnew/cross-probing.cpp:219
 #, c-format
@@ -16704,13 +16694,13 @@ msgstr ""
 #: pcbnew/dialogs/dialog_SVG_print.cpp:304
 #, c-format
 msgid "Plot: \"%s\" OK."
-msgstr "Plot: \"%s\" erstellt."
+msgstr "Plot: „%s“ erstellt."
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:310 pcbnew/dialogs/dialog_plot.cpp:913
 #: pcbnew/exporters/gen_footprints_placefile.cpp:340
 #, c-format
 msgid "Unable to create file \"%s\"."
-msgstr "Konnte Datei \"%s\" nicht erstellen."
+msgstr "Konnte Datei „%s“ nicht erstellen."
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:29
 msgid ""
@@ -16892,12 +16882,12 @@ msgstr "Optionen für das Aufräumen"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:394
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
-msgstr "Abstandsfläche muss kleiner sein als %f\" / %f mm."
+msgstr "Abstandsfläche muss kleiner sein als %f″ / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:406
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
-msgstr "Minimalbreite muss größer sein als %f\" / %f mm."
+msgstr "Minimalbreite muss größer sein als %f″ / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:446
 msgid "Thermal relief spoke must be greater than the minimum width."
@@ -17188,8 +17178,8 @@ msgid ""
 "Could not determine numbering start from \"%s\": expected value consistent "
 "with alphabet \"%s\""
 msgstr ""
-"Konnte den Start der Nummerierung von \"%s\" nicht ermitteln: Erwarteter "
-"Wert ist konsistent mit dem Alphabet \"%s\""
+"Konnte den Start der Nummerierung von „%s“ nicht ermitteln: Erwarteter Wert "
+"ist konsistent mit dem Alphabet „%s“"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:276
 #, c-format
@@ -17886,7 +17876,7 @@ msgstr "Anzeige Padabstandsflächen"
 #: pcbnew/dialogs/dialog_drc.cpp:247 pcbnew/dialogs/dialog_drc.cpp:319
 #, c-format
 msgid "Report file \"%s\" created"
-msgstr "Protokolldatei \"%s\" erstellt"
+msgstr "Protokolldatei „%s“ erstellt"
 
 #: pcbnew/dialogs/dialog_drc.cpp:249 pcbnew/dialogs/dialog_drc.cpp:320
 msgid "Disk File Report Completed"
@@ -17895,7 +17885,7 @@ msgstr "Erstellung der Protokolldatei durchgeführt"
 #: pcbnew/dialogs/dialog_drc.cpp:254 pcbnew/dialogs/dialog_drc.cpp:325
 #, c-format
 msgid "Unable to create report file \"%s\""
-msgstr "Protokolldatei \"%s\" konnte nicht erstellt werden."
+msgstr "Protokolldatei „%s“ konnte nicht erstellt werden."
 
 #: pcbnew/dialogs/dialog_drc.cpp:345
 msgid "Save DRC Report File"
@@ -18551,17 +18541,17 @@ msgstr "Aktualisieren"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:345
 #, c-format
 msgid "File \"%s\" created\n"
-msgstr "Datei \"%s\" erstellt\n"
+msgstr "Datei „%s“ erstellt\n"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:350
 #, c-format
 msgid "** Could not create file \"%s\" ***\n"
-msgstr "** Konnte Datei \"%s\" nicht erstellen ***\n"
+msgstr "** Konnte Datei „%s“ nicht erstellen ***\n"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:434
 #, c-format
 msgid "Change footprint \"%s\" (from \"%s\") to \"%s\""
-msgstr "Ändere Footprint \"%s\" (von \"%s\") nach \"%s\""
+msgstr "Ändere Footprint „%s“ (von „%s“) nach „%s“"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:443
 msgid "footprint not found"
@@ -18578,7 +18568,7 @@ msgstr "Footprints Assoziierungsdatei speichern"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:556
 #, c-format
 msgid "Could not create file \"%s\""
-msgstr "Konnte Datei \"%s\" nicht erstellen"
+msgstr "Konnte Datei „%s“ nicht erstellen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 #, c-format
@@ -18817,12 +18807,12 @@ msgstr "VRML-Exportoptionen"
 #: pcbnew/dialogs/dialog_find.cpp:132
 #, c-format
 msgid "\"%s\" found"
-msgstr "\"%s\" gefunden"
+msgstr "„%s“ gefunden"
 
 #: pcbnew/dialogs/dialog_find.cpp:138
 #, c-format
 msgid "\"%s\" not found"
-msgstr "\"%s\" nicht gefunden"
+msgstr "„%s“ nicht gefunden"
 
 #: pcbnew/dialogs/dialog_find.cpp:169
 msgid "Marker found"
@@ -18911,7 +18901,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:64
 #, c-format
 msgid "Options for Library \"%s\""
-msgstr "Optionen für Bibliothek \"%s\""
+msgstr "Optionen für Bibliothek „%s“"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
@@ -19125,8 +19115,7 @@ msgstr "Verwende Werte der Netzklasse"
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
 msgstr ""
-"Konnte die Bohr- und /oder Mapdateien nicht in dem Verzeichnis \"%s\" "
-"anlegen."
+"Konnte die Bohr- und /oder Mapdateien nicht in dem Verzeichnis „%s“ anlegen."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:444
 msgid "Save Drill Report File"
@@ -20904,7 +20893,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist.cpp:190
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr "Lese Netzliste  \"%s\".\n"
+msgstr "Lese Netzliste „%s“.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:194
 msgid "Using time stamps to match components and footprints.\n"
@@ -20953,7 +20942,7 @@ msgstr "Footprints prüfen"
 #: pcbnew/dialogs/dialog_netlist.cpp:376 pcbnew/netlist.cpp:89
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
-msgstr "Konnte die Netzliste \"%s\" nicht öffnen."
+msgstr "Konnte die Netzliste „%s“ nicht öffnen."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:377 pcbnew/netlist.cpp:90
 msgid "Netlist Load Error."
@@ -21853,7 +21842,7 @@ msgstr "Keine Lage gewählt, keine Daten zum Plotten."
 #: pcbnew/dialogs/dialog_plot.cpp:908
 #, c-format
 msgid "Plot file \"%s\" created."
-msgstr "Plot-Datei \"%s\" erstellt."
+msgstr "Plot-Datei „%s“ erstellt."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:26
 msgid "Plot format:"
@@ -22334,7 +22323,7 @@ msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Wenn nicht aktiviert werden DuKo's als \"Nicht bewegbar\" betrachtet und "
+"Wenn nicht aktiviert werden DuKo's als „Nicht bewegbar“ betrachtet und "
 "umschlossen anstatt verschoben."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
@@ -22926,43 +22915,42 @@ msgstr "Umrissflächen ...\n"
 #: pcbnew/drc.cpp:564
 #, c-format
 msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
-msgstr "Netzklasse \"%s\" hat Abstand %s, weniger als der globale Wert von %s"
+msgstr "Netzklasse „%s“ hat Abstand %s, weniger als der globale Wert von %s"
 
 # TODO: Überarbeiten
 #: pcbnew/drc.cpp:578
 #, c-format
 msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
 msgstr ""
-"Netzklasse \"%s\" hat Leiterbahnbreite %s, weniger als der globale Wert von "
-"%s"
+"Netzklasse „%s“ hat Leiterbahnbreite %s, weniger als der globale Wert von %s"
 
 #: pcbnew/drc.cpp:591
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s"
 msgstr ""
-"NETZKLASSE: \"%s\" hat DuKo Durchmesser: %s welcher kleiner ist als der "
+"NETZKLASSE: „%s“ hat DuKo Durchmesser: %s welcher kleiner ist als der "
 "Globale: %s"
 
 #: pcbnew/drc.cpp:604
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
 msgstr ""
-"NETZKLASSE: \"%s\" hat DuKo Bohrdurchmesser: %s welcher kleiner ist als der "
+"NETZKLASSE: „%s“ hat DuKo Bohrdurchmesser: %s welcher kleiner ist als der "
 "Globale: %s"
 
 #: pcbnew/drc.cpp:617
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
 msgstr ""
-"NETZKLASSE: \"%s\" hat Micro-DuKo Durchmesser: %s welcher kleiner ist als "
-"der Globale: %s"
+"NETZKLASSE: „%s“ hat Micro-DuKo Durchmesser: %s welcher kleiner ist als der "
+"Globale: %s"
 
 #: pcbnew/drc.cpp:630
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
 msgstr ""
-"NETZKLASSE: \"%s\" hat Micro-DuKo Bohrdurchmesser: %s welcher kleiner ist "
-"als der Globale: %s"
+"NETZKLASSE: „%s“ hat Micro-DuKo Bohrdurchmesser: %s welcher kleiner ist als "
+"der Globale: %s"
 
 #: pcbnew/drc.cpp:728
 msgid "Track clearances"
@@ -22971,26 +22959,24 @@ msgstr "Leiterbahnabstandsflächen"
 #: pcbnew/drc.cpp:1214
 #, c-format
 msgid "footprint \"%s\" has malformed courtyard"
-msgstr "Footprint \"%s\" hat ungültigen Umriss"
+msgstr "Footprint „%s“ hat ungültigen Umriss"
 
 #: pcbnew/drc.cpp:1231
 #, c-format
 msgid "footprint \"%s\" has no courtyard defined"
-msgstr "Footprint \"%s\" hat keinen Umriss definiert"
+msgstr "Footprint „%s“ hat keinen Umriss definiert"
 
 #: pcbnew/drc.cpp:1270
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on front (top) layer"
 msgstr ""
-"Footprints \"%s\" und \"%s\" überschneiden sich auf der Vorderseite (Top "
-"Layer)"
+"Footprints „%s“ und „%s“ überschneiden sich auf der Vorderseite (Top Layer)"
 
 #: pcbnew/drc.cpp:1307
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on back (bottom) layer"
 msgstr ""
-"Footprints \"%s\" und \"%s\" überschneiden sich auf der Rückseite (Bottom "
-"Layer)"
+"Footprints „%s“ und „%s“ überschneiden sich auf der Rückseite (Bottom Layer)"
 
 #: pcbnew/drc_item.cpp:43
 msgid "Unconnected items"
@@ -23155,12 +23141,12 @@ msgstr "Footprint hat ein ungültigen Umriss (kein geschlossene Kontur)"
 #: pcbnew/eagle_plugin.cpp:816
 #, c-format
 msgid "<package> name: \"%s\" duplicated in eagle <library>: \"%s\""
-msgstr "<package> Name: \"%s\" doppelt in Eagle <library>: \"%s\""
+msgstr "<package> Name: „%s“ doppelt in Eagle <library>: „%s“"
 
 #: pcbnew/eagle_plugin.cpp:888
 #, c-format
 msgid "No \"%s\" package in library \"%s\""
-msgstr "Kein \"%s\" Package in Bibliothek \"%s\""
+msgstr "Kein „%s“ Package in Bibliothek „%s“"
 
 #: pcbnew/eagle_plugin.cpp:1395
 #, c-format
@@ -23345,17 +23331,17 @@ msgstr "Kein Footprint für automatische Platzierung vorhanden."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:298
 #, c-format
 msgid "Unable to create \"%s\"."
-msgstr "Kann \"%s\" nicht erstellen."
+msgstr "Kann „%s“ nicht erstellen."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:305
 #, c-format
 msgid "Place file: \"%s\"."
-msgstr "Platzierungsdatei: \"%s\"."
+msgstr "Platzierungsdatei: „%s“."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #, c-format
 msgid "Front side (top side) place file: \"%s\"."
-msgstr "Platzierungsdatei der Vorderseite (Oberseite): \"%s\"."
+msgstr "Platzierungsdatei der Vorderseite (Oberseite): „%s“."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:311
 #: pcbnew/exporters/gen_footprints_placefile.cpp:352
@@ -23371,7 +23357,7 @@ msgstr "Erstellung Bauteil Platzierungsdatei abgeschlossen."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:349
 #, c-format
 msgid "Back side (bottom side) place file: \"%s\"."
-msgstr "Platzierungsdatei der Rückseite (Unterseite): \"%s\"."
+msgstr "Platzierungsdatei der Rückseite (Unterseite): „%s“."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:360
 #, c-format
@@ -23401,12 +23387,12 @@ msgstr "Erstelle Datei %s\n"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:128
 #, c-format
 msgid "Unable to create job file \"%s\""
-msgstr "Kann Job-Datei \"%s\" nicht erstellen"
+msgstr "Kann Job-Datei „%s“ nicht erstellen"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:134
 #, c-format
 msgid "Create Gerber job file \"%s\""
-msgstr "Erstelle Gerber Job-Datei \"%s\""
+msgstr "Erstelle Gerber Job-Datei „%s“"
 
 #: pcbnew/files.cpp:143
 msgid "Open Board File"
@@ -23427,12 +23413,12 @@ msgstr "Bedruckte Leiterplatte"
 #: pcbnew/files.cpp:283
 #, c-format
 msgid "Recovery file \"%s\" not found."
-msgstr "Wiederherstellungsdatei \"%s\" wurde nicht gefunden."
+msgstr "Wiederherstellungsdatei „%s“ wurde nicht gefunden."
 
 #: pcbnew/files.cpp:289
 #, c-format
 msgid "OK to load recovery or backup file \"%s\""
-msgstr "Soll die Wiederherstellungsdatei \"%s\" geladen werden?"
+msgstr "Soll die Wiederherstellungsdatei „%s“ geladen werden?"
 
 #: pcbnew/files.cpp:351
 msgid "noname"
@@ -23441,7 +23427,7 @@ msgstr "namenlos"
 #: pcbnew/files.cpp:425
 #, c-format
 msgid "PCB file \"%s\" is already open."
-msgstr "Datei \"%s\" ist bereits geöffnet."
+msgstr "Datei „%s“ ist bereits geöffnet."
 
 #: pcbnew/files.cpp:435
 msgid "The current board has been modified.  Do you wish to save the changes?"
@@ -23452,7 +23438,7 @@ msgstr ""
 #: pcbnew/files.cpp:461
 #, c-format
 msgid "Board \"%s\" does not exist.  Do you wish to create it?"
-msgstr "Platine \"%s\" existiert nicht. Soll sie erstellt werden?"
+msgstr "Platine „%s“ existiert nicht. Soll sie erstellt werden?"
 
 #: pcbnew/files.cpp:526
 #, c-format
@@ -23474,12 +23460,12 @@ msgstr ""
 #: pcbnew/files.cpp:629
 #, c-format
 msgid "Warning: unable to create backup file \"%s\""
-msgstr "Achtung: Konnte Wiederherstellungsdatei \"%s\" nicht erstellen"
+msgstr "Achtung: Konnte Wiederherstellungsdatei „%s“ nicht erstellen"
 
 #: pcbnew/files.cpp:656 pcbnew/files.cpp:749
 #, c-format
 msgid "No access rights to write to file \"%s\""
-msgstr "Keine Zugriffsrechte zum Speichern von Datei \"%s\""
+msgstr "Keine Zugriffsrechte zum Speichern von Datei „%s“"
 
 #: pcbnew/files.cpp:695 pcbnew/files.cpp:774
 #, c-format
@@ -23493,17 +23479,17 @@ msgstr ""
 #: pcbnew/files.cpp:701
 #, c-format
 msgid "Failed to create \"%s\""
-msgstr "Konnte \"%s\" nicht erstellen"
+msgstr "Konnte „%s“ nicht erstellen"
 
 #: pcbnew/files.cpp:727
 #, c-format
 msgid "Backup file: \"%s\""
-msgstr "Wiederherstellungsdatei: \"%s\""
+msgstr "Wiederherstellungsdatei: „%s“"
 
 #: pcbnew/files.cpp:729
 #, c-format
 msgid "Wrote board file: \"%s\""
-msgstr "Platinendatei geschrieben: \"%s\""
+msgstr "Platinendatei geschrieben: „%s“"
 
 #: pcbnew/files.cpp:783
 #, c-format
@@ -23737,7 +23723,7 @@ msgstr "Lade Footprints"
 #: pcbnew/footprint_libraries_utils.cpp:61
 #, c-format
 msgid "Library \"%s\" exists, OK to replace ?"
-msgstr "Bibliothek \"%s\" existiert, ersetzen?"
+msgstr "Bibliothek „%s“ existiert, ersetzen?"
 
 #: pcbnew/footprint_libraries_utils.cpp:62
 msgid "Create New Library Folder (the .pretty folder is the library)"
@@ -23747,7 +23733,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:63
 #, c-format
 msgid "OK to delete footprint \"%s\" in library \"%s\""
-msgstr "Möchten Sie den Footprint \"%s\" in der Bibliothek \"%s\" entfernen?"
+msgstr "Möchten Sie den Footprint „%s“ in der Bibliothek „%s“ entfernen?"
 
 #: pcbnew/footprint_libraries_utils.cpp:64
 msgid "Import Footprint"
@@ -23760,26 +23746,24 @@ msgstr "Keine Footprintdatei"
 #: pcbnew/footprint_libraries_utils.cpp:67
 #, c-format
 msgid "Unable to find or load footprint \"%s\" from lib path \"%s\""
-msgstr ""
-"Konnte Footprint \"%s\" im Bibliothekspfad \"%s\" nicht finden oder laden."
+msgstr "Konnte Footprint „%s“ im Bibliothekspfad „%s“ nicht finden oder laden."
 
 #: pcbnew/footprint_libraries_utils.cpp:68
 #, c-format
 msgid "Unable to find or load footprint from path \"%s\""
-msgstr "Konnte Footprint im Pfad \"%s\" nicht finden oder laden."
+msgstr "Konnte Footprint im Pfad „%s“ nicht finden oder laden."
 
 #: pcbnew/footprint_libraries_utils.cpp:69
 #, c-format
 msgid ""
 "The footprint library \"%s\" could not be found in any of the search paths."
 msgstr ""
-"Die Footprintbibliothek \"%s\" konnte in keinem der Suchpfade gefunden "
-"werden."
+"Die Footprintbibliothek „%s“ konnte in keinem der Suchpfade gefunden werden."
 
 #: pcbnew/footprint_libraries_utils.cpp:70
 #, c-format
 msgid "Library \"%s\" is read only, not writable"
-msgstr "Bibliothek \"%s\" ist schreibgeschützt"
+msgstr "Bibliothek „%s“ ist schreibgeschützt"
 
 #: pcbnew/footprint_libraries_utils.cpp:72
 msgid "Export Footprint"
@@ -23796,12 +23780,12 @@ msgstr "Footprintname:"
 #: pcbnew/footprint_libraries_utils.cpp:75
 #, c-format
 msgid "Footprint exported to file \"%s\""
-msgstr "Footprint wurde in die Datei \"%s\" exportiert."
+msgstr "Footprint wurde in die Datei „%s“ exportiert."
 
 #: pcbnew/footprint_libraries_utils.cpp:76
 #, c-format
 msgid "Footprint \"%s\" deleted from library \"%s\""
-msgstr "Footprint \"%s\" wurde aus der Bibliothek \"%s\" entfernt."
+msgstr "Footprint „%s“ wurde aus der Bibliothek „%s“ entfernt."
 
 #: pcbnew/footprint_libraries_utils.cpp:77
 msgid "New Footprint"
@@ -23810,7 +23794,7 @@ msgstr "Neuer Footprint"
 #: pcbnew/footprint_libraries_utils.cpp:79
 #, c-format
 msgid "Footprint \"%s\" already exists in library \"%s\""
-msgstr "Footprint \"%s\" existiert bereits in der Bibliothek \"%s\"."
+msgstr "Footprint „%s“ existiert bereits in der Bibliothek „%s“."
 
 #: pcbnew/footprint_libraries_utils.cpp:80
 msgid "No footprint name defined."
@@ -23846,13 +23830,13 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:400
 #, c-format
 msgid "Unable to create or write file \"%s\""
-msgstr "Konnte Datei \"%s\" nicht erstellen"
+msgstr "Konnte Datei „%s“ nicht erstellen"
 
 #: pcbnew/footprint_libraries_utils.cpp:556 pcbnew/gpcb_plugin.cpp:1008
 #: pcbnew/kicad_plugin.cpp:2090 pcbnew/kicad_plugin.cpp:2158
 #, c-format
 msgid "Library \"%s\" is read only"
-msgstr "Bibliothek \"%s\" ist schreibgeschützt"
+msgstr "Bibliothek „%s“ ist schreibgeschützt"
 
 #: pcbnew/footprint_libraries_utils.cpp:602
 msgid "No footprints to archive!"
@@ -23883,12 +23867,12 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:811
 #, c-format
 msgid "Component \"%s\" replaced in \"%s\""
-msgstr "Bauteil \"%s\" ersetzt in \"%s\"."
+msgstr "Bauteil „%s“ ersetzt in „%s“."
 
 #: pcbnew/footprint_libraries_utils.cpp:812
 #, c-format
 msgid "Component \"%s\" added in  \"%s\""
-msgstr "Bauteil \"%s\" hinzugefügt zu \"%s\"."
+msgstr "Bauteil „%s“ hinzugefügt zu „%s“."
 
 #: pcbnew/footprint_viewer_frame.cpp:129
 msgid "Footprint Library Browser"
@@ -24017,8 +24001,8 @@ msgid ""
 "option \"%s\" for Github library \"%s\" must point to a writable directory "
 "ending with '.pretty'."
 msgstr ""
-"Die Option \"%s\" für die GitHub-Bibliothek \"%s\" muss auf ein "
-"beschreibbares Verzeichnis mit der Endung '.pretty' verweisen."
+"Die Option „%s“ für die GitHub-Bibliothek „%s“ muss auf ein beschreibbares "
+"Verzeichnis mit der Endung „.pretty“ verweisen."
 
 #: pcbnew/github/github_plugin.cpp:572
 #, c-format
@@ -24054,24 +24038,23 @@ msgstr ""
 #: pcbnew/gpcb_plugin.cpp:91
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
-msgstr "\"%s\" kann nicht in einen Zahlenwert konvertiert werden."
+msgstr "„%s“ kann nicht in einen Zahlenwert konvertiert werden."
 
 #: pcbnew/gpcb_plugin.cpp:248 pcbnew/gpcb_plugin.cpp:926
 #, c-format
 msgid "footprint library path \"%s\" does not exist"
-msgstr "Footprintbibliothekspfad \"%s\" existiert nicht."
+msgstr "Footprintbibliothekspfad „%s“ existiert nicht."
 
 #: pcbnew/gpcb_plugin.cpp:304 pcbnew/kicad_plugin.cpp:329
 #, c-format
 msgid "library \"%s\" has no footprint \"%s\" to delete"
 msgstr ""
-"Bibliothek \"%s\" besitzt keinen Footprint \"%s\", welcher gelöscht werden "
-"kann."
+"Bibliothek „%s“ besitzt keinen Footprint „%s“, welcher gelöscht werden kann."
 
 #: pcbnew/gpcb_plugin.cpp:400
 #, c-format
 msgid "unknown token \"%s\""
-msgstr "Unbekanntes Vorkommnis \"%s\""
+msgstr "Unbekanntes Vorkommnis „%s“"
 
 #: pcbnew/gpcb_plugin.cpp:407
 #, c-format
@@ -24081,24 +24064,23 @@ msgstr "Elementvorkommnis enthält %d Parameter."
 #: pcbnew/gpcb_plugin.cpp:1027 pcbnew/kicad_plugin.cpp:2206
 #, c-format
 msgid "user does not have permission to delete directory \"%s\""
-msgstr "Keine Schreibberechtigung zum Löschen von Verzeichnis \"%s\"."
+msgstr "Keine Schreibberechtigung zum Löschen von Verzeichnis „%s“."
 
 #: pcbnew/gpcb_plugin.cpp:1035 pcbnew/kicad_plugin.cpp:2214
 #, c-format
 msgid "library directory \"%s\" has unexpected sub-directories"
 msgstr ""
-"Das Bibliotheksverzeichnis %s\" enthält nicht erwartete Unterverzeichnisse."
+"Das Bibliotheksverzeichnis %s„ enthält nicht erwartete Unterverzeichnisse."
 
 #: pcbnew/gpcb_plugin.cpp:1054 pcbnew/kicad_plugin.cpp:2233
 #, c-format
 msgid "unexpected file \"%s\" was found in library path \"%s\""
-msgstr ""
-"Es wurde eine unerwartete Datei \"%s\" im Bibliothekspfad \"%s\" gefunden."
+msgstr "Es wurde eine unerwartete Datei „%s“ im Bibliothekspfad „%s“ gefunden."
 
 #: pcbnew/gpcb_plugin.cpp:1072 pcbnew/kicad_plugin.cpp:2251
 #, c-format
 msgid "footprint library \"%s\" cannot be deleted"
-msgstr "Die Footprintbibliothek \"%s\" konnte nicht gelöscht werden."
+msgstr "Die Footprintbibliothek „%s“ konnte nicht gelöscht werden."
 
 #: pcbnew/help_common_strings.h:15 pcbnew/tool_footprint_editor.cpp:105
 msgid "Undo last edition"
@@ -24446,7 +24428,7 @@ msgstr "Inhalt der Zwischenablage ist nicht kompatibel mit KiCad"
 #: pcbnew/kicad_netlist_reader.cpp:253
 #, c-format
 msgid "Cannot find component with reference \"%s\" in netlist."
-msgstr "Konnte in der Netzliste kein Bauteil mit der Referenz \"%s\" finden."
+msgstr "Konnte in der Netzliste kein Bauteil mit der Referenz „%s“ finden."
 
 #: pcbnew/kicad_netlist_reader.cpp:369
 #, c-format
@@ -24464,24 +24446,24 @@ msgstr ""
 #: pcbnew/kicad_plugin.cpp:193
 #, c-format
 msgid "Cannot create footprint library path \"%s\""
-msgstr "Der Footprintbibliothekspfad \"%s\" konnte nicht erstellen werden."
+msgstr "Der Footprintbibliothekspfad „%s“ konnte nicht erstellen werden."
 
 #: pcbnew/kicad_plugin.cpp:199
 #, c-format
 msgid "Footprint library path \"%s\" is read only"
-msgstr "Auf die Footprintbibliothek \"%s\" kann nur lesend zugegriffen werden."
+msgstr "Auf die Footprintbibliothek „%s“ kann nur lesend zugegriffen werden."
 
 #: pcbnew/kicad_plugin.cpp:238
 #, c-format
 msgid "Cannot rename temporary file \"%s\" to footprint library file \"%s\""
 msgstr ""
-"Konnte temporäre Datei \"%s\" nicht in Footprintbibliotheksdatei \"%s\" "
+"Konnte temporäre Datei „%s“ nicht in Footprintbibliotheksdatei „%s“ "
 "umbenennen."
 
 #: pcbnew/kicad_plugin.cpp:266
 #, c-format
 msgid "Footprint library path \"%s\" does not exist"
-msgstr "Footprintbibliothekspfad \"%s\" existiert nicht."
+msgstr "Footprintbibliothekspfad „%s“ existiert nicht."
 
 #: pcbnew/kicad_plugin.cpp:1294 pcbnew/legacy_plugin.cpp:96
 #, c-format
@@ -24519,22 +24501,22 @@ msgstr ""
 #: pcbnew/kicad_plugin.cpp:2079
 #, c-format
 msgid "Create new library \"%s\"?"
-msgstr "Neue Bibliothek \"%s\" erstellen?"
+msgstr "Neue Bibliothek „%s“ erstellen?"
 
 #: pcbnew/kicad_plugin.cpp:2108
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
-msgstr "\"%s\" ist kein gültiger Name für eine Footprintdatei."
+msgstr "„%s“ ist kein gültiger Name für eine Footprintdatei."
 
 #: pcbnew/kicad_plugin.cpp:2114
 #, c-format
 msgid "user does not have write permission to delete file \"%s\" "
-msgstr "Keine Berechtigung zum Löschen der Datei \"%s\" "
+msgstr "Keine Berechtigung zum Löschen der Datei „%s“ "
 
 #: pcbnew/kicad_plugin.cpp:2181
 #, c-format
 msgid "cannot overwrite library path \"%s\""
-msgstr "Bibliothekspfad \"%s\" kann nicht überschrieben werden."
+msgstr "Bibliothekspfad „%s“ kann nicht überschrieben werden."
 
 #: pcbnew/layer_widget.cpp:130
 msgid "Change Layer Color for "
@@ -24591,7 +24573,7 @@ msgstr ""
 #, c-format
 msgid "Cannot find symbol \"%s\" in footprint filter section of netlist."
 msgstr ""
-"Konnte das Symbol \"%s\" in der Footprintfiltersektion der Netzliste nicht "
+"Konnte das Symbol „%s“ in der Footprintfiltersektion der Netzliste nicht "
 "finden."
 
 #: pcbnew/legacy_plugin.cpp:94
@@ -24613,43 +24595,43 @@ msgstr "unbekannter Grafiktyp: %d"
 #: pcbnew/legacy_plugin.cpp:730
 #, c-format
 msgid "Unknown sheet type \"%s\" on line:%d"
-msgstr "Unbekannter Schaltplantyp \"%s\" in Zeile: %d"
+msgstr "Unbekannter Schaltplantyp „%s“ in Zeile: %d"
 
 #: pcbnew/legacy_plugin.cpp:1374
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE \"%s\""
-msgstr "Fehlendes '$EndMODULE' für MODULE \"%s\""
+msgstr "Fehlendes '$EndMODULE' für MODULE „%s“"
 
 #: pcbnew/legacy_plugin.cpp:1426
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: \"%s\""
-msgstr "Unbekannte Padform '%c=0x%02x' in Zeile: %d von Footprint: \"%s\""
+msgstr "Unbekannte Padform '%c=0x%02x' in Zeile: %d von Footprint: „%s“"
 
 #: pcbnew/legacy_plugin.cpp:1632
 #, c-format
 msgid "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\""
 msgstr ""
-"Unbekannter EDGE_MODULE Typ:'%c=0x%02x' in Zeile:%d von Footprint: \"%s\""
+"Unbekannter EDGE_MODULE Typ:'%c=0x%02x' in Zeile:%d von Footprint: „%s“"
 
 #: pcbnew/legacy_plugin.cpp:2460
 #, c-format
 msgid "duplicate NETCLASS name \"%s\""
-msgstr "Doppelter NETCLASS Name \"%s\""
+msgstr "Doppelter NETCLASS Name „%s“"
 
 #: pcbnew/legacy_plugin.cpp:2542 pcbnew/legacy_plugin.cpp:2553
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
-msgstr "Fehlerhafter ZAux für CZONE_CONTAINER \"%s\""
+msgstr "Fehlerhafter ZAux für CZONE_CONTAINER „%s“"
 
 #: pcbnew/legacy_plugin.cpp:2570
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr "Fehlerhaftes ZSmoothing für CZONE_CONTAINER \"%s\""
+msgstr "Fehlerhaftes ZSmoothing für CZONE_CONTAINER „%s“"
 
 #: pcbnew/legacy_plugin.cpp:2644
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr "Fehlerhafte ZClearance Padoption für CZONE_CONTAINER \"%s\""
+msgstr "Fehlerhafte ZClearance Padoption für CZONE_CONTAINER „%s“"
 
 #: pcbnew/legacy_plugin.cpp:2992 pcbnew/legacy_plugin.cpp:3029
 #, c-format
@@ -24673,7 +24655,7 @@ msgstr ""
 #, c-format
 msgid "File \"%s\" is empty or is not a legacy library"
 msgstr ""
-"Die Datei \"%s\" ist entweder leer oder keine im alten Format vorliegende "
+"Die Datei „%s“ ist entweder leer oder keine im alten Format vorliegende "
 "Bibliothek."
 
 #: pcbnew/load_select_footprint.cpp:424
@@ -24721,12 +24703,12 @@ msgstr "Footprints [%u Elemente]"
 #: pcbnew/load_select_footprint.cpp:602
 #, c-format
 msgid "Footprint \"%s\" saved"
-msgstr "Footprint \"%s\" gespeichert"
+msgstr "Footprint „%s“ gespeichert"
 
 #: pcbnew/load_select_footprint.cpp:616
 #, c-format
 msgid "Footprint library \"%s\" saved as \"%s\"."
-msgstr "Die Footprintbibliothek \"%s\" wurde gespeichert als \"%s\"."
+msgstr "Die Footprintbibliothek „%s“ wurde gespeichert als „%s“."
 
 #: pcbnew/menubar_footprint_editor.cpp:58
 msgid "Set Acti&ve Library..."
@@ -25478,7 +25460,7 @@ msgstr "&Specctra Session..."
 
 #: pcbnew/menubar_pcb_editor.cpp:869
 msgid "Import routed \"Specctra Session\" (*.ses) file"
-msgstr "Eine entflechtete \"Specctra Session\" Datei (*.ses) importieren"
+msgstr "Eine entflechtete „Specctra Session“ Datei (*.ses) importieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:873
 msgid "&DXF File..."
@@ -25592,7 +25574,7 @@ msgstr "S&pecctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:973
 msgid "Export current board to \"Specctra DSN\" file"
-msgstr "Die aktuelle Platine in eine \"Specctra DSN\" Datei exportieren"
+msgstr "Die aktuelle Platine in eine „Specctra DSN“ Datei exportieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:977
 msgid "&GenCAD..."
@@ -25800,7 +25782,7 @@ msgstr "Bauteile"
 #: pcbnew/netlist.cpp:254
 #, c-format
 msgid "No footprint defined for symbol \"%s\".\n"
-msgstr "Es wurde kein Footprint für das Bauteil \"%s\" definiert.\n"
+msgstr "Es wurde kein Footprint für das Bauteil „%s“ definiert.\n"
 
 #: pcbnew/netlist.cpp:276
 #, c-format
@@ -25808,13 +25790,13 @@ msgid ""
 "Footprint of symbol \"%s\" changed: board footprint \"%s\", netlist "
 "footprint \"%s\"\n"
 msgstr ""
-"Geänderter Footprint des Bauteils \"%s\": Platinen Footprint \"%s\", "
-"Netzlisten Footprint \"%s\"\n"
+"Geänderter Footprint des Bauteils „%s“: Platinen Footprint „%s“, Netzlisten "
+"Footprint „%s“\n"
 
 #: pcbnew/netlist.cpp:306
 #, c-format
 msgid "Component \"%s\" footprint ID \"%s\" is not valid.\n"
-msgstr "Bauteil \"%s\" mit ungültiger Footprint ID \"%s\".\n"
+msgstr "Bauteil „%s“ mit ungültiger Footprint ID „%s“.\n"
 
 #: pcbnew/netlist.cpp:327
 #, c-format
@@ -25822,7 +25804,7 @@ msgid ""
 "Component \"%s\" footprint \"%s\" was not found in any libraries in the "
 "footprint library table.\n"
 msgstr ""
-"Bauteil \"%s\" mit Footprint \"%s\" konnte in keiner Bibliothek der "
+"Bauteil „%s“ mit Footprint „%s“ konnte in keiner Bibliothek der "
 "Footprintbibliothekstabelle gefunden werden.\n"
 
 #: pcbnew/netlist_reader.cpp:181
@@ -26204,8 +26186,7 @@ msgstr "Lagenverwaltung"
 #: pcbnew/pcb_edit_frame.cpp:701
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
-msgstr ""
-"Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
+msgstr "Die automatisch gespeicherte Datei „%s“ konnte nicht gelöscht werden!"
 
 #: pcbnew/pcb_edit_frame.cpp:1104
 msgid " [new file]"
@@ -26536,19 +26517,18 @@ msgstr "Die Datumsangaben sind nicht korrekt %d"
 #: pcbnew/pcb_parser.cpp:473 pcbnew/pcb_parser.cpp:578
 #, c-format
 msgid "Unknown token \"%s\""
-msgstr "Unbekanntes Vorkommnis \"%s\""
+msgstr "Unbekanntes Vorkommnis „%s“"
 
 #: pcbnew/pcb_parser.cpp:684
 #, c-format
 msgid "Page type \"%s\" is not valid "
-msgstr "Ungültiger Seitentyp \"%s\" "
+msgstr "Ungültiger Seitentyp „%s“ "
 
 #: pcbnew/pcb_parser.cpp:916
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
 msgstr ""
-"Lage \"%s\" in Datei \"%s\" in Zeile %d wurde nicht in der Lagensektion "
-"fixiert."
+"Lage „%s“ in Datei „%s“ in Zeile %d wurde nicht in der Lagensektion fixiert."
 
 #: pcbnew/pcb_parser.cpp:949
 #, c-format
@@ -26571,7 +26551,7 @@ msgstr ""
 #: pcbnew/pcb_parser.cpp:1366
 #, c-format
 msgid "Duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
-msgstr "NETCLASS Namensduplikat \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
+msgstr "NETCLASS Namensduplikat „%s“ in Datei „%s“, Zeile %d, Spalte %d."
 
 #: pcbnew/pcb_parser.cpp:1802
 #, c-format
@@ -26763,7 +26743,7 @@ msgstr ""
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr ""
-"Kann keinen geeigneten Ausgangspunkt für das gekoppelte Netz \"%s\" finden."
+"Kann keinen geeigneten Ausgangspunkt für das gekoppelte Netz „%s“ finden."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:557
 msgid "Can't start a differential pair  in the middle of nowhere."
@@ -26970,7 +26950,7 @@ msgstr "Beendet die aktuell geroutete Leiterbahn automatisch."
 #: pcbnew/router/router_tool.cpp:150
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr ""
-"Fügt eine \"Through-Hole\" Durchkontaktierung (PTH) am Ende der aktuell "
+"Fügt eine „Through-Hole“ Durchkontaktierung (PTH) am Ende der aktuell "
 "gerouteten Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:157
@@ -26994,7 +26974,7 @@ msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Wählt einen Lage und fügt eine \"Through-Hole\" Durchkontaktierung (PTH) am "
+"Wählt einen Lage und fügt eine „Through-Hole“ Durchkontaktierung (PTH) am "
 "Ende der aktuell gerouteten Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:179
@@ -27110,12 +27090,12 @@ msgstr "Export nicht möglich. Bitte das Problem beheben und erneut versuchen."
 #: pcbnew/specctra_import_export/specctra_export.cpp:934
 #, c-format
 msgid "Symbol with value of \"%s\" has empty reference id."
-msgstr "Das Bauteil mit dem Wert \"%s\" hat keine Referenz-ID."
+msgstr "Das Bauteil mit dem Wert „%s“ hat keine Referenz-ID."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:942
 #, c-format
 msgid "Multiple symbols have identical reference IDs of \"%s\"."
-msgstr "Mehrere Bauteile verfügen über die selbe Referenz-ID \"%s\"."
+msgstr "Mehrere Bauteile verfügen über die selbe Referenz-ID „%s“."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:78
 msgid "Merge Specctra Session file:"
@@ -27137,7 +27117,7 @@ msgstr "Sessiondatei erfolgreich importiert und zusammengeführt."
 #: pcbnew/specctra_import_export/specctra_import.cpp:323
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "Sessiondatei verwendet fehlerhafte Lagen-ID \"%s\""
+msgstr "Sessiondatei verwendet fehlerhafte Lagen-ID „%s“"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:264
 msgid "Session via padstack has no shapes"
@@ -27152,26 +27132,26 @@ msgstr "Nicht unterstützte Form für Durchkontaktierung: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:370
 msgid "Session file is missing the \"session\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"session\"."
+msgstr "Der Sessiondatei fehlt die Sektion „session“."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:378
 msgid "Session file is missing the \"routes\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"routes\"."
+msgstr "Der Sessiondatei fehlt die Sektion „routes“."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:381
 msgid "Session file is missing the \"library_out\" section"
-msgstr "Der Sessiondatei fehlt die Sektion \"library_out\"."
+msgstr "Der Sessiondatei fehlt die Sektion „library_out“."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:407
 #, c-format
 msgid "Session file has 'reference' to non-existent symbol \"%s\""
 msgstr ""
-"Sessiondatei beinhaltet eine Referenz zu dem nicht existenten Symbol \"%s\"."
+"Sessiondatei beinhaltet eine Referenz zu dem nicht existenten Symbol „%s“."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:546
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "Ein wire_via referenziert einen fehlenden Padstapel \"%s\"."
+msgstr "Ein wire_via referenziert einen fehlenden Padstapel „%s“."
 
 #: pcbnew/swap_layers.cpp:90
 msgid "Move Layers:"
@@ -27199,7 +27179,7 @@ msgstr ""
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:82
 #, c-format
 msgid "Method \"%s\" not found, or not callable"
-msgstr "Methode \"%s\" nicht gefunden oder nicht aufrufbar"
+msgstr "Methode „%s“ nicht gefunden oder nicht aufrufbar"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:89
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:83
