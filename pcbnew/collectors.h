@@ -179,6 +179,11 @@ public:
     virtual     bool IgnoreMicroVias() const = 0;
 
     /**
+     * @return true if should ignore tracks
+     */
+    virtual     bool IgnoreTracks() const = 0;
+
+    /**
      * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
      *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
     virtual     bool UseHitTesting() const = 0;
@@ -393,6 +398,7 @@ private:
     bool    m_IgnoreThroughVias;
     bool    m_IgnoreBlindBuriedVias;
     bool    m_IgnoreMicroVias;
+    bool    m_IgnoreTracks;
 
 public:
 
@@ -434,6 +440,7 @@ public:
         m_IgnoreThroughVias         = false;
         m_IgnoreBlindBuriedVias     = false;
         m_IgnoreMicroVias           = false;
+        m_IgnoreTracks              = false;
     }
 
     /**
@@ -564,6 +571,9 @@ public:
 
     bool IgnoreMicroVias() const override { return m_IgnoreMicroVias; }
     void SetIgnoreMicroVias( bool ignore ) { m_IgnoreMicroVias = ignore; }
+
+    bool IgnoreTracks() const override { return m_IgnoreTracks; }
+    void SetIgnoreTracks( bool ignore ) { m_IgnoreTracks = ignore; }
 };
 
 

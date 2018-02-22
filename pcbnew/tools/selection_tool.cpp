@@ -444,6 +444,7 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
     guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIA_THROUGH ) );
     guide.SetIgnoreBlindBuriedVias( ! board()->IsElementVisible( LAYER_VIA_BBLIND ) );
     guide.SetIgnoreMicroVias( ! board()->IsElementVisible( LAYER_VIA_MICROVIA ) );
+    guide.SetIgnoreTracks( ! board()->IsElementVisible( LAYER_TRACKS ) );
 
     return guide;
 }
@@ -1540,6 +1541,13 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
                 // No active layers selected!
                 return false;
             }
+        }
+        break;
+
+    case PCB_TRACE_T:
+        {
+            if( !board()->IsElementVisible( LAYER_TRACKS ) )
+                return false;
         }
         break;
 
