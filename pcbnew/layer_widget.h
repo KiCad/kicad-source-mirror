@@ -92,6 +92,7 @@ public:
         bool        state;      ///< initial wxCheckBox state
         wxString    tooltip;    ///< if not empty, use this tooltip on row
         bool        changeable; ///< if true, the state can be changed
+        bool        spacer;     ///< if true, this row is a spacer
 
         ROW( const wxString& aRowName, int aId, COLOR4D aColor = COLOR4D::UNSPECIFIED,
             const wxString& aTooltip = wxEmptyString, bool aState = true, bool aChangeable = true )
@@ -102,6 +103,13 @@ public:
             state   = aState;
             tooltip = aTooltip;
             changeable = aChangeable;
+        }
+
+        ROW()
+        {
+            spacer = true;
+            color = COLOR4D::UNSPECIFIED;
+            id = 0;
         }
     };
 

@@ -383,16 +383,20 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     const int   flags = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
 
     wxString renderName( aSpec.rowName );
+    wxCheckBox* cb = nullptr;
 
     // column 1
-    col = 1;
-    wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ),
-                        aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
-    shrinkFont( cb, m_PointSize );
-    cb->SetValue( aSpec.state );
-    cb->Enable( aSpec.changeable );
-    cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnRenderCheckBox, this );
-    cb->SetToolTip( aSpec.tooltip );
+    if( !aSpec.spacer )
+    {
+        col = 1;
+        cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ),
+                            aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+        shrinkFont( cb, m_PointSize );
+        cb->SetValue( aSpec.state );
+        cb->Enable( aSpec.changeable );
+        cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnRenderCheckBox, this );
+        cb->SetToolTip( aSpec.tooltip );
+    }
 
     // column 0
     col = 0;
@@ -422,7 +426,16 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
     // Items have to be inserted in order
     col = 1;
-    m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
+
+    if( aSpec.spacer )
+    {
+        wxPanel* invisible = new wxPanel( m_RenderScrolledWindow, wxID_ANY );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, invisible, 0, flags );
+    }
+    else
+    {
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
+    }
 }
 
 
@@ -541,7 +554,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
     }
 
     // Account for the parent's frame:
-    totWidth += 10;
+    totWidth += 32;
 
 
     /* The minimum height is a small size to properly force computation
@@ -567,7 +580,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
         }
     }
     // account for the parent's frame, this one has void space of 10 PLUS a border:
-    totWidth += 20;
+    totWidth += 32;
 
     // For totHeight re-use the previous small one
     wxSize renderz( totWidth, totHeight );
