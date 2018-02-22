@@ -1975,13 +1975,15 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     rejected.insert( mod );
                 // footprints completely covered with other features have no other
                 // means of selection, so must be kept
-                else if ( mod->CoverageRatio() > footprintMaxCoverRatio )
+                else if( mod->CoverageRatio( aCollector ) > footprintMaxCoverRatio )
                     rejected.erase( mod );
                 // if a footprint is much smaller than the largest overlapping
-                // footprint then it should be considered for selection; reject
-                // all other footprints
-                else if( moduleCount > 1
-                        && calcRatio( calcArea( mod ), maxArea ) > footprintToFootprintMinRatio )
+                // footprint then it should be considered for selection
+                else if( calcRatio( calcArea( mod ), maxArea ) <= footprintToFootprintMinRatio )
+                    continue;
+                // reject ALL OTHER footprints (whether there are one or more of
+                // them); the other items in the list should have precedence
+                else
                     rejected.insert( mod );
             }
         }

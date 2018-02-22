@@ -37,6 +37,7 @@
 #include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
 #include <class_board_item.h>
 #include <board_item_container.h>
+#include <collectors.h>
 #include <lib_id.h>
 
 #include <class_text_mod.h>
@@ -680,7 +681,7 @@ public:
      * to the area of the footprint. Used by selection tool heuristics.
      * @return the ratio
      */
-    double CoverageRatio() const;
+    double CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const;
 
     /// Return the initial comments block or NULL if none, without transfer of ownership.
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }

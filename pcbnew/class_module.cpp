@@ -1317,19 +1317,37 @@ static void addRect( SHAPE_POLY_SET& aPolySet, wxRect aRect )
     aPolySet.Append( aRect.GetX(), aRect.GetY()+aRect.height );
 }
 
-double MODULE::CoverageRatio() const
+double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 {
     double moduleArea = GetFootprintRect().GetArea();
     SHAPE_POLY_SET coveredRegion;
-    addRect(coveredRegion, GetFootprintRect() );
+    addRect( coveredRegion, GetFootprintRect() );
 
-    // build hole list if full area
+    // build list of holes (covered areas not available for selection)
     SHAPE_POLY_SET holes;
+
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
         addRect( holes, pad->GetBoundingBox() );
 
     addRect( holes, m_Reference->GetBoundingBox() );
     addRect( holes, m_Value->GetBoundingBox() );
+
+    for( int i = 0; i < aCollector.GetCount(); ++i )
+    {
+        BOARD_ITEM* item = aCollector[i];
+
+        switch( item->Type() )
+        {
+        case PCB_TEXT_T:
+        case PCB_MODULE_TEXT_T:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
+            addRect( holes, item->GetBoundingBox() );
+            break;
+        default:
+            break;
+        }
+    }
 
     SHAPE_POLY_SET uncoveredRegion;
     uncoveredRegion.BooleanSubtract( coveredRegion, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
