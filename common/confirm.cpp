@@ -57,7 +57,7 @@ KI_DIALOG::KI_DIALOG( wxWindow* aParent, const wxString& aMessage )
     m_sizerUpper->Add( message, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
     m_sizerMain->Add( m_sizerUpper, 1, wxALL | wxEXPAND, 5 );
 
-    Type( NONE );
+    Type( KD_NONE );
     Buttons( wxOK );
 
     SetSizer( m_sizerMain );
@@ -70,13 +70,13 @@ KI_DIALOG& KI_DIALOG::Type( TYPE aType )
     m_type = aType;
 
     const std::unordered_map<TYPE, wxString> stdTitle = {
-        { NONE, _( "Message" ) }, { INFO, _( "Information" ) }, { QUESTION, _( "Question" ) },
-        { WARNING, _( "Warning" ) }, { ERROR, _( "Error" ) }
+        { KD_NONE, _( "Message" ) }, { KD_INFO, _( "Information" ) }, { KD_QUESTION, _( "Question" ) },
+        { KD_WARNING, _( "Warning" ) }, { KD_ERROR, _( "Error" ) }
     };
 
     const std::unordered_map<TYPE, wxArtID> icons = {
-        { INFO, wxART_INFORMATION }, { QUESTION, wxART_QUESTION },
-        { WARNING, wxART_WARNING }, { ERROR, wxART_ERROR }
+        { KD_INFO, wxART_INFORMATION }, { KD_QUESTION, wxART_QUESTION },
+        { KD_WARNING, wxART_WARNING }, { KD_ERROR, wxART_ERROR }
     };
 
     if( m_icon )
@@ -86,7 +86,7 @@ KI_DIALOG& KI_DIALOG::Type( TYPE aType )
         m_icon = nullptr;
     }
 
-    if( aType != NONE )
+    if( aType != KD_NONE )
     {
         m_icon = new wxStaticBitmap( this, wxID_ANY,
                 wxArtProvider::GetBitmap( icons.at( aType ), wxART_CMN_DIALOG ) );

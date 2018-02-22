@@ -808,7 +808,7 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
                 aZone->GetPosition().x, aZone->GetPosition().y, aZone->GetSelectMenuText() );
 
         KI_DIALOG dlg( nullptr, msg );
-        dlg.Type( KI_DIALOG::WARNING ).Title( _( "Malformed keep-out zone" ) ).DoNotShowCheckbox();
+        dlg.Type( KI_DIALOG::KD_WARNING ).Title( _( "Malformed keep-out zone" ) ).DoNotShowCheckbox();
         dlg.ShowModal();
 
         return false;
