@@ -512,20 +512,50 @@ const EDA_RECT MODULE::GetBoundingBox() const
 }
 
 
+/**
+ * This is a bit hacky right now for performance reasons.
+ *
+ * We assume that most footprints will have features aligned to the axes in
+ * the zero-rotation state.  Therefore, if the footprint is rotated, we
+ * temporarily rotate back to zero, get the bounding box (excluding reference
+ * and value text) and then rotate the resulting poly back to the correct
+ * orientation.
+ *
+ * This is more accurate than using the AABB when most footprints are rotated
+ * off of the axes, but less accurate than computing some kind of bounding hull.
+ * We should consider doing that instead at some point in the future if we can
+ * use a performant algorithm and cache the result to avoid extra computing.
+ */
 SHAPE_POLY_SET MODULE::GetBoundingPoly() const
 {
-    const int segcountforcircle = 8;
-    double    correctionFactor  = 1.0 / cos( M_PI / (segcountforcircle * 2) );
     SHAPE_POLY_SET poly;
 
-    TransformPadsShapesWithClearanceToPolygon( UNDEFINED_LAYER,
-            poly, 0, segcountforcircle, correctionFactor );
+    double orientation = GetOrientationRadians();
 
-    TransformGraphicShapesWithClearanceToPolygonSet( UNDEFINED_LAYER,
-            poly, 0, segcountforcircle, correctionFactor, 0, false );
+    MODULE temp = *this;
+    temp.SetOrientation( 0.0 );
+    BOX2I area = temp.GetFootprintRect();
 
-    poly.NormalizeAreaOutlines();
-    poly.Inflate( Millimeter2iu( 0.01 ), segcountforcircle );
+    poly.NewOutline();
+
+    VECTOR2I p = area.GetPosition();
+    poly.Append( p );
+    p.x = area.GetRight();
+    poly.Append( p );
+    p.y = area.GetBottom();
+    poly.Append( p );
+    p.x = area.GetX();
+    poly.Append( p );
+
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        poly.Inflate( biggest_clearance, 4 );
+    }
+
+    poly.Inflate( Millimeter2iu( 0.01 ), 4 );
+    poly.Rotate( -orientation, m_Pos );
 
     return poly;
 }
