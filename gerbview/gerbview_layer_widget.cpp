@@ -92,8 +92,8 @@ bool GERBER_LAYER_WIDGET::AreArbitraryColorsAllowed()
 
 void GERBER_LAYER_WIDGET::SetLayersManagerTabsText( )
 {
-    m_notebook->SetPageText(0, _("Layer") );
-    m_notebook->SetPageText(1, _("Render") );
+    m_notebook->SetPageText(0, _("Layers") );
+    m_notebook->SetPageText(1, _("Items") );
 }
 
 /**

@@ -495,7 +495,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_LayerPanel->SetSizer( bSizer3 );
     m_LayerPanel->Layout();
     bSizer3->Fit( m_LayerPanel );
-    m_notebook->AddPage( m_LayerPanel, _( "Layer" ), true );
+    m_notebook->AddPage( m_LayerPanel, _( "Layers" ), true );
     m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
     wxBoxSizer* bSizer4;
@@ -515,7 +515,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_RenderingPanel->SetSizer( bSizer4 );
     m_RenderingPanel->Layout();
     bSizer4->Fit( m_RenderingPanel );
-    m_notebook->AddPage( m_RenderingPanel, _( "Render" ), false );
+    m_notebook->AddPage( m_RenderingPanel, _( "Items" ), false );
 
     boxSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 

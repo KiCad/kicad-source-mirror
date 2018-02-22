@@ -63,17 +63,17 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 #define RR  LAYER_WIDGET::ROW   // Render Row abbreviation to reduce source width
 #define NOCOLOR COLOR4D::UNSPECIFIED    // specify rows that do not have a color selector icon
 
-         // text                id                      color       tooltip
-    RR( _( "Footprints Front" ),LAYER_MOD_FR,         NOCOLOR,  _( "Show footprints that are on board's front") ),
-    RR( _( "Footprints Back" ), LAYER_MOD_BK,         NOCOLOR,  _( "Show footprints that are on board's back") ),
-    RR( _( "Values" ),          LAYER_MOD_VALUES,     NOCOLOR,  _( "Show footprint values") ),
-    RR( _( "References" ),      LAYER_MOD_REFERENCES, NOCOLOR,  _( "Show footprint references") ),
-    RR( _( "Text Front" ),      LAYER_MOD_TEXT_FR,    NOCOLOR,  _( "Show footprint text on board's front" ) ),
-    RR( _( "Text Back" ),       LAYER_MOD_TEXT_BK,    NOCOLOR,  _( "Show footprint text on board's back" ) ),
-    RR( _( "Hidden Text" ),     LAYER_MOD_TEXT_INVISIBLE, WHITE, _( "Show footprint text marked as invisible" ) ),
-    RR( _( "Pads Front" ),      LAYER_PAD_FR,         WHITE,    _( "Show footprint pads on board's front" ) ),
-    RR( _( "Pads Back" ),       LAYER_PAD_BK,         WHITE,    _( "Show footprint pads on board's back" ) ),
-    RR( _( "Through Hole Pads" ),LAYER_PADS_TH,       YELLOW,   _( "Show through hole pads in specific color") ),
+         // text                     id                      color       tooltip
+    RR( _( "Footprints Front" ),     LAYER_MOD_FR,         NOCOLOR,  _( "Show footprints that are on board's front") ),
+    RR( _( "Footprints Back" ),      LAYER_MOD_BK,         NOCOLOR,  _( "Show footprints that are on board's back") ),
+    RR( _( "Values" ),               LAYER_MOD_VALUES,     NOCOLOR,  _( "Show footprint values") ),
+    RR( _( "References" ),           LAYER_MOD_REFERENCES, NOCOLOR,  _( "Show footprint references") ),
+    RR( _( "Footprint Text Front" ), LAYER_MOD_TEXT_FR,    NOCOLOR,  _( "Show footprint text on board's front" ) ),
+    RR( _( "Footprint Text Back" ),  LAYER_MOD_TEXT_BK,    NOCOLOR,  _( "Show footprint text on board's back" ) ),
+    RR( _( "Hidden Text" ),          LAYER_MOD_TEXT_INVISIBLE, WHITE, _( "Show footprint text marked as invisible" ) ),
+    RR( _( "Pads Front" ),           LAYER_PAD_FR,         WHITE,    _( "Show footprint pads on board's front" ) ),
+    RR( _( "Pads Back" ),            LAYER_PAD_BK,         WHITE,    _( "Show footprint pads on board's back" ) ),
+    RR( _( "Through Hole Pads" ),    LAYER_PADS_TH,        YELLOW,   _( "Show through hole pads in specific color") ),
     RR(),
     RR( _( "Tracks" ),          LAYER_TRACKS,         NOCOLOR,  _( "Show tracks" ) ),
     RR( _( "Through Via" ),     LAYER_VIA_THROUGH,    WHITE,    _( "Show through vias" ) ),
@@ -380,8 +380,8 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
 void PCB_LAYER_WIDGET::SetLayersManagerTabsText()
 {
-    m_notebook->SetPageText( 0, _( "Layer" ) );
-    m_notebook->SetPageText( 1, _( "Render" ) );
+    m_notebook->SetPageText( 0, _( "Layers" ) );
+    m_notebook->SetPageText( 1, _( "Items" ) );
 }
 
 
@@ -390,7 +390,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
     BOARD* board = myframe->GetBoard();
     ClearRenderRows();
 
-    // Add "Render" tab rows to LAYER_WIDGET, after setting color and checkbox state.
+    // Add "Items" tab rows to LAYER_WIDGET, after setting color and checkbox state.
     // Because s_render_rows is created static, we must explicitly call
     // wxGetTranslation for texts which are internationalized (tool tips
     // and item names)
