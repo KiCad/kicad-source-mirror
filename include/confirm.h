@@ -48,12 +48,12 @@ class KI_DIALOG : wxDialog
 {
 public:
     ///> Dialog type. Selects appropriate icon and default dialog title
-    enum TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
+    enum KD_TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
 
     KI_DIALOG( wxWindow* aParent, const wxString& aMessage );
 
     ///> Sets the dialog type
-    KI_DIALOG& Type( TYPE aType );
+    KI_DIALOG& Type( KD_TYPE aType );
 
     ///> Sets the dialog title
     KI_DIALOG& Title( const wxString& aTitle );
@@ -80,7 +80,7 @@ protected:
     wxString m_message;
 
     ///> Dialog type
-    TYPE m_type;
+    KD_TYPE m_type;
 
     ///> Custom title requested, if any was requested
     wxString m_customTitle;

@@ -65,16 +65,16 @@ KI_DIALOG::KI_DIALOG( wxWindow* aParent, const wxString& aMessage )
 }
 
 
-KI_DIALOG& KI_DIALOG::Type( TYPE aType )
+KI_DIALOG& KI_DIALOG::Type( KD_TYPE aType )
 {
     m_type = aType;
 
-    const std::unordered_map<TYPE, wxString> stdTitle = {
+    const std::unordered_map<int, wxString> stdTitle = {
         { KD_NONE, _( "Message" ) }, { KD_INFO, _( "Information" ) }, { KD_QUESTION, _( "Question" ) },
         { KD_WARNING, _( "Warning" ) }, { KD_ERROR, _( "Error" ) }
     };
 
-    const std::unordered_map<TYPE, wxArtID> icons = {
+    const std::unordered_map<int, wxArtID> icons = {
         { KD_INFO, wxART_INFORMATION }, { KD_QUESTION, wxART_QUESTION },
         { KD_WARNING, wxART_WARNING }, { KD_ERROR, wxART_ERROR }
     };
