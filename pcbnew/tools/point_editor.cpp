@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include "point_editor.h"
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <status_popup.h>
 
 #include <pcb_edit_frame.h>
 #include <class_edge_mod.h>
@@ -228,6 +229,7 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
+    m_statusPopup.reset( new STATUS_TEXT_POPUP( getEditFrame<PCB_BASE_EDIT_FRAME>() ) );
 }
 
 
@@ -471,13 +473,14 @@ void POINT_EDITOR::updateItem() const
 
         case S_POLYGON:
         {
-            SHAPE_POLY_SET* outline = &segment->GetPolyShape();
+            SHAPE_POLY_SET originalPoly = segment->GetPolyShape();
+            SHAPE_POLY_SET& outline = segment->GetPolyShape();
 
-            for( int i = 0; i < outline->TotalVertices(); ++i )
-            {
-                VECTOR2I point = m_editPoints->Point( i ).GetPosition();
-                outline->Vertex( i ) = point;
-            }
+            for( int i = 0; i < outline.TotalVertices(); ++i )
+                outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
+
+            validatePolygon( outline, &originalPoly );
+            break;
         }
 
         default:        // suppress warnings
@@ -495,16 +498,14 @@ void POINT_EDITOR::updateItem() const
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         zone->ClearFilledPolysList();
-        SHAPE_POLY_SET* outline = zone->Outline();
+        SHAPE_POLY_SET& outline = *zone->Outline();
+        SHAPE_POLY_SET originalPoly( outline );
 
-        for( int i = 0; i < outline->TotalVertices(); ++i )
-        {
-            VECTOR2I point = m_editPoints->Point( i ).GetPosition();
-            outline->Vertex( i ) = point;
-        }
+        for( int i = 0; i < outline.TotalVertices(); ++i )
+            outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
 
+        validatePolygon( outline, &originalPoly );
         zone->Hatch();
-
         break;
     }
 
@@ -565,6 +566,7 @@ void POINT_EDITOR::updateItem() const
 void POINT_EDITOR::finishItem()
 {
     auto item = m_editPoints->GetParent();
+
     if( !item )
         return;
 
@@ -578,6 +580,28 @@ void POINT_EDITOR::finishItem()
             filler.Fill( { zone } );
         }
     }
+}
+
+
+bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aModified, const SHAPE_POLY_SET* aOriginal ) const
+{
+    if( !aModified.IsSelfIntersecting() )
+        return true;
+
+    if( m_statusPopup )
+    {
+        m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
+        m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed" ) );
+        wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
+        m_statusPopup->Move( p );
+        m_statusPopup->Popup( getEditFrame<PCB_BASE_FRAME>() );
+        m_statusPopup->Expire( 1500 );
+    }
+
+    if( aOriginal )
+        aModified = *aOriginal;
+
+    return false;
 }
 
 
@@ -992,12 +1016,14 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     {
         const auto& vertexIdx = vertex.second;
         auto& outline = polygon->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour];
+        bool valid = true;
 
         if( outline.PointCount() > 3 )
         {
             // the usual case: remove just the corner when there are >3 vertices
             commit.Modify( item );
             polygon->RemoveVertex( vertexIdx );
+            valid = validatePolygon( *polygon );
         }
         else
         {
@@ -1016,7 +1042,16 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         }
 
         setEditedPoint( nullptr );
-        commit.Push( _( "Remove a zone/polygon corner" ) );
+
+        if( valid )
+            commit.Push( _( "Remove a zone/polygon corner" ) );
+        else
+            commit.Revert();
+
+        // Refresh zone hatching
+        if( item->Type() == PCB_ZONE_AREA_T)
+            static_cast<ZONE_CONTAINER*>( item )->Hatch();
+
         updatePoints();
     }
 

@@ -27,11 +27,13 @@
 
 #include <tool/tool_interactive.h>
 #include "edit_points.h"
+#include <status_popup.h>
 
 #include <memory>
 
 
 class SELECTION_TOOL;
+class SHAPE_POLY_SET;
 
 /**
  * Class POINT_EDITOR
@@ -78,11 +80,21 @@ private:
     // EDIT_POINT for alternative constraint mode
     EDIT_POINT m_altConstrainer;
 
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+
     ///> Updates item's points with edit points.
     void updateItem() const;
 
     ///> Applies the last changes to the edited item.
     void finishItem();
+
+    /**
+     * Validates a polygon and restores it to its original version if available.
+     * @param aModified is the polygon to be checked.
+     * @param aOriginal is the original copy that will be used to restore its state.
+     * @return True if polygon is valid.
+     */
+    bool validatePolygon( SHAPE_POLY_SET& aModified, const SHAPE_POLY_SET* aOriginal = nullptr ) const;
 
     ///> Updates edit points with item's points.
     void updatePoints();
