@@ -47,6 +47,7 @@ class PCB_TARGET;
 class DIMENSION;
 class EDGE_MODULE;
 class DRC;
+class DIALOG_PLOT;
 class ZONE_CONTAINER;
 class DRAWSEGMENT;
 class GENERAL_COLLECTOR;
@@ -89,6 +90,8 @@ protected:
     PCB_LAYER_WIDGET* m_Layers;
 
     DRC* m_drc;                                 ///< the DRC controller, see drc.cpp
+
+    DIALOG_PLOT*      m_plotDialog;
 
     PARAM_CFG_ARRAY   m_configParams;         ///< List of Pcbnew configuration settings.
 

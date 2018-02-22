@@ -360,6 +360,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), pointSize );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
+    m_plotDialog = nullptr;
 
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
@@ -542,6 +543,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
     delete m_drc;
+    delete m_plotDialog;
 }
 
 
@@ -1199,9 +1201,10 @@ void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
-    DIALOG_PLOT dlg( this );
+    if( !m_plotDialog )
+        m_plotDialog = new DIALOG_PLOT( this );
 
-    dlg.ShowModal();
+    m_plotDialog->Show( true );
 }
 
 

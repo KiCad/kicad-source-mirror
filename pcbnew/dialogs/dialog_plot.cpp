@@ -46,8 +46,7 @@
 
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
-    DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
-    m_board( aParent->GetBoard() )
+    DIALOG_PLOT_BASE( aParent ), m_parent( aParent )
 {
     m_config = Kiface().KifaceSettings();
     m_plotOpts = aParent->GetPlotSettings();
@@ -60,6 +59,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
 void DIALOG_PLOT::init_Dialog()
 {
+    BOARD*      board = m_parent->GetBoard();
     wxString    msg;
     wxFileName  fileName;
 
@@ -75,8 +75,8 @@ void DIALOG_PLOT::init_Dialog()
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
-    m_widthAdjustMinValue   = -( m_board->GetDesignSettings().m_TrackMinWidth - 1 );
-    m_widthAdjustMaxValue   = m_board->GetDesignSettings().GetSmallestClearanceValue() - 1;
+    m_widthAdjustMinValue   = -( board->GetDesignSettings().m_TrackMinWidth - 1 );
+    m_widthAdjustMaxValue   = board->GetDesignSettings().GetSmallestClearanceValue() - 1;
 
     switch( m_plotOpts.GetFormat() )
     {
@@ -106,9 +106,9 @@ void DIALOG_PLOT::init_Dialog()
         break;
     }
 
-    msg = StringFromValue( g_UserUnit, m_board->GetDesignSettings().m_SolderMaskMargin, true );
+    msg = StringFromValue( g_UserUnit, board->GetDesignSettings().m_SolderMaskMargin, true );
     m_SolderMaskMarginCurrValue->SetLabel( msg );
-    msg = StringFromValue( g_UserUnit, m_board->GetDesignSettings().m_SolderMaskMinWidth, true );
+    msg = StringFromValue( g_UserUnit, board->GetDesignSettings().m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
     // Set units and value for HPGL pen size (this param in in mils).
@@ -146,14 +146,14 @@ void DIALOG_PLOT::init_Dialog()
     m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
 
     // Could devote a PlotOrder() function in place of UIOrder().
-    m_layerList = m_board->GetEnabledLayers().UIOrder();
+    m_layerList = board->GetEnabledLayers().UIOrder();
 
     // Populate the check list box by all enabled layers names
     for( LSEQ seq = m_layerList;  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
 
-        int checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
+        int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
         if( m_plotOpts.GetLayerSelection()[layer] )
             m_layerCheckListBox->Check( checkIndex );
@@ -239,14 +239,19 @@ void DIALOG_PLOT::reInitDialog()
 
 void DIALOG_PLOT::OnQuit( wxCommandEvent& event )
 {
-    Close( true );    // true is to force the frame to close
+    // Put a wxID_CANCEL event through the dialog infrastrucutre
+    event.SetId( wxID_CANCEL );
+    event.Skip();
 }
 
 
 void DIALOG_PLOT::OnClose( wxCloseEvent& event )
 {
     applyPlotSettings();
-    EndModal( 0 );
+
+    // Put an wxID_OK event through the dialog infrastrucutre
+    event.SetId( wxID_OK );
+    event.Skip();
 }
 
 
@@ -703,7 +708,7 @@ void DIALOG_PLOT::applyPlotSettings()
             selectedLayers.set( m_layerList[i] );
     }
     // Get a list of copper layers that aren't being used by inverting enabled layers.
-    LSET disabledCopperLayers = LSET::AllCuMask() & ~m_board->GetEnabledLayers();
+    LSET disabledCopperLayers = LSET::AllCuMask() & ~m_parent->GetBoard()->GetEnabledLayers();
     // Enable all of the disabled copper layers.
     // If someone enables more copper layers they will be selected by default.
     selectedLayers = selectedLayers | disabledCopperLayers;
@@ -750,6 +755,8 @@ void DIALOG_PLOT::OnGerberX2Checked( wxCommandEvent& event )
 
 void DIALOG_PLOT::Plot( wxCommandEvent& event )
 {
+    BOARD* board = m_parent->GetBoard();
+
     applyPlotSettings();
 
     // If no layer selected, we have nothing plotted.
@@ -827,7 +834,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         DisplayInfoMessage( this,
                             _( "Warning: Scale option set to a very large value" ) );
 
-    GERBER_JOBFILE_WRITER jobfile_writer( m_board, &reporter );
+    GERBER_JOBFILE_WRITER jobfile_writer( board, &reporter );
 
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
@@ -844,7 +851,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // If plot options become accessible to the layers setup dialog
         // please move this functionality there!
         // This skips a copper layer if it is actually disabled on the board.
-        if( ( LSET::AllCuMask() & ~m_board->GetEnabledLayers() )[layer] )
+        if( ( LSET::AllCuMask() & ~board->GetEnabledLayers() )[layer] )
             continue;
 
         // Pick the basename from the board file
@@ -855,7 +862,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
             file_ext = GetGerberProtelExtension( layer );
 
-        BuildPlotFileName( &fn, outputDir.GetPath(), m_board->GetLayerName( layer ), file_ext );
+        BuildPlotFileName( &fn, outputDir.GetPath(), board->GetLayerName( layer ), file_ext );
         wxString fullname = fn.GetFullName();
         jobfile_writer.AddGbrFile( layer, fullname );
 

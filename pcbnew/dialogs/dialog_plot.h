@@ -40,7 +40,6 @@ public:
 
 private:
     PCB_EDIT_FRAME*     m_parent;
-    BOARD*              m_board;
     wxConfigBase*       m_config;
     LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate
