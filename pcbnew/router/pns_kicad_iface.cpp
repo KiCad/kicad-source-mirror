@@ -29,10 +29,7 @@
 #include <board_commit.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
-#include <pcb_edit_frame.h>
-
-#include <unordered_set>
-#include <unordered_map>
+#include <confirm.h>
 
 #include <view/view.h>
 #include <view/view_item.h>
@@ -805,8 +802,15 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
 
     if( !poly.IsTriangulationUpToDate() )
     {
-        wxFAIL_MSG( wxString::Format( "Zone triangulation failed for %s",
-                    aZone->GetSelectMenuText() ) );
+        wxString msg = wxString::Format( _( "Malformed keep-out zone at (%d, %d) "
+                "cannot be handled by the track layout tool.\n%s\n"
+                "Please verify it is not a self-intersecting polygon." ),
+                aZone->GetPosition().x, aZone->GetPosition().y, aZone->GetSelectMenuText() );
+
+        KI_DIALOG dlg( nullptr, msg );
+        dlg.Type( KI_DIALOG::WARNING ).Title( _( "Malformed keep-out zone" ) ).DoNotShowCheckbox();
+        dlg.ShowModal();
+
         return false;
     }
 
