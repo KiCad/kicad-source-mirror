@@ -488,9 +488,12 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
 void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
                                            bool aNewState )
 {
+    bool dcodes_changed = false;
+
     switch( aItemIdVisible )
     {
     case LAYER_DCODES:
+        dcodes_changed = m_DisplayOptions.m_DisplayDCodes != aNewState;
         m_DisplayOptions.m_DisplayDCodes = aNewState;
         break;
 
@@ -504,6 +507,19 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
 
     default:
         wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aItemIdVisible );
+    }
+
+    if( dcodes_changed )
+    {
+        auto view = GetGalCanvas()->GetView();
+
+        for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
+        {
+            int layer = GERBER_DRAW_LAYER( i );
+            int dcode_layer = GERBER_DCODE_LAYER( layer );
+            view->SetLayerVisible( dcode_layer,
+                                   aNewState && view->IsLayerVisible( layer ) );
+        }
     }
 
     applyDisplaySettingsToGAL();
@@ -520,7 +536,6 @@ void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
 
     settings->ImportLegacyColors( m_colorsSettings );
 
-    view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
@@ -756,7 +771,8 @@ void GERBVIEW_FRAME::SetVisibleLayers( long aLayerMask )
             bool v = ( aLayerMask & ( 1 << i ) );
             int layer = GERBER_DRAW_LAYER( i );
             canvas->GetView()->SetLayerVisible( layer, v );
-            canvas->GetView()->SetLayerVisible( GERBER_DCODE_LAYER( layer ), v );
+            canvas->GetView()->SetLayerVisible( GERBER_DCODE_LAYER( layer ),
+                                                m_DisplayOptions.m_DisplayDCodes && v );
         }
     }
 }

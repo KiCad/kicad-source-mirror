@@ -189,12 +189,9 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     // TODO(JE) This doesn't actually work properly for ImageNegative
     bool     isNegative = ( aItem->GetLayerPolarity() ^ aItem->m_GerberImageFile->m_ImageNegative );
 
-    // Draw DCODEs if enabled
+    // Draw DCODE overlay text
     if( IsDCodeLayer( aLayer ) )
     {
-        if( !m_gerbviewSettings.m_showCodes )
-            return;
-
         wxString codeText;
         VECTOR2D textPosition;
         double textSize;
