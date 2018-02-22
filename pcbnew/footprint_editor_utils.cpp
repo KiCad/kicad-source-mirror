@@ -379,9 +379,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_LIBMODULE:
-        if( GetBoard()->m_Modules && GetCurrentLib().size() )
+        if( GetBoard()->m_Modules )
         {
-            SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules, true, true );
+            SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules );
             GetScreen()->ClrModify();
         }
         break;

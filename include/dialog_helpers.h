@@ -75,6 +75,9 @@ public:
 
     // ~EDA_LIST_DIALOG() {}
 
+    void     SetFilterLabel( const wxString& aLabel );
+    void     SetListLabel( const wxString& aLabel );
+
     void     Append( const wxArrayString& aItemStr );
     void     InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
 

@@ -87,18 +87,35 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
         m_staticTextMsg->Show( false );
     }
 
-    if( !!aSelection )
+    if( !aSelection.IsEmpty() )
     {
         for( unsigned row = 0; row < m_itemsListCp->size(); ++row )
         {
             if( (*m_itemsListCp)[row][0] == aSelection )
             {
                 m_listBox->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+
+                // Set to a small size so EnsureVisible() won't be foiled by later additions.
+                // ListBox will expand to fit later.
+                m_listBox->SetSize( m_listBox->GetSize().GetX(), 100 );
                 m_listBox->EnsureVisible( row );
+
                 break;
             }
         }
     }
+}
+
+
+void EDA_LIST_DIALOG::SetFilterLabel( const wxString& aLabel )
+{
+    m_filterLabel->SetLabel( aLabel );
+}
+
+
+void EDA_LIST_DIALOG::SetListLabel( const wxString& aLabel )
+{
+    m_listLabel->SetLabel( aLabel );
 }
 
 

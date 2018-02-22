@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,7 +37,7 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_filterLabel;
 		wxTextCtrl* m_filterBox;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_listLabel;
 		wxListCtrl* m_listBox;
 		wxStaticText* m_staticTextMsg;
 		wxTextCtrl* m_messages;
@@ -56,7 +56,7 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~EDA_LIST_DIALOG_BASE();
 	
 };

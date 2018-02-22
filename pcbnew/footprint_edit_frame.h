@@ -186,7 +186,6 @@ public:
     void OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
-    void OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
@@ -204,18 +203,11 @@ public:
     /**
      * Function SaveFootprintInLibrary
      * Save in an existing library a given footprint
-     * @param aLibName = name of the library to use
+     * @param activeLibrary = default library if the footprint has none
      * @param aModule = the given footprint
-     * @param aOverwrite = true to overwrite an existing footprint, false to
-     *                     abort if an existing footprint with same name is found
-     * @param aDisplayDialog = true to display a dialog to enter or confirm the
-     *                         footprint name
      * @return : true if OK, false if abort
      */
-    bool SaveFootprintInLibrary( const wxString& aLibName,
-                                 MODULE*         aModule,
-                                 bool            aOverwrite,
-                                 bool            aDisplayDialog );
+    bool SaveFootprintInLibrary( wxString activeLibrary, MODULE* aModule );
 
     /**
      * Virtual Function OnModify()
