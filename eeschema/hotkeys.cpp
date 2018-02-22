@@ -120,17 +120,6 @@ static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET
 static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK,
                                 ID_POPUP_SCH_LEAVE_SHEET );
 
-// Undo
-static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
-
-// Redo
-#if !defined( __WXMAC__ )
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
-#else
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z',
-                          (int) wxID_REDO );
-#endif
-
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
 static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
@@ -193,9 +182,6 @@ static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Symbol or Label" ),
                                          ID_POPUP_SCH_DUPLICATE_ITEM );
 
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
-static EDA_HOTKEY HkCopyBlock( _HKI( "Copy Block" ), HK_COPY_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
-static EDA_HOTKEY HkPasteBlock( _HKI( "Paste Block" ), HK_PASTE_BLOCK, 'V' + GR_KB_CTRL, wxID_PASTE );
-static EDA_HOTKEY HkCutBlock( _HKI( "Cut Block" ), HK_CUT_BLOCK, 'X' + GR_KB_CTRL, wxID_CUT );
 static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
@@ -219,8 +205,6 @@ static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GR
 
 // Load/save files
 static EDA_HOTKEY HkSaveAllLib( _HKI( "Save All Libraries" ), HK_SAVE_ALL_LIBS, 'S' + GR_KB_CTRL, ID_LIBEDIT_SAVE_ALL_LIBS );
-static EDA_HOTKEY HkSaveSchematic( _HKI( "Save Schematic" ), HK_SAVE_SCH, 'S' + GR_KB_CTRL );
-static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 
 // Autoplace fields
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
@@ -233,9 +217,35 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
+
+// Common: hotkeys_basic.h
+static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
+static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
+static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S', (int) wxID_SAVEAS );
+static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
+
+static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+
+#if !defined( __WXMAC__ )
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+#else
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO,
+                       GR_KB_SHIFT + GR_KB_CTRL + 'Z',
+                       (int) wxID_REDO );
+#endif
+
+static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int) wxID_CUT );
+static EDA_HOTKEY HkEditCopy( _HKI( "Copy" ), HK_EDIT_COPY, GR_KB_CTRL + 'C', (int) wxID_COPY );
+static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V', (int) wxID_PASTE );
+
+
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
 {
+    &HkNew,         &HkOpen,            &HkSave,          &HkSaveAs,        &HkPrint,
+    &HkUndo,        &HkRedo,
+    &HkEditCut,     &HkEditCopy,        &HkEditPaste,
     &HkHelp,
     &HkZoomIn,
     &HkZoomOut,
@@ -248,8 +258,6 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     &HkDelete,
     &HkRotate,
     &HkDrag,
-    &HkUndo,
-    &HkRedo,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     NULL
@@ -273,17 +281,12 @@ static EDA_HOTKEY* common_basic_Hotkey_List[] =
 // List of hotkey descriptors for schematic
 static EDA_HOTKEY* schematic_Hotkey_List[] =
 {
-    &HkSaveSchematic,
-    &HkLoadSchematic,
     &HkFindItem,
     &HkFindNextItem,
     &HkFindNextDrcMarker,
     &HkFindReplace,
     &HkInsert,
     &HkMove2Drag,
-    &HkCopyBlock,
-    &HkPasteBlock,
-    &HkCutBlock,
     &HkMove,
     &HkDuplicateItem,
     &HkAddComponent,
@@ -325,9 +328,6 @@ static EDA_HOTKEY* libEdit_Hotkey_List[] =
     &HkMoveLibItem,
     &HkMirrorX,
     &HkMirrorY,
-    &HkCopyBlock,
-    &HkPasteBlock,
-    &HkCutBlock,
     NULL
 };
 
@@ -476,9 +476,9 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_AUTO:
     case HK_ZOOM_SELECTION:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
-    case HK_PASTE_BLOCK:
-    case HK_COPY_BLOCK:                      // Copy block to paste buffer.
-    case HK_CUT_BLOCK:
+    case HK_EDIT_PASTE:
+    case HK_EDIT_COPY:                      // Copy block to paste buffer.
+    case HK_EDIT_CUT:
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;
@@ -705,9 +705,9 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
-    case HK_PASTE_BLOCK:
-    case HK_COPY_BLOCK:
-    case HK_CUT_BLOCK:
+    case HK_EDIT_PASTE:
+    case HK_EDIT_COPY:
+    case HK_EDIT_CUT:
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;
