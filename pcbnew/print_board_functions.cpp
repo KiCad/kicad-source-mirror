@@ -112,13 +112,9 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     PCB_DISPLAY_OPTIONS save_opt;
     BOARD*          Pcb   = GetBoard();
     int             defaultPenSize = Millimeter2iu( 0.2 );
-    bool            onePagePerLayer = false;
 
     PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData; // can be null
     auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
-
-    if( printParameters && printParameters->m_OptionPrintPage == 0 )
-        onePagePerLayer = true;
 
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 

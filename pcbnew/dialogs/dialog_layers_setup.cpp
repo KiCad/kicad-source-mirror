@@ -383,6 +383,9 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
     showPresets( m_enabledLayers );
     showLayerTypes();
 
+    // All widgets are now initialized. Fix the min sizes:
+    GetSizer()->SetSizeHints( this );
+
     return true;
 }
 
