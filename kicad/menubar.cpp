@@ -269,8 +269,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     wxMenu* importprjSubMenu = new wxMenu();
 
-    AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "Eagle CAD..." ),
-            _( "Import Eagle CAD XML schematic and board" ),
+    AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "EAGLE CAD..." ),
+            _( "Import EAGLE CAD XML schematic and board" ),
             KiBitmap( import_project_xpm ) );
 
 
@@ -303,7 +303,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Quit
     AddMenuItem( fileMenu,
                  wxID_EXIT,
-                 _( "&Close" ),
+                 _( "&Exit" ),
                  _( "Close KiCad" ),
                  KiBitmap( exit_xpm ) );
 
@@ -315,6 +315,10 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
      AddMenuItem( viewMenu, ID_PROJECT_TREE_REFRESH, msg,
                   _( "Refresh project tree" ),
                   KiBitmap( reload_xpm ) );
+
+#ifdef __APPLE__
+    aParentMenu->AppendSeparator();
+#endif
 
     // Menu Browse:
     wxMenu* browseMenu = new wxMenu();
@@ -385,17 +389,18 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "PDF viewer preferences" ),
                  KiBitmap( datasheet_xpm ) );
 
-    // Hotkey submenu
     preferencesMenu->AppendSeparator();
-    AddHotkeyConfigMenu( preferencesMenu );
-
-    // Language submenu
-    preferencesMenu->AppendSeparator();
-    Pgm().AddMenuLanguageList( preferencesMenu );
 
     // Icons options submenu
-    preferencesMenu->AppendSeparator();
     AddMenuIconsOptions( preferencesMenu );
+
+    preferencesMenu->AppendSeparator();
+
+    // Language submenu
+    Pgm().AddMenuLanguageList( preferencesMenu );
+    // Hotkey submenu
+    AddHotkeyConfigMenu( preferencesMenu );
+
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
