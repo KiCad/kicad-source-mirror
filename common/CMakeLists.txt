@@ -432,11 +432,6 @@ set( PCB_COMMON_SRCS
     widgets/widget_net_selector.cpp
 )
 
-set( PCB_COMMON_SRCS
-    ${PCB_COMMON_SRCS}
-    ../pcbnew/pcb_painter.cpp
-    )
-
 # add -DPCBNEW to compilation of these PCBNEW sources
 set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     COMPILE_DEFINITIONS "PCBNEW"
