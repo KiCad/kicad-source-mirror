@@ -515,6 +515,12 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 }
 
 
+// It'd be nice to share the min/max with the COLOR4D_PICKER_DLG, but those are
+// set in wxFormBuilder.
+#define ALPHA_MIN 0.20
+#define ALPHA_MAX 1.00
+#define ALPHA_STEP 0.05
+
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
@@ -523,15 +529,17 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
 
-    if( currentColor.a <= 0.95 )
+    if( currentColor.a <= ALPHA_MAX - ALPHA_STEP )
     {
-        currentColor.a += 0.05;
+        currentColor.a += ALPHA_STEP;
         settings->SetLayerColor( currentLayer, currentColor );
         m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
 
         wxUpdateUIEvent dummy;
         static_cast<PCB_EDIT_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
     }
+    else
+        wxBell();
 
     return 0;
 }
@@ -545,15 +553,17 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
 
-    if( currentColor.a >= 0.05 )
+    if( currentColor.a >= ALPHA_MIN + ALPHA_STEP )
     {
-        currentColor.a -= 0.05;
+        currentColor.a -= ALPHA_STEP;
         settings->SetLayerColor( currentLayer, currentColor );
         m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
 
         wxUpdateUIEvent dummy;
         static_cast<PCB_BASE_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
     }
+    else
+        wxBell();
 
     return 0;
 }

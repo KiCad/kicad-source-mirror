@@ -313,16 +313,16 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     contrastModeSubMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Dim Current Layer" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_DEC_LAYER_ALHPA );
     AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
-                 text, _( "Dim the current layer" ),
+                 text, _( "Make the current layer more transparent" ),
                  KiBitmap( contrast_mode_xpm ) );
 
-    text = AddHotkeyName( _( "&Brighten Current Layer" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_INC_LAYER_ALHPA );
     AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
-                 text, _( "Brighten the current layer" ),
+                 text, _( "Make the current layer less transparent" ),
                  KiBitmap( contrast_mode_xpm ) );
 
     AddMenuItem( viewMenu, contrastModeSubMenu,
