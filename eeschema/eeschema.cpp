@@ -173,6 +173,12 @@ COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 
 void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
 {
+    // Do not allow non-background layers to be completely white.
+    // This ensures the BW printing recognizes that the colors should be
+    // printed black.
+    if( aColor == COLOR4D::WHITE && aLayer != LAYER_SCHEMATIC_BACKGROUND )
+        aColor.Darken( 0.01 );
+
     unsigned layer = SCH_LAYER_INDEX( aLayer );
     wxASSERT( layer < DIM( s_layerColor ) );
     s_layerColor[layer] = aColor;
