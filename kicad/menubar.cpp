@@ -317,7 +317,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                   KiBitmap( reload_xpm ) );
 
 #ifdef __APPLE__
-    aParentMenu->AppendSeparator();
+    viewMenu->AppendSeparator();
 #endif
 
     // Menu Browse:
