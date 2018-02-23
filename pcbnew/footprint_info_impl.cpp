@@ -47,8 +47,7 @@ void FOOTPRINT_INFO_IMPL::load()
 
     wxASSERT( fptable );
 
-    std::unique_ptr<MODULE> footprint( fptable->FootprintLoad( m_nickname, m_fpname ) );
-
+    std::unique_ptr<MODULE> footprint( fptable->LoadEnumeratedFootprint( m_nickname, m_fpname ) );
     if( footprint.get() == NULL ) // Should happen only with malformed/broken libraries
     {
         m_pad_count = 0;
@@ -119,7 +118,7 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
                                               WX_PROGRESS_REPORTER* aProgressReporter )
 {
-    if( aTable->GenLastModifiedChecksum( aNickname ) == m_libraries_last_mod_checksum )
+    if( aTable->GenerateTimestamp( aNickname ) == m_list_timestamp )
         return true;
 
     m_progress_reporter = aProgressReporter;
@@ -167,7 +166,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
                     ( _( "Loading incomplete; cancelled by user." ), nullptr, nullptr, 0 ) );
     }
 
-    m_libraries_last_mod_checksum = aTable->GenLastModifiedChecksum( aNickname );
+    m_list_timestamp = aTable->GenerateTimestamp( aNickname );
     m_progress_reporter = nullptr;
 
     return m_errors.empty();
@@ -238,7 +237,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
                 try
                 {
-                    this->m_lib_table->FootprintEnumerate( fpnames, nickname );
+                    m_lib_table->FootprintEnumerate( fpnames, nickname );
                 }
                 catch( const IO_ERROR& ioe )
                 {
@@ -306,7 +305,7 @@ size_t FOOTPRINT_LIST_IMPL::CountFinished()
 FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
     m_loader( nullptr ),
     m_count_finished( 0 ),
-    m_libraries_last_mod_checksum( 0 ),
+    m_list_timestamp( 0 ),
     m_progress_reporter( nullptr ),
     m_cancelled( false )
 {

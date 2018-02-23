@@ -73,6 +73,15 @@ void PLUGIN::PrefetchLib( const wxString& aLibraryPath, const PROPERTIES* aPrope
 }
 
 
+MODULE* PLUGIN::LoadEnumeratedFootprint( const wxString& aLibraryPath,
+                                         const wxString& aFootprintName,
+                                         const PROPERTIES* aProperties )
+{
+    // default implementation
+    return FootprintLoad( aLibraryPath, aFootprintName, aProperties );
+}
+
+
 MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                     const PROPERTIES* aProperties )
 {

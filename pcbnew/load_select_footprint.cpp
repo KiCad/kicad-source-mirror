@@ -574,7 +574,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
 
         for( unsigned i = 0;  i < mods.size();  ++i )
         {
-            std::unique_ptr<MODULE> m( cur->FootprintLoad( curLibPath, mods[i] ) );
+            std::unique_ptr<MODULE> m( cur->LoadEnumeratedFootprint( curLibPath, mods[i] ) );
             dst->FootprintSave( dstLibPath, m.get() );
 
             msg = wxString::Format( _( "Footprint \"%s\" saved" ),

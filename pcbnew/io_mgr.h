@@ -354,12 +354,14 @@ public:
                                      const PROPERTIES* aProperties = NULL );
 
     /**
-     * Return the footprint lib last-mod-time, if available.
+     * Generate a timestamp representing all the files in the library (including the library
+     * directory).
+     * Timestamps should not be considered ordered; they either match or they don't.
      */
-    virtual wxDateTime GetLibModificationTime( const wxString& aLibraryPath ) const
+    virtual long long GetLibraryTimestamp() const
     {
         // Default implementation.
-        return wxDateTime::Now();   // If we don't know then we must assume the worst.
+        return 0;
     }
 
     /**
@@ -407,6 +409,15 @@ public:
      */
     virtual MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL );
+
+    /**
+     * Function LoadEnumeratedFootprint
+     * a version of FootprintLoad() for use after FootprintEnumerate() for more
+     * efficient cache management.
+     */
+    virtual MODULE* LoadEnumeratedFootprint( const wxString& aLibraryPath,
+                                             const wxString& aFootprintName,
+                                             const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintSave

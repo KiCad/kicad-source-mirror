@@ -92,7 +92,6 @@ void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
 class FP_CACHE_ITEM
 {
     wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
-    wxDateTime              m_mod_time;  ///< The last file modified time stamp.
     std::unique_ptr<MODULE> m_module;
 
 public:
@@ -101,11 +100,7 @@ public:
     wxString    GetName() const { return m_file_name.GetDirs().Last(); }
     wxFileName  GetFileName() const { return m_file_name; }
 
-    /// Tell if the disk content or the lib_path has changed.
-    bool        IsModified() const;
-
     MODULE*     GetModule() const { return m_module.get(); }
-    void        UpdateModificationTime() { m_mod_time = m_file_name.GetModificationTime(); }
 };
 
 
@@ -113,26 +108,6 @@ FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
     m_module( aModule )
 {
     m_file_name = aFileName;
-
-    if( m_file_name.FileExists() )
-        m_mod_time = m_file_name.GetModificationTime();
-    else
-        m_mod_time.Now();
-}
-
-
-bool FP_CACHE_ITEM::IsModified() const
-{
-    if( !m_file_name.FileExists() )
-        return false;
-
-    wxLogTrace( traceFootprintLibrary, wxT( "File '%s', m_mod_time %s-%s, file mod time: %s-%s." ),
-                GetChars( m_file_name.GetFullPath() ),
-                GetChars( m_mod_time.FormatDate() ), GetChars( m_mod_time.FormatTime() ),
-                GetChars( m_file_name.GetModificationTime().FormatDate() ),
-                GetChars( m_file_name.GetModificationTime().FormatTime() ) );
-
-    return m_file_name.GetModificationTime() != m_mod_time;
 }
 
 
@@ -145,20 +120,16 @@ class FP_CACHE
 {
     PCB_IO*         m_owner;        /// Plugin object that owns the cache.
     wxFileName      m_lib_path;     /// The path of the library.
-    wxDateTime      m_mod_time;     /// Footprint library path modified time stamp.
     MODULE_MAP      m_modules;      /// Map of footprint file name per MODULE*.
 
-    bool m_represents_non_existant_dir;  // Indicates this cache represents a directory
-                                         // which does not exist. This forces
-                                         // GetLibModificationTime() to return 0 (at least
-                                         // until the directory is found, at which point it
-                                         // will return Now).
+    bool            m_cache_dirty;      // Stored separately because it's expensive
+                                        // to check m_cache_timestamp against file.
+    long long       m_cache_timestamp;  // A timestamp for the footprint file.
 
 public:
     FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath );
 
     wxString    GetPath() const { return m_lib_path.GetPath(); }
-    wxDateTime  GetLastModificationTime() const { return m_mod_time; }
     bool        IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
     MODULE_MAP& GetModules() { return m_modules; }
 
@@ -173,21 +144,19 @@ public:
 
     void Remove( const wxString& aFootprintName );
 
-    wxDateTime GetLibModificationTime() const;
+    /**
+     * Function GetTimestamp
+     * Generate a timestamp representing all source files in the cache (including the
+     * parent directory).
+     * Timestamps should not be considered ordered.  They either match or they don't.
+     */
+    long long GetTimestamp();
 
     /**
      * Function IsModified
-     * check if the footprint cache has been modified relative to \a aLibPath
-     * and \a aFootprintName.
-     *
-     * @param aLibPath is a path to test the current cache library path against.
-     * @param aFootprintName is the footprint name in the cache to test.  If the footprint
-     *                       name is empty, the all the footprint files in the library are
-     *                       checked to see if they have been modified.
-     * @return true if the cache has been modified.
+     * Return true if the cache is not up-to-date.
      */
-    bool IsModified( const wxString& aLibPath,
-                     const wxString& aFootprintName = wxEmptyString ) const;
+    bool IsModified();
 
     /**
      * Function IsPath
@@ -206,30 +175,18 @@ public:
 
 
 FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
-    : m_mod_time( 0.0 )
 {
     m_owner = aOwner;
     m_lib_path.SetPath( aLibraryPath );
-    m_represents_non_existant_dir = false;
-}
-
-
-wxDateTime FP_CACHE::GetLibModificationTime() const
-{
-    if( !m_lib_path.DirExists() )
-    {
-        if( m_represents_non_existant_dir )
-            return wxDateTime( 0.0 );
-        else
-            return wxDateTime::Now();
-    }
-
-    return m_lib_path.GetModificationTime();
+    m_cache_timestamp = 0;
+    m_cache_dirty = true;
 }
 
 
 void FP_CACHE::Save()
 {
+    m_cache_timestamp = 0;
+
     if( !m_lib_path.DirExists() && !m_lib_path.Mkdir() )
     {
         THROW_IO_ERROR( wxString::Format( _( "Cannot create footprint library path \"%s\"" ),
@@ -245,9 +202,6 @@ void FP_CACHE::Save()
     for( MODULE_ITER it = m_modules.begin();  it != m_modules.end();  ++it )
     {
         wxFileName fn = it->second->GetFileName();
-
-        if( fn.FileExists() && !it->second->IsModified() )
-            continue;
 
         wxString tempFileName =
 #ifdef USE_TMP_FILE
@@ -284,21 +238,22 @@ void FP_CACHE::Save()
             THROW_IO_ERROR( msg );
         }
 #endif
-        it->second->UpdateModificationTime();
-        m_mod_time = GetLibModificationTime();
+        m_cache_timestamp += fn.GetModificationTime().GetValue().GetValue();
     }
+
+    m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
+    m_cache_dirty = false;
 }
 
 
 void FP_CACHE::Load()
-{
-    m_represents_non_existant_dir = false;
-
+{    
     wxDir dir( m_lib_path.GetPath() );
 
     if( !dir.IsOpened() )
     {
-        m_represents_non_existant_dir = true;
+        m_cache_timestamp = 0;
+        m_cache_dirty = false;
 
         wxString msg = wxString::Format(
                 _( "Footprint library path \"%s\" does not exist" ),
@@ -306,6 +261,11 @@ void FP_CACHE::Load()
                 );
 
         THROW_IO_ERROR( msg );
+    }
+    else
+    {
+        m_cache_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
+        m_cache_dirty = false;
     }
 
     wxString fpFileName;
@@ -334,6 +294,8 @@ void FP_CACHE::Load()
 
                 footprint->SetFPID( LIB_ID( fpName ) );
                 m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fullPath ) );
+
+                m_cache_timestamp += fullPath.GetModificationTime().GetValue().GetValue();
             }
             catch( const IO_ERROR& ioe )
             {
@@ -343,11 +305,6 @@ void FP_CACHE::Load()
                 cacheError += ioe.What();
             }
         } while( dir.GetNext( &fpFileName ) );
-
-        // Remember the file modification time of library file when the
-        // cache snapshot was made, so that in a networked environment we will
-        // reload the cache as needed.
-        m_mod_time = GetLibModificationTime();
 
         if( !cacheError.IsEmpty() )
             THROW_IO_ERROR( cacheError );
@@ -386,9 +343,41 @@ bool FP_CACHE::IsPath( const wxString& aPath ) const
 }
 
 
-bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintName ) const
+bool FP_CACHE::IsModified()
 {
-    return GetLibModificationTime() > m_mod_time;
+    if( m_cache_dirty )
+        return true;
+    else
+        return GetTimestamp() != m_cache_timestamp;
+}
+
+
+long long FP_CACHE::GetTimestamp()
+{
+    // Avoid expensive GetModificationTime checks if we already know we're dirty
+    if( m_cache_dirty )
+        return wxDateTime::Now().GetValue().GetValue();
+
+    long long files_timestamp = 0;
+
+    if( m_lib_path.DirExists() )
+    {
+        files_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
+
+        for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+        {
+            wxFileName moduleFile = it->second->GetFileName();
+            if( moduleFile.FileExists() )
+                files_timestamp += moduleFile.GetModificationTime().GetValue().GetValue();
+        }
+    }
+
+    // If the new timestamp doesn't match the cache timestamp, then save ourselves the
+    // expensive calls next time
+    if( m_cache_timestamp != files_timestamp )
+        m_cache_dirty = true;
+
+    return files_timestamp;
 }
 
 
@@ -1955,9 +1944,9 @@ void PCB_IO::init( const PROPERTIES* aProperties )
 }
 
 
-void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName )
+void PCB_IO::validateCache( const wxString& aLibraryPath )
 {
-    if( !m_cache || m_cache->IsModified( aLibraryPath, aFootprintName ) )
+    if( !m_cache || m_cache->IsModified() )
     {
         // a spectacular episode in memory management:
         delete m_cache;
@@ -1980,7 +1969,7 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
 
     try
     {
-        cacheLib( aLibraryPath );
+        validateCache( aLibraryPath );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -2002,14 +1991,13 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
 }
 
 
-MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                               const PROPERTIES* aProperties )
+MODULE* PCB_IO::LoadEnumeratedFootprint( const wxString& aLibraryPath,
+                                         const wxString& aFootprintName,
+                                         const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
-
-    cacheLib( aLibraryPath, aFootprintName );
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
@@ -2025,6 +2013,17 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 }
 
 
+MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                               const PROPERTIES* aProperties )
+{
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    validateCache( aLibraryPath );
+
+    return LoadEnumeratedFootprint( aLibraryPath, aFootprintName, aProperties );
+}
+
+
 void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
                             const PROPERTIES* aProperties )
 {
@@ -2036,7 +2035,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     // called for saving into a library path.
     m_ctl = CTL_FOR_LIBRARY;
 
-    cacheLib( aLibraryPath );
+    validateCache( aLibraryPath );
 
     if( !m_cache->IsWritable() )
     {
@@ -2103,7 +2102,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
     init( aProperties );
 
-    cacheLib( aLibraryPath );
+    validateCache( aLibraryPath );
 
     if( !m_cache->IsWritable() )
     {
@@ -2116,12 +2115,13 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
 
 
-wxDateTime PCB_IO::GetLibModificationTime( const wxString& aLibraryPath ) const
+long long PCB_IO::GetLibraryTimestamp() const
 {
+    // If we have not cache, return a number which won't match any stored timestamps
     if( !m_cache )
-        return wxDateTime::Now();     // force a load
+        return wxDateTime::Now().GetValue().GetValue();
 
-    return m_cache->GetLibModificationTime();
+    return m_cache->GetTimestamp();
 }
 
 
@@ -2226,7 +2226,7 @@ bool PCB_IO::IsFootprintLibWritable( const wxString& aLibraryPath )
 
     init( NULL );
 
-    cacheLib( aLibraryPath );
+    validateCache( aLibraryPath );
 
     return m_cache->IsWritable();
 }

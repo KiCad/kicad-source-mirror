@@ -121,6 +121,9 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL ) override;
 
+    MODULE* LoadEnumeratedFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
+            const PROPERTIES* aProperties = NULL ) override;
+
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL ) override;
 
@@ -130,7 +133,7 @@ public:
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const PROPERTIES* aProperties = NULL ) override;
 
-    wxDateTime GetLibModificationTime( const wxString& aLibraryPath ) const override;
+    long long GetLibraryTimestamp() const override;
 
     void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
 
@@ -188,8 +191,7 @@ protected:
     NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
                                     ///< are stored with consecutive integers as net codes
 
-    /// we only cache one footprint library, this determines which one.
-    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
+    void validateCache( const wxString& aLibraryPath );
 
     void init( const PROPERTIES* aProperties );
 

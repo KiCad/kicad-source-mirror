@@ -152,10 +152,10 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname );
 
     /**
-     * Generate a checksum of the last-mod-date of \a aNickname's directory, or a checksum
-     * of all the libraries' directories if \a aNickname is NULL.
+     * Generate a hashed timestamp representing the last-mod-times of the library indicated
+     * by \a aNickname, or all libraries if \a aNickname is NULL.
      */
-    long long GenLastModifiedChecksum( const wxString* aNickname );
+    long long GenerateTimestamp( const wxString* aNickname );
 
     /**
      * Function PrefetchLib
@@ -186,6 +186,13 @@ public:
      */
     MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
 
+    /**
+     * Function LoadEnumeratedFootprint
+     *
+     * a version of FootprintLoad() for use after FootprintEnumerate() for more efficient
+     * cache management.
+     */
+    MODULE* LoadEnumeratedFootprint( const wxString& aNickname, const wxString& aFootprintName );
     /**
      * Enum SAVE_T
      * is the set of return values from FootprintSave() below.

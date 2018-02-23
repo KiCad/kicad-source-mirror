@@ -235,13 +235,13 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 }
 
 
-long long FP_LIB_TABLE::GenLastModifiedChecksum( const wxString* aNickname )
+long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 {
     if( aNickname )
     {
         const FP_LIB_TABLE_ROW* row = FindRow( *aNickname );
         wxASSERT( (PLUGIN*) row->plugin );
-        return row->plugin->GetLibModificationTime( *aNickname ).GetValue().GetValue();
+        return row->plugin->GetLibraryTimestamp();
     }
 
     long long hash = 0;
@@ -250,7 +250,7 @@ long long FP_LIB_TABLE::GenLastModifiedChecksum( const wxString* aNickname )
     {
         const FP_LIB_TABLE_ROW* row = FindRow( nickname );
         wxASSERT( (PLUGIN*) row->plugin );
-        hash += row->plugin->GetLibModificationTime( nickname ).GetValue().GetValue();
+        hash += row->plugin->GetLibraryTimestamp();
     }
 
     return hash;
@@ -297,6 +297,45 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 }
 
 
+static void setLibNickname( MODULE* aModule,
+                            const wxString& aNickname, const wxString& aFootprintName )
+{
+    // The library cannot know its own name, because it might have been renamed or moved.
+    // Therefore footprints cannot know their own library nickname when residing in
+    // a footprint library.
+    // Only at this API layer can we tell the footprint about its actual library nickname.
+    if( aModule )
+    {
+        // remove "const"-ness, I really do want to set nickname without
+        // having to copy the LIB_ID and its two strings, twice each.
+        LIB_ID& fpid = (LIB_ID&) aModule->GetFPID();
+
+        // Catch any misbehaving plugin, which should be setting internal footprint name properly:
+        wxASSERT( aFootprintName == fpid.GetLibItemName().wx_str() );
+
+        // and clearing nickname
+        wxASSERT( !fpid.GetLibNickname().size() );
+
+        fpid.SetLibNickname( aNickname );
+    }
+}
+
+
+MODULE* FP_LIB_TABLE::LoadEnumeratedFootprint( const wxString& aNickname,
+                                               const wxString& aFootprintName )
+{
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+
+    MODULE* ret = row->plugin->LoadEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
+                                                        row->GetProperties() );
+
+    setLibNickname( ret, row->GetNickName(), aFootprintName );
+
+    return ret;
+}
+
+
 MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
@@ -305,24 +344,7 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
     MODULE* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
                                               row->GetProperties() );
 
-    // The library cannot know its own name, because it might have been renamed or moved.
-    // Therefore footprints cannot know their own library nickname when residing in
-    // a footprint library.
-    // Only at this API layer can we tell the footprint about its actual library nickname.
-    if( ret )
-    {
-        // remove "const"-ness, I really do want to set nickname without
-        // having to copy the LIB_ID and its two strings, twice each.
-        LIB_ID& fpid = (LIB_ID&) ret->GetFPID();
-
-        // Catch any misbehaving plugin, which should be setting internal footprint name properly:
-        wxASSERT( aFootprintName == fpid.GetLibItemName().wx_str() );
-
-        // and clearing nickname
-        wxASSERT( !fpid.GetLibNickname().size() );
-
-        fpid.SetLibNickname( row->GetNickName() );
-    }
+    setLibNickname( ret, row->GetNickName(), aFootprintName );
 
     return ret;
 }

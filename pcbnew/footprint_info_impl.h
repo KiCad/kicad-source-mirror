@@ -62,7 +62,7 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
     SYNC_QUEUE<wxString>     m_queue_in;
     SYNC_QUEUE<wxString>     m_queue_out;
     std::atomic_size_t       m_count_finished;
-    long long                m_libraries_last_mod_checksum;
+    long long                m_list_timestamp;
     WX_PROGRESS_REPORTER*    m_progress_reporter;
     std::atomic_bool         m_cancelled;
 
