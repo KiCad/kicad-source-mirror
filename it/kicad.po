@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-23 23:01+0100\n"
-"PO-Revision-Date: 2018-02-23 23:06+0100\n"
+"PO-Revision-Date: 2018-02-23 23:23+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -18610,19 +18610,19 @@ msgstr "Mostra i riferimenti delle impronte"
 
 #: pcbnew/pcb_layer_widget.cpp:71
 msgid "Footprint Text Front"
-msgstr "Testo impronta fronte"
+msgstr "Testo impronte fronte"
 
 #: pcbnew/pcb_layer_widget.cpp:71
 msgid "Show footprint text on board's front"
-msgstr "Mostra testo impronta sul fronte della scheda"
+msgstr "Mostra il testo delle impronte sul fronte della scheda"
 
 #: pcbnew/pcb_layer_widget.cpp:72
 msgid "Footprint Text Back"
-msgstr "Testo impronta retro"
+msgstr "Testo impronte retro"
 
 #: pcbnew/pcb_layer_widget.cpp:72
 msgid "Show footprint text on board's back"
-msgstr "Mostra testo impronta sul retro della scheda"
+msgstr "Mostra il testo delle impronte sul retro della scheda"
 
 #: pcbnew/pcb_layer_widget.cpp:73
 msgid "Hidden Text"
