@@ -175,12 +175,18 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 
 bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 {
+#ifdef  __WXMAC__
+    // Apple in its infinite wisdom will raise a disabled window before even passing
+    // us the event, so we have no way to stop it.  Instead, we have to catch an
+    // improperly ordered disabled window and quasi-modal dialog here and reorder
+    // them.
     if( !IsEnabled() && IsActive() )
     {
         DIALOG_SHIM* dlg = findQuasiModalDialog( GetChildren() );
         if( dlg )
             dlg->Raise();
     }
+#endif
 
     if( !wxFrame::ProcessEvent( aEvent ) )
         return false;
