@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -545,15 +545,31 @@ wxString DIALOG_BOM::choosePlugin()
     wxFileName  fn( fullFileName );
     wxString    ext = fn.GetExt();
 
+    // Python requires on Windows the path of the script ends by '/' instead of '\'
+    // otherwise import does not find modules in the same folder as the python script
+    // We cannot change all '\' to '/' in command line because it causes issues with files
+    // that are stored on network resources and pointed to using the Windows
+    // Universal Naming Convention format. (full filename starting by \\server\)
+    //
+    // I hope changing the last separator only to '/' will work.
+#ifdef __WINDOWS__
+    if( ext == wxT("py" ) || ext == wxT("pyw" ) )
+    {
+        wxString sc_path = fn.GetPathWithSep();
+        sc_path.RemoveLast();
+        fullFileName = sc_path +'/' + fn.GetFullName();;
+    }
+#endif
+
     if( ext == "xsl" )
         cmdLine.Printf( "xsltproc -o \"%%O\" \"%s\" \"%%I\"", GetChars( fullFileName ) );
-    else if( ext == "exe" || ext.IsEmpty() )
+    else if( ext == "exe" )
         cmdLine.Printf( "\"%s\" < \"%%I\" > \"%%O\"", GetChars( fullFileName ) );
-    else if( ext == wxT("py" ) || ext.IsEmpty() )
+    else if( ext == "py" )
         cmdLine.Printf( "python \"%s\" \"%%I\" \"%%O\"", GetChars( fullFileName ) );
-    else if( ext == "pyw" || ext.IsEmpty() )
+    else if( ext == "pyw" )
 #ifdef __WINDOWS__
-        cmdLine.Printf(wxT("pythonw \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
+        cmdLine.Printf( "pythonw \"%s\" \"%%I\" \"%%O\"", GetChars( fullFileName ) );
 #else
         cmdLine.Printf( "python \"%s\" \"%%I\" \"%%O\"", GetChars( fullFileName ) );
 #endif

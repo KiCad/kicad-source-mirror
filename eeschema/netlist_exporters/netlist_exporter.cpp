@@ -61,7 +61,7 @@ wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
     ret.Replace( "%I", in.GetFullPath(), true );
 
 #ifdef __WINDOWS__
-    // A ugly hack to run xsltproc that has a serious bug on Window since  along time:
+    // A ugly hack to run xsltproc that has a serious bug on Window since a long time:
     // the filename given after -o option (output filename) cannot use '\' in filename
     // so replace if by '/' if possible (I mean if the filename does not start by "\\"
     // that is a filename on a Windows server)
