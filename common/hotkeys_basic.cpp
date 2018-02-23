@@ -530,6 +530,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 {
     wxString msg;
     wxString keyname, infokey;
+    FILE* file;
 
     msg = wxT( "$hotkey list\n" );
 
@@ -565,40 +566,46 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     msg += wxT( "$Endlist\n" );
 
     if( aFullFileName )
+        file = wxFopen( *aFullFileName, wxT( "wt" ) );
+    else
     {
-        FILE* file = wxFopen( *aFullFileName, wxT( "wt" ) );
+        wxString configName( ConfigBaseName() );
+        wxFileName fn( configName );
+        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+        fn.SetPath( GetKicadConfigPath() );
+        file = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
+    }
 
-        if( file )
-        {
-            fputs( TO_UTF8( msg ), file );
-            fclose( file );
-        }
-        else
-        {
-            msg.Printf( wxT( "Unable to write file %s" ), GetChars( *aFullFileName ) );
-            return 0;
-        }
+    if( file )
+    {
+        wxFputs( msg, file );
+        fclose( file );
     }
     else
     {
-        wxFileName fn( GetName() );
-        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-        std::unique_ptr<wxConfigBase> config( GetNewConfig( fn.GetFullPath() ) );
-        config->Write( HOTKEYS_CONFIG_KEY, msg );
+        msg.Printf( wxT( "Unable to write file %s" ), GetChars( *aFullFileName ) );
+        return 0;
     }
 
     return 1;
 }
 
 
-int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
-                                          struct EDA_HOTKEY_CONFIG* aDescList )
+int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* aDescList,
+        const bool aDefaultLocation )
 {
     wxFileName fn( aFilename );
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+
+    if( aDefaultLocation )
+    {
+        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+        fn.SetPath( GetKicadConfigPath() );
+    }
+
+    if( !wxFile::Exists( fn.GetFullPath() ) )
+        return 0;
 
     wxFile cfgfile( fn.GetFullPath() );
-
     if( !cfgfile.IsOpened() )       // There is a problem to open file
         return 0;
 
@@ -612,6 +619,10 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
     cfgfile.Read( buffer.data(), size );
     wxString data( buffer.data(), wxConvUTF8 );
 
+    // Is this the wxConfig format? If so, remove "Keys=" and parse the newlines.
+    if( data.StartsWith( wxT("Keys="), &data ) )
+        data.Replace( "\\n", "\n", true );
+
     // parse
     ParseHotkeyConfig( data, aDescList );
 
@@ -621,35 +632,9 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
 }
 
 
-void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList )
+int ReadHotkeyConfig( const wxString& aAppname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxFileName fn( Appname );
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-
-    std::unique_ptr<wxConfigBase> config;
-    config.reset( GetNewConfig( fn.GetFullPath() ) );
-
-    if( !config->HasEntry( HOTKEYS_CONFIG_KEY ) )
-    {
-        // assume defaults are ok
-        return;
-    }
-
-    wxString data;
-    config->Read( HOTKEYS_CONFIG_KEY, &data );
-
-    ParseHotkeyConfig( data, aDescList );
-}
-
-
-/* Function ReadHotkeyConfig
- * Read configuration data and fill the current hotkey list with hotkeys
- * aDescList is the current hotkey list descr. to initialize.
- */
-int EDA_BASE_FRAME::ReadHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList )
-{
-    ::ReadHotkeyConfig( GetName(), aDescList );
-    return 1;
+    return ReadHotkeyConfigFile( aAppname, aDescList );
 }
 
 
@@ -748,7 +733,7 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
     if( filename.IsEmpty() )
         return;
 
-    ReadHotkeyConfigFile( filename, aDescList );
+    ::ReadHotkeyConfigFile( filename, aDescList, false );
     WriteHotkeyConfig( aDescList );
     SetMruPath( wxFileName( filename ).GetPath() );
 }

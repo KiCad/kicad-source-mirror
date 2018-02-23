@@ -218,14 +218,26 @@ EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList );
  */
 EDA_HOTKEY* GetDescriptorFromCommand( int aCommand, EDA_HOTKEY** aList );
 
+
 /**
  * Function ReadHotkeyConfig
  * Read hotkey configuration for a given app,
  * possibly before the frame for that app has been created
- * @param Appname = the value of the app's m_FrameName
+ * @param aFilename = the filename to save the hotkeys as
  * @param aDescList = the hotkey data
+ * @param aDefaultLocation = if true, add hotkey path and extension to aFilename
+ * @return 1 on success, 0 on failure
 */
-void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList );
+int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* aDescList,
+                        const bool aDefaultLocation = true );
+
+/**
+ * Function ReadHotkeyConfig
+ * Read configuration data and fill the current hotkey list with hotkeys
+ * @param aAppname = the value of the app's m_FrameName
+ * @param aDescList = current hotkey list descr. to initialize.
+ */
+int ReadHotkeyConfig( const wxString& aAppname,  struct EDA_HOTKEY_CONFIG* aDescList );
 
 void ParseHotkeyConfig( const wxString& data, struct EDA_HOTKEY_CONFIG* aDescList );
 
