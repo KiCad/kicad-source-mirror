@@ -66,13 +66,6 @@ public:
     void ReFillRender();
 
     /**
-     * Function SyncRenderStates
-     * updates the checkboxes (checked or not) to be consistent with the current state
-     * of the visibility of the visible rendering elements.
-     */
-    void SyncRenderStates();
-
-    /**
      * Function SyncLayerVisibilities
      * updates each "Layer" checkbox in this layer widget according
      * to each layer's current visibility determined by IsLayerVisible(), and is

@@ -409,38 +409,21 @@ void PCB_LAYER_WIDGET::ReFillRender()
         if( renderRow.id == LAYER_VIA_BBLIND && !settings.m_BlindBuriedViaAllowed )
             continue;
 
-        renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );
-        renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName );
-
-        if( renderRow.color != COLOR4D::UNSPECIFIED )       // does this row show a color?
+        if( !renderRow.spacer )
         {
-            // this window frame must have an established BOARD, i.e. after SetBoard()
-            renderRow.color = myframe->Settings().Colors().GetItemColor( static_cast<GAL_LAYER_ID>( renderRow.id ) );
+            renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );
+            renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName );
+
+            if( renderRow.color != COLOR4D::UNSPECIFIED )       // does this row show a color?
+            {
+                // this window frame must have an established BOARD, i.e. after SetBoard()
+                renderRow.color = myframe->Settings().Colors().GetItemColor( static_cast<GAL_LAYER_ID>( renderRow.id ) );
+            }
+
+            renderRow.state = board->IsElementVisible( static_cast<GAL_LAYER_ID>( renderRow.id ) );
         }
 
-        renderRow.state = board->IsElementVisible( static_cast<GAL_LAYER_ID>( renderRow.id ) );
-
         AppendRenderRow( renderRow );
-    }
-}
-
-
-void PCB_LAYER_WIDGET::SyncRenderStates()
-{
-    BOARD*  board = myframe->GetBoard();
-
-    for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
-    {
-        int rowId = s_render_rows[row].id;
-
-        if( m_fp_editor_mode && !isAllowedInFpMode( rowId ) )
-            continue;
-
-        if( s_render_rows[row].spacer )
-            continue;
-
-        // this does not fire a UI event
-        SetRenderState( rowId, board->IsElementVisible( static_cast<GAL_LAYER_ID>( rowId ) ) );
     }
 }
 

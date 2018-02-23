@@ -952,7 +952,7 @@ void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 
 void PCB_EDIT_FRAME::syncRenderStates()
 {
-    m_Layers->SyncRenderStates();
+    m_Layers->ReFillRender();
 }
 
 
