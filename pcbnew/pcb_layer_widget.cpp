@@ -388,6 +388,8 @@ void PCB_LAYER_WIDGET::SetLayersManagerTabsText()
 void PCB_LAYER_WIDGET::ReFillRender()
 {
     BOARD* board = myframe->GetBoard();
+    auto settings = board->GetDesignSettings();
+
     ClearRenderRows();
 
     // Add "Items" tab rows to LAYER_WIDGET, after setting color and checkbox state.
@@ -399,6 +401,12 @@ void PCB_LAYER_WIDGET::ReFillRender()
         LAYER_WIDGET::ROW renderRow = s_render_rows[row];
 
         if( m_fp_editor_mode && !isAllowedInFpMode( renderRow.id ) )
+            continue;
+
+        if( renderRow.id == LAYER_VIA_MICROVIA && !settings.m_MicroViasAllowed )
+            continue;
+
+        if( renderRow.id == LAYER_VIA_BBLIND && !settings.m_BlindBuriedViaAllowed )
             continue;
 
         renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );

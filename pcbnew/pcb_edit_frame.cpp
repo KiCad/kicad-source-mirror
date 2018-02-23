@@ -828,6 +828,7 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
     {
         ReCreateLayerBox();
         ReCreateAuxiliaryToolbar();
+        m_Layers->ReFillRender();
         OnModify();
     }
 }
