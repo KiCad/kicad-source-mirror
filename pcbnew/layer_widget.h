@@ -103,6 +103,7 @@ public:
             state   = aState;
             tooltip = aTooltip;
             changeable = aChangeable;
+            spacer = false;
         }
 
         ROW()
