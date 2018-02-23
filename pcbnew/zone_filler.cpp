@@ -84,7 +84,8 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
     auto connectivity = m_board->GetConnectivity();
 
-    connectivity->Lock();
+    if( !connectivity->TryLock() )
+        return;
 
     // Remove segment zones
     m_board->m_Zone.DeleteAll();
