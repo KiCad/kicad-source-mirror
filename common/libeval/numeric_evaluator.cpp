@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 
 /* The (generated) lemon parser is written in C.
@@ -178,6 +179,7 @@ NumericEvaluator :: newString(const char* s)
    clear();
    auto len = strlen(s);
    clToken.token = reinterpret_cast<decltype(clToken.token)>(malloc(TokenStat::OutLen+1));
+   strcpy(clToken.token, "0");
    clToken.inputLen = len;
    clToken.pos = 0;
    clToken.input = s;
@@ -197,50 +199,55 @@ NumericEvaluator :: getToken()
    if (clToken.input == nullptr) return retval;
    if (clToken.pos >= clToken.inputLen) return retval;
 
+   auto isDecSep = [&](char ch) -> bool {
+      if (ch == cClDecSep) return true;
+      if (cClDecSep == ',' && ch == '.') return true;
+      return false;
+   };
+
    // Lambda: get value as string, store into clToken.token and update current index.
-   auto extractNumber = [&idx, this]() {
+   auto extractNumber = [&]() {
       short sepCount = 0;
       idx = 0;
       auto ch = clToken.input[clToken.pos];
       do {
-         if (ch == cClDecSep && sepCount) break;
+         if (ch == isDecSep(ch) && sepCount) break;
          clToken.token[idx++] = ch;
-         if (ch == cClDecSep) sepCount++;
+         if (isDecSep(ch)) sepCount++;
          ch = clToken.input[++clToken.pos];
-      } while (isdigit(ch) || ch == cClDecSep);
+      } while (isdigit(ch) || isDecSep(ch));
       clToken.token[idx] = 0;
+
+      // Ensure that the systems decimal separator is used
+      for (int i = strlen(clToken.token); i; i--) if (isDecSep(clToken.token[i-1])) clToken.token[i-1] = cClDecSep;
    };
 
-   // Lamda: Get unit for current token. Returns Unit::Invalid if token is not a unit.
+   /* Lamda: Get unit for current token. Returns Unit::Invalid if token is not a unit.
+    * '"', "in", "th", "mi", "mil" or "mm"
+    */
    auto checkUnit = [this]() -> Unit {
-      // '"' or "mm" or "mil"
-      char ch = clToken.input[clToken.pos];
-      if (ch == '"' || ch == 'm') {
-         Unit convertFrom = Unit::Invalid;
-         if (ch == '"') {
-            convertFrom = Unit::Inch;
-            clToken.pos++;
-         }
-         else {
-            // Do not use strcasecmp() as it is not available on all platforms
-            const char* cptr = &clToken.input[clToken.pos];
-            const auto sizeLeft = clToken.inputLen - clToken.pos;
-            if (sizeLeft >= 2) {
-               if (tolower(cptr[1]) == 'm' && !isalnum(cptr[2])) {
-                  convertFrom = Unit::Metric;
-                  clToken.pos += 2;
-               }
-               else if (sizeLeft >= 3) {
-                  if (tolower(cptr[1]) == 'i' && tolower(cptr[2]) == 'l' && !isalnum(cptr[3])) {
-                     convertFrom = Unit::Mil;
-                     clToken.pos += 3;
-                  }
-               }
-            }
-         }
-         return convertFrom;
+      const int sizeLeft = clToken.inputLen - clToken.pos;
+      Unit convertFrom = Unit::Invalid;
+      char unit[2] = { 0, 0 };
+      for (int i = 0; i < sizeLeft && i < int(sizeof(unit)/sizeof(unit[0])); i++) unit[i] = tolower(clToken.input[clToken.pos+i]);
+      auto tokcmp = [sizeLeft, unit](const char* s, int len) -> int {
+         if (len > sizeLeft) return 0;
+         if (!strncmp(unit, s, len)) return len;
+         return 0;
+      };
+      int size = 0;
+      if ((size = tokcmp("\"", 1)))       convertFrom = Unit::Inch;
+      else if ((size = tokcmp("in",  2))) convertFrom = Unit::Inch;
+      else if ((size = tokcmp("mi",  2))) convertFrom = Unit::Mil;
+      else if ((size = tokcmp("th",  2))) convertFrom = Unit::Mil;
+      else if ((size = tokcmp("mm",  2))) convertFrom = Unit::Metric;
+      clToken.pos += size;
+
+      if (size) {
+         while (clToken.pos < clToken.inputLen && isalnum(clToken.input[clToken.pos])) clToken.pos++;
       }
-      return Unit::Invalid;
+
+      return convertFrom;
    };
 
    // Start processing of first/next token: Remove whitespace
@@ -258,7 +265,7 @@ NumericEvaluator :: getToken()
    if (ch == 0) {
       /* End of input */
    }
-   else if (isdigit(ch) || ch == cClDecSep) { // VALUE
+   else if (isdigit(ch) || isDecSep(ch)) { // VALUE
       extractNumber();
       retval.token = VALUE;
       retval.value.dValue = atof(clToken.token);
@@ -273,22 +280,20 @@ NumericEvaluator :: getToken()
       retval.token = UNIT;
       if (eClUnitDefault == Unit::Metric)
       {
-         switch (convertFrom)
-         {
-         case Unit::Inch    : retval.value.dValue = 25.4;        break;
-         case Unit::Mil     : retval.value.dValue = 25.4/1000.0; break;
-         case Unit::Metric  : retval.value.dValue = 1.0;         break;
-         case Unit::Invalid : break;
+         switch (convertFrom) {
+            case Unit::Inch    : retval.value.dValue = 25.4;        break;
+            case Unit::Mil     : retval.value.dValue = 25.4/1000.0; break;
+            case Unit::Metric  : retval.value.dValue = 1.0;         break;
+            case Unit::Invalid : break;
          }
       }
       else if (eClUnitDefault == Unit::Inch)
       {
-         switch (convertFrom)
-         {
-         case Unit::Inch    : retval.value.dValue =  1.0;         break;
-         case Unit::Mil     : retval.value.dValue =  1.0/1000.0;  break;
-         case Unit::Metric  : retval.value.dValue =  1.0/25.4;    break;
-         case Unit::Invalid : break;
+         switch (convertFrom) {
+            case Unit::Inch    : retval.value.dValue =  1.0;         break;
+            case Unit::Mil     : retval.value.dValue =  1.0/1000.0;  break;
+            case Unit::Metric  : retval.value.dValue =  1.0/25.4;    break;
+            case Unit::Invalid : break;
          }
       }
    }

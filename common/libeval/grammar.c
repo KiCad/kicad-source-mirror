@@ -1,64 +1,92 @@
-/* Driver template for the LEMON parser generator.
-** The author disclaims copyright to this source code.
+/*
+** 2000-05-29
+**
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+**
+*************************************************************************
+** Driver template for the LEMON parser generator.
+**
+** The "lemon" program processes an LALR(1) input grammar file, then uses
+** this template to construct a parser.  The "lemon" program inserts text
+** at each "%%" line.  Also, any "P-a-r-s-e" identifer prefix (without the
+** interstitial "-" characters) contained in this template is changed into
+** the value of the %name directive from the grammar.  Otherwise, the content
+** of this template is copied straight through into the generate parser
+** source file.
+**
+** The following is the concatenation of all %include directives from the
+** input grammar file:
 */
-/* First off, code is included that follows the "include" declaration
-** in the input grammar file. */
 #include <stdio.h>
-#line 27 "grammar.lemon"
+/************ Begin %include sections from the grammar ************************/
+#line 28 "grammar.lemon"
 
 #include <assert.h>
-#include <math.h>
 #include <libeval/numeric_evaluator.h>
-#line 13 "grammar.c"
-/* Next is all token values, in a form suitable for use by makeheaders.
-** This section will be null unless lemon is run with the -m switch.
-*/
-/* 
-** These constants (all generated automatically by the parser generator)
-** specify the various kinds of tokens (terminals) that the parser
-** understands. 
-**
-** Each symbol here is a terminal symbol in the grammar.
-*/
-/* Make sure the INTERFACE macro is defined.
-*/
-#ifndef INTERFACE
-# define INTERFACE 1
-#endif
-/* The next thing included is series of defines which control
+#line 32 "grammar.c"
+/**************** End of %include directives **********************************/
+/* These constants specify the various numeric values for terminal symbols
+** in a format understandable to "makeheaders".  This section is blank unless
+** "lemon" is run with the "-m" command-line option.
+***************** Begin makeheaders token definitions *************************/
+/**************** End makeheaders token definitions ***************************/
+
+/* The next sections is a series of control #defines.
 ** various aspects of the generated parser.
-**    YYCODETYPE         is the data type used for storing terminal
-**                       and nonterminal numbers.  "unsigned char" is
-**                       used if there are fewer than 250 terminals
-**                       and nonterminals.  "int" is used otherwise.
-**    YYNOCODE           is a number of type YYCODETYPE which corresponds
-**                       to no legal terminal or nonterminal number.  This
-**                       number is used to fill in empty slots of the hash 
-**                       table.
+**    YYCODETYPE         is the data type used to store the integer codes
+**                       that represent terminal and non-terminal symbols.
+**                       "unsigned char" is used if there are fewer than
+**                       256 symbols.  Larger types otherwise.
+**    YYNOCODE           is a number of type YYCODETYPE that is not used for
+**                       any terminal or nonterminal symbol.
 **    YYFALLBACK         If defined, this indicates that one or more tokens
-**                       have fall-back values which should be used if the
-**                       original value of the token will not parse.
-**    YYACTIONTYPE       is the data type used for storing terminal
-**                       and nonterminal numbers.  "unsigned char" is
-**                       used if there are fewer than 250 rules and
-**                       states combined.  "int" is used otherwise.
-**    ParseTOKENTYPE     is the data type used for minor tokens given 
-**                       directly to the parser from the tokenizer.
-**    YYMINORTYPE        is the data type used for all minor tokens.
+**                       (also known as: "terminal symbols") have fall-back
+**                       values which should be used if the original symbol
+**                       would not parse.  This permits keywords to sometimes
+**                       be used as identifiers, for example.
+**    YYACTIONTYPE       is the data type used for "action codes" - numbers
+**                       that indicate what to do in response to the next
+**                       token.
+**    ParseTOKENTYPE     is the data type used for minor type for terminal
+**                       symbols.  Background: A "minor type" is a semantic
+**                       value associated with a terminal or non-terminal
+**                       symbols.  For example, for an "ID" terminal symbol,
+**                       the minor type might be the name of the identifier.
+**                       Each non-terminal can have a different minor type.
+**                       Terminal symbols all have the same minor type, though.
+**                       This macros defines the minor type for terminal 
+**                       symbols.
+**    YYMINORTYPE        is the data type used for all minor types.
 **                       This is typically a union of many types, one of
 **                       which is ParseTOKENTYPE.  The entry in the union
-**                       for base tokens is called "yy0".
+**                       for terminal symbols is called "yy0".
 **    YYSTACKDEPTH       is the maximum depth of the parser's stack.  If
 **                       zero the stack is dynamically sized using realloc()
 **    ParseARG_SDECL     A static variable declaration for the %extra_argument
 **    ParseARG_PDECL     A parameter declaration for the %extra_argument
 **    ParseARG_STORE     Code to store %extra_argument into yypParser
 **    ParseARG_FETCH     Code to extract %extra_argument from yypParser
-**    YYNSTATE           the combined number of states.
-**    YYNRULE            the number of rules in the grammar
 **    YYERRORSYMBOL      is the code number of the error symbol.  If not
 **                       defined, then do no error processing.
+**    YYNSTATE           the combined number of states.
+**    YYNRULE            the number of rules in the grammar
+**    YY_MAX_SHIFT       Maximum value for shift actions
+**    YY_MIN_SHIFTREDUCE Minimum value for shift-reduce actions
+**    YY_MAX_SHIFTREDUCE Maximum value for shift-reduce actions
+**    YY_MIN_REDUCE      Maximum value for reduce actions
+**    YY_ERROR_ACTION    The yy_action[] code for syntax error
+**    YY_ACCEPT_ACTION   The yy_action[] code for accept
+**    YY_NO_ACTION       The yy_action[] code for no-op
 */
+#ifndef INTERFACE
+# define INTERFACE 1
+#endif
+/************* Begin control #defines *****************************************/
 #define YYCODETYPE unsigned char
 #define YYNOCODE 19
 #define YYACTIONTYPE unsigned char
@@ -74,11 +102,17 @@ typedef union {
 #define ParseARG_PDECL , NumericEvaluator* pEval 
 #define ParseARG_FETCH  NumericEvaluator* pEval  = yypParser->pEval 
 #define ParseARG_STORE yypParser->pEval  = pEval 
-#define YYNSTATE 26
-#define YYNRULE 16
-#define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
-#define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
-#define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
+#define YYNSTATE             16
+#define YYNRULE              16
+#define YY_MAX_SHIFT         15
+#define YY_MIN_SHIFTREDUCE   26
+#define YY_MAX_SHIFTREDUCE   41
+#define YY_MIN_REDUCE        42
+#define YY_MAX_REDUCE        57
+#define YY_ERROR_ACTION      58
+#define YY_ACCEPT_ACTION     59
+#define YY_NO_ACTION         60
+/************* End control #defines *******************************************/
 
 /* The yyzerominor constant is used to initialize instances of
 ** YYMINORTYPE objects to zero. */
@@ -105,16 +139,20 @@ static const YYMINORTYPE yyzerominor = { 0 };
 ** Suppose the action integer is N.  Then the action is determined as
 ** follows
 **
-**   0 <= N < YYNSTATE                  Shift N.  That is, push the lookahead
+**   0 <= N <= YY_MAX_SHIFT             Shift N.  That is, push the lookahead
 **                                      token onto the stack and goto state N.
 **
-**   YYNSTATE <= N < YYNSTATE+YYNRULE   Reduce by rule N-YYNSTATE.
+**   N between YY_MIN_SHIFTREDUCE       Shift to an arbitrary state then
+**     and YY_MAX_SHIFTREDUCE           reduce by rule N-YY_MIN_SHIFTREDUCE.
 **
-**   N == YYNSTATE+YYNRULE              A syntax error has occurred.
+**   N between YY_MIN_REDUCE            Reduce by rule N-YY_MIN_REDUCE
+**     and YY_MAX_REDUCE
+
+**   N == YY_ERROR_ACTION               A syntax error has occurred.
 **
-**   N == YYNSTATE+YYNRULE+1            The parser accepts its input.
+**   N == YY_ACCEPT_ACTION              The parser accepts its input.
 **
-**   N == YYNSTATE+YYNRULE+2            No such action.  Denotes unused
+**   N == YY_NO_ACTION                  No such action.  Denotes unused
 **                                      slots in the yy_action[] table.
 **
 ** The action table is constructed as a single large table named yy_action[].
@@ -143,45 +181,48 @@ static const YYMINORTYPE yyzerominor = { 0 };
 **  yy_reduce_ofst[]   For each state, the offset into yy_action for
 **                     shifting non-terminals after a reduce.
 **  yy_default[]       Default action for each state.
-*/
-#define YY_ACTTAB_COUNT (47)
+**
+*********** Begin parsing tables **********************************************/
+#define YY_ACTTAB_COUNT (51)
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */    22,    8,    6,    3,    4,   23,   26,   15,    8,    6,
- /*    10 */     3,    4,    7,   25,    9,   24,   16,    2,    8,    6,
- /*    20 */     3,    4,   15,   21,   15,   18,    5,    7,   12,    7,
- /*    30 */    24,   16,    2,   16,    2,   14,   43,    1,   17,    9,
- /*    40 */     3,    4,   13,   11,   20,   19,   10,
+ /*     0 */    31,    8,    7,   33,    5,    6,   30,   42,   15,   10,
+ /*    10 */    15,   11,    4,   12,    4,   40,   29,   32,    2,   32,
+ /*    20 */     2,    8,    7,   33,    5,    6,   15,   28,    9,   41,
+ /*    30 */     4,   39,   13,   14,   29,   32,    2,   44,    3,    8,
+ /*    40 */     7,   33,    5,    6,   59,    1,   27,    9,   33,    5,
+ /*    50 */     6,
 };
 static const YYCODETYPE yy_lookahead[] = {
- /*     0 */     4,    5,    6,    7,    8,    9,    0,    1,    5,    6,
- /*    10 */     7,    8,    6,   16,   17,    9,   10,   11,    5,    6,
- /*    20 */     7,    8,    1,    3,    1,   12,    2,    6,   17,    6,
- /*    30 */     9,   10,   11,   10,   11,   17,   14,   15,   16,   17,
- /*    40 */     7,    8,   17,   17,   17,   17,   17,
+ /*     0 */     3,    4,    5,    6,    7,    8,    9,    0,    1,   17,
+ /*    10 */     1,   17,    5,   17,    5,   17,    9,   10,   11,   10,
+ /*    20 */    11,    4,    5,    6,    7,    8,    1,   16,   17,   12,
+ /*    30 */     5,   17,   17,   17,    9,   10,   11,   18,    2,    4,
+ /*    40 */     5,    6,    7,    8,   14,   15,   16,   17,    6,    7,
+ /*    50 */     8,
 };
-#define YY_SHIFT_USE_DFLT (-5)
-#define YY_SHIFT_COUNT (16)
-#define YY_SHIFT_MIN   (-4)
-#define YY_SHIFT_MAX   (33)
+#define YY_SHIFT_USE_DFLT (-4)
+#define YY_SHIFT_COUNT (15)
+#define YY_SHIFT_MIN   (-3)
+#define YY_SHIFT_MAX   (42)
 static const signed char yy_shift_ofst[] = {
- /*     0 */    21,    6,   23,   23,   23,   23,   23,   23,   23,   -4,
- /*    10 */    13,    3,   33,   33,   33,   24,   20,
+ /*     0 */    25,    7,    9,    9,    9,    9,    9,    9,    9,   -3,
+ /*    10 */    17,   35,   42,   42,   42,   36,
 };
-#define YY_REDUCE_USE_DFLT (-4)
+#define YY_REDUCE_USE_DFLT (-9)
 #define YY_REDUCE_COUNT (8)
-#define YY_REDUCE_MIN   (-3)
-#define YY_REDUCE_MAX   (29)
+#define YY_REDUCE_MIN   (-8)
+#define YY_REDUCE_MAX   (30)
 static const signed char yy_reduce_ofst[] = {
- /*     0 */    22,   -3,   29,   28,   27,   26,   25,   18,   11,
+ /*     0 */    30,   11,   -8,   -6,   -4,   -2,   14,   15,   16,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */    42,   42,   42,   42,   42,   42,   42,   42,   42,   42,
- /*    10 */    42,   36,   37,   38,   34,   35,   32,   27,   41,   40,
- /*    20 */    39,   33,   31,   30,   29,   28,
+ /*     0 */    58,   58,   58,   58,   58,   58,   58,   58,   58,   58,
+ /*    10 */    58,   52,   50,   54,   53,   51,
 };
+/********** End of lemon-generated parsing tables *****************************/
 
-/* The next table maps tokens into fallback tokens.  If a construct
-** like the following:
+/* The next table maps tokens (terminal symbols) into fallback tokens.  
+** If a construct like the following:
 ** 
 **      %fallback ID X Y Z.
 **
@@ -189,6 +230,10 @@ static const YYACTIONTYPE yy_default[] = {
 ** and Z.  Whenever one of the tokens X, Y, or Z is input to the parser
 ** but it does not parse, the type of the token is changed to ID and
 ** the parse is retried before an error is thrown.
+**
+** This feature can be used, for example, to cause some keywords in a language
+** to revert to identifiers if they keyword does not apply in the context where
+** it appears.
 */
 #ifdef YYFALLBACK
 static const YYCODETYPE yyFallback[] = {
@@ -206,9 +251,13 @@ static const YYCODETYPE yyFallback[] = {
 **   +  The semantic value stored at this level of the stack.  This is
 **      the information used by the action routines in the grammar.
 **      It is sometimes called the "minor" token.
+**
+** After the "shift" half of a SHIFTREDUCE action, the stateno field
+** actually contains the reduce action for the second half of the
+** SHIFTREDUCE.
 */
 struct yyStackEntry {
-  YYACTIONTYPE stateno;  /* The state-number */
+  YYACTIONTYPE stateno;  /* The state-number, or reduce action in SHIFTREDUCE */
   YYCODETYPE major;      /* The major token value.  This is the code
                          ** number for the token at this stack level */
   YYMINORTYPE minor;     /* The user-supplied minor token value.  This
@@ -270,8 +319,8 @@ void ParseTrace(FILE *TraceFILE, char *zTracePrompt){
 /* For tracing shifts, the names of all terminals and nonterminals
 ** are required.  The following table supplies these names */
 static const char *const yyTokenName[] = { 
-  "$",             "VAR",           "ASSIGN",        "UNIT",        
-  "SEMCOL",        "PLUS",          "MINUS",         "DIVIDE",      
+  "$",             "VAR",           "ASSIGN",        "SEMCOL",      
+  "PLUS",          "MINUS",         "UNIT",          "DIVIDE",      
   "MULT",          "ENDS",          "VALUE",         "PARENL",      
   "PARENR",        "error",         "main",          "in",          
   "stmt",          "expr",        
@@ -289,7 +338,7 @@ static const char *const yyRuleName[] = {
  /*   4 */ "stmt ::= expr ENDS",
  /*   5 */ "stmt ::= expr SEMCOL",
  /*   6 */ "expr ::= VALUE",
- /*   7 */ "expr ::= VALUE UNIT",
+ /*   7 */ "expr ::= expr UNIT",
  /*   8 */ "expr ::= MINUS expr",
  /*   9 */ "expr ::= VAR",
  /*  10 */ "expr ::= VAR ASSIGN expr",
@@ -325,6 +374,15 @@ static void yyGrowStack(yyParser *p){
 }
 #endif
 
+/* Datatype of the argument to the memory allocated passed as the
+** second argument to ParseAlloc() below.  This can be changed by
+** putting an appropriate #define in the %include section of the input
+** grammar.
+*/
+#ifndef YYMALLOCARGTYPE
+# define YYMALLOCARGTYPE size_t
+#endif
+
 /* 
 ** This function allocates a new parser.
 ** The only argument is a pointer to a function which works like
@@ -337,9 +395,9 @@ static void yyGrowStack(yyParser *p){
 ** A pointer to a parser.  This pointer is used in subsequent calls
 ** to Parse and ParseFree.
 */
-void *ParseAlloc(void *(*mallocProc)(size_t)){
+void *ParseAlloc(void *(*mallocProc)(YYMALLOCARGTYPE)){
   yyParser *pParser;
-  pParser = (yyParser*)(*mallocProc)( (size_t)sizeof(yyParser) );
+  pParser = (yyParser*)(*mallocProc)( (YYMALLOCARGTYPE)sizeof(yyParser) );
   if( pParser ){
     pParser->yyidx = -1;
 #ifdef YYTRACKMAXSTACKDEPTH
@@ -354,10 +412,12 @@ void *ParseAlloc(void *(*mallocProc)(size_t)){
   return pParser;
 }
 
-/* The following function deletes the value associated with a
-** symbol.  The symbol can be either a terminal or nonterminal.
-** "yymajor" is the symbol code, and "yypminor" is a pointer to
-** the value.
+/* The following function deletes the "minor type" or semantic value
+** associated with a symbol.  The symbol can be either a terminal
+** or nonterminal. "yymajor" is the symbol code, and "yypminor" is
+** a pointer to the value to be deleted.  The code used to do the 
+** deletions is derived from the %destructor and/or %token_destructor
+** directives of the input grammar.
 */
 static void yy_destructor(
   yyParser *yypParser,    /* The parser */
@@ -373,9 +433,11 @@ static void yy_destructor(
     ** being destroyed before it is finished parsing.
     **
     ** Note: during a reduce, the only symbols destroyed are those
-    ** which appear on the RHS of the rule, but which are not used
+    ** which appear on the RHS of the rule, but which are *not* used
     ** inside the C code.
     */
+/********* Begin destructor definitions ***************************************/
+/********* End destructor definitions *****************************************/
     default:  break;   /* If no destructor action specified: do nothing */
   }
 }
@@ -385,45 +447,37 @@ static void yy_destructor(
 **
 ** If there is a destructor routine associated with the token which
 ** is popped from the stack, then call it.
-**
-** Return the major token number for the symbol popped.
 */
-static int yy_pop_parser_stack(yyParser *pParser){
-  YYCODETYPE yymajor;
-  yyStackEntry *yytos = &pParser->yystack[pParser->yyidx];
-
-  if( pParser->yyidx<0 ) return 0;
+static void yy_pop_parser_stack(yyParser *pParser){
+  yyStackEntry *yytos;
+  assert( pParser->yyidx>=0 );
+  yytos = &pParser->yystack[pParser->yyidx--];
 #ifndef NDEBUG
-  if( yyTraceFILE && pParser->yyidx>=0 ){
+  if( yyTraceFILE ){
     fprintf(yyTraceFILE,"%sPopping %s\n",
       yyTracePrompt,
       yyTokenName[yytos->major]);
   }
 #endif
-  yymajor = yytos->major;
-  yy_destructor(pParser, yymajor, &yytos->minor);
-  pParser->yyidx--;
-  return yymajor;
+  yy_destructor(pParser, yytos->major, &yytos->minor);
 }
 
 /* 
-** Deallocate and destroy a parser.  Destructors are all called for
+** Deallocate and destroy a parser.  Destructors are called for
 ** all stack elements before shutting the parser down.
 **
-** Inputs:
-** <ul>
-** <li>  A pointer to the parser.  This should be a pointer
-**       obtained from ParseAlloc.
-** <li>  A pointer to a function used to reclaim memory obtained
-**       from malloc.
-** </ul>
+** If the YYPARSEFREENEVERNULL macro exists (for example because it
+** is defined in a %include section of the input grammar) then it is
+** assumed that the input pointer is never NULL.
 */
 void ParseFree(
   void *p,                    /* The parser to be deleted */
   void (*freeProc)(void*)     /* Function used to reclaim memory */
 ){
   yyParser *pParser = (yyParser*)p;
+#ifndef YYPARSEFREENEVERNULL
   if( pParser==0 ) return;
+#endif
   while( pParser->yyidx>=0 ) yy_pop_parser_stack(pParser);
 #if YYSTACKDEPTH<=0
   free(pParser->yystack);
@@ -444,10 +498,6 @@ int ParseStackPeak(void *p){
 /*
 ** Find the appropriate action for a parser given the terminal
 ** look-ahead token iLookAhead.
-**
-** If the look-ahead token is YYNOCODE, then check to see if the action is
-** independent of the look-ahead.  If it is, return the action, otherwise
-** return YY_NO_ACTION.
 */
 static int yy_find_shift_action(
   yyParser *pParser,        /* The parser */
@@ -456,63 +506,64 @@ static int yy_find_shift_action(
   int i;
   int stateno = pParser->yystack[pParser->yyidx].stateno;
  
-  if( stateno>YY_SHIFT_COUNT
-   || (i = yy_shift_ofst[stateno])==YY_SHIFT_USE_DFLT ){
-    return yy_default[stateno];
-  }
-  assert( iLookAhead!=YYNOCODE );
-  i += iLookAhead;
-  if( i<0 || i>=YY_ACTTAB_COUNT || yy_lookahead[i]!=iLookAhead ){
-    if( iLookAhead>0 ){
+  if( stateno>=YY_MIN_REDUCE ) return stateno;
+  assert( stateno <= YY_SHIFT_COUNT );
+  do{
+    i = yy_shift_ofst[stateno];
+    if( i==YY_SHIFT_USE_DFLT ) return yy_default[stateno];
+    assert( iLookAhead!=YYNOCODE );
+    i += iLookAhead;
+    if( i<0 || i>=YY_ACTTAB_COUNT || yy_lookahead[i]!=iLookAhead ){
+      if( iLookAhead>0 ){
 #ifdef YYFALLBACK
-      YYCODETYPE iFallback;            /* Fallback token */
-      if( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0])
-             && (iFallback = yyFallback[iLookAhead])!=0 ){
-#ifndef NDEBUG
-        if( yyTraceFILE ){
-          fprintf(yyTraceFILE, "%sFALLBACK %s => %s\n",
-             yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[iFallback]);
-        }
-#endif
-        return yy_find_shift_action(pParser, iFallback);
-      }
-#endif
-#ifdef YYWILDCARD
-      {
-        int j = i - iLookAhead + YYWILDCARD;
-        if( 
-#if YY_SHIFT_MIN+YYWILDCARD<0
-          j>=0 &&
-#endif
-#if YY_SHIFT_MAX+YYWILDCARD>=YY_ACTTAB_COUNT
-          j<YY_ACTTAB_COUNT &&
-#endif
-          yy_lookahead[j]==YYWILDCARD
-        ){
+        YYCODETYPE iFallback;            /* Fallback token */
+        if( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0])
+               && (iFallback = yyFallback[iLookAhead])!=0 ){
 #ifndef NDEBUG
           if( yyTraceFILE ){
-            fprintf(yyTraceFILE, "%sWILDCARD %s => %s\n",
-               yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[YYWILDCARD]);
+            fprintf(yyTraceFILE, "%sFALLBACK %s => %s\n",
+               yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[iFallback]);
           }
-#endif /* NDEBUG */
-          return yy_action[j];
+#endif
+          assert( yyFallback[iFallback]==0 ); /* Fallback loop must terminate */
+          iLookAhead = iFallback;
+          continue;
         }
-      }
+#endif
+#ifdef YYWILDCARD
+        {
+          int j = i - iLookAhead + YYWILDCARD;
+          if( 
+#if YY_SHIFT_MIN+YYWILDCARD<0
+            j>=0 &&
+#endif
+#if YY_SHIFT_MAX+YYWILDCARD>=YY_ACTTAB_COUNT
+            j<YY_ACTTAB_COUNT &&
+#endif
+            yy_lookahead[j]==YYWILDCARD
+          ){
+#ifndef NDEBUG
+            if( yyTraceFILE ){
+              fprintf(yyTraceFILE, "%sWILDCARD %s => %s\n",
+                 yyTracePrompt, yyTokenName[iLookAhead],
+                 yyTokenName[YYWILDCARD]);
+            }
+#endif /* NDEBUG */
+            return yy_action[j];
+          }
+        }
 #endif /* YYWILDCARD */
+      }
+      return yy_default[stateno];
+    }else{
+      return yy_action[i];
     }
-    return yy_default[stateno];
-  }else{
-    return yy_action[i];
-  }
+  }while(1);
 }
 
 /*
 ** Find the appropriate action for a parser given the non-terminal
 ** look-ahead token iLookAhead.
-**
-** If the look-ahead token is YYNOCODE, then check to see if the action is
-** independent of the look-ahead.  If it is, return the action, otherwise
-** return YY_NO_ACTION.
 */
 static int yy_find_reduce_action(
   int stateno,              /* Current state number */
@@ -555,8 +606,30 @@ static void yyStackOverflow(yyParser *yypParser, YYMINORTYPE *yypMinor){
    while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
    /* Here code is inserted which will execute if the parser
    ** stack every overflows */
+/******** Begin %stack_overflow code ******************************************/
+/******** End %stack_overflow code ********************************************/
    ParseARG_STORE; /* Suppress warning about unused %extra_argument var */
 }
+
+/*
+** Print tracing information for a SHIFT action
+*/
+#ifndef NDEBUG
+static void yyTraceShift(yyParser *yypParser, int yyNewState){
+  if( yyTraceFILE ){
+    if( yyNewState<YYNSTATE ){
+      fprintf(yyTraceFILE,"%sShift '%s', go to state %d\n",
+         yyTracePrompt,yyTokenName[yypParser->yystack[yypParser->yyidx].major],
+         yyNewState);
+    }else{
+      fprintf(yyTraceFILE,"%sShift '%s'\n",
+         yyTracePrompt,yyTokenName[yypParser->yystack[yypParser->yyidx].major]);
+    }
+  }
+}
+#else
+# define yyTraceShift(X,Y)
+#endif
 
 /*
 ** Perform a shift action.
@@ -592,16 +665,7 @@ static void yy_shift(
   yytos->stateno = (YYACTIONTYPE)yyNewState;
   yytos->major = (YYCODETYPE)yyMajor;
   yytos->minor = *yypMinor;
-#ifndef NDEBUG
-  if( yyTraceFILE && yypParser->yyidx>0 ){
-    int i;
-    fprintf(yyTraceFILE,"%sShift %d\n",yyTracePrompt,yyNewState);
-    fprintf(yyTraceFILE,"%sStack:",yyTracePrompt);
-    for(i=1; i<=yypParser->yyidx; i++)
-      fprintf(yyTraceFILE," %s",yyTokenName[yypParser->yystack[i].major]);
-    fprintf(yyTraceFILE,"\n");
-  }
-#endif
+  yyTraceShift(yypParser, yyNewState);
 }
 
 /* The following table contains information about every rule that
@@ -649,28 +713,12 @@ static void yy_reduce(
 #ifndef NDEBUG
   if( yyTraceFILE && yyruleno>=0 
         && yyruleno<(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){
-    fprintf(yyTraceFILE, "%sReduce [%s].\n", yyTracePrompt,
-      yyRuleName[yyruleno]);
+    yysize = yyRuleInfo[yyruleno].nrhs;
+    fprintf(yyTraceFILE, "%sReduce [%s], go to state %d.\n", yyTracePrompt,
+      yyRuleName[yyruleno], yymsp[-yysize].stateno);
   }
 #endif /* NDEBUG */
-
-  /* Silence complaints from purify about yygotominor being uninitialized
-  ** in some cases when it is copied into the stack after the following
-  ** switch.  yygotominor is uninitialized when a rule reduces that does
-  ** not set the value of its left-hand side nonterminal.  Leaving the
-  ** value of the nonterminal uninitialized is utterly harmless as long
-  ** as the value is never used.  So really the only thing this code
-  ** accomplishes is to quieten purify.  
-  **
-  ** 2007-01-16:  The wireshark project (www.wireshark.org) reports that
-  ** without this code, their parser segfaults.  I'm not sure what there
-  ** parser is doing to make this happen.  This is the second bug report
-  ** from wireshark this week.  Clearly they are stressing Lemon in ways
-  ** that it has not been previously stressed...  (SQLite ticket #2172)
-  */
-  /*memset(&yygotominor, 0, sizeof(yygotominor));*/
   yygotominor = yyzerominor;
-
 
   switch( yyruleno ){
   /* Beginning here are the reduction cases.  A typical example
@@ -681,55 +729,56 @@ static void yy_reduce(
   **  #line <lineno> <thisfile>
   **     break;
   */
+/********** Begin reduce actions **********************************************/
       case 4: /* stmt ::= expr ENDS */
 #line 49 "grammar.lemon"
 { pEval->parseSetResult(yymsp[-1].minor.yy0.valid ? yymsp[-1].minor.yy0.dValue : NAN); }
-#line 688 "grammar.c"
+#line 737 "grammar.c"
         break;
       case 5: /* stmt ::= expr SEMCOL */
 #line 50 "grammar.lemon"
 { pEval->parseSetResult(NAN); }
-#line 693 "grammar.c"
+#line 742 "grammar.c"
         break;
       case 6: /* expr ::= VALUE */
 #line 52 "grammar.lemon"
 { yygotominor.yy0.dValue = yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=true; }
-#line 698 "grammar.c"
+#line 747 "grammar.c"
         break;
-      case 7: /* expr ::= VALUE UNIT */
+      case 7: /* expr ::= expr UNIT */
 #line 53 "grammar.lemon"
-{ yygotominor.yy0.dValue = yymsp[-1].minor.yy0.dValue * yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=true; }
-#line 703 "grammar.c"
+{ yygotominor.yy0.dValue = yymsp[-1].minor.yy0.dValue * yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=yymsp[-1].minor.yy0.valid; }
+#line 752 "grammar.c"
         break;
       case 8: /* expr ::= MINUS expr */
 #line 54 "grammar.lemon"
 { yygotominor.yy0.dValue = -yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=yymsp[0].minor.yy0.valid; }
-#line 708 "grammar.c"
+#line 757 "grammar.c"
         break;
       case 9: /* expr ::= VAR */
 #line 55 "grammar.lemon"
 { yygotominor.yy0.dValue = pEval->getVar(yymsp[0].minor.yy0.text); yygotominor.yy0.valid=true; }
-#line 713 "grammar.c"
+#line 762 "grammar.c"
         break;
       case 10: /* expr ::= VAR ASSIGN expr */
 #line 56 "grammar.lemon"
 { pEval->setVar(yymsp[-2].minor.yy0.text, yymsp[0].minor.yy0.dValue); yygotominor.yy0.dValue = yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=false; }
-#line 718 "grammar.c"
+#line 767 "grammar.c"
         break;
       case 11: /* expr ::= expr PLUS expr */
 #line 57 "grammar.lemon"
 { yygotominor.yy0.dValue = yymsp[-2].minor.yy0.dValue + yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=yymsp[0].minor.yy0.valid; }
-#line 723 "grammar.c"
+#line 772 "grammar.c"
         break;
       case 12: /* expr ::= expr MINUS expr */
 #line 58 "grammar.lemon"
 { yygotominor.yy0.dValue = yymsp[-2].minor.yy0.dValue - yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=yymsp[0].minor.yy0.valid; }
-#line 728 "grammar.c"
+#line 777 "grammar.c"
         break;
       case 13: /* expr ::= expr MULT expr */
 #line 59 "grammar.lemon"
 { yygotominor.yy0.dValue = yymsp[-2].minor.yy0.dValue * yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=yymsp[0].minor.yy0.valid; }
-#line 733 "grammar.c"
+#line 782 "grammar.c"
         break;
       case 14: /* expr ::= expr DIVIDE expr */
 #line 60 "grammar.lemon"
@@ -740,12 +789,12 @@ static void yy_reduce(
    else pEval->parseError("Div by zero");
    yygotominor.yy0.valid=yymsp[0].minor.yy0.valid; 
 }
-#line 744 "grammar.c"
+#line 793 "grammar.c"
         break;
       case 15: /* expr ::= PARENL expr PARENR */
 #line 67 "grammar.lemon"
 { yygotominor.yy0.dValue = yymsp[-1].minor.yy0.dValue; yygotominor.yy0.valid=yymsp[-1].minor.yy0.valid; }
-#line 749 "grammar.c"
+#line 798 "grammar.c"
         break;
       default:
       /* (0) main ::= in */ yytestcase(yyruleno==0);
@@ -753,14 +802,16 @@ static void yy_reduce(
       /* (2) in ::= in stmt */ yytestcase(yyruleno==2);
       /* (3) stmt ::= ENDS */ yytestcase(yyruleno==3);
         break;
+/********** End reduce actions ************************************************/
   };
+  assert( yyruleno>=0 && yyruleno<sizeof(yyRuleInfo)/sizeof(yyRuleInfo[0]) );
   yygoto = yyRuleInfo[yyruleno].lhs;
   yysize = yyRuleInfo[yyruleno].nrhs;
   yypParser->yyidx -= yysize;
   yyact = yy_find_reduce_action(yymsp[-yysize].stateno,(YYCODETYPE)yygoto);
-  if( yyact < YYNSTATE ){
-#ifdef NDEBUG
-    /* If we are not debugging and the reduce action popped at least
+  if( yyact <= YY_MAX_SHIFTREDUCE ){
+    if( yyact>YY_MAX_SHIFT ) yyact += YY_MIN_REDUCE - YY_MIN_SHIFTREDUCE;
+    /* If the reduce action popped at least
     ** one element off the stack, then we can push the new element back
     ** onto the stack here, and skip the stack overflow test in yy_shift().
     ** That gives a significant speed improvement. */
@@ -770,13 +821,12 @@ static void yy_reduce(
       yymsp->stateno = (YYACTIONTYPE)yyact;
       yymsp->major = (YYCODETYPE)yygoto;
       yymsp->minor = yygotominor;
-    }else
-#endif
-    {
+      yyTraceShift(yypParser, yyact);
+    }else{
       yy_shift(yypParser,yyact,yygoto,&yygotominor);
     }
   }else{
-    assert( yyact == YYNSTATE + YYNRULE + 1 );
+    assert( yyact == YY_ACCEPT_ACTION );
     yy_accept(yypParser);
   }
 }
@@ -797,6 +847,8 @@ static void yy_parse_failed(
   while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
   /* Here code is inserted which will be executed whenever the
   ** parser fails */
+/************ Begin %parse_failure code ***************************************/
+/************ End %parse_failure code *****************************************/
   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 #endif /* YYNOERRORRECOVERY */
@@ -811,10 +863,12 @@ static void yy_syntax_error(
 ){
   ParseARG_FETCH;
 #define TOKEN (yyminor.yy0)
+/************ Begin %syntax_error code ****************************************/
 #line 33 "grammar.lemon"
 
   pEval->parseError("Syntax error");
-#line 818 "grammar.c"
+#line 871 "grammar.c"
+/************ End %syntax_error code ******************************************/
   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -833,10 +887,12 @@ static void yy_accept(
   while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
+/*********** Begin %parse_accept code *****************************************/
 #line 37 "grammar.lemon"
 
   pEval->parseOk();
-#line 840 "grammar.c"
+#line 895 "grammar.c"
+/*********** End %parse_accept code *******************************************/
   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -867,7 +923,9 @@ void Parse(
 ){
   YYMINORTYPE yyminorunion;
   int yyact;            /* The parser action. */
+#if !defined(YYERRORSYMBOL) && !defined(YYNOERRORRECOVERY)
   int yyendofinput;     /* True if we are at the end of input */
+#endif
 #ifdef YYERRORSYMBOL
   int yyerrorhit = 0;   /* True if yymajor has invoked an error */
 #endif
@@ -888,26 +946,34 @@ void Parse(
     yypParser->yyerrcnt = -1;
     yypParser->yystack[0].stateno = 0;
     yypParser->yystack[0].major = 0;
+#ifndef NDEBUG
+    if( yyTraceFILE ){
+      fprintf(yyTraceFILE,"%sInitialize. Empty stack. State 0\n",
+              yyTracePrompt);
+    }
+#endif
   }
   yyminorunion.yy0 = yyminor;
+#if !defined(YYERRORSYMBOL) && !defined(YYNOERRORRECOVERY)
   yyendofinput = (yymajor==0);
+#endif
   ParseARG_STORE;
 
 #ifndef NDEBUG
   if( yyTraceFILE ){
-    fprintf(yyTraceFILE,"%sInput %s\n",yyTracePrompt,yyTokenName[yymajor]);
+    fprintf(yyTraceFILE,"%sInput '%s'\n",yyTracePrompt,yyTokenName[yymajor]);
   }
 #endif
 
   do{
     yyact = yy_find_shift_action(yypParser,(YYCODETYPE)yymajor);
-    if( yyact<YYNSTATE ){
-      assert( !yyendofinput );  /* Impossible to shift the $ token */
+    if( yyact <= YY_MAX_SHIFTREDUCE ){
+      if( yyact > YY_MAX_SHIFT ) yyact += YY_MIN_REDUCE - YY_MIN_SHIFTREDUCE;
       yy_shift(yypParser,yyact,yymajor,&yyminorunion);
       yypParser->yyerrcnt--;
       yymajor = YYNOCODE;
-    }else if( yyact < YYNSTATE + YYNRULE ){
-      yy_reduce(yypParser,yyact-YYNSTATE);
+    }else if( yyact <= YY_MAX_REDUCE ){
+      yy_reduce(yypParser,yyact-YY_MIN_REDUCE);
     }else{
       assert( yyact == YY_ERROR_ACTION );
 #ifdef YYERRORSYMBOL
@@ -957,7 +1023,7 @@ void Parse(
           yymx != YYERRORSYMBOL &&
           (yyact = yy_find_reduce_action(
                         yypParser->yystack[yypParser->yyidx].stateno,
-                        YYERRORSYMBOL)) >= YYNSTATE
+                        YYERRORSYMBOL)) >= YY_MIN_REDUCE
         ){
           yy_pop_parser_stack(yypParser);
         }
@@ -1007,5 +1073,15 @@ void Parse(
 #endif
     }
   }while( yymajor!=YYNOCODE && yypParser->yyidx>=0 );
+#ifndef NDEBUG
+  if( yyTraceFILE ){
+    int i;
+    fprintf(yyTraceFILE,"%sReturn. Stack=",yyTracePrompt);
+    for(i=1; i<=yypParser->yyidx; i++)
+      fprintf(yyTraceFILE,"%c%s", i==1 ? '[' : ' ', 
+              yyTokenName[yypParser->yystack[i].major]);
+    fprintf(yyTraceFILE,"]\n");
+  }
+#endif
   return;
 }

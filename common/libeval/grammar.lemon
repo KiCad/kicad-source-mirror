@@ -20,14 +20,14 @@
 %token_type { numEval::TokenType }
 %extra_argument { NumericEvaluator* pEval }
 
-%nonassoc VAR ASSIGN UNIT SEMCOL.
+%nonassoc VAR ASSIGN SEMCOL.
 %left PLUS MINUS.
+%right UNIT.
 %left DIVIDE MULT.
 
 %include {
 #include <assert.h>
-#include <math.h>
-#include <libeval/numeric_evaluator.h>
+#include "numeric_evaluator.h"
 }
 
 %syntax_error {
@@ -50,7 +50,7 @@ stmt ::= expr(A) ENDS.                    { pEval->parseSetResult(A.valid ? A.dV
 stmt ::= expr SEMCOL.                     { pEval->parseSetResult(NAN); }
 
 expr(A) ::= VALUE(B).                     { A.dValue = B.dValue; A.valid=true; }
-expr(A) ::= VALUE(B) UNIT(C).             { A.dValue = B.dValue * C.dValue; A.valid=true; }
+expr(A) ::= expr(B) UNIT(C).              { A.dValue = B.dValue * C.dValue; A.valid=B.valid; }
 expr(A) ::= MINUS expr(B).                { A.dValue = -B.dValue; A.valid=B.valid; }
 expr(A) ::= VAR(B).                       { A.dValue = pEval->getVar(B.text); A.valid=true; }
 expr(A) ::= VAR(B) ASSIGN expr(C).        { pEval->setVar(B.text, C.dValue); A.dValue = C.dValue; A.valid=false; }
