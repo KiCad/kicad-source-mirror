@@ -58,7 +58,7 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     m_scaleSlider->SetStep( 25 );
 
     // Embed the hotkeys list
-    HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( g_Eeschema_Hokeys_Descr );
+    HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( g_Schematic_Hokeys_Descr );
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, sections );
     m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 

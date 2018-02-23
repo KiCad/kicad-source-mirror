@@ -23,9 +23,13 @@
 
 #include <dialog_hotkeys_editor.h>
 
-void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
+void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys,
+        EDA_HOTKEY_CONFIG* aShowHotkeys )
 {
-    HOTKEYS_EDITOR_DIALOG dialog( aParent, aHotkeys );
+    if( !aShowHotkeys )
+        aShowHotkeys = aHotkeys;
+
+    HOTKEYS_EDITOR_DIALOG dialog( aParent, aHotkeys, aShowHotkeys );
 
     int diag = dialog.ShowModal();
 
@@ -38,12 +42,13 @@ void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
 
 
 HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent,
-        EDA_HOTKEY_CONFIG* aHotkeys ) :
+        EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys ) :
     HOTKEYS_EDITOR_DIALOG_BASE( aParent ),
-    m_hotkeys( aHotkeys )
+    m_hotkeys( aHotkeys ),
+    m_showhotkeys( aShowHotkeys )
 {
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys,
-            WIDGET_HOTKEY_LIST::GenSections( aHotkeys ) );
+            WIDGET_HOTKEY_LIST::GenSections( aShowHotkeys ) );
     m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 
     m_sdbSizerOK->SetDefault();

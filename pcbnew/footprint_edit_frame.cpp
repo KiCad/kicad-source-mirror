@@ -214,7 +214,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
 END_EVENT_TABLE()
 
-#define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
@@ -833,7 +832,7 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Module_Editor_Hotkeys_Descr );
+        InstallHotkeyFrame( this, g_Pcbnew_Editor_Hotkeys_Descr, g_Module_Editor_Hotkeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:

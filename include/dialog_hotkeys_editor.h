@@ -41,6 +41,7 @@ class HOTKEYS_EDITOR_DIALOG : public HOTKEYS_EDITOR_DIALOG_BASE
 {
 protected:
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
+    struct EDA_HOTKEY_CONFIG* m_showhotkeys;
 
     WIDGET_HOTKEY_LIST* m_hotkeyListCtrl;
 
@@ -53,7 +54,8 @@ protected:
     }
 
 public:
-    HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
+    HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys,
+            EDA_HOTKEY_CONFIG* aShowHotkeys );
 
     ~HOTKEYS_EDITOR_DIALOG() {};
 
@@ -81,8 +83,10 @@ private:
  * Create a hotkey editor dialog window with the provided hotkey configuration array
  *
  * @param aParent is the parent window
- * @param aHotkeys is the hotkey configuration array
+ * @param aHotkeys is the hotkey configuration array for read/writing
+ * @param aShowHotkeys is the hotkey configuration array that is displayed (subset)
  */
-void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
+void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys,
+        EDA_HOTKEY_CONFIG* aShowHotkeys = NULL );
 
 #endif

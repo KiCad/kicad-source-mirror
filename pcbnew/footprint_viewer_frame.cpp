@@ -124,9 +124,6 @@ END_EVENT_TABLE()
 #define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT
 #endif
 
-#define FOOTPRINT_VIEWER_FRAME_NAME         "ModViewFrame"
-#define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   "ModViewFrameModal"
-
 
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType ) :
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),

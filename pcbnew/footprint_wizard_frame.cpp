@@ -91,8 +91,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-#define FOOTPRINT_WIZARD_FRAME_NAME wxT( "FootprintWizard" )
-
 /* Note: our FOOTPRINT_WIZARD_FRAME is always modal.
  * Note:
  * On windows, when the frame with type wxFRAME_FLOAT_ON_PARENT is displayed

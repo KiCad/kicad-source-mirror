@@ -39,6 +39,7 @@
 #include <macros.h>
 #include <dialog_hotkeys_editor.h>
 #include <menus_helpers.h>
+#include <draw_frame.h>
 #include <tool/tool_manager.h>
 
 #include <wx/apptrait.h>
@@ -570,6 +571,12 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     else
     {
         wxString configName( ConfigBaseName() );
+        if( configName == SCH_EDIT_FRAME_NAME  || configName == LIB_EDIT_FRAME_NAME )
+            configName = EESCHEMA_HOTKEY_NAME;
+        else if( configName == PCB_EDIT_FRAME_NAME  ||
+                configName == FOOTPRINT_EDIT_FRAME_NAME )
+            configName = PCBNEW_HOTKEY_NAME;
+
         wxFileName fn( configName );
         fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
         fn.SetPath( GetKicadConfigPath() );
@@ -624,7 +631,7 @@ int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* a
         data.Replace( "\\n", "\n", true );
 
     // parse
-    ParseHotkeyConfig( data, aDescList );
+    ParseHotkeyConfig( data, aDescList, aFilename );
 
     // cleanup
     cfgfile.Close();
@@ -634,6 +641,20 @@ int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* a
 
 int ReadHotkeyConfig( const wxString& aAppname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
+    // For Eeschema and Pcbnew frames, we try twice.
+    // The first time, we try to read the new combined file.  If it doesn't exist,
+    // we fall back to reading the old, frame-based file
+    if( aAppname == LIB_EDIT_FRAME_NAME || aAppname == SCH_EDIT_FRAME_NAME )
+    {
+        if( ReadHotkeyConfigFile( EESCHEMA_HOTKEY_NAME, aDescList ) )
+            return 1;
+    }
+    else if( aAppname == PCB_EDIT_FRAME_NAME || aAppname == FOOTPRINT_EDIT_FRAME_NAME )
+    {
+        if( ReadHotkeyConfigFile( PCBNEW_HOTKEY_NAME, aDescList ) )
+            return 1;
+    }
+
     return ReadHotkeyConfigFile( aAppname, aDescList );
 }
 
@@ -644,7 +665,8 @@ int ReadHotkeyConfig( const wxString& aAppname, struct EDA_HOTKEY_CONFIG* aDescL
  * lines like [xxx] are tags (example: [common] or [libedit] which identify sections
  */
 void ParseHotkeyConfig( const wxString&           data,
-                        struct EDA_HOTKEY_CONFIG* aDescList )
+                        struct EDA_HOTKEY_CONFIG* aDescList,
+                        const wxString&           aAppname )
 {
     // Read the config
     wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
@@ -676,6 +698,19 @@ void ParseHotkeyConfig( const wxString&           data,
 
             continue;
         }
+
+        // Do not accept hotkey assignments from hotkey files that don't match the application
+        if( aAppname == LIB_EDIT_FRAME_NAME && line_type == wxT( "[eeschema]" ) )
+            CurrentHotkeyList = nullptr;
+
+        if( aAppname == SCH_EDIT_FRAME_NAME && line_type == wxT( "[libedit]" ) )
+            CurrentHotkeyList = nullptr;
+
+        if( aAppname == PCB_EDIT_FRAME_NAME && line_type == wxT( "[footprinteditor]" ) )
+            CurrentHotkeyList = nullptr;
+
+        if( aAppname == FOOTPRINT_EDIT_FRAME_NAME && line_type == wxT( "[pcbnew]" ) )
+            CurrentHotkeyList = nullptr;
 
         if( line_type == wxT( "$Endlist" ) )
             break;

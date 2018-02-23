@@ -135,7 +135,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr, g_Libedit_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
@@ -206,7 +206,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr, g_Schematic_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
@@ -514,6 +514,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     long tmp;
 
+    ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Schematic_Hokeys_Descr );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
@@ -681,6 +682,8 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    ReadHotkeyConfig( LIB_EDIT_FRAME_NAME, g_Libedit_Hokeys_Descr );
 
     SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );

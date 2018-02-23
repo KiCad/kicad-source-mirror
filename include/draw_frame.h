@@ -46,6 +46,14 @@ namespace KIGFX
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
+#define LIB_EDIT_FRAME_NAME                 wxT( "LibeditFrame" )
+#define SCH_EDIT_FRAME_NAME                 wxT( "SchematicFrame" )
+#define PL_EDITOR_FRAME_NAME                wxT( "PlEditorFrame" )
+#define FOOTPRINT_WIZARD_FRAME_NAME         wxT( "FootprintWizard" )
+#define FOOTPRINT_EDIT_FRAME_NAME           wxT( "ModEditFrame" )
+#define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
+#define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
+#define PCB_EDIT_FRAME_NAME                 wxT( "PcbFrame" )
 
 /**
  * Class EDA_DRAW_FRAME

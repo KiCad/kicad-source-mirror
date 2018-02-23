@@ -284,13 +284,6 @@ public:
     // Read/Save and Import/export hotkeys config
 
     /**
-     * Function ReadHotkeyConfig
-     * Read configuration data and fill the current hotkey list with hotkeys
-     * @param aDescList = current hotkey list descr. to initialize.
-     */
-    int ReadHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList );
-
-    /**
      * Function WriteHotkeyConfig
      * Store the current hotkey list
      * It is stored using the standard wxConfig mechanism or a file.
@@ -302,15 +295,6 @@ public:
      * lines starting with # are comments
      */
     virtual int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL );
-
-    /**
-     * Function ReadHotkeyConfigFile
-     * Read an old configuration file (&ltfile&gt.key) and fill the current hotkey list
-     * with hotkeys
-     * @param aFilename = file name to read.
-     * @param aDescList = current hotkey list descr. to initialize.
-     */
-    int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function ImportHotkeyConfigFromFile
