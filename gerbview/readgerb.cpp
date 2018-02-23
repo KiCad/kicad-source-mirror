@@ -50,6 +50,10 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
         gerber = new GERBER_FILE_IMAGE( layer );
         images->AddGbrImage( gerber, layer );
     }
+    else
+    {
+        Erase_Current_DrawLayer( false );
+    }
 
     /* Read the gerber file */
     bool success = gerber->LoadGerberFile( GERBER_FullFileName );
