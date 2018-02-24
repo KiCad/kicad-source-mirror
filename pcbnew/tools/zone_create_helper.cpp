@@ -61,12 +61,9 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
 
     // Get the current default settings for zones
     ZONE_SETTINGS zoneInfo = frame.GetZoneSettings();
+    zoneInfo.m_CurrentZone_Layer = frame.GetScreen()->m_Active_Layer;
     zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
-    zoneInfo.m_CurrentZone_Layer = frame.GetScreen()->m_Active_Layer;
-
-    if( !IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
-        zoneInfo.m_CurrentZone_Layer = F_Cu;
 
     if ( m_params.m_mode != DRAWING_TOOL::ZONE_MODE::GRAPHIC_POLYGON  )
     {
@@ -78,10 +75,17 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         if( m_params.m_keepout )
             dialogResult = InvokeKeepoutAreaEditor( &frame, &zoneInfo );
         else
-            dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
+        {
+            if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
+                dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
+            else
+                dialogResult = InvokeNonCopperZonesEditor( &frame, nullptr, &zoneInfo );
+        }
 
         if( dialogResult == ZONE_ABORT )
+        {
             return nullptr;
+        }
     }
 
     auto newZone = std::make_unique<ZONE_CONTAINER>( &board );
