@@ -333,6 +333,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hotkeysDescrList = g_Board_Editor_Hotkeys_Descr;
     m_hasAutoSave = true;
     m_microWaveToolBar = NULL;
+    m_Layers = nullptr;
 
     m_rotationAngle = 900;
 
