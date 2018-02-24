@@ -247,7 +247,7 @@ void FP_CACHE::Save()
 
 
 void FP_CACHE::Load()
-{    
+{
     wxDir dir( m_lib_path.GetPath() );
 
     if( !dir.IsOpened() )
@@ -1944,9 +1944,9 @@ void PCB_IO::init( const PROPERTIES* aProperties )
 }
 
 
-void PCB_IO::validateCache( const wxString& aLibraryPath )
+void PCB_IO::validateCache( const wxString& aLibraryPath, bool checkModified )
 {
-    if( !m_cache || m_cache->IsModified() )
+    if( !m_cache || ( checkModified && m_cache->IsModified() ) )
     {
         // a spectacular episode in memory management:
         delete m_cache;
@@ -1991,13 +1991,23 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
 }
 
 
-MODULE* PCB_IO::LoadEnumeratedFootprint( const wxString& aLibraryPath,
-                                         const wxString& aFootprintName,
-                                         const PROPERTIES* aProperties )
+MODULE* PCB_IO::doLoadFootprint( const wxString& aLibraryPath,
+                                 const wxString& aFootprintName,
+                                 const PROPERTIES* aProperties,
+                                 bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
+
+    try
+    {
+        validateCache( aLibraryPath, checkModified );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        // do nothing with the error
+    }
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
@@ -2013,14 +2023,18 @@ MODULE* PCB_IO::LoadEnumeratedFootprint( const wxString& aLibraryPath,
 }
 
 
+MODULE* PCB_IO::LoadEnumeratedFootprint( const wxString& aLibraryPath,
+                                         const wxString& aFootprintName,
+                                         const PROPERTIES* aProperties )
+{
+    return doLoadFootprint( aLibraryPath, aFootprintName, aProperties, false );
+}
+
+
 MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                const PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-
-    validateCache( aLibraryPath );
-
-    return LoadEnumeratedFootprint( aLibraryPath, aFootprintName, aProperties );
+    return doLoadFootprint( aLibraryPath, aFootprintName, aProperties, true );
 }
 
 

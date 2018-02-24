@@ -191,7 +191,10 @@ protected:
     NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
                                     ///< are stored with consecutive integers as net codes
 
-    void validateCache( const wxString& aLibraryPath );
+    void validateCache( const wxString& aLibraryPath, bool checkModified = true );
+
+    MODULE* doLoadFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
+            const PROPERTIES* aProperties, bool checkModified );
 
     void init( const PROPERTIES* aProperties );
 
