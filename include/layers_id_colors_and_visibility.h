@@ -302,10 +302,7 @@ enum GERBVIEW_LAYER_ID: int
 // from a dialog, but have a visibility control flag.
 // Here is a mask to set them visible, to be sure they are displayed
 // after loading a board for instance
-#define MIN_VISIBILITY_MASK int( (1 << GAL_LAYER_INDEX( LAYER_TRACKS ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS_TH ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS_PLATEDHOLES ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_NON_PLATEDHOLES ) ) +\
+#define MIN_VISIBILITY_MASK int( ( 1 << GAL_LAYER_INDEX( LAYER_PADS_PLATEDHOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) )
