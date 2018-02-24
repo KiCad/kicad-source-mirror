@@ -72,8 +72,8 @@ private:
         FinishDialogSettings();
     }
 
-    void            setGridSize( const wxRealPoint& grid );
-    bool            getGridSize( wxRealPoint& aGrisSize );
+    void            setGridSize( const wxPoint& grid );
+    bool            getGridSize( wxPoint& aGrisSize );
 
     void            setGridOrigin( const wxPoint& grid );
     bool            getGridOrigin( wxPoint& aGridOrigin );
@@ -112,7 +112,7 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
         return false;
     }
 
-    wxRealPoint gridSize;
+    wxPoint gridSize;
 
     if( !getGridSize( gridSize ) )
     {
@@ -137,7 +137,7 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
     // User grid
     BASE_SCREEN* screen = m_parent->GetScreen();
-    screen->AddGrid( gridSize, g_UserUnit, ID_POPUP_GRID_USER );
+    screen->AddGrid( gridSize, EDA_UNITS_T::UNSCALED_UNITS, ID_POPUP_GRID_USER );
 
     // If the user grid is the current option, recall SetGrid()
     // to force new values put in list as current grid value
@@ -171,7 +171,7 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
 }
 
 
-void DIALOG_SET_GRID::setGridSize( const wxRealPoint& grid )
+void DIALOG_SET_GRID::setGridSize( const wxPoint& grid )
 {
     wxString msg;
 
@@ -183,7 +183,7 @@ void DIALOG_SET_GRID::setGridSize( const wxRealPoint& grid )
 }
 
 
-bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGridSize )
+bool DIALOG_SET_GRID::getGridSize( wxPoint& aGridSize )
 {
     double x, y;
 
@@ -198,8 +198,6 @@ bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGridSize )
     if( x < MIN_GRID_SIZE || x > MAX_GRID_SIZE )
         return false;
 
-    aGridSize.x = x;
-
     const wxString& y_str = m_OptGridSizeY->GetValue();
 
     if( !y_str.ToDouble( &y ) )
@@ -211,7 +209,8 @@ bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGridSize )
     if( y < MIN_GRID_SIZE || y > MAX_GRID_SIZE )
         return false;
 
-    aGridSize.y = y;
+    aGridSize.x = KiROUND( x );
+    aGridSize.y = KiROUND( y );
 
     return true;
 }

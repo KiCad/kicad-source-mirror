@@ -68,7 +68,7 @@ class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
     PCB_DISPLAY_OPTIONS m_DisplayOptions;
-    wxRealPoint m_UserGridSize;
+    wxPoint m_UserGridSize;
 
     int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
     int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
