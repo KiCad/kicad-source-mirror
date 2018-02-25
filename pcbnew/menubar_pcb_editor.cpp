@@ -756,13 +756,13 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
     contrastModeSubMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
-                          HK_DEC_LAYER_ALHPA );
+                          HK_DEC_LAYER_ALPHA );
     AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
                  text, _( "Make the current layer more transparent" ),
                  KiBitmap( contrast_mode_xpm ) );
 
     text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
-                          HK_INC_LAYER_ALHPA );
+                          HK_INC_LAYER_ALPHA );
     AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
                  text, _( "Make the current layer less transparent" ),
                  KiBitmap( contrast_mode_xpm ) );

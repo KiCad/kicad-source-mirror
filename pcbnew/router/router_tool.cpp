@@ -84,7 +84,7 @@ TOOL_ACTION PCB_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleT
         _( "Run push & shove router (single tracks)" ), ps_router_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
-        AS_GLOBAL, '6',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_DIFF_PAIR ),
         _( "Interactive Router (Differential Pairs)" ),
         _( "Run push & shove router (differential pairs)" ), ps_diff_pair_xpm, AF_ACTIVATE );
 
@@ -99,15 +99,15 @@ TOOL_ACTION PCB_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRo
         _( "Open Differential Pair Dimension settings" ), ps_diff_pair_gap_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
-        AS_GLOBAL, '7',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SINGLE ),
         _( "Tune length of a single track" ), "", ps_tune_length_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
-        AS_GLOBAL, '8',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DIFF_PAIR ),
         _( "Tune length of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
-        AS_GLOBAL, '9',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SKEW ),
         _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",

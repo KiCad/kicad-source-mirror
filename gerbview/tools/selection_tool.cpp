@@ -70,7 +70,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Cle
         "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION GERBVIEW_ACTIONS::measureTool( "gerbview.InteractiveSelection.measureTool",
-        AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
         _( "Measure Tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 

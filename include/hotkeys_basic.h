@@ -254,6 +254,8 @@ enum common_hotkey_id_commnand {
     HK_ZOOM_CENTER,
     HK_ZOOM_AUTO,
     HK_ZOOM_SELECTION,
+    HK_TOGGLE_CURSOR,
+    HK_MEASURE_TOOL,
     HK_COMMON_END
 };
 

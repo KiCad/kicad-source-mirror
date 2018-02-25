@@ -96,6 +96,16 @@ static EDA_HOTKEY HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer"
 static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static EDA_HOTKEY HkBackspace( _HKI( "Delete Track Segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( _HKI( "Add New Track" ), HK_ADD_NEW_TRACK, 'X' );
+
+static EDA_HOTKEY HkRouteDiffPair( _HKI( "Route Differential Pair (Modern Toolset only)" ),
+                                   HK_ROUTE_DIFF_PAIR, '6' );
+static EDA_HOTKEY HkRouteTuneSingle( _HKI( "Tune Single Track (Modern Toolset only)" ),
+                                     HK_ROUTE_TUNE_SINGLE, '7' );
+static EDA_HOTKEY HkRouteTuneDiffPair( _HKI( "Tune Differential Pair Length (Modern Toolset only)" ),
+                                       HK_ROUTE_TUNE_DIFF_PAIR, '8' );
+static EDA_HOTKEY HkRouteTuneSkew( _HKI( "Tune Differential Pair Skew (Modern Toolset only)" ),
+                                   HK_ROUTE_TUNE_SKEW, '9' );
+
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),
                                               HK_SEL_LAYER_AND_ADD_THROUGH_VIA, '<' );
@@ -110,6 +120,8 @@ static EDA_HOTKEY HkEditBoardItem( _HKI( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static EDA_HOTKEY HkEditWithModedit( _HKI( "Edit with Footprint Editor" ), HK_EDIT_MODULE_WITH_MODEDIT, 'E' + GR_KB_CTRL );
 static EDA_HOTKEY HkFlipItem( _HKI( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( _HKI( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
+static EDA_HOTKEY HkRotateItemClockwise( _HKI( "Rotate Item Clockwise (Modern Toolset only)" ),
+                                         HK_ROTATE_ITEM_CLOCKWISE, GR_KB_SHIFT + 'R' );
 static EDA_HOTKEY HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M' );
 static EDA_HOTKEY HkMoveItemExact( _HKI( "Move Item Exactly" ), HK_MOVE_ITEM_EXACT, 'M' + GR_KB_CTRL );
 static EDA_HOTKEY HkPositionItemRelative( _HKI( "Position Item Relative" ), HK_POSITION_RELATIVE, 'R' + GR_KB_CTRL );
@@ -216,9 +228,15 @@ static EDA_HOTKEY HkAddModule( _HKI( "Add Footprint" ), HK_ADD_MODULE, 'O' );
 
 // These hotkeys work only in GAL canvas, because the legacy canvas using wxDC does not know
 // the transparency (alpha channel)
-static EDA_HOTKEY HkIncLayerAlhpa( _HKI( "Increment Layer Transparency" ), HK_INC_LAYER_ALHPA, '}' );
+static EDA_HOTKEY HkIncLayerAlpha( _HKI( "Increment Layer Transparency (Modern Toolset only)" ),
+                                   HK_INC_LAYER_ALPHA, '}' );
 
-static EDA_HOTKEY HkDecLayerAlhpa( _HKI( "Decrement Layer Transparency" ), HK_DEC_LAYER_ALHPA, '{' );
+static EDA_HOTKEY HkDecLayerAlpha( _HKI( "Decrement Layer Transparency (Modern Toolset only)" ),
+                                   HK_DEC_LAYER_ALPHA, '{' );
+
+// These two are currently unused, and are intentionally not added to a list below.
+static EDA_HOTKEY HkIncHighContrast( _HKI( "Increment High Contrast" ), HK_HIGHCONTRAST_INC, '>' );
+static EDA_HOTKEY HkDecHighContrast( _HKI( "Decrement High Contrast" ), HK_HIGHCONTRAST_DEC, '<' );
 
 static EDA_HOTKEY HkSelectConnection( _HKI( "Select Trivial Connection" ), HK_SEL_TRIVIAL_CONNECTION, 'U' );
 
@@ -255,6 +273,11 @@ static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int)
 static EDA_HOTKEY HkEditCopy( _HKI( "Copy" ), HK_EDIT_COPY, GR_KB_CTRL + 'C', (int) wxID_COPY );
 static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V', (int) wxID_PASTE );
 
+static EDA_HOTKEY HkToggleCursor( _HKI( "Toggle Cursor Display (Modern Toolset only)" ),
+                                  HK_TOGGLE_CURSOR, 'X' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkMeasureTool( _HKI( "Measure Distance (Modern Toolset only)" ),
+                                 HK_MEASURE_TOOL, 'M' + GR_KB_SHIFTCTRL );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -266,7 +289,9 @@ EDA_HOTKEY* common_Hotkey_List[] =
     &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin, &HkResetGridOrigin,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
-    &HkIncLayerAlhpa, &HkDecLayerAlhpa,
+    &HkIncLayerAlpha, &HkDecLayerAlpha,
+    &HkToggleCursor,
+    &HkMeasureTool,
     NULL
 };
 
@@ -286,7 +311,12 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 {
     &HkTrackDisplayMode,       &HkDelete,
     &HkBackspace,
-    &HkAddNewTrack,            &HkAddThroughVia, &HkAddBlindBuriedVia,
+    &HkAddNewTrack,
+    &HkRouteDiffPair,
+    &HkRouteTuneSingle,
+    &HkRouteTuneDiffPair,
+    &HkRouteTuneSkew,
+    &HkAddThroughVia, &HkAddBlindBuriedVia,
     &HkAddMicroVia,
     &HkSelLayerAndAddThroughVia, &HkSelLayerAndAddBlindBuriedVia,
     &HkSwitchTrackPosture,
@@ -294,7 +324,8 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkPlaceItem,              &HkCopyItem,
     &HkMoveItem,
     &HkFlipItem,
-    &HkRotateItem,             &HkMoveItemExact, &HkPositionItemRelative,
+    &HkRotateItem,             &HkRotateItemClockwise,
+    &HkMoveItemExact,          &HkPositionItemRelative,
     &HkDuplicateItem,          &HkDuplicateItemAndIncrement, &HkCreateArray,
     &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,

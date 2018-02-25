@@ -29,14 +29,15 @@
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_screen.h>
+#include <hotkeys.h>
 
 #include <tool/common_tools.h>
 
 
 static TOOL_ACTION ACT_toggleCursor( "common.Control.toggleCursor",
-        AS_GLOBAL, MD_CTRL + MD_SHIFT + 'X',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
         _( "Toggle Always Show Cursor" ),
-         _( "Toogle display of the cursor, even when not in an interactive tool" ) );
+        _( "Toogle display of the cursor, even when not in an interactive tool" ) );
 
 
 COMMON_TOOLS::COMMON_TOOLS() :

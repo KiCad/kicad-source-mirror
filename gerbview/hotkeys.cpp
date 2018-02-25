@@ -105,6 +105,9 @@ static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Modern Toolset with software g
 #endif
                                  WXK_F12 );
 
+static EDA_HOTKEY HkMeasureTool( _HKI( "Measure Distance (Modern Toolset only)" ),
+                                HK_MEASURE_TOOL, 'M' + GR_KB_SHIFTCTRL );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkHelp,
@@ -117,6 +120,7 @@ EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkCanvasDefault,
     &HkCanvasOpenGL,
     &HkCanvasCairo,
+    &HkMeasureTool,
     NULL
 };
 

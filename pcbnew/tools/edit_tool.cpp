@@ -120,7 +120,7 @@ TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         _( "Create Array..." ), _( "Create array" ), array_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
-        AS_GLOBAL, MD_SHIFT + 'R',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM_CLOCKWISE ),
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm, AF_NONE, (void*) -1 );
 
@@ -166,17 +166,17 @@ TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSele
         "", "", nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
-        AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
         _( "Measuring Tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::copyToClipboard( "pcbnew.InteractiveEdit.CopyToClipboard",
-        AS_GLOBAL, MD_CTRL + int( 'C' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
         _( "Copy" ), _( "Copy selected content to clipboard" ),
         copy_xpm );
 
 TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard",
-        AS_GLOBAL, MD_CTRL + int( 'X' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
         _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
 
