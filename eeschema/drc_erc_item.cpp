@@ -63,7 +63,7 @@ wxString DRC_ITEM::GetErrorText() const
 
     default:
         wxFAIL_MSG( "Missing ERC error description" );
-        return wxString( wxT("Unkown.") );
+        return wxString( wxT("Unknown.") );
     }
 }
 
