@@ -886,8 +886,6 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
         m_toolManager->RunAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
         GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
 
-        // NOTE(JE) The next two calls are slow (scales with number of items)
-        GetGalCanvas()->SetTopLayer( GERBER_DRAW_LAYER( aLayer ) );
         GetGalCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );
 
         GetGalCanvas()->Refresh();
