@@ -671,21 +671,26 @@ void VIEW::UpdateLayerColor( int aLayer )
 
 void VIEW::UpdateAllLayersColor()
 {
-    BOX2I r;
-
-    r.SetMaximum();
     m_gal->BeginUpdate();
 
-    for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
+    for( VIEW_ITEM* item : m_allItems )
     {
-        VIEW_LAYER* l = &( ( *i ).second );
+        auto viewData = item->viewPrivData();
 
-        // There is no point in updating non-cached layers
-        if( !IsCached( l->id ) )
+        if( !viewData )
             continue;
 
-        updateItemsColor visitor( l->id, m_painter, m_gal );
-        l->items->Query( r, visitor );
+        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+        viewData->getLayers( layers, layers_count );
+
+        for( int i = 0; i < layers_count; ++i )
+        {
+            const COLOR4D color = m_painter->GetSettings()->GetColor( item, layers[i] );
+            int group = viewData->getGroup( layers[i] );
+
+            if( group >= 0 )
+                m_gal->ChangeGroupColor( group, color );
+        }
     }
 
     m_gal->EndUpdate();
@@ -793,17 +798,26 @@ void VIEW::ClearTopLayers()
 
 void VIEW::UpdateAllLayersOrder()
 {
-    BOX2I r;
-    r.SetMaximum();
-
     sortLayers();
     m_gal->BeginUpdate();
 
-    for( LAYER_MAP::value_type& l : m_layers )
+    for( VIEW_ITEM* item : m_allItems )
     {
-        int layer = l.first;
-        changeItemsDepth visitor( layer, l.second.renderingOrder, m_gal );
-        m_layers[layer].items->Query( r, visitor );
+        auto viewData = item->viewPrivData();
+
+        if( !viewData )
+            continue;
+
+        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+        viewData->getLayers( layers, layers_count );
+
+        for( int i = 0; i < layers_count; ++i )
+        {
+            int group = viewData->getGroup( layers[i] );
+
+            if( group >= 0 )
+                m_gal->ChangeGroupDepth( group, m_layers[layers[i]].renderingOrder );
+        }
     }
 
     m_gal->EndUpdate();
