@@ -21,6 +21,7 @@
 
 #include <deque>
 #include <gal/color4d.h>
+#include <view/view.h>
 
 #include <geometry/shape_rect.h>
 #include <geometry/shape_convex.h>
@@ -269,6 +270,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     case SH_POLY_SET:
     case SH_COMPOUND:
+    case SH_ARC:
         break;          // Not yet in use
         }
     }
@@ -341,6 +343,6 @@ const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
     return color;
 }
 
-const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -300;
-const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -310;
-const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -346;
+const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 10;
+const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 20;
+const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 50;
