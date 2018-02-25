@@ -121,7 +121,7 @@ protected:
     int           m_max;
 
     ///> Evaluator
-    NumericEvaluator m_eval;
+    NUMERIC_EVALUATOR m_eval;
     bool             m_allowEval;
 };
 

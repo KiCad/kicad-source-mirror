@@ -27,7 +27,8 @@
 TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const
         wxString& aValue, const wxPoint& aPos, const wxSize& aSize, long aStyle,
         const wxValidator& aValidator, const wxString& aName )
-    : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator, aName )
+    : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator, aName ),
+      m_eval( g_UserUnit )
 {
     Connect( wxEVT_SET_FOCUS,
             wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusGet ), NULL, this );
@@ -41,16 +42,16 @@ TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const
 void TEXT_CTRL_EVAL::SetValue( const wxString& aValue )
 {
     wxTextCtrl::SetValue( aValue );
-    m_eval.clear( this );
+    m_eval.Clear();
 }
 
 
 void TEXT_CTRL_EVAL::onTextFocusGet( wxFocusEvent& aEvent )
 {
-    auto oldStr = m_eval.textInput( this );
+    wxString oldStr = m_eval.OriginalText();
 
-    if( oldStr )
-        wxTextCtrl::SetValue( wxString::FromUTF8( oldStr ) );
+    if( oldStr.length() )
+        SetValue( oldStr );
 
     aEvent.Skip();
 }
@@ -78,6 +79,6 @@ void TEXT_CTRL_EVAL::evaluate()
     if( GetValue().IsEmpty() )
         wxTextCtrl::SetValue( "0" );
 
-    if( m_eval.process( GetValue().mb_str(), this ) )
-        wxTextCtrl::SetValue( wxString::FromUTF8( m_eval.result() ) );
+    if( m_eval.Process( GetValue() ) )
+        SetValue( m_eval.Result() );
 }

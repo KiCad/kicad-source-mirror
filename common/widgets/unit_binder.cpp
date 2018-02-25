@@ -65,10 +65,10 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 {
     if( m_allowEval )
     {
-        auto oldStr = m_eval.textInput( this );
+        wxString oldStr = m_eval.OriginalText();
 
-        if( oldStr )
-            m_textEntry->SetValue( wxString::FromUTF8( oldStr ) );
+        if( oldStr.length() )
+            m_textEntry->SetValue( oldStr );
     }
 
     aEvent.Skip();
@@ -104,10 +104,10 @@ void UNIT_BINDER::onTextEnter( wxCommandEvent& aEvent )
 void UNIT_BINDER::evaluate()
 {
     if( m_textEntry->GetValue().IsEmpty() )
-        m_textEntry->SetValue( "0" );
+        m_textEntry->ChangeValue( "0" );
 
-    if( m_eval.process( m_textEntry->GetValue().mb_str(), this ) )
-        m_textEntry->SetValue( wxString::FromUTF8( m_eval.result() ) );
+    if( m_eval.Process( m_textEntry->GetValue() ) )
+        m_textEntry->ChangeValue( m_eval.Result() );
 }
 
 
@@ -137,7 +137,7 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
     {
         wxString msg = wxString::Format( _( "%s must be larger than %s." ),
                                          valueDescriptionFromLabel( m_label ),
-                                         StringFromValue( EDA_UNITS_T::MILLIMETRES, m_min, true ) );
+                                         StringFromValue( m_units, m_min, true ) );
         DisplayError( textInput->GetParent(), msg );
 
         if( setFocusOnError )
@@ -154,7 +154,7 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
     {
         wxString msg = wxString::Format( _( "%s must be smaller than %s." ),
                                          valueDescriptionFromLabel( m_label ),
-                                         StringFromValue( EDA_UNITS_T::MILLIMETRES, m_max, true ) );
+                                         StringFromValue( m_units, m_max, true ) );
         DisplayError( textInput->GetParent(), msg );
 
         if( setFocusOnError )
@@ -182,7 +182,7 @@ void UNIT_BINDER::SetValue( wxString aValue )
     m_textEntry->SetValue( aValue );
 
     if( m_allowEval )
-        m_eval.clear();
+        m_eval.Clear();
 
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
 }

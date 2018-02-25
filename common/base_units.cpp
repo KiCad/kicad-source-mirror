@@ -397,10 +397,10 @@ int ValueFromTextCtrl( const wxTextCtrl& aTextCtr )
 {
     int value;
     wxString msg = aTextCtr.GetValue();
-    NumericEvaluator eval;
+    NUMERIC_EVALUATOR eval( g_UserUnit );
 
-    if( eval.process( msg.mb_str() ) )
-        msg = wxString::FromUTF8( eval.result() );
+    if( eval.Process( msg ) )
+        msg = eval.Result();
 
     value = ValueFromString( g_UserUnit, msg );
 

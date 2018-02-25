@@ -98,9 +98,9 @@ typedef union {
 #ifndef YYSTACKDEPTH
 #define YYSTACKDEPTH 100
 #endif
-#define ParseARG_SDECL  NumericEvaluator* pEval ;
-#define ParseARG_PDECL , NumericEvaluator* pEval 
-#define ParseARG_FETCH  NumericEvaluator* pEval  = yypParser->pEval 
+#define ParseARG_SDECL  NUMERIC_EVALUATOR* pEval ;
+#define ParseARG_PDECL , NUMERIC_EVALUATOR* pEval
+#define ParseARG_FETCH  NUMERIC_EVALUATOR* pEval  = yypParser->pEval
 #define ParseARG_STORE yypParser->pEval  = pEval 
 #define YYNSTATE             16
 #define YYNRULE              16
@@ -757,12 +757,12 @@ static void yy_reduce(
         break;
       case 9: /* expr ::= VAR */
 #line 55 "grammar.lemon"
-{ yygotominor.yy0.dValue = pEval->getVar(yymsp[0].minor.yy0.text); yygotominor.yy0.valid=true; }
+{ yygotominor.yy0.dValue = pEval->GetVar(yymsp[0].minor.yy0.text); yygotominor.yy0.valid=true; }
 #line 762 "grammar.c"
         break;
       case 10: /* expr ::= VAR ASSIGN expr */
 #line 56 "grammar.lemon"
-{ pEval->setVar(yymsp[-2].minor.yy0.text, yymsp[0].minor.yy0.dValue); yygotominor.yy0.dValue = yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=false; }
+{ pEval->SetVar(yymsp[-2].minor.yy0.text, yymsp[0].minor.yy0.dValue); yygotominor.yy0.dValue = yymsp[0].minor.yy0.dValue; yygotominor.yy0.valid=false; }
 #line 767 "grammar.c"
         break;
       case 11: /* expr ::= expr PLUS expr */

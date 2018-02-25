@@ -52,8 +52,8 @@ stmt ::= expr SEMCOL.                     { pEval->parseSetResult(NAN); }
 expr(A) ::= VALUE(B).                     { A.dValue = B.dValue; A.valid=true; }
 expr(A) ::= expr(B) UNIT(C).              { A.dValue = B.dValue * C.dValue; A.valid=B.valid; }
 expr(A) ::= MINUS expr(B).                { A.dValue = -B.dValue; A.valid=B.valid; }
-expr(A) ::= VAR(B).                       { A.dValue = pEval->getVar(B.text); A.valid=true; }
-expr(A) ::= VAR(B) ASSIGN expr(C).        { pEval->setVar(B.text, C.dValue); A.dValue = C.dValue; A.valid=false; }
+expr(A) ::= VAR(B).                       { A.dValue = pEval->GetVar(B.text); A.valid=true; }
+expr(A) ::= VAR(B) ASSIGN expr(C).        { pEval->SetVar(B.text, C.dValue); A.dValue = C.dValue; A.valid=false; }
 expr(A) ::= expr(B) PLUS expr(C).         { A.dValue = B.dValue + C.dValue; A.valid=C.valid; }
 expr(A) ::= expr(B) MINUS expr(C).        { A.dValue = B.dValue - C.dValue; A.valid=C.valid; }
 expr(A) ::= expr(B) MULT expr(C).         { A.dValue = B.dValue * C.dValue; A.valid=C.valid; }

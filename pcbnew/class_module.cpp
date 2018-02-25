@@ -1022,7 +1022,6 @@ const BOX2I MODULE::ViewBBox() const
         area.Inflate( biggest_clearance );
     }
 
-
     return area;
 }
 

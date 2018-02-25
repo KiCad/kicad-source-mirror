@@ -57,7 +57,7 @@ public:
 
 protected:
     ///> Numeric expression evaluator
-    NumericEvaluator m_eval;
+    NUMERIC_EVALUATOR m_eval;
 
     void onTextFocusGet( wxFocusEvent& aEvent );
     void onTextFocusLost( wxFocusEvent& aEvent );
