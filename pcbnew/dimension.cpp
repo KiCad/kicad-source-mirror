@@ -230,7 +230,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     m_parent->Refresh();
 #endif
 
-    commit.Push( _( "Modifed dimensions properties" ) );
+    commit.Push( _( "Modified dimensions properties" ) );
     event.Skip();   // ends returning wxID_OK (default behavior)
 }
 
