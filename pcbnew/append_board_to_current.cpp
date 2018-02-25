@@ -197,17 +197,14 @@ bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
     enabledLayers |= initialEnabledLayers;
     GetBoard()->SetEnabledLayers( enabledLayers );
     GetBoard()->SetVisibleLayers( enabledLayers );
-    ReCreateLayerBox();
-    ReFillLayerWidget();
+
+    onBoardLoaded();
 
     if( IsGalCanvasActive() )
         static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( GetBoard() );
 
     GetBoard()->BuildListOfNets();
     GetBoard()->SynchronizeNetsAndNetClasses();
-
-    SetStatusText( wxEmptyString );
-    Zoom_Automatique( false );
 
     // Finish block move command:
     wxPoint cpos = GetNearestGridPosition( bbox.Centre() );

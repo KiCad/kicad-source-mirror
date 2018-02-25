@@ -329,8 +329,9 @@ void PCB_EDIT_FRAME::Files_io_from_id( int id )
         fn.SetExt( PcbFileExtension );
 
         GetBoard()->SetFileName( fn.GetFullPath() );
-        UpdateTitle();
-        ReCreateLayerBox();
+
+        onBoardLoaded();
+
         OnModify();
         break;
     }
@@ -532,12 +533,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         loadedBoard->BuildListOfNets();
         loadedBoard->SynchronizeNetsAndNetClasses();
 
-        SetStatusText( wxEmptyString );
-        Zoom_Automatique( false );
-
-        // update the layer names in the listbox
-        ReCreateLayerBox( false );
-
         GetScreen()->ClrModify();
 
         {
@@ -567,8 +562,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetBoard()->SetFileName( fname );
     }
 
-    UpdateTitle();
-
     if( !converted )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
@@ -582,27 +575,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     Compile_Ratsnest( NULL, true );
     GetBoard()->BuildConnectivity();
 
-    // Update info shown by the horizontal toolbars
-    ReFillLayerWidget();
-    ReCreateLayerBox();
-
-    // upate the layer widget to match board visibility states, both layers and render columns.
-    syncLayerVisibilities();
-    syncLayerWidgetLayer();
-    syncRenderStates();
-
-    // Update the tracks / vias available sizes list:
-    ReCreateAuxiliaryToolbar();
-
-    // Update the RATSNEST items, which were not loaded at the time
-    // BOARD::SetVisibleElements() was called from within any PLUGIN.
-    // See case LAYER_RATSNEST: in BOARD::SetElementVisibility()
-    GetBoard()->SetVisibleElements( GetBoard()->GetVisibleElements() );
-
-    // Display the loaded board:
-    Zoom_Automatique( false );
-
-    SetMsgPanel( GetBoard() );
+    onBoardLoaded();
 
     // Refresh the 3D view, if any
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();

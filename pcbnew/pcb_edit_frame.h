@@ -164,6 +164,11 @@ protected:
     }
 
     /**
+     * Updates the state of the GUI after a new board is loaded or created
+     */
+    void onBoardLoaded();
+
+    /**
      * Function syncLayerWidgetLayer
      * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
      * The currently selected layer is defined by the return value of GetActiveLayer().

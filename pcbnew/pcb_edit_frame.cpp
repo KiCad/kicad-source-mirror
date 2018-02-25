@@ -946,6 +946,35 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 }
 
 
+void PCB_EDIT_FRAME::onBoardLoaded()
+{
+    UpdateTitle();
+
+    // Re-create layers manager based on layer info in board
+    ReFillLayerWidget();
+    ReCreateLayerBox();
+
+    // Sync layer and item visibility
+    syncLayerVisibilities();
+    syncLayerWidgetLayer();
+    syncRenderStates();
+
+    // Update the tracks / vias available sizes list:
+    ReCreateAuxiliaryToolbar();
+
+    // Update the RATSNEST items, which were not loaded at the time
+    // BOARD::SetVisibleElements() was called from within any PLUGIN.
+    // See case LAYER_RATSNEST: in BOARD::SetElementVisibility()
+    GetBoard()->SetVisibleElements( GetBoard()->GetVisibleElements() );
+
+    // Display the loaded board:
+    Zoom_Automatique( false );
+
+    SetMsgPanel( GetBoard() );
+    SetStatusText( wxEmptyString );
+}
+
+
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
     m_Layers->SelectLayer( GetActiveLayer() );
