@@ -113,7 +113,7 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->GetGalCanvas()->GetView()->RecacheAllItems();
+    m_frame->GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
     m_frame->GetGalCanvas()->Refresh();
 
     return 0;
