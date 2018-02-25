@@ -880,6 +880,33 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     aParentMenu->AppendSeparator();
 
+    //----- Import submenu ------------------------------------------------------
+    wxMenu* submenuImport = new wxMenu();
+
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
+                 _( "&Specctra Session..." ),
+                 _( "Import routed \"Specctra Session\" (*.ses) file" ),
+                 KiBitmap( import_xpm ) );
+
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_DXF_FILE,
+                 _( "&DXF File..." ),
+                 _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
+                 KiBitmap( import_xpm ) );
+
+    AddMenuItem( aParentMenu, submenuImport,
+                 ID_GEN_IMPORT_FILE, _( "&Import" ),
+                 _( "Import files" ), KiBitmap( import_xpm ) );
+
+
+    //----- Export submenu ------------------------------------------------------
+    wxMenu* submenuexport = new wxMenu();
+    prepareExportMenu( submenuexport );
+
+    AddMenuItem( aParentMenu, submenuexport,
+                 ID_GEN_EXPORT_FILE, _( "E&xport" ),
+                 _( "Export board" ), KiBitmap( export_xpm ) );
+
+
     //----- Fabrication Outputs submenu -----------------------------------------
     wxMenu* fabricationOutputsMenu = new wxMenu;
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
@@ -911,32 +938,6 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  -1, _( "&Fabrication Outputs" ),
                  _( "Generate files for fabrication" ),
                  KiBitmap( fabrication_xpm ) );
-
-    //----- Import submenu ------------------------------------------------------
-    wxMenu* submenuImport = new wxMenu();
-
-    AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
-                 _( "&Specctra Session..." ),
-                 _( "Import routed \"Specctra Session\" (*.ses) file" ),
-                 KiBitmap( import_xpm ) );
-
-    AddMenuItem( submenuImport, ID_GEN_IMPORT_DXF_FILE,
-                 _( "&DXF File..." ),
-                 _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
-                 KiBitmap( import_xpm ) );
-
-    AddMenuItem( aParentMenu, submenuImport,
-                 ID_GEN_IMPORT_FILE, _( "&Import" ),
-                 _( "Import files" ), KiBitmap( import_xpm ) );
-
-
-    //----- Export submenu ------------------------------------------------------
-    wxMenu* submenuexport = new wxMenu();
-    prepareExportMenu( submenuexport );
-
-    AddMenuItem( aParentMenu, submenuexport,
-                 ID_GEN_EXPORT_FILE, _( "E&xport" ),
-                 _( "Export board" ), KiBitmap( export_xpm ) );
 
     aParentMenu->AppendSeparator();
 
