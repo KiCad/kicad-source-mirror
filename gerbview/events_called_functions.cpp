@@ -451,7 +451,6 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     int     id = event.GetId();
     bool    state;
     bool    needs_refresh = false;
-    bool    needs_repaint = false;
 
     switch( id )
     {
@@ -473,17 +472,17 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
         m_DisplayOptions.m_DisplayFlashedItemsFill = not state;
-        needs_refresh = needs_repaint = true;
+        needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
         m_DisplayOptions.m_DisplayLinesFill = not state;
-        needs_refresh = needs_repaint = true;
+        needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
         m_DisplayOptions.m_DisplayPolygonsFill = not state;
-        needs_refresh = needs_repaint = true;
+        needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_DCODES:
@@ -532,10 +531,59 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         applyDisplaySettingsToGAL();
         auto view = GetGalCanvas()->GetView();
 
-        if( needs_repaint )
-            view->UpdateAllItems( KIGFX::REPAINT );
-        else
+        switch( id )
+        {
+        case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
+            view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                               []( KIGFX::VIEW_ITEM* aItem ) {
+                auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                switch( item->m_Shape )
+                {
+                case GBR_SPOT_CIRCLE:
+                case GBR_SPOT_RECT:
+                case GBR_SPOT_OVAL:
+                case GBR_SPOT_POLY:
+                case GBR_SPOT_MACRO:
+                    return true;
+
+                default:
+                    return false;
+                }
+            } );
+            break;
+
+        case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
+            view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                               []( KIGFX::VIEW_ITEM* aItem ) {
+                auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                switch( item->m_Shape )
+                {
+                case GBR_CIRCLE:
+                case GBR_ARC:
+                case GBR_SEGMENT:
+                    return true;
+
+                default:
+                    return false;
+                }
+            } );
+            break;
+
+        case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
+            view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                               []( KIGFX::VIEW_ITEM* aItem ) {
+                auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                return ( item->m_Shape == GBR_POLYGON );
+            } );
+            break;
+
+        default:
             view->UpdateAllItems( KIGFX::COLOR );
+            break;
+        }
 
         m_canvas->Refresh( true );
     }

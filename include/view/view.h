@@ -616,6 +616,14 @@ public:
      */
     void UpdateAllItems( int aUpdateFlags );
 
+    /**
+     * Updates items in the view according to the given flags and condition
+     * @param aUpdateFlags is is according to KIGFX::VIEW_UPDATE_FLAGS
+     * @param aCondition is a function returning true if the item should be updated
+     */
+    void UpdateAllItemsConditionally( int aUpdateFlags,
+                                      std::function<bool( VIEW_ITEM* )> aCondition );
+
     const BOX2I CalculateExtents() ;
 
     /**

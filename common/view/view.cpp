@@ -1302,6 +1302,24 @@ void VIEW::UpdateAllItems( int aUpdateFlags )
 }
 
 
+void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
+                                        std::function<bool( VIEW_ITEM* )> aCondition )
+{
+    for( VIEW_ITEM* item : m_allItems )
+    {
+        if( aCondition( item ) )
+        {
+            auto viewData = item->viewPrivData();
+
+            if( !viewData )
+                continue;
+
+            viewData->m_requiredUpdate |= aUpdateFlags;
+        }
+    }
+}
+
+
 struct VIEW::extentsVisitor
 {
     BOX2I extents;
