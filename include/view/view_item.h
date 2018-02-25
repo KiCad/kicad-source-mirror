@@ -57,6 +57,7 @@ enum VIEW_UPDATE_FLAGS {
     GEOMETRY    = 0x04,     /// Position or shape has changed
     LAYERS      = 0x08,     /// Layers have changed
     INITIAL_ADD = 0x10,     /// Item is being added to the view
+    REPAINT     = 0x20,     /// Item needs to be redrawn
     ALL         = 0xef      /// All except INITIAL_ADD
 };
 

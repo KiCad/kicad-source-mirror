@@ -1092,7 +1092,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 
         if( IsCached( layerId ) )
         {
-            if( aUpdateFlags & ( GEOMETRY | LAYERS ) )
+            if( aUpdateFlags & ( GEOMETRY | LAYERS | REPAINT ) )
                 updateItemGeometry( aItem, layerId );
             else if( aUpdateFlags & COLOR )
                 updateItemColor( aItem, layerId );

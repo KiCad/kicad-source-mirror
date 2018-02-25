@@ -533,7 +533,7 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         auto view = GetGalCanvas()->GetView();
 
         if( needs_repaint )
-            view->UpdateAllItems( KIGFX::GEOMETRY );
+            view->UpdateAllItems( KIGFX::REPAINT );
         else
             view->UpdateAllItems( KIGFX::COLOR );
 
