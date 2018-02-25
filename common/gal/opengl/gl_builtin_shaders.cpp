@@ -223,7 +223,7 @@ void main()
     {
         vec2 tex           = shaderParams.yz;
 
-        // Unless we're streching chars it is okay to consider
+        // Unless we're stretching chars it is okay to consider
         // one derivative for filtering
         float derivative   = length( dFdx( tex ) ) * fontTextureWidth / 4;
 
