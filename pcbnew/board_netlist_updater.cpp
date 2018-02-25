@@ -682,7 +682,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( m_errorCount )
     {
-        m_reporter->Report( _( "Errors occured during the netlist update. Unless you "
+        m_reporter->Report( _( "Errors occurred during the netlist update. Unless you "
                                "fix them, your board will not be consistent with the schematics." ),
                             REPORTER::RPT_ERROR );
 

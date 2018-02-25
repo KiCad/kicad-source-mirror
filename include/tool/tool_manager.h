@@ -356,7 +356,7 @@ public:
     /**
      * Stores an information to the system clipboard.
      * @param aText is the information to be stored.
-     * @return False if error occured.
+     * @return False if error occurred.
      */
     bool SaveClipboard( const std::string& aText );
 
