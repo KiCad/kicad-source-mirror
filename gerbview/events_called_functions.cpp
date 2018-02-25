@@ -450,6 +450,8 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int     id = event.GetId();
     bool    state;
+    bool    needs_refresh = false;
+    bool    needs_repaint = false;
 
     switch( id )
     {
@@ -471,20 +473,17 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
         m_DisplayOptions.m_DisplayFlashedItemsFill = not state;
-        applyDisplaySettingsToGAL();
-        m_canvas->Refresh( true );
+        needs_refresh = needs_repaint = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
         m_DisplayOptions.m_DisplayLinesFill = not state;
-        applyDisplaySettingsToGAL();
-        m_canvas->Refresh( true );
+        needs_refresh = needs_repaint = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
         m_DisplayOptions.m_DisplayPolygonsFill = not state;
-        applyDisplaySettingsToGAL();
-        m_canvas->Refresh( true );
+        needs_refresh = needs_repaint = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_DCODES:
@@ -499,14 +498,12 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_DIFF_MODE:
         m_DisplayOptions.m_DiffMode = state;
-        applyDisplaySettingsToGAL();
-        m_canvas->Refresh( true );
+        needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_HIGH_CONTRAST_MODE:
         m_DisplayOptions.m_HighContrastMode = state;
-        applyDisplaySettingsToGAL();
-        m_canvas->Refresh( true );
+        needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
@@ -528,6 +525,19 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     default:
         wxMessageBox( wxT( "GERBVIEW_FRAME::OnSelectOptionToolbar error" ) );
         break;
+    }
+
+    if( needs_refresh )
+    {
+        applyDisplaySettingsToGAL();
+        auto view = GetGalCanvas()->GetView();
+
+        if( needs_repaint )
+            view->UpdateAllItems( KIGFX::GEOMETRY );
+        else
+            view->UpdateAllItems( KIGFX::COLOR );
+
+        m_canvas->Refresh( true );
     }
 }
 

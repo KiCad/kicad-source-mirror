@@ -1288,6 +1288,20 @@ void VIEW::UpdateItems()
 }
 
 
+void VIEW::UpdateAllItems( int aUpdateFlags )
+{
+    for( VIEW_ITEM* item : m_allItems )
+    {
+        auto viewData = item->viewPrivData();
+
+        if( !viewData )
+            continue;
+
+        viewData->m_requiredUpdate |= aUpdateFlags;
+    }
+}
+
+
 struct VIEW::extentsVisitor
 {
     BOX2I extents;

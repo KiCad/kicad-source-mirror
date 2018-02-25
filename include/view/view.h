@@ -610,6 +610,12 @@ public:
      */
     void UpdateItems();
 
+    /**
+     * Updates all items in the view according to the given flags
+     * @param aUpdateFlags is is according to KIGFX::VIEW_UPDATE_FLAGS
+     */
+    void UpdateAllItems( int aUpdateFlags );
+
     const BOX2I CalculateExtents() ;
 
     /**
