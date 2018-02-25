@@ -1808,7 +1808,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( linestart,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -1851,7 +1851,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( linestart,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -1899,7 +1899,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( lineend,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -1941,7 +1941,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( lineend,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -1988,7 +1988,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( linestart,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -2025,7 +2025,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( linestart,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -2069,7 +2069,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( lineend,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
@@ -2106,7 +2106,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 else
                                 {
                                     SCH_MARKER* marker = new SCH_MARKER( lineend,
-                                            "Bus Entry neeeded" );
+                                            "Bus Entry needed" );
 
                                     m_currentSheet->GetScreen()->Append( marker );
                                 }
