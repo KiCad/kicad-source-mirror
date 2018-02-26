@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 11:38+0100\n"
-"PO-Revision-Date: 2018-02-26 11:44+0100\n"
+"PO-Revision-Date: 2018-02-26 12:12+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -16450,11 +16450,11 @@ msgstr ""
 #: pcbnew/tools/microwave_tool.cpp:83 pcbnew/tools/microwave_tool.cpp:168
 #: pcbnew/muwave_command.cpp:76
 msgid "Add Polynomial Shape"
-msgstr "Aggiungi forma polinominale "
+msgstr "Aggiungi forma polinomiale "
 
 #: pcbnew/tools/microwave_tool.cpp:83
 msgid "Create polynomial shape for microwave applications"
-msgstr "Crea forma polinominale per applicazioni a microonde"
+msgstr "Crea forma polinomiale per applicazioni a microonde"
 
 #: pcbnew/tools/microwave_tool.cpp:89
 msgid "Add Microwave Line"
@@ -20012,7 +20012,7 @@ msgstr "Imposta l'origine della griglia"
 
 #: pcbnew/tool_pcb_editor.cpp:573
 msgid "Create a polynomial shape for microwave applications"
-msgstr "Crea forma polinominale per applicazioni a microonde"
+msgstr "Crea forma polinomiale per applicazioni a microonde"
 
 #: pcbnew/tool_pcb_editor.cpp:626
 msgid ""
