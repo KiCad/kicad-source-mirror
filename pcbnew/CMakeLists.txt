@@ -608,12 +608,15 @@ if( PCBNEW_LINK_MAPS )
 endif()
 
 # the main pcbnew program, in DSO form.
-add_library( pcbnew_kiface MODULE
+add_library( pcbnew_kiface_objects OBJECT
     pcbnew.cpp
     ${PCBNEW_SRCS}
     ${PCBNEW_COMMON_SRCS}
     ${PCBNEW_SCRIPTING_SRCS}
     )
+
+add_library( pcbnew_kiface MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
+
 set_target_properties( pcbnew_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
     # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface
@@ -640,7 +643,7 @@ if( ${OPENMP_FOUND} )
         )
 endif()
 
-target_link_libraries( pcbnew_kiface
+set( PCBNEW_KIFACE_LIBRARIES
     3d-viewer
     pcbcommon
     pnsrouter
@@ -659,6 +662,9 @@ target_link_libraries( pcbnew_kiface
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     ${OPENMP_LIBRARIES}
     )
+
+
+target_link_libraries( pcbnew_kiface ${PCBNEW_KIFACE_LIBRARIES} )
 
 set_source_files_properties( pcbnew.cpp PROPERTIES
     # The KIFACE is in pcbnew.cpp, export it:
@@ -777,9 +783,12 @@ if( KICAD_SCRIPTING_MODULES )
             )
         add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingWxpythonCopy )
         set( PYMOD_EXT "so" )
-
     else()  # only linux remains among supported platforms
-        install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
+        add_library( pcbnew_python MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
+        target_link_libraries( pcbnew_python ${PCBNEW_KIFACE_LIBRARIES} )
+        set_target_properties( pcbnew_python PROPERTIES OUTPUT_NAME pcbnew PREFIX "_" SUFFIX ".so" )
+        install( TARGETS pcbnew_python DESTINATION ${PYTHON_DEST} COMPONENT binary )
+
         set( PYMOD_EXT "so" )
     endif()
 
