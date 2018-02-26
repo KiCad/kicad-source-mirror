@@ -164,7 +164,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
             return false;
 
         filename = dlg.GetPath();
-        currentPath = wxGetCwd();
+        currentPath = filename.GetPath();
         m_mruPath = currentPath;
     }
     else
