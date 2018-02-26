@@ -48,7 +48,7 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), g_UserUnit ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
-    cursorStrings.push_back( DimensionLabel( "θ", degs, DEGREES ) );
+    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
 
     for( auto& str: cursorStrings )
     {
