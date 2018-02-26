@@ -212,7 +212,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
 const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     int netCode = -1;
-    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
+    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
 
     if( item )
     {
@@ -277,7 +277,10 @@ int PCB_PAINTER::getLineThickness( int aActualThickness ) const
 
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
+    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+
+    if( !item )
+        return false;
 
     // the "cast" applied in here clarifies which overloaded draw() is called
     switch( item->Type() )
