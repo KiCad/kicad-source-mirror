@@ -179,27 +179,6 @@ public:
         return false;
     }
 
-    /**
-     * Function ImportFile
-     *  load the given filename but sets the path to the current project path.
-     *  @param full filepath of file to be imported.
-     *  @param aFileType enum value for filetype
-     */
-    VTBL_ENTRY bool ImportFile( const wxString& aFileName, int aFileType )
-    {
-        // overload me for your wxFrame type.
-
-        return false;
-    }
-
-    /**
-     * Rematch ophaned zones and vias to schematic nets.
-     */
-    VTBL_ENTRY bool FixEagleNets()
-    {
-        return false;
-    };
-
 
     /**
      * Create a list of net names currently in use by the player .

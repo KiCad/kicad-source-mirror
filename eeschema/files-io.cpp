@@ -676,7 +676,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     }
 
     // For now there is only one import plugin
-    ImportFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );
+    importFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );
 }
 
 
@@ -752,7 +752,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
 }
 
 
-bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
+bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
     wxString fullFileName( aFileName );
 

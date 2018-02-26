@@ -253,6 +253,30 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         GetCanvas()->Refresh();
         break;
 
+    case MAIL_IMPORT_FILE:
+    {
+        // Extract file format type and path (plugin type and path separated with \n)
+        size_t split = payload.find( '\n' );
+        wxCHECK( split != std::string::npos, /*void*/ );
+        int importFormat;
+
+        try
+        {
+            importFormat = std::stoi( payload.substr( 0, split ) );
+        }
+        catch( std::invalid_argument& e )
+        {
+            wxFAIL;
+            importFormat = -1;
+        }
+
+        std::string path = payload.substr( split + 1 );
+        wxASSERT( !path.empty() );
+
+        if( importFormat >= 0 )
+            importFile( path, importFormat );
+    }
+
     default:
         ;
     }

@@ -47,11 +47,6 @@
 
 #include <io_mgr.h>
 #include <sch_io_mgr.h>
-#include <pcb_edit_frame.h>
-#include <sch_edit_frame.h>
-#include <netlist.h>
-
-class PCB_EDIT_FRAME;
 
 #include "kicad.h"
 
@@ -124,17 +119,16 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     SetProjectFileName( pro.GetFullPath() );
     wxString prj_filename = GetProjectFileName();
-    wxString sch_filename = sch.GetFullPath();
 
     if( sch.FileExists() )
     {
-        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway.Player( FRAME_SCH, false );
+        KIWAY_PLAYER* schframe = Kiway.Player( FRAME_SCH, false );
 
         if( !schframe )
         {
-            try
+            try     // SCH frame was not available, try to start it
             {
-                schframe = (SCH_EDIT_FRAME*) Kiway.Player( FRAME_SCH, true );
+                schframe = Kiway.Player( FRAME_SCH, true );
             }
             catch( IO_ERROR err )
             {
@@ -144,7 +138,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             }
         }
 
-        schframe->ImportFile( sch_filename, SCH_IO_MGR::SCH_EAGLE );
+        schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE,
+                wxString::Format( "%d\n%s", SCH_IO_MGR::SCH_EAGLE, sch.GetFullPath() ).ToStdString(), this );
 
         if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
                                         // but no project loaded.
@@ -161,13 +156,13 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     if( pcb.FileExists() )
     {
-        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway.Player( FRAME_PCB, false );
+        KIWAY_PLAYER* pcbframe = Kiway.Player( FRAME_PCB, false );
 
         if( !pcbframe )
         {
-            try
+            try     // PCB frame was not available, try to start it
             {
-                pcbframe = (PCB_EDIT_FRAME*) Kiway.Player( FRAME_PCB, true );
+                pcbframe = Kiway.Player( FRAME_PCB, true );
             }
             catch( IO_ERROR err )
             {
@@ -182,22 +177,17 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         // if the frame is not visible, the board is not yet loaded
         if( !pcbframe->IsVisible() )
         {
-            pcbframe->ImportFile( pcb.GetFullPath(), IO_MGR::EAGLE );
             pcbframe->Show( true );
         }
+
+        pcbframe->Kiway().ExpressMail( FRAME_PCB, MAIL_IMPORT_FILE,
+            wxString::Format( "%d\n%s", IO_MGR::EAGLE, pcb.GetFullPath() ).ToStdString(), this );
 
         // On Windows, Raise() does not bring the window on screen, when iconized
         if( pcbframe->IsIconized() )
             pcbframe->Iconize( false );
 
         pcbframe->Raise();
-
-        // Two stage project update:
-        // - first, assign valid timestamps to footprints
-        // - second, perform schematic annotation and update footprint references
-        pcbframe->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "no-annotate;by-reference", this );
-        pcbframe->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "quiet-annotate;by-timestamp", this );
-        pcbframe->FixEagleNets();
     }
 
     ReCreateTreePrj();

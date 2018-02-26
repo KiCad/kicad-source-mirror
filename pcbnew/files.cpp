@@ -836,7 +836,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
 }
 
 
-bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
+bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
     switch( (IO_MGR::PCB_FILE_T) aFileType )
     {
@@ -854,15 +854,15 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
             UpdateTitle();
             OnModify();
 
+            // Extract a footprint library from the design and add it to the fp-lib-table
             wxString newLibPath;
             ArchiveModulesOnBoard( true, newfilename.GetName(), &newLibPath );
 
-            if( newLibPath.Length()>0 )
+            if( newLibPath.Length() > 0 )
             {
                 FP_LIB_TABLE* prjlibtable = Prj().PcbFootprintLibs();
                 const wxString& project_env = PROJECT_VAR_NAME;
-                wxString rel_path;
-                wxString env_path;
+                wxString rel_path, env_path;
 
                 wxGetEnv( project_env, &env_path );
 
@@ -874,9 +874,7 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                     newLibPath = rel_path;
 
                 FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( newfilename.GetName(),
-                                                              newLibPath,
-                                                              wxT( "KiCad" ),
-                                                              wxEmptyString );     // options
+                        newLibPath, wxT( "KiCad" ), wxEmptyString );
                 prjlibtable->InsertRow( row );
             }
 
@@ -893,11 +891,22 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                     wxString msg = wxString::Format( _(
                                     "Error occurred saving project specific footprint library "
                                     "table:\n\n%s" ),
-                            GetChars( ioe.What() )
-                            );
+                            GetChars( ioe.What() ) );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
+
+
+            // Two stage netlist update:
+            // - first, assign valid timestamps to footprints (no reannotation)
+            // - second, perform schematic annotation and update footprint references
+            //   based on timestamps
+            Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST,
+                    "no-annotate;by-reference", this );
+            Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST,
+                    "quiet-annotate;by-timestamp", this );
+
+            fixEagleNets();
 
             return true;
         }
@@ -912,53 +921,49 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 }
 
 
-bool PCB_EDIT_FRAME::FixEagleNets()
+bool PCB_EDIT_FRAME::fixEagleNets()
 {
     KIWAY_PLAYER* schematicFrame = Kiway().Player( FRAME_SCH, false );
 
     // if the schematic file was also loaded. Fix any instances of ophaned zones and vias.
-    if( schematicFrame )
+    if( !schematicFrame )
+        return false;
+
+    // Get list of nets from schematic.
+    wxArrayString nets = schematicFrame->ListNets();
+
+    // perform netlist matching to prevent ophaned zones.
+    for( auto zone : GetBoard()->Zones() )
     {
-        // Get list of nets from schematic.
-        wxArrayString nets = schematicFrame->ListNets();
+        wxString zoneNet  = zone->GetNet()->GetNetname();
+        wxString localNet = "/" + zoneNet;
 
-        // perform netlist matching to prevent ophaned zones.
-        for( auto zone : GetBoard()->Zones() )
+        for( unsigned int i = 0; i < nets.GetCount(); i++ )
         {
-            wxString    zoneNet     = zone->GetNet()->GetNetname();
-            wxString    localNet    = "/" + zoneNet;
-
-            for( int i = 0; i < nets.GetCount(); i++ )
+            if( nets[i].EndsWith( localNet ) )
             {
-                if( nets[i].EndsWith( localNet ) )
-                {
-                    NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
+                NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
 
-                    if( net )
-                    {
-                        zone->SetNetCode( net->GetNet() );
-                    }
-                }
+                if( net )
+                    zone->SetNetCode( net->GetNet() );
             }
         }
+    }
 
-        // perform netlist matching to prevent ophaned tracks/vias.
-        for( auto track : GetBoard()->Tracks() )
+    // perform netlist matching to prevent ophaned tracks/vias.
+    for( auto track : GetBoard()->Tracks() )
+    {
+        wxString trackNet = track->GetNet()->GetNetname();
+        wxString localNet = "/" + trackNet;
+
+        for( unsigned int i = 0; i < nets.GetCount(); i++ )
         {
-            wxString    trackNet    = track->GetNet()->GetNetname();
-            wxString    localNet    = "/" + trackNet;
-
-            for( int i = 0; i < nets.GetCount(); i++ )
+            if( nets[i].EndsWith( localNet ) )
             {
-                if( nets[i].EndsWith( localNet ) )
-                {
-                    NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
+                NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
 
-                    if( net )
-                    {
-                        track->SetNetCode( net->GetNet() );
-                    }
-                }
+                if( net )
+                    track->SetNetCode( net->GetNet() );
             }
         }
     }

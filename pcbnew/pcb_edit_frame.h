@@ -233,6 +233,18 @@ protected:
      */
     void duplicateItems( bool aIncrement ) override;
 
+    /**
+     * Load the given filename but sets the path to the current project path.
+     * @param full filepath of file to be imported.
+     * @param aFileType PCB_FILE_T value for filetype
+     */
+    bool importFile( const wxString& aFileName, int aFileType );
+
+    /**
+     * Rematch orphaned zones and vias to schematic nets.
+     */
+    bool fixEagleNets();
+
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -868,19 +880,6 @@ public:
      * the main purpose is only to allow panelizing boards.
      */
     bool AppendBoardFile( const wxString& aFullFileName, int aCtl );
-
-    /**
-     * Function ImportFile
-     *  load the given filename but sets the path to the current project path.
-     *  @param full filepath of file to be imported.
-     *  @param aFileType PCB_FILE_T value for filetype
-     */
-    bool ImportFile( const wxString& aFileName, int aFileType ) override;
-
-    /**
-     * Rematch ophaned zones and vias to schematic nets.
-     */
-    bool FixEagleNets() override;
 
     /**
      * Function SavePcbFile
