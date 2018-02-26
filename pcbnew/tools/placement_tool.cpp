@@ -400,21 +400,42 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortRightmostX );
-    const auto maxRight = itemsToDistribute.begin()->second.GetRight();
     const auto lastItem = itemsToDistribute.begin()->first;
+
+    const auto maxRight = itemsToDistribute.begin()->second.GetRight();
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortLeftmostX );
-
-    auto totalGap = maxRight - itemsToDistribute.begin()->second.GetX();
+    const auto minX = itemsToDistribute.begin()->second.GetX();
+    auto totalGap = maxRight - minX;
+    int totalWidth = 0;
 
     for( auto& i : itemsToDistribute )
     {
-        totalGap -= i.second.GetWidth();
+        totalWidth += i.second.GetWidth();
     }
 
-    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    if( totalGap < totalWidth )
+    {
+        // the width of the items exceeds the gap (overlapping items) -> use center point spacing
+        doDistributeCentersHorizontally( itemsToDistribute );
+    }
+    else
+    {
+        totalGap -= totalWidth;
+        doDistributeGapsHorizontally( itemsToDistribute, lastItem, totalGap );
+    }
 
+    commit.Push( _( "Distribute horizontally" ) );
+
+    return 0;
+}
+
+
+void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& itemsToDistribute,
+                                                          const BOARD_ITEM* lastItem, int totalGap ) const
+{
+    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
     auto targetX = itemsToDistribute.begin()->second.GetX();
 
     for( auto& i : itemsToDistribute )
@@ -427,10 +448,23 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
         i.first->Move( wxPoint( difference, 0 ) );
         targetX += ( i.second.GetWidth() + itemGap );
     }
+}
 
-    commit.Push( _( "Distribute horizontally" ) );
 
-    return 0;
+void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &itemsToDistribute ) const
+{
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortCenterX );
+    const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().x
+                          - itemsToDistribute.begin()->second.GetCenter().x;
+    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    auto targetX = itemsToDistribute.begin()->second.GetCenter().x;
+
+    for( auto& i : itemsToDistribute )
+        {
+            int difference = targetX - i.second.GetCenter().x;
+            i.first->Move( wxPoint( difference, 0 ) );
+            targetX += ( itemGap );
+        }
 }
 
 
@@ -453,17 +487,37 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortTopmostY );
+    auto minY = itemsToDistribute.begin()->second.GetY();
 
-    // determine the distance between the bottommost and topmost Y coordinates
-    auto totalGap = maxBottom - itemsToDistribute.begin()->second.GetY();
+    auto totalGap = maxBottom - minY;
+    int totalHeight = 0;
 
     for( auto& i : itemsToDistribute )
     {
-        totalGap -= i.second.GetHeight();
+        totalHeight += i.second.GetHeight();
     }
 
-    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    if( totalGap < totalHeight )
+    {
+        // the width of the items exceeds the gap (overlapping items) -> use center point spacing
+        doDistributeCentersVertically( itemsToDistribute );
+    }
+    else
+    {
+        totalGap -= totalHeight;
+        doDistributeGapsVertically( itemsToDistribute, lastItem, totalGap );
+    }
 
+    commit.Push( _( "Distribute vertically" ) );
+
+    return 0;
+}
+
+
+void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsToDistribute,
+                                                        const BOARD_ITEM* lastItem, int totalGap ) const
+{
+    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
     auto targetY = itemsToDistribute.begin()->second.GetY();
 
     for( auto& i : itemsToDistribute )
@@ -476,10 +530,23 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
         i.first->Move( wxPoint( 0, difference ) );
         targetY += ( i.second.GetHeight() + itemGap );
     }
+}
 
-    commit.Push( _( "Distribute vertically" ) );
 
-    return 0;
+void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& itemsToDistribute ) const
+{
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortCenterY );
+    const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().y
+                          - itemsToDistribute.begin()->second.GetCenter().y;
+    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    auto targetY = itemsToDistribute.begin()->second.GetCenter().y;
+
+    for( auto& i : itemsToDistribute )
+    {
+        int difference = targetY - i.second.GetCenter().y;
+        i.first->Move( wxPoint( 0, difference ) );
+        targetY += ( itemGap );
+    }
 }
 
 
