@@ -336,9 +336,9 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
         auto view = galCanvas->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
         view->UpdateLayerColor( aId );
-        // TODO(JE) Why are the below two lines needed? Not needed in pcbnew
+
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-        view->RecacheAllItems();
+        view->UpdateAllItems( KIGFX::COLOR );
     }
 
     if( galCanvas && myframe->IsGalCanvasActive() )
@@ -359,8 +359,6 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         {
             galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
             galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-            // TODO(JE) Why is the below line needed? Not needed in pcbnew
-            galCanvas->GetView()->RecacheAllItems();
         }
         else
             galCanvas->GetView()->SetLayerVisible( aId, isEnabled );

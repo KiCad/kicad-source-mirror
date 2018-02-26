@@ -190,7 +190,6 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
     auto settings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( displayOptions );
-    view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     m_Parent->GetCanvas()->Refresh();

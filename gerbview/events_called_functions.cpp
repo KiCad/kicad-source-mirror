@@ -324,7 +324,7 @@ void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
 
         }
 
-        GetGalCanvas()->GetView()->RecacheAllItems();
+        GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
         GetGalCanvas()->Refresh();
     }
     else
