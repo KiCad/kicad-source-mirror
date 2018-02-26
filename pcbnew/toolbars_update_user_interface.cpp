@@ -235,7 +235,6 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars( wxEvent& aEvent )
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, false );
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, false );
 
-
     switch( displOpts->m_DisplayZonesMode )
     {
         case 0:
@@ -252,5 +251,19 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars( wxEvent& aEvent )
             menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY )->Check( true );
             m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, true );
             break;
+    }
+
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, false );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, false );
+
+    if( g_UserUnit == INCHES )
+    {
+        menuBar->FindItem( ID_TB_OPTIONS_SELECT_UNIT_INCH )->Check( true );
+        m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, true );
+    }
+    else
+    {
+        menuBar->FindItem( ID_TB_OPTIONS_SELECT_UNIT_MM )->Check( true );
+        m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, true );
     }
 }
