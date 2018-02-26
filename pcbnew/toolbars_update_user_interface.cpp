@@ -119,13 +119,7 @@ void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 {
-    int selected = aEvent.GetId() - ID_TB_OPTIONS_SHOW_ZONES;
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    if( aEvent.IsChecked() && ( displ_opts->m_DisplayZonesMode == selected ) )
-        return;
-
-    aEvent.Check( displ_opts->m_DisplayZonesMode == selected );
 }
 
 
@@ -230,4 +224,33 @@ void PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent )
 {
     //Nothing to do.
+}
+
+void PCB_EDIT_FRAME::SyncMenusAndToolbars( wxEvent& aEvent )
+{
+    auto displOpts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto menuBar = GetMenuBar();
+
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES, false );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, false );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, false );
+
+
+    switch( displOpts->m_DisplayZonesMode )
+    {
+        case 0:
+            menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES )->Check( true );
+            m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES, true );
+            break;
+
+        case 1:
+            menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES_DISABLE )->Check( true );
+            m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, true );
+            break;
+
+        case 2:
+            menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY )->Check( true );
+            m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, true );
+            break;
+    }
 }

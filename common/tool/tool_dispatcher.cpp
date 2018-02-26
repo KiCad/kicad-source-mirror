@@ -430,7 +430,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         aEvent.Skip();
 #endif
 
-    updateUI();
+    updateUI( aEvent );
 }
 
 
@@ -443,11 +443,11 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
     else
         aEvent.Skip();
 
-    updateUI();
+    updateUI( aEvent );
 }
 
 
-void TOOL_DISPATCHER::updateUI()
+void TOOL_DISPATCHER::updateUI( wxEvent& aEvent )
 {
     // TODO I don't feel it is the right place for updating UI,
     // but at the moment I cannot think of a better one..
@@ -456,6 +456,6 @@ void TOOL_DISPATCHER::updateUI()
     if( frame )
     {
         frame->UpdateStatusBar();
-        //frame->UpdateMsgPanel();
+        frame->SyncMenusAndToolbars( aEvent );
     }
 }

@@ -897,10 +897,17 @@ public:
     virtual void* GetDisplayOptions() { return NULL; }
 
     /**
-    * Function GetGalDisplayOptions
-    * Returns a reference to the gal rendering options used by GAL for rendering.
-    */
+     * Function GetGalDisplayOptions
+     * Returns a reference to the gal rendering options used by GAL for rendering.
+     */
     KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return *m_galDisplayOptions; }
+
+    /**
+     * Function SyncMenusAndToolbars
+     * Updates the toolbars and menus (mostly settings/check buttons/checkboxes)
+     * with the current controller state 
+     */
+    virtual void SyncMenusAndToolbars( wxEvent& aEvent ) {};
 
     DECLARE_EVENT_TABLE()
 };

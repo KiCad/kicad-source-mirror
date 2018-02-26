@@ -1730,6 +1730,8 @@ public:
     int GetIconScale() override;
     void SetIconScale( int aScale ) override;
 
+    void SyncMenusAndToolbars( wxEvent& aEvent ) override;
+
     DECLARE_EVENT_TABLE()
 };
 
