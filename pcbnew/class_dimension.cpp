@@ -221,7 +221,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_Text.SetLayer( GetLayer() );
 
     // calculate the size of the dimension (text + line above the text)
-    ii = m_Text.GetTextHeight() + m_Text.GetThickness() + (m_Width * 3);
+    ii = m_Text.GetTextHeight() + m_Text.GetThickness() + ( m_Width );
 
     deltax  = m_featureLineDO.x - m_featureLineGO.x;
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
@@ -282,16 +282,27 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_arrowD2F.x    = m_crossBarF.x - arrow_up_X;
     m_arrowD2F.y    = m_crossBarF.y - arrow_up_Y;
 
-    m_featureLineGF.x   = m_crossBarO.x + hx;
-    m_featureLineGF.y   = m_crossBarO.y + hy;
+    // Length of feature lines
+    double radius = ( m_Height +
+                      ( std::copysign( 1.0, m_Height ) *
+                      arrowz * sin( DEG2RAD( 27.5 ) ) ) );
 
-    m_featureLineDF.x   = m_crossBarF.x + hx;
-    m_featureLineDF.y   = m_crossBarF.y + hy;
+    m_featureLineGF.x = m_featureLineGO.x - wxRound( radius * sin( angle ) );
+    m_featureLineGF.y = m_featureLineGO.y + wxRound( radius * cos( angle ) );
+
+    m_featureLineDF.x = m_featureLineDO.x - wxRound( radius * sin( angle ) );
+    m_featureLineDF.y = m_featureLineDO.y + wxRound( radius * cos( angle ) );
 
     // Calculate the better text position and orientation:
+    radius = ( std::copysign( 1.0, m_Height ) * ii );
+
     wxPoint textPos;
-    textPos.x  = (m_crossBarF.x + m_featureLineGF.x) / 2;
-    textPos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
+    textPos.x  = ( m_crossBarF.x + m_crossBarO.x ) / 2;
+    textPos.y  = ( m_crossBarF.y + m_crossBarO.y ) / 2;
+
+    textPos.x -= KiROUND( radius * sin( angle ) );
+    textPos.y += KiROUND( radius * cos( angle ) );
+
     m_Text.SetTextPos( textPos );
 
     double newAngle = -RAD2DECIDEG( angle );
