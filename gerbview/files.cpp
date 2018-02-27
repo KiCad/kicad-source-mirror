@@ -306,8 +306,6 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
 
     Zoom_Automatique( false );
 
-    GetImagesList()->SortImagesByZOrder();
-
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
     SetActiveLayer( GetActiveLayer() );
