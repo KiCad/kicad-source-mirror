@@ -100,10 +100,10 @@ public:
    /* Initialization and destruction. init() is invoked be the constructor and should not be needed
     * by the user.
     * clear() should be invoked by the user if a new input string is to be processed. It will reset
-    * the parser. User defined variables are retained.
+    * the parser and clear the original expression value for a requested object (if pObj != null).
     */
    void init();
-   void clear();
+   void clear(const void* pObj = nullptr);
 
    /* Set the decimal separator for the input string. Defaults to '.' */
    void setDecimalSeparator(char sep);

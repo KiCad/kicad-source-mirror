@@ -96,12 +96,14 @@ NumericEvaluator :: init()
 }
 
 void
-NumericEvaluator :: clear()
+NumericEvaluator :: clear(const void* pObj)
 {
    free(clToken.token);
    clToken.token = nullptr;
    clToken.input = nullptr;
    bClError = true;
+
+   if (bClTextInputStorage && pObj) clObjMap.erase(pObj);
 }
 
 void
