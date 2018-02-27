@@ -498,8 +498,20 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
         break;
 
     case LAYER_NEGATIVE_OBJECTS:
+    {
         m_DisplayOptions.m_DisplayNegativeObjects = aNewState;
+
+        auto view = GetGalCanvas()->GetView();
+
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                           []( KIGFX::VIEW_ITEM* aItem ) {
+            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+            // GetLayerPolarity() returns true for negative items
+            return item->GetLayerPolarity();
+        } );
         break;
+    }
 
     case LAYER_GERBVIEW_GRID:
         SetGridVisibility( aNewState );
