@@ -47,6 +47,14 @@ public:
     {
     }
 
+    /**
+     * Set a new value in evaluator buffer, and display it
+     * in the wxTextCtrl.
+     * @param aValue is the new value to store and display
+     * if aValue is empty, the value "0" is stored and displayed
+     */
+    void SetValue( const wxString& aValue ) override;
+
 protected:
     ///> Numeric expression evaluator
     NumericEvaluator m_eval;
