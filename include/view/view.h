@@ -455,6 +455,15 @@ public:
     void SortLayers( int aLayers[], int& aCount ) const;
 
     /**
+     * Remaps the data between layer ids without invalidating that data
+     *
+     * Used by GerbView for the "Sort by X2" functionality
+     *
+     * @param aReorderMap is a mapping of old to new layer ids
+     */
+    void ReorderLayerData( std::unordered_map<int, int> aReorderMap );
+
+    /**
      * Function UpdateLayerColor()
      * Applies the new coloring scheme held by RENDER_SETTINGS in case that it has changed.
      * @param aLayer is a number of the layer to be updated.

@@ -224,7 +224,8 @@ static bool sortZorder( const GERBER_FILE_IMAGE* const& ref, const GERBER_FILE_I
     return ref->m_FileFunction->GetZSubOrder() > test->m_FileFunction->GetZSubOrder();
 }
 
-void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
+
+std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
 {
     std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortZorder );
 
@@ -232,7 +233,7 @@ void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
     // Graphic layer numbering must be updated to match the widgets layer order
 
     // Store the old/new graphic layer info:
-    std::map <int, int> tab_lyr;
+    std::unordered_map<int, int> tab_lyr;
 
     for( unsigned layer = 0; layer < m_GERBER_List.size(); ++layer )
     {
@@ -244,4 +245,6 @@ void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
         tab_lyr[gerber->m_GraphicLayer] = layer;
         gerber->m_GraphicLayer = layer ;
     }
+
+    return tab_lyr;
 }

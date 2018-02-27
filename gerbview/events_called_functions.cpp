@@ -492,7 +492,7 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS:
         SetElementVisibility( LAYER_NEGATIVE_OBJECTS, state );
-        m_canvas->Refresh( true );
+        needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_DIFF_MODE:

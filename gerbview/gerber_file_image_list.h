@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <set>
+#include <unordered_map>
 
 #include <gerber_draw_item.h>
 #include <am_primitive.h>
@@ -118,8 +119,10 @@ public:
     /**
      * Sort loaded images by Z order priority, if they have the X2 FileFormat info
      * (SortImagesByZOrder updates the graphic layer of these items)
+     *
+     * @return a mapping of old to new layer index
      */
-    void SortImagesByZOrder();
+    std::unordered_map<int, int> SortImagesByZOrder();
 
     #if defined(DEBUG)
 

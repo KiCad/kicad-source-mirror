@@ -189,6 +189,31 @@ private:
         return m_groupsSize > 0;
     }
 
+
+    /**
+     * Reorders the stored groups (to facilitate reordering of layers)
+     * @see VIEW::ReorderLayerData
+     *
+     * @param aReorderMap is the mapping of old to new layer ids
+     */
+    void reorderGroups( std::unordered_map<int, int> aReorderMap )
+    {
+        for( int i = 0; i < m_groupsSize; ++i )
+        {
+            int orig_layer = m_groups[i].first;
+            int new_layer = orig_layer;
+
+            try
+            {
+                new_layer = aReorderMap.at( orig_layer );
+            }
+            catch( std::out_of_range ) {}
+
+            m_groups[i].first = new_layer;
+        }
+    }
+
+
     /// Stores layer numbers used by the item.
     std::vector<int> m_layers;
 
@@ -623,6 +648,52 @@ void VIEW::SortLayers( int aLayers[], int& aCount ) const
         aLayers[maxIdx] = aLayers[i];
         aLayers[i] = maxLay;
     }
+}
+
+
+void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
+{
+    LAYER_MAP new_map;
+
+    for( auto it : m_layers )
+    {
+        int orig_idx = it.first;
+        VIEW_LAYER layer = it.second;
+        int new_idx;
+
+        try
+        {
+            new_idx = aReorderMap.at( orig_idx );
+        }
+        catch( std::out_of_range )
+        {
+            new_idx = orig_idx;
+        }
+
+        layer.id = new_idx;
+        new_map[new_idx] = layer;
+    }
+
+    m_layers = new_map;
+
+    for( VIEW_ITEM* item : m_allItems )
+    {
+        auto viewData = item->viewPrivData();
+
+        if( !viewData )
+            continue;
+
+        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+
+        item->ViewGetLayers( layers, layers_count );
+        viewData->saveLayers( layers, layers_count );
+
+        viewData->reorderGroups( aReorderMap );
+
+        viewData->m_requiredUpdate |= COLOR;
+    }
+
+    UpdateItems();
 }
 
 

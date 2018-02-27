@@ -39,6 +39,7 @@
 #include <reporter.h>
 #include <plot_auxiliary_data.h>
 #include <html_messagebox.h>
+#include <view/view.h>
 
 
 /**
@@ -195,6 +196,20 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
     }
 
     Zoom_Automatique( false );
+
+    auto remapping = GetImagesList()->SortImagesByZOrder();
+
+    ReFillLayerWidget();
+    syncLayerBox( true );
+
+    std::unordered_map<int, int> view_remapping;
+
+    for( auto it : remapping )
+    {
+        view_remapping[ GERBER_DRAW_LAYER( it.first) ] = GERBER_DRAW_LAYER( it.second );
+    }
+
+    GetGalCanvas()->GetView()->ReorderLayerData( view_remapping );
 
     if( !msg.IsEmpty() )
     {
