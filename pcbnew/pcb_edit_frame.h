@@ -24,7 +24,7 @@
 #ifndef  WXPCB_STRUCT_H_
 #define  WXPCB_STRUCT_H_
 
-
+#include <unordered_map>
 #include "pcb_base_edit_frame.h"
 #include "config_params.h"
 #include "undo_redo_container.h"
@@ -243,7 +243,7 @@ protected:
     /**
      * Rematch orphaned zones and vias to schematic nets.
      */
-    bool fixEagleNets();
+    bool fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap );
 
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );

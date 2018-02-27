@@ -897,6 +897,17 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             }
 
 
+            // Store net names for all pads, to create net remap information
+            std::unordered_map<D_PAD*, wxString> netMap;
+
+            for( const auto& pad : GetBoard()->GetPads() )
+            {
+                NETINFO_ITEM* netinfo = pad->GetNet();
+
+                if( netinfo->GetNet() > 0 && !netinfo->GetNetname().IsEmpty() )
+                    netMap[pad] = netinfo->GetNetname();
+            }
+
             // Two stage netlist update:
             // - first, assign valid timestamps to footprints (no reannotation)
             // - second, perform schematic annotation and update footprint references
@@ -906,7 +917,25 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST,
                     "quiet-annotate;by-timestamp", this );
 
-            fixEagleNets();
+            std::unordered_map<wxString, wxString> netRemap;
+
+            // Compare the old net names with the new net names and create a net map
+            for( const auto& pad : GetBoard()->GetPads() )
+            {
+                auto it = netMap.find( pad );
+
+                if( it == netMap.end() )
+                    continue;
+
+                NETINFO_ITEM* netinfo = pad->GetNet();
+
+                // Net name has changed, create a remap entry
+                if( netinfo->GetNet() > 0 && netMap[pad] != netinfo->GetNetname() )
+                    netRemap[netMap[pad]] = netinfo->GetNetname();
+            }
+
+            if( !netRemap.empty() )
+                fixEagleNets( netRemap );
 
             return true;
         }
@@ -921,52 +950,51 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 }
 
 
-bool PCB_EDIT_FRAME::fixEagleNets()
+bool PCB_EDIT_FRAME::fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap )
 {
-    KIWAY_PLAYER* schematicFrame = Kiway().Player( FRAME_SCH, false );
+    bool result = true;
+    BOARD* board = GetBoard();
 
-    // if the schematic file was also loaded. Fix any instances of ophaned zones and vias.
-    if( !schematicFrame )
-        return false;
-
-    // Get list of nets from schematic.
-    wxArrayString nets = schematicFrame->ListNets();
-
-    // perform netlist matching to prevent ophaned zones.
-    for( auto zone : GetBoard()->Zones() )
+    // perform netlist matching to prevent orphaned zones.
+    for( auto zone : board->Zones() )
     {
-        wxString zoneNet  = zone->GetNet()->GetNetname();
-        wxString localNet = "/" + zoneNet;
+        auto it = aRemap.find( zone->GetNet()->GetNetname() );
 
-        for( unsigned int i = 0; i < nets.GetCount(); i++ )
+        if( it != aRemap.end() )
         {
-            if( nets[i].EndsWith( localNet ) )
-            {
-                NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
+            NETINFO_ITEM* net = board->FindNet( it->second );
 
-                if( net )
-                    zone->SetNetCode( net->GetNet() );
+            if( !net )
+            {
+                wxFAIL;
+                result = false;
+                continue;
             }
+
+            zone->SetNet( net );
         }
     }
 
-    // perform netlist matching to prevent ophaned tracks/vias.
-    for( auto track : GetBoard()->Tracks() )
+
+    // perform netlist matching to prevent orphaned tracks/vias.
+    for( auto track : board->Tracks() )
     {
-        wxString trackNet = track->GetNet()->GetNetname();
-        wxString localNet = "/" + trackNet;
+        auto it = aRemap.find( track->GetNet()->GetNetname() );
 
-        for( unsigned int i = 0; i < nets.GetCount(); i++ )
+        if( it != aRemap.end() )
         {
-            if( nets[i].EndsWith( localNet ) )
-            {
-                NETINFO_ITEM* net = GetBoard()->FindNet( nets[i] );
+            NETINFO_ITEM* net = board->FindNet( it->second );
 
-                if( net )
-                    track->SetNetCode( net->GetNet() );
+            if( !net )
+            {
+                wxFAIL;
+                result = false;
+                continue;
             }
+
+            track->SetNet( net );
         }
     }
 
-    return true;
+    return result;
 }
