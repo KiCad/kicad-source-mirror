@@ -196,7 +196,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
                 currentPath.RemoveLast();
         }
 
-        wxFileDialog dlg( this, _( "Open Gerber File" ),
+        wxFileDialog dlg( this, _( "Open Gerber File(s)" ),
                           currentPath,
                           filename.GetFullName(),
                           filetypes,
@@ -346,7 +346,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         else
             currentPath = m_mruPath;
 
-        wxFileDialog dlg( this, _( "Open Drill File" ),
+        wxFileDialog dlg( this, _( "Open Excellon Drill File(s)" ),
                           currentPath, filename.GetFullName(), filetypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
 

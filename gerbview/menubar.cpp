@@ -59,28 +59,28 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // Load Gerber files
+    // Open Gerber file(s)
     AddMenuItem( fileMenu, wxID_FILE,
-                 _( "Load &Gerber File..." ),
-                 _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
+                 _( "Open &Gerber File(s)..." ),
+                 _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
                  KiBitmap( load_gerber_xpm ) );
 
-    // Load Excellon drill files
+    // Open Excellon drill file(s)
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
-                 _( "Load &EXCELLON Drill File..." ),
-                 _( "Load excellon drill file" ),
+                 _( "Open &Excellon Drill File(s)..." ),
+                 _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
                  KiBitmap( gerbview_drill_file_xpm ) );
 
-    // Load Gerber job files
+    // Open Gerber job files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_JOB_FILE,
-                 _( "Load Gerber &Job File..." ),
-                 _( "Load a Gerber job file, and load gerber files depending on the job" ),
+                 _( "Open Gerber &Job File..." ),
+                 _( "Open a Gerber job file, and it's associated gerber files depending on the job" ),
                  KiBitmap( gerber_job_file_xpm ) );
 
-    // Load Zip archive files
+    // Open Zip archive files
     AddMenuItem( fileMenu, ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE,
-                 _( "Load &Zip Archive File..." ),
-                 _( "Load a zipped archive (Gerber and drill) file" ),
+                 _( "Open &Zip Archive File..." ),
+                 _( "Open a zipped archive (Gerber and Drill) file" ),
                  KiBitmap( zip_xpm ) );
 
     // Recent gerber files
@@ -111,11 +111,25 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_drillFileHistory.UseMenu( openRecentDrlMenu );
     m_drillFileHistory.AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentDrlMenu, wxID_ANY,
-                 _( "Open Recent Dri&ll File" ),
-                 _( "Open a recently opened drill file" ),
+                 _( "Open Recent Excellon Dri&ll File" ),
+                 _( "Open a recently opened Excellon drill file" ),
                  KiBitmap( recent_xpm ) );
 
-    // Recent drill files
+    // Recent job files
+    static wxMenu* openRecentJobFilesMenu;
+
+    if( openRecentJobFilesMenu )
+        m_jobFileHistory.RemoveMenu( openRecentJobFilesMenu );
+
+    openRecentJobFilesMenu = new wxMenu();
+    m_jobFileHistory.UseMenu( openRecentJobFilesMenu );
+    m_jobFileHistory.AddFilesToMenu( );
+    AddMenuItem( fileMenu, openRecentJobFilesMenu, wxID_ANY,
+                 _( "Open Recent Gerber &Job File" ),
+                 _( "Open a recently opened gerber job file" ),
+                 KiBitmap( recent_xpm ) );
+
+    // Recent Zip archive
     static wxMenu* openRecentZipArchiveMenu;
 
     if( openRecentZipArchiveMenu )
@@ -129,27 +143,13 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Open a recently opened zip archive file" ),
                  KiBitmap( recent_xpm ) );
 
-    // Recent job files
-    static wxMenu* openRecentJobFilesMenu;
-
-    if( openRecentJobFilesMenu )
-        m_jobFileHistory.RemoveMenu( openRecentJobFilesMenu );
-
-    openRecentJobFilesMenu = new wxMenu();
-    m_jobFileHistory.UseMenu( openRecentJobFilesMenu );
-    m_jobFileHistory.AddFilesToMenu( );
-    AddMenuItem( fileMenu, openRecentJobFilesMenu, wxID_ANY,
-                 _( "Open Recent &Job File" ),
-                 _( "Open a recently opened gerber job file" ),
-                 KiBitmap( recent_xpm ) );
-
     // Separator
     fileMenu->AppendSeparator();
 
     // Clear all
     AddMenuItem( fileMenu,
                  ID_GERBVIEW_ERASE_ALL,
-                 _( "Clear &All" ),
+                 _( "Clear &All Layers" ),
                  _( "Clear all layers. All data will be deleted" ),
                  KiBitmap( delete_gerber_xpm ) );
 
@@ -168,7 +168,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Print
     AddMenuItem( fileMenu, wxID_PRINT,
-                 _( "&Print..." ), _( "Print gerber" ),
+                 _( "&Print..." ), _( "Print layers" ),
                  KiBitmap( print_button_xpm ) );
 
     // Separator
@@ -250,7 +250,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Erase graphic layer
     AddMenuItem( miscellaneousMenu, ID_GERBVIEW_ERASE_CURR_LAYER,
                  _( "&Clear Current Layer" ),
-                 _( "Erase the graphic layer currently selected" ),
+                 _( "Clear the graphic layer currently selected" ),
                  KiBitmap( delete_sheet_xpm ) );
 
     // Separator

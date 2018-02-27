@@ -54,14 +54,14 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     // Set up toolbar
     m_mainToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
                             KiScaledBitmap( delete_gerber_xpm, this ),
-                            _( "Erase all layers" ) );
+                            _( "Clear all layers" ) );
 
     m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiScaledBitmap( load_gerber_xpm, this ),
-                            _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
+                            _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ) );
 
     m_mainToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,
                             KiScaledBitmap( gerbview_drill_file_xpm, this ),
-                            _( "Load an excellon drill file on the current layer. Previous data will be deleted" ) );
+                            _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_GERBVIEW_SET_PAGE_BORDER, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
@@ -225,7 +225,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiScaledBitmap( polar_coord_xpm, this ),
-                               _( "Turn polar coordinate on" ), wxITEM_CHECK );
+                               _( "Turn polar coordinates on" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                KiScaledBitmap( unit_inch_xpm, this ),
