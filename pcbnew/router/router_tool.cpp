@@ -840,13 +840,15 @@ int ROUTER_TOOL::RouteDiffPair( const TOOL_EVENT& aEvent )
     return mainLoop( PNS::PNS_MODE_ROUTE_DIFF_PAIR );
 }
 
+
 void ROUTER_TOOL::breakTrack()
 {
-    if ( m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
+    if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
     {
         m_router->BreakSegment( m_startItem, m_startSnapPoint );
     }
 }
+
 
 int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
