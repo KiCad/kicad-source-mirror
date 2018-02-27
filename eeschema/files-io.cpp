@@ -801,6 +801,31 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 // Ensure the schematic is fully segmented on first display
                 BreakSegmentsOnJunctions();
                 SchematicCleanUp( true );
+
+                // Add junctions dots where necessary to get the connectivity right
+                SCH_TYPE_COLLECTOR components;
+                auto& schLibTable = *Kiway().Prj().SchSymbolLibTable();
+                components.Collect( GetScreen()->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
+
+                for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
+                {
+                    std::vector<wxPoint> pts;
+                    SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( components[cmpIdx] );
+
+                    cmp->Resolve( schLibTable );
+                    cmp->UpdatePinCache();
+                    cmp->GetConnectionPoints( pts );
+
+                    for( auto i = pts.begin(); i != pts.end(); ++i )
+                    {
+                        for( auto j = i + 1; j != pts.end(); ++j )
+                            TrimWire( *i, *j, true );
+
+                        if( GetScreen()->IsJunctionNeeded( *i, true ) )
+                            AddJunction( *i, true );
+                    }
+                }
+
                 GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
                 // Only perform the dangling end test on root sheet.
                 GetScreen()->TestDanglingEnds();
