@@ -1594,9 +1594,9 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         float viewArea = getView()->GetViewport().GetArea();
         float modArea = aItem->ViewBBox().GetArea();
 
-        // Do not select modules that cover more than 90% of the view area
+        // Do not select modules that are larger the view area
         // (most likely footprints representing shield connectors)
-        if( viewArea > 0.0 && modArea / viewArea > 0.9 )
+        if( viewArea > 0.0 && modArea > viewArea )
             return false;
 
         if( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( LAYER_MOD_FR ) )
