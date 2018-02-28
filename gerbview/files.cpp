@@ -231,6 +231,7 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();
+    int visibility = GetVisibleLayers();
 
     // Manage errors when loading files
     wxString msg;
@@ -264,6 +265,8 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
         m_lastFileName = filename.GetFullPath();
 
         SetActiveLayer( layer, false );
+
+        visibility |= ( 1 << layer );
 
         if( Read_GERBER_File( filename.GetFullPath() ) )
         {
@@ -304,6 +307,8 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
         mbox.ListSet( msg );
         mbox.ShowModal();
     }
+
+    SetVisibleLayers( visibility );
 
     Zoom_Automatique( false );
 

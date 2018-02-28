@@ -668,6 +668,27 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 }
 
 
+void GERBVIEW_FRAME::SortLayersByX2Attributes()
+{
+    auto remapping = GetImagesList()->SortImagesByZOrder();
+
+    ReFillLayerWidget();
+    syncLayerBox( true );
+
+    std::unordered_map<int, int> view_remapping;
+
+    for( auto it : remapping )
+    {
+        view_remapping[ GERBER_DRAW_LAYER( it.first) ] = GERBER_DRAW_LAYER( it.second );
+        view_remapping[ GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( it.first) ) ] =
+            GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( it.second ) );
+    }
+
+    GetGalCanvas()->GetView()->ReorderLayerData( view_remapping );
+    GetCanvas()->Refresh();
+}
+
+
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
     GERBER_FILE_IMAGE* gerber = GetGbrImage( GetActiveLayer() );

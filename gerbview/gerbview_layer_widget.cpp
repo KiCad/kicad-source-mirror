@@ -209,20 +209,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         break;
 
     case ID_SORT_GBR_LAYERS:
-        auto remapping = GetImagesList()->SortImagesByZOrder();
-        myframe->ReFillLayerWidget();
-        myframe->syncLayerBox( true );
-
-        std::unordered_map<int, int> view_remapping;
-
-        for( auto it : remapping )
-        {
-            view_remapping[ GERBER_DRAW_LAYER( it.first) ] = GERBER_DRAW_LAYER( it.second );
-        }
-
-        myframe->GetGalCanvas()->GetView()->ReorderLayerData( view_remapping );
-
-        myframe->GetCanvas()->Refresh();
+        myframe->SortLayersByX2Attributes();
         break;
     }
 }

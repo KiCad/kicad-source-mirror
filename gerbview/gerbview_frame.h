@@ -701,6 +701,8 @@ public:
     bool                Clear_DrawLayers( bool query );
     void                Erase_Current_DrawLayer( bool query );
 
+    void                SortLayersByX2Attributes();
+
     // Conversion function
     void                ExportDataInPcbnewFormat( wxCommandEvent& event );
 
