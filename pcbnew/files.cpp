@@ -897,6 +897,19 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             }
 
 
+            // Update module LIB_IDs to point to the just imported Eagle library
+            for( MODULE* module : GetBoard()->Modules() )
+            {
+                LIB_ID libId = module->GetFPID();
+
+                if( libId.GetLibItemName().empty() )
+                    continue;
+
+                libId.SetLibNickname( newfilename.GetName() );
+                module->SetFPID( libId );
+            }
+
+
             // Store net names for all pads, to create net remap information
             std::unordered_map<D_PAD*, wxString> netMap;
 
