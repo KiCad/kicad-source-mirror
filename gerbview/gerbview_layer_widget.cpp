@@ -34,6 +34,7 @@
 #include <class_drawpanel.h>
 #include <macros.h>
 #include <gbr_layer_box_selector.h>
+#include <menus_helpers.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -134,24 +135,26 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 }
 
 
-void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
+void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu* aMenu )
 {
     // Remember: menu text is capitalized (see our rules_for_capitalization_in_Kicad_UI.txt)
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_LAYERS,
-                                 _("Show All Layers") ) );
+    AddMenuItem( aMenu, ID_SHOW_ALL_LAYERS, _( "Show All Layers" ),
+                 KiBitmap( show_all_layers_xpm ) );
 
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_LAYERS_BUT_ACTIVE,
-                                 _( "Hide All Layers But Active" ) ) );
+    AddMenuItem( aMenu, ID_SHOW_NO_LAYERS_BUT_ACTIVE,
+                 _( "Hide All Layers But Active" ),
+                 KiBitmap( select_w_layer_xpm ) );
 
-    menu.Append( new wxMenuItem( &menu, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
-                                 _( "Always Hide All Layers But Active" ) ) );
+    AddMenuItem( aMenu, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+                 _( "Always Hide All Layers But Active" ),
+                 KiBitmap( select_w_layer_xpm ) );
 
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_LAYERS,
-                                 _( "Hide All Layers" ) ) );
+    AddMenuItem( aMenu, ID_SHOW_NO_LAYERS, _( "Hide All Layers" ),
+                 KiBitmap( show_no_layers_xpm ) );
 
-    menu.AppendSeparator();
-    menu.Append( new wxMenuItem( &menu, ID_SORT_GBR_LAYERS,
-                                 _( "Sort Layers if X2 Mode" ) ) );
+    aMenu->AppendSeparator();
+    AddMenuItem( aMenu, ID_SORT_GBR_LAYERS, _( "Sort Layers if X2 Mode" ),
+                 KiBitmap( reload_xpm ) );
 }
 
 
@@ -159,7 +162,7 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 {
     wxMenu          menu;
 
-    AddRightClickMenuItems( menu );
+    AddRightClickMenuItems( &menu );
     PopupMenu( &menu );
 
     passOnFocus();
@@ -173,16 +176,17 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     long visibleLayers = 0;
     bool force_active_layer_visible;
 
-    m_alwaysShowActiveLayer = ( menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
-    force_active_layer_visible = ( menuId == ID_SHOW_NO_LAYERS_BUT_ACTIVE ||
-                                   menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
-
     switch( menuId )
     {
     case ID_SHOW_ALL_LAYERS:
     case ID_SHOW_NO_LAYERS:
     case ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE:
     case ID_SHOW_NO_LAYERS_BUT_ACTIVE:
+        // Set the display layers options. Sorting layers has no effect to these options
+        m_alwaysShowActiveLayer = ( menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
+        force_active_layer_visible = ( menuId == ID_SHOW_NO_LAYERS_BUT_ACTIVE ||
+                                       menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
+        // Update icons and check boxes
         rowCount = GetLayerRowCount();
         for( int row=0; row < rowCount; ++row )
         {
@@ -260,7 +264,7 @@ void GERBER_LAYER_WIDGET::ReFill()
 
 void GERBER_LAYER_WIDGET::OnLayerRightClick( wxMenu& aMenu )
 {
-    AddRightClickMenuItems( aMenu );
+    AddRightClickMenuItems( &aMenu );
 }
 
 void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )

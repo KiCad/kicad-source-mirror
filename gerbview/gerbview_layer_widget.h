@@ -121,8 +121,9 @@ public:
      * Function addRightClickMenuItems
      * add menu items to a menu that should be shown when right-clicking
      * the Gerber layer widget.
+     * @param aMenu is the menu to modify: menuitems will be added to aMenu
      */
-    void AddRightClickMenuItems( wxMenu& menu );
+    void AddRightClickMenuItems( wxMenu* aMenu );
 
 protected:
     // popup menu ids. in layer manager
