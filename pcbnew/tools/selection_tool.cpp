@@ -313,10 +313,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( m_selection.Empty() )
             {
                 // There is nothing selected, so try to select something
-                if( !selectCursor() )
+                if( getEditFrame<PCB_BASE_FRAME>()->Settings().m_dragSelects || !selectCursor() )
                 {
-                    // If nothings has been selected or user wants to select more
-                    // draw the selection box
+                    // If nothings has been selected, user wants to select more or selection
+                    // box is preferred to dragging - draw selection box
                     selectMultiple();
                 }
                 else

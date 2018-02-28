@@ -42,6 +42,7 @@
 #include <collectors.h>
 #include <pgm_base.h>
 #include <dialog_general_options.h>
+#include <widgets/stepped_slider.h>
 
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
@@ -89,6 +90,7 @@ void DIALOG_GENERALOPTIONS::init()
     m_MagneticPadOptCtrl->SetSelection( GetParent()->Settings().m_magneticPads );
     m_MagneticTrackOptCtrl->SetSelection( GetParent()->Settings().m_magneticTracks );
     m_UseEditKeyForWidth->SetValue( GetParent()->Settings().m_editActionChangesTrackWidth );
+    m_dragSelects->SetValue( GetParent()->Settings().m_dragSelects );
 
     m_Show_Page_Limits->SetValue( GetParent()->ShowPageLimits() );
 
@@ -174,6 +176,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     GetParent()->Settings().m_magneticPads   = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticPadOptCtrl->GetSelection();
     GetParent()->Settings().m_magneticTracks = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticTrackOptCtrl->GetSelection();
     GetParent()->Settings().m_editActionChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
+    GetParent()->Settings().m_dragSelects = m_dragSelects->GetValue();
 
     GetParent()->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 

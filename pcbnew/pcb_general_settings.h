@@ -62,6 +62,8 @@ public:
     bool    m_legacyUseTwoSegmentTracks = true;
 
     bool    m_editActionChangesTrackWidth = false;
+    bool    m_dragSelects = true;                   // True: Drag gesture always draws a selection box,
+                                                    // False: Drag will preselect an item and move it
 
     MAGNETIC_PAD_OPTION_VALUES  m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
     MAGNETIC_PAD_OPTION_VALUES  m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;

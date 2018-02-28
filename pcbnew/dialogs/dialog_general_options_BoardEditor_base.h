@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_GENERAL_OPTIONS_BOARDEDITOR_BASE_H__
@@ -11,7 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "widgets/stepped_slider.h"
+class DIALOG_SHIM;
+class STEPPED_SLIDER;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -69,6 +71,7 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Show_Page_Limits;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
 		wxCheckBox* m_UseEditKeyForWidth;
+		wxCheckBox* m_dragSelects;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
 		wxRadioBox* m_MagneticPadOptCtrl;

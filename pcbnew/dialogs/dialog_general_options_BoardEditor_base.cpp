@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/stepped_slider.h"
 
 #include "dialog_general_options_BoardEditor_base.h"
 
@@ -146,6 +148,11 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	m_UseEditKeyForWidth->SetToolTip( _("When active, hitting Edit hotkey or double-clicking on a track or via changes its width/diameter to the one selected in the main toolbar. ") );
 	
 	bOptionsSizer->Add( m_UseEditKeyForWidth, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	m_dragSelects = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Prefer selection to dragging"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dragSelects->SetToolTip( _("When enabled and nothing is selected, drag gesture will draw a selection box, even if there are items under the cursor that could be immediately dragged.") );
+	
+	bOptionsSizer->Add( m_dragSelects, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	wxFlexGridSizer* fgSizer12;
 	fgSizer12 = new wxFlexGridSizer( 0, 2, 0, 0 );
