@@ -94,3 +94,33 @@ REPORTER& NULL_REPORTER::GetInstance()
 
     return *s_nullReporter;
 }
+
+
+REPORTER& STDOUT_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    switch( aSeverity )
+    {
+        case RPT_UNDEFINED: std::cout << "RPT_UNDEFINED: "; break;
+        case RPT_INFO:      std::cout << "RPT_INFO: "; break;
+        case RPT_WARNING:   std::cout << "RPT_WARNING: "; break;
+        case RPT_ERROR:     std::cout << "RPT_ERROR: "; break;
+        case RPT_ACTION:    std::cout << "RPT_ACTION: "; break;
+    }
+
+    std::cout << aText << std::endl;
+
+    return *this;
+}
+
+
+REPORTER& STDOUT_REPORTER::GetInstance()
+{
+    static REPORTER* s_stdoutReporter = nullptr;
+
+    if( !s_stdoutReporter )
+    {
+        s_stdoutReporter = new STDOUT_REPORTER();
+    }
+
+    return *s_stdoutReporter;
+}

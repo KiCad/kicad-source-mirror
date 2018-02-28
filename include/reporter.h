@@ -178,4 +178,23 @@ public:
     bool HasMessage() const override { return false; }
 };
 
+/**
+ * Class STDOUT_REPORTER
+ *
+ * Debug type reporter, forwarding messages to std::cout.
+ */
+class STDOUT_REPORTER : public REPORTER
+{
+public:
+    STDOUT_REPORTER()
+    {
+    }
+
+    static REPORTER& GetInstance();
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+
+    bool HasMessage() const override { return false; }
+};
+
 #endif     // _REPORTER_H_
