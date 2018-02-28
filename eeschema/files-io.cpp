@@ -802,29 +802,45 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 BreakSegmentsOnJunctions();
                 SchematicCleanUp( true );
 
-                // Add junctions dots where necessary to get the connectivity right
+
                 SCH_TYPE_COLLECTOR components;
                 auto& schLibTable = *Kiway().Prj().SchSymbolLibTable();
-                components.Collect( GetScreen()->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
-
-                for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
+                SCH_SCREENS allScreens;
+                for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
                 {
-                    std::vector<wxPoint> pts;
-                    SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( components[cmpIdx] );
+                    components.Collect( screen->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
 
-                    cmp->Resolve( schLibTable );
-                    cmp->UpdatePinCache();
-                    cmp->GetConnectionPoints( pts );
-
-                    for( auto i = pts.begin(); i != pts.end(); ++i )
+                    for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
                     {
-                        for( auto j = i + 1; j != pts.end(); ++j )
-                            TrimWire( *i, *j, true );
+                        std::vector<wxPoint> pts;
+                        SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( components[cmpIdx] );
 
-                        if( GetScreen()->IsJunctionNeeded( *i, true ) )
-                            AddJunction( *i, true );
+                        // Update footprint LIB_ID to point to the imported Eagle library
+                        auto fpField = cmp->GetField( FOOTPRINT );
+
+                        if( !fpField->GetText().IsEmpty() )
+                        {
+                            LIB_ID fpId( fpField->GetText() );
+                            fpId.SetLibNickname( newfilename.GetName() );
+                            fpField->SetText( fpId.Format() );
+                        }
+
+                        // Add junction dots where necessary
+                        cmp->Resolve( schLibTable );
+                        cmp->UpdatePinCache();
+                        cmp->GetConnectionPoints( pts );
+
+                        for( auto i = pts.begin(); i != pts.end(); ++i )
+                        {
+                            for( auto j = i + 1; j != pts.end(); ++j )
+                                TrimWire( *i, *j, true );
+
+                            if( GetScreen()->IsJunctionNeeded( *i, true ) )
+                                AddJunction( *i, true );
+                        }
                     }
                 }
+
 
                 GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
                 // Only perform the dangling end test on root sheet.
