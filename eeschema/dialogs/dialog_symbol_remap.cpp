@@ -312,17 +312,19 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
 
 bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 {
-    static wxString backupPath = "rescue-backup";
+    static wxString backupFolder = "rescue-backup";
 
     wxString tmp;
     wxString errorMsg;
     wxFileName srcFileName;
     wxFileName destFileName;
+    wxFileName backupPath;
     SCH_SCREENS schematic;
 
     // Copy backup files to different folder so as not to pollute the project folder.
     destFileName.SetPath( Prj().GetProjectPath() );
-    destFileName.AppendDir( backupPath );
+    destFileName.AppendDir( backupFolder );
+    backupPath = destFileName;
 
     if( !destFileName.DirExists() )
     {
@@ -348,7 +350,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     srcFileName.SetPath( Prj().GetProjectPath() );
     srcFileName.SetName( SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     destFileName = srcFileName;
-    destFileName.AppendDir( backupPath );
+    destFileName.AppendDir( backupFolder );
     destFileName.SetName( destFileName.GetName() + timeStamp );
 
     tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
@@ -367,11 +369,33 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     {
         destFileName = screen->GetFileName();
         destFileName.SetName( destFileName.GetName() + timeStamp );
-        destFileName.AppendDir( backupPath );
+
+        // Check for nest hierarchical schematic paths.
+        if( destFileName.GetPath() != backupPath.GetPath() )
+        {
+            destFileName.SetPath( backupPath.GetPath() );
+
+            wxArrayString srcDirs = wxFileName( screen->GetFileName() ).GetDirs();
+            wxArrayString destDirs = wxFileName( Prj().GetProjectPath() ).GetDirs();
+
+            for( size_t i = destDirs.GetCount(); i < srcDirs.GetCount(); i++ )
+                destFileName.AppendDir( srcDirs[i] );
+        }
+        else
+        {
+            destFileName.AppendDir( backupFolder );
+        }
 
         tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                     screen->GetFileName(), destFileName.GetFullPath() );
         aReporter.Report( tmp, REPORTER::RPT_INFO );
+
+        if( !destFileName.DirExists() && !destFileName.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            tmp.Printf( _( "Failed to create backup folder \"%s\"\n" ), destFileName.GetPath() );
+            errorMsg += tmp;
+            continue;
+        }
 
         if( wxFileName::Exists( screen->GetFileName() )
           && !wxCopyFile( screen->GetFileName(), destFileName.GetFullPath() ) )
@@ -384,7 +408,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     // Back up the project file.
     destFileName = Prj().GetProjectFullName();
     destFileName.SetName( destFileName.GetName() + timeStamp );
-    destFileName.AppendDir( backupPath );
+    destFileName.AppendDir( backupFolder );
 
     tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                    Prj().GetProjectFullName(), destFileName.GetFullPath() );
@@ -404,7 +428,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 
     destFileName = srcFileName;
     destFileName.SetName( destFileName.GetName() + timeStamp );
-    destFileName.AppendDir( backupPath );
+    destFileName.AppendDir( backupFolder );
 
     tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
