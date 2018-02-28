@@ -182,18 +182,68 @@ ALIGNMENT_RECTS GetBoundingBoxes( const SELECTION &sel )
 }
 
 
+int ALIGN_DISTRIBUTE_TOOL::checkLockedStatus( const SELECTION &selection ) const
+{
+    SELECTION moving_items( selection );
+
+    // Remove the anchor from the list
+    moving_items.Remove( moving_items.Front() );
+
+    bool containsLocked = false;
+
+    // Check if the selection contains locked items
+    for( const auto& item : moving_items )
+    {
+        switch ( item->Type() )
+        {
+        case PCB_MODULE_T:
+            if( static_cast< MODULE* >( item )->IsLocked() )
+                containsLocked = true;
+            break;
+
+        case PCB_PAD_T:
+        case PCB_MODULE_EDGE_T:
+        case PCB_MODULE_TEXT_T:
+            if( static_cast< MODULE* >( item->GetParent() )->IsLocked() )
+                containsLocked = true;
+            break;
+
+        default:    // suppress warnings
+            break;
+        }
+    }
+
+    if( containsLocked )
+    {
+        if( IsOK( getEditFrame< PCB_EDIT_FRAME >(),
+                _( "Selection contains locked items. Do you want to continue?" ) ) )
+        {
+            return SELECTION_LOCK_OVERRIDE;
+        }
+        else
+            return SELECTION_LOCKED;
+    }
+
+    return SELECTION_UNLOCKED;
+}
+
+
 int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
-    commit.StageItems( selection, CHT_MODIFY );
-
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortTopmostY );
+
+    if( checkLockedStatus( selection ) == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
+    commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
     const int targetTop = itemsToAlign.begin()->second.GetY();
@@ -202,7 +252,13 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     for( auto& i : itemsToAlign )
     {
         int difference = targetTop - i.second.GetY();
-        i.first->Move( wxPoint( 0, difference ) );
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        item->Move( wxPoint( 0, difference ) );
     }
 
     commit.Push( _( "Align to top" ) );
@@ -213,16 +269,20 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
-    commit.StageItems( selection, CHT_MODIFY );
-
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortBottommostY );
+
+    if( checkLockedStatus( selection ) == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
+    commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
    const int targetBottom = itemsToAlign.begin()->second.GetBottom();
@@ -231,7 +291,13 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     for( auto& i : itemsToAlign )
     {
         int difference = targetBottom - i.second.GetBottom();
-        i.first->Move( wxPoint( 0, difference ) );
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        item->Move( wxPoint( 0, difference ) );
     }
 
     commit.Push( _( "Align to bottom" ) );
@@ -257,16 +323,20 @@ int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
-    commit.StageItems( selection, CHT_MODIFY );
-
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortLeftmostX );
+
+    if( checkLockedStatus( selection ) == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
+    commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
     const int targetLeft = itemsToAlign.begin()->second.GetX();
@@ -275,7 +345,13 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
     for( auto& i : itemsToAlign )
     {
         int difference = targetLeft - i.second.GetX();
-        i.first->Move( wxPoint( difference, 0 ) );
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        item->Move( wxPoint( difference, 0 ) );
     }
 
     commit.Push( _( "Align to left" ) );
@@ -301,16 +377,20 @@ int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
-    commit.StageItems( selection, CHT_MODIFY );
-
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortRightmostX );
+
+    if( checkLockedStatus( selection ) == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
+    commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
     const int targetRight = itemsToAlign.begin()->second.GetRight();
@@ -319,7 +399,13 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     for( auto& i : itemsToAlign )
     {
         int difference = targetRight - i.second.GetRight();
-        i.first->Move( wxPoint( difference, 0 ) );
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        item->Move( wxPoint( difference, 0 ) );
     }
 
     commit.Push( _( "Align to right" ) );
@@ -330,16 +416,20 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
-    commit.StageItems( selection, CHT_MODIFY );
-
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterX );
+
+    if( checkLockedStatus( selection ) == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
+    commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting use the x coordinate of the middle item as a target for all other items
     const int targetX = itemsToAlign.at( itemsToAlign.size() / 2 ).second.GetCenter().x;
@@ -348,7 +438,13 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
     for( auto& i : itemsToAlign )
     {
         int difference = targetX - i.second.GetCenter().x;
-        i.first->Move( wxPoint( difference, 0 ) );
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        item->Move( wxPoint( difference, 0 ) );
     }
 
     commit.Push( _( "Align to middle" ) );
@@ -359,16 +455,20 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
-    commit.StageItems( selection, CHT_MODIFY );
-
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterY );
+
+    if( checkLockedStatus( selection ) == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
+    commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting use the y coordinate of the middle item as a target for all other items
     const int targetY = itemsToAlign.at( itemsToAlign.size() / 2 ).second.GetCenter().y;
@@ -377,7 +477,13 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
     for( auto& i : itemsToAlign )
     {
         int difference = targetY - i.second.GetCenter().y;
-        i.first->Move( wxPoint( 0, difference ) );
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        item->Move( wxPoint( 0, difference ) );
     }
 
     commit.Push( _( "Align to center" ) );
@@ -388,12 +494,17 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection(
+            SELECTION_EDITABLE | SELECTION_SANITIZE_PADS );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     auto itemsToDistribute = GetBoundingBoxes( selection );
@@ -470,12 +581,17 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
 
 int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    const SELECTION& selection = m_selectionTool->RequestSelection(
+            SELECTION_EDITABLE | SELECTION_SANITIZE_PADS );
 
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
+        return 0;
+
+    BOARD_COMMIT commit( frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     auto itemsToDistribute = GetBoundingBoxes( selection );

@@ -120,6 +120,16 @@ private:
     CONTEXT_MENU* m_placementMenu;
 
     /**
+     * Check a selection to ensure locks are valid for alignment.
+     *
+     * This is slightly different from the standard lock checking in that we ignore the lock
+     * of the first element in the selection as this is meant to be our anchor.
+     * We also check the lock of a pad's parent as we will not move pads independently of
+     * the parent module
+     */
+    int checkLockedStatus( const SELECTION &selection ) const;
+
+    /**
      * Distributes selected items using an even spacing between the centers of their bounding boxes
      *
      * NOTE: Using the centers of bounding box of items can give unsatisfactory visual results since
