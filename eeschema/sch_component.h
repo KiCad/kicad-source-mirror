@@ -68,8 +68,6 @@ extern std::string toUTFTildaText( const wxString& txt );
  */
 class SCH_COMPONENT : public SCH_ITEM
 {
-    friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
-
 public:
     enum AUTOPLACED { AUTOPLACED_NO = 0, AUTOPLACED_AUTO, AUTOPLACED_MANUAL };
 private:

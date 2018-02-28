@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_edit_libentry_fields_in_lib_base.h"
@@ -17,185 +17,101 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizerFieldsSetup;
-	bSizerFieldsSetup = new wxBoxSizer( wxHORIZONTAL );
+	bSizerFieldsSetup = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizerFiledsList;
-	bSizerFiledsList = new wxBoxSizer( wxVERTICAL );
+	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fieldListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	bSizerFiledsList->Add( fieldListCtrl, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 6 );
+	// Grid
+	m_grid->CreateGrid( 4, 11 );
+	m_grid->EnableEditing( true );
+	m_grid->EnableGridLines( true );
+	m_grid->EnableDragGridSize( false );
+	m_grid->SetMargins( 0, 0 );
 	
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+	// Columns
+	m_grid->SetColSize( 0, 72 );
+	m_grid->SetColSize( 1, 120 );
+	m_grid->SetColSize( 2, 48 );
+	m_grid->SetColSize( 3, 72 );
+	m_grid->SetColSize( 4, 72 );
+	m_grid->SetColSize( 5, 48 );
+	m_grid->SetColSize( 6, 48 );
+	m_grid->SetColSize( 7, 84 );
+	m_grid->SetColSize( 8, 84 );
+	m_grid->SetColSize( 9, 84 );
+	m_grid->SetColSize( 10, 84 );
+	m_grid->EnableDragColMove( false );
+	m_grid->EnableDragColSize( true );
+	m_grid->SetColLabelSize( 22 );
+	m_grid->SetColLabelValue( 0, _("Name") );
+	m_grid->SetColLabelValue( 1, _("Value") );
+	m_grid->SetColLabelValue( 2, _("Show") );
+	m_grid->SetColLabelValue( 3, _("H Align") );
+	m_grid->SetColLabelValue( 4, _("V Align") );
+	m_grid->SetColLabelValue( 5, _("Italic") );
+	m_grid->SetColLabelValue( 6, _("Bold") );
+	m_grid->SetColLabelValue( 7, _("Text Size") );
+	m_grid->SetColLabelValue( 8, _("Orientation") );
+	m_grid->SetColLabelValue( 9, _("X Position") );
+	m_grid->SetColLabelValue( 10, _("Y Position") );
+	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
-	moveUpButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	moveUpButton->SetToolTip( _("Move the selected optional field up one position") );
+	// Rows
+	m_grid->EnableDragRowSize( true );
+	m_grid->SetRowLabelSize( 0 );
+	m_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
-	bSizer8->Add( moveUpButton, 0, wxALL, 5 );
+	// Label Appearance
 	
-	moveDownButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	moveDownButton->SetToolTip( _("Move the selected optional field down one position") );
+	// Cell Defaults
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_grid->SetMinSize( wxSize( -1,180 ) );
 	
-	bSizer8->Add( moveDownButton, 0, wxALL, 5 );
+	bSizerFieldsSetup->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 	
+	wxBoxSizer* bButtonSize;
+	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_bpAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpAdd->SetMinSize( wxSize( 29,29 ) );
 	
-	deleteFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	deleteFieldButton->SetToolTip( _("Delete one of the optional fields") );
+	bButtonSize->Add( m_bpAdd, 0, 0, 5 );
 	
-	bSizer8->Add( deleteFieldButton, 0, wxALL, 5 );
+	m_bpDelete = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpDelete->SetMinSize( wxSize( 29,29 ) );
 	
-	addFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	addFieldButton->SetToolTip( _("Add a new custom field") );
+	bButtonSize->Add( m_bpDelete, 0, wxRIGHT, 10 );
 	
-	bSizer8->Add( addFieldButton, 0, wxALL, 5 );
+	m_bpMoveUp = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpMoveUp->SetMinSize( wxSize( 29,29 ) );
 	
+	bButtonSize->Add( m_bpMoveUp, 0, wxLEFT, 10 );
 	
-	bSizerFiledsList->Add( bSizer8, 0, wxEXPAND, 5 );
+	m_bpMoveDown = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpMoveDown->SetMinSize( wxSize( 29,29 ) );
 	
-	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice model"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerFiledsList->Add( m_spiceFieldsButton, 0, wxALL|wxEXPAND, 5 );
+	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
 	
 	
-	bSizerFieldsSetup->Add( bSizerFiledsList, 3, wxEXPAND, 5 );
+	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* fieldEditBoxSizer;
-	fieldEditBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizerJustify;
-	bSizerJustify = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxString m_FieldHJustifyCtrlChoices[] = { _("Left"), _("Center"), _("Right") };
-	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
-	m_FieldHJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Horizontal Align:"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_FieldHJustifyCtrl->SetSelection( 1 );
-	m_FieldHJustifyCtrl->SetToolTip( _("Select if the symbol is to be rotated when drawn") );
-	
-	bSizerJustify->Add( m_FieldHJustifyCtrl, 1, wxEXPAND|wxALL, 5 );
-	
-	wxString m_FieldVJustifyCtrlChoices[] = { _("Bottom"), _("Center"), _("Top") };
-	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
-	m_FieldVJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Vertical Align:"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_FieldVJustifyCtrl->SetSelection( 0 );
-	m_FieldVJustifyCtrl->SetToolTip( _("Pick the graphical transformation to be used when displaying the symbol") );
-	
-	bSizerJustify->Add( m_FieldVJustifyCtrl, 1, wxEXPAND|wxALL, 5 );
-	
-	
-	fieldEditBoxSizer->Add( bSizerJustify, 1, wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizerAspect;
-	bSizerAspect = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxStaticBoxSizer* visibilitySizer;
-	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility:") ), wxVERTICAL );
-	
-	showCheckBox = new wxCheckBox( visibilitySizer->GetStaticBox(), wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
-	showCheckBox->SetToolTip( _("Check if you want this field visible") );
-	
-	visibilitySizer->Add( showCheckBox, 0, wxALL, 5 );
-	
-	rotateCheckBox = new wxCheckBox( visibilitySizer->GetStaticBox(), wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
-	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
-	
-	visibilitySizer->Add( rotateCheckBox, 0, wxALL, 5 );
-	
-	
-	bSizerAspect->Add( visibilitySizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	wxString m_StyleRadioBoxChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
-	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
-	m_StyleRadioBox = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	m_StyleRadioBox->SetSelection( 0 );
-	bSizerAspect->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	
-	fieldEditBoxSizer->Add( bSizerAspect, 1, wxALL|wxEXPAND|wxTOP, 5 );
-	
-	wxBoxSizer* fieldNameBoxSizer;
-	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
-	
-	fieldNameLabel = new wxStaticText( this, wxID_ANY, _("Field Name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fieldNameLabel->Wrap( -1 );
-	fieldNameBoxSizer->Add( fieldNameLabel, 0, 0, 5 );
-	
-	fieldNameTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldNameTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
-	
-	fieldNameBoxSizer->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND, 5 );
-	
-	fieldValueLabel = new wxStaticText( this, wxID_ANY, _("Field Value:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fieldValueLabel->Wrap( -1 );
-	fieldNameBoxSizer->Add( fieldValueLabel, 0, wxTOP, 5 );
-	
-	fieldValueTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldValueTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
-	
-	fieldNameBoxSizer->Add( fieldValueTextCtrl, 0, wxBOTTOM|wxEXPAND, 5 );
-	
-	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show in Browser"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_show_datasheet_button->SetToolTip( _("If your datasheet is given as an http:// link, then pressing this button should bring it up in your webbrowser.") );
-	
-	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
-	
-	
-	fieldEditBoxSizer->Add( fieldNameBoxSizer, 0, wxALL|wxEXPAND, 5 );
-	
-	wxFlexGridSizer* fgSizerPosSize;
-	fgSizerPosSize = new wxFlexGridSizer( 3, 3, 5, 5 );
-	fgSizerPosSize->AddGrowableCol( 1 );
-	fgSizerPosSize->SetFlexibleDirection( wxBOTH );
-	fgSizerPosSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	textSizeLabel = new wxStaticText( this, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	textSizeLabel->Wrap( -1 );
-	fgSizerPosSize->Add( textSizeLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	textSizeTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	textSizeTextCtrl->SetToolTip( _("The vertical height of the currently selected field's text in the schematic") );
-	
-	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-	
-	m_staticTextUnitSize = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUnitSize->Wrap( -1 );
-	fgSizerPosSize->Add( m_staticTextUnitSize, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	posXLabel = new wxStaticText( this, wxID_ANY, _("X Position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	posXLabel->Wrap( -1 );
-	fgSizerPosSize->Add( posXLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	posXTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPosSize->Add( posXTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-	
-	m_staticTextUnitPosX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUnitPosX->Wrap( -1 );
-	fgSizerPosSize->Add( m_staticTextUnitPosX, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	posYLabel = new wxStaticText( this, wxID_ANY, _("Y Position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	posYLabel->Wrap( -1 );
-	fgSizerPosSize->Add( posYLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	posYTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	posYTextCtrl->SetToolTip( _("The Y coordinate of the text relative to the symbol anchor position") );
-	
-	fgSizerPosSize->Add( posYTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-	
-	m_staticTextUnitPosY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUnitPosY->Wrap( -1 );
-	fgSizerPosSize->Add( m_staticTextUnitPosY, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	
-	fieldEditBoxSizer->Add( fgSizerPosSize, 1, wxALL|wxEXPAND, 5 );
-	
-	
-	bSizerFieldsSetup->Add( fieldEditBoxSizer, 2, wxEXPAND, 5 );
+	bSizerFieldsSetup->Add( bButtonSize, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	mainSizer->Add( bSizerFieldsSetup, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("   Edit Spice Model...   "), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_spiceFieldsButton, 0, wxEXPAND|wxRIGHT|wxLEFT, 25 );
 	
 	stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -204,7 +120,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	stdDialogButtonSizer->AddButton( stdDialogButtonSizerCancel );
 	stdDialogButtonSizer->Realize();
 	
-	mainSizer->Add( stdDialogButtonSizer, 0, wxALL|wxEXPAND, 6 );
+	bSizerButtons->Add( stdDialogButtonSizer, 0, wxEXPAND, 6 );
+	
+	
+	mainSizer->Add( bSizerButtons, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( mainSizer );
@@ -214,15 +133,13 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCloseDialog ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnInitDialog ) );
-	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemDeselected ), NULL, this );
-	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemSelected ), NULL, this );
-	fieldListCtrl->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnSizeFieldsList ), NULL, this );
-	moveUpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveUpButtonHandler ), NULL, this );
-	moveDownButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveDownButtonHandler ), NULL, this );
-	deleteFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::deleteFieldButtonHandler ), NULL, this );
-	addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::addFieldButtonHandler ), NULL, this );
-	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::EditSpiceModel ), NULL, this );
-	m_show_datasheet_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::showButtonHandler ), NULL, this );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnUpdateUI ) );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnSizeGrid ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnAddField ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnDeleteField ), NULL, this );
+	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnMoveDown ), NULL, this );
+	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnEditSpiceModel ), NULL, this );
 	stdDialogButtonSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCancelButtonClick ), NULL, this );
 	stdDialogButtonSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnOKButtonClick ), NULL, this );
 }
@@ -232,15 +149,13 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BAS
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCloseDialog ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnInitDialog ) );
-	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemDeselected ), NULL, this );
-	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemSelected ), NULL, this );
-	fieldListCtrl->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnSizeFieldsList ), NULL, this );
-	moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveUpButtonHandler ), NULL, this );
-	moveDownButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveDownButtonHandler ), NULL, this );
-	deleteFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::deleteFieldButtonHandler ), NULL, this );
-	addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::addFieldButtonHandler ), NULL, this );
-	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::EditSpiceModel ), NULL, this );
-	m_show_datasheet_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::showButtonHandler ), NULL, this );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnUpdateUI ) );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnSizeGrid ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnAddField ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnDeleteField ), NULL, this );
+	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnMoveDown ), NULL, this );
+	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnEditSpiceModel ), NULL, this );
 	stdDialogButtonSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCancelButtonClick ), NULL, this );
 	stdDialogButtonSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnOKButtonClick ), NULL, this );
 	

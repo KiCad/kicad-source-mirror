@@ -66,6 +66,8 @@ public:
      * @return true if the text in the control is valid otherwise false.
      */
     virtual bool Validate( wxWindow *aParent ) override;
+
+    void SetFieldId( int aFieldId ) { m_fieldId = aFieldId; }
 };
 
 

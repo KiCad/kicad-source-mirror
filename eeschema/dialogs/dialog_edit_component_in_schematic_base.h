@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,25 +12,25 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/choice.h>
-#include <wx/sizer.h>
-#include <wx/radiobox.h>
-#include <wx/checkbox.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
-#include <wx/statbox.h>
-#include <wx/statline.h>
-#include <wx/listctrl.h>
+#include <wx/string.h>
+#include <wx/font.h>
+#include <wx/grid.h>
+#include <wx/gdicmn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/bmpbuttn.h>
+#include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
+#include <wx/radiobox.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,67 +44,38 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_staticTextUnit;
-		wxChoice* unitChoice;
-		wxStaticText* unitsInterchageableText;
-		wxStaticText* unitsInterchageableLabel;
-		wxRadioBox* orientationRadioBox;
-		wxRadioBox* mirrorRadioBox;
-		wxCheckBox* convertCheckBox;
-		wxTextCtrl* chipnameTextCtrl;
-		wxButton* m_buttonTestChipName;
-		wxButton* m_buttonSelectChipName;
-		wxStaticText* m_staticTextTimeStamp;
-		wxTextCtrl* m_textCtrlTimeStamp;
+		wxGrid* m_grid;
+		wxBitmapButton* m_bpAdd;
+		wxBitmapButton* m_bpDelete;
+		wxBitmapButton* m_bpMoveUp;
+		wxBitmapButton* m_bpMoveDown;
+		wxButton* m_updateFieldValues;
+		wxStaticText* m_staticText3;
+		wxTextCtrl* m_libraryNameTextCtrl;
+		wxBitmapButton* m_buttonBrowseLibrary;
+		wxStaticText* m_unitLabel;
+		wxChoice* m_unitChoice;
+		wxCheckBox* m_cbAlternateSymbol;
+		wxRadioBox* m_rbOrientation;
+		wxRadioBox* m_rbMirror;
 		wxStaticLine* m_staticline1;
-		wxButton* spiceFieldsButton;
-		wxButton* resetFieldsStyleButton;
-		wxButton* updateFieldValues;
-		wxListCtrl* fieldListCtrl;
-		wxBitmapButton* moveUpButton;
-		wxBitmapButton* moveDownButton;
-		wxBitmapButton* deleteFieldButton;
-		wxBitmapButton* addFieldButton;
-		wxRadioBox* m_FieldHJustifyCtrl;
-		wxRadioBox* m_FieldVJustifyCtrl;
-		wxCheckBox* showCheckBox;
-		wxCheckBox* rotateCheckBox;
-		wxRadioBox* m_StyleRadioBox;
-		wxStaticText* fieldNameLabel;
-		wxTextCtrl* fieldNameTextCtrl;
-		wxStaticText* fieldValueLabel;
-		wxTextCtrl* fieldValueTextCtrl;
-		wxButton* m_show_datasheet_button;
-		wxStaticText* textSizeLabel;
-		wxTextCtrl* textSizeTextCtrl;
-		wxStaticText* m_staticTextUnitSize;
-		wxStaticText* posXLabel;
-		wxTextCtrl* posXTextCtrl;
-		wxStaticText* m_staticTextUnitPosX;
-		wxStaticText* posYLabel;
-		wxTextCtrl* posYTextCtrl;
-		wxStaticText* m_staticTextUnitPosY;
-		wxStdDialogButtonSizer* stdDialogButtonSizer;
-		wxButton* stdDialogButtonSizerOK;
-		wxButton* stdDialogButtonSizerCancel;
+		wxTextCtrl* m_textCtrlTimeStamp;
+		wxButton* m_spiceFieldsButton;
+		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
+		wxButton* m_stdDialogButtonSizerOK;
+		wxButton* m_stdDialogButtonSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void OnTestChipName( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSelectChipName( wxCommandEvent& event ) { event.Skip(); }
-		virtual void EditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void SetInitCmp( wxCommandEvent& event ) { event.Skip(); }
-		virtual void UpdateFields( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnListItemDeselected( wxListEvent& event ) { event.Skip(); }
-		virtual void OnListItemSelected( wxListEvent& event ) { event.Skip(); }
-		virtual void OnSizeFieldsList( wxSizeEvent& event ) { event.Skip(); }
-		virtual void moveUpButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void moveDownButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void showButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UpdateFieldsFromLibrary( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBrowseLibrary( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
