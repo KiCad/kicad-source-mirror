@@ -110,7 +110,6 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
     switch( id )
     {
     case wxID_FILE:
-        Erase_Current_DrawLayer( false );
         LoadGerberFiles( wxEmptyString );
         break;
 
@@ -214,6 +213,8 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         filenamesList.Add( aFullFileName );
         m_mruPath = currentPath = filename.GetPath();
     }
+
+    Erase_Current_DrawLayer( false );
 
     // Set the busy cursor
     wxBusyCursor wait;
