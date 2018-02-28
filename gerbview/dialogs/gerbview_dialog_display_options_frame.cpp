@@ -147,28 +147,32 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     TransferDataFromWindow();
     auto displayOptions = (GBR_DISPLAY_OPTIONS*) m_Parent->GetDisplayOptions();
 
+    bool needs_repaint = false, option;
+
     m_Parent->m_DisplayOptions.m_DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? false : true;
     g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
 
-    if( m_OptDisplayLines->GetSelection() == 1 )
-        m_Parent->m_DisplayOptions.m_DisplayLinesFill = true;
-    else
-        m_Parent->m_DisplayOptions.m_DisplayLinesFill = false;
+    option = ( m_OptDisplayLines->GetSelection() == 1 );
 
-    if( m_OptDisplayFlashedItems->GetSelection() == 1 )
-    {
-        m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = true;
-    }
-    else
-    {
-        m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = false;
-    }
+    if( option != m_Parent->m_DisplayOptions.m_DisplayLinesFill )
+        needs_repaint = true;
 
-    if( m_OptDisplayPolygons->GetSelection() == 0 )
-        m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = false;
-    else
-        m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = true;
+    m_Parent->m_DisplayOptions.m_DisplayLinesFill = option;
+
+    option = ( m_OptDisplayFlashedItems->GetSelection() == 1 );
+
+    if( option != m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill )
+        needs_repaint = true;
+
+    m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = option;
+
+    option = ( m_OptDisplayPolygons->GetSelection() == 1 );
+
+    if( option != m_Parent->m_DisplayOptions.m_DisplayPolygonsFill )
+        needs_repaint = true;
+
+    m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = option;
 
     m_Parent->SetElementVisibility( LAYER_DCODES, m_OptDisplayDCodes->GetValue() );
 
@@ -191,6 +195,9 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     auto settings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( displayOptions );
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+    if( needs_repaint )
+        view->UpdateAllItems( KIGFX::REPAINT );
 
     m_Parent->GetCanvas()->Refresh();
 
