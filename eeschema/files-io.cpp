@@ -50,6 +50,7 @@
 #include <sch_eagle_plugin.h>
 #include <symbol_lib_table.h>
 #include <dialog_symbol_remap.h>
+#include <worksheet_shape_builder.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
@@ -755,12 +756,9 @@ bool SCH_EDIT_FRAME::doAutoSave()
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
     wxString fullFileName( aFileName );
-
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi;
     wxString projectpath;
     wxFileName newfilename;
     SCH_SHEET_LIST sheetList( g_RootSheet );
-    SCH_SCREENS schematic;
 
     switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
     {
@@ -779,8 +777,29 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             try
             {
-                pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+                delete g_RootSheet;
+                g_RootSheet = nullptr;
+                SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
                 g_RootSheet = pi->Load( fullFileName, &Kiway() );
+
+
+                // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
+                WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+                pglayout.SetEmptyLayout();
+
+                BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
+                wxFileName layoutfn( Kiway().Prj().GetProjectPath(),
+                                        BASE_SCREEN::m_PageLayoutDescrFileName );
+                wxFile layoutfile;
+
+                if( layoutfile.Create( layoutfn.GetFullPath() ) )
+                {
+                    layoutfile.Write( WORKSHEET_LAYOUT::EmptyLayout() );
+                    layoutfile.Close();
+                }
+
+                SaveProjectSettings( false );
+
 
                 projectpath = Kiway().Prj().GetProjectPath();
                 newfilename.SetPath( Prj().GetProjectPath() );
@@ -796,7 +815,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 GetScreen()->SetModify();
 
                 UpdateFileHistory( fullFileName );
-                schematic.UpdateSymbolLinks();   // Update all symbol library links for all sheets.
+                SCH_SCREENS schematic;
+                schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
 
                 // Ensure the schematic is fully segmented on first display
                 BreakSegmentsOnJunctions();
