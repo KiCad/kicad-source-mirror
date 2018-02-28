@@ -769,8 +769,43 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
         return poly.Contains( VECTOR2I( ref_pos ), 0 );
 
     case GBR_SPOT_RECT:
-    case GBR_ARC:
         return GetBoundingBox().Contains( aRefPos );
+
+    case GBR_ARC:
+        {
+            double radius = GetLineLength( m_Start, m_ArcCentre );
+            VECTOR2D test_radius = VECTOR2D( ref_pos ) - VECTOR2D( m_ArcCentre );
+
+            // Are we within m_Size.x of the radius?
+            bool radius_hit = ( std::fabs( test_radius.EuclideanNorm() - radius) < m_Size.x );
+
+            if( radius_hit )
+            {
+                // Now check that we are within the arc angle
+
+                VECTOR2D start = VECTOR2D( m_Start ) - VECTOR2D( m_ArcCentre );
+                VECTOR2D end = VECTOR2D( m_End ) - VECTOR2D( m_ArcCentre );
+
+                double start_angle = NormalizeAngleRadiansPos( start.Angle() );
+                double end_angle = NormalizeAngleRadiansPos( end.Angle() );
+
+                if( m_Start == m_End )
+                {
+                    start_angle = 0;
+                    end_angle = 2 * M_PI;
+                }
+                else if( end_angle < start_angle )
+                {
+                    end_angle += 2 * M_PI;
+                }
+
+                double test_angle = NormalizeAngleRadiansPos( test_radius.Angle() );
+
+                return ( test_angle > start_angle && test_angle < end_angle );
+            }
+
+            return false;
+        }
 
     case GBR_SPOT_MACRO:
         // Aperture macro polygons are already in absolute coordinates

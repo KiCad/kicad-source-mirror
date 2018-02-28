@@ -261,6 +261,16 @@ inline void NORMALIZE_ANGLE_DEGREES_POS( double& Angle )
     Angle = NormalizeAngleDegreesPos( Angle );
 }
 
+
+inline double NormalizeAngleRadiansPos( double Angle )
+{
+    while( Angle < 0 )
+        Angle += (2 * M_PI );
+    while( Angle >= ( 2 * M_PI ) )
+        Angle -= ( 2 * M_PI );
+    return Angle;
+}
+
 /// Add two angles (keeping the result normalized). T2 is here
 // because most of the time it's an int (and templates don't promote in
 // that way)
