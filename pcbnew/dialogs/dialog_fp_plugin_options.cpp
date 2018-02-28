@@ -291,16 +291,13 @@ private:
 
     void onDeleteRow( wxMouseEvent& event ) override
     {
-        int rowCount = m_grid->GetNumberRows();
         int curRow   = getCursorRow();
 
         m_grid->DeleteRows( curRow );
 
-        if( curRow && curRow == rowCount - 1 )
-        {
-            m_grid->MakeCellVisible( curRow-1, getCursorCol() );
-            m_grid->SetGridCursor( curRow-1, getCursorCol() );
-        }
+        curRow = std::max( 0, curRow - 1 );
+        m_grid->MakeCellVisible( curRow, m_grid->GetGridCursorCol() );
+        m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
     }
 
     void onMoveUp( wxMouseEvent& event ) override

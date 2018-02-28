@@ -72,8 +72,9 @@ include_directories(
 # A corresponding ${basename}.svg file must exist in 'sources' dir below here.
 
 
-# small icons (16x16) needed in listboxes
+# small icons (16x16) needed in listboxes and dialog buttons
 set( BMAPS_SMALL
+    folder
     pinorient_right
     pinorient_left
     pinorient_up
@@ -99,6 +100,10 @@ set( BMAPS_SMALL
     pintype_openemit
     pintype_noconnect
     refresh
+    small_down
+    small_plus
+    small_up
+    trash
     tree_nosel
     tree_sel
     )

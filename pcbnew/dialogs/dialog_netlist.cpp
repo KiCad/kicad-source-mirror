@@ -49,31 +49,17 @@
 #include <dialog_netlist.h>
 #include <wx_html_report_panel.h>
 
-#define NETLIST_SILENTMODE_KEY wxT("SilentMode")
 #define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
+#define NETLIST_UPDATEFOOTPRINTS_KEY wxT("NetlistUpdateFootprints")
+#define NETLIST_DELETESHORTINGTRACKS_KEY wxT("NetlistDeleteShortingTracks")
+#define NETLIST_DELETEEXTRAFOOTPRINTS_KEY wxT("NetlistDeleteExtraFootprints")
 #define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
 
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 {
-    /* Setup the netlist file name to the last netlist file read,
-     * or the board file name if the last filename is empty or last file not existing.
-     */
     wxString netlistName = GetLastNetListRead();
 
-    wxFileName fn = netlistName;
-
-    if( !fn.IsOk() || !fn.FileExists() )
-    {
-        fn = GetBoard()->GetFileName();
-        fn.SetExt( NetlistFileExtension );
-
-        if( fn.GetName().IsEmpty() )
-            netlistName.Clear();
-        else
-            netlistName = fn.GetFullPath();
-    }
-
-    DIALOG_NETLIST dlg( this, DC, netlistName );
+    DIALOG_NETLIST dlg( this, netlistName );
 
     dlg.ShowModal();
 
@@ -84,139 +70,112 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     if( configChanged && !GetBoard()->GetFileName().IsEmpty()
       && IsOK( this, _( "The project configuration has changed.  Do you want to save it?" ) ) )
     {
-        fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
+        wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
         fn.SetExt( ProjectFileExtension );
-
-        wxString pro_name = fn.GetFullPath();
-
-        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB,
-                GetProjectFileParameters(), pro_name );
+        wxString path = fn.GetFullPath();
+        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters(), path );
     }
 }
 
 
-DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
-                                const wxString & aNetlistFullFilename )
-    : DIALOG_NETLIST_BASE( aParent )
+DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, const wxString & aNetlistFullFilename )
+    : DIALOG_NETLIST_BASE( aParent ),
+      m_parent( aParent ),
+      m_initialized( false )
 {
-    m_parent = aParent;
-    m_dc = aDC;
     m_config = Kiface().KifaceSettings();
 
-    m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
-    bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );
-    m_rbSingleNets->SetSelection( tmp == 0 ? 0 : 1);
-    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
-    m_checkBoxSilentMode->SetValue( m_silentMode );
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    int severities = m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l );
-    m_MessageWindow->SetVisibleSeverities( severities );
+    m_cbUpdateFootprints->SetValue( m_config->Read( NETLIST_UPDATEFOOTPRINTS_KEY, 0l ) );
+    m_cbDeleteShortingTracks->SetValue( m_config->Read( NETLIST_DELETESHORTINGTRACKS_KEY, 0l ) );
+    m_cbDeleteExtraFootprints->SetValue( m_config->Read( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, 0l ) );
+    m_cbDeleteSinglePadNets->SetValue( m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l ) );
 
-    // Update sizes and sizers:
-    m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 160 ) );
-    GetSizer()->SetSizeHints( this );
+    m_MessageWindow->SetLabel( _("Changes To Be Applied") );
+    m_MessageWindow->SetVisibleSeverities( m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l ) );
+
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Update PCB" ) );
+    m_sdbSizer1Apply->SetLabel( _( "Rebuild Ratsnest" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_buttonsSizer->Layout();
+
+    m_sdbSizer1OK->SetDefault();
+    FinishDialogSettings();
+
+    m_initialized = true;
+    loadNetlist( true );
 }
 
 DIALOG_NETLIST::~DIALOG_NETLIST()
 {
-    m_config->Write( NETLIST_SILENTMODE_KEY, (long) m_silentMode );
-    m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY,
-                    (long) m_rbSingleNets->GetSelection() );
-    m_config->Write( NETLIST_FILTER_MESSAGES_KEY,
-                    (long) m_MessageWindow->GetVisibleSeverities() );
+    m_config->Write( NETLIST_UPDATEFOOTPRINTS_KEY, m_cbUpdateFootprints->GetValue() );
+    m_config->Write( NETLIST_DELETESHORTINGTRACKS_KEY, m_cbDeleteShortingTracks->GetValue() );
+    m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
+    m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY, m_cbDeleteSinglePadNets->GetValue() );
+    m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_MessageWindow->GetVisibleSeverities() );
 }
 
 
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 {
-    wxString lastPath = wxFileName( Prj().GetProjectFullName() ).GetPath();
+    wxString dirPath = wxFileName( Prj().GetProjectFullName() ).GetPath();
 
-    wxString lastNetlistRead = m_parent->GetLastNetListRead();
+    wxString filename = m_parent->GetLastNetListRead();
 
-    if( !lastNetlistRead.IsEmpty() && !wxFileName::FileExists( lastNetlistRead ) )
+    if( !filename.IsEmpty() )
     {
-        lastNetlistRead = wxEmptyString;
-    }
-    else
-    {
-        wxFileName fn = lastNetlistRead;
-        lastPath = fn.GetPath();
-        lastNetlistRead = fn.GetFullName();
+        wxFileName fn = filename;
+        dirPath = fn.GetPath();
+        filename = fn.GetFullName();
     }
 
-    wxLogDebug( wxT( "Last net list read path '%s', file name '%s'." ),
-                GetChars( lastPath ), GetChars( lastNetlistRead ) );
-
-    wxFileDialog FilesDialog( this, _( "Select Netlist" ), lastPath, lastNetlistRead,
+    wxFileDialog FilesDialog( this, _( "Select Netlist" ), dirPath, filename,
                               NetlistFileWildcard(), wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( FilesDialog.ShowModal() != wxID_OK )
         return;
 
     m_NetlistFilenameCtrl->SetValue( FilesDialog.GetPath() );
+    onFilenameChanged();
 }
 
-void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
+void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
 {
-    wxString netlistFileName = m_NetlistFilenameCtrl->GetValue();
-    wxFileName fn = netlistFileName;
+    wxFileName fn = m_NetlistFilenameCtrl->GetValue();
 
     if( !fn.IsOk() )
     {
-        wxMessageBox( _("Please, choose a valid netlist file") );
+        wxMessageBox( _("Please, choose a valid netlist file.") );
         return;
     }
 
     if( !fn.FileExists() )
     {
-        wxMessageBox( _("The netlist file does not exist") );
+        wxMessageBox( _("The netlist file does not exist.") );
         return;
     }
 
     // Give the user a chance to bail out when making changes from a netlist.
-    if( !m_checkDryRun->GetValue() && !m_silentMode
-      && !m_parent->GetBoard()->IsEmpty()
-      && !IsOK( this, _( "The changes made by reading the netlist cannot be undone.  Are you "
-                         "sure you want to read the netlist?" ) ) )
-        return;
+    if( m_parent->GetBoard()->IsEmpty()
+        || IsOK( this, _( "The changes made cannot be undone.  Are you sure you want to update the PCB?" ) ) )
+    {
+        m_MessageWindow->SetLabel( _( "Changes Applied To PCB" ) );
+        loadNetlist( false );
 
-    m_MessageWindow->Clear();
-    REPORTER& reporter = m_MessageWindow->Reporter();
-
-    wxBusyCursor busy;
-
-    wxString msg;
-    msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
-    reporter.ReportHead( msg, REPORTER::RPT_INFO );
-
-    if( m_Select_By_Timestamp->GetSelection() == 1 )
-        msg = _( "Using time stamps to match components and footprints.\n" );
-    else
-        msg = _( "Using references to match components and footprints.\n" );
-
-    reporter.ReportHead( msg, REPORTER::RPT_INFO );
-    m_MessageWindow->SetLazyUpdate( true ); // use a "lazy" update to speed up the creation of the report
-                                            // (The window is not updated for each message)
-
-    m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, &reporter,
-                              m_ChangeExistingFootprintCtrl->GetSelection() == 1,
-                              m_DeleteBadTracks->GetSelection() == 1,
-                              m_RemoveExtraFootprintsCtrl->GetSelection() == 1,
-                              m_Select_By_Timestamp->GetSelection() == 1,
-                              m_rbSingleNets->GetSelection() == 1,
-                              m_checkDryRun->GetValue() );
-    // The creation of the report was made without window update:
-    // the full page must be displayed
-    m_MessageWindow->Flush( true );
+        m_sdbSizer1Cancel->SetDefault();
+    }
 }
 
 
 void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 {
-    if( m_parent->GetBoard()->m_Modules == NULL )
+    if( m_parent->GetBoard()->m_Modules == nullptr )
     {
-        DisplayInfoMessage( this, _( "No footprints" ) );
+        DisplayInfoMessage( this, _( "No footprints." ) );
         return;
     }
 
@@ -324,25 +283,53 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_COMPILE_RATSNEST
- */
+void DIALOG_NETLIST::OnFilenameKillFocus( wxFocusEvent& event )
+{
+    onFilenameChanged();
+}
+
+
+void DIALOG_NETLIST::onFilenameChanged()
+{
+    if( m_initialized )
+    {
+        wxFileName fn = m_NetlistFilenameCtrl->GetValue();
+        if( fn.IsOk() )
+        {
+            if( fn.FileExists() )
+            {
+                loadNetlist( true );
+            }
+            else
+            {
+                m_MessageWindow->Clear();
+                REPORTER& reporter = m_MessageWindow->Reporter();
+                reporter.Report( _("The netlist file does not exist."), REPORTER::RPT_ERROR );
+            }
+        }
+    }
+}
+
+
+void DIALOG_NETLIST::OnMatchChanged( wxCommandEvent& event )
+{
+    if( m_initialized )
+        loadNetlist( true );
+}
+
+
+void DIALOG_NETLIST::OnOptionChanged( wxCommandEvent& event )
+{
+    if( m_initialized )
+        loadNetlist( true );
+}
+
 
 void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 {
     // Rebuild the board connectivity:
     auto board = m_parent->GetBoard();
 	board->GetConnectivity()->RecalculateRatsnest();
-}
-
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
- */
-
-void DIALOG_NETLIST::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
 }
 
 
@@ -435,3 +422,44 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
 
     return true;
 }
+
+
+void DIALOG_NETLIST::loadNetlist( bool aDryRun )
+{
+    wxString netlistFileName = m_NetlistFilenameCtrl->GetValue();
+    wxFileName fn = netlistFileName;
+
+    if( !fn.IsOk() || !fn.FileExists() )
+        return;
+
+    m_MessageWindow->Clear();
+    REPORTER& reporter = m_MessageWindow->Reporter();
+
+    wxBusyCursor busy;
+
+    wxString msg;
+    msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
+    reporter.ReportHead( msg, REPORTER::RPT_INFO );
+
+    if( m_matchByTimestamp->GetSelection() == 0 )
+        msg = _( "Using time stamps to match components and footprints.\n" );
+    else
+        msg = _( "Using references to match components and footprints.\n" );
+
+    reporter.ReportHead( msg, REPORTER::RPT_INFO );
+    m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report
+                                            // (the window is not updated for each message)
+
+    m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, &reporter,
+                              m_cbUpdateFootprints->GetValue(),
+                              m_cbDeleteShortingTracks->GetValue(),
+                              m_cbDeleteExtraFootprints->GetValue(),
+                              m_matchByTimestamp->GetSelection() == 0,
+                              m_cbDeleteSinglePadNets->GetValue(),
+                              aDryRun );
+
+    // The creation of the report was made without window update: the full page must be displayed
+    m_MessageWindow->Flush( true );
+}
+
+

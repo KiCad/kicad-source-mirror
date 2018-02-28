@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,61 +16,33 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bTopSizer;
+	bTopSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_staticTextFilter = new wxStaticText( this, wxID_ANY, _("Net name filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFilter->Wrap( -1 );
-	fgSizer1->Add( m_staticTextFilter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bTopSizer->Add( m_staticTextFilter, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textCtrlFilter, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bTopSizer->Add( m_textCtrlFilter, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	
+	
+	bTopSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_cbShowZeroPad = new wxCheckBox( this, wxID_ANY, _("Show zero pad nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbShowZeroPad->SetValue(true); 
-	fgSizer1->Add( m_cbShowZeroPad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bTopSizer->Add( m_cbShowZeroPad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerMain->Add( fgSizer1, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bTopSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_netsListGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_netsList = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_netsList->SetMinSize( wxSize( 400,300 ) );
 	
-	// Grid
-	m_netsListGrid->CreateGrid( 1, 2 );
-	m_netsListGrid->EnableEditing( false );
-	m_netsListGrid->EnableGridLines( true );
-	m_netsListGrid->EnableDragGridSize( false );
-	m_netsListGrid->SetMargins( 0, 0 );
-	
-	// Columns
-	m_netsListGrid->SetColSize( 0, 300 );
-	m_netsListGrid->SetColSize( 1, 130 );
-	m_netsListGrid->EnableDragColMove( false );
-	m_netsListGrid->EnableDragColSize( true );
-	m_netsListGrid->SetColLabelSize( 20 );
-	m_netsListGrid->SetColLabelValue( 0, _("Net name") );
-	m_netsListGrid->SetColLabelValue( 1, _("Number of pads") );
-	m_netsListGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
-	
-	// Rows
-	m_netsListGrid->AutoSizeRows();
-	m_netsListGrid->EnableDragRowSize( true );
-	m_netsListGrid->SetRowLabelSize( 50 );
-	m_netsListGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_netsListGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_netsListGrid->SetMinSize( wxSize( 485,300 ) );
-	
-	bSizerMain->Add( m_netsListGrid, 1, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_netsList, 1, wxALL|wxEXPAND, 10 );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -79,7 +51,7 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -89,22 +61,18 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::updateSize ) );
 	m_textCtrlFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
 	m_cbShowZeroPad->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
-	m_netsListGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onCellClick ), NULL, this );
-	m_netsListGrid->Connect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onColumnResize ), NULL, this );
-	m_netsListGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelectCell ), NULL, this );
+	m_netsList->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelChanged ), NULL, this );
+	m_netsList->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onListSize ), NULL, this );
 }
 
 DIALOG_SELECT_NET_FROM_LIST_BASE::~DIALOG_SELECT_NET_FROM_LIST_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::updateSize ) );
 	m_textCtrlFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
 	m_cbShowZeroPad->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
-	m_netsListGrid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onCellClick ), NULL, this );
-	m_netsListGrid->Disconnect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onColumnResize ), NULL, this );
-	m_netsListGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelectCell ), NULL, this );
+	m_netsList->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelChanged ), NULL, this );
+	m_netsList->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onListSize ), NULL, this );
 	
 }

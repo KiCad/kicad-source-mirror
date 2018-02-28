@@ -63,10 +63,10 @@ public:
                                                         // and therefore should be saved
 
 private:
-    void OnPlotFormatSelection( wxCommandEvent& event ) override;
-    void OnButtonPlotCurrentClick( wxCommandEvent& event ) override;
-    void OnButtonPlotAllClick( wxCommandEvent& event ) override;
-    void OnButtonCancelClick( wxCommandEvent& event ) override;
+    void OnPageSizeSelected( wxCommandEvent& event ) override;
+    void OnPlotCurrent( wxCommandEvent& event ) override;
+    void OnPlotAll( wxCommandEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void    initDlg();
 

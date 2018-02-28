@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wx_html_report_panel_base.h"
@@ -11,7 +11,7 @@
 
 WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output messages:") ), wxVERTICAL );
+	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Messages") ), wxVERTICAL );
 	
 	m_box->SetMinSize( wxSize( -1,130 ) ); 
 	m_fgSizer = new wxFlexGridSizer( 2, 1, 0, 0 );
@@ -25,43 +25,53 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	
 	m_fgSizer->Add( m_htmlView, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 2 );
 	
-	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 1, 9, 0, 0 );
-	fgSizer3->AddGrowableCol( 8 );
-	fgSizer3->SetFlexibleDirection( wxBOTH );
-	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer1;
+	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_staticText3 = new wxStaticText( m_box->GetStaticBox(), wxID_ANY, _("Show:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	fgSizer3->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_checkBoxShowAll = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxShowAll->SetValue(true); 
-	fgSizer3->Add( m_checkBoxShowAll, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_checkBoxShowAll, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	bSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_checkBoxShowErrors = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_checkBoxShowErrors, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_checkBoxShowErrors, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_errorsBadge = new wxStaticBitmap( m_box->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_errorsBadge, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_errorsBadge->SetMinSize( wxSize( 20,20 ) );
+	
+	bSizer1->Add( m_errorsBadge, 0, wxBOTTOM|wxRIGHT|wxTOP, 4 );
 	
 	m_checkBoxShowWarnings = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_checkBoxShowWarnings, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_checkBoxShowWarnings, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_warningsBadge = new wxStaticBitmap( m_box->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_warningsBadge, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_warningsBadge->SetMinSize( wxSize( 20,20 ) );
+	
+	bSizer1->Add( m_warningsBadge, 0, wxBOTTOM|wxRIGHT|wxTOP, 4 );
 	
 	m_checkBoxShowInfos = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Infos"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_checkBoxShowInfos, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_checkBoxShowInfos, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	bSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_checkBoxShowActions = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Actions"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_checkBoxShowActions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_btnSaveReportToFile = new wxButton( m_box->GetStaticBox(), wxID_ANY, _("Save Report File"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_btnSaveReportToFile, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_checkBoxShowActions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	m_fgSizer->Add( fgSizer3, 1, wxEXPAND, 5 );
+	bSizer1->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	
+	m_btnSaveReportToFile = new wxButton( m_box->GetStaticBox(), wxID_ANY, _("Save..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer1->Add( m_btnSaveReportToFile, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	m_fgSizer->Add( bSizer1, 1, wxEXPAND, 5 );
 	
 	
 	m_box->Add( m_fgSizer, 1, wxEXPAND, 5 );

@@ -18,50 +18,53 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bUpperSizer;
+	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Match footprints by:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	fgSizer2->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	wxString m_matchByTimestampChoices[] = { _("Keep existing symbol to footprint associations"), _("Re-associate footprints by reference") };
+	int m_matchByTimestampNChoices = sizeof( m_matchByTimestampChoices ) / sizeof( wxString );
+	m_matchByTimestamp = new wxRadioBox( this, wxID_ANY, _("Match Method"), wxDefaultPosition, wxDefaultSize, m_matchByTimestampNChoices, m_matchByTimestampChoices, 1, wxRA_SPECIFY_COLS );
+	m_matchByTimestamp->SetSelection( 0 );
+	m_matchByTimestamp->SetToolTip( _("Select how footprints are recognized:\nby their reference (U1, R3...) (normal setting)\nor their time stamp (special setting after a full schematic reannotation)") );
 	
-	m_matchByReference = new wxRadioButton( this, wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_matchByReference, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bUpperSizer->Add( m_matchByTimestamp, 1, wxALIGN_TOP|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_matchByTimestamp = new wxRadioButton( this, wxID_ANY, _("Timestamp"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_matchByTimestamp, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	wxStaticBoxSizer* sbSizer1;
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	
+	m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Update footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM, 5 );
+	
+	m_cbDeleteExtraFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete extra footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_cbDeleteExtraFootprints, 0, wxBOTTOM, 5 );
+	
+	m_cbDeleteSinglePadNets = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete single-pad nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_cbDeleteSinglePadNets, 0, wxBOTTOM, 5 );
 	
 	
-	bMainSizer->Add( fgSizer2, 0, wxEXPAND|wxALL, 5 );
+	bUpperSizer->Add( sbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( bUpperSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 	
-	bLowerSizer->SetMinSize( wxSize( 500,300 ) ); 
+	bLowerSizer->SetMinSize( wxSize( 660,300 ) ); 
 	m_messagePanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	bLowerSizer->Add( m_messagePanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	bMainSizer->Add( bLowerSizer, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( bLowerSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 1, 5, 0, 0 );
-	fgSizer1->AddGrowableCol( 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
 	
-	m_btnCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_btnCancel, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
-	
-	m_btnPerformUpdate = new wxButton( this, wxID_ANY, _("Update PCB"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnPerformUpdate->SetMinSize( wxSize( 140,-1 ) );
-	
-	fgSizer1->Add( m_btnPerformUpdate, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	
-	bMainSizer->Add( fgSizer1, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
@@ -69,16 +72,20 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_matchByReference->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnMatchChange ), NULL, this );
-	m_matchByTimestamp->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnMatchChange ), NULL, this );
-	m_btnPerformUpdate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnUpdateClick ), NULL, this );
+	m_matchByTimestamp->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnMatchChanged ), NULL, this );
+	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteExtraFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteSinglePadNets->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnUpdateClick ), NULL, this );
 }
 
 DIALOG_UPDATE_PCB_BASE::~DIALOG_UPDATE_PCB_BASE()
 {
 	// Disconnect Events
-	m_matchByReference->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnMatchChange ), NULL, this );
-	m_matchByTimestamp->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnMatchChange ), NULL, this );
-	m_btnPerformUpdate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnUpdateClick ), NULL, this );
+	m_matchByTimestamp->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnMatchChanged ), NULL, this );
+	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteExtraFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbDeleteSinglePadNets->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnUpdateClick ), NULL, this );
 	
 }

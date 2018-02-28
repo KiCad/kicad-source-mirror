@@ -39,7 +39,6 @@
 #include <dialog_drc_base.h>
 #include <dialog_drclistbox.h>
 
-
 // forward declarations
 class DRCLISTBOX;
 class BOARD_DESIGN_SETTINGS;

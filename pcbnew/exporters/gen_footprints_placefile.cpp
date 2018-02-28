@@ -103,6 +103,14 @@ public:
         m_reporter = &m_messagesPanel->Reporter();
         initDialog();
 
+        // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+        // that requires us to correct the button labels here.
+        m_sdbSizer1OK->SetLabel( _( "Generate Position File" ) );
+        m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+        m_sdbSizer1->Layout();
+
+        m_sdbSizer1OK->SetDefault();
+
         GetSizer()->SetSizeHints(this);
         Centre();
     }
@@ -158,7 +166,7 @@ const wxString backSideName = wxT( "bottom" );
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
-    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     m_config = Kiface().KifaceSettings();
     m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
@@ -174,8 +182,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     // Update sizes and sizers:
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
     GetSizer()->SetSizeHints( this );
-
-    m_generateButton->SetDefault();
 }
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )

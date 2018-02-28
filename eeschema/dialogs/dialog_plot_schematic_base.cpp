@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,108 +31,108 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizerDir->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
 	
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_browseButton->SetMinSize( wxSize( 30,28 ) );
+	
 	bSizerDir->Add( m_browseButton, 0, wxRIGHT, 5 );
 	
 	
-	bMainSizer->Add( bSizerDir, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( bSizerDir, 0, wxALL|wxEXPAND, 7 );
 	
 	m_optionsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
-	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format:"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 2 );
-	m_optionsSizer->Add( m_plotFormatOpt, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_optionsSizer->Add( m_plotFormatOpt, 0, wxALIGN_TOP|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_paperOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Paper Options:") ), wxVERTICAL );
+	wxStaticBoxSizer* sbOptions;
+	sbOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
-	wxString m_PaperSizeOptionChoices[] = { _("Schematic size"), _("A4"), _("A") };
-	int m_PaperSizeOptionNChoices = sizeof( m_PaperSizeOptionChoices ) / sizeof( wxString );
-	m_PaperSizeOption = new wxRadioBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PaperSizeOptionNChoices, m_PaperSizeOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_PaperSizeOption->SetSelection( 1 );
-	m_paperOptionsSizer->Add( m_PaperSizeOption, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("HPGL Options:") ), wxVERTICAL );
-	
-	m_staticText4 = new wxStaticText( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Page size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Page size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	m_paperHPGLSizer->Add( m_staticText4, 0, wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_staticText4, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 	
-	wxString m_HPGLPaperSizeOptionChoices[] = { _("Schematic size"), _("A4"), _("A3"), _("A2"), _("A1"), _("A0"), _("A"), _("B"), _("C"), _("D"), _("E") };
-	int m_HPGLPaperSizeOptionNChoices = sizeof( m_HPGLPaperSizeOptionChoices ) / sizeof( wxString );
-	m_HPGLPaperSizeOption = new wxChoice( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_HPGLPaperSizeOptionNChoices, m_HPGLPaperSizeOptionChoices, 0 );
-	m_HPGLPaperSizeOption->SetSelection( 0 );
-	m_paperHPGLSizer->Add( m_HPGLPaperSizeOption, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	wxString m_paperSizeOptionChoices[] = { _("Schematic size"), _("A4"), _("A") };
+	int m_paperSizeOptionNChoices = sizeof( m_paperSizeOptionChoices ) / sizeof( wxString );
+	m_paperSizeOption = new wxChoice( sbOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_paperSizeOptionNChoices, m_paperSizeOptionChoices, 0 );
+	m_paperSizeOption->SetSelection( 0 );
+	gbSizer1->Add( m_paperSizeOption, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_plotOriginOptChoices[] = { _("Bottom left"), _("Center on page") };
-	int m_plotOriginOptNChoices = sizeof( m_plotOriginOptChoices ) / sizeof( wxString );
-	m_plotOriginOpt = new wxRadioBox( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Align:"), wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_plotOriginOpt->SetSelection( 0 );
-	m_paperHPGLSizer->Add( m_plotOriginOpt, 0, wxBOTTOM|wxTOP, 5 );
-	
-	m_penHPLGWidthTitle = new wxStaticText( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Pen width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_penHPLGWidthTitle->Wrap( -1 );
-	m_paperHPGLSizer->Add( m_penHPLGWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_penHPGLWidthCtrl = new wxTextCtrl( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_paperHPGLSizer->Add( m_penHPGLWidthCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	
-	m_paperOptionsSizer->Add( m_paperHPGLSizer, 1, wxEXPAND, 5 );
-	
-	
-	m_optionsSizer->Add( m_paperOptionsSizer, 0, wxEXPAND, 5 );
-	
-	wxStaticBoxSizer* sbSizerPlotFormat;
-	sbSizerPlotFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options:") ), wxVERTICAL );
-	
-	m_defaultLineWidthTitle = new wxStaticText( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Default line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_defaultLineWidthTitle->Wrap( -1 );
-	sbSizerPlotFormat->Add( m_defaultLineWidthTitle, 0, wxLEFT|wxRIGHT, 5 );
-	
-	m_DefaultLineSizeCtrl = new wxTextCtrl( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_DefaultLineSizeCtrl->SetToolTip( _("Selection of the default pen thickness used to draw items, when their thickness is set to 0.") );
-	
-	sbSizerPlotFormat->Add( m_DefaultLineSizeCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
-	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
-	m_ModeColorOption = new wxRadioBox( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Output Mode:"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_ModeColorOption->SetSelection( 1 );
-	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
-	
-	sbSizerPlotFormat->Add( m_ModeColorOption, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
-	
-	m_PlotFrameRefOpt = new wxCheckBox( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PlotFrameRefOpt = new wxCheckBox( sbOptions->GetStaticBox(), wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PlotFrameRefOpt->SetValue(true); 
 	m_PlotFrameRefOpt->SetToolTip( _("Print the frame references.") );
 	
-	sbSizerPlotFormat->Add( m_PlotFrameRefOpt, 0, wxALL, 5 );
+	gbSizer1->Add( m_PlotFrameRefOpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+	
+	wxStaticText* bOutputModeLabel;
+	bOutputModeLabel = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bOutputModeLabel->Wrap( -1 );
+	gbSizer1->Add( bOutputModeLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	
+	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and White") };
+	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
+	m_ModeColorOption = new wxChoice( sbOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 0 );
+	m_ModeColorOption->SetSelection( 0 );
+	gbSizer1->Add( m_ModeColorOption, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	m_defaultLineWidthTitle = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Default line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_defaultLineWidthTitle->Wrap( -1 );
+	gbSizer1->Add( m_defaultLineWidthTitle, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	
+	m_DefaultLineSizeCtrl = new wxTextCtrl( sbOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultLineSizeCtrl->SetToolTip( _("Selection of the default pen thickness used to draw items, when their thickness is set to 0.") );
+	
+	gbSizer1->Add( m_DefaultLineSizeCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_optionsSizer->Add( sbSizerPlotFormat, 0, wxEXPAND|wxLEFT, 5 );
+	gbSizer1->AddGrowableCol( 1 );
 	
-	m_ButtonsSizer = new wxBoxSizer( wxVERTICAL );
-	
-	
-	m_ButtonsSizer->Add( 0, 0, 1, wxALL|wxEXPAND, 5 );
-	
-	m_buttonPlotCurrent = new wxButton( this, wxID_PRINT_CURRENT, _("Plot Current Page"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonPlotCurrent->SetDefault(); 
-	m_ButtonsSizer->Add( m_buttonPlotCurrent, 0, wxALL|wxEXPAND, 5 );
-	
-	m_buttonPlotAll = new wxButton( this, wxID_PRINT_ALL, _("Plot All Pages"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonPlotAll->SetDefault(); 
-	m_ButtonsSizer->Add( m_buttonPlotAll, 0, wxALL|wxEXPAND, 5 );
-	
-	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxEXPAND, 5 );
+	sbOptions->Add( gbSizer1, 1, wxEXPAND, 5 );
 	
 	
-	m_optionsSizer->Add( m_ButtonsSizer, 0, 0, 5 );
+	m_optionsSizer->Add( sbOptions, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_HPGLOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
+	
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 0, 0 );
+	gbSizer2->SetFlexibleDirection( wxBOTH );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	wxStaticText* sPositionLabel;
+	sPositionLabel = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	sPositionLabel->Wrap( -1 );
+	gbSizer2->Add( sPositionLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	
+	wxString m_plotOriginOptChoices[] = { _("Bottom left"), _("Center on page") };
+	int m_plotOriginOptNChoices = sizeof( m_plotOriginOptChoices ) / sizeof( wxString );
+	m_plotOriginOpt = new wxChoice( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 0 );
+	m_plotOriginOpt->SetSelection( 0 );
+	gbSizer2->Add( m_plotOriginOpt, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_penHPLGWidthTitle = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_penHPLGWidthTitle->Wrap( -1 );
+	gbSizer2->Add( m_penHPLGWidthTitle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	
+	m_penHPGLWidthCtrl = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_penHPGLWidthCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	gbSizer2->AddGrowableCol( 1 );
+	
+	m_HPGLOptionsSizer->Add( gbSizer2, 1, wxEXPAND, 5 );
+	
+	
+	m_optionsSizer->Add( m_HPGLOptionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerMsgPanel;
 	bSizerMsgPanel = new wxBoxSizer( wxVERTICAL );
@@ -143,7 +143,18 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizerMsgPanel->Add( m_MessagesBox, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	bMainSizer->Add( bSizerMsgPanel, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bMainSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
@@ -152,23 +163,23 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnCloseWindow ) );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnUpdateUI ) );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_plotFormatOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPlotFormatSelection ), NULL, this );
-	m_HPGLPaperSizeOption->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnHPGLPageSelected ), NULL, this );
-	m_buttonPlotCurrent->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnButtonPlotCurrentClick ), NULL, this );
-	m_buttonPlotAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnButtonPlotAllClick ), NULL, this );
-	m_buttonQuit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnButtonCancelClick ), NULL, this );
+	m_paperSizeOption->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPageSizeSelected ), NULL, this );
+	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPlotCurrent ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPlotAll ), NULL, this );
 }
 
 DIALOG_PLOT_SCHEMATIC_BASE::~DIALOG_PLOT_SCHEMATIC_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnCloseWindow ) );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnUpdateUI ) );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_plotFormatOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPlotFormatSelection ), NULL, this );
-	m_HPGLPaperSizeOption->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnHPGLPageSelected ), NULL, this );
-	m_buttonPlotCurrent->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnButtonPlotCurrentClick ), NULL, this );
-	m_buttonPlotAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnButtonPlotAllClick ), NULL, this );
-	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnButtonCancelClick ), NULL, this );
+	m_paperSizeOption->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPageSizeSelected ), NULL, this );
+	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPlotCurrent ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnPlotAll ), NULL, this );
 	
 }

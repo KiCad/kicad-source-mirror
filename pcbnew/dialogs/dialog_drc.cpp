@@ -38,6 +38,7 @@
 #include <board_design_settings.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
+#include <bitmaps.h>
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -157,10 +158,7 @@ void DIALOG_DRC_CONTROL::InitValues()
     m_config->Read( RefillZonesBeforeDrc, &value, false );
     m_cbRefillZones->SetValue( value );
 
-    // Set the initial "enabled" status of the browse button and the text
-    // field for report name
-    wxCommandEvent junk;
-    OnReportCheckBoxClicked( junk );
+    m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 

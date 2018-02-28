@@ -1,7 +1,3 @@
-/**
- * @file dialog_plot.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -54,7 +50,8 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_plotOpts = aParent->GetPlotSettings();
     init_Dialog();
 
-    // We use a sdbSizer here to get the order right, which is platform-dependent
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
     m_sdbSizer1OK->SetLabel( _( "Plot" ) );
     m_sdbSizer1Apply->SetLabel( _( "Generate Drill Files..." ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
@@ -80,7 +77,7 @@ void DIALOG_PLOT::init_Dialog()
     m_config->Read( OPTKEY_PLOT_CHECK_ZONES, &checkZones, true );
     m_zoneFillCheck->SetValue( checkZones );
 
-    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     // m_PSWidthAdjust is stored in mm in user config
     double dtmp;
@@ -95,29 +92,12 @@ void DIALOG_PLOT::init_Dialog()
     switch( m_plotOpts.GetFormat() )
     {
     default:
-    case PLOT_FORMAT_GERBER:
-        m_plotFormatOpt->SetSelection( 0 );
-        break;
-
-    case PLOT_FORMAT_POST:
-        m_plotFormatOpt->SetSelection( 1 );
-        break;
-
-    case PLOT_FORMAT_SVG:
-        m_plotFormatOpt->SetSelection( 2 );
-        break;
-
-    case PLOT_FORMAT_DXF:
-        m_plotFormatOpt->SetSelection( 3 );
-        break;
-
-    case PLOT_FORMAT_HPGL:
-        m_plotFormatOpt->SetSelection( 4 );
-        break;
-
-    case PLOT_FORMAT_PDF:
-        m_plotFormatOpt->SetSelection( 5 );
-        break;
+    case PLOT_FORMAT_GERBER: m_plotFormatOpt->SetSelection( 0 ); break;
+    case PLOT_FORMAT_POST:   m_plotFormatOpt->SetSelection( 1 ); break;
+    case PLOT_FORMAT_SVG:    m_plotFormatOpt->SetSelection( 2 ); break;
+    case PLOT_FORMAT_DXF:    m_plotFormatOpt->SetSelection( 3 ); break;
+    case PLOT_FORMAT_HPGL:   m_plotFormatOpt->SetSelection( 4 ); break;
+    case PLOT_FORMAT_PDF:    m_plotFormatOpt->SetSelection( 5 ); break;
     }
 
     msg = StringFromValue( m_userUnits, board->GetDesignSettings().m_SolderMaskMargin, true );
@@ -125,37 +105,25 @@ void DIALOG_PLOT::init_Dialog()
     msg = StringFromValue( m_userUnits, board->GetDesignSettings().m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
-    // Set units and value for HPGL pen size (this param is stored in mils).
-    AddUnitSymbol( *m_textPenSize, m_userUnits );
-
-    msg = StringFromValue( m_userUnits,
-                           m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
+    // Set units and value for HPGL pen size (this param is in mils).
+    msg = StringFromValue( m_userUnits, m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS, true );
     m_HPGLPenSizeOpt->SetValue( msg );
 
-    AddUnitSymbol( *m_textDefaultPenSize, m_userUnits );
-    msg = StringFromValue( m_userUnits, m_plotOpts.GetLineWidth() );
-    m_linesWidth->SetValue( msg );
-
-    // Set units for PS global width correction.
-    AddUnitSymbol( *m_textPSFineAdjustWidth, m_userUnits );
+    m_linesWidth->SetValue( StringFromValue( m_userUnits, m_plotOpts.GetLineWidth(), true ) );
 
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
         || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
         m_XScaleAdjust = m_YScaleAdjust = 1.0;
 
-    msg.Printf( wxT( "%f" ), m_XScaleAdjust );
-    m_fineAdjustXscaleOpt->AppendText( msg );
-
-    msg.Printf( wxT( "%f" ), m_YScaleAdjust );
-    m_fineAdjustYscaleOpt->SetValue( msg );
+    m_fineAdjustXscaleOpt->SetValue( StringFromValue( UNSCALED_UNITS, m_XScaleAdjust ) );
+    m_fineAdjustYscaleOpt->SetValue( StringFromValue( UNSCALED_UNITS, m_YScaleAdjust ) );
 
     // Test for a reasonable PS width correction value. Set to 0 if problem.
     if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
         m_PSWidthAdjust = 0.;
 
-    msg.Printf( wxT( "%f" ), To_User_Unit( m_userUnits, m_PSWidthAdjust ) );
-    m_PSFineAdjustWidthOpt->SetValue( msg );
+    m_PSFineAdjustWidthOpt->SetValue( StringFromValue( m_userUnits, m_PSWidthAdjust, true ) );
 
     m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
     m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
@@ -853,12 +821,10 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // XXX could this actually happen? isn't it constrained in the apply
     // function?
     if( m_plotOpts.GetScale() < PLOT_MIN_SCALE )
-        DisplayInfoMessage( this,
-                            _( "Warning: Scale option set to a very small value" ) );
+        DisplayInfoMessage( this, _( "Warning: Scale option set to a very small value" ) );
 
     if( m_plotOpts.GetScale() > PLOT_MAX_SCALE )
-        DisplayInfoMessage( this,
-                            _( "Warning: Scale option set to a very large value" ) );
+        DisplayInfoMessage( this, _( "Warning: Scale option set to a very large value" ) );
 
     GERBER_JOBFILE_WRITER jobfile_writer( board, &reporter );
 

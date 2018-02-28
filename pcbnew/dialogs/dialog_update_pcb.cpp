@@ -40,27 +40,57 @@
 #include <view/view.h>
 
 #include <functional>
+#include <kiface_i.h>
+
 using namespace std::placeholders;
+
+#define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
+#define NETLIST_UPDATEFOOTPRINTS_KEY wxT("NetlistUpdateFootprints")
+#define NETLIST_DELETESHORTINGTRACKS_KEY wxT("NetlistDeleteShortingTracks")
+#define NETLIST_DELETEEXTRAFOOTPRINTS_KEY wxT("NetlistDeleteExtraFootprints")
+#define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
+
 
 DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist ) :
     DIALOG_UPDATE_PCB_BASE( aParent ),
     m_frame( aParent ),
-    m_netlist( aNetlist )
+    m_netlist( aNetlist ),
+    m_initialized( false )
 {
-    m_messagePanel->SetLabel( _("Changes to be applied:") );
+    m_config = Kiface().KifaceSettings();
+
+    m_cbUpdateFootprints->SetValue( m_config->Read( NETLIST_UPDATEFOOTPRINTS_KEY, 0l ) );
+    m_cbDeleteExtraFootprints->SetValue( m_config->Read( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, 0l ) );
+    m_cbDeleteSinglePadNets->SetValue( m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l ) );
+
+    m_messagePanel->SetLabel( _("Changes To Be Applied") );
     m_messagePanel->SetLazyUpdate( true );
     m_netlist->SortByReference();
-    m_btnPerformUpdate->SetFocus();
 
-    m_messagePanel->SetVisibleSeverities( REPORTER::RPT_WARNING | REPORTER::RPT_ERROR | REPORTER::RPT_ACTION );
+    m_messagePanel->SetVisibleSeverities( m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l ) );
 
     m_messagePanel->GetSizer()->SetSizeHints( this );
-    GetSizer()->SetSizeHints( this );
+
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Update PCB" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizer1->Layout();
+
+    m_sdbSizer1OK->SetDefault();
+    FinishDialogSettings();
+
+    m_initialized = true;
+    PerformUpdate( true );
 }
 
 
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
+    m_config->Write( NETLIST_UPDATEFOOTPRINTS_KEY, m_cbUpdateFootprints->GetValue() );
+    m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
+    m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY, m_cbDeleteSinglePadNets->GetValue() );
+    m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_messagePanel->GetVisibleSeverities() );
 }
 
 
@@ -78,14 +108,13 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     if( !aDryRun )
     {
-
         // Clear selection, just in case a selected item has to be removed
         toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
     }
 
-    m_netlist->SetDeleteExtraFootprints( true );
-    m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetValue() );
-    m_netlist->SetReplaceFootprints( true );
+    m_netlist->SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
+    m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 0 );
+    m_netlist->SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 
     try
     {
@@ -93,8 +122,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     }
     catch( IO_ERROR &error )
     {
-        wxString msg;
-
         reporter.ReportTail( _( "Failed to load one or more footprints. Please add the missing libraries in PCBNew configuration. "
                             "The PCB will not update completely." ), REPORTER::RPT_ERROR );
         reporter.ReportTail( error.What(), REPORTER::RPT_INFO );
@@ -103,10 +130,10 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
-    updater.SetLookupByTimestamp( m_matchByTimestamp->GetValue() );
-    updater.SetDeleteUnusedComponents ( true );
-    updater.SetReplaceFootprints( true );
-    updater.SetDeleteSinglePadNets( false );
+    updater.SetLookupByTimestamp( m_matchByTimestamp->GetSelection() == 0 );
+    updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
+    updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
+    updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
     updater.UpdateNetlist( *m_netlist );
 
     m_messagePanel->Flush( true );
@@ -114,7 +141,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     if( aDryRun )
         return;
 
-    m_frame->SetCurItem( NULL );
+    m_frame->SetCurItem( nullptr );
     m_frame->SetMsgPanel( board );
 
     // Update rendered tracks and vias net labels
@@ -145,32 +172,33 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         if( !newFootprints.empty() )
         {
             for( MODULE* footprint : newFootprints )
-            {
                 toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
-            }
 
             toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
     }
     else    // Legacy canvas
         m_frame->GetCanvas()->Refresh();
-
-    m_btnPerformUpdate->Enable( false );
-    m_btnPerformUpdate->SetLabel( _( "Update complete" ) );
-    m_btnCancel->SetLabel( _( "Close" ) );
-    m_btnCancel->SetFocus();
 }
 
 
-void DIALOG_UPDATE_PCB::OnMatchChange( wxCommandEvent& event )
+void DIALOG_UPDATE_PCB::OnMatchChanged( wxCommandEvent& event )
 {
-    PerformUpdate( true );
+    if( m_initialized )
+        PerformUpdate( true );
+}
+
+
+void DIALOG_UPDATE_PCB::OnOptionChanged( wxCommandEvent& event )
+{
+    if( m_initialized )
+        PerformUpdate( true );
 }
 
 
 void DIALOG_UPDATE_PCB::OnUpdateClick( wxCommandEvent& event )
 {
-    m_messagePanel->SetLabel( _( "Changes applied to the PCB:" ) );
+    m_messagePanel->SetLabel( _( "Changes Applied To PCB" ) );
     PerformUpdate( false );
-    m_btnCancel->SetFocus();
+    m_sdbSizer1Cancel->SetDefault();
 }

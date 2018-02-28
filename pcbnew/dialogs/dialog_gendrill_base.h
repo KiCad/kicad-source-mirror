@@ -25,14 +25,14 @@
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
+#include <wx/radiobox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_GEN_DRILL_FILE 1000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GENDRILL_BASE
@@ -45,20 +45,17 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxStaticText* staticTextOutputDir;
 		wxTextCtrl* m_outputDirectoryName;
 		wxBitmapButton* m_browseButton;
-		wxRadioBox* m_rbFileFormat;
+		wxRadioButton* m_rbExcellon;
+		wxCheckBox* m_Check_Mirror;
+		wxCheckBox* m_Check_Minimal;
+		wxCheckBox* m_Check_Merge_PTH_NPTH;
+		wxRadioButton* m_rbGerberX2;
+		wxRadioBox* m_Choice_Drill_Map;
+		wxRadioBox* m_Choice_Drill_Offset;
 		wxRadioBox* m_Choice_Unit;
 		wxRadioBox* m_Choice_Zeros_Format;
 		wxStaticText* m_staticTextTitle;
 		wxStaticText* m_staticTextPrecision;
-		wxRadioBox* m_Choice_Drill_Map;
-		wxCheckBox* m_Check_Mirror;
-		wxCheckBox* m_Check_Minimal;
-		wxCheckBox* m_Check_Merge_PTH_NPTH;
-		wxRadioBox* m_Choice_Drill_Offset;
-		wxStaticBoxSizer* m_DefaultViasDrillSizer;
-		wxStaticText* m_ViaDrillValue;
-		wxStaticBoxSizer* m_MicroViasDrillSizer;
-		wxStaticText* m_MicroViaDrillValue;
 		wxStaticText* staticTextPlatedPads;
 		wxStaticText* m_PlatedPadsCountInfoMsg;
 		wxStaticText* staticTextNonPlatedPads;
@@ -69,21 +66,22 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxStaticText* m_MicroViasInfoMsg;
 		wxStaticText* staticTextBuriedVias;
 		wxStaticText* m_BuriedViasInfoMsg;
-		wxButton* m_buttonDrill;
-		wxButton* m_buttonMap;
-		wxButton* m_buttonReport;
-		wxButton* m_CancelButton;
 		wxTextCtrl* m_messagesBox;
+		wxBoxSizer* m_buttonsSizer;
+		wxButton* m_buttonReport;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFileFormatSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGenDrillFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGenMapFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenReportFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGenMapFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGenDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

@@ -52,46 +52,21 @@ enum HPGL_PAGEZ_T {
 
 static const wxChar* plot_sheet_list( int aSize )
 {
-    const wxChar* ret;
-
     switch( aSize )
     {
     default:
-    case PAGE_DEFAULT:
-        ret = NULL;         break;
-
-    case HPGL_PAGE_SIZE_A4:
-        ret = wxT( "A4" );  break;
-
-    case HPGL_PAGE_SIZE_A3:
-        ret = wxT( "A3" );  break;
-
-    case HPGL_PAGE_SIZE_A2:
-        ret = wxT( "A2" );  break;
-
-    case HPGL_PAGE_SIZE_A1:
-        ret = wxT( "A1" );  break;
-
-    case HPGL_PAGE_SIZE_A0:
-        ret = wxT( "A0" );  break;
-
-    case HPGL_PAGE_SIZE_A:
-        ret = wxT( "A" );   break;
-
-    case HPGL_PAGE_SIZE_B:
-        ret = wxT( "B" );   break;
-
-    case HPGL_PAGE_SIZE_C:
-        ret = wxT( "C" );   break;
-
-    case HPGL_PAGE_SIZE_D:
-        ret = wxT( "D" );   break;
-
-    case HPGL_PAGE_SIZE_E:
-        ret = wxT( "E" );   break;
+    case PAGE_DEFAULT:      return nullptr;
+    case HPGL_PAGE_SIZE_A4: return wxT( "A4" );
+    case HPGL_PAGE_SIZE_A3: return wxT( "A3" );
+    case HPGL_PAGE_SIZE_A2: return wxT( "A2" );
+    case HPGL_PAGE_SIZE_A1: return wxT( "A1" );
+    case HPGL_PAGE_SIZE_A0: return wxT( "A0" );
+    case HPGL_PAGE_SIZE_A:  return wxT( "A" );
+    case HPGL_PAGE_SIZE_B:  return wxT( "B" );
+    case HPGL_PAGE_SIZE_C:  return wxT( "C" );
+    case HPGL_PAGE_SIZE_D:  return wxT( "D" );
+    case HPGL_PAGE_SIZE_E:  return wxT( "E" );
     }
-
-    return ret;
 }
 
 
@@ -145,8 +120,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
         PAGE_INFO           plotPage = curPage;
 
         // if plotting on a page size other than curPage
-        if( m_HPGLPaperSizeOption->GetSelection() != PAGE_DEFAULT )
-            plotPage.SetType( plot_sheet_list( m_HPGLPaperSizeOption->GetSelection() ) );
+        if( m_paperSizeOption->GetSelection() != PAGE_DEFAULT )
+            plotPage.SetType( plot_sheet_list( m_paperSizeOption->GetSelection() ) );
 
         // Calculation of conversion scales.
         double  plot_scale = (double) plotPage.GetWidthMils() / curPage.GetWidthMils();

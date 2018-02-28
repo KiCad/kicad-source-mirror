@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_PLOT_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -75,9 +74,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxCheckBox* m_excludePadsFromSilkscreen;
-		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
+		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_zoneFillCheck;
 		wxStaticText* m_staticText11;
 		wxChoice* m_drillShapeOpt;
@@ -87,7 +86,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_plotModeOpt;
 		wxStaticText* m_textDefaultPenSize;
 		wxTextCtrl* m_linesWidth;
-		wxStaticBoxSizer* m_sizerSoldMaskLayerOpt;
 		wxStaticText* m_SolderMaskMarginLabel;
 		wxStaticText* m_SolderMaskMarginCurrValue;
 		wxStaticText* m_solderMaskMinWidthLabel;
@@ -123,7 +121,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxMenu* m_popMenu;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onActivate( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }

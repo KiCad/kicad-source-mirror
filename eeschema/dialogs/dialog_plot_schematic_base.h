@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,8 +29,9 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/choice.h>
-#include <wx/statbox.h>
 #include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -44,43 +45,35 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		enum
-		{
-			wxID_PRINT_CURRENT = 1000,
-			wxID_PRINT_ALL
-		};
-		
 		wxStaticText* m_staticTextOutputDirectory;
 		wxTextCtrl* m_outputDirectoryName;
 		wxBitmapButton* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
 		wxRadioBox* m_plotFormatOpt;
-		wxStaticBoxSizer* m_paperOptionsSizer;
-		wxRadioBox* m_PaperSizeOption;
-		wxStaticBoxSizer* m_paperHPGLSizer;
 		wxStaticText* m_staticText4;
-		wxChoice* m_HPGLPaperSizeOption;
-		wxRadioBox* m_plotOriginOpt;
-		wxStaticText* m_penHPLGWidthTitle;
-		wxTextCtrl* m_penHPGLWidthCtrl;
+		wxChoice* m_paperSizeOption;
+		wxCheckBox* m_PlotFrameRefOpt;
+		wxChoice* m_ModeColorOption;
 		wxStaticText* m_defaultLineWidthTitle;
 		wxTextCtrl* m_DefaultLineSizeCtrl;
-		wxRadioBox* m_ModeColorOption;
-		wxCheckBox* m_PlotFrameRefOpt;
-		wxBoxSizer* m_ButtonsSizer;
-		wxButton* m_buttonPlotCurrent;
-		wxButton* m_buttonPlotAll;
-		wxButton* m_buttonQuit;
+		wxStaticBoxSizer* m_HPGLOptionsSizer;
+		wxChoice* m_plotOriginOpt;
+		wxStaticText* m_penHPLGWidthTitle;
+		wxTextCtrl* m_penHPGLWidthCtrl;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnHPGLPageSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonPlotCurrentClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonPlotAllClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPageSizeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPlotCurrent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPlotAll( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

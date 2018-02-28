@@ -81,7 +81,6 @@ private:
      */
     void            OnGenReportFile( wxCommandEvent& event ) override;
 
-    void            OnCancelClick( wxCommandEvent& event ) override;
     void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
     // Specific functions:

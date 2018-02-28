@@ -49,12 +49,10 @@
 
 // Keywords for read and write config
 #define ZerosFormatKey          wxT( "DrillZerosFormat" )
-#define PrecisionKey            wxT( "DrilltPrecisionOpt" )
 #define MirrorKey               wxT( "DrillMirrorYOpt" )
 #define MinimalHeaderKey        wxT( "DrillMinHeader" )
 #define MergePTHNPTHKey         wxT( "DrillMergePTHNPTH" )
 #define UnitDrillInchKey        wxT( "DrillUnit" )
-#define DrillOriginIsAuxAxisKey wxT( "DrillAuxAxis" )
 #define DrillMapFileTypeKey     wxT( "DrillMapFileType" )
 #define DrillFileFormatKey      wxT( "DrillFileType" )
 
@@ -83,6 +81,14 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
     m_config = Kiface().KifaceSettings();
     m_plotOpts = m_parent->GetPlotSettings();
 
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Generate Drill File" ) );
+    m_sdbSizer1Apply->SetLabel( _( "Generate Map File" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_buttonsSizer->Layout();
+
+    m_sdbSizer1OK->SetDefault();
     SetReturnCode( 1 );
     initDialog();
     GetSizer()->SetSizeHints( this );
@@ -122,9 +128,10 @@ void DIALOG_GENDRILL::initDialog()
 
 void DIALOG_GENDRILL::InitDisplayParams()
 {
-    m_browseButton->SetBitmap( KiBitmap( browse_files_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    m_rbFileFormat->SetSelection( m_drillFileType );
+    m_rbExcellon->SetValue( m_drillFileType == 0 );
+    m_rbGerberX2->SetValue( m_drillFileType == 1 );
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
     m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
     UpdatePrecisionOptions();
@@ -136,45 +143,12 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_Check_Mirror->SetValue( m_Mirror );
     m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
     m_Choice_Drill_Map->SetSelection( m_mapFileType );
-    m_ViaDrillValue->SetLabel( _( "Use Netclass values" ) );
-    m_MicroViaDrillValue->SetLabel( _( "Use Netclass values" ) );
 
-    // See if we have some buried vias or/and microvias, and display
-    // microvias drill value if so
+    m_platedPadsHoleCount    = 0;
+    m_notplatedPadsHoleCount = 0;
     m_throughViasCount = 0;
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
-
-    for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
-    {
-        const VIA *via = dynamic_cast<const VIA*>( track );
-        if( via )
-        {
-            switch( via->GetViaType() )
-            {
-            case VIA_THROUGH:
-                m_throughViasCount++;
-                break;
-
-            case VIA_MICROVIA:
-                m_microViasCount++;
-                break;
-
-            case VIA_BLIND_BURIED:
-                m_blindOrBuriedViasCount++;
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-
-    m_MicroViaDrillValue->Enable( m_microViasCount );
-
-    // Count plated pad holes and not plated pad holes:
-    m_platedPadsHoleCount    = 0;
-    m_notplatedPadsHoleCount = 0;
 
     for( MODULE* module = m_parent->GetBoard()->m_Modules;  module;  module = module->Next() )
     {
@@ -203,6 +177,31 @@ void DIALOG_GENDRILL::InitDisplayParams()
         }
     }
 
+    for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
+    {
+        const VIA *via = dynamic_cast<const VIA*>( track );
+        if( via )
+        {
+            switch( via->GetViaType() )
+            {
+            case VIA_THROUGH:
+                m_throughViasCount++;
+                break;
+
+            case VIA_MICROVIA:
+                m_microViasCount++;
+                break;
+
+            case VIA_BLIND_BURIED:
+                m_blindOrBuriedViasCount++;
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
     // Display hole counts:
     m_PlatedPadsCountInfoMsg->   SetLabel( wxString() << m_platedPadsHoleCount );
     m_NotPlatedPadsCountInfoMsg->SetLabel( wxString() << m_notplatedPadsHoleCount );
@@ -220,8 +219,9 @@ void DIALOG_GENDRILL::InitDisplayParams()
 
 void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
 {
-    m_drillFileType = m_rbFileFormat->GetSelection();
-    bool enbl_Excellon = m_drillFileType == 0;
+    bool enbl_Excellon = m_rbExcellon->GetValue();
+
+    m_drillFileType = enbl_Excellon ? 0 : 1;
 
     m_Choice_Unit->Enable( enbl_Excellon );
 	m_Choice_Zeros_Format->Enable( enbl_Excellon );
@@ -268,13 +268,6 @@ void DIALOG_GENDRILL::OnGenMapFile( wxCommandEvent& event )
 void DIALOG_GENDRILL::OnGenDrillFile( wxCommandEvent& event )
 {
     GenDrillAndMapFiles(true, false);
-}
-
-
-void DIALOG_GENDRILL::OnCancelClick( wxCommandEvent& event )
-{
-    UpdateConfig();                 // Save drill options:
-    EndModal( wxID_CANCEL );        // Process the default cancel event (close dialog)
 }
 
 
