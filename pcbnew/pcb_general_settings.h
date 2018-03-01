@@ -54,12 +54,13 @@ public:
                                                     // always for temporary use
     bool    m_legacyAutoDeleteOldTrack = true;
     bool    m_legacyUse45DegreeTracks = true;       // True to allow horiz, vert. and 45deg only tracks
-    bool    m_use45DegreeGraphicSegments = false;   // True to allow horiz, vert. and 45deg only graphic segments
+    static bool m_use45DegreeGraphicSegments;       // True to allow horizontal, vertical and
+                                                    // 45deg only graphic segments
     bool    m_legacyUseTwoSegmentTracks = true;
 
     bool    m_editActionChangesTrackWidth = false;
-    bool    m_dragSelects = true;                   // True: Drag gesture always draws a selection box,
-                                                    // False: Drag will preselect an item and move it
+    static bool m_dragSelects;                  // True: Drag gesture always draws a selection box,
+                                                // False: Drag will preselect an item and move it
 
     MAGNETIC_PAD_OPTION_VALUES  m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
     MAGNETIC_PAD_OPTION_VALUES  m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;

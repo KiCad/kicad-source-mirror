@@ -26,16 +26,23 @@
 PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
     : m_frameType( aFrameType ), m_colorsSettings( aFrameType )
 {
-    if( m_frameType == FRAME_PCB )
+    switch( m_frameType )
     {
-        Add( "LegacyAutoDeleteOldTrack", &m_legacyAutoDeleteOldTrack, true );
-        Add( "LegacyUse45DegreeTracks",&m_legacyUse45DegreeTracks, true);
-        Add( "LegacyUseTwoSegmentTracks", &m_legacyUseTwoSegmentTracks, true);
-        Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
-        Add( "MagneticPads", reinterpret_cast<int*>( &m_magneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "MagneticTracks", reinterpret_cast<int*>( &m_magneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "EditActionChangesTrackWidth", &m_editActionChangesTrackWidth, false );
-        Add( "DragSelects", &m_dragSelects, true );
+        case FRAME_PCB:
+            Add( "LegacyAutoDeleteOldTrack", &m_legacyAutoDeleteOldTrack, true );
+            Add( "LegacyUse45DegreeTracks",&m_legacyUse45DegreeTracks, true);
+            Add( "LegacyUseTwoSegmentTracks", &m_legacyUseTwoSegmentTracks, true);
+            Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
+            Add( "MagneticPads", reinterpret_cast<int*>( &m_magneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+            Add( "MagneticTracks", reinterpret_cast<int*>( &m_magneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+            Add( "EditActionChangesTrackWidth", &m_editActionChangesTrackWidth, false );
+            Add( "DragSelects", &m_dragSelects, true );
+            break;
+
+        case FRAME_PCB_MODULE_EDITOR:
+            Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
+            Add( "DragSelects", &m_dragSelects, true );
+            break;
     }
 }
 
@@ -52,3 +59,7 @@ void PCB_GENERAL_SETTINGS::Save( wxConfigBase* aCfg )
     m_colorsSettings.Save( aCfg );
     SETTINGS::Save( aCfg );
 }
+
+
+bool PCB_GENERAL_SETTINGS::m_use45DegreeGraphicSegments = false;
+bool PCB_GENERAL_SETTINGS::m_dragSelects = true;
