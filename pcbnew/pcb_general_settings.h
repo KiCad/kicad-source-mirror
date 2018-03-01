@@ -41,17 +41,13 @@ class PCB_GENERAL_SETTINGS : public SETTINGS
 public:
     PCB_GENERAL_SETTINGS( FRAME_T aFrameType );
 
-    void Load ( wxConfigBase* aCfg ) override;
+    void Load( wxConfigBase* aCfg ) override;
     void Save( wxConfigBase* aCfg ) override;
-
-    COLORS_DESIGN_SETTINGS m_colorsSettings;
 
     COLORS_DESIGN_SETTINGS& Colors()
     {
         return m_colorsSettings;
     }
-
-    FRAME_T m_frameType;
 
     bool    m_legacyDrcOn = true;                   // Not stored, always true when starting pcbnew,
                                                     // false only on request during routing, and
@@ -67,6 +63,10 @@ public:
 
     MAGNETIC_PAD_OPTION_VALUES  m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
     MAGNETIC_PAD_OPTION_VALUES  m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;
+
+protected:
+    const FRAME_T m_frameType;
+    COLORS_DESIGN_SETTINGS m_colorsSettings;
 };
 
 #endif

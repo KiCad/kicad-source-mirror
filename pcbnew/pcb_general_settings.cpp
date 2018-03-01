@@ -24,10 +24,8 @@
 #include <pcb_general_settings.h>
 
 PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
-    : m_colorsSettings( aFrameType )
+    : m_frameType( aFrameType ), m_colorsSettings( aFrameType )
 {
-    m_frameType = aFrameType;
-
     if( m_frameType == FRAME_PCB )
     {
         Add( "LegacyAutoDeleteOldTrack", &m_legacyAutoDeleteOldTrack, true );
@@ -40,6 +38,7 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
         Add( "DragSelects", &m_dragSelects, true );
     }
 }
+
 
 void PCB_GENERAL_SETTINGS::Load( wxConfigBase* aCfg )
 {

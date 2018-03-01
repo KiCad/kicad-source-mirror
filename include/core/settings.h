@@ -90,24 +90,24 @@ class SETTINGS
         #endif
 
 
-        void Add ( const wxString& name, int* aPtr, int aDefaultValue )
+        void Add( const wxString& name, int* aPtr, int aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_INT ( m_prefix+name, aPtr, aDefaultValue ) );
+            m_params.push_back( new PARAM_CFG_INT ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
-        void Add ( const wxString& name, bool* aPtr, bool aDefaultValue )
+        void Add( const wxString& name, bool* aPtr, bool aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_BOOL ( m_prefix+name, aPtr, aDefaultValue ) );
+            m_params.push_back( new PARAM_CFG_BOOL ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
-        void Add ( const wxString& name, KIGFX::COLOR4D* aPtr, KIGFX::COLOR4D aDefaultValue )
+        void Add( const wxString& name, KIGFX::COLOR4D* aPtr, KIGFX::COLOR4D aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_SETCOLOR ( m_prefix+name, aPtr, aDefaultValue ) );
+            m_params.push_back( new PARAM_CFG_SETCOLOR ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
-        void Add ( const wxString& name, KIGFX::COLOR4D* aPtr, EDA_COLOR_T aDefaultValue )
+        void Add( const wxString& name, KIGFX::COLOR4D* aPtr, EDA_COLOR_T aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_SETCOLOR ( m_prefix+name, aPtr, aDefaultValue ) );
+            m_params.push_back( new PARAM_CFG_SETCOLOR ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
 
