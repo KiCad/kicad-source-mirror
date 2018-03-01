@@ -182,6 +182,27 @@ ALIGNMENT_RECTS GetBoundingBoxes( const SELECTION &sel )
 }
 
 
+void ALIGN_DISTRIBUTE_TOOL::filterPadsWithModules( SELECTION &selection )
+{
+    std::set<BOARD_ITEM*> rejected;
+    for( auto i : selection )
+    {
+        auto item = static_cast<BOARD_ITEM*>( i );
+        if( item->Type() == PCB_PAD_T )
+        {
+            MODULE* mod = static_cast<MODULE*>( item->GetParent() );
+
+            // selection contains both the module and its pads - remove the pads
+            if( mod && selection.Contains( mod ) )
+                rejected.insert( item );
+        }
+    }
+
+    for( BOARD_ITEM* item : rejected )
+        selection.Remove( item );
+}
+
+
 int ALIGN_DISTRIBUTE_TOOL::checkLockedStatus( const SELECTION &selection ) const
 {
     SELECTION moving_items( selection );
@@ -231,14 +252,15 @@ int ALIGN_DISTRIBUTE_TOOL::checkLockedStatus( const SELECTION &selection ) const
 int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
+    SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
+    filterPadsWithModules( selection );
+
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortTopmostY );
-
     if( checkLockedStatus( selection ) == SELECTION_LOCKED )
         return 0;
 
@@ -270,14 +292,15 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
+    SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
+    filterPadsWithModules( selection );
+
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortBottommostY );
-
     if( checkLockedStatus( selection ) == SELECTION_LOCKED )
         return 0;
 
@@ -324,14 +347,15 @@ int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
+    SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
+    filterPadsWithModules( selection );
+
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortLeftmostX );
-
     if( checkLockedStatus( selection ) == SELECTION_LOCKED )
         return 0;
 
@@ -378,14 +402,15 @@ int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
+    SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
+    filterPadsWithModules( selection );
+
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortRightmostX );
-
     if( checkLockedStatus( selection ) == SELECTION_LOCKED )
         return 0;
 
@@ -417,14 +442,15 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
+    SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
+    filterPadsWithModules( selection );
+
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterX );
-
     if( checkLockedStatus( selection ) == SELECTION_LOCKED )
         return 0;
 
@@ -456,14 +482,15 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
+    SELECTION& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE );
 
     if( selection.Size() <= 1 )
         return 0;
 
+    filterPadsWithModules( selection );
+
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterY );
-
     if( checkLockedStatus( selection ) == SELECTION_LOCKED )
         return 0;
 
@@ -495,7 +522,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection(
+    SELECTION& selection = m_selectionTool->RequestSelection(
             SELECTION_EDITABLE | SELECTION_SANITIZE_PADS );
 
     if( selection.Size() <= 1 )
@@ -582,7 +609,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
 int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    const SELECTION& selection = m_selectionTool->RequestSelection(
+    SELECTION& selection = m_selectionTool->RequestSelection(
             SELECTION_EDITABLE | SELECTION_SANITIZE_PADS );
 
     if( selection.Size() <= 1 )
