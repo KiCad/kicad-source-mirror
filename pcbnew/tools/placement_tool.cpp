@@ -457,8 +457,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( frame );
     commit.StageItems( selection, CHT_MODIFY );
 
-    // after sorting use the x coordinate of the middle item as a target for all other items
-    const int targetX = itemsToAlign.at( itemsToAlign.size() / 2 ).second.GetCenter().x;
+    // after sorting use the center x coordinate of the leftmost item as a target
+    // for all other items
+    const int targetX = itemsToAlign.begin()->second.GetCenter().x;
 
     // Move the selected items
     for( auto& i : itemsToAlign )
@@ -497,8 +498,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( frame );
     commit.StageItems( selection, CHT_MODIFY );
 
-    // after sorting use the y coordinate of the middle item as a target for all other items
-    const int targetY = itemsToAlign.at( itemsToAlign.size() / 2 ).second.GetCenter().y;
+    // after sorting use the center y coordinate of the top-most item as a target
+    // for all other items
+    const int targetY = itemsToAlign.begin()->second.GetCenter().y;
 
     // Move the selected items
     for( auto& i : itemsToAlign )
