@@ -69,7 +69,7 @@ class LEGACY_PLUGIN : public PLUGIN
 
 public:
 
-    //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
+    //-----<PLUGIN API>---------------------------------------------------------
 
     const wxString PluginName() const override
     {
@@ -93,9 +93,11 @@ public:
     bool FootprintLibDelete( const wxString& aLibraryPath,
                              const PROPERTIES* aProperties = NULL ) override;
 
+    long long GetLibraryTimestamp() const override;
+
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
-    //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
+    //-----</PLUGIN API>--------------------------------------------------------
 
     typedef int     BIU;
 

@@ -3383,6 +3383,16 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 }
 
 
+long long LEGACY_PLUGIN::GetLibraryTimestamp() const
+{
+    // If we have no cache, return a number which won't match any stored timestamps
+    if( !m_cache )
+        return wxDateTime::Now().GetValue().GetValue();
+
+    return m_cache->GetLibModificationTime().GetValue().GetValue();
+}
+
+
 void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 {
     if( !m_cache || m_cache->m_lib_path != aLibraryPath ||

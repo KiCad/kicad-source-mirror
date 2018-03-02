@@ -74,6 +74,8 @@ public:
     bool FootprintLibDelete( const wxString& aLibraryPath,
                              const PROPERTIES* aProperties = NULL ) override;
 
+    long long GetLibraryTimestamp() const override;
+
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
     //-----</PLUGIN API>--------------------------------------------------------

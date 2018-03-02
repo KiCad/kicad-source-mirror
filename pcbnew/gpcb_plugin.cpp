@@ -280,7 +280,7 @@ GPCB_FPL_CACHE::GPCB_FPL_CACHE( GPCB_PLUGIN* aOwner, const wxString& aLibraryPat
 wxDateTime GPCB_FPL_CACHE::GetLibModificationTime() const
 {
     if( !m_lib_path.DirExists() )
-        return wxDateTime::Now();
+        return wxDateTime( 0.0 );
 
     return m_lib_path.GetModificationTime();
 }
@@ -1128,6 +1128,16 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
     }
 
     return true;
+}
+
+
+long long GPCB_PLUGIN::GetLibraryTimestamp() const
+{
+    // If we have no cache, return a number which won't match any stored timestamps
+    if( !m_cache )
+        return wxDateTime::Now().GetValue().GetValue();
+
+    return m_cache->GetLibModificationTime().GetValue().GetValue();
 }
 
 
