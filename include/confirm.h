@@ -31,67 +31,47 @@
 #ifndef __INCLUDE__CONFIRM_H__
 #define __INCLUDE__CONFIRM_H__
 
-#include <wx/dialog.h>
+#include <wx/richmsgdlg.h>
 #include <vector>
 
 class wxCheckBox;
 class wxStaticBitmap;
 
 /**
- * Helper class to create more flexible dialogs, e.g:
- *
- *  KIDIALOG dlg( "Test ");
- *  dlg.Title( "Title" ).Buttons( wxOK | wxCANCEL ).Type( WARNING ).DoNotShowCheckBox();
- *  int res = dlg.ShowModal();
+ * Helper class to create more flexible dialogs, including 'do not show again' checkbox handling.
  */
-class KIDIALOG : wxDialog
+class KIDIALOG : public wxRichMessageDialog
 {
 public:
     ///> Dialog type. Selects appropriate icon and default dialog title
     enum KD_TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
 
-    KIDIALOG( wxWindow* aParent, const wxString& aMessage );
-
-    ///> Sets the dialog type
-    KIDIALOG& Type( KD_TYPE aType );
-
-    ///> Sets the dialog title
-    KIDIALOG& Title( const wxString& aTitle );
-
-    ///> Selects the button set (combination of wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE, wxHELP)
-    KIDIALOG& Buttons( long aButtons );
+    KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption, long aStyle = wxOK );
+    KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType, const wxString& aCaption = "" );
 
     ///> Shows the 'do not show again' checkbox
-    KIDIALOG& DoNotShowCheckbox();
+    void DoNotShowCheckbox()
+    {
+        ShowCheckBox( _( "Do not show again" ), false );
+    }
 
     ///> Checks the 'do not show again' setting for the dialog
     bool DoNotShowAgain() const;
     void ForceShowAgain();
 
+    bool Show( bool aShow = true ) override;
     int ShowModal() override;
 
 protected:
-    void onButtonClick( wxCommandEvent& aEvent );
+    ///> Sets the dialog hash value
+    void setHash();
 
     ///> Unique identifier of the dialog
-    unsigned long hash() const;
+    unsigned long m_hash;
 
-    ///> Text message shown in the dialog
-    wxString m_message;
-
-    ///> Dialog type
-    KD_TYPE m_type;
-
-    ///> Custom title requested, if any was requested
-    wxString m_customTitle;
-
-    // Widgets
-    wxBoxSizer* m_sizerMain;
-    wxBoxSizer* m_sizerUpper;
-    wxBoxSizer* m_btnSizer;
-    wxCheckBox* m_cbDoNotShow;
-    wxStaticBitmap* m_icon;
-    std::vector<wxButton*> m_buttons;
+    // Helper functions for wxRichMessageDialog constructor
+    static wxString getCaption( KD_TYPE aType, const wxString& aCaption );
+    static long getStyle( KD_TYPE aType );
 };
 
 

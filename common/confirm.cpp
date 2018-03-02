@@ -42,166 +42,110 @@
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 
-KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage )
-    : wxDialog( aParent, wxID_ANY, wxEmptyString ),
-    m_btnSizer( nullptr ), m_cbDoNotShow( nullptr ), m_icon( nullptr )
+KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
+        const wxString& aCaption, long aStyle )
+    : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE )
 {
-    SetSizeHints( wxDefaultSize, wxDefaultSize );
-
-    m_sizerMain = new wxBoxSizer( wxVERTICAL );
-    m_sizerUpper = new wxBoxSizer( wxHORIZONTAL );
-
-    wxStaticText* message = new wxStaticText( this, wxID_ANY, aMessage );
-    message->Wrap( -1 );
-    //message->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-    m_sizerUpper->Add( message, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
-    m_sizerMain->Add( m_sizerUpper, 1, wxALL | wxEXPAND, 5 );
-
-    Type( KD_NONE );
-    Buttons( wxOK );
-
-    SetSizer( m_sizerMain );
-    Connect( wxEVT_BUTTON, wxCommandEventHandler( KIDIALOG::onButtonClick ), NULL, this );
+    setHash();
 }
 
 
-KIDIALOG& KIDIALOG::Type( KD_TYPE aType )
+KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
+        KD_TYPE aType, const wxString& aCaption )
+    : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) )
 {
-    m_type = aType;
-
-    const std::unordered_map<int, wxString> stdTitle = {
-        { KD_NONE, _( "Message" ) }, { KD_INFO, _( "Information" ) }, { KD_QUESTION, _( "Question" ) },
-        { KD_WARNING, _( "Warning" ) }, { KD_ERROR, _( "Error" ) }
-    };
-
-    const std::unordered_map<int, wxArtID> icons = {
-        { KD_INFO, wxART_INFORMATION }, { KD_QUESTION, wxART_QUESTION },
-        { KD_WARNING, wxART_WARNING }, { KD_ERROR, wxART_ERROR }
-    };
-
-    if( m_icon )
-    {
-        m_sizerUpper->Remove( 0 );
-        m_icon->Destroy();
-        m_icon = nullptr;
-    }
-
-    if( aType != KD_NONE )
-    {
-        m_icon = new wxStaticBitmap( this, wxID_ANY,
-                wxArtProvider::GetBitmap( icons.at( aType ), wxART_CMN_DIALOG ) );
-        m_sizerUpper->Prepend( m_icon, 0, wxALL, 5 );
-    }
-
-    if( !m_customTitle )
-        SetTitle( stdTitle.at( aType ) );
-
-    return *this;
-}
-
-
-KIDIALOG& KIDIALOG::Title( const wxString& aTitle )
-{
-    m_customTitle = aTitle;
-    SetTitle( aTitle );
-    return *this;
-}
-
-
-KIDIALOG& KIDIALOG::Buttons( long aButtons )
-{
-    wxASSERT( aButtons );
-
-    if( !aButtons )
-        aButtons = wxOK;
-
-    const std::map<long, long> btnTypes = { { wxOK, wxID_OK }, { wxCANCEL, wxID_CANCEL },
-        { wxYES, wxID_YES }, { wxNO, wxID_NO }, { wxAPPLY, wxID_APPLY }, { wxCLOSE, wxID_CLOSE },
-        { wxHELP, wxID_HELP } };
-
-    if( m_btnSizer )
-    {
-        m_sizerMain->Remove( m_btnSizer );   // also deletes m_btnSizer
-
-        for( auto btn : m_buttons )
-            btn->Destroy();
-    }
-
-    m_btnSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    for( auto type : btnTypes )
-    {
-        if( !( aButtons & type.first ) )
-            continue;
-
-        wxButton* btn = new wxButton( this, type.second );
-        m_btnSizer->Add( btn, 1, wxALL | wxEXPAND | wxALIGN_RIGHT );
-        m_buttons.push_back( btn );
-    }
-
-    m_sizerMain->Add( m_btnSizer, 0, wxALL | wxALIGN_RIGHT, 5 );
-
-    return *this;
-}
-
-
-KIDIALOG& KIDIALOG::DoNotShowCheckbox()
-{
-    if( !m_cbDoNotShow )
-    {
-        m_cbDoNotShow = new wxCheckBox( this, wxID_ANY, _( "Do not show again" ) );
-        m_sizerMain->Insert( 1, m_cbDoNotShow, 1, wxALL | wxEXPAND, 5 );
-    }
-
-    return *this;
+    setHash();
 }
 
 
 bool KIDIALOG::DoNotShowAgain() const
 {
-    return doNotShowAgainDlgs.count( hash() ) > 0;
+    return doNotShowAgainDlgs.count( m_hash ) > 0;
 }
 
 
 void KIDIALOG::ForceShowAgain()
 {
-    doNotShowAgainDlgs.erase( hash() );
+    doNotShowAgainDlgs.erase( m_hash );
+}
+
+
+bool KIDIALOG::Show( bool aShow )
+{
+    // Check if this dialog should be shown to the user
+    auto it = doNotShowAgainDlgs.find( m_hash );
+
+    if( it != doNotShowAgainDlgs.end() )
+        return it->second;
+
+    bool ret = wxRichMessageDialog::Show();
+
+    // Has the user asked not to show the dialog again
+    if( IsCheckBoxChecked() )
+        doNotShowAgainDlgs[m_hash] = ret;
+
+    return ret;
 }
 
 
 int KIDIALOG::ShowModal()
 {
     // Check if this dialog should be shown to the user
-    auto it = doNotShowAgainDlgs.find( hash() );
+    auto it = doNotShowAgainDlgs.find( m_hash );
 
     if( it != doNotShowAgainDlgs.end() )
         return it->second;
 
-    Layout();
-    m_sizerMain->Fit( this );
-    int ret = wxDialog::ShowModal();
+    int ret = wxRichMessageDialog::ShowModal();
 
     // Has the user asked not to show the dialog again
-    if( m_cbDoNotShow && m_cbDoNotShow->IsChecked() )
-        doNotShowAgainDlgs[hash()] = ret;
+    if( IsCheckBoxChecked() )
+        doNotShowAgainDlgs[m_hash] = ret;
 
     return ret;
 }
 
 
-void KIDIALOG::onButtonClick( wxCommandEvent& aEvent )
+void KIDIALOG::setHash()
 {
-    EndModal( aEvent.GetId() );
+    std::size_t h1 = std::hash<wxString>{}( GetMessage() );
+    std::size_t h2 = std::hash<wxString>{}( GetTitle() );
+    m_hash = h1 ^ ( h2 << 1 );
 }
 
 
-unsigned long KIDIALOG::hash() const
+wxString KIDIALOG::getCaption( KD_TYPE aType, const wxString& aCaption )
 {
-    std::size_t h1 = std::hash<wxString>{}( m_message );
-    std::size_t h2 = std::hash<wxString>{}( m_customTitle );
-    std::size_t h3 = std::hash<int>{}( m_type );
+    if( !aCaption.IsEmpty() )
+        return aCaption;
 
-    return h1 ^ ( h2 << 1 ) ^ ( h3 << 2 );
+    switch( aType )
+    {
+        case KD_NONE:       /* fall through */
+        case KD_INFO:       return _( "Message" );
+        case KD_QUESTION:   return _( "Question" );
+        case KD_WARNING:    return _( "Warning" );
+        case KD_ERROR:      return _( "Error" );
+    }
+
+    return wxEmptyString;
+}
+
+
+long KIDIALOG::getStyle( KD_TYPE aType )
+{
+    long style = wxOK | wxCENTRE;
+
+    switch( aType )
+    {
+        case KD_NONE:       break;
+        case KD_INFO:       style |= wxICON_INFORMATION; break;
+        case KD_QUESTION:   style |= wxICON_QUESTION; break;
+        case KD_WARNING:    style |= wxICON_WARNING; break;
+        case KD_ERROR:      style |= wxICON_ERROR; break;
+    }
+
+    return style;
 }
 
 
