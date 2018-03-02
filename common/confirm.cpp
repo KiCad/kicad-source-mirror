@@ -42,7 +42,7 @@
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 
-KI_DIALOG::KI_DIALOG( wxWindow* aParent, const wxString& aMessage )
+KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage )
     : wxDialog( aParent, wxID_ANY, wxEmptyString ),
     m_btnSizer( nullptr ), m_cbDoNotShow( nullptr ), m_icon( nullptr )
 {
@@ -61,11 +61,11 @@ KI_DIALOG::KI_DIALOG( wxWindow* aParent, const wxString& aMessage )
     Buttons( wxOK );
 
     SetSizer( m_sizerMain );
-    Connect( wxEVT_BUTTON, wxCommandEventHandler( KI_DIALOG::onButtonClick ), NULL, this );
+    Connect( wxEVT_BUTTON, wxCommandEventHandler( KIDIALOG::onButtonClick ), NULL, this );
 }
 
 
-KI_DIALOG& KI_DIALOG::Type( KD_TYPE aType )
+KIDIALOG& KIDIALOG::Type( KD_TYPE aType )
 {
     m_type = aType;
 
@@ -100,7 +100,7 @@ KI_DIALOG& KI_DIALOG::Type( KD_TYPE aType )
 }
 
 
-KI_DIALOG& KI_DIALOG::Title( const wxString& aTitle )
+KIDIALOG& KIDIALOG::Title( const wxString& aTitle )
 {
     m_customTitle = aTitle;
     SetTitle( aTitle );
@@ -108,7 +108,7 @@ KI_DIALOG& KI_DIALOG::Title( const wxString& aTitle )
 }
 
 
-KI_DIALOG& KI_DIALOG::Buttons( long aButtons )
+KIDIALOG& KIDIALOG::Buttons( long aButtons )
 {
     wxASSERT( aButtons );
 
@@ -145,7 +145,7 @@ KI_DIALOG& KI_DIALOG::Buttons( long aButtons )
 }
 
 
-KI_DIALOG& KI_DIALOG::DoNotShowCheckbox()
+KIDIALOG& KIDIALOG::DoNotShowCheckbox()
 {
     if( !m_cbDoNotShow )
     {
@@ -157,19 +157,19 @@ KI_DIALOG& KI_DIALOG::DoNotShowCheckbox()
 }
 
 
-bool KI_DIALOG::DoNotShowAgain() const
+bool KIDIALOG::DoNotShowAgain() const
 {
     return doNotShowAgainDlgs.count( hash() ) > 0;
 }
 
 
-void KI_DIALOG::ForceShowAgain()
+void KIDIALOG::ForceShowAgain()
 {
     doNotShowAgainDlgs.erase( hash() );
 }
 
 
-int KI_DIALOG::ShowModal()
+int KIDIALOG::ShowModal()
 {
     // Check if this dialog should be shown to the user
     auto it = doNotShowAgainDlgs.find( hash() );
@@ -189,13 +189,13 @@ int KI_DIALOG::ShowModal()
 }
 
 
-void KI_DIALOG::onButtonClick( wxCommandEvent& aEvent )
+void KIDIALOG::onButtonClick( wxCommandEvent& aEvent )
 {
     EndModal( aEvent.GetId() );
 }
 
 
-unsigned long KI_DIALOG::hash() const
+unsigned long KIDIALOG::hash() const
 {
     std::size_t h1 = std::hash<wxString>{}( m_message );
     std::size_t h2 = std::hash<wxString>{}( m_customTitle );

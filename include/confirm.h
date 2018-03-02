@@ -40,29 +40,29 @@ class wxStaticBitmap;
 /**
  * Helper class to create more flexible dialogs, e.g:
  *
- *  KI_DIALOG dlg( "Test ");
+ *  KIDIALOG dlg( "Test ");
  *  dlg.Title( "Title" ).Buttons( wxOK | wxCANCEL ).Type( WARNING ).DoNotShowCheckBox();
  *  int res = dlg.ShowModal();
  */
-class KI_DIALOG : wxDialog
+class KIDIALOG : wxDialog
 {
 public:
     ///> Dialog type. Selects appropriate icon and default dialog title
     enum KD_TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
 
-    KI_DIALOG( wxWindow* aParent, const wxString& aMessage );
+    KIDIALOG( wxWindow* aParent, const wxString& aMessage );
 
     ///> Sets the dialog type
-    KI_DIALOG& Type( KD_TYPE aType );
+    KIDIALOG& Type( KD_TYPE aType );
 
     ///> Sets the dialog title
-    KI_DIALOG& Title( const wxString& aTitle );
+    KIDIALOG& Title( const wxString& aTitle );
 
     ///> Selects the button set (combination of wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE, wxHELP)
-    KI_DIALOG& Buttons( long aButtons );
+    KIDIALOG& Buttons( long aButtons );
 
     ///> Shows the 'do not show again' checkbox
-    KI_DIALOG& DoNotShowCheckbox();
+    KIDIALOG& DoNotShowCheckbox();
 
     ///> Checks the 'do not show again' setting for the dialog
     bool DoNotShowAgain() const;

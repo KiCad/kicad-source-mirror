@@ -807,8 +807,8 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
                 "Please verify it is not a self-intersecting polygon." ),
                 aZone->GetPosition().x, aZone->GetPosition().y, aZone->GetSelectMenuText() );
 
-        KI_DIALOG dlg( nullptr, msg );
-        dlg.Type( KI_DIALOG::KD_WARNING ).Title( _( "Malformed keep-out zone" ) ).DoNotShowCheckbox();
+        KIDIALOG dlg( nullptr, msg );
+        dlg.Type( KIDIALOG::KD_WARNING ).Title( _( "Malformed keep-out zone" ) ).DoNotShowCheckbox();
         dlg.ShowModal();
 
         return false;
