@@ -1253,7 +1253,10 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
 {
     auto&   controls    = *getViewControls();
     bool    started     = false;
+
     STATUS_TEXT_POPUP status( m_frame );
+    status.SetTextColor( wxColour( 255, 0, 0 ) );
+    status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -1310,15 +1313,6 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
                     controls.CaptureCursor( true );
                 }
             }
-            else if( started )
-            {
-                status.SetTextColor( wxColour( 255, 0, 0 ) );
-                status.SetText( _( "Self-intersecting polygons are not allowed" ) );
-                wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
-                status.Move( p );
-                status.Popup( m_frame );
-                status.Expire( 1500 );
-            }
 
         }
         else if( evt->IsAction( &deleteLastPoint ) )
@@ -1342,6 +1336,18 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
             polyGeomMgr.SetCursorPosition( cursorPos, evt->Modifier( MD_CTRL )
                                                       ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
                                                       : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+
+            if( polyGeomMgr.IsSelfIntersecting( true ) )
+            {
+                wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
+                status.Move( p );
+                status.Popup( m_frame );
+                status.Expire( 1500 );
+            }
+            else
+            {
+                status.Hide();
+            }
         }
     }    // end while
 }

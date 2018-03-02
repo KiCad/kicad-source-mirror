@@ -229,7 +229,10 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
+
     m_statusPopup.reset( new STATUS_TEXT_POPUP( getEditFrame<PCB_BASE_EDIT_FRAME>() ) );
+    m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
+    m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed" ) );
 }
 
 
@@ -473,13 +476,12 @@ void POINT_EDITOR::updateItem() const
 
         case S_POLYGON:
         {
-            SHAPE_POLY_SET originalPoly = segment->GetPolyShape();
             SHAPE_POLY_SET& outline = segment->GetPolyShape();
 
             for( int i = 0; i < outline.TotalVertices(); ++i )
                 outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
 
-            validatePolygon( outline, &originalPoly );
+            validatePolygon( outline );
             break;
         }
 
@@ -499,12 +501,11 @@ void POINT_EDITOR::updateItem() const
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         zone->ClearFilledPolysList();
         SHAPE_POLY_SET& outline = *zone->Outline();
-        SHAPE_POLY_SET originalPoly( outline );
 
         for( int i = 0; i < outline.TotalVertices(); ++i )
             outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
 
-        validatePolygon( outline, &originalPoly );
+        validatePolygon( outline );
         zone->Hatch();
         break;
     }
@@ -586,12 +587,13 @@ void POINT_EDITOR::finishItem()
 bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aModified, const SHAPE_POLY_SET* aOriginal ) const
 {
     if( !aModified.IsSelfIntersecting() )
+    {
+        m_statusPopup->Hide();
         return true;
+    }
 
     if( m_statusPopup )
     {
-        m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
-        m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed" ) );
         wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
         m_statusPopup->Move( p );
         m_statusPopup->Popup( getEditFrame<PCB_BASE_FRAME>() );

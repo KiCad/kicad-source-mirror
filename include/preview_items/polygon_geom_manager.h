@@ -114,6 +114,13 @@ public:
     }
 
     /**
+     * Checks whether the locked points constitute a self-intersecting outline.
+     * @param aIncludeLeaderPts when true, also the leading points (not placed ones) will be tested.
+     * @return True when the outline is self-intersecting.
+     */
+    bool IsSelfIntersecting( bool aIncludeLeaderPts ) const;
+
+    /**
      * Set the current cursor position
      */
     void SetCursorPosition( const VECTOR2I& aPos, LEADER_MODE aModifier );

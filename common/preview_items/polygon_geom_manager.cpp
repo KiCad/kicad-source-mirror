@@ -29,7 +29,7 @@
 POLYGON_GEOM_MANAGER::POLYGON_GEOM_MANAGER( CLIENT& aClient ):
     m_client( aClient ),
     m_leaderMode( LEADER_MODE::DIRECT ),
-    m_intersectionsAllowed( false )
+    m_intersectionsAllowed( true )
 {}
 
 
@@ -53,12 +53,8 @@ bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
         m_lockedPoints.Append( aPt );
     }
 
-    // check for self-intersections (line chain needs to be set as closed for proper checks)
-    m_lockedPoints.SetClosed( true );
-    bool selfIntersect = !!m_lockedPoints.SelfIntersecting();
-    m_lockedPoints.SetClosed( false );
-
-    if( !m_intersectionsAllowed && selfIntersect )
+    // check for self-intersections
+    if( !m_intersectionsAllowed && IsSelfIntersecting( false ) )
     {
         m_lockedPoints.Remove( m_lockedPoints.PointCount() - 1 );
         return false;
@@ -78,6 +74,23 @@ void POLYGON_GEOM_MANAGER::SetFinished()
 void POLYGON_GEOM_MANAGER::SetLeaderMode( LEADER_MODE aMode )
 {
     m_leaderMode = aMode;
+}
+
+
+bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
+{
+    auto pts( m_lockedPoints );
+
+    if( aIncludeLeaderPts )
+    {
+        for( int i = 0; i < m_leaderPts.PointCount(); ++i )
+            pts.Append( m_leaderPts.CPoint( i ) );
+    }
+
+    // line chain needs to be set as closed for proper checks
+    pts.SetClosed( true );
+
+    return !!pts.SelfIntersecting();
 }
 
 
