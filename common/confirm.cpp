@@ -292,73 +292,47 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
 }
 
 
-class DIALOG_MULTI_OPTIONS : public wxDialog
+class DIALOG_MULTI_OPTIONS : public wxMultiChoiceDialog
 {
 public:
     DIALOG_MULTI_OPTIONS( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
             const wxArrayString& aOptions )
-        : wxDialog( aParent, wxID_ANY, aTitle )
+        : wxMultiChoiceDialog( aParent, aMessage, aTitle, aOptions ),
+        m_optionsCount( aOptions.GetCount() )
     {
-        SetSizeHints( wxDefaultSize, wxDefaultSize );
-
-        wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-
-        if( !aMessage.IsEmpty() )
-            boxSizer->Add( new wxStaticText( this, wxID_ANY, aMessage ), 0, wxEXPAND | wxALL, 5 );
-
-        m_checklist = new wxCheckListBox( this, wxID_ANY );
-
-        for( const wxString& option : aOptions )
-            m_checklist->Append( option );
-
-        boxSizer->Add( m_checklist, 1, wxEXPAND | wxALL, 5 );
-
         wxBoxSizer* btnSizer = new wxBoxSizer( wxHORIZONTAL );
         wxButton* selectAll = new wxButton( this, wxID_ANY, _( "Select All" ) );
         btnSizer->Add( selectAll, 1, wxEXPAND | wxALL, 5 );
         wxButton* unselectAll = new wxButton( this, wxID_ANY, _( "Unselect All" ) );
         btnSizer->Add( unselectAll, 1, wxEXPAND | wxALL, 5 );
-        boxSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 5 );
+        auto sizer = GetSizer();
+        sizer->Insert( sizer->GetItemCount() - 1, btnSizer, 0, wxEXPAND | wxALL, 0 );
 
-        wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
-        wxButton* btnOk = new wxButton( this, wxID_OK );
-        m_sdboxSizer->AddButton( btnOk );
-        m_sdboxSizer->AddButton( new wxButton( this, wxID_CANCEL ) );
-        m_sdboxSizer->Realize();
-        btnOk->SetDefault();
-        boxSizer->Add( m_sdboxSizer, 0, wxEXPAND | wxALL, 5 );
-
-        SetSizer( boxSizer );
         Layout();
-        boxSizer->Fit( this );
-        boxSizer->SetSizeHints( this );
+        sizer->Fit( this );
+        sizer->SetSizeHints( this );
         Centre( wxBOTH );
 
         selectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::selectAll, this );
         unselectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::unselectAll, this );
     }
 
-    std::vector<int> GetSelection() const
-    {
-        std::vector<int> ret;
-
-        for( unsigned int i = 0; i < m_checklist->GetCount(); ++i )
-        {
-            if( m_checklist->IsChecked( i ) )
-                ret.push_back( i );
-        }
-
-        return ret;
-    }
-
     void SetCheckboxes( bool aValue )
     {
-        for( unsigned int i = 0; i < m_checklist->GetCount(); ++i )
-            m_checklist->Check( i, aValue );
+        wxArrayInt selIdxs;
+
+        if( aValue )        // select all indices
+        {
+            for( unsigned int i = 0; i < m_optionsCount; ++i )
+                selIdxs.Add( i );
+        }
+
+        SetSelections( selIdxs );
     }
 
 protected:
-    wxCheckListBox* m_checklist;
+    ///> Number of displayed options
+    int m_optionsCount;
 
     void selectAll( wxCommandEvent& aEvent )
     {
@@ -372,29 +346,24 @@ protected:
 };
 
 
-std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
         const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState )
 {
-    std::vector<int> ret;
-    bool clickedOk;
     DIALOG_MULTI_OPTIONS dlg( aParent, aTitle, aMessage, aOptions );
+    dlg.Layout();
     dlg.SetCheckboxes( aDefaultState );
 
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        ret = dlg.GetSelection();
-        clickedOk = true;
-    }
-    else
-    {
-        clickedOk = false;
-    }
+    wxArrayInt ret;
+    bool clickedOk = ( dlg.ShowModal() == wxID_OK );
+
+    if( clickedOk )
+        ret = dlg.GetSelections();
 
     return std::make_pair( clickedOk, ret );
 }
 
 
-std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
         const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState )
 {
     wxArrayString array;

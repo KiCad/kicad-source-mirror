@@ -169,17 +169,19 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
 
 /**
  * Displays a dialog with checkboxes asking the user to select one or more options.
+ *
  * @param aParent is the parent window.
  * @param aTitle is the dialog title.
  * @param aMessage is a text label displayed in the first row of the dialog.
  * @param aOptions is a vector of possible options.
  * @param aDefaultState is the default state for the checkboxes.
- * @return Vector containing indices of the selected option.
+ * @return Pair containing a boolean value equal to true when the selection has been confirmed and
+ *         an integer array containing indices of the selected options.
  */
-std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
         const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState = false );
 
-std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
         const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState = false );
 
 #endif /* __INCLUDE__CONFIRM_H__ */

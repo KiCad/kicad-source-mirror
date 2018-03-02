@@ -614,7 +614,7 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aClosing )
         if( unsavedLibraries.IsEmpty() )
             break;
 
-        std::vector<int> libIdxs;
+        wxArrayInt libIdxs;
 
         // Show a list of unsaved libraries when:
         // - library editor is closed
