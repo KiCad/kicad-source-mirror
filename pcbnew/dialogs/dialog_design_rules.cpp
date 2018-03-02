@@ -249,6 +249,9 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
     // Initialize the Rules List
     InitRulesList();
 
+    // Reassure that all nets have net classes assigned
+    m_Pcb->BuildListOfNets();
+
     // copy all NETs into m_AllNets by adding them as NETCUPs.
 
     // @todo go fix m_Pcb->SynchronizeNetsAndNetClasses() so that the netcode==0 is not
