@@ -2061,32 +2061,16 @@ void EAGLE_PLUGIN::centerBoard()
 
 wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
 {
+    // File hasn't been loaded yet.
+    if( aPath.IsEmpty() )
+        return wxDateTime::Now();
+
     wxFileName  fn( aPath );
 
-    // Do not call wxFileName::GetModificationTime() on a non-existent file, because
-    // if it fails, wx's implementation calls the crap wxLogSysError() which
-    // eventually infects our UI with an unwanted popup window, so don't let it fail.
-    if( !fn.IsFileReadable() )
-    {
-        wxString msg = wxString::Format(
-            _( "File \"%s\" is not readable." ),
-            GetChars( aPath ) );
-
-        THROW_IO_ERROR( msg );
-    }
-
-    /*
-    // update the writable flag while we have a wxFileName, in a network this
-    // is possibly quite dynamic anyway.
-    m_writable = fn.IsFileWritable();
-    */
-
-    wxDateTime modTime = fn.GetModificationTime();
-
-    if( !modTime.IsValid() )
-        modTime.Now();
-
-    return modTime;
+    if( fn.IsFileReadable() )
+        return fn.GetModificationTime();
+    else
+        return wxDateTime( 0.0 );
 }
 
 
@@ -2099,8 +2083,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
         // Fixes assertions in wxWidgets debug builds for the wxDateTime object.  Refresh the
         // cache if either of the wxDateTime objects are invalid or the last file modification
         // time differs from the current file modification time.
-        bool load = !m_mod_time.IsValid() || !modtime.IsValid() ||
-                    m_mod_time != modtime;
+        bool load = !m_mod_time.IsValid() || !modtime.IsValid() || m_mod_time != modtime;
 
         if( aLibPath != m_lib_path || load )
         {

@@ -140,7 +140,6 @@ class GPCB_FPL_CACHE_ITEM
 {
     wxFileName         m_file_name; ///< The the full file name and path of the footprint to cache.
     bool               m_writable;  ///< Writability status of the footprint file.
-    wxDateTime         m_mod_time;  ///< The last file modified time stamp.
     std::unique_ptr<MODULE> m_module;
 
 public:
@@ -148,9 +147,7 @@ public:
 
     wxString    GetName() const { return m_file_name.GetDirs().Last(); }
     wxFileName  GetFileName() const { return m_file_name; }
-    bool        IsModified() const;
     MODULE*     GetModule() const { return m_module.get(); }
-    void        UpdateModificationTime() { m_mod_time = m_file_name.GetModificationTime(); }
 };
 
 
@@ -159,20 +156,6 @@ GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aModule, const wxFileName& aFi
 {
     m_file_name = aFileName;
     m_writable = true;          // temporary init
-
-    if( m_file_name.FileExists() )
-        m_mod_time = m_file_name.GetModificationTime();
-    else
-        m_mod_time.Now();
-}
-
-
-bool GPCB_FPL_CACHE_ITEM::IsModified() const
-{
-    if( !m_file_name.FileExists() )
-        return false;
-
-    return m_file_name.GetModificationTime() != m_mod_time;
 }
 
 
@@ -185,8 +168,12 @@ class GPCB_FPL_CACHE
 {
     GPCB_PLUGIN*    m_owner;        /// Plugin object that owns the cache.
     wxFileName      m_lib_path;     /// The path of the library.
-    wxDateTime      m_mod_time;     /// Footprint library path modified time stamp.
     MODULE_MAP      m_modules;      /// Map of footprint file name per MODULE*.
+
+    bool            m_cache_dirty;      // Stored separately because it's expensive to check
+                                        // m_cache_timestamp against all the files.
+    long long       m_cache_timestamp;  // A hash of the timestamps for all the footprint
+                                        // files.
 
     MODULE* parseMODULE( LINE_READER* aLineReader );
 
@@ -224,7 +211,6 @@ public:
     GPCB_FPL_CACHE( GPCB_PLUGIN* aOwner, const wxString& aLibraryPath );
 
     wxString GetPath() const { return m_lib_path.GetPath(); }
-    wxDateTime GetLastModificationTime() const { return m_mod_time; }
     bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
     MODULE_MAP& GetModules() { return m_modules; }
 
@@ -238,21 +224,19 @@ public:
 
     void Remove( const wxString& aFootprintName );
 
-    wxDateTime GetLibModificationTime() const;
+    /**
+     * Function GetTimestamp
+     * Generate a timestamp representing all source files in the cache (including the
+     * parent directory).
+     * Timestamps should not be considered ordered.  They either match or they don't.
+     */
+    long long GetTimestamp();
 
     /**
      * Function IsModified
-     * check if the footprint cache has been modified relative to \a aLibPath
-     * and \a aFootprintName.
-     *
-     * @param aLibPath is a path to test the current cache library path against.
-     * @param aFootprintName is the footprint name in the cache to test.  If the footprint
-     *                       name is empty, the all the footprint files in the library are
-     *                       checked to see if they have been modified.
-     * @return true if the cache has been modified.
+     * Return true if the cache is not up-to-date.
      */
-    bool IsModified( const wxString& aLibPath,
-                     const wxString& aFootprintName = wxEmptyString ) const;
+    bool IsModified();
 
     /**
      * Function IsPath
@@ -274,15 +258,8 @@ GPCB_FPL_CACHE::GPCB_FPL_CACHE( GPCB_PLUGIN* aOwner, const wxString& aLibraryPat
 {
     m_owner = aOwner;
     m_lib_path.SetPath( aLibraryPath );
-}
-
-
-wxDateTime GPCB_FPL_CACHE::GetLibModificationTime() const
-{
-    if( !m_lib_path.DirExists() )
-        return wxDateTime( 0.0 );
-
-    return m_lib_path.GetModificationTime();
+    m_cache_timestamp = 0;
+    m_cache_dirty = true;
 }
 
 
@@ -295,8 +272,16 @@ void GPCB_FPL_CACHE::Load()
 
     if( !dir.IsOpened() )
     {
+        m_cache_timestamp = 0;
+        m_cache_dirty = false;
+
         THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
                                           m_lib_path.GetPath().GetData() ) );
+    }
+    else
+    {
+        m_cache_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
+        m_cache_dirty = false;
     }
 
     wxString fpFileName;
@@ -333,11 +318,6 @@ void GPCB_FPL_CACHE::Load()
         }
     } while( dir.GetNext( &fpFileName ) );
 
-    // Remember the file modification time of library file when the
-    // cache snapshot was made, so that in a networked environment we will
-    // reload the cache as needed.
-    m_mod_time = GetLibModificationTime();
-
     if( !cacheErrorMsg.IsEmpty() )
         THROW_IO_ERROR( cacheErrorMsg );
 }
@@ -373,49 +353,41 @@ bool GPCB_FPL_CACHE::IsPath( const wxString& aPath ) const
 }
 
 
-bool GPCB_FPL_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintName ) const
+bool GPCB_FPL_CACHE::IsModified()
 {
-    // The library is modified if the library path got deleted or changed.
-    if( !m_lib_path.DirExists() || !IsPath( aLibPath ) )
+    if( m_cache_dirty )
         return true;
+    else
+        return GetTimestamp() != m_cache_timestamp;
+}
 
-    // If no footprint was specified, check every file modification time against the time
-    // it was loaded.
-    if( aFootprintName.IsEmpty() )
+
+long long GPCB_FPL_CACHE::GetTimestamp()
+{
+    // Avoid expensive GetModificationTime checks if we already know we're dirty
+    if( m_cache_dirty )
+        return wxDateTime::Now().GetValue().GetValue();
+
+    long long files_timestamp = 0;
+
+    if( m_lib_path.DirExists() )
     {
+        files_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
+
         for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
-            wxFileName fn = m_lib_path;
-
-            fn.SetName( it->second->GetFileName().GetName() );
-            fn.SetExt( GedaPcbFootprintLibFileExtension );
-
-            if( !fn.FileExists() )
-            {
-                wxLogTrace( traceFootprintLibrary,
-                            wxT( "Footprint cache file \"%s\" does not exist." ),
-                            fn.GetFullPath().GetData() );
-                return true;
-            }
-
-            if( it->second->IsModified() )
-            {
-                wxLogTrace( traceFootprintLibrary,
-                            wxT( "Footprint cache file \"%s\" has been modified." ),
-                            fn.GetFullPath().GetData() );
-                return true;
-            }
+            wxFileName moduleFile = it->second->GetFileName();
+            if( moduleFile.FileExists() )
+                files_timestamp += moduleFile.GetModificationTime().GetValue().GetValue();
         }
     }
-    else
-    {
-        MODULE_CITER it = m_modules.find( TO_UTF8( aFootprintName ) );
 
-        if( it == m_modules.end() || it->second->IsModified() )
-            return true;
-    }
+    // If the new timestamp doesn't match the cache timestamp, then save ourselves the
+    // expensive calls next time
+    if( m_cache_timestamp != files_timestamp )
+        m_cache_dirty = true;
 
-    return false;
+    return files_timestamp;
 }
 
 
@@ -960,9 +932,9 @@ void GPCB_PLUGIN::init( const PROPERTIES* aProperties )
 }
 
 
-void GPCB_PLUGIN::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName )
+void GPCB_PLUGIN::validateCache( const wxString& aLibraryPath, bool checkModified  )
 {
-    if( !m_cache || m_cache->IsModified( aLibraryPath, aFootprintName ) )
+    if( !m_cache || ( checkModified && m_cache->IsModified() ) )
     {
         // a spectacular episode in memory management:
         delete m_cache;
@@ -993,7 +965,7 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
     // the library.
     try
     {
-        cacheLib( aLibraryPath );
+        validateCache( aLibraryPath );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -1012,14 +984,16 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
 }
 
 
-MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    const PROPERTIES* aProperties )
+MODULE* GPCB_PLUGIN::doLoadFootprint( const wxString& aLibraryPath,
+                                      const wxString& aFootprintName,
+                                      const PROPERTIES* aProperties,
+                                      bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
 
-    cacheLib( aLibraryPath, aFootprintName );
+    validateCache( aLibraryPath, checkModified );
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
@@ -1035,6 +1009,21 @@ MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString
 }
 
 
+MODULE* GPCB_PLUGIN::LoadEnumeratedFootprint( const wxString& aLibraryPath,
+                                              const wxString& aFootprintName,
+                                              const PROPERTIES* aProperties )
+{
+    return doLoadFootprint( aLibraryPath, aFootprintName, aProperties, false );
+}
+
+
+MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    const PROPERTIES* aProperties )
+{
+    return doLoadFootprint( aLibraryPath, aFootprintName, aProperties, true );
+}
+
+
 void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                                    const PROPERTIES* aProperties )
 {
@@ -1042,7 +1031,7 @@ void GPCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString&
 
     init( aProperties );
 
-    cacheLib( aLibraryPath );
+    validateCache( aLibraryPath );
 
     if( !m_cache->IsWritable() )
     {
@@ -1137,7 +1126,7 @@ long long GPCB_PLUGIN::GetLibraryTimestamp() const
     if( !m_cache )
         return wxDateTime::Now().GetValue().GetValue();
 
-    return m_cache->GetLibModificationTime().GetValue().GetValue();
+    return m_cache->GetTimestamp();
 }
 
 
@@ -1147,7 +1136,7 @@ bool GPCB_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 
     init( NULL );
 
-    cacheLib( aLibraryPath );
+    validateCache( aLibraryPath );
 
     return m_cache->IsWritable();
 }

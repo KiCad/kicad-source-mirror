@@ -65,6 +65,9 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              const PROPERTIES* aProperties = NULL) override;
 
+    MODULE* LoadEnumeratedFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
+            const PROPERTIES* aProperties = NULL ) override;
+
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL ) override;
 
@@ -96,8 +99,10 @@ protected:
     wxString          m_filename;     ///< for saves only, name is in m_reader for loads
 
 private:
-    /// we only cache one footprint library for now, this determines which one.
-    void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
+    void validateCache( const wxString& aLibraryPath, bool checkModified = true );
+
+    MODULE* doLoadFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
+            const PROPERTIES* aProperties, bool checkModified );
 
     void init( const PROPERTIES* aProperties );
 };
