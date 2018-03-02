@@ -283,56 +283,12 @@ int YesNoCancelDialog( wxWindow*       aParent,
 
 int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage, const wxArrayString& aOptions )
 {
-    int ret = -1;
-    wxDialog* dlg = new wxDialog( aParent, wxID_ANY, aTitle );
+    wxSingleChoiceDialog dlg( aParent, aMessage, aTitle, aOptions );
 
-    wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
+    if( dlg.ShowModal() != wxID_OK )
+        return -1;
 
-    if( !aMessage.IsEmpty() )
-        boxSizer->Add( new wxStaticText( dlg, wxID_ANY, aMessage ), 0, wxEXPAND | wxALL, 5  );
-
-    std::vector<wxRadioButton*> radioButtons;
-    radioButtons.reserve( aOptions.Count() );
-
-    for( const wxString& option : aOptions )
-    {
-        radioButtons.emplace_back( new wxRadioButton( dlg, wxID_ANY, _( option ) ) );
-        boxSizer->Add( radioButtons.back(), 0, wxEXPAND | wxALL, 5 );
-    }
-
-    wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
-    wxButton* btnOk = new wxButton( dlg, wxID_OK );
-    m_sdboxSizer->AddButton( btnOk );
-    m_sdboxSizer->AddButton( new wxButton( dlg, wxID_CANCEL ) );
-    m_sdboxSizer->Realize();
-    btnOk->SetDefault();
-    boxSizer->Add( m_sdboxSizer, 1, wxEXPAND | wxALL, 5 );
-
-    dlg->SetSizer( boxSizer );
-    dlg->Layout();
-    boxSizer->Fit( dlg );
-    boxSizer->SetSizeHints( dlg );
-    dlg->Centre( wxBOTH );
-
-    if( dlg->ShowModal() == wxID_OK )
-    {
-        for( unsigned int i = 0; i < radioButtons.size(); ++i )
-        {
-            if( radioButtons[i]->GetValue() )
-            {
-                ret = i;
-                break;
-            }
-        }
-    }
-    else
-    {
-        ret = -1;
-    }
-
-    dlg->Destroy();
-
-    return ret;
+    return dlg.GetSelection();
 }
 
 

@@ -157,6 +157,7 @@ int YesNoCancelDialog( wxWindow*       aParent,
 
 /**
  * Displays a dialog with radioboxes asking the user to select an option.
+ *
  * @param aParent is the parent window.
  * @param aTitle is the dialog title.
  * @param aMessage is a text label displayed in the first row of the dialog.
