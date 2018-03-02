@@ -53,9 +53,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	optionsSizer->Add( orientationRadioBox, 0, wxEXPAND|wxALL, 5 );
 	
-	wxString mirrorRadioBoxChoices[] = { _("Default"), _("Mirror horizontally"), _("Mirror vertically") };
+	wxString mirrorRadioBoxChoices[] = { _("Default"), _("Mirror around X axis"), _("Mirror around Y axis") };
 	int mirrorRadioBoxNChoices = sizeof( mirrorRadioBoxChoices ) / sizeof( wxString );
-	mirrorRadioBox = new wxRadioBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Position:"), wxDefaultPosition, wxDefaultSize, mirrorRadioBoxNChoices, mirrorRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
+	mirrorRadioBox = new wxRadioBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Aspect:"), wxDefaultPosition, wxDefaultSize, mirrorRadioBoxNChoices, mirrorRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
 	mirrorRadioBox->SetSelection( 2 );
 	mirrorRadioBox->SetToolTip( _("Pick the graphical transformation to be used when displaying the symbol") );
 	
