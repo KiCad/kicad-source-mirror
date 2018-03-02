@@ -346,13 +346,13 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
         AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ),
                      KiBitmap( duplicate_xpm ) );
         msg = AddHotkeyName( _( "Mirror Block Around Horizontal(X) Axis" ), g_Libedit_Hokeys_Descr,
-                             HK_MIRROR_Y );
-        AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
-                     KiBitmap( mirror_h_xpm ) );
-        msg = AddHotkeyName( _( "Mirror Block Around Vertical(Y) Axis" ), g_Libedit_Hokeys_Descr,
                              HK_MIRROR_X );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_X_BLOCK, msg,
                      KiBitmap( mirror_v_xpm ) );
+        msg = AddHotkeyName( _( "Mirror Block Around Vertical(Y) Axis" ), g_Libedit_Hokeys_Descr,
+                             HK_MIRROR_Y );
+        AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
+                     KiBitmap( mirror_h_xpm ) );
         msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_POPUP_ROTATE_BLOCK, msg,
                      KiBitmap( rotate_ccw_xpm ) );
