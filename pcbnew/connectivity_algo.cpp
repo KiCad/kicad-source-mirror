@@ -734,7 +734,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     } );
 
 #ifdef CONNECTIVITY_DEBUG
-    printf("Active clusters: %d\n");
+    printf("Active clusters: %d\n", clusters.size() );
 
     for( auto cl : clusters )
     {
