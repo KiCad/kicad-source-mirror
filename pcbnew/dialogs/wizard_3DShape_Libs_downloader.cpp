@@ -25,7 +25,7 @@
  */
 
 /**
- * @brief Wizard for selecting and dowloading D shapes libraries of footprints
+ * @brief Wizard for selecting and dowloading 3D shapes libraries of footprints
  * consisting of 3 steps:
  * - select source and destination (Github URL and local folder)
  * - pick and select libraries
@@ -348,7 +348,7 @@ void WIZARD_3DSHAPE_LIBS_DOWNLOADER::getLibsListGithub( wxArrayString& aList )
 }
 
 
-// Download the .pretty libraries folders found in aUrlList and store them on disk
+// Download the .3Dshapes libraries folders found in aUrlList and store them on disk
 // in a master folder
 bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& aUrlList,
                                                      wxString* aErrorMessage )
