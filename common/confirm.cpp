@@ -323,7 +323,7 @@ public:
 
         if( aValue )        // select all indices
         {
-            for( unsigned int i = 0; i < m_optionsCount; ++i )
+            for( int i = 0; i < m_optionsCount; ++i )
                 selIdxs.Add( i );
         }
 
