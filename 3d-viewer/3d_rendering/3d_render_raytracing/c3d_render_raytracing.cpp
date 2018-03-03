@@ -372,7 +372,7 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
     int numBlocksRendered = 0;
 
     #pragma omp parallel for schedule(dynamic) shared(breakLoop) \
-        firstprivate(ptrPBO, nrBlocks, startTime) reduction(+:numBlocksRendered) default(none)
+        firstprivate(ptrPBO) reduction(+:numBlocksRendered) default(none)
     for( long iBlock = 0; iBlock < nrBlocks; iBlock++ )
     {
 
