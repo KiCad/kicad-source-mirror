@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -841,16 +841,18 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
     switch( (IO_MGR::PCB_FILE_T) aFileType )
     {
     case IO_MGR::EAGLE:
-        if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
-                    KICTL_EAGLE_BRD ) )
+        if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_EAGLE_BRD ) )
         {
             wxString projectpath = Kiway().Prj().GetProjectPath();
-            wxFileName newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+            wxFileName newfilename;
 
+            newfilename.SetPath( Prj().GetProjectPath() );
+            newfilename.SetName( Prj().GetProjectName() );
             newfilename.SetExt( KiCadPcbFileExtension );
 
             GetBoard()->SetFileName( newfilename.GetFullPath() );
             UpdateTitle();
+            OnModify();
 
             wxString newLibPath;
             ArchiveModulesOnBoard( true, newfilename.GetName(), &newLibPath );
@@ -865,14 +867,16 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                 wxGetEnv( project_env, &env_path );
 
                 wxString result( newLibPath );
-                rel_path =  result.Replace( env_path, wxString( "$(" + project_env + ")" ) ) ? result : "" ;
+                rel_path =  result.Replace( env_path,
+                                            wxString( "$(" + project_env + ")" ) ) ? result : "" ;
 
-                if( !rel_path.IsEmpty() ) newLibPath = rel_path;
+                if( !rel_path.IsEmpty() )
+                    newLibPath = rel_path;
 
                 FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( newfilename.GetName(),
-                                                          newLibPath,
-                                                          wxT( "KiCad" ),
-                                                          wxEmptyString );     // options
+                                                              newLibPath,
+                                                              wxT( "KiCad" ),
+                                                              wxEmptyString );     // options
                 prjlibtable->InsertRow( row );
             }
 

@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -783,7 +783,8 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                 g_RootSheet = pi->Load( fullFileName, &Kiway() );
 
                 projectpath = Kiway().Prj().GetProjectPath();
-                newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+                newfilename.SetPath( Prj().GetProjectPath() );
+                newfilename.SetName( Prj().GetProjectName() );
                 newfilename.SetExt( SchematicFileExtension );
 
                 m_CurrentSheet->clear();
@@ -795,13 +796,14 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                 GetScreen()->SetModify();
 
                 UpdateFileHistory( fullFileName );
-                schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+                schematic.UpdateSymbolLinks();   // Update all symbol library links for all sheets.
 
                 // Ensure the schematic is fully segmented on first display
                 BreakSegmentsOnJunctions();
                 SchematicCleanUp( true );
                 GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
-                GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+                // Only perform the dangling end test on root sheet.
+                GetScreen()->TestDanglingEnds();
 
                 GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
                 Zoom_Automatique( false );

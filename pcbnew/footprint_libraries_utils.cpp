@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,7 +129,8 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
  * @param aFileName - file name to be read
  * @param aName - wxString to receive the module name iff type is LEGACY
  */
-static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFileName, wxString* aName )
+static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFileName,
+                                            wxString* aName )
 {
     FILE_LINE_READER freader( aFile, aFileName.GetFullPath() );
     WHITESPACE_FILTER_READER reader( freader );
@@ -148,6 +149,7 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
     else if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
     {
         file_type = IO_MGR::LEGACY;
+
         while( reader.ReadLine() )
         {
             if( !strncasecmp( line, "$MODULE", strlen( "$MODULE" ) ) )
@@ -469,9 +471,12 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         wxFileName fn = aLibName;
 
         if( !fn.IsAbsolute() )
+        {
+            fn.SetName( aLibName );
             fn.MakeAbsolute( initialPath );
+        }
 
-        // Enforce the extension:
+        // Enforce the .pretty extension:
         fn.SetExt( KiCadFootprintLibPathExtension );
 
         libPath = fn.GetFullPath();
@@ -588,7 +593,8 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 }
 
 
-void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName,  wxString* aLibPath )
+void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName,
+                                            wxString* aLibPath )
 {
     if( GetBoard()->m_Modules == NULL )
     {
@@ -616,7 +622,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
 
             for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )
             {
-                if( !curr_fp->GetFPID().GetLibItemName().empty() )      // Can happen with old boards.
+                if( !curr_fp->GetFPID().GetLibItemName().empty() )   // Can happen with old boards.
                     tbl->FootprintSave( nickname, curr_fp, false );
             }
         }
@@ -644,7 +650,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
         {
             try
             {
-                if( !curr_fp->GetFPID().GetLibItemName().empty() )      // Can happen with old boards.
+                if( !curr_fp->GetFPID().GetLibItemName().empty() )   // Can happen with old boards.
                     pi->FootprintSave( libPath, curr_fp );
             }
             catch( const IO_ERROR& ioe )
@@ -702,17 +708,20 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
 
     wxSizer* mainSizer = dlg.GetSizer();
 
-    wxStaticLine* separator = new wxStaticLine( &dlg, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    wxStaticLine* separator = new wxStaticLine( &dlg, wxID_ANY, wxDefaultPosition,
+                                                wxDefaultSize, wxLI_HORIZONTAL );
     mainSizer->Prepend( separator, 0, wxEXPAND|wxBOTTOM|wxTOP, 10 );
 
-    wxTextCtrl* nameTextCtrl = new wxTextCtrl( &dlg, wxID_ANY, footprintName, wxDefaultPosition, wxDefaultSize, 0 );
+    wxTextCtrl* nameTextCtrl = new wxTextCtrl( &dlg, wxID_ANY, footprintName,
+                                               wxDefaultPosition, wxDefaultSize, 0 );
     mainSizer->Prepend( nameTextCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
     wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
     nameValidator.SetCharExcludes( MODULE::StringLibNameInvalidChars( true ) );
     nameTextCtrl->SetValidator( nameValidator );
 
-    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Footprint Name:" ), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Footprint Name:" ),
+                                            wxDefaultPosition, wxDefaultSize, 0 );
     mainSizer->Prepend( label, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
     // Move nameTextCtrl to the head of the tab-order
