@@ -201,33 +201,7 @@ wxString WIZARD_FPLIB_TABLE::LIBRARY::GetPluginName() const
     if( !m_plugin )
         return _( "UNKNOWN" );
 
-    switch( *m_plugin )
-    {
-        case IO_MGR::LEGACY:
-            return wxT( "Legacy" );
-
-        case IO_MGR::KICAD_SEXP:
-            return wxT( "KiCad" );
-
-        case IO_MGR::EAGLE:
-            return wxT( "Eagle" );
-
-        case IO_MGR::GEDA_PCB:
-            return wxT( "Geda-PCB" );
-
-        case IO_MGR::GITHUB:
-            return wxT( "Github" );
-
-        default:
-            return _( "UNKNOWN" );
-    }
-
-    /*PLUGIN* p = IO_MGR::PluginFind( *m_plugin );
-
-    if( !p )
-        return _( "UNKNOWN" );
-
-    return p->PluginName();*/
+    return IO_MGR::ShowType( *m_plugin );
 }
 
 

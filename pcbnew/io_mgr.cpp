@@ -76,10 +76,6 @@ void IO_MGR::PluginRelease( PLUGIN* aPlugin )
 
 const wxString IO_MGR::ShowType( PCB_FILE_T aType )
 {
-    // keep this function in sync with EnumFromStr() relative to the
-    // text spellings.  If you change the spellings, you will obsolete
-    // library tables, so don't do change, only additions are ok.
-
     const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
 
     for( const auto& plugin : plugins )
@@ -90,16 +86,12 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
         }
     }
 
-    return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aType );
+    return wxString::Format( _( "UNKNOWN (%d)" ), aType );
 }
 
 
 IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
 {
-    // keep this function in sync with ShowType() relative to the
-    // text spellings.  If you change the spellings, you will obsolete
-    // library tables, so don't do change, only additions are ok.
-
     const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
 
     for( const auto& plugin : plugins )
@@ -205,6 +197,8 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
 
+// These text strings are "truth" for identifying the plugins.  If you change the spellings,
+// you will obsolete library tables, so don't do it.  Additions are OK.
 static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"), []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP, wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
 static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"), []() -> PLUGIN* { return new PCAD_PLUGIN; } );
