@@ -177,7 +177,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             auto poly = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent ) : new DRAWSEGMENT();
 
             poly->SetShape ( S_POLYGON );
-            poly->SetLayer( aZone->GetLayer() );
+            poly->SetLayer( m_tool.getDrawingLayer() );
             poly->SetPolyShape ( *aZone->Outline() );
 
             bCommit.Add( poly );
