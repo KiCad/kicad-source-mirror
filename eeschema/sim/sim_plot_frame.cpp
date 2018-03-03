@@ -24,6 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/stc/stc.h>
+
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <kiway.h>
@@ -181,11 +183,12 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
              wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
 
     // Bind toolbar buttons event to existing menu event handlers, so they behave the same
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate,  this, m_runSimulation->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onAddSignal, this, m_addSignals->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onProbe,     this, m_probeSignals->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onTune,      this, m_tuneValue->GetId() );
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings,  this, m_settings->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate,    this, m_runSimulation->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onAddSignal,   this, m_addSignals->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onProbe,       this, m_probeSignals->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onTune,        this, m_tuneValue->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onShowNetlist, this, m_showNetlist->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings,    this, m_settings->GetId() );
 
     m_toolBar->Realize();
     m_plotNotebook->SetPageText( 0, _( "Welcome!" ) );
@@ -1072,6 +1075,57 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
 
     wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_TUNE ) );
     m_schematicFrame->Raise();
+}
+
+void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
+{
+    class NETLIST_VIEW_DIALOG : public wxDialog
+    {
+    public:
+        enum
+        {
+            MARGIN_LINE_NUMBERS
+        };
+
+        void onClose( wxCloseEvent& evt )
+        {
+            EndModal( GetReturnCode() );
+        }
+
+        NETLIST_VIEW_DIALOG(wxWindow* parent, wxString source) :
+            wxDialog(parent, wxID_ANY, "SPICE Netlist",
+                     wxDefaultPosition, wxSize(1500,900),
+                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        {
+            wxStyledTextCtrl* text = new wxStyledTextCtrl(this, wxID_ANY);
+
+            text->SetMarginWidth (MARGIN_LINE_NUMBERS, 50);
+            text->StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (75, 75, 75) );
+            text->StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour (220, 220, 220));
+            text->SetMarginType (MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER);
+
+            text->SetWrapMode (wxSTC_WRAP_WORD);
+
+            text->SetText( source );
+
+            text->StyleClearAll();
+            text->SetLexer(wxSTC_LEX_SPICE);
+
+            wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+            sizer->Add(text, 1, wxEXPAND);
+            SetSizer(sizer);
+
+            Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(NETLIST_VIEW_DIALOG::onClose), NULL, this);
+        }
+
+    };
+
+    if( m_schematicFrame == NULL || m_simulator == NULL )
+        return;
+
+    NETLIST_VIEW_DIALOG dlg( this, m_simulator->GetNetlist() );
+
+    dlg.ShowModal();
 }
 
 

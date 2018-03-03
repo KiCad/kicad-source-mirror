@@ -88,7 +88,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -240,7 +240,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Simulation</property>
                     <property name="name">m_simulationMenu</property>
                     <property name="permission">protected</property>
@@ -302,6 +302,21 @@
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Tune component value</property>
                         <property name="name">m_tuneValue</property>
+                        <property name="permission">protected</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection"></event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help">Shows current simulation&apos;s netlist. Useful for debugging SPICE errors.</property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Show SPICE Netlist...</property>
+                        <property name="name">m_showNetlist</property>
                         <property name="permission">protected</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>

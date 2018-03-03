@@ -261,6 +261,7 @@ private:
     void onAddSignal( wxCommandEvent& event );
     void onProbe( wxCommandEvent& event );
     void onTune( wxCommandEvent& event );
+    void onShowNetlist( wxCommandEvent& event );
 
     void onClose( wxCloseEvent& aEvent );
 

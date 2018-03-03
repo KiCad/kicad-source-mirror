@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Nov 10 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,6 +61,9 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	
 	m_tuneValue = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Tune component value") ) , wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_tuneValue );
+	
+	m_showNetlist = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Show SPICE Netlist...") ) , _("Shows current simulation's netlist. Useful for debugging SPICE errors."), wxITEM_NORMAL );
+	m_simulationMenu->Append( m_showNetlist );
 	
 	m_simulationMenu->AppendSeparator();
 	

@@ -134,6 +134,12 @@ public:
      */
     virtual std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) = 0;
 
+    /**
+     * @brief Returns current SPICE netlist used by the simulator.
+     * @return The netlist.
+     */
+    virtual const std::string GetNetlist() const = 0;
+
 protected:
     ///> Reporter object to receive simulation log
     SPICE_REPORTER* m_reporter;

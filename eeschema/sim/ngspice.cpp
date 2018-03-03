@@ -194,11 +194,14 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     vector<char*> lines;
     stringstream ss( aNetlist );
 
+    m_netlist = "";
+
     while( !ss.eof() )
     {
         char line[1024];
         ss.getline( line, sizeof( line ) );
         lines.push_back( strdup( line ) );
+        m_netlist += std::string( line ) + std::string( "\n" );
     }
 
     lines.push_back( nullptr );
@@ -428,6 +431,11 @@ int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, 
     //printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
 
     return 0;
+}
+
+const std::string NGSPICE::GetNetlist() const
+{
+    return m_netlist;
 }
 
 

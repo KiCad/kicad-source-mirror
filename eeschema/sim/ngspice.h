@@ -73,6 +73,9 @@ public:
     ///> @copydoc SPICE_SIMULATOR::GetPhasePlot()
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
 
+    ///> @copydoc SPICE_SIMULATOR::GetNetlist()
+    virtual const std::string GetNetlist() const override;
+
 private:
     void init();
 
@@ -96,6 +99,9 @@ private:
 
     ///> NGspice should be initialized only once
     static bool m_initialized;
+
+    ///> current netlist
+    std::string m_netlist;
 };
 
 #endif /* NGSPICE_H */

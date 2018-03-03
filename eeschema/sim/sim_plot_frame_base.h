@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Nov 10 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,6 +50,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenuItem* m_addSignals;
 		wxMenuItem* m_probeSignals;
 		wxMenuItem* m_tuneValue;
+		wxMenuItem* m_showNetlist;
 		wxMenuItem* m_settings;
 		wxMenu* m_viewMenu;
 		wxBoxSizer* m_sizerMain;
