@@ -281,11 +281,6 @@ public:
     PROJECT* GetPrj() { return m_prj; }
 
     /**
-     * Return the suffix to add to rescued parts.
-     */
-    wxString GetPartNameSuffix();
-
-    /**
      * Used by individual #RESCUE_CANDIDATE objects to log a rescue for undoing.
      */
     void LogRescue( SCH_COMPONENT *aComponent, const wxString& aOldName,

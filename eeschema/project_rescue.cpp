@@ -241,8 +241,6 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     LIB_PART* lib_match = nullptr;
     wxString old_part_name;
 
-    wxString part_name_suffix = aRescuer.GetPartNameSuffix();
-
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
         wxString part_name = each_component->GetLibId().GetLibItemName();
@@ -267,9 +265,6 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             // Check if the symbol has already been rescued.
             wxString new_name = LIB_ID::FixIllegalChars( part_name );
-
-            if( new_name.Find( part_name_suffix ) == wxNOT_FOUND )
-                new_name += part_name_suffix;
 
             RESCUE_CACHE_CANDIDATE candidate( part_name, new_name, cache_match, lib_match );
 
@@ -501,23 +496,6 @@ void RESCUER::UndoRescues()
         each_logitem.component->SetLibId( libId );
         each_logitem.component->ClearFlags();
     }
-}
-
-
-wxString RESCUER::GetPartNameSuffix()
-{
-    wxString suffix = wxT( "-RESCUE-" );
-    wxString pname = GetPrj()->GetProjectName();
-
-    for( size_t i = 0; i < pname.Len(); ++i )
-    {
-        if( isspace( pname[i].GetValue() ) )
-            suffix.Append( '_' );
-        else
-            suffix.Append( pname[i] );
-    }
-
-    return suffix;
 }
 
 
