@@ -22,7 +22,7 @@
     <key>CFBundleIdentifier</key>                   <string>org.kicad-pcb.eeschema</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
     <key>CFBundleLongVersionString</key>            <string></string>
-    <key>CFBundleName</key>                         <string>EESchema</string>
+    <key>CFBundleName</key>                         <string>Eeschema</string>
     <key>CFBundlePackageType</key>                  <string>APPL</string>
     <key>CFBundleShortVersionString</key>           <string></string>
     <key>CFBundleSignature</key>                    <string>????</string>

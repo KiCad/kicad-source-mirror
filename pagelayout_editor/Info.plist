@@ -22,7 +22,7 @@
     <key>CFBundleIdentifier</key>                   <string>org.kicad-pcb.pl_editor</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
     <key>CFBundleLongVersionString</key>            <string></string>
-    <key>CFBundleName</key>                         <string>pl_editor</string>
+    <key>CFBundleName</key>                         <string>Page Layout Editor</string>
     <key>CFBundlePackageType</key>                  <string>APPL</string>
     <key>CFBundleShortVersionString</key>           <string></string>
     <key>CFBundleSignature</key>                    <string>????</string>

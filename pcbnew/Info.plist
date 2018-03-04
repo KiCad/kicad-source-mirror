@@ -24,7 +24,7 @@
     <key>CFBundleIdentifier</key>               <string>org.kicad-pcb.pcbnew</string>
     <key>CFBundleInfoDictionaryVersion</key>    <string>6.0</string>
     <key>CFBundleLongVersionString</key>        <string></string>
-    <key>CFBundleName</key>                     <string>PCBNew</string>
+    <key>CFBundleName</key>                     <string>Pcbnew</string>
     <key>CFBundlePackageType</key>              <string>APPL</string>
     <key>CFBundleShortVersionString</key>       <string></string>
     <key>CFBundleSignature</key>                <string>????</string>
