@@ -852,9 +852,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
                         for( auto i = pts.begin(); i != pts.end(); ++i )
                         {
-                            for( auto j = i + 1; j != pts.end(); ++j )
-                                TrimWire( *i, *j, true );
-
                             if( GetScreen()->IsJunctionNeeded( *i, true ) )
                                 AddJunction( *i, true );
                         }
