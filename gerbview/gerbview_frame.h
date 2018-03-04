@@ -703,6 +703,12 @@ public:
 
     void                SortLayersByX2Attributes();
 
+    /**
+     * Updates the display options and refreshes the view as needed
+     * @param aOptions is the new options to apply
+     */
+    void                UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
+
     // Conversion function
     void                ExportDataInPcbnewFormat( wxCommandEvent& event );
 

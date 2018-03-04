@@ -43,6 +43,7 @@ public:
     int HighContrastMode( const TOOL_EVENT& aEvent );
     int HighContrastInc( const TOOL_EVENT& aEvent );
     int HighContrastDec( const TOOL_EVENT& aEvent );
+    int DisplayControl( const TOOL_EVENT& aEvent );
 
     // Layer control
     int LayerSwitch( const TOOL_EVENT& aEvent );
@@ -54,6 +55,11 @@ public:
 
     // Highlight control
     int HighlightControl( const TOOL_EVENT& aEvent );
+
+    // Miscellaneous
+    int ResetCoords( const TOOL_EVENT& aEvent );
+    int SwitchUnits( const TOOL_EVENT& aEvent );
+    int ShowHelp( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

@@ -68,15 +68,18 @@ public:
     static TOOL_ACTION zoomPreset;
 
     // Display modes
-    static TOOL_ACTION zoneDisplayEnable;
-    static TOOL_ACTION zoneDisplayDisable;
-    static TOOL_ACTION zoneDisplayOutlines;
+    static TOOL_ACTION linesDisplayOutlines;
+    static TOOL_ACTION flashedDisplayOutlines;
+    static TOOL_ACTION polygonsDisplayOutlines;
+    static TOOL_ACTION negativeObjectDisplay;
+    static TOOL_ACTION dcodeDisplay;
     static TOOL_ACTION highContrastMode;
     static TOOL_ACTION highContrastInc;
     static TOOL_ACTION highContrastDec;
 
     // Layer control
     static TOOL_ACTION layerPrev;
+    static TOOL_ACTION layerNext;
     static TOOL_ACTION layerAlphaInc;
     static TOOL_ACTION layerAlphaDec;
     static TOOL_ACTION layerToggle;

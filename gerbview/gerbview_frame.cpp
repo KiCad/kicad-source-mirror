@@ -689,6 +689,75 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
 }
 
 
+void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
+{
+    bool update_flashed =   ( m_DisplayOptions.m_DisplayFlashedItemsFill !=
+                              aOptions.m_DisplayFlashedItemsFill );
+    bool update_lines =     ( m_DisplayOptions.m_DisplayLinesFill !=
+                              aOptions.m_DisplayLinesFill );
+    bool update_polygons =  ( m_DisplayOptions.m_DisplayPolygonsFill !=
+                              aOptions.m_DisplayPolygonsFill );
+
+    m_DisplayOptions = aOptions;
+
+    applyDisplaySettingsToGAL();
+
+    auto view = GetGalCanvas()->GetView();
+
+    if( update_flashed )
+    {
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                           []( KIGFX::VIEW_ITEM* aItem ) {
+            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+            switch( item->m_Shape )
+            {
+            case GBR_SPOT_CIRCLE:
+            case GBR_SPOT_RECT:
+            case GBR_SPOT_OVAL:
+            case GBR_SPOT_POLY:
+            case GBR_SPOT_MACRO:
+                return true;
+
+            default:
+                return false;
+            }
+        } );
+    }
+    else if( update_lines )
+    {
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                           []( KIGFX::VIEW_ITEM* aItem ) {
+            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+            switch( item->m_Shape )
+            {
+            case GBR_CIRCLE:
+            case GBR_ARC:
+            case GBR_SEGMENT:
+                return true;
+
+            default:
+                return false;
+            }
+        } );
+    }
+    else if( update_polygons )
+    {
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                           []( KIGFX::VIEW_ITEM* aItem ) {
+            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+            return ( item->m_Shape == GBR_POLYGON );
+        } );
+    }
+
+    view->UpdateAllItems( KIGFX::COLOR );
+
+    GetGalCanvas()->Refresh( true );
+}
+
+
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
     GERBER_FILE_IMAGE* gerber = GetGbrImage( GetActiveLayer() );

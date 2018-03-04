@@ -457,6 +457,8 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     bool    state;
     bool    needs_refresh = false;
 
+    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
+
     switch( id )
     {
         case ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
@@ -472,21 +474,21 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        m_DisplayOptions.m_DisplayPolarCood = state;
+        options.m_DisplayPolarCood = state;
         break;
 
     case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
-        m_DisplayOptions.m_DisplayFlashedItemsFill = not state;
+        options.m_DisplayFlashedItemsFill = not state;
         needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
-        m_DisplayOptions.m_DisplayLinesFill = not state;
+        options.m_DisplayLinesFill = not state;
         needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
-        m_DisplayOptions.m_DisplayPolygonsFill = not state;
+        options.m_DisplayPolygonsFill = not state;
         needs_refresh = true;
         break;
 
@@ -501,12 +503,12 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_DIFF_MODE:
-        m_DisplayOptions.m_DiffMode = state;
+        options.m_DiffMode = state;
         needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_HIGH_CONTRAST_MODE:
-        m_DisplayOptions.m_HighContrastMode = state;
+        options.m_HighContrastMode = state;
         needs_refresh = true;
         break;
 
@@ -532,66 +534,7 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 
     if( needs_refresh )
-    {
-        applyDisplaySettingsToGAL();
-        auto view = GetGalCanvas()->GetView();
-
-        switch( id )
-        {
-        case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
-            view->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                                               []( KIGFX::VIEW_ITEM* aItem ) {
-                auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
-
-                switch( item->m_Shape )
-                {
-                case GBR_SPOT_CIRCLE:
-                case GBR_SPOT_RECT:
-                case GBR_SPOT_OVAL:
-                case GBR_SPOT_POLY:
-                case GBR_SPOT_MACRO:
-                    return true;
-
-                default:
-                    return false;
-                }
-            } );
-            break;
-
-        case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
-            view->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                                               []( KIGFX::VIEW_ITEM* aItem ) {
-                auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
-
-                switch( item->m_Shape )
-                {
-                case GBR_CIRCLE:
-                case GBR_ARC:
-                case GBR_SEGMENT:
-                    return true;
-
-                default:
-                    return false;
-                }
-            } );
-            break;
-
-        case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
-            view->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                                               []( KIGFX::VIEW_ITEM* aItem ) {
-                auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
-
-                return ( item->m_Shape == GBR_POLYGON );
-            } );
-            break;
-
-        default:
-            view->UpdateAllItems( KIGFX::COLOR );
-            break;
-        }
-
-        m_canvas->Refresh( true );
-    }
+        UpdateDisplayOptions( options );
 }
 
 
