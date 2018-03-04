@@ -208,7 +208,14 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    wxClientDC* dc = nullptr;
+
+    if( !IsGalCanvasActive() )
+    {
+        dc = new wxClientDC( m_canvas );
+        m_canvas->DoPrepareDC( *dc );
+    }
+
     GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
 
     switch( id )
@@ -255,15 +262,21 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
-        m_canvas->SetAutoPanRequest( false );
-        HandleBlockPlace( &dc );
+        if( !IsGalCanvasActive() )
+        {
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
+            m_canvas->SetAutoPanRequest( false );
+            HandleBlockPlace( dc );
+        }
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
+        if( !IsGalCanvasActive() )
+        {
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
+            GetScreen()->m_BlockLocate.SetMessageBlock( this );
+            HandleBlockEnd( dc );
+        }
         break;
 
     case ID_HIGHLIGHT_CMP_ITEMS:
