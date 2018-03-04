@@ -118,7 +118,8 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
                                               WX_PROGRESS_REPORTER* aProgressReporter )
 {
-    if( aTable->GenerateTimestamp( aNickname ) == m_list_timestamp )
+    long long libraryTimestamp = aTable->GenerateTimestamp( aNickname );
+    if( m_list_timestamp == libraryTimestamp )
         return true;
 
     m_progress_reporter = aProgressReporter;
@@ -166,7 +167,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
                     ( _( "Loading incomplete; cancelled by user." ), nullptr, nullptr, 0 ) );
     }
 
-    m_list_timestamp = aTable->GenerateTimestamp( aNickname );
+    m_list_timestamp = libraryTimestamp;
     m_progress_reporter = nullptr;
 
     return m_errors.empty();

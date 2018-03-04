@@ -1120,10 +1120,10 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
 }
 
 
-long long GPCB_PLUGIN::GetLibraryTimestamp() const
+long long GPCB_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
     // If we have no cache, return a number which won't match any stored timestamps
-    if( !m_cache )
+    if( !m_cache || !m_cache->IsPath( aLibraryPath ) )
         return wxDateTime::Now().GetValue().GetValue();
 
     return m_cache->GetTimestamp();

@@ -1947,7 +1947,7 @@ void PCB_IO::init( const PROPERTIES* aProperties )
 
 void PCB_IO::validateCache( const wxString& aLibraryPath, bool checkModified )
 {
-    if( !m_cache || ( checkModified && m_cache->IsModified() ) )
+    if( !m_cache || !m_cache->IsPath( aLibraryPath ) || ( checkModified && m_cache->IsModified() ) )
     {
         // a spectacular episode in memory management:
         delete m_cache;
@@ -2130,10 +2130,10 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
 
 
-long long PCB_IO::GetLibraryTimestamp() const
+long long PCB_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
     // If we have no cache, return a number which won't match any stored timestamps
-    if( !m_cache )
+    if( !m_cache || !m_cache->IsPath( aLibraryPath ) )
         return wxDateTime::Now().GetValue().GetValue();
 
     return m_cache->GetTimestamp();

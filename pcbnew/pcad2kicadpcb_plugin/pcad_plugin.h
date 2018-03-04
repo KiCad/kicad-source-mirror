@@ -47,7 +47,7 @@ public:
 
     const wxString  GetFileExtension() const override;
 
-    long long GetLibraryTimestamp() const override
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {
         // No support for libraries....
         return 0;

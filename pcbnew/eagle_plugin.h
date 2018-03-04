@@ -98,9 +98,9 @@ public:
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL ) override;
 
-    long long GetLibraryTimestamp() const override
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {
-        return getModificationTime( m_lib_path ).GetValue().GetValue();
+        return getModificationTime( aLibraryPath ).GetValue().GetValue();
     }
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override

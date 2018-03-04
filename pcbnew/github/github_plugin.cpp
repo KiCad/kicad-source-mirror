@@ -464,6 +464,29 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 }
 
 
+long long GITHUB_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
+{
+    // This plugin currently relies on the nginx server for caching (see comments
+    // at top of file).
+    // Since only the nginx server holds the timestamp information, we must defeat
+    // all caching above the nginx server.
+    return wxDateTime::Now().GetValue().GetValue();
+
+#if 0
+    // If we have no cache, return a number which won't match any stored timestamps
+    if( !m_gh_cache || m_lib_path != aLibraryPath )
+        return wxDateTime::Now().GetValue().GetValue();
+
+    long long hash = m_gh_cache->GetTimestamp();
+
+    if( m_pretty_dir.size() )
+        hash += PCB_IO::GetLibraryTimestamp( m_pretty_dir );
+
+    return hash;
+#endif
+}
+
+
 bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string* aZipURL )
 {
     // e.g. "https://github.com/liftoff-sr/pretty_footprints"

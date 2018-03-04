@@ -133,7 +133,7 @@ public:
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const PROPERTIES* aProperties = NULL ) override;
 
-    long long GetLibraryTimestamp() const override;
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
 

@@ -184,6 +184,8 @@ public:
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
+
     void FootprintLibOptions( PROPERTIES* aListToAppendTo ) const override;
 
     // Since I derive from PCB_IO, I have to implement this, else I'd inherit his, which is bad since

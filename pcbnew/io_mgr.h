@@ -358,7 +358,7 @@ public:
      * directory).
      * Timestamps should not be considered ordered; they either match or they don't.
      */
-    virtual long long GetLibraryTimestamp() const = 0;
+    virtual long long GetLibraryTimestamp( const wxString& aLibraryPath ) const = 0;
 
     /**
      * Function PrefetchLib
