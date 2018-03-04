@@ -21,6 +21,17 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
+cmake_minimum_required( VERSION 2.8.12 FATAL_ERROR )
+# because of http://public.kitware.com/Bug/view.php?id=10395
+
+# See https://gitlab.kitware.com/cmake/cmake/issues/15943
+# Remove as soon as 3.1 is minimum required version
+if(POLICY CMP0025)
+  cmake_policy(SET CMP0025 NEW) # CMake 3.0
+endif()
+
+project( kicad )
+
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
 if( DEFINED CMAKE_BUILD_TYPE )
@@ -29,12 +40,7 @@ else()
     set( CMAKE_BUILD_TYPE Release CACHE STRING "Set to either \"Release\" or \"Debug\"" )
 endif()
 
-project( kicad )
-
 include( GNUInstallDirs )
-
-cmake_minimum_required( VERSION 2.8.12 FATAL_ERROR )
-# because of http://public.kitware.com/Bug/view.php?id=10395
 
 # Path to local CMake modules.
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
