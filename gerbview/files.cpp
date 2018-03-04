@@ -231,6 +231,7 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();
+    int first_layer = layer;
     int visibility = GetVisibleLayers();
 
     // Manage errors when loading files
@@ -314,9 +315,11 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
 
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
-    SetActiveLayer( GetActiveLayer() );
+    SetActiveLayer( first_layer, true );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox( true );
+
+    GetGalCanvas()->Refresh();
 
     return success;
 }

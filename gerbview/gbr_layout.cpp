@@ -208,7 +208,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( aDisplayOptions->m_IsPrinting )
             gerber->m_IsVisible = IsLayerPrintable( layer );
         else
-            gerber->m_IsVisible = gerbFrame->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
+            gerber->m_IsVisible = gerbFrame->IsLayerVisible( layer );
 
         if( !gerber->m_IsVisible )
             continue;

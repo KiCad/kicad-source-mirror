@@ -233,8 +233,7 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_SWITCH_LAYER_TO_PREVIOUS:
         if( GetActiveLayer() > 0 )
         {
-            SetActiveLayer( GetActiveLayer() - 1 );
-            m_LayersManager->OnLayerSelected();
+            SetActiveLayer( GetActiveLayer() - 1, true );
             m_canvas->Refresh();
         }
         break;
@@ -242,8 +241,7 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_SWITCH_LAYER_TO_NEXT:
         if( GetActiveLayer() < GERBER_DRAWLAYERS_COUNT - 1 )
         {
-            SetActiveLayer( GetActiveLayer() + 1 );
-            m_LayersManager->OnLayerSelected();
+            SetActiveLayer( GetActiveLayer() + 1, true );
             m_canvas->Refresh();
         }
         break;

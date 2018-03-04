@@ -195,7 +195,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             bool loc_visible = visible;
 
             if( force_active_layer_visible &&
-                (layer == GERBER_DRAW_LAYER( myframe->GetActiveLayer() ) ) )
+                (layer == myframe->GetActiveLayer() ) )
             {
                 loc_visible = true;
             }
@@ -243,6 +243,7 @@ void GERBER_LAYER_WIDGET::ReFill()
         wxString msg = GetImagesList()->GetDisplayName( layer );
 
         bool visible = true;
+
         if( auto canvas = myframe->GetGalCanvas() )
         {
             visible = canvas->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
@@ -252,7 +253,7 @@ void GERBER_LAYER_WIDGET::ReFill()
             visible = myframe->IsLayerVisible( layer );
         }
 
-        AppendLayerRow( LAYER_WIDGET::ROW( msg, GERBER_DRAW_LAYER( layer ),
+        AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
                         myframe->GetLayerColor( GERBER_DRAW_LAYER( layer ) ),
                         wxEmptyString, visible, true ) );
     }
@@ -267,32 +268,36 @@ void GERBER_LAYER_WIDGET::OnLayerRightClick( wxMenu& aMenu )
     AddRightClickMenuItems( &aMenu );
 }
 
+
 void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
-    myframe->SetLayerColor( aLayer, aColor );
+    // NOTE: Active layer in GerbView is stored as 0-indexed, but layer color is
+    //       stored according to the GERBER_DRAW_LAYER() offset.
+
+    myframe->SetLayerColor( GERBER_DRAW_LAYER( aLayer ), aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
 
     if( myframe->IsGalCanvasActive() )
     {
         KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
-        view->UpdateLayerColor( aLayer );
+        view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
     }
 
     myframe->GetCanvas()->Refresh();
 }
 
+
 bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the GERBER_LAYER_WIDGET can be denied by returning
     // false from this function.
-    int layer = myframe->GetActiveLayer( );
-    // TODO(JE) ActiveLayer is stored as an index from 0 rather than as a layer
-    // id matching GERBER_DRAW_LAYER( idx ), is this what we want long-term?
-    myframe->SetActiveLayer( GERBER_DRAW_LAYER_INDEX( aLayer ), false );
+    int layer = myframe->GetActiveLayer();
+
+    myframe->SetActiveLayer( aLayer, false );
     myframe->syncLayerBox();
 
-    if( layer != myframe->GetActiveLayer( ) )
+    if( layer != myframe->GetActiveLayer() )
     {
         if( ! OnLayerSelected() )
             myframe->GetCanvas()->Refresh();
@@ -301,20 +306,22 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     return true;
 }
 
+
 void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
     long visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= 1 << ( aLayer - GERBVIEW_LAYER_ID_START );
+        visibleLayers |= 1 << aLayer ;
     else
-        visibleLayers &= ~( 1 << ( aLayer - GERBVIEW_LAYER_ID_START ) );
+        visibleLayers &= ~( 1 << aLayer );
 
     myframe->SetVisibleLayers( visibleLayers );
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
 }
+
 
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
@@ -337,6 +344,7 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
     else
         myframe->GetCanvas()->Refresh();
 }
+
 
 void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
