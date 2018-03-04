@@ -866,29 +866,3 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
         }
     }
 }
-
-wxArrayString NETLIST_OBJECT_LIST::ListNets()
-{
-    wxArrayString netNames;
-    wxString    netName;
-    wxString    ref;
-
-    int         netCode;
-    int         lastNetCode = -1;
-    int         sameNetcodeCount = 0;
-
-    for( unsigned ii = 0; ii < size(); ii++ )
-    {
-        NETLIST_OBJECT* nitem = GetItem( ii );
-
-        // New net found, write net id;
-        if( ( netCode = nitem->GetNet() ) != lastNetCode )
-        {
-            netName = nitem->GetNetName();
-            netNames.Add( netName );
-            lastNetCode  = netCode;
-        }
-    }
-
-    return netNames;
-}
