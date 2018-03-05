@@ -387,6 +387,13 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     if( refPad )
     {
         pad.reset( static_cast<D_PAD*>( refPad->Clone() ) );
+
+        if( refPad->GetShape() == PAD_SHAPE_RECT )
+            pad->SetAnchorPadShape( PAD_SHAPE_RECT );
+
+        // ignore the pad orientation and offset for the moment. Makes more trouble than it's worth.
+        pad->SetOrientation( 0 );
+        pad->SetOffset( wxPoint( 0, 0 ) );
     }
     else
     {
@@ -397,6 +404,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
         int radius = Millimeter2iu( 0.2 );
         pad->SetSize ( wxSize( radius, radius ) );
         pad->IncrementPadName( true, true );
+        pad->SetOrientation( 0 );
     }
 
 
