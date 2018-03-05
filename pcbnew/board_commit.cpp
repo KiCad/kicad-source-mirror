@@ -119,7 +119,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                     }
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Add( boardItem );
+                        board->Add( boardItem );        // handles connectivity
 
                 }
                 else
@@ -128,6 +128,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                     wxASSERT( boardItem->Type() != PCB_MODULE_T );
 
                     boardItem->SetParent( board->m_Modules.GetFirst() );
+
                     if( !( changeFlags & CHT_DONE ) )
                         board->m_Modules->Add( boardItem );
                 }
@@ -226,7 +227,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                     view->Remove( module );
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Remove( module );
+                        board->Remove( module );        // handles connectivity
 
                     // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
                     board->m_Status_Pcb = 0;

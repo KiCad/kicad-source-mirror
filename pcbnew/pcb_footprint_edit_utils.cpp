@@ -411,7 +411,8 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRats
 
     m_canvas->SetMouseCapture( NULL, NULL );
 
-    m_Pcb->GetConnectivity()->Update( aModule );
+    if( aRecreateRatsnest )
+        m_Pcb->GetConnectivity()->Update( aModule );
 
     if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && aRecreateRatsnest )
         Compile_Ratsnest( aDC, true );
