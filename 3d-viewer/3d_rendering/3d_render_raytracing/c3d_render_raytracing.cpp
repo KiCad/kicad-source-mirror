@@ -965,16 +965,16 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
         {
             GLubyte *ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
 
-            SFVEC3F *ptrShaderY0 =
+            const SFVEC3F *ptrShaderY0 =
                     &m_shaderBuffer[ glm::max((int)y - 2, 0) * m_realBufferSize.x ];
-            SFVEC3F *ptrShaderY1 =
+            const SFVEC3F *ptrShaderY1 =
                     &m_shaderBuffer[ glm::max((int)y - 1, 0) * m_realBufferSize.x ];
-            SFVEC3F *ptrShaderY2 =
+            const SFVEC3F *ptrShaderY2 =
                     &m_shaderBuffer[ y * m_realBufferSize.x ];
-            SFVEC3F *ptrShaderY3 =
+            const SFVEC3F *ptrShaderY3 =
                     &m_shaderBuffer[ glm::min((int)y + 1, (int)(m_realBufferSize.y - 1)) *
                                      m_realBufferSize.x ];
-            SFVEC3F *ptrShaderY4 =
+            const SFVEC3F *ptrShaderY4 =
                     &m_shaderBuffer[ glm::min((int)y + 2, (int)(m_realBufferSize.y - 1)) *
                                      m_realBufferSize.x ];
 
@@ -982,77 +982,46 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
             {
 // This #if should be 1, it is here that can be used for debug proposes during development
 #if 1
+                int idx = x > 1 ? -2 : 0;
+                SFVEC3F bluredShadeColor = ptrShaderY0[idx] * 1.0f / 273.0f +
+                                           ptrShaderY1[idx] * 4.0f / 273.0f +
+                                           ptrShaderY2[idx] * 7.0f / 273.0f +
+                                           ptrShaderY3[idx] * 4.0f / 273.0f +
+                                           ptrShaderY4[idx] * 1.0f / 273.0f;
 
-                SFVEC3F bluredShadeColor = (*ptrShaderY0) * 1.0f / 273.0f +
-                                           (*ptrShaderY1) * 4.0f / 273.0f +
-                                           (*ptrShaderY2) * 7.0f / 273.0f +
-                                           (*ptrShaderY3) * 4.0f / 273.0f +
-                                           (*ptrShaderY4) * 1.0f / 273.0f;
-                if( x > 1 )
-                {
-                    ptrShaderY0++;
-                    ptrShaderY1++;
-                    ptrShaderY2++;
-                    ptrShaderY3++;
-                    ptrShaderY4++;
-                }
+                idx = x > 0 ? -1 : 0;
+                bluredShadeColor += ptrShaderY0[idx] *  4.0f / 273.0f +
+                                    ptrShaderY1[idx] * 16.0f / 273.0f +
+                                    ptrShaderY2[idx] * 26.0f / 273.0f +
+                                    ptrShaderY3[idx] * 16.0f / 273.0f +
+                                    ptrShaderY4[idx] *  4.0f / 273.0f;
 
-                bluredShadeColor += (*ptrShaderY0) * 4.0f / 273.0f +
-                                    (*ptrShaderY1) *16.0f / 273.0f +
-                                    (*ptrShaderY2) *26.0f / 273.0f +
-                                    (*ptrShaderY3) *16.0f / 273.0f +
-                                    (*ptrShaderY4) * 4.0f / 273.0f;
+                bluredShadeColor += (*ptrShaderY0) *  7.0f / 273.0f +
+                                    (*ptrShaderY1) * 26.0f / 273.0f +
+                                    (*ptrShaderY2) * 41.0f / 273.0f +
+                                    (*ptrShaderY3) * 26.0f / 273.0f +
+                                    (*ptrShaderY4) *  7.0f / 273.0f;
 
-                if( x > 0 )
-                {
-                    ptrShaderY0++;
-                    ptrShaderY1++;
-                    ptrShaderY2++;
-                    ptrShaderY3++;
-                    ptrShaderY4++;
-                }
+                idx = (x < (int)m_realBufferSize.x - 1) ? 1 : 0;
+                bluredShadeColor += ptrShaderY0[idx] * 4.0f / 273.0f +
+                                    ptrShaderY1[idx] *16.0f / 273.0f +
+                                    ptrShaderY2[idx] *26.0f / 273.0f +
+                                    ptrShaderY3[idx] *16.0f / 273.0f +
+                                    ptrShaderY4[idx] * 4.0f / 273.0f;
 
-                bluredShadeColor += (*ptrShaderY0) * 7.0f / 273.0f +
-                                    (*ptrShaderY1) *26.0f / 273.0f +
-                                    (*ptrShaderY2) *41.0f / 273.0f +
-                                    (*ptrShaderY3) *26.0f / 273.0f +
-                                    (*ptrShaderY4) * 7.0f / 273.0f;
+                idx = (x < (int)m_realBufferSize.x - 2) ? 2 : 0;
+                bluredShadeColor += ptrShaderY0[idx] * 1.0f / 273.0f +
+                                    ptrShaderY1[idx] * 4.0f / 273.0f +
+                                    ptrShaderY2[idx] * 7.0f / 273.0f +
+                                    ptrShaderY3[idx] * 4.0f / 273.0f +
+                                    ptrShaderY4[idx] * 1.0f / 273.0f;
 
-                if( x < ((int)m_realBufferSize.x - 1) )
-                {
-                    ptrShaderY0++;
-                    ptrShaderY1++;
-                    ptrShaderY2++;
-                    ptrShaderY3++;
-                    ptrShaderY4++;
-                }
-
-                bluredShadeColor += (*ptrShaderY0) * 4.0f / 273.0f +
-                                    (*ptrShaderY1) *16.0f / 273.0f +
-                                    (*ptrShaderY2) *26.0f / 273.0f +
-                                    (*ptrShaderY3) *16.0f / 273.0f +
-                                    (*ptrShaderY4) * 4.0f / 273.0f;
-
-                if( x < ((int)m_realBufferSize.x - 2) )
-                {
-                    ptrShaderY0++;
-                    ptrShaderY1++;
-                    ptrShaderY2++;
-                    ptrShaderY3++;
-                    ptrShaderY4++;
-                }
-
-                bluredShadeColor += (*ptrShaderY0) * 1.0f / 273.0f +
-                                    (*ptrShaderY1) * 4.0f / 273.0f +
-                                    (*ptrShaderY2) * 7.0f / 273.0f +
-                                    (*ptrShaderY3) * 4.0f / 273.0f +
-                                    (*ptrShaderY4) * 1.0f / 273.0f;
-
-                ptrShaderY0-= 3;
-                ptrShaderY1-= 3;
-                ptrShaderY2-= 3;
-                ptrShaderY3-= 3;
-                ptrShaderY4-= 3;
+                // process next pixel
+                ++ptrShaderY0;
+                ++ptrShaderY1;
+                ++ptrShaderY2;
+                ++ptrShaderY3;
+                ++ptrShaderY4;
 
 #ifdef USE_SRGB_SPACE
                 const SFVEC3F originColor = convertLinearToSRGB( m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x,y ) ) );
