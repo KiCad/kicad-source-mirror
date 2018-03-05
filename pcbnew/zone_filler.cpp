@@ -121,7 +121,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
     m_count_done = 0;
     std::vector<std::thread> fillWorkers;
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    for( ssize_t ii = 0; ii < parallelThreadCount; ++ii )
     {
         fillWorkers.push_back( std::thread( [ this, toFill ]()
         {
@@ -191,7 +191,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
     m_count_done = 0;
     std::vector<std::thread> triangulationWorkers;
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    for( ssize_t ii = 0; ii < parallelThreadCount; ++ii )
     {
         triangulationWorkers.push_back( std::thread( [ this, toFill ]()
         {
