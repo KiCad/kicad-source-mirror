@@ -349,7 +349,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 }
 
 
-void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreateRatsnest )
+void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRatsnest )
 {
     wxPoint newpos;
 
@@ -413,7 +413,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
 
     m_Pcb->GetConnectivity()->Update( aModule );
 
-    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && !aDoNotRecreateRatsnest )
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && aRecreateRatsnest )
         Compile_Ratsnest( aDC, true );
 
     if( aDC )

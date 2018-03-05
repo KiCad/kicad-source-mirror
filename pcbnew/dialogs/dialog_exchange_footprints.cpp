@@ -467,7 +467,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board */
-    PlaceModule( aNewModule, NULL, true );
+    PlaceModule( aNewModule, NULL, false );
 
     // Copy full placement and pad net names (when possible)
     // but not local settings like clearances (use library values)

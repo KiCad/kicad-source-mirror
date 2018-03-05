@@ -333,9 +333,9 @@ public:
      * @param aModule A MODULE object point of the module to be placed.
      * @param aDC A wxDC object point of the device context to draw \a aModule on
      *            or  NULL if no display screen need updated.
-     * @param aDoNotRecreateRatsnest A bool true redraws the module rats nest.
+     * @param aRecreateRatsnest A bool true redraws the module rats nest.
      */
-    void PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreateRatsnest = false );
+    void PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRatsnest = true );
 
     // module texts
     void RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
