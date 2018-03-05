@@ -995,9 +995,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
                 (int) new_items.size() ) );
 
+
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit
-        TOOL_EVENT evt = PCB_ACTIONS::editActivate.MakeEvent();
+        TOOL_EVENT evt = PCB_ACTIONS::move.MakeEvent();
         Main( evt );
     }
 
@@ -1367,4 +1368,3 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
     Remove( aEvent );
     return 0;
 }
-
