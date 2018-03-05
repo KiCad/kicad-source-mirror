@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,14 +208,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    wxClientDC* dc = nullptr;
-
-    if( !IsGalCanvasActive() )
-    {
-        dc = new wxClientDC( m_canvas );
-        m_canvas->DoPrepareDC( *dc );
-    }
-
     GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
 
     switch( id )
@@ -264,18 +256,20 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PLACE_BLOCK:
         if( !IsGalCanvasActive() )
         {
+            INSTALL_UNBUFFERED_DC( dc, m_canvas );
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
             m_canvas->SetAutoPanRequest( false );
-            HandleBlockPlace( dc );
+            HandleBlockPlace( &dc );
         }
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
         if( !IsGalCanvasActive() )
         {
+            INSTALL_UNBUFFERED_DC( dc, m_canvas );
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
             GetScreen()->m_BlockLocate.SetMessageBlock( this );
-            HandleBlockEnd( dc );
+            HandleBlockEnd( &dc );
         }
         break;
 
