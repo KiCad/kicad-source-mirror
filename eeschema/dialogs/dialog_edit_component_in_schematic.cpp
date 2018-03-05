@@ -142,6 +142,7 @@ private:
     void showButtonHandler( wxCommandEvent& event ) override;
     void OnTestChipName( wxCommandEvent& event ) override;
     void OnSelectChipName( wxCommandEvent& event ) override;
+    void OnSizeFieldsList( wxSizeEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override
     {
         TransferDataToWindow();
@@ -919,8 +920,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const wxStri
     fieldListCtrl->SetItem( aFieldNdx, 1, aValue );
 
     // recompute the column widths here, after setting texts
+    int totalWidth = fieldListCtrl->GetSize().GetWidth();
     fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( 1, totalWidth - fieldListCtrl->GetColumnWidth( 0 ) );
 }
 
 
@@ -1263,4 +1265,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFields( wxCommandEvent& event )
     // Update the selected field as well
     copySelectedFieldToPanel();
     updateDisplay();
+}
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSizeFieldsList( wxSizeEvent& event )
+{
+    int newWidth = event.GetSize().GetX();
+    fieldListCtrl->SetColumnWidth( 1, newWidth - fieldListCtrl->GetColumnWidth( 0 ) );
+    event.Skip();
 }
