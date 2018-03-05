@@ -36,6 +36,7 @@
 #include <iomanip>
 #include <cmath>
 #include <vrml_layer.h>
+#include <trigo.h>
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -576,6 +577,31 @@ bool VRML_LAYER::AddSlot( double aCenterX, double aCenterY,
     }
 
     return !fail;
+}
+
+
+bool VRML_LAYER::AddPolygon( const std::vector< wxRealPoint >& aPolySet, double aCenterX,
+        double aCenterY, double aAngle )
+{
+    int pad = NewContour( false );
+
+    if( pad < 0 )
+    {
+        error = "AddPolygon(): failed to add a contour";
+        return false;
+    }
+
+    for( auto corner : aPolySet )
+    {
+        // The sense of polygon rotations is reversed
+        RotatePoint( &corner.x, &corner.y, -aAngle );
+        AddVertex( pad, aCenterX + corner.x, aCenterY + corner.y );
+    }
+
+    if( !EnsureWinding( pad, false ) )
+        return false;
+
+    return true;
 }
 
 

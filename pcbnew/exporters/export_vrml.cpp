@@ -49,6 +49,8 @@
 #include "pcb_edit_frame.h"
 #include "../../kicad/kicad.h"
 
+#include <convert_basic_shapes_to_polygon.h>
+
 #include <zone_filler.h>
 
 // minimum width (mm) of a VRML line
@@ -1147,6 +1149,55 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
             throw( std::runtime_error( aTinLayer->GetError() ) );
 
         break;
+
+    case PAD_SHAPE_ROUNDRECT:
+    {
+        SHAPE_POLY_SET polySet;
+        int segmentToCircleCount = 32;
+        const int corner_radius = aPad->GetRoundRectCornerRadius( aPad->GetSize() );
+        TransformRoundRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(),
+                0.0, corner_radius, segmentToCircleCount );
+        std::vector< wxRealPoint > cornerList;
+        // TransformRoundRectToPolygon creates only one convex polygon
+        SHAPE_LINE_CHAIN poly( polySet.Outline( 0 ) );
+
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+            cornerList.push_back( wxRealPoint( poly.Point( ii ).x * BOARD_SCALE,
+                                               -poly.Point( ii ).y * BOARD_SCALE ) );
+
+        // Close polygon
+        cornerList.push_back( cornerList[0] );
+        if( !aTinLayer->AddPolygon( cornerList, pad_x, -pad_y, aPad->GetOrientation() ) )
+            throw( std::runtime_error( aTinLayer->GetError() ) );
+
+        break;
+    }
+
+    case PAD_SHAPE_CUSTOM:
+    {
+        SHAPE_POLY_SET polySet;
+        int segmentToCircleCount = 32;
+        std::vector< wxRealPoint > cornerList;
+        aPad->MergePrimitivesAsPolygon( &polySet, segmentToCircleCount );
+
+        for( int cnt = 0; cnt < polySet.OutlineCount(); ++cnt )
+        {
+            SHAPE_LINE_CHAIN& poly = polySet.Outline( cnt );
+            cornerList.clear();
+
+            for( int ii = 0; ii < poly.PointCount(); ++ii )
+                cornerList.push_back( wxRealPoint( poly.Point( ii ).x * BOARD_SCALE,
+                                                   -poly.Point( ii ).y * BOARD_SCALE ) );
+
+            // Close polygon
+            cornerList.push_back( cornerList[0] );
+
+            if( !aTinLayer->AddPolygon( cornerList, pad_x, -pad_y, aPad->GetOrientation() ) )
+                throw( std::runtime_error( aTinLayer->GetError() ) );
+        }
+
+        break;
+    }
 
     case PAD_SHAPE_RECT:
         // Just to be sure :D
