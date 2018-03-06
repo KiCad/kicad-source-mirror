@@ -105,20 +105,26 @@ wxString CoordinateToString( int aValue, bool aUseMils = false );
 wxString AngleToStringDegrees( double aAngle );
 
 /**
- * Function LengthDoubleToString
+ * Function MessageTextFromValue
  * is a helper to convert the \a double length \a aValue to a string in inches,
- * millimeters, or unscaled units according to the current user units setting.
+ * millimeters, or unscaled units.
  *
  * Should be used only to display a coordinate in status, but not in dialogs,
- * because the mantissa of the number displayed has 4 digits max for readability.
- * (i.e. the value shows the decimils or the microns )
- * However the actual internal value could need up to 8 digits to be printed
+ * files, etc., because the mantissa of the number displayed has 4 digits max
+ * for readability.  The actual internal value could need up to 8 digits to be
+ * printed.
  *
+ * Use StringFromValue() instead where precision matters.
+ *
+ * @param aUnits The units to show the value in.  The unit string is added to the
+ *               message text.
  * @param aValue The double value to convert.
  * @param aUseMils Convert inch values to mils if true.
  * @return The converted string for display in user interface elements.
  */
-wxString LengthDoubleToString( double aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS_T aUnits, double aValue, bool aUseMils = false );
+
+wxString MessageTextFromValue( EDA_UNITS_T aUnits, int aValue, bool aUseMils = false );
 
 /**
  * Function StringFromValue

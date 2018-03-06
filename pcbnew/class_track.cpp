@@ -1080,15 +1080,15 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
             track_buffer_start = track_buffer_start->Back();
 
         board->MarkTrace( track_buffer_start, this, NULL, &trackLen, &lenPadToDie, false );
-        msg = ::LengthDoubleToString( trackLen );
+        msg = ::MessageTextFromValue( g_UserUnit, trackLen );
         aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKCYAN ) );
 
         if( lenPadToDie != 0 )
         {
-            msg = ::LengthDoubleToString( trackLen + lenPadToDie );
+            msg = ::MessageTextFromValue( g_UserUnit, trackLen + lenPadToDie );
             aList.push_back( MSG_PANEL_ITEM( _( "Full Length" ), msg, DARKCYAN ) );
 
-            msg = ::LengthDoubleToString( lenPadToDie );
+            msg = ::MessageTextFromValue( g_UserUnit, lenPadToDie );
             aList.push_back( MSG_PANEL_ITEM( _( "Pad To Die Length" ), msg, DARKCYAN ) );
         }
     }
@@ -1196,7 +1196,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 
     // Display segment length
-    msg = ::LengthDoubleToString( GetLength() );
+    msg = ::MessageTextFromValue( g_UserUnit, GetLength() );
     aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
 }
 
@@ -1223,7 +1223,7 @@ void SEGZONE::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 
     // Display segment length
-    msg = ::LengthDoubleToString( GetLength() );
+    msg = ::MessageTextFromValue( g_UserUnit, GetLength() );
     aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
 }
 
@@ -1613,7 +1613,7 @@ wxString TRACK::GetSelectMenuText() const
                  GetChars( ShowWidth() ),
                  GetChars( GetNetnameMsg() ),
                  GetChars( GetLayerName() ),
-                 GetChars( ::LengthDoubleToString( GetLength() ) ) );
+                 GetChars( ::MessageTextFromValue( g_UserUnit, GetLength() ) ) );
 
     return text;
 }

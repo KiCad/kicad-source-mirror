@@ -163,9 +163,9 @@ const wxString MEANDER_SKEW_PLACER::TuningInfo() const
         return _( "?" );
     }
 
-    status += LengthDoubleToString( (double) m_lastLength - m_coupledLength, false );
+    status += ::MessageTextFromValue( g_UserUnit, m_lastLength - m_coupledLength, false );
     status += "/";
-    status += LengthDoubleToString( (double) m_settings.m_targetSkew, false );
+    status += ::MessageTextFromValue( g_UserUnit, m_settings.m_targetSkew, false );
 
     return status;
 }

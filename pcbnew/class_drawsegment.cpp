@@ -727,7 +727,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
 
     text.Printf( _( "Pcb Graphic %s, length %s on %s" ),
                  GetChars( ShowShape( m_Shape ) ),
-                 GetChars( ::LengthDoubleToString( GetLength() ) ),
+                 GetChars( ::MessageTextFromValue( g_UserUnit, GetLength() ) ),
                  GetChars( GetLayerName() ) );
 
     return text;

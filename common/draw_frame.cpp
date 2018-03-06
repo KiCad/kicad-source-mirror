@@ -884,17 +884,6 @@ void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
     m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
 }
 
-wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils ) const
-{
-    return ::CoordinateToString( aValue, aConvertToMils );
-}
-
-wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMils ) const
-{
-    return ::LengthDoubleToString( aValue, aConvertToMils );
-}
-
-
 bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
        int aExplicitCommand )
 {

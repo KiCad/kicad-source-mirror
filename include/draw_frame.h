@@ -858,28 +858,6 @@ public:
     virtual void PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData = NULL );
 
     /**
-     * Function CoordinateToString
-     * is a helper to convert the \a integer coordinate \a aValue to a string in inches or mm
-     * according to the current user units setting.
-     * @param aValue The coordinate to convert.
-     * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
-     *                       the current user unit is millimeters.
-     * @return The converted string for display in user interface elements.
-     */
-    wxString CoordinateToString( int aValue, bool aConvertToMils = false ) const;
-
-    /**
-     * Function LengthDoubleToString
-     * is a helper to convert the \a double value \a aValue to a string in inches or mm
-     * according to the current user units setting.
-     * @param aValue The coordinate to convert.
-     * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
-     *                       the current user unit is millimeters.
-     * @return The converted string for display in user interface elements.
-     */
-    wxString LengthDoubleToString( double aValue, bool aConvertToMils = false ) const;
-
-    /**
      * Function UseGalCanvas
      * used to switch between standard and GAL-based canvas.
      *

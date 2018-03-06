@@ -120,20 +120,29 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils )
  * but not in dialogs, because 4 digits only
  * could truncate the actual value
  */
+
+// JEY TODO: retire this in favour of MessageTextFromValue()....
 wxString CoordinateToString( int aValue, bool aUseMils )
 {
-    return LengthDoubleToString( (double) aValue, aUseMils );
+    return MessageTextFromValue( g_UserUnit, aValue, aUseMils );
 }
 
 
-// JEY TODO: remove; use StringFromValue() instead
-wxString LengthDoubleToString( double aValue, bool aUseMils )
+// A lower-precision (for readability) version of StringFromValue()
+wxString MessageTextFromValue( EDA_UNITS_T aUnits, int aValue, bool aUseMils )
+{
+    return MessageTextFromValue( aUnits, (double) aValue, aUseMils );
+}
+
+
+// A lower-precision (for readability) version of StringFromValue()
+wxString MessageTextFromValue( EDA_UNITS_T aUnits, double aValue, bool aUseMils )
 {
     wxString      text;
     const wxChar* format;
-    double        value = To_User_Unit( g_UserUnit, aValue );
+    double        value = To_User_Unit( aUnits, aValue, aUseMils );
 
-    if( g_UserUnit == INCHES )
+    if( aUnits == INCHES )
     {
         if( aUseMils )
         {
@@ -142,7 +151,6 @@ wxString LengthDoubleToString( double aValue, bool aUseMils )
 #else
             format = wxT( "%.1f" );
 #endif
-            value *= 1000;
         }
         else
         {
@@ -165,10 +173,7 @@ wxString LengthDoubleToString( double aValue, bool aUseMils )
     text.Printf( format, value );
     text += " ";
 
-    if( g_UserUnit == INCHES )
-        text += ( aUseMils ) ? _( " mils" ) : _( " in" );
-    else
-        text += _( "mm" );
+    text += GetAbbreviatedUnitsLabel( aUnits );
 
     return text;
 }
@@ -209,9 +214,9 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
  * otherwise the actual value is rounded when read from dialog and converted
  * in internal units, and therefore modified.
  */
-wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol, bool aUseMils )
+wxString StringFromValue( EDA_UNITS_T aUnits, int aValue, bool aAddUnitSymbol, bool aUseMils )
 {
-    double  value_to_print = To_User_Unit( aUnit, aValue, aUseMils );
+    double  value_to_print = To_User_Unit( aUnits, aValue, aUseMils );
 
 #if defined( EESCHEMA )
     wxString    stringValue = wxString::Format( wxT( "%.3f" ), value_to_print );
@@ -248,7 +253,7 @@ wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol, bo
 
     if( aAddUnitSymbol )
     {
-        switch( aUnit )
+        switch( aUnits )
         {
         case INCHES:
             if( aUseMils )
@@ -283,9 +288,9 @@ void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue )
 }
 
 
-double From_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils )
+double From_User_Unit( EDA_UNITS_T aUnits, double aValue, bool aUseMils )
 {
-    switch( aUnit )
+    switch( aUnits )
     {
     case MILLIMETRES:
         return MM_TO_IU( aValue );

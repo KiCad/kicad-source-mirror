@@ -377,11 +377,11 @@ const wxString DP_MEANDER_PLACER::TuningInfo() const
         return _( "?" );
     }
 
-    status += LengthDoubleToString( (double) m_lastLength, false );
+    status += ::MessageTextFromValue( g_UserUnit, m_lastLength, false );
     status += "/";
-    status += LengthDoubleToString( (double) m_settings.m_targetLength, false );
+    status += ::MessageTextFromValue( g_UserUnit, m_settings.m_targetLength, false );
     status += " (gap: ";
-    status += LengthDoubleToString( (double) m_originPair.Gap(), false );
+    status += ::MessageTextFromValue( g_UserUnit, m_originPair.Gap(), false );
     status += ")";
 
     return status;

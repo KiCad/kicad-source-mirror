@@ -252,9 +252,9 @@ const wxString MEANDER_PLACER::TuningInfo() const
         return _( "?" );
     }
 
-    status += LengthDoubleToString( (double) m_lastLength, false );
+    status += ::MessageTextFromValue( g_UserUnit, m_lastLength, false );
     status += "/";
-    status += LengthDoubleToString( (double) m_settings.m_targetLength, false );
+    status += ::MessageTextFromValue( g_UserUnit, m_settings.m_targetLength, false );
 
     return status;
 }
