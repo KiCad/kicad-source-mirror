@@ -611,7 +611,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->AutoSizeColumns( false );
 
     m_grid->SetGridCursor( 0, 1 );
-    m_grid->SetFocus();
+    SetInitialFocus( m_grid );
 
     m_sdbSizer1OK->SetDefault();
 

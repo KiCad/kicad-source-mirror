@@ -29,24 +29,7 @@
 #include <hashtables.h>
 #include <kiway_player.h>
 
-#ifdef  __WXMAC__
-/**
- * MACOS requires this option to be set to 1 in order to set dialogs focus.
- **/
-#define DLGSHIM_USE_SETFOCUS      1
-#else
-#define DLGSHIM_USE_SETFOCUS      0
-#endif
 
-#ifdef __WXMAC__
-/**
- * MACOS requires this option so that tabbing between text controls will
- * arrive with the text selected.
- **/
-#define DLGSHIM_SELECT_ALL_IN_TEXT_CONTROLS     1
-#else
-#define DLGSHIM_SELECT_ALL_IN_TEXT_CONTROLS     0
-#endif
 
 class WDO_ENABLE_DISABLE;
 class EVENT_LOOP;
@@ -130,6 +113,15 @@ protected:
     void FinishDialogSettings();
 
     /**
+     * Sets the window (usually a wxTextCtrl) that should be focused when the dialog is
+     * shown.
+     */
+    void SetInitialFocus( wxWindow* aWindow )
+    {
+        m_initialFocusTarget = aWindow;
+    }
+
+    /**
      * Set the dialog to the given dimensions in "dialog units". These are units equivalent
      * to 4* the average character width and 8* the average character height, allowing a dialog
      * to be sized in a way that scales it with the system font.
@@ -149,8 +141,13 @@ protected:
     int VertPixelsFromDU( int y );
 
     EDA_UNITS_T         m_units;        // userUnits for display and parsing
-    bool                m_fixupsRun;    // indicates various wxWidgets fixups have run
     std::string         m_hash_key;     // alternate for class_map when classname re-used
+
+    // On MacOS (at least) SetFocus() calls made in the constructor will fail because a
+    // window that isn't yet visible will return false to AcceptsFocus().  So we must delay
+    // the initial-focus SetFocus() call to the first paint event.
+    bool                m_firstPaintEvent;
+    wxWindow*           m_initialFocusTarget;
 
     // variables for quasi-modal behavior support, only used by a few derivatives.
     EVENT_LOOP*         m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed

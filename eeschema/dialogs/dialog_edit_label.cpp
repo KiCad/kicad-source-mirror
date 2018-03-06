@@ -154,6 +154,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
         m_textLabelMultiLine->Show( false );
     }
 
+    SetInitialFocus( m_activeTextCtrl );
+
     if( m_CurrentText->Type() != SCH_TEXT_T )
         ( (wxTextValidator*) m_activeTextCtrl->GetValidator() )->SetCharExcludes( wxT( " /" ) );
 
@@ -209,7 +211,6 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
         return false;
 
     m_activeTextCtrl->SetValue( m_CurrentText->GetText() );
-    m_activeTextCtrl->SetFocus();
 
     // Set text options:
     int orientation = mapOrientation( m_CurrentText->Type(), m_CurrentText->GetLabelSpinStyle() );

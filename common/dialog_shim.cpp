@@ -58,7 +58,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
     wxDialog( aParent, id, title, pos, size, style, name ),
     KIWAY_HOLDER( 0 ),
-    m_fixupsRun( false ),
+    m_firstPaintEvent( true ),
+    m_initialFocusTarget( nullptr ),
     m_qmodal_loop( 0 ),
     m_qmodal_showing( false ),
     m_qmodal_parent_disabler( 0 )
@@ -229,38 +230,29 @@ bool DIALOG_SHIM::Enable( bool enable )
 }
 
 
-// Traverse all items in the dialog.  If selectTextInTextCtrls, do a SelectAll()
-// in each so that tab followed by typing will replace the existing value.
-// Also collects the firstTextCtrl and the item with focus (if any).
-static void recursiveDescent( wxWindowList& children, const bool selectTextInTextCtrls,
-                              wxWindow* & firstTextCtrl, wxWindow* & windowWithFocus )
+#ifdef  __WXMAC__
+// Recursive descent doing a SelectAll() in wxTextCtrls.
+// MacOS User Interface Guidelines state that when tabbing to a text control all its
+// text should be selected.  Since wxWidgets fails to implement this, we do it here.
+static void selectAllInTextCtrls( wxWindowList& children )
 {
-    for( wxWindowList::iterator it = children.begin();  it != children.end();  ++it )
+    for( wxWindow* child : children )
     {
-        wxWindow* child = *it;
-
-        if( child->HasFocus() )
-            windowWithFocus = child;
-
         wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child );
         if( childTextCtrl )
         {
-            if( !firstTextCtrl && childTextCtrl->IsEnabled() && childTextCtrl->IsEditable() )
-                firstTextCtrl = childTextCtrl;
+            wxTextEntry* asTextEntry = dynamic_cast<wxTextEntry*>( childTextCtrl );
 
-            if( selectTextInTextCtrls )
-            {
-                wxTextEntry* asTextEntry = dynamic_cast<wxTextEntry*>( childTextCtrl );
-                // Respect an existing selection
-                if( asTextEntry->GetStringSelection().IsEmpty() )
-                    asTextEntry->SelectAll();
-            }
+            // Respect an existing selection
+            if( asTextEntry->GetStringSelection().IsEmpty() )
+                asTextEntry->SelectAll();
         }
-
-        recursiveDescent( child->GetChildren(), selectTextInTextCtrls, firstTextCtrl,
-                          windowWithFocus );
+        else
+            selectAllInTextCtrls( child->GetChildren() );
     }
 }
+#endif
+
 
 #ifdef  __WXMAC__
 static void fixOSXCancelButtonIssue( wxWindow *aWindow )
@@ -284,37 +276,19 @@ static void fixOSXCancelButtonIssue( wxWindow *aWindow )
 
 void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
 {
-    if( !m_fixupsRun )
+    if( m_firstPaintEvent )
     {
-#if DLGSHIM_SELECT_ALL_IN_TEXT_CONTROLS
-        const bool selectAllInTextCtrls = true;
-#else
-        const bool selectAllInTextCtrls = false;
-#endif
-        wxWindow* firstTextCtrl = NULL;
-        wxWindow* windowWithFocus = NULL;
-
-        recursiveDescent( GetChildren(), selectAllInTextCtrls, firstTextCtrl,
-                          windowWithFocus );
-
-#if DLGSHIM_USE_SETFOCUS
-        // While it would be nice to honour any focus already set (which was
-        // recorded in windowWithFocus), the reality is that it's currently wrong
-        // far more often than it's right.
-        // So just focus on the first text control if we have one; otherwise the
-        // focus on the dialog itself, which will at least allow esc, return, etc.
-        // to function.
-        if( firstTextCtrl )
-            firstTextCtrl->SetFocus();
-        else
-            SetFocus();
-#endif
-
-#ifdef  __WXMAC__
+#ifdef __WXMAC__
         fixOSXCancelButtonIssue( this );
+        selectAllInTextCtrls( GetChildren() );
 #endif
 
-        m_fixupsRun = true;
+        if( m_initialFocusTarget )
+            m_initialFocusTarget->SetFocus();
+        else
+            SetFocus();     // Focus the dialog itself
+
+        m_firstPaintEvent = false;
     }
 
     event.Skip();

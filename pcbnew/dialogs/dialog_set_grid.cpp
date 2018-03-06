@@ -82,6 +82,7 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
     m_comboBoxGrid2->Append( m_fast_grid_opts );
 
     m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
+    SetInitialFocus( m_GridOriginXCtrl );
 
     Layout();
 
