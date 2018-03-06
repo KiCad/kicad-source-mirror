@@ -502,18 +502,20 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
     // The full width of the lines to create:
     int linewidth = m_Width + (2 * aClearanceValue);
 
-    // The aCircleSegmentsCount parameter is intended for use with small features such as
-    // pads and vias.  It can be way too coarse for larger draw items, such as silkscreen
-    // drawings, which use this routine for DXF-specific sketch-mode plotting.  Scale the
-    // number of segments by the size of the circle/arc.
     if( m_Shape == S_CIRCLE || m_Shape == S_ARC )
     {
-        double multiple = (double) GetRadius() / IU_PER_MM;
-        if( multiple > 1 )
-        {
-            aCircleToSegmentsCount = int( aCircleToSegmentsCount * multiple );
-            aCorrectionFactor      = 1.0 / cos( M_PI / (aCircleToSegmentsCount * 2) );
-        }
+        // this is an ugly hack, but I don't want to change the file format now that we are in feature freeze.
+        // the circle to segment count parameter is essentially useless for larger circle/arc shapes as it doesn't provide
+        // sufficient approximation accuracy. Here we compute the necessary number of segments based on
+        // percentage accuracy required. This is currently mapped to the CircleToSegmentCount parameter: low value (16)
+        // means 1% accuracy, high - 0.33% acciracy.
+
+        double accuracy = aCircleToSegmentsCount == 16 ? 0.01 : 0.0033;
+        double r = GetRadius();
+        double step = 180.0 / M_PI * acos( r * ( 1.0 - accuracy ) / r );
+
+        aCircleToSegmentsCount = (int) ceil( 360.0 / step );
+        aCorrectionFactor      = 1.0 / cos( M_PI / (aCircleToSegmentsCount * 2) );
     }
 
     switch( m_Shape )
