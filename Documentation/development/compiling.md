@@ -95,22 +95,35 @@ available and is always required to build KiCad.
 
 ## Python Programming Language ## {#python}
 
-The [Python][] programming language is used to provide scripting support to KiCad.  It only needs
-to be install if the [KiCad scripting](#kicad_scripting) build configuration option is enabled.
+The [Python][] programming language is used to provide scripting support to KiCad.  It needs
+to be installed unless the [KiCad scripting](#kicad_scripting) build configuration option is
+disabled.
 
 ## wxPython Library ## {#wxpython}
 
-The [wxPython][] library is used to provide a scripting console for Pcbnew.  It only needs to be
-installed if the [wxPython scripting](#wxpython_scripting) build configuration option is enabled.
-When building KiCad with wxPython support, make sure the version of the wxWidgets library and
-the version of wxPython installed on your system are the same.  Mismatched versions have been
-known to cause runtime issues.
+The [wxPython][] library is used to provide a scripting console for Pcbnew.  It needs to be
+installed unless the [wxPython scripting](#wxpython_scripting) build configuration option is
+disabled.  When building KiCad with wxPython support, make sure the version of the wxWidgets
+library and the version of wxPython installed on your system are the same.  Mismatched versions
+have been known to cause runtime issues.
 
 ## Curl Multi-Protocol File Transfer Library ## {#curl}
 
 The [Curl Multi-Protocol File Transfer Library][libcurl] is used to provide secure internet
-file transfer access for the [GitHub][] plug in.  This library only needs to be installed if
-the GitHub plug build option is enabled.
+file transfer access for the [GitHub][] plug in.  This library needs to be installed unless
+the GitHub plug build option is disabled.
+
+## OpenCascade Community Edition (OCE) ## {#oce}
+
+The [OpenCascade Community Edition][liboce] is used to provide support for loading and saving
+3D model file formats such as STEP.  This library needs to be installed unless the OCE build
+option is disabled.
+
+## Ngspice Library ## {#ngspice}
+
+The [Ngspice Library][libngsice] is used to provide Spice simulation support in the schematic
+editor.  Make sure the the version of ngspice library used was built with the--with-ngshared
+option.  This library needs to be installed unless the Spice build option is disabled.
 
 # KiCad Build Configuration Options # {#build_opts}
 
@@ -175,29 +188,22 @@ The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directl
 menu.  This option is disabled by default.  Please note that this option is highly experimental
 and can cause Pcbnew to crash if Python scripts create an invalid object state within Pcbnew.
 
-## Setting the Build Version and Repository Name ## {#build_version_opt}
+## KiCad Build Version ## {#build_version_opt}
 
-The KiCad version string is defined by the three CMake variables KICAD_VERSION, KICAD_BRANCH_NAME,
-and KICAD_VERSION_EXTRA.  Variables KICAD_BRANCH_NAME and KICAD_VERSION_EXTRA are defined as empty
-strings and can be set at configuration.  Unless the source branch is a stable release archive,
-KICAD_VERSION is set to "no-vcs-found".  If an optional variable is not define, it is not appended
-to the full version string.  If an optional variable is defined it is appended along with a leading
-'-' to the full version string as follows:
+The KiCad version string is defined by the output of `git describe --dirty` when git is available
+or the version string defined in CMakeModules/KiCadVersion.cmake with the value of
+KICAD_VERSION_EXTRA appended to the former.  If the KICAD_VERSION_EXTRA variable is not define,
+it is not appended to the version string.  If the KICAD_VERSION_EXTRA  variable is defined it
+is appended along with a leading '-' to the full version string as follows:
 
-    KICAD_VERSION[-KICAD_BRANCH_NAME][-KICAD_VERSION_EXTRA]
+    (KICAD_VERSION[-KICAD_VERSION_EXTRA])
 
-When the version string is set to "no-vcs-found", the build script automatically creates the
-version string information from the [git][] repository information as follows:
+The build script automatically creates the version string information from the [git][] repository
+information as follows:
 
-    (2016-08-26 revision 67230ac)-master
-     |                   |        |
-     |                   |        branch name, "HEAD" if not on a branch,
-     |                   |        or "unknown" if no .git present
-     |                   |
-     |                   abbreviated commit hash, or no-git if no .git
-     |                   present
+    (5.0.0-rc2-dev-100-g5a33f0960)
      |
-     date of commit, or date of build if no .git present
+     output of `git describe --dirty` if git is available.
 
 # Getting the KiCad Source Code ## {#getting_src}
 
@@ -215,7 +221,7 @@ copy on your machine by using the following command:
 
 Here is a list of source links:
 
-Stable release archive: https://launchpad.net/kicad/4.0/4.0.2/+download/kicad-4.0.2.tar.xz
+Stable release archive: https://launchpad.net/kicad/4.0/4.0.7/+download/kicad-4.0.7.tar.xz
 
 Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref/master
 
@@ -230,9 +236,6 @@ To perform a full build on Linux, run the following commands:
     mkdir build/debug               # Optional for debug build.
     cd build/release
     cmake -DCMAKE_BUILD_TYPE=Release \
-          -DKICAD_SCRIPTING=ON \
-          -DKICAD_SCRIPTING_MODULES=ON \
-          -DKICAD_SCRIPTING_WXPYTHON=ON \
           ../../
     make
     sudo make install
@@ -281,6 +284,7 @@ the `mingw64_shell.bat` file located in the MSYS2 install path.  At the command 
 the following commands:
 
     pacman -S base-devel \
+              git \
               mingw-w64-x86_64-cmake \
               mingw-w64-x86_64-doxygen \
               mingw-w64-x86_64-gcc \
@@ -294,7 +298,9 @@ the following commands:
               mingw-w64-x86_64-wxPython \
               mingw-w64-x86_64-wxWidgets \
               mingw-w64-x86_64-toolchain \
-              mingw-w64-x86_64-glm
+              mingw-w64-x86_64-glm \
+              mingw-w64-x86_64-oce \
+              mingw-w64-x86_64-ngspice
     cd kicad-source
     mkdir -p build/release
     mkdir build/debug               # Optional for debug build.
@@ -304,9 +310,6 @@ the following commands:
           -DCMAKE_PREFIX_PATH=/mingw64 \
           -DCMAKE_INSTALL_PREFIX=/mingw64 \
           -DDEFAULT_INSTALL_PATH=/mingw64 \
-          -DKICAD_SCRIPTING=ON \
-          -DKICAD_SCRIPTING_MODULES=ON \
-          -DKICAD_SCRIPTING_WXPYTHON=ON \
           ../../
     make install
 
@@ -411,9 +414,6 @@ configuration as follows to point it to your own wxWidgets/wxPython:
           -DCMAKE_CXX_COMPILER=clang++ \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
           -DwxWidgets_CONFIG_EXECUTABLE=<your wxWidgets build folder>/wx-bin/bin/wx-config \
-          -DKICAD_SCRIPTING=ON \
-          -DKICAD_SCRIPTING_MODULES=ON \
-          -DKICAD_SCRIPTING_WXPYTHON=ON \
           -DPYTHON_EXECUTABLE=<path-to-python-exe>/python \
           -DPYTHON_SITE_PACKAGE_PATH=<your wxWidgets build folder>/wx-bin/lib/python2.7/site-packages \
           -DCMAKE_INSTALL_PREFIX=../bin \
@@ -469,3 +469,5 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [GLM]: http://glm.g-truc.net/
 [git]: https://git-scm.com/
 [OCE]: https://github.com/tpaviot/oce
+[liboce]: https://github.com/tpaviot/oce
+[libngspice]: https://sourceforge.net/projects/ngspice/
