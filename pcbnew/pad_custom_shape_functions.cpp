@@ -159,6 +159,15 @@ bool D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList 
     return MergePrimitivesAsPolygon();
 }
 
+bool D_PAD::AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
+{
+    for( const auto& prim : aPrimitivesList )
+        m_basicShapes.push_back( prim );
+
+    return MergePrimitivesAsPolygon();
+}
+
+
 // clear the basic shapes list and associated data
 void D_PAD::DeletePrimitivesList()
 {

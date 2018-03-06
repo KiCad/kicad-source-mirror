@@ -354,6 +354,13 @@ public:
      */
     bool SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
 
+    /**
+     * Add to the basic shape list
+     * @return true if OK, false if issues
+     * (more than one polygon to build the polygon shape list)
+     */
+    bool AddPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
+
 
     /**
      * Function SetOrientation
