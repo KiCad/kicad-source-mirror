@@ -97,9 +97,15 @@ END_EVENT_TABLE()
 /* EDA_DRAW_PANEL base functions (EDA_DRAW_PANEL is the main panel)*/
 /***********************************************************************/
 
+#ifdef __WXMAC__
+const int drawPanelStyle = wxBORDER | wxHSCROLL | wxVSCROLL | wxALWAYS_SHOW_SB;
+#else
+const int drawPanelStyle = wxBORDER | wxHSCROLL | wxVSCROLL;
+#endif
+
 EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
                                 const wxPoint& pos, const wxSize& size ) :
-    wxScrolledWindow( parent, id, pos, size, wxBORDER | wxHSCROLL | wxVSCROLL | wxALWAYS_SHOW_SB )
+    wxScrolledWindow( parent, id, pos, size, drawPanelStyle )
 {
     wxASSERT( parent );
 
