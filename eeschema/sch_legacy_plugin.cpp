@@ -2370,7 +2370,6 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
         {
             // Read one DEF/ENDDEF part entry from library:
             loadPart( reader );
-
         }
     }
 
@@ -2629,10 +2628,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
             loadFootprintFilters( part, aReader );
         else if( strCompare( "ENDDEF", line, &line ) )   // End of part description
         {
-            // Now all is good, Add the root alias to the cache alias list.
-            m_aliases[ part->GetName() ] = part->GetAlias( part->GetName() );
-
-            // Add aliases when exist
+            // Add aliases
             for( size_t ii = 0; ii < part->GetAliasCount(); ++ii )
                 m_aliases[ part->GetAlias( ii )->GetName() ] = part->GetAlias( ii );
 
