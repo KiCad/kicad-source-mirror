@@ -93,11 +93,11 @@ static inline int okLogical( const UTF8& aField )
 
 static int okRevision( const UTF8& aField )
 {
-    char  rev[32];  // C string for speed
+    char rev[32];  // C string for speed
 
     if( aField.size() >= 4 )
     {
-        strcpy( rev, "x/" );
+        strncpy( rev, "x/", sizeof( rev ) );
         strncat( rev, aField.c_str(), sizeof(rev)-strlen(rev)-1 );
 
         if( EndsWithRev( rev, rev + strlen(rev), '/' ) == rev+2 )
