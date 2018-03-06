@@ -32,7 +32,8 @@
         Remove(self, BOARD_ITEM)
         """
         self.RemoveNative(item)
-        item.thisown=1
+        if (not IsActionRunning()):
+            item.thisown=1
 
     def Delete(self,item):
         """

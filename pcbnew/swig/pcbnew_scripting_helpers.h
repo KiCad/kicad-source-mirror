@@ -69,4 +69,9 @@ void    WindowZoom( int xl, int yl, int width, int height );
  */
 void UpdateUserInterface();
 
+/**
+ * Are we currently in an action plugin?
+ */
+bool IsActionRunning();
+
 #endif      // __PCBNEW_SCRIPTING_HELPERS_H

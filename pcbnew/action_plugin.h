@@ -101,7 +101,7 @@ private:
      * ACTION_PLUGIN system wide static list
      */
     static std::vector<ACTION_PLUGIN*> m_actionsList;
-
+    static bool m_actionRunning;
 public:
     /**
      * Function register_action
@@ -168,6 +168,18 @@ public:
      * @return the number of actions available into the system
      */
     static int GetActionsCount();
+
+    /**
+     * Function IsActionRunning
+     * @return Is an action running right now
+     */
+    static bool IsActionRunning();
+
+    /**
+     * Function SetActionRunning
+     * @param aRunning sets whether an action is running now.
+     */
+    static void SetActionRunning( bool aRunning );
 };
 
 #endif /* PCBNEW_ACTION_PLUGINS_H */

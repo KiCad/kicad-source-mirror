@@ -230,7 +230,9 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
         itemsList.ClearItemsList();
 
         // Execute plugin himself...
+        ACTION_PLUGINS::SetActionRunning( true );
         actionPlugin->Run();
+        ACTION_PLUGINS::SetActionRunning( false );
 
         currentPcb->m_Status_Pcb = 0;
 

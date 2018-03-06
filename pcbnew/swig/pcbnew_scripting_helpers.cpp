@@ -40,6 +40,7 @@
 #include <macros.h>
 #include <stdlib.h>
 #include <pcb_draw_panel_gal.h>
+#include <action_plugin.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 
@@ -134,4 +135,10 @@ void UpdateUserInterface()
 {
     if( s_PcbEditFrame )
         s_PcbEditFrame->UpdateUserInterface();
+}
+
+
+bool IsActionRunning()
+{
+    return ACTION_PLUGINS::IsActionRunning();
 }

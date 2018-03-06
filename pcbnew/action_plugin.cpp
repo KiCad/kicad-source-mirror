@@ -44,6 +44,9 @@ void ACTION_PLUGIN::register_action()
 std::vector<ACTION_PLUGIN*> ACTION_PLUGINS::m_actionsList;
 
 
+bool ACTION_PLUGINS::m_actionRunning = false;
+
+
 ACTION_PLUGIN* ACTION_PLUGINS::GetAction( int aIndex )
 {
     return m_actionsList[aIndex];
@@ -146,4 +149,16 @@ bool ACTION_PLUGINS::deregister_object( void* aObject )
     }
 
     return false;
+}
+
+
+bool ACTION_PLUGINS::IsActionRunning()
+{
+    return ACTION_PLUGINS::m_actionRunning;
+}
+
+
+void ACTION_PLUGINS::SetActionRunning( bool aRunning )
+{
+    ACTION_PLUGINS::m_actionRunning = aRunning;
 }
