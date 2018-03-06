@@ -345,11 +345,12 @@ private:
 
     // Event callbacks
     void    OnParameterChanged( wxCommandEvent& event ) override;
-    void    OnOkClick( wxCommandEvent& event ) override;
 
     // Internal callback handlers
     void setControlEnablement();
     void calculateCircularArrayProperties();
+
+    bool TransferDataFromWindow() override;
 
     struct CREATE_ARRAY_DIALOG_ENTRIES
     {

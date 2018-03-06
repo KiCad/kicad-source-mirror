@@ -260,9 +260,9 @@
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND</property>
+                                        <property name="flag">wxEXPAND|wxTOP|wxRIGHT</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxGridBagSizer" expanded="1">
+                                        <object class="wxGridBagSizer" expanded="0">
                                             <property name="empty_cell_size"></property>
                                             <property name="flexible_direction">wxBOTH</property>
                                             <property name="growablecols"></property>
@@ -817,7 +817,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">2</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -1083,7 +1083,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">3</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -1349,7 +1349,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">4</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -1615,7 +1615,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">5</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -1973,10 +1973,20 @@
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
+                                        <property name="border">10</property>
+                                        <property name="flag">wxALL|wxEXPAND</property>
+                                        <property name="proportion">0</property>
+                                        <object class="spacer" expanded="1">
+                                            <property name="height">0</property>
+                                            <property name="permission">protected</property>
+                                            <property name="width">0</property>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxALL|wxEXPAND</property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBoxSizer" expanded="1">
+                                        <object class="wxBoxSizer" expanded="0">
                                             <property name="minimum_size"></property>
                                             <property name="name">m_gridPadNumberingSizer</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -2104,7 +2114,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Reverse pad numbering on alternate rows or columns</property>
+                                                    <property name="label">Reverse numbering on alternate rows/columns</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -2159,11 +2169,11 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="1">
+                                            <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxRadioBox" expanded="1">
+                                                <object class="wxRadioBox" expanded="0">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -2681,11 +2691,11 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="1">
+                                            <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="1">
+                                                <object class="wxBoxSizer" expanded="0">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizer5</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -2693,7 +2703,7 @@
                                                     <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                                        <property name="proportion">0</property>
+                                                        <property name="proportion">1</property>
                                                         <object class="wxStaticText" expanded="0">
                                                             <property name="BottomDockable">1</property>
                                                             <property name="LeftDockable">1</property>
@@ -2811,7 +2821,7 @@
                                                             <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size"></property>
+                                                            <property name="minimum_size">72,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_entryGridPriNumberingOffset</property>
                                                             <property name="pane_border">1</property>
@@ -2902,7 +2912,7 @@
                                                             <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size"></property>
+                                                            <property name="minimum_size">72,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_entryGridSecNumberingOffset</property>
                                                             <property name="pane_border">1</property>
@@ -3045,10 +3055,10 @@
                                     <property name="name">bSizer4</property>
                                     <property name="orient">wxHORIZONTAL</property>
                                     <property name="permission">none</property>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxALL|wxEXPAND</property>
-                                        <property name="proportion">0</property>
+                                        <property name="proportion">1</property>
                                         <object class="wxGridBagSizer" expanded="0">
                                             <property name="empty_cell_size"></property>
                                             <property name="flexible_direction">wxBOTH</property>
@@ -3244,7 +3254,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">0</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -3510,7 +3520,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">1</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -3948,7 +3958,7 @@
                                                 <property name="border">5</property>
                                                 <property name="colspan">1</property>
                                                 <property name="column">2</property>
-                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                 <property name="row">3</property>
                                                 <property name="rowspan">1</property>
                                                 <object class="wxStaticText" expanded="0">
@@ -4390,10 +4400,20 @@
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
+                                        <property name="border">10</property>
+                                        <property name="flag">wxALL|wxEXPAND</property>
+                                        <property name="proportion">0</property>
+                                        <object class="spacer" expanded="1">
+                                            <property name="height">0</property>
+                                            <property name="permission">protected</property>
+                                            <property name="width">0</property>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND|wxALL</property>
-                                        <property name="proportion">1</property>
-                                        <object class="wxStaticBoxSizer" expanded="1">
+                                        <property name="proportion">0</property>
+                                        <object class="wxStaticBoxSizer" expanded="0">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label">Pad Numbering Options</property>
                                             <property name="minimum_size"></property>
@@ -4402,11 +4422,11 @@
                                             <property name="parent">1</property>
                                             <property name="permission">protected</property>
                                             <event name="OnUpdateUI"></event>
-                                            <object class="sizeritem" expanded="1">
+                                            <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxRadioBox" expanded="1">
+                                                <object class="wxRadioBox" expanded="0">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -4492,11 +4512,11 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="1">
+                                            <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="1">
+                                                <object class="wxBoxSizer" expanded="0">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizer7</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -4705,7 +4725,7 @@
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">OnOkClick</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>

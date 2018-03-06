@@ -282,7 +282,7 @@ static bool validateLongEntry( const wxTextEntry& entry,
 }
 
 
-void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
+bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 {
     ARRAY_OPTIONS* newSettings = NULL;
 
@@ -389,7 +389,7 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
         m_settings = newSettings;
         ReadConfigFromControls();
 
-        EndModal( wxID_OK );
+        return true;
     }
     else
     {
@@ -401,6 +401,7 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
             errorStr = boost::algorithm::join( errorStrs, "\n" );
 
         wxMessageBox( errorStr );
+        return false;
     }
 }
 
