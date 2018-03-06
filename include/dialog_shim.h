@@ -32,7 +32,7 @@
 
 
 class WDO_ENABLE_DISABLE;
-class EVENT_LOOP;
+class WX_EVENT_LOOP;
 
 // These macros are for DIALOG_SHIM only, NOT for KIWAY_PLAYER.  KIWAY_PLAYER
 // has its own support for quasi modal and its platform specific issues are different
@@ -150,7 +150,7 @@ protected:
     wxWindow*           m_initialFocusTarget;
 
     // variables for quasi-modal behavior support, only used by a few derivatives.
-    EVENT_LOOP*         m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
+    WX_EVENT_LOOP*      m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
     bool                m_qmodal_showing;
     WDO_ENABLE_DISABLE* m_qmodal_parent_disabler;
 };
