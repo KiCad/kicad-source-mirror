@@ -482,8 +482,9 @@ wxString GetIllegalFileNameWxChars()
 
 bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar )
 {
-    bool              changed = false;
-    std::string       result;
+    bool changed = false;
+    std::string result;
+    result.reserve( aName->length() );
 
     for( std::string::iterator it = aName->begin();  it != aName->end();  ++it )
     {
@@ -503,7 +504,37 @@ bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar )
     }
 
     if( changed )
-        *aName =  result;
+        *aName = result;
+
+    return changed;
+}
+
+
+bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar )
+{
+    bool changed = false;
+    wxString result;
+    result.reserve( aName.Length() );
+
+    for( wxString::iterator it = aName.begin();  it != aName.end();  ++it )
+    {
+        if( strchr( illegalFileNameChars, *it ) )
+        {
+            if( aReplaceChar )
+                result += aReplaceChar;
+            else
+                result += wxString::Format( "%%%02x", *it );
+
+            changed = true;
+        }
+        else
+        {
+            result += *it;
+        }
+    }
+
+    if( changed )
+        aName = result;
 
     return changed;
 }

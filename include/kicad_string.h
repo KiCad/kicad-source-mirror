@@ -172,6 +172,7 @@ wxString GetIllegalFileNameWxChars();
  * @return true if any characters have been replaced in \a aName.
  */
 bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar = 0 );
+bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
 
 #ifndef HAVE_STRTOKR
 // common/strtok_r.c optionally:
