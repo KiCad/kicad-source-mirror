@@ -125,7 +125,7 @@ public:
 
     const wxString& GetName() const         { return name; }
 
-    void SetName( const wxString& aName )   { name = aName; }
+    void SetName( const wxString& aName );
 
     void SetDescription( const wxString& aDescription )
     {

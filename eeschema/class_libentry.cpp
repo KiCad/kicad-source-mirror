@@ -35,6 +35,7 @@
 #include <gr_basic.h>
 #include <sch_screen.h>
 #include <richio.h>
+#include <kicad_string.h>
 
 #include <general.h>
 #include <template_fieldnames.h>
@@ -67,7 +68,7 @@ LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ):
     EDA_ITEM( LIB_ALIAS_T ),
     shared( aRootPart )
 {
-    name = aName;
+    SetName( aName );
 }
 
 
@@ -115,6 +116,13 @@ bool LIB_ALIAS::IsRoot() const
 PART_LIB* LIB_ALIAS::GetLib()
 {
     return shared->GetLib();
+}
+
+
+void LIB_ALIAS::SetName( const wxString& aName )
+{
+    name = aName;
+    ReplaceIllegalFileNameChars( name, '_' );
 }
 
 
@@ -275,21 +283,22 @@ const wxString& LIB_PART::GetName() const
 
 void LIB_PART::SetName( const wxString& aName )
 {
-    m_libId.SetLibItemName( aName, false );
-
     // The LIB_ALIAS that is the LIB_PART name has to be created so create it.
-    if( m_aliases.size() == 0 )
+    if( m_aliases.empty() )
         m_aliases.push_back( new LIB_ALIAS( aName, this ) );
     else
         m_aliases[0]->SetName( aName );
+
+    // LIB_ALIAS validates the name, reuse it instead of validating the name again
+    wxString validatedName( m_aliases[0]->GetName() );
+    m_libId.SetLibItemName( validatedName, false );
 
     LIB_FIELD& valueField = GetValueField();
 
     // LIB_FIELD::SetText() calls LIB_PART::SetName(),
     // the following if-clause is to break an infinite loop
-    if( valueField.GetText() != aName )
-        valueField.SetText( aName );
-
+    if( valueField.GetText() != validatedName )
+        valueField.SetText( validatedName );
 }
 
 
