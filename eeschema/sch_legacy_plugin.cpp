@@ -2630,7 +2630,42 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         {
             // Add aliases
             for( size_t ii = 0; ii < part->GetAliasCount(); ++ii )
-                m_aliases[ part->GetAlias( ii )->GetName() ] = part->GetAlias( ii );
+            {
+                LIB_ALIAS* alias = part->GetAlias( ii );
+                const wxString& aliasName = alias->GetName();
+                auto it = m_aliases.find( aliasName );
+
+                if( it != m_aliases.end() )
+                {
+                    // Find a new name for the alias
+                    wxString newName;
+                    int idx = 0;
+                    LIB_ALIAS_MAP::const_iterator jt;
+
+                    do
+                    {
+                        newName = wxString::Format( "%s_%d", aliasName, idx );
+                        jt = m_aliases.find( newName );
+                        ++idx;
+                    }
+                    while( jt != m_aliases.end() );
+
+                    wxLogWarning( "Symbol name conflict in library:\n%s\n"
+                                  "'%s' has been renamed to '%s'",
+                                  m_fileName, aliasName, newName );
+
+                    if( alias->IsRoot() )
+                        part->SetName( newName );
+                    else
+                        alias->SetName( newName );
+
+                    m_aliases[newName] = alias;
+                }
+                else
+                {
+                    m_aliases[aliasName] = alias;
+                }
+            }
 
             return part.release();
         }
