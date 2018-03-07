@@ -75,9 +75,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
-"Report-Msgid-Bugs-To:\n"
-"POT-Creation-Date: 2018-03-07 17:38+0100\n"
-"PO-Revision-Date: 2018-03-07 18:22+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-07 20:44+0100\n"
+"PO-Revision-Date: 2018-03-07 20:46+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2487,7 +2487,8 @@ msgid ""
 "externally to the running process and will be temporarily overwritten."
 msgstr ""
 "Avvertenza!  Alcuni percorsi che si è configurati sono stati definiti\n"
-"esternamente al processo in esecuzione e verranno temporaneamente sovrascritti."
+"esternamente al processo in esecuzione e verranno temporaneamente "
+"sovrascritti."
 
 #: common/pgm_base.cpp:928
 msgid ""
@@ -6564,7 +6565,7 @@ msgstr "Doppio clic sinistro mouse"
 
 #: eeschema/hotkeys.cpp:130
 msgid "End Line Wire Bus"
-msgstr "Fine linea bus fili"
+msgstr "Fine bus"
 
 #: eeschema/hotkeys.cpp:133
 msgid "Add Label"
@@ -6580,7 +6581,7 @@ msgstr "Aggiungi etichetta globale"
 
 #: eeschema/hotkeys.cpp:139
 msgid "Add Symbol"
-msgstr "Aggiungi Simbolo"
+msgstr "Aggiungi simbolo"
 
 #: eeschema/hotkeys.cpp:141
 msgid "Add Power"
@@ -6612,7 +6613,7 @@ msgstr "Aggiungi testo grafico"
 
 #: eeschema/hotkeys.cpp:159
 msgid "Orient Normal Component"
-msgstr "Orienta componente normale"
+msgstr "Orienta normalmente il componente"
 
 #: eeschema/hotkeys.cpp:161 pcbnew/hotkeys.cpp:122
 msgid "Rotate Item"
@@ -11259,9 +11260,12 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Sembra che questo progetto sia stato fatto usando vecchie librerie di simboli.\n"
-"Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con nome diverso,\n"
-"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni simboli in una nuova libreria.\n"
+"Sembra che questo progetto sia stato fatto usando vecchie librerie di "
+"simboli.\n"
+"Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con "
+"nome diverso,\n"
+"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni "
+"simboli in una nuova libreria.\n"
 "\n"
 "I seguenti cambiamenti sono raccomandati per aggiornare il progetto."
 
