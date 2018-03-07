@@ -146,10 +146,19 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
         }
     }
 
-    //printf("DefaultCL : %d\n",  m_board->GetDesignSettings().m_NetClasses.Find ("Default clearance")->GetClearance());
-
     m_overrideEnabled = false;
-    m_defaultClearance = Millimeter2iu( 0.254 );    // m_board->m_NetClasses.Find ("Default clearance")->GetClearance();
+
+    auto defaultRule = m_board->GetDesignSettings().m_NetClasses.Find ("Default");
+
+    if( defaultRule )
+    {
+        m_defaultClearance = defaultRule->GetClearance();
+    }
+    else 
+    {
+        m_defaultClearance = Millimeter2iu(0.254);
+    }
+
     m_overrideNetA = 0;
     m_overrideNetB = 0;
     m_overrideClearance = 0;
