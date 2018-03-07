@@ -423,7 +423,7 @@ DIALOG_ENV_VAR_SINGLE::DIALOG_ENV_VAR_SINGLE( wxWindow* parent,
 {
     m_envVarName->SetValue( aEnvVarName );
     m_envVarPath->SetValue( aEnvVarPath );
-    m_envVarName->SetValidator( ENVIRONMENT_VARIABLE_CHAR_VALIDATOR() );
+    m_envVarName->SetValidator( ENV_VAR_NAME_VALIDATOR() );
 }
 
 

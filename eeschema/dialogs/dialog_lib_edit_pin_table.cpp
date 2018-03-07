@@ -34,9 +34,6 @@
 #include <kiface_i.h>
 
 
-// Indicator that multiple values exist in child rows
-#define ROW_MULT_ITEMS wxString( "< ... >" )
-
 #define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
 
 
@@ -156,7 +153,7 @@ public:
                 if( !fieldValue.Length() )
                     fieldValue = val;
                 else if( val != fieldValue )
-                    fieldValue = ROW_MULT_ITEMS;
+                    fieldValue = INDETERMINATE;
             }
         }
 
@@ -165,7 +162,7 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
-        if( aValue == ROW_MULT_ITEMS )
+        if( aValue == INDETERMINATE )
             return;
 
         LIB_PINS pins = m_rows[ aRow ];
@@ -340,18 +337,18 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART
             g_typeIcons.push_back( GetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
         for( unsigned i = 0; i < PINTYPE_COUNT; ++i )
             g_typeNames.push_back( GetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
-        g_typeNames.push_back( ROW_MULT_ITEMS );
+        g_typeNames.push_back( INDETERMINATE );
 
         for( unsigned i = 0; i < PINSHAPE_COUNT; ++i )
             g_shapeIcons.push_back( GetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
         for( unsigned i = 0; i < PINSHAPE_COUNT; ++i )
             g_shapeNames.push_back( GetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
-        g_shapeNames.push_back( ROW_MULT_ITEMS );
+        g_shapeNames.push_back( INDETERMINATE );
 
         for( unsigned i = 0; i < LIB_PIN::GetOrientationNames().size(); ++i )
             g_orientationIcons.push_back( LIB_PIN::GetOrientationSymbols()[ i ] );
         g_orientationNames = LIB_PIN::GetOrientationNames();
-        g_orientationNames.push_back( ROW_MULT_ITEMS );
+        g_orientationNames.push_back( INDETERMINATE );
     }
 
     m_dataModel = new PIN_TABLE_DATA_MODEL( GetUserUnits() );

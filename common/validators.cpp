@@ -30,8 +30,37 @@
 #include <kicad_string.h>
 #include <validators.h>
 
+#include <wx/grid.h>
+#include <wx/textctrl.h>
 #include <wx/textentry.h>
 #include <wx/log.h>
+
+
+GRID_CELL_TEXT_EDITOR::GRID_CELL_TEXT_EDITOR() : wxGridCellTextEditor()
+{
+}
+
+
+void GRID_CELL_TEXT_EDITOR::SetValidator(const wxValidator& validator)
+{
+    // keep our own copy because wxGridCellTextEditor's is annoyingly private
+    m_validator.reset( static_cast<wxValidator*>( validator.Clone() ) );
+
+    wxGridCellTextEditor::SetValidator( validator );
+}
+
+
+void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
+{
+    if( m_validator )
+    {
+        m_validator.get()->SetWindow( Text() );
+        m_validator.get()->ProcessEvent( event );
+    }
+
+    if( !event.WasProcessed() )
+        wxGridCellTextEditor::StartingKey( event );
+}
 
 
 FILE_NAME_CHAR_VALIDATOR::FILE_NAME_CHAR_VALIDATOR( wxString* aValue ) :
@@ -77,9 +106,74 @@ FILE_NAME_WITH_PATH_CHAR_VALIDATOR::FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString
 }
 
 
-ENVIRONMENT_VARIABLE_CHAR_VALIDATOR::ENVIRONMENT_VARIABLE_CHAR_VALIDATOR( wxString* aValue ) :
-    wxTextValidator( wxFILTER_INCLUDE_CHAR_LIST | wxFILTER_EMPTY, aValue )
+ENV_VAR_NAME_VALIDATOR::ENV_VAR_NAME_VALIDATOR( wxString* aValue ) :
+    wxTextValidator()
 {
-    wxString includeChars( wxT( "abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" ) );
-    SetCharIncludes( includeChars );
+    Connect( wxEVT_CHAR, wxKeyEventHandler( ENV_VAR_NAME_VALIDATOR::OnChar ) );
+}
+
+
+ENV_VAR_NAME_VALIDATOR::ENV_VAR_NAME_VALIDATOR( const ENV_VAR_NAME_VALIDATOR& val )
+    : wxTextValidator()
+{
+    wxValidator::Copy( val );
+
+    Connect( wxEVT_CHAR, wxKeyEventHandler( ENV_VAR_NAME_VALIDATOR::OnChar ) );
+}
+
+
+ENV_VAR_NAME_VALIDATOR::~ENV_VAR_NAME_VALIDATOR()
+{
+    Disconnect( wxEVT_CHAR, wxKeyEventHandler( ENV_VAR_NAME_VALIDATOR::OnChar ) );
+}
+
+
+void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
+{
+    if (!m_validatorWindow)
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    int keyCode = aEvent.GetKeyCode();
+
+    // we don't filter special keys and delete
+    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START)
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    wxUniChar c = (wxUChar) keyCode;
+
+    if( c == wxT( '_' ) )
+    {
+        // OK anywhere
+        aEvent.Skip();
+    }
+    else if( wxIsdigit( c ) )
+    {
+        // not as first character
+        long from, to;
+        GetTextEntry()->GetSelection( &from, &to );
+        if( from < 1 )
+            wxBell();
+        else
+            aEvent.Skip();
+    }
+    else if( wxIsalpha( c ) )
+    {
+        // Capitals only.
+        // Note: changing the keyCode and/or uniChar in the event and passing it on
+        // doesn't work.  Some platforms look at the original copy as long as the event
+        // isn't vetoed.  Insert the capitalized character by hand.
+        wxString s( c, 1 );
+        s = s.Capitalize();
+        GetTextEntry()->WriteText( s );
+    }
+    else
+    {
+        wxBell();
+    }
 }

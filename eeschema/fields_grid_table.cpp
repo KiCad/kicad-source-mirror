@@ -25,6 +25,8 @@
 #include <kiway_player.h>
 #include <dialog_shim.h>
 #include <fields_grid_table.h>
+#include <sch_field.h>
+#include <sch_validators.h>
 #include <validators.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
@@ -53,9 +55,9 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( bool aInLibEdit, EDA_UNITS_T aUserUnits
     m_readOnlyAttr->SetReadOnly( true );
 
     m_valueColAttr = new wxGridCellAttr;
-    m_valueTextEditor = new wxGridCellTextEditor();
-    m_valueTextEditor->SetValidator( m_valueValidator );
-    m_valueColAttr->SetEditor( m_valueTextEditor );
+    GRID_CELL_TEXT_EDITOR* textEditor = new GRID_CELL_TEXT_EDITOR();
+    textEditor->SetValidator( m_valueValidator );
+    m_valueColAttr->SetEditor( textEditor );
 
     m_boolColAttr = new wxGridCellAttr;
     m_boolColAttr->SetRenderer( new wxGridCellBoolRenderer() );

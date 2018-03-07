@@ -25,16 +25,14 @@
 
 #include <wx/msgdlg.h>
 #include <wx/grid.h>
-
+#include <base_units.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
 #include <kicad_string.h>
-
 #include <build_version.h>
 #include <general.h>
 #include <class_library.h>
-
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <kiface_i.h>
@@ -100,10 +98,6 @@ struct DATA_MODEL_ROW
 #else
 #define CHECKBOX_COLUMN_MARGIN 15
 #endif
-
-
-// Indicator that multiple values exist in child rows
-#define ROW_MULT_ITEMS wxString( "< ... >" )
 
 
 class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
@@ -221,7 +215,7 @@ public:
                 if( &ref == &group.m_Refs.front() )
                     fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol ] ];
                 else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol ] ] )
-                    return ROW_MULT_ITEMS;
+                    return INDETERMINATE;
             }
         }
 

@@ -32,11 +32,12 @@
 #include "widgets/unit_binder.h"
 
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
-                          wxStaticText* aLabel, wxTextEntry* aTextEntry, wxStaticText* aUnitLabel,
+                          wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
                           bool aUseMils, int aMin, int aMax, bool allowEval ) :
     m_label( aLabel ),
-    m_textEntry( aTextEntry ),
+    m_value( aValue ),
     m_unitLabel( aUnitLabel ),
+    m_showMessage( true ),
     m_eval( aParent->GetUserUnits(), aUseMils )
 {
     // Fix the units (to the current units) for the life of the binder
@@ -44,31 +45,30 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     m_useMils = aUseMils;
     m_min = aMin;
     m_max = aMax;
-    m_allowEval = allowEval;
+    m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
 
-    m_textEntry->SetValue( wxT( "0" ) );
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    if( textEntry )
+        textEntry->SetValue( wxT( "0" ) );
+
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, aUseMils ) );
 
-    wxWindow* textInput = dynamic_cast<wxWindow*>( m_textEntry );
-    textInput->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
-    textInput->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
-    textInput->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( UNIT_BINDER::onTextEnter ), NULL, this );
-}
-
-
-UNIT_BINDER::~UNIT_BINDER()
-{
+    m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
+    m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
+    m_value->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( UNIT_BINDER::onTextEnter ), NULL, this );
 }
 
 
 void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 {
-    if( m_allowEval )
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+
+    if( m_allowEval && textEntry )
     {
         wxString oldStr = m_eval.OriginalText();
 
         if( oldStr.length() )
-            m_textEntry->SetValue( oldStr );
+            textEntry->SetValue( oldStr );
     }
 
     aEvent.Skip();
@@ -97,17 +97,22 @@ void UNIT_BINDER::onTextEnter( wxCommandEvent& aEvent )
 
     // Send an OK event to the parent dialog
     wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK );
-    wxPostEvent( dynamic_cast<wxWindow*>( m_textEntry )->GetParent(), event );
+    wxPostEvent( m_value->GetParent(), event );
 }
 
 
 void UNIT_BINDER::evaluate()
 {
-    if( m_textEntry->GetValue().IsEmpty() )
-        m_textEntry->ChangeValue( "0" );
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
-    if( m_eval.Process( m_textEntry->GetValue() ) )
-        m_textEntry->ChangeValue( m_eval.Result() );
+    if( !textEntry )
+        return;
+
+    if( textEntry->GetValue().IsEmpty() )
+        textEntry->ChangeValue( "0" );
+
+    if( m_eval.Process( textEntry->GetValue() ) )
+        textEntry->ChangeValue( m_eval.Result() );
 }
 
 
@@ -122,29 +127,36 @@ wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 
 void UNIT_BINDER::delayedFocusHandler( wxIdleEvent& )
 {
-    wxWindow* textInput = dynamic_cast<wxWindow*>( m_textEntry );
-    textInput->SetFocus();
+    m_value->SetFocus();
+    m_showMessage = true;
 
-    textInput->Unbind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+    m_value->Unbind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
 }
 
 
 bool UNIT_BINDER::Validate( bool setFocusOnError )
 {
-    wxWindow* textInput = dynamic_cast<wxWindow*>( m_textEntry );
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+
+    if( !textEntry || textEntry->GetValue() == INDETERMINATE )
+        return true;
 
     if( m_min > INT_MIN && GetValue() < m_min )
     {
-        wxString msg = wxString::Format( _( "%s must be larger than %s." ),
-                                         valueDescriptionFromLabel( m_label ),
-                                         StringFromValue( m_units, m_min, true ) );
-        DisplayError( textInput->GetParent(), msg );
+        if( m_showMessage )
+        {
+            wxString msg = wxString::Format( _( "%s must be larger than %s." ),
+                                             valueDescriptionFromLabel( m_label ),
+                                             StringFromValue( m_units, m_min, true ) );
+            DisplayError( m_value->GetParent(), msg );
+        }
 
         if( setFocusOnError )
         {
-            m_textEntry->SelectAll();
+            textEntry->SelectAll();
             // Don't focus directly; we might be inside a KillFocus event handler
-            textInput->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+            m_value->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+            m_showMessage = false;
         }
 
         return false;
@@ -152,16 +164,20 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
 
     if( m_max < INT_MAX && GetValue() > m_max )
     {
-        wxString msg = wxString::Format( _( "%s must be smaller than %s." ),
-                                         valueDescriptionFromLabel( m_label ),
-                                         StringFromValue( m_units, m_max, true ) );
-        DisplayError( textInput->GetParent(), msg );
+        if( m_showMessage )
+        {
+            wxString msg = wxString::Format( _( "%s must be smaller than %s." ),
+                                             valueDescriptionFromLabel( m_label ),
+                                             StringFromValue( m_units, m_max, true ) );
+            DisplayError( m_value->GetParent(), msg );
+        }
 
         if( setFocusOnError )
         {
-            m_textEntry->SelectAll();
+            textEntry->SelectAll();
             // Don't focus directly; we might be inside a KillFocus event handler
-            textInput->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+            m_value->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+            m_showMessage = false;
         }
 
         return false;
@@ -179,7 +195,10 @@ void UNIT_BINDER::SetValue( int aValue )
 
 void UNIT_BINDER::SetValue( wxString aValue )
 {
-    m_textEntry->SetValue( aValue );
+    if( dynamic_cast<wxTextEntry*>( m_value ) )
+        dynamic_cast<wxTextEntry*>( m_value )->SetValue( aValue );
+    else if( dynamic_cast<wxStaticText*>( m_value ) )
+        dynamic_cast<wxStaticText*>( m_value )->SetLabel( aValue );
 
     if( m_allowEval )
         m_eval.Clear();
@@ -190,7 +209,12 @@ void UNIT_BINDER::SetValue( wxString aValue )
 
 int UNIT_BINDER::GetValue() const
 {
-    wxString s = m_textEntry->GetValue();
+    wxString s;
+
+    if( dynamic_cast<wxTextEntry*>( m_value ) )
+        s = dynamic_cast<wxTextEntry*>( m_value )->GetValue();
+    else if( dynamic_cast<wxStaticText*>( m_value ) )
+        s = dynamic_cast<wxStaticText*>( m_value )->GetLabel();
 
     return ValueFromString( m_units, s, m_useMils );
 }
@@ -198,14 +222,17 @@ int UNIT_BINDER::GetValue() const
 
 bool UNIT_BINDER::IsIndeterminate() const
 {
-    return m_textEntry->GetValue() == INDETERMINATE;
+    if( dynamic_cast<wxTextEntry*>( m_value ) )
+        return dynamic_cast<wxTextEntry*>( m_value )->GetValue() == INDETERMINATE;
+
+    return false;
 }
 
 
 void UNIT_BINDER::Enable( bool aEnable )
 {
     m_label->Enable( aEnable );
-    dynamic_cast<wxWindow*>( m_textEntry )->Enable( aEnable );
+    m_value->Enable( aEnable );
     m_unitLabel->Enable( aEnable );
 }
 

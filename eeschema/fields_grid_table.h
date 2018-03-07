@@ -96,7 +96,6 @@ private:
     LIB_PART*             m_part;
 
     bool                  m_inLibEdit;
-    wxGridCellTextEditor* m_valueTextEditor;
     SCH_FIELD_VALIDATOR   m_valueValidator;
 
     wxGridCellAttr*       m_readOnlyAttr;

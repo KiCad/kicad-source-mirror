@@ -44,8 +44,8 @@ public:
      * @param aParent is the parent EDA_DRAW_FRAME.
      * @param aLabel is the static text used to label the text input widget (note: the label
      *               text, trimmed of its colon, will also be used in error messages)
-     * @param aTextEntry is the text input widget used to edit the given value (wxTextCtrl,
-     *                    wxComboBox, ...).
+     * @param aValue is the control used to edit or display the given value (wxTextCtrl,
+     *               wxComboBox, wxStaticText, etc.).
      * @param aUnitLabel is the units label displayed after the text input widget
      * @param aUseMils specifies the use of mils for imperial units (instead of inches)
      * @param aMin a minimum value (in internal units) for validation
@@ -53,12 +53,10 @@ public:
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */
     UNIT_BINDER( EDA_DRAW_FRAME* aParent,
-                 wxStaticText* aLabel, wxTextEntry* aTextEntry, wxStaticText* aUnitLabel,
+                 wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
                  bool aUseMils = false,
                  int aMin = INT_MIN, int aMax = INT_MAX,
                  bool aAllowEval = true );
-
-    virtual ~UNIT_BINDER();
 
     /**
      * Function SetValue
@@ -99,7 +97,6 @@ public:
 
 protected:
 
-    void onTextChanged( wxEvent& aEvent );
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );
     void onTextEnter( wxCommandEvent& aEvent );
@@ -108,21 +105,22 @@ protected:
     void evaluate();
 
     ///> The bound widgets
-    wxStaticText* m_label;
-    wxTextEntry*  m_textEntry;
-    wxStaticText* m_unitLabel;
+    wxStaticText*     m_label;
+    wxWindow*         m_value;
+    wxStaticText*     m_unitLabel;
 
     ///> Currently used units.
-    EDA_UNITS_T   m_units;
-    bool          m_useMils;
+    EDA_UNITS_T       m_units;
+    bool              m_useMils;
 
     ///> Validation support.
-    int           m_min;
-    int           m_max;
+    int               m_min;
+    int               m_max;
+    bool              m_showMessage;
 
     ///> Evaluator
     NUMERIC_EVALUATOR m_eval;
-    bool             m_allowEval;
+    bool              m_allowEval;
 };
 
 #endif /* __UNIT_BINDER_H_ */

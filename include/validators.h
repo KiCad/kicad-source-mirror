@@ -31,6 +31,26 @@
 #define VALIDATORS_H
 
 #include <wx/valtext.h>
+#include <wx/grid.h>
+
+/**
+ * Class GRID_CELL_TEXT_EDITOR
+ *
+ * This class works around a bug in wxGrid where the first keystroke doesn't get sent through
+ * the validator if the editor wasn't already open.
+ */
+class GRID_CELL_TEXT_EDITOR : public wxGridCellTextEditor
+{
+public:
+    GRID_CELL_TEXT_EDITOR();
+
+    virtual void SetValidator(const wxValidator& validator) override;
+    virtual void StartingKey(wxKeyEvent& event) override;
+
+protected:
+    wxScopedPtr<wxValidator> m_validator;
+};
+
 
 /**
  * Class FILE_NAME_CHAR_VALIDATOR
@@ -63,19 +83,31 @@ public:
 
 
 /**
- * Class ENVIRONMENT_VARIABLE_CHAR_VALIDATOR
+ * Class ENV_VAR_NAME_VALIDATOR
  *
- * This class provides a custome wxValidator object for limiting the allowable characters
+ * This class provides a custom wxValidator object for limiting the allowable characters
  * when defining an environment varaible name in a text edit control.  Only uppercase,
  * numbers, and underscore (_) characters are valid and the first character of the name
  * cannot start with a number.  This is according to IEEE Std 1003.1-2001.  Even though
  * most systems support other characters, these characters guarantee compatibility for
  * all shells.
  */
-class ENVIRONMENT_VARIABLE_CHAR_VALIDATOR : public wxTextValidator
+class ENV_VAR_NAME_VALIDATOR : public wxTextValidator
 {
 public:
-    ENVIRONMENT_VARIABLE_CHAR_VALIDATOR( wxString* aValue = NULL );
+    ENV_VAR_NAME_VALIDATOR( wxString* aValue = NULL );
+    ENV_VAR_NAME_VALIDATOR( const ENV_VAR_NAME_VALIDATOR& val );
+
+    virtual ~ENV_VAR_NAME_VALIDATOR();
+
+    // Make a clone of this validator (or return NULL) - currently necessary
+    // if you're passing a reference to a validator.
+    virtual wxObject *Clone() const override
+    {
+        return new ENV_VAR_NAME_VALIDATOR( *this );
+    }
+
+    void OnChar(wxKeyEvent& event);
 };
 
 #endif  // #ifndef VALIDATORS_H
