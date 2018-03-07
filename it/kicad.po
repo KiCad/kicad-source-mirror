@@ -2,7 +2,7 @@
 # Ing. Angelo Aliberti <microrf@tiscali.it>, 2005.
 # Michele Petrecca <michelinux@alice.it>, 2005, 2006.
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
-# Marco Ciampa <ciampix@libero.it>, 2014-2018.
+# Marco Ciampa <ciampix@posteo.net>, 2014-2018.
 #
 #  db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 #  db: di una frase: negli altri casi può risultare molto inelegante
@@ -75,10 +75,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To:\n"
 "POT-Creation-Date: 2018-03-07 17:38+0100\n"
-"PO-Revision-Date: 2018-03-07 17:45+0100\n"
-"Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
+"PO-Revision-Date: 2018-03-07 18:22+0100\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -2486,9 +2486,8 @@ msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
 msgstr ""
-"Avvertenza!  Alcuni percorsi che si è configurati sono stati definiti \n"
-"esternamente al processo in esecuzione e verranno temporaneamente "
-"sovrascritti."
+"Avvertenza!  Alcuni percorsi che si è configurati sono stati definiti\n"
+"esternamente al processo in esecuzione e verranno temporaneamente sovrascritti."
 
 #: common/pgm_base.cpp:928
 msgid ""
@@ -2501,7 +2500,7 @@ msgstr ""
 "Al prossimo avvio di KiCad, verrà usato ogni percorso che sia\n"
 "già stato definito e ogni impostazione definita nella finestra\n"
 "di configurazione percorsi verrà ignorata. Se non si desidera tale\n"
-"comportamento, rinominare ogni voce in conflitto o rimuovere \n"
+"comportamento, rinominare ogni voce in conflitto o rimuovere\n"
 "dal sistema le definizioni delle variabili ambiente esterne."
 
 #: common/pgm_base.cpp:935
@@ -2813,7 +2812,7 @@ msgid ""
 " or\n"
 "\"%s\" could not be found."
 msgstr ""
-"File della guida HTML o PDF \n"
+"File della guida HTML o PDF\n"
 "\"%s\"\n"
 "o\n"
 "\"%s\" non trovato."
@@ -6674,7 +6673,7 @@ msgstr "Trova prossimo elemento"
 
 #: eeschema/hotkeys.cpp:195 eeschema/dialogs/dialog_schematic_find.cpp:48
 msgid "Find and Replace"
-msgstr "Trova e Sostituisci"
+msgstr "Trova e sostituisci"
 
 #: eeschema/hotkeys.cpp:197
 msgid "Find Next DRC Marker"
@@ -6826,7 +6825,7 @@ msgstr "Elemento da bus a filo"
 
 #: eeschema/sch_bus_entry.cpp:343
 msgid "Bus to Bus Entry"
-msgstr "Elemento da bus a bus "
+msgstr "Elemento da bus a bus"
 
 #: eeschema/getpart.cpp:148
 msgid "History"
@@ -11260,12 +11259,9 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Sembra che questo progetto sia stato fatto usando vecchie librerie di "
-"simboli.\n"
-"Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con "
-"nome diverso, \n"
-"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni "
-"simboli in una nuova libreria.\n"
+"Sembra che questo progetto sia stato fatto usando vecchie librerie di simboli.\n"
+"Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con nome diverso,\n"
+"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni simboli in una nuova libreria.\n"
 "\n"
 "I seguenti cambiamenti sono raccomandati per aggiornare il progetto."
 
@@ -20152,7 +20148,7 @@ msgid ""
 msgstr ""
 "La scrittura/modifica di librerie datate (file .mod) non è consentita.\n"
 "Salvare la libreria corrente nel nuovo formato .pretty e aggiornare\n"
-"la tabella delle librerie impronte per salvare la propria impronta \n"
+"la tabella delle librerie impronte per salvare la propria impronta\n"
 "(un file .kicad_mod) nella cartella della libreria .pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:89
