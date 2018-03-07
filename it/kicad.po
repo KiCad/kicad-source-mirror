@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-06 22:01+0100\n"
-"PO-Revision-Date: 2018-03-06 22:25+0100\n"
+"POT-Creation-Date: 2018-03-07 17:38+0100\n"
+"PO-Revision-Date: 2018-03-07 17:45+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -431,8 +431,8 @@ msgstr "pollici"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:63
 #: pcbnew/dialogs/dialog_create_array_base.cpp:74
 #: pcbnew/dialogs/dialog_create_array_base.cpp:85
-#: pcbnew/dialogs/dialog_create_array_base.cpp:190
-#: pcbnew/dialogs/dialog_create_array_base.cpp:201
+#: pcbnew/dialogs/dialog_create_array_base.cpp:197
+#: pcbnew/dialogs/dialog_create_array_base.cpp:208
 msgid "mm"
 msgstr "mm"
 
@@ -1471,7 +1471,7 @@ msgstr "in"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:150
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:67
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:65
-#: pcbnew/dialogs/dialog_create_array_base.cpp:222
+#: pcbnew/dialogs/dialog_create_array_base.cpp:229
 msgid "deg"
 msgstr "Gradi "
 
@@ -1643,7 +1643,7 @@ msgstr "Centra la vista tracciatura in questa posizione"
 #: common/widgets/mathplot.cpp:1766 eeschema/hotkeys.cpp:87
 #: eeschema/sim/sim_plot_frame_base.cpp:85
 msgid "Fit on Screen"
-msgstr "Centra sullo schermo"
+msgstr "Adatta allo schermo"
 
 #: common/widgets/mathplot.cpp:1766
 msgid "Set plot view to show all items"
@@ -2231,7 +2231,7 @@ msgstr "Griglia"
 #: pcbnew/footprint_editor_utils.cpp:933 pcbnew/tool_pcb_editor.cpp:294
 #: pcbnew/tool_footprint_editor.cpp:133 pcbnew/edit.cpp:1463
 msgid "Zoom to selection"
-msgstr "Zoom a selezione"
+msgstr "Zoom alla selezione"
 
 #: common/tool/zoom_menu.cpp:39
 msgid "Zoom"
@@ -2250,7 +2250,7 @@ msgstr "Annulla strumento corrente"
 #: pagelayout_editor/menubar.cpp:143 pagelayout_editor/hotkeys.cpp:80
 #: pcbnew/hotkeys.cpp:196
 msgid "Zoom to Selection"
-msgstr "Zoom a selezione"
+msgstr "Zoom alla selezione"
 
 #: common/colors.cpp:39
 msgid "Black"
@@ -4967,7 +4967,7 @@ msgstr "Rimpicci&olisci"
 #: eeschema/menubar_libedit.cpp:170 pcbnew/menubar_pcb_editor.cpp:639
 #: pcbnew/menubar_footprint_editor.cpp:234 pcbnew/tool_footprint_viewer.cpp:162
 msgid "&Fit on Screen"
-msgstr "Per&fetto su schermo"
+msgstr "&Adatta allo schermo"
 
 #: eeschema/tool_viewlib.cpp:201 eeschema/menubar.cpp:192
 #: eeschema/menubar_libedit.cpp:174 pcbnew/menubar_pcb_editor.cpp:644
@@ -7589,7 +7589,9 @@ msgstr "Mostra netlist SPICE..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
-msgstr "Mostra la netlist della simulazione corrente. Utile per fare il debug di errori SPICE."
+msgstr ""
+"Mostra la netlist della simulazione corrente. Utile per fare il debug di "
+"errori SPICE."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:70
 msgid "Settings..."
@@ -11036,9 +11038,9 @@ msgstr "Unità intercambiabili:"
 #: pcbnew/dialogs/dialog_drc_base.cpp:233
 #: pcbnew/dialogs/dialog_create_array_base.cpp:71
 #: pcbnew/dialogs/dialog_create_array_base.cpp:82
-#: pcbnew/dialogs/dialog_create_array_base.cpp:187
-#: pcbnew/dialogs/dialog_create_array_base.cpp:198
-#: pcbnew/dialogs/dialog_create_array_base.cpp:217
+#: pcbnew/dialogs/dialog_create_array_base.cpp:194
+#: pcbnew/dialogs/dialog_create_array_base.cpp:205
+#: pcbnew/dialogs/dialog_create_array_base.cpp:224
 msgid "0"
 msgstr "0"
 
@@ -12052,13 +12054,17 @@ msgstr "Cancella tutti gli strati"
 
 #: gerbview/toolbars_gerber.cpp:60 gerbview/menubar.cpp:65
 msgid "Open Gerber file(s) on the current layer. Previous data will be deleted"
-msgstr "Apre (i) file Gerber nello strato corrente. I dati preesistenti verranno cancellati."
+msgstr ""
+"Apre (i) file Gerber nello strato corrente. I dati preesistenti verranno "
+"cancellati."
 
 #: gerbview/toolbars_gerber.cpp:64 gerbview/menubar.cpp:71
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
-msgstr "Apre (i) file Excellon nello strato corrente. I dati preesistenti verranno cancellati."
+msgstr ""
+"Apre (i) file Excellon nello strato corrente. I dati preesistenti verranno "
+"cancellati."
 
 #: gerbview/toolbars_gerber.cpp:68
 msgid "Show/hide frame reference and select paper size for printing"
@@ -12310,7 +12316,9 @@ msgstr "Apri file di &lavoro Gerber..."
 #: gerbview/menubar.cpp:77
 msgid ""
 "Open a Gerber job file, and it's associated gerber files depending on the job"
-msgstr "Apre un file di lavoro Gerber, e carica gli associati file Gerber a seconda del lavoro"
+msgstr ""
+"Apre un file di lavoro Gerber, e carica gli associati file Gerber a seconda "
+"del lavoro"
 
 #: gerbview/menubar.cpp:82
 msgid "Open &Zip Archive File..."
@@ -16411,7 +16419,6 @@ msgid "Unfill all zones"
 msgstr "Svuota tutte le zone"
 
 #: pcbnew/tools/zone_filler_tool.cpp:116
-#: pcbnew/zones_by_polygon_fill_functions.cpp:107
 msgid "Fill All Zones"
 msgstr "Riempi tutte le zone"
 
@@ -19100,12 +19107,12 @@ msgstr ""
 "Le impostazioni di larghezza pista correnti violano le regole di "
 "progettazione."
 
-#: pcbnew/router/pns_kicad_iface.cpp:805
+#: pcbnew/router/pns_kicad_iface.cpp:814
 #, c-format
 msgid "Malformed keep-out zone at (%d, %d)"
 msgstr "Zona di esclusione malformata in (%d, %d)"
 
-#: pcbnew/router/pns_kicad_iface.cpp:808
+#: pcbnew/router/pns_kicad_iface.cpp:817
 #, c-format
 msgid ""
 "%s\n"
@@ -20303,7 +20310,7 @@ msgstr "Duplica elemento"
 msgid "Duplicate Item and Increment"
 msgstr "Duplica elemento e incrementa"
 
-#: pcbnew/hotkeys.cpp:131 pcbnew/dialogs/dialog_create_array_base.h:115
+#: pcbnew/hotkeys.cpp:131 pcbnew/dialogs/dialog_create_array_base.h:114
 msgid "Create Array"
 msgstr "Crea schiera"
 
@@ -21874,7 +21881,7 @@ msgstr "Esporta file di test D-356"
 msgid "Unable to create "
 msgstr "Impossibile creare"
 
-#: pcbnew/exporters/export_vrml.cpp:843
+#: pcbnew/exporters/export_vrml.cpp:845
 msgid ""
 "Unable to calculate the board outlines; fall back to using the board "
 "boundary box."
@@ -21882,11 +21889,11 @@ msgstr ""
 "Impossibile calcolare i bordi della scheda; ripiego sull'uso il riquadro "
 "limite della scheda."
 
-#: pcbnew/exporters/export_vrml.cpp:874
+#: pcbnew/exporters/export_vrml.cpp:876
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "Esportazione VRML fallita: impossibile aggiungere fori ai contorni."
 
-#: pcbnew/exporters/export_vrml.cpp:1639 pcbnew/exporters/export_idf.cpp:605
+#: pcbnew/exporters/export_vrml.cpp:1690 pcbnew/exporters/export_idf.cpp:605
 #: pcbnew/exporters/export_idf.cpp:614 pcbnew/exporters/export_idf.cpp:622
 msgid "IDF Export Failed:\n"
 msgstr "Esportazione IDF fallita:\n"
@@ -22574,7 +22581,10 @@ msgid ""
 "When enabled and nothing is selected, drag gesture will draw a selection "
 "box, even if there are items under the cursor that could be immediately "
 "dragged."
-msgstr "Se abilitato e niente è selezionato, un trascinamento disegnerà un riquadro di selezione, anche se ci sono elementi sotto il puntatore che potrebbero essere immediatamente trascinati."
+msgstr ""
+"Se abilitato e niente è selezionato, un trascinamento disegnerà un riquadro "
+"di selezione, anche se ci sono elementi sotto il puntatore che potrebbero "
+"essere immediatamente trascinati."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:163
 msgid "&Rotation angle:"
@@ -23502,7 +23512,7 @@ msgid "2"
 msgstr "2"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
-#: pcbnew/dialogs/dialog_create_array_base.cpp:230
+#: pcbnew/dialogs/dialog_create_array_base.cpp:237
 msgid "4"
 msgstr "4"
 
@@ -26049,7 +26059,7 @@ msgstr "Distanza:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:142
 #: pcbnew/dialogs/dialog_move_exact.cpp:236
-#: pcbnew/dialogs/dialog_create_array_base.cpp:213
+#: pcbnew/dialogs/dialog_create_array_base.cpp:220
 msgid "Angle:"
 msgstr "Angolo:"
 
@@ -27453,9 +27463,9 @@ msgid "Stagger:"
 msgstr "Alternanza:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
-#: pcbnew/dialogs/dialog_create_array_base.cpp:157
 #: pcbnew/dialogs/dialog_create_array_base.cpp:160
-#: pcbnew/dialogs/dialog_create_array_base.cpp:263
+#: pcbnew/dialogs/dialog_create_array_base.cpp:165
+#: pcbnew/dialogs/dialog_create_array_base.cpp:273
 msgid "1"
 msgstr "1"
 
@@ -27471,82 +27481,82 @@ msgstr "Colonne"
 msgid "Stagger Type"
 msgstr "Tipo alternanza"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:107
+#: pcbnew/dialogs/dialog_create_array_base.cpp:110
 msgid "Horizontal, then vertical"
 msgstr "Orizzontale, poi verticale"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:107
+#: pcbnew/dialogs/dialog_create_array_base.cpp:110
 msgid "Vertical, then horizontal"
 msgstr "Verticale, poi orizzontale"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:109
+#: pcbnew/dialogs/dialog_create_array_base.cpp:112
 msgid "Pad Numbering Direction"
 msgstr "Direzione numerazione piazzole"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:113
-msgid "Reverse pad numbering on alternate rows or columns"
-msgstr "Numerazione inversa piazzole su righe o colonne alternate"
-
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
-#: pcbnew/dialogs/dialog_create_array_base.cpp:250
+msgid "Reverse numbering on alternate rows/columns"
+msgstr "Numerazione inversa su righe/colonne alternate"
+
+#: pcbnew/dialogs/dialog_create_array_base.cpp:119
+#: pcbnew/dialogs/dialog_create_array_base.cpp:260
 msgid "Use first free number"
 msgstr "Usa il primo numero libero"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:116
-#: pcbnew/dialogs/dialog_create_array_base.cpp:250
+#: pcbnew/dialogs/dialog_create_array_base.cpp:119
+#: pcbnew/dialogs/dialog_create_array_base.cpp:260
 msgid "From start value"
 msgstr "Dal valore di inizio"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:118
-#: pcbnew/dialogs/dialog_create_array_base.cpp:252
+#: pcbnew/dialogs/dialog_create_array_base.cpp:121
+#: pcbnew/dialogs/dialog_create_array_base.cpp:262
 msgid "Initial Pad Number"
 msgstr "Numero iniziale piazzola"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:122
+#: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Continuous (1, 2, 3...)"
 msgstr "Continua (1, 2, 3...)"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:122
+#: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Coordinate (A1, A2, ... B1, ...)"
 msgstr "Coordinata (A1, A2, ... B1, ...)"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:124
+#: pcbnew/dialogs/dialog_create_array_base.cpp:127
 msgid "Pad Numbering Scheme"
 msgstr "Schema numerazione piazzole"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:128
+#: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Primary axis numbering:"
 msgstr "Numerazione asse primario:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:137
+#: pcbnew/dialogs/dialog_create_array_base.cpp:140
 msgid "Secondary axis numbering:"
 msgstr "Numerazione asse secondario:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:153
+#: pcbnew/dialogs/dialog_create_array_base.cpp:156
 msgid "Pad numbering start:"
 msgstr "Avvio numerazione piazzole:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:173
+#: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Grid Array"
 msgstr "Schiere a griglia"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:183
+#: pcbnew/dialogs/dialog_create_array_base.cpp:190
 msgid "Horizontal center:"
 msgstr "Centro orizzontale:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:194
+#: pcbnew/dialogs/dialog_create_array_base.cpp:201
 msgid "Vertical center:"
 msgstr "Centro verticale:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:205
+#: pcbnew/dialogs/dialog_create_array_base.cpp:212
 msgid "Radius:"
 msgstr "Raggio:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:209
+#: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "0 mm"
 msgstr "0 mm"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:218
+#: pcbnew/dialogs/dialog_create_array_base.cpp:225
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
@@ -27554,33 +27564,33 @@ msgstr ""
 "Gli angoli positivi rappresentano la rotazione antioraria. Un angolo di 0 "
 "produrrà un cerchio completo diviso equamente in \"conteggio\" porzioni."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:226
+#: pcbnew/dialogs/dialog_create_array_base.cpp:233
 msgid "Count:"
 msgstr "Conteggio:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:231
+#: pcbnew/dialogs/dialog_create_array_base.cpp:238
 msgid "How many items in the array."
 msgstr "Quanti elementi nell'array."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:235
+#: pcbnew/dialogs/dialog_create_array_base.cpp:242
 msgid "Rotate:"
 msgstr "Ruota:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:241
+#: pcbnew/dialogs/dialog_create_array_base.cpp:248
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
 msgstr "Ruota e sposta l'elemento - la multiselezione verrà ruotata assieme."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:248
+#: pcbnew/dialogs/dialog_create_array_base.cpp:258
 msgid "Pad Numbering Options"
 msgstr "Opzioni numerazione piazzole"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:259
+#: pcbnew/dialogs/dialog_create_array_base.cpp:269
 msgid "Pad numbering start value:"
 msgstr "Valore di inizio numerazione piazzole:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:276
+#: pcbnew/dialogs/dialog_create_array_base.cpp:286
 msgid "Circular Array"
 msgstr "Schiere circolari"
 
@@ -27924,7 +27934,7 @@ msgstr "Cerca componenti e testo nella scheda corrente"
 
 #: pcbnew/help_common_strings.h:21
 msgid "Zoom to fit board on screen"
-msgstr "Zoom perfetto sullo schermo"
+msgstr "Adatta lo zoom della scheda allo schermo"
 
 #: pcbnew/help_common_strings.h:22
 msgid "Redraw screen"
