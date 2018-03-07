@@ -444,9 +444,9 @@ public:
      */
     bool GetToolToggled( int aToolId )
     {
-        return ( m_mainToolBar->GetToolToggled( aToolId ) ||
-                 m_optionsToolBar->GetToolToggled( aToolId ) ||
-                 m_drawToolBar->GetToolToggled( aToolId ) );
+        return ( ( m_mainToolBar && m_mainToolBar->GetToolToggled( aToolId ) ) ||
+                 ( m_optionsToolBar && m_optionsToolBar->GetToolToggled( aToolId ) ) ||
+                 ( m_drawToolBar && m_drawToolBar->GetToolToggled( aToolId ) ) );
     }
 
     /**
