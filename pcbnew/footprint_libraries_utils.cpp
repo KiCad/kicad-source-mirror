@@ -717,7 +717,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
     mainSizer->Prepend( nameTextCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
     wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
-    nameValidator.SetCharExcludes( MODULE::StringLibNameInvalidChars( true ) );
+    nameValidator.SetCharExcludes( MODULE::StringLibNameInvalidChars( false ) );
     nameTextCtrl->SetValidator( nameValidator );
 
     wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Footprint Name:" ),
