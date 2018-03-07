@@ -136,7 +136,7 @@ bool S3D_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
 
     if( m_Paths.empty() )
     {
-        S3D_ALIAS al;
+        SEARCH_PATH al;
         al.m_alias = "${KIPRJMOD}";
         al.m_pathvar = "${KIPRJMOD}";
         al.m_pathexp = m_curProjDir;
@@ -195,7 +195,7 @@ bool S3D_RESOLVER::createPathList( void )
     // we cannot set a sensible default so we use an empty string.
     // the user may change this later with a call to SetProjectDir()
 
-    S3D_ALIAS lpath;
+    SEARCH_PATH lpath;
     lpath.m_alias = "${KIPRJMOD}";
     lpath.m_pathvar = "${KIPRJMOD}";
     lpath.m_pathexp = m_curProjDir;
@@ -294,8 +294,8 @@ bool S3D_RESOLVER::createPathList( void )
 
 #ifdef DEBUG
     wxLogTrace( MASK_3D_RESOLVER, " * [3D model] search paths:\n" );
-    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
@@ -308,7 +308,7 @@ bool S3D_RESOLVER::createPathList( void )
 }
 
 
-bool S3D_RESOLVER::UpdatePathList( std::vector< S3D_ALIAS >& aPathList )
+bool S3D_RESOLVER::UpdatePathList( std::vector< SEARCH_PATH >& aPathList )
 {
     wxUniChar envMarker( '$' );
 
@@ -408,8 +408,8 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     // a. an aliased shortened name or
     // b. cannot be determined
 
-    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
 
     // check the path relative to the current project directory;
     // note: this is not necessarily the same as the current working
@@ -519,14 +519,14 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 }
 
 
-bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
+bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 {
     if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
         return false;
 
     wxCriticalSectionLocker lock( lock3D_resolver );
 
-    S3D_ALIAS tpath = aPath;
+    SEARCH_PATH tpath = aPath;
 
 #ifdef _WIN32
     while( tpath.m_pathvar.EndsWith( "\\" ) )
@@ -566,8 +566,8 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
     }
 
     wxString pname = path.GetPath();
-    std::list< S3D_ALIAS >::iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
@@ -639,7 +639,7 @@ bool S3D_RESOLVER::readPathList( void )
     }
 
     int lineno = 0;
-    S3D_ALIAS al;
+    SEARCH_PATH al;
     size_t idx;
     int vnum = 0;           // version number
 
@@ -715,8 +715,8 @@ bool S3D_RESOLVER::writePathList( void )
     }
 
     // skip all ${ENV_VAR} alias names
-    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
 
     while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" )
                            || sPL->m_alias.StartsWith( "$(" ) ) )
@@ -818,8 +818,8 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
 
     // check if the alias exists; if not then add it to the end of the
     // env var section of the path list
-    std::list< S3D_ALIAS >::iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
@@ -832,7 +832,7 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
         ++sPL;
     }
 
-    S3D_ALIAS lpath;
+    SEARCH_PATH lpath;
     lpath.m_alias = envar;
     lpath.m_pathvar = lpath.m_alias;
     wxFileName tmpFN( lpath.m_alias, "" );
@@ -896,8 +896,8 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
         createPathList();
 
     wxCriticalSectionLocker lock( lock3D_resolver );
-    std::list< S3D_ALIAS >::const_iterator sL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator eL = m_Paths.end();
+    std::list< SEARCH_PATH >::const_iterator sL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator eL = m_Paths.end();
     size_t idx;
 
     while( sL != eL )
@@ -960,7 +960,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
 
 
-const std::list< S3D_ALIAS >* S3D_RESOLVER::GetPaths( void )
+const std::list< SEARCH_PATH >* S3D_RESOLVER::GetPaths( void )
 {
     return &m_Paths;
 }

@@ -43,6 +43,8 @@ class wxApp;
 class wxMenu;
 class wxWindow;
 
+class FILENAME_RESOLVER;
+
 
 // inter program module calling
 #define VTBL_ENTRY      virtual
@@ -279,11 +281,8 @@ public:
      * the footprint library table and the 3D model importer.  It was added to PGM_BASE because
      * it will eventually find use for in schematic I/O design so it needs to accessible by
      * almost every KiCad application.
-     *
-     * @param aParent - a pointer the wxWindow parent of the dialog or NULL to use the top level
-     *                  window.
      */
-    VTBL_ENTRY void ConfigurePaths( wxWindow* aParent = NULL );
+    VTBL_ENTRY void ConfigurePaths(  wxWindow* aParent, FILENAME_RESOLVER* aResolver  );
 
     /**
      * Function App

@@ -27,7 +27,7 @@
 #include "3d_cache.h"
 #include "plugins/3dapi/ifsg_api.h"
 #include "3d_cache_dialogs.h"
-#include "dlg_3d_pathconfig.h"
+#include "dialog_configure_paths.h"
 #include "dlg_select_3dmodel.h"
 
 
@@ -51,16 +51,9 @@ bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
 }
 
 
-bool S3D::Configure3DPaths( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver )
+bool S3D::Configure3DPaths( wxWindow* aParent, FILENAME_RESOLVER* aResolver )
 {
-    DLG_3D_PATH_CONFIG* dp = new DLG_3D_PATH_CONFIG( aParent, aResolver );
+    DIALOG_CONFIGURE_PATHS dlg( aParent, aResolver );
 
-    if( wxID_OK == dp->ShowModal() )
-    {
-        delete dp;
-        return true;
-    }
-
-    delete dp;
-    return false;
+    return( dlg.ShowModal() == wxID_OK );
 }

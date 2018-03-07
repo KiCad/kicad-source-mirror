@@ -43,7 +43,7 @@
 
 class MODULE_3D_SETTINGS;
 class S3D_CACHE;
-class S3D_FILENAME_RESOLVER;
+class FILENAME_RESOLVER;
 class C3D_MODEL_VIEWER;
 
 class DLG_SELECT_3DMODEL : public DIALOG_SHIM
@@ -51,7 +51,7 @@ class DLG_SELECT_3DMODEL : public DIALOG_SHIM
 private:
     MODULE_3D_SETTINGS* m_model;        // data for the selected model
     S3D_CACHE* m_cache;                 // cache manager
-    S3D_FILENAME_RESOLVER*  m_resolver; // 3D filename resolver
+    FILENAME_RESOLVER*  m_resolver; // 3D filename resolver
 
     wxString& m_previousDir;
     int&      m_previousFilterIndex;

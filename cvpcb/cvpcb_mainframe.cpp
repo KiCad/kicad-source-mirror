@@ -41,6 +41,7 @@
 #include <netlist_reader.h>
 #include <bitmaps.h>
 #include <widgets/progress_reporter.h>
+#include <3d_cache/3d_cache.h>
 
 #include <cvpcb_mainframe.h>
 #include <cvpcb.h>
@@ -974,7 +975,7 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 
 void CVPCB_MAINFRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this );
+    Pgm().ConfigurePaths( this, Prj().Get3DCacheManager()->GetResolver() );
 }
 
 

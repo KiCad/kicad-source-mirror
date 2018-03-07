@@ -81,8 +81,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     }
     else
     {
-        wxFAIL_MSG( wxString::Format( "No KIWAY_HOLDER in parent chain.  Top window is a %s.",
-                    aParent->GetClassInfo()->GetClassName() ) );
+        // There are a few dialogs, such as Configure Paths, which are called
+        // from the top-level wxFrame.
         m_units = MILLIMETRES;
     }
 

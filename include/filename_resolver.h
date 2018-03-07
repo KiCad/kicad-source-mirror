@@ -22,7 +22,7 @@
  */
 
 /**
- * @file 3d_filename_resolver.h
+ * @file filename_resolver.h
  * provides an extensible class to resolve 3D model paths. Initially
  * the legacy behavior will be implemented and an incomplete path
  * would be checked against the project directory or the KISYS3DMOD
@@ -30,18 +30,17 @@
  * paths may be specified.
  */
 
-#ifndef FILENAME_RESOLVER_3D_H
-#define FILENAME_RESOLVER_3D_H
+#ifndef FILENAME_RESOLVER_H
+#define FILENAME_RESOLVER_H
 
 #include <list>
 #include <map>
 #include <vector>
 #include <wx/string.h>
-#include "str_rsort.h"
 
 class PGM_BASE;
 
-struct S3D_ALIAS
+struct SEARCH_PATH
 {
     wxString m_alias;           // alias to the base path
     wxString m_pathvar;         // base path as stored in the config file
@@ -49,11 +48,11 @@ struct S3D_ALIAS
     wxString m_description;     // description of the aliased path
 };
 
-class S3D_FILENAME_RESOLVER
+class FILENAME_RESOLVER
 {
 private:
     wxString m_ConfigDir;           // 3D configuration directory
-    std::list< S3D_ALIAS > m_Paths; // list of base paths to search from
+    std::list< SEARCH_PATH > m_Paths; // list of base paths to search from
     int m_errflags;
     PGM_BASE* m_pgm;
     wxString m_curProjDir;
@@ -76,7 +75,7 @@ private:
      * @param aPath is the alias set to be checked and added
      * @return true if aPath is valid
      */
-    bool addPath( const S3D_ALIAS& aPath );
+    bool addPath( const SEARCH_PATH& aPath );
 
     /**
      * Function readPathList
@@ -105,7 +104,7 @@ private:
     void checkEnvVarPath( const wxString& aPath );
 
 public:
-    S3D_FILENAME_RESOLVER();
+    FILENAME_RESOLVER();
 
     /**
      * Function Set3DConfigDir
@@ -143,7 +142,7 @@ public:
      * clears the current path list and substitutes the given path
      * list, updating the path configuration file on success.
      */
-    bool UpdatePathList( std::vector< S3D_ALIAS >& aPathList );
+    bool UpdatePathList( std::vector< SEARCH_PATH >& aPathList );
 
     /**
      * Function ResolvePath
@@ -175,7 +174,7 @@ public:
      *
      * @return pointer to the internal path list
      */
-    const std::list< S3D_ALIAS >* GetPaths( void );
+    const std::list< SEARCH_PATH >* GetPaths( void );
 
     /**
      * Function SplitAlias
@@ -201,4 +200,4 @@ public:
     bool GetKicadPaths( std::list< wxString >& paths );
 };
 
-#endif  // FILENAME_RESOLVER_3D_H
+#endif  // FILENAME_RESOLVER_H

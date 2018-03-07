@@ -263,7 +263,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
 void SCH_BASE_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this );
+    Pgm().ConfigurePaths( this, nullptr );
 }
 
 

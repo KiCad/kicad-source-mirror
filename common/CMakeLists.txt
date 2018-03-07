@@ -153,9 +153,9 @@ set( COMMON_ABOUT_DLG_SRCS
     )
 
 set( COMMON_DLG_SRCS
+    dialogs/dialog_configure_paths.cpp
+    dialogs/dialog_configure_paths_base.cpp
     dialogs/dialog_display_info_HTML_base.cpp
-    dialogs/dialog_env_var_config.cpp
-    dialogs/dialog_env_var_config_base.cpp
     dialogs/dialog_exit_base.cpp
     dialogs/dialog_file_dir_picker.cpp
     dialogs/dialog_hotkeys_editor.cpp
@@ -261,6 +261,7 @@ set( COMMON_SRCS
     env_paths.cpp
     exceptions.cpp
     executable_names.cpp
+    filename_resolver.cpp
     filter_reader.cpp
     footprint_filter.cpp
     footprint_info.cpp

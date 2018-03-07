@@ -907,7 +907,7 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this );
+    Pgm().ConfigurePaths( this, Prj().Get3DCacheManager()->GetResolver() );
 }
 
 

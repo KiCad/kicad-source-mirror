@@ -47,23 +47,23 @@
 #define MAX_ROTATION       180.0
 #define MAX_OFFSET         1000.0
 
-#define SCALE_INCREMENT_FINE    0.02
-#define SCALE_INCREMENT     0.1
+#define SCALE_INCREMENT_FINE       0.02
+#define SCALE_INCREMENT            0.1
 
 #define ROTATION_INCREMENT 5             // in degrees, for spin button command
 #define ROTATION_INCREMENT_WHEEL 15      // in degrees, for mouse wheel command
 #define ROTATION_INCREMENT_WHEEL_FINE 1  // in degrees, for mouse wheel command
 
-#define OFFSET_INCREMENT_MM   0.5
-#define OFFSET_INCREMENT_MM_FINE 0.1
+#define OFFSET_INCREMENT_MM        0.5
+#define OFFSET_INCREMENT_MM_FINE   0.1
 
-#define OFFSET_INCREMENT_MIL   25.0
-#define OFFSET_INCREMENT_MIL_FINE   5.0
+#define OFFSET_INCREMENT_MIL       25.0
+#define OFFSET_INCREMENT_MIL_FINE  5.0
 
 
 // Declared classes to create pointers
 class S3D_CACHE;
-class S3D_FILENAME_RESOLVER;
+class FILENAME_RESOLVER;
 class BOARD;
 class CINFO3D_VISU;
 class MODULE;
@@ -80,31 +80,31 @@ public:
     ~PANEL_PREV_3D();
 
 private:
-    wxString                currentModelFile;   ///< Used to check if the model file was changed
-    S3D_FILENAME_RESOLVER   *m_resolver;        ///< Used to get the full path name
+    wxString            currentModelFile;   ///< Used to check if the model file was changed
+    FILENAME_RESOLVER   *m_resolver;        ///< Used to get the full path name
 
     /// The 3D canvas
-    EDA_3D_CANVAS   *m_previewPane;
+    EDA_3D_CANVAS       *m_previewPane;
 
     /// A dummy board used to store the copy moduled
-    BOARD           *m_dummyBoard;
+    BOARD               *m_dummyBoard;
 
     /// The settings that will be used for this 3D viewer canvas
-    CINFO3D_VISU    *m_settings3Dviewer;
+    CINFO3D_VISU        *m_settings3Dviewer;
 
     /// A pointer to a new copy of the original module
-    MODULE          *m_copyModule;
+    MODULE              *m_copyModule;
 
     /// A pointer to the parent MODULE_3D_SETTINGS list that we will use to copy to the preview module
     std::vector<MODULE_3D_SETTINGS> *m_parentInfoList;
 
     /// The current selected index of the MODULE_3D_SETTINGS list
-    int             m_currentSelectedIdx;
+    int                 m_currentSelectedIdx;
 
     /// Current MODULE_3D_SETTINGS that is being edited
-    MODULE_3D_SETTINGS        m_modelInfo;
+    MODULE_3D_SETTINGS  m_modelInfo;
 
-    EDA_UNITS_T     m_userUnits;
+    EDA_UNITS_T         m_userUnits;
 
     // Methods of the class
 private:

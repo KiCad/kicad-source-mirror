@@ -39,7 +39,7 @@
 #include "project.h"
 #include "kiway.h"
 #include "3d_cache/3d_cache.h"
-#include "3d_cache/3d_filename_resolver.h"
+#include "filename_resolver.h"
 
 #ifndef PCBNEW
 #define PCBNEW                  // needed to define the right value of Millimeter2iu(x)
@@ -49,7 +49,7 @@
 // assumed default graphical line thickness: == 0.1mm
 #define LINE_WIDTH (Millimeter2iu( 0.1 ))
 
-static S3D_FILENAME_RESOLVER* resolver;
+static FILENAME_RESOLVER* resolver;
 
 /**
  * Function idf_export_outline

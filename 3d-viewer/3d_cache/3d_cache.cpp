@@ -43,7 +43,7 @@
 #include "3d_cache.h"
 #include "3d_info.h"
 #include "sg/scenegraph.h"
-#include "3d_filename_resolver.h"
+#include "filename_resolver.h"
 #include "3d_plugin_manager.h"
 #include "plugins/3dapi/ifsg_api.h"
 
@@ -180,7 +180,7 @@ const wxString S3D_CACHE_ENTRY::GetCacheBaseName( void )
 S3D_CACHE::S3D_CACHE()
 {
     m_DirtyCache = false;
-    m_FNResolver = new S3D_FILENAME_RESOLVER;
+    m_FNResolver = new FILENAME_RESOLVER;
     m_Plugins = new S3D_PLUGIN_MANAGER;
 
     return;
@@ -217,7 +217,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 
     // check cache if file is already loaded
     wxCriticalSectionLocker lock( lock3D_cache );
-    std::map< wxString, S3D_CACHE_ENTRY*, S3D::rsort_wxString >::iterator mi;
+    std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString >::iterator mi;
     mi = m_CacheMap.find( full3Dpath );
 
     if( mi != m_CacheMap.end() )
@@ -736,7 +736,7 @@ wxString S3D_CACHE::GetProjectDir( void )
 }
 
 
-S3D_FILENAME_RESOLVER* S3D_CACHE::GetResolver( void )
+FILENAME_RESOLVER* S3D_CACHE::GetResolver( void )
 {
     return m_FNResolver;
 }
@@ -818,7 +818,7 @@ wxString S3D_CACHE::GetModelHash( const wxString& aModelFileName )
         return wxEmptyString;
 
     // check cache if file is already loaded
-    std::map< wxString, S3D_CACHE_ENTRY*, S3D::rsort_wxString >::iterator mi;
+    std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString >::iterator mi;
     mi = m_CacheMap.find( full3Dpath );
 
     if( mi != m_CacheMap.end() )

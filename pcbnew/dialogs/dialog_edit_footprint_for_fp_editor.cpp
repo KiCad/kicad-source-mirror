@@ -53,11 +53,11 @@
 #include <footprint_edit_frame.h>
 #include <dialog_edit_footprint_for_fp_editor.h>
 #include <wildcards_and_files_ext.h>
+#include "filename_resolver.h"
 #include <pgm_base.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include "3d_cache/3d_cache.h"
-#include "3d_cache/3d_filename_resolver.h"
 
 #include <dialog_edit_footprint_text.h>
 
@@ -157,7 +157,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::initModeditProperties()
     wxString origPath;
     wxString alias;
     wxString shortPath;
-    S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+    FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
     while( sM != eM )
     {
@@ -371,7 +371,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::Edit3DShapeFileName()
     WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filepath:" ), _( "Edit 3D Shape Name" ), filename );
 
     bool hasAlias;
-    S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+    FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -449,7 +449,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::BrowseAndAdd3DShapeFile()
     wxString origPath = model.m_Filename;
     wxString alias;
     wxString shortPath;
-    S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+    FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
     if( res && res->SplitAlias( origPath, alias, shortPath ) )
     {

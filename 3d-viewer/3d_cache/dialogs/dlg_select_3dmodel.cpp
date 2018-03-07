@@ -240,9 +240,9 @@ void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
     if( NULL == m_FileTree || NULL == m_resolver || NULL == dirChoices )
         return;
 
-    std::list< S3D_ALIAS > const* md = m_resolver->GetPaths();
-    std::list< S3D_ALIAS >::const_iterator sL = md->begin();
-    std::list< S3D_ALIAS >::const_iterator eL = md->end();
+    std::list< SEARCH_PATH > const* md = m_resolver->GetPaths();
+    std::list< SEARCH_PATH >::const_iterator sL = md->begin();
+    std::list< SEARCH_PATH >::const_iterator eL = md->end();
     std::set< wxString > cl;
     wxString prjDir;
 

@@ -189,4 +189,52 @@ bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
 extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
 #endif
 
+/**
+ * A helper for sorting strings from the rear.  Useful for things like 3d model names
+ * where they tend to be largely repititous at the front.
+ */
+struct rsort_wxString
+{
+    bool operator() (const wxString& strA, const wxString& strB ) const
+    {
+        wxString::const_reverse_iterator sA = strA.rbegin();
+        wxString::const_reverse_iterator eA = strA.rend();
+
+        wxString::const_reverse_iterator sB = strB.rbegin();
+        wxString::const_reverse_iterator eB = strB.rend();
+
+        if( strA.empty() )
+        {
+            if( strB.empty() )
+                return false;
+
+            // note: this rule implies that a null string is first in the sort order
+            return true;
+        }
+
+        if( strB.empty() )
+            return false;
+
+        while( sA != eA && sB != eB )
+        {
+            if( (*sA) == (*sB) )
+            {
+                ++sA;
+                ++sB;
+                continue;
+            }
+
+            if( (*sA) < (*sB) )
+                return true;
+            else
+                return false;
+        }
+
+        if( sB == eB )
+            return false;
+
+        return true;
+    }
+};
+
 #endif  // KICAD_STRING_H_

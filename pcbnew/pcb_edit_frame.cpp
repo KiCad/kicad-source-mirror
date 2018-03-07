@@ -1216,7 +1216,7 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 
 void PCB_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this );
+    Pgm().ConfigurePaths( this, Prj().Get3DCacheManager()->GetResolver() );
 }
 
 

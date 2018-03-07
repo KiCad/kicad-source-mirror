@@ -27,14 +27,14 @@
 #include <wx/window.h>
 
 class S3D_CACHE;
-class S3D_FILENAME_RESOLVER;
+class FILENAME_RESOLVER;
 
 namespace S3D
 {
     bool Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
         wxString& prevModelSelectDir, int& prevModelWildcard, MODULE_3D_SETTINGS* aModel );
 
-    bool Configure3DPaths( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );
+    bool Configure3DPaths( wxWindow* aParent, FILENAME_RESOLVER* aResolver );
 }
 
 #endif  // CACHE_DIALOGS_3D_H

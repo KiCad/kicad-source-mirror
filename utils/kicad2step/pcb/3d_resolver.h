@@ -91,7 +91,7 @@ namespace S3D
 
 class KICADPCB;
 
-struct S3D_ALIAS
+struct SEARCH_PATH
 {
     wxString m_alias;           // alias to the base path
     wxString m_pathvar;         // base path as stored in the config file
@@ -103,7 +103,7 @@ class S3D_RESOLVER
 {
 private:
     wxString m_ConfigDir;           // 3D configuration directory
-    std::list< S3D_ALIAS > m_Paths; // list of base paths to search from
+    std::list< SEARCH_PATH > m_Paths; // list of base paths to search from
     // mapping of (short) file names to resolved names
     std::map< wxString, wxString, S3D::rsort_wxString > m_NameMap;
     int m_errflags;
@@ -129,7 +129,7 @@ private:
      * @param aPath is the alias set to be checked and added
      * @return true if aPath is valid
      */
-    bool addPath( const S3D_ALIAS& aPath );
+    bool addPath( const SEARCH_PATH& aPath );
 
     /**
      * Function readPathList
@@ -189,7 +189,7 @@ public:
      * clears the current path list and substitutes the given path
      * list, updating the path configuration file on success.
      */
-    bool UpdatePathList( std::vector< S3D_ALIAS >& aPathList );
+    bool UpdatePathList( std::vector< SEARCH_PATH >& aPathList );
 
     /**
      * Function ResolvePath
@@ -221,7 +221,7 @@ public:
      *
      * @return pointer to the internal path list
      */
-    const std::list< S3D_ALIAS >* GetPaths( void );
+    const std::list< SEARCH_PATH >* GetPaths( void );
 
     /**
      * Function SplitAlias
