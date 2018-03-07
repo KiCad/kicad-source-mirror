@@ -505,17 +505,25 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
     if( m_Shape == S_CIRCLE || m_Shape == S_ARC )
     {
         // this is an ugly hack, but I don't want to change the file format now that we are in feature freeze.
-        // the circle to segment count parameter is essentially useless for larger circle/arc shapes as it doesn't provide
-        // sufficient approximation accuracy. Here we compute the necessary number of segments based on
-        // percentage accuracy required. This is currently mapped to the CircleToSegmentCount parameter: low value (16)
-        // means 1% accuracy, high - 0.33% acciracy.
+        // the circle to segment count parameter is essentially useless for larger circle/arc shapes as
+        // it doesn't provide sufficient approximation accuracy.
+        // Here we compute the necessary number of segments based on error between circle and segments
+        // The max error is the distance between the middle of a segment, and the circle
+        //
+        // Warning: too small values can create very long calculation time in zone filling
+        double error_max = Millimeter2iu( 0.05 );
+        // error relative to the radius value
+        double rel_error = error_max / GetRadius();
+        // best arc increment
+        double step = 180 / M_PI * acos( 1.0 - rel_error );
+        // the best seg count for a circle
+        int segCount = KiROUND( 360.0 / step );
 
-        double accuracy = aCircleToSegmentsCount == 16 ? 0.01 : 0.0033;
-        double r = GetRadius();
-        double step = 180.0 / M_PI * acos( r * ( 1.0 - accuracy ) / r );
-
-        aCircleToSegmentsCount = (int) ceil( 360.0 / step );
-        aCorrectionFactor      = 1.0 / cos( M_PI / (aCircleToSegmentsCount * 2) );
+        if( segCount > aCircleToSegmentsCount )
+        {
+            aCircleToSegmentsCount = segCount;
+            aCorrectionFactor      = 1.0 / cos( M_PI / (aCircleToSegmentsCount * 2) );
+        }
     }
 
     switch( m_Shape )
