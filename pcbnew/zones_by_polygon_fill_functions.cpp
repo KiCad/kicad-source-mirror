@@ -36,6 +36,9 @@
 #include <pcb_edit_frame.h>
 #include <macros.h>
 
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+
 #include <class_board.h>
 #include <class_track.h>
 #include <class_zone.h>
@@ -90,24 +93,11 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, timestamp_t aTimestamp
     }
 }
 
-int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow )
+
+int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow* aActiveWindow )
 {
-    wxBusyCursor dummy;
-
-    std::vector<ZONE_CONTAINER*> toFill;
-
-    for( auto zone : GetBoard()->Zones() )
-    {
-        toFill.push_back(zone);
-    }
-
-    ZONE_FILLER filler( GetBoard() );
-
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-        new WX_PROGRESS_REPORTER( aActiveWindow, _( "Fill All Zones" ), 3 ) );
-
-    filler.SetProgressReporter( progressReporter.get() );
-    filler.Fill( toFill );
-
+    auto toolMgr = GetToolManager();
+    wxCHECK( toolMgr, 1 );
+    toolMgr->RunAction( PCB_ACTIONS::zoneFillAll, true );
     return 0;
 }
