@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-07 20:44+0100\n"
-"PO-Revision-Date: 2018-03-07 20:46+0100\n"
+"PO-Revision-Date: 2018-03-07 20:51+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4565,7 +4565,7 @@ msgstr "Cancella"
 
 #: eeschema/onrightclick.cpp:400 eeschema/hotkeys.cpp:210
 msgid "Autoplace Fields"
-msgstr "Campi autopiazzanti"
+msgstr "Autopiazza campi"
 
 #: eeschema/onrightclick.cpp:404
 msgid "Open Documentation"
