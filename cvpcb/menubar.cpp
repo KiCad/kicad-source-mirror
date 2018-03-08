@@ -124,7 +124,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // About CvPcb
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Kicad" ),
+                 _( "&About KiCad" ),
                  _( "About KiCad" ),
                  KiBitmap( about_xpm ) );
 

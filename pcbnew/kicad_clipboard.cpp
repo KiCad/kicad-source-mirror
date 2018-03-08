@@ -298,7 +298,7 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName,
     if( item->Type() != PCB_T )
     {
         // The parser loaded something that was valid, but wasn't a board.
-        THROW_PARSE_ERROR( _( "Clipboard content is not Kicad compatible" ),
+        THROW_PARSE_ERROR( _( "Clipboard content is not KiCad compatible" ),
                 m_parser->CurSource(), m_parser->CurLine(),
                 m_parser->CurLineNumber(), m_parser->CurOffset() );
     }

@@ -288,7 +288,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // About Kicad
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Kicad" ), _( "About KiCad" ),
+                 _( "&About KiCad" ), _( "About KiCad" ),
                  KiBitmap( about_xpm ) );
 
     // Append menus to the menubar

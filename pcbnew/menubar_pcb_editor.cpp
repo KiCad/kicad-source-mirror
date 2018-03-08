@@ -868,7 +868,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                      KiBitmap( add_board_xpm ) );
 
         AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
-                _( "Import Non-Kicad Board File..." ),
+                _( "Import Non-KiCad Board File..." ),
                 _( "Import board file from other applications" ),
                 KiBitmap( import_brd_file_xpm ) );
     }
