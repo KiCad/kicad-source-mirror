@@ -601,7 +601,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
 
         if( nc == 0 )
         {
-            msg.Printf( _( "Copper zone (net name %s): net has no pads connected." ),
+            msg.Printf( _( "Copper zone (net name \"%s\"): net has no pads connected." ),
                         GetChars( zone->GetNet()->GetNetname() ) );
             m_reporter->Report( msg, REPORTER::RPT_WARNING );
             ++m_warningCount;
