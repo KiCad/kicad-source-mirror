@@ -331,7 +331,7 @@ to crash.  You must downgrade to version 1.57 by running the command:
     pacman -U /var/cache/pacman/pkg/mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz
 
 If the file mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz is no longer in your pacman cache,
-you will have to down load it from the [MSYS2 64-bit SourceForge repo][].  You should also
+you will have to download it from the [MSYS2 64-bit SourceForge repo][].  You should also
 configure pacman to prevent upgrading the 64-bit Boost package by adding:
 
     IgnorePkg = mingw-w64-x86_64-boost
@@ -470,9 +470,9 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [Cairo]: http://cairographics.org/
 [Python]: https://www.python.org/
 [wxPython]: http://wxpython.org/
-[MSYS2]: http://msys2.github.io/
-[MSYS2 32-bit Installer]: http://repo.msys2.org/distrib/i686/msys2-i686-20150916.exe
-[MSYS2 64-bit Installer]: http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20150916.exe
+[MSYS2]: http://www.msys2.org/
+[MSYS2 32-bit Installer]: http://repo.msys2.org/distrib/i686/msys2-i686-20161025.exe
+[MSYS2 64-bit Installer]: http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20161025.exe
 [PKGBUILD]: https://github.com/Alexpux/MINGW-packages/blob/master/mingw-w64-kicad-git/PKGBUILD
 [macOS bundle build scripts]:http://bazaar.launchpad.net/~adamwolf/+junk/kicad-mac-packaging/files
 [KiCad fork of wxWidgets]:https://github.com/KiCad/wxWidgets
