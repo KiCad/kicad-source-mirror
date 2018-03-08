@@ -537,6 +537,7 @@ bool EXCELLON_IMAGE::readToolInformation( char*& aText )
     return true;
 }
 
+
 bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 {
     D_CODE*  tool;
@@ -548,9 +549,9 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
         {
             case 'X':
             case 'Y':
+                // Decode the coordinate format
                 if( !m_format_known )
                 {
-                    // Scan the first entry to decode format
                     int nbdigits = 0;
                     int integer = m_GerbMetric ? fmtIntegerMM : fmtIntegerInch;
                     int mantissa;
@@ -558,7 +559,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 
                     while( IsNumber( *read ) )
                     {
-                        if( (*read >= '0') && (*read <='9') )
+                        if( ( *read >= '0' ) && ( *read <='9' ) )
                             nbdigits++;
 
                         read++;
@@ -574,10 +575,12 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 
                 ReadXYCoord( text );
                 break;
+
             case 'G':  // G85 is found here for oval holes
                 m_PreviousPos = m_CurrentPos;
                 Execute_EXCELLON_G_Command( text );
                 break;
+
             case 0:     // E.O.L: execute command
                 tool = GetDCODE( m_Current_Tool );
 
