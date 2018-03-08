@@ -509,7 +509,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
                  _( "Get &Involved" ),
-                 _( "Contribute to KiCad (open web browser)" ),
+                 _( "Contribute to KiCad (opens a web browser)" ),
                  KiBitmap( info_xpm ) );
 
     // About Pcbnew
