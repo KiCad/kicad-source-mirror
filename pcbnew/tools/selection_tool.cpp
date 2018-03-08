@@ -837,7 +837,10 @@ void connectedTrackFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
 
 int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 {
-    if( !selectCursor( true, connectedTrackFilter ) )
+    if( !m_selection.HasType( PCB_TRACE_T ) && !m_selection.HasType( PCB_VIA_T ) )
+        selectCursor( true, connectedTrackFilter );
+
+    if( !m_selection.HasType( PCB_TRACE_T ) && !m_selection.HasType( PCB_VIA_T ) )
         return 0;
 
     return expandSelectedConnection( aEvent );
@@ -887,11 +890,19 @@ void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 
 int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 {
-    if( !selectCursor( true, connectedItemFilter ) )
-        return 0;
+    bool haveCopper = false;
+
+    for( auto item : m_selection.GetItems() )
+    {
+        if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            haveCopper = true;;
+    }
+
+    if( !haveCopper )
+        selectCursor( true, connectedItemFilter );
 
     // copy the selection, since we're going to iterate and modify
-    auto selection = m_selection.GetItems();
+    auto selection  = m_selection.GetItems();
 
     for( auto item : selection )
     {
