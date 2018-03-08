@@ -397,18 +397,22 @@ VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText ) const
 }
 
 
-VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D aGlyphSize,
-                                        double aGlyphThickness,
-                                        double* aTopLimit, double* aBottomLimit ) const
+VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECTOR2D& aGlyphSize,
+                                        double aGlyphThickness ) const
 {
     VECTOR2D string_bbox;
-    double ymax = 0.0;
-    double ymin = 0.0;
+    int line_count = 1;
+    double maxX = 0.0, curX = 0.0;
 
     for( UTF8::uni_iter it = aText.ubegin(), end = aText.uend(); it < end; ++it )
     {
-        wxASSERT_MSG( *it != '\n',
-                      wxT( "This function is intended to work with single line strings" ) );
+        if( *it == '\n' )
+        {
+            curX = 0.0;
+            maxX = std::max( maxX, curX );
+            ++line_count;
+            continue;
+        }
 
         // If it is double tilda, then it is displayed as a single tilda
         // If it is single tilda, then it is toggling overbar, so we need to skip it
@@ -425,36 +429,17 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D a
             dd = '?' - ' ';
 
         const BOX2D& box = m_glyphBoundingBoxes[dd];
-
-        string_bbox.x += box.GetEnd().x;
-
-        // Calculate Y min and Y max
-        if( aTopLimit )
-        {
-            ymax = std::max( ymax, box.GetY() );
-            ymax = std::max( ymax, box.GetEnd().y );
-        }
-
-        if( aBottomLimit )
-        {
-            ymin = std::min( ymin, box.GetY() );
-            ymin = std::min( ymin, box.GetEnd().y );
-        }
+        curX += box.GetEnd().x;
     }
 
+    string_bbox.x = std::max( maxX, curX );
     string_bbox.x *= aGlyphSize.x;
     string_bbox.x += aGlyphThickness;
-    string_bbox.y = aGlyphSize.y + aGlyphThickness;
+    string_bbox.y = line_count * GetInterline( aGlyphSize.y, aGlyphThickness );
 
     // For italic correction, take in account italic tilt
     if( m_gal->IsFontItalic() )
         string_bbox.x += string_bbox.y * STROKE_FONT::ITALIC_TILT;
-
-    if( aTopLimit )
-        *aTopLimit = ymax * aGlyphSize.y;
-
-    if( aBottomLimit )
-        *aBottomLimit = ymin * aGlyphSize.y;
 
     return string_bbox;
 }
