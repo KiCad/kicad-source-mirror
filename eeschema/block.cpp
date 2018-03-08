@@ -261,7 +261,9 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
-                block->SetFlags( IS_MOVED );
+                if( block->GetCommand() != BLOCK_DUPLICATE )
+                    block->SetFlags( IS_MOVED );
+
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
