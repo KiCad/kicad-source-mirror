@@ -195,9 +195,9 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
         }
     }
 
-    Zoom_Automatique( false );
-
     SortLayersByX2Attributes();
+
+    SetActiveLayer( 0 );
 
     if( !msg.IsEmpty() )
     {

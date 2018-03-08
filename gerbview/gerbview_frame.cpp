@@ -206,7 +206,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     SetActiveLayer( 0, true );
     Zoom_Automatique( false );           // Gives a default zoom value
-    UpdateTitleAndInfo();
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = loadCanvasTypeSetting();
 
@@ -333,7 +332,7 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         int layer = 0;
 
-        for( unsigned i=0;  i<limit;  ++i, ++layer )
+        for( unsigned i = 0; i < limit; ++i, ++layer )
         {
             SetActiveLayer( layer );
 
@@ -352,8 +351,6 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     Zoom_Automatique( true );        // Zoom fit in frame
-
-    UpdateTitleAndInfo();
 
     return true;
 }
@@ -576,7 +573,6 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 void GERBVIEW_FRAME::syncLayerWidget()
 {
     m_LayersManager->SelectLayer( GetActiveLayer() );
-    UpdateTitleAndInfo();
 }
 
 
@@ -599,8 +595,6 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
         m_DCodeSelector->SetDCodeSelection( dcodeSelected );
         m_DCodeSelector->Enable( gerber != NULL );
     }
-
-    UpdateTitleAndInfo();
 }
 
 
@@ -977,6 +971,8 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 
     if( doLayerWidgetUpdate )
         m_LayersManager->SelectLayer( GetActiveLayer() );
+
+    UpdateTitleAndInfo();
 
     if( IsGalCanvasActive() )
     {
