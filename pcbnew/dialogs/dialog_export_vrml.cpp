@@ -174,7 +174,7 @@ bool DIALOG_EXPORT_3DFILE::TransferDataFromWindow()
 
     if( fn.Exists() )
     {
-        if( wxMessageBox( _( "Are you sure you want to overwrite the exiting file(s)?" ),
+        if( wxMessageBox( _( "Are you sure you want to overwrite the existing file?" ),
                           _( "Warning" ), wxYES_NO | wxCENTER | wxICON_QUESTION, this ) == wxNO )
             return false;
     }

@@ -166,7 +166,7 @@ bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
 
     if( fn.FileExists() )
     {
-        if( wxMessageBox( _( "Are you sure you want to overwrite the exiting file?" ),
+        if( wxMessageBox( _( "Are you sure you want to overwrite the existing file?" ),
                           _( "Warning" ), wxYES_NO | wxCENTER | wxICON_QUESTION, this ) == wxNO )
             return false;
     }
