@@ -366,17 +366,17 @@ void preparePlaceMenu( wxMenu* aParentMenu )
     text = AddHotkeyName( _( "&Footprint" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_ADD_MODULE );
     AddMenuItem( aParentMenu, ID_PCB_MODULE_BUTT, text,
-                 _( "Add footprints" ), KiBitmap( module_xpm ) );
+                 _( "Add footprint" ), KiBitmap( module_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_DRAW_VIA_BUTT,
                  _( "&Via" ),
-                 _( "Add vias" ), KiBitmap( add_via_xpm ) );
+                 _( "Add via" ), KiBitmap( add_via_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ZONES_BUTT,
-                 _( "&Zone" ), _( "Add filled zones" ), KiBitmap( add_zone_xpm ) );
+                 _( "&Zone" ), _( "Add filled zone" ), KiBitmap( add_zone_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_KEEPOUT_AREA_BUTT,
-                 _( "&Keepout Area" ), _( "Add keepout areas" ), KiBitmap( add_keepout_area_xpm ) );
+                 _( "&Keepout Area" ), _( "Add keepout area" ), KiBitmap( add_keepout_area_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ADD_TEXT_BUTT,
                  _( "Te&xt" ), _( "Add text on copper layers or graphic text" ),
@@ -390,13 +390,13 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                  KiBitmap( add_circle_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ADD_LINE_BUTT,
-                 _( "&Lines" ),
-                 _( "Add graphic lines" ),
+                 _( "&Line" ),
+                 _( "Add graphic line" ),
                  KiBitmap( add_graphical_segments_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ADD_POLYGON_BUTT,
-                  _( "&Polygons" ),
-                  _( "Add graphic polygons" ),
+                  _( "&Polygon" ),
+                  _( "Add graphic polygon" ),
                   KiBitmap( add_graphical_polygon_xpm ) );
 
     aParentMenu->AppendSeparator();

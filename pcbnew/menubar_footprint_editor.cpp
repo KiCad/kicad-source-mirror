@@ -377,7 +377,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Line
     AddMenuItem( placeMenu, ID_MODEDIT_LINE_TOOL,
-                 _( "&Lines" ), _( "Add graphic line" ),
+                 _( "&Line" ), _( "Add graphic line" ),
                  KiBitmap( add_graphical_segments_xpm ) );
 
     // Polygon
