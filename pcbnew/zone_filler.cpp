@@ -44,6 +44,7 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_file_io.h>
 #include <geometry/convex_hull.h>
+#include <geometry/geometry_utils.h>
 
 #include "zone_filler.h"
 
@@ -299,10 +300,10 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx.
-     * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
-     * correctionFactor is 1 /cos( PI/s_CircleToSegmentsCount  )
+     * For a circle the min radius is radius * cos( 2PI / segsPerCircle / 2)
+     * correctionFactor is 1 /cos( PI/segsPerCircle  )
      */
-    correctionFactor = 1.0 / cos( M_PI / (double) segsPerCircle );
+    correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
 
     aFeatures.RemoveAllContours();
 
@@ -683,11 +684,8 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
         segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
 
     /* calculates the coeff to compensate radius reduction of holes clearance
-     * due to the segment approx.
-     * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
-     * s_Correction is 1 /cos( PI/s_CircleToSegmentsCount  )
      */
-    correctionFactor = 1.0 / cos( M_PI / (double) segsPerCircle );
+    correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
 
     if( s_DumpZonesWhenFilling )
         dumper->BeginGroup( "clipper-zone" );

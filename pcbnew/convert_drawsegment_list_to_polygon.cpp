@@ -35,6 +35,7 @@
 #include <class_drawsegment.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/geometry_utils.h>
 
 
 /**
@@ -167,15 +168,10 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
 }
 
 
+// Error max when converting a circle or arc to segments.
+// Avoid too small values that create a very long calculation time
+// in zone fillings
 #define ARC_ACCURACY ( 0.05 * IU_PER_MM )
-
-int calcArcSteps( int aRadius, int aSweptAngle )
-{
-    int circleSteps = M_PI / acos( ( aRadius - ARC_ACCURACY ) / aRadius );
-    int arcSteps    = circleSteps * fabs( aSweptAngle ) / 3600.0;
-
-    return std::max( arcSteps, 1 );
-}
 
 
 /**
@@ -238,7 +234,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                 wxPoint  pstart = graphic->GetArcStart();
                 wxPoint  center = graphic->GetCenter();
                 double   angle  = -graphic->GetAngle();
-                int      steps  = calcArcSteps( graphic->GetRadius(), angle );
+                int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_ACCURACY,
+                                                  (double)angle / 10.0 );
                 wxPoint  pt;
 
                 for( int step = 1; step<=steps; ++step )
@@ -296,9 +293,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     // Output the Edge.Cuts perimeter as circle or polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
-        TransformCircleToPolygon( aPolygons, graphic->GetCenter(),
-                                  graphic->GetRadius(),
-                                  calcArcSteps( graphic->GetRadius(), 3600 ) );
+        int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_ACCURACY, 360.0 );
+        TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), steps );
     }
     else
     {
@@ -344,7 +340,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                     wxPoint pend    = graphic->GetArcEnd();
                     wxPoint pcenter = graphic->GetCenter();
                     double  angle   = -graphic->GetAngle();
-                    int     steps   = calcArcSteps( graphic->GetRadius(), angle );
+                    int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_ACCURACY,
+                                                      (double)angle / 10.0 );
 
                     if( !close_enough( prevPt, pstart, prox ) )
                     {
@@ -436,7 +433,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
             double   angle   = 3600.0;
             wxPoint  start = center;
             int      radius  = graphic->GetRadius();
-            int      steps  = calcArcSteps( radius, angle );
+            int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_ACCURACY, 360.0 );
             wxPoint  nextPt;
 
             start.x += radius;
@@ -494,7 +491,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                         wxPoint pend    = graphic->GetArcEnd();
                         wxPoint pcenter = graphic->GetCenter();
                         double  angle   = -graphic->GetAngle();
-                        int     steps   = calcArcSteps( graphic->GetRadius(), angle );
+                        int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_ACCURACY,
+                                                         (double)angle / 10.0 );
 
                         if( !close_enough( prevPt, pstart, prox ) )
                         {

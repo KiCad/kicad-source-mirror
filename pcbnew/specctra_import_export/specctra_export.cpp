@@ -56,6 +56,7 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/geometry_utils.h>
 
 #include "specctra.h"
 
@@ -765,11 +766,13 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
                 double radius = GetLineLength( graphic->GetStart(), graphic->GetEnd() );
 
-                const int SEG_PER_CIRCLE = 36;         // seg count to approximate circle by line segments
+                // seg count to approximate circle by line segments
+                int err_max = Millimeter2iu( 0.05 );
+                int seg_per_circle = GetArcToSegmentCount( radius, err_max, 360.0 );
 
-                for( int ii = 0; ii < SEG_PER_CIRCLE; ++ii )
+                for( int ii = 0; ii < seg_per_circle; ++ii )
                 {
-                    double radians =  2*M_PI / SEG_PER_CIRCLE * ii;
+                    double radians =  2*M_PI / seg_per_circle * ii;
                     wxPoint point( KiROUND( radius * cos( radians ) ),
                                    KiROUND( radius * sin( radians ) ) );
 

@@ -350,6 +350,7 @@ set( COMMON_SRCS
     tool/zoom_tool.cpp
 
     geometry/convex_hull.cpp
+    geometry/geometry_utils.cpp
     geometry/seg.cpp
     geometry/shape.cpp
     geometry/shape_collisions.cpp

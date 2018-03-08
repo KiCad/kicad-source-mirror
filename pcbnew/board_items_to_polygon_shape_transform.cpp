@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/geometry_utils.h>
 
 // These variables are parameters used in addTextSegmToPoly.
 // But addTextSegmToPoly is a call-back function,
@@ -54,6 +55,11 @@
 static int s_textWidth;
 static int s_textCircle2SegmentCount;
 static SHAPE_POLY_SET* s_cornerBuffer;
+
+// The max error is the distance between the middle of a segment, and the circle
+// for circle/arc to segment approximation.
+// Warning: too small values can create very long calculation time in zone filling
+double s_error_max = Millimeter2iu( 0.01 );
 
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
 static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
@@ -68,7 +74,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 {
     // Number of segments to convert a circle to a polygon
     const int       segcountforcircle   = 18;
-    double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
+    double          correctionFactor    = GetCircletoPolyCorrectionFactor( segcountforcircle );
 
     // convert tracks and vias:
     for( TRACK* track = m_Track; track != NULL; track = track->Next() )
@@ -504,25 +510,12 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
     if( m_Shape == S_CIRCLE || m_Shape == S_ARC )
     {
-        // this is an ugly hack, but I don't want to change the file format now that we are in feature freeze.
-        // the circle to segment count parameter is essentially useless for larger circle/arc shapes as
-        // it doesn't provide sufficient approximation accuracy.
-        // Here we compute the necessary number of segments based on error between circle and segments
-        // The max error is the distance between the middle of a segment, and the circle
-        //
-        // Warning: too small values can create very long calculation time in zone filling
-        double error_max = Millimeter2iu( 0.05 );
-        // error relative to the radius value
-        double rel_error = error_max / GetRadius();
-        // best arc increment
-        double step = 180 / M_PI * acos( 1.0 - rel_error );
-        // the best seg count for a circle
-        int segCount = KiROUND( 360.0 / step );
+        int segCount = GetArcToSegmentCount( GetRadius(), s_error_max, 360.0 );
 
         if( segCount > aCircleToSegmentsCount )
         {
             aCircleToSegmentsCount = segCount;
-            aCorrectionFactor      = 1.0 / cos( M_PI / (aCircleToSegmentsCount * 2) );
+            aCorrectionFactor = GetCircletoPolyCorrectionFactor( aCircleToSegmentsCount );
         }
     }
 
