@@ -1425,8 +1425,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
-                                     SHAPE_POLY_SET& aPolygons, int aSegmentsByCircle,
-                                     wxString* aErrorText);
+                                     SHAPE_POLY_SET& aPolygons, wxString* aErrorText);
 
 bool MODULE::BuildPolyCourtyard()
 {
@@ -1455,13 +1454,10 @@ bool MODULE::BuildPolyCourtyard()
 
     wxString error_msg;
 
-    const int STEPS = 36;     // for a segmentation of an arc of 360 degrees
-    bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
-                                            STEPS, &error_msg );
+    bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, &error_msg );
 
     if( success )
-        success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
-                                           STEPS, &error_msg );
+        success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, &error_msg );
 
     if( !error_msg.IsEmpty() )
     {

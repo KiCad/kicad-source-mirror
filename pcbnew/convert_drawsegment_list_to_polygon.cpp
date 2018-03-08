@@ -167,6 +167,17 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
 }
 
 
+#define ARC_ACCURACY ( 0.05 * IU_PER_MM )
+
+int calcArcSteps( int aRadius, int aSweptAngle )
+{
+    int circleSteps = M_PI / acos( ( aRadius - ARC_ACCURACY ) / aRadius );
+    int arcSteps    = circleSteps * fabs( aSweptAngle ) / 3600.0;
+
+    return std::max( arcSteps, 1 );
+}
+
+
 /**
  * Function ConvertOutlineToPolygon
  * build a polygon (with holes) from a DRAWSEGMENT list, which is expected to be
@@ -174,12 +185,10 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
- * @param aSegmentsByCircle is the number of segments to approximate a circle.
  * @param aErrorText is a wxString to return error message.
  */
 bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
-                              SHAPE_POLY_SET& aPolygons, int aSegmentsByCircle,
-                              wxString* aErrorText )
+                              SHAPE_POLY_SET& aPolygons, wxString* aErrorText )
 {
 
     if( aSegList.size() == 0 )
@@ -226,15 +235,11 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
             // an arc with a series of short lines and put those
             // line segments into the !same! PATH.
             {
-                wxPoint     pstart   = graphic->GetArcStart();
-                wxPoint     center  = graphic->GetCenter();
-                double      angle   = -graphic->GetAngle();
-                int         steps   = aSegmentsByCircle * fabs(angle) /3600.0;
-
-                if( steps == 0 )
-                    steps = 1;
-
-                wxPoint     pt;
+                wxPoint  pstart = graphic->GetArcStart();
+                wxPoint  center = graphic->GetCenter();
+                double   angle  = -graphic->GetAngle();
+                int      steps  = calcArcSteps( graphic->GetRadius(), angle );
+                wxPoint  pt;
 
                 for( int step = 1; step<=steps; ++step )
                 {
@@ -292,7 +297,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     if( graphic->GetShape() == S_CIRCLE )
     {
         TransformCircleToPolygon( aPolygons, graphic->GetCenter(),
-                                  graphic->GetRadius(), aSegmentsByCircle );
+                                  graphic->GetRadius(),
+                                  calcArcSteps( graphic->GetRadius(), 3600 ) );
     }
     else
     {
@@ -320,13 +326,9 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                     // very close to it.
 
                     if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
-                    {
                         nextPt = graphic->GetEnd();
-                    }
                     else
-                    {
                         nextPt = graphic->GetStart();
-                    }
 
                     aPolygons.Append( nextPt );
                     prevPt = nextPt;
@@ -341,11 +343,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                     wxPoint pstart  = graphic->GetArcStart();
                     wxPoint pend    = graphic->GetArcEnd();
                     wxPoint pcenter = graphic->GetCenter();
-                    double  angle  = -graphic->GetAngle();
-                    int     steps  = aSegmentsByCircle * fabs(angle) /3600.0;
-
-                    if( steps == 0 )
-                        steps = 1;
+                    double  angle   = -graphic->GetAngle();
+                    int     steps   = calcArcSteps( graphic->GetRadius(), angle );
 
                     if( !close_enough( prevPt, pstart, prox ) )
                     {
@@ -374,7 +373,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                 if( aErrorText )
                 {
                     msg.Printf( _( "Unsupported DRAWSEGMENT type %s" ),
-                        GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
+                                GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
                     *aErrorText << msg << "\n";
                 }
@@ -433,17 +432,18 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
         if( graphic->GetShape() == S_CIRCLE )
         {
             // make a circle by segments;
-            wxPoint     center  = graphic->GetCenter();
-            double      angle   = 3600.0;
-            wxPoint     start = center;
-            int         radius  = graphic->GetRadius();
+            wxPoint  center  = graphic->GetCenter();
+            double   angle   = 3600.0;
+            wxPoint  start = center;
+            int      radius  = graphic->GetRadius();
+            int      steps  = calcArcSteps( radius, angle );
+            wxPoint  nextPt;
+
             start.x += radius;
 
-            wxPoint nextPt;
-
-            for( int step = 0; step<aSegmentsByCircle; ++step )
+            for( int step = 0; step < steps; ++step )
             {
-                double rotation = ( angle * step ) / aSegmentsByCircle;
+                double rotation = ( angle * step ) / steps;
                 nextPt = start;
                 RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
                 aPolygons.Append( nextPt, -1, hole );
@@ -490,14 +490,11 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                     // an arc with a series of short lines and put those
                     // line segments into the !same! PATH.
                     {
-                        wxPoint     pstart   = graphic->GetArcStart();
-                        wxPoint     pend     = graphic->GetArcEnd();
-                        wxPoint     pcenter  = graphic->GetCenter();
-                        double      angle   = -graphic->GetAngle();
-                        int         steps   = aSegmentsByCircle * fabs(angle) /3600.0;
-
-                        if( steps == 0 )
-                            steps = 1;
+                        wxPoint pstart  = graphic->GetArcStart();
+                        wxPoint pend    = graphic->GetArcEnd();
+                        wxPoint pcenter = graphic->GetCenter();
+                        double  angle   = -graphic->GetAngle();
+                        int     steps   = calcArcSteps( graphic->GetRadius(), angle );
 
                         if( !close_enough( prevPt, pstart, prox ) )
                         {
@@ -526,9 +523,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                 default:
                     if( aErrorText )
                     {
-                        msg.Printf(
-                            _( "Unsupported DRAWSEGMENT type %s" ),
-                            GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
+                        msg.Printf( _( "Unsupported DRAWSEGMENT type %s" ),
+                                    GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
                         *aErrorText << msg << "\n";
                     }
@@ -602,8 +598,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
             segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
     }
 
-    const int STEPS = 36;     // for a segmentation of an arc of 360 degrees
-    bool success = ConvertOutlineToPolygon( segList, aOutlines, STEPS, aErrorText );
+    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText );
 
     if( !success || !aOutlines.OutlineCount() )
     {
