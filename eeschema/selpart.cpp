@@ -48,7 +48,7 @@ static void DisplayCmpDocAndKeywords( wxString& aSelection, void* aData )
 
     if( id.Parse( aSelection ) != -1 )
     {
-        aSelection = _( "Invalid symbol library indentifier!" );
+        aSelection = _( "Invalid symbol library identifier!" );
         return;
     }
 

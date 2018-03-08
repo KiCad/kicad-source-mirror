@@ -260,7 +260,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
 
     if( id.Parse( partname ) != -1 || !id.IsValid() )
     {
-        msg.Printf( _( "\"%s\" is not a valid library symbol indentifier." ), partname );
+        msg.Printf( _( "\"%s\" is not a valid library symbol identifier." ), partname );
         DisplayError( this, msg );
         return;
     }

@@ -49,7 +49,7 @@ struct curl_slist;
  *   KICAD_CURL_EASY curl;
  *
  *   curl.SetURL( "http://github.com" );
- *   curl.SetUserAgent( <http-client-indentifier> );
+ *   curl.SetUserAgent( <http-client-identifier> );
  *   curl.SetHeader( "Accept", "application/json" );
  *   curl.Perform();
  * @endcode
