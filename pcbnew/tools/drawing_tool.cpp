@@ -95,7 +95,7 @@ TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
 
 TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         AS_GLOBAL, 0,
-        _( "Add Vias" ), _( "Add free-stanging vias" ), NULL, AF_ACTIVATE );
+        _( "Add Vias" ), _( "Add free-standing vias" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
