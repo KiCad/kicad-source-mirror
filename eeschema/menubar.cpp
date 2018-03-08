@@ -655,7 +655,7 @@ void prepareHelpMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  text,
-                 _( "Displays current hotkeys list and corresponding commands" ),
+                 _( "Displays current hotkeys table and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
     aParentMenu->AppendSeparator();
