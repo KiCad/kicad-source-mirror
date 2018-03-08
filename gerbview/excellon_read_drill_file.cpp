@@ -547,9 +547,31 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
         switch( *text )
         {
             case 'X':
-                ReadXYCoord( text );
-                break;
             case 'Y':
+                if( !m_format_known )
+                {
+                    // Scan the first entry to decode format
+                    int nbdigits = 0;
+                    int integer = m_GerbMetric ? fmtIntegerMM : fmtIntegerInch;
+                    int mantissa;
+                    char* read = text + 1;
+
+                    while( IsNumber( *read ) )
+                    {
+                        if( (*read >= '0') && (*read <='9') )
+                            nbdigits++;
+
+                        read++;
+                    }
+
+                    mantissa = nbdigits - integer;
+
+                    m_FmtScale.x = m_FmtScale.y = mantissa;
+                    m_FmtLen.x = m_FmtLen.y = integer + mantissa;
+
+                    m_format_known = true;
+                }
+
                 ReadXYCoord( text );
                 break;
             case 'G':  // G85 is found here for oval holes
