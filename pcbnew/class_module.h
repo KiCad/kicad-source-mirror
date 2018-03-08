@@ -610,6 +610,15 @@ public:
      */
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction );
 
+    /**
+     * Returns a set of all layers that this module has drawings on
+     * similar to ViewGetLayers()
+     *
+     * @param aLayers is an array to store layer ids
+     * @param aCount is the number of layers stored in the array
+     * @param aIncludePads controls whether to also include pad layers
+     */
+    void GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads = true ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

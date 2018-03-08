@@ -1599,13 +1599,37 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( viewArea > 0.0 && modArea > viewArea )
             return false;
 
-        if( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( LAYER_MOD_FR ) )
-            return !m_editModules;
+        // Allow selection of footprints if at least one draw layer is on and
+        // the appropriate LAYER_MOD is on
 
-        if( aItem->IsOnLayer( B_Cu ) && board()->IsElementVisible( LAYER_MOD_BK ) )
-            return !m_editModules;
+        bool layer_mod = ( ( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( LAYER_MOD_FR ) ) ||
+                           ( aItem->IsOnLayer( B_Cu ) && board()->IsElementVisible( LAYER_MOD_BK ) ) );
 
-        return false;
+        bool draw_layer_visible = false;
+        int draw_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], draw_layers_count;
+
+        static_cast<const MODULE*>( aItem )->GetAllDrawingLayers( draw_layers,
+                                                                  draw_layers_count,
+                                                                  true );
+
+        for( int i = 0; i < draw_layers_count; ++i )
+        {
+            // NOTE: Pads return LAYER_PADS_PLATEDHOLES but the visibility
+            // control only directly switches LAYER_PADS_TH, so we overwrite it
+            // here so that the visibility check is accurate
+            if( draw_layers[i] == LAYER_PADS_PLATEDHOLES )
+                draw_layers[i] = LAYER_PADS_TH;
+
+            if( ( ( draw_layers[i] < PCB_LAYER_ID_COUNT ) &&
+                  board()->IsLayerVisible( static_cast<PCB_LAYER_ID>( draw_layers[i] ) ) ) ||
+                ( ( draw_layers[i] >= GAL_LAYER_ID_START ) &&
+                  board()->IsElementVisible( static_cast<GAL_LAYER_ID>( draw_layers[i] ) ) ) )
+            {
+                draw_layer_visible = true;
+            }
+        }
+
+        return ( draw_layer_visible && layer_mod );
 
         break;
     }

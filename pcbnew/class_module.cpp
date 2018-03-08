@@ -42,6 +42,7 @@
 #include <macros.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <unordered_set>
 
 #include <pcb_edit_frame.h>
 #include <class_board.h>
@@ -923,6 +924,36 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
         DisplayError( NULL, wxT( "Error running MODULE::RunOnChildren" ) );
     }
 }
+
+
+void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads ) const
+{
+    std::unordered_set<int> layers;
+
+    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    {
+        layers.insert( static_cast<int>( item->GetLayer() ) );
+    }
+
+    if( aIncludePads )
+    {
+        for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+        {
+            int pad_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], pad_layers_count;
+            pad->ViewGetLayers( pad_layers, pad_layers_count );
+
+            for( int i = 0; i < pad_layers_count; i++ )
+                layers.insert( pad_layers[i] );
+        }
+    }
+
+    aCount = layers.size();
+    int i = 0;
+
+    for( auto layer : layers )
+        aLayers[i++] = layer;
+}
+
 
 void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
