@@ -641,6 +641,10 @@ void PGM_BASE::loadCommonSettings()
     for( unsigned i = 0;  i < entries.GetCount();  i++ )
     {
         wxString val = m_common_settings->Read( entries[i], wxEmptyString );
+
+        if( m_local_env_vars[ entries[i] ].GetDefinedExternally() )
+            continue;
+
         m_local_env_vars[ entries[i]  ] = ENV_VAR_ITEM( val, wxGetEnv( entries[i], NULL ) );
     }
 
@@ -668,6 +672,9 @@ void PGM_BASE::SaveCommonSettings()
 
         for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
         {
+            if( it->second.GetDefinedExternally() )
+                continue;
+
             wxLogTrace( traceEnvVars, wxT( "Saving environment variable config entry %s as %s" ),
                         GetChars( it->first ),  GetChars( it->second.GetValue() ) );
             m_common_settings->Write( it->first, it->second.GetValue() );
