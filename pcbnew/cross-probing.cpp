@@ -379,7 +379,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         try
         {
-            STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlistData, _( "EEschema netlist" ) );
+            STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlistData, _( "Eeschema netlist" ) );
             KICAD_NETLIST_READER netlistReader( lineReader, &netlist );
             netlistReader.LoadNetlist();
         }

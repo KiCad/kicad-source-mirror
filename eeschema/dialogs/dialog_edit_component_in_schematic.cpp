@@ -449,7 +449,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].GetText() ) )
     {
-        DisplayError( NULL, _( "Illegal reference. A reference must start with a letter" ) );
+        DisplayError( NULL, _( "Illegal reference. References must start with a letter" ) );
         return;
     }
 

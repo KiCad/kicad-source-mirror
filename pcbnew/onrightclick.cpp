@@ -741,7 +741,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
                      _( "Add Cutout Area" ), KiBitmap( add_zone_cutout_xpm ) );
 
         AddMenuItem( zones_menu, ID_POPUP_PCB_ZONE_DUPLICATE,
-                     _( "Duplicate Zone Onto Layer..." ), KiBitmap( zone_duplicate_xpm ) );
+                     _( "Duplicate Zone onto Layer..." ), KiBitmap( zone_duplicate_xpm ) );
 
         zones_menu->AppendSeparator();
 

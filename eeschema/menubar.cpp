@@ -419,7 +419,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( add_document_xpm ) );
 
     AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_SCH,
-                 _( "&Import Non-Kicad Schematic File..." ),
+                 _( "&Import Non KiCad Schematic File..." ),
                  _( "Import schematic file from other applications" ),
                  KiBitmap( import_document_xpm ) );   // TODO needs a different icon
 

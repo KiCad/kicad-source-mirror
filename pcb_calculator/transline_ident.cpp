@@ -361,7 +361,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_O_PRM,
                                    _( "Zodd" ), _( "Odd mode impedance (lines driven by opposite (differential) voltages)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   _( "Ang_l" ), _( "Electrical length" ), 0.0, true ) );
+                                   _( "Ang_l" ), _( "Electrical Length" ), 0.0, true ) );
         break;
 
     case STRIPLINE_TYPE:      // stripline
