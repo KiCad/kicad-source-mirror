@@ -395,7 +395,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
             {
-                wxMessageBox( _("No board currently edited" ) );
+                DisplayErrorMessage( this, _("No board currently open." ) );
                 break;
             }
 

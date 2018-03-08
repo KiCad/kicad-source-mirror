@@ -236,10 +236,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     updateTitle();
 
     // Create GAL canvas
-    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
+    bool boardEditorWasRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
+    PCB_BASE_FRAME* pcbFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                             GetGalDisplayOptions(),
-                                                            parentFrame->GetGalCanvas()->GetBackend() );
+                                                            pcbFrame->GetGalCanvas()->GetBackend() );
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -344,7 +345,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    UseGalCanvas( parentFrame->IsGalCanvasActive() );
+    UseGalCanvas( pcbFrame->IsGalCanvasActive() );
 
     if( m_auimgr.GetPane( "m_LayersManagerToolBar" ).IsShown() )
     {
@@ -355,6 +356,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_Layers->SelectLayer( F_SilkS );
         m_Layers->OnLayerSelected();
     }
+
+    if( !boardEditorWasRunning )
+        pcbFrame->Destroy();
 
     m_auimgr.Update();
 
