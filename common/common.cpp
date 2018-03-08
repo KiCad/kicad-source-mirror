@@ -39,6 +39,7 @@
 #include <wx/config.h>
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
+#include <wx/url.h>
 
 #include <pgm_base.h>
 
@@ -263,6 +264,20 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString )
     // function.
     return wxExpandEnvVars( aString );
 }
+
+
+const wxString ResolveUriByEnvVars( const wxString& aUri )
+{
+    // URL-like URI: return as is.
+    wxURL url( aUri );
+    if( url.GetError() == wxURL_NOERR )
+        return aUri;
+
+    // Otherwise, the path points to a local file. Resolve environment
+    // variables if any.
+    return ExpandEnvVarSubstitutions( aUri );
+}
+
 
 bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                 const wxString& aBaseFilename,

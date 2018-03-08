@@ -599,18 +599,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
     m_skipCopyFromPanel = false;
 }
 
-static wxString resolveUriByEnvVars( const wxString& aUri )
-{
-    // URL-like URI: return as is.
-    wxURL url( aUri );
-    if( url.GetError() == wxURL_NOERR )
-    {
-        return aUri;
-    }
-    // Otherwise, the path points to a local file. Resolve environment
-    // variables if any.
-    return ExpandEnvVarSubstitutions( aUri );
-}
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& event )
 {
@@ -619,7 +607,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
     if( fieldNdx == DATASHEET )
     {
         wxString datasheet_uri = fieldValueTextCtrl->GetValue();
-        datasheet_uri = resolveUriByEnvVars( datasheet_uri );
+        datasheet_uri = ResolveUriByEnvVars( datasheet_uri );
         GetAssociatedDocument( this, datasheet_uri );
     }
     else if( fieldNdx == FOOTPRINT )

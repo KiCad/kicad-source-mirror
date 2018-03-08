@@ -285,8 +285,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a piece of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
-            wxString text = static_cast<SCH_COMPONENT*>( item )->
-                                    GetField( DATASHEET )->GetFullyQualifiedText();
+            wxString text = static_cast<SCH_COMPONENT*>( item )->GetField( DATASHEET )->GetText();
+            text = ResolveUriByEnvVars( text );
 
             if( !text.IsEmpty() )
                 GetAssociatedDocument( this, text );

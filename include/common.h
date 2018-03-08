@@ -316,6 +316,13 @@ wxString GetKicadConfigPath();
  */
 const wxString ExpandEnvVarSubstitutions( const wxString& aString );
 
+/**
+ * Function ResolveUriByEnvVars
+ * replaces any environment variables in file-path uris (leaving network-path
+ * uris alone).
+ */
+const wxString ResolveUriByEnvVars( const wxString& aUri );
+
 
 #ifdef __WXMAC__
 /**
