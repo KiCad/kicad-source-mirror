@@ -129,6 +129,11 @@ static wxString createFilePath( const wxString& aPath, const wxString& aFileName
 wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
         const PROJECT* aProject )
 {
+    wxFileName full( aFileName );
+
+    if( full.IsAbsolute() )
+        return full.GetFullPath();
+
     if( aProject )
     {
         wxFileName fn( createFilePath( aProject->GetProjectPath(), aFileName ) );
