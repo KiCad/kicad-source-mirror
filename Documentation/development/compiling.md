@@ -338,6 +338,20 @@ configure pacman to prevent upgrading the 64-bit Boost package by adding:
 
 to your /etc/pacman.conf file.
 
+### Building OCE from source
+
+KiCad requires OCE by default, and the version installed by `pacman` can cause build errors in
+x86_64 systems as of March 2018.  In order to work around this, you can build OCE from source on
+these systems.  Building OCE on Windows requires that you place the source code in a very short
+directory path, otherwise you will run into errors caused by the maximum path length on Windows.
+In the example below, the `MINGW-packages` repository is cloned to `/c/mwp`, which is equivalent to
+`C:\mwp` in Windows path terminology.  You may wish to change the destination of the `git clone`
+command if you do not want to place it on the root of your C drive, but if you run in to strange
+compilation errors about missing files, it is probably because your path is too long.
+
+    git clone https://github.com/Alexpux/MINGW-packages /c/mwp
+    cd /c/mwp/mingw-w64-oce
+    makepkg-mingw -is
 
 # Building KiCad on macOS # {#build_osx}
 
