@@ -38,6 +38,12 @@
 #include <geometry/geometry_utils.h>
 
 
+// Error max when converting a circle or arc to segments.
+// Avoid too small values that create a very long calculation time
+// in zone fillings
+#define ARC_ACCURACY ( 0.05 * IU_PER_MM )
+
+
 /**
  * Function close_ness
  * is a non-exact distance (also called Manhattan distance) used to approximate
@@ -166,12 +172,6 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
 
     return NULL;
 }
-
-
-// Error max when converting a circle or arc to segments.
-// Avoid too small values that create a very long calculation time
-// in zone fillings
-#define ARC_ACCURACY ( 0.05 * IU_PER_MM )
 
 
 /**

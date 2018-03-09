@@ -509,22 +509,25 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
     // The full width of the lines to create:
     int linewidth = m_Width + (2 * aClearanceValue);
 
+    // Creating a reliable clearance shape for circles and arcs is not so easy, due to
+    // the error created by segment approximation.
+    // for a cicle this is not so hard: create a polygon from a circle slightly bigger:
+    // thickness = linewidth + s_error_max, and radius = initial radius + s_error_max/2
+    // giving a shape with a suitable internal radius and external radius
+    // For an arc this is more tricky: TODO
     if( m_Shape == S_CIRCLE || m_Shape == S_ARC )
     {
         int segCount = GetArcToSegmentCount( GetRadius(), s_error_max, 360.0 );
 
         if( segCount > aCircleToSegmentsCount )
-        {
             aCircleToSegmentsCount = segCount;
-            aCorrectionFactor = GetCircletoPolyCorrectionFactor( aCircleToSegmentsCount );
-        }
     }
 
     switch( m_Shape )
     {
     case S_CIRCLE:
-        TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(),
-                                aCircleToSegmentsCount, linewidth ) ;
+        TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius() + (s_error_max/2),
+                                aCircleToSegmentsCount, linewidth + s_error_max ) ;
         break;
 
     case S_ARC:
