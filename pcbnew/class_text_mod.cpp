@@ -394,9 +394,9 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKGREEN ) );
 
     if( IsMirrored() )
-        msg = _( " Yes" );
+        msg = _( "Yes" );
     else
-        msg = _( " No" );
+        msg = _( "No" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
 

@@ -156,11 +156,12 @@ wxString LengthDoubleToString( double aValue, bool aConvertToMils )
     }
 
     text.Printf( format, value );
+    text += " ";
 
     if( g_UserUnit == INCHES )
-        text += ( aConvertToMils ) ? _( " mils" ) : _( " in" );
+        text += ( aConvertToMils ) ? _( "mils" ) : _( "in" );
     else
-        text += _( " mm" );
+        text += _( "mm" );
 
     return text;
 }
@@ -243,15 +244,15 @@ wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol )
         switch( aUnit )
         {
         case INCHES:
-            stringValue += _( " \"" );
+            stringValue += " " + _( "\"" );
             break;
 
         case MILLIMETRES:
-            stringValue += _( " mm" );
+            stringValue += " " + _( "mm" );
             break;
 
         case DEGREES:
-            stringValue += _( " deg" );
+            stringValue += " " + _( "deg" );
             break;
 
         case UNSCALED_UNITS:
