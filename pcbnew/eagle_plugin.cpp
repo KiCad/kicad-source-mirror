@@ -74,6 +74,9 @@ Load() TODO's
 
 #include <eagle_plugin.h>
 
+// KiCad doesn't currently have curved tracks, so we use high-def for zone
+#define EAGLE_CURVE_DELTA ( 360.0 / ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF )
+
 using namespace std;
 
 
@@ -1739,17 +1742,61 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                 if( IsCopperLayer( layer ) )
                 {
-                    TRACK*  t = new TRACK( m_board );
-
-                    t->SetTimeStamp( EagleTimeStamp( netItem ) );
-
-                    t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
-                    t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
+                    wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+                    double angle = 0.0;
+                    double end_angle;
+                    double radius;
+                    wxPoint center;
 
                     int width = w.width.ToPcbUnits();
                     if( width < m_min_trace )
                         m_min_trace = width;
 
+                    if( w.curve )
+                    {
+                        center = ConvertArcCenter(
+                                wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ),
+                                wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ),
+                                *w.curve );
+
+                        angle = DEG2RAD( *w.curve );
+
+                        end_angle = atan2( kicad_y( w.y2 ) - center.y,
+                                           kicad_x( w.x2 ) - center.x );
+
+                        radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
+                                       pow( center.y - kicad_y( w.y1 ), 2 ) );
+                    }
+
+                    while( fabs( angle ) > DEG2RAD( EAGLE_CURVE_DELTA ) )
+                    {
+                        wxPoint end( int( radius * cos( end_angle + angle ) + center.x ),
+                                     int( radius * sin( end_angle + angle ) + center.y ) );
+
+                        TRACK*  t = new TRACK( m_board );
+
+                        t->SetTimeStamp( EagleTimeStamp( netItem ) + int( RAD2DEG( angle ) ) );
+                        t->SetPosition( start );
+                        t->SetEnd( end );
+                        t->SetWidth( width );
+                        t->SetLayer( layer );
+                        t->SetNetCode( netCode );
+
+                        m_board->m_Track.Insert( t, NULL );
+
+                        start = end;
+
+                        if( angle < 0 )
+                            angle += DEG2RAD( EAGLE_CURVE_DELTA );
+                        else
+                            angle -= DEG2RAD( EAGLE_CURVE_DELTA );
+                    }
+
+                    TRACK*  t = new TRACK( m_board );
+
+                    t->SetTimeStamp( EagleTimeStamp( netItem ) );
+                    t->SetPosition( start );
+                    t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
                     t->SetWidth( width );
                     t->SetLayer( layer );
                     t->SetNetCode( netCode );
