@@ -68,8 +68,8 @@ static void DisplayCmpDocAndKeywords( wxString& aSelection, void* aData )
     if( !part )
         return;
 
-    aSelection  = _( "Description: " ) + part->GetDescription() + "\n";
-    aSelection += _( "Key Words: " ) + part->GetKeyWords();
+    aSelection  = _( "Description:" ) + " " + part->GetDescription() + "\n";
+    aSelection += _( "Key words:" ) + " " + part->GetKeyWords();
 }
 
 

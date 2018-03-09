@@ -36,7 +36,7 @@ static const wxString DescriptionFormat =
 
 static const wxString AliasOfFormat =   "<br><i>" + _( "Alias of" ) + " %s (%s)</i>";
 static const wxString DescFormat =      "<br>%s";
-static const wxString KeywordsFormat =  "<br>" + _( "Keywords:" ) + " %s";
+static const wxString KeywordsFormat =  "<br>" + _( "Key words:" ) + " %s";
 static const wxString FieldFormat =
     "<tr>"
     "   <td><b>__NAME__</b></td>"
