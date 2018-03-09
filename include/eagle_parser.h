@@ -364,13 +364,13 @@ public:
  */
 NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
-/// Make a unique time stamp
-unsigned long EagleTimeStamp( wxXmlNode* aTree );
+///> Make a unique time stamp
+unsigned int EagleTimeStamp( wxXmlNode* aTree );
 
-/// Computes module timestamp basing on its name, value and unit
-time_t EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit );
+///> Computes module timestamp basing on its name, value and unit
+unsigned int EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit );
 
-/// Convert an Eagle curve end to a KiCad center for S_ARC
+///> Convert an Eagle curve end to a KiCad center for S_ARC
 wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
 
 // Pre-declare for typedefs
