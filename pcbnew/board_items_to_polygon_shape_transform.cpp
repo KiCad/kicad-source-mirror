@@ -59,7 +59,8 @@ static SHAPE_POLY_SET* s_cornerBuffer;
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.
 // Warning: too small values can create very long calculation time in zone filling
-double s_error_max = Millimeter2iu( 0.01 );
+// 0.05 to 0.01 mm is a reasonable value
+double s_error_max = Millimeter2iu( 0.02 );
 
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
 static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
