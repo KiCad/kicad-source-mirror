@@ -374,7 +374,7 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
 
         msg.Printf( _( "Cannot write to folder \"%s\"." ), prjPath.GetPath() );
         wxMessageDialog msgDlg( this, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
-        msgDlg.SetExtendedMessage( _( "Plese check your access permissions to this folder "
+        msgDlg.SetExtendedMessage( _( "Please check your access permissions to this folder "
                                       "and try again." ) );
         msgDlg.ShowModal();
         return;
