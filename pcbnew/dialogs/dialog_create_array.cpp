@@ -230,7 +230,7 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
     else
     {
         wxString err;
-        err.Printf( _("Unrecognised numbering scheme: %d"), typeVal );
+        err.Printf( _("Unrecognized numbering scheme: %d"), typeVal );
         errors.Add( err );
         // we can't proceed - we don't know the numbering type
         return false;
