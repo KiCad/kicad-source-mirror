@@ -231,21 +231,5 @@ enum SELECTION_LOCK_FLAGS
     SELECTION_LOCKED = 2
 };
 
-// Selection type flags for RequestSelection()
-enum SELECTION_TYPE_FLAGS
-{
-    // Items that can be deleted (but not necessarily modified, eg. DRC markers)
-    SELECTION_DELETABLE = 1,
-    // Items that can be edited (moved, rotated, properties)
-    SELECTION_EDITABLE = 2,
-    // Remove pads without a host module
-    SELECTION_SANITIZE_PADS = 4,
-    // Request a hover-only selection
-    SELECTION_HOVER = 8,
-    // Select locked parts without asking the user
-    SELECTION_FORCE_UNLOCK = 16,
-
-    SELECTION_DEFAULT = 0x7
-};
 
 #endif

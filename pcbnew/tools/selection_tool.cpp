@@ -380,34 +380,33 @@ SELECTION& SELECTION_TOOL::GetSelection()
 }
 
 
-SELECTION& SELECTION_TOOL::RequestSelection( int aFlags, CLIENT_SELECTION_FILTER aClientFilter )
+SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter )
 {
-    std::vector<EDA_ITEM*> removed_items;
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
 
     if( selectionEmpty )
     {
-        if( aFlags & SELECTION_FORCE_UNLOCK )
-            m_locked = false;
-
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, aClientFilter );
         m_selection.ClearReferencePoint();
     }
-
-    // Be careful with iterators: items can be removed from list that invalidate iterators.
-    for( auto item : m_selection )
+    else if( aClientFilter )
     {
-        if( ( aFlags & SELECTION_EDITABLE ) && item->Type() == PCB_MARKER_T )
-            removed_items.push_back( item );
+        GENERAL_COLLECTOR collector;
+
+        for( auto item : m_selection.Items() )
+            collector.Append( item );
+
+        aClientFilter( VECTOR2I(), collector );
+
+        clearSelection();
+
+        for( int i = 0; i < collector.GetCount(); ++i )
+        {
+            m_additive = true;
+            toggleSelection( collector[ i ] );
+        }
     }
-
-    // Now safely remove the items from the selection
-    for( auto item : removed_items )
-        unselect( static_cast<BOARD_ITEM *>( item ) );
-
-    if( aFlags & SELECTION_SANITIZE_PADS )
-        SanitizeSelection();
 
     return m_selection;
 }
@@ -2225,58 +2224,6 @@ int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
     getView()->Update( &m_selection );
 
     return 0;
-}
-
-
-bool SELECTION_TOOL::SanitizeSelection()
-{
-    std::set<BOARD_ITEM*> rejected;
-    std::set<BOARD_ITEM*> added;
-
-    if( !m_editModules )
-    {
-        for( auto i : m_selection )
-        {
-            auto item = static_cast<BOARD_ITEM*>( i );
-            if( item->Type() == PCB_PAD_T )
-            {
-                MODULE* mod = static_cast<MODULE*>( item->GetParent() );
-
-                // case 1: module (or its pads) are locked
-                if( mod && ( mod->PadsLocked() || mod->IsLocked() ) )
-                {
-                    rejected.insert( item );
-
-                    if( !mod->IsLocked() && !mod->IsSelected() )
-                        added.insert( mod );
-                }
-
-                // case 2: multi-item selection contains both the module and its pads - remove the pads
-                if( mod && m_selection.Contains( mod ) )
-                    rejected.insert( item );
-            }
-        }
-    }
-
-    if( !rejected.empty() )
-    {
-        for( BOARD_ITEM* item : rejected )
-            unselect( item );
-
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
-    }
-
-    if( !added.empty() )
-    {
-        for( BOARD_ITEM* item : added )
-            select( item );
-
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( SelectedEvent );
-    }
-
-    return true;
 }
 
 

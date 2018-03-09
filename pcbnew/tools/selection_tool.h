@@ -94,8 +94,7 @@ public:
      * and aClientFilter.
      * If the set is empty, performs the legacy-style hover selection.
      */
-    SELECTION& RequestSelection( int aFlags = SELECTION_DEFAULT,
-                                 CLIENT_SELECTION_FILTER aClientFilter = NULL );
+    SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter );
 
 
     inline TOOL_MENU& GetToolMenu()
@@ -111,10 +110,6 @@ public:
 
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
-
-    ///> Makes sure a group selection does not contain items that would cause
-    ///> conflicts when moving/rotating together (e.g. a footprint and one of the same footprint's pads)
-    bool SanitizeSelection();
 
     ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );

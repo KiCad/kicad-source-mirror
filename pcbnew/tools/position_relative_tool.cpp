@@ -27,6 +27,7 @@ using namespace std::placeholders;
 #include "position_relative_tool.h"
 #include "pcb_actions.h"
 #include "selection_tool.h"
+#include "edit_tool.h"
 #include "picker_tool.h"
 
 #include <dialogs/dialog_position_relative.h>
@@ -84,7 +85,7 @@ bool POSITION_RELATIVE_TOOL::Init()
 
 int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection();
+    const auto& selection = m_selectionTool->RequestSelection( SanitizePadsEnsureEditableFilter );
 
     if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
@@ -119,10 +120,8 @@ static bool selectPRitem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     wxCHECK( positionRelativeTool, false );
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    selectionTool->SanitizeSelection();
 
-    const SELECTION& selection = selectionTool->GetSelection();
+    const SELECTION& selection = selectionTool->RequestSelection( SanitizePadsFilter );
 
     if( selection.Empty() )
         return true;

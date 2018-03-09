@@ -28,12 +28,25 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
+#include <tools/selection_tool.h>
 
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
-class SELECTION_TOOL;
 class CONNECTIVITY_DATA;
+
+/**
+ * Function SanitizePadsEnsureEditableFilter
+ *
+ * A CLIENT_SELECTION_FILTER which promotes pad selections to their parent modules and
+ * excludes non-editable items (such as markers).
+ */
+void SanitizePadsEnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& items );
+
+void SanitizePadsFilter( const VECTOR2I&, GENERAL_COLLECTOR& items );
+
+void EnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& items );
+
 
 /**
  * Class EDIT_TOOL
@@ -172,6 +185,8 @@ private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
 
+    CLIENT_SELECTION_FILTER m_defaultSelectionFilter;
+
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;
 
@@ -190,21 +205,6 @@ private:
 
     bool changeTrackWidthOnClick( const SELECTION& selection );
     bool pickCopyReferencePoint( VECTOR2I& aP );
-
-
-    /**
-     * Function hoverSelection()
-     *
-     * If there are no items currently selected, it tries to choose the
-     * item that is under he cursor or displays a disambiguation menu
-     * if there are multiple items.
-     *
-     * @param aSanitize sanitize selection using SanitizeSelection()
-     * @return true if the eventual selection contains any items, or
-     * false if it fails to select any items.
-     */
-    bool hoverSelection( bool aSanitize = true );
-
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };

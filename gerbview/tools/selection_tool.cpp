@@ -260,31 +260,6 @@ SELECTION& GERBVIEW_SELECTION_TOOL::GetSelection()
 }
 
 
-SELECTION& GERBVIEW_SELECTION_TOOL::RequestSelection( int aFlags )
-{
-    std::vector<EDA_ITEM*> removed_items;
-    if( m_selection.Empty() )
-    {
-        m_toolMgr->RunAction( GERBVIEW_ACTIONS::selectionCursor, true, 0 );
-        m_selection.SetIsHover( true );
-    }
-
-
-    // Be careful with iterators: items can be removed from list that invalidate iterators.
-    for( auto item : m_selection )
-    {
-        if( ( aFlags & SELECTION_EDITABLE ) && item->Type() == PCB_MARKER_T )
-            removed_items.push_back( item );
-    }
-
-    // Now safely remove the items from the selection
-    for( auto item : removed_items )
-        unselect( static_cast<EDA_ITEM *>( item ) );
-
-    return m_selection;
-}
-
-
 void GERBVIEW_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem )
 {
     if( aItem->IsSelected() )

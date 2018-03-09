@@ -797,10 +797,8 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     wxCHECK( selectionTool, false );
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    selectionTool->SanitizeSelection();
 
-    const SELECTION& selection = selectionTool->GetSelection();
+    const SELECTION& selection = selectionTool->RequestSelection( SanitizePadsFilter );
 
     if( selection.Empty() )
         return true;

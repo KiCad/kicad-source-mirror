@@ -72,14 +72,6 @@ public:
      */
     SELECTION& GetSelection();
 
-    /**
-     * Function RequestSelection()
-     *
-     * Returns the current selection set, filtered according to aFlags.
-     * If the set is empty, performs the legacy-style hover selection.
-     */
-    SELECTION& RequestSelection( int aFlags = SELECTION_DEFAULT );
-
     inline TOOL_MENU& GetToolMenu()
     {
         return m_menu;
