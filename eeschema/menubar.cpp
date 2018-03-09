@@ -150,7 +150,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu,
                  ID_HIERARCHY,
                  _( "Show &Hierarchical Navigator" ),
-                 _( "Navigate hierarchical sheets" ),
+                 _( "Navigate schematic hierarchy" ),
                  KiBitmap( hierarchy_nav_xpm ) );
 
     text = AddHotkeyName( _( "&Leave Sheet" ), g_Schematic_Hokeys_Descr, HK_LEAVE_SHEET );
