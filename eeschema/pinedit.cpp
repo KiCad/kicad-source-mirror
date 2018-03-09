@@ -722,8 +722,7 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
         LIB_PIN* pin      = pinList[ii - 1];
 
         if( pin->GetNumber() != curr_pin->GetNumber()
-            || pin->GetConvert() != curr_pin->GetConvert()
-            || pin->GetUnit() != curr_pin->GetUnit() )
+            || pin->GetConvert() != curr_pin->GetConvert() )
             continue;
 
         dup_error++;
@@ -746,7 +745,9 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
         if( part->GetUnitCount() > 1 )
         {
-            msg += wxString::Format( _( " in symbol %c" ), 'A' + curr_pin->GetUnit() - 1 );
+            msg += wxString::Format( _( " in units %c and %c" ),
+                                     'A' + curr_pin->GetUnit() - 1,
+                                     'A' + pin->GetUnit() - 1 );
         }
 
         if( m_showDeMorgan )
