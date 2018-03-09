@@ -258,20 +258,20 @@ NODE_MAP MapChildren( wxXmlNode* aCurrentNode )
 }
 
 
-unsigned int EagleTimeStamp( wxXmlNode* aTree )
+timestamp_t EagleTimeStamp( wxXmlNode* aTree )
 {
     // in this case from a unique tree memory location
-    return (unsigned int) reinterpret_cast<uintptr_t>( aTree );
+    return (timestamp_t) reinterpret_cast<uintptr_t>( aTree );
 }
 
 
-unsigned int EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit )
+timestamp_t EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit )
 {
     std::size_t h1 = std::hash<wxString>{}( aName );
     std::size_t h2 = std::hash<wxString>{}( aValue );
     std::size_t h3 = std::hash<int>{}( aUnit );
 
-    return (unsigned int)( h1 ^ (h2 << 1) ^ (h3 << 2) );
+    return (timestamp_t)( h1 ^ (h2 << 1) ^ (h3 << 2) );
 }
 
 

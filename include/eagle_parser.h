@@ -365,10 +365,10 @@ public:
 NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
 ///> Make a unique time stamp
-unsigned int EagleTimeStamp( wxXmlNode* aTree );
+timestamp_t EagleTimeStamp( wxXmlNode* aTree );
 
 ///> Computes module timestamp basing on its name, value and unit
-unsigned int EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit );
+timestamp_t EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit );
 
 ///> Convert an Eagle curve end to a KiCad center for S_ARC
 wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
