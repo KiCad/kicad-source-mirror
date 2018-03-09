@@ -591,7 +591,13 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
                                  double aEndAngle, double aWidth )
 {
     if( aRadius <= 0 )
+    {
+        // Arcs of zero radius are a circle of aWidth diameter
+        if( aWidth > 0 )
+            DrawCircle( aCenterPoint, aWidth / 2.0 );
+
         return;
+    }
 
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
