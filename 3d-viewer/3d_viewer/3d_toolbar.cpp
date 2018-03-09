@@ -265,7 +265,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING,
                 _( "Anti-aliasing" ),
-                _( "Render with improoved quality on final render (slow)"),
+                _( "Render with improved quality on final render (slow)"),
                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_POST_PROCESSING,
