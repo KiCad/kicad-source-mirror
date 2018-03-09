@@ -728,6 +728,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
     if( dlg.GetChildren().DeleteObject( nameTextCtrl ) )
         dlg.GetChildren().Insert( nameTextCtrl );
 
+    nameTextCtrl->SetFocus();
+
     dlg.Layout();
     mainSizer->Fit( &dlg );
 

@@ -65,6 +65,8 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 
     m_filterBox->SetFocus();
 
+    m_sdbSizerOK->SetDefault();
+
     // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
     // and works fine on all systems
     GetSizer()->Fit(  this );
