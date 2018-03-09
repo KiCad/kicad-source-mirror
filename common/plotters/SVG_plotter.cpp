@@ -357,6 +357,15 @@ void SVG_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int wid
     setFillMode( fill );
     SetCurrentLineWidth( width );
 
+    // If diameter is less than width, switch to filled mode
+    if( fill == NO_FILL && diametre < width )
+    {
+        setFillMode( FILLED_SHAPE );
+        SetCurrentLineWidth( 0 );
+
+        radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
+    }
+
     fprintf( outputFile,
              "<circle cx=\"%g\" cy=\"%g\" r=\"%g\" /> \n",
              pos_dev.x, pos_dev.y, radius );
@@ -375,7 +384,10 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
      */
 
     if( radius <= 0 )
+    {
+        Circle( centre, width, FILLED_SHAPE, 0 );
         return;
+    }
 
     if( StAngle > EndAngle )
         std::swap( StAngle, EndAngle );
