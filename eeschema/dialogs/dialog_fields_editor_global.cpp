@@ -84,8 +84,16 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     sortColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     sortColumn->SetResizeable( false );
 
+
+    // Reference column is either single reference or a list of references.
+    // Autosize can fill the window in the case of a list so use a fixed width.
+    // wxCOL_WIDTH_DEFAULT is wxDVC_DEFAULT_WIDTH on all platforms and too small.
+    auto refcol = m_bomView->GetColumn( 0 );
+    refcol->SetWidth( wxDVC_DEFAULT_WIDTH * 2 );
+    refcol->SetResizeable( true );
+
     // Set default column widths for BOM table
-    for( unsigned int ii = 0; ii < m_bomView->GetColumnCount(); ii++ )
+    for( unsigned int ii = 1; ii < m_bomView->GetColumnCount(); ii++ )
     {
         auto col = m_bomView->GetColumn( ii );
 
