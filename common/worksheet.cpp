@@ -177,7 +177,8 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'Z':
-                msg += *m_paperFormat;
+                if( m_paperFormat )
+                    msg += *m_paperFormat;
                 break;
 
             case 'S':
@@ -196,11 +197,12 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'L':
-                msg += *m_sheetLayer;
+                if( m_sheetLayer )
+                    msg += *m_sheetLayer;
                 break;
 
             case 'P':
-                msg += *m_sheetFullName;
+                msg += m_sheetFullName;
                 break;
 
             case 'Y':

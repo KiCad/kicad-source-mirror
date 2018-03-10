@@ -388,7 +388,7 @@ protected:
     const TITLE_BLOCK* m_titleBlock;    // for basic inscriptions
     const wxString* m_paperFormat;      // for basic inscriptions
     wxString        m_fileName;         // for basic inscriptions
-    const wxString* m_sheetFullName;    // for basic inscriptions
+    wxString        m_sheetFullName;    // for basic inscriptions
     const wxString* m_sheetLayer;       // for basic inscriptions
 
 
@@ -400,10 +400,9 @@ public:
         m_penSize = 1;
         m_sheetNumber = 1;
         m_sheetCount = 1;
-        m_sheetLayer = 0;
-        m_titleBlock = NULL;
-        m_paperFormat = NULL;
-        m_sheetFullName = NULL;
+        m_sheetLayer = nullptr;
+        m_titleBlock = nullptr;
+        m_paperFormat = nullptr;
     }
 
     ~WS_DRAW_ITEM_LIST()
@@ -416,7 +415,7 @@ public:
      * Set the filename to draw/plot
      * @param aFileName = the text to display by the "filename" format
      */
-    void SetFileName( const wxString & aFileName )
+    void SetFileName( const wxString& aFileName )
     {
         m_fileName = aFileName;
     }
@@ -425,16 +424,16 @@ public:
      * Set the sheet name to draw/plot
      * @param aSheetName = the text to draw/plot by the "sheetname" format
      */
-    void SetSheetName( const wxString & aSheetName )
+    void SetSheetName( const wxString& aSheetName )
     {
-        m_sheetFullName = &aSheetName;
+        m_sheetFullName = aSheetName;
     }
 
     /**
      * Set the sheet layer to draw/plot
      * @param aSheetLayer = the text to draw/plot by the "sheetlayer" format
      */
-    void SetSheetLayer( const wxString & aSheetLayer )
+    void SetSheetLayer( const wxString& aSheetLayer )
     {
         m_sheetLayer = &aSheetLayer;
     }
