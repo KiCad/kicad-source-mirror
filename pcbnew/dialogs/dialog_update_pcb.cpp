@@ -53,6 +53,9 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_btnPerformUpdate->SetFocus();
 
     m_messagePanel->SetVisibleSeverities( REPORTER::RPT_WARNING | REPORTER::RPT_ERROR | REPORTER::RPT_ACTION );
+
+    m_messagePanel->GetSizer()->SetSizeHints(m_messagePanel);
+    GetSizer()->SetSizeHints(this);
 }
 
 
