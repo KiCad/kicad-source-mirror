@@ -61,7 +61,17 @@ void AddNewItemsCommand( wxMenu* aMainMenu )
 bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 {
     bool busy = GetScreen()->GetCurItem() != NULL;
+    bool blockActive = GetScreen()->IsBlockActive();
     wxString msg;
+
+    if( blockActive )
+    {
+
+        AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ),
+                     KiBitmap( cancel_xpm ) );
+        aPopMenu->AppendSeparator();
+        return true;
+    }
 
     // If the tool ID_ZOOM_SELECTION is currently in use, add a
     if( GetToolId() == ID_ZOOM_SELECTION && !busy )

@@ -99,6 +99,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     // the ID_NO_TOOL_SELECTED id TOOL does not existing currently, but the right click
     // popup menu can generate this event.
     EVT_TOOL( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_POPUP_CANCEL_CURRENT_COMMAND, PL_EDITOR_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     PL_EDITOR_FRAME::Process_Special_Functions )
@@ -155,6 +156,15 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
+        if( m_canvas->IsMouseCaptured() )
+        {
+            m_canvas->EndMouseCapture();
+            SetToolID( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString );
+        }
+        else
+        {
+            SetNoToolSelected();
+        }
         break;
 
     case ID_POPUP_DESIGN_TREE_ITEM_DELETE:

@@ -907,9 +907,13 @@ void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
 
     exporter.Format( &formatter, GNL_ALL );
 
+    // Copy the netlist in a static string, to have a long life time
+    // and giving to Pcbnew the time to analyze this netlist:
+    static std::string netlist_string;
+    netlist_string = wxString::Format("%s\n%s", aUpdateOptions, formatter.GetString() ).ToStdString();
+
     // Now, send the "kicad" (s-expr) netlist to Pcbnew
-    Kiway().ExpressMail( FRAME_PCB, MAIL_SCH_PCB_UPDATE,
-        wxString::Format("%s\n%s", aUpdateOptions, formatter.GetString() ).ToStdString(), this );
+    Kiway().ExpressMail( FRAME_PCB, MAIL_SCH_PCB_UPDATE, netlist_string, this );
 }
 
 
