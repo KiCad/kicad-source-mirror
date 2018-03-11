@@ -380,7 +380,7 @@ class FootprintWizardParameter(object):
                     if (to_int % multiple) > 0:
                         self.AddError("value '{v}' is not a multiple of {m}".format(v=self.raw_value,m=multiple),info)
             except:
-                self.AddError("value {'v}' is not an integer".format(v=self.raw_value),info)
+                self.AddError("value '{v}' is not an integer".format(v=self.raw_value),info)
 
         if self.units == uBool:  # Check that the value is of a correct boolean format
             if self.raw_value in [True,False] or str(self.raw_value).lower() in self._bools:
