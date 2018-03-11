@@ -348,8 +348,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( footprintWizard == NULL )
         return;
 
-    m_parameterGridPage = m_pageList->GetSelection();
     m_parameterGrid->ClearGrid();
+    m_parameterGridPage = m_pageList->GetSelection();
 
     if( m_parameterGridPage < 0 )   // Should not happen
         return;
