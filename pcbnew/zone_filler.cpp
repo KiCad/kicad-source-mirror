@@ -421,10 +421,11 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             }
 
             // Pads are removed from zone if the setup is PAD_ZONE_CONN_NONE
-            // or if they have a custom shape, because a thermal relief will break
+            // or if they have a custom shape and not PAD_ZONE_CONN_FULL,
+            // because a thermal relief will break
             // the shape
             if( aZone->GetPadConnection( pad ) == PAD_ZONE_CONN_NONE
-                || pad->GetShape() == PAD_SHAPE_CUSTOM )
+                || ( pad->GetShape() == PAD_SHAPE_CUSTOM && aZone->GetPadConnection( pad ) != PAD_ZONE_CONN_FULL ) )
             {
                 int gap = zone_clearance;
                 int thermalGap = aZone->GetThermalReliefGap( pad );

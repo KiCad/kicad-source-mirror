@@ -164,7 +164,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThermalGapUnits;
 		wxStaticBoxSizer* m_sbSizerCustomShapedZonesSettings;
 		wxStaticText* m_staticTextCsZconnTitle;
-		wxTextCtrl* m_textCtrlNone;
+		wxChoice* m_ZoneConnectionCustom;
 		wxStaticText* m_staticTextcps;
 		wxChoice* m_ZoneCustomPadShape;
 		wxPanel* m_panelCustomShapePrimitives;

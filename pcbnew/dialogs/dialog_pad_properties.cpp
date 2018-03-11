@@ -620,18 +620,22 @@ void DIALOG_PAD_PROPERTIES::initValues()
     default:
     case PAD_ZONE_CONN_INHERITED:
         m_ZoneConnectionChoice->SetSelection( 0 );
+        m_ZoneConnectionCustom->SetSelection( 0 );
         break;
 
     case PAD_ZONE_CONN_FULL:
         m_ZoneConnectionChoice->SetSelection( 1 );
+        m_ZoneConnectionCustom->SetSelection( 1 );
         break;
 
     case PAD_ZONE_CONN_THERMAL:
         m_ZoneConnectionChoice->SetSelection( 2 );
+        m_ZoneConnectionCustom->SetSelection( 0 );
         break;
 
     case PAD_ZONE_CONN_NONE:
         m_ZoneConnectionChoice->SetSelection( 3 );
+        m_ZoneConnectionCustom->SetSelection( 0 );
         break;
     }
 
@@ -933,9 +937,10 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     m_tcCornerSizeRatio->Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT );
 
     // PAD_SHAPE_CUSTOM type has constraints for zone connection and thermal shape:
-    // only not connected is allowed to avoid destroying the shape.
+    // only not connected or solid connection is allowed to avoid destroying the shape.
     // Enable/disable options only available for custom shaped pads
     m_ZoneConnectionChoice->Enable( !is_custom );
+    m_ZoneConnectionCustom->Enable( is_custom );
     m_ThermalWidthCtrl->Enable( !is_custom );
     m_ThermalGapCtrl->Enable( !is_custom );
 
@@ -1486,7 +1491,12 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
 
     if( m_currentPad->GetShape() == PAD_SHAPE_CUSTOM )
-        m_currentPad->SetZoneConnection( PAD_ZONE_CONN_NONE );
+    {
+        if( m_padMaster->GetZoneConnection() == PAD_ZONE_CONN_FULL )
+            m_currentPad->SetZoneConnection( PAD_ZONE_CONN_FULL );
+        else
+            m_currentPad->SetZoneConnection( PAD_ZONE_CONN_NONE );
+    }
     else
         m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
 
@@ -1579,6 +1589,15 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     case 3:
         aPad->SetZoneConnection( PAD_ZONE_CONN_NONE );
         break;
+    }
+
+    // Custom shape has only 2 options:
+    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    {
+        if( m_ZoneConnectionCustom->GetSelection() == 0 )
+            aPad->SetZoneConnection( PAD_ZONE_CONN_NONE );
+        else
+            aPad->SetZoneConnection( PAD_ZONE_CONN_FULL );
     }
 
     // Read pad position:

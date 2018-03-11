@@ -546,8 +546,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticTextCsZconnTitle->Wrap( -1 );
 	fgSizerCustomShapedCopperZonesOpts->Add( m_staticTextCsZconnTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
 	
-	m_textCtrlNone = new wxTextCtrl( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, _("None"), wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizerCustomShapedCopperZonesOpts->Add( m_textCtrlNone, 0, wxALL|wxEXPAND, 5 );
+	wxString m_ZoneConnectionCustomChoices[] = { _("None"), _("Solid") };
+	int m_ZoneConnectionCustomNChoices = sizeof( m_ZoneConnectionCustomChoices ) / sizeof( wxString );
+	m_ZoneConnectionCustom = new wxChoice( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionCustomNChoices, m_ZoneConnectionCustomChoices, 0 );
+	m_ZoneConnectionCustom->SetSelection( 0 );
+	fgSizerCustomShapedCopperZonesOpts->Add( m_ZoneConnectionCustom, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextcps = new wxStaticText( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, _("Custom pad shape in zone:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextcps->Wrap( -1 );
@@ -557,7 +560,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	int m_ZoneCustomPadShapeNChoices = sizeof( m_ZoneCustomPadShapeChoices ) / sizeof( wxString );
 	m_ZoneCustomPadShape = new wxChoice( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneCustomPadShapeNChoices, m_ZoneCustomPadShapeChoices, 0 );
 	m_ZoneCustomPadShape->SetSelection( 0 );
-	fgSizerCustomShapedCopperZonesOpts->Add( m_ZoneCustomPadShape, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizerCustomShapedCopperZonesOpts->Add( m_ZoneCustomPadShape, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_sbSizerCustomShapedZonesSettings->Add( fgSizerCustomShapedCopperZonesOpts, 0, wxEXPAND, 5 );
