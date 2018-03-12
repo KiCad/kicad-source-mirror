@@ -1112,7 +1112,7 @@ void PCB_EDIT_FRAME::UpdateTitle()
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
-        fileinfo = fileName.IsFileWritable() ? wxEmptyString : _( " [Read Only]" );
+        fileinfo = fileName.IsFileWritable() ? wxString( wxEmptyString ) : _( " [Read Only]" );
     }
     else
     {

@@ -737,7 +737,7 @@ void CVPCB_MAINFRAME::UpdateTitle()
     {
         title.Printf( _( "Cvpcb" ) + wxT( " \u2014 %s%s" ),
                       fn.GetFullPath(),
-                      fn.IsFileWritable() ? wxEmptyString : _( " [Read Only]" ) );
+                      fn.IsFileWritable() ? wxString( wxEmptyString ) : _( " [Read Only]" ) );
     }
     else
     {
