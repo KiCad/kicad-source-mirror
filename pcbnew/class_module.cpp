@@ -1184,9 +1184,22 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
         case PCB_MODULE_EDGE_T:
         {
             EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
-            edge->m_Start0 += moveVector;
-            edge->m_End0   += moveVector;
-            edge->SetDrawCoord();
+
+            // Polygonal shape coordinates are specific:
+            // m_Start0 and m_End0 have no meaning. So we have to move corner positions
+            if( edge->GetShape() == S_POLYGON )
+            {
+                for( auto iter = edge->GetPolyShape().Iterate(); iter; iter++ )
+                {
+                    (*iter) += VECTOR2I( moveVector );
+                }
+            }
+            else
+            {
+                edge->m_Start0 += moveVector;
+                edge->m_End0   += moveVector;
+                edge->SetDrawCoord();
+            }
             break;
         }
 
