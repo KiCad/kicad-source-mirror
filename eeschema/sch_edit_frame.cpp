@@ -1474,14 +1474,14 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
     {
-        title.Printf( _( "Eeschema \u2014 %s" ), GetChars( GetScreen()->GetFileName() ) );
+        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s" ), GetChars( GetScreen()->GetFileName() ) );
     }
     else
     {
         wxString    fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
         wxFileName  fn = fileName;
 
-        title.Printf( _( "Eeschema \u2014 %s [%s] \u2014 %s" ),
+        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s [%s] \u2014 %s" ),
                       GetChars( fn.GetName() ),
                       GetChars( m_CurrentSheet->PathHumanReadable() ),
                       GetChars( fn.GetPath() ) );
