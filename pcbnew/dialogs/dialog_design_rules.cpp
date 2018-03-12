@@ -42,6 +42,7 @@
 #include <class_track.h>
 #include <macros.h>
 #include <html_messagebox.h>
+#include <dialog_text_entry.h>
 
 #include <dialog_design_rules.h>
 #include <wx/generic/gridctrl.h>
@@ -731,7 +732,7 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
 
     // @todo set validator to ensure net class name is valid rather than all of the checks
     //       after the OK button has been selected.
-    wxTextEntryDialog dlg( this, _( "New Net Class Name:" ), wxEmptyString, class_name );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "New Net Class Name:" ), wxEmptyString, class_name );
 
     if( dlg.ShowModal() != wxID_OK )
         return;         // canceled by user

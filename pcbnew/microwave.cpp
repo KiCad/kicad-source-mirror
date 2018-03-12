@@ -42,7 +42,8 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <base_units.h>
-#include <validators.h> //
+#include <validators.h>
+#include <dialog_text_entry.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -264,8 +265,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         break;
     }
 
-    wxString          value = StringFromValue( g_UserUnit, gap_size );
-    wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), value );
+    wxString             value = StringFromValue( g_UserUnit, gap_size );
+    WX_TEXT_ENTRY_DIALOG dlg( this, msg, _( "Create microwave module" ), value );
 
     if( dlg.ShowModal() != wxID_OK )
     {
@@ -282,8 +283,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     {
         double            fcoeff = 10.0, fval;
         msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
-        wxTextEntryDialog angledlg( this, _( "Angle in degrees:" ),
-                                    _( "Create microwave module" ), msg );
+        WX_TEXT_ENTRY_DIALOG angledlg( this, _( "Angle in degrees:" ),
+                                       _( "Create microwave module" ), msg );
 
         if( angledlg.ShowModal() != wxID_OK )
         {
@@ -720,7 +721,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
 
     // Entrer the desired length of the gap.
     msg = StringFromValue( g_UserUnit, gap_size );
-    wxTextEntryDialog dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user

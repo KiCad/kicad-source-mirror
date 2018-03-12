@@ -34,6 +34,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
+#include <dialog_text_entry.h>
 #include <pcbnew.h>
 #include <kiface_i.h>
 #include <gestfich.h>
@@ -341,7 +342,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::Edit3DShapeFileName()
 
     // Edit filename
     wxString filename = m_3D_ShapeNameListBox->GetStringSelection();
-    wxTextEntryDialog dlg( this, wxEmptyString, wxEmptyString, filename );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filepath:" ), _( "Edit 3D Shape Name" ), filename );
 
     bool hasAlias;
     S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();

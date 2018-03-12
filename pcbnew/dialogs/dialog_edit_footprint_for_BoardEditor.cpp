@@ -43,6 +43,7 @@
 #include <project.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <dialog_text_entry.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -488,7 +489,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::Edit3DShapeFileName()
 
     // Edit filename
     wxString filename = m_3D_ShapeNameListBox->GetStringSelection();
-    wxTextEntryDialog dlg( this, wxEmptyString, wxEmptyString, filename );
+    WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, wxEmptyString, filename );
 
     bool hasAlias;
     S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();

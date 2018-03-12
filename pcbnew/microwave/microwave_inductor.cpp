@@ -27,6 +27,7 @@
 
 #include <base_units.h>
 #include <validators.h>
+#include <dialog_text_entry.h>
 #include <pcb_edit_frame.h>
 
 #include <class_pad.h>
@@ -306,7 +307,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Enter the desired length.
     msg = StringFromValue( g_UserUnit, inductorPattern.m_length );
-    wxTextEntryDialog dlg( nullptr, wxEmptyString, _( "Length of Trace:" ), msg );
+    WX_TEXT_ENTRY_DIALOG dlg( nullptr, _( "Length of Trace:" ), wxEmptyString, msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return nullptr; // canceled by user
@@ -335,7 +336,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Generate footprint. the value is also used as footprint name.
     msg = "L";
-    wxTextEntryDialog cmpdlg( nullptr, wxEmptyString, _( "Component Value:" ), msg );
+    WX_TEXT_ENTRY_DIALOG cmpdlg( nullptr, _( "Component Value:" ), wxEmptyString, msg );
     cmpdlg.SetTextValidator( FILE_NAME_CHAR_VALIDATOR( &msg ) );
 
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )

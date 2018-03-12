@@ -31,6 +31,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
+#include <dialog_text_entry.h>
 
 #include <general.h>
 #include <lib_edit_frame.h>
@@ -326,7 +327,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::EditAliasOfPart( wxCommandEvent& aEvent )
         return;
     }
 
-    wxTextEntryDialog dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
@@ -343,7 +344,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
 {
     wxString  aliasname;
 
-    wxTextEntryDialog dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
@@ -522,7 +523,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event
     if( component == NULL )
         return;
 
-    wxTextEntryDialog dlg( this, _( "Add Footprint Filter" ), _( "Footprint Filter" ), Line );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Add Footprint Filter" ), _( "Footprint Filter" ), Line );
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
@@ -575,7 +576,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::EditOneFootprintFilter( wxCommandEvent& e
 
     wxString filter = m_FootprintFilterListBox->GetStringSelection();
 
-    wxTextEntryDialog dlg( this, wxEmptyString, _( "Edit footprint filter" ), filter );
+    WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Edit footprint filter" ), filter );
 
     if( dlg.ShowModal() != wxID_OK )
         return;    // Aborted by user

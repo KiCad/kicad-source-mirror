@@ -38,6 +38,7 @@
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
+#include <dialog_text_entry.h>
 
 #include <footprint_edit_frame.h>
 #include <class_board.h>
@@ -251,7 +252,7 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
     wxString buffer;
 
     buffer = StringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth );
-    wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // canceled by user

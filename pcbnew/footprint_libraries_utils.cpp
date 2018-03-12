@@ -42,6 +42,7 @@
 #include <macros.h>
 #include <fp_lib_table.h>
 #include <validators.h>
+#include <dialog_text_entry.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -810,7 +811,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     // Ask for the new module name
     if( moduleName.IsEmpty() )
     {
-        wxTextEntryDialog dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
+        WX_TEXT_ENTRY_DIALOG dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
         dlg.SetTextValidator( FILE_NAME_CHAR_VALIDATOR( &moduleName ) );
 
         if( dlg.ShowModal() != wxID_OK )
