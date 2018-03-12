@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -112,58 +112,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	bupperSizer->Add( fgSizer1, 0, wxBOTTOM|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizerDldOptions;
-	bSizerDldOptions = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxBoxSizer* bSizerDlgChoices;
-	bSizerDlgChoices = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizerChoiceClose;
-	bSizerChoiceClose = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_cbKeepDlgOpen = new wxCheckBox( this, wxID_ANY, _("Keep this dialog open"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChoiceClose->Add( m_cbKeepDlgOpen, 0, wxALL, 5 );
-	
-	
-	bSizerChoiceClose->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	bSizerDlgChoices->Add( bSizerChoiceClose, 0, wxEXPAND|wxRIGHT, 5 );
-	
-	wxBoxSizer* bSizerChoiceSilentMode;
-	bSizerChoiceSilentMode = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_cbSkipConfirmation = new wxCheckBox( this, wxID_ANY, _("Don't ask for confirmation"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChoiceSilentMode->Add( m_cbSkipConfirmation, 0, wxALL, 5 );
-	
-	
-	bSizerChoiceSilentMode->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	bSizerDlgChoices->Add( bSizerChoiceSilentMode, 1, wxEXPAND, 5 );
-	
-	
-	bSizerDldOptions->Add( bSizerDlgChoices, 1, wxLEFT, 5 );
-	
-	wxBoxSizer* bButtonsSizer;
-	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
-	
-	bButtonsSizer->SetMinSize( wxSize( 160,-1 ) ); 
-	m_btnApply = new wxButton( this, wxID_APPLY, _("Annotate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_btnApply, 0, wxALL|wxEXPAND, 5 );
-	
-	m_btnClear = new wxButton( this, ID_CLEAR_ANNOTATION_CMP, _("Clear Annotation"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_btnClear, 0, wxALL|wxEXPAND, 5 );
-	
-	m_btnClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_btnClose, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	bSizerDldOptions->Add( bButtonsSizer, 0, wxALIGN_RIGHT, 5 );
-	
-	
-	bupperSizer->Add( bSizerDldOptions, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
-	
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,120 ) );
 	
@@ -172,20 +120,38 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	bmainSizer->Add( bupperSizer, 1, wxALL|wxEXPAND, 6 );
 	
+	wxBoxSizer* m_buttonsSizer;
+	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_btnClear = new wxButton( this, ID_CLEAR_ANNOTATION_CMP, _("Clear Annotation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonsSizer->Add( m_btnClear, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	
+	m_buttonsSizer->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bmainSizer->Add( m_buttonsSizer, 0, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bmainSizer );
 	this->Layout();
 	bmainSizer->Fit( this );
 	
 	// Connect Events
-	m_btnApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnApplyClick ), NULL, this );
 	m_btnClear->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnClearAnnotationCmpClick ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnApplyClick ), NULL, this );
 }
 
 DIALOG_ANNOTATE_BASE::~DIALOG_ANNOTATE_BASE()
 {
 	// Disconnect Events
-	m_btnApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnApplyClick ), NULL, this );
 	m_btnClear->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnClearAnnotationCmpClick ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnApplyClick ), NULL, this );
 	
 }

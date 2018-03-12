@@ -32,6 +32,7 @@
 #include <sch_edit_frame.h>
 #include <class_drawpanel.h>
 #include <bitmaps.h>
+#include <confirm.h>
 
 #include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>
@@ -40,8 +41,6 @@
 
 #define KEY_ANNOTATE_SORT_OPTION          wxT( "AnnotateSortOption" )
 #define KEY_ANNOTATE_ALGO_OPTION          wxT( "AnnotateAlgoOption" )
-#define KEY_ANNOTATE_KEEP_OPEN_OPTION     wxT( "AnnotateKeepOpenOption" )
-#define KEY_ANNOTATE_SKIP_CONFIRMATION    wxT( "AnnotateSkipConfirmation" )
 #define KEY_ANNOTATE_MESSAGES_FILTER      wxT( "AnnotateFilterMsg" )
 
 
@@ -87,16 +86,6 @@ private:
     int GetAnnotateAlgo();
 
     int GetStartNumber();
-
-    bool GetAnnotateKeepOpen()
-    {
-        return m_cbKeepDlgOpen->GetValue();
-    }
-
-    bool GetAnnotateSkipConfirmation()
-    {
-        return m_cbSkipConfirmation->GetValue();
-    }
 };
 
 
@@ -111,10 +100,17 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
         m_userMessage->Show( true );
 
         m_rbScope->Enable( false );
-        m_cbKeepDlgOpen->Show( false );
     }
 
     m_MessageWindow->SetLabel( _( "Annotation Messages:" ) );
+
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Annotate" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizer1->Layout();
+
+    m_sdbSizer1OK->SetDefault();
 
     InitValues();
     Layout();
@@ -128,8 +124,6 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 {
     m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
     m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo() );
-    m_Config->Write( KEY_ANNOTATE_KEEP_OPEN_OPTION, GetAnnotateKeepOpen() );
-    m_Config->Write( KEY_ANNOTATE_SKIP_CONFIRMATION, GetAnnotateSkipConfirmation() );
 
     m_Config->Write( KEY_ANNOTATE_MESSAGES_FILTER,
                     (long) m_MessageWindow->GetVisibleSeverities() );
@@ -176,12 +170,6 @@ void DIALOG_ANNOTATE::InitValues()
     }
     m_textNumberAfter->SetValue( wxT( "0" ) );
 
-    m_Config->Read( KEY_ANNOTATE_KEEP_OPEN_OPTION, &option, 0L );
-    m_cbKeepDlgOpen->SetValue( option );
-
-    m_Config->Read( KEY_ANNOTATE_SKIP_CONFIRMATION, &option, 0L );
-    m_cbSkipConfirmation->SetValue( option );
-
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
     annotate_right_down_bitmap->SetBitmap( KiBitmap( annotate_right_down_xpm ) );
 
@@ -189,29 +177,28 @@ void DIALOG_ANNOTATE::InitValues()
     m_MessageWindow->SetVisibleSeverities( severities );
 
     m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 160 ) );
-
-    m_btnApply->SetDefault();
 }
 
 
 void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
-    int         response;
     wxString    message;
 
-    // Ask for confirmation of destructive actions unless the user asked us not to.
-    if( GetResetItems() && !GetAnnotateSkipConfirmation() )
+    // Ask for confirmation of destructive actions.
+    if( GetResetItems() )
     {
         if( GetLevel() )
             message += _( "Clear and annotate all of the symbols on the entire schematic?" );
         else
             message += _( "Clear and annotate all of the symbols on the current sheet?" );
 
-        message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
+        message += _( "\n\nThis operation will change the current annotation and cannot \nbe undone." );
 
-        response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
+        KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKLabel( _( "Clear and Annotate" ) );
+        dlg.DoNotShowCheckbox();
 
-        if( response == wxCANCEL )
+        if( dlg.ShowModal() == wxCANCEL )
             return;
     }
 
@@ -233,7 +220,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     if( reporter.HasMessage() )
         return;
 
-    if( m_userMessage->IsShown() || !GetAnnotateKeepOpen() )
+    if( m_userMessage->IsShown() )
     {
         // Close the dialog by calling the default handler for a wxID_OK event
         event.SetId( wxID_OK );
@@ -244,24 +231,23 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
 void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
 {
-    int         response;
     wxString    message;
 
-    if( !GetAnnotateSkipConfirmation() )
-    {
-        if( GetLevel() )
-            message = _( "Clear the existing annotation for the entire schematic?" );
-        else
-            message = _( "Clear the existing annotation for the current sheet?" );
+    if( GetLevel() )
+        message = _( "Clear the existing annotation for the entire schematic?" );
+    else
+        message = _( "Clear the existing annotation for the current sheet?" );
 
-        message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
-        response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
+    message += _( "\n\nThis operation will clear the existing annotation and cannot \nbe undone." );
 
-        if( response == wxCANCEL )
-            return;
-    }
+    KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+    dlg.SetOKLabel( _( "Clear" ) );
+    dlg.DoNotShowCheckbox();
 
-    m_Parent->DeleteAnnotation( GetLevel() ? false : true );
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    m_Parent->DeleteAnnotation( !GetLevel() );
     m_btnClear->Enable( false );
 }
 

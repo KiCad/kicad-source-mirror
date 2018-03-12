@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,9 +30,8 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
-#include <wx/checkbox.h>
-#include <wx/button.h>
 #include <wx/panel.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -63,16 +62,15 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textNumberAfter;
 		wxRadioButton* m_rbSheetX100;
 		wxRadioButton* m_rbSheetX1000;
-		wxCheckBox* m_cbKeepDlgOpen;
-		wxCheckBox* m_cbSkipConfirmation;
-		wxButton* m_btnApply;
-		wxButton* m_btnClear;
-		wxButton* m_btnClose;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
+		wxButton* m_btnClear;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnClearAnnotationCmpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
