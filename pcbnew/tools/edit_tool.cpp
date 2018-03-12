@@ -171,12 +171,12 @@ TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         nullptr, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::copyToClipboard( "pcbnew.InteractiveEdit.CopyToClipboard",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
+        AS_GLOBAL, 0,   // do not define a hotkey and let TranslateLegacyId() handle the event
         _( "Copy" ), _( "Copy selected content to clipboard" ),
         copy_xpm );
 
 TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
+        AS_GLOBAL, 0,   // do not define a hotkey and let TranslateLegacyId() handle the event
         _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
 

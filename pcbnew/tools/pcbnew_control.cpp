@@ -239,7 +239,7 @@ TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
         "", "" );               // so users are aware of that
 
 TOOL_ACTION PCB_ACTIONS::pasteFromClipboard( "pcbnew.InteractiveEdit.pasteFromClipboard",
-        AS_GLOBAL, MD_CTRL + int( 'V' ),
+        AS_GLOBAL, 0,   // do not define a hotkey and let TranslateLegacyId() handle the event
         _( "Paste" ), _( "Paste content from clipboard" ),
         paste_xpm );
 
