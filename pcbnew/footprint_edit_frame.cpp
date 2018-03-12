@@ -797,10 +797,10 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     }
 
     wxString title;
-    title.Printf( _( "Footprint Editor" ) + L" \u2014 %s%s%s",
-            nickname_display,
-            writable ? wxString( wxEmptyString ) : _( " [Read Only]" ),
-            path_display );
+    title.Printf( _( "Footprint Editor" ) + wxT( " \u2014 %s%s%s" ),
+                  nickname_display,
+                  writable ? wxEmptyString : _( " [Read Only]" ),
+                  path_display );
 
     SetTitle( title );
 }

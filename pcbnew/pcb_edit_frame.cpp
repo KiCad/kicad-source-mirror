@@ -1112,9 +1112,7 @@ void PCB_EDIT_FRAME::UpdateTitle()
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
-        fileinfo = fileName.IsFileWritable()
-            ? wxString( wxEmptyString )
-            : _( " [Read Only]" );
+        fileinfo = fileName.IsFileWritable() ? wxEmptyString : _( " [Read Only]" );
     }
     else
     {
@@ -1122,9 +1120,9 @@ void PCB_EDIT_FRAME::UpdateTitle()
     }
 
     wxString title;
-    title.Printf( L"Pcbnew \u2014 %s%s",
-            fileName.GetFullPath(),
-            fileinfo );
+    title.Printf( _( "Pcbnew" ) + wxT( " \u2014 %s%s" ),
+                  fileName.GetFullPath(),
+                  fileinfo );
 
     SetTitle( title );
 }

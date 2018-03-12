@@ -688,9 +688,8 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
     if( draw3DFrame == NULL )
         return;
 
-    wxString title = wxString::Format(
-                _( "3D Viewer" ) + L" \u2014 %s",
-                getCurFootprintName() );
+    wxString title = wxString::Format( _( "3D Viewer" ) + wxT( " \u2014 %s" ),
+                                       getCurFootprintName() );
 
     draw3DFrame->SetTitle( title );
 
