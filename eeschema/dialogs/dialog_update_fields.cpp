@@ -43,6 +43,7 @@ DIALOG_UPDATE_FIELDS::DIALOG_UPDATE_FIELDS( SCH_EDIT_FRAME* aParent,
     : DIALOG_UPDATE_FIELDS_BASE( aParent ), m_frame( aParent ),
     m_components( aComponents ), m_createUndo( aCreateUndoEntry )
 {
+    m_sdbSizerOK->SetDefault();
 }
 
 
@@ -89,10 +90,10 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
 
 bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
 {
-    if( !wxDialog::TransferDataToWindow() )
+    if( !wxDialog::TransferDataToWindow() || !m_components.size() )
         return false;
 
-    // Collect all field names from library parts of components that are going to be updated
+    // Collect all user field names from library parts of components that are going to be updated
     {
         for( auto component : m_components )
         {
@@ -106,7 +107,9 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
             for( auto it = drawItems.begin( LIB_FIELD_T ); it != drawItems.end( LIB_FIELD_T ); ++it )
             {
                 const LIB_FIELD* field = static_cast<const LIB_FIELD*>( &( *it ) );
-                m_fields.insert( field->GetName( false ) );
+
+                if( field->GetId() >= MANDATORY_FIELDS )
+                    m_fields.insert( field->GetName( false ) );
             }
         }
     }
@@ -114,12 +117,18 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
     // Update the listbox widget
     m_fieldsBox->Clear();
 
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    {
+        m_fieldsBox->Append( m_components.front()->GetField( i )->GetName( false ) );
+
+        if( i != REFERENCE && i != VALUE )
+            m_fieldsBox->Check( i, true );
+    }
+
     for( const auto& field : m_fields )
     {
         int idx = m_fieldsBox->Append( field );
-
-        if( field != "Reference" && field != "Value" )
-            m_fieldsBox->Check( idx, true );
+        m_fieldsBox->Check( idx, true );
     }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -174,10 +183,30 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
 
         // If the library field is empty an update would clear an existing entry.
         // Check if this is the desired behavior.
-        auto newText = libField->GetText();
-        if( !newText.empty() || !m_omitEmpty->IsChecked() )
+        if( !libField->GetText().empty() || m_resetEmpty->IsChecked() )
+           field->SetText( libField->GetText() );
+
+        if( m_resetVisibility->IsChecked() )
+            field->SetVisible( libField->IsVisible() );
+
+        if( m_resetPosition->IsChecked() )
         {
-           field->SetText( newText );
+            field->SetTextAngle( libField->GetTextAngle() );
+
+            // Board fields are board-relative; symbol editor fields are component-relative
+            if( m_createUndo )
+                field->SetTextPos( libField->GetTextPos() + aComponent->GetPosition() );
+            else
+                field->SetTextPos( libField->GetTextPos() );
+        }
+
+        if( m_resetSizeAndStyle->IsChecked() )
+        {
+            field->SetHorizJustify( libField->GetHorizJustify() );
+            field->SetVertJustify( libField->GetVertJustify() );
+            field->SetTextSize( libField->GetTextSize() );
+            field->SetItalic( libField->IsItalic() );
+            field->SetBold( libField->IsBold() );
         }
     }
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  6 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,16 +13,15 @@
 #include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/checklst.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/checklst.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/checkbox.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,13 +35,14 @@ class DIALOG_UPDATE_FIELDS_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_infoLabel;
 		wxCheckListBox* m_fieldsBox;
 		wxButton* m_selAllBtn;
 		wxButton* m_selNoneBtn;
 		wxCheckBox* m_removeExtraBox;
-		wxCheckBox* m_omitEmpty;
-		wxStaticLine* m_staticline;
+		wxCheckBox* m_resetEmpty;
+		wxCheckBox* m_resetVisibility;
+		wxCheckBox* m_resetSizeAndStyle;
+		wxCheckBox* m_resetPosition;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
