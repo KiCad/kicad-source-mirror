@@ -344,7 +344,7 @@ public:
      * aCommand in there.
      */
     VTBL_ENTRY void ExpressMail( FRAME_T aDestination, MAIL_T aCommand,
-            const std::string& aPayload, wxWindow* aSource = NULL );
+            std::string aPayload, wxWindow* aSource = NULL );
 
     /**
      * Function Prj
