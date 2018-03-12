@@ -235,13 +235,15 @@ static const wxString intern_new_d356_netname( const wxString &aNetname,
         std::map<wxString, wxString> &aMap, std::set<wxString> &aSet )
 {
     wxString canon;
-    for (wxString::const_iterator i = aNetname.begin();
-            i != aNetname.end(); ++i)
+
+    for( size_t ii = 0; ii < aNetname.Len(); ++ii )
     {
         // Rule: we can only use the standard ASCII, control excluded
-        char ch = *i;
-        if( ch > 126 || !std::isgraph( ch ) )
+        wxUniChar ch = aNetname[ii];
+
+        if( ch > 126 || !std::isgraph( static_cast<unsigned char>( ch ) ) )
             ch = '?';
+
         canon += ch;
     }
 
