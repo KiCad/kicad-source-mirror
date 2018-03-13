@@ -1669,16 +1669,12 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     else if( layer == B_Cu )
         pad->SetLayerSet( back );
 
-    // Optional according to DTD
-    if( e.roundness )    // set set shape to PAD_SHAPE_RECT above, in case roundness is not present
+    // Rounded rectangle pads
+    if( e.roundness )
     {
-        if( *e.roundness >= 75 )       // roundness goes from 0-100% as integer
-        {
-            if( e.dy == e.dx )
-                pad->SetShape( PAD_SHAPE_CIRCLE );
-            else
-                pad->SetShape( PAD_SHAPE_OVAL );
-        }
+        // Eagle uses a different definition of roundness, hence division by 200
+        pad->SetRoundRectRadiusRatio( *e.roundness / 200.0 );
+        pad->SetShape( PAD_SHAPE_ROUNDRECT );
     }
 
     if( e.rot )
