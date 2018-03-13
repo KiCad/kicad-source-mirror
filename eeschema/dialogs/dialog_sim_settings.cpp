@@ -94,7 +94,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     else if( page == m_pgDC )
     {
         // At least one source has to be enabled
-        if( !m_dcEnable1->IsChecked() && !m_dcEnable1->IsChecked() )
+        if( !m_dcEnable1->IsChecked() && !m_dcEnable2->IsChecked() )
         {
             DisplayError( this, wxT( "You need to enable at least one source" ) );
             return false;
