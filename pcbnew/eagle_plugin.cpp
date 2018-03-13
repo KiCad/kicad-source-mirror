@@ -660,8 +660,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             MODULE* module = new MODULE( m_board );
             m_board->Add( module, ADD_APPEND );
 
-            char    temp[40];
-            sprintf( temp, "@HOLE%d", m_hole_count++ );
+            char temp[40];
+            snprintf( temp, sizeof( temp ), "@HOLE%d", m_hole_count++ );
             module->SetReference( FROM_UTF8( temp ) );
             module->Reference().SetVisible( false );
 
