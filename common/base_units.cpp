@@ -244,7 +244,10 @@ wxString StringFromValue( EDA_UNITS_T aUnits, int aValue, bool aAddUnitSymbol, b
     }
     else
     {
-        len = sprintf( buf, "%.10g", value_to_print );
+        if( aUnits == INCHES && aUseMils )
+            len = sprintf( buf, "%.7g", value_to_print );
+        else
+            len = sprintf( buf, "%.10g", value_to_print );
     }
 
     wxString    stringValue( buf, wxConvUTF8 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,40 +24,44 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bpanelNetClassesSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerUpper;
-	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Classes:") ), wxVERTICAL );
+	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Classes") ), wxVERTICAL );
 	
 	m_grid = new wxGrid( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	
 	// Grid
-	m_grid->CreateGrid( 1, 8 );
+	m_grid->CreateGrid( 1, 9 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
 	m_grid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_grid->SetColSize( 0, 100 );
-	m_grid->SetColSize( 1, 120 );
-	m_grid->SetColSize( 2, 84 );
-	m_grid->SetColSize( 3, 85 );
-	m_grid->SetColSize( 4, 81 );
-	m_grid->SetColSize( 5, 90 );
+	m_grid->SetColSize( 0, 120 );
+	m_grid->SetColSize( 1, 100 );
+	m_grid->SetColSize( 2, 100 );
+	m_grid->SetColSize( 3, 100 );
+	m_grid->SetColSize( 4, 100 );
+	m_grid->SetColSize( 5, 100 );
+	m_grid->SetColSize( 6, 100 );
+	m_grid->SetColSize( 7, 100 );
+	m_grid->SetColSize( 8, 100 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 40 );
-	m_grid->SetColLabelValue( 0, _("Clearance") );
-	m_grid->SetColLabelValue( 1, _("Track Width") );
-	m_grid->SetColLabelValue( 2, _("Via Dia") );
-	m_grid->SetColLabelValue( 3, _("Via Drill") );
-	m_grid->SetColLabelValue( 4, _("uVia Dia") );
-	m_grid->SetColLabelValue( 5, _("uVia Drill") );
-	m_grid->SetColLabelValue( 6, _("Diff Pair Width") );
-	m_grid->SetColLabelValue( 7, _("Diff Pair Gap") );
+	m_grid->SetColLabelSize( 22 );
+	m_grid->SetColLabelValue( 0, _("Name") );
+	m_grid->SetColLabelValue( 1, _("Clearance") );
+	m_grid->SetColLabelValue( 2, _("Track Width") );
+	m_grid->SetColLabelValue( 3, _("Via Dia") );
+	m_grid->SetColLabelValue( 4, _("Via Drill") );
+	m_grid->SetColLabelValue( 5, _("uVia Dia") );
+	m_grid->SetColLabelValue( 6, _("uVia Drill") );
+	m_grid->SetColLabelValue( 7, _("Diff Pair Width") );
+	m_grid->SetColLabelValue( 8, _("Diff Pair Gap") );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_grid->EnableDragRowSize( false );
-	m_grid->SetRowLabelSize( 120 );
+	m_grid->SetRowLabelSize( 0 );
 	m_grid->SetRowLabelValue( 0, _("Default") );
 	m_grid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
 	
@@ -67,34 +71,39 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetToolTip( _("Net Class parameters") );
 	
-	sbSizerUpper->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+	sbSizerUpper->Add( m_grid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_addButton = new wxButton( m_panelNetClassesEditor, wxID_ADD_NETCLASS, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_addButton->SetToolTip( _("Add another Net Class") );
+	m_addButton = new wxBitmapButton( m_panelNetClassesEditor, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_addButton->SetMinSize( wxSize( 29,29 ) );
 	
-	buttonBoxSizer->Add( m_addButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	buttonBoxSizer->Add( m_addButton, 0, wxLEFT, 5 );
 	
-	m_removeButton = new wxButton( m_panelNetClassesEditor, wxID_REMOVE_NETCLASS, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_removeButton->SetToolTip( _("Remove the currently select Net Class\nThe default Net Class cannot be removed") );
+	m_removeButton = new wxBitmapButton( m_panelNetClassesEditor, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_removeButton->SetMinSize( wxSize( 29,29 ) );
 	
-	buttonBoxSizer->Add( m_removeButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	buttonBoxSizer->Add( m_removeButton, 0, wxRIGHT, 10 );
 	
-	m_moveUpButton = new wxButton( m_panelNetClassesEditor, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_moveUpButton->SetToolTip( _("Move the currently selected Net Class up one row") );
+	m_moveUpButton = new wxBitmapButton( m_panelNetClassesEditor, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_moveUpButton->SetMinSize( wxSize( 29,29 ) );
 	
-	buttonBoxSizer->Add( m_moveUpButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	buttonBoxSizer->Add( m_moveUpButton, 0, wxLEFT, 5 );
+	
+	m_moveDownButton = new wxBitmapButton( m_panelNetClassesEditor, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_moveDownButton->SetMinSize( wxSize( 29,29 ) );
+	
+	buttonBoxSizer->Add( m_moveDownButton, 0, wxRIGHT, 5 );
 	
 	
-	sbSizerUpper->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	sbSizerUpper->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 2 );
 	
 	
 	bpanelNetClassesSizer->Add( sbSizerUpper, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxStaticBoxSizer* sbSizerNetSelectMain;
-	sbSizerNetSelectMain = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Class Membership:") ), wxHORIZONTAL );
+	sbSizerNetSelectMain = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Class Membership") ), wxHORIZONTAL );
 	
 	wxBoxSizer* leftNetSelectBoxSizer;
 	leftNetSelectBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -174,13 +183,10 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), true );
 	m_panelGolbalDesignRules = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bpanelGlobRulesSizer;
-	bpanelGlobRulesSizer = new wxBoxSizer( wxVERTICAL );
+	bpanelGlobRulesSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bDesignRulesUpperSizer;
-	bDesignRulesUpperSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxStaticBoxSizer* sbViasOptionSizer;
-	sbViasOptionSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Routing Options:") ), wxVERTICAL );
+	wxStaticBoxSizer* sbRoutingOptionSizer;
+	sbRoutingOptionSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Routing Options") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgViaOptionsSize;
 	fgViaOptionsSize = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -188,34 +194,34 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	fgViaOptionsSize->SetFlexibleDirection( wxBOTH );
 	fgViaOptionsSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_TrackMinWidthTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum track width:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_TrackMinWidthTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum track width:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_TrackMinWidthTitle->Wrap( -1 );
-	fgViaOptionsSize->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgViaOptionsSize->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	m_SetTrackMinWidthCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaOptionsSize->Add( m_SetTrackMinWidthCtrl, 0, wxALIGN_LEFT|wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	fgViaOptionsSize->Add( m_SetTrackMinWidthCtrl, 0, wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_TrackMinWidthUnits = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_TrackMinWidthUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_TrackMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
-	m_ViaMinTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via diameter:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ViaMinTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via diameter:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_ViaMinTitle->Wrap( -1 );
-	fgViaOptionsSize->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgViaOptionsSize->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	m_SetViasMinSizeCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaOptionsSize->Add( m_SetViasMinSizeCtrl, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgViaOptionsSize->Add( m_SetViasMinSizeCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_ViaMinUnits = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_ViaMinUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_ViaMinUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
-	m_ViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via drill:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via drill:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_ViaMinDrillTitle->Wrap( -1 );
-	fgViaOptionsSize->Add( m_ViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgViaOptionsSize->Add( m_ViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	m_SetViasMinDrillCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaOptionsSize->Add( m_SetViasMinDrillCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgViaOptionsSize->Add( m_SetViasMinDrillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_ViaMinDrillUnits = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_ViaMinDrillUnits->Wrap( -1 );
@@ -239,104 +245,40 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	fgViaOptionsSize->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_MicroViaMinSizeTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinSizeTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia diameter:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MicroViaMinSizeTitle->Wrap( -1 );
-	fgViaOptionsSize->Add( m_MicroViaMinSizeTitle, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	fgViaOptionsSize->Add( m_MicroViaMinSizeTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxTOP, 5 );
 	
 	m_SetMicroViasMinSizeCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetMicroViasMinSizeCtrl->Enable( false );
 	
-	fgViaOptionsSize->Add( m_SetMicroViasMinSizeCtrl, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgViaOptionsSize->Add( m_SetMicroViasMinSizeCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_MicroViaMinSizeUnits = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MicroViaMinSizeUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_MicroViaMinSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
-	m_MicroViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia drill:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia drill:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MicroViaMinDrillTitle->Wrap( -1 );
-	fgViaOptionsSize->Add( m_MicroViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgViaOptionsSize->Add( m_MicroViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	m_SetMicroViasMinDrillCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetMicroViasMinDrillCtrl->Enable( false );
 	
-	fgViaOptionsSize->Add( m_SetMicroViasMinDrillCtrl, 0, wxEXPAND|wxALL, 5 );
+	fgViaOptionsSize->Add( m_SetMicroViasMinDrillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_MicroViaMinDrillUnits = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MicroViaMinDrillUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_MicroViaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	
-	sbViasOptionSizer->Add( fgViaOptionsSize, 1, wxEXPAND, 5 );
+	sbRoutingOptionSizer->Add( fgViaOptionsSize, 1, wxEXPAND, 5 );
 	
 	
-	bDesignRulesUpperSizer->Add( sbViasOptionSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	
-	bpanelGlobRulesSizer->Add( bDesignRulesUpperSizer, 0, wxEXPAND, 5 );
-	
-	m_staticTextInfo = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Specific via diameters and track widths, which can be used to replace default Netclass values on demand,\nfor arbitrary vias or track segments."), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE );
-	m_staticTextInfo->Wrap( -1 );
-	bpanelGlobRulesSizer->Add( m_staticTextInfo, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bDesignRulesLowerSizer;
-	bDesignRulesLowerSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxStaticBoxSizer* sViaSizeBox;
-	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Via Sizes:") ), wxVERTICAL );
-	
-	m_staticText7 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Drill value: a blank or 0 => default Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	sViaSizeBox->Add( m_staticText7, 0, wxALL, 5 );
-	
-	m_gridViaSizeList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	// Grid
-	m_gridViaSizeList->CreateGrid( 8, 2 );
-	m_gridViaSizeList->EnableEditing( true );
-	m_gridViaSizeList->EnableGridLines( true );
-	m_gridViaSizeList->EnableDragGridSize( false );
-	m_gridViaSizeList->SetMargins( 0, 0 );
-	
-	// Columns
-	m_gridViaSizeList->EnableDragColMove( false );
-	m_gridViaSizeList->EnableDragColSize( true );
-	m_gridViaSizeList->SetColLabelSize( 30 );
-	m_gridViaSizeList->SetColLabelValue( 0, _("Diameter") );
-	m_gridViaSizeList->SetColLabelValue( 1, _("Drill") );
-	m_gridViaSizeList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	m_gridViaSizeList->EnableDragRowSize( true );
-	m_gridViaSizeList->SetRowLabelSize( 80 );
-	m_gridViaSizeList->SetRowLabelValue( 0, _("Via 1") );
-	m_gridViaSizeList->SetRowLabelValue( 1, _("Via 2") );
-	m_gridViaSizeList->SetRowLabelValue( 2, _("Via 3") );
-	m_gridViaSizeList->SetRowLabelValue( 3, _("Via 4") );
-	m_gridViaSizeList->SetRowLabelValue( 4, _("Via 5") );
-	m_gridViaSizeList->SetRowLabelValue( 5, _("Via 6") );
-	m_gridViaSizeList->SetRowLabelValue( 6, _("Via 7") );
-	m_gridViaSizeList->SetRowLabelValue( 7, _("Via 8") );
-	m_gridViaSizeList->SetRowLabelValue( 8, _("Via 9") );
-	m_gridViaSizeList->SetRowLabelValue( 9, _("Via 10") );
-	m_gridViaSizeList->SetRowLabelValue( 10, _("Via 11") );
-	m_gridViaSizeList->SetRowLabelValue( 11, _("Via 12") );
-	m_gridViaSizeList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_gridViaSizeList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	sViaSizeBox->Add( m_gridViaSizeList, 1, wxALL|wxEXPAND, 5 );
-	
-	
-	bDesignRulesLowerSizer->Add( sViaSizeBox, 1, wxALL|wxEXPAND, 5 );
+	bpanelGlobRulesSizer->Add( sbRoutingOptionSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbTracksListSizer;
-	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Track Widths:") ), wxVERTICAL );
-	
-	m_staticText8 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	sbTracksListSizer->Add( m_staticText8, 0, wxALL, 5 );
+	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Track Widths") ), wxVERTICAL );
 	
 	m_gridTrackWidthList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
@@ -348,14 +290,15 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridTrackWidthList->SetMargins( 0, 0 );
 	
 	// Columns
+	m_gridTrackWidthList->SetColSize( 0, 110 );
 	m_gridTrackWidthList->EnableDragColMove( false );
-	m_gridTrackWidthList->EnableDragColSize( true );
-	m_gridTrackWidthList->SetColLabelSize( 30 );
+	m_gridTrackWidthList->EnableDragColSize( false );
+	m_gridTrackWidthList->SetColLabelSize( 22 );
 	m_gridTrackWidthList->SetColLabelValue( 0, _("Width") );
 	m_gridTrackWidthList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_gridTrackWidthList->EnableDragRowSize( true );
+	m_gridTrackWidthList->EnableDragRowSize( false );
 	m_gridTrackWidthList->SetRowLabelSize( 80 );
 	m_gridTrackWidthList->SetRowLabelValue( 0, _("Track 1") );
 	m_gridTrackWidthList->SetRowLabelValue( 1, _("Track 2") );
@@ -375,13 +318,58 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	// Cell Defaults
 	m_gridTrackWidthList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	sbTracksListSizer->Add( m_gridTrackWidthList, 1, wxALL|wxEXPAND, 5 );
+	sbTracksListSizer->Add( m_gridTrackWidthList, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bDesignRulesLowerSizer->Add( sbTracksListSizer, 1, wxALL|wxEXPAND, 5 );
+	bpanelGlobRulesSizer->Add( sbTracksListSizer, 0, wxALL|wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sViaSizeBox;
+	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Via Sizes") ), wxVERTICAL );
+	
+	m_gridViaSizeList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	// Grid
+	m_gridViaSizeList->CreateGrid( 8, 2 );
+	m_gridViaSizeList->EnableEditing( true );
+	m_gridViaSizeList->EnableGridLines( true );
+	m_gridViaSizeList->EnableDragGridSize( false );
+	m_gridViaSizeList->SetMargins( 0, 0 );
+	
+	// Columns
+	m_gridViaSizeList->SetColSize( 0, 110 );
+	m_gridViaSizeList->SetColSize( 1, 110 );
+	m_gridViaSizeList->EnableDragColMove( false );
+	m_gridViaSizeList->EnableDragColSize( false );
+	m_gridViaSizeList->SetColLabelSize( 22 );
+	m_gridViaSizeList->SetColLabelValue( 0, _("Diameter") );
+	m_gridViaSizeList->SetColLabelValue( 1, _("Drill") );
+	m_gridViaSizeList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Rows
+	m_gridViaSizeList->EnableDragRowSize( false );
+	m_gridViaSizeList->SetRowLabelSize( 80 );
+	m_gridViaSizeList->SetRowLabelValue( 0, _("Via 1") );
+	m_gridViaSizeList->SetRowLabelValue( 1, _("Via 2") );
+	m_gridViaSizeList->SetRowLabelValue( 2, _("Via 3") );
+	m_gridViaSizeList->SetRowLabelValue( 3, _("Via 4") );
+	m_gridViaSizeList->SetRowLabelValue( 4, _("Via 5") );
+	m_gridViaSizeList->SetRowLabelValue( 5, _("Via 6") );
+	m_gridViaSizeList->SetRowLabelValue( 6, _("Via 7") );
+	m_gridViaSizeList->SetRowLabelValue( 7, _("Via 8") );
+	m_gridViaSizeList->SetRowLabelValue( 8, _("Via 9") );
+	m_gridViaSizeList->SetRowLabelValue( 9, _("Via 10") );
+	m_gridViaSizeList->SetRowLabelValue( 10, _("Via 11") );
+	m_gridViaSizeList->SetRowLabelValue( 11, _("Via 12") );
+	m_gridViaSizeList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Label Appearance
+	
+	// Cell Defaults
+	m_gridViaSizeList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	sViaSizeBox->Add( m_gridViaSizeList, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bpanelGlobRulesSizer->Add( bDesignRulesLowerSizer, 0, wxEXPAND, 5 );
+	bpanelGlobRulesSizer->Add( sViaSizeBox, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	m_panelGolbalDesignRules->SetSizer( bpanelGlobRulesSizer );
@@ -409,12 +397,15 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bMainSizer->Fit( this );
 	
 	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_DESIGN_RULES_BASE::OnUpdateUI ) );
 	m_DRnotebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DESIGN_RULES_BASE::OnNotebookPageChanged ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameLeftClick ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameRightClick ), NULL, this );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_DESIGN_RULES_BASE::OnSizeNetclassGrid ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRemoveNetclassClick ), NULL, this );
 	m_moveUpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnMoveUpSelectedNetClass ), NULL, this );
+	m_moveDownButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnMoveDownSelectedNetClass ), NULL, this );
 	m_leftClassChoice->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnLeftCBSelection ), NULL, this );
 	m_buttonLeftSelAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnLeftSelectAllButton ), NULL, this );
 	m_buttonRightToLeft->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRightToLeftCopyButton ), NULL, this );
@@ -427,12 +418,15 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 DIALOG_DESIGN_RULES_BASE::~DIALOG_DESIGN_RULES_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_DESIGN_RULES_BASE::OnUpdateUI ) );
 	m_DRnotebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DESIGN_RULES_BASE::OnNotebookPageChanged ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameLeftClick ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameRightClick ), NULL, this );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_DESIGN_RULES_BASE::OnSizeNetclassGrid ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRemoveNetclassClick ), NULL, this );
 	m_moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnMoveUpSelectedNetClass ), NULL, this );
+	m_moveDownButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnMoveDownSelectedNetClass ), NULL, this );
 	m_leftClassChoice->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnLeftCBSelection ), NULL, this );
 	m_buttonLeftSelAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnLeftSelectAllButton ), NULL, this );
 	m_buttonRightToLeft->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRightToLeftCopyButton ), NULL, this );

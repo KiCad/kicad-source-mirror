@@ -32,6 +32,7 @@
 #define __dialog_design_rules_h_
 
 #include <../class_board.h>
+#include <widgets/unit_binder.h>
 
 #include <dialog_design_rules_base.h>
 
@@ -65,16 +66,28 @@ class DIALOG_DESIGN_RULES : public DIALOG_DESIGN_RULES_BASE
 
 private:
 
-    static const wxString wildCard;     ///< the name of a fictitious netclass which includes all NETs
+    static const wxString   wildCard;               // The name of a fictitious netclass
+                                                    // which includes all NETs
+    static int              s_LastTabSelection;     // Which tab user had open last
 
     PCB_EDIT_FRAME*         m_Parent;
     BOARD*                  m_Pcb;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
-    NETCLASSPTR             m_SelectedNetClass;
+    int*                    m_originalColWidths;
 
-    static int              s_LastTabSelection;     ///< which tab user had open last
-    int                     m_initialRowLabelsSize; ///< the initial width given by wxFormBuilder
+    wxString                m_gridErrorMsg;
+    wxGrid*                 m_gridErrorGrid;
+    int                     m_gridErrorRow;
+    int                     m_gridErrorCol;
+
+    bool                    m_netclassesDirty;      // Indicates the netclass drop-down
+                                                    // menus need rebuilding
+    UNIT_BINDER             m_trackMinWidth;
+    UNIT_BINDER             m_viaMinDiameter;
+    UNIT_BINDER             m_viaMinDrill;
+    UNIT_BINDER             m_microViaMinDiameter;
+    UNIT_BINDER             m_microViaMinDrill;
 
     wxFloatingPointValidator< double > m_validator; // Floating point validator
 
@@ -97,75 +110,31 @@ private:
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
     void CheckAllowMicroVias();
     void OnAllowMicroVias( wxCommandEvent& event ) override;
-
-    /*
-     * Called on "Move Up" button click
-     * the selected(s) rules are moved up
-     * The default netclass is always the first rule
-     */
+    void OnSizeNetclassGrid( wxSizeEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent &event ) override;
+    void OnNetclassGridCellChanging( wxGridEvent& event );
     void OnMoveUpSelectedNetClass( wxCommandEvent& event ) override;
-
-    /*
-     * Called on the left Choice Box selection
-     */
+    void OnMoveDownSelectedNetClass( wxCommandEvent& event ) override;
     void OnLeftCBSelection( wxCommandEvent& event ) override;
-
-    /*
-     * Called on the Right Choice Box selection
-     */
     void OnRightCBSelection( wxCommandEvent& event ) override;
-
     void OnRightToLeftCopyButton( wxCommandEvent& event ) override;
     void OnLeftToRightCopyButton( wxCommandEvent& event ) override;
-
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
-
-    /*
-     * Called on clicking the left "select all" button:
-     * select all items of the left netname list list box
-     */
     void OnLeftSelectAllButton( wxCommandEvent& event ) override;
-
-    /*
-     * Called on clicking the right "select all" button:
-     * select all items of the right netname list list box
-     */
     void OnRightSelectAllButton( wxCommandEvent& event ) override;
 
-    /*
-     * Function SetDataValidators
-     * adds numerical validators to relevant text input boxes
-     */
-    void SetDataValidators( void );
+    bool validateNetclassName( int aRow, wxString aName, bool focusFirst = true );
+    bool validateData();
 
-    /*
-     * Function TestDataValidity
-     *
-     * Performs a check of design rule data validity and displays an error message if errors
-     * are found.
-     * @param aErrorMsg is a pointer to a wxString to copy the error message into.  Can be NULL.
-     * @return true if Ok, false if error
-     */
-    bool TestDataValidity( wxString* aErrorMsg = NULL );
+    void transferNetclassesToWindow();
+    void transferGlobalRulesToWindow();
 
-    void InitDialogRules();
-    void InitGlobalRules();
-
-    /**
-     * Function InitRulesList
-     * Fill the grid showing current rules with values
-     */
-    void InitRulesList();
+    void rebuildNetclassDropdowns();
 
     /* Populates the lists of sizes (Tracks width list and Vias diameters & drill list) */
     void InitDimensionsLists();
 
-    void InitializeRulesSelectionBoxes();
-
-    /* Copy the rules list from grid to board
-     */
-    void CopyRulesListToBoard();
-
+    void CopyNetclassesToBoard();
     void CopyGlobalRulesToBoard();
     void CopyDimensionsListsToBoard( );
     void SetRoutableLayerStatus();
@@ -195,11 +164,15 @@ private:
 
     void moveSelectedItems( NETS_LIST_CTRL* src, const wxString& newClassName );
 
+    void setGridError( wxGrid* aGrid, const wxString& aMsg, int aRow, int aCol );
+
+    void AdjustNetclassGridColumns( int aWidth );
 
 public:
     DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent );
-    ~DIALOG_DESIGN_RULES( ) { }
+    ~DIALOG_DESIGN_RULES( );
 
+    virtual bool TransferDataToWindow() override;
     virtual bool TransferDataFromWindow() override;
 };
 

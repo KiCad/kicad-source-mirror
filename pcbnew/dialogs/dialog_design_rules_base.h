@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,10 @@ class NETS_LIST_CTRL;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -27,9 +31,6 @@ class NETS_LIST_CTRL;
 #include <wx/statline.h>
 #include <wx/listctrl.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
@@ -49,18 +50,17 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			wxID_ADD_NETCLASS = 1000,
-			wxID_REMOVE_NETCLASS,
-			ID_LEFT_TO_RIGHT_COPY,
+			ID_LEFT_TO_RIGHT_COPY = 1000,
 			ID_RIGHT_TO_LEFT_COPY
 		};
 		
 		wxNotebook* m_DRnotebook;
 		wxPanel* m_panelNetClassesEditor;
 		wxGrid* m_grid;
-		wxButton* m_addButton;
-		wxButton* m_removeButton;
-		wxButton* m_moveUpButton;
+		wxBitmapButton* m_addButton;
+		wxBitmapButton* m_removeButton;
+		wxBitmapButton* m_moveUpButton;
+		wxBitmapButton* m_moveDownButton;
 		wxComboBox* m_leftClassChoice;
 		wxStaticLine* m_staticline21;
 		wxButton* m_buttonLeftSelAll;
@@ -89,23 +89,23 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		wxStaticText* m_MicroViaMinDrillTitle;
 		wxTextCtrl* m_SetMicroViasMinDrillCtrl;
 		wxStaticText* m_MicroViaMinDrillUnits;
-		wxStaticText* m_staticTextInfo;
-		wxStaticText* m_staticText7;
-		wxGrid* m_gridViaSizeList;
-		wxStaticText* m_staticText8;
 		wxGrid* m_gridTrackWidthList;
+		wxGrid* m_gridViaSizeList;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnNetClassesNameLeftClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnNetClassesNameRightClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveUpSelectedNetClass( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveDownSelectedNetClass( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftCBSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightToLeftCopyButton( wxCommandEvent& event ) { event.Skip(); }
