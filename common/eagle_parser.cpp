@@ -73,7 +73,7 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
         throw XML_PARSER_ERROR( "Invalid coordinate" );
 
     // process the integer part
-    value = ToNanoMeters( integer, aUnit );
+    value = ConvertToNm( integer, aUnit );
 
     // process the fraction part
     if( ret == 2 )
@@ -88,7 +88,7 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
             fraction /= DIVIDERS[diff];
         }
 
-        int frac_value = ToNanoMeters( fraction, aUnit ) / DIVIDERS[digits];
+        int frac_value = ConvertToNm( fraction, aUnit ) / DIVIDERS[digits];
 
         // keep the sign in mind
         value = negative ? value - frac_value : value + frac_value;
@@ -96,17 +96,17 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 }
 
 
-long long int ECOORD::ToNanoMeters( int aValue, enum EAGLE_UNIT aUnit )
+long long int ECOORD::ConvertToNm( int aValue, enum EAGLE_UNIT aUnit )
 {
     long long int ret;
 
     switch( aUnit )
     {
         default:
-        case EAGLE_NM:    ret = aValue; break;
-        case EAGLE_MM:    ret = (long long) aValue * 1000000; break;
-        case EAGLE_INCH:  ret = (long long) aValue * 25400000; break;
-        case EAGLE_MIL:   ret = (long long) aValue * 25400; break;
+        case EU_NM:    ret = aValue; break;
+        case EU_MM:    ret = (long long) aValue * 1000000; break;
+        case EU_INCH:  ret = (long long) aValue * 25400000; break;
+        case EU_MIL:   ret = (long long) aValue * 25400; break;
     }
 
     wxASSERT( ( ret > 0 ) == ( aValue > 0 ) );  // check for overflow
@@ -195,7 +195,7 @@ template<>
 ECOORD Convert<ECOORD>( const wxString& aCoord )
 {
     // Eagle uses millimeters as the default unit
-    return ECOORD( aCoord, ECOORD::EAGLE_UNIT::EAGLE_MM );
+    return ECOORD( aCoord, ECOORD::EAGLE_UNIT::EU_MM );
 }
 
 

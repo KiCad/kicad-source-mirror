@@ -395,17 +395,17 @@ struct ECOORD
 {
     enum EAGLE_UNIT
     {
-        EAGLE_NM,     ///< nanometers
-        EAGLE_MM,     ///< millimeters
-        EAGLE_INCH,   ///< inches
-        EAGLE_MIL,    ///< mils/thous
+        EU_NM,     ///< nanometers
+        EU_MM,     ///< millimeters
+        EU_INCH,   ///< inches
+        EU_MIL,    ///< mils/thous
     };
 
     ///> Value expressed in nanometers
     long long int value;
 
     ///> Unit used for the value field
-    static constexpr EAGLE_UNIT ECOORD_UNIT = EAGLE_NM;
+    static constexpr EAGLE_UNIT ECOORD_UNIT = EU_NM;
 
     ECOORD()
         : value( 0 )
@@ -413,21 +413,19 @@ struct ECOORD
     }
 
     ECOORD( int aValue, enum EAGLE_UNIT aUnit )
-        : value( ToNanoMeters( aValue, aUnit ) )
+        : value( ConvertToNm( aValue, aUnit ) )
     {
     }
 
     ECOORD( const wxString& aValue, enum EAGLE_UNIT aUnit );
 
-    int ToSchUnits() const
+    int ToMils() const
     {
-        // mils
         return value / 25400;
     }
 
-    int ToPcbUnits() const
+    int ToNanoMeters() const
     {
-        // nanometers
         return value;
     }
 
@@ -435,6 +433,9 @@ struct ECOORD
     {
         return value / 1000000.0;
     }
+
+    int ToSchUnits() const { return ToMils(); }
+    int ToPcbUnits() const { return ToNanoMeters(); }
 
     ECOORD operator+( const ECOORD& aOther ) const
     {
@@ -451,7 +452,8 @@ struct ECOORD
         return value == aOther.value;
     }
 
-    static long long int ToNanoMeters( int aValue, enum EAGLE_UNIT aUnit );
+    ///> Converts a size expressed in a certain unit to nanometers.
+    static long long int ConvertToNm( int aValue, enum EAGLE_UNIT aUnit );
 };
 
 
