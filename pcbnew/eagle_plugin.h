@@ -32,6 +32,7 @@
 #include <map>
 #include <wx/xml/xml.h>
 
+class D_PAD;
 
 typedef std::map<wxString, MODULE*>  MODULE_MAP;
 typedef std::map<wxString, ENET>     NET_MAP;
@@ -166,8 +167,8 @@ private:
     void    clear_cu_map();
 
     /// Convert an Eagle distance to a KiCad distance.
-    int     kicad_y( const ECOORD& y ) const       { return -y.ToPcbUnits(); }
-    int     kicad_x( const ECOORD& x ) const       { return x.ToPcbUnits(); }
+    int kicad_y( const ECOORD& y ) const { return -y.ToPcbUnits(); }
+    int kicad_x( const ECOORD& x ) const { return x.ToPcbUnits(); }
 
     /// create a font size (fontz) from an eagle font size scalar
     wxSize  kicad_fontz( const ECOORD& d ) const;
@@ -237,6 +238,9 @@ private:
     void packageCircle( MODULE* aModule, wxXmlNode* aTree ) const;
     void packageHole( MODULE* aModule, wxXmlNode* aTree ) const;
     void packageSMD( MODULE* aModule, wxXmlNode* aTree ) const;
+
+    ///> Handles common pad properties
+    void transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) const;
 
     ///> Deletes the footprint templates list
     void deleteTemplates();

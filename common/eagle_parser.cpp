@@ -621,7 +621,20 @@ wxSize ETEXT::ConvertSize() const
 }
 
 
+EPAD_COMMON::EPAD_COMMON( wxXmlNode* aPad )
+{
+    // #REQUIRED says DTD, throw exception if not found
+    name      = parseRequiredAttribute<wxString>( aPad, "name" );
+    x         = parseRequiredAttribute<ECOORD>( aPad, "x" );
+    y         = parseRequiredAttribute<ECOORD>( aPad, "y" );
+    rot      = parseOptionalAttribute<EROT>( aPad, "rot" );
+    stop     = parseOptionalAttribute<bool>( aPad, "stop" );
+    thermals = parseOptionalAttribute<bool>( aPad, "thermals" );
+}
+
+
 EPAD::EPAD( wxXmlNode* aPad )
+    : EPAD_COMMON( aPad )
 {
     /*
     <!ELEMENT pad EMPTY>
@@ -640,9 +653,6 @@ EPAD::EPAD( wxXmlNode* aPad )
     */
 
     // #REQUIRED says DTD, throw exception if not found
-    name         = parseRequiredAttribute<wxString>( aPad, "name" );
-    x            = parseRequiredAttribute<ECOORD>( aPad, "x" );
-    y            = parseRequiredAttribute<ECOORD>( aPad, "y" );
     drill        = parseRequiredAttribute<ECOORD>( aPad, "drill" );
 
     // Optional attributes
@@ -662,14 +672,12 @@ EPAD::EPAD( wxXmlNode* aPad )
     else if( s == "offset" )
         shape = EPAD::OFFSET;
 
-    rot      = parseOptionalAttribute<EROT>( aPad, "rot" );
-    stop     = parseOptionalAttribute<bool>( aPad, "stop" );
-    thermals = parseOptionalAttribute<bool>( aPad, "thermals" );
     first    = parseOptionalAttribute<bool>( aPad, "first" );
 }
 
 
 ESMD::ESMD( wxXmlNode* aSMD )
+    : EPAD_COMMON( aSMD )
 {
     /*
     <!ATTLIST smd
@@ -688,18 +696,11 @@ ESMD::ESMD( wxXmlNode* aSMD )
     */
 
     // DTD #REQUIRED, throw exception if not found
-    name      = parseRequiredAttribute<wxString>( aSMD, "name" );
-    x         = parseRequiredAttribute<ECOORD>( aSMD, "x" );
-    y         = parseRequiredAttribute<ECOORD>( aSMD, "y" );
     dx        = parseRequiredAttribute<ECOORD>( aSMD, "dx" );
     dy        = parseRequiredAttribute<ECOORD>( aSMD, "dy" );
     layer     = parseRequiredAttribute<int>( aSMD, "layer" );
 
     roundness = parseOptionalAttribute<int>( aSMD, "roundness" );
-    rot       = parseOptionalAttribute<EROT>( aSMD, "rot" );
-    thermals  = parseOptionalAttribute<bool>( aSMD, "thermals" );
-    stop      = parseOptionalAttribute<bool>( aSMD, "stop" );
-    thermals  = parseOptionalAttribute<bool>( aSMD, "thermals" );
     cream     = parseOptionalAttribute<bool>( aSMD, "cream" );
 }
 

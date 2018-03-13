@@ -1283,18 +1283,8 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
 
     D_PAD* pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
+    transferPad( e, pad );
 
-    pad->SetName( FROM_UTF8( e.name.c_str() ) );
-
-    // pad's "Position" is not relative to the module's,
-    // whereas Pos0 is relative to the module's but is the unrotated coordinate.
-
-    wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
-    pad->SetPos0( padpos );
-
-    RotatePoint( &padpos, aModule->GetOrientation() );
-
-    pad->SetPosition( padpos + aModule->GetPosition() );
     pad->SetDrillSize( wxSize( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() ) );
     pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 
@@ -1639,19 +1629,11 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
 
     D_PAD* pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
+    transferPad( e, pad );
 
-    pad->SetName( FROM_UTF8( e.name.c_str() ) );
     pad->SetShape( PAD_SHAPE_RECT );
     pad->SetAttribute( PAD_ATTRIB_SMD );
 
-    // pad's "Position" is not relative to the module's,
-    // whereas Pos0 is relative to the module's but is the unrotated coordinate.
-
-    wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
-    pad->SetPos0( padpos );
-
-    RotatePoint( &padpos, aModule->GetOrientation() );
-    pad->SetPosition( padpos + aModule->GetPosition() );
     pad->SetSize( wxSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() ) );
     pad->SetLayer( layer );
 
@@ -1677,6 +1659,22 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     // don't know what stop, thermals, and cream should look like now.
+
+
+
+void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) const
+{
+    aPad->SetName( FROM_UTF8( aEaglePad.name.c_str() ) );
+
+    // pad's "Position" is not relative to the module's,
+    // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+    wxPoint padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
+    aPad->SetPos0( padPos );
+
+    MODULE* module = aPad->GetParent();
+    wxCHECK( module, /* void */ );
+    RotatePoint( &padPos, module->GetOrientation() );
+    aPad->SetPosition( padPos + module->GetPosition() );
 }
 
 

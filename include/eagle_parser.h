@@ -676,12 +676,22 @@ struct ETEXT
 };
 
 
-/// Eagle thru hol pad
-struct EPAD
+/// Structure holding common properties for through-hole and SMD pads
+struct EPAD_COMMON
 {
     wxString   name;
-    ECOORD     x;
-    ECOORD     y;
+    ECOORD     x, y;
+    opt_erot   rot;
+    opt_bool   stop;
+    opt_bool   thermals;
+
+    EPAD_COMMON( wxXmlNode* aPad );
+};
+
+
+/// Eagle thru hole pad
+struct EPAD : public EPAD_COMMON
+{
     ECOORD     drill;
     opt_ecoord diameter;
 
@@ -694,9 +704,6 @@ struct EPAD
         OFFSET,
     };
     opt_int  shape;
-    opt_erot rot;
-    opt_bool stop;
-    opt_bool thermals;
     opt_bool first;
 
     EPAD( wxXmlNode* aPad );
@@ -704,18 +711,12 @@ struct EPAD
 
 
 /// Eagle SMD pad
-struct ESMD
+struct ESMD : public EPAD_COMMON
 {
-    wxString name;
-    ECOORD   x;
-    ECOORD   y;
     ECOORD   dx;
     ECOORD   dy;
     int      layer;
     opt_int  roundness;
-    opt_erot rot;
-    opt_bool stop;
-    opt_bool thermals;
     opt_bool cream;
 
     ESMD( wxXmlNode* aSMD );
