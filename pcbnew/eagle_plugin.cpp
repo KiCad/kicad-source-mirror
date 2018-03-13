@@ -127,6 +127,7 @@ void ERULES::parse( wxXmlNode* aRules )
                 rlMinPadTop = parseEagle( value );
             else if( name == "rlMaxPadTop" )
                 rlMaxPadTop = parseEagle( value );
+
             else if( name == "rvViaOuter" )
                 value.ToDouble( &rvViaOuter );
             else if( name == "rlMinViaOuter" )
@@ -1280,7 +1281,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
 
-    D_PAD*  pad = new D_PAD( aModule );
+    D_PAD* pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
 
     pad->SetName( FROM_UTF8( e.name.c_str() ) );
@@ -1289,7 +1290,6 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
 
     wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
-
     pad->SetPos0( padpos );
 
     RotatePoint( &padpos, aModule->GetOrientation() );
@@ -1303,13 +1303,13 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
         switch( *e.shape )
         {
         case EPAD::ROUND:
-            wxASSERT( pad->GetShape()==PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
+            wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
             break;
 
         case EPAD::OCTAGON:
             // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
             // pad->SetShape( PAD_OCTAGON );
-            wxASSERT( pad->GetShape()==PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
+            wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
             break;
 
         case EPAD::LONG:
@@ -1631,15 +1631,13 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
 
 void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
 {
-    ESMD         e( aTree );
+    ESMD e( aTree );
     PCB_LAYER_ID layer = kicad_layer( e.layer );
 
     if( !IsCopperLayer( layer ) )
-    {
         return;
-    }
 
-    D_PAD*  pad = new D_PAD( aModule );
+    D_PAD* pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
 
     pad->SetName( FROM_UTF8( e.name.c_str() ) );
@@ -1650,19 +1648,15 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
 
     wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
-
     pad->SetPos0( padpos );
 
     RotatePoint( &padpos, aModule->GetOrientation() );
-
     pad->SetPosition( padpos + aModule->GetPosition() );
-
     pad->SetSize( wxSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() ) );
-
     pad->SetLayer( layer );
 
-    static const LSET front( 3, F_Cu, F_Paste, F_Mask );
-    static const LSET back(  3, B_Cu, B_Paste, B_Mask );
+    const LSET front( 3, F_Cu, F_Paste, F_Mask );
+    const LSET back(  3, B_Cu, B_Paste, B_Mask );
 
     if( layer == F_Cu )
         pad->SetLayerSet( front );

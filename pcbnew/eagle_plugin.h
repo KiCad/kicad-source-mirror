@@ -41,21 +41,22 @@ typedef NET_MAP::const_iterator      NET_MAP_CITER;
 /// subset of eagle.drawing.board.designrules in the XML document
 struct ERULES
 {
-    int         psElongationLong;   ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
-                                    ///< Goes into making a scaling factor for "long" pads.
+    int    psElongationLong;    ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
+                                ///< Goes into making a scaling factor for "long" pads.
 
-    int         psElongationOffset; ///< the offset of the hole within the "long" pad.
+    int    psElongationOffset;  ///< the offset of the hole within the "long" pad.
 
-    double      rvPadTop;           ///< top pad size as percent of drill size
-    // double   rvPadBottom;        ///< bottom pad size as percent of drill size
 
-    double      rlMinPadTop;        ///< minimum copper annulus on through hole pads
-    double      rlMaxPadTop;        ///< maximum copper annulus on through hole pads
+    double rvPadTop;            ///< top pad size as percent of drill size
+    // double   rvPadBottom;    ///< bottom pad size as percent of drill size
 
-    double      rvViaOuter;         ///< copper annulus is this percent of via hole
-    double      rlMinViaOuter;      ///< minimum copper annulus on via
-    double      rlMaxViaOuter;      ///< maximum copper annulus on via
-    double      mdWireWire;         ///< wire to wire spacing I presume.
+    double rlMinPadTop;         ///< minimum copper annulus on through hole pads
+    double rlMaxPadTop;         ///< maximum copper annulus on through hole pads
+
+    double rvViaOuter;          ///< copper annulus is this percent of via hole
+    double rlMinViaOuter;       ///< minimum copper annulus on via
+    double rlMaxViaOuter;       ///< maximum copper annulus on via
+    double mdWireWire;          ///< wire to wire spacing I presume.
 
 
     ERULES() :
