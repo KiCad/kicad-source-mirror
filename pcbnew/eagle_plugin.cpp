@@ -121,6 +121,20 @@ void ERULES::parse( wxXmlNode* aRules )
                 psElongationLong = wxAtoi( value );
             else if( name == "psElongationOffset" )
                 psElongationOffset = wxAtoi( value );
+
+            else if( name == "mvStopFrame" )
+                value.ToDouble( &mvStopFrame );
+            else if( name == "mvCreamFrame" )
+                value.ToDouble( &mvCreamFrame );
+            else if( name == "mlMinStopFrame" )
+                mlMinStopFrame = parseEagle( value );
+            else if( name == "mlMaxStopFrame" )
+                mlMaxStopFrame = parseEagle( value );
+            else if( name == "mlMinCreamFrame" )
+                mlMinCreamFrame = parseEagle( value );
+            else if( name == "mlMaxCreamFrame" )
+                mlMaxCreamFrame = parseEagle( value );
+
             else if( name == "rvPadTop" )
                 value.ToDouble( &rvPadTop );
             else if( name == "rlMinPadTop" )
@@ -1634,7 +1648,8 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     pad->SetShape( PAD_SHAPE_RECT );
     pad->SetAttribute( PAD_ATTRIB_SMD );
 
-    pad->SetSize( wxSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() ) );
+    wxSize padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
+    pad->SetSize( padSize );
     pad->SetLayer( layer );
 
     const LSET front( 3, F_Cu, F_Paste, F_Mask );
@@ -1658,8 +1673,14 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
         pad->SetOrientation( e.rot->degrees * 10 );
     }
 
-    // don't know what stop, thermals, and cream should look like now.
+    // Solder paste (only for SMD pads)
+    int solderPasteSize = m_rules->mvCreamFrame * std::min( padSize.x, padSize.y );
+    solderPasteSize = std::min( solderPasteSize, m_rules->mlMaxCreamFrame );
+    solderPasteSize = std::max( solderPasteSize, m_rules->mlMinCreamFrame );
+    pad->SetLocalSolderPasteMargin( solderPasteSize );
 
+    // @todo: handle thermal
+}
 
 
 void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) const
@@ -1670,6 +1691,13 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
     wxPoint padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
     aPad->SetPos0( padPos );
+
+    // Solder mask
+    const wxSize& padSize( aPad->GetSize() );
+    int solderMaskSize = m_rules->mvStopFrame * std::min( padSize.x, padSize.y );
+    solderMaskSize = std::min( solderMaskSize, m_rules->mlMaxStopFrame );
+    solderMaskSize = std::max( solderMaskSize, m_rules->mlMinStopFrame );
+    aPad->SetLocalSolderMaskMargin( solderMaskSize );
 
     MODULE* module = aPad->GetParent();
     wxCHECK( module, /* void */ );

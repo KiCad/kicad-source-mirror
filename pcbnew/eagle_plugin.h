@@ -47,6 +47,12 @@ struct ERULES
 
     int    psElongationOffset;  ///< the offset of the hole within the "long" pad.
 
+    double mvStopFrame;         ///< solder mask, expressed as percentage of the smaller pad/via dimension
+    double mvCreamFrame;        ///< solderpaste mask, expressed as percentage of the smaller pad/via dimension
+    int    mlMinStopFrame;      ///< solder mask, minimum size (mils)
+    int    mlMaxStopFrame;      ///< solder mask, maximum size (mils)
+    int    mlMinCreamFrame;     ///< solder paste mask, minimum size (mils)
+    int    mlMaxCreamFrame;     ///< solder paste mask, maximum size (mils)
 
     double rvPadTop;            ///< top pad size as percent of drill size
     // double   rvPadBottom;    ///< bottom pad size as percent of drill size
@@ -63,6 +69,14 @@ struct ERULES
     ERULES() :
         psElongationLong    ( 100 ),
         psElongationOffset  ( 0 ),
+
+        mvStopFrame         ( 1.0 ),
+        mvCreamFrame        ( 0.0 ),
+        mlMinStopFrame      ( Mils2iu( 4.0 ) ),
+        mlMaxStopFrame      ( Mils2iu( 4.0 ) ),
+        mlMinCreamFrame     ( Mils2iu( 0.0 ) ),
+        mlMaxCreamFrame     ( Mils2iu( 0.0 ) ),
+
         rvPadTop            ( 0.25 ),
         // rvPadBottom      ( 0.25 ),
         rlMinPadTop         ( Mils2iu( 10 ) ),
