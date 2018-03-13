@@ -750,7 +750,7 @@ void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
 
     view->UpdateAllItems( KIGFX::COLOR );
 
-    GetGalCanvas()->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 
