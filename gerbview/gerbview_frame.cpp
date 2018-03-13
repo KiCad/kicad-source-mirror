@@ -136,8 +136,10 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     if( m_LastGridSizeId < 0 )
         m_LastGridSizeId = 0;
+
     if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000 )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000;
+
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     m_auimgr.SetManagedWindow( this );
@@ -1074,6 +1076,7 @@ EDA_RECT GERBVIEW_FRAME::GetGerberLayoutBoundingBox()
     return GetGerberLayout()->GetBoundingBox();
 }
 
+
 void GERBVIEW_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
@@ -1177,10 +1180,12 @@ const wxString GERBVIEW_FRAME::GetZoomLevelIndicator() const
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }
 
+
 GERBER_FILE_IMAGE* GERBVIEW_FRAME::GetGbrImage( int aIdx ) const
 {
     return m_gerberLayout->GetImagesList()->GetGbrImage( aIdx );
 }
+
 
 unsigned GERBVIEW_FRAME::ImagesMaxCount() const
 {
@@ -1236,6 +1241,7 @@ void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
     m_LayersManager->ReFillRender();
 
     ReCreateOptToolbar();
+    ReCreateMenuBar();
 }
 
 

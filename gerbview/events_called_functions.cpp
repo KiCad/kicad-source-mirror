@@ -43,6 +43,8 @@
 #include <gerbview_layer_widget.h>
 #include <dialog_show_page_borders.h>
 
+#include <gerbview_draw_panel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <gerbview_painter.h>
 #include <view/view.h>
@@ -84,8 +86,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     GERBVIEW_FRAME::Process_Config )
 
-    EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-              GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::InstallGerberOptionsDialog )
     EVT_UPDATE_UI( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
@@ -126,12 +126,12 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     //EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions ) // mentioned below
     EVT_TOOL( ID_ZOOM_SELECTION, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_TB_MEASUREMENT_TOOL, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnToggleCoordType )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnTogglePolygonDrawMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnToggleFlashItemDrawMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnToggleLineDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-              GERBVIEW_FRAME::OnSelectOptionToolbar )
+              GERBVIEW_FRAME::OnToggleShowLayerManager )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
@@ -142,7 +142,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     // Auxiliary horizontal toolbar
     EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE, GERBVIEW_FRAME::OnSelectHighlightChoice )
     EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE, GERBVIEW_FRAME::OnSelectHighlightChoice )
-    EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE, GERBVIEW_FRAME::OnSelectHighlightChoice )
+    EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE,
+                GERBVIEW_FRAME::OnSelectHighlightChoice )
 
     // Right click context menu
     EVT_MENU( ID_HIGHLIGHT_CMP_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
@@ -156,8 +157,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
                    GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLinesDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnUpdatePolygonsDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLineDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnUpdatePolygonDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnUpdateShowDCodes )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnUpdateShowNegativeItems )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
@@ -370,6 +371,7 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
     if( gerber_layer )
     {
         wxString editorname = Pgm().GetEditorName();
+
         if( !editorname.IsEmpty() )
         {
             wxFileName fn( gerber_layer->m_FileName );
@@ -390,7 +392,6 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
         else
             wxMessageBox( _( "No editor defined. Please select one" ) );
     }
-
     else
     {
         wxString msg;
@@ -445,76 +446,43 @@ void GERBVIEW_FRAME::ShowChangedLanguage()
 }
 
 
+void GERBVIEW_FRAME::OnToggleShowLayerManager( wxCommandEvent& aEvent )
+{
+    m_show_layer_manager_tools = !m_show_layer_manager_tools;
+
+    // show/hide auxiliary Vertical layers and visibility manager toolbar
+    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+    m_auimgr.Update();
+}
+
+
 void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int     id = event.GetId();
-    bool    state;
     bool    needs_refresh = false;
 
     GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
 
     switch( id )
     {
-        case ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
-            state = ! m_show_layer_manager_tools;
-            id = ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR;
-            break;
-
-        default:
-            state = m_optionsToolBar->GetToolToggled( id );
-            break;
-    }
-
-    switch( id )
-    {
-    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        options.m_DisplayPolarCood = state;
-        break;
-
-    case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
-        options.m_DisplayFlashedItemsFill = not state;
-        needs_refresh = true;
-        break;
-
-    case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
-        options.m_DisplayLinesFill = not state;
-        needs_refresh = true;
-        break;
-
-    case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
-        options.m_DisplayPolygonsFill = not state;
-        needs_refresh = true;
-        break;
-
     case ID_TB_OPTIONS_SHOW_DCODES:
-        SetElementVisibility( LAYER_DCODES, state );
+        SetElementVisibility( LAYER_DCODES, !IsElementVisible( LAYER_DCODES ) );
         m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS:
-        SetElementVisibility( LAYER_NEGATIVE_OBJECTS, state );
-        needs_refresh = true;
+        SetElementVisibility( LAYER_NEGATIVE_OBJECTS, !IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
+        m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_DIFF_MODE:
-        options.m_DiffMode = state;
+        options.m_DiffMode = !options.m_DiffMode;
         needs_refresh = true;
         break;
 
     case ID_TB_OPTIONS_HIGH_CONTRAST_MODE:
-        options.m_HighContrastMode = state;
+        options.m_HighContrastMode = !options.m_HighContrastMode;
         needs_refresh = true;
-        break;
-
-    case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
-
-        // show/hide auxiliary Vertical layers and visibility manager toolbar
-        m_show_layer_manager_tools = state;
-        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
-        m_auimgr.Update();
-        GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                m_show_layer_manager_tools ?
-                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ));
         break;
 
     // collect GAL-only tools here:
@@ -529,6 +497,33 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     if( needs_refresh )
         UpdateDisplayOptions( options );
+}
+
+
+void GERBVIEW_FRAME::OnTogglePolygonDrawMode( wxCommandEvent& aEvent )
+{
+    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
+    options.m_DisplayPolygonsFill = !m_DisplayOptions.m_DisplayPolygonsFill;
+
+    UpdateDisplayOptions( options );
+}
+
+
+void GERBVIEW_FRAME::OnToggleLineDrawMode( wxCommandEvent& aEvent )
+{
+    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
+    options.m_DisplayLinesFill = !m_DisplayOptions.m_DisplayLinesFill;
+
+    UpdateDisplayOptions( options );
+}
+
+
+void GERBVIEW_FRAME::OnToggleFlashItemDrawMode( wxCommandEvent& aEvent )
+{
+    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
+    options.m_DisplayFlashedItemsFill = !m_DisplayOptions.m_DisplayFlashedItemsFill;
+
+    UpdateDisplayOptions( options );
 }
 
 

@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,15 +179,115 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "&Close" ), _( "Close GerbView" ),
                  KiBitmap( exit_xpm ) );
 
-    // Menu for configuration and preferences
-    wxMenu* configMenu = new wxMenu;
+    //--------- View menu ----------------
+    wxMenu* viewMenu = new wxMenu;
 
     // Hide layer manager
-    AddMenuItem( configMenu, ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                 _( "Hide &Layers Manager" ),
-                 m_show_layer_manager_tools ?
-                           _( "Hide &Layers Manager" ) : _("Show &Layers Manager" ),
-                 KiBitmap( layers_manager_xpm ) );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                 _( "Show &Layers Manager" ), _( "Show or hide the layer manager" ),
+                 KiBitmap( layers_manager_xpm ), wxITEM_CHECK );
+
+    viewMenu->AppendSeparator();
+
+    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
+     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
+     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
+     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
+     * From here, zooming is made around the screen center
+     * From hotkeys, zooming is made around the mouse cursor position
+     * (obviously not possible from the toolbar or menubar command)
+     *
+     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
+     * for Zoom in and Zoom out sub menus
+     */
+    text = AddHotkeyName( _( "Zoom &In" ), GerbviewHokeysDescr,
+                          HK_ZOOM_IN, IS_ACCELERATOR );
+    AddMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom in" ), KiBitmap( zoom_in_xpm ) );
+
+    text = AddHotkeyName( _( "Zoom &Out" ), GerbviewHokeysDescr,
+                          HK_ZOOM_OUT, IS_ACCELERATOR );
+    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom out" ), KiBitmap( zoom_out_xpm ) );
+
+    text = AddHotkeyName( _( "&Fit" ), GerbviewHokeysDescr, HK_ZOOM_AUTO  );
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit" ),
+                 KiBitmap( zoom_fit_in_page_xpm ) );
+
+    text = AddHotkeyName( _( "&Redraw" ), GerbviewHokeysDescr, HK_ZOOM_REDRAW );
+    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
+                 _( "Refresh screen" ), KiBitmap( zoom_redraw_xpm ) );
+
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GRID,
+                 _( "Show &Grid" ), wxEmptyString,
+                 KiBitmap( grid_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                 _( "Display &Polar Coordinates" ), wxEmptyString,
+                 KiBitmap( polar_coord_xpm ), wxITEM_CHECK );
+
+    // Units submenu
+    wxMenu* unitsSubMenu = new wxMenu;
+    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
+                 _( "&Imperial" ), _( "Use imperial units" ),
+                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
+
+    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
+                 _( "&Metric" ), _( "Use metric units" ),
+                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
+
+    AddMenuItem( viewMenu, unitsSubMenu,
+                 -1, _( "&Units" ),
+                 _( "Select which units are displayed" ),
+                 KiBitmap( unit_mm_xpm ) );
+
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
+                 _( "Sketch F&lashed Items" ),_( "Show flashed items in outline mode" ),
+                 KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LINES_SKETCH,
+                 _( "Sketch &Lines" ),_( "Show lines in outline mode" ),
+                 KiBitmap( showtrack_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+                 _( "Sketch Pol&ygons" ),_( "Show polygons in outline mode" ),
+                 KiBitmap( opt_show_polygon_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_DCODES,
+                 _( "Show &DCodes" ), _( "Show or hide DCodes" ),
+                 KiBitmap( show_dcodenumber_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS,
+                 _( "Show &Negative Objects" ), _( "Show negative objects in ghost color" ),
+                 KiBitmap( gerbview_show_negative_objects_xpm ), wxITEM_CHECK );
+
+    if( IsGalCanvasActive() )
+    {
+        AddMenuItem( viewMenu, ID_TB_OPTIONS_DIFF_MODE,
+                     _( "Show in Differential Mode" ), _( "Show layers in differential mode" ),
+                     KiBitmap( gbr_select_mode2_xpm ), wxITEM_CHECK );
+
+        AddMenuItem( viewMenu, ID_TB_OPTIONS_HIGH_CONTRAST_MODE,
+                     _( "Show in High Contrast" ), _( "Show in high contrast mode" ),
+                     KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
+    }
+    else
+    {
+        AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GBR_MODE_0,
+                     _( "Show Normal Mode" ), _( "Show layers in normal mode" ),
+                     KiBitmap( gbr_select_mode0_xpm ), wxITEM_RADIO );
+        AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GBR_MODE_1,
+                     _( "Show Stacked Mode" ), _( "Show layers in stacked mode" ),
+                     KiBitmap( gbr_select_mode1_xpm ), wxITEM_RADIO );
+        AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
+                     _( "Show Transparency Mode" ), _( "Show layers in transparency mode" ),
+                     KiBitmap( gbr_select_mode2_xpm ), wxITEM_RADIO );
+    }
+
+    // Menu for configuration and preferences
+    wxMenu* configMenu = new wxMenu;
 
     // Options (Preferences on WXMAC)
 #ifdef __WXMAC__
@@ -293,6 +393,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( configMenu, _( "&Preferences" ) );
     menuBar->Append( miscellaneousMenu, _( "&Miscellaneous" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

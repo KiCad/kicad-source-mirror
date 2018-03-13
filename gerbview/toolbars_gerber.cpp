@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -81,17 +81,18 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     msg = AddHotkeyName( _( "Zoom out" ), GerbviewHokeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), GerbviewHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
+    msg = AddHotkeyName( _( "Zoom to fit" ), GerbviewHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
+                            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
     m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                               _( "Zoom to selection" ), wxITEM_CHECK );
+                            _( "Zoom to selection" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
 
     m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
-                                ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                wxDefaultPosition, wxDefaultSize, 0,NULL);
+                                                ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+                                                wxDefaultPosition, wxDefaultSize, 0, NULL );
     m_SelLayerBox->Resync();
 
     m_mainToolBar->AddControl( m_SelLayerBox );
@@ -111,7 +112,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     wxStaticText* text;
 
     if( !m_auxiliaryToolBar )
-        m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+        m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition,
+                                               wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Creates box to display and choose components:
@@ -120,7 +122,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
         m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
                                           ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
         m_SelComponentBox->SetToolTip( _("Select a component and highlight items belonging to this component") );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Cmp:") );
+        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp: ") );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_SelComponentBox );
         KiScaledSeparator( m_auxiliaryToolBar, this );
@@ -132,7 +134,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
         m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
                                         ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
         m_SelNetnameBox->SetToolTip( _("Select a net name and highlight graphic items belonging to this net") );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Net:") );
+        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
         KiScaledSeparator( m_auxiliaryToolBar, this );
@@ -142,9 +144,9 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     if( !m_SelAperAttributesBox )
     {
         m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
-                                          ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+                                               ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
         m_SelAperAttributesBox->SetToolTip( _("Select an aperture attribute and highlight graphic items having this attribute") );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("Attr:") );
+        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
         KiScaledSeparator( m_auxiliaryToolBar, this );
@@ -155,7 +157,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
         m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
                                                    ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
                                                    wxDefaultPosition, wxSize( 150, -1 ) );
-        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _("DCode:") );
+        text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "DCode:" ) );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_DCodeSelector );
     }
@@ -189,7 +191,8 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ) );
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
+                            KiScaledBitmap( cursor_xpm, this ) );
     KiScaledSeparator( m_mainToolBar, this );
 
     m_drawToolBar->Realize();
@@ -207,7 +210,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
+    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
+                               KiScaledBitmap( cursor_xpm, this ),
                                wxEmptyString, wxITEM_CHECK );
 
     if( IsGalCanvasActive() )
@@ -220,7 +224,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
+                               KiScaledBitmap( grid_xpm, this ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
@@ -249,15 +254,15 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     KiScaledSeparator( m_mainToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
                                KiScaledBitmap( pad_sketch_xpm, this ),
-                               _( "Show spots in sketch mode" ), wxITEM_CHECK );
+                               _( "Show flashed items in outline mode" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH, wxEmptyString,
                                KiScaledBitmap( showtrack_xpm, this ),
-                               _( "Show lines in sketch mode" ), wxITEM_CHECK );
+                               _( "Show lines in outline mode" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
                                KiScaledBitmap( opt_show_polygon_xpm, this ),
-                               _( "Show polygons in sketch mode" ),
+                               _( "Show polygons in outline mode" ),
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, wxEmptyString,
@@ -277,17 +282,17 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
                                    KiScaledBitmap( gbr_select_mode0_xpm, this ),
                                    _( "Show layers in raw mode\n"
         "(could have problems with negative items when more than one gerber file is shown)" ),
-                                   wxITEM_CHECK );
+                                   wxITEM_RADIO );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
                                    KiScaledBitmap( gbr_select_mode1_xpm, this ),
                                    _( "Show layers in stacked mode\n"
                                       "(show negative items without artifacts)" ),
-                                   wxITEM_CHECK );
+                                   wxITEM_RADIO );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
                                    KiScaledBitmap( gbr_select_mode2_xpm, this ),
                                    _( "Show layers in transparency mode\n"
                                       "(show negative items without artifacts)" ),
-                                   wxITEM_CHECK );
+                                   wxITEM_RADIO );
     }
     else
     {
@@ -374,6 +379,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
         m_auimgr.Update();
     }
 }
+
 
 void GERBVIEW_FRAME::updateComponentListSelectBox()
 {
@@ -479,6 +485,7 @@ void GERBVIEW_FRAME::updateAperAttributesSelectBox()
     m_SelAperAttributesBox->SetSelection( 0 );
 }
 
+
 void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 {
     switch( aEvent.GetId() )
@@ -501,50 +508,106 @@ void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
+void GERBVIEW_FRAME::OnToggleCoordType( wxCommandEvent& aEvent )
+{
+    m_DisplayOptions.m_DisplayPolarCood = !m_DisplayOptions.m_DisplayPolarCood;
+
+    UpdateStatusBar();
+}
+
+
 void GERBVIEW_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_DisplayOptions.m_DisplayPolarCood );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                                            m_DisplayOptions.m_DisplayPolarCood ?
+                                            _( "Turn rectangular coordinates on" ) :
+                                            _( "Tunn polar coordinates on" ) );
 }
+
 
 void GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayOptions.m_DisplayFlashedItemsFill );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
+                                            m_DisplayOptions.m_DisplayFlashedItemsFill ?
+                                            _( "Show flashed items in outline mode" ) :
+                                            _( "Show flashed items in fill mode" ) );
 }
 
 
-void GERBVIEW_FRAME::OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayOptions.m_DisplayLinesFill );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_LINES_SKETCH,
+                                            m_DisplayOptions.m_DisplayFlashedItemsFill ?
+                                            _( "Show lines in outline mode" ) :
+                                            _( "Show lines in fill mode" ) );
 }
 
 
-void GERBVIEW_FRAME::OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdatePolygonDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayOptions.m_DisplayPolygonsFill );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+                                            m_DisplayOptions.m_DisplayFlashedItemsFill ?
+                                            _( "Show polygons in outline mode" ) :
+                                            _( "Show polygons in fill mode" ) );
 }
 
 
 void GERBVIEW_FRAME::OnUpdateShowDCodes( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( IsElementVisible( LAYER_DCODES ) );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_DCODES,
+                                            IsElementVisible( LAYER_DCODES ) ?
+                                            _( "Hide DCodes" ) : _( "Show DCodes" ) );
 }
 
 
 void GERBVIEW_FRAME::OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS,
+                                            IsElementVisible( LAYER_NEGATIVE_OBJECTS ) ?
+                                            _( "Show negative objects in normal color" ) :
+                                            _( "Show negative objects in ghost color" ) );
 }
 
 
 void GERBVIEW_FRAME::OnUpdateDiffMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_DisplayOptions.m_DiffMode );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DIFF_MODE,
+                                            m_DisplayOptions.m_DiffMode ?
+                                            _( "Show layers in normal mode" ) :
+                                            _( "Show layers in differential mode" ) );
 }
 
 
 void GERBVIEW_FRAME::OnUpdateHighContrastMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_DisplayOptions.m_HighContrastMode );
+
+    if( m_optionsToolBar )
+        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIGH_CONTRAST_MODE,
+                                            m_DisplayOptions.m_HighContrastMode ?
+                                            _( "Disable high contrast mode" ) :
+                                            _( "Enable high contrast mode" ) );
 }
 
 
@@ -555,9 +618,9 @@ void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
     if( m_optionsToolBar )
     {
         if( m_show_layer_manager_tools )
-            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _("Hide layers manager" ) );
+            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _( "Hide layers manager" ) );
         else
-            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _("Show layers manager" ) );
+            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _( "Show layers manager" ) );
     }
 }
 
