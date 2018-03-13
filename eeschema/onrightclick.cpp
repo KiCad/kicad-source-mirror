@@ -192,6 +192,14 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
     if( item == NULL )
     {
+        if( GetToolId() == ID_NO_TOOL_SELECTED )
+        {
+            msg = AddHotkeyName( _( "&Paste" ), g_Schematic_Hokeys_Descr, HK_EDIT_PASTE );
+            AddMenuItem( PopMenu, wxID_PASTE, msg,
+                        _( "Pastes item(s) from the Clipboard" ),
+                        KiBitmap( paste_xpm ) );
+        }
+
         if( m_CurrentSheet->Last() != g_RootSheet )
         {
             msg = AddHotkeyName( _( "Leave Sheet" ), g_Schematic_Hokeys_Descr, HK_LEAVE_SHEET );
@@ -199,6 +207,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( leave_sheet_xpm ) );
             PopMenu->AppendSeparator();
         }
+
         return true;
     }
 
