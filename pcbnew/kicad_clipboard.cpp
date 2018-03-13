@@ -190,7 +190,8 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 
 BOARD_ITEM* CLIPBOARD_IO::Parse()
 {
-    std::string result;
+    BOARD_ITEM* item;
+    wxString result;
 
     if( wxTheClipboard->Open() )
     {
@@ -198,18 +199,18 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
         {
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
-
-            result = data.GetText().mb_str();
+            result = data.GetText();
         }
 
         wxTheClipboard->Close();
     }
 
-    BOARD_ITEM *item;
     try
     {
         item = PCB_IO::Parse( result );
-    } catch (...) {
+    }
+    catch (...)
+    {
         item = nullptr;
     }
 
