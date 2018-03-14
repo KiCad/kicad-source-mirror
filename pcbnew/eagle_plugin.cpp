@@ -1367,8 +1367,6 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     {
         pad->SetOrientation( e.rot->degrees * 10 );
     }
-
-    // @todo: handle stop and thermal
 }
 
 
@@ -1697,8 +1695,6 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
                 (int)( m_rules->mvCreamFrame * minPadSize ),
                 m_rules->mlMaxCreamFrame ) );
     }
-
-    // @todo: handle thermal
 }
 
 
@@ -1720,6 +1716,10 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
                     (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
                     m_rules->mlMaxStopFrame ) );
     }
+
+    // Solid connection to copper zones
+    if( aEaglePad.thermals && !*aEaglePad.thermals )
+        aPad->SetZoneConnection( PAD_ZONE_CONN_FULL );
 
     MODULE* module = aPad->GetParent();
     wxCHECK( module, /* void */ );
@@ -2001,6 +2001,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     // missing == yes per DTD.
                     bool thermals = !p.thermals || *p.thermals;
                     zone->SetPadConnection( thermals ? PAD_ZONE_CONN_THERMAL : PAD_ZONE_CONN_FULL );
+
                     if( thermals )
                     {
                         // FIXME: eagle calculates dimensions for thermal spokes
