@@ -288,6 +288,93 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 }
 
 
+void FOOTPRINT_WIZARD_FRAME::OnParameterCellClick( wxGridEvent& event )
+{
+    auto footprintWizard = GetMyWizard();
+
+    if( !footprintWizard )
+        return;
+
+    if( m_parameterGridPage < 0 )
+        return;
+
+    if( event.GetCol() != WIZ_COL_VALUE )
+        return;
+
+    auto types = footprintWizard->GetParameterTypes( m_parameterGridPage );
+    auto values = footprintWizard->GetParameterValues( m_parameterGridPage );
+
+    int row = event.GetRow();
+    bool has_changed = false;
+
+    // Handle toggling of boolean parameters
+    if( types[row] == WIZARD_PARAM_UNITS_BOOL )
+    {
+        has_changed = true;
+        values[row] = ( values[row] == "1" ) ? "0" : "1";
+        m_parameterGrid->SetCellValue( row, WIZ_COL_VALUE, values[row] );
+    }
+    else
+    {
+        event.Skip();
+    }
+
+    if( has_changed )
+    {
+        wxString res = footprintWizard->SetParameterValues( m_parameterGridPage, values );
+
+        if( !res.IsEmpty() )
+            wxMessageBox( res );
+
+        ReloadFootprint();
+        DisplayWizardInfos();
+    }
+}
+
+
+void FOOTPRINT_WIZARD_FRAME::OnParameterGridKeyPress( wxKeyEvent& event )
+{
+    auto footprintWizard = GetMyWizard();
+    int row = m_parameterGrid->GetGridCursorRow();
+    int col = m_parameterGrid->GetGridCursorCol();
+    bool has_changed = false;
+
+
+    if( !footprintWizard || m_parameterGridPage < 0 ||
+        col != WIZ_COL_VALUE || event.GetKeyCode() != ' ' )
+    {
+        event.Skip();
+        return;
+    }
+
+    auto types = footprintWizard->GetParameterTypes( m_parameterGridPage );
+    auto values = footprintWizard->GetParameterValues( m_parameterGridPage );
+
+    // Handle toggling of boolean parameters when user presses space
+    if( types[row] == WIZARD_PARAM_UNITS_BOOL )
+    {
+        has_changed = true;
+        values[row] = ( values[row] == "1" ) ? "0" : "1";
+        m_parameterGrid->SetCellValue( row, WIZ_COL_VALUE, values[row] );
+    }
+    else
+    {
+        m_parameterGrid->EnableCellEditControl();
+    }
+
+    if( has_changed )
+    {
+        wxString res = footprintWizard->SetParameterValues( m_parameterGridPage, values );
+
+        if( !res.IsEmpty() )
+            wxMessageBox( res );
+
+        ReloadFootprint();
+        DisplayWizardInfos();
+    }
+}
+
+
 /**
  * Function RedrawActiveWindow
  * Display the current selected component.
