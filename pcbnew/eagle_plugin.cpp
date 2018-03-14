@@ -135,6 +135,13 @@ void ERULES::parse( wxXmlNode* aRules )
             else if( name == "mlMaxCreamFrame" )
                 mlMaxCreamFrame = parseEagle( value );
 
+            else if( name == "srRoundness" )
+                value.ToDouble( &srRoundness );
+            else if( name == "srMinRoundness" )
+                srMinRoundness = parseEagle( value );
+            else if( name == "srMaxRoundness" )
+                srMaxRoundness = parseEagle( value );
+
             else if( name == "rvPadTop" )
                 value.ToDouble( &rvPadTop );
             else if( name == "rlMinPadTop" )
@@ -1660,12 +1667,22 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     else if( layer == B_Cu )
         pad->SetLayerSet( back );
 
+    int minPadSize = std::min( padSize.x, padSize.y );
+
     // Rounded rectangle pads
-    if( e.roundness )
+    int roundRadius = Clamp( m_rules->srMinRoundness * 2,
+            (int)( minPadSize * m_rules->srRoundness ), m_rules->srMaxRoundness * 2 );
+
+    if( e.roundness || roundRadius > 0 )
     {
+        double roundRatio = (double) roundRadius / minPadSize / 2.0;
+
         // Eagle uses a different definition of roundness, hence division by 200
-        pad->SetRoundRectRadiusRatio( *e.roundness / 200.0 );
+        if( e.roundness )
+            roundRatio = std::fmax( *e.roundness / 200.0, roundRatio );
+
         pad->SetShape( PAD_SHAPE_ROUNDRECT );
+        pad->SetRoundRectRadiusRatio( roundRatio );
     }
 
     if( e.rot )

@@ -54,6 +54,10 @@ struct ERULES
     int    mlMinCreamFrame;     ///< solder paste mask, minimum size (Eagle mils, here nanometers)
     int    mlMaxCreamFrame;     ///< solder paste mask, maximum size (Eagle mils, here nanometers)
 
+    double srRoundness;         ///< corner rounding ratio for SMD pads (percentage)
+    int    srMinRoundness;      ///< corner rounding radius, minimum size (Eagle mils, here nanometers)
+    int    srMaxRoundness;      ///< corner rounding radius, maximum size (Eagle mils, here nanometers)
+
     double rvPadTop;            ///< top pad size as percent of drill size
     // double   rvPadBottom;    ///< bottom pad size as percent of drill size
 
@@ -76,6 +80,10 @@ struct ERULES
         mlMaxStopFrame      ( Mils2iu( 4.0 ) ),
         mlMinCreamFrame     ( Mils2iu( 0.0 ) ),
         mlMaxCreamFrame     ( Mils2iu( 0.0 ) ),
+
+        srRoundness         ( 0.0 ),
+        srMinRoundness      ( Mils2iu( 0.0 ) ),
+        srMaxRoundness      ( Mils2iu( 0.0 ) ),
 
         rvPadTop            ( 0.25 ),
         // rvPadBottom      ( 0.25 ),
