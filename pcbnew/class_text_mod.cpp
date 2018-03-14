@@ -465,16 +465,16 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
 
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    if( !IsVisible() )      // Hidden text
-        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
-    //else if( IsFrontLayer( m_Layer ) )
-        //aLayers[0] = LAYER_MOD_TEXT_FR;
-    //else if( IsBackLayer( m_Layer ) )
-        //aLayers[0] = LAYER_MOD_TEXT_BK;
-    else
-        aLayers[0] = GetLayer();
+    PCB_LAYER_ID nativeLayer = GetLayer();
 
     aCount = 1;
+
+    if( IsVisible() )
+        aLayers[0] = nativeLayer;
+    else if ( GetBoard()->IsLayerVisible( nativeLayer ) )
+        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
+    else
+        aCount = 0;
 }
 
 
