@@ -1782,8 +1782,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 {
                     wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
                     double angle = 0.0;
-                    double end_angle;
-                    double radius;
+                    double end_angle = 0.0;
+                    double radius = 0.0;
                     wxPoint center;
 
                     int width = w.width.ToPcbUnits();
@@ -1808,6 +1808,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     while( fabs( angle ) > DEG2RAD( EAGLE_CURVE_DELTA ) )
                     {
+                        wxASSERT( radius > 0.0 );
                         wxPoint end( int( radius * cos( end_angle + angle ) + center.x ),
                                      int( radius * sin( end_angle + angle ) + center.y ) );
 
