@@ -182,12 +182,13 @@ private:
      * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
      * @param aText = pointer to the last useful char in aBuff
      *          on return: points the beginning of the next line.
+     * @param aBuffSize = the size in bytes of aBuff
      * @param aFile = the opened GERBER file to read
      * @return a pointer to the beginning of the next line or NULL if end of file
     */
-    char* GetNextLine( char *aBuff, char* aText, FILE* aFile );
+    char* GetNextLine( char *aBuff, unsigned int aBuffSize, char* aText, FILE* aFile );
 
-    bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file );
+    bool GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char*& aText, FILE* aGerberFile );
 
 public:
     GERBER_FILE_IMAGE( int layer );
@@ -293,14 +294,14 @@ public:
      * Function ReadRS274XCommand
      * reads a single RS274X command terminated with a %
      */
-    bool ReadRS274XCommand( char *aBuff, char* & text );
+    bool ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, char*& aText );
 
     /**
      * Function ExecuteRS274XCommand
      * executes 1 command
      */
-    bool ExecuteRS274XCommand( int command, char* aBuff,
-                               char*& text );
+    bool ExecuteRS274XCommand( int aCommand, char* aBuff,
+                               unsigned int aBuffSize, char*& aText );
 
 
     /**
@@ -310,11 +311,12 @@ public:
      *          used to read successive lines from the gerber file.
      * @param text A reference to a character pointer which gives the initial
      *              text to read from.
+     * @param aBuffSize is the size of aBuff
      * @param gerber_file Which file to read from for continuation.
      * @return bool - true if a macro was read in successfully, else false.
      */
-    bool ReadApertureMacro( char *aBuff, char* & text,
-                            FILE * gerber_file );
+    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
+                            char* & text, FILE * gerber_file );
 
 
     /**

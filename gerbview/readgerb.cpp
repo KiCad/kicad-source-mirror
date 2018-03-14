@@ -103,11 +103,18 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
 }
 
 
+
+/**
+* size of single line of a text from a gerber file.
+* warning: some files can have *very long* lines, so the buffer must be large.
+*/
+#define GERBER_BUFZ 1000000
+static char line[GERBER_BUFZ];
+
 bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 {
     int      G_command = 0;        // command number for G commands like G04
     int      D_commande = 0;       // command number for D commands like D02
-    char     line[GERBER_BUFZ];
     char*    text;
 
     ClearMessageList( );
@@ -170,8 +177,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 m_CurrentPos = ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
-                    Execute_DCODE_Command( text,
-                                                   m_Last_Pen_Command );
+                    Execute_DCODE_Command( text, m_Last_Pen_Command );
                 }
                 break;
 
@@ -181,8 +187,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 
                 if( *text == '*' )      // command like X35142Y15945J504*
                 {
-                    Execute_DCODE_Command( text,
-                                                   m_Last_Pen_Command );
+                    Execute_DCODE_Command( text, m_Last_Pen_Command );
                 }
                 break;
 
@@ -190,7 +195,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 if( m_CommandState != ENTER_RS274X_CMD )
                 {
                     m_CommandState = ENTER_RS274X_CMD;
-                    ReadRS274XCommand( line, text );
+                    ReadRS274XCommand( line, GERBER_BUFZ, text );
                 }
                 else        //Error
                 {
