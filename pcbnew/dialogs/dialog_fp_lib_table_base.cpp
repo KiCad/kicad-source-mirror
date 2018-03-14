@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_fp_lib_table_base.h"
@@ -13,13 +13,15 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMainSizer;
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* m_top_sizer;
 	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
 	
 	m_auinotebook = new wxAuiNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_auinotebook->SetMinSize( wxSize( 720,460 ) );
+	
 	m_global_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -53,12 +55,12 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_grid->AutoSizeColumns();
 	m_global_grid->EnableDragColMove( false );
 	m_global_grid->EnableDragColSize( true );
-	m_global_grid->SetColLabelSize( 30 );
+	m_global_grid->SetColLabelSize( 22 );
 	m_global_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_global_grid->EnableDragRowSize( false );
-	m_global_grid->SetRowLabelSize( 40 );
+	m_global_grid->SetRowLabelSize( 0 );
 	m_global_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -105,12 +107,12 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_grid->AutoSizeColumns();
 	m_project_grid->EnableDragColMove( false );
 	m_project_grid->EnableDragColSize( true );
-	m_project_grid->SetColLabelSize( 30 );
+	m_project_grid->SetColLabelSize( 22 );
 	m_project_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_project_grid->EnableDragRowSize( false );
-	m_project_grid->SetRowLabelSize( 40 );
+	m_project_grid->SetRowLabelSize( 0 );
 	m_project_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -125,44 +127,31 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_sizer->Fit( m_project_panel );
 	m_auinotebook->AddPage( m_project_panel, _("Project Specific Libraries"), true, wxNullBitmap );
 	
-	m_top_sizer->Add( m_auinotebook, 6, wxEXPAND | wxALL, 5 );
+	m_top_sizer->Add( m_auinotebook, 6, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxBoxSizer* bSizer51;
-	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bButtonsSizer;
+	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_browseButton = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Browse Libraries..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer51->Add( m_browseButton, 0, wxALL, 5 );
+	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bButtonsSizer->Add( m_append_button, 0, wxLEFT, 5 );
 	
-	m_append_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_append_button->SetToolTip( _("Add a PCB library row to this table") );
+	m_browse_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bButtonsSizer->Add( m_browse_button, 0, wxRIGHT, 5 );
 	
-	bSizer51->Add( m_append_button, 0, wxALL, 5 );
+	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bButtonsSizer->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_delete_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Remove Library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_delete_button->SetToolTip( _("Remove a PCB library from this library table") );
+	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bButtonsSizer->Add( m_move_up_button, 0, wxLEFT, 5 );
 	
-	bSizer51->Add( m_delete_button, 0, wxALL, 5 );
-	
-	m_move_up_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_move_up_button->SetToolTip( _("Move the currently selected row up one position") );
-	
-	bSizer51->Add( m_move_up_button, 0, wxALL, 5 );
-	
-	m_move_down_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_move_down_button->SetToolTip( _("Move the currently selected row down one position") );
-	
-	bSizer51->Add( m_move_down_button, 0, wxALL, 5 );
-	
-	m_edit_options = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Options Editor"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_edit_options->SetToolTip( _("Zoom into the options table for current row") );
-	
-	bSizer51->Add( m_edit_options, 0, wxALL, 5 );
+	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bButtonsSizer->Add( m_move_down_button, 0, wxRIGHT, 5 );
 	
 	
-	m_top_sizer->Add( bSizer51, 0, wxALIGN_CENTER|wxBOTTOM, 8 );
+	m_top_sizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions:") ), wxVERTICAL );
@@ -182,14 +171,12 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_path_subs_grid->AutoSizeColumns();
 	m_path_subs_grid->EnableDragColMove( false );
 	m_path_subs_grid->EnableDragColSize( true );
-	m_path_subs_grid->SetColLabelSize( 30 );
-	m_path_subs_grid->SetColLabelValue( 0, _("Environment Variable") );
-	m_path_subs_grid->SetColLabelValue( 1, _("Path Segment") );
+	m_path_subs_grid->SetColLabelSize( 0 );
 	m_path_subs_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_path_subs_grid->EnableDragRowSize( true );
-	m_path_subs_grid->SetRowLabelSize( 40 );
+	m_path_subs_grid->SetRowLabelSize( 0 );
 	m_path_subs_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -198,10 +185,10 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_path_subs_grid->SetToolTip( _("This is a read-only table which shows pertinent environment variables.") );
 	
-	sbSizer1->Add( m_path_subs_grid, 1, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( m_path_subs_grid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* m_bottom_sizer;
 	m_bottom_sizer = new wxBoxSizer( wxVERTICAL );
@@ -213,44 +200,38 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	m_bottom_sizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	m_bottom_sizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( m_bottom_sizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_bottom_sizer, 0, wxEXPAND, 5 );
 	
 	
-	this->SetSizer( bSizer1 );
+	this->SetSizer( bMainSizer );
 	this->Layout();
 	
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelCaptionButtonClick ) );
-	this->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
+	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
-	m_edit_options->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::optionsEditor ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelButtonClick ), NULL, this );
+	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FP_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::onOKButtonClick ), NULL, this );
 }
 
 DIALOG_FP_LIB_TABLE_BASE::~DIALOG_FP_LIB_TABLE_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelCaptionButtonClick ) );
-	this->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
+	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
-	m_edit_options->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::optionsEditor ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelButtonClick ), NULL, this );
+	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FP_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::onOKButtonClick ), NULL, this );
 	
 }

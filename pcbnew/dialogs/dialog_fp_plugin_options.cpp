@@ -29,6 +29,7 @@
 #include <dialog_fp_plugin_options_base.h>
 #include <fp_lib_table.h>
 #include <grid_tricks.h>
+#include <bitmaps.h>
 
 
 #define INITIAL_HELP    \
@@ -36,10 +37,6 @@
 
 
 using std::string;
-
-// re-enter the dialog with the column sizes preserved from last time.
-static int col_width_option;
-static int col_width_value;
 
 
 /**
@@ -52,26 +49,62 @@ class DIALOG_FP_PLUGIN_OPTIONS : public DIALOG_FP_PLUGIN_OPTIONS_BASE
 {
 
 public:
-    DIALOG_FP_PLUGIN_OPTIONS( wxTopLevelWindow* aParent,
-            const wxString& aNickname, const wxString& aPluginType,
-            const wxString& aOptions, wxString* aResult ) :
+    DIALOG_FP_PLUGIN_OPTIONS( wxWindow* aParent, const wxString& aNickname,
+                              const wxString& aPluginType, const wxString& aOptions,
+                              wxString* aResult ) :
         DIALOG_FP_PLUGIN_OPTIONS_BASE( aParent ),
         m_callers_options( aOptions ),
         m_result( aResult ),
         m_initial_help( INITIAL_HELP )
     {
-        wxString title = wxString::Format(
-                _( "Options for Library \"%s\"" ), GetChars( aNickname ) );
-
-        SetTitle( title );
+        SetTitle( wxString::Format( _( "Options for Library \"%s\"" ), aNickname ) );
 
         // add Cut, Copy, and Paste to wxGrid
         m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-        m_grid->SetColMinimalWidth( 1, 250 );
+        // Option Choices Panel:
+
+        IO_MGR::PCB_FILE_T  pi_type = IO_MGR::EnumFromStr( aPluginType );
+        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( pi_type ) );
+
+        pi->FootprintLibOptions( &m_choices );
+
+        if( m_choices.size() )
+        {
+            unsigned int row = 0;
+            for( PROPERTIES::const_iterator it = m_choices.begin();  it != m_choices.end();  ++it, ++row )
+            {
+                wxString item = FROM_UTF8( it->first.c_str() );
+
+                m_listbox->InsertItems( 1, &item, row );
+            }
+        }
+
+        m_html->SetPage( m_initial_help );
+
+        // Configure button logos
+        m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
+        m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
+
+        // initial focus on the grid please.
+        SetInitialFocus( m_grid );
+
+        m_sdbSizer1OK->SetDefault();
+    }
+
+    ~DIALOG_FP_PLUGIN_OPTIONS() override
+    {
+        // destroy GRID_TRICKS before m_grid.
+        m_grid->PopEventHandler( true );
+    }
+
+    bool TransferDataToWindow() override
+    {
+        if( !DIALOG_SHIM::TransferDataToWindow() )
+            return false;
 
         // Fill the grid with existing aOptions
-        string options = TO_UTF8( aOptions );
+        string options = TO_UTF8( m_callers_options );
 
         PROPERTIES* props = LIB_TABLE::ParseOptions( options );
 
@@ -90,94 +123,19 @@ public:
             delete props;
         }
 
-        // Option Choices Panel:
+        adjustGridColumns( m_grid->GetRect().GetWidth() );
 
-        IO_MGR::PCB_FILE_T  pi_type = IO_MGR::EnumFromStr( aPluginType );
-        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( pi_type ) );
-
-        pi->FootprintLibOptions( &m_choices );
-
-        if( m_choices.size() )
-        {
-            int row = 0;
-            for( PROPERTIES::const_iterator it = m_choices.begin();  it != m_choices.end();  ++it, ++row )
-            {
-                wxString item = FROM_UTF8( it->first.c_str() );
-
-                m_listbox->InsertItems( 1, &item, row );
-            }
-        }
-
-        m_html->SetPage( m_initial_help );
-
-        if( !col_width_option )
-        {
-            m_grid->AutoSizeColumns( false );
-        }
-        else
-        {
-            m_grid->SetColSize( 0, col_width_option );
-            m_grid->SetColSize( 1, col_width_value );
-        }
-
-        Fit();
-
-        // initial focus on the grid please.
-        m_grid->SetFocus();
+        return true;
     }
 
-    ~DIALOG_FP_PLUGIN_OPTIONS()
+    bool TransferDataFromWindow() override
     {
-        // destroy GRID_TRICKS before m_grid.
-        m_grid->PopEventHandler( true );
-    }
+        // Write any active editors into the grid
+        m_grid->DisableCellEditControl();
 
+        if( !DIALOG_SHIM::TransferDataFromWindow() )
+            return false;
 
-private:
-    const wxString& m_callers_options;
-    wxString*       m_result;
-    PROPERTIES      m_choices;
-    wxString        m_initial_help;
-
-
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based column index.
-    int getCursorCol() const
-    {
-        return m_grid->GetGridCursorCol();
-    }
-
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based row index.
-    int getCursorRow() const
-    {
-        return m_grid->GetGridCursorRow();
-    }
-
-    wxArrayString getRow( int aRow )
-    {
-        wxArrayString row;
-
-        const int col_count = m_grid->GetNumberCols();
-        for( int col = 0;  col < col_count;  ++col )
-        {
-            row.Add( m_grid->GetCellValue( aRow, col ) );
-        }
-
-        return row;
-    }
-
-    void setRow( int aRow, const wxArrayString& aPair )
-    {
-        const int col_count = m_grid->GetNumberCols();
-        for( int col = 0;  col < col_count;  ++col )
-        {
-            m_grid->SetCellValue( aRow, col, aPair[col] );
-        }
-    }
-
-    wxString makeResult()
-    {
         PROPERTIES  props;
         const int   rowCount = m_grid->GetNumberRows();
 
@@ -192,37 +150,27 @@ private:
             }
         }
 
-        return LIB_TABLE::FormatOptions( &props );
+        *m_result =  LIB_TABLE::FormatOptions( &props );
+        return true;
     }
 
-    void saveColSizes()
-    {
-        col_width_option = m_grid->GetColSize( 0 );
-        col_width_value  = m_grid->GetColSize( 1 );
-    }
-
-    void abort()
-    {
-        saveColSizes();
-
-        *m_result = m_callers_options;      // tell caller "no change"
-        EndModal( 0 );
-    }
+private:
+    const wxString& m_callers_options;
+    wxString*       m_result;
+    PROPERTIES      m_choices;
+    wxString        m_initial_help;
 
     int appendRow()
     {
-        if( m_grid->AppendRows( 1 ) )
-        {
-            int last_row = m_grid->GetNumberRows() - 1;
+        int row = m_grid->GetNumberRows();
 
-            // wx documentation is wrong, SetGridCursor does not make visible.
-            m_grid->MakeCellVisible( last_row, 0 );
-            m_grid->SetGridCursor( last_row, 0 );
+        m_grid->AppendRows( 1 );
 
-            return last_row;
-        }
+        // wx documentation is wrong, SetGridCursor does not make visible.
+        m_grid->MakeCellVisible( row, 0 );
+        m_grid->SetGridCursor( row, 0 );
 
-        return -1;
+        return row;
     }
 
     void appendOption()
@@ -247,7 +195,6 @@ private:
                 row = appendRow();
 
             m_grid->SetCellValue( row, 0, option );
-            m_grid->AutoSizeColumns( false );
         }
     }
 
@@ -262,15 +209,9 @@ private:
             UTF8    help_text;
 
             if( m_choices.Value( option.c_str(), &help_text ) )
-            {
-                wxString page = help_text;
-
-                m_html->SetPage( page );
-            }
+                m_html->SetPage( help_text );
             else
-            {
                 m_html->SetPage( m_initial_help );
-            }
         }
     }
 
@@ -279,19 +220,25 @@ private:
         appendOption();
     }
 
-    void onAppendOption( wxCommandEvent& event ) override
+    void onAppendOption( wxCommandEvent&  ) override
     {
         appendOption();
     }
 
-    void onAppendRow( wxMouseEvent& event ) override
+    void onAppendRow( wxCommandEvent&  ) override
     {
         appendRow();
     }
 
-    void onDeleteRow( wxMouseEvent& event ) override
+    void onDeleteRow( wxCommandEvent&  ) override
     {
-        int curRow   = getCursorRow();
+        if( !m_grid->HasFocus() )
+        {
+            m_grid->SetFocus();
+            return;
+        }
+
+        int curRow   = m_grid->GetGridCursorRow();
 
         m_grid->DeleteRows( curRow );
 
@@ -300,97 +247,40 @@ private:
         m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
     }
 
-    void onMoveUp( wxMouseEvent& event ) override
+    void onUpdateUI( wxUpdateUIEvent&  ) override
     {
-        int curRow = getCursorRow();
-        if( curRow >= 1 )
-        {
-            int curCol = getCursorCol();
-
-            wxArrayString move_me = getRow( curRow );
-
-            m_grid->DeleteRows( curRow );
-            --curRow;
-            m_grid->InsertRows( curRow );
-
-            setRow( curRow, move_me );
-
-            wxGridTableBase* tbl = m_grid->GetTable();
-
-            if( tbl->GetView() )
-            {
-                // fire a msg to cause redrawing
-                wxGridTableMessage msg( tbl,
-                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                        curRow,
-                                        0 );
-
-                tbl->GetView()->ProcessTableMessage( msg );
-            }
-
-            m_grid->MakeCellVisible( curRow, curCol );
-            m_grid->SetGridCursor( curRow, curCol );
-        }
+        if( !m_grid->IsCellEditControlShown() )
+            adjustGridColumns( m_grid->GetRect().GetWidth() );
     }
 
-    void onMoveDown( wxMouseEvent& event ) override
+    void onSize( wxSizeEvent& aEvent ) override
     {
-        int curRow = getCursorRow();
-        if( curRow + 1 < m_grid->GetNumberRows() )
-        {
-            int curCol  = getCursorCol();
+        adjustGridColumns( aEvent.GetSize().GetX() );
 
-            wxArrayString move_me = getRow( curRow );
-
-            m_grid->DeleteRows( curRow );
-             ++curRow;
-            m_grid->InsertRows( curRow );
-            setRow( curRow, move_me );
-
-            wxGridTableBase* tbl = m_grid->GetTable();
-
-            if( tbl->GetView() )
-            {
-                // fire a msg to cause redrawing
-                wxGridTableMessage msg( tbl,
-                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                        curRow - 1,
-                                        0 );
-
-                tbl->GetView()->ProcessTableMessage( msg );
-            }
-
-            m_grid->MakeCellVisible( curRow, curCol );
-            m_grid->SetGridCursor( curRow, curCol );
-        }
+        aEvent.Skip();
     }
 
-    void onCancelButtonClick( wxCommandEvent& event ) override
-    {
-        abort();
-    }
-
-    void onCancelCaptionButtonClick( wxCloseEvent& event ) override
-    {
-        abort();
-    }
-
-    void onOKButtonClick( wxCommandEvent& event ) override
-    {
-        saveColSizes();
-
-        *m_result = makeResult();       // change from edits
-        EndModal( 1 );
-    }
     //-----</event handlers>-----------------------------------------------------
+
+    void adjustGridColumns( int aWidth )
+    {
+        m_grid->Freeze();
+
+        m_grid->AutoSizeColumn( 0 );
+        m_grid->SetColSize( 0, std::max( 120, m_grid->GetColSize( 0 ) ) );
+
+        m_grid->SetColSize( 1, aWidth - m_grid->GetColSize( 0 ) );
+
+        m_grid->Thaw();
+    }
 };
 
 
-void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller,
-        const wxString& aNickname, const wxString& aPluginType,
-        const wxString& aOptions, wxString* aResult )
+void InvokePluginOptionsEditor( wxWindow* aCaller, const wxString& aNickname,
+                                const wxString& aPluginType, const wxString& aOptions,
+                                wxString* aResult )
 {
-    DIALOG_FP_PLUGIN_OPTIONS    dlg( aCaller, aNickname, aPluginType, aOptions, aResult );
+    DIALOG_FP_PLUGIN_OPTIONS dlg( aCaller, aNickname, aPluginType, aOptions, aResult );
 
     dlg.ShowModal();
 }

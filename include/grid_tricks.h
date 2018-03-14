@@ -22,9 +22,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef _GRID_TRICKS_H_
+#define _GRID_TRICKS_H_
+
 
 #include <wx/grid.h>
 #include <wx/event.h>
+
+
+enum
+{
+    GRIDTRICKS_FIRST_ID = 901,
+    GRIDTRICKS_ID_CUT,
+    GRIDTRICKS_ID_COPY,
+    GRIDTRICKS_ID_PASTE,
+    GRIDTRICKS_ID_SELECT,
+
+    GRIDTRICKS_FIRST_SHOWHIDE = 979,    // reserve 20 IDs for show/hide-column-n
+
+    GRIDTRICKS_LAST_ID = 999
+};
 
 
 /**
@@ -35,8 +52,19 @@ class GRID_TRICKS : public wxEvtHandler
 {
 public:
 
-    GRID_TRICKS( wxGrid* aGrid );
+    explicit GRID_TRICKS( wxGrid* aGrid );
 
+    /// Helper routines for column visibility preferences
+    static void ShowHideGridColumns( wxGrid* aGrid, const wxString& shownColumns );
+    static wxString GetShownColumns( wxGrid* aGrid );
+
+    /// Workaround for wxGrid::SetTable(), which messes up the column widths that were set
+    /// in wxFormBuilder.)
+    static void SetGridTable( wxGrid* aGrid, wxGridTableBase* aTable );
+
+    /// Workaround for crash bug in wxGrid where it tries to call the table in the d'tor
+    /// in order to hide the cell editor
+    static void DestroyGridTable( wxGrid* aGrid, wxGridTableBase* aTable );
 
 protected:
     wxGrid* m_grid;     ///< I don't own the grid, but he owns me
@@ -48,20 +76,6 @@ protected:
     int     m_sel_row_count;
     int     m_sel_col_count;
 
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based column index.
-    int getCursorCol() const
-    {
-        return m_grid->GetGridCursorCol();
-    }
-
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based row index.
-    int getCursorRow() const
-    {
-        return m_grid->GetGridCursorRow();
-    }
-
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
 
@@ -71,30 +85,21 @@ protected:
     }
 
     void onGridCellLeftClick( wxGridEvent& event );
-
-    void onGridCellRightClick( wxGridEvent& event )
-    {
-        showPopupMenu();
-    }
-
-    void onRightDown( wxMouseEvent& event )
-    {
-        showPopupMenu();
-    }
-
-    virtual void showPopupMenu();
-
-    // the user clicked on a popup menu choice:
+    void onGridCellLeftDClick( wxGridEvent& event );
+    void onGridCellRightClick( wxGridEvent& event );
+    void onGridLabelRightClick( wxGridEvent& event );
     void onPopupSelection( wxCommandEvent& event );
-
     void onKeyDown( wxKeyEvent& ev );
+
+    virtual bool handleDoubleClick( wxGridEvent& aEvent );
+    virtual void showPopupMenu( wxMenu& menu );
+    virtual void doPopupSelection( wxCommandEvent& event );
 
     bool toggleCell( int aRow, int aCol );
 
     virtual void paste_clipboard();
-
     virtual void paste_text( const wxString& cb_text );
-
     virtual void cutcopy( bool doCut );
 };
 
+#endif  // _GRID_TRICKS_H_

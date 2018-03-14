@@ -20,6 +20,8 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
 	
 	m_auinotebook = new wxAuiNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_auinotebook->SetMinSize( wxSize( 720,460 ) );
+	
 	m_global_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -53,13 +55,13 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	m_global_grid->AutoSizeColumns();
 	m_global_grid->EnableDragColMove( false );
 	m_global_grid->EnableDragColSize( true );
-	m_global_grid->SetColLabelSize( 30 );
+	m_global_grid->SetColLabelSize( 22 );
 	m_global_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_global_grid->AutoSizeRows();
 	m_global_grid->EnableDragRowSize( false );
-	m_global_grid->SetRowLabelSize( 40 );
+	m_global_grid->SetRowLabelSize( 0 );
 	m_global_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -106,12 +108,12 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	m_project_grid->AutoSizeColumns();
 	m_project_grid->EnableDragColMove( false );
 	m_project_grid->EnableDragColSize( true );
-	m_project_grid->SetColLabelSize( 30 );
+	m_project_grid->SetColLabelSize( 22 );
 	m_project_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_project_grid->EnableDragRowSize( false );
-	m_project_grid->SetRowLabelSize( 40 );
+	m_project_grid->SetRowLabelSize( 0 );
 	m_project_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -131,31 +133,23 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_browse_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Browse Libraries..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer51->Add( m_browse_button, 0, wxALL, 5 );
+	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bSizer51->Add( m_append_button, 0, wxLEFT, 5 );
 	
-	m_append_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_append_button->SetToolTip( _("Add a symbol library row to this table") );
+	m_browse_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bSizer51->Add( m_browse_button, 0, wxRIGHT, 5 );
 	
-	bSizer51->Add( m_append_button, 0, wxALL, 5 );
+	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bSizer51->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_delete_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Remove Library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_delete_button->SetToolTip( _("Remove a symbol library from this library table") );
+	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bSizer51->Add( m_move_up_button, 0, wxLEFT, 5 );
 	
-	bSizer51->Add( m_delete_button, 0, wxALL, 5 );
-	
-	m_move_up_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_move_up_button->SetToolTip( _("Move the currently selected row up one position") );
-	
-	bSizer51->Add( m_move_up_button, 0, wxALL, 5 );
-	
-	m_move_down_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_move_down_button->SetToolTip( _("Move the currently selected row down one position") );
-	
-	bSizer51->Add( m_move_down_button, 0, wxALL, 5 );
+	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bSizer51->Add( m_move_down_button, 0, wxRIGHT, 5 );
 	
 	
-	m_top_sizer->Add( bSizer51, 0, wxALIGN_CENTER|wxBOTTOM, 8 );
+	m_top_sizer->Add( bSizer51, 0, 0, 8 );
 	
 	
 	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
@@ -178,14 +172,12 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	m_path_subs_grid->AutoSizeColumns();
 	m_path_subs_grid->EnableDragColMove( false );
 	m_path_subs_grid->EnableDragColSize( true );
-	m_path_subs_grid->SetColLabelSize( 30 );
-	m_path_subs_grid->SetColLabelValue( 0, _("Environment Variable") );
-	m_path_subs_grid->SetColLabelValue( 1, _("Path Segment") );
+	m_path_subs_grid->SetColLabelSize( 0 );
 	m_path_subs_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_path_subs_grid->EnableDragRowSize( true );
-	m_path_subs_grid->SetRowLabelSize( 40 );
+	m_path_subs_grid->SetRowLabelSize( 0 );
 	m_path_subs_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -194,7 +186,7 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_path_subs_grid->SetToolTip( _("This is a read-only table which shows pertinent environment variables.") );
 	
-	sbSizer1->Add( m_path_subs_grid, 1, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( m_path_subs_grid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
@@ -209,7 +201,7 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	m_bottom_sizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	m_bottom_sizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
 	
 	
 	bSizer1->Add( m_bottom_sizer, 0, wxEXPAND, 5 );
@@ -217,26 +209,29 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
 	// Connect Events
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
+	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
+	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 }
 
 DIALOG_SYMBOL_LIB_TABLE_BASE::~DIALOG_SYMBOL_LIB_TABLE_BASE()
 {
 	// Disconnect Events
 	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
+	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
+	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 	
 }

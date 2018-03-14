@@ -29,6 +29,7 @@
 #include <lib_table_lexer.h>
 #include <grid_tricks.h>
 #include <confirm.h>
+#include <bitmaps.h>
 #include <lib_table_grid.h>
 #include <wildcards_and_files_ext.h>
 #include <env_paths.h>
@@ -114,19 +115,12 @@ protected:
 
             if( parsed )
             {
-                const int cur_row = std::max( getCursorRow(), 0 );
-
-                // if clipboard rows would extend past end of current table size...
-                if( tmp_tbl.GetCount() > tbl->GetNumberRows() - cur_row )
-                {
-                    int newRowsNeeded = tmp_tbl.GetCount() - ( tbl->GetNumberRows() - cur_row );
-                    tbl->AppendRows( newRowsNeeded );
-                }
+                // make sure the table is big enough...
+                if( tmp_tbl.GetCount() > tbl->GetNumberRows() )
+                    tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
 
                 for( int i = 0;  i < tmp_tbl.GetCount();  ++i )
-                {
-                    tbl->rows.replace( cur_row+i, tmp_tbl.At( i ) );
-                }
+                    tbl->rows.replace( i, tmp_tbl.At( i ) );
             }
 
             m_grid->AutoSizeColumns( false );
@@ -135,6 +129,8 @@ protected:
         {
             // paste spreadsheet formatted text.
             GRID_TRICKS::paste_text( cb_text );
+
+            m_grid->AutoSizeColumns( false );
         }
     }
 };
@@ -155,6 +151,10 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
     // so make it a grid owned table.
     m_global_grid->SetTable(  new SYMBOL_LIB_TABLE_GRID( *aGlobal ),  true );
     m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *aProject ), true );
+
+    // Give a bit more room for combobox editors
+    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 4 );
+    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
 
     // add Cut, Copy, and Paste to wxGrids
     m_global_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_global_grid ) );
@@ -205,24 +205,22 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
     m_global_grid->SelectRow( 0 );
     m_project_grid->SelectRow( 0 );
 
-    // for ALT+A handling, we want the initial focus to be on the first selected grid.
-    if( m_pageNdx == 0 )
-    {
-        m_global_grid->SetFocus();
-        m_cur_grid = m_global_grid;
-    }
-    else
-    {
-        m_project_grid->SetFocus();
-        m_cur_grid = m_project_grid;
-    }
+    // Configure button logos
+    m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
+    m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
+    m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
+    m_browse_button->SetBitmap( KiBitmap( folder_xpm ) );
+
+    m_sdbSizerOK->SetDefault();
 
     SetSizeInDU( 450, 400 );
     Center();
 
-    // On some window managers (Unity, XFCE), this dialog is
-    // not always raised, depending on this dialog is run.
-    // Force it to be raised
+    FinishDialogSettings();
+
+    // On some window managers (Unity, XFCE), this dialog is not always raised, depending on
+    // how this dialog is run.
     Raise();
 }
 
@@ -236,15 +234,25 @@ DIALOG_SYMBOL_LIB_TABLE::~DIALOG_SYMBOL_LIB_TABLE()
 }
 
 
-int DIALOG_SYMBOL_LIB_TABLE::getCursorCol() const
+bool DIALOG_SYMBOL_LIB_TABLE::Show( bool aShow )
 {
-    return m_cur_grid->GetGridCursorCol();
-}
+    if( aShow )
+    {
+        m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
 
+        // for ALT+A handling, we want the initial focus to be on the first selected grid.
+        SetInitialFocus( m_cur_grid );
+    }
+    else
+    {
+        // Save page index for next invocation
+        // We must do this on Show( false ) because when the first grid is hidden it
+        // gives focus to the next one (which is then hidden), but the result is that
+        // we save the wrong grid if we do it after this.
+        m_pageNdx = m_auinotebook->GetSelection();
+    }
 
-int DIALOG_SYMBOL_LIB_TABLE::getCursorRow() const
-{
-    return m_cur_grid->GetGridCursorRow();
+    return DIALOG_SHIM::Show( aShow );
 }
 
 
@@ -271,19 +279,15 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
             else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_SCH ) ) )
             {
                 wxString msg = wxString::Format(
-                    _( "Illegal character \"%c\" found in Nickname: \"%s\" in row %d" ),
-                    illegalCh, GetChars( nick ), r + 1 );
+                    _( "Illegal character \"%c\" in Nickname: \"%s\"" ),
+                    illegalCh, GetChars( nick ) );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( &model != cur_model() )
-                {
                     m_auinotebook->SetSelection( &model == global_model() ? 0 : 1 );
-                }
 
-                // go to the problematic row
-                m_cur_grid->SetGridCursor( r, 0 );
-                m_cur_grid->SelectBlock( r, 0, r, 0 );
                 m_cur_grid->MakeCellVisible( r, 0 );
+                m_cur_grid->SetGridCursor( r, 1 );
 
                 wxMessageDialog errdlg( this, msg, _( "No Colon in Nicknames" ) );
                 errdlg.ShowModal();
@@ -321,17 +325,15 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( &model != cur_model() )
-                    {
                         m_auinotebook->SetSelection( &model == global_model() ? 0 : 1 );
-                    }
 
                     // go to the lower of the two rows, it is technically the duplicate:
-                    m_cur_grid->SetGridCursor( r2, 0 );
-                    m_cur_grid->SelectBlock( r2, 0, r2, 0 );
                     m_cur_grid->MakeCellVisible( r2, 0 );
+                    m_cur_grid->SetGridCursor( r2, 1 );
 
                     wxMessageDialog errdlg( this, msg, _( "Please Delete or Modify One" ) );
                     errdlg.ShowModal();
+
                     return false;
                 }
             }
@@ -344,8 +346,7 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
 
 void DIALOG_SYMBOL_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 {
-    m_pageNdx = m_auinotebook->GetSelection();
-    m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
+    m_cur_grid = ( m_auinotebook->GetSelection() == 0 ) ? m_global_grid : m_project_grid;
 }
 
 
@@ -425,7 +426,10 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
 
     if( !files.IsEmpty() )
-        scrollToRow( m_cur_grid->GetNumberRows() - 1 );  // scroll to the new libraries
+    {
+        m_cur_grid->MakeCellVisible( m_cur_grid->GetNumberRows() - 1, 0 );
+        m_cur_grid->SetGridCursor( m_cur_grid->GetNumberRows() - 1, 1 );
+    }
 }
 
 
@@ -436,14 +440,21 @@ void DIALOG_SYMBOL_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
         int row = m_cur_grid->GetNumberRows() - 1;
         // Gives a default type (currently, only one type exists):
         m_cur_grid->SetCellValue( row, COL_TYPE, SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
-        scrollToRow( row );
+
+        // wx documentation is wrong, SetGridCursor does not make visible.
+        m_cur_grid->MakeCellVisible( row, 0 );
+        m_cur_grid->SetGridCursor( row, 1 );
+
+        m_cur_grid->EnableCellEditControl( true );
+        m_cur_grid->ShowCellEditControl();
     }
 }
 
 
 void DIALOG_SYMBOL_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 {
-    int currRow = getCursorRow();
+    int curRow = m_cur_grid->GetGridCursorRow();
+    int curCol = m_cur_grid->GetGridCursorCol();
 
     // In a wxGrid, collect rows that have a selected cell, or are selected
     // is not so easy: it depend on the way the selection was made.
@@ -467,8 +478,8 @@ void DIALOG_SYMBOL_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     }
 
     // Use the row having the grid cursor only if we have no candidate:
-    if( selectedRows.size() == 0 && getCursorRow() >= 0 )
-        selectedRows.Add( getCursorRow() );
+    if( selectedRows.size() == 0 && m_cur_grid->GetGridCursorRow() >= 0 )
+        selectedRows.Add( m_cur_grid->GetGridCursorRow() );
 
     std::sort( selectedRows.begin(), selectedRows.end() );
 
@@ -486,29 +497,18 @@ void DIALOG_SYMBOL_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
         }
     }
 
-    if( currRow >= m_cur_grid->GetNumberRows() )
-        m_cur_grid->SetGridCursor(m_cur_grid->GetNumberRows()-1, getCursorCol() );
-
-    m_cur_grid->SelectRow( m_cur_grid->GetGridCursorRow() );
+    m_cur_grid->SetGridCursor( std::min( curRow, m_cur_grid->GetNumberRows() - 1 ), curCol );
 }
 
 
 void DIALOG_SYMBOL_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
-    wxArrayInt rowsSelected = m_cur_grid->GetSelectedRows();
-
-    if( rowsSelected.GetCount() == 0 )
-        return;
+    SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
+    int curRow = m_cur_grid->GetGridCursorRow();
 
     // @todo: add multiple selection moves.
-    int curRow = rowsSelected[0];
-
     if( curRow >= 1 )
     {
-        int curCol = getCursorCol();
-
-        SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
-
         boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
             tbl->rows.release( tbl->rows.begin() + curRow );
 
@@ -517,38 +517,25 @@ void DIALOG_SYMBOL_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 
         if( tbl->GetView() )
         {
-            // fire a msg to cause redrawing
-            wxGridTableMessage msg( tbl,
-                                    wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                    curRow,
-                                    0 );
-
+            // Update the wxGrid
+            wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, curRow, 0 );
             tbl->GetView()->ProcessTableMessage( msg );
         }
 
-        m_cur_grid->MakeCellVisible( curRow, curCol );
-        m_cur_grid->SetGridCursor( curRow, curCol );
-        m_cur_grid->SelectRow( getCursorRow() );
+        m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
+        m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
     }
 }
 
 
 void DIALOG_SYMBOL_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
-    wxArrayInt rowsSelected = m_cur_grid->GetSelectedRows();
-
-    if( rowsSelected.GetCount() == 0 )
-        return;
-
     SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
+    int curRow = m_cur_grid->GetGridCursorRow();
 
     // @todo: add multiple selection moves.
-    int curRow = rowsSelected[0];
-
     if( unsigned( curRow + 1 ) < tbl->rows.size() )
     {
-        int curCol = getCursorCol();
-
         boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
             tbl->rows.release( tbl->rows.begin() + curRow );
 
@@ -557,18 +544,13 @@ void DIALOG_SYMBOL_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 
         if( tbl->GetView() )
         {
-            // fire a msg to cause redrawing
-            wxGridTableMessage msg( tbl,
-                                    wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                    curRow - 1,
-                                    0 );
-
+            // Update the wxGrid
+            wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, curRow - 1, 0 );
             tbl->GetView()->ProcessTableMessage( msg );
         }
 
-        m_cur_grid->MakeCellVisible( curRow, curCol );
-        m_cur_grid->SetGridCursor( curRow, curCol );
-        m_cur_grid->SelectRow( getCursorRow() );
+        m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
+        m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
     }
 }
 
@@ -642,31 +624,41 @@ void DIALOG_SYMBOL_LIB_TABLE::populateEnvironReadOnlyTable()
     unique.insert( PROJECT_VAR_NAME );
     unique.insert( SYMBOL_LIB_TABLE::GlobalPathEnvVariableName() );
 
-    m_path_subs_grid->AppendRows( unique.size() );
-
-    int row = 0;
-
-    for( auto it = unique.begin();  it != unique.end();  ++it, ++row )
+    for( wxString evName : unique )
     {
-        wxString    evName = *it;
-        wxString    evValue;
+        int row = m_path_subs_grid->GetNumberRows();
+        m_path_subs_grid->AppendRows( 1 );
 
-        m_path_subs_grid->SetCellValue( row, 0, evName );
+        m_path_subs_grid->SetCellValue( row, 0, wxT( "${" ) + evName + wxT( "}" ) );
 
-        if( wxGetEnv( evName, &evValue ) )
-            m_path_subs_grid->SetCellValue( row, 1, evValue );
+        wxString evValue;
+        wxGetEnv( evName, &evValue );
+        m_path_subs_grid->SetCellValue( row, 1, evValue );
     }
 
-    m_path_subs_grid->AutoSizeColumns();
+    // No combobox editors here, but it looks better if its consistent with the other
+    // grids in the dialog.
+    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 4 );
+
+    adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::scrollToRow( int aRowNumber )
+void DIALOG_SYMBOL_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 {
-    // wx documentation is wrong, SetGridCursor does not make visible.
-    m_cur_grid->MakeCellVisible( aRowNumber, 0 );
-    m_cur_grid->SetGridCursor( aRowNumber, 0 );
-    m_cur_grid->SelectRow( m_cur_grid->GetGridCursorRow() );
+    // Account for scroll bars
+    aWidth -= ( m_path_subs_grid->GetSize().x - m_path_subs_grid->GetClientSize().x );
+
+    m_path_subs_grid->AutoSizeColumn( 0 );
+    m_path_subs_grid->SetColSize( 1, aWidth - m_path_subs_grid->GetColSize( 0 ) );
+}
+
+
+void DIALOG_SYMBOL_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
+{
+    adjustPathSubsGridColumns( event.GetSize().GetX() );
+
+    event.Skip();
 }
 
 
@@ -688,4 +680,4 @@ SYMBOL_LIB_TABLE_GRID* DIALOG_SYMBOL_LIB_TABLE::cur_model() const
 }
 
 
-int DIALOG_SYMBOL_LIB_TABLE::m_pageNdx = 0;
+size_t DIALOG_SYMBOL_LIB_TABLE::m_pageNdx = 0;

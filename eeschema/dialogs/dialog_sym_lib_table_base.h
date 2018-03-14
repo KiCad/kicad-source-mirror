@@ -25,6 +25,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/aui/auibook.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/dialog.h>
@@ -49,11 +50,11 @@ class DIALOG_SYMBOL_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText4;
 		wxStaticText* m_PrjTableFilename;
 		wxGrid* m_project_grid;
-		wxButton* m_browse_button;
-		wxButton* m_append_button;
-		wxButton* m_delete_button;
-		wxButton* m_move_up_button;
-		wxButton* m_move_down_button;
+		wxBitmapButton* m_append_button;
+		wxBitmapButton* m_browse_button;
+		wxBitmapButton* m_delete_button;
+		wxBitmapButton* m_move_up_button;
+		wxBitmapButton* m_move_down_button;
 		wxGrid* m_path_subs_grid;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -61,16 +62,17 @@ class DIALOG_SYMBOL_LIB_TABLE_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
-		virtual void browseLibrariesHandler( wxCommandEvent& event ) = 0;
 		virtual void appendRowHandler( wxCommandEvent& event ) = 0;
+		virtual void browseLibrariesHandler( wxCommandEvent& event ) = 0;
 		virtual void deleteRowHandler( wxCommandEvent& event ) = 0;
 		virtual void moveUpHandler( wxCommandEvent& event ) = 0;
 		virtual void moveDownHandler( wxCommandEvent& event ) = 0;
+		virtual void onSizeGrid( wxSizeEvent& event ) = 0;
 		
 	
 	public:
 		
-		DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_SYMBOL_LIB_TABLE_BASE();
 	
 };

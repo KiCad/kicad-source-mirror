@@ -42,6 +42,31 @@
 #include "dialog_fields_editor_global.h"
 
 
+class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    FIELDS_EDITOR_GRID_TRICKS( wxGrid* aGrid, wxDataViewListCtrl* aFieldsCtrl ) :
+            GRID_TRICKS( aGrid ),
+            m_fieldsCtrl( aFieldsCtrl )
+    {}
+
+protected:
+    void doPopupSelection( wxCommandEvent& event ) override
+    {
+        GRID_TRICKS::doPopupSelection( event );
+
+        if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE && event.GetId() < GRIDTRICKS_LAST_ID )
+        {
+            // Refresh Show checkboxes from grid columns
+            for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
+                m_fieldsCtrl->SetToggleValue( m_grid->IsColShown( i ), i, 1 );
+        }
+    }
+
+    wxDataViewListCtrl* m_fieldsCtrl;
+};
+
+
 enum GROUP_TYPE
 {
     GROUP_SINGLETON,
@@ -590,7 +615,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     }
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( m_grid, m_fieldsCtrl ) );
 
     // give a bit more room for editing
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 2 );

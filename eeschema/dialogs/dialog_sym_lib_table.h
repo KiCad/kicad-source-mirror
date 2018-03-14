@@ -38,16 +38,9 @@ public:
                              SYMBOL_LIB_TABLE* aProject );
     virtual ~DIALOG_SYMBOL_LIB_TABLE();
 
+    bool Show( bool aShow ) override;
 
 private:
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based column index.
-    int getCursorCol() const;
-
-    /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
-    /// else return a 0 based row index.
-    int getCursorRow() const;
-
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
      *
@@ -56,25 +49,19 @@ private:
     bool verifyTables();
 
     void pageChangedHandler( wxAuiNotebookEvent& event ) override;
-
     void browseLibrariesHandler( wxCommandEvent& event ) override;
-
     void appendRowHandler( wxCommandEvent& event ) override;
-
     void deleteRowHandler( wxCommandEvent& event ) override;
-
     void moveUpHandler( wxCommandEvent& event ) override;
-
     void moveDownHandler( wxCommandEvent& event ) override;
+    void onSizeGrid( wxSizeEvent& event ) override;
+    void adjustPathSubsGridColumns( int aWidth );
 
     bool TransferDataFromWindow() override;
 
     /// Populate the readonly environment variable table with names and values
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
-
-    /// Makes a specific row visible
-    void scrollToRow( int aRowNumber );
 
     // Caller's tables are modified only on OK button and successful verification.
     SYMBOL_LIB_TABLE*    m_global;
@@ -87,7 +74,7 @@ private:
     SYMBOL_LIB_TABLE_GRID* cur_model() const;
 
     wxGrid*          m_cur_grid;     ///< changed based on tab choice
-    static int       m_pageNdx;      ///< Remember the last notebook page selected during a session
+    static size_t    m_pageNdx;      ///< Remember the last notebook page selected during a session
 
     wxString         m_lastBrowseDir; ///< last browsed directory
 };

@@ -95,7 +95,7 @@ void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aCaller );
  * @param aOptions is the options string on calling into this function.
  * @param aResult is where to put the result of the editing.
  */
-void InvokePluginOptionsEditor( wxTopLevelWindow* aCaller, const wxString& aNickname,
+void InvokePluginOptionsEditor( wxWindow* aCaller, const wxString& aNickname,
     const wxString& aPluginType, const wxString& aOptions, wxString* aResult );
 
 /**
