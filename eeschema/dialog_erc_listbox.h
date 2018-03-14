@@ -71,7 +71,9 @@ public:
     void DisplayList()
     {
         wxString htmlpage;
-
+        wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+        wxColour lncolor = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT );
+        wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         // for each marker, build a link like:
         // <A HREF="marker_index">text to click</A>
         // The "text to click" is the error name (first line of the full error text).
@@ -79,13 +81,18 @@ public:
 
         for( unsigned ii = 0; ii < m_MarkerListReferences.size(); ii++ )
         {
-            marker_text.Printf( wxT( "<A HREF=\"%d\">" ), ii );
-            marker_text << m_MarkerListReferences[ii]->GetReporter().ShowHtml();
-            marker_text.Replace( wxT( "<ul>" ), wxT( "</A><ul>" ), false );
+            marker_text.Printf( wxT( "<font color='%s'><a href='%d'>%s</font>" ),
+                                lncolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                                ii,
+                                m_MarkerListReferences[ii]->GetReporter().ShowHtml() );
+            marker_text.Replace( wxT( "<ul>" ), wxT( "</a><ul>" ), false );
             htmlpage += marker_text;
         }
 
-        SetPage( htmlpage );
+        SetPage( wxString::Format( wxT( "<html><body bgcolor='%s' text='%s'>%s</body></html>" ),
+                                   bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                                   fgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                                   htmlpage ) );
     }
 
     /**

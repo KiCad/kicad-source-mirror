@@ -249,7 +249,13 @@ public:
         {
             const DRC_ITEM*   item = m_list->GetItem( (int) n );
             if( item )
-                return item->ShowHtml();
+            {
+                wxColour color = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+
+                return wxString::Format( wxT( "<font color='%s'>%s</font>" ),
+                                         color.GetAsString( wxC2S_HTML_SYNTAX ),
+                                         item->ShowHtml() );
+            }
         }
         return wxString();
     }

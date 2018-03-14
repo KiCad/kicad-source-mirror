@@ -207,12 +207,11 @@ wxString WX_HTML_REPORT_PANEL::addHeader( const wxString& aBody )
 {
     wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
     wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-    wxString s = "<html><body bgcolor=\"" + bgcolor.GetAsString( wxC2S_HTML_SYNTAX ) +
-                 "\" text=\"" + fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) + "\">";
-    s += aBody;
-    s += "</body></html>";
 
-    return s;
+    return wxString::Format( wxT( "<html><body bgcolor='%s' text='%s'>%s</body></html>" ),
+                             bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                             fgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                             aBody );
 }
 
 
