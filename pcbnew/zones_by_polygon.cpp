@@ -894,13 +894,12 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     else if( IsCopperLayer( aZone->GetLayer() ) )
     {
         // edit a zone on a copper layer
-
         zoneInfo << *aZone;
-
         edited = InvokeCopperZonesEditor( this, &zoneInfo );
     }
     else
     {
+        zoneInfo << *aZone;
         edited = InvokeNonCopperZonesEditor( this, aZone, &zoneInfo );
     }
 
@@ -989,6 +988,9 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     s_PickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
+
+    if( !IsGalCanvasActive() )
+        m_canvas->Refresh();
 }
 
 
