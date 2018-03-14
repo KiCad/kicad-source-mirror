@@ -1674,10 +1674,12 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     // Solder paste (only for SMD pads)
-    int solderPasteSize = m_rules->mvCreamFrame * std::min( padSize.x, padSize.y );
-    solderPasteSize = std::min( solderPasteSize, m_rules->mlMaxCreamFrame );
-    solderPasteSize = std::max( solderPasteSize, m_rules->mlMinCreamFrame );
-    pad->SetLocalSolderPasteMargin( solderPasteSize );
+    if( !e.cream || !*e.cream )     // enabled by default
+    {
+        pad->SetLocalSolderPasteMargin( Clamp( m_rules->mlMinCreamFrame,
+                (int)( m_rules->mvCreamFrame * minPadSize ),
+                m_rules->mlMaxCreamFrame ) );
+    }
 
     // @todo: handle thermal
 }
@@ -1694,10 +1696,13 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
 
     // Solder mask
     const wxSize& padSize( aPad->GetSize() );
-    int solderMaskSize = m_rules->mvStopFrame * std::min( padSize.x, padSize.y );
-    solderMaskSize = std::min( solderMaskSize, m_rules->mlMaxStopFrame );
-    solderMaskSize = std::max( solderMaskSize, m_rules->mlMinStopFrame );
-    aPad->SetLocalSolderMaskMargin( solderMaskSize );
+
+    if( !aEaglePad.stop || !*aEaglePad.stop )     // enabled by default
+    {
+        aPad->SetLocalSolderMaskMargin( Clamp( m_rules->mlMinStopFrame,
+                    (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
+                    m_rules->mlMaxStopFrame ) );
+    }
 
     MODULE* module = aPad->GetParent();
     wxCHECK( module, /* void */ );
