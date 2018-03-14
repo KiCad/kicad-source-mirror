@@ -179,79 +179,84 @@ bool AM_PARAM::ReadParam( char*& aText  )
     {
         switch( *aText )
         {
-            case ',':
+        case ',':
+            aText++;
+
+            if( !found )    // happens when a string starts by ',' before any param
+                break;      // just skip this separator
+            // fall through
+        case '\n':
+        case '\r':
+        case 0:     // EOL
+        case '*':   // Terminator in a gerber command
+            end = true;
+            break;
+
+        case ' ':
+            aText++;
+            break;
+
+        case '$':
+            // defered value defined later, in ADD command which define defered parameters
+            ++aText;
+            ivalue = ReadInt( aText, false );
+            if( m_index < 1 )
+                SetIndex( ivalue );
+            PushOperator( PUSHPARM, ivalue );
+            found = true;
+            break;
+
+        case '/':
+            PushOperator( DIV );
+            aText++;
+            break;
+
+        case '(':   // Open a block to evaluate an expression between '(' and ')'
+            PushOperator( OPEN_PAR );
+            aText++;
+            break;
+
+        case ')':   // close a block between '(' and ')'
+            PushOperator( CLOSE_PAR );
+            aText++;
+            break;
+
+        case 'x':
+        case 'X':
+            PushOperator( MUL );
+            aText++;
+            break;
+
+        case '-':
+        case '+':
+            // Test if this is an operator between 2 params, or the sign of a value
+            if( m_paramStack.size() > 0 && !m_paramStack.back().IsOperator() )
+            {   // Seems an operator
+                PushOperator( *aText == '+' ? ADD : SUB );
                 aText++;
-                // fall through
-            case 0:     // EOL
-            case '*':   // Terminator in a gerber command
-                end = true;
-                break;
-
-            case ' ':
-                aText++;
-                break;
-
-            case '$':
-                // defered value defined later, in ADD command which define defered parameters
-                ++aText;
-                ivalue = ReadInt( aText, false );
-                if( m_index < 1 )
-                    SetIndex( ivalue );
-                PushOperator( PUSHPARM, ivalue );
-                found = true;
-                break;
-
-            case '/':
-                PushOperator( DIV );
-                aText++;
-                break;
-
-            case '(':   // Open a block to evaluate an expression between '(' and ')'
-                PushOperator( OPEN_PAR );
-                aText++;
-                break;
-
-            case ')':   // close a block between '(' and ')'
-                PushOperator( CLOSE_PAR );
-                aText++;
-                break;
-
-            case 'x':
-            case 'X':
-                PushOperator( MUL );
-                aText++;
-                break;
-
-            case '-':
-            case '+':
-                // Test if this is an operator between 2 params, or the sign of a value
-                if( m_paramStack.size() > 0 && !m_paramStack.back().IsOperator() )
-                {   // Seems an operator
-                    PushOperator( *aText == '+' ? ADD : SUB );
-                    aText++;
-                }
-                else
-                {   // seems the sign of a value
-                    dvalue = ReadDouble( aText, false );
-                    PushOperator( PUSHVALUE, dvalue );
-                    found = true;
-                }
-                break;
-
-            case '=':   // A local definition found like $4=$3/2
-                // At this point, one defered parameter is expected to be read.
-                // this parameter value (the index) is stored in m_index.
-                // The list of items is cleared
-                aText++;
-                m_paramStack.clear();
-                found = false;
-                break;
-
-            default:
+            }
+            else
+            {   // seems the sign of a value
                 dvalue = ReadDouble( aText, false );
                 PushOperator( PUSHVALUE, dvalue );
                 found = true;
-                break;
+            }
+            break;
+
+        case '=':   // A local definition found like $4=$3/2
+            // At this point, one defered parameter is expected to be read.
+            // this parameter value (the index) is stored in m_index.
+            // The list of items is cleared
+            aText++;
+            m_paramStack.clear();
+            found = false;
+            break;
+
+        default:
+           dvalue = ReadDouble( aText, false );
+            PushOperator( PUSHVALUE, dvalue );
+            found = true;
+            break;
         }
     }
 

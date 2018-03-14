@@ -1086,13 +1086,13 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
         int ii;
 
-        for( ii = 0; ii < *aText && *aText != '*'; ++ii )
+        for( ii = 0; ii < paramCount && *aText && *aText != '*'; ++ii )
         {
             prim.params.push_back( AM_PARAM() );
 
             AM_PARAM& param = prim.params.back();
 
-            aText = GetNextLine(  aBuff, aBuffSize, aText, gerber_file );
+            aText = GetNextLine( aBuff, aBuffSize, aText, gerber_file );
 
             if( aText == NULL)   // End of File
                 return false;
@@ -1106,7 +1106,6 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
                         prim.primitive_id, ii );
             AddMessageToList( msg );
-
         }
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )

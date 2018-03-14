@@ -104,12 +104,11 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
 
 
 
-/**
-* size of single line of a text from a gerber file.
-* warning: some files can have *very long* lines, so the buffer must be large.
-*/
+// size of a single line of text from a gerber file.
+// warning: some files can have *very long* lines, so the buffer must be large.
 #define GERBER_BUFZ 1000000
-static char line[GERBER_BUFZ];
+// A large buffer to store one line
+static char lineBuffer[GERBER_BUFZ+1];
 
 bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 {
@@ -134,11 +133,11 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 
     while( true )
     {
-        if( fgets( line, sizeof(line), m_Current_File ) == NULL )
+        if( fgets( lineBuffer, GERBER_BUFZ, m_Current_File ) == NULL )
             break;
 
         m_LineNum++;
-        text = StrPurge( line );
+        text = StrPurge( lineBuffer );
 
         while( text && *text )
         {
@@ -195,7 +194,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 if( m_CommandState != ENTER_RS274X_CMD )
                 {
                     m_CommandState = ENTER_RS274X_CMD;
-                    ReadRS274XCommand( line, GERBER_BUFZ, text );
+                    ReadRS274XCommand( lineBuffer, GERBER_BUFZ, text );
                 }
                 else        //Error
                 {
