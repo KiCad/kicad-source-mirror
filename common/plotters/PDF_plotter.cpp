@@ -187,6 +187,16 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
     */
 
     SetCurrentLineWidth( width );
+
+    // If diameter is less than width, switch to filled mode
+    if( aFill == NO_FILL && diametre < width )
+    {
+        aFill = FILLED_SHAPE;
+        SetCurrentLineWidth( 0 );
+
+        radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
+    }
+
     double magic = radius * 0.551784; // You don't want to know where this come from
 
     // This is the convex hull for the bezier approximated circle
@@ -226,7 +236,10 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 {
     wxASSERT( workFile );
     if( radius <= 0 )
+    {
+        Circle( centre, width, FILLED_SHAPE, 0 );
         return;
+    }
 
     /* Arcs are not so easily approximated by beziers (in the general case),
        so we approximate them in the old way */
