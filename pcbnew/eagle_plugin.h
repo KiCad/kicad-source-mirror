@@ -49,10 +49,10 @@ struct ERULES
 
     double mvStopFrame;         ///< solder mask, expressed as percentage of the smaller pad/via dimension
     double mvCreamFrame;        ///< solderpaste mask, expressed as percentage of the smaller pad/via dimension
-    int    mlMinStopFrame;      ///< solder mask, minimum size (mils)
-    int    mlMaxStopFrame;      ///< solder mask, maximum size (mils)
-    int    mlMinCreamFrame;     ///< solder paste mask, minimum size (mils)
-    int    mlMaxCreamFrame;     ///< solder paste mask, maximum size (mils)
+    int    mlMinStopFrame;      ///< solder mask, minimum size (Eagle mils, here nanometers)
+    int    mlMaxStopFrame;      ///< solder mask, maximum size (Eagle mils, here nanometers)
+    int    mlMinCreamFrame;     ///< solder paste mask, minimum size (Eagle mils, here nanometers)
+    int    mlMaxCreamFrame;     ///< solder paste mask, maximum size (Eagle mils, here nanometers)
 
     double rvPadTop;            ///< top pad size as percent of drill size
     // double   rvPadBottom;    ///< bottom pad size as percent of drill size
