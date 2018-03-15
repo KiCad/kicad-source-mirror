@@ -37,6 +37,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("Barcode", "Use Cu layer", self.uBool, True)
         self.AddParam("Caption", "Enabled", self.uBool, True)
         self.AddParam("Caption", "Height", self.uMM, 1.2)
+        self.AddParam("Caption", "Width", self.uMM, 1.2)
         self.AddParam("Caption", "Thickness", self.uMM, 0.12)
 
 
@@ -48,7 +49,9 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.UseCu = self.parameters['Barcode']['Use Cu layer']
         self.border = int(self.parameters['Barcode']['Border'])
         self.textHeight = int(self.parameters['Caption']['Height'])
-        self.module.Value().SetText(str(self.Barcode) )
+        self.textThickness = int(self.parameters['Caption']['Thickness'])
+        self.textWidth = int(self.parameters['Caption']['Width'])
+        self.module.Value().SetText(str(self.Barcode))
 
         # Build Qrcode
         self.qr = qrcode.QRCode()
@@ -133,7 +136,13 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         #int((5 + half_number_of_elements) * self.X))
         textPosition = int((self.textHeight) + ((1 + half_number_of_elements) * self.X))
         self.module.Value().SetPosition(pcbnew.wxPoint(0, - textPosition))
+        self.module.Value().SetTextHeight(self.textHeight)
+        self.module.Value().SetTextWidth(self.textWidth)
+        self.module.Value().SetThickness(self.textThickness)
         self.module.Reference().SetPosition(pcbnew.wxPoint(0, textPosition))
+        self.module.Reference().SetTextHeight(self.textHeight)
+        self.module.Reference().SetTextWidth(self.textWidth)
+        self.module.Reference().SetThickness(self.textThickness)
         self.module.Value().SetLayer(pcbnew.F_SilkS)
 
 QRCodeWizard().register()
