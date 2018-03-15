@@ -60,6 +60,8 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Global labels are similar (lower/upper case difference only)") );
     case ERCE_DIFFERENT_UNIT_FP:
         return wxString( _("Different footprint assigned in another unit of the same component") );
+    case ERCE_DIFFERENT_UNIT_NET:
+        return wxString( _("Different net assigned to a shared pin in another unit of the same component" ) );
 
     default:
         wxFAIL_MSG( "Missing ERC error description" );

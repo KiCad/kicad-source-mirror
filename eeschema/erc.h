@@ -62,6 +62,8 @@ extern const wxString CommentERC_V[];
 #define ERCE_SIMILAR_GLBL_LABELS  10   // 2 labels are equal fir case insensitive comparisons
 #define ERCE_DIFFERENT_UNIT_FP    11   // different units of the same component have different
                                        // footprints assigned
+#define ERCE_DIFFERENT_UNIT_NET   12   // a shared pin in a multi-unit component is connected
+                                       // to more than one net
 
 /* Minimal connection table */
 #define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
