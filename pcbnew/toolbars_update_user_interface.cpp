@@ -143,16 +143,6 @@ void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( Settings().m_legacyAutoDeleteOldTrack );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
-                                        Settings().m_legacyAutoDeleteOldTrack ?
-                                        _( "Disable auto delete old track" ) :
-                                        _( "Enable auto delete old track" ) );
-}
-
-
 void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();

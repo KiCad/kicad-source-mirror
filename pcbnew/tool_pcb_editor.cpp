@@ -391,12 +391,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                _( "Show board ratsnest" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_AUTO_DEL_TRACK, wxEmptyString,
-                               KiScaledBitmap( auto_delete_track_xpm, this ),
-                               _( "Enable automatic track deletion" ),
-                               wxITEM_CHECK );
-
-    KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString, KiScaledBitmap( show_zone_xpm, this ),
                                _( "Show filled areas in zones" ), wxITEM_CHECK );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
@@ -789,10 +783,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         Compile_Ratsnest( NULL, true );
 
         m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_AUTO_DEL_TRACK:
-        Settings().m_legacyAutoDeleteOldTrack = state;
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES:

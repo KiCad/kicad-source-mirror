@@ -1,11 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
-
-#include "widgets/stepped_slider.h"
 
 #include "dialog_general_options_BoardEditor_base.h"
 
@@ -206,7 +204,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	bLegacyOptionsSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
 	
-	m_TrackAutodel = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("&Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackAutodel = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("Auto-delete old tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackAutodel->SetValue(true); 
 	m_TrackAutodel->SetToolTip( _("Enable automatic track deletion when redrawing a track.") );
 	
