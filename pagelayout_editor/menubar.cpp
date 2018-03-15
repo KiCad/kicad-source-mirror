@@ -131,10 +131,10 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // View Menu:
     wxMenu* viewMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "Zoom In" ), PlEditorHokeysDescr, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "Zoom In" ), PlEditorHokeysDescr, HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_IN, msg, wxEmptyString, KiBitmap( zoom_in_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom Out" ), PlEditorHokeysDescr, HK_ZOOM_OUT );
+    msg = AddHotkeyName( _( "Zoom Out" ), PlEditorHokeysDescr, HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, msg, wxEmptyString, KiBitmap( zoom_out_xpm ) );
 
     msg = AddHotkeyName( _( "Zoom All" ), PlEditorHokeysDescr, HK_ZOOM_AUTO );
