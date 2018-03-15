@@ -231,7 +231,6 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();
-    int first_layer = layer;
     int visibility = GetVisibleLayers();
 
     // Manage errors when loading files
@@ -315,7 +314,14 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
 
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
-    SetActiveLayer( first_layer, true );
+
+    // TODO: it would be nice if we could set the active layer to one of the
+    // ones that was just loaded, but to maintain the previous user experience
+    // we need to set it to a blank layer in case they load another file.
+    // We can't start with the next available layer when loading files because
+    // some users expect the behavior of overwriting the active layer on load.
+    SetActiveLayer( getNextAvailableLayer( layer ), true );
+
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox( true );
 
