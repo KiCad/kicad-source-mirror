@@ -70,9 +70,13 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         aParent = m_pcbEditorFrame;
     }
 
+    TOOL_MANAGER* toolMgr = m_pcbEditorFrame->GetToolManager();
+    toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+    toolMgr->DeactivateTool();
+    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     if( !m_drcDialog )
     {
-        m_pcbEditorFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
         m_drcDialog = new DIALOG_DRC_CONTROL( this, m_pcbEditorFrame, aParent );
         updatePointers();
 
