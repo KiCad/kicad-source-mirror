@@ -655,18 +655,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
     if( galCanvas )
-    {
-        KIGFX::VIEW* view = galCanvas->GetView();
-
-        view->SetLayerVisible( aLayer, isVisible );
-
-        // Special case hidden text which can move back and forth from the hidden layer.
-        view->UpdateAllItemsConditionally( KIGFX::LAYERS, []( KIGFX::VIEW_ITEM* aItem )
-                            {
-                                TEXTE_MODULE* modText = dynamic_cast<TEXTE_MODULE*>( aItem );
-                                return( modText && !modText->IsVisible() );
-                            } );
-    }
+        galCanvas->GetView()->SetLayerVisible( aLayer, isVisible );
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();

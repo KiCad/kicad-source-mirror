@@ -465,16 +465,12 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
 
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    PCB_LAYER_ID nativeLayer = GetLayer();
+    if( IsVisible() )
+        aLayers[0] = GetLayer();
+    else
+        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
 
     aCount = 1;
-
-    if( IsVisible() )
-        aLayers[0] = nativeLayer;
-    else if ( GetBoard()->IsLayerVisible( nativeLayer ) )
-        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
-    else
-        aCount = 0;
 }
 
 
@@ -484,6 +480,11 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( !aView )
         return 0;
+
+    // Hidden text gets put on the LAYER_MOD_TEXT_INVISIBLE for rendering, but
+    // should only render if its native layer is visible.
+    if( !aView->IsLayerVisible( GetLayer() ) )
+        return HIDE;
 
     // Handle Render tab switches
     if( ( m_Type == TEXT_is_VALUE || m_Text == wxT( "%V" ) )
