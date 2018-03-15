@@ -207,6 +207,8 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
     {
         m_wizardName = footprintWizard->GetName();
         m_wizardDescription = footprintWizard->GetDescription();
+
+        footprintWizard->ResetParameters();
     }
     else
     {
