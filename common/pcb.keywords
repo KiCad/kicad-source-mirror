@@ -93,6 +93,7 @@ gr_poly
 gr_text
 hatch
 hide
+hole_to_hole_min
 italic
 justify
 keepout
