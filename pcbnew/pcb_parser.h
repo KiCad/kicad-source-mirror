@@ -113,8 +113,6 @@ class PCB_PARSER : public PCB_LEXER
     void parseNETINFO_ITEM();
     void parseNETCLASS();
 
-    void parseUnknown();
-
     DRAWSEGMENT*    parseDRAWSEGMENT();
     TEXTE_PCB*      parseTEXTE_PCB();
     DIMENSION*      parseDIMENSION();
