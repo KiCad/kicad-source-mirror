@@ -523,8 +523,8 @@ void GERBVIEW_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
     if( m_optionsToolBar )
         m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                             m_DisplayOptions.m_DisplayPolarCood ?
-                                            _( "Turn rectangular coordinates on" ) :
-                                            _( "Tunn polar coordinates on" ) );
+                                            _( "Turn on rectangular coordinates" ) :
+                                            _( "Turn on polar coordinates" ) );
 }
 
 
