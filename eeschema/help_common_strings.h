@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 CERN
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 
 #define HELP_ZOOM_IN     _( "Zoom in" )
 #define HELP_ZOOM_OUT    _( "Zoom out" )
-#define HELP_ZOOM_FIT    _( "Fit schematic sheet on screen" )
+#define HELP_ZOOM_FIT    _( "Zoom to fit schematic page" )
 #define HELP_ZOOM_REDRAW _( "Redraw schematic view" )
 
 #define HELP_DELETE_ITEMS         _( "Delete item" )

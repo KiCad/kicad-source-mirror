@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
 *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,14 +180,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     if( IsGalCanvasActive() )
     {
         text = AddHotkeyName( _( "Cu&t" ), m_hotkeysDescrList, HK_EDIT_CUT );
-        AddMenuItem( editMenu, ID_EDIT_CUT, text, _(
-                        "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
+        AddMenuItem( editMenu, ID_EDIT_CUT, text,
+                     _( "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
         text = AddHotkeyName( _( "&Copy" ), m_hotkeysDescrList, HK_EDIT_COPY );
-        AddMenuItem( editMenu, ID_EDIT_COPY, text, _(
-                        "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
+        AddMenuItem( editMenu, ID_EDIT_COPY, text,
+                     _( "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
         text = AddHotkeyName( _( "&Paste" ), m_hotkeysDescrList, HK_EDIT_PASTE );
-        AddMenuItem( editMenu, ID_EDIT_PASTE, text, _(
-                        "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
+        AddMenuItem( editMenu, ID_EDIT_PASTE, text,
+                     _( "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
     }
 
     // Delete items
@@ -231,9 +231,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "&Zoom to Fit" ), m_hotkeysDescrList,
                           HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit footprint" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
     text = AddHotkeyName( _( "&Redraw" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );

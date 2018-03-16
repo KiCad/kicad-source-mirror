@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,8 +63,8 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
-                         KiBitmap( read_setup_xpm ),
-                         _( "Set display options, and some layers visibility" ) );
+                            KiBitmap( read_setup_xpm ),
+                            _( "Set display options, and some layers visibility" ) );
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
@@ -84,7 +84,7 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
                             _( "Redraw view" ) );
 
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ),
-                            _( "Fit in page" ) );
+                            _( "Zoom to fit 3D model" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString,
@@ -148,8 +148,8 @@ void EDA_3D_VIEWER::CreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
 
     AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_PNG,
-                  _( "Export Current View as PNG..." ),
-                  KiBitmap( export_xpm ) );
+                 _( "Export Current View as PNG..." ),
+                 KiBitmap( export_xpm ) );
 
     AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_JPEG,
                  _( "Export Current View as JPEG..." ),
@@ -237,26 +237,26 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // /////////////////////////////////////////////////////////////////////////
     wxMenu * renderOptionsMenu_RAYTRACING = new wxMenu;
     AddMenuItem( renderOptionsMenu, renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING,
-                _( "Raytracing Options" ), KiBitmap( tools_xpm ) );
+                 _( "Raytracing Options" ), KiBitmap( tools_xpm ) );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS,
-                _( "Render Shadows" ),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                 _( "Render Shadows" ),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES,
-                _( "Procedural Textures" ),
-                _( "Apply procedural textures to materials (slow)"),
+                 _( "Procedural Textures" ),
+                 _( "Apply procedural textures to materials (slow)"),
                  KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_BACKFLOOR,
-                _( "Add Floor" ),
-                _( "Adds a floor plane below the board (slow)"),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                 _( "Add Floor" ),
+                 _( "Adds a floor plane below the board (slow)"),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_REFRACTIONS,
-                _( "Refractions" ),
-                _( "Render materials with refractions properties on final render (slow)"),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                 _( "Refractions" ),
+                 _( "Render materials with refractions properties on final render (slow)"),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_REFLECTIONS,
                 _( "Reflections" ),
@@ -264,14 +264,14 @@ void EDA_3D_VIEWER::CreateMenuBar()
                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING,
-                _( "Anti-aliasing" ),
-                _( "Render with improved quality on final render (slow)"),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                 _( "Anti-aliasing" ),
+                 _( "Render with improved quality on final render (slow)"),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_POST_PROCESSING,
-                _( "Post-processing" ),
-                _( "Apply Screen Space Ambient Occlusion and Global Illumination reflections on final render (slow)"),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                 _( "Post-processing" ),
+                 _( "Apply Screen Space Ambient Occlusion and Global Illumination reflections on final render (slow)"),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
     prefsMenu->AppendSeparator();
 
@@ -342,14 +342,14 @@ void EDA_3D_VIEWER::CreateMenuBar()
     prefsMenu->AppendSeparator();
 
     AddMenuItem( prefsMenu, ID_MENU3D_SHOW_BOARD_BODY,
-                _( "Show Board Bod&y" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+                 _( "Show Board Bod&y" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
 
     AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
-                _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
+                 _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
 
     wxMenu * moduleAttributes = new wxMenu;
     AddMenuItem( prefsMenu, moduleAttributes, ID_MENU3D_MODULE_ONOFF,
-                _( "Show 3D M&odels" ), KiBitmap( shape_3d_xpm ) );
+                 _( "Show 3D M&odels" ), KiBitmap( shape_3d_xpm ) );
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL,
                                        _( "Through Hole" ),
                                        _( "Footprint Properties -> Placement type -> Through hole" ) );
@@ -368,35 +368,35 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     wxMenu * layersMenu = new wxMenu;
     AddMenuItem( prefsMenu, layersMenu, ID_MENU3D_LAYERS,
-                _( "Show &Layers" ), KiBitmap( tools_xpm ) );
+                 _( "Show &Layers" ), KiBitmap( tools_xpm ) );
 
     AddMenuItem( layersMenu, ID_MENU3D_ADHESIVE_ONOFF,
-                _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
+                 _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_SILKSCREEN_ONOFF,
-                _( "Show &Silkscreen Layers" ), KiBitmap( text_xpm ), wxITEM_CHECK );
+                 _( "Show &Silkscreen Layers" ), KiBitmap( text_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
-                _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
+                 _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
-                _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
+                 _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
     // Other layers are not "board" layers, and are not shown in realistic mode
     // These menus will be disabled in in realistic mode
     AddMenuItem( layersMenu, ID_MENU3D_COMMENTS_ONOFF,
-                _( "Show &Comments and Drawings Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
+                 _( "Show &Comments and Drawings Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_ECO_ONOFF,
-                _( "Show &Eco Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
+                 _( "Show &Eco Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
 
     // Reset options
     // /////////////////////////////////////////////////////////////////////////
     prefsMenu->AppendSeparator();
 
     AddMenuItem( prefsMenu, ID_MENU3D_RESET_DEFAULTS,
-                _( "Reset to Default Settings" ),
-                KiBitmap( tools_xpm ) );
+                 _( "Reset to Default Settings" ),
+                 KiBitmap( tools_xpm ) );
 
     // Help menu
     // /////////////////////////////////////////////////////////////////////////

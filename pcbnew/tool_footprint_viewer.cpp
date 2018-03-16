@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -90,7 +90,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_REDRAW, wxEmptyString,
                             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Viewer_Hotkeys_Descr,
+    msg = AddHotkeyName( _( "Zoom to fit footprint" ), g_Module_Viewer_Hotkeys_Descr,
                             HK_ZOOM_AUTO );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
@@ -161,7 +161,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
 
     text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Viewer_Hotkeys_Descr,
                           HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_VIEWER_ZOOM_PAGE, text, HELP_ZOOM_FIT,
+    AddMenuItem( viewMenu, ID_VIEWER_ZOOM_PAGE, text, _( "Zoom to fit footprint" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
     text = AddHotkeyName( _( "&Redraw" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );

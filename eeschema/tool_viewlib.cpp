@@ -78,7 +78,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), g_Viewlib_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom to fit symbol" ), g_Viewlib_Hokeys_Descr,
             HK_ZOOM_AUTO, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
@@ -193,9 +193,8 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), g_Viewlib_Hokeys_Descr,
-                          HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
+    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Viewlib_Hokeys_Descr, HK_ZOOM_AUTO  );
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit symbol" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
     text = AddHotkeyName( _( "&Redraw" ), g_Viewlib_Hokeys_Descr, HK_ZOOM_REDRAW );

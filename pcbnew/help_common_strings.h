@@ -18,7 +18,7 @@
 
 #define HELP_ZOOM_IN     _( "Zoom in" )
 #define HELP_ZOOM_OUT    _( "Zoom out" )
-#define HELP_ZOOM_FIT    _( "Zoom to fit board on screen" )
+#define HELP_ZOOM_FIT    _( "Zoom to fit board or page" )
 #define HELP_ZOOM_REDRAW _( "Redraw screen" )
 
 #define HELP_SHOW_HIDE_LAYERMANAGER _( "Show/hide the layers manager toolbar" )
