@@ -746,6 +746,7 @@ struct EVERTEX
 {
     ECOORD      x;
     ECOORD      y;
+    opt_double  curve;      ///< range is -359.9..359.9
 
     EVERTEX( wxXmlNode* aVertex );
 };

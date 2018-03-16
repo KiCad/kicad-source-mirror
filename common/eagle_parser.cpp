@@ -749,6 +749,7 @@ EVERTEX::EVERTEX( wxXmlNode* aVertex )
 
     x = parseRequiredAttribute<ECOORD>( aVertex, "x" );
     y = parseRequiredAttribute<ECOORD>( aVertex, "y" );
+    curve = parseOptionalAttribute<double>( aVertex, "curve" );
 }
 
 

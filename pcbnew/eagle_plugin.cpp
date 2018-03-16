@@ -1804,8 +1804,11 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
                                        pow( center.y - kicad_y( w.y1 ), 2 ) );
 
-                        delta_angle = angle / static_cast<double>( GetArcToSegmentCount(
-                                static_cast<int>( rint( radius ) ), ARC_HIGH_DEF, *w.curve ) );
+                        // If we are curving, we need at least 2 segments otherwise
+                        // delta_angle == angle
+                        int segments = std::max( 2, GetArcToSegmentCount( KiROUND( radius ),
+                                ARC_HIGH_DEF, *w.curve ) - 1 );
+                        delta_angle = angle / segments;
                     }
 
                     while( fabs( angle ) > fabs( delta_angle ) )
@@ -1954,18 +1957,57 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     // Get the first vertex and iterate
                     wxXmlNode* vertex = netItem->GetChildren();
+                    std::vector<EVERTEX> vertices;
 
+                    // Create a circular vector of vertices
+                    // The "curve" parameter indicates a curve from the current
+                    // to the next vertex, so we keep the first at the end as well
+                    // to allow the curve to link back
                     while( vertex )
                     {
-                        if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
-                            continue;
-
-                        EVERTEX v( vertex );
-
-                        // Append the corner
-                        zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ), -1 );
+                        if( vertex->GetName() == "vertex" )
+                            vertices.push_back( EVERTEX( vertex ) );
 
                         vertex = vertex->GetNext();
+                    }
+
+                    vertices.push_back( vertices[0] );
+
+                    for( size_t i = 0; i < vertices.size() - 1; i++ )
+                    {
+                        EVERTEX v1 = vertices[i];
+
+                        // Append the corner
+                        zone->AppendCorner( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ), -1 );
+
+                        if( v1.curve )
+                        {
+                            EVERTEX v2 = vertices[i + 1];
+                            wxPoint center = ConvertArcCenter(
+                                    wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ),
+                                    wxPoint( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
+                            double angle = DEG2RAD( *v1.curve );
+                            double end_angle = atan2( kicad_y( v2.y ) - center.y,
+                                                      kicad_x( v2.x ) - center.x );
+                            double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
+                                                + pow( center.y - kicad_y( v1.y ), 2 ) );
+
+                            // If we are curving, we need at least 2 segments otherwise
+                            // delta_angle == angle
+                            double delta_angle = angle / std::max(
+                                            2, GetArcToSegmentCount( KiROUND( radius ),
+                                            ARC_HIGH_DEF, *v1.curve ) - 1 );
+
+                            for( double a = end_angle + angle;
+                                    fabs( a - end_angle ) > fabs( delta_angle );
+                                    a -= delta_angle )
+                            {
+                                zone->AppendCorner(
+                                        wxPoint( KiROUND( radius * cos( a ) ),
+                                                 KiROUND( radius * sin( a ) ) ) + center,
+                                        -1 );
+                            }
+                        }
                     }
 
                     // If the pour is a cutout it needs to be set to a keepout
