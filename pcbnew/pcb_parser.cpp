@@ -1191,14 +1191,8 @@ void PCB_PARSER::parseSetup()
             }
             break;
 
-        case T_hole_to_hole_min:
-            // Not implemented yet...
-            parseBoardUnits( T_hole_to_hole_min );
-            NeedRIGHT();
-            break;
-
         case T_pad_to_mask_clearance:
-            designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
+             designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
             NeedRIGHT();
             break;
 
