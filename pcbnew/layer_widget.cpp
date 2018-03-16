@@ -688,6 +688,13 @@ LAYER_NUM LAYER_WIDGET::GetSelectedLayer()
 
 void LAYER_WIDGET::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
 {
+    setLayerCheckbox( aLayer, isVisible );
+    OnLayerVisible( aLayer, isVisible );
+}
+
+
+void LAYER_WIDGET::setLayerCheckbox( LAYER_NUM aLayer, bool isVisible )
+{
     int row = findLayerRow( aLayer );
     if( row >= 0 )
     {

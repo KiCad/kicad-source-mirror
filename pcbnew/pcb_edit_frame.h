@@ -623,6 +623,8 @@ public:
      */
     virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
+    PCB_LAYER_WIDGET* GetLayerManager() { return m_Layers; }
+
     /**
      * Update the UI to reflect changes to the current layer's transparency.
      */

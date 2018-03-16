@@ -236,6 +236,8 @@ protected:
 
     void insertRenderRow( int aRow, const ROW& aSpec );
 
+    void setLayerCheckbox( LAYER_NUM aLayer, bool isVisible );
+
     /**
      * Function passOnFocus
      * gives away the keyboard focus up to the main parent window.

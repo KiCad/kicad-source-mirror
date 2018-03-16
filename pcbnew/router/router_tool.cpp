@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include <pcbnew_id.h>
 #include <view/view.h>
 #include <view/view_controls.h>
+#include <pcb_layer_widget.h>
 #include <pcb_painter.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
@@ -657,7 +658,8 @@ bool ROUTER_TOOL::prepareInteractive()
 
     frame()->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
-    // fixme: switch on invisible layer
+    // Force layer visible
+    frame()->GetLayerManager()->SetLayerVisible( routingLayer, true );
 
     // for some reason I don't understand, GetNetclass() may return null sometimes...
     if( m_startItem && m_startItem->Net() >= 0 &&
