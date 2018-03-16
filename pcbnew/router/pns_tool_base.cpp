@@ -113,7 +113,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 }
 
 
-ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
+ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, bool aIgnorePads )
 {
     int tl = getView()->GetTopLayer();
 
@@ -143,6 +143,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
         {
             if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
             {
+                if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
+                    continue;
+
                 if( !prioritized[2] )
                     prioritized[2] = item;
                 if( item->Layers().Overlaps( tl ) )
@@ -227,7 +230,7 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     return doSnap;
 }
 
-void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
+void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent, bool aIgnorePads )
 {
     int tl = getView()->GetTopLayer();
     VECTOR2I cp = controls()->GetCursorPosition();
@@ -247,7 +250,7 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
         p = cp;
     }
 
-    m_startItem = pickSingleItem( p );
+    m_startItem = pickSingleItem( p, -1, -1, aIgnorePads );
 
     if( !snapEnabled && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;

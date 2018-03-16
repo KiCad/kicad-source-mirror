@@ -893,17 +893,17 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
         else if( evt->IsAction( &PCB_ACTIONS::dragFreeAngle ) )
         {
-            updateStartItem( *evt );
+            updateStartItem( *evt, true );
             performDragging( PNS::DM_ANY | PNS::DM_FREE_ANGLE );
         }
         else if( evt->IsAction( &PCB_ACTIONS::drag45Degree ) )
         {
-            updateStartItem( *evt );
+            updateStartItem( *evt, true );
             performDragging( PNS::DM_ANY );
         }
         else if( evt->IsAction( &PCB_ACTIONS::breakTrack ) )
         {
-            updateStartItem( *evt );
+            updateStartItem( *evt, true );
             breakTrack( );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_NewTrack ) )
