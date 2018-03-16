@@ -177,6 +177,12 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
     {
         wxWindowUpdateLocker updateLock( m_widget );
 
+        // Even with the updateLock, wxWidgets sometimes ties its knickers in
+        // a knot when trying to run a wxdataview_selection_changed_callback()
+        // on a row that has been deleted.
+        // https://bugs.launchpad.net/kicad/+bug/1756255
+        m_widget->UnselectAll();
+
         Cleared();
 #ifndef __WINDOWS__
         // The fastest method to update wxDataViewCtrl is to rebuild from
