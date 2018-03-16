@@ -406,6 +406,26 @@ void DSNLEXER::NeedRIGHT()
 }
 
 
+void DSNLEXER::SkipUnknown()
+{
+    int nested = 1;
+    while( nested )
+    {
+        int tok = NextTok();
+
+        if( tok == DSN_EOF )
+        {
+            Expecting( DSN_RIGHT );
+            return;
+        }
+        else if( tok == DSN_RIGHT )
+            --nested;
+        else if( tok == DSN_LEFT )
+            ++nested;
+    }
+}
+
+
 int DSNLEXER::NeedSYMBOL()
 {
     int tok = NextTok();

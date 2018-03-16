@@ -287,7 +287,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     break;
 
                 default:
-                    Expecting( "size, bold, or italic" );
+                    parseUnknown();
                 }
             }
             break;
@@ -332,7 +332,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
             break;
 
         default:
-            Expecting( "font, justify, or hide" );
+            parseUnknown();
         }
     }
 
@@ -429,7 +429,7 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             break;
 
         default:
-            Expecting( "at, offset, scale, or rotate" );
+            parseUnknown();
         }
 
         NeedRIGHT();
@@ -574,9 +574,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         default:
-            wxString err;
-            err.Printf( _( "Unknown token \"%s\"" ), GetChars( FromUTF8() ) );
-            THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+            parseUnknown();
         }
     }
 
@@ -715,7 +713,7 @@ void PCB_PARSER::parsePAGE_INFO()
     }
     else if( token != T_RIGHT )
     {
-        Expecting( "portrait|)" );
+        Expecting( "portrait or )" );
     }
 
     m_board->SetPageSettings( pageInfo );
@@ -795,7 +793,7 @@ void PCB_PARSER::parseTITLE_BLOCK()
             break;
 
         default:
-            Expecting( "title, date, rev, company, or comment" );
+            parseUnknown();
         }
 
         NeedRIGHT();
@@ -1191,12 +1189,6 @@ void PCB_PARSER::parseSetup()
             }
             break;
 
-        case T_hole_to_hole_min:
-            // Not implemented yet...
-            parseBoardUnits( T_hole_to_hole_min );
-            NeedRIGHT();
-            break;
-
         case T_pad_to_mask_clearance:
             designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
             NeedRIGHT();
@@ -1258,12 +1250,25 @@ void PCB_PARSER::parseSetup()
             break;
 
         default:
-            Unexpected( CurText() );
+            parseUnknown();
         }
     }
 
     m_board->SetDesignSettings( designSettings );
     m_board->SetZoneSettings( zoneSettings );
+}
+
+
+void PCB_PARSER::parseUnknown()
+{
+    wxLogStderr stderr;
+    wxString msg = wxString::Format( _( "Warning: unknown token \"%s\" ignored: \"%s\", line %d" ),
+                                     GetChars( FromUTF8() ),
+                                     CurSource(),
+                                     CurLineNumber() );
+    stderr.LogText( msg );
+
+    SkipUnknown();
 }
 
 
@@ -1355,7 +1360,7 @@ void PCB_PARSER::parseNETCLASS()
             break;
 
         default:
-            Expecting( "clearance, trace_width, via_dia, via_drill, uvia_dia, uvia_drill, diff_pair_width, diff_pair_gap or add_net" );
+            parseUnknown();
         }
 
         NeedRIGHT();
@@ -1531,7 +1536,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT()
             break;
 
         default:
-            Expecting( "layer, width, tstamp, or status" );
+            parseUnknown();
         }
 
         NeedRIGHT();
@@ -1601,7 +1606,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB()
             break;
 
         default:
-            Expecting( "layer, tstamp or effects" );
+            parseUnknown();
         }
     }
 
@@ -1756,8 +1761,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             break;
 
         default:
-            Expecting( "layer, tstamp, gr_text, feature1, feature2 crossbar, arrow1a, "
-                       "arrow1b, arrow2a, or arrow2b" );
+            parseUnknown();
         }
     }
 
@@ -1798,7 +1802,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     token = NextTok();
 
     if( !IsSymbol( token ) && token != T_NUMBER )
-        Expecting( "symbol|number" );
+        Expecting( "symbol or number" );
 
     name = FromUTF8();
 
@@ -2016,11 +2020,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         default:
-            Expecting( "locked, placed, tedit, tstamp, at, descr, tags, path, "
-                       "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
-                       "solder_paste_margin, solder_paste_ratio, clearance, "
-                       "zone_connect, thermal_width, thermal_gap, attr, fp_text, "
-                       "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, pad, or model" );
+            parseUnknown();
         }
     }
 
@@ -2115,7 +2115,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
             break;
 
         default:
-            Expecting( "hide or effects" );
+            parseUnknown();
         }
     }
 
@@ -2282,7 +2282,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
             break;
 
         default:
-            Expecting( "layer or width" );
+            parseUnknown();
         }
 
         NeedRIGHT();
@@ -2455,7 +2455,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                         break;
 
                     default:
-                        Expecting( "oval, size, or offset" );
+                        parseUnknown();
                     }
                 }
 
@@ -2590,9 +2590,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             break;
 
         default:
-            Expecting( "at, drill, layers, net, die_length, solder_mask_margin, roundrect_rratio,\n"
-                       "solder_paste_margin, solder_paste_margin_ratio, clearance,\n"
-                       "zone_connect, fp_poly, primitives, thermal_width, or thermal_gap" );
+            parseUnknown();
         }
     }
 
@@ -2632,8 +2630,7 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
                     break;
 
                 default:
-                    // Currently, because pad options is a moving target
-                    // just skip unknown keywords
+                    parseUnknown();
                     break;
             }
             NeedRIGHT();
@@ -2642,7 +2639,7 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
         case T_clearance:
             token = NextTok();
             // Custom shaped pads have a clearance area that is the pad shape
-            // (like usual pads) or the convew hull of the pad shape.
+            // (like usual pads) or the convex hull of the pad shape.
             switch( token )
             {
             case T_outline:
@@ -2654,18 +2651,14 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
                 break;
 
             default:
-                // Currently, because pad options is a moving target
-                // just skip unknown keywords
+                parseUnknown();
                 break;
             }
             NeedRIGHT();
             break;
 
         default:
-            // Currently, because pad options is a moving target
-            // just skip unknown keywords
-            while( (token = NextTok() ) != T_RIGHT )
-            {}
+            parseUnknown();
             break;
         }
     }
@@ -2730,7 +2723,7 @@ TRACK* PCB_PARSER::parseTRACK()
             break;
 
         default:
-            Expecting( "start, end, width, layer, net, tstamp, or status" );
+            parseUnknown();
         }
 
         NeedRIGHT();
@@ -2815,7 +2808,7 @@ VIA* PCB_PARSER::parseVIA()
             break;
 
         default:
-            Expecting( "blind, micro, at, size, drill, layers, net, tstamp, or status" );
+            parseUnknown();
         }
     }
 
@@ -3019,8 +3012,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
                     break;
 
                 default:
-                    Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
-                               "smoothing, or radius" );
+                    parseUnknown();
                 }
             }
             break;
@@ -3060,7 +3052,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
                     break;
 
                 default:
-                    Expecting( "tracks, vias or copperpour" );
+                    parseUnknown();
                 }
 
                 NeedRIGHT();
@@ -3135,8 +3127,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
             break;
 
         default:
-            Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
-                       "fill, polygon, filled_polygon, or fill_segments" );
+            parseUnknown();
         }
     }
 
@@ -3253,7 +3244,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
             break;
 
         default:
-            Expecting( "x, plus, at, size, width, layer or tstamp" );
+            parseUnknown();
         }
     }
 

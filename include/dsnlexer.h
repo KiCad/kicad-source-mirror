@@ -459,6 +459,14 @@ public:
     void NeedRIGHT();
 
     /**
+     * Funcion SkipUnknown
+     * skips an unknown construct (and any nested constructs).  Looks for the next
+     * DSN_RIGHT at the same level.
+     * @throw IO_ERROR, if the EOF is reached before the unknown contruct's end
+     */
+    void SkipUnknown();
+
+    /**
      * Function GetTokenText
      * returns the C string representation of a DSN_T value.
      */
