@@ -649,32 +649,6 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     wxString cfgname = cfgpath.GetFullPath();
     std::ofstream cfgFile;
 
-    if( sPL == ePL )
-    {
-        wxMessageDialog md( NULL,
-            _( "3D search path list is empty;\ncontinue to write empty file?" ),
-            _( "Write 3D search path list" ), wxYES_NO );
-
-        if( md.ShowModal() == wxID_YES )
-        {
-            cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
-
-            if( !cfgFile.is_open() )
-            {
-                wxMessageBox( _( "Could not open configuration file" ),
-                    _( "Write 3D search path list" ) );
-
-                return false;
-            }
-
-            cfgFile << "#V" << CFGFILE_VERSION << "\n";
-            cfgFile.close();
-            return true;
-        }
-
-        return false;
-    }
-
     cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
 
     if( !cfgFile.is_open() )
