@@ -1,13 +1,13 @@
 /**
  * @file gerber_jobfile_writer.h
- * @brief Classes used in drill files, map files and report files generation.
+ * @brief Classes used to generate a Gerber job file in JSON
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2018 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,12 +87,26 @@ public:
     }
 
     /**
-     * Creates an Excellon drill file
+     * Creates a Gerber job file
+     * @param aFullFilename = the full filename
+     * @return true, or false if the file cannot be created
+     */
+    bool  CreateJobFile( const wxString& aFullFilename );
+
+    /**
+     * Creates a Gerber job file in old gbr format
+     * @param aFullFilename = the full filename
+     * @return true, or false if the file cannot be created
+     */
+    bool  CreateGbrJobFile( const wxString& aFullFilename );
+
+    /**
+     * Creates an Gerber job file in JSON format
      * @param aFullFilename = the full filename
      * @param aParams = true for a NPTH file, false for a PTH file
      * @return true, or false if the file cannot be created
      */
-    bool  CreateJobFile( const wxString& aFullFilename );
+    bool  CreateJSONJobFile( const wxString& aFullFilename );
 
 private:
     /** @return SIDE_NONE if no silk screen layer is in list
@@ -114,12 +128,94 @@ private:
      */
     const char* sideKeyValue( enum ONSIDE aValue );
 
+    /**
+     * Add the job file header in JSON format to m_JSONbuffer
+     */
+    void addJSONHeader();
+
+    /**
+     * Add the General Specs in JSON format to m_JSONbuffer
+     */
+    void addJSONGeneralSpecs();
+
+    /**
+     * Add the Files Attributes section in JSON format to m_JSONbuffer
+     */
+    void addJSONFilesAttributes();
+
+    /**
+     * Add the Material Stackup section in JSON format to m_JSONbuffer
+     * This is the ordered list of stackup layers (mask, paste, silk, copper, dielectric)
+     * used to make the physical board. Therefore not all layers are listed here
+     */
+    void addJSONMaterialStackup();
+
+    /**
+     * Add the Design Rules section in JSON format to m_JSONbuffer
+     */
+    void addJSONDesignRules();
+
+    /**
+     * Remove the comma if it is the last char in m_JSONbuffer,
+     * or the previous char if the last char is a \n
+     */
+    void removeJSONSepararator();
+
+    /**
+     * add m_indent spaces in m_JSONbuffer
+     */
+    void addIndent() { m_JSONbuffer.Append( ' ', m_indent ); }
+
+    /**
+     * open a JSON block: add '{' and increment indentation
+     */
+    void openBlock() { addIndent(); m_JSONbuffer << "{\n"; m_indent += 2; }
+
+    /**
+     * open a JSON array block: add '[' and increment indentation
+     */
+    void openArrayBlock() { addIndent(); m_JSONbuffer << "[\n"; m_indent += 2; }
+
+    /**
+     * close a JSON block: decrement indentation and add '}'
+     */
+    void closeBlock() { m_indent -= 2; addIndent(); m_JSONbuffer << "}\n"; }
+
+    /**
+     * close a JSON block: decrement indentation and add '}' and ','
+     */
+    void closeBlockWithSep() { m_indent -= 2; addIndent(); m_JSONbuffer << "},\n"; }
+
+    /**
+     * close a JSON array block: decrement indentation and add ']'
+     */
+    void closeArrayBlock() { m_indent -= 2; addIndent(); m_JSONbuffer << "]\n"; }
+
+    /**
+     * close a JSON array block: decrement indentation and add ']' and ','
+     */
+    void closeArrayBlockWithSep() { m_indent -= 2; addIndent(); m_JSONbuffer << "],\n"; }
+
+    /**
+     * Add aParam to m_JSONbuffer, with suitable indentation
+     */
+    void addJSONObject( const wxString& aParam )
+    {
+        addIndent(); m_JSONbuffer << aParam;
+    }
+    void addJSONObject( const char* aParam )
+    {
+        addIndent(); m_JSONbuffer << aParam;
+    }
 
 private:
     BOARD* m_pcb;               // The board
     REPORTER* m_reporter;       // a reporter for messages (can be null)
     JOBFILE_PARAMS m_params;    // the list of various prms and data to write in a job file
     double m_conversionUnits;   // scaling factor to convert brd units to gerber units (mm)
+    bool m_useJSONformat;       // temporary option
+    wxString m_JSONbuffer;      // a buffer to build the JSON data
+    int m_indent;               // helper for JSON format: the current indentation value
 };
 
 #endif  //  #ifndef GERBER_JOBFILE_WRITER_H

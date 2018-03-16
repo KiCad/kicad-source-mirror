@@ -41,19 +41,39 @@
 #include <html_messagebox.h>
 #include <view/view.h>
 
+#include "json11.hpp"   // A light JSON parser
 
 /**
  * this class read and parse a Gerber job file to extract useful info
  * for GerbView
  *
- * In a gerber job file, data lines start by
+ * In a gerber job file, old (deprecated) format, data lines start by
  * %TF.     (usual Gerber X2 info)
  * %TJ.B.   (board info)
  * %TJ.D.   (design info)
  * %TJ.L.   (layers info)
  * some others are not yet handled by Kicad
  * M02*     is the last line
+
+ * In a gerber job file, JSON format, first lines are
+ *   {
+ *    "Header":
+ * and the block ( a JSON array) containing the filename of files to load is
+ *    "FilesAttributes":
+ *    [
+ *      {
+ *        "Path":  "interf_u-Composant.gbr",
+ *        "FileFunction":  "Copper,L1,Top",
+ *        "FilePolarity":  "Positive"
+ *      },
+ *      {
+ *        "Path":  "interf_u-In1.Cu.gbr",
+ *        "FileFunction":  "Copper,L2,Inr",
+ *        "FilePolarity":  "Positive"
+ *      },
+ *    ],
  */
+
 class GERBER_JOBFILE_READER
 {
 public:
@@ -96,28 +116,65 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
     wxString msg;
     wxString data;
 
-    while( true )
+    // detect the file format: old gerber format of new JSON format
+    bool json_format = false;
+
+    char* line = jobfileReader.ReadLine();
+
+    if( !line )     // end of file
+        return false;
+
+    data = line;
+
+    if( data.Contains("{" ) )
+        json_format = true;
+
+    if( json_format )
     {
-        char* line = jobfileReader.ReadLine();
+        while( ( line = jobfileReader.ReadLine() ) )
+            data << '\n' << line;
 
-        if( !line )     // end of file
-            break;
+        std::string err;
+        json11::Json json_parser = json11::Json::parse( TO_UTF8( data ), err );
 
-        wxString text( line );
-        text.Trim( true );
-        text.Trim( false );
+        if( !err.empty() )
+            return false;
 
-        // Search for lines starting by '%', others are not usefull
-        if( text.StartsWith( "%TJ.L.", &data )  // First job file syntax
-            || text.StartsWith( "%TJ.L_", &data )   // current job file syntax
-            )
+        for( auto& entry : json_parser["FilesAttributes"].array_items() )
         {
-            parseTJLayerString( data );
-            continue;
+            //wxLogMessage( entry.dump().c_str() );
+            std::string name = entry["Path"].string_value();
+            //wxLogMessage( name.c_str() );
+            m_GerberFiles.Add( FormatStringFromGerber( name ) );
         }
+    }
+    else
+    {
+        jobfileReader.Rewind();
 
-        if( text.StartsWith( "M02" ) )  // End of file
-            break;
+        while( true )
+        {
+            line = jobfileReader.ReadLine();
+
+            if( !line )     // end of file
+                break;
+
+            wxString text( line );
+            text.Trim( true );
+            text.Trim( false );
+
+            // Search for lines starting by '%', others are not usefull
+            if( text.StartsWith( "%TJ.L.", &data )  // First job file syntax
+                || text.StartsWith( "%TJ.L_", &data )   // current job file syntax
+                )
+            {
+                parseTJLayerString( data );
+                continue;
+            }
+
+            if( text.StartsWith( "M02" ) )  // End of file
+                break;
+        }
     }
 
     return true;

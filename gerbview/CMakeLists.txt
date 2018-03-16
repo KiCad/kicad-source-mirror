@@ -51,6 +51,7 @@ set( GERBVIEW_SRCS
     gerbview_config.cpp
     gerbview_frame.cpp
     hotkeys.cpp
+    json11.cpp
     job_file_reader.cpp
     locate.cpp
     menubar.cpp
