@@ -52,6 +52,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
+    wxString footprint;
     EDA_ITEM* DrawList;
     SCH_COMPONENT* component;
     wxString title = wxT( "Eeschema " ) + GetBuildVersion();
@@ -60,7 +61,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
     ret |= fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
     ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
-    ret |= fprintf( f, "\n" );
+    ret |= fprintf( f, ".TYP FULL\n\n" );
 
     // Prepare list of nets generation
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
@@ -80,16 +81,11 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
             if( component == NULL )
                 break;
 
-            /*
-            doing nothing with footprint
+
             if( !component->GetField( FOOTPRINT )->IsVoid() )
-            {
-                footprint = component->GetField( FOOTPRINT )->m_Text;
-                footprint.Replace( wxT( " " ), wxT( "_" ) );
-            }
+                footprint = component->GetField( FOOTPRINT )->GetText();
             else
-                footprint = wxT( "$noname" );
-            */
+                footprint = "$noname";
 
             msg = component->GetRef( &sheetList[i] );
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
@@ -98,6 +94,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
             msg = component->GetField( VALUE )->GetText();
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
+            ret |= fprintf( f, "     \"%s\"", TO_UTF8( footprint ) );
             ret |= fprintf( f, "\n" );
         }
     }
