@@ -12185,7 +12185,7 @@ msgid "Turn rectangular coordinates on"
 msgstr "Abilita le coordinate rettangolari"
 
 #: gerbview/toolbars_gerber.cpp:527
-msgid "Turn polar coordinates on"
+msgid "Tunn polar coordinates on"
 msgstr "Abilita le coordinate polari"
 
 #: gerbview/toolbars_gerber.cpp:539
