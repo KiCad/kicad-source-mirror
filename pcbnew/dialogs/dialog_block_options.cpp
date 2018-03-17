@@ -36,6 +36,8 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
     if( !aShowLegacyOptions )
     {
         m_DrawBlockItems->Hide();
+        m_checkBoxIncludeInvisible->Hide();
+        m_staticline1->Hide();
     }
 
     m_Include_Modules->SetValue( m_options.includeModules );

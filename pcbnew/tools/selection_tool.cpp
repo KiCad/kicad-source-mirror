@@ -1235,20 +1235,20 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
  */
 static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
                                     const BOARD& aBoard,
-                                    const LSET& aTechnlLayerMask,
                                     const DIALOG_BLOCK_OPTIONS::OPTIONS& aBlockOpts )
 {
     bool include = true;
     const PCB_LAYER_ID layer = aItem.GetLayer();
 
     // can skip without even checking item type
+    // fixme: selecting items on invisible layers does not work in GAL
     if( !aBlockOpts.includeItemsOnInvisibleLayers
         && !aBoard.IsLayerVisible( layer ) )
     {
         include = false;
     }
 
-    // if the item needsto be checked agains the options
+    // if the item needs to be checked against the options
     if( include )
     {
         switch( aItem.Type() )
@@ -1267,6 +1267,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
             break;
         }
         case PCB_TRACE_T:
+        case PCB_VIA_T:
         {
             include = aBlockOpts.includeTracks;
             break;
@@ -1280,42 +1281,26 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
         case PCB_TARGET_T:
         case PCB_DIMENSION_T:
         {
-            include = aTechnlLayerMask[layer];
+            if( layer == Edge_Cuts )
+                include = aBlockOpts.includeBoardOutlineLayer;
+            else
+                include = aBlockOpts.includeItemsOnTechLayers;
             break;
         }
         case PCB_TEXT_T:
         {
-            include = aBlockOpts.includePcbTexts
-                        && aTechnlLayerMask[layer];
+            include = aBlockOpts.includePcbTexts;
             break;
         }
         default:
         {
-            // no filterering, just select it
+            // no filtering, just select it
             break;
         }
         }
     }
 
     return include;
-}
-
-
-/**
- * Gets the technical layers that are part of the given selection opts
- */
-static LSET getFilteredLayerSet(
-        const DIALOG_BLOCK_OPTIONS::OPTIONS& blockOpts )
-{
-    LSET layerMask( Edge_Cuts );
-
-    if( blockOpts.includeItemsOnTechLayers )
-        layerMask.set();
-
-    if( !blockOpts.includeBoardOutlineLayer )
-        layerMask.set( Edge_Cuts, false );
-
-    return layerMask;
 }
 
 
@@ -1330,7 +1315,6 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
         return 0;
 
     const auto& board = *getModel<BOARD>();
-    const auto layerMask = getFilteredLayerSet( opts );
 
     // copy current selection
     auto selection = m_selection.GetItems();
@@ -1343,7 +1327,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
     for( auto i : selection )
     {
         auto item = static_cast<BOARD_ITEM*>( i );
-        bool include = itemIsIncludedByFilter( *item, board, layerMask, opts );
+        bool include = itemIsIncludedByFilter( *item, board, opts );
 
         if( include )
         {
