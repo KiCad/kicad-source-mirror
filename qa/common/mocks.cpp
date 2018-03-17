@@ -295,6 +295,7 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
     m_IncludeLockedModules = nullptr;
     m_Include_Draw_Items = nullptr;
     m_Include_Tracks = nullptr;
+    m_Include_Vias = nullptr;
     m_Include_Edges_Items = nullptr;
     m_Include_Zones = nullptr;
     m_DrawBlockItems = nullptr;

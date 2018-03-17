@@ -1267,9 +1267,13 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
             break;
         }
         case PCB_TRACE_T:
-        case PCB_VIA_T:
         {
             include = aBlockOpts.includeTracks;
+            break;
+        }
+        case PCB_VIA_T:
+        {
+            include = aBlockOpts.includeVias;
             break;
         }
         case PCB_ZONE_AREA_T:

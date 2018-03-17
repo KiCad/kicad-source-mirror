@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version May  6 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_BLOCK_OPTIONS_BASE_H__
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -41,10 +43,11 @@ class DIALOG_BLOCK_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Include_Draw_Items;
 		wxCheckBox* m_Include_Tracks;
 		wxCheckBox* m_Include_Edges_Items;
+		wxCheckBox* m_Include_Vias;
 		wxCheckBox* m_Include_Zones;
-		wxCheckBox* m_DrawBlockItems;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_checkBoxIncludeInvisible;
+		wxCheckBox* m_DrawBlockItems;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

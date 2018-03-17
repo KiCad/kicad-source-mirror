@@ -41,6 +41,7 @@ public:
         bool includeModules     = true;
         bool includeLockedModules = true;
         bool includeTracks      = true;
+        bool includeVias        = true;
         bool includeZones       = true;
         bool includeItemsOnTechLayers  = true;
         bool includeBoardOutlineLayer = true;

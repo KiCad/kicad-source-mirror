@@ -334,19 +334,19 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     }
 
     // Add tracks and vias
-    if( blockOpts.includeTracks )
+    for( auto PtStruct : m_Pcb->Tracks() )
     {
-        for( TRACK* track = m_Pcb->m_Track; track != NULL; track = track->Next() )
+        if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) && !blockOpts.includeItemsOnInvisibleLayers )
+            continue;
+
+        if( !( blockOpts.includeTracks && PtStruct->Type() == PCB_TRACE_T ) &&
+            !( blockOpts.includeVias && PtStruct->Type() == PCB_VIA_T) )
+            continue;
+
+        if( PtStruct->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
         {
-            if( track->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
-            {
-                if( blockOpts.includeItemsOnInvisibleLayers
-                  || m_Pcb->IsLayerVisible( track->GetLayer() ) )
-                {
-                    picker.SetItem( track );
-                    itemsList->PushItem( picker );
-                }
-            }
+            picker.SetItem ( PtStruct );
+            itemsList->PushItem( picker );
         }
     }
 

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version May  6 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_block_options_base.h"
@@ -18,6 +18,11 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 3, 1, 0, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 4, 2, 3, 3 );
@@ -40,20 +45,32 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	m_Include_Edges_Items = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &board outline layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_Include_Edges_Items, 0, 0, 5 );
 	
+	m_Include_Vias = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_Vias, 0, 0, 5 );
+	
 	m_Include_Zones = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_Include_Zones, 0, 0, 5 );
 	
-	m_DrawBlockItems = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Draw &selected items while moving"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_DrawBlockItems, 0, 0, 5 );
 	
-	
-	sbSizer1->Add( gSizer1, 1, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( gSizer1, 1, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sbSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	fgSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	wxGridSizer* gSizer2;
+	gSizer2 = new wxGridSizer( 1, 2, 3, 3 );
 	
 	m_checkBoxIncludeInvisible = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &items on invisible layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkBoxIncludeInvisible, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	gSizer2->Add( m_checkBoxIncludeInvisible, 0, 0, 5 );
+	
+	m_DrawBlockItems = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Draw &selected items while moving"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer2->Add( m_DrawBlockItems, 0, 0, 5 );
+	
+	
+	fgSizer1->Add( gSizer2, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	sbSizer1->Add( fgSizer1, 1, wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
@@ -81,9 +98,10 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	m_Include_Draw_Items->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Tracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Edges_Items->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
+	m_Include_Vias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Zones->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
-	m_DrawBlockItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_checkBoxIncludeInvisible->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
+	m_DrawBlockItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::OnCancel ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::ExecuteCommand ), NULL, this );
 }
@@ -97,9 +115,10 @@ DIALOG_BLOCK_OPTIONS_BASE::~DIALOG_BLOCK_OPTIONS_BASE()
 	m_Include_Draw_Items->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Tracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Edges_Items->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
+	m_Include_Vias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Zones->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
-	m_DrawBlockItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_checkBoxIncludeInvisible->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
+	m_DrawBlockItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::OnCancel ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::ExecuteCommand ), NULL, this );
 	
