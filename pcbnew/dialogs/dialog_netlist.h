@@ -28,14 +28,14 @@
 #ifndef _DIALOG_NETLIST_H_
 #define _DIALOG_NETLIST_H_
 
-#include <dialog_netlist_fbp.h>
+#include <dialog_netlist_base.h>
 
 
 class MODULE;
 class NETLIST;
 
 
-class DIALOG_NETLIST : public DIALOG_NETLIST_FBP
+class DIALOG_NETLIST : public DIALOG_NETLIST_BASE
 {
 private:
     PCB_EDIT_FRAME* m_parent;

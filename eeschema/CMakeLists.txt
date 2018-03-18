@@ -32,7 +32,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_component_in_lib.cpp
     dialogs/dialog_edit_component_in_lib_base.cpp
     dialogs/dialog_edit_component_in_schematic.cpp
-    dialogs/dialog_edit_component_in_schematic_fbp.cpp
+    dialogs/dialog_edit_component_in_schematic_base.cpp
     dialogs/dialog_edit_components_libid.cpp
     dialogs/dialog_edit_components_libid_base.cpp
     dialogs/dialog_edit_label.cpp

@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP_H__
-#define __DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP_H__
+#ifndef __DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE_H__
+#define __DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -37,9 +37,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
+/// Class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
+class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -110,9 +110,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
-		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP();
+		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE();
 	
 };
 
-#endif //__DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP_H__
+#endif //__DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE_H__

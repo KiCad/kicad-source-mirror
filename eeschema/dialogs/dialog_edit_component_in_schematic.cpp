@@ -44,7 +44,7 @@
 
 #include <bitmaps.h>
 
-#include <dialog_edit_component_in_schematic_fbp.h>
+#include <dialog_edit_component_in_schematic_base.h>
 #include <invoke_sch_dialog.h>
 
 #ifdef KICAD_SPICE
@@ -60,10 +60,10 @@
 /**
  * Dialog used to edit #SCH_COMPONENT objects in a schematic.
  *
- * This is derived from DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which is maintained by
+ * This is derived from DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE which is maintained by
  * wxFormBuilder.  Do not auto-generate this class or file, it is hand coded.
  */
-class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
+class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 {
 public:
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent );
@@ -206,7 +206,7 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 
 
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent ) :
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( aParent )
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE( aParent )
 {
 #ifndef KICAD_SPICE
     spiceFieldsButton->Hide();

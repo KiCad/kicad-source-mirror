@@ -97,7 +97,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 
 DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
                                 const wxString & aNetlistFullFilename )
-    : DIALOG_NETLIST_FBP( aParent )
+    : DIALOG_NETLIST_BASE( aParent )
 {
     m_parent = aParent;
     m_dc = aDC;
