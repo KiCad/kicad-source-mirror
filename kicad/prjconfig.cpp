@@ -196,7 +196,7 @@ public:
         m_cbCreateDir->SetValue( true );
 
         wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-        sizer->Add( m_cbCreateDir );
+        sizer->Add( m_cbCreateDir, 0, wxALL, 8 );
 
         SetSizerAndFit( sizer );
     }

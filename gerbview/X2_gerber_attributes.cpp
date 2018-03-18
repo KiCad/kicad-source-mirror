@@ -292,7 +292,15 @@ void X2_ATTRIBUTE_FILEFUNCTION::set_Z_Order()
         // Silk screen layer: the priority is top then bottom
         m_z_order = 3;       // for top
 
-        if( GetFileType().IsSameAs( wxT( "Legend" ), false ) )
+        if( GetBrdLayerId().IsSameAs( wxT( "Bot" ), false ) )
+            m_z_order = -m_z_order;
+    }
+
+    if( GetFileType().IsSameAs( wxT( "Glue" ), false ) )
+    {
+        // Glue spots used to fix components to the board prior to soldering:
+        // the priority is top then bottom
+        m_z_order = 4;       // for top
 
         if( GetBrdLayerId().IsSameAs( wxT( "Bot" ), false ) )
             m_z_order = -m_z_order;
