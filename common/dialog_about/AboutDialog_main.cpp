@@ -139,7 +139,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     description << "<li>"
                 << _(" Official KiCad library repositories - " )
-                << HtmlHyperlink( "https://github.com/KiCad/" )
+                << HtmlHyperlink( "https://kicad.github.io" )
                 << "</li>";
 
     description << "</ul></p>";
