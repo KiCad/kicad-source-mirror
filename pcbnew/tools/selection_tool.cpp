@@ -1882,7 +1882,19 @@ double calcRatio( double a, double b )
 }
 
 
-// todo: explain the selection heuristics
+// The general idea here is that if the user clicks directly on a small item inside a larger
+// one, then they want the small item.  The quintessential case of this is clicking on a pad
+// within a footprint, but we also apply it for text within a footprint, footprints within
+// larger footprints, and vias within either larger pads or longer tracks.
+//
+// These "guesses" presume there is area within the larger item to click in to select it.  If
+// an item is mostly covered by smaller items within it, then the guesses are inappropriate as
+// there might not be any area left to click to select the larger item.  In this case we must
+// leave the items in the collector and bring up a Selection Clarification menu.
+//
+// We currently check for pads and text mostly covering a footprint, but we don’t check for
+// smaller footprints mostly covering a larger footprint.
+//
 void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const
 {
     std::set<BOARD_ITEM*> rejected;
