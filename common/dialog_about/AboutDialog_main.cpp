@@ -129,16 +129,16 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // bullet-ed list with some http links
     description << "<ul>";
     description << "<li>"
-                << "The official KiCad website - "
+                << _( "The official KiCad website - " )
                 << HtmlHyperlink( "http://www.kicad-pcb.org" )
                 << "</li>";
     description << "<li>"
-                << "Developer website on Launchpad - "
+                << _( "Developer website on Launchpad - " )
                 << HtmlHyperlink( "https://launchpad.net/kicad" )
                 << "</li>";
 
     description << "<li>"
-                << "Official KiCad library repositories - "
+                << _(" Official KiCad library repositories - " )
                 << HtmlHyperlink( "https://github.com/KiCad/" )
                 << "</li>";
 
@@ -151,7 +151,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // bullet-ed list with some http links
     description << "<ul>";
     description << "<li>"
-                << "Report or examine bugs - "
+                << _( "Report or examine bugs - " )
                 << HtmlHyperlink( "https://bugs.launchpad.net/kicad/+bugs?orderby=-id&start=0",
                                   "https://bugs.launchpad.net/kicad" )
                 << "</li>";
@@ -163,12 +163,12 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     description << "<ul>";
     description << "<li>"
-                << "KiCad forum - "
+                << _( "KiCad forum - " )
                 << HtmlHyperlink( "https://forum.kicad.info" )
                 << "</li>";
 
     description << "<li>"
-                << "KiCad user's group - "
+                <<_(  "KiCad user's group - " )
                 << HtmlHyperlink( "https://groups.yahoo.com/neo/groups/kicad-users/info" )
                 << "</li>";
 
