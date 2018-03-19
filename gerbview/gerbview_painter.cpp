@@ -406,6 +406,9 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 
     wxASSERT_MSG( code, wxT( "drawFlashedShape: Item has no D_CODE!" ) );
 
+    if( !code )
+        return;
+
     m_gal->SetIsFill( aFilled );
     m_gal->SetIsStroke( !aFilled );
     m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );

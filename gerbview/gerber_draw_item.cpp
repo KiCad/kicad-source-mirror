@@ -320,37 +320,49 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 
     case GBR_SPOT_CIRCLE:
     {
-        int radius = code->m_Size.x >> 1;
-        bbox.Inflate( radius, radius );
+        if( code )
+        {
+            int radius = code->m_Size.x >> 1;
+            bbox.Inflate( radius, radius );
+        }
         break;
     }
 
     case GBR_SPOT_RECT:
     {
-        bbox.Inflate( code->m_Size.x / 2, code->m_Size.y / 2 );
+        if( code )
+            bbox.Inflate( code->m_Size.x / 2, code->m_Size.y / 2 );
         break;
     }
 
     case GBR_SPOT_OVAL:
     {
-        bbox.Inflate( code->m_Size.x, code->m_Size.y );
+        if( code )
+            bbox.Inflate( code->m_Size.x, code->m_Size.y );
         break;
     }
 
     case GBR_SPOT_POLY:
     {
-        if( code->m_Polygon.OutlineCount() == 0 )
-            code->ConvertShapeToPolygon();
+        if( code )
+        {
+            if( code->m_Polygon.OutlineCount() == 0 )
+                code->ConvertShapeToPolygon();
 
-        bbox.Inflate( code->m_Polygon.BBox().GetWidth() / 2, code->m_Polygon.BBox().GetHeight() / 2 );
+            bbox.Inflate( code->m_Polygon.BBox().GetWidth() / 2,
+                          code->m_Polygon.BBox().GetHeight() / 2 );
+        }
         break;
     }
     case GBR_SPOT_MACRO:
     {
-        // Update the shape drawings and the bounding box coordiantes:
-        code->GetMacro()->GetApertureMacroShape( this, m_Start );
-        // now the bounding box is valid:
-        bbox = code->GetMacro()->GetBoundingBox();
+        if( code )
+        {
+            // Update the shape drawings and the bounding box coordiantes:
+            code->GetMacro()->GetApertureMacroShape( this, m_Start );
+            // now the bounding box is valid:
+            bbox = code->GetMacro()->GetBoundingBox();
+        }
         break;
     }
 
