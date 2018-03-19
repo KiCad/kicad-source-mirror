@@ -98,6 +98,8 @@ private:
     void scrollToBottom();
     void syncCheckboxes();
 
+    void onRightClick( wxMouseEvent& event ) override;
+    void onMenuEvent( wxMenuEvent& event );
     void onCheckBoxShowAll( wxCommandEvent& event ) override;
     void onCheckBoxShowWarnings( wxCommandEvent& event ) override;
     void onCheckBoxShowErrors( wxCommandEvent& event ) override;

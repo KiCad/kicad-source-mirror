@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_HTML_REPORT_PANEL_BASE_H__
@@ -53,6 +53,7 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		wxButton* m_btnSaveReportToFile;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowErrors( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowWarnings( wxCommandEvent& event ) { event.Skip(); }

@@ -23,7 +23,7 @@
 
 #include <wildcards_and_files_ext.h>
 #include <gal/color4d.h>
-
+#include <wx/clipbrd.h>
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow*      parent,
                                             wxWindowID     id,
@@ -38,6 +38,9 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow*      parent,
 {
     syncCheckboxes();
     m_htmlView->SetPage( addHeader( "" ) );
+
+    Connect( wxEVT_COMMAND_MENU_SELECTED,
+            wxMenuEventHandler( WX_HTML_REPORT_PANEL::onMenuEvent ), NULL, this );
 }
 
 
@@ -275,12 +278,36 @@ wxString WX_HTML_REPORT_PANEL::generatePlainText( const REPORT_LINE& aLine )
 }
 
 
+void WX_HTML_REPORT_PANEL::onRightClick( wxMouseEvent& event )
+{
+    wxMenu popup;
+    popup.Append( wxID_COPY, "Copy" );
+    PopupMenu( &popup );
+}
+
+
+void WX_HTML_REPORT_PANEL::onMenuEvent( wxMenuEvent& event )
+{
+    if( event.GetId() == wxID_COPY )
+    {
+        if( wxTheClipboard->Open() )
+        {
+            bool primarySelection = wxTheClipboard->IsUsingPrimarySelection();
+            wxTheClipboard->UsePrimarySelection( false );   // required to use the main clipboard
+            wxTheClipboard->SetData( new wxTextDataObject( m_htmlView->SelectionToText() ) );
+            wxTheClipboard->Close();
+            wxTheClipboard->UsePrimarySelection( primarySelection );
+        }
+    }
+}
+
+
 void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 {
-    if ( event.IsChecked() )
-         m_showAll = true;
-     else
-         m_showAll = false;
+    if( event.IsChecked() )
+        m_showAll = true;
+    else
+        m_showAll = false;
 
     syncCheckboxes();
     refreshView();
