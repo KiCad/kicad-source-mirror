@@ -32,11 +32,13 @@
 #include "pcb_edit_frame.h"
 #include "kiface_i.h"
 #include "confirm.h"
+#include "reporter.h"
 
 #include "pcbnew.h"
 #include "class_board.h"
 #include "dialog_export_step_base.h"
 #include <widgets/text_ctrl_eval.h>
+#include <wx_html_report_panel.h>
 
 #define OPTKEY_STEP_ORIGIN_OPT      "STEP_Origin_Opt"
 #define OPTKEY_STEP_UORG_UNITS      "STEP_UserOriginUnits"
@@ -66,38 +68,20 @@ private:
     int    m_OrgUnits;      // remember last units for User Origin
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
+    wxString m_boardPath;   // path to the exported board file
 
 protected:
     void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
     void onUpdateXPos( wxUpdateUIEvent& aEvent ) override;
     void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
+    void onExportButton( wxCommandEvent& aEvent ) override;
 
-public:
-    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent );
-
-    ~DIALOG_EXPORT_STEP()
-    {
-        GetOriginOption(); // Update m_STEP_org_opt member.
-        m_config->Write( OPTKEY_STEP_ORIGIN_OPT, (int)m_STEP_org_opt );
-
-        m_config->Write( OPTKEY_STEP_NOVIRT, m_cbRemoveVirtual->GetValue() );
-
-        m_config->Write( OPTKEY_STEP_UORG_UNITS, m_STEP_OrgUnitChoice->GetSelection() );
-        m_config->Write( OPTKEY_STEP_UORG_X, m_STEP_Xorg->GetValue() );
-        m_config->Write( OPTKEY_STEP_UORG_Y, m_STEP_Yorg->GetValue() );
-    }
-
-    wxFilePickerCtrl* FilePicker()
-    {
-        return m_filePickerSTEP;
-    }
-
-    int GetOrgUnitsChoice()
+    int GetOrgUnitsChoice() const
     {
         return m_STEP_OrgUnitChoice->GetSelection();
     }
 
-    double GetXOrg()
+    double GetXOrg() const
     {
         return DoubleValueFromString( UNSCALED_UNITS, m_STEP_Xorg->GetValue() );
     }
@@ -114,15 +98,33 @@ public:
         return m_cbRemoveVirtual->GetValue();
     }
 
-    bool TransferDataFromWindow() override;
+public:
+    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath );
+
+    ~DIALOG_EXPORT_STEP()
+    {
+        GetOriginOption(); // Update m_STEP_org_opt member.
+        m_config->Write( OPTKEY_STEP_ORIGIN_OPT, (int)m_STEP_org_opt );
+        m_config->Write( OPTKEY_STEP_NOVIRT, m_cbRemoveVirtual->GetValue() );
+        m_config->Write( OPTKEY_STEP_UORG_UNITS, m_STEP_OrgUnitChoice->GetSelection() );
+        m_config->Write( OPTKEY_STEP_UORG_X, m_STEP_Xorg->GetValue() );
+        m_config->Write( OPTKEY_STEP_UORG_Y, m_STEP_Yorg->GetValue() );
+    }
 };
 
 
-DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
-    DIALOG_EXPORT_STEP_BASE( parent )
+DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
+    DIALOG_EXPORT_STEP_BASE( aParent )
 {
-    m_parent = parent;
+    m_parent = aParent;
+    m_boardPath = aBoardPath;
     m_config = Kiface().KifaceSettings();
+
+    // Build default output file name
+    wxFileName brdFile = m_parent->GetBoard()->GetFileName();
+    brdFile.SetExt( "stp" );
+    m_filePickerSTEP->SetPath( brdFile.GetFullPath() );
+
     SetFocus();
 
     m_STEP_org_opt = STEP_ORG_0;;
@@ -154,32 +156,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
     tmpStr << m_YOrg;
     m_STEP_Yorg->SetValue( tmpStr );
 
-    m_sdbSizerOK->SetDefault();
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
-}
-
-
-bool DIALOG_EXPORT_STEP::TransferDataFromWindow()
-{
-    if( !wxDialog::TransferDataFromWindow() )
-        return false;
-
-    wxFileName fn = m_filePickerSTEP->GetFileName();
-
-    if( fn.FileExists() )
-    {
-        wxString msg;
-        msg.Printf( _( "File: %s\n"
-                       "already exists. Do you want overwrite this file?" ),
-                    fn.GetFullPath().GetData() );
-
-        if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
-            return false;
-    }
-
-    return true;
 }
 
 
@@ -202,9 +180,7 @@ DIALOG_EXPORT_STEP::STEP_ORG_OPT DIALOG_EXPORT_STEP::GetOriginOption()
 
 void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
 {
-
     wxFileName brdFile = GetBoard()->GetFileName();
-    wxString brdName;
 
     if( GetScreen()->IsModify() || brdFile.GetFullPath().empty() )
     {
@@ -215,106 +191,12 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
             return;
         }
 
-        brdFile = GetBoard()->GetFileName();
-        brdName = GetAutoSaveFilePrefix();
-        brdName.append( brdFile.GetName() );
-        brdFile.SetName( brdName );
+        // Use auto-saved board for export
+        brdFile.SetName( GetAutoSaveFilePrefix() + brdFile.GetName() );
     }
 
-    brdName = "\"";
-    brdName.Append( brdFile.GetFullPath() );
-    brdName.Append( "\"" );
-
-    // Build default output file name
-    brdFile = GetBoard()->GetFileName();
-    wxString brdExt = brdFile.GetExt();
-    brdFile.SetExt( "stp" );
-
-    DIALOG_EXPORT_STEP dlg( this );
-    dlg.FilePicker()->SetPath( brdFile.GetFullPath() );
-
-    if ( dlg.ShowModal() != wxID_OK )
-        return;
-
-    wxString outputFile = dlg.FilePicker()->GetPath();
-    brdFile.SetExt( brdExt );
-    outputFile.Prepend( "\"" );
-    outputFile.Append( "\"" );
-
-    DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = dlg.GetOriginOption();
-    double xOrg = 0.0;
-    double yOrg = 0.0;
-
-    wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
-    appK2S.SetName( "kicad2step" );
-
-    wxString cmdK2S = "\"";
-    cmdK2S.Append( appK2S.GetFullPath() );
-    cmdK2S.Append( "\"" );
-
-    if( dlg.GetNoVirtOption() )
-        cmdK2S.Append( " --no-virtual" );
-
-    switch( orgOpt )
-    {
-        case DIALOG_EXPORT_STEP::STEP_ORG_0:
-            break;
-
-        case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
-            cmdK2S.Append( " --drill-origin" );
-            break;
-
-        case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
-            cmdK2S.Append( " --grid-origin" );
-            break;
-
-        case DIALOG_EXPORT_STEP::STEP_ORG_USER:
-        {
-            xOrg = dlg.GetXOrg();
-            yOrg = dlg.GetYOrg();
-
-            if( dlg.GetOrgUnitsChoice() == 1 )
-            {
-                // selected reference unit is in inches, and STEP units are mm
-                xOrg *= 25.4;
-                yOrg *= 25.4;
-            }
-
-            LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
-        }
-            break;
-
-        case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
-        {
-            EDA_RECT bbox = GetBoard()->ComputeBoundingBox( true );
-            xOrg = Iu2Millimeter( bbox.GetCenter().x );
-            yOrg = Iu2Millimeter( bbox.GetCenter().y );
-            LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
-        }
-            break;
-    }
-
-    cmdK2S.Append( " -f -o " );
-    cmdK2S.Append( outputFile );
-
-    cmdK2S.Append( " " );
-    cmdK2S.Append( brdName );
-
-    int result = 0;
-
-    do
-    {
-        wxBusyCursor dummy;
-        result = wxExecute( cmdK2S, wxEXEC_SYNC | wxEXEC_HIDE_CONSOLE );
-    } while( 0 );
-
-    if( result )
-    {
-        DisplayErrorMessage( this, _( "Unable to create STEP file.  Check that the board has a "
-                                      "valid outline and models." ), cmdK2S );
-    }
+    DIALOG_EXPORT_STEP dlg( this, brdFile.GetFullPath() );
+    dlg.ShowModal();
 }
 
 
@@ -333,4 +215,124 @@ void DIALOG_EXPORT_STEP::onUpdateXPos( wxUpdateUIEvent& aEvent )
 void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
+}
+
+
+void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
+{
+    wxFileName fn = m_filePickerSTEP->GetFileName();
+
+    if( fn.FileExists() )
+    {
+        wxString msg;
+        msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
+                    fn.GetFullPath().GetData() );
+
+        if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+            return;
+    }
+
+    DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = GetOriginOption();
+    double xOrg = 0.0;
+    double yOrg = 0.0;
+
+    wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
+    appK2S.SetName( "kicad2step" );
+
+    wxString cmdK2S = "\"";
+    cmdK2S.Append( appK2S.GetFullPath() );
+    cmdK2S.Append( "\"" );
+
+    if( GetNoVirtOption() )
+        cmdK2S.Append( " --no-virtual" );
+
+    switch( orgOpt )
+    {
+        case DIALOG_EXPORT_STEP::STEP_ORG_0:
+            break;
+
+        case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
+            cmdK2S.Append( " --drill-origin" );
+            break;
+
+        case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
+            cmdK2S.Append( " --grid-origin" );
+            break;
+
+        case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+        {
+            xOrg = GetXOrg();
+            yOrg = GetYOrg();
+
+            if( GetOrgUnitsChoice() == 1 )
+            {
+                // selected reference unit is in inches, and STEP units are mm
+                xOrg *= 25.4;
+                yOrg *= 25.4;
+            }
+
+            LOCALE_IO dummy;
+            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
+        }
+            break;
+
+        case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
+        {
+            EDA_RECT bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+            xOrg = Iu2Millimeter( bbox.GetCenter().x );
+            yOrg = Iu2Millimeter( bbox.GetCenter().y );
+            LOCALE_IO dummy;
+            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
+        }
+            break;
+    }
+
+    cmdK2S.Append( " -f -o " );
+    cmdK2S.Append( wxString::Format("\"%s\"", m_filePickerSTEP->GetPath() ) );  // input file path
+
+    cmdK2S.Append( " " );
+    cmdK2S.Append( wxString::Format("\"%s\"", m_boardPath ) );                  // output file path
+
+    int result = 0;
+    bool success = false;
+    wxArrayString output, errors;
+    REPORTER& reporter = m_messagesPanel->Reporter();
+    reporter.Report( wxString::Format( _( "Executing '%s'" ), cmdK2S ), REPORTER::RPT_ACTION );
+
+    {
+        wxBusyCursor dummy;
+        result = wxExecute( cmdK2S, output, errors, wxEXEC_SYNC | wxEXEC_HIDE_CONSOLE );
+    }
+
+    // Check the output log for an indication of success,
+    // the value returned by wxExecute is not conclusive
+    for( auto& l : output )
+    {
+        if( l.Contains( "Done" ) )
+        {
+            success = true;
+            break;
+        }
+    }
+
+    for( auto& err : errors )
+        reporter.Report( err, REPORTER::RPT_WARNING );
+
+    if( result )    // Any troubles?
+    {
+        if( !success )
+        {
+            reporter.Report( _( "Unable to create STEP file.  Check that the board has a "
+                                        "valid outline and models." ), REPORTER::RPT_ERROR );
+        }
+        else
+        {
+            reporter.Report( _( "STEP file has been created, but there are warnings." ),
+                    REPORTER::RPT_INFO );
+        }
+    }
+    else
+    {
+        reporter.Report( _( "STEP file has been created succesfully." ), REPORTER::RPT_INFO );
+    }
 }
