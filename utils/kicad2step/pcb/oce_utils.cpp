@@ -571,10 +571,21 @@ bool PCBMODEL::AddPadHole( KICADPAD* aPad )
 
 
 // add a component at the given position and orientation
-bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string aRefDes,
+bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aRefDes,
     bool aBottom, DOUBLET aPosition, double aRotation,
     TRIPLET aOffset, TRIPLET aOrientation )
 {
+    if( aFileName.empty() )
+    {
+        std::ostringstream ostr;
+#ifdef __WXDEBUG__
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+#endif /* __WXDEBUG */
+        ostr << "  * no model defined for component '" << aRefDes << "'\n";
+        wxLogMessage( "%s", ostr.str().c_str() );
+        return false;
+    }
+
     // first retrieve a label
     TDF_Label lmodel;
 

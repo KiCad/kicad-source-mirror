@@ -114,7 +114,7 @@ public:
     bool AddPadHole( KICADPAD* aPad );
 
     // add a component at the given position and orientation
-    bool AddComponent( const std::string& aFileName, const std::string aRefDes,
+    bool AddComponent( const std::string& aFileName, const std::string& aRefDes,
         bool aBottom, DOUBLET aPosition, double aRotation,
         TRIPLET aOffset, TRIPLET aOrientation );
 
