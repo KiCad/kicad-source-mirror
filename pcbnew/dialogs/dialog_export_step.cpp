@@ -220,11 +220,21 @@ void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
 
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
+    SHAPE_POLY_SET outline;
+    wxString msg;
+
+    // Check if the board outline is continuous
+    // TODO the check below is more forgiving than kicad2step, needs to be more strict
+    if( !m_parent->GetBoard()->GetBoardPolygonOutlines( outline, &msg ) )
+    {
+        DisplayErrorMessage( this, _( "Cannot determine the board outline." ), msg );
+        return;
+    }
+
     wxFileName fn = m_filePickerSTEP->GetFileName();
 
     if( fn.FileExists() )
     {
-        wxString msg;
         msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
                     fn.GetFullPath().GetData() );
 
