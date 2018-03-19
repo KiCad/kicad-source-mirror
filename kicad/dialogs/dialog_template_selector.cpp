@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,10 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     // wxWidgets_3.xx way of doing the same...
     // Bind(wxEVT_LEFT_DOWN, &TEMPLATE_WIDGET::OnMouse, this );
 
-    m_bitmapIcon->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), NULL, this );
-    m_staticTitle->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), NULL, this );
+    m_bitmapIcon->Connect( wxEVT_LEFT_DOWN,
+                           wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), NULL, this );
+    m_staticTitle->Connect( wxEVT_LEFT_DOWN,
+                            wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), NULL, this );
 
     // We're not selected until we're clicked
     Unselect();
@@ -97,13 +99,14 @@ void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
         m_panels[i]->SetSize( m_notebook->GetSize().GetWidth() - 6, 140 );
         m_panels[i]->m_SizerBase->FitInside( m_panels[i] );
         m_panels[i]->m_scrolledWindow->SetSize( m_panels[i]->GetSize().GetWidth() - 6,
-                                                 m_panels[i]->GetSize().GetHeight() - 6 );
+                                                m_panels[i]->GetSize().GetHeight() - 6 );
         m_panels[i]->m_SizerChoice->FitInside( m_panels[i]->m_scrolledWindow );
     }
     m_notebook->Refresh();
 
     event.Skip();
 }
+
 
 void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 {
@@ -118,7 +121,9 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent ) :
     DIALOG_TEMPLATE_SELECTOR_BASE( aParent )
 {
     m_htmlWin->SetPage( _( "<html><h1>Template Selector</h1></html>" ) );
-    m_notebook->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_TEMPLATE_SELECTOR::onNotebookResize ), NULL, this );
+    m_notebook->Connect( wxEVT_SIZE,
+                         wxSizeEventHandler( DIALOG_TEMPLATE_SELECTOR::onNotebookResize ),
+                         NULL, this );
     m_selectedWidget = NULL;
 }
 
@@ -132,6 +137,7 @@ void DIALOG_TEMPLATE_SELECTOR::SetWidget( TEMPLATE_WIDGET* aWidget )
     SetHtml( m_selectedWidget->GetTemplate()->GetHtmlFile() );
 }
 
+
 void DIALOG_TEMPLATE_SELECTOR::AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate )
 {
     TEMPLATE_WIDGET* w = new TEMPLATE_WIDGET( m_panels[aPage]->m_scrolledWindow, this  );
@@ -142,7 +148,7 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplate( int aPage, PROJECT_TEMPLATE* aTempla
     m_panels[aPage]->SetSize( m_notebook->GetSize().GetWidth() - 6, 140 );
     m_panels[aPage]->m_SizerBase->FitInside( m_panels[aPage] );
     m_panels[aPage]->m_scrolledWindow->SetSize( m_panels[aPage]->GetSize().GetWidth() - 6,
-                                                 m_panels[aPage]->GetSize().GetHeight() - 6 );
+                                                m_panels[aPage]->GetSize().GetHeight() - 6 );
     m_panels[aPage]->m_SizerChoice->FitInside( m_panels[aPage]->m_scrolledWindow );
 
     m_notebook->Refresh();
@@ -153,6 +159,7 @@ PROJECT_TEMPLATE* DIALOG_TEMPLATE_SELECTOR::GetSelectedTemplate()
 {
     return m_selectedWidget? m_selectedWidget->GetTemplate() : NULL;
 }
+
 
 void DIALOG_TEMPLATE_SELECTOR::AddTemplatesPage( const wxString& aTitle, wxFileName& aPath )
 {
@@ -172,30 +179,36 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplatesPage( const wxString& aTitle, wxFileN
     buildPageContent( path, m_notebook->GetPageCount() - 1 );
 }
 
+
 void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPage )
 {
     // Get a list of files under the template path to include as choices...
-    wxArrayString   files;
     wxDir           dir;
 
     if( dir.Open( aPath ) )
     {
-        wxDir       sub_dir;
-        wxString    sub_name;
-
-        bool cont = dir.GetFirst( &sub_name, wxEmptyString, wxDIR_DIRS );
-        while( cont )
+        if( dir.HasSubDirs( "meta" ) )
         {
-            wxString sub_full = aPath + sub_name;
-            if( sub_dir.Open( sub_full ) )
+            AddTemplate( aPage, new PROJECT_TEMPLATE( aPath ) );
+        }
+        else
+        {
+            wxDir       sub_dir;
+            wxString    sub_name;
+
+            bool cont = dir.GetFirst( &sub_name, wxEmptyString, wxDIR_DIRS );
+
+            while( cont )
             {
-                files.Add( sub_name );
+                wxString sub_full = aPath + sub_name;
 
-                PROJECT_TEMPLATE* pt = new PROJECT_TEMPLATE( sub_full );
-                AddTemplate( aPage, pt );
+                if( sub_dir.Open( sub_full ) )
+                {
+                    AddTemplate( aPage, new PROJECT_TEMPLATE( sub_full ) );
+                }
+
+                cont = dir.GetNext( &sub_name );
             }
-
-            cont = dir.GetNext( &sub_name );
         }
     }
 }
@@ -270,5 +283,5 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
 void DIALOG_TEMPLATE_SELECTOR::OnHtmlLinkActivated( wxHtmlLinkEvent& event )
 {
     wxString url = event.GetLinkInfo().GetHref();
-    wxLaunchDefaultBrowser( url);
+    wxLaunchDefaultBrowser( url );
 }
