@@ -27,7 +27,7 @@
 #include <wx/evtloop.h>
 #include <pgm_base.h>
 #include <eda_rect.h>
-
+#include <wx/display.h>
 
 /// Toggle a window's "enable" status to disabled, then enabled on destruction.
 class WDO_ENABLE_DISABLE
@@ -178,6 +178,12 @@ bool DIALOG_SHIM::Show( bool show )
                      std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ),
                      0 );
         }
+
+        // Be sure that the dialog appears in a visible area
+        // (the dialog position might have been stored at the time when it was
+        // shown on another display)
+        if( wxDisplay::GetFromWindow( this ) == wxNOT_FOUND )
+            Centre();
     }
     else
     {
