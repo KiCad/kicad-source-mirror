@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -284,6 +284,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
+    GetGalCanvas()->GetView()->Clear();
+
     GetGerberLayout()->GetImagesList()->DeleteAllImages();
     delete m_gerberLayout;
 }
@@ -291,17 +293,17 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    GetGalCanvas()->GetView()->Clear();
+    GetGalCanvas()->StopDrawing();
+
     if( m_toolManager )
         m_toolManager->DeactivateTool();
 
     if( IsGalCanvasActive() )
     {
-        GetGalCanvas()->GetView()->Clear();
         // Be sure any OpenGL event cannot be fired after frame deletion:
         GetGalCanvas()->SetEvtHandlerEnabled( false );
     }
-
-    GetGalCanvas()->StopDrawing();
 
     Destroy();
 }
