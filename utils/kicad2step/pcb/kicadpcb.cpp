@@ -28,6 +28,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <memory>
 
 #include "kicadpcb.h"
 #include "sexpr/sexpr.h"
@@ -143,9 +144,9 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
     {
         SEXPR::PARSER parser;
         std::string infile( fname.GetFullPath().ToUTF8() );
-        SEXPR::SEXPR* data = parser.ParseFromFile( infile );
+        std::unique_ptr<SEXPR::SEXPR> data( parser.ParseFromFile( infile ) );
 
-        if( NULL == data )
+        if( !data )
         {
             std::ostringstream ostr;
             ostr << "* no data in file: '" << aFileName.ToUTF8() << "'\n";
@@ -154,9 +155,8 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
             return false;
         }
 
-        if( !parsePCB( data ) )
+        if( !parsePCB( data.get() ) )
             return false;
-
     }
     catch( std::exception& e )
     {

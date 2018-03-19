@@ -134,25 +134,6 @@ const BOX2I SELECTION::ViewBBox() const
     BOX2I r;
     r.SetMaximum();
     return r;
-    EDA_RECT eda_bbox;
-
-    if( Size() == 1 )
-    {
-        eda_bbox = Front()->GetBoundingBox();
-    }
-    else if( Size() > 1 )
-    {
-        eda_bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
-
-        for( ; i != m_items.end(); ++i )
-        {
-            eda_bbox.Merge( (*i)->GetBoundingBox() );
-        }
-    }
-
-    return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
 }
 
 

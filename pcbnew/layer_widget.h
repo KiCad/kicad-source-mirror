@@ -108,9 +108,11 @@ public:
 
         ROW()
         {
-            spacer = true;
-            color = COLOR4D::UNSPECIFIED;
             id = 0;
+            color = COLOR4D::UNSPECIFIED;
+            state = true;
+            changeable = true;
+            spacer = true;
         }
     };
 

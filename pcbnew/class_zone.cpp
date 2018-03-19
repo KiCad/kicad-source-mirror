@@ -55,6 +55,9 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = ZFM_POLYGONS;
+    m_hatchStyle = DIAGONAL_EDGE;
+    m_hatchPitch = GetDefaultHatchPitch();
+    m_hv45 = false;
     m_priority = 0;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
     SetIsKeepout( false );

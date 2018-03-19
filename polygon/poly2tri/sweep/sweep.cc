@@ -736,6 +736,10 @@ Triangle& Sweep::NextFlipTriangle(SweepContext& tcx, int o, Triangle& t, Triangl
   if (o == CCW) {
     // ot is not crossing edge after flip
     int edge_index = ot.EdgeIndex(&p, &op);
+
+    if(edge_index < 0)
+      throw std::runtime_error("Edge not found in the triangle");
+
     ot.delaunay_edge[edge_index] = true;
     Legalize(tcx, ot);
     ot.ClearDelunayEdges();
@@ -744,6 +748,9 @@ Triangle& Sweep::NextFlipTriangle(SweepContext& tcx, int o, Triangle& t, Triangl
 
   // t is not crossing edge after flip
   int edge_index = t.EdgeIndex(&p, &op);
+
+  if(edge_index < 0)
+    throw std::runtime_error("Edge not found in the triangle");
 
   t.delaunay_edge[edge_index] = true;
   Legalize(tcx, t);

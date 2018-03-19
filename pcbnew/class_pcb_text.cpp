@@ -68,7 +68,7 @@ void TEXTE_PCB::SetTextAngle( double aAngle )
 void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                       GR_DRAWMODE DrawMode, const wxPoint& offset )
 {
-     wxASSERT( panel );
+    wxASSERT( panel );
 
     if( !panel )
         return;
@@ -78,16 +78,11 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
+    auto frame = static_cast<PCB_EDIT_FRAME*>( panel->GetParent() );
     auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     EDA_DRAW_MODE_T fillmode = FILLED;
-    PCB_DISPLAY_OPTIONS* displ_opts = nullptr;
-
-    if( panel )
-    {
-        displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-    }
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     if( displ_opts && displ_opts->m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;
@@ -106,8 +101,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( brd->IsElementVisible( LAYER_ANCHOR ) )
         anchor_color = frame->Settings().Colors().GetItemColor( LAYER_ANCHOR );
 
-    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    EDA_TEXT::Draw( clipbox, DC, offset, color,
+    EDA_TEXT::Draw( panel->GetClipBox(), DC, offset, color,
                     DrawMode, fillmode, anchor_color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
