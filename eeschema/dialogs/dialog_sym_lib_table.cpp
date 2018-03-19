@@ -550,8 +550,8 @@ void DIALOG_SYMBOL_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 
 bool DIALOG_SYMBOL_LIB_TABLE::TransferDataFromWindow()
 {
-    // stuff any pending cell editor text into the table.
-    m_cur_grid->SaveEditControlValue();
+    // Commit any pending in-place edits and close the editor
+    m_cur_grid->DisableCellEditControl();
 
     if( !wxDialog::TransferDataFromWindow() || !verifyTables() )
         return false;

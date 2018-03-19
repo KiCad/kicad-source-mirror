@@ -582,7 +582,7 @@ private:
         int dialogRet = 0;
 
         // stuff any pending cell editor text into the table.
-        m_cur_grid->SaveEditControlValue();
+        m_cur_grid->DisableCellEditControl();
 
         if( verifyTables() )
         {
