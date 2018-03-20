@@ -988,8 +988,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     }
     else
     {
-        padHalfsize.x = aPad->GetSize().x >> 1;
-        padHalfsize.y = aPad->GetSize().y >> 1;
+        padHalfsize = aPad->GetSize() / 2;
     }
 
     if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )     // The size is bigger, due to GetDelta() extra size
@@ -1017,7 +1016,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     m_xcliphi = m_padToTestPos.x + distToLine + padHalfsize.x;
     m_ycliphi = m_padToTestPos.y + distToLine + padHalfsize.y;
 
-    wxPoint startPoint;
+    wxPoint startPoint( 0, 0 );
     wxPoint endPoint = m_segmEnd;
 
     double orient = aPad->GetOrientation();
@@ -1073,12 +1072,13 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
             // is (radius + distToLine)*2
             m_xcliplo = cstart.x - distToLine - radius;
             m_ycliplo = cstart.y;
-            m_xcliphi = cend.x + distToLine +radius;
+            m_xcliphi = cend.x + distToLine + radius;
             m_ycliphi = cend.y;
         }
 
         // Test the rectangular clearance area between the two circles (the rounded ends)
-        if( !checkLine( startPoint, endPoint ) )
+        // If the segment legth is zero, only check the endpoints, skip the rectangle
+        if( m_segmLength && !checkLine( startPoint, endPoint ) )
         {
             return false;
         }
@@ -1264,6 +1264,21 @@ bool DRC::checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength )
 static inline int USCALE( unsigned arg, unsigned num, unsigned den )
 {
     int ii;
+    double result;
+
+    // Trivial check first
+    if( !arg || !num)
+        return 0;
+
+    // If arg and num are both non-zero but den is zero, we return effective infinite
+    if( !den )
+        return INT_MAX;
+
+    result = ( (double) arg * num ) / den;
+
+    // Ensure that our result doesn't overflow into the sign bit
+    if( result > INT_MAX )
+        return INT_MAX;
 
     ii = KiROUND( ( (double) arg * num ) / den );
     return ii;
@@ -1284,14 +1299,14 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
     if( aSegStart.x > aSegEnd.x )
         std::swap( aSegStart, aSegEnd );
 
-    if( (aSegEnd.x < m_xcliplo) || (aSegStart.x > m_xcliphi) )
+    if( (aSegEnd.x <= m_xcliplo) || (aSegStart.x >= m_xcliphi) )
     {
         WHEN_OUTSIDE;
     }
 
     if( aSegStart.y < aSegEnd.y )
     {
-        if( (aSegEnd.y < m_ycliplo) || (aSegStart.y > m_ycliphi) )
+        if( (aSegEnd.y <= m_ycliplo) || (aSegStart.y >= m_ycliphi) )
         {
             WHEN_OUTSIDE;
         }
@@ -1301,7 +1316,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
             temp = USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegStart.y),
                            (aSegEnd.y - aSegStart.y) );
 
-            if( (aSegStart.x += temp) > m_xcliphi )
+            if( (aSegStart.x += temp) >= m_xcliphi )
             {
                 WHEN_OUTSIDE;
             }
@@ -1315,7 +1330,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
             temp = USCALE( (aSegEnd.x - aSegStart.x), (aSegEnd.y - m_ycliphi),
                            (aSegEnd.y - aSegStart.y) );
 
-            if( (aSegEnd.x -= temp) < m_xcliplo )
+            if( (aSegEnd.x -= temp) <= m_xcliplo )
             {
                 WHEN_OUTSIDE;
             }
@@ -1344,7 +1359,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
     }
     else
     {
-        if( (aSegStart.y < m_ycliplo) || (aSegEnd.y > m_ycliphi) )
+        if( (aSegStart.y <= m_ycliplo) || (aSegEnd.y >= m_ycliphi) )
         {
             WHEN_OUTSIDE;
         }
@@ -1354,7 +1369,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
             temp = USCALE( (aSegEnd.x - aSegStart.x), (aSegStart.y - m_ycliphi),
                            (aSegStart.y - aSegEnd.y) );
 
-            if( (aSegStart.x += temp) > m_xcliphi )
+            if( (aSegStart.x += temp) >= m_xcliphi )
             {
                 WHEN_OUTSIDE;
             }
@@ -1368,7 +1383,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
             temp = USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegEnd.y),
                            (aSegStart.y - aSegEnd.y) );
 
-            if( (aSegEnd.x -= temp) < m_xcliplo )
+            if( (aSegEnd.x -= temp) <= m_xcliplo )
             {
                 WHEN_OUTSIDE;
             }
@@ -1396,10 +1411,11 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
         }
     }
 
-    if( ( (aSegEnd.x + aSegStart.x) / 2 <= m_xcliphi )
-       && ( (aSegEnd.x + aSegStart.x) / 2 >= m_xcliplo ) \
-       && ( (aSegEnd.y + aSegStart.y) / 2 <= m_ycliphi )
-       && ( (aSegEnd.y + aSegStart.y) / 2 >= m_ycliplo ) )
+    // Do not divide here to avoid rounding errors
+    if( ( (aSegEnd.x + aSegStart.x) < m_xcliphi * 2 )
+       && ( (aSegEnd.x + aSegStart.x) > m_xcliplo * 2) \
+       && ( (aSegEnd.y + aSegStart.y) < m_ycliphi * 2 )
+       && ( (aSegEnd.y + aSegStart.y) > m_ycliplo * 2 ) )
     {
         return false;
     }
