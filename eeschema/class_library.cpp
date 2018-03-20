@@ -545,28 +545,13 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
 
 const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 {
-    /* until apr 2009 the project cache lib was named: <root_name>.cache.lib,
-     * and after: <root_name>-cache.lib.  So if the <name>-cache.lib is not found,
-     * the old file will be renamed and returned.
-     */
-    wxFileName  new_name = aFullProjectFilename;
+    wxFileName  name = aFullProjectFilename;
 
-    new_name.SetName( new_name.GetName() + "-cache" );
-    new_name.SetExt( SchematicLibraryFileExtension );
+    name.SetName( name.GetName() + "-cache" );
+    name.SetExt( SchematicLibraryFileExtension );
 
-    if( new_name.FileExists() )
-        return new_name.GetFullPath();
-    else
-    {
-        wxFileName old_name = aFullProjectFilename;
-        old_name.SetExt( "cache.lib" );
-
-        if( old_name.FileExists() )
-        {
-            wxRenameFile( old_name.GetFullPath(), new_name.GetFullPath() );
-            return new_name.GetFullPath();
-        }
-    }
+    if( name.FileExists() )
+        return name.GetFullPath();
 
     return wxEmptyString;
 }

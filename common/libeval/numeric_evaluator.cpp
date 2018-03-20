@@ -62,6 +62,9 @@ NumericEvaluator :: NumericEvaluator() : pClParser(0)
 
    bClTextInputStorage = true;
 
+   bClError = false;
+   bClParseFinished = false;
+
    init();
 }
 

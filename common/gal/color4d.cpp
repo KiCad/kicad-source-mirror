@@ -190,11 +190,12 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
             for( EDA_COLOR_T candidate = ::BLACK;
                     candidate < NBCOLORS; candidate = NextColor( candidate ) )
             {
-                double ch, cs, cv;
+                double ch;
 
                 if( hues[candidate] == 0.0 && values[candidate] == 0.0 )
                 {
                     COLOR4D candidate4d( candidate );
+                    double cs, cv;
 
                     candidate4d.ToHSV( ch, cs, cv );
 
@@ -205,8 +206,6 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
                 else
                 {
                     ch = hues[candidate];
-                    cv = values[candidate];
-                    cv = 0.0;
                 }
 
                 if( fabs( ch - h ) < minDist )

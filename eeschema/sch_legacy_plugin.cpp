@@ -1757,32 +1757,32 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
         switch( item->Type() )
         {
         case SCH_COMPONENT_T:
-            saveComponent( dynamic_cast< SCH_COMPONENT* >( item ) );
+            saveComponent( static_cast< SCH_COMPONENT* >( item ) );
             break;
         case SCH_BITMAP_T:
-            saveBitmap( dynamic_cast< SCH_BITMAP* >( item ) );
+            saveBitmap( static_cast< SCH_BITMAP* >( item ) );
             break;
         case SCH_SHEET_T:
-            saveSheet( dynamic_cast< SCH_SHEET* >( item ) );
+            saveSheet( static_cast< SCH_SHEET* >( item ) );
             break;
         case SCH_JUNCTION_T:
-            saveJunction( dynamic_cast< SCH_JUNCTION* >( item ) );
+            saveJunction( static_cast< SCH_JUNCTION* >( item ) );
             break;
         case SCH_NO_CONNECT_T:
-            saveNoConnect( dynamic_cast< SCH_NO_CONNECT* >( item ) );
+            saveNoConnect( static_cast< SCH_NO_CONNECT* >( item ) );
             break;
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
-            saveBusEntry( dynamic_cast< SCH_BUS_ENTRY_BASE* >( item ) );
+            saveBusEntry( static_cast< SCH_BUS_ENTRY_BASE* >( item ) );
             break;
         case SCH_LINE_T:
-            saveLine( dynamic_cast< SCH_LINE* >( item ) );
+            saveLine( static_cast< SCH_LINE* >( item ) );
             break;
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIERARCHICAL_LABEL_T:
-            saveText( dynamic_cast< SCH_TEXT* >( item ) );
+            saveText( static_cast< SCH_TEXT* >( item ) );
             break;
         default:
             wxASSERT( "Unexpected schematic object type in SCH_LEGACY_PLUGIN::Format()" );

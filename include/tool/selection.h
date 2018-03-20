@@ -35,7 +35,10 @@
 class SELECTION : public KIGFX::VIEW_GROUP
 {
 public:
-    SELECTION() {};
+    SELECTION()
+    {
+        m_isHover = false;
+    }
 
     SELECTION( const SELECTION& aOther )
     {

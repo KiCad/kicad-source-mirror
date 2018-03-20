@@ -84,6 +84,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness = aZone.m_ZoneMinThickness;
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
+    m_hv45 = aZone.m_hv45;
     m_priority = aZone.m_priority;
     m_ArcToSegmentsCount = aZone.m_ArcToSegmentsCount;
     m_PadConnection = aZone.m_PadConnection;
