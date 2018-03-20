@@ -174,6 +174,7 @@ private:
     bool     m_doFootprintOverlapping;
     bool     m_doNoCourtyardDefined;
     bool     m_refillZones;
+    bool     m_reportAllTrackErrors;
 
     wxString m_rptFilename;
 
@@ -501,12 +502,14 @@ public:
      * @param aKeepoutTest Tells whether to test keepout areas.
      * @param aCourtyardTest Tells whether to test footprint courtyard overlap.
      * @param aCourtyardMissingTest Tells whether to test missing courtyard definition in footprint.
+     * @param aReportAllTrackErrors Tells whether or not to stop checking track connections after the first error.
      * @param aReportName A string telling the disk file report name entered.
      * @param aSaveReport A boolean telling whether to generate disk file report.
      */
     void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
                       bool aZonesTest, bool aKeepoutTest, bool aRefillZones,
                       bool aCourtyardTest, bool aCourtyardMissingTest,
+                      bool aReportAllTrackErrors,
                       const wxString& aReportName, bool aSaveReport )
     {
         m_doPad2PadTest         = aPad2PadTest;
@@ -518,6 +521,7 @@ public:
         m_doFootprintOverlapping = aCourtyardTest;
         m_doNoCourtyardDefined  = aCourtyardMissingTest;
         m_refillZones           = aRefillZones;
+        m_reportAllTrackErrors  = aReportAllTrackErrors;
     }
 
 

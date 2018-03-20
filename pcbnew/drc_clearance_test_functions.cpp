@@ -141,6 +141,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     LSET layerMask;
     int       net_code_ref;
     wxPoint   shape_pos;
+    bool      success = true;
 
     NETCLASSPTR netclass = aRefSeg->GetNetClass();
     BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
@@ -165,30 +166,44 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         {
             if( refvia->GetWidth() < dsnSettings.m_MicroViasMinSize )
             {
-                m_currentMarker = fillMarker( refvia, NULL,
-                                              DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( refvia, NULL,
+                                            DRCE_TOO_SMALL_MICROVIA, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
+
             if( refvia->GetDrillValue() < dsnSettings.m_MicroViasMinDrill )
             {
-                m_currentMarker = fillMarker( refvia, NULL,
-                                              DRCE_TOO_SMALL_MICROVIA_DRILL, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( refvia, NULL,
+                                            DRCE_TOO_SMALL_MICROVIA_DRILL, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
         }
         else
         {
             if( refvia->GetWidth() < dsnSettings.m_ViasMinSize )
             {
-                m_currentMarker = fillMarker( refvia, NULL,
-                                              DRCE_TOO_SMALL_VIA, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( refvia, NULL,
+                                            DRCE_TOO_SMALL_VIA, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
+
             if( refvia->GetDrillValue() < dsnSettings.m_ViasMinDrill )
             {
-                m_currentMarker = fillMarker( refvia, NULL,
-                                              DRCE_TOO_SMALL_VIA_DRILL, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( refvia, NULL,
+                                            DRCE_TOO_SMALL_VIA_DRILL, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
         }
 
@@ -197,27 +212,36 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // and a default via hole can be bigger than some vias sizes
         if( refvia->GetDrillValue() > refvia->GetWidth() )
         {
-            m_currentMarker = fillMarker( refvia, NULL,
-                                          DRCE_VIA_HOLE_BIGGER, m_currentMarker );
-            return false;
+            addMarkerToPcb( fillMarker( refvia, NULL,
+                                        DRCE_VIA_HOLE_BIGGER, nullptr ) );
+            success = false;
+
+            if( !m_reportAllTrackErrors )
+                return false;
         }
 
         // test if the type of via is allowed due to design rules
         if( ( refvia->GetViaType() == VIA_MICROVIA ) &&
             ( m_pcb->GetDesignSettings().m_MicroViasAllowed == false ) )
         {
-            m_currentMarker = fillMarker( refvia, NULL,
-                    DRCE_MICRO_VIA_NOT_ALLOWED, m_currentMarker );
-            return false;
+            addMarkerToPcb( fillMarker( refvia, NULL,
+                                        DRCE_MICRO_VIA_NOT_ALLOWED, nullptr ) );
+            success = false;
+
+            if( !m_reportAllTrackErrors )
+                return false;
         }
 
         // test if the type of via is allowed due to design rules
         if( ( refvia->GetViaType() == VIA_BLIND_BURIED ) &&
             ( m_pcb->GetDesignSettings().m_BlindBuriedViaAllowed == false ) )
         {
-            m_currentMarker = fillMarker( refvia, NULL,
-                    DRCE_BURIED_VIA_NOT_ALLOWED, m_currentMarker );
-            return false;
+            addMarkerToPcb( fillMarker( refvia, NULL,
+                                        DRCE_BURIED_VIA_NOT_ALLOWED, nullptr ) );
+            success = false;
+
+            if( !m_reportAllTrackErrors )
+                return false;
         }
 
         // For microvias: test if they are blind vias and only between 2 layers
@@ -242,9 +266,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             if( err )
             {
-                m_currentMarker = fillMarker( refvia, NULL,
-                                              DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( refvia, NULL,
+                                            DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
         }
 
@@ -253,9 +280,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     {
         if( aRefSeg->GetWidth() < dsnSettings.m_TrackMinWidth )
         {
-            m_currentMarker = fillMarker( aRefSeg, NULL,
-                                          DRCE_TOO_SMALL_TRACK_WIDTH, m_currentMarker );
-            return false;
+            addMarkerToPcb( fillMarker( aRefSeg, NULL,
+                                        DRCE_TOO_SMALL_TRACK_WIDTH, nullptr ) );
+            success = false;
+
+            if( !m_reportAllTrackErrors )
+                return false;
         }
     }
 
@@ -325,9 +355,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 if( !checkClearanceSegmToPad( &dummypad, aRefSeg->GetWidth(),
                                               netclass->GetClearance() ) )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, pad,
-                                                  DRCE_TRACK_NEAR_THROUGH_HOLE, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, pad,
+                                                DRCE_TRACK_NEAR_THROUGH_HOLE, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
 
                 continue;
@@ -343,11 +376,15 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             shape_pos = pad->ShapePos();
             m_padToTestPos = shape_pos - origin;
 
-            if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(), aRefSeg->GetClearance( pad ) ) )
+            if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(),
+                                          aRefSeg->GetClearance( pad ) ) )
             {
-                m_currentMarker = fillMarker( aRefSeg, pad,
-                                              DRCE_TRACK_NEAR_PAD, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( aRefSeg, pad,
+                                            DRCE_TRACK_NEAR_PAD, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
         }
     }
@@ -361,6 +398,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     // Test the reference segment with other track segments
     wxPoint segStartPoint;
     wxPoint segEndPoint;
+
     for( track = aStart; track; track = track->Next() )
     {
         // No problem if segments have the same net code:
@@ -394,9 +432,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 // Test distance between two vias, i.e. two circles, trivial case
                 if( EuclideanNorm( segStartPoint ) < w_dist )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
-                                                  DRCE_VIA_NEAR_VIA, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                DRCE_VIA_NEAR_VIA, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
             }
             else    // test via to segment
@@ -410,9 +451,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                 if( !checkMarginToCircle( segStartPoint, w_dist, delta.x ) )
                 {
-                    m_currentMarker = fillMarker( track, aRefSeg,
-                                                  DRCE_VIA_NEAR_TRACK, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( track, aRefSeg,
+                                                DRCE_VIA_NEAR_TRACK, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
             }
 
@@ -432,9 +476,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 continue;
 
-            m_currentMarker = fillMarker( aRefSeg, track,
-                                          DRCE_TRACK_NEAR_VIA, m_currentMarker );
-            return false;
+            addMarkerToPcb( fillMarker( aRefSeg, track,
+                                        DRCE_TRACK_NEAR_VIA, nullptr ) );
+            success = false;
+
+            if( !m_reportAllTrackErrors )
+                return false;
         }
 
         /*	We have changed axis:
@@ -459,16 +506,22 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 // Fine test : we consider the rounded shape of each end of the track segment:
                 if( segStartPoint.x >= 0 && segStartPoint.x <= m_segmLength )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
-                                                  DRCE_TRACK_ENDS1, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                DRCE_TRACK_ENDS1, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
 
                 if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
-                                                  DRCE_TRACK_ENDS2, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                DRCE_TRACK_ENDS2, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
             }
 
@@ -480,16 +533,22 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 // Fine test : we consider the rounded shape of the ends
                 if( segEndPoint.x >= 0 && segEndPoint.x <= m_segmLength )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
-                                                  DRCE_TRACK_ENDS3, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                DRCE_TRACK_ENDS3, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
 
                 if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
-                                                  DRCE_TRACK_ENDS4, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                DRCE_TRACK_ENDS4, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
             }
 
@@ -500,9 +559,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             // handled)
             //  X.............X
             //    O--REF--+
-                m_currentMarker = fillMarker( aRefSeg, track,
-                                              DRCE_TRACK_SEGMENTS_TOO_CLOSE, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( aRefSeg, track,
+                                            DRCE_TRACK_SEGMENTS_TOO_CLOSE, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
         }
         else if( segStartPoint.x == segEndPoint.x ) // perpendicular segments
@@ -514,25 +576,34 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( segStartPoint.y > segEndPoint.y )
                 std::swap( segStartPoint.y, segEndPoint.y );
 
-            if( (segStartPoint.y < 0) && (segEndPoint.y > 0) )
+            if( ( segStartPoint.y < 0 ) && ( segEndPoint.y > 0 ) )
             {
-                m_currentMarker = fillMarker( aRefSeg, track,
-                                              DRCE_TRACKS_CROSSING, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( aRefSeg, track,
+                                            DRCE_TRACKS_CROSSING, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
 
             // At this point the drc error is due to an end near a reference segm end
             if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
             {
-                m_currentMarker = fillMarker( aRefSeg, track,
-                                              DRCE_ENDS_PROBLEM1, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( aRefSeg, track,
+                                            DRCE_ENDS_PROBLEM1, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
             if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
             {
-                m_currentMarker = fillMarker( aRefSeg, track,
-                                              DRCE_ENDS_PROBLEM2, m_currentMarker );
-                return false;
+                addMarkerToPcb( fillMarker( aRefSeg, track,
+                                            DRCE_ENDS_PROBLEM2, nullptr ) );
+                success = false;
+
+                if( !m_reportAllTrackErrors )
+                    return false;
             }
         }
         else    // segments quelconques entre eux
@@ -558,9 +629,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                 if( !checkLine( segStartPoint, segEndPoint ) )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
-                                                  DRCE_ENDS_PROBLEM3, m_currentMarker );
-                    return false;
+                    addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                DRCE_ENDS_PROBLEM3, nullptr ) );
+                    success = false;
+
+                    if( !m_reportAllTrackErrors )
+                        return false;
                 }
                 else    // The drc error is due to the starting or the ending point of the reference segment
                 {
@@ -586,23 +660,29 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                     if( !checkMarginToCircle( relStartPos, w_dist, delta.x ) )
                     {
-                        m_currentMarker = fillMarker( aRefSeg, track,
-                                                      DRCE_ENDS_PROBLEM4, m_currentMarker );
-                        return false;
+                        addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                    DRCE_ENDS_PROBLEM4, nullptr ) );
+                        success = false;
+
+                        if( !m_reportAllTrackErrors )
+                            return false;
                     }
 
                     if( !checkMarginToCircle( relEndPos, w_dist, delta.x ) )
                     {
-                        m_currentMarker = fillMarker( aRefSeg, track,
-                                                      DRCE_ENDS_PROBLEM5, m_currentMarker );
-                        return false;
+                        addMarkerToPcb( fillMarker( aRefSeg, track,
+                                                    DRCE_ENDS_PROBLEM5, nullptr ) );
+                        success = false;
+
+                        if( !m_reportAllTrackErrors )
+                            return false;
                     }
                 }
             }
         }
     }
 
-    return true;
+    return success;
 }
 
 

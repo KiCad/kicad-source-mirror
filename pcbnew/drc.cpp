@@ -135,6 +135,7 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_abortDRC = false;
     m_drcInProgress = false;
     m_refillZones = false;            // Only fill zones if requested by user.
+    m_reportAllTrackErrors = false;
     m_doCreateRptFile = false;
 
     // m_rptFilename set to empty by its constructor
@@ -165,9 +166,9 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 
     if( !doTrackDrc( aRefSegm, aList, true ) )
     {
-        wxASSERT( m_currentMarker );
+        if( m_currentMarker )
+            m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
 
-        m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
         return BAD_DRC;
     }
 
@@ -711,9 +712,11 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 
         if( !doTrackDrc( segm, segm->Next(), true ) )
         {
-            wxASSERT( m_currentMarker );
-            addMarkerToPcb ( m_currentMarker );
-            m_currentMarker = nullptr;
+            if( m_currentMarker )
+            {
+                addMarkerToPcb ( m_currentMarker );
+                m_currentMarker = nullptr;
+            }
         }
     }
 

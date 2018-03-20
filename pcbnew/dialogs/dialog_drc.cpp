@@ -220,6 +220,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
                            m_cbRefillZones->GetValue(),
                            m_cbCourtyardOverlap->GetValue(),
                            m_cbCourtyardMissing->GetValue(),
+                           m_cbReportAllTrackErrors->GetValue(),
                            reportName, make_report );
 
     DelDRCMarkers();
@@ -294,6 +295,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
                            m_cbRefillZones->GetValue(),
                            m_cbCourtyardOverlap->GetValue(),
                            m_cbCourtyardMissing->GetValue(),
+                           m_cbReportAllTrackErrors->GetValue(),
                            reportName, make_report );
 
     DelDRCMarkers();
