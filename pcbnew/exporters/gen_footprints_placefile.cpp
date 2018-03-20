@@ -584,10 +584,15 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             LAYER_NUM layer = list[ii].m_Module->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
-            const wxString& ref = list[ii].m_Reference;
-            const wxString& val = list[ii].m_Value;
-            const wxString& pkg = list[ii].m_Module->GetFPID().GetLibItemName();
+            if( layer == B_Cu )
+                footprint_pos.x = - footprint_pos.x;
 
+            wxString ref = list[ii].m_Reference;
+            wxString val = list[ii].m_Value;
+            wxString pkg = list[ii].m_Module->GetFPID().GetLibItemName();
+            ref.Replace( wxT( " " ), wxT( "_" ) );
+            val.Replace( wxT( " " ), wxT( "_" ) );
+            pkg.Replace( wxT( " " ), wxT( "_" ) );
             fprintf(file, "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
                     lenRefText, TO_UTF8( ref ),
                     lenValText, TO_UTF8( val ),
