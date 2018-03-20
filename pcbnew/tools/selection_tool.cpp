@@ -124,7 +124,8 @@ TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ),
         _( "Get and Move Footprint" ),
-        _( "Selects a footprint by reference and places it under the cursor for moving"));
+        _( "Selects a footprint by reference and places it under the cursor for moving"),
+        move_xpm );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0,
