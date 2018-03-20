@@ -27,6 +27,8 @@
 
 #include <macros.h>
 
+class MARKER_BASE;
+
 
 /**
  * Class DRC_ITEM
@@ -51,6 +53,9 @@ protected:
     bool     m_hasSecondItem;                   ///< true when 2 items create a DRC/ERC error, false if only one item
     bool     m_noCoordinate;
 
+    /// The marker this item belongs to, if any
+    MARKER_BASE* m_parent;
+
 public:
 
     DRC_ITEM()
@@ -58,6 +63,7 @@ public:
         m_ErrorCode     = 0;
         m_hasSecondItem = false;
         m_noCoordinate = false;
+        m_parent = nullptr;
     }
 
     DRC_ITEM( int aErrorCode,
@@ -127,6 +133,9 @@ public:
         m_hasSecondItem     = true;
     }
 
+    void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
+
+    MARKER_BASE* GetParent() const { return m_parent; }
 
     bool HasSecondItem() const { return m_hasSecondItem; }
 

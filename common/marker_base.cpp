@@ -137,6 +137,7 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
     m_Pos = aMarkerPos;
     m_drc.SetData( aErrorCode,
                    aText, bText, aPos, bPos );
+    m_drc.SetParent( this );
 }
 
 
@@ -146,6 +147,7 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
     m_Pos = aMarkerPos;
     m_drc.SetData( aErrorCode,
                    aText, aPos );
+    m_drc.SetParent( this );
 }
 
 
