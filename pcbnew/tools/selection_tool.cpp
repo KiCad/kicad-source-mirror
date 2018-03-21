@@ -1577,10 +1577,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             }
 
             // For vias it is enough if only one of its layers is visible
-            PCB_LAYER_ID top, bottom;
-            via->LayerPair( &top, &bottom );
-
-            return board()->IsLayerVisible( top ) || board()->IsLayerVisible( bottom );
+            return ( board()->GetVisibleLayers() & via->GetLayerSet() ).any();
         }
         break;
 
