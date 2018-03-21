@@ -195,10 +195,6 @@ private:
      */
     void                ParametersUpdated( wxGridEvent& event );
 
-    void                OnParameterCellClick( wxGridEvent& event );
-
-    void                OnParameterGridKeyPress( wxKeyEvent& event );
-
     bool                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
 
     /**

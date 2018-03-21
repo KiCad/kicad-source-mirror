@@ -57,10 +57,63 @@ GRID_TRICKS::GRID_TRICKS( wxGrid* aGrid ):
     m_sel_row_count = 0;
     m_sel_col_count = 0;
 
+    aGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), NULL, this );
+    aGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), NULL, this );
     aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), NULL, this );
     aGrid->Connect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), NULL, this );
     aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), NULL, this );
     aGrid->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( GRID_TRICKS::onRightDown ), NULL, this );
+}
+
+
+bool GRID_TRICKS::toggleCell( int aRow, int aCol )
+{
+    auto renderer = m_grid->GetCellRenderer( aRow, aCol );
+    bool isCheckbox = ( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) != nullptr );
+    renderer->DecRef();
+
+    if( isCheckbox )
+    {
+        wxGridTableBase* model = m_grid->GetTable();
+
+        if( model->CanGetValueAs( aRow, aCol, wxGRID_VALUE_BOOL )
+                && model->CanSetValueAs( aRow, aCol, wxGRID_VALUE_BOOL ))
+        {
+            model->SetValueAsBool( aRow, aCol, !model->GetValueAsBool( aRow, aCol ));
+        }
+        else    // fall back to string processing
+        {
+            if( model->GetValue( aRow, aCol )  == wxT( "1" ) )
+                model->SetValue( aRow, aCol, wxT( "0" ) );
+            else
+                model->SetValue( aRow, aCol, wxT( "1" ) );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
+void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+    int col = aEvent.GetCol();
+
+    // Don't make users click twice to toggle a checkbox
+
+    if( !aEvent.GetModifiers() && toggleCell( row, col ) )
+    {
+        m_grid->ClearSelection();
+        m_grid->SetGridCursor( row, col );
+
+        // eat event
+    }
+    else
+    {
+        aEvent.Skip();
+    }
 }
 
 
@@ -178,26 +231,39 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     if( isCtl( 'A', ev ) )
     {
         m_grid->SelectAll();
+        return;
     }
     else if( isCtl( 'C', ev ) )
     {
         getSelectedArea();
         cutcopy( false );
+        return;
     }
     else if( isCtl( 'V', ev ) )
     {
         getSelectedArea();
         paste_clipboard();
+        return;
     }
     else if( isCtl( 'X', ev ) )
     {
         getSelectedArea();
         cutcopy( true );
+        return;
     }
-    else
+    else if( ev.GetKeyCode() == ' ' )
     {
-        ev.Skip( true );
+        int row = m_grid->GetCursorRow();
+        int col = m_grid->GetCursorColumn();
+
+        if( m_grid->IsVisible( row, col ) && toggleCell( row, col ) )
+        {
+            m_grid->ForceRefresh();
+            return;
+        }
     }
+
+    ev.Skip( true );
 }
 
 

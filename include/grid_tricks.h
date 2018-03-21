@@ -70,6 +70,8 @@ protected:
         return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
     }
 
+    void onGridCellLeftClick( wxGridEvent& event );
+
     void onGridCellRightClick( wxGridEvent& event )
     {
         showPopupMenu();
@@ -86,6 +88,8 @@ protected:
     void onPopupSelection( wxCommandEvent& event );
 
     void onKeyDown( wxKeyEvent& ev );
+
+    bool toggleCell( int aRow, int aCol );
 
     virtual void paste_clipboard();
 

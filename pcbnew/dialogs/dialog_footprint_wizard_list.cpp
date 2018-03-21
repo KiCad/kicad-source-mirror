@@ -66,7 +66,6 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         SetSize( size );
     }
 
-
     m_sdbSizerOK->SetDefault();
     FinishDialogSettings();
 

@@ -37,6 +37,7 @@
 #include <msgpanel.h>
 #include <macros.h>
 #include <bitmaps.h>
+#include <grid_tricks.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -85,8 +86,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
     EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
     EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                                FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
-    EVT_GRID_CMD_CELL_LEFT_CLICK( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                                  FOOTPRINT_WIZARD_FRAME::OnParameterCellClick )
 
     EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
@@ -164,6 +163,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     // Creates the list of parameters for the current parameter page
     m_parameterGridPage = -1;
     initParameterGrid();
+    m_parameterGrid->PushEventHandler( new GRID_TRICKS( m_parameterGrid ) );
 
     ReCreatePageList();
 
@@ -229,6 +229,9 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
 FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 {
+    // Delete the GRID_TRICKS.
+    m_parameterGrid->PopEventHandler( true );
+
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
@@ -311,9 +314,6 @@ void  FOOTPRINT_WIZARD_FRAME::initParameterGrid()
     m_parameterGrid->Connect( wxEVT_SIZE,
                               wxSizeEventHandler( FOOTPRINT_WIZARD_FRAME::OnGridSize ),
                               NULL, this );
-    m_parameterGrid->Connect( wxEVT_KEY_UP,
-                              wxKeyEventHandler( FOOTPRINT_WIZARD_FRAME::OnParameterGridKeyPress ),
-                              NULL, this );
 }
 
 
@@ -391,14 +391,10 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
         m_parameterGrid->SetReadOnly( i, WIZ_COL_NAME );
         m_parameterGrid->SetCellAlignment( i, WIZ_COL_NAME, wxALIGN_LEFT, wxALIGN_CENTRE );
 
-        // Set the editor type of the
-
         // Boolean parameters are displayed using a checkbox
         if( units == WIZARD_PARAM_UNITS_BOOL )
         {
-            // NOTE: Not using wxGridCellBoolEditor because it doesn't work well
-            // Setting read-only to disable the grid editor; value will be
-            // updated by the OnParameterCellClick event handler.
+            // Set to ReadOnly as we delegate interactivity to GRID_TRICKS
             m_parameterGrid->SetReadOnly( i, WIZ_COL_VALUE );
             m_parameterGrid->SetCellRenderer( i, WIZ_COL_VALUE, new wxGridCellBoolRenderer );
         }
