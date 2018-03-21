@@ -1097,34 +1097,33 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
                      wxDefaultPosition, wxSize(1500,900),
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         {
-            wxStyledTextCtrl* text = new wxStyledTextCtrl(this, wxID_ANY);
+            wxStyledTextCtrl* text = new wxStyledTextCtrl( this, wxID_ANY );
 
-            text->SetMarginWidth (MARGIN_LINE_NUMBERS, 50);
-            text->StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (75, 75, 75) );
-            text->StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour (220, 220, 220));
-            text->SetMarginType (MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER);
+            text->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
+            text->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
+            text->StyleSetBackground( wxSTC_STYLE_LINENUMBER, wxColour( 220, 220, 220 ) );
+            text->SetMarginType( MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER );
 
-            text->SetWrapMode (wxSTC_WRAP_WORD);
+            text->SetWrapMode( wxSTC_WRAP_WORD );
 
             text->SetText( source );
 
             text->StyleClearAll();
-            text->SetLexer(wxSTC_LEX_SPICE);
+            text->SetLexer( wxSTC_LEX_SPICE );
 
-            wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-            sizer->Add(text, 1, wxEXPAND);
-            SetSizer(sizer);
+            wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+            sizer->Add( text, 1, wxEXPAND );
+            SetSizer( sizer );
 
-            Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(NETLIST_VIEW_DIALOG::onClose), NULL, this);
+            Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ), NULL,
+                    this );
         }
-
     };
 
     if( m_schematicFrame == NULL || m_simulator == NULL )
         return;
 
     NETLIST_VIEW_DIALOG dlg( this, m_simulator->GetNetlist() );
-
     dlg.ShowModal();
 }
 

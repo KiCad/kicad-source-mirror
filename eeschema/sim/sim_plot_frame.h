@@ -25,8 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __sim_plot_frame__
-#define __sim_plot_frame__
+#ifndef __SIM_PLOT_FRAME__
+#define __SIM_PLOT_FRAME__
 
 /**
  * @file sim_plot_frame.h
