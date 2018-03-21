@@ -734,13 +734,13 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
     // Import/export
     AddMenuItem( aParentMenu,
                  ID_CONFIG_SAVE,
-                 _( "&Save Preferences..." ),
-                 _( "Save application preferences" ),
+                 _( "&Save Project File..." ),
+                 _( "Save project preferences into a project file" ),
                  KiBitmap( save_setup_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_CONFIG_READ,
-                 _( "Load Prefe&rences..." ),
-                 _( "Load application preferences" ),
+                 _( "Load P&roject File..." ),
+                 _( "Load project preferences into a project file" ),
                  KiBitmap( import_setup_xpm ) );
 }

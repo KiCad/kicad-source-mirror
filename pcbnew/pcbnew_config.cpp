@@ -192,7 +192,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             fn = GetBoard()->GetFileName();
             fn.SetExt( ProjectFileExtension );
 
-            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+            wxFileDialog dlg( this, _( "Load Project File" ), fn.GetPath(),
                               fn.GetFullName(), ProjectFileWildcard(),
                               wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
