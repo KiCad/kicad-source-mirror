@@ -119,9 +119,10 @@ private:
     static int cbBGThreadRunning( bool is_running, int id, void* user );
     static int cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user );
 
-    void dump();
+    // Assures ngspice is in a valid state and reinitializes it if need be
+    void validate();
 
-    ///> Error flag, meaning ngspice needs to be reloaded
+    ///> Error flag indicating that ngspice needs to be reloaded
     bool m_error;
 
     ///> NGspice should be initialized only once

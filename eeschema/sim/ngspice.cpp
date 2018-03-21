@@ -50,12 +50,6 @@ NGSPICE::~NGSPICE()
 
 void NGSPICE::Init()
 {
-    if( m_error )
-    {
-        delete m_dll;
-        init_dll();
-    }
-
     Command( "reset" );
 }
 
@@ -247,6 +241,7 @@ bool NGSPICE::IsRunning()
 bool NGSPICE::Command( const string& aCmd )
 {
     LOCALE_IO c_locale;               // ngspice works correctly only with C locale
+    validate();
     m_ngSpice_Command( (char*) aCmd.c_str() );
     return true;
 }
@@ -454,12 +449,23 @@ int NGSPICE::cbBGThreadRunning( bool is_running, int id, void* user )
 int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user )
 {
     // Something went wrong, reload the dll
-    //NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
-    //sim->m_initialized = false;
-    //printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    sim->m_error = true;
 
     return 0;
 }
+
+
+void NGSPICE::validate()
+{
+    if( m_error )
+    {
+        delete m_dll;
+        m_initialized = false;
+        init_dll();
+    }
+}
+
 
 const std::string NGSPICE::GetNetlist() const
 {
