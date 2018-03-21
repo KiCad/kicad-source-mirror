@@ -613,7 +613,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
     else if( fieldNdx == FOOTPRINT )
     {
         // pick a footprint using the footprint picker.
-        wxString fpid;
+        wxString fpid = fieldValueTextCtrl->GetValue();
 
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, this );
 

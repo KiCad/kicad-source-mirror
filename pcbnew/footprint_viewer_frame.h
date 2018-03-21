@@ -64,6 +64,15 @@ public:
      */
     void ReCreateLibraryList();
 
+    /**
+     * Function ShowModal
+     *
+     * Runs the Footprint Viewer as a modal dialog.
+     * @param aFootprint an optional FPID string to initialize the viewer with and to
+     *                   return a selected footprint through.
+     */
+    bool ShowModal( wxString* aFootprint, wxWindow* aResultantFocusWindow ) override;
+
 private:
 
     wxListBox*          m_libList;               // The list of libs names

@@ -622,6 +622,24 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
+bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aResultantFocusWindow )
+{
+    if( aFootprint )
+    {
+        LIB_ID fpid( *aFootprint );
+        if( fpid.IsValid() )
+        {
+            setCurNickname( fpid.GetLibNickname() );
+            setCurFootprintName( fpid.GetLibItemName() );
+            ReCreateFootprintList();
+            SelectAndViewFootprint( NEW_PART );
+        }
+    }
+
+    return KIWAY_PLAYER::ShowModal( aFootprint, aResultantFocusWindow );
+}
+
+
 bool FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
     bool eventHandled = true;
