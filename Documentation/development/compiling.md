@@ -252,36 +252,16 @@ the dependencies from source which is a huge and frustrating undertaking.  The [
 provides packages for all of the require dependencies to build KiCad.  To setup the [MSYS2][]
 build environment, depending on your system download and run either the [MSYS2 32-bit Installer][]
 or the [MSYS2 64-bit Installer][].  After the installer is finished, update to the latest
-package versions by running the `msys2_shell.bat` file located in the MSYS2 install path and
+package versions by running the `msys2_shell.cmd` file located in the MSYS2 install path and
 running the command `pacman -Syu`.  If the msys2-runtime package is updated, close the shell
-and run `msys2_shell.bat`.
+and run `msys2_shell.cmd`.
 
-## MSYS2 the Easy Way ## {#msys2_easy}
+## Building using MSYS2 ## {#msys2_build}
 
-The easiest way to build KiCad using the [MSYS2][] build environment is to use the KiCad
-[PKGBUILD][] provided by the MSYS2 project to build package using the head of the KiCad
-development branch.  To build the KiCad package, run the `msys2_shell.bat` file located in the
-MSYS2 install path and run the following commands:
-
-    pacman -S base-devel git
-    mkdir src
-    cd src
-    git clone https://github.com/Alexpux/MINGW-packages
-    cd MinGW-packages/mingw-w64-kicad-git
-    makepkg-mingw -is
-
-This will download and install all of the build dependencies, clone the KiCad source mirror
-from GitHub, create both 32-bit and 64-bit KiCad packages depending on your MSYS setup, and
-install the newly built KiCad packages.  Please note that this build process takes a very
-long time to build even on a fast system.
-
-
-## MSYS2 the Hard Way ## {#msys2_hard}
-
-If you do not want to create KiCad packages and prefer the traditional `make && make install`
-method of building KiCad, your task is significantly more involved.  For 64 bit builds run
-the `mingw64_shell.bat` file located in the MSYS2 install path.  At the command prompt run the
-the following commands:
+The following commands assume you are building for 64-bit Windows, and that you already have
+the KiCad source code in a folder called `kicad-source` in your home directory.  See below
+for changes if you need to build for 32-bit instead.  Run `mingw64.exe` from the MSYS2
+install path. At the command prompt run the the following commands:
 
     pacman -S base-devel \
               git \
@@ -313,9 +293,10 @@ the following commands:
           ../../
     make install
 
-For 32-bit builds, run `mingw32_shell.bat` and change `x86_64` to `i686` in the package names and
+For 32-bit builds, run `mingw32.exe` and change `x86_64` to `i686` in the package names and
 change the paths in the cmake configuration from `/mingw64` to `/mingw32`.
 
+For debug builds, run the cmake command with `-DCMAKE_BUILD_TYPE=Debug` from the `build/debug` folder.
 
 ## Known MSYS2 Build Issues ## {#known_issues_msys2}
 
