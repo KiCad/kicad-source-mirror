@@ -30,8 +30,10 @@
 #include <string>
 #include <vector>
 #include <complex>
+#include <memory>
 
 class SPICE_REPORTER;
+class SPICE_SIMULATOR;
 
 typedef std::complex<double> COMPLEX;
 
@@ -42,7 +44,7 @@ public:
     virtual ~SPICE_SIMULATOR() {}
 
     ///> Creates a simulator instance of particular type (currently only ngspice is handled)
-    static SPICE_SIMULATOR* CreateInstance( const std::string& aName );
+    static std::shared_ptr<SPICE_SIMULATOR> CreateInstance( const std::string& aName );
 
     ///> Intializes the simulator
     virtual void Init() = 0;

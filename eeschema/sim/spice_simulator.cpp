@@ -26,14 +26,14 @@
 
 #include <confirm.h>
 
-SPICE_SIMULATOR* SPICE_SIMULATOR::CreateInstance( const std::string& )
+std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::string& )
 {
     try
     {
-        static NGSPICE* ngspiceInstance = nullptr;
+        static std::shared_ptr<SPICE_SIMULATOR> ngspiceInstance;
 
         if( !ngspiceInstance )
-            ngspiceInstance = new NGSPICE;
+            ngspiceInstance.reset( new NGSPICE );
 
         return ngspiceInstance;
     }

@@ -286,7 +286,7 @@ private:
 
     SCH_EDIT_FRAME* m_schematicFrame;
     std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
-    SPICE_SIMULATOR* m_simulator;
+    std::shared_ptr<SPICE_SIMULATOR> m_simulator;
     SIM_THREAD_REPORTER* m_reporter;
 
     typedef std::map<wxString, TRACE_DESC> TRACE_MAP;
