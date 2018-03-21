@@ -1666,11 +1666,43 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         // When editing modules, it's allowed to select them, even when
         // locked, since you already have to explicitly activate the
         // module editor to get to this stage
-        if ( !m_editModules )
+        if( !m_editModules )
         {
             MODULE* mod = static_cast<const D_PAD*>( aItem )->GetParent();
             if( mod && mod->IsLocked() )
                 return false;
+        }
+        else if( aItem->Type() == PCB_PAD_T )
+        {
+            // In editor, pads are selectable if any draw layer is visible
+
+            auto pad = static_cast<const D_PAD*>( aItem );
+
+            // Shortcut: check copper layer visibility
+            if( board()->IsLayerVisible( F_Cu ) && pad->IsOnLayer( F_Cu ) )
+                return true;
+
+            if( board()->IsLayerVisible( B_Cu ) && pad->IsOnLayer( B_Cu ) )
+                return true;
+
+            // Now check the non-copper layers
+
+            bool draw_layer_visible = false;
+
+            int pad_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], pad_layers_count;
+            pad->ViewGetLayers( pad_layers, pad_layers_count );
+
+            for( int i = 0; i < pad_layers_count; ++i )
+            {
+                // NOTE: Only checking the regular layers (not GAL meta-layers)
+                if( ( ( pad_layers[i] < PCB_LAYER_ID_COUNT ) &&
+                      board()->IsLayerVisible( static_cast<PCB_LAYER_ID>( pad_layers[i] ) ) ) )
+                {
+                    draw_layer_visible = true;
+                }
+            }
+
+            return draw_layer_visible;
         }
 
         break;
