@@ -121,7 +121,6 @@ NumericEvaluator :: parseError(const char* s)
 void
 NumericEvaluator :: parseOk()
 {
-   bClError = false;
    bClParseFinished = true;
 }
 
@@ -150,6 +149,7 @@ NumericEvaluator :: process(const char* s)
    newString(s);
 
    if (pClParser == nullptr) init();
+   bClError = false;
    bClParseFinished = false;
 
    Token tok;
@@ -320,6 +320,7 @@ NumericEvaluator :: getToken()
          case ')' : retval.token = PARENR; break;
          case '=' : retval.token = ASSIGN; break;
          case ';' : retval.token = SEMCOL; break;
+         default: bClError = true; break;   /* invalid character */
       }
       clToken.pos++;
    }
