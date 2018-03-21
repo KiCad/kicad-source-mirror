@@ -752,10 +752,6 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     openBlock();
     addJSONObject( "\"Layers\": \"Outer\",\n" );
-
-    addJSONObject( "\"Values\":\n" );
-
-    openBlock();
     addJSONObject( wxString::Format( "\"PadToPad\":  %.3f,\n", minPadClearanceOuter*m_conversionUnits ) );
     addJSONObject( wxString::Format( "\"PadToTrack\":  %.3f,\n", minPadClearanceOuter*m_conversionUnits ) );
     addJSONObject( wxString::Format( "\"TrackToTrack\":  %.3f,\n", minclearance_track2track*m_conversionUnits ) );
@@ -843,7 +839,6 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     }
 
     // Close DesignRules
-    closeBlock();
     closeArrayBlockWithSep();
 }
 
