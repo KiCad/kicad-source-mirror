@@ -528,8 +528,13 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         // Clear annotation and init new time stamp for the new components and sheets:
         if( item->Type() == SCH_COMPONENT_T )
         {
-            ( (SCH_COMPONENT*) item )->SetTimeStamp( GetNewTimeStamp() );
-            ( (SCH_COMPONENT*) item )->ClearAnnotation( NULL );
+            SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( item );
+            cmp->SetTimeStamp( GetNewTimeStamp() );
+
+            // clear the annotation, but preserve the selected unit
+            int unit = cmp->GetUnit();
+            cmp->ClearAnnotation( NULL );
+            cmp->SetUnit( unit );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
