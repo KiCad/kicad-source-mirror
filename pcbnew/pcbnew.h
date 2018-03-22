@@ -41,6 +41,10 @@
 #define ARC_APPROX_SEGMENTS_COUNT_LOW_DEF 16
 #define ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF 32
 
+// The new absolute-error-based algorithm uses the stored segment count as a hint on whether
+// to use ARC_HIGH_DEF or ARC_LOW_DEF.  This defines the crossover point.
+#define SEGMENT_COUNT_CROSSOVER 24
+
 /* Flag used in locate functions. The locate ref point is the on grid cursor or the off
  * grid mouse cursor. */
 #define CURSEUR_ON_GRILLE  (0 << 0)

@@ -293,7 +293,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
     double correctionFactor;
 
     // Set the number of segments in arc approximations
-    if( aZone->GetArcSegmentCount() == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF  )
+    if( aZone->GetArcSegmentCount() > SEGMENT_COUNT_CROSSOVER  )
         segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF;
     else
         segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;

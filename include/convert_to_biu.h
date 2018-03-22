@@ -98,6 +98,15 @@ constexpr inline double Iu2Mils( int iu )
 {
     return iu / IU_PER_MILS;
 }
+
+// The max error is the distance between the middle of a segment, and the circle
+// for circle/arc to segment approximation.
+// Warning: too small values can create very long calculation time in zone filling
+// 0.05 to 0.005 mm are reasonable values
+
+constexpr int ARC_LOW_DEF  = Millimeter2iu( 0.02 );
+constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
+
 #endif
 
 #endif  // CONVERT_TO_BIU_H_

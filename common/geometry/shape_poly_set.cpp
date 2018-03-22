@@ -38,6 +38,7 @@
 #include <md5_hash.h>
 #include <map>
 
+#include <geometry/geometry_utils.h>
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
@@ -1575,10 +1576,10 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::ChamferPolygon( unsigned int aDistance, 
 
 
 SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius,
-        unsigned int aSegments,
+        int aErrorMax,
         int aIndex )
 {
-    return chamferFilletPolygon( CORNER_MODE::FILLETED, aRadius, aIndex, aSegments );
+    return chamferFilletPolygon( CORNER_MODE::FILLETED, aRadius, aIndex, aErrorMax );
 }
 
 
@@ -1703,12 +1704,12 @@ SHAPE_POLY_SET SHAPE_POLY_SET::Chamfer( int aDistance )
 }
 
 
-SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aSegments )
+SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aErrorMax )
 {
     SHAPE_POLY_SET filleted;
 
     for( size_t polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
-        filleted.m_polys.push_back( FilletPolygon( aRadius, aSegments, polygonIdx ) );
+        filleted.m_polys.push_back( FilletPolygon( aRadius, aErrorMax, polygonIdx ) );
 
     return filleted;
 }
@@ -1717,7 +1718,7 @@ SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aSegments )
 SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
         unsigned int aDistance,
         int aIndex,
-        int aSegments )
+        int aErrorMax )
 {
     // Null segments create serious issues in calculations. Remove them:
     RemoveNullSegments();
@@ -1833,9 +1834,8 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                     argument = 1;
 
                 double arcAngle = acos( argument );
-
-                // Calculate the number of segments
-                unsigned int segments = ceil( (double) aSegments * ( arcAngle / ( 2 * M_PI ) ) );
+                double arcAngleDegrees = arcAngle * 180.0 / M_PI;
+                int    segments = GetArcToSegmentCount( radius, aErrorMax, arcAngleDegrees );
 
                 double  deltaAngle  = arcAngle / segments;
                 double  startAngle  = atan2( -ys, xs );

@@ -1328,7 +1328,12 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
         break;
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
-        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, m_ArcToSegmentsCount );
+        // Note: we're now using m_ArcToSegmentsCount only as a hint to determine accuracy
+        // vs. speed.
+        if( m_ArcToSegmentsCount > SEGMENT_COUNT_CROSSOVER )
+            aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_HIGH_DEF );
+        else
+            aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_LOW_DEF );
         break;
 
     default:

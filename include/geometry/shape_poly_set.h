@@ -1002,11 +1002,11 @@ class SHAPE_POLY_SET : public SHAPE
          * Function Fillet
          * returns a filleted version of the aIndex-th polygon.
          * @param aRadius is the fillet radius.
-         * @param aSegments is the number of segments / fillet.
+         * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
          * @param aIndex is the index of the polygon to be filleted
          * @return POLYGON - A polygon containing the filleted version of the aIndex-th polygon.
          */
-        POLYGON FilletPolygon( unsigned int aRadius, unsigned int aSegments, int aIndex = 0 );
+        POLYGON FilletPolygon( unsigned int aRadius, int aErrorMax, int aIndex = 0 );
 
         /**
          * Function Chamfer
@@ -1020,10 +1020,10 @@ class SHAPE_POLY_SET : public SHAPE
          * Function Fillet
          * returns a filleted version of the polygon set.
          * @param aRadius is the fillet radius.
-         * @param aSegments is the number of segments / fillet.
+         * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
          * @return SHAPE_POLY_SET - A set containing the filleted version of this set.
          */
-        SHAPE_POLY_SET Fillet(  int aRadius, int aSegments );
+        SHAPE_POLY_SET Fillet(  int aRadius, int aErrorMax );
 
         /**
          * Function DistanceToPolygon
@@ -1147,12 +1147,12 @@ class SHAPE_POLY_SET : public SHAPE
          * @param  aDistance is the chamfering distance if aMode = CHAMFERED; if aMode = FILLETED,
          *                   is the filleting radius.
          * @param  aIndex    is the index of the polygon that will be chamfered/filleted.
-         * @param  aSegments is the number of filleting segments if aMode = FILLETED. If aMode =
-         *                   CHAMFERED, it is unused.
+         * @param  aErrorMax is the maximum allowable deviation of the polygon from the circle
+         *                   if aMode = FILLETED. If aMode = CHAMFERED, it is unused.
          * @return POLYGON - the chamfered/filleted version of the polygon.
          */
         POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
-                                      int aIndex, int aSegments = -1 );
+                                      int aIndex, int aErrorMax = -1 );
 
         ///> Returns true if the polygon set has any holes that touch share a vertex.
         bool hasTouchingHoles( const POLYGON& aPoly ) const;

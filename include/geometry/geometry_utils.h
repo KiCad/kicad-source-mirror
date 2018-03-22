@@ -41,7 +41,7 @@
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
 
 /**
- * @return the correction factor to approximate a circle by segùments
+ * @return the correction factor to approximate a circle by segments
  * @param aSegCountforCircle is the number of segments to approximate the circle
  *
  * When creating a polygon from a circle, the polygon is inside the circle.

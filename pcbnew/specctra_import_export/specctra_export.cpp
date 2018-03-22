@@ -767,8 +767,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 double radius = GetLineLength( graphic->GetStart(), graphic->GetEnd() );
 
                 // seg count to approximate circle by line segments
-                int err_max = Millimeter2iu( 0.05 );
-                int seg_per_circle = GetArcToSegmentCount( radius, err_max, 360.0 );
+                int seg_per_circle = GetArcToSegmentCount( radius, ARC_LOW_DEF, 360.0 );
 
                 for( int ii = 0; ii < seg_per_circle; ++ii )
                 {
