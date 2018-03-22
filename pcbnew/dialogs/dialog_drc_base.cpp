@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 30 2016)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -111,7 +111,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_cbReportAllTrackErrors = new wxCheckBox( this, wxID_ANY, _("Report all errors for tracks (slower)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbReportAllTrackErrors->SetToolTip( _("If selected, all DRC violations for tracks will be reported.  This can be slow for complicated designs.\n\nIf unselected, only the first DRC violation will be reported for each track connection.") );
 	
-	bSizerOptSettings->Add( m_cbReportAllTrackErrors, 0, wxALL, 5 );
+	bSizerOptSettings->Add( m_cbReportAllTrackErrors, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_cbCourtyardOverlap = new wxCheckBox( this, wxID_ANY, _("Check footprint courtyard overlap"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerOptSettings->Add( m_cbCourtyardOverlap, 0, wxLEFT|wxRIGHT, 5 );
