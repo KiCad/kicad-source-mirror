@@ -29,7 +29,6 @@
 #include <gal/opengl/utils.h>
 
 #include <list>
-#include <cassert>
 
 #ifdef __WXDEBUG__
 #include <wx/log.h>
@@ -62,19 +61,19 @@ CACHED_CONTAINER_GPU::~CACHED_CONTAINER_GPU()
 
 void CACHED_CONTAINER_GPU::Map()
 {
-    assert( !IsMapped() );
+    wxCHECK( !IsMapped(), /*void*/ );
 
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     m_vertices = static_cast<VERTEX*>( glMapBuffer( GL_ARRAY_BUFFER, GL_READ_WRITE ) );
-    checkGlError( "mapping vertices buffer" );
 
-    m_isMapped = true;
+    if( checkGlError( "mapping vertices buffer" ) == GL_NO_ERROR )
+        m_isMapped = true;
 }
 
 
 void CACHED_CONTAINER_GPU::Unmap()
 {
-    assert( IsMapped() );
+    wxCHECK( IsMapped(), /*void*/ );
 
     glUnmapBuffer( GL_ARRAY_BUFFER );
     checkGlError( "unmapping vertices buffer" );
@@ -91,7 +90,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     if( !m_useCopyBuffer )
         return defragmentResizeMemcpy( aNewSize );
 
-    assert( IsMapped() );
+    wxCHECK( IsMapped(), false );
 
     wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
             wxT( "Resizing & defragmenting container from %d to %d" ), m_currentSize, aNewSize );
@@ -109,7 +108,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     // glCopyBufferSubData requires a buffer to be unmapped
     glUnmapBuffer( GL_ARRAY_BUFFER );
 
-    // Create the destination buffer
+    // Create a new destination buffer
     glGenBuffers( 1, &newBuffer );
 
     // It would be best to use GL_COPY_WRITE_BUFFER here,
@@ -117,7 +116,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 #ifdef __WXDEBUG__
     GLint eaBuffer = -1;
     glGetIntegerv( GL_ELEMENT_ARRAY_BUFFER_BINDING, &eaBuffer );
-    assert( eaBuffer == 0 );
+    wxASSERT( eaBuffer == 0 );
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
@@ -158,6 +157,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     // Cleanup
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
     // Previously we have unmapped the array buffer, now when it is also
     // unbound, it may be officially marked as unmapped
     m_isMapped = false;
@@ -189,7 +189,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 
 bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 {
-    assert( IsMapped() );
+    wxCHECK( IsMapped(), false );
 
     wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
             wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ),
@@ -214,7 +214,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 #ifdef __WXDEBUG__
     GLint eaBuffer = -1;
     glGetIntegerv( GL_ELEMENT_ARRAY_BUFFER_BINDING, &eaBuffer );
-    assert( eaBuffer == 0 );
+    wxASSERT( eaBuffer == 0 );
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
