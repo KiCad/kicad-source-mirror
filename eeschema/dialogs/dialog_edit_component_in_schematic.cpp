@@ -617,12 +617,20 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
 
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, this );
 
-        if( frame->ShowModal( &fpid, this ) )
+        try
         {
-            // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
-            fieldValueTextCtrl->SetValue( fpid );
+            if( frame->ShowModal( &fpid, this ) )
+            {
+                // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
+                fieldValueTextCtrl->SetValue( fpid );
 
-            setRowItem( fieldNdx, m_FieldsBuf[fieldNdx].GetName( false ), fpid );
+                setRowItem( fieldNdx, m_FieldsBuf[fieldNdx].GetName( false ), fpid );
+            }
+        }
+        catch( const IO_ERROR& aError )
+        {
+            // it may happen that the specified footprint is not available in the loaded
+            // footprint libraries, no big deal
         }
 
         frame->Destroy();
