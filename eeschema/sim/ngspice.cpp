@@ -207,7 +207,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
         m_netlist += std::string( line ) + std::string( "\n" );
     }
 
-    lines.push_back( nullptr );
+    lines.push_back( nullptr ); // sentinel, as requested in ngSpice_Circ description
     m_ngSpice_Circ( lines.data() );
 
     for( auto line : lines )

@@ -87,6 +87,10 @@ public:
             case SIM_RUNNING:
                 event = new wxCommandEvent( EVT_SIM_STARTED );
                 break;
+
+            default:
+                wxFAIL;
+                return;
         }
 
         wxQueueEvent( m_parent, event );
