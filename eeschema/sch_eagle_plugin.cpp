@@ -1051,7 +1051,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                 component->GetPosition() + field.GetTextPos() );
     }
 
-    component->GetField( REFERENCE )->SetText( einstance.part );
+    // If there is no footprint assigned, then prepend the reference value
+    // with a hash character to mute netlist updater complaints
+    wxString reference = package.IsEmpty() ? '#' + einstance.part : einstance.part;
 
     SCH_SHEET_PATH sheetpath;
     m_rootSheet->LocatePathOfScreen( screen, &sheetpath );
@@ -1061,7 +1063,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     tstamp.Printf( "%8.8lX", (unsigned long) component->GetTimeStamp() );
     current_sheetpath += tstamp;
 
-    component->AddHierarchicalReference( current_sheetpath, wxString( einstance.part ), unit );
+    component->AddHierarchicalReference( current_sheetpath, reference, unit );
 
     if( epart->value )
         component->GetField( VALUE )->SetText( *epart->value );
@@ -1195,7 +1197,9 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( prefix.length() == 0 )
                 reference->SetVisible( false );
             else
-                reference->SetText( prefix );
+                // If there is no footprint assigned, then prepend the reference value
+                // with a hash character to mute netlist updater complaints
+                reference->SetText( edevice.package ? prefix : '#' + prefix );
 
             int gateindex = 1;
             bool ispower = false;
