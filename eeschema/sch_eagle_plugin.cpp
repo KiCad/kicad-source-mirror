@@ -806,20 +806,16 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         if( labelled == false && wire != NULL )
         {
             wxString netname = escapeName( netName );
+            std::unique_ptr<SCH_TEXT> label;
 
             // Add a global label if the net appears on more than one Eagle sheet
             if( m_netCounts[netName.ToStdString()] > 1 )
-            {
-                std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
-                glabel->SetPosition( wire->GetStartPoint() );
-                glabel->SetText( netname );
-                glabel->SetTextSize( wxSize( 10, 10 ) );
-                glabel->SetLabelSpinStyle( 0 );
-                screen->Append( glabel.release() );
-            }
+                label.reset( new SCH_GLOBALLABEL );
             else if( segmentCount > 1 )
+                label.reset( new SCH_LABEL );
+
+            if( label )
             {
-                std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
                 label->SetPosition( wire->GetStartPoint() );
                 label->SetText( netname );
                 label->SetTextSize( wxSize( 10, 10 ) );
@@ -879,116 +875,65 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
 
 
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
-        const wxString& aNetName,
-        const DLIST<SCH_LINE>& segmentWires )
+        const wxString& aNetName, const DLIST<SCH_LINE>& segmentWires )
 {
     auto elabel = ELABEL( aLabelNode, aNetName );
-
     wxPoint elabelpos( elabel.x.ToSchUnits(), -elabel.y.ToSchUnits() );
 
-    wxString netname = escapeName( elabel.netname );
+    // Determine if the label is local or global depending on
+    // the number of sheets the net appears in
+    bool global = m_netCounts[aNetName] > 1;
+    std::unique_ptr<SCH_TEXT> label;
 
-
-    // Determine if the Label is a local and global label based on the number of sheets the net appears on.
-    if( m_netCounts[aNetName] > 1 )
-    {
-        std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
-        glabel->SetPosition( elabelpos );
-        glabel->SetText( netname );
-        glabel->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
-        glabel->SetLabelSpinStyle( 2 );
-
-        if( elabel.rot )
-        {
-            glabel->SetLabelSpinStyle( ( int( elabel.rot->degrees ) / 90 + 2 ) % 4 );
-
-            if( elabel.rot->mirror
-                && ( glabel->GetLabelSpinStyle() == 0 || glabel->GetLabelSpinStyle() == 2 ) )
-                glabel->SetLabelSpinStyle( glabel->GetLabelSpinStyle() % 4 );
-        }
-
-        SCH_LINE*   wire;
-        SCH_LINE*   next_wire;
-
-        bool    labelOnWire = false;
-        auto    glabelPosition = glabel->GetPosition();
-
-        // determine if the segment has been labelled.
-        for( wire = segmentWires.begin(); wire; wire = next_wire )
-        {
-            next_wire = wire->Next();
-
-            if( wire->HitTest( glabelPosition, 0 ) )
-            {
-                labelOnWire = true;
-                break;
-            }
-        }
-
-        wire = segmentWires.begin();
-
-        // Reposition label if necessary
-        if( labelOnWire == false )
-        {
-            wxPoint newLabelPos = findNearestLinePoint( elabelpos, segmentWires );
-
-            if( wire )
-            {
-                glabel->SetPosition( newLabelPos );
-            }
-        }
-
-        return glabel.release();
-    }
+    if( global )
+        label.reset( new SCH_GLOBALLABEL );
     else
+        label.reset( new SCH_LABEL );
+
+    label->SetPosition( elabelpos );
+    label->SetText( escapeName( elabel.netname ) );
+    label->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
+    label->SetLabelSpinStyle( global ? 2 : 0 );
+
+    if( elabel.rot )
     {
-        std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
-        label->SetPosition( elabelpos );
-        label->SetText( netname );
-        label->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
+        int offset = global ? 2 : 0;
+        label->SetLabelSpinStyle( int( elabel.rot->degrees / 90 + offset ) % 4 );
 
-        label->SetLabelSpinStyle( 0 );
-
-        if( elabel.rot )
-        {
-            label->SetLabelSpinStyle( int(elabel.rot->degrees / 90) % 4 );
-
-            if( elabel.rot->mirror
-                && ( label->GetLabelSpinStyle() == 0 || label->GetLabelSpinStyle() == 2 ) )
-                label->SetLabelSpinStyle( (label->GetLabelSpinStyle() + 2) % 4 );
-        }
-
-        SCH_LINE*   wire;
-        SCH_LINE*   next_wire;
-
-        bool    labelOnWire = false;
-        auto    labelPosition = label->GetPosition();
-
-        for( wire = segmentWires.begin(); wire; wire = next_wire )
-        {
-            next_wire = wire->Next();
-
-            if( wire->HitTest( labelPosition, 0 ) )
-            {
-                labelOnWire = true;
-                break;
-            }
-        }
-
-        wire = segmentWires.begin();
-
-        // Reposition label if necessary
-        if( labelOnWire == false )
-        {
-            if( wire )
-            {
-                wxPoint newLabelPos = findNearestLinePoint( elabelpos, segmentWires );
-                label->SetPosition( newLabelPos );
-            }
-        }
-
-        return label.release();
+        if( elabel.rot->mirror
+            && ( label->GetLabelSpinStyle() == 0 || label->GetLabelSpinStyle() == 2 ) )
+            label->SetLabelSpinStyle( (label->GetLabelSpinStyle() + 2 ) % 4 );
     }
+
+    SCH_LINE* wire;
+    SCH_LINE* next_wire;
+    bool labelOnWire = false;
+    auto labelPosition = label->GetPosition();
+
+    // determine if the segment has been labelled.
+    for( wire = segmentWires.begin(); wire; wire = next_wire )
+    {
+        next_wire = wire->Next();
+
+        if( wire->HitTest( labelPosition, 0 ) )
+        {
+            labelOnWire = true;
+            break;
+        }
+    }
+
+    wire = segmentWires.begin();
+
+    // Eagle supports detached labels, so a label does not need to be placed on a wire
+    // to be associated with it. KiCad needs to move them, so the labels actually touch the
+    // corresponding wires.
+    if( !labelOnWire && wire )
+    {
+        wxPoint newLabelPos = findNearestLinePoint( elabelpos, segmentWires );
+        label->SetPosition( newLabelPos );
+    }
+
+    return label.release();
 }
 
 
