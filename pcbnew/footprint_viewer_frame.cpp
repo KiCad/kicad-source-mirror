@@ -624,9 +624,10 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 
 bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aResultantFocusWindow )
 {
-    if( aFootprint )
+    if( aFootprint && !aFootprint->IsEmpty() )
     {
         LIB_ID fpid( *aFootprint );
+
         if( fpid.IsValid() )
         {
             setCurNickname( fpid.GetLibNickname() );
