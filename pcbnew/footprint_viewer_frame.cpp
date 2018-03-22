@@ -626,14 +626,22 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aResulta
 {
     if( aFootprint && !aFootprint->IsEmpty() )
     {
-        LIB_ID fpid( *aFootprint );
-
-        if( fpid.IsValid() )
+        try
         {
-            setCurNickname( fpid.GetLibNickname() );
-            setCurFootprintName( fpid.GetLibItemName() );
-            ReCreateFootprintList();
-            SelectAndViewFootprint( NEW_PART );
+            LIB_ID fpid( *aFootprint );
+
+            if( fpid.IsValid() )
+            {
+                setCurNickname( fpid.GetLibNickname() );
+                setCurFootprintName( fpid.GetLibItemName() );
+                ReCreateFootprintList();
+                SelectAndViewFootprint( NEW_PART );
+            }
+        }
+        catch( ... )
+        {
+            // LIB_ID's constructor throws on some invalid footprint IDs.  It'd be nicer
+            // if it just set it to !IsValid(), but it is what it is.
         }
     }
 
