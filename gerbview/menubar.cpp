@@ -208,7 +208,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom out" ), KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit" ), GerbviewHokeysDescr, HK_ZOOM_AUTO  );
+    text = AddHotkeyName( _( "&Fit on Screen" ), GerbviewHokeysDescr, HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
