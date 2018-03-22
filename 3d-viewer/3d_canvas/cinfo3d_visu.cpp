@@ -33,6 +33,7 @@
 #include <class_board.h>
 #include <3d_math.h>
 #include "3d_fastmath.h"
+#include <geometry/geometry_utils.h>
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.
@@ -243,37 +244,19 @@ int CINFO3D_VISU::GetCopperThicknessBIU() const
     return COPPER_THICKNESS;
 }
 
-// Constant factors used for number of segments approximation calcs
-#define MIN_SEG_PER_CIRCLE 12
-#define MAX_SEG_PER_CIRCLE 48
-
-#define SEG_MIN_FACTOR_BIU ( 0.10f * IU_PER_MM )
-#define SEG_MAX_FACTOR_BIU ( 6.00f * IU_PER_MM )
-
-
 unsigned int CINFO3D_VISU::GetNrSegmentsCircle( float aDiameter3DU ) const
 {
     wxASSERT( aDiameter3DU > 0.0f );
 
-    unsigned int result = mapf( aDiameter3DU,
-                                m_calc_seg_min_factor3DU, m_calc_seg_max_factor3DU,
-                                (float)MIN_SEG_PER_CIRCLE, (float)MAX_SEG_PER_CIRCLE );
-    wxASSERT( result > 1 );
-
-    return result;
+    return GetNrSegmentsCircle( (int)( aDiameter3DU / m_biuTo3Dunits ) );
 }
 
 
-unsigned int CINFO3D_VISU::GetNrSegmentsCircle( int aDiameterBUI ) const
+unsigned int CINFO3D_VISU::GetNrSegmentsCircle( int aDiameterBIU ) const
 {
-    wxASSERT( aDiameterBUI > 0 );
+    wxASSERT( aDiameterBIU > 0 );
 
-    unsigned int result = mapf( (float)aDiameterBUI,
-                                (float)SEG_MIN_FACTOR_BIU, (float)SEG_MAX_FACTOR_BIU,
-                                (float)MIN_SEG_PER_CIRCLE, (float)MAX_SEG_PER_CIRCLE );
-    wxASSERT( result > 1 );
-
-    return result;
+    return GetArcToSegmentCount( aDiameterBIU / 2, ARC_HIGH_DEF, 360.0 );
 }
 
 
@@ -281,7 +264,7 @@ double CINFO3D_VISU::GetCircleCorrectionFactor( int aNrSides ) const
 {
     wxASSERT( aNrSides >= 3 );
 
-    return 1.0 / cos( M_PI / ( (double)aNrSides * 2.0 ) );
+    return GetCircletoPolyCorrectionFactor( aNrSides );
 }
 
 
@@ -317,10 +300,6 @@ void CINFO3D_VISU::InitSettings( REPORTER *aStatusTextReporter )
 
     // Calculate the convertion to apply to all positions.
     m_biuTo3Dunits = RANGE_SCALE_3D / std::max( m_boardSize.x, m_boardSize.y );
-
-    // Calculate factors for cicle segment approximation
-    m_calc_seg_min_factor3DU = (float)( SEG_MIN_FACTOR_BIU * m_biuTo3Dunits );
-    m_calc_seg_max_factor3DU = (float)( SEG_MAX_FACTOR_BIU * m_biuTo3Dunits );
 
     m_epoxyThickness3DU = m_board->GetDesignSettings().GetBoardThickness() *
                           m_biuTo3Dunits;

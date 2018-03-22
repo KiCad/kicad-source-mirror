@@ -768,9 +768,11 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
             {
                 const VIA *via = static_cast<const VIA*>(track);
 
-                const float holediameter = via->GetDrillValue() * m_settings.BiuTo3Dunits();
-                const float thickness = m_settings.GetCopperThickness3DU();
-                const float hole_inner_radius = ( holediameter / 2.0f );
+                const float  holediameter = via->GetDrillValue() * m_settings.BiuTo3Dunits();
+                const float  thickness = m_settings.GetCopperThickness3DU();
+                const int    nrSegments = m_settings.GetNrSegmentsCircle( via->GetDrillValue() );
+                const double correctionFactor = m_settings.GetCircleCorrectionFactor( nrSegments );
+                const float  hole_inner_radius = ( holediameter / 2.0f ) * correctionFactor;
 
                 const SFVEC2F via_center(  via->GetStart().x * m_settings.BiuTo3Dunits(),
                                           -via->GetStart().y * m_settings.BiuTo3Dunits() );
@@ -790,7 +792,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                                    hole_inner_radius + thickness,
                                    ztop,
                                    zbot,
-                                   m_settings.GetNrSegmentsCircle( via->GetDrillValue() ),
+                                   nrSegments,
                                    layerTriangleVIA );
             }
         }
@@ -829,20 +831,20 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
 
                     // we use the hole diameter to calculate the seg count.
                     // for round holes, drillsize.x == drillsize.y
-                    // for oblong holes, the diameter is the smaller of
-                    // (drillsize.x, drillsize.y)
-                    const int diam = std::min( drillsize.x, drillsize.y ) +
-                                     m_settings.GetCopperThicknessBIU() * 2;
-
-                    const int segmentsPerCircle = m_settings.GetNrSegmentsCircle( diam );
+                    // for slots, the diameter is the smaller of (drillsize.x, drillsize.y)
+                    int    copperThickness = m_settings.GetCopperThicknessBIU();
+                    int    radius = std::min( drillsize.x, drillsize.y ) / 2 + copperThickness;
+                    int    nrSegments = m_settings.GetNrSegmentsCircle( radius * 2 );
+                    double correctionFactor = m_settings.GetCircleCorrectionFactor( nrSegments );
+                    int    correction = radius * ( correctionFactor - 1 );
 
                     pad->BuildPadDrillShapePolygon( tht_outer_holes_poly,
-                                                    m_settings.GetCopperThicknessBIU(),
-                                                    segmentsPerCircle );
+                                                    copperThickness + correction,
+                                                    nrSegments );
 
                     pad->BuildPadDrillShapePolygon( tht_inner_holes_poly,
-                                                    0,
-                                                    segmentsPerCircle );
+                                                    correction,
+                                                    nrSegments );
                 }
             }
         }
