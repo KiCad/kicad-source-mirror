@@ -559,6 +559,13 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 
                     while( IsNumber( *read ) )
                     {
+                        if( *read == '.' )
+                        {
+                            integer = nbdigits;
+                            read++;
+                            continue;
+                        }
+
                         if( ( *read >= '0' ) && ( *read <='9' ) )
                             nbdigits++;
 
@@ -566,6 +573,10 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                     }
 
                     mantissa = nbdigits - integer;
+
+                    // Enforce minimum mantissa of 3 for metric
+                    if( m_GerbMetric && mantissa < 3 )
+                        mantissa = 3;
 
                     m_FmtScale.x = m_FmtScale.y = mantissa;
                     m_FmtLen.x = m_FmtLen.y = integer + mantissa;
