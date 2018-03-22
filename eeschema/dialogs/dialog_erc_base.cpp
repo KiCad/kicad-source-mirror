@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_erc_listbox.h"
@@ -135,7 +135,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_panelMatrixSizer->Add( m_cbTestSimilarLabels, 0, wxALL, 5 );
 	
-	m_cbTestUniqueGlbLabels = new wxCheckBox( m_PanelERCOptions, wxID_ANY, _("Test unique global labels"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTestUniqueGlbLabels = new wxCheckBox( m_PanelERCOptions, wxID_ANY, _("Test single instances of global labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTestUniqueGlbLabels->SetToolTip( _("Global labels are used to connect signals across the full hierarchy.\nThey are expected to be at least two labels with the same name.") );
 	
 	m_panelMatrixSizer->Add( m_cbTestUniqueGlbLabels, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );

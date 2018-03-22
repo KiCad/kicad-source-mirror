@@ -271,7 +271,7 @@
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxStaticBoxSizer" expanded="1">
+                                                <object class="wxStaticBoxSizer" expanded="0">
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">ERC Report:</property>
                                                     <property name="minimum_size"></property>
@@ -280,11 +280,11 @@
                                                     <property name="parent">1</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="sizeritem" expanded="1">
+                                                    <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxALL|wxEXPAND</property>
                                                         <property name="proportion">0</property>
-                                                        <object class="wxGridSizer" expanded="1">
+                                                        <object class="wxGridSizer" expanded="0">
                                                             <property name="cols">2</property>
                                                             <property name="hgap">5</property>
                                                             <property name="minimum_size"></property>
@@ -816,11 +816,11 @@
                                                             </object>
                                                         </object>
                                                     </object>
-                                                    <object class="sizeritem" expanded="1">
+                                                    <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                                         <property name="proportion">0</property>
-                                                        <object class="wxStaticLine" expanded="1">
+                                                        <object class="wxStaticLine" expanded="0">
                                                             <property name="BottomDockable">1</property>
                                                             <property name="LeftDockable">1</property>
                                                             <property name="RightDockable">1</property>
@@ -2238,7 +2238,7 @@
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Test unique global labels</property>
+                                            <property name="label">Test single instances of global labels</property>
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
