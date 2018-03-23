@@ -27,6 +27,7 @@
 
 #include "spice_simulator.h"
 
+#include <wx/dynlib.h>
 #include <ngspice/sharedspice.h>
 
 class wxDynamicLibrary;
@@ -101,7 +102,7 @@ private:
     ngSpice_AllVecs m_ngSpice_AllVecs;
     ngSpice_Running m_ngSpice_Running;
 
-    wxDynamicLibrary* m_dll;
+    wxDynamicLibrary m_dll;
 
     ///> Executes commands from a file
     bool loadSpinit( const std::string& aFileName );
