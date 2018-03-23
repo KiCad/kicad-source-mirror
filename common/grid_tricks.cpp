@@ -89,6 +89,9 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
                 model->SetValue( aRow, aCol, wxT( "1" ) );
         }
 
+        // Mac needs this for the keyboard events; Linux appears to always need it.
+        m_grid->ForceRefresh();
+
         return true;
     }
 
@@ -257,10 +260,7 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
         int col = m_grid->GetCursorColumn();
 
         if( m_grid->IsVisible( row, col ) && toggleCell( row, col ) )
-        {
-            m_grid->ForceRefresh();
             return;
-        }
     }
 
     ev.Skip( true );
