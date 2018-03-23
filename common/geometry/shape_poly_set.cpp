@@ -1853,7 +1853,7 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                 int prevX   = KiROUND( nx );
                 int prevY   = KiROUND( ny );
 
-                for( unsigned int j = 0; j < segments; j++ )
+                for( int j = 0; j < segments; j++ )
                 {
                     nx = xc + cos( startAngle + ( j + 1 ) * deltaAngle ) * radius;
                     ny = yc - sin( startAngle + ( j + 1 ) * deltaAngle ) * radius;

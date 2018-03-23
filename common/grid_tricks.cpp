@@ -256,8 +256,8 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     }
     else if( ev.GetKeyCode() == ' ' )
     {
-        int row = m_grid->GetCursorRow();
-        int col = m_grid->GetCursorColumn();
+        int row = getCursorRow();
+        int col = getCursorCol();
 
         if( m_grid->IsVisible( row, col ) && toggleCell( row, col ) )
             return;
