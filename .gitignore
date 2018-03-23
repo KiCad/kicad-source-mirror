@@ -61,6 +61,7 @@ demos/**/_autosave-*
 # editor/OS fluff
 .*.swp
 *~
+.idea
 .DS_Store
 *.png
 *.kiface
