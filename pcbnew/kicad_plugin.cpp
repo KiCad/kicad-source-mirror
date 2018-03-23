@@ -1186,9 +1186,6 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
 
     LSET cu_mask = cu_all;
 
-    if( m_board )
-        cu_mask &= m_board->GetEnabledLayers();
-
     // output copper layers first, then non copper
 
     if( ( aLayerMask & cu_mask ) == cu_mask )
@@ -1239,9 +1236,6 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
     }
 
     // output any individual layers not handled in wildcard combos above
-
-    if( m_board )
-        aLayerMask &= m_board->GetEnabledLayers();
 
     wxString layerName;
 
@@ -1332,7 +1326,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    formatLayers( aPad->GetLayerSet(), 0 );
+    formatLayers( aPad->GetLayerSet() );
 
     // Output the radius ratio for rounded rect pads
     if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
