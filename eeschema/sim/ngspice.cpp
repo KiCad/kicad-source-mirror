@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2018 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -34,6 +34,8 @@
 #include <stdexcept>
 
 using namespace std;
+
+static const wxChar* const traceNgspice = wxT( "KICAD_NGSPICE" );
 
 NGSPICE::NGSPICE()
 {
@@ -276,13 +278,42 @@ void NGSPICE::init_dll()
         return;
 
     LOCALE_IO c_locale;               // ngspice works correctly only with C locale
+    const wxStandardPaths& stdPaths = wxStandardPaths::Get();
 
     if( m_dll.IsLoaded() )      // enable force reload
         m_dll.Unload();
 
+// Extra effort to find libngspice
+#if defined(__WINDOWS__) || (__WXMAC__)
 #ifdef __WINDOWS__
-    m_dll.Load( "libngspice-0.dll" );
-#else
+    wxFileName dllFile( "", "libngspice-0.dll" );
+    const vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
+#endif /* __WINDOWS__ */
+#ifdef __WXMAC__
+    wxFileName dllFile( "", "libngspice.0.dylib" );
+    const vector<string> dllPaths = {
+        GetOSXKicadUserDataDir() + "/PlugIns/ngspice",
+        GetOSXKicadMachineDataDir() + "/PlugIns/ngspice",
+        // when running kicad.app
+        stdPaths.GetPluginsDir() + "/sim",
+        // when running eeschema.app
+        wxFileName( stdPaths.GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim"
+    };
+#endif /* __WXMAC__ */
+
+    for( const auto& path : dllPaths )
+    {
+        dllFile.SetPath( path );
+        wxLogTrace( traceNgspice, "libngspice search path: %s", dllFile.GetFullPath() );
+        m_dll.Load( dllFile.GetFullPath(), wxDL_VERBATIM | wxDL_QUIET | wxDL_NOW );
+
+        if( m_dll.IsLoaded() )
+        {
+            wxLogTrace( traceNgspice, "libngspice path found in: %s", dllFile.GetFullPath() );
+            break;
+        }
+    }
+#else /* not __WINDOWS || __WXMAC__ */
     m_dll.Load( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
 #endif
 
@@ -304,9 +335,8 @@ void NGSPICE::init_dll()
 
     // Load a custom spinit file, to fix the problem with loading .cm files
     // Switch to the executable directory, so the relative paths are correct
-    const wxStandardPaths& paths = wxStandardPaths::Get();
     wxString cwd( wxGetCwd() );
-    wxFileName exeDir( paths.GetExecutablePath() );
+    wxFileName exeDir( stdPaths.GetExecutablePath() );
     wxSetWorkingDirectory( exeDir.GetPath() );
 
     // Find *.cm files
@@ -320,6 +350,10 @@ void NGSPICE::init_dll()
     const vector<string> spiceinitPaths =
     {
         ".",
+#ifdef __WXMAC__
+        stdPaths.GetPluginsDir() + "/sim/ngspice/scripts",
+        wxFileName( stdPaths.GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim/ngspice/scripts"
+#endif /* __WXMAC__ */
         "../share/kicad",
         "../share",
         "../../share/kicad",
@@ -330,8 +364,11 @@ void NGSPICE::init_dll()
 
     for( const auto& path : spiceinitPaths )
     {
+        wxLogTrace( traceNgspice, "ngspice init script search path: %s", path );
+
         if( loadSpinit( path + "/spiceinit" ) )
         {
+            wxLogTrace( traceNgspice, "ngspice path found in: %s", path );
             foundSpiceinit = true;
             break;
         }
@@ -376,9 +413,12 @@ string NGSPICE::findCmPath() const
 {
     const vector<string> cmPaths =
     {
-#ifdef __APPLE__
+#ifdef __WXMAC__
         "/Applications/ngspice/lib/ngspice",
-#endif /* __APPLE__ */
+        "Contents/Frameworks",
+        wxStandardPaths::Get().GetPluginsDir() + "/sim/ngspice",
+        wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim/ngspice"
+#endif /* __WXMAC__ */
         "../lib/ngspice",
         "../../lib/ngspice"
         "lib/ngspice",
@@ -387,8 +427,13 @@ string NGSPICE::findCmPath() const
 
     for( const auto& path : cmPaths )
     {
-        if( wxFileName::DirExists( path ) )
+        wxLogTrace( traceNgspice, "ngspice code models search path: %s", path );
+
+        if( wxFileName::FileExists( path + "/spice2poly.cm" ) )
+        {
+            wxLogTrace( traceNgspice, "ngspice code models found in: %s", path );
             return path;
+        }
     }
 
     return string();
