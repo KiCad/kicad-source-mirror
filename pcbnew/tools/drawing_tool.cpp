@@ -1028,8 +1028,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 // User has clicked twice in the same spot
                 {
                     // a clear sign that the current drawing is finished
-                    // Now we have to add the helper line as well
-                    if( direction45 )
+                    // Now we have to add the helper line as well, unless it is zero-length
+                    if( direction45 && line45.GetStart() != aGraphic->GetStart() )
                     {
                         BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
                         DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( (MODULE*) parent )
