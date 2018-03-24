@@ -28,11 +28,8 @@
 #include <common.h>
 
 #include <bitmaps.h>
-#include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <cvpcb_id.h>
-
-#include <common_help_msg.h>
 
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
@@ -43,9 +40,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
         m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                           KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiScaledBitmap( save_xpm, this ), SAVE_HLP_MSG );
-
-    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_CVPCB_LIB_TABLE_EDIT, wxEmptyString,
                             KiScaledBitmap( config_xpm, this ),
                             _( "Edit footprint library table" ) );

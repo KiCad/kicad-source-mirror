@@ -34,13 +34,11 @@
 #include <macros.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
-#include <reporter.h>
 #include <html_messagebox.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
-#include <wildcards_and_files_ext.h>
 #include <fp_conflict_assignment_selector.h>
 
 
@@ -97,9 +95,6 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName, int aIndex )
     if( component == NULL )
         return;
 
-    // Check to see if the component has already a footprint set.
-    bool hasFootprint = !component->GetFPID().empty();
-
     LIB_ID fpid;
 
     if( !aFootprintName.IsEmpty() )
@@ -116,12 +111,6 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName, int aIndex )
                         GetChars( component->GetReference() ),
                         GetChars( component->GetValue() ),
                         GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
-
-    // If the component hasn't had a footprint associated with it
-    // it now has, so we decrement the count of components without
-    // a footprint assigned.
-    if( !hasFootprint )
-        m_undefinedComponentCnt -= 1;
 
     // Set the new description and deselect the processed component
     m_compListBox->SetString( aIndex, description );
@@ -196,7 +185,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
     BuildLIBRARY_LISTBOX();
 
     m_compListBox->Clear();
-    m_undefinedComponentCnt = 0;
 
     if( m_netlist.AnyFootprintsLinked() )
     {
@@ -391,7 +379,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 }
 
 
-void CVPCB_MAINFRAME::SaveFootprintAssociation()
+void CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
 {
     STRING_FORMATTER sf;
 
@@ -399,5 +387,6 @@ void CVPCB_MAINFRAME::SaveFootprintAssociation()
 
     Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, sf.GetString() );
 
-    SetStatusText( _("Footprint association sent to Eeschema") );
+    if( doSaveSchematic )
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_SAVE, std::string( "" ) );
 }

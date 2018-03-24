@@ -129,6 +129,8 @@ class EDA_BASE_FRAME : public wxFrame
      */
     void windowClosing( wxCloseEvent& event );
 
+    wxWindow* findQuasiModalDialog();
+
     /**
      * Removes border from wxAui panes.
      */

@@ -112,28 +112,39 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 }
 
 
-DIALOG_SHIM* findQuasiModalDialog( wxWindowList& aList )
+wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
 {
-    for( wxWindowList::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for( auto& iter : GetChildren() )
     {
-        DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( *iter );
+        DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( iter );
         if( dlg && dlg->IsQuasiModal() )
             return dlg;
     }
-    return NULL;
+
+    // FIXME: CvPcb is currently implemented on top of KIWAY_PLAYER rather than DIALOG_SHIM,
+    // so we have to look for it separately.
+    if( m_Ident == FRAME_SCH )
+    {
+        wxWindow* cvpcb = wxWindow::FindWindowByName( "CvpcbFrame" );
+        if( cvpcb )
+            return cvpcb;
+    }
+
+    return nullptr;
 }
 
 
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
-    DIALOG_SHIM* dlg = findQuasiModalDialog( GetChildren() );
-    if( dlg )
+    // Don't allow closing when a quasi-modal is open.
+    wxWindow* quasiModal = findQuasiModalDialog();
+    if( quasiModal )
     {
-        // Happens when a quasi modal dialog is currently open.
-        // For example: if the Kicad manager try to close Kicad.
-        wxMessageBox( _(
-                "The program cannot be closed\n"
-                "A quasi-modal dialog window is currently open, please close it first." ) );
+        // Raise and notify; don't give the user a warning regarding "quasi-modal dialogs"
+        // when they have no idea what those are.
+        quasiModal->Raise();
+        wxBell();
+
         event.Veto();
         return;
     }
@@ -182,7 +193,7 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     // them.
     if( !IsEnabled() && IsActive() )
     {
-        DIALOG_SHIM* dlg = findQuasiModalDialog( GetChildren() );
+        wxWindow* dlg = findQuasiModalDialog();
         if( dlg )
             dlg->Raise();
     }

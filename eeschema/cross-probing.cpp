@@ -276,6 +276,17 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         if( importFormat >= 0 )
             importFile( path, importFormat );
     }
+        break;
+
+    case MAIL_SCH_SAVE:
+    {
+        wxCommandEvent dummyEvent;
+        OnSaveProject( dummyEvent );
+
+        if( !isAutoSaveRequired() )     // proxy for save completed
+            Kiway().ExpressMail( FRAME_CVPCB, MAIL_STATUS, _( "Schematic saved" ).ToStdString() );
+    }
+        break;
 
     default:
         ;

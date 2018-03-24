@@ -62,17 +62,9 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Save the footprints back into eeschema
     AddMenuItem( filesMenu, wxID_SAVE,
-                 _( "&Save Footprint Associations\tCtrl+S" ),
+                 _( "&Save Schematic\tCtrl+S" ),
                  SAVE_HLP_MSG,
                  KiBitmap( save_xpm ) );
-
-    // Separator
-    filesMenu->AppendSeparator();
-
-    // Quit
-    AddMenuItem( filesMenu, wxID_EXIT,
-                 _( "&Close" ), _( "Close CvPcb" ),
-                 KiBitmap( exit_xpm ) );
 
     // Preferences Menu :
     wxMenu* preferencesMenu = new wxMenu;
@@ -100,14 +92,6 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    // Keep open on save data
-    preferencesMenu->AppendSeparator();
-    AddMenuItem( preferencesMenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
-                 _( "&Keep Open On Save" ),
-                 _( "Prevent CvPcb from exiting after saving netlist file" ),
-                 KiBitmap( exit_xpm ),
-                 wxITEM_CHECK );
-
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
 
@@ -129,7 +113,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  KiBitmap( about_xpm ) );
 
     // Create the menubar and append all submenus
-    menuBar->Append( filesMenu, _( "&Save" ) );
+    menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
