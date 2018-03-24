@@ -262,10 +262,6 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     bool            has_changed = false;
     int             count = m_parameterGrid->GetNumberRows();
 
-    // Skip extra event, useless
-    if( event.GetString() == m_parameterGrid->GetCellValue( event.GetRow(), WIZ_COL_VALUE ) )
-        return;
-
     for( int prm_id = 0; prm_id < count; ++prm_id )
     {
         wxString value = m_parameterGrid->GetCellValue( prm_id, WIZ_COL_VALUE );

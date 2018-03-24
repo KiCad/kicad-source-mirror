@@ -92,6 +92,11 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
         // Mac needs this for the keyboard events; Linux appears to always need it.
         m_grid->ForceRefresh();
 
+        // Let any clients know
+        wxGridEvent event( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, aRow, aCol );
+        event.SetString( model->GetValue( aRow, aCol ) );
+        m_grid->GetEventHandler()->ProcessEvent( event );
+
         return true;
     }
 
