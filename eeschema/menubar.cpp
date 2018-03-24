@@ -741,6 +741,6 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
     AddMenuItem( aParentMenu,
                  ID_CONFIG_READ,
                  _( "Load P&roject File..." ),
-                 _( "Load project preferences into a project file" ),
+                 _( "Load project preferences from a project file" ),
                  KiBitmap( import_setup_xpm ) );
 }
