@@ -662,8 +662,9 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
             if( wxNOT_FOUND == selectedNetListNdx )
             {
                 // the currently selected net must *always* be visible.
-                listNetName.Insert( equipot->GetNetname(), 0 );
-                selectedNetListNdx = 0;
+		// <no net> is the zero'th index, so pick next lowest
+                listNetName.Insert( equipot->GetNetname(), 1 );
+                selectedNetListNdx = 1;
             }
         }
     }
