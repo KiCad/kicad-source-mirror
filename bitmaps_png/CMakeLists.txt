@@ -2,7 +2,7 @@
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 # Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-# Copyright (C) 2011-2016 Kicad Developers, see change_log.txt for contributors#.
+# Copyright (C) 2011-2018 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -630,7 +630,7 @@ function( svg2png inputFile outFile pngWidth pngHeight )
 
     add_custom_command(
         OUTPUT ${outFile}
-        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap -f ${inputFile} -e ${outFile}
+        COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} -e ${outFile}
             -w ${pngWidth} -h ${pngHeight} > ${logfile}
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
