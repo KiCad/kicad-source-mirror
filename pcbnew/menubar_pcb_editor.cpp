@@ -643,7 +643,7 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
 
     text = AddHotkeyName( _( "Zoom to Selection" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_ZOOM_SELECTION );
-    AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
+    AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
 
     text = AddHotkeyName( _( "&Redraw" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( aParentMenu, ID_ZOOM_REDRAW, text,

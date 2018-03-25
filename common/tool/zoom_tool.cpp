@@ -47,7 +47,10 @@ void ZOOM_TOOL::Reset( RESET_REASON aReason )
 int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // This method is called both when the zoom tool is activated (on) or deactivated (off)
-    bool zoom_tool_is_on = m_frame->GetToolToggled( ID_ZOOM_SELECTION );
+    wxMenuBar* menu = m_frame->GetMenuBar();
+
+    bool zoom_tool_is_on = m_frame->GetToolToggled( ID_ZOOM_SELECTION ) ||
+                           ( menu && menu->IsChecked( ID_ZOOM_SELECTION ) );
 
     if( !zoom_tool_is_on )  // This is a tool deselection: do nothing
         return 0;
