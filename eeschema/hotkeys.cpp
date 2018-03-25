@@ -196,7 +196,8 @@ static EDA_HOTKEY HkFindReplace( _HKI( "Find and Replace" ), HK_FIND_REPLACE,
                                  'F' + GR_KB_CTRL + GR_KB_ALT, wxID_REPLACE );
 static EDA_HOTKEY HkFindNextDrcMarker( _HKI( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
                                        WXK_F5 + GR_KB_SHIFT, EVT_COMMAND_FIND_DRC_MARKER );
-static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
+static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
+                                   GR_KB_CTRL + WXK_F5, ID_ZOOM_SELECTION );
 
 // Special keys for library editor:
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
@@ -204,7 +205,8 @@ static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT 
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 // Load/save files
-static EDA_HOTKEY HkSaveAllLib( _HKI( "Save All Libraries" ), HK_SAVE_ALL_LIBS, 'S' + GR_KB_CTRL, ID_LIBEDIT_SAVE_ALL_LIBS );
+static EDA_HOTKEY HkSaveAllLib( _HKI( "Save All Libraries" ), HK_SAVE_ALL_LIBS, 'S' + GR_KB_CTRL,
+                                ID_LIBEDIT_SAVE_ALL_LIBS );
 
 // Autoplace fields
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
@@ -217,12 +219,12 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
-
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
 static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
 static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
-static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S', (int) wxID_SAVEAS );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S',
+                            (int) wxID_SAVEAS );
 static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
 
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );

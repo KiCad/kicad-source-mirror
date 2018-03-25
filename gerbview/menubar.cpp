@@ -208,9 +208,12 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom out" ), KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), GerbviewHokeysDescr, HK_ZOOM_AUTO  );
+    text = AddHotkeyName( _( "Zoom to &Fit" ), GerbviewHokeysDescr, HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, _( "Zoom to Selection" ),
+                 KiBitmap( zoom_area_xpm ) );
 
     text = AddHotkeyName( _( "&Redraw" ), GerbviewHokeysDescr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,

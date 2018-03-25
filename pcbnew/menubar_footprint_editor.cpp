@@ -236,6 +236,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit footprint" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
+    text = AddHotkeyName( _( "Zoom to Selection" ), m_hotkeysDescrList, HK_ZOOM_SELECTION );
+
+    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
+
     text = AddHotkeyName( _( "&Redraw" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );

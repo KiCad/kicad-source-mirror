@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -67,7 +67,8 @@
 
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK,
+                                     WXK_END, 0 );
 
 static EDA_HOTKEY    HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
@@ -77,7 +78,8 @@ static EDA_HOTKEY    HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4
 static EDA_HOTKEY    HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
 static EDA_HOTKEY    HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_KEY_ZOOM_OUT );
 static EDA_HOTKEY    HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_KEY_ZOOM_IN );
-static EDA_HOTKEY    HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, WXK_F5, ID_ZOOM_SELECTION );
+static EDA_HOTKEY    HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
+                                      GR_KB_CTRL + WXK_F5, ID_ZOOM_SELECTION );
 static EDA_HOTKEY    HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY    HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
 static EDA_HOTKEY    HkPlaceItem( _HKI( "Place Item" ), HK_PLACE_ITEM, 'P', ID_POPUP_ITEM_PLACE );
@@ -94,7 +96,8 @@ static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
 static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
 static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
-static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_CTRL + GR_KB_SHIFT + 'S', (int) wxID_SAVEAS );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_CTRL + GR_KB_SHIFT + 'S',
+                            (int) wxID_SAVEAS );
 static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
 
 // List of common hotkey descriptors

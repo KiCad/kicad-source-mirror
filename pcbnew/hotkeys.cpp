@@ -194,7 +194,7 @@ static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' )
 #endif
 
 static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
-                                   '@', ID_ZOOM_SELECTION );
+                                   GR_KB_CTRL + WXK_F5, ID_ZOOM_SELECTION );
 
 static EDA_HOTKEY Hk3DViewer( _HKI( "3D Viewer" ), HK_3D_VIEWER, GR_KB_ALT + '3' );
 

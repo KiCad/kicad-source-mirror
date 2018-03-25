@@ -636,10 +636,14 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Zoom to &Fit" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_ZOOM_AUTO  );
     AddMenuItem( aParentMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
+
+    text = AddHotkeyName( _( "Zoom to Selection" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ZOOM_SELECTION );
+    AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
 
     text = AddHotkeyName( _( "&Redraw" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( aParentMenu, ID_ZOOM_REDRAW, text,
