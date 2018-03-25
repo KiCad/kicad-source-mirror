@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-25 22:32+0200\n"
-"PO-Revision-Date: 2018-03-25 22:35+0200\n"
+"POT-Creation-Date: 2018-03-25 22:37+0200\n"
+"PO-Revision-Date: 2018-03-25 22:38+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2246,7 +2246,7 @@ msgstr ""
 msgid "Grid"
 msgstr "Griglia"
 
-#: common/tool/zoom_tool.cpp:55 common/block_commande.cpp:97
+#: common/tool/zoom_tool.cpp:58 common/block_commande.cpp:97
 #: eeschema/tool_sch.cpp:127 eeschema/tool_lib.cpp:190 eeschema/schedit.cpp:516
 #: eeschema/lib_edit_frame.cpp:1159 gerbview/toolbars_gerber.cpp:89
 #: gerbview/events_called_functions.cpp:237
@@ -23780,7 +23780,6 @@ msgid "14"
 msgstr "14"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
 msgid "16"
 msgstr "16"
 
@@ -23813,7 +23812,6 @@ msgid "30"
 msgstr "30"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
 msgid "32"
 msgstr "32"
 
@@ -28002,8 +28000,16 @@ msgid "Fill mode:"
 msgstr "Modalità riempimento:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
-msgid "Segments / 360 deg:"
-msgstr "Segmenti / 360 gradi:"
+msgid "Boundary mode:"
+msgstr "Modalità bordo:"
+
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
+msgid "Low Resolution"
+msgstr "Bassa risoluzione"
+
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
+msgid "High Resolution"
+msgstr "Alta risoluzione"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
 msgid "Outline slope:"
