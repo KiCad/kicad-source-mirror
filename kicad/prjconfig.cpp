@@ -191,7 +191,7 @@ public:
     DIR_CHECKBOX( wxWindow* aParent )
         : wxPanel( aParent )
     {
-        m_cbCreateDir = new wxCheckBox( aParent, wxID_ANY,
+        m_cbCreateDir = new wxCheckBox( this, wxID_ANY,
                 _( "Create a new directory for the project" ) );
         m_cbCreateDir->SetValue( true );
 
