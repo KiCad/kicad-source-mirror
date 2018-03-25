@@ -245,7 +245,6 @@ long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
     }
 
     long long hash = 0;
-
     for( wxString const& nickname : GetLogicalLibs() )
     {
         const FP_LIB_TABLE_ROW* row = FindRow( nickname );

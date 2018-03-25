@@ -265,12 +265,12 @@ public:
     }
 
     /**
-     * Factory function to return a new FOOTPRINT_LIST via Kiway. NOT guaranteed
+     * Factory function to return a FOOTPRINT_LIST via Kiway. NOT guaranteed
      * to succeed; will return null if the kiface is not available.
      *
      * @param aKiway - active kiway instance
      */
-    static std::unique_ptr<FOOTPRINT_LIST> GetInstance( KIWAY& aKiway );
+    static FOOTPRINT_LIST* GetInstance( KIWAY& aKiway );
 
 protected:
     /**

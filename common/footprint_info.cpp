@@ -109,7 +109,7 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 }
 
 
-static std::unique_ptr<FOOTPRINT_LIST> get_instance_from_id( KIWAY& aKiway, int aId )
+static FOOTPRINT_LIST* get_instance_from_id( KIWAY& aKiway, int aId )
 {
     void* ptr = nullptr;
 
@@ -130,11 +130,11 @@ static std::unique_ptr<FOOTPRINT_LIST> get_instance_from_id( KIWAY& aKiway, int 
         return nullptr;
     }
 
-    return std::unique_ptr<FOOTPRINT_LIST>( (FOOTPRINT_LIST*) ( ptr ) );
+    return static_cast<FOOTPRINT_LIST*>( ptr );
 }
 
 
-std::unique_ptr<FOOTPRINT_LIST> FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
+FOOTPRINT_LIST* FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
 {
     return get_instance_from_id( aKiway, KIFACE_NEW_FOOTPRINT_LIST );
 }

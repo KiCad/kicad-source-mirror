@@ -45,9 +45,6 @@
 #include <widgets/footprint_select_widget.h>
 
 
-FOOTPRINT_ASYNC_LOADER          DIALOG_CHOOSE_COMPONENT::m_fp_loader;
-std::unique_ptr<FOOTPRINT_LIST> DIALOG_CHOOSE_COMPONENT::m_fp_list;
-
 wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
 int DIALOG_CHOOSE_COMPONENT::m_tree_canvas_sash_position = 0;
 
@@ -65,6 +62,8 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_external_browser_requested( false )
 {
     wxBusyCursor busy_while_loading;
+
+    m_fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -161,7 +160,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     if( m_show_footprints )
     {
         if( m_allow_field_edits )
-            m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, m_fp_loader, m_fp_list, true );
+            m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, m_fp_list, true );
 
         m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
 

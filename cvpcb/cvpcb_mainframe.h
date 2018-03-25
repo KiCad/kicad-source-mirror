@@ -73,7 +73,8 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
 public:
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_EquFilesNames;
-    std::unique_ptr<FOOTPRINT_LIST> m_FootprintsList;
+
+    FOOTPRINT_LIST*           m_FootprintsList;
 
 protected:
     int             m_undefinedComponentCnt;

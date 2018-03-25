@@ -59,14 +59,13 @@ public:
      * loaded more than once.
      *
      * @param aParent - parent window
-     * @param aLoader - FOOTPRINT_ASYNC_LOADER instance
      * @param aFpList - FOOTPRINT_LIST container
      * @param aUpdate - whether to call UpdateList() automatically when finished loading
      * @param aMaxItems - maximum number of filter items to display, in addition to
      *  Default and Other
      */
-    FOOTPRINT_SELECT_WIDGET( wxWindow* aParent, FOOTPRINT_ASYNC_LOADER& aLoader,
-            std::unique_ptr<FOOTPRINT_LIST>& aFpList, bool aUpdate = true, int aMaxItems = 400 );
+    FOOTPRINT_SELECT_WIDGET( wxWindow* aParent, FOOTPRINT_LIST* aFpList,
+                             bool aUpdate = true, int aMaxItems = 400 );
 
     virtual ~FOOTPRINT_SELECT_WIDGET()
     {
@@ -145,10 +144,10 @@ private:
     wxString m_other_footprint;
     int      m_last_item;
 
-    FOOTPRINT_ASYNC_LOADER&          m_fp_loader;
-    std::unique_ptr<FOOTPRINT_LIST>& m_fp_list;
-    FOOTPRINT_FILTER                 m_fp_filter;
-    bool                             m_zero_filter;
+    FOOTPRINT_ASYNC_LOADER   m_fp_loader;
+    FOOTPRINT_LIST*          m_fp_list;
+    FOOTPRINT_FILTER         m_fp_filter;
+    bool                     m_zero_filter;
 
     void OnProgressTimer( wxTimerEvent& aEvent );
     void OnComboBox( wxCommandEvent& aEvent );

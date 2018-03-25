@@ -61,7 +61,7 @@ wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
 
 
 FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
-        FOOTPRINT_ASYNC_LOADER& aLoader, std::unique_ptr<FOOTPRINT_LIST>& aFpList, bool aUpdate,
+        FOOTPRINT_LIST* aFpList, bool aUpdate,
         int aMaxItems )
         : wxPanel( aParent ),
           m_kiway( nullptr ),
@@ -69,7 +69,6 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
           m_finished_loading( false ),
           m_max_items( aMaxItems ),
           m_last_item( 0 ),
-          m_fp_loader( aLoader ),
           m_fp_list( aFpList )
 {
     m_zero_filter = true;

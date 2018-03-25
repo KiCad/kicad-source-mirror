@@ -208,9 +208,8 @@ protected:
     bool                        m_external_browser_requested;
     wxString                    m_fp_override;
 
-    static FOOTPRINT_ASYNC_LOADER          m_fp_loader;
-    static std::unique_ptr<FOOTPRINT_LIST> m_fp_list;
-    std::vector<std::pair<int, wxString>> m_field_edits;
+    FOOTPRINT_LIST*                        m_fp_list;
+    std::vector<std::pair<int, wxString>>  m_field_edits;
 
     // Remember the dialog size during a session
     static wxSize m_last_dlg_size;

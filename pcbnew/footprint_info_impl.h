@@ -93,4 +93,7 @@ public:
                                      WX_PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 };
 
+extern FOOTPRINT_LIST_IMPL GFootprintList;        // KIFACE scope.
+
+
 #endif // FOOTPRINT_INFO_IMPL_H

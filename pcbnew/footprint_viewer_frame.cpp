@@ -405,7 +405,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         return;
     }
 
-    auto fp_info_list( FOOTPRINT_LIST::GetInstance( Kiway() ) );
+    auto fp_info_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
     wxString nickname = getCurNickname();
 

@@ -89,6 +89,7 @@ wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 DLIST<TRACK> g_CurrentTrackList;
 
 
+
 namespace PCB {
 
 static struct IFACE : public KIFACE_I
@@ -167,7 +168,7 @@ static struct IFACE : public KIFACE_I
         switch( aDataId )
         {
         case KIFACE_NEW_FOOTPRINT_LIST:
-            return (void*) static_cast<FOOTPRINT_LIST*>( new FOOTPRINT_LIST_IMPL() );
+            return (void*) &GFootprintList;
 
         case KIFACE_G_FOOTPRINT_TABLE:
             return (void*) new FP_LIB_TABLE( &GFootprintTable );
@@ -309,7 +310,13 @@ void PythonPluginsReloadBase()
 /// The global footprint library table.  This is not dynamically allocated because
 /// in a multiple project environment we must keep its address constant (since it is
 /// the fallback table for multiple projects).
-FP_LIB_TABLE    GFootprintTable;
+FP_LIB_TABLE          GFootprintTable;
+
+/// The global footprint info table.  This is performance-intensive to build so we
+/// keep a hash-stamped global version.  Any deviation from the request vs. stored
+/// hash will result in it being rebuilt.
+FOOTPRINT_LIST_IMPL   GFootprintList;
+
 
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
