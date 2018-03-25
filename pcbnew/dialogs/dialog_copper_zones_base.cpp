@@ -206,11 +206,11 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_FillModeCtrl->SetSelection( 0 );
 	m_MiddleBox->Add( m_FillModeCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_staticTextSegmCnt = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Segments / 360 deg:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSegmCnt = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Boundary mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSegmCnt->Wrap( -1 );
 	m_MiddleBox->Add( m_staticTextSegmCnt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	wxString m_ArcApproximationOptChoices[] = { _("16"), _("32") };
+	wxString m_ArcApproximationOptChoices[] = { _("Low Resolution"), _("High Resolution") };
 	int m_ArcApproximationOptNChoices = sizeof( m_ArcApproximationOptChoices ) / sizeof( wxString );
 	m_ArcApproximationOpt = new wxChoice( m_ExportableSetupSizer->GetStaticBox(), ID_M_ARCAPPROXIMATIONOPT, wxDefaultPosition, wxDefaultSize, m_ArcApproximationOptNChoices, m_ArcApproximationOptChoices, 0 );
 	m_ArcApproximationOpt->SetSelection( 0 );
