@@ -357,7 +357,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
     // The title is updated for each downloaded library.
     // the state will be updated by downloadOneLib() for each file.
     wxProgressDialog pdlg( _( "Downloading 3D libraries" ), wxEmptyString,
-                           aUrlList.GetCount(), GetParent(),
+                           aUrlList.GetCount(), this,
                            wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_AUTO_HIDE );
 
     // Built the full server name string:
