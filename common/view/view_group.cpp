@@ -105,28 +105,54 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
     const auto drawList = updateDrawList();
 
-    // Draw all items immediately (without caching)
+    std::unordered_map<int, std::vector<VIEW_ITEM*>> layer_item_map;
+
+    // Build a list of layers used by the items in the group
     for( auto item : drawList )
     {
-        gal->PushDepth();
+        int item_layers[VIEW::VIEW_MAX_LAYERS], item_layers_count;
+        item->ViewGetLayers( item_layers, item_layers_count );
 
-        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
-        item->ViewGetLayers( layers, layers_count );
-        aView->SortLayers( layers, layers_count );
-
-        for( int i = 0; i < layers_count; i++ )
+        for( int i = 0; i < item_layers_count; i++ )
         {
-            if( aView->IsLayerVisible( layers[i] ) )
+            if( layer_item_map.count( item_layers[i] ) == 0 )
             {
-                gal->AdvanceDepth();
+                layer_item_map.emplace( std::make_pair( item_layers[i],
+                                                        std::vector<VIEW_ITEM*>() ) );
+            }
 
+            layer_item_map[ item_layers[i] ].push_back( item );
+        }
+    }
+
+    int layers[VIEW::VIEW_MAX_LAYERS], layers_count = 0;
+
+    for( const auto& entry : layer_item_map )
+    {
+        layers[ layers_count++ ] = entry.first;
+    }
+
+    aView->SortLayers( layers, layers_count );
+
+    // Now draw the layers in sorted order
+
+    gal->PushDepth();
+
+    for( int i = 0; i < layers_count; i++ )
+    {
+        if( aView->IsLayerVisible( layers[i] ) )
+        {
+            gal->AdvanceDepth();
+
+            for( auto item : layer_item_map[ layers[i] ] )
+            {
                 if( !painter->Draw( item, layers[i] ) )
                     item->ViewDraw( layers[i], aView ); // Alternative drawing method
             }
         }
-
-        gal->PopDepth();
     }
+
+    gal->PopDepth();
 }
 
 
