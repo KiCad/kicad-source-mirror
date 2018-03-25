@@ -77,11 +77,12 @@ public:
     FOOTPRINT_LIST*           m_FootprintsList;
 
 protected:
-    int             m_undefinedComponentCnt;
     bool            m_modified;
     bool            m_skipComponentSelect;      // true to skip OnSelectComponent event
                                                 // (in automatic selection/deletion of associations)
     PARAM_CFG_ARRAY m_projectFileParams;
+
+    bool            m_initialized;
 
     CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
 

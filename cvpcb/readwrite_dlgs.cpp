@@ -361,12 +361,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
                     GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
 
         m_compListBox->AppendLine( msg );
-
-        if( component->GetFPID().empty() )
-        {
-            m_undefinedComponentCnt += 1;
-            continue;
-        }
     }
 
     if( !m_netlist.IsEmpty() )

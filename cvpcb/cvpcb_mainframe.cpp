@@ -118,6 +118,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_filteringOptions      = 0;
     m_tcFilterString        = NULL;
     m_FootprintsList        = FOOTPRINT_LIST::GetInstance( Kiway() );
+    m_initialized           = false;
 
     // Give an icon
     wxIcon icon;
@@ -209,6 +210,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( bottomPanel, wxAuiPaneInfo( horiz ).Name( wxT( "buttons" ) ).Bottom() );
 
     m_auimgr.Update();
+    m_initialized = true;
 
     // Connect Events
     m_saveAndContinue->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ), NULL, this );
@@ -645,8 +647,8 @@ void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
 
 void CVPCB_MAINFRAME::DisplayStatus()
 {
-    if( !m_libListBox || !m_compListBox || !m_footprintListBox )
-        return;         // still initializing; not ready for status yet
+    if( !m_initialized )
+        return;
 
     wxString   filters, msg;
     COMPONENT* component = GetSelectedComponent();
