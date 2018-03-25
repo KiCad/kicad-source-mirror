@@ -9,7 +9,7 @@ set( XSL_SCRIPTS_LIST
     xsl_scripts/netlist_form_cadstar-RINF.xsl
     xsl_scripts/netlist_form_cadstar.xsl
     xsl_scripts/netlist_form_OrcadPcb2.xsl
-    xsl_scripts/netlist_form_pads-pcb.xsl
+    xsl_scripts/netlist_form_pads-pcb.asc.xsl
     xsl_scripts/bom_with_title_block_2_csv.xsl
     )
 

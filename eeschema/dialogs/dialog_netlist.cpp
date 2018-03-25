@@ -55,7 +55,7 @@
 #include <netlist_exporters/netlist_exporter_pspice.h>
 
 #include <eeschema_id.h>
-
+#include <wx/regex.h>
 
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
@@ -580,7 +580,16 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
+    {
+        wxString command = currPage->m_CommandStringCtrl->GetValue();
+        wxRegEx extRE( wxT( ".*\\.([[:alnum:]][[:alnum:]][[:alnum:]][[:alnum:]]?)\\.xslt?\".*" ) );
+
+        if( extRE.Matches( command ) )
+            fileExt = extRE.GetMatch( command, 1 );
+
         title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue().GetData() );
+    }
+        break;
     }
 
     fn.SetExt( fileExt );

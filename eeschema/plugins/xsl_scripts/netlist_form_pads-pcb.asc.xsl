@@ -15,7 +15,7 @@
 <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
 <xsl:template match="/export">
-    <xsl:text>*PADS-PCB*&nl;*PART*&nl;</xsl:text>
+    <xsl:text>!PADS-POWERPCB-V2.0-MILS!&nl;*PART*&nl;</xsl:text>
     <xsl:apply-templates select="components/comp"/>
     <xsl:text>&nl;*NET*&nl;</xsl:text>
     <xsl:apply-templates select="nets/net"/>
