@@ -1814,8 +1814,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     while( fabs( angle ) > fabs( delta_angle ) )
                     {
                         wxASSERT( radius > 0.0 );
-                        wxPoint end( int( radius * cos( end_angle + angle ) + center.x ),
-                                     int( radius * sin( end_angle + angle ) + center.y ) );
+                        wxPoint end( KiROUND( radius * cos( end_angle + angle ) + center.x ),
+                                     KiROUND( radius * sin( end_angle + angle ) + center.y ) );
 
                         TRACK*  t = new TRACK( m_board );
 
