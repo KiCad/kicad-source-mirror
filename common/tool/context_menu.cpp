@@ -335,6 +335,14 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
         // Store the selected position, so it can be checked by the tools
         m_selected = aEvent.GetId();
 
+        CONTEXT_MENU* parent = dynamic_cast<CONTEXT_MENU*>( GetParent() );
+
+        while( parent )
+        {
+            parent->m_selected = m_selected;
+            parent = dynamic_cast<CONTEXT_MENU*>( parent->GetParent() );
+        }
+
         // Check if there is a TOOL_ACTION for the given ID
         if( m_selected >= ACTION_ID )
             evt = findToolAction( m_selected );
