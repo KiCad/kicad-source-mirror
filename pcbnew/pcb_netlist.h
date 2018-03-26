@@ -84,6 +84,7 @@ class COMPONENT
 {
     COMPONENT_NETS m_nets;
     wxArrayString  m_footprintFilters; ///< Footprint filters found in netlist.
+    int            m_pinCount;         ///< Number of pins found in netlist.
     wxString       m_reference;        ///< The component reference designator found in netlist.
     wxString       m_value;            ///< The component value found in netlist.
 
@@ -121,6 +122,7 @@ public:
         m_fpid             = aFPID;
         m_reference        = aReference;
         m_value            = aValue;
+        m_pinCount         = 0;
         m_timeStamp        = aTimeStamp;
         m_footprintChanged = false;
     }
@@ -161,11 +163,11 @@ public:
         m_altFpid = aFPID;
     }
 
-   const LIB_ID& GetFPID() const { return m_fpid; }
+    const LIB_ID& GetFPID() const { return m_fpid; }
 
     const LIB_ID& GetAltFPID() const { return m_altFpid; }
 
-     const wxString& GetTimeStamp() const { return m_timeStamp; }
+    const wxString& GetTimeStamp() const { return m_timeStamp; }
 
     void SetFootprintFilters( const wxArrayString& aFilterList )
     {
@@ -173,6 +175,13 @@ public:
     }
 
     const wxArrayString& GetFootprintFilters() const { return m_footprintFilters; }
+
+    void SetPinCount( int aPinCount )
+    {
+        m_pinCount = aPinCount;
+    }
+
+    int GetPinCount() const { return m_pinCount; }
 
     MODULE* GetModule( bool aRelease = false )
     {

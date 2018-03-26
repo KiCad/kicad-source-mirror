@@ -676,7 +676,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
         msg.Empty();
 
         if( component )
-            msg = wxString::Format( wxT( "%i" ), component->GetNetCount() );
+            msg = wxString::Format( wxT( "%i" ), component->GetPinCount() );
 
         if( !filters.IsEmpty() )
             filters += wxT( ", " );

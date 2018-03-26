@@ -407,6 +407,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
     wxString          libPartName;
     wxArrayString     footprintFilters;
     wxArrayString     aliases;
+    int               pinCount = 0;
 
     // The last token read was libpart, so read the next token
     while( (token = NextTok()) != T_RIGHT )
@@ -442,7 +443,6 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
                 footprintFilters.Add( FROM_UTF8( CurText() ) );
                 NeedRIGHT();
             }
-
             break;
 
         case T_aliases:
@@ -459,6 +459,22 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
                 NeedRIGHT();
             }
             break;
+
+        case T_pins:
+            while( (token = NextTok()) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token != T_pin )
+                    Expecting( T_pin );
+
+                pinCount++;
+
+                skipCurrent();
+            }
+            break;
+
         default:
             // Skip not used data (i.e all other tokens)
             skipCurrent();
@@ -472,12 +488,18 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
         component = m_netlist->GetComponent( i );
 
         if( component->IsLibSource( libName, libPartName ) )
+        {
             component->SetFootprintFilters( footprintFilters );
+            component->SetPinCount( pinCount );
+        }
 
         for( unsigned jj = 0; jj < aliases.GetCount(); jj++ )
         {
             if( component->IsLibSource( libName, aliases[jj] ) )
+            {
                 component->SetFootprintFilters( footprintFilters );
+                component->SetPinCount( pinCount );
+            }
         }
 
     }
