@@ -608,6 +608,10 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
     if( jt->IsLocked() )
         return SH_INCOMPLETE;
 
+    // nothing to push...
+    if ( aForce.x == 0 && aForce.y == 0 )
+        return SH_OK;
+
     while( aForce.x != 0 || aForce.y != 0 )
     {
         JOINT* jt_next = m_currentNode->FindJoint( p0_pushed, aVia );
