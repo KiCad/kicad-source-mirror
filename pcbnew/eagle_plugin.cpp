@@ -60,6 +60,7 @@ Load() TODO's
 #include <fctsys.h>
 #include <trigo.h>
 #include <macros.h>
+#include <geometry/geometry_utils.h>
 #include <kicad_string.h>
 #include <properties.h>
 #include <wx/filename.h>
@@ -73,9 +74,6 @@ Load() TODO's
 #include <class_dimension.h>
 
 #include <eagle_plugin.h>
-
-// KiCad doesn't currently have curved tracks, so we use high-def for zone
-#define EAGLE_CURVE_DELTA ( 360.0 / ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF )
 
 using namespace std;
 
@@ -1784,6 +1782,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     double angle = 0.0;
                     double end_angle = 0.0;
                     double radius = 0.0;
+                    double delta_angle = 0.0;
                     wxPoint center;
 
                     int width = w.width.ToPcbUnits();
@@ -1804,9 +1803,12 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                         radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
                                        pow( center.y - kicad_y( w.y1 ), 2 ) );
+
+                        delta_angle = angle / static_cast<double>( GetArcToSegmentCount(
+                                static_cast<int>( rint( radius ) ), ARC_HIGH_DEF, *w.curve ) );
                     }
 
-                    while( fabs( angle ) > DEG2RAD( EAGLE_CURVE_DELTA ) )
+                    while( fabs( angle ) > fabs( delta_angle ) )
                     {
                         wxASSERT( radius > 0.0 );
                         wxPoint end( int( radius * cos( end_angle + angle ) + center.x ),
@@ -1824,11 +1826,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         m_board->m_Track.Insert( t, NULL );
 
                         start = end;
-
-                        if( angle < 0 )
-                            angle += DEG2RAD( EAGLE_CURVE_DELTA );
-                        else
-                            angle -= DEG2RAD( EAGLE_CURVE_DELTA );
+                        angle -= delta_angle;
                     }
 
                     TRACK*  t = new TRACK( m_board );
