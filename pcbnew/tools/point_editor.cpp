@@ -99,8 +99,8 @@ private:
                 points->AddBreak();
         }
 
-    // Lines have to be added after creating edit points,
-    // as they use EDIT_POINT references
+        // Lines have to be added after creating edit points,
+        // as they use EDIT_POINT references
         for( int i = 0; i < cornersCount - 1; ++i )
         {
             if( points->IsContourEnd( i ) )
@@ -117,7 +117,7 @@ private:
                             std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
         }
 
-    // The last missing line, connecting the last and the first polygon point
+        // The last missing line, connecting the last and the first polygon point
         points->AddLine( points->Point( cornersCount - 1 ),
                 points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
 
@@ -667,6 +667,7 @@ void POINT_EDITOR::updatePoints()
         if( m_editPoints->PointsSize() != (unsigned) outline->TotalVertices() )
         {
             getView()->Remove( m_editPoints.get() );
+            m_editedPoint = nullptr;
             m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
             getView()->Add( m_editPoints.get() );
         }
