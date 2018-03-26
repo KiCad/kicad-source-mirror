@@ -322,7 +322,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
 
     int candidate = -1;
 
-    for( int jj = first_selected+1; jj < m_netlist.GetCount(); jj++ )
+    for( int jj = first_selected+1; jj < (int)m_netlist.GetCount(); jj++ )
     {
         if( m_netlist.GetComponent( jj )->GetFPID().empty() )
         {
