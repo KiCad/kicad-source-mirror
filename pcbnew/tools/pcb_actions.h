@@ -384,6 +384,7 @@ public:
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION highlightNetCursor;
+    static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;

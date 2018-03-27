@@ -141,6 +141,10 @@ TOOL_ACTION PCB_ACTIONS::highlightNetCursor( "pcbnew.EditorControl.highlightNetC
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHLIGHT_NET_SELECTION ),
+        "", "" );
+
 TOOL_ACTION PCB_ACTIONS::showLocalRatsnest( "pcbnew.Control.showLocalRatsnest",
         AS_GLOBAL, 0,
         "", "" );
@@ -915,34 +919,73 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
  * highlight for its net.
  * @param aToolMgr is the TOOL_MANAGER currently in use.
  * @param aPosition is the point where an item is expected (world coordinates).
+ * @param aUseSelection is true if we should use the current selection to pick the netcode
  */
-static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
+static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
+                          bool aUseSelection = false )
 {
     auto render = aToolMgr->GetView()->GetPainter()->GetSettings();
     auto frame = static_cast<PCB_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
-    auto guide = frame->GetCollectorsGuide();
+
     BOARD* board = static_cast<BOARD*>( aToolMgr->GetModel() );
-    GENERAL_COLLECTOR collector;
+
     int net = -1;
+    bool enableHighlight = false;
 
-    // Find a connected item for which we are going to highlight a net
-    collector.Collect( board, GENERAL_COLLECTOR::PadsTracksOrZones,
-                       wxPoint( aPosition.x, aPosition.y ), guide );
-
-    for( int i = 0; i < collector.GetCount(); i++ )
+    if( aUseSelection )
     {
-        if( collector[i]->Type() == PCB_PAD_T )
+        auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
+
+        const SELECTION& selection = selectionTool->GetSelection();
+
+        for( auto item : selection )
         {
-            frame->SendMessageToEESCHEMA( static_cast<BOARD_CONNECTED_ITEM*>( collector[i] ) );
-            break;
+            if( BOARD_CONNECTED_ITEM::ClassOf( item ) )
+            {
+                auto ci = static_cast<BOARD_CONNECTED_ITEM*>( item );
+
+                int item_net = ci->GetNetCode();
+
+                if( net < 0 )
+                {
+                    net = item_net;
+                }
+                else if( net != item_net )
+                {
+                    // more than one net selected: do nothing
+                    return 0;
+                }
+            }
         }
+
+        enableHighlight = ( net >= 0 && net != render->GetHighlightNetCode() );
     }
 
-    bool enableHighlight = ( collector.GetCount() > 0 );
+    // If we didn't get a net to highlight from the selection, use the cursor
+    if( net < 0 )
+    {
+        auto guide = frame->GetCollectorsGuide();
+        GENERAL_COLLECTOR collector;
 
-    // Obtain net code for the clicked item
-    if( enableHighlight )
-        net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
+        // Find a connected item for which we are going to highlight a net
+        collector.Collect( board, GENERAL_COLLECTOR::PadsTracksOrZones,
+                           wxPoint( aPosition.x, aPosition.y ), guide );
+
+        for( int i = 0; i < collector.GetCount(); i++ )
+        {
+            if( collector[i]->Type() == PCB_PAD_T )
+            {
+                frame->SendMessageToEESCHEMA( static_cast<BOARD_CONNECTED_ITEM*>( collector[i] ) );
+                break;
+            }
+        }
+
+        enableHighlight = ( collector.GetCount() > 0 );
+
+        // Obtain net code for the clicked item
+        if( enableHighlight )
+            net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
+    }
 
     // Toggle highlight when the same net was picked
     if( net > 0 && net == render->GetHighlightNetCode() )
@@ -1002,13 +1045,24 @@ int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
+    // If the keyboard hotkey was triggered, the behavior is as follows:
+    // If we are already in the highlight tool, behave the same as a left click.
+    // If we are not, highlight the net of the selected item(s), or if there is
+    // no selection, then behave like a Ctrl+Left Click.
+    if( aEvent.IsAction( &PCB_ACTIONS::highlightNetSelection ) )
+    {
+        bool use_selection = ( m_frame->GetToolId() != ID_PCB_HIGHLIGHT_BUTT );
+        highlightNet( m_toolMgr, getViewControls()->GetMousePosition(),
+                      use_selection );
+    }
+
     Activate();
 
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight net" ) );
-    picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, _1 ) );
+    picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, _1, false ) );
     picker->SetSnapping( false );
     picker->Activate();
     Wait();
@@ -1155,6 +1209,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::selectionModified.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HideSelectionRatsnest, SELECTION_TOOL::ClearedEvent );
