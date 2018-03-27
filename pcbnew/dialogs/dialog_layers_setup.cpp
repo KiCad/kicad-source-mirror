@@ -151,7 +151,7 @@ private:
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
     // Force mandatory non copper layers enabled
-    void enableMandatoryLayerCheckBoxes();
+    void setStateMandatoryLayerCheckBoxes();
 
     void showCopperChoice( int copperCount );
     void showBoardLayerNames();
@@ -387,7 +387,7 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
     showSelectedLayerCheckBoxes( m_enabledLayers );
     showPresets( m_enabledLayers );
     showLayerTypes();
-    enableMandatoryLayerCheckBoxes();
+    setStateMandatoryLayerCheckBoxes();
 
     // All widgets are now initialized. Fix the min sizes:
     GetSizer()->SetSizeHints( this );
@@ -396,15 +396,18 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
 }
 
 
-void DIALOG_LAYERS_SETUP::enableMandatoryLayerCheckBoxes()
+void DIALOG_LAYERS_SETUP::setStateMandatoryLayerCheckBoxes()
 {
-    // Currently, do nothing
-#if 0
-    setLayerCheckBox( F_CrtYd, true );
-    setLayerCheckBox( B_CrtYd, true );
-    setLayerCheckBox( Edge_Cuts, true );
-    setLayerCheckBox( Margin, true );
-#endif
+    int layerList[4] =
+    {
+        F_CrtYd, B_CrtYd, Edge_Cuts, Margin
+    };
+
+    for( int ii = 0; ii < 4; ii++ )
+    {
+        setLayerCheckBox( layerList[ii], true );
+        getCheckBox( layerList[ii] )->Enable( false );  // do not allow changes
+    }
 }
 
 
@@ -604,30 +607,25 @@ void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
     if( presetNdx < DIM(presets) )
     {
         m_enabledLayers = presets[ presetNdx ];
-
         LSET copperSet = m_enabledLayers & LSET::AllCuMask();
-
         int copperCount = copperSet.count();
 
         m_copperLayerCount = copperCount;
-
         showCopperChoice( m_copperLayerCount );
-
         showSelectedLayerCheckBoxes( m_enabledLayers );
-
         setCopperLayerCheckBoxes( m_copperLayerCount );
     }
+
+    // Ensure mandatory layers are activated
+    setStateMandatoryLayerCheckBoxes();
 }
 
 
 void DIALOG_LAYERS_SETUP::OnCopperLayersChoice( wxCommandEvent& event )
 {
     m_copperLayerCount = m_CopperLayersChoice->GetCurrentSelection() * 2 + 2;
-
     setCopperLayerCheckBoxes( m_copperLayerCount );
-
     m_enabledLayers = getUILayerMask();
-
     showPresets( m_enabledLayers );
 }
 
@@ -745,9 +743,7 @@ bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
 int DIALOG_LAYERS_SETUP::getLayerTypeIndex( LAYER_NUM aLayer )
 {
     wxChoice*  ctl =  getChoice( aLayer );
-
     int ret = ctl->GetCurrentSelection();   // indices must have same sequence as LAYER_T
-
     return ret;
 }
 
@@ -755,11 +751,8 @@ int DIALOG_LAYERS_SETUP::getLayerTypeIndex( LAYER_NUM aLayer )
 wxString DIALOG_LAYERS_SETUP::getLayerName( LAYER_NUM aLayer )
 {
     wxString ret;
-
     wxASSERT( IsCopperLayer( aLayer ) );
-
     wxTextCtrl*  ctl = (wxTextCtrl*) getName( aLayer );
-
     ret = ctl->GetValue().Trim();
 
     return ret;
@@ -781,7 +774,6 @@ static bool hasOneOf( const wxString& str, const wxString& chars )
 bool DIALOG_LAYERS_SETUP::testLayerNames()
 {
     std::vector<wxString>    names;
-
     wxTextCtrl*  ctl;
 
     for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
