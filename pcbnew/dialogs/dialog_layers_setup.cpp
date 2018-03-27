@@ -29,6 +29,9 @@
 
 #include <confirm.h>
 #include <pcbnew.h>
+#include <pcb_edit_frame.h>
+#include <view/view.h>
+
 #include <invoke_pcb_dialog.h>
 
 #include <class_board.h>
@@ -42,11 +45,6 @@
 // if defined, display only active copper layers
 // if not displays always 1=the full set (32 copper layers)
 #define HIDE_INACTIVE_LAYERS
-
-// if defined, use the layer manager copper layers order (from FRONT to BACK)
-// to display inner layers.
-// if not, use the default order (from BACK to FRONT)
-#define USE_LAYER_MANAGER_COPPER_LAYERS_ORDER
 
 
 /**
@@ -138,7 +136,7 @@ static LSEQ dlg_layers()
 class DIALOG_LAYERS_SETUP : public DIALOG_LAYERS_SETUP_BASE
 {
 public:
-    DIALOG_LAYERS_SETUP( wxTopLevelWindow* aCaller, BOARD* aBoard );
+    DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
 
 private:
     int             m_copperLayerCount;
@@ -152,6 +150,8 @@ private:
 
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
+    // Force mandatory non copper layers enabled
+    void enableMandatoryLayerCheckBoxes();
 
     void showCopperChoice( int copperCount );
     void showBoardLayerNames();
@@ -178,6 +178,11 @@ private:
      * Return a list of layers removed from the board that contain items.
      */
     LSEQ getRemovedLayersWithItems();
+
+    /**
+     * Return a list of layers in use in footprints, and therefore not removable.
+     */
+    LSEQ getNonRemovableLayers();
 
     /**
      * Map \a aLayerNumber to the wx IDs for that layer which are
@@ -323,7 +328,7 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
 }
 
 
-DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoard ) :
+DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
     DIALOG_LAYERS_SETUP_BASE( aParent )
 {
     m_pcb = aBoard;
@@ -382,6 +387,7 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
     showSelectedLayerCheckBoxes( m_enabledLayers );
     showPresets( m_enabledLayers );
     showLayerTypes();
+    enableMandatoryLayerCheckBoxes();
 
     // All widgets are now initialized. Fix the min sizes:
     GetSizer()->SetSizeHints( this );
@@ -390,10 +396,23 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
 }
 
 
+void DIALOG_LAYERS_SETUP::enableMandatoryLayerCheckBoxes()
+{
+    // Currently, do nothing
+#if 0
+    setLayerCheckBox( F_CrtYd, true );
+    setLayerCheckBox( B_CrtYd, true );
+    setLayerCheckBox( Edge_Cuts, true );
+    setLayerCheckBox( Margin, true );
+#endif
+}
+
+
 void DIALOG_LAYERS_SETUP::OnSize( wxSizeEvent& event )
 {
     moveTitles();
     event.Skip();
+    Refresh();
 }
 
 
@@ -634,14 +653,31 @@ bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
     // Check for removed layers with items which will get deleted from the board.
     LSEQ removedLayers = getRemovedLayersWithItems();
 
-    if( !removedLayers.empty()
-      && !IsOK( this, _( "Items have been found on removed layers. This operation will delete "
-                         "all items from removed layers and cannot be undone. Do you wish to "
-                         "continue?" ) ) )
+    // Check for non copper layers in use in footprints, and therefore not removable.
+    LSEQ notremovableLayers = getNonRemovableLayers();
+
+    if( !notremovableLayers.empty() )
+    {
+        for( unsigned int ii = 0; ii < notremovableLayers.size(); ii++ )
+            msg << m_pcb->GetLayerName( notremovableLayers[ii] ) << "\n";
+
+        if( !IsOK( this, wxString::Format( _( "Footprints have some items on removed layers:\n"
+                                              "%s\n"
+                                              "These items will be no longer accessible\n"
+                                              "Do you wish to continue?" ), msg ) ) )
+            return false;
+    }
+
+    if( !removedLayers.empty() &&
+        !IsOK( this, _( "Items have been found on removed layers. This operation will delete "
+                        "all items from removed layers and cannot be undone. Do you wish to "
+                        "continue?" ) ) )
         return false;
 
     // Delete all objects on layers that have been removed.  Leaving them in copper layers
     // can (will?) result in DRC errors and it pollutes the board file with cruft.
+    bool hasRemovedBoardItems = false;
+
     if( !removedLayers.empty() )
     {
         PCB_LAYER_COLLECTOR collector;
@@ -654,8 +690,14 @@ bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
             // Bye-bye items on on removed layer.
             if( collector.GetCount() != 0 )
             {
+                hasRemovedBoardItems = true;
+
                 for( int i = 0; i < collector.GetCount(); i++ )
-                    m_pcb->Remove( collector[i] );
+                {
+                    BOARD_ITEM* item = collector[i];
+                    m_pcb->Remove( item );
+                    delete item;
+                }
             }
         }
     }
@@ -685,6 +727,16 @@ bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
     }
 
     m_pcb->GetDesignSettings().SetBoardThickness( thickness );
+
+    // If some board items are deleted: rebuild the connectivity,
+    // because it is likely some tracks and vias where removed
+    if( hasRemovedBoardItems )
+    {
+        PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( GetParent() );
+        // Rebuild list of nets (full ratsnest rebuild)
+        editFrame->Compile_Ratsnest( NULL, true );
+        m_pcb->BuildConnectivity();
+    }
 
     return true;
 }
@@ -800,7 +852,7 @@ LSEQ DIALOG_LAYERS_SETUP::getRemovedLayersWithItems()
     LSET newLayers = getUILayerMask();
     LSET curLayers = m_pcb->GetEnabledLayers();
 
-    if( newLayers == curLayers )
+    if( newLayers == curLayers )    // return a empty list if no change
         return removedLayers;
 
     PCB_LAYER_COLLECTOR collector;
@@ -823,7 +875,40 @@ LSEQ DIALOG_LAYERS_SETUP::getRemovedLayersWithItems()
 }
 
 
-bool InvokeLayerSetup( wxTopLevelWindow* aCaller, BOARD* aBoard )
+LSEQ DIALOG_LAYERS_SETUP::getNonRemovableLayers()
+{
+     //Build the list of non copper layers in use in footprints.
+    LSEQ inUseLayers;
+    LSET newLayers = getUILayerMask();
+    LSET curLayers = m_pcb->GetEnabledLayers();
+
+    if( newLayers == curLayers )    // return a empty list if no change
+        return inUseLayers;
+
+    PCB_LAYER_COLLECTOR collector;
+    LSEQ newLayerSeq = newLayers.Seq();
+    std::vector< PCB_LAYER_ID >::iterator it;
+
+    for( auto layer_id : curLayers.Seq() )
+    {
+        if( IsCopperLayer( layer_id ) ) // Copper layers are not taken in account here
+            continue;
+
+        if( std::find( newLayerSeq.begin(), newLayerSeq.end(), layer_id ) == newLayerSeq.end() )
+        {
+            collector.SetLayerId( layer_id );
+            collector.Collect( m_pcb, GENERAL_COLLECTOR::ModuleItems );
+
+            if( collector.GetCount() != 0 )
+                inUseLayers.push_back( layer_id );
+        }
+    }
+
+    return inUseLayers;
+}
+
+
+bool InvokeLayerSetup( PCB_EDIT_FRAME* aCaller, BOARD* aBoard )
 {
     DIALOG_LAYERS_SETUP dlg( aCaller, aBoard );
 

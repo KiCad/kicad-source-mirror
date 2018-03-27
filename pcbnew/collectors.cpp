@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -499,7 +499,12 @@ SEARCH_RESULT PCB_LAYER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
 
-    if( item->GetLayer() == m_layer_id )
+    if( item->Type() == PCB_PAD_T )     // multilayer
+    {
+        if( static_cast<D_PAD*>( item )->IsOnLayer( m_layer_id ) )
+            Append( testItem );
+    }
+    else if( item->GetLayer() == m_layer_id )
         Append( testItem );
 
     return SEARCH_CONTINUE;
