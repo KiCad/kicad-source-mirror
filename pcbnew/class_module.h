@@ -306,9 +306,9 @@ public:
             m_ModuleStatus &= ~MODULE_PADS_LOCKED;
     }
 
-    void SetLastEditTime( time_t aTime ) { m_LastEditTime = aTime; }
+    void SetLastEditTime( timestamp_t aTime ) { m_LastEditTime = aTime; }
     void SetLastEditTime() { m_LastEditTime = time( NULL ); }
-    time_t GetLastEditTime() const { return m_LastEditTime; }
+    timestamp_t GetLastEditTime() const { return m_LastEditTime; }
 
     /* drawing functions */
 
@@ -736,7 +736,7 @@ private:
     wxString m_KeyWord;         ///< Search keywords to find module in library.
     wxString m_Path;
     ZoneConnection m_ZoneConnection;
-    time_t m_LastEditTime;
+    timestamp_t m_LastEditTime;
     int m_arflag;           ///< Use to trace ratsnest and auto routing.
     double m_Surface;       ///< Bounding box area
     timestamp_t m_Link;     ///< Temporary logical link used in edition
