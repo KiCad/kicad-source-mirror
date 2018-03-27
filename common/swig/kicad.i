@@ -112,6 +112,8 @@ principle should be easily implemented by adapting the current STL containers.
 %include marker_base.h
 %include eda_text.h
 
+// Cast time_t to known type for Python
+typedef long time_t;
 
 // std template mappings
 %template(intVector) std::vector<int>;
