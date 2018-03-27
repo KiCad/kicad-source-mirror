@@ -32,7 +32,6 @@
 
 #include <vector>
 
-#include <fctsys.h>
 #include <base_struct.h>    // SEARCH_RESULT
 #include <common.h>         // GetNewTimeStamp()
 #include <eda_rect.h>
@@ -72,7 +71,7 @@ protected:
     EDA_RECT m_RefBox;
 
     /// The time at which the collection was made.
-    time_t m_TimeAtCollection;
+    timestamp_t m_TimeAtCollection;
 
 public:
     COLLECTOR() :
@@ -215,7 +214,7 @@ public:
         m_TimeAtCollection = GetNewTimeStamp();
     }
 
-    time_t GetTime()
+    timestamp_t GetTime()
     {
         return m_TimeAtCollection;
     }
@@ -238,13 +237,13 @@ public:
     bool IsSimilarPointAndTime( const wxPoint& aRefPos )
     {
         const int distMax = 2;      // adjust these here
-        const time_t timeMax = 3;   // seconds
+        const timestamp_t timeMax = 3;   // seconds
 
         int dx = abs( aRefPos.x - m_RefPos.x );
         int dy = abs( aRefPos.y - m_RefPos.y );
 
         if( dx <= distMax && dy <= distMax &&
-            (int)GetNewTimeStamp() - m_TimeAtCollection <= timeMax )
+            GetNewTimeStamp() - m_TimeAtCollection <= timeMax )
             return true;
         else
             return false;
