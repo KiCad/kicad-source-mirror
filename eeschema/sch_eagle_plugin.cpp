@@ -2173,6 +2173,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 if( p == lineend )    // wire is overlapped by bus entry symbol
                                 {
                                     m_currentSheet->GetScreen()->DeleteItem( line );
+                                    line = nullptr;
                                 }
                                 else
                                 {
@@ -2191,6 +2192,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 if( p == lineend )    // wire is overlapped by bus entry symbol
                                 {
                                     m_currentSheet->GetScreen()->DeleteItem( line );
+                                    line = nullptr;
                                 }
                                 else
                                 {
@@ -2212,6 +2214,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 if( linestart + wxPoint( 100, -100 )== lineend )    // wire is overlapped by bus entry symbol
                                 {
                                     m_currentSheet->GetScreen()->DeleteItem( line );
+                                    line = nullptr;
                                 }
                                 else
                                 {
@@ -2230,6 +2233,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                                 if( linestart + wxPoint( 100, 100 )== lineend )    // wire is overlapped by bus entry symbol
                                 {
                                     m_currentSheet->GetScreen()->DeleteItem( line );
+                                    line = nullptr;
                                 }
                                 else
                                 {
@@ -2240,7 +2244,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                     }
 
-                    if( TestSegmentHit( lineend, busstart, busend, 0 ) )
+                    if( line && TestSegmentHit( lineend, busstart, busend, 0 ) )
                     {
                         wxPoint wirevector = linestart - lineend;
 
