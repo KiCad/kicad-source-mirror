@@ -573,14 +573,14 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                  KiBitmap( exchange_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_SWAP_LAYERS,
-                 _( "&Swap Layers..." ),
-                 _( "Swap tracks on copper layers or drawings on other layers" ),
+                 _( "&Move and Swap Layers..." ),
+                 _( "Move tracks or drawings from a layer to an other layer" ),
                  KiBitmap( swap_layer_xpm ) );
 
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_PCB_GLOBAL_DELETE,
                  _( "&Global Deletions..." ),
-                 _( "Delete tracks, footprints and texts on board" ),
+                 _( "Delete tracks, footprints and graphic items from board" ),
                  KiBitmap( general_deletions_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_CLEAN,

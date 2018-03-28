@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_layer_selection_base.h"
@@ -26,7 +26,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	m_leftGridLayers->EnableEditing( false );
 	m_leftGridLayers->EnableGridLines( true );
 	m_leftGridLayers->EnableDragGridSize( false );
-	m_leftGridLayers->SetMargins( 0, 3 );
+	m_leftGridLayers->SetMargins( 5, 3 );
 	
 	// Columns
 	m_leftGridLayers->EnableDragColMove( false );
@@ -56,7 +56,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	m_rightGridLayers->EnableEditing( false );
 	m_rightGridLayers->EnableGridLines( true );
 	m_rightGridLayers->EnableDragGridSize( false );
-	m_rightGridLayers->SetMargins( 0, 3 );
+	m_rightGridLayers->SetMargins( 5, 3 );
 	
 	// Columns
 	m_rightGridLayers->EnableDragColMove( false );
@@ -77,7 +77,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	bSizerUpper->Add( m_rightGridLayers, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

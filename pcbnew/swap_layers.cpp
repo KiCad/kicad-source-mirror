@@ -51,11 +51,11 @@ enum swap_layer_id {
 };
 
 
-class SWAP_LAYERS_DIALOG : public DIALOG_SHIM
+class MOVE_SWAP_LAYER_DIALOG : public DIALOG_SHIM
 {
 public:
-    SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aArray );
-    // ~SWAP_LAYERS_DIALOG() { };
+    MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aArray );
+    // ~MOVE_SWAP_LAYER_DIALOG() { };
 
 private:
     PCB_BASE_FRAME*         m_Parent;
@@ -79,18 +79,18 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
+BEGIN_EVENT_TABLE( MOVE_SWAP_LAYER_DIALOG, wxDialog )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + PCB_LAYER_ID_COUNT - 1,
-                       wxEVT_COMMAND_BUTTON_CLICKED, SWAP_LAYERS_DIALOG::Sel_Layer )
+                       wxEVT_COMMAND_BUTTON_CLICKED, MOVE_SWAP_LAYER_DIALOG::Sel_Layer )
 
-    EVT_BUTTON( wxID_OK, SWAP_LAYERS_DIALOG::OnOkClick )
+    EVT_BUTTON( wxID_OK, MOVE_SWAP_LAYER_DIALOG::OnOkClick )
 
-    EVT_BUTTON( wxID_CANCEL, SWAP_LAYERS_DIALOG::OnCancelClick )
+    EVT_BUTTON( wxID_CANCEL, MOVE_SWAP_LAYER_DIALOG::OnCancelClick )
 END_EVENT_TABLE()
 
 
-SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aArray ) :
-    DIALOG_SHIM( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
+MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aArray ) :
+    DIALOG_SHIM( parent, -1, _( "Move Layers:" ), wxPoint( -1, -1 ),
                  wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
     m_callers_nlayers( aArray )
 {
@@ -260,7 +260,7 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aA
     }
 
     /* Provide spacers to occupy otherwise blank cells within the second
-     * FlexGrid sizer. (Becuse there are three columns, three spacers
+     * FlexGrid sizer. (Because there are three columns, three spacers
      * are thus required for each unused row.)
     for( int ii = 3 * NB_PCB_LAYERS; ii < 96; ii++ )
     {
@@ -291,16 +291,13 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aA
     StdDialogButtonSizer->Realize();
 
     // Resize the dialog
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
+    GetSizer()->SetSizeHints( this );
 
     Center();
 }
 
 
-void SWAP_LAYERS_DIALOG::Sel_Layer( wxCommandEvent& event )
+void MOVE_SWAP_LAYER_DIALOG::Sel_Layer( wxCommandEvent& event )
 {
     int ii;
 
@@ -340,19 +337,21 @@ void SWAP_LAYERS_DIALOG::Sel_Layer( wxCommandEvent& event )
             // that this layer *is* being swapped)
             layer_list[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
         }
+
+        layer_list[ii]->Refresh();
     }
 }
 
 
-void SWAP_LAYERS_DIALOG::OnCancelClick( wxCommandEvent& event )
+void MOVE_SWAP_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }
 
 
-void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
+void MOVE_SWAP_LAYER_DIALOG::OnOkClick( wxCommandEvent& event )
 {
-    EndModal( 1 );
+    EndModal( wxID_OK );
 }
 
 
@@ -363,9 +362,9 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     for( unsigned i = 0; i < DIM( new_layer );  ++i )
         new_layer[i] = NO_CHANGE;
 
-    SWAP_LAYERS_DIALOG dlg( this, new_layer );
+    MOVE_SWAP_LAYER_DIALOG dlg( this, new_layer );
 
-    if( dlg.ShowModal() != 1 )
+    if( dlg.ShowModal() != wxID_OK )
         return;     // (Canceled dialog box returns -1 instead)
 
     // Change traces.
