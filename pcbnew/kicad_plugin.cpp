@@ -138,8 +138,13 @@ public:
     // error codes nor user interface calls from here, nor in any PLUGIN.
     // Catch these exceptions higher up please.
 
-    /// save the entire legacy library to m_lib_name;
-    void Save();
+    /**
+     * Function Save
+     * Save the footprint cache or a single module from it to disk
+     *
+     * @param aModule if set, save only this module, otherwise, save the full library
+     */
+    void Save( MODULE* aModule = NULL );
 
     void Load();
 
@@ -184,7 +189,7 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 }
 
 
-void FP_CACHE::Save()
+void FP_CACHE::Save( MODULE* aModule )
 {
     m_cache_timestamp = 0;
 
@@ -202,6 +207,9 @@ void FP_CACHE::Save()
 
     for( MODULE_ITER it = m_modules.begin();  it != m_modules.end();  ++it )
     {
+        if( aModule && aModule != it->second->GetModule() )
+            continue;
+
         wxFileName fn = it->second->GetFileName();
 
         wxString tempFileName =
@@ -243,7 +251,10 @@ void FP_CACHE::Save()
     }
 
     m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
-    m_cache_dirty = false;
+
+    // If we've saved the full cache, we clear the dirty flag.
+    if( !aModule )
+        m_cache_dirty = false;
 }
 
 
@@ -2101,7 +2112,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     wxLogTrace( traceFootprintLibrary, wxT( "Creating s-expression footprint file: %s." ),
                 fn.GetFullPath().GetData() );
     mods.insert( footprintName, new FP_CACHE_ITEM( module, fn ) );
-    m_cache->Save();
+    m_cache->Save( module );
 }
 
 
