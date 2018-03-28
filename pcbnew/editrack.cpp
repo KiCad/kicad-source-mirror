@@ -425,20 +425,12 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     if( Begin_Route( aTrack, aDC ) == NULL )
         return false;
 
+    // Update last track position
     ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, true );
+    // Erase the last drawings
     ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, false );
-    TraceAirWiresToTargets( aDC );
-
-    /* cleanup
-     *  if( g_CurrentTrackSegment->Next() != NULL )
-     *  {
-     *   delete g_CurrentTrackSegment->Next();
-     *   g_CurrentTrackSegment->SetNext( NULL );
-     *  }
-     */
 
     DBG( g_CurrentTrackList.VerifyListIntegrity(); );
-
 
     /* The track here is now chained to the list of track segments.
      * It must be seen in the area of net
@@ -487,8 +479,6 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
             GetBoard()->GetConnectivity()->Add( track );
         }
 
-        TraceAirWiresToTargets( aDC );
-
         int i = 0;
 
         for( track = firstTrack; track && i < newCount; ++i, track = track->Next() )
@@ -506,7 +496,14 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
         s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
-        // compute the new ratsnest
+        // Erase old ratsnest
+        if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && aDC )
+        {
+            GRSetDrawMode( aDC, GR_XOR );
+            DrawGeneralRatsnest( aDC, 0 );
+        }
+
+        // compute and display the new ratsnest
         TestNetConnection( aDC, netcode );
         OnModify();
         SetMsgPanel( GetBoard() );
@@ -529,8 +526,6 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
     m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
-
-    GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     return true;
 }

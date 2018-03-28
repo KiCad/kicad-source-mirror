@@ -120,18 +120,24 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
     int netcode = aTrack->GetNetCode();
 
-    // Remove the segment from list, but do not delete it (it will be stored i n undo list)
+    // Remove the segment from list, but do not delete it (it will be stored in undo list)
     GetBoard()->Remove( aTrack );
-
     GetBoard()->GetConnectivity()->Remove( aTrack );
-
-    // redraw the area where the track was
-    m_canvas->RefreshDrawingRect( aTrack->GetBoundingBox() );
 
     SaveCopyInUndoList( aTrack, UR_DELETED );
     OnModify();
+
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && DC )
+    {
+        GRSetDrawMode( DC, GR_XOR );
+        DrawGeneralRatsnest( DC, 0 );
+    }
+    // compute and display the new ratsnest
     TestNetConnection( DC, netcode );
     SetMsgPanel( GetBoard() );
+
+    // redraw the area where the track was
+    m_canvas->RefreshDrawingRect( aTrack->GetBoundingBox() );
 
     return NULL;
 }
@@ -141,10 +147,8 @@ void PCB_EDIT_FRAME::Delete_Track( wxDC* DC, TRACK* aTrack )
 {
     if( aTrack != NULL )
     {
-        int netcode = aTrack->GetNetCode();
         Remove_One_Track( DC, aTrack );
         OnModify();
-        TestNetConnection( DC, netcode );
     }
 }
 
@@ -184,6 +188,14 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
     SaveCopyInUndoList( itemsList, UR_DELETED );
     OnModify();
+
+    // Erase old ratsnest
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
+    {
+        GRSetDrawMode( DC, GR_XOR );
+        DrawGeneralRatsnest( DC, 0 );
+    }
+
     TestNetConnection( DC, netcode );
     SetMsgPanel( GetBoard() );
 }
@@ -231,5 +243,15 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     SaveCopyInUndoList( itemsList, UR_DELETED );
 
     if( net_code > 0 )
+    {
+        // Erase old ratsnest
+        if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
+        {
+            GRSetDrawMode( DC, GR_XOR );
+            DrawGeneralRatsnest( DC, 0 );
+        }
+
+        // Build and draw the new ratsnest
         TestNetConnection( DC, net_code );
+    }
 }
