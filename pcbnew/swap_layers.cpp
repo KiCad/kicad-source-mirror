@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 /**
  * @file swap_layers.cpp
- * @brief Dialog to swap layers.
+ * @brief Dialog to move board items between layers.
  */
 
 #include <fctsys.h>
@@ -37,11 +37,12 @@
 #include <class_drawsegment.h>
 
 #include <pcbnew.h>
+#include <board_commit.h>
 
 #include <wx/statline.h>
 
 
-#define NO_CHANGE     PCB_LAYER_ID(-3)
+#define NO_CHANGE PCB_LAYER_ID(-3)
 
 
 enum swap_layer_id {
@@ -59,13 +60,9 @@ public:
 
 private:
     PCB_BASE_FRAME*         m_Parent;
-    wxBoxSizer*             OuterBoxSizer;
-    wxBoxSizer*             MainBoxSizer;
+    wxBoxSizer*             m_outerBoxSizer;
+    wxBoxSizer*             m_mainBoxSizer;
     wxFlexGridSizer*        FlexColumnBoxSizer;
-    wxStaticText*           label;
-    wxButton*               Button;
-    wxStaticText*           text;
-    wxStaticLine*           Line;
     wxStdDialogButtonSizer* StdDialogButtonSizer;
 
     PCB_LAYER_ID*               m_callers_nlayers;          // DIM() is PCB_LAYER_ID_COUNT
@@ -98,13 +95,9 @@ MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYE
 
     BOARD* board = parent->GetBoard();
 
-    OuterBoxSizer = NULL;
-    MainBoxSizer  = NULL;
+    m_outerBoxSizer = NULL;
+    m_mainBoxSizer  = NULL;
     FlexColumnBoxSizer = NULL;
-    label  = NULL;
-    Button = NULL;
-    text   = NULL;
-    Line   = NULL;
     StdDialogButtonSizer = NULL;
 
     m_Parent = parent;
@@ -133,23 +126,20 @@ MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYE
      * buttons should be some other size in that version.
      */
 
-    OuterBoxSizer = new wxBoxSizer( wxVERTICAL );
-    SetSizer( OuterBoxSizer );
+    m_outerBoxSizer = new wxBoxSizer( wxVERTICAL );
+    SetSizer( m_outerBoxSizer );
 
-    MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    OuterBoxSizer->Add( MainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    m_mainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+    m_outerBoxSizer->Add( m_mainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     for( unsigned layer = 0; layer < DIM( layer_list );  ++layer )
     {
         // Provide a vertical line to separate the two FlexGrid sizers
         if( layer == 32 )
         {
-            Line = new wxStaticLine( this,
-                                     -1,
-                                     wxDefaultPosition,
-                                     wxDefaultSize,
-                                     wxLI_VERTICAL );
-            MainBoxSizer->Add( Line, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
+            wxStaticLine* line = new wxStaticLine( this, -1, wxDefaultPosition,
+                                                   wxDefaultSize, wxLI_VERTICAL );
+            m_mainBoxSizer->Add( line, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
         }
 
         // Provide a separate FlexGrid sizer for every sixteen sets of controls
@@ -188,15 +178,16 @@ MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYE
             // Specify that (just) the right-hand column can be expanded.
             FlexColumnBoxSizer->AddGrowableCol( 2 );
 
-            MainBoxSizer->Add( FlexColumnBoxSizer, 1, wxGROW | wxTOP, 5 );
+            m_mainBoxSizer->Add( FlexColumnBoxSizer, 1, wxGROW | wxTOP, 5 );
         }
 
         /* Provide a text string to identify this layer (with trailing spaces
          * within that string being purged).
          */
-        label = new wxStaticText( this, wxID_STATIC, board->GetLayerName( ToLAYER_ID( layer ) ),
-                                  wxDefaultPosition, wxDefaultSize,
-                                  wxALIGN_RIGHT );
+        wxStaticText* label = new wxStaticText( this, wxID_STATIC,
+                                    board->GetLayerName( ToLAYER_ID( layer ) ),
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxALIGN_RIGHT );
 
         FlexColumnBoxSizer->Add( label, 0,
                                  wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL |
@@ -206,8 +197,8 @@ MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYE
         // Provide a button for this layer (which will invoke a child dialog box)
         item_ID = ID_BUTTON_0 + layer;
 
-        Button = new wxButton( this, item_ID, wxT( "..." ), wxDefaultPosition,
-                               wxSize( w, h ), 0 );
+        wxButton* Button = new wxButton( this, item_ID, wxT( "..." ), wxDefaultPosition,
+                                         wxSize( w, h ), 0 );
         FlexColumnBoxSizer->Add( Button, 0,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
                                  wxLEFT | wxBOTTOM, 5 );
@@ -227,9 +218,12 @@ MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYE
          * size is not this size, strings can be truncated after
          * some other layer is selected.)
          */
+        wxStaticText* text;
+
         if( layer == 0 )
         {
-            text = new wxStaticText( this, item_ID, board->GetLayerName( PCB_LAYER_ID( 0 ) ),
+            text = new wxStaticText( this, item_ID,
+                                     board->GetLayerName( PCB_LAYER_ID( 0 ) ),
                                      wxDefaultPosition, wxDefaultSize, 0 );
             goodSize = text->GetSize();
 
@@ -272,16 +266,18 @@ MOVE_SWAP_LAYER_DIALOG::MOVE_SWAP_LAYER_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYE
 
     // Provide a line to separate the controls which have been provided so far
     // from the OK and Cancel buttons (which will be provided after this line)
-    Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    OuterBoxSizer->Add( Line, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    wxStaticLine* line = new wxStaticLine( this, -1, wxDefaultPosition,
+                                           wxDefaultSize, wxLI_HORIZONTAL );
+    m_outerBoxSizer->Add( line, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     // Provide a StdDialogButtonSizer to accommodate the OK and Cancel buttons;
     // using that type of sizer results in those buttons being automatically
     // located in positions appropriate for each (OS) version of KiCad.
     StdDialogButtonSizer = new wxStdDialogButtonSizer;
-    OuterBoxSizer->Add( StdDialogButtonSizer, 0, wxGROW | wxALL, 10 );
+    m_outerBoxSizer->Add( StdDialogButtonSizer, 0, wxGROW | wxALL, 10 );
 
-    Button = new wxButton( this, wxID_OK, _( "&OK" ), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* Button = new wxButton( this, wxID_OK, _( "&OK" ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetDefault();
     StdDialogButtonSizer->AddButton( Button );
 
@@ -367,6 +363,9 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     if( dlg.ShowModal() != wxID_OK )
         return;     // (Canceled dialog box returns -1 instead)
 
+    BOARD_COMMIT commit( this );
+    bool hasChanges = false;
+
     // Change traces.
     for( TRACK* segm = GetBoard()->m_Track;  segm;  segm = segm->Next() )
     {
@@ -389,6 +388,9 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
             if( new_layer[top_layer] != NO_CHANGE )
                 top_layer = new_layer[top_layer];
 
+            commit.Modify( via );
+            hasChanges = true;
+
             via->SetLayerPair( top_layer, bottom_layer );
         }
         else
@@ -396,12 +398,16 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
             int jj = segm->GetLayer();
 
             if( new_layer[jj] != NO_CHANGE )
+            {
+                commit.Modify( segm );
+                hasChanges = true;
                 segm->SetLayer( new_layer[jj] );
+            }
         }
     }
 
     // Change zones.
-    for( TRACK* segm = GetBoard()->m_Zone;  segm;  segm = segm->Next() )
+    for( TRACK* segm = GetBoard()->m_Zone; segm; segm = segm->Next() )
     {
         OnModify();
         int jj = segm->GetLayer();
@@ -421,9 +427,16 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
             int jj = drawsegm->GetLayer();
 
             if( new_layer[jj] != NO_CHANGE )
+            {
+                commit.Modify( drawsegm );
+                hasChanges = true;
                 drawsegm->SetLayer( new_layer[jj] );
+            }
         }
     }
+
+    if( hasChanges )
+        commit.Push( "Layers moved" );
 
     m_canvas->Refresh( true );
 }
