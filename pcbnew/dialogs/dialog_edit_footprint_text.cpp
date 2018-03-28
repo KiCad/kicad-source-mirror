@@ -64,26 +64,48 @@ void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC
 }
 
 
-DIALOG_EDIT_FPTEXT::DIALOG_EDIT_FPTEXT( wxWindow* aCaller, PCB_BASE_FRAME* aBoardEditor,
-                                            TEXTE_MODULE* aTextMod, wxDC* aDC ) :
-    DIALOG_EDIT_FPTEXT_BASE( aCaller ), m_OrientValidator( 1, &m_OrientValue )
+DIALOG_EDIT_FPTEXT::DIALOG_EDIT_FPTEXT( wxWindow* aCaller, PCB_BASE_FRAME* aFrame,
+                                        TEXTE_MODULE* aTextMod, wxDC* aDC ) :
+    DIALOG_EDIT_FPTEXT_BASE( aCaller ),
+    m_frame( aFrame ), m_dc( aDC ), m_text( aTextMod ),
+    m_textWidth( aFrame, m_widthLabel, m_widthCtrl, m_widthUnits, true, TEXTS_MIN_SIZE ),
+    m_textHeight( aFrame, m_heightLabel, m_heightCtrl, m_heightUnits, true, TEXTS_MIN_SIZE ),
+    m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true, 0 ),
+    m_posX( aFrame, m_posXLabel, m_posXCtrl, m_posXUnits ),
+    m_posY( aFrame, m_posYLabel, m_posYCtrl, m_posYUnits ),
+    m_OrientValidator( 1, &m_OrientValue )
 {
-    m_boardEditor = aBoardEditor;
-    m_dc     = aDC;
-    m_module = NULL;
-    m_currentText = aTextMod;
+    if( m_text )
+        m_module = (MODULE*) m_text->GetParent();
+
     m_OrientValue = 0;
+
+    switch( m_text->GetType() )
+    {
+    case TEXTE_MODULE::TEXT_is_REFERENCE: m_TextDataTitle->SetLabel( _( "Reference:" ) ); break;
+    case TEXTE_MODULE::TEXT_is_VALUE:     m_TextDataTitle->SetLabel( _( "Value:" ) );     break;
+    case TEXTE_MODULE::TEXT_is_DIVERS:    m_TextDataTitle->SetLabel( _( "Text:" ) );      break;
+    }
+
+    // Configure the layers list selector.  Note that footprints are built outside the current
+    // board and so we may need to show all layers if the text is on an unactivated layer.
+    if( !m_frame->GetBoard()->IsLayerEnabled( m_text->GetLayer() ) )
+        m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
+
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenTextLayers() );
+    m_LayerSelectionCtrl->SetBoardFrame( m_frame );
+    m_LayerSelectionCtrl->Resync();
 
     m_OrientValidator.SetRange( -180.0, 180.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
     m_OrientValidator.SetWindow( m_OrientValueCtrl );
 
-    if( m_currentText )
-        m_module = (MODULE*) m_currentText->GetParent();
-
     m_sdbSizerOK->SetDefault();
-    SetFocus();
+    SetInitialFocus( m_Name );
 
+    Layout();
+    FinishDialogSettings();
 }
 
 
@@ -92,121 +114,45 @@ bool DIALOG_EDIT_FPTEXT::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    wxString msg;
+    wxString msg1, msg2;
 
     if( m_module )
     {
-        wxString format = m_ModuleInfoText->GetLabel();
-        msg.Printf( format,
-                    GetChars( m_module->GetReference() ),
-                    GetChars( m_module->GetValue() ),
-                    m_module->GetOrientation() / 10.0 );
-    }
-    else
-    {
-        msg.Empty();
+        msg1.Printf( _("Footprint %s (%s),"), m_module->GetReference(), m_module->GetValue() );
+        msg2.Printf( _("orientation %.1f deg"), m_module->GetOrientation() / 10.0 );
     }
 
-    m_ModuleInfoText->SetLabel( msg );
+    m_statusLine1->SetLabel( msg1 );
+    m_statusLine2->SetLabel( msg2 );
 
-    // Create a list of not allowed layers.
-    // could be slightly dependent of the type of footprint text.
-    LSET forbiddenLayers( LSET::AllCuMask() );
-    forbiddenLayers.set( Edge_Cuts ).set( Margin ).set( F_Paste ).set( B_Paste ).set( F_Mask ).set( B_Mask );
+    m_Name->SetValue( m_text->GetText() );
+    m_textWidth.SetValue( m_text->GetTextWidth() );
+    m_textHeight.SetValue( m_text->GetTextHeight() );
+    m_thickness.SetValue(  m_text->GetThickness() );
+    m_posX.SetValue( m_text->GetPos0().x );
+    m_posY.SetValue( m_text->GetPos0().y );
 
-    switch( m_currentText->GetType() )
-    {
-    case TEXTE_MODULE::TEXT_is_VALUE:
-        m_TextDataTitle->SetLabel( _( "Value:" ) );
-        break;
+    m_Show->SetValue( m_text->IsVisible() );
+    m_Italic->SetValue(  m_text->IsItalic() );
 
-    case TEXTE_MODULE::TEXT_is_DIVERS:
-        m_TextDataTitle->SetLabel( _( "Text:" ) );
-        break;
+    m_OrientValue = m_text->GetTextAngle() / 10.0;
+    m_Orient0->SetValue( m_OrientValue == 0.0 );
+    m_Orient90->SetValue( m_OrientValue == 90.0 || m_OrientValue == -270.0 );
+    m_Orient270->SetValue( m_OrientValue == 270.0 || m_OrientValue == -90.0 );
+    m_Orient180->SetValue( m_OrientValue == 180.0 || m_OrientValue == -180.0 );
 
-    case TEXTE_MODULE::TEXT_is_REFERENCE:
-        m_TextDataTitle->SetLabel( _( "Reference:" ) );
-        break;
-    }
-
-    m_Name->SetValue( m_currentText->GetText() );
-
-    m_Style->SetSelection( m_currentText->IsItalic() ? 1 : 0 );
-
-    AddUnitSymbol( *m_SizeXTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->GetTextWidth() );
-
-    AddUnitSymbol( *m_SizeYTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->GetTextHeight() );
-
-    AddUnitSymbol( *m_PosXTitle );
-    PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x );
-
-    AddUnitSymbol( *m_PosYTitle );
-    PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y );
-
-    AddUnitSymbol( *m_WidthTitle );
-    PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
-
-    double text_orient = m_currentText->GetTextAngle();
-    text_orient = NormalizeAngle180( text_orient );
-
-    if( !m_currentText->IsVisible() )
-        m_Show->SetSelection( 1 );
-
-    bool custom_orientation = false;
-    switch( int( text_orient ) )
-    {
-    case 0:
-        m_Orient->SetSelection( 0 );
-        break;
-
-    case 900:
-    case -2700:
-        m_Orient->SetSelection( 1 );
-        break;
-
-    case -900:
-    case 2700:
-        m_Orient->SetSelection( 2 );
-        break;
-
-    case -1800:
-    case 1800:
-        m_Orient->SetSelection( 3 );
-        break;
-
-    default:
-        m_Orient->SetSelection( 4 );
-        custom_orientation = true;
-        break;
-    }
-
-    m_OrientValueCtrl->Enable( custom_orientation );
-    m_OrientValue = text_orient / 10.0;
+    m_OrientOther->SetValue( !m_Orient0->GetValue() && !m_Orient90->GetValue()
+                             && !m_Orient270->GetValue() && !m_Orient180->GetValue() );
     m_OrientValidator.TransferToWindow();
 
-    m_unlock->SetValue( m_currentText->IsUnlocked() );
+    m_unlock->SetValue( m_text->IsUnlocked() );
 
-    // Configure the layers list selector
-    if( !m_boardEditor->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
-        // Footprints are built outside the current board, so items cann be
-        // on a not activated layer, therefore show it if happens.
-        m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
-
-    m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
-    m_LayerSelectionCtrl->SetBoardFrame( m_boardEditor );
-    m_LayerSelectionCtrl->Resync();
-
-    if( m_LayerSelectionCtrl->SetLayerSelection( m_currentText->GetLayer() ) < 0 )
+    if( m_LayerSelectionCtrl->SetLayerSelection( m_text->GetLayer() ) < 0 )
     {
-        wxMessageBox( _( "This item has an illegal layer id.\n"
-                         "Now, forced on the front silk screen layer. Please, fix it" ) );
+        wxString layerName = m_frame->GetBoard()->GetLayerName( ToLAYER_ID( m_text->GetLayer() ) );
+        DisplayError( this, wxString::Format( _( "Text not allowed on %s." ), layerName ) );
         m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
     }
-
-    Layout();
 
     return true;
 }
@@ -214,135 +160,50 @@ bool DIALOG_EDIT_FPTEXT::TransferDataToWindow()
 
 bool DIALOG_EDIT_FPTEXT::TransferDataFromWindow()
 {
-    BOARD_COMMIT commit( m_boardEditor );
+    BOARD_COMMIT commit( m_frame );
 
     if( !Validate() || !DIALOG_EDIT_FPTEXT_BASE::TransferDataFromWindow() )
         return false;
 
+    if( !m_textWidth.Validate( true ) || !m_textHeight.Validate( true ) )
+        return false;
+
     if( m_module )
-        commit.Modify( m_currentText );
+        commit.Modify( m_text );
 
 #ifndef USE_WX_OVERLAY
-    if( m_dc )     //Erase old text on screen
+    if( m_dc )     // Erase old text on screen
     {
-        m_currentText->Draw( m_boardEditor->GetCanvas(), m_dc, GR_XOR,
-                             (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
+        m_text->Draw( m_frame->GetCanvas(), m_dc, GR_XOR,
+                      m_text->IsMoving() ? MoveVector : wxPoint( 0, 0 ) );
     }
 #endif
 
-    m_currentText->SetText( m_Name->GetValue() );
-    m_currentText->SetItalic( m_Style->GetSelection() == 1 );
+    m_text->SetText( m_Name->GetValue() );
+    m_text->SetItalic( m_Italic->GetValue() );
+    m_text->SetVisible( m_Show->GetValue() );
 
-    wxPoint tmp;
+    m_text->SetPos0( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
+    m_text->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+    m_text->SetThickness( Clamp_Text_PenSize( m_thickness.GetValue(), m_text->GetTextSize() ) );
 
-    tmp.x = ValueFromString( g_UserUnit, m_TxtPosCtrlX->GetValue() );
-    tmp.y = ValueFromString( g_UserUnit, m_TxtPosCtrlY->GetValue() );
+    m_text->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
 
-    m_currentText->SetPos0( tmp );
+    m_text->SetDrawCoord();
 
-    wxSize textSize( wxSize( ValueFromString( g_UserUnit, m_TxtSizeCtrlX->GetValue() ),
-                             ValueFromString( g_UserUnit, m_TxtSizeCtrlY->GetValue() ) ) );
+    m_text->SetUnlocked( m_unlock->GetValue() );
 
-    // Test for a reasonable size:
-    if( textSize.x < TEXTS_MIN_SIZE )
-        textSize.x = TEXTS_MIN_SIZE;
-
-    if( textSize.y < TEXTS_MIN_SIZE )
-        textSize.y = TEXTS_MIN_SIZE;
-
-    m_currentText->SetTextSize( textSize );
-
-    int width = ValueFromString( g_UserUnit, m_TxtWidthCtlr->GetValue() );
-
-    // Test for a reasonable width:
-    if( width <= 1 )
-        width = 1;
-
-    int maxthickness = Clamp_Text_PenSize(width, m_currentText->GetTextSize() );
-
-    if( width > maxthickness )
-    {
-        DisplayError( NULL,
-                      _( "The text thickness is too large for the text size. It will be clamped" ) );
-        width = maxthickness;
-    }
-
-    m_currentText->SetThickness( width );
-
-    m_currentText->SetVisible( m_Show->GetSelection() == 0 );
-
-    bool custom_orientation = false;
-    switch( m_Orient->GetSelection() )
-    {
-    case 0:
-        m_currentText->SetTextAngle( 0 );
-        break;
-
-    case 1:
-        m_currentText->SetTextAngle( 900 );
-        break;
-
-    case 2:
-        m_currentText->SetTextAngle( -900 );
-        break;
-
-    case 3:
-        m_currentText->SetTextAngle( 1800 );
-        break;
-
-    default:
-        custom_orientation = true;
-        m_currentText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
-        break;
-    };
-
-    switch( int( m_currentText->GetTextAngle() ) )
-    {
-    case 0:
-        m_Orient->SetSelection( 0 );
-        break;
-
-    case 900:
-    case -2700:
-        m_Orient->SetSelection( 1 );
-        break;
-
-    case -900:
-    case 2700:
-        m_Orient->SetSelection( 2 );
-        break;
-
-    case -1800:
-    case 1800:
-        m_Orient->SetSelection( 3 );
-        break;
-
-    default:
-        m_Orient->SetSelection( 4 );
-        m_currentText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
-        custom_orientation = true;
-        break;
-    }
-    m_OrientValue = 10.0 * m_currentText->GetTextAngle();
-    m_OrientValueCtrl->Enable( custom_orientation );
-    m_OrientValidator.TransferToWindow();
-
-    m_currentText->SetDrawCoord();
-
-    m_currentText->SetUnlocked( m_unlock->GetValue() );
-
-    LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
-    m_currentText->SetLayer( ToLAYER_ID( layer ) );
-    m_currentText->SetMirrored( IsBackLayer( m_currentText->GetLayer() ) );
+    m_text->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_text->SetMirrored( IsBackLayer( m_text->GetLayer() ) );
 
 #ifndef USE_WX_OVERLAY
     if( m_dc )     // Display new text
     {
-        m_currentText->Draw( m_boardEditor->GetCanvas(), m_dc, GR_XOR,
-                (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
+        m_text->Draw( m_frame->GetCanvas(), m_dc, GR_XOR,
+                      m_text->IsMoving() ? MoveVector : wxPoint( 0, 0 ) );
     }
 #else
-    m_boardEditor->Refresh();
+    m_frame->Refresh();
 #endif
 
     commit.Push( _( "Modify module text" ) );
@@ -354,33 +215,26 @@ bool DIALOG_EDIT_FPTEXT::TransferDataFromWindow()
 }
 
 
-void DIALOG_EDIT_FPTEXT::ModuleOrientEvent( wxCommandEvent& event )
+void DIALOG_EDIT_FPTEXT::ModuleOrientEvent( wxCommandEvent&  )
 {
-    bool custom_orientation = false;
-
-    switch( m_Orient->GetSelection() )
-    {
-    case 0:
+    if( m_Orient0->GetValue() )
         m_OrientValue = 0.0;
-        break;
-
-    case 1:
+    else if( m_Orient90->GetValue() )
         m_OrientValue = 90.0;
-        break;
-
-    case 2:
-        m_OrientValue = -90.0;
-        break;
-
-    case 3:
+    else if( m_Orient270->GetValue() )
+        m_OrientValue = 270.0;
+    else if( m_Orient180->GetValue() )
         m_OrientValue = 180.0;
-        break;
-
-    default:
-        custom_orientation = true;
-        break;
-    }
 
     m_OrientValidator.TransferToWindow();
-    m_OrientValueCtrl->Enable( custom_orientation );
 }
+
+
+void DIALOG_EDIT_FPTEXT::OnOtherOrientation( wxKeyEvent& aEvent )
+{
+    m_OrientOther->SetValue( true );
+
+    aEvent.Skip();
+}
+
+

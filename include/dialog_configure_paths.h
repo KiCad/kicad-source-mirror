@@ -34,37 +34,32 @@
 class EDA_DRAW_FRAME;
 class FILENAME_RESOLVER;
 
-/**
- * DIALOG_CONFIGURE_PATHS class declaration
- */
 
 class DIALOG_CONFIGURE_PATHS: public DIALOG_CONFIGURE_PATHS_BASE
 {
 public:
     DIALOG_CONFIGURE_PATHS(  wxWindow* aParent, FILENAME_RESOLVER* aResolver  );
-    virtual ~DIALOG_CONFIGURE_PATHS();
+    ~DIALOG_CONFIGURE_PATHS() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 protected:
     // Various button callbacks
-    virtual void OnGridCellRightClick( wxGridEvent& event ) override;
-    virtual void OnGridSize( wxSizeEvent& event ) override;
-    virtual void OnUpdateUI( wxUpdateUIEvent& event ) override;
-    virtual void OnGridCellChanging( wxGridEvent& event );
-    virtual void OnAddEnvVar( wxCommandEvent& event ) override;
-    virtual void OnRemoveEnvVar( wxCommandEvent& event ) override;
-    virtual void OnAddSearchPath( wxCommandEvent& event ) override;
-    virtual void OnDeleteSearchPath( wxCommandEvent& event ) override;
-    virtual void OnSearchPathMoveUp( wxCommandEvent& event ) override;
-    virtual void OnSearchPathMoveDown( wxCommandEvent& event ) override;
-    virtual void OnHelp( wxCommandEvent& event ) override;
+    void OnGridCellRightClick( wxGridEvent& event ) override;
+    void OnGridSize( wxSizeEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnGridCellChanging( wxGridEvent& event );
+    void OnAddEnvVar( wxCommandEvent& event ) override;
+    void OnRemoveEnvVar( wxCommandEvent& event ) override;
+    void OnAddSearchPath( wxCommandEvent& event ) override;
+    void OnDeleteSearchPath( wxCommandEvent& event ) override;
+    void OnSearchPathMoveUp( wxCommandEvent& event ) override;
+    void OnSearchPathMoveDown( wxCommandEvent& event ) override;
+    void OnHelp( wxCommandEvent& event ) override;
 
-    void AppendEnvVar( const wxString& aName, const wxString& aPath,
-                       bool isExternal );
-    void AppendSearchPath( const wxString& aName, const wxString& aPath,
-                           const wxString& aDescription );
+    void AppendEnvVar( const wxString& aName, const wxString& aPath, bool isExternal );
+    void AppendSearchPath( const wxString& aName, const wxString& aPath, const wxString& aDesc );
     void AdjustGridColumns( int aWidth );
 
     /**
@@ -73,14 +68,14 @@ protected:
     bool IsEnvVarImmutable( const wxString aEnvVar );
 
 private:
-    wxString               m_errorMsg;
-    wxGrid*                m_errorGrid;
-    int                    m_errorRow;
-    int                    m_errorCol;
+    wxString            m_errorMsg;
+    wxGrid*             m_errorGrid;
+    int                 m_errorRow;
+    int                 m_errorCol;
 
-    FILENAME_RESOLVER* m_resolver;
-    wxString               m_curdir;
-    wxTextValidator        m_aliasValidator;
+    FILENAME_RESOLVER*  m_resolver;
+    wxString            m_curdir;
+    wxTextValidator     m_aliasValidator;
 
 };
 

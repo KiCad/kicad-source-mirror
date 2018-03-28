@@ -45,18 +45,14 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
     for( unsigned layerid = 0; layerid < images.ImagesMaxCount(); ++layerid )
     {
-        wxBitmap    layerbmp( BM_SIZE, BM_SIZE );
-        wxString    layername;
-
         if( !IsLayerEnabled( layerid ) )
             continue;
 
         // Prepare Bitmap
-        SetBitmapLayer( layerbmp, layerid );
+        wxBitmap bmp( BM_SIZE, BM_SIZE );
+        DrawColorSwatch( bmp, GetLayerColor( LAYER_PCB_BACKGROUND ), GetLayerColor( layerid ) );
 
-        layername = GetLayerName( layerid );
-
-        Append( layername, layerbmp, (void*)(intptr_t) layerid );
+        Append( GetLayerName( layerid ), bmp, (void*)(intptr_t) layerid );
     }
 
     // Ensure the width of the widget is enough to show the text and the icon

@@ -523,6 +523,7 @@ public:
 
     static LSET UserMask();
 
+    static LSET ForbiddenTextLayers();
 
     /**
      * Function CuStack

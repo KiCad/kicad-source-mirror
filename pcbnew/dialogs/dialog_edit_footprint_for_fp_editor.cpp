@@ -1,9 +1,3 @@
-/**
- * @file dialog_edit_footprint_for_fp_editor.cpp
- *
- * @brief Dialog for editing a module properties in module editor (modedit)
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -32,83 +26,138 @@
 
 
 #include <fctsys.h>
+#include <base_units.h>
+#include <view/view.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
 #include <pcbnew.h>
 #include <kiface_i.h>
-#include <gestfich.h>
 #include <3d_viewer.h>
 #include <pcb_edit_frame.h>
-#include <base_units.h>
-#include <macros.h>
 #include <validators.h>
-#include <kicad_string.h>
+#include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
 #include <widgets/text_ctrl_eval.h>
 
 #include <class_module.h>
-#include <class_text_mod.h>
 #include <footprint_edit_frame.h>
 #include <dialog_edit_footprint_for_fp_editor.h>
-#include <wildcards_and_files_ext.h>
 #include "filename_resolver.h"
 #include <pgm_base.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
-#include "3d_cache/3d_cache.h"
 
 #include <dialog_edit_footprint_text.h>
+#include <fp_lib_table.h>
 
-size_t DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page during session
+#define LibFootprintTextShownColumnsKey   wxT( "LibFootprintTextShownColumns" )
+
+int DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page during session
 
 
 DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
-                                                          MODULE* aModule ) :
-    DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent )
+                                                        MODULE* aModule ) :
+    DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent ),
+    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits,
+    false, 0 ),
+    m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
+    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits )
 {
-    m_parent = aParent;
-    m_currentModule = aModule;
+    m_config = Kiface().KifaceSettings();
+
+    m_frame = aParent;
+    m_footprint = aModule;
+
+    m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
+
+    m_delayedErrorMessage = wxEmptyString;
+    m_delayedFocusGrid = nullptr;
+    m_delayedFocusRow = -1;
+    m_delayedFocusColumn = -1;
 
     // Give an icon
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
-    aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
+    // Give a bit more room for combobox editors
+    m_itemsGrid->SetDefaultRowSize( m_itemsGrid->GetDefaultRowSize() + 4 );
+    m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
 
-    m_currentModuleCopy = new MODULE( *aModule );
+    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
+    GRID_TRICKS::SetGridTable( m_itemsGrid, m_texts );
 
-    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->GetUserUnits(),
-                                       aParent->Prj().Get3DCacheManager(),
-                                       m_currentModuleCopy,
-                                       &aParent->Settings().Colors(),
-                                       &m_shapes3D_list );
+    m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
+    m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
-    bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
-
-    m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
-    initModeditProperties();
+    // Show/hide columns according to the user's preference
+    wxString shownColumns;
+    m_config->Read( LibFootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
+    GRID_TRICKS::ShowHideGridColumns( m_itemsGrid, shownColumns );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
     m_staticTextInfo2->SetFont( infoFont );
 
+    // Set up the 3D models grid
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_modelsGrid->SetColAttr( 1, attr );
+    m_modelsGrid->SetWindowStyleFlag( m_modelsGrid->GetWindowStyle() & ~wxHSCROLL );
+
+    aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
+
+    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, m_frame, m_footprint, &m_shapes3D_list );
+
+    bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
+
+    m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
+
     m_NoteBook->SetSelection( m_page );
+
+    if( m_page == 0 )
+    {
+        m_delayedFocusGrid = m_itemsGrid;
+        m_delayedFocusRow = 0;
+        m_delayedFocusColumn = 0;
+    }
+    else if ( m_page == 1 )
+        SetInitialFocus( m_NetClearanceCtrl );
+    else
+    {
+        m_delayedFocusGrid = m_modelsGrid;
+        m_delayedFocusRow = 0;
+        m_delayedFocusColumn = 0;
+    }
 
     m_sdbSizerStdButtonsOK->SetDefault();
 
-    Layout();
+    // Configure button logos
+    m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
+    m_buttonAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
+    FinishDialogSettings();
 }
 
 
 DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
 {
-    m_shapes3D_list.clear();
+    m_config->Write( LibFootprintTextShownColumnsKey, GRID_TRICKS::GetShownColumns( m_itemsGrid ) );
+
+    // Prevents crash bug in wxGrid's d'tor
+    GRID_TRICKS::DestroyGridTable( m_itemsGrid, m_texts );
+
+    // Delete the GRID_TRICKS.
+    m_itemsGrid->PopEventHandler( true );
+    m_modelsGrid->PopEventHandler( true );
 
     // free the memory used by all models, otherwise models which were
     // browsed but not used would consume memory
@@ -118,302 +167,214 @@ DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
     m_page = m_NoteBook->GetSelection();
     m_NoteBook->SetSelection( 1 );
 
-    delete m_referenceCopy;
-    m_referenceCopy = NULL;   // just in case, to avoid double-free
-
-    delete m_valueCopy;
-    m_valueCopy = NULL;
-
     delete m_PreviewPane;
-    m_PreviewPane = NULL;   // just in case, to avoid double-free
-
-    // this is already deleted by the board used on preview pane so
-    // no need to delete here
-    // delete m_currentModuleCopy;
-    // m_currentModuleCopy = NULL;
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::initModeditProperties()
+bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
 {
-    SetFocus();
+    LIB_ID   fpID          = m_footprint->GetFPID();
+    wxString libNickname   = fpID.GetLibNickname();
+    wxString libPath       = wxEmptyString;
+    wxString footprintName = fpID.GetLibItemName();
 
-    // Display the default path, given by environment variable KISYS3DMOD
+    try
+    {
+        libPath = Prj().PcbFootprintLibs()->FindRow( libNickname )->GetFullURI( true );
+    }
+    catch( const IO_ERROR& )
+    {
+        // not critical; it's just for the status display
+    }
+
+    m_FootprintNameCtrl->SetValue( footprintName );
+    m_libraryName->SetLabel( wxString::Format( wxT( "%s  (%s)" ), libNickname, libPath ) );
+
+    m_DocCtrl->SetValue( m_footprint->GetDescription() );
+    m_KeywordCtrl->SetValue( m_footprint->GetKeywords() );
+
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    if( !m_PanelGeneral->TransferDataToWindow() )
+        return false;
+
+    if( !m_Panel3D->TransferDataToWindow() )
+        return false;
+
+    // Module Texts
+
+    m_texts->push_back( m_footprint->Reference() );
+    m_texts->push_back( m_footprint->Value() );
+
+    for( BOARD_ITEM* item = m_footprint->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+    {
+        auto textModule = dyn_cast<TEXTE_MODULE*>( item );
+
+        if( textModule )
+            m_texts->push_back( *textModule );
+    }
+
+    // notify the grid
+    wxGridTableMessage tmsg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_texts->GetNumberRows() );
+    m_itemsGrid->ProcessTableMessage( tmsg );
+
+    // Module Properties
+
+    m_AutoPlaceCtrl->SetSelection( (m_footprint->IsLocked()) ? 1 : 0 );
+    m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
+    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
+
+    m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
+    m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );
+
+    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD footprints\n"
+            "Footprints with this option are not put in the footprint position list file" ) );
+    m_AttributsCtrl->SetItemToolTip( 1, _( "Use this attribute for SMD footprints.\n"
+            "Only footprints with this option are put in the footprint position list file" ) );
+    m_AttributsCtrl->SetItemToolTip( 2, _( "Use this attribute for \"virtual\" footprints drawn on board\n"
+            "such as an edge connector (old ISA PC bus for instance)" ) );
+
+    switch( m_footprint->GetAttributes() & 255 )
+    {
+    case MOD_CMS:     m_AttributsCtrl->SetSelection( 1 ); break;
+    case MOD_VIRTUAL: m_AttributsCtrl->SetSelection( 2 ); break;
+    case 0:
+    default:          m_AttributsCtrl->SetSelection( 0 ); break;
+    }
+
+    // Local Clearances
+
+    m_netClearance.SetValue( m_footprint->GetLocalClearance() );
+    m_solderMask.SetValue( m_footprint->GetLocalSolderMaskMargin() );
+    m_solderPaste.SetValue( m_footprint->GetLocalSolderPasteMargin() );
+
+    // Prefer "-0" to "0" for normally negative values
+    if( m_footprint->GetLocalSolderPasteMargin() == 0 )
+        m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
+
+    // Add solder paste margin ratio in per cent
+    // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
+    wxString msg;
+    msg.Printf( wxT( "%f" ), m_footprint->GetLocalSolderPasteMarginRatio() * 100.0 );
+
+    if( m_footprint->GetLocalSolderPasteMarginRatio() == 0.0 &&
+        msg[0] == '0')  // Sometimes Printf adds a sign if the value is very small (0.0)
+        m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
+    else
+        m_SolderPasteMarginRatioCtrl->SetValue( msg );
+
+    // 3D Settings
+
     wxString default_path;
     wxGetEnv( KISYS3DMOD, &default_path );
-
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
 
-    m_lastSelected3DShapeIndex = -1;
-
-    // Init 3D shape list
-    m_3D_ShapeNameListBox->Clear();
-    auto sM = m_currentModule->Models().begin();
-    auto eM = m_currentModule->Models().end();
     m_shapes3D_list.clear();
+    m_modelsGrid->DeleteRows( 0, m_modelsGrid->GetNumberRows() );
 
-    wxString origPath;
-    wxString alias;
-    wxString shortPath;
+    wxString origPath, alias, shortPath;
     FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
-    while( sM != eM )
+    for( MODULE_3D_SETTINGS model : m_footprint->Models() )
     {
-        m_shapes3D_list.push_back( *sM );
-        origPath = sM->m_Filename;
+        m_shapes3D_list.push_back( model );
+        origPath = model.m_Filename;
 
         if( res && res->SplitAlias( origPath, alias, shortPath ) )
+            origPath = alias + wxT( ":" ) + shortPath;
+
+        m_modelsGrid->AppendRows( 1 );
+        int row = m_modelsGrid->GetNumberRows() - 1;
+        m_modelsGrid->SetCellValue( row, 0, origPath );
+        m_modelsGrid->SetCellValue( row, 1, model.m_Preview ? wxT( "1" ) : wxT( "0" ) );
+    }
+
+    select3DModel( 0 );   // will clamp idx within bounds
+
+    Layout();
+    adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
+
+    return true;
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::select3DModel( int aModelIdx )
+{
+    aModelIdx = std::max( 0, aModelIdx );
+    aModelIdx = std::min( aModelIdx, m_modelsGrid->GetNumberRows() - 1 );
+
+    if( m_modelsGrid->GetNumberRows() )
+        m_modelsGrid->SelectRow( aModelIdx );
+
+    m_PreviewPane->SetModelDataIdx( aModelIdx );
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelSelected( wxGridEvent& aEvent )
+{
+    select3DModel( aEvent.GetRow() );
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
+{
+    if( aEvent.GetCol() == 0 )
+    {
+        bool               hasAlias = false;
+        FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+        wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), 0 );
+
+        if( filename.empty() || !res->ValidateFileName( filename, hasAlias ) )
         {
-            origPath = alias;
-            origPath.append( wxT( ":" ) );
-            origPath.append( shortPath );
+            m_delayedErrorMessage = wxString::Format( _( "Invalid filename: %s" ), filename );
+            m_delayedFocusGrid = m_modelsGrid;
+            m_delayedFocusRow = aEvent.GetRow();
+            m_delayedFocusColumn = aEvent.GetCol();
         }
 
-        m_3D_ShapeNameListBox->Append( origPath );
-        ++sM;
+        // if the user has specified an alias in the name then prepend ':'
+        if( hasAlias )
+            filename.insert( 0, wxT( ":" ) );
+
+#ifdef __WINDOWS__
+        // In Kicad files, filenames and paths are stored using Unix notation
+        filename.Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
+
+        m_shapes3D_list[ aEvent.GetRow() ].m_Filename = filename;
     }
-
-    m_DocCtrl->SetValue( m_currentModule->GetDescription() );
-    m_KeywordCtrl->SetValue( m_currentModule->GetKeywords() );
-    m_referenceCopy = new TEXTE_MODULE( m_currentModule->Reference() );
-    m_referenceCopy->SetParent( m_currentModule );
-    m_valueCopy = new TEXTE_MODULE( m_currentModule->Value() );
-    m_valueCopy->SetParent( m_currentModule );
-    m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
-    m_ValueCtrl->SetValue( m_valueCopy->GetText() );
-
-    m_currentFPID = m_currentModule->GetFPID();
-    m_FootprintNameCtrl->SetValue( m_currentFPID.GetLibItemName() );
-    m_LibraryNicknameCtrl->SetValue( m_currentFPID.GetLibNickname() );
-
-    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD footprints" ) );
-    m_AttributsCtrl->SetItemToolTip( 1,
-                                    _( "Use this attribute for SMD footprints.\n"
-                                       "Only footprints with this option are put in the footprint position list file" ) );
-    m_AttributsCtrl->SetItemToolTip( 2,
-                                    _( "Use this attribute for \"virtual\" footprints drawn on board\n"
-                                       "like an edge connector (old ISA PC bus for instance)" ) );
-
-    // Controls on right side of the dialog
-    switch( m_currentModule->GetAttributes() & 255 )
+    else if( aEvent.GetCol() == 1 )
     {
-    case 0:
-        m_AttributsCtrl->SetSelection( 0 );
-        break;
+        wxString previewValue = m_modelsGrid->GetCellValue( aEvent.GetRow(), 1 );
 
-    case MOD_CMS:
-        m_AttributsCtrl->SetSelection( 1 );
-        break;
-
-    case MOD_VIRTUAL:
-        m_AttributsCtrl->SetSelection( 2 );
-        break;
-
-    default:
-        m_AttributsCtrl->SetSelection( 0 );
-        break;
+        m_shapes3D_list[ aEvent.GetRow() ].m_Preview = previewValue == wxT( "1" );
     }
 
-    m_AutoPlaceCtrl->SetSelection( (m_currentModule->IsLocked()) ? 1 : 0 );
-    m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
-
-    m_CostRot90Ctrl->SetValue( m_currentModule->GetPlacementCost90() );
-    m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
-
-    switch( m_currentModule->GetZoneConnection() )
-    {
-    default:
-    case PAD_ZONE_CONN_INHERITED:
-        m_ZoneConnectionChoice->SetSelection( 0 );
-        break;
-
-    case PAD_ZONE_CONN_FULL:
-        m_ZoneConnectionChoice->SetSelection( 1 );
-        break;
-
-    case PAD_ZONE_CONN_THERMAL:
-        m_ZoneConnectionChoice->SetSelection( 2 );
-        break;
-
-    case PAD_ZONE_CONN_NONE:
-        m_ZoneConnectionChoice->SetSelection( 3 );
-        break;
-    }
-
-    // Initialize dialog relative to masks clearances
-    m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_SolderMaskMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_SolderPasteMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-
-    wxString  msg;
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_currentModule->GetLocalClearance() );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_currentModule->GetLocalSolderMaskMargin() );
-
-    // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
-    PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_currentModule->GetLocalSolderPasteMargin() );
-
-    if( m_currentModule->GetLocalSolderPasteMargin() == 0 )
-        m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
-
-    if( m_currentModule->GetLocalSolderPasteMarginRatio() == 0.0 )
-        msg.Printf( wxT( "-%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
-    else
-        msg.Printf( wxT( "%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
-
-    m_SolderPasteMarginRatioCtrl->SetValue( msg );
-
-    // Add solder paste margin ration in per cent
-    // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
-    msg.Printf( wxT( "%f" ), m_currentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
-
-    if( m_currentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&
-        msg[0] == '0')  // Sometimes Printf adds a sign if the value is very small (0.0)
-        m_SolderPasteMarginRatioCtrl->SetValue( wxT( "-" ) + msg );
-    else
-        m_SolderPasteMarginRatioCtrl->SetValue( msg );
-
-    // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
-    if( m_3D_ShapeNameListBox->GetCount() > 0 )
-    {
-        m_lastSelected3DShapeIndex = 0;
-        m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
-        if( m_PreviewPane )
-            m_PreviewPane->SetModelDataIdx( m_lastSelected3DShapeIndex, true );
-    }
-    else
-    {
-        if( m_PreviewPane )
-            m_PreviewPane->ResetModelData( true );
-    }
-
-    // We have modified the UI, so call Fit() for m_Panel3D
-    // to be sure the m_Panel3D sizers are initialized before opening the dialog
-    m_Panel3D->GetSizer()->Fit( m_Panel3D );
+    m_PreviewPane->UpdateModelInfoList();
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
+void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
 {
-    m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetSelection();
+    int idx = m_modelsGrid->GetGridCursorRow();
 
-    if( m_lastSelected3DShapeIndex < 0 )    // happens under wxGTK when deleting an item in m_3D_ShapeNameListBox wxListBox
+    if( idx >= 0 )
     {
-        if( m_PreviewPane )
-            m_PreviewPane->ResetModelData();
+        m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
+        m_modelsGrid->DeleteRows( idx );
 
-        return;
+        select3DModel( idx );       // will clamp idx within bounds
+        m_PreviewPane->UpdateModelInfoList();
     }
-
-    if( m_lastSelected3DShapeIndex >= (int)m_shapes3D_list.size() )
-    {
-        wxMessageBox( wxT( "On3DShapeNameSelected() error" ) );
-        m_lastSelected3DShapeIndex = -1;
-
-        if( m_PreviewPane )
-            m_PreviewPane->ResetModelData();
-
-        return;
-    }
-
-    m_PreviewPane->SetModelDataIdx( m_lastSelected3DShapeIndex );
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::Remove3DShape( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 {
-    int ii = m_3D_ShapeNameListBox->GetSelection();
-
-    if( ii < 0 )
-    {
-        if( m_PreviewPane )
-            m_PreviewPane->ResetModelData( true );
-
-        return;
-    }
-
-    m_shapes3D_list.erase( m_shapes3D_list.begin() + ii );
-    m_3D_ShapeNameListBox->Delete( ii );
-
-    if( m_3D_ShapeNameListBox->GetCount() > 0 )
-    {
-        if( ii > 0 )
-            m_lastSelected3DShapeIndex = ii - 1;
-        else
-            m_lastSelected3DShapeIndex = 0;
-
-        m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
-
-        if( m_PreviewPane )
-            m_PreviewPane->SetModelDataIdx( m_lastSelected3DShapeIndex, true );
-    }
-    else
-    {
-        if( m_PreviewPane )
-            m_PreviewPane->ResetModelData( true );
-    }
-
-    return;
-}
-
-
-void DIALOG_FOOTPRINT_FP_EDITOR::Edit3DShapeFileName()
-{
-    int idx = m_3D_ShapeNameListBox->GetSelection();
-
-    if( idx < 0 )
-        return;
-
-    // Edit filename
-    wxString filename = m_3D_ShapeNameListBox->GetStringSelection();
-    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filepath:" ), _( "Edit 3D Shape Name" ), filename );
-
-    bool hasAlias;
-    FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    filename = dlg.GetValue();
-
-    if( filename.empty() )
-        return;
-
-    if( !res->ValidateFileName( filename, hasAlias ) )
-    {
-        wxString msg = _( "Invalid filename: " );
-        msg.append( filename );
-        wxMessageBox( msg, _( "Edit 3D file name" ) );
-
-        return;
-    }
-
-    m_3D_ShapeNameListBox->SetString( idx, filename );
-
-    // if the user has specified an alias in the name then prepend ':'
-    if( hasAlias )
-        filename.insert( 0, wxT( ":" ) );
-
-    #ifdef __WINDOWS__
-    // In Kicad files, filenames and paths are stored using Unix notation
-    filename.Replace( wxT( "\\" ), wxT( "/" ) );
-    #endif
-
-    m_shapes3D_list[idx].m_Filename = filename;
-
-    // This assumes that the index didn't change and will just update the filename
-    if( m_PreviewPane )
-        m_PreviewPane->UpdateModelName( filename );
-
-    return;
-}
-
-
-void DIALOG_FOOTPRINT_FP_EDITOR::BrowseAndAdd3DShapeFile()
-{
-    PROJECT&        prj = Prj();
+    PROJECT& prj = Prj();
     MODULE_3D_SETTINGS model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
@@ -433,12 +394,12 @@ void DIALOG_FOOTPRINT_FP_EDITOR::BrowseAndAdd3DShapeFile()
         long tmp;
         sidx.ToLong( &tmp );
 
-        if( tmp > 0 && tmp <= 0x7FFFFFFF )
+        if( tmp > 0 && tmp <= INT_MAX )
             filter = (int) tmp;
     }
 
-    if( !S3D::Select3DModel( m_PreviewPane, Prj().Get3DCacheManager(),
-        initialpath, filter, &model ) || model.m_Filename.empty() )
+    if( !S3D::Select3DModel( this, Prj().Get3DCacheManager(), initialpath, filter, &model )
+        || model.m_Filename.empty() )
     {
         return;
     }
@@ -446,153 +407,172 @@ void DIALOG_FOOTPRINT_FP_EDITOR::BrowseAndAdd3DShapeFile()
     prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
     sidx = wxString::Format( wxT( "%i" ), filter );
     prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
-    wxString origPath = model.m_Filename;
+    FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
     wxString alias;
     wxString shortPath;
-    FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+    wxString filename = model.m_Filename;
 
-    if( res && res->SplitAlias( origPath, alias, shortPath ) )
-    {
-        origPath = alias;
-        origPath.append( wxT( ":" ) );
-        origPath.append( shortPath );
-    }
-
-    m_3D_ShapeNameListBox->Append( origPath );
+    if( res && res->SplitAlias( filename, alias, shortPath ) )
+        filename = alias + wxT( ":" ) + shortPath;
 
 #ifdef __WINDOWS__
     // In Kicad files, filenames and paths are stored using Unix notation
-    model.m_Filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    model.m_Filename.Replace( "\\", "/" );
 #endif
 
+    model.m_Preview = true;
     m_shapes3D_list.push_back( model );
-    m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
-    m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
 
-    if( m_PreviewPane )
-        m_PreviewPane->SetModelDataIdx( m_lastSelected3DShapeIndex, true );
+    int idx = m_modelsGrid->GetNumberRows();
+    m_modelsGrid->AppendRows( 1 );
+    m_modelsGrid->SetCellValue( idx, 0, filename );
+    m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
-    return;
+    m_PreviewPane->UpdateModelInfoList();
 }
 
 
-bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
+bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
 {
-    wxString msg;
+    // Commit any pending in-place edits and close the editor
+    m_itemsGrid->DisableCellEditControl();
+
+    if( !DIALOG_SHIM::Validate() )
+        return false;
+
     // First, test for invalid chars in module name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
 
-    if( ! footprintName.IsEmpty() )
+    if( footprintName.IsEmpty() || !MODULE::IsLibNameValid( footprintName ) )
     {
-        if( ! MODULE::IsLibNameValid( footprintName ) )
-        {
-            msg.Printf( _( "Error:\n"
-                           "one of invalid chars \"%s\" found\nin \"%s\"" ),
-                        MODULE::StringLibNameInvalidChars( true ),
-                        GetChars( footprintName ) );
+        wxString msg;
+        if( footprintName.IsEmpty() )
+            msg = _( "Footprint must have a name." );
+        else
+            msg.Printf( _( "Footprint name may not contain \"%s\"." ),
+                        MODULE::StringLibNameInvalidChars( true ) );
 
-            DisplayError( NULL, msg );
+        DisplayError( nullptr, msg );
+
+        m_FootprintNameCtrl->SetFocus();
+
+        return false;
+    }
+
+    // Check for empty texts.
+    for( size_t i = 2; i < m_texts->size(); ++i )
+    {
+        TEXTE_MODULE& text = m_texts->at( i );
+
+        if( text.GetText().IsEmpty() )
+        {
+            if( m_NoteBook->GetSelection() != 0 )
+                m_NoteBook->SetSelection( 0 );
+
+            m_delayedErrorMessage = _( "Text items must have some content." );
+            m_delayedFocusColumn = TMC_TEXT;
+            m_delayedFocusRow = i;
 
             return false;
         }
     }
 
-    // Check if footprint local clerance is acceptable (i.e. >= 0 )
-    int localNetClearance = ValueFromTextCtrl( *m_NetClearanceValueCtrl );
-
-    if( localNetClearance < 0 )
-    {
-        wxMessageBox( _( "Error: footprint local net clearance is < 0" ) );
+    if( !m_netClearance.Validate( true ) )
         return false;
+
+    return true;
+}
+
+
+bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
+{
+    if( !Validate() )
+        return false;
+
+    if( !DIALOG_SHIM::TransferDataFromWindow() )
+        return false;
+
+    if( !m_PanelGeneral->TransferDataFromWindow() )
+        return false;
+
+    if( !m_Panel3D->TransferDataFromWindow() )
+        return false;
+
+    auto view = m_frame->GetGalCanvas()->GetView();
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( m_footprint );
+
+    LIB_ID fpID = m_footprint->GetFPID();
+    fpID.SetLibItemName( m_FootprintNameCtrl->GetValue(), false );
+    m_footprint->SetFPID( fpID );
+
+    m_footprint->SetDescription( m_DocCtrl->GetValue() );
+    m_footprint->SetKeywords( m_KeywordCtrl->GetValue() );
+
+    // copy reference and value
+    m_footprint->Reference() = m_texts->at( 0 );
+    m_footprint->Value() = m_texts->at( 1 );
+
+    size_t i = 2;
+    for( BOARD_ITEM* item = m_footprint->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+    {
+        TEXTE_MODULE* textModule = dyn_cast<TEXTE_MODULE*>( item );
+
+        if( textModule )
+        {
+            // copy grid table entries till we run out, then delete any remaining texts
+            if( i < m_texts->size() )
+                *textModule = m_texts->at( i++ );
+            else
+                textModule->DeleteStructure();
+        }
     }
 
-    if( !m_PreviewPane->ValidateWithMessage( msg ) )
+    // if there are still grid table entries, create new texts for them
+    while( i < m_texts->size() )
     {
-        DisplayError( NULL, msg );
-        return false;
+        auto newText = new TEXTE_MODULE( m_texts->at( i++ ) );
+        m_footprint->Add( newText, ADD_APPEND );
+        view->Add( newText );
     }
 
-    BOARD_COMMIT commit( m_parent );
-    commit.Modify( m_currentModule );
-
-    m_currentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
+    m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     switch( m_AttributsCtrl->GetSelection() )
     {
-    case 0:
-        m_currentModule->SetAttributes( 0 );
-        break;
-
-    case 1:
-        m_currentModule->SetAttributes( MOD_CMS );
-        break;
-
-    case 2:
-        m_currentModule->SetAttributes( MOD_VIRTUAL );
-        break;
+    case 0:  m_footprint->SetAttributes( 0 );           break;
+    case 1:  m_footprint->SetAttributes( MOD_CMS );     break;
+    case 2:  m_footprint->SetAttributes( MOD_VIRTUAL ); break;
+    default: wxFAIL;
     }
 
-    m_currentModule->SetPlacementCost90( m_CostRot90Ctrl->GetValue() );
-    m_currentModule->SetPlacementCost180( m_CostRot180Ctrl->GetValue() );
-    m_currentModule->SetDescription( m_DocCtrl->GetValue() );
-    m_currentModule->SetKeywords( m_KeywordCtrl->GetValue() );
+    m_footprint->SetPlacementCost90( m_CostRot90Ctrl->GetValue() );
+    m_footprint->SetPlacementCost180( m_CostRot180Ctrl->GetValue() );
 
-    // Set footprint name in library
-    if( ! footprintName.IsEmpty() )
-    {
-        m_currentFPID.SetLibItemName( footprintName, false );
-        m_currentModule->SetFPID( m_currentFPID );
-    }
+    // Initialize masks clearances
+    m_footprint->SetLocalClearance( m_netClearance.GetValue() );
+    m_footprint->SetLocalSolderMaskMargin( m_solderMask.GetValue() );
+    m_footprint->SetLocalSolderPasteMargin( m_solderPaste.GetValue() );
 
-    // Set fields
-    TEXTE_MODULE& reference = m_currentModule->Reference();
-    reference = *m_referenceCopy;
-    TEXTE_MODULE& value = m_currentModule->Value();
-    value = *m_valueCopy;
-
-    switch( m_ZoneConnectionChoice->GetSelection() )
-    {
-    default:
-    case 0:
-        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_INHERITED );
-        break;
-
-    case 1:
-        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_FULL );
-        break;
-
-    case 2:
-        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_THERMAL );
-        break;
-
-    case 3:
-        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_NONE );
-        break;
-    }
-
-    // Set masks clearances
-    m_currentModule->SetLocalClearance( localNetClearance );
-    m_currentModule->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
-    m_currentModule->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
-    double   dtmp;
-    msg = m_SolderPasteMarginRatioCtrl->GetValue();
+    double dtmp = 0.0;
+    wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
 
     // A -50% margin ratio means no paste on a pad, the ratio must be >= -50%
     if( dtmp < -50.0 )
         dtmp = -50.0;
-
     // A margin ratio is always <= 0
+    // 0 means use full pad copper area
     if( dtmp > 0.0 )
         dtmp = 0.0;
 
-    m_currentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
+    m_footprint->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 
-    std::list<MODULE_3D_SETTINGS>* draw3D  = &m_currentModule->Models();
+    std::list<MODULE_3D_SETTINGS>* draw3D  = &m_footprint->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 
-    m_currentModule->CalculateBoundingBox();
+    m_footprint->CalculateBoundingBox();
 
     commit.Push( _( "Modify module properties" ) );
 
@@ -600,36 +580,126 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnEditReference( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
-    wxPoint tmp = m_parent->GetCrossHairPosition();
-    m_parent->SetCrossHairPosition( m_referenceCopy->GetTextPos() );
+    const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+    TEXTE_MODULE textMod( m_footprint );
 
-    DIALOG_EDIT_FPTEXT dialog( this, m_parent, m_referenceCopy, NULL );
-    dialog.ShowModal();
+    // Set active layer if legal; otherwise copy layer from previous text item
+    if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
+        textMod.SetLayer( m_frame->GetActiveLayer() );
+    else
+        textMod.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
 
-    m_parent->SetCrossHairPosition( tmp );
-    m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
+    textMod.SetTextSize( dsnSettings.m_ModuleTextSize );
+    textMod.SetThickness( dsnSettings.m_ModuleTextWidth );
+
+    m_texts->push_back( textMod );
+
+    // notify the grid
+    wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+    m_itemsGrid->ProcessTableMessage( msg );
+
+    m_itemsGrid->SetFocus();
+    m_itemsGrid->MakeCellVisible( m_texts->size() - 1, 0 );
+    m_itemsGrid->SetGridCursor( m_texts->size() - 1, 0 );
+
+    m_itemsGrid->EnableCellEditControl( true );
+    m_itemsGrid->ShowCellEditControl();
 }
 
 
-void DIALOG_FOOTPRINT_FP_EDITOR::OnEditValue( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
 {
-    wxPoint tmp = m_parent->GetCrossHairPosition();
-    m_parent->SetCrossHairPosition( m_valueCopy->GetTextPos() );
+    int rowCount = m_itemsGrid->GetNumberRows();
+    int curRow   = m_itemsGrid->GetGridCursorRow();
 
-    DIALOG_EDIT_FPTEXT dialog( this, m_parent, m_valueCopy, NULL );
-    dialog.ShowModal();
+    if( curRow < 0 || curRow >= (int) m_texts->size() )
+        return;
 
-    m_parent->SetCrossHairPosition( tmp );
-    m_ValueCtrl->SetValue( m_valueCopy->GetText() );
+    if( curRow < 2 )
+    {
+        DisplayError( nullptr, _( "Reference and value are mandatory." ) );
+        return;
+    }
+
+    auto start = m_texts->begin() + curRow;
+    m_texts->erase( start, start + 1 );
+
+    // notify the grid
+    wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
+    m_itemsGrid->ProcessTableMessage( msg );
+
+    if( curRow == rowCount - 1 )
+    {
+        m_itemsGrid->MakeCellVisible( curRow-1, m_itemsGrid->GetGridCursorCol() );
+        m_itemsGrid->SetGridCursor( curRow-1, m_itemsGrid->GetGridCursorCol() );
+    }
 }
 
 
 void DIALOG_FOOTPRINT_FP_EDITOR::Cfg3DPath( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
-        if( m_lastSelected3DShapeIndex >= 0 )
-            if( m_PreviewPane )
-                m_PreviewPane->SetModelDataIdx( m_lastSelected3DShapeIndex, true );
+        m_PreviewPane->UpdateModelInfoList();
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::adjustGridColumns( int aWidth )
+{
+    // Account for scroll bars
+    int itemsWidth = aWidth - ( m_itemsGrid->GetSize().x - m_itemsGrid->GetClientSize().x );
+    int modelsWidth = aWidth - ( m_modelsGrid->GetSize().x - m_modelsGrid->GetClientSize().x );
+
+    itemsWidth -= m_itemsGrid->GetRowLabelSize();
+
+    for( int i = 1; i < m_itemsGrid->GetNumberCols(); i++ )
+        itemsWidth -= m_itemsGrid->GetColSize( i );
+
+    m_itemsGrid->SetColSize( 0, std::max( itemsWidth, 120 ) );
+
+    m_modelsGrid->SetColSize( 0, modelsWidth - m_modelsGrid->GetColSize( 1 ) - 5 );
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    if( !m_itemsGrid->IsCellEditControlShown() && !m_modelsGrid->IsCellEditControlShown() )
+        adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
+
+    // Handle a grid error.  This is delayed to OnUpdateUI so that we can change focus
+    // even when the original validation was triggered from a killFocus event, and so
+    // that the corresponding notebook page can be shown in the background when triggered
+    // from an OK.
+    if( m_delayedFocusRow >= 0 )
+    {
+        if( !m_delayedErrorMessage.IsEmpty() )
+        {
+            // We will re-enter this routine when the error dialog is displayed, so make
+            // sure we don't keep putting up more dialogs.
+            wxString msg = m_delayedErrorMessage;
+            m_delayedErrorMessage = wxEmptyString;
+
+            // Do not use DisplayErrorMessage(); it screws up window order on Mac
+            DisplayError( nullptr, msg );
+        }
+
+        m_delayedFocusGrid->SetFocus();
+        m_delayedFocusGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
+        m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
+
+        m_delayedFocusGrid->EnableCellEditControl( true );
+        m_delayedFocusGrid->ShowCellEditControl();
+
+        m_delayedFocusRow = -1;
+        m_delayedFocusColumn = -1;
+    }
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::OnGridSize( wxSizeEvent& event )
+{
+    adjustGridColumns( event.GetSize().GetX());
+
+    event.Skip();
 }

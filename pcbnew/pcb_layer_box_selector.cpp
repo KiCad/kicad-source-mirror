@@ -98,8 +98,8 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         else
             layerstatus.Empty();
 
-        wxBitmap   layerbmp( BM_SIZE, BM_SIZE );
-        SetBitmapLayer( layerbmp, layerid );
+        wxBitmap bmp( BM_SIZE, BM_SIZE );
+        DrawColorSwatch( bmp, GetLayerColor( LAYER_PCB_BACKGROUND ), GetLayerColor( layerid ) );
 
         wxString layername = GetLayerName( layerid ) + layerstatus;
 
@@ -111,7 +111,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
                 layername = AddHotkeyName( layername, m_hotkeys, id, IS_COMMENT );
         }
 
-        Append( layername, layerbmp, (void*)(intptr_t) layerid );
+        Append( layername, bmp, (void*)(intptr_t) layerid );
 
         int w, h;
         dc.GetTextExtent ( layername, &w, &h );

@@ -783,6 +783,15 @@ LSET LSET::BackMask()
 }
 
 
+LSET LSET::ForbiddenTextLayers()
+{
+    static const LSET saved = AllCuMask().set( Edge_Cuts ).set( Margin )
+                                         .set( F_Paste ).set( B_Paste )
+                                         .set( F_Mask ).set( B_Mask );
+    return saved;
+}
+
+
 LSEQ LSET::UIOrder() const
 {
     LSEQ order = CuStack();

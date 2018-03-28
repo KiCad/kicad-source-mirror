@@ -28,6 +28,8 @@
 // Include the wxFormBuider header base:
 #include <vector>
 #include <dialog_edit_footprint_for_fp_editor_base.h>
+#include <text_mod_grid_table.h>
+#include <widgets/unit_binder.h>
 
 class PANEL_PREV_3D;
 class MODULE;
@@ -35,56 +37,52 @@ class MODULE;
 class DIALOG_FOOTPRINT_FP_EDITOR : public DIALOG_FOOTPRINT_FP_EDITOR_BASE
 {
 private:
+    wxConfigBase*                    m_config;
+    FOOTPRINT_EDIT_FRAME*            m_frame;
+    MODULE*                          m_footprint;
 
-    FOOTPRINT_EDIT_FRAME*       m_parent;
-    MODULE*                     m_currentModule;
-    TEXTE_MODULE*               m_referenceCopy;
-    TEXTE_MODULE*               m_valueCopy;
-    std::vector<MODULE_3D_SETTINGS>       m_shapes3D_list;
-    int                         m_lastSelected3DShapeIndex;
-    static size_t               m_page;         // remember the last open page during session
-    PANEL_PREV_3D*              m_PreviewPane;
-    MODULE*                     m_currentModuleCopy;
-    LIB_ID                      m_currentFPID;  // the full initial FPID
+    static int                       m_page;       // remember the last open page during session
+
+    TEXT_MOD_GRID_TABLE*             m_texts;
+
+    UNIT_BINDER                      m_netClearance;
+    UNIT_BINDER                      m_solderMask;
+    UNIT_BINDER                      m_solderPaste;
+
+    std::vector<MODULE_3D_SETTINGS>  m_shapes3D_list;
+    PANEL_PREV_3D*                   m_PreviewPane;
+
+    wxString                         m_delayedErrorMessage;
+    wxGrid*                          m_delayedFocusGrid;
+    int                              m_delayedFocusRow;
+    int                              m_delayedFocusColumn;
 
 public:
 
     // Constructor and destructor
     DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, MODULE* aModule );
-    ~DIALOG_FOOTPRINT_FP_EDITOR();
+    ~DIALOG_FOOTPRINT_FP_EDITOR() override;
 
-private:
-    void BrowseAndAdd3DShapeFile();
-    void initModeditProperties();
-    void Edit3DShapeFileName();
+    bool Validate() override;
 
-    // virtual event functions
-    void OnEditValue( wxCommandEvent& event ) override;
-    void OnEditReference( wxCommandEvent& event ) override;
-    void On3DShapeSelection( wxCommandEvent& event );
-    void On3DShapeNameSelected( wxCommandEvent& event ) override;
-    void Add3DShape( wxCommandEvent& event ) override
-    {
-        BrowseAndAdd3DShapeFile();
-    }
-    void Remove3DShape( wxCommandEvent& event ) override;
-    void Edit3DShapeFilename( wxCommandEvent& event ) override
-    {
-        Edit3DShapeFileName();
-    }
-
-    void Cfg3DPath( wxCommandEvent& event ) override;
-
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void OnInitDlg( wxInitDialogEvent& event ) override
-    {
-        // Call the default wxDialog handler of a wxInitDialogEvent
-        TransferDataToWindow();
+private:
+    // virtual event functions
+    void On3DModelSelected( wxGridEvent&  ) override;
+    void On3DModelCellChanged( wxGridEvent& aEvent ) override;
+    void OnRemove3DModel( wxCommandEvent& event ) override;
+    void OnAdd3DModel( wxCommandEvent& event ) override;
+    void Cfg3DPath( wxCommandEvent& event ) override;
+    void OnGridSize( wxSizeEvent& event ) override;
+    void OnAddField( wxCommandEvent& event ) override;
+    void OnDeleteField( wxCommandEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
-    }
+    void select3DModel( int aModelIdx );
+
+    void adjustGridColumns( int aWidth );
 };
 
 

@@ -235,6 +235,8 @@ set( PCBNEW_CLASS_SRCS
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
     globaleditpad.cpp
+    grid_layer_box_helpers.cpp
+    grid_layer_box_helpers.h
     highlight.cpp
     hotkeys.cpp
     hotkeys_board_editor.cpp
@@ -275,6 +277,7 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra_keywords.cpp
     swap_layers.cpp
     target_edit.cpp
+    text_mod_grid_table.cpp
     tool_footprint_editor.cpp
     tool_footprint_viewer.cpp
     tool_onrightclick.cpp

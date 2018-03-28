@@ -29,32 +29,43 @@
 
 #include <dialog_edit_footprint_for_BoardEditor_base.h>
 #include <wx/valnum.h>
+#include <text_mod_grid_table.h>
+#include <widgets/unit_binder.h>
 
 class PANEL_PREV_3D;
 
 class DIALOG_FOOTPRINT_BOARD_EDITOR: public DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
 {
 private:
-    PCB_EDIT_FRAME *            m_Parent;
-    wxDC *                      m_DC;
-    MODULE*                     m_CurrentModule;
-    TEXTE_MODULE*               m_ReferenceCopy;
-    TEXTE_MODULE*               m_ValueCopy;
-    std::vector <MODULE_3D_SETTINGS>      m_shapes3D_list;
-    int                         m_LastSelected3DShapeIndex;
-    static size_t               m_page; // remember the last open page during session
-    PANEL_PREV_3D*              m_PreviewPane;
-    MODULE*                     m_currentModuleCopy;
+    wxConfigBase*                    m_config;
+    PCB_EDIT_FRAME*                  m_frame;
+    wxDC*                            m_DC;
+    MODULE*                          m_footprint;
 
-    wxFloatingPointValidator<double>    m_OrientValidator;
-    double  m_OrientValue;
+    static int                       m_page;       // remember the last open page during session
+
+    TEXT_MOD_GRID_TABLE*             m_texts;
+    UNIT_BINDER                      m_posX;
+    UNIT_BINDER                      m_posY;
+    wxFloatingPointValidator<double> m_OrientValidator;
+    double                           m_OrientValue;
+
+    UNIT_BINDER                      m_netClearance;
+    UNIT_BINDER                      m_solderMask;
+    UNIT_BINDER                      m_solderPaste;
+
+    std::vector<MODULE_3D_SETTINGS>  m_shapes3D_list;
+    PANEL_PREV_3D*                   m_PreviewPane;
+
+    wxString                         m_delayedErrorMessage;
+    wxGrid*                          m_delayedFocusGrid;
+    int                              m_delayedFocusRow;
+    int                              m_delayedFocusColumn;
 
 public:
     // The dialog can be closed for several reasons.
-    // they are listed here:
     enum FP_PRM_EDITOR_RETVALUE
     {
-        PRM_EDITOR_ABORT,
         PRM_EDITOR_WANT_UPDATE_FP,
         PRM_EDITOR_WANT_EXCHANGE_FP,
         PRM_EDITOR_EDIT_OK,
@@ -64,44 +75,33 @@ public:
 public:
     // Constructor and destructor
     DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule, wxDC* aDC );
-    ~DIALOG_FOOTPRINT_BOARD_EDITOR();
+    ~DIALOG_FOOTPRINT_BOARD_EDITOR() override;
 
-private:
-    void BrowseAndAdd3DShapeFile();
-    void InitBoardProperties();
-    void InitModeditProperties();
-    void Edit3DShapeFileName();
-
-    // virtual event functions
-    void OnEditValue( wxCommandEvent& event ) override;
-    void OnEditReference( wxCommandEvent& event ) override;
-    void On3DShapeNameSelected( wxCommandEvent& event ) override;
-    void Edit3DShapeFilename( wxCommandEvent& event ) override
-    {
-        Edit3DShapeFileName();
-    }
-    void Remove3DShape( wxCommandEvent& event ) override;
-    void Add3DShape( wxCommandEvent& event ) override
-    {
-        BrowseAndAdd3DShapeFile();
-    }
-    void GotoModuleEditor( wxCommandEvent& event ) override;
-    void UpdateModule( wxCommandEvent& event ) override;
-    void ExchangeModule( wxCommandEvent& event ) override;
-    void ModuleOrientEvent( wxCommandEvent& event ) override;
-    void Cfg3DPath( wxCommandEvent& event ) override;
-
-    void OnInitDlg( wxInitDialogEvent& event ) override
-    {
-        // Call the default wxDialog handler of a wxInitDialogEvent
-        TransferDataToWindow();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
-    }
+    bool Validate() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+private:
+    // virtual event functions
+    void On3DModelSelected( wxGridEvent&  ) override;
+    void On3DModelCellChanged( wxGridEvent& aEvent ) override;
+    void OnRemove3DModel( wxCommandEvent&  ) override;
+    void OnAdd3DModel( wxCommandEvent&  ) override;
+    void GotoModuleEditor( wxCommandEvent&  ) override;
+    void UpdateModule( wxCommandEvent&  ) override;
+    void ExchangeModule( wxCommandEvent&  ) override;
+    void ModuleOrientEvent( wxCommandEvent&  ) override;
+    void OnOtherOrientation( wxKeyEvent& aEvent ) override;
+    void Cfg3DPath( wxCommandEvent&  ) override;
+    void OnGridSize( wxSizeEvent& aEvent ) override;
+    void OnAddField( wxCommandEvent&  ) override;
+    void OnDeleteField( wxCommandEvent&  ) override;
+    void OnUpdateUI( wxUpdateUIEvent&  ) override;
+
+    void select3DModel( int aModelIdx );
+
+    void adjustGridColumns( int aWidth );
 };
 
 

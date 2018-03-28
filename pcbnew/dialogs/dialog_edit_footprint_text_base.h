@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,12 +21,13 @@ class TEXT_CTRL_EVAL;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
 #include <wx/checkbox.h>
+#include <wx/radiobut.h>
+#include <wx/gbsizer.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,29 +41,38 @@ class DIALOG_EDIT_FPTEXT_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_ModuleInfoText;
-		wxStaticLine* m_staticline1;
 		wxStaticText* m_TextDataTitle;
 		wxTextCtrl* m_Name;
-		wxStaticText* m_SizeXTitle;
-		TEXT_CTRL_EVAL* m_TxtSizeCtrlX;
-		wxStaticText* m_SizeYTitle;
-		TEXT_CTRL_EVAL* m_TxtSizeCtrlY;
-		wxStaticText* m_WidthTitle;
-		TEXT_CTRL_EVAL* m_TxtWidthCtlr;
-		wxStaticText* m_PosXTitle;
-		TEXT_CTRL_EVAL* m_TxtPosCtrlX;
-		wxStaticText* m_PosYTitle;
-		TEXT_CTRL_EVAL* m_TxtPosCtrlY;
+		wxStaticText* m_widthLabel;
+		TEXT_CTRL_EVAL* m_widthCtrl;
+		wxStaticText* m_widthUnits;
+		wxStaticText* m_heightLabel;
+		TEXT_CTRL_EVAL* m_heightCtrl;
+		wxStaticText* m_heightUnits;
+		wxStaticText* m_thicknessLabel;
+		TEXT_CTRL_EVAL* m_thicknessCtrl;
+		wxStaticText* m_thicknessUnits;
+		wxStaticText* m_posXLabel;
+		TEXT_CTRL_EVAL* m_posXCtrl;
+		wxStaticText* m_posXUnits;
+		wxStaticText* m_posYLabel;
+		TEXT_CTRL_EVAL* m_posYCtrl;
+		wxStaticText* m_posYUnits;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
-		wxRadioBox* m_Show;
-		wxRadioBox* m_Style;
-		wxRadioBox* m_Orient;
-		wxStaticText* m_staticTextRotation;
+		wxCheckBox* m_Show;
+		wxCheckBox* m_Italic;
+		wxStaticText* stOrienationLabel;
+		wxRadioButton* m_Orient0;
+		wxRadioButton* m_Orient90;
+		wxRadioButton* m_Orient270;
+		wxRadioButton* m_Orient180;
+		wxRadioButton* m_OrientOther;
 		wxTextCtrl* m_OrientValueCtrl;
 		wxCheckBox* m_unlock;
 		wxStaticLine* m_staticline2;
+		wxStaticText* m_statusLine1;
+		wxStaticText* m_statusLine2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -70,6 +80,7 @@ class DIALOG_EDIT_FPTEXT_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOtherOrientation( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

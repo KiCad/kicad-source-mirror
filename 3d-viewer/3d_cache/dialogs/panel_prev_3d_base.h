@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 12 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,7 @@
 #include <wx/textctrl.h>
 #include <wx/spinbutt.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -38,7 +39,6 @@ class PANEL_PREV_3D_BASE : public wxPanel
 	private:
 	
 	protected:
-		wxStaticText* m_staticTextScale;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* xscale;
 		wxSpinButton* m_spinXscale;
@@ -48,7 +48,6 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		wxStaticText* m_staticText3;
 		wxTextCtrl* zscale;
 		wxSpinButton* m_spinZscale;
-		wxStaticText* m_staticTextRot;
 		wxStaticText* m_staticText11;
 		wxTextCtrl* xrot;
 		wxSpinButton* m_spinXrot;
@@ -58,7 +57,6 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		wxStaticText* m_staticText31;
 		wxTextCtrl* zrot;
 		wxSpinButton* m_spinZrot;
-		wxStaticText* m_staticTextOffset;
 		wxStaticText* m_staticText12;
 		wxTextCtrl* xoff;
 		wxSpinButton* m_spinXoffset;
@@ -68,15 +66,14 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		wxTextCtrl* zoff;
 		wxSpinButton* m_spinZoffset;
 		wxBoxSizer* m_SizerPanelView;
-		wxFlexGridSizer* m_fgSizerButtons;
 		wxBitmapButton* m_bpvISO;
 		wxBitmapButton* m_bpvLeft;
-		wxBitmapButton* m_bpvFront;
-		wxBitmapButton* m_bpvTop;
-		wxBitmapButton* m_bpUpdate;
 		wxBitmapButton* m_bpvRight;
+		wxBitmapButton* m_bpvFront;
 		wxBitmapButton* m_bpvBack;
+		wxBitmapButton* m_bpvTop;
 		wxBitmapButton* m_bpvBottom;
+		wxBitmapButton* m_bpUpdate;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onMouseWheelScale( wxMouseEvent& event ) { event.Skip(); }
@@ -91,12 +88,12 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		virtual void onIncrementOffset( wxSpinEvent& event ) { event.Skip(); }
 		virtual void View3DISO( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DLeft( wxCommandEvent& event ) { event.Skip(); }
-		virtual void View3DFront( wxCommandEvent& event ) { event.Skip(); }
-		virtual void View3DTop( wxCommandEvent& event ) { event.Skip(); }
-		virtual void View3DUpdate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DRight( wxCommandEvent& event ) { event.Skip(); }
+		virtual void View3DFront( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DBack( wxCommandEvent& event ) { event.Skip(); }
+		virtual void View3DTop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DBottom( wxCommandEvent& event ) { event.Skip(); }
+		virtual void View3DUpdate( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

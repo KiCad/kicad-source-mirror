@@ -29,23 +29,27 @@
 
 #include <dialog_edit_footprint_text_base.h>
 #include <wx/valnum.h>
+#include <widgets/unit_binder.h>
 
-/*************** **************/
-/* class DIALOG_EDIT_FPTEXT */
-/*************** **************/
 class DIALOG_EDIT_FPTEXT : public DIALOG_EDIT_FPTEXT_BASE
 {
 private:
-    PCB_BASE_FRAME* m_boardEditor;
-    wxDC* m_dc;
-    MODULE* m_module;
-    TEXTE_MODULE* m_currentText;
+    PCB_BASE_FRAME* m_frame;
+    wxDC*           m_dc;
+    MODULE*         m_module;
+    TEXTE_MODULE*   m_text;
+
+    UNIT_BINDER     m_textWidth;
+    UNIT_BINDER     m_textHeight;
+    UNIT_BINDER     m_thickness;
+    UNIT_BINDER     m_posX;
+    UNIT_BINDER     m_posY;
 
     wxFloatingPointValidator<double> m_OrientValidator;
-    double m_OrientValue;
+    double          m_OrientValue;
 
 public:
-    DIALOG_EDIT_FPTEXT( wxWindow* aCaller, PCB_BASE_FRAME* aBoardEditor,
+    DIALOG_EDIT_FPTEXT( wxWindow* aCaller, PCB_BASE_FRAME* aFrame,
                         TEXTE_MODULE* aTextMod, wxDC* aDC );
     ~DIALOG_EDIT_FPTEXT() {};
 
@@ -55,15 +59,7 @@ protected:
 
 private:
     void ModuleOrientEvent( wxCommandEvent& event ) override;
-
-    void OnInitDlg( wxInitDialogEvent& event ) override
-    {
-        // Call the default wxDialog handler of a wxInitDialogEvent
-        TransferDataToWindow();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
-    }
+    void OnOtherOrientation( wxKeyEvent& event ) override;
 };
 
 #endif /* DIALOG_EDIT_FOOTPRINT_TEXT_H */

@@ -99,32 +99,38 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataToWindow()
    if( !wxDialog::TransferDataToWindow() )
        return false;
 
-   // Environment variables
-
-   const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
-
-   for( auto it = envVars.begin(); it != envVars.end(); ++it )
-       AppendEnvVar( it->first, it->second.GetValue(), it->second.GetDefinedExternally() );
-
-   // 3D search paths
+   // Do 3D search paths first so they get first crack at setting m_curdir
 
    if( m_resolver )
    {
        const std::list<SEARCH_PATH>* paths = m_resolver->GetPaths();
-       auto it = paths->begin();
 
-       while( it != paths->end()
-              && ( ( *it ).m_alias.StartsWith( "${" ) || ( *it ).m_alias.StartsWith( "$(" ) ) )
-           ++it;
+       for( auto it = paths->begin(); it != paths->end(); ++it )
+       {
+           if ( !( *it ).m_alias.StartsWith( "${" ) && !( *it ).m_alias.StartsWith( "$(" ) )
+           {
+               AppendSearchPath( it->m_alias, it->m_pathvar, it->m_description );
 
-       if( it != paths->end() )
-           m_curdir = ( *it ).m_pathexp;
-
-       for( ; it != paths->end(); ++it )
-           AppendSearchPath( it->m_alias, it->m_pathvar, it->m_description );
+               if( m_curdir.IsEmpty() )
+                   m_curdir = it->m_pathexp;
+           }
+       }
    }
 
-   return true;
+    // Environment variables
+
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+
+    for( auto it = envVars.begin(); it != envVars.end(); ++it )
+    {
+        const wxString& path = it->second.GetValue();
+        AppendEnvVar( it->first, path, it->second.GetDefinedExternally() );
+
+        if( m_curdir.IsEmpty() && !path.StartsWith( "${" ) && !path.StartsWith( "$(" ) )
+            m_curdir = path;
+    }
+
+    return true;
 }
 
 
@@ -430,15 +436,14 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
         AddMenuItem( &menu, 1, _( "File Browser..." ), KiBitmap( folder_xpm ) );
         if( GetPopupMenuSelectionFromUser( menu ) == 1 )
         {
-            wxString title = _( "Select Path" );
-            wxString path;  // Currently the first opened path is not initialized
-
-            wxDirDialog dlg( nullptr, title, path, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+            wxDirDialog dlg( nullptr, _( "Select Path" ), m_curdir,
+                             wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
             if( dlg.ShowModal() == wxID_OK )
             {
                 wxGrid* grid = dynamic_cast<wxGrid*>( aEvent.GetEventObject() );
                 grid->SetCellValue( aEvent.GetRow(), EV_PATH_COL, dlg.GetPath() );
+                m_curdir = dlg.GetPath();
             }
         }
     }

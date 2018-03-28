@@ -87,7 +87,8 @@ class MODULE_3D_SETTINGS
             // Initialize with sensible values
             m_Scale { 1, 1, 1 },
             m_Rotation { 0, 0, 0 },
-            m_Offset { 0, 0, 0 }
+            m_Offset { 0, 0, 0 },
+            m_Preview( true )
         {
         }
 
@@ -100,6 +101,7 @@ class MODULE_3D_SETTINGS
         VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)
         VECTOR3D m_Offset;      ///< 3D model offset (mm)
         wxString m_Filename;    ///< The 3D shape filename in 3D library
+        bool     m_Preview;     ///< Include module in 3D preview
 };
 
 class MODULE : public BOARD_ITEM_CONTAINER

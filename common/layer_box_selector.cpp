@@ -45,7 +45,7 @@ bool LAYER_SELECTOR::SetLayersHotkeys( bool value )
 }
 
 
-void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
+void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, COLOR4D aColor )
 {
     wxMemoryDC bmpDC;
     wxBrush    brush;
@@ -54,15 +54,14 @@ void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
     bmpDC.SelectObject( aLayerbmp );
 
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    COLOR4D backgroundColor = GetLayerColor( LAYER_PCB_BACKGROUND );
-    if( backgroundColor != COLOR4D::UNSPECIFIED )
+    if( aBackground != COLOR4D::UNSPECIFIED )
     {
-        brush.SetColour( backgroundColor.WithAlpha(1.0).ToColour() );
+        brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
         bmpDC.SetBrush( brush );
         bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
     }
 
-    brush.SetColour( GetLayerColor( aLayer ).ToColour() );
+    brush.SetColour( aColor.ToColour() );
     bmpDC.SetBrush( brush );
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
 
@@ -150,7 +149,7 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
     for( LAYER_NUM i = 0; i < elements; ++i )
     {
         wxBitmap layerbmp( 14, 14 );
-        SetBitmapLayer( layerbmp, i );
+        DrawColorSwatch( layerbmp, GetLayerColor( LAYER_PCB_BACKGROUND ), GetLayerColor( i ) );
     }
 }
 
