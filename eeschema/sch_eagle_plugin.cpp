@@ -524,7 +524,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     int sheet_count = countChildren( schematicChildren["sheets"], "sheet" );
 
-    // If eagle schematic has multiple sheets.
+    // If eagle schematic has multiple sheets then create corresponding subsheets on the root sheet
     if( sheet_count > 1 )
     {
         int x, y, i;
@@ -758,9 +758,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         while( segmentAttribute )
         {
             if( segmentAttribute->GetName() == "wire" )
-            {
-                segmentWires.Append( loadWire( segmentAttribute ) );
-            }
+                segmentWires.push_back( loadWire( segmentAttribute ) );
 
             segmentAttribute = segmentAttribute->GetNext();
         }
@@ -803,7 +801,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
         // Add a small label to the net segment if it hasn't been labelled already
         // this preserves the named net feature of Eagle schematics.
-        if( labelled == false && wire != NULL )
+        if( !labelled && wire )
         {
             wxString netname = escapeName( netName );
             std::unique_ptr<SCH_TEXT> label;
@@ -868,7 +866,7 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
     auto ejunction = EJUNCTION( aJunction );
     wxPoint pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
 
-    junction->SetPosition( pos  );
+    junction->SetPosition( pos );
 
     return junction.release();
 }
@@ -2190,7 +2188,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                                 moveLabels( line, p );
 
-                                if( p== lineend )    // wire is overlapped by bus entry symbol
+                                if( p == lineend )    // wire is overlapped by bus entry symbol
                                 {
                                     m_currentSheet->GetScreen()->DeleteItem( line );
                                 }
