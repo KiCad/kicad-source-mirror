@@ -321,6 +321,12 @@ public:
         std::swap( A, B );
     }
 
+    ///> Returns the center point of the line
+    VECTOR2I Center() const
+    {
+        return A + ( B - A ) / 2;
+    }
+
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 
