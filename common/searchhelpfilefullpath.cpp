@@ -162,7 +162,11 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
         fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".html" ), &altsubdirs );
 
         if( !fn.IsEmpty() )
+        {
+            // Prepend URI protocol since we will open in a browser
+            fn = wxT( "file://" ) + fn;
             break;
+        }
 
         fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".pdf" ), &altsubdirs );
 
@@ -172,7 +176,11 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
         fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".html" ), &subdirs );
 
         if( !fn.IsEmpty() )
+        {
+            // Prepend URI protocol since we will open in a browser
+            fn = wxT( "file://" ) + fn;
             break;
+        }
 
         fn = FindFileInSearchPaths( ss, aBaseName + wxT( ".pdf" ), &subdirs );
 

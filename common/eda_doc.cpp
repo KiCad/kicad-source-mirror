@@ -98,7 +98,8 @@ bool GetAssociatedDocument( wxWindow* aParent,
         wxT( "http:" ),
         wxT( "https:" ),
         wxT( "ftp:" ),
-        wxT( "www." )
+        wxT( "www." ),
+        wxT( "file:" )
     };
 
     for( unsigned ii = 0; ii < DIM(url_header); ii++ )
