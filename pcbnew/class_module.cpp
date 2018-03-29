@@ -570,7 +570,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN ) );
 
     // Display last date the component was edited (useful in Module Editor).
-    wxDateTime date( m_LastEditTime );
+    wxDateTime date( static_cast<time_t>( m_LastEditTime ) );
 
     if( m_LastEditTime && date.IsValid() )
     // Date format: see http://www.cplusplus.com/reference/ctime/strftime
