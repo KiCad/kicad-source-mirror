@@ -169,7 +169,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         // to avoid issues under Windows, although under Unix
         // filenames are case sensitive.
         // But many users create schematic under both Unix and Windows
-        if( newFilename.CmpNoCase( aSheet->GetFileName() ) != 0 )
+        // **
+        // N.B. aSheet->GetFileName() will return a relative path
+        //      aSheet->GetScreen()->GetFileName() returns a full path
+        if( newFilename.CmpNoCase( aSheet->GetScreen()->GetFileName() ) != 0 )
         {
             // Sheet file name changes cannot be undone.
             isUndoable = false;
