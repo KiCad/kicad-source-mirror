@@ -764,6 +764,9 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
 {
+    // In case the item has a very tiny width defined, allow it to be selected
+    const int MIN_HIT_TEST_RADIUS = Millimeter2iu( 0.01 );
+
     // calculate aRefPos in XY gerber axis:
     wxPoint ref_pos = GetXYPosition( aRefPos );
 
@@ -788,8 +791,11 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
             double radius = GetLineLength( m_Start, m_ArcCentre );
             VECTOR2D test_radius = VECTOR2D( ref_pos ) - VECTOR2D( m_ArcCentre );
 
-            // Are we within m_Size.x of the radius?
-            bool radius_hit = ( std::fabs( test_radius.EuclideanNorm() - radius) < m_Size.x );
+            int size = ( ( m_Size.x < MIN_HIT_TEST_RADIUS ) ? MIN_HIT_TEST_RADIUS
+                                                            : m_Size.x );
+
+            // Are we close enough to the radius?
+            bool radius_hit = ( std::fabs( test_radius.EuclideanNorm() - radius) < size );
 
             if( radius_hit )
             {
@@ -832,6 +838,9 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
 
     // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
     int radius = std::min( m_Size.x, m_Size.y ) >> 1;
+
+    if( radius < MIN_HIT_TEST_RADIUS )
+        radius = MIN_HIT_TEST_RADIUS;
 
     if( m_Flashed )
         return HitTestPoints( m_Start, ref_pos, radius );
