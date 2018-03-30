@@ -84,7 +84,8 @@ bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
     if( aIncludeLeaderPts )
     {
         for( int i = 0; i < m_leaderPts.PointCount(); ++i )
-            pts.Append( m_leaderPts.CPoint( i ) );
+            if( m_leaderPts.CPoint( i ) != pts.CPoint( 0 ) )
+                pts.Append( m_leaderPts.CPoint( i ) );
     }
 
     // line chain needs to be set as closed for proper checks
