@@ -73,7 +73,7 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
         if( PyErr_Occurred() )
         {
             wxMessageBox( PyErrStringWithTraceback(),
-                    wxT( "Exception on python action plugin code" ),
+                    _( "Exception on python action plugin code" ),
                     wxICON_ERROR | wxOK );
         }
 
@@ -85,7 +85,8 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
     }
     else
     {
-        printf( "method not found, or not callable: %s\n", aMethod );
+        wxString msg = wxString::Format(_( "Method \"%s\" not found, or not callable" ), aMethod );
+        wxMessageBox( msg, _( "Unknown Method" ), wxICON_ERROR | wxOK );
     }
 
     if( pFunc )
@@ -300,7 +301,7 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
 
             default:
                 wxString msg;
-                msg.Printf( wxT( "(PCB_EDIT_FRAME::OnActionPlugin) needs work: "
+                msg.Printf( _( "(PCB_EDIT_FRAME::OnActionPlugin) needs work: "
                                  "BOARD_ITEM type (%d) not handled" ),
                         item->Type() );
                 wxFAIL_MSG( msg );

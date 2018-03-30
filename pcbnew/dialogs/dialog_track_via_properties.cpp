@@ -78,7 +78,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         if( prevNet >= 0 && net != prevNet )
         {
-            printf("prev %d net %d\n", net, prevNet );
+            DBG( printf("prev %d net %d\n", net, prevNet ) );
             m_haveUniqueNet = false;
             break;
         }
@@ -391,7 +391,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
 
                 if ( m_NetComboBox->IsUniqueNetSelected() )
                 {
-                    printf("snc %d\n", m_NetComboBox->GetSelectedNet());
+                    DBG( printf( "snc %d\n", m_NetComboBox->GetSelectedNet() ) );
                     t->SetNetCode( m_NetComboBox->GetSelectedNet() );
                 }
 
@@ -482,7 +482,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
 
                 if ( m_NetComboBox->IsUniqueNetSelected() )
                 {
-                    printf("snc %d\n", m_NetComboBox->GetSelectedNet());
+                    DBG( printf( "snc %d\n", m_NetComboBox->GetSelectedNet() ) );
                     v->SetNetCode( m_NetComboBox->GetSelectedNet() );
                 }
 
