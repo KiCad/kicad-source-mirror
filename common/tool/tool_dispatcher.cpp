@@ -36,6 +36,11 @@
 
 #include <core/optional.h>
 
+extern wxString dumpKeyEvent( const wxKeyEvent& aEvent );
+
+extern const wxString kicadTraceKeyEvent;
+
+
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
 {
@@ -374,11 +379,20 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             if( !keyIsSpecial )
             {
+                wxLogTrace( kicadTraceKeyEvent,
+                            "TOOL_DISPATCHER::DispatchWxEvent wxEVT_CHAR_HOOK %s",
+                            dumpKeyEvent( *ke ) );
                 aEvent.Skip();
                 return;
             }
             else
             key = translateSpecialCode( key );
+        }
+        else
+        {
+            wxLogTrace( kicadTraceKeyEvent,
+                        "TOOL_DISPATCHER::DispatchWxEvent wxEVT_CHAR %s",
+                        dumpKeyEvent( *ke ) );
         }
 
         int mods = decodeModifiers( ke );
@@ -395,6 +409,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
                 key += 'A' - 1;
         }
+
+        // For some reason on windows with US keyboards, the /? key always returns the '/' key
+        // code where as the <,, .>, ;:, '", [{, ]}, and \| keys return the shifted character
+        // key code.
+#if defined( __WXMSW__ )
+        if( ( mods & MD_SHIFT ) && ( key == '?' ) )
+            mods &= ~MD_SHIFT;
+#endif
 
         if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
             evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
