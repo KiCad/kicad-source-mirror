@@ -422,6 +422,10 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double   lineAngle      = startEndVector.Angle();
 
+    // Width must be nonzero for anything to appear
+    if( aWidth <= 0 )
+        aWidth = 1.0;
+
     if( isFillEnabled )
     {
         // Filled tracks
