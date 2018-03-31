@@ -158,6 +158,9 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
 
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, GetCurPart() );
 
+    if( GetDrawItem() && GetDrawItem()->Type() == LIB_FIELD_T )
+        SetDrawItem( nullptr );     // selected LIB_FIELD might be deleted
+
     // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
     // frame. Therefore this dialog as a modal frame parent, MUST be run under
     // quasimodal mode for the quasimodal frame support to work.  So don't use
