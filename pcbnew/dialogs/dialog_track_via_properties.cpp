@@ -248,11 +248,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
 
         m_ViaStartLayer->SetLayersHotkeys( false );
-        m_ViaStartLayer->SetLayerSet( LSET::AllNonCuMask() );
+        m_ViaStartLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
         m_ViaStartLayer->SetBoardFrame( aParent );
         m_ViaStartLayer->Resync();
         m_ViaEndLayer->SetLayersHotkeys( false );
-        m_ViaEndLayer->SetLayerSet( LSET::AllNonCuMask() );
+        m_ViaEndLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
         m_ViaEndLayer->SetBoardFrame( aParent );
         m_ViaEndLayer->Resync();
 
@@ -291,7 +291,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         }
 
         m_TrackLayerCtrl->SetLayersHotkeys( false );
-        m_TrackLayerCtrl->SetLayerSet( LSET::AllNonCuMask() );
+        m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
         m_TrackLayerCtrl->SetBoardFrame( aParent );
         m_TrackLayerCtrl->Resync();
 

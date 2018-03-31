@@ -72,7 +72,7 @@ public:
 
     // SetLayerSet allows disableing some layers, which are not
     // shown in list
-    void SetLayerSet( LSET aMask ) { m_layerMaskDisable = aMask; }
+    void SetNotAllowedLayerSet( LSET aMask ) { m_layerMaskDisable = aMask; }
 
     // Reload the Layers names and bitmaps
     // Virtual function

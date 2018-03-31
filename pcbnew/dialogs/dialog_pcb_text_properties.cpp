@@ -185,7 +185,7 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataToWindow()
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
 
     // A text has no sense on edge cut layer
-    m_LayerSelectionCtrl->SetLayerSet( Edge_Cuts );
+    m_LayerSelectionCtrl->SetNotAllowedLayerSet( Edge_Cuts );
     m_LayerSelectionCtrl->SetBoardFrame( m_Parent );
     m_LayerSelectionCtrl->Resync();
     m_LayerSelectionCtrl->SetLayerSelection( m_SelectedPCBText->GetLayer() );

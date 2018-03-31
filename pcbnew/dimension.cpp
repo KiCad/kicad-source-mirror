@@ -141,7 +141,7 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
         m_SelLayerBox->ShowNonActivatedLayers( true );
 
     m_SelLayerBox->SetLayersHotkeys( false );
-    m_SelLayerBox->SetLayerSet( LSET::AllCuMask().set( Edge_Cuts ) );
+    m_SelLayerBox->SetNotAllowedLayerSet( LSET::AllCuMask().set( Edge_Cuts ) );
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 

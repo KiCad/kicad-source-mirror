@@ -199,7 +199,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerSet( LSET::InternalCuMask().set( Edge_Cuts ) );
+    m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::InternalCuMask().set( Edge_Cuts ) );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 

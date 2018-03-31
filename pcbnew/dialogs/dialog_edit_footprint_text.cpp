@@ -195,7 +195,7 @@ bool DIALOG_EDIT_FPTEXT::TransferDataToWindow()
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerSet( forbiddenLayers );
+    m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     m_LayerSelectionCtrl->SetBoardFrame( m_boardEditor );
     m_LayerSelectionCtrl->Resync();
 

@@ -204,15 +204,17 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetLayerSet( LSET::AllCuMask() );
+    m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::AllCuMask() );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 
     if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
-        wxMessageBox( _( "This item was on an unknown layer.\n"
-                         "It has been moved to the drawings layer. Please fix it." ) );
-        m_LayerSelectionCtrl->SetLayerSelection( Dwgs_User );
+        wxMessageBox( _( "This item was on a not allowed or non existing layer.\n"
+                         "It has been moved to the first allowed layer.\n\n"
+                         "Please fix it." ) );
+        //m_LayerSelectionCtrl->SetLayerSelection( Dwgs_User );
+        m_LayerSelectionCtrl->SetSelection( 0 );
     }
 
     return DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataToWindow();
