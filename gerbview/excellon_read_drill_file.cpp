@@ -119,8 +119,8 @@ static EXCELLON_CMD excellonHeaderCmdList[] =
     { "M45",    DRILL_M_LONGMESSAGE,         -1 },  // Long Operator message (use more than one line)
     { "M48",    DRILL_M_HEADER,              0  },  // beginning of a header
     { "M95",    DRILL_M_ENDHEADER,           0  },  // End of the header
-    { "METRIC", DRILL_METRICHEADER,          1  },
-    { "INCH",   DRILL_IMPERIALHEADER,        1  },
+    { "METRIC", DRILL_METRIC_HEADER,          1  },
+    { "INCH",   DRILL_IMPERIAL_HEADER,        1  },
     { "M71",    DRILL_M_METRIC,              1  },
     { "M72",    DRILL_M_IMPERIAL,            1  },
     { "M25",    DRILL_M_BEGINPATTERN,        0  },  // Beginning of Pattern
@@ -392,31 +392,20 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         SelectUnits( true );
         break;
 
-    case DRILL_METRICHEADER:    // command like METRIC,TZ or METRIC,LZ
-        SelectUnits( true );
+    case DRILL_IMPERIAL_HEADER:  // command like INCH,TZ or INCH,LZ
+    case DRILL_METRIC_HEADER:    // command like METRIC,TZ or METRIC,LZ
+        SelectUnits( cmd->m_Code == DRILL_METRIC_HEADER ? true : false );
+
         if( *text != ',' )
         {
-            AddMessageToList( _( "METRIC command has no parameter" ) );
-            break;
-        }
-        text++;     // skip separator
-        if( *text == 'T' )
+            // No TZ or LZ specified. Can be a decimal format
+            // I am not sure this is incorrect and must be reported.
+            // AddMessageToList( _( "METRIC or INCH command has no parameter" ) );
+            // use default TZ setting, for now
             m_NoTrailingZeros = false;
-        else
-            m_NoTrailingZeros = true;
-        break;
-
-    case DRILL_M_IMPERIAL:
-        SelectUnits( false );
-        break;
-
-    case DRILL_IMPERIALHEADER:  // command like INCH,TZ or INCH,LZ
-        SelectUnits( false );
-        if( *text != ',' )
-        {
-            AddMessageToList( _( "INCH command has no parameter" ) );
             break;
         }
+
         text++;     // skip separator
         if( *text == 'T' )
             m_NoTrailingZeros = false;
