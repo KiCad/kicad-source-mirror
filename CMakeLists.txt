@@ -799,7 +799,7 @@ add_custom_target( uninstall
 ###
 # Install scripts
 ###
-if( UNIX )
+if( UNIX AND NOT APPLE )
     install( DIRECTORY scripts
         DESTINATION ${KICAD_DOCS}
         COMPONENT resources
