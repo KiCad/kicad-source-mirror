@@ -35,6 +35,7 @@
 #include <wx/mimetype.h>
 #include <wx/tokenzr.h>
 #include <wx/filename.h>
+#include <wx/uri.h>
 #include <macros.h>
 
 
@@ -106,7 +107,8 @@ bool GetAssociatedDocument( wxWindow* aParent,
     {
         if( aDocName.First( url_header[ii] ) == 0 )   // looks like an internet url
         {
-            wxLaunchDefaultBrowser( aDocName );
+            wxURI uri( aDocName );
+            wxLaunchDefaultBrowser( uri.BuildURI() );
             return true;
         }
     }
