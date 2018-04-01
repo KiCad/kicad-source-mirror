@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -515,11 +515,10 @@ void prepareEditMenu( wxMenu* aParentMenu )
                  KiBitmap( paste_xpm ) );
 
     // Delete
+    aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_MENU_DELETE_ITEM_BUTT,
                  _( "&Delete" ), HELP_DELETE_ITEMS,
                  KiBitmap( delete_xpm ) );
-
-    aParentMenu->AppendSeparator();
 
     // Find
     aParentMenu->AppendSeparator();
