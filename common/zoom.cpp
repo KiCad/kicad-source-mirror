@@ -284,7 +284,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 
     wxMenu* zoom_choice = new wxMenu;
     AddMenuItem( MasterMenu, zoom_choice,
-                 ID_POPUP_ZOOM_SELECT, _( "Zoom to Selection" ),
+                 ID_POPUP_ZOOM_SELECT, _( "Zoom Select" ),
                  KiBitmap( zoom_selection_xpm ) );
 
     zoom = screen->GetZoom();

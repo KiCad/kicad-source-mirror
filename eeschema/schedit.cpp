@@ -507,9 +507,10 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_HIGHLIGHT:
-        SetToolID( id, wxCURSOR_HAND, _("Highlight specific net") );
+        SetToolID( ID_HIGHLIGHT, wxCURSOR_HAND, _("Highlight specific net") );
         break;
 
+    case ID_MENU_ZOOM_SELECTION:
     case ID_ZOOM_SELECTION:
         // This tool is located on the main toolbar: switch it on or off on click
         if( lastToolID != ID_ZOOM_SELECTION )
@@ -518,76 +519,94 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             SetNoToolSelected();
         break;
 
+    case ID_MENU_NOCONN_BUTT:
     case ID_NOCONN_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add no connect" ) );
+        SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add no connect" ) );
         break;
 
+    case ID_MENU_WIRE_BUTT:
     case ID_WIRE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add wire" ) );
+        SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
         break;
 
+    case ID_MENU_BUS_BUTT:
     case ID_BUS_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add bus" ) );
+        SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
         break;
 
+    case ID_MENU_LINE_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add lines" ) );
+        SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
         break;
 
+    case ID_MENU_JUNCTION_BUTT:
     case ID_JUNCTION_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add junction" ) );
+        SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add junction" ) );
         break;
 
+    case ID_MENU_LABEL_BUTT:
     case ID_LABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add label" ) );
+        SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add label" ) );
         break;
 
+    case ID_MENU_GLABEL_BUTT:
     case ID_GLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add global label" ) );
+        SetToolID( ID_GLABEL_BUTT, wxCURSOR_PENCIL, _( "Add global label" ) );
         break;
 
+    case ID_MENU_HIERLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
+        SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
         break;
 
+    case ID_MENU_TEXT_COMMENT_BUTT:
     case ID_TEXT_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
         break;
 
+    case ID_MENU_ADD_IMAGE_BUTT:
     case ID_ADD_IMAGE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add image" ) );
+        SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
         break;
 
+    case ID_MENU_WIRETOBUS_ENTRY_BUTT:
     case ID_WIRETOBUS_ENTRY_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
+        SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
         break;
 
+    case ID_MENU_BUSTOBUS_ENTRY_BUTT:
     case ID_BUSTOBUS_ENTRY_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
+        SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
         break;
 
+    case ID_MENU_SHEET_SYMBOL_BUTT:
     case ID_SHEET_SYMBOL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add sheet" ) );
+        SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
         break;
 
+    case ID_MENU_SHEET_PIN_BUTT:
     case ID_SHEET_PIN_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
+        SetToolID( ID_SHEET_PIN_BUTT, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
         break;
 
+    case ID_MENU_IMPORT_HLABEL_BUTT:
     case ID_IMPORT_HLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
+        SetToolID( ID_IMPORT_HLABEL_BUTT, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
         break;
 
+    case ID_MENU_PLACE_COMPONENT:
     case ID_SCH_PLACE_COMPONENT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add component" ) );
+        SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add component" ) );
         break;
 
+    case ID_MENU_PLACE_POWER_BUTT:
     case ID_PLACE_POWER_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add power" ) );
+        SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add power" ) );
         break;
 
+    case ID_MENU_DELETE_ITEM_BUTT:
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+        SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;
 
 #ifdef KICAD_SPICE

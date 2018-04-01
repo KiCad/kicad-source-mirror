@@ -132,6 +132,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Right vertical toolbar.
     EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
+    EVT_MENU( ID_MENU_ZOOM_SELECTION, LIB_EDIT_FRAME::OnSelectTool )
     EVT_TOOL( ID_ZOOM_SELECTION, LIB_EDIT_FRAME::OnSelectTool )
     EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                     LIB_EDIT_FRAME::OnSelectTool )
@@ -1153,6 +1154,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
+    case ID_MENU_ZOOM_SELECTION:
     case ID_ZOOM_SELECTION:
         // This tool is located on the main toolbar: switch it on or off on click on it
         if( lastToolID != ID_ZOOM_SELECTION )

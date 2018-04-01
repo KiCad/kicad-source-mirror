@@ -77,7 +77,7 @@ enum id_eeschema_frm
     ID_UPDATE_FIELDS,
     ID_GEN_PLOT_SCHEMATIC,
 
-    /* Schematic editor veritcal toolbar IDs */
+    /* Schematic editor vertical toolbar IDs */
     ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
     ID_HIGHLIGHT,
     ID_SCH_PLACE_COMPONENT,
@@ -99,6 +99,31 @@ enum id_eeschema_frm
     ID_ADD_IMAGE_BUTT,
     ID_SCHEMATIC_DELETE_ITEM_BUTT,
     ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
+
+    // Schematic editor menu place IDs (equivalent to vertical toolbar IDs
+    // for submenus.
+    // On Windows we cannot use the same ID for 2 items in the same frame.
+    // Usually it creates issues (wxASSERTS, item not displayed, ...)
+    ID_SCHEMATIC_PLACE_MENU_START,
+    ID_MENU_PLACE_COMPONENT,
+    ID_MENU_PLACE_POWER_BUTT,
+    ID_MENU_BUS_BUTT,
+    ID_MENU_WIRE_BUTT,
+    ID_MENU_BUSTOBUS_ENTRY_BUTT,
+    ID_MENU_WIRETOBUS_ENTRY_BUTT,
+    ID_MENU_LABEL_BUTT,
+    ID_MENU_GLABEL_BUTT,
+    ID_MENU_HIERLABEL_BUTT,
+    ID_MENU_IMPORT_HLABEL_BUTT,
+    ID_MENU_SHEET_PIN_BUTT,
+    ID_MENU_NOCONN_BUTT,
+    ID_MENU_JUNCTION_BUTT,
+    ID_MENU_SHEET_SYMBOL_BUTT,
+    ID_MENU_TEXT_COMMENT_BUTT,
+    ID_MENU_LINE_COMMENT_BUTT,
+    ID_MENU_ADD_IMAGE_BUTT,
+    ID_MENU_DELETE_ITEM_BUTT,
+    ID_SCHEMATIC_PLACE_MENU_END,
 
     // Toolbar options id:
     ID_TB_OPTIONS_HIDDEN_PINS,

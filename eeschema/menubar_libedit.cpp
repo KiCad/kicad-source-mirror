@@ -171,8 +171,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit symbol" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom to Selection" ), g_Schematic_Hokeys_Descr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
+    text = AddHotkeyName( _( "Zoom to Selection" ),
+                          g_Schematic_Hokeys_Descr, HK_ZOOM_SELECTION );
+    AddMenuItem( viewMenu, ID_MENU_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
 
     // Redraw
     text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW );

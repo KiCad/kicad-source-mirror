@@ -122,6 +122,7 @@ enum main_id
     ID_EDIT,
     ID_NO_TOOL_SELECTED,
     ID_ZOOM_SELECTION,
+    ID_MENU_ZOOM_SELECTION, // similar to ID_ZOOM_SELECTION, used in main memubar
     ID_SEL_BG_COLOR,
 
     ID_REPEAT_BUTT,
