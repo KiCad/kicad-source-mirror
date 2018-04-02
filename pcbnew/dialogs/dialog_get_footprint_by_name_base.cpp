@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,7 @@ DIALOG_GET_FOOTPRINT_BY_NAME_BASE::DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* 
 	
 	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRef->Wrap( -1 );
-	fgSizer1->Add( m_staticTextRef, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_SearchTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), 0 );
 	fgSizer1->Add( m_SearchTextCtrl, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -56,7 +56,7 @@ DIALOG_GET_FOOTPRINT_BY_NAME_BASE::DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
