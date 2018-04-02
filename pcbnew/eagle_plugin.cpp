@@ -1548,17 +1548,56 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 
     // Get the first vertex and iterate
     wxXmlNode* vertex = aTree->GetChildren();
+    std::vector<EVERTEX> vertices;
 
+    // Create a circular vector of vertices
+    // The "curve" parameter indicates a curve from the current
+    // to the next vertex, so we keep the first at the end as well
+    // to allow the curve to link back
     while( vertex )
     {
-        if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
-            continue;
-
-        EVERTEX v( vertex );
-
-        pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+        if( vertex->GetName() == "vertex" )
+            vertices.push_back( EVERTEX( vertex ) );
 
         vertex = vertex->GetNext();
+    }
+
+    vertices.push_back( vertices[0] );
+
+    for( size_t i = 0; i < vertices.size() - 1; i++ )
+    {
+        EVERTEX v1 = vertices[i];
+
+        // Append the corner
+        pts.push_back( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ) );
+
+        if( v1.curve )
+        {
+            EVERTEX v2 = vertices[i + 1];
+            wxPoint center = ConvertArcCenter(
+                    wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ),
+                    wxPoint( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
+            double angle = DEG2RAD( *v1.curve );
+            double end_angle = atan2( kicad_y( v2.y ) - center.y,
+                                      kicad_x( v2.x ) - center.x );
+            double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
+                                + pow( center.y - kicad_y( v1.y ), 2 ) );
+
+            // If we are curving, we need at least 2 segments otherwise
+            // delta_angle == angle
+            double delta_angle = angle / std::max(
+                            2, GetArcToSegmentCount( KiROUND( radius ),
+                            ARC_HIGH_DEF, *v1.curve ) - 1 );
+
+            for( double a = end_angle + angle;
+                    fabs( a - end_angle ) > fabs( delta_angle );
+                    a -= delta_angle )
+            {
+                pts.push_back(
+                        wxPoint( KiROUND( radius * cos( a ) ),
+                                 KiROUND( radius * sin( a ) ) ) + center );
+            }
+        }
     }
 
     dwg->SetPolyPoints( pts );
