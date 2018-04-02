@@ -343,10 +343,10 @@ building and packaging KiCad on macOS, see the [macOS bundle build scripts][].
 In the following set of commands, replace the macOS version number (i.e. 10.9) with the desired
 minimum version.  It may be easiest to build for the same version you are running.
 
-KiCad currently won't work with a stock version of wxWidgets that can be downloaded or installed by
-package managers like MacPorts or Homebrew. To avoid having to deal with patches a [KiCad fork of
-wxWidgets][] is being maintained on GitHub. All the needed patches and some other fixes/improvements
-are contained in the `kicad/macos-wx-3.0` branch.
+KiCad currently won't work with a stock version of wxWidgets that can be downloaded or
+installed by package managers like MacPorts or Homebrew. To avoid having to deal with
+patches a [KiCad fork of wxWidgets][] is being maintained on GitHub. All the needed patches
+and some other fixes/improvements are contained in the `kicad/macos-wx-3.0` branch.
 
 To perform a wxWidgets build, execute the following commands:
 
