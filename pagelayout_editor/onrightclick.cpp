@@ -73,10 +73,10 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
         return true;
     }
 
-    // If the tool ID_ZOOM_SELECTION is currently in use, add a
+    // If the tool ID_ZOOM_SELECTION is currently in use, add a close command menu
     if( GetToolId() == ID_ZOOM_SELECTION && !busy )
     {
-        AddMenuItem( aPopMenu, ID_NO_TOOL_SELECTED, _( "End Tool" ),
+        AddMenuItem( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ),
                      KiBitmap( cursor_xpm ) );
         aPopMenu->AppendSeparator();
     }

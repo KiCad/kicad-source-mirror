@@ -92,6 +92,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_ZOOM_SELECTION, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_ZOOM_SELECTION, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
@@ -131,6 +132,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetNoToolSelected();
         break;
 
+    case ID_MENU_ZOOM_SELECTION:
     case ID_ZOOM_SELECTION:
         // This tool is located on the main toolbar: switch it on or off on click
         if( GetToolId() != ID_ZOOM_SELECTION )

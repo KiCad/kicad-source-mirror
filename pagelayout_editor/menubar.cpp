@@ -141,7 +141,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, msg, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ) );
 
     msg = AddHotkeyName( _( "Zoom to Selection" ), PlEditorHokeysDescr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ) );
+    AddMenuItem( viewMenu, ID_MENU_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ) );
 
     viewMenu->AppendSeparator();
 
