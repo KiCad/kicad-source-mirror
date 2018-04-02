@@ -605,38 +605,40 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( drawhole )
     {
         bool blackpenstate = false;
+        COLOR4D fillcolor = aDrawInfo.m_ShowNotPlatedHole? aDrawInfo.m_NPHoleColor :
+                                                           aDrawInfo.m_HoleColor;
+        COLOR4D hole_color = fillcolor;
 
         if( aDrawInfo.m_IsPrinting )
         {
+            fillcolor = COLOR4D::WHITE;
             blackpenstate = GetGRForceBlackPenState();
             GRForceBlackPen( false );
-            aDrawInfo.m_HoleColor = WHITE;
-            aDrawInfo.m_NPHoleColor = WHITE;
         }
         else
         {
             GRSetDrawMode( aDC, ( aDrawInfo.m_DrawMode != GR_XOR ) ? GR_COPY : GR_XOR );
         }
 
-        COLOR4D hole_color = aDrawInfo.m_HoleColor;
-
-        if( aDrawInfo. m_ShowNotPlatedHole )    // Draw a specific hole color
-            hole_color = aDrawInfo.m_NPHoleColor;
+        if( blackpenstate )
+            hole_color = COLOR4D::BLACK;
 
         switch( GetDrillShape() )
         {
         case PAD_DRILL_SHAPE_CIRCLE:
             if( aDC->LogicalToDeviceXRel( hole ) > 1 )  // hole is drawn if hole > 1pixel
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
-                                hole_color, hole_color );
+                                hole_color, fillcolor );
             break;
 
         case PAD_DRILL_SHAPE_OBLONG:
         {
             wxPoint drl_start, drl_end;
             GetOblongDrillGeometry( drl_start, drl_end, seg_width );
-            GRFilledSegment( aClipBox, aDC, holepos + drl_start,
-                             holepos + drl_end, seg_width, hole_color );
+            drl_start += holepos;
+            drl_end += holepos;
+            GRFilledSegment( aClipBox, aDC, drl_start, drl_end, seg_width, fillcolor );
+            GRCSegm( aClipBox, aDC, drl_start, drl_end, seg_width, hole_color );
         }
             break;
 
