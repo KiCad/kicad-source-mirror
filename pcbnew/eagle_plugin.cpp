@@ -648,6 +648,10 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
+                if( r.rot )
+                {
+                    zone->Rotate( zone->GetPosition(), r.rot->degrees * 10 );
+                }
                 // this is not my fault:
                 zone->SetHatch( outline_hatch, zone->GetDefaultHatchPitch(), true );
             }
@@ -1517,6 +1521,11 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 
     dwg->SetStart0( start );
     dwg->SetEnd0( end );
+
+    if( r.rot )
+    {
+        dwg->Rotate( dwg->GetCenter(), r.rot->degrees * 10 );
+    }
 }
 
 
@@ -1725,12 +1734,17 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
         pad->SetOrientation( e.rot->degrees * 10 );
     }
 
-    // Solder paste (only for SMD pads)
-    if( !e.cream || !*e.cream )     // enabled by default
-    {
-        pad->SetLocalSolderPasteMargin( Clamp( m_rules->mlMinCreamFrame,
-                (int)( m_rules->mvCreamFrame * minPadSize ),
+    pad->SetLocalSolderPasteMargin( Clamp( m_rules->mlMinCreamFrame,
+                (int) ( m_rules->mvCreamFrame * minPadSize ),
                 m_rules->mlMaxCreamFrame ) );
+
+    // Solder paste (only for SMD pads)
+    if( e.cream && *e.cream == false )         // enabled by default
+    {
+        if( layer == F_Cu )
+            pad->SetLayerSet( pad->GetLayerSet().set( F_Paste, false ) );
+        else if( layer == B_Cu )
+            pad->SetLayerSet( pad->GetLayerSet().set( B_Paste, false ) );
     }
 }
 
