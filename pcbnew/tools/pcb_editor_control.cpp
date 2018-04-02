@@ -467,14 +467,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             if( !module )
             {
                 // Pick the module to be placed
-                module = m_frame->LoadModuleFromLibrary( wxEmptyString,
-                                                         m_frame->Prj().PcbFootprintLibs(),
-                                                         true, NULL );
+                module = m_frame->LoadModuleFromLibrary( wxEmptyString );
 
                 if( module == NULL )
                     continue;
 
-                // NOTE: Module has been already added in LoadModuleFromLibrary(),
+                m_frame->AddModuleToBoard( module );
                 commit.Added( module );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );

@@ -368,13 +368,16 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
         {
             m_canvas->MoveCursorToCrossHair();
-            curr_item = (BOARD_ITEM*) LoadModuleFromLibrary(
-                    wxEmptyString, Prj().PcbFootprintLibs(), true, aDC );
+            MODULE* module = LoadModuleFromLibrary( wxEmptyString, Prj().PcbFootprintLibs() );
 
-            SetCurItem( curr_item );
+            SetCurItem( (BOARD_ITEM*) module );
 
-            if( curr_item )
-                StartMoveModule( (MODULE*) curr_item, aDC, false );
+            if( module )
+            {
+                m_canvas->MoveCursorToCrossHair();
+                AddModuleToBoard( module, aDC );
+                StartMoveModule( module, aDC, false );
+            }
         }
         else if( curr_item->Type() == PCB_MODULE_T )
         {

@@ -160,13 +160,10 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 }
 
 
-MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
-                                               FP_LIB_TABLE*   aTable,
-                                               bool            aUseFootprintViewer,
-                                               wxDC*           aDC )
+MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary, bool aUseFootprintViewer )
 {
+    FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
     MODULE*         module = NULL;
-    wxPoint         curspos = GetCrossHairPosition();
     wxString        moduleName, keys;
     const wxString& libName = aLibrary;
     bool            allowWildSeach = true;
@@ -207,7 +204,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         // If the footprints are already in the cache, ReadFootprintFiles() will return
         // immediately.
         WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
-        MList.ReadFootprintFiles( aTable, libName.length() ? &libName : NULL, &progressReporter );
+        MList.ReadFootprintFiles( fpTable, libName.length() ? &libName : NULL, &progressReporter );
         progressReporter.Show( false );
 
         if( MList.GetErrorCount() )
@@ -217,7 +214,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         {
             allowWildSeach = false;
             keys = moduleName;
-            moduleName = SelectFootprint( this, libName, wxEmptyString, keys, aTable );
+            moduleName = SelectFootprint( this, libName, wxEmptyString, keys, fpTable );
 
             if( moduleName.IsEmpty() )  // Cancel command
             {
@@ -228,7 +225,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         else                        // Selection wild card
         {
             allowWildSeach = false;
-            moduleName     = SelectFootprint( this, libName, moduleName, wxEmptyString, aTable );
+            moduleName     = SelectFootprint( this, libName, moduleName, wxEmptyString, fpTable );
 
             if( moduleName.IsEmpty() )
             {
@@ -261,7 +258,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
         moduleName = wildname;
 
-        moduleName = SelectFootprint( this, libName, moduleName, wxEmptyString, aTable );
+        moduleName = SelectFootprint( this, libName, moduleName, wxEmptyString, fpTable );
 
         if( moduleName.IsEmpty() )
         {
@@ -286,15 +283,21 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         }
     }
 
-    SetCrossHairPosition( curspos );
-    m_canvas->MoveCursorToCrossHair();
+    if( module )
+    {
+        lastComponentName = moduleName;
+        AddHistoryComponentName( HistoryList, moduleName );
+    }
 
+    return module;
+}
+
+
+void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module, wxDC* aDC )
+{
     if( module )
     {
         GetBoard()->Add( module, ADD_APPEND );
-
-        lastComponentName = moduleName;
-        AddHistoryComponentName( HistoryList, moduleName );
 
         module->SetFlags( IS_NEW );
         module->SetLink( 0 );
@@ -302,7 +305,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         if( IsGalCanvasActive() )
             module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
         else
-            module->SetPosition( curspos );
+            module->SetPosition( GetCrossHairPosition() );
 
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
@@ -322,8 +325,6 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         if( aDC )
             module->Draw( m_canvas, aDC, GR_OR );
     }
-
-    return module;
 }
 
 

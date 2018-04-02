@@ -443,19 +443,19 @@ public:
 
     /**
      * Function LoadModuleFromLibrary
-     * opens a dialog to select a footprint, and loads it into current board.
+     * opens a dialog to select a footprint.
      *
-     * @param aLibrary = the library name to use, or empty string to search
-     * in all loaded libraries
-     * @param aTable is the #FP_LIB_TABLE containing the avaiable footprint libraries.
-     * @param aUseFootprintViewer = true to show the option
-     * allowing the footprint selection by the footprint viewer
+     * @param aLibrary = the library name to use, or empty string to search all libraries
+     * @param aUseFootprintViewer = true to allow selection by the footprint viewer
+     */
+    MODULE* LoadModuleFromLibrary( const wxString& aLibrary, bool aUseFootprintViewer = true );
+
+    /**
+     * Adds the given module to the board.
+     * @param module
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */
-    MODULE* LoadModuleFromLibrary( const wxString& aLibrary,
-                                   FP_LIB_TABLE*   aTable,
-                                   bool            aUseFootprintViewer = true,
-                                   wxDC*           aDC = NULL );
+    void AddModuleToBoard( MODULE* module, wxDC* aDC = nullptr );
 
     /**
      * Function SelectFootprintFromLibBrowser

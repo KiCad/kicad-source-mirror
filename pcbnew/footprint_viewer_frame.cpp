@@ -807,18 +807,19 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
     wxString curr_nickname = getCurNickname();
     MODULE*  oldmodule = GetBoard()->m_Modules;
-    MODULE*  module = LoadModuleFromLibrary( curr_nickname, Prj().PcbFootprintLibs(), false );
+    MODULE*  module = LoadModuleFromLibrary( curr_nickname, false );
 
     if( module )
     {
-        module->SetPosition( wxPoint( 0, 0 ) );
-
         // Only one footprint allowed: remove the previous footprint (if exists)
         if( oldmodule )
         {
             GetBoard()->Remove( oldmodule );
             delete oldmodule;
         }
+
+        SetCrossHairPosition( wxPoint( 0, 0 ) );
+        AddModuleToBoard( module );
 
         setCurFootprintName( module->GetFPID().GetLibItemName() );
 
