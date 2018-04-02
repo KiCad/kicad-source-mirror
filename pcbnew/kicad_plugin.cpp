@@ -892,6 +892,12 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
             m_out->Print( 0, ")" );
         }
+        else
+        {
+            wxFAIL_MSG( wxT( "Cannot format invalid polygon." ) );
+            return;
+        }
+
         break;
 
     case S_CURVE:   // Bezier curve
@@ -904,6 +910,7 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
     default:
         wxFAIL_MSG( wxT( "Cannot format invalid DRAWSEGMENT type." ) );
+        return;
     };
 
     formatLayer( aSegment );
@@ -968,6 +975,11 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
 
             m_out->Print( 0, ")" );
         }
+        else
+        {
+            wxFAIL_MSG( wxT( "Cannot format invalid polygon." ) );
+            return;
+        }
         break;
 
     case S_CURVE:   // Bezier curve
@@ -980,6 +992,7 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
 
     default:
         wxFAIL_MSG( wxT( "Cannot format invalid DRAWSEGMENT type." ) );
+        return;
     };
 
     formatLayer( aModuleDrawing );
