@@ -828,7 +828,6 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         // this preserves the named net feature of Eagle schematics.
         if( !labelled && firstWire )
         {
-            wxString netname = escapeName( netName );
             std::unique_ptr<SCH_TEXT> label;
 
             // Add a global label if the net appears on more than one Eagle sheet
@@ -840,7 +839,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             if( label )
             {
                 label->SetPosition( firstWire->GetStartPoint() );
-                label->SetText( netname );
+                label->SetText( escapeName( netName ) );
                 label->SetTextSize( wxSize( 10, 10 ) );
                 label->SetLabelSpinStyle( 0 );
                 screen->Append( label.release() );
@@ -1048,6 +1047,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     tstamp.Printf( "%8.8lX", (unsigned long) component->GetTimeStamp() );
     current_sheetpath += tstamp;
 
+    component->GetField( REFERENCE )->SetText( reference );
     component->AddHierarchicalReference( current_sheetpath, reference, unit );
 
     if( epart->value )
@@ -1284,6 +1284,10 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
                 else if( wxString( *ePin.direction ).Lower()== "hiz" )
                 {
                     pin->SetType( PIN_TRISTATE );
+                }
+                else if( wxString( *ePin.direction ).Lower()== "pwr" )
+                {
+                    pin->SetType( PIN_POWER_IN );
                 }
                 else
                 {
