@@ -966,6 +966,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     // Display the loaded board:
     Zoom_Automatique( false );
 
+    Refresh();
+
     SetMsgPanel( GetBoard() );
     SetStatusText( wxEmptyString );
 }
