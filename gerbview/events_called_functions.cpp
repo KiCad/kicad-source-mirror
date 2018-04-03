@@ -116,6 +116,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
 
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
 
+    EVT_MENU( ID_MENU_ZOOM_SELECTION, GERBVIEW_FRAME::Process_Special_Functions )
+
     // Vertical toolbar:
     EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions )
 
@@ -231,6 +233,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetNoToolSelected();
         break;
 
+    case ID_MENU_ZOOM_SELECTION:
     case ID_ZOOM_SELECTION:
         // This tool is located on the main toolbar: switch it on or off on click
         if( GetToolId() != ID_ZOOM_SELECTION )

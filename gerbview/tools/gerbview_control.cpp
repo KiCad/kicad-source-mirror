@@ -33,6 +33,9 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionTool( "gerbview.Control.selectionTool",
         AS_GLOBAL, 0,
         "", "", NULL, AF_ACTIVATE );
 
+TOOL_ACTION GERBVIEW_ACTIONS::switchZoomToSelectionTool( "gerbview.Control.switchZoomToSelectionTool",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_SELECTION ), "", "" );
+
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0,
         "", "", NULL, AF_NOTIFY );
@@ -257,6 +260,21 @@ int GERBVIEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 }
 
 
+int GERBVIEW_CONTROL::SwitchZoomToSelectionTool( const TOOL_EVENT& aEvent )
+{
+    // Update the Zoom to Selection Tool state changed from the zoom menuitem
+    bool state = m_frame->GetToolToggled( ID_ZOOM_SELECTION );
+    m_frame->GetMainToolBar()->ToggleTool( ID_ZOOM_SELECTION, !state );
+    m_frame->GetMainToolBar()->Refresh();
+
+    // Send the Zoom to Selection Tool event similar to a tool click:
+    wxCommandEvent evt( wxEVT_TOOL );
+    evt.SetId( ID_ZOOM_SELECTION );
+    m_frame->ProcessEvent( evt );
+    return 0;
+}
+
+
 void GERBVIEW_CONTROL::setTransitions()
 {
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightClear.MakeEvent() );
@@ -276,4 +294,6 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::ResetCoords,        GERBVIEW_ACTIONS::resetCoords.MakeEvent() );
     Go( &GERBVIEW_CONTROL::SwitchUnits,        GERBVIEW_ACTIONS::switchUnits.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::SwitchZoomToSelectionTool,
+                                               GERBVIEW_ACTIONS::switchZoomToSelectionTool.MakeEvent() );
 }

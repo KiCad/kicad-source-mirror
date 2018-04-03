@@ -124,6 +124,7 @@ public:
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION showHelp;
+    static TOOL_ACTION switchZoomToSelectionTool;
     static TOOL_ACTION toBeDone;
 
     // Highlighting
