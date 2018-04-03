@@ -80,6 +80,9 @@ private:
     // EDIT_POINT for alternative constraint mode
     EDIT_POINT m_altConstrainer;
 
+    // Flag indicating whether the selected zone needs to be refilled
+    bool m_refill;
+
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 
     ///> Updates item's points with edit points.

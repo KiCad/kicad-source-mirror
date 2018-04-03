@@ -226,6 +226,7 @@ POINT_EDITOR::POINT_EDITOR() :
 
 void POINT_EDITOR::Reset( RESET_REASON aReason )
 {
+    m_refill = false;
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
@@ -295,6 +296,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
+    m_refill = false;
     bool modified = false;
     bool revert = false;
 
@@ -352,8 +354,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             if( modified )
             {
-                commit.Push( _( "Drag a line ending" ) );
+                commit.Push( _( "Drag a corner" ) );
                 modified = false;
+                m_refill = true;
             }
 
             m_toolMgr->PassEvent();
@@ -383,9 +386,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
         if( modified && revert )
             commit.Revert();
-        else
-            finishItem();
 
+        finishItem();
         m_editPoints.reset();
     }
 
@@ -575,7 +577,7 @@ void POINT_EDITOR::finishItem()
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
 
-        if( zone->IsFilled() )
+        if( zone->IsFilled() && m_refill )
         {
             ZONE_FILLER filler( board() );
             filler.Fill( { zone } );
@@ -1064,6 +1066,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
 int POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
+    m_refill = true;  // zone has been modified outside the point editor tool
     updatePoints();
     return 0;
 }
