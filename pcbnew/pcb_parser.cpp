@@ -558,11 +558,11 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_segment:
-            m_board->Add( parseTRACK(), ADD_APPEND );
+            m_board->Add( parseTRACK(), ADD_INSERT );
             break;
 
         case T_via:
-            m_board->Add( parseVIA(), ADD_APPEND );
+            m_board->Add( parseVIA(), ADD_INSERT );
             break;
 
         case T_zone:

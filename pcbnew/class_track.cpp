@@ -498,15 +498,18 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 {
     TRACK* track;
 
-    if( Type() == PCB_ZONE_T )
-        track = aPcb->m_Zone;
-    else
-        track = aPcb->m_Track;
+    // When reading from a file most of the items will already be in the correct order.
+    // Searching from the back therefore takes us from n^2 to essentially 0.
 
-    for( ; track;  track = track->Next() )
+    if( Type() == PCB_ZONE_T )
+        track = aPcb->m_Zone.GetLast();
+    else
+        track = aPcb->m_Track.GetLast();
+
+    for( ; track;  track = track->Back() )
     {
-        if( GetNetCode() <= track->GetNetCode() )
-            return track;
+        if( GetNetCode() >= track->GetNetCode() )
+            return track->Next();
     }
 
     return NULL;
