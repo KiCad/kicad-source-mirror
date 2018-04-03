@@ -115,8 +115,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
 
-    m_auxiliaryToolBar    = NULL;
-
     m_zoomLevelCoeff      = 11.0 * IU_PER_MILS;  // Adjusted to roughly displays zoom level = 1
                                         // when the screen shows a 1:1 image
                                         // obviously depends on the monitor,

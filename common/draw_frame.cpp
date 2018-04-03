@@ -134,6 +134,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
+    m_auxiliaryToolBar    = NULL;
     m_gridSelectBox       = NULL;
     m_zoomSelectBox       = NULL;
     m_hotkeysDescrList    = NULL;
@@ -304,6 +305,37 @@ void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
     }
 
     m_canvas->Refresh();
+}
+
+bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
+{
+    // Checks all the toolbars and returns true if the given tool id is toggled.
+    return ( ( m_mainToolBar && m_mainToolBar->GetToolToggled( aToolId ) ) ||
+             ( m_optionsToolBar && m_optionsToolBar->GetToolToggled( aToolId ) ) ||
+             ( m_drawToolBar && m_drawToolBar->GetToolToggled( aToolId ) ) ||
+             ( m_auxiliaryToolBar && m_auxiliaryToolBar->GetToolToggled( aToolId ) )
+           );
+}
+
+
+wxAuiToolBarItem* EDA_DRAW_FRAME::GetToolbarTool( int aToolId )
+{
+    // Checks all the toolbars and returns a reference to the given tool id
+    // (or the first tool found, but only one or 0 tool is expected, because on
+    // Windows, when different tools have the same ID, it creates issues)
+    if( m_mainToolBar && m_mainToolBar->FindTool( aToolId ) )
+        return m_mainToolBar->FindTool( aToolId );
+
+    if( m_optionsToolBar && m_optionsToolBar->FindTool( aToolId ) )
+        return m_optionsToolBar->FindTool( aToolId );
+
+    if( m_drawToolBar && m_drawToolBar->FindTool( aToolId ) )
+        return m_drawToolBar->FindTool( aToolId );
+
+    if( m_auxiliaryToolBar && m_auxiliaryToolBar->FindTool( aToolId ) )
+        return m_auxiliaryToolBar->FindTool( aToolId );
+
+    return nullptr;
 }
 
 

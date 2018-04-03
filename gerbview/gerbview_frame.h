@@ -182,10 +182,6 @@ public:
     COLORS_DESIGN_SETTINGS* m_colorsSettings;
 
 private:
-    /// Auxiliary tool bar typically shown below the main tool bar at the top of the
-    /// main window.
-    wxAuiToolBar*       m_auxiliaryToolBar;
-
     // list of PARAM_CFG_xxx to read/write parameters saved in config
     PARAM_CFG_ARRAY         m_configSettings;
 
@@ -257,8 +253,6 @@ public:
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     double BestZoom() override;
     void UpdateStatusBar() override;
-
-    wxAuiToolBar* GetMainToolBar() { return m_optionsToolBar; }
 
     /**
      * Function GetZoomLevelIndicator

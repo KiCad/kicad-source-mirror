@@ -121,6 +121,10 @@ protected:
     /// Choice box to choose the zoom value.
     wxChoice*       m_zoomSelectBox;
 
+    /// Auxiliary tool bar typically shown below the main tool bar at the top of the
+    /// main window.
+    wxAuiToolBar*       m_auxiliaryToolBar;
+
     /// The tool bar that contains the buttons for quick access to the application draw
     /// tools.  It typically is located on the right side of the main window.
     wxAuiToolBar*   m_drawToolBar;
@@ -434,20 +438,23 @@ public:
 
     // Toolbar accessors
     wxAuiToolBar* GetMainToolBar() const { return m_mainToolBar; }
+    wxAuiToolBar* GetOptionsToolBar() const { return m_optionsToolBar; }
+    wxAuiToolBar* GetDrawToolBar() const { return m_drawToolBar; }
+    wxAuiToolBar* GetAuxiliaryToolBar() const { return m_auxiliaryToolBar; }
 
     /**
      * Checks all the toolbars and returns true if the given tool id is toggled.
      *
-     * This is needed because GerbView and Pcbnew put some of the same tools in
-     * different toolbars (for example, zoom selection is in the main bar in
-     * Pcbnew and in the options bar in GerbView).
+     * This is needed because GerbView and Pcbnew can put some of the same tools in
+     * different toolbars.
      */
-    bool GetToolToggled( int aToolId )
-    {
-        return ( ( m_mainToolBar && m_mainToolBar->GetToolToggled( aToolId ) ) ||
-                 ( m_optionsToolBar && m_optionsToolBar->GetToolToggled( aToolId ) ) ||
-                 ( m_drawToolBar && m_drawToolBar->GetToolToggled( aToolId ) ) );
-    }
+    bool GetToolToggled( int aToolId );
+
+    /**
+     * Checks all the toolbars and returns a reference to the given tool id
+     * or nullptr if not found
+     */
+    wxAuiToolBarItem* GetToolbarTool( int aToolId );
 
     /**
      * Function SetToolID
@@ -905,7 +912,7 @@ public:
     /**
      * Function SyncMenusAndToolbars
      * Updates the toolbars and menus (mostly settings/check buttons/checkboxes)
-     * with the current controller state 
+     * with the current controller state
      */
     virtual void SyncMenusAndToolbars( wxEvent& aEvent ) {};
 

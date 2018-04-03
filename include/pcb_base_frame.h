@@ -78,10 +78,6 @@ protected:
     GENERAL_COLLECTOR*  m_Collector;
     PCB_GENERAL_SETTINGS m_configSettings;
 
-    /// Auxiliary tool bar typically shown below the main tool bar at the top of the
-    /// main window.
-    wxAuiToolBar*       m_auxiliaryToolBar;
-
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh() override;
