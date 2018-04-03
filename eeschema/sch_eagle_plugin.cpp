@@ -1252,46 +1252,28 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
 
             if( ePin.direction )
             {
-                if( wxString( *ePin.direction ).Lower()== "sup" )
+                const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap =
                 {
-                    ispower = true;
-                    pin->SetType( PIN_POWER_IN );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "pas" )
+                    { "sup", PIN_POWER_IN },        { "pas", PIN_PASSIVE },
+                    { "out", PIN_OUTPUT },          { "in", PIN_INPUT },
+                    { "nc",  PIN_NC },              { "io", PIN_BIDI },
+                    { "oc",  PIN_OPENCOLLECTOR },   { "hiz", PIN_TRISTATE },
+                    { "pwr", PIN_POWER_IN },
+                };
+
+                pin->SetType( PIN_UNSPECIFIED );
+
+                for( const auto& pinDir : pinDirectionsMap )
                 {
-                    pin->SetType( PIN_PASSIVE );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "out" )
-                {
-                    pin->SetType( PIN_OUTPUT );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "in" )
-                {
-                    pin->SetType( PIN_INPUT );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "nc" )
-                {
-                    pin->SetType( PIN_NC );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "io" )
-                {
-                    pin->SetType( PIN_BIDI );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "oc" )
-                {
-                    pin->SetType( PIN_OPENEMITTER );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "hiz" )
-                {
-                    pin->SetType( PIN_TRISTATE );
-                }
-                else if( wxString( *ePin.direction ).Lower()== "pwr" )
-                {
-                    pin->SetType( PIN_POWER_IN );
-                }
-                else
-                {
-                    pin->SetType( PIN_UNSPECIFIED );
+                    if( ePin.direction->Lower() == pinDir.first )
+                    {
+                        pin->SetType( pinDir.second );
+
+                        if( pinDir.first == "sup" )         // power supply symbol
+                            ispower = true;
+
+                        break;
+                    }
                 }
             }
 
