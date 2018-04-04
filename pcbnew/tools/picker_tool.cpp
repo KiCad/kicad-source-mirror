@@ -77,7 +77,6 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     setControls();
 
-
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         auto mousePos = controls->GetMousePosition();

@@ -1342,17 +1342,17 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     std::vector<MSG_PANEL_ITEM> msgItems = { item1 };
 
-    SELECTION selection = m_selectionTool->RequestSelection();
+    SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.Empty() )
-        return 0;
+        return 1;
 
     frame()->SetMsgPanel( msgItems );
     bool rv = pickCopyReferencePoint( refPoint );
     frame()->SetMsgPanel( board() );
 
     if( !rv )
-        return 0;
+        return 1;
 
     selection.SetReferencePoint( refPoint );
     io.SetBoard( board() );
@@ -1364,7 +1364,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
-    copyToClipboard( aEvent );
-    Remove( aEvent );
+    if( !copyToClipboard( aEvent ) )
+        Remove( aEvent );
+
     return 0;
 }
