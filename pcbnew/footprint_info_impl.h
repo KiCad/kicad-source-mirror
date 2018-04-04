@@ -58,6 +58,7 @@ protected:
 class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
 {
     FOOTPRINT_ASYNC_LOADER*  m_loader;
+    const wxString*          m_library;
     std::vector<std::thread> m_threads;
     SYNC_QUEUE<wxString>     m_queue_in;
     SYNC_QUEUE<wxString>     m_queue_out;
@@ -89,8 +90,10 @@ public:
     FOOTPRINT_LIST_IMPL();
     virtual ~FOOTPRINT_LIST_IMPL();
 
-    virtual bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
-                                     WX_PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+    bool RequiresLoading( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr ) override;
+
+    bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
+                             WX_PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 };
 
 extern FOOTPRINT_LIST_IMPL GFootprintList;        // KIFACE scope.

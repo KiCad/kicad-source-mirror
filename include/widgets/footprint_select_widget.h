@@ -149,6 +149,7 @@ private:
     FOOTPRINT_FILTER         m_fp_filter;
     bool                     m_zero_filter;
 
+    void FootprintsLoaded();
     void OnProgressTimer( wxTimerEvent& aEvent );
     void OnComboBox( wxCommandEvent& aEvent );
     void OnComboInteractive( wxCommandEvent& aEvent );

@@ -243,6 +243,15 @@ public:
     }
 
     /**
+     * Indicates whether or not the table requires loading for the given \a aNickname.
+     */
+    virtual bool RequiresLoading( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr )
+    {
+        return true;    // Implementations which support caching should implement this.
+    }
+
+
+    /**
      * Read all the footprints provided by the combination of aTable and aNickname.
      *
      * @param aTable defines all the libraries.

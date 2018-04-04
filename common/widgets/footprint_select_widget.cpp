@@ -101,15 +101,17 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
     try
     {
         auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
+        m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
 
-        if( m_fp_loader.GetProgress() == 0 || !m_fp_loader.IsSameTable( fp_lib_table ) )
+        if( m_fp_list->RequiresLoading( fp_lib_table ) )
         {
-            m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
             m_fp_loader.SetList( &*m_fp_list );
             m_fp_loader.Start( fp_lib_table );
-        }
 
-        m_progress_timer->Start( 200 );
+            m_progress_timer->Start( 200 );
+        }
+        else
+            FootprintsLoaded();
     }
     catch( ... )
     {
@@ -128,15 +130,24 @@ void FOOTPRINT_SELECT_WIDGET::OnProgressTimer( wxTimerEvent& aEvent )
         wxBusyCursor busy;
 
         m_fp_loader.Join();
-        m_fp_filter.SetList( *m_fp_list );
         m_progress_timer->Stop();
 
-        m_book->SetSelection( PAGE_SELECT );
-        m_finished_loading = true;
-
-        if( m_update )
-            UpdateList();
+        FootprintsLoaded();
     }
+}
+
+
+void FOOTPRINT_SELECT_WIDGET::FootprintsLoaded()
+{
+    m_progress_ctrl->SetValue( 100 );
+
+    m_fp_filter.SetList( *m_fp_list );
+
+    m_book->SetSelection( PAGE_SELECT );
+    m_finished_loading = true;
+
+    if( m_update )
+        UpdateList();
 }
 
 
