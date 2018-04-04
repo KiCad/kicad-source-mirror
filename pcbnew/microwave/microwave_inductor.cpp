@@ -343,8 +343,8 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
         return nullptr;    //  Aborted by user
 
     MODULE* module = aPcbFrame->CreateNewModule( msg );
+    aPcbFrame->AddModuleToBoard( module );
 
-    // here the module is already in the BOARD, CreateNewModule() does that.
     module->SetFPID( LIB_ID( wxString( "mw_inductor" ) ) );
     module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
     module->ClearFlags();

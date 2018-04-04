@@ -830,8 +830,6 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     // Creates the new module and add it to the head of the linked list of modules
     MODULE* module = new MODULE( GetBoard() );
 
-    GetBoard()->Add( module );
-
     // Update parameters: timestamp ...
     module->SetLastEditTime();
 

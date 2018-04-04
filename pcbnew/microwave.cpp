@@ -187,6 +187,7 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
                                                    int aTextSize, int aPadCount )
 {
     MODULE* module = CreateNewModule( aValue );
+    AddModuleToBoard( module );
 
     if( aTextSize > 0 )
     {
