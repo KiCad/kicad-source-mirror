@@ -188,14 +188,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         text = AddHotkeyName( _( "&Paste" ), m_hotkeysDescrList, HK_EDIT_PASTE );
         AddMenuItem( editMenu, ID_EDIT_PASTE, text,
                      _( "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
+
+        editMenu->AppendSeparator();
     }
 
-    // Delete items
+    // Delete items tool
     AddMenuItem( editMenu, ID_MODEDIT_DELETE_TOOL,
                  _( "&Delete" ), _( "Delete items" ),
                  KiBitmap( delete_xpm ) );
-
-    editMenu->AppendSeparator();
 
     //--------- View menu ----------------
     wxMenu* viewMenu = new wxMenu;
