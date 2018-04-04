@@ -119,8 +119,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
         if( item )
         {
-            SetDrawItem( item );
-            deleteItem( DC );
+            deleteItem( DC, item );
         }
         else
         {

@@ -292,11 +292,9 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 }
 
 
-void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
+void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
 {
-    LIB_ITEM* item = GetDrawItem();
-
-    if( item == NULL )
+    if( aItem == NULL )
         return;
 
     SetCursor( wxCURSOR_HAND );
@@ -305,25 +303,23 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 
     // For fields only, move the anchor point of the field
     // to the cursor position to allow user to see the text justification
-    if( item->Type() == LIB_FIELD_T )
-        item->BeginEdit( IS_MOVED, item->GetPosition() );
+    if( aItem->Type() == LIB_FIELD_T )
+        aItem->BeginEdit( IS_MOVED, aItem->GetPosition() );
     else
-        item->BeginEdit( IS_MOVED, GetCrossHairPosition( true ) );
+        aItem->BeginEdit( IS_MOVED, GetCrossHairPosition( true ) );
 
     m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
 }
 
 
-void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
+void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
 {
-    LIB_ITEM* item = GetDrawItem();
-
-    if( item == NULL )
+    if( aItem == NULL )
         return;
 
     TempCopyComponent();
-    item->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
+    aItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
 }

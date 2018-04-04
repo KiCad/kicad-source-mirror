@@ -835,7 +835,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
         if( item )
-            deleteItem( &dc );
+            deleteItem( &dc, item );
 
         break;
 
@@ -844,9 +844,9 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         if( item->Type() == LIB_PIN_T )
-            StartMovePin( &dc );
+            StartMovePin( item );
         else
-            StartMoveDrawSymbol( &dc );
+            StartMoveDrawSymbol( &dc, item );
         break;
 
     case ID_POPUP_LIBEDIT_MODIFY_ITEM:
@@ -861,7 +861,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             || item->Type() == LIB_ARC_T
             )
         {
-            StartModifyDrawSymbol( &dc );
+            StartModifyDrawSymbol( &dc, item );
         }
 
         break;
@@ -1377,11 +1377,10 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 }
 
 
-void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
+void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
 {
-    LIB_ITEM* item = GetDrawItem();
-
-    wxCHECK_RET( item != NULL, "No drawing item selected to delete." );
+    if( !aItem )
+        return;
 
     m_canvas->CrossHairOff( aDC );
 
@@ -1389,9 +1388,9 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
 
     SaveCopyInUndoList( part );
 
-    if( item->Type() == LIB_PIN_T )
+    if( aItem->Type() == LIB_PIN_T )
     {
-        LIB_PIN*    pin = static_cast<LIB_PIN*>( item );
+        LIB_PIN*    pin = static_cast<LIB_PIN*>( aItem );
         wxPoint     pos = pin->GetPosition();
 
         part->RemoveDrawItem( (LIB_ITEM*) pin, m_canvas, aDC );
@@ -1428,7 +1427,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
         }
         else
         {
-            part->RemoveDrawItem( item, m_canvas, aDC );
+            part->RemoveDrawItem( aItem, m_canvas, aDC );
             m_canvas->Refresh();
         }
     }

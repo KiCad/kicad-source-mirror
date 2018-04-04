@@ -551,8 +551,9 @@ private:
      * Deletes the currently selected draw item.
      *
      * @param aDC The device context to draw upon when removing item.
+     * @param aItem The item to delete
      */
-    void deleteItem( wxDC* aDC );
+    void deleteItem( wxDC* aDC, LIB_ITEM* aItem );
 
     // General editing
 public:
@@ -570,7 +571,13 @@ private:
 
     // Editing pins
     void CreatePin( wxDC* DC );
-    void StartMovePin( wxDC* DC );
+
+    /**
+     * Prepare the displacement of a pin
+     *
+     * @param aPin the pin to prepare for movement.
+     */
+    void StartMovePin( LIB_ITEM* aPin );
 
     /**
      * Adds copies of \a aPin in components with multiple units in all units
@@ -590,8 +597,8 @@ private:
     // Editing graphic items
     LIB_ITEM* CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC );
     void GraphicItemBeginDraw( wxDC* DC );
-    void StartMoveDrawSymbol( wxDC* DC );
-    void StartModifyDrawSymbol( wxDC* DC ); //<! Modify the item, adjust size etc.
+    void StartMoveDrawSymbol( wxDC* DC, LIB_ITEM* aItem );
+    void StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem ); //<! Modify the item, adjust size etc.
     void EndDrawGraphicItem( wxDC* DC );
 
     /**

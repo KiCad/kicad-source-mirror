@@ -804,7 +804,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_LIBEDIT_MOVE_GRAPHIC_ITEM:
-        if( !itemInEdit )
+        if( !itemInEdit && !blocInProgress )
         {
             SetDrawItem( LocateItemUsingCursor( aPosition ) );
 
@@ -817,7 +817,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_DRAG:
-        if( !itemInEdit )
+        if( !itemInEdit && !blocInProgress  )
         {
             SetDrawItem( LocateItemUsingCursor( aPosition ) );
 
@@ -833,16 +833,22 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( !itemInEdit )
             SetDrawItem( LocateItemUsingCursor( aPosition ) );
 
-        cmd.SetId( ID_LIBEDIT_MIRROR_Y );
-        GetEventHandler()->ProcessEvent( cmd );
+        if( GetDrawItem() )
+        {
+            cmd.SetId( ID_LIBEDIT_MIRROR_Y );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
         break;
 
     case HK_MIRROR_X:                       // Mirror X
         if( !itemInEdit )
             SetDrawItem( LocateItemUsingCursor( aPosition ) );
 
-        cmd.SetId( ID_LIBEDIT_MIRROR_X );
-        GetEventHandler()->ProcessEvent( cmd );
+        if( GetDrawItem() )
+        {
+            cmd.SetId( ID_LIBEDIT_MIRROR_X );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
         break;
     }
 
