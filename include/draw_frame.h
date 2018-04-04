@@ -32,6 +32,7 @@
 #include <gal/gal_display_options.h>
 #include <gal/color4d.h>
 #include <class_draw_panel_gal.h>
+#include "hotkeys_basic.h"
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
@@ -72,9 +73,13 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
 protected:
 
+    wxSocketServer*                          m_socketServer;
+    std::vector<wxSocketBase*>               m_sockets;         ///< interprocess communication
+
     std::unique_ptr<wxSingleInstanceChecker> m_file_checker;    ///< prevents opening same file multiple times.
 
-    EDA_HOTKEY_CONFIG* m_hotkeysDescrList;
+    EDA_HOTKEY_CONFIG*                       m_hotkeysDescrList;
+
     int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
                                             // 0 is for the grid corresponding to
                                             // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
@@ -772,6 +777,7 @@ public:
     void CopyToClipboard( wxCommandEvent& event );
 
     /* interprocess communication */
+    void CreateServer( int service, bool local = true );
     void OnSockRequest( wxSocketEvent& evt );
     void OnSockRequestServer( wxSocketEvent& evt );
 

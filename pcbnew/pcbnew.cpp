@@ -106,50 +106,42 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
     {
-        wxWindow* frame = NULL;
-
         switch( aClassId )
         {
         case FRAME_PCB:
-            frame = dynamic_cast< wxWindow* >( new PCB_EDIT_FRAME( aKiway, aParent ) );
+        {
+            auto frame = new PCB_EDIT_FRAME( aKiway, aParent );
 
 #if defined( KICAD_SCRIPTING )
             // give the scripting helpers access to our frame
-            ScriptingSetPcbEditFrame( (PCB_EDIT_FRAME*) frame );
+            ScriptingSetPcbEditFrame( frame );
 #endif
 
             if( Kiface().IsSingle() )
             {
                 // only run this under single_top, not under a project manager.
-                CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER );
+                frame->CreateServer( KICAD_PCB_PORT_SERVICE_NUMBER );
             }
 
-            break;
+            return frame;
+        }
 
         case FRAME_PCB_MODULE_EDITOR:
-            frame = dynamic_cast< wxWindow* >( new FOOTPRINT_EDIT_FRAME( aKiway, aParent ) );
-            break;
+            return new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
 
         case FRAME_PCB_MODULE_VIEWER:
         case FRAME_PCB_MODULE_VIEWER_MODAL:
-            frame = dynamic_cast< wxWindow* >( new FOOTPRINT_VIEWER_FRAME( aKiway, aParent,
-                                                                           FRAME_T( aClassId ) ) );
-            break;
+            return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
 
         case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
-            frame = dynamic_cast< wxWindow* >( new FOOTPRINT_WIZARD_FRAME( aKiway, aParent,
-                                                                           FRAME_T( aClassId ) ) );
-            break;
+            return new FOOTPRINT_WIZARD_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
 
         case FRAME_PCB_FOOTPRINT_PREVIEW:
-            frame = dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
-            break;
+            return dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
 
         default:
-            break;
+            return nullptr;
         }
-
-        return frame;
     }
 
     /**

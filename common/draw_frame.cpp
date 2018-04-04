@@ -132,6 +132,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
     m_galDisplayOptions( std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>() )
 {
+    m_socketServer        = nullptr;
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_auxiliaryToolBar    = NULL;
@@ -216,6 +217,13 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
+    delete m_socketServer;
+    for( auto socket : m_sockets )
+    {
+        socket->Shutdown();
+        socket->Destroy();
+    }
+
     if( m_canvasTypeDirty )
         saveCanvasTypeSetting( m_canvasType );
 

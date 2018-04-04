@@ -45,7 +45,6 @@
 #define MSG_TO_PCB                      KICAD_PCB_PORT_SERVICE_NUMBER
 #define MSG_TO_SCH                      KICAD_SCH_PORT_SERVICE_NUMBER
 
-wxSocketServer* CreateServer( wxWindow * window, int port, bool local = true );
 bool SendCommand( int port, const char* cmdline );
 
 #endif    // EDA_DDE_H_

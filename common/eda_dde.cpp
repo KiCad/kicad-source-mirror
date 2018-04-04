@@ -46,7 +46,7 @@ static char client_ipc_buffer[IPC_BUF_SIZE];
 
 /* Function to initialize a server socket
  */
-wxSocketServer* CreateServer( wxWindow* window, int service, bool local )
+void EDA_DRAW_FRAME::CreateServer( int service, bool local )
 {
     wxIPV4address addr;
 
@@ -57,16 +57,12 @@ wxSocketServer* CreateServer( wxWindow* window, int service, bool local )
     if( local )
         addr.Hostname( HOSTNAME );
 
-    wxSocketServer* server = new wxSocketServer( addr );
+    delete m_socketServer;
+    m_socketServer = new wxSocketServer( addr );
 
-    if( server )
-    {
-        server->SetNotify( wxSOCKET_CONNECTION_FLAG );
-        server->SetEventHandler( *window, ID_EDA_SOCKET_EVENT_SERV );
-        server->Notify( true );
-    }
-
-    return server;
+    m_socketServer->SetNotify( wxSOCKET_CONNECTION_FLAG );
+    m_socketServer->SetEventHandler( *this, ID_EDA_SOCKET_EVENT_SERV );
+    m_socketServer->Notify( true );
 }
 
 
@@ -106,17 +102,19 @@ void EDA_DRAW_FRAME::OnSockRequest( wxSocketEvent& evt )
  */
 void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
 {
-    wxSocketBase*   sock2;
+    wxSocketBase*   socket;
     wxSocketServer* server = (wxSocketServer*) evt.GetSocket();
 
-    sock2 = server->Accept();
+    socket = server->Accept();
 
-    if( sock2 == NULL )
+    if( socket == NULL )
         return;
 
-    sock2->Notify( true );
-    sock2->SetEventHandler( *this, ID_EDA_SOCKET_EVENT );
-    sock2->SetNotify( wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG );
+    m_sockets.push_back( socket );
+
+    socket->Notify( true );
+    socket->SetEventHandler( *this, ID_EDA_SOCKET_EVENT );
+    socket->SetNotify( wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG );
 }
 
 

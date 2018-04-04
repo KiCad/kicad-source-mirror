@@ -83,7 +83,7 @@ static struct IFACE : public KIFACE_I
                 if( Kiface().IsSingle() )
                 {
                     // only run this under single_top, not under a project manager.
-                    CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER );
+                    frame->CreateServer( KICAD_SCH_PORT_SERVICE_NUMBER );
                 }
                 return frame;
             }
