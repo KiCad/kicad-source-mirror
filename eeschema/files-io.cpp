@@ -249,8 +249,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
-    LoadProjectFile();
-
     // PROJECT::SetProjectFullName() is an impactful function.  It should only be
     // called under carefully considered circumstances.
 
@@ -273,6 +271,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
         Prj().SchLibs();
     }
+
+    LoadProjectFile();
 
     // Load the symbol library table, this will be used forever more.
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
