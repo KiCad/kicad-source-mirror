@@ -280,16 +280,6 @@ public:
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
 
     /**
-     * Function UpdateTitle
-     * sets the main window title bar text.
-     * <p>
-     * If no current project open( eeschema run outside kicad manager with no schematic loaded),
-     * the title is set to the application name appended with "no project".
-     * Otherwise, the title shows the project name.
-     */
-    void UpdateTitle();
-
-    /**
      * Function SendMessageToEESCHEMA
      * Send a remote command to Eeschema via a socket,
      * Commands are

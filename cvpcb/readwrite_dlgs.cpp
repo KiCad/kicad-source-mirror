@@ -368,7 +368,6 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
     DisplayStatus();
 
-    UpdateTitle();
     return true;
 }
 

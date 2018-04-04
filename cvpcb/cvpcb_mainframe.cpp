@@ -106,7 +106,7 @@ END_EVENT_TABLE()
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, wxT( "CvPCB" ), wxDefaultPosition,
+    KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_compListBox           = NULL;
@@ -145,8 +145,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     BuildLIBRARY_LISTBOX();
 
     m_auimgr.SetManagedWindow( this );
-
-    UpdateTitle();
 
     EDA_PANEINFO horiz;
     horiz.HorizontalToolbarPane();
@@ -750,27 +748,6 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     }
 
     return true;
-}
-
-
-void CVPCB_MAINFRAME::UpdateTitle()
-{
-    wxString    title;
-    PROJECT&    prj = Prj();
-    wxFileName fn = prj.GetProjectFullName();
-
-    if( fn.IsOk() && !prj.GetProjectFullName().IsEmpty() && fn.FileExists() )
-    {
-        title.Printf( _( "Cvpcb" ) + wxT( " \u2014 %s%s" ),
-                      fn.GetFullPath(),
-                      fn.IsFileWritable() ? wxString( wxEmptyString ) : _( " [Read Only]" ) );
-    }
-    else
-    {
-        title = "Cvpcb";
-    }
-
-    SetTitle( title );
 }
 
 

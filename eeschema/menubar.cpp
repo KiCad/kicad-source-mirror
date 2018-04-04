@@ -623,8 +623,8 @@ void prepareToolsMenu( wxMenu* aParentMenu )
     // Run CvPcb
     AddMenuItem( aParentMenu,
                  ID_RUN_CVPCB,
-                 _( "A&ssign Footprints" ),
-                 _( "Run CvPcb" ),
+                 _( "A&ssign Footprints..." ),
+                 _( "Assign PCB footprints to schematic symbols" ),
                  KiBitmap( cvpcb_xpm ) );
 
     aParentMenu->AppendSeparator();
