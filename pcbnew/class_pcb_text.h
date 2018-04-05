@@ -40,6 +40,17 @@ class EDA_DRAW_PANEL;
 class MSG_PANEL_ITEM;
 
 
+// A mutex which is unique to each instance it appears in (ie: a new std::mutex is allocated
+// on copy or assignment).
+class UNIQUE_MUTEX : public std::mutex
+{
+public:
+    UNIQUE_MUTEX() : std::mutex() {}
+    UNIQUE_MUTEX( const UNIQUE_MUTEX& ) : std::mutex() {}
+    UNIQUE_MUTEX& operator= (const UNIQUE_MUTEX& ) { return *this; }
+};
+
+
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TEXT
 {
 public:
@@ -141,6 +152,8 @@ public:
     EDA_ITEM* Clone() const override;
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    mutable UNIQUE_MUTEX m_mutex;
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
