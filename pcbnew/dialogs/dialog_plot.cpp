@@ -681,7 +681,7 @@ void DIALOG_PLOT::applyPlotSettings()
         m_PSFineAdjustWidthOpt->SetValue( msg );
         msg.Printf( _( "Width correction constrained. "
                        "The reasonable width correction value must be in a range of "
-                       " [%+f; %+f] (%s) for current design rules. " ),
+                       " [%+f; %+f] (%s) for current design rules." ),
                     To_User_Unit( g_UserUnit, m_widthAdjustMinValue ),
                     To_User_Unit( g_UserUnit, m_widthAdjustMaxValue ),
                     ( g_UserUnit == INCHES ) ? wxT( "\"" ) : wxT( "mm" ) );
