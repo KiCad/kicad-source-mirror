@@ -66,7 +66,7 @@ static const CBBOX2D *s_boardBBox3DU = NULL;
 static const BOARD_ITEM *s_boardItem = NULL;
 
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
-void addTextSegmToContainer( int x0, int y0, int xf, int yf )
+void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 {
     wxASSERT( s_boardBBox3DU != NULL );
     wxASSERT( s_dstcontainer != NULL );

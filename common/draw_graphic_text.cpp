@@ -1,15 +1,15 @@
 /**
  * Functions to draw and plot text on screen
- * @file drawtxt.cpp
+ * @file draw_graphic_text.cpp
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 #include <macros.h>
 #include <class_drawpanel.h>
 #include <base_screen.h>
+#include <draw_graphic_text.h>
 
 #include <basic_gal.h>
 
@@ -114,8 +115,11 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
  *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font. Useful only with default width value (aWidth = 0)
- *  @param aCallback() = function called (if non null) to draw each segment.
- *                  used to draw 3D texts or for plotting, NULL for normal drawings
+ *  @param aCallback( int x0, int y0, int xf, int yf, void* aData ) is a function called
+ *                  (if non null) to draw each segment. used to draw 3D texts or for plotting.
+ *                  NULL for normal drawings
+ *  @param aCallbackData = is the auxiliary parameter aData for the callback function.
+ *                         can be nullptr if no auxiliary parameter is needed
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
@@ -131,7 +135,8 @@ void DrawGraphicText( EDA_RECT* aClipBox,
                       int aWidth,
                       bool aItalic,
                       bool aBold,
-                      void (* aCallback)( int x0, int y0, int xf, int yf ),
+                      void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
+                      void* aCallbackData,
                       PLOTTER* aPlotter )
 {
     bool    fill_mode = true;
@@ -164,7 +169,7 @@ void DrawGraphicText( EDA_RECT* aClipBox,
 
     basic_gal.SetTextAttributes( &dummy );
     basic_gal.SetPlotter( aPlotter );
-    basic_gal.SetCallback( aCallback );
+    basic_gal.SetCallback( aCallback, aCallbackData );
     basic_gal.m_DC = aDC;
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( aClipBox );
@@ -184,7 +189,8 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
                           enum EDA_TEXT_HJUSTIFY_T aH_justify,
                           enum EDA_TEXT_VJUSTIFY_T aV_justify,
                           int aWidth, bool aItalic, bool aBold,
-                          void (*aCallback)( int x0, int y0, int xf, int yf ),
+                          void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ),
+                          void* aCallbackData,
                           PLOTTER * aPlotter )
 {
     // Swap color if contrast would be better
@@ -199,12 +205,12 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
     // Draw the background
     DrawGraphicText( aClipBox, aDC, aPos, aColor1, aText, aOrient, aSize,
                      aH_justify, aV_justify, aWidth, aItalic, aBold,
-                     aCallback, aPlotter );
+                     aCallback, aCallbackData, aPlotter );
 
     // Draw the text
     DrawGraphicText( aClipBox, aDC, aPos, aColor2, aText, aOrient, aSize,
                      aH_justify, aV_justify, aWidth/4, aItalic, aBold,
-                     aCallback, aPlotter );
+                     aCallback, aCallbackData, aPlotter );
 }
 
 /**
@@ -256,7 +262,7 @@ void PLOTTER::Text( const wxPoint&              aPos,
     DrawGraphicText( NULL, NULL, aPos, aColor, aText,
                      aOrient, aSize,
                      aH_justify, aV_justify,
-                     textPensize, aItalic, aBold, NULL, this );
+                     textPensize, aItalic, aBold, nullptr, nullptr, this );
 
     if( aWidth != textPensize )
         SetCurrentLineWidth( aWidth, aData );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2009-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -49,12 +49,16 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
 
+// A helper struct for the callback function
 // These variables are parameters used in addTextSegmToPoly.
 // But addTextSegmToPoly is a call-back function,
 // so we cannot send them as arguments.
-static int s_textWidth;
-static int s_textCircle2SegmentCount;
-static SHAPE_POLY_SET* s_cornerBuffer;
+struct TSEGM_2_POLY_PRMS {
+    int m_textWidth;
+    int m_textCircle2SegmentCount;
+    SHAPE_POLY_SET* m_cornerBuffer;
+};
+TSEGM_2_POLY_PRMS prms;
 
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.
@@ -63,11 +67,12 @@ static SHAPE_POLY_SET* s_cornerBuffer;
 double s_error_max = Millimeter2iu( 0.02 );
 
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
-static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
+static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 {
-    TransformRoundedEndsSegmentToPolygon( *s_cornerBuffer,
+    TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
+    TransformRoundedEndsSegmentToPolygon( *prm->m_cornerBuffer,
                                            wxPoint( x0, y0), wxPoint( xf, yf ),
-                                           s_textCircle2SegmentCount, s_textWidth );
+                                           prm->m_textCircle2SegmentCount, prm->m_textWidth );
 }
 
 
@@ -260,18 +265,18 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
     if( Value().GetLayer() == aLayer && Value().IsVisible() )
         texts.push_back( &Value() );
 
-    s_cornerBuffer = &aCornerBuffer;
+    prms.m_cornerBuffer = &aCornerBuffer;
 
     // To allow optimization of circles approximated by segments,
     // aCircleToSegmentsCountForTexts, when not 0, is used.
     // if 0 (default value) the aCircleToSegmentsCount is used
-    s_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
+    prms.m_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
                                 aCircleToSegmentsCountForTexts : aCircleToSegmentsCount;
 
     for( unsigned ii = 0; ii < texts.size(); ii++ )
     {
         TEXTE_MODULE *textmod = texts[ii];
-        s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        prms.m_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
         wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
@@ -281,7 +286,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                          textmod->GetShownText(), textmod->GetDrawRotation(), size,
                          textmod->GetHorizJustify(), textmod->GetVertJustify(),
                          textmod->GetThickness(), textmod->IsItalic(),
-                         true, addTextSegmToPoly );
+                         true, addTextSegmToPoly, &prms );
     }
 
 }
@@ -329,18 +334,18 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
     if( Value().GetLayer() == aLayer && Value().IsVisible() )
         texts.push_back( &Value() );
 
-    s_cornerBuffer = &aCornerBuffer;
+    prms.m_cornerBuffer = &aCornerBuffer;
 
     // To allow optimization of circles approximated by segments,
     // aCircleToSegmentsCountForTexts, when not 0, is used.
     // if 0 (default value) the aCircleToSegmentsCount is used
-    s_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
+    prms.m_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
                                 aCircleToSegmentsCountForTexts : aCircleToSegmentsCount;
 
     for( unsigned ii = 0; ii < texts.size(); ii++ )
     {
         TEXTE_MODULE *textmod = texts[ii];
-        s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        prms.m_textWidth = textmod->GetThickness() + ( 2 * aInflateValue );
         wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
@@ -350,7 +355,7 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
                          textmod->GetShownText(), textmod->GetDrawRotation(), size,
                          textmod->GetHorizJustify(), textmod->GetVertJustify(),
                          textmod->GetThickness(), textmod->IsItalic(),
-                         true, addTextSegmToPoly );
+                         true, addTextSegmToPoly, &prms );
     }
 
 }
@@ -459,9 +464,9 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
     if( IsMirrored() )
         size.x = -size.x;
 
-    s_cornerBuffer = &aCornerBuffer;
-    s_textWidth  = GetThickness() + ( 2 * aClearanceValue );
-    s_textCircle2SegmentCount = aCircleToSegmentsCount;
+    prms.m_cornerBuffer = &aCornerBuffer;
+    prms.m_textWidth  = GetThickness() + ( 2 * aClearanceValue );
+    prms.m_textCircle2SegmentCount = aCircleToSegmentsCount;
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( IsMultilineAllowed() )
@@ -479,7 +484,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
                              txt, GetTextAngle(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
-                             true, addTextSegmToPoly );
+                             true, addTextSegmToPoly, &prms );
         }
     }
     else
@@ -488,7 +493,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
                          GetShownText(), GetTextAngle(), size,
                          GetHorizJustify(), GetVertJustify(),
                          GetThickness(), IsItalic(),
-                         true, addTextSegmToPoly );
+                         true, addTextSegmToPoly, &prms );
     }
 }
 

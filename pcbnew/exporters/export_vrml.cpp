@@ -751,7 +751,7 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
 
 /* C++ doesn't have closures and neither continuation forms... this is
  * for coupling the vrml_text_callback with the common parameters */
-static void vrml_text_callback( int x0, int y0, int xf, int yf )
+static void vrml_text_callback( int x0, int y0, int xf, int yf, void* aData )
 {
     LAYER_NUM m_text_layer = model_vrml->m_text_layer;
     int m_text_width = model_vrml->m_text_width;

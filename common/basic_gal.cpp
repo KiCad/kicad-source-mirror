@@ -97,7 +97,7 @@ void BASIC_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
         for( unsigned ii = 1; ii < polyline_corners.size(); ii++ )
         {
             m_callback( polyline_corners[ii-1].x, polyline_corners[ii-1].y,
-                        polyline_corners[ii].x, polyline_corners[ii].y );
+                        polyline_corners[ii].x, polyline_corners[ii].y, m_callbackData );
         }
     }
 }
@@ -129,6 +129,6 @@ void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
     else if( m_callback )
     {
             m_callback( startVector.x, startVector.y,
-                        endVector.x, endVector.y );
+                        endVector.x, endVector.y, m_callbackData );
     }
 }

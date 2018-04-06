@@ -97,8 +97,11 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font
- *  @param aCallback() = function called (if non null) to draw each segment.
- *                  used to draw 3D texts or for plotting, NULL for normal drawings
+ *  @param aCallback( int x0, int y0, int xf, int yf, void* aData ) is a function called
+ *                  (if non null) to draw each segment. used to draw 3D texts or for plotting.
+ *                  NULL for normal drawings
+ *  @param aCallbackData = is the auxiliary parameter aData for the callback function.
+ *                         can be nullptr if no auxiliary parameter is needed
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
@@ -114,8 +117,9 @@ void DrawGraphicText( EDA_RECT* aClipBox,
                       int aWidth,
                       bool aItalic,
                       bool aBold,
-                      void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL,
-                      PLOTTER * aPlotter = NULL );
+                      void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
+                      void* aCallbackData = nullptr,
+                      PLOTTER * aPlotter = nullptr );
 
 
 /**
@@ -138,7 +142,8 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox,
                           int aWidth,
                           bool aItalic,
                           bool aBold,
-                          void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL,
-                          PLOTTER * aPlotter = NULL );
+                          void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
+                          void* aCallbackData = nullptr,
+                          PLOTTER * aPlotter = nullptr );
 
 #endif /* __INCLUDE__DRAWTXT_H__ */

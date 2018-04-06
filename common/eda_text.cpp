@@ -467,13 +467,13 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 // each segment is stored as 2 wxPoints: its starting point and its ending point
 // we are using DrawGraphicText to create the segments.
 // and therefore a call-back function is needed
-static std::vector<wxPoint>* s_cornerBuffer;
 
 // This is a call back function, used by DrawGraphicText to put each segment in buffer
-static void addTextSegmToBuffer( int x0, int y0, int xf, int yf )
+static void addTextSegmToBuffer( int x0, int y0, int xf, int yf, void* aData )
 {
-    s_cornerBuffer->push_back( wxPoint( x0, y0 ) );
-    s_cornerBuffer->push_back( wxPoint( xf, yf ) );
+    std::vector<wxPoint>* cornerBuffer = static_cast<std::vector<wxPoint>*>( aData );
+    cornerBuffer->push_back( wxPoint( x0, y0 ) );
+    cornerBuffer->push_back( wxPoint( xf, yf ) );
 }
 
 void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const
@@ -483,7 +483,6 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
     if( IsMirrored() )
         size.x = -size.x;
 
-    s_cornerBuffer = &aCornerBuffer;
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( IsMultilineAllowed() )
@@ -501,7 +500,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
                              txt, GetTextAngle(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
-                             true, addTextSegmToBuffer );
+                             true, addTextSegmToBuffer, &aCornerBuffer );
         }
     }
     else
@@ -510,6 +509,6 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
                          GetText(), GetTextAngle(), size,
                          GetHorizJustify(), GetVertJustify(),
                          GetThickness(), IsItalic(),
-                         true, addTextSegmToBuffer );
+                         true, addTextSegmToBuffer, &aCornerBuffer );
     }
 }
