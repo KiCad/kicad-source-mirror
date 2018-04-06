@@ -29,7 +29,7 @@
 #include <vector>
 #include <class_zone.h>
 
-class PROGRESS_REPORTER;
+class WX_PROGRESS_REPORTER;
 class BOARD;
 class COMMIT;
 class SHAPE_POLY_SET;
@@ -41,9 +41,8 @@ public:
     ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit = nullptr );
     ~ZONE_FILLER();
 
-    void    SetProgressReporter( PROGRESS_REPORTER* aReporter );
-    void    Fill( std::vector<ZONE_CONTAINER*> aZones );
-    void    Unfill( std::vector<ZONE_CONTAINER*> aZones );
+    void    SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
+    void    Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck = false );
 
 private:
 
@@ -118,11 +117,12 @@ private:
 
     BOARD* m_board;
     COMMIT* m_commit;
-    PROGRESS_REPORTER* m_progressReporter;
+    WX_PROGRESS_REPORTER* m_progressReporter;
 
     std::atomic_size_t m_next;          // An index into the vector of zones to fill.
                                         // Used by the variuos parallel thread sets during
                                         // fill operations.
+    std::atomic_bool   m_out_of_date;
     std::atomic_size_t m_count_done;
 };
 

@@ -1168,6 +1168,8 @@ class SHAPE_POLY_SET : public SHAPE
         void CacheTriangulation();
         bool IsTriangulationUpToDate() const;
 
+        MD5_HASH GetHash() const;
+
     private:
         void triangulateSingle( const POLYGON& aPoly, SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult );
 

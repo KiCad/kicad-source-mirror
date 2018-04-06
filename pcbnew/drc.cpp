@@ -404,14 +404,6 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     testTracks( aMessages ? aMessages->GetParent() : m_pcbEditorFrame, true );
 
-    // Before testing segments and unconnected, refill all zones:
-    // this is a good caution, because filled areas can be outdated.
-    if( aMessages )
-    {
-        aMessages->AppendText( _( "Fill zones...\n" ) );
-        wxSafeYield();
-    }
-
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
     wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
 
@@ -420,11 +412,16 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->AppendText( _( "Refilling all zones...\n" ) );
         m_pcbEditorFrame->Fill_All_Zones( caller );
     }
+    else
+    {
+        aMessages->AppendText( _( "Checking zone fills...\n" ) );
+        m_pcbEditorFrame->Check_All_Zones( caller );
+    }
 
     // test zone clearances to other zones
     if( aMessages )
     {
-        aMessages->AppendText( _( "Test zones...\n" ) );
+        aMessages->AppendText( _( "Zone to zone clearances...\n" ) );
         wxSafeYield();
     }
 

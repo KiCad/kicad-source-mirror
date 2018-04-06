@@ -2051,6 +2051,15 @@ void SHAPE_POLY_SET::triangulateSingle( const POLYGON& aPoly,
 }
 
 
+MD5_HASH SHAPE_POLY_SET::GetHash() const
+{
+    if( !m_hash.IsValid() )
+        return checksum();
+
+    return m_hash;
+}
+
+
 bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 {
     if( !m_triangulationValid )

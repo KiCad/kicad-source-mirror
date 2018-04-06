@@ -1436,6 +1436,13 @@ public:
      */
     int Fill_All_Zones( wxWindow * aActiveWindow );
 
+    /**
+     * Function Check_All_Zones
+     *  Checks for out-of-date fills and fills them if requested by the user.
+     * @param aActiveWindow
+     */
+    void Check_All_Zones( wxWindow* aActiveWindow );
+
 
     /**
      * Function Add_Zone_Cutout

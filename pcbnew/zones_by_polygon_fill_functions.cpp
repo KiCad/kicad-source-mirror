@@ -101,3 +101,21 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow* aActiveWindow )
     toolMgr->RunAction( PCB_ACTIONS::zoneFillAll, true );
     return 0;
 }
+
+
+void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
+{
+    std::vector<ZONE_CONTAINER*> toFill;
+
+    for( auto zone : GetBoard()->Zones() )
+        toFill.push_back(zone);
+
+    BOARD_COMMIT commit( this );
+
+    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
+            new WX_PROGRESS_REPORTER( aActiveWindow, _( "Checking Zones" ), 3 ) );
+
+    ZONE_FILLER filler( GetBoard(), &commit );
+    filler.SetProgressReporter( progressReporter.get() );
+    filler.Fill( toFill, true );
+}
