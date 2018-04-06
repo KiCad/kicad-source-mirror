@@ -86,17 +86,17 @@
 // Messages for matrix rows:
 const wxString CommentERC_H[] =
 {
-    _( "Input Pin.........." ),
-    _( "Output Pin........." ),
-    _( "Bidirectional Pin.." ),
-    _( "Tri-State Pin......" ),
-    _( "Passive Pin........" ),
-    _( "Unspecified Pin...." ),
-    _( "Power Input Pin...." ),
-    _( "Power Output Pin..." ),
-    _( "Open Collector....." ),
-    _( "Open Emitter......." ),
-    _( "No Connection......" )
+    _( "Input Pin" ),
+    _( "Output Pin" ),
+    _( "Bidirectional Pin" ),
+    _( "Tri-State Pin" ),
+    _( "Passive Pin" ),
+    _( "Unspecified Pin" ),
+    _( "Power Input Pin" ),
+    _( "Power Output Pin" ),
+    _( "Open Collector" ),
+    _( "Open Emitter" ),
+    _( "No Connection" )
 };
 
 // Messages for matrix columns

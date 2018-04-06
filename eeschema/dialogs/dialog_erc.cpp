@@ -294,15 +294,26 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
     if( m_initialized == false )
     {
+        std::vector<wxStaticText*> labels;
+
         // Print row labels
         for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
         {
             int y = pos.y + (ii * bitmap_size.y);
             text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
                                      wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
+            labels.push_back( text );
 
             int x = text->GetRect().GetRight();
             pos.x = std::max( pos.x, x );
+        }
+
+        // Right-align
+        for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
+        {
+            wxPoint labelPos = labels[ ii ]->GetPosition();
+            labelPos.x = pos.x - labels[ ii ]->GetRect().GetWidth();
+            labels[ ii ]->SetPosition( labelPos );
         }
 
         pos.x += 5;
