@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-05 10:01+0200\n"
-"PO-Revision-Date: 2018-04-05 10:01+0200\n"
+"POT-Creation-Date: 2018-04-06 13:26+0200\n"
+"PO-Revision-Date: 2018-04-06 13:27+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2668,7 +2668,7 @@ msgstr ""
 "Dalla riga di comando: argv[0]:\n"
 "'"
 
-#: common/footprint_info.cpp:91 cvpcb/cvpcb_mainframe.cpp:815
+#: common/footprint_info.cpp:91 cvpcb/cvpcb_mainframe.cpp:792
 msgid "Load Error"
 msgstr "Errore di caricamento"
 
@@ -3669,7 +3669,11 @@ msgstr "Informazioni su KiCad"
 msgid "Project file \"%s\" is not writable"
 msgstr "File progetto \"%s\" non scrivibile"
 
-#: cvpcb/cvpcb_mainframe.cpp:260
+#: cvpcb/cvpcb_mainframe.cpp:109
+msgid "Assign Footprints"
+msgstr "Assegna impronte"
+
+#: cvpcb/cvpcb_mainframe.cpp:258
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit?"
@@ -3677,11 +3681,11 @@ msgstr ""
 "Le associazioni componenti a impronte sono state modificate.\n"
 "Salvare prima di uscire?"
 
-#: cvpcb/cvpcb_mainframe.cpp:408
+#: cvpcb/cvpcb_mainframe.cpp:406
 msgid "Delete selections"
 msgstr "Cancella selezione"
 
-#: cvpcb/cvpcb_mainframe.cpp:457
+#: cvpcb/cvpcb_mainframe.cpp:455
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -3692,7 +3696,7 @@ msgstr ""
 "\"%s\"\n"
 "%s"
 
-#: cvpcb/cvpcb_mainframe.cpp:461 cvpcb/cvpcb_mainframe.cpp:481
+#: cvpcb/cvpcb_mainframe.cpp:459 cvpcb/cvpcb_mainframe.cpp:479
 #: eeschema/sch_base_frame.cpp:328 eeschema/sch_base_frame.cpp:346
 #: pcbnew/footprint_edit_frame.cpp:902 pcbnew/footprint_edit_frame.cpp:922
 #: pcbnew/pcbnew_config.cpp:120 pcbnew/pcbnew_config.cpp:142
@@ -3700,7 +3704,7 @@ msgstr ""
 msgid "File Save Error"
 msgstr "Errore salvataggio file"
 
-#: cvpcb/cvpcb_mainframe.cpp:477
+#: cvpcb/cvpcb_mainframe.cpp:475
 #, c-format
 msgid ""
 "Error occurred saving the project footprint library table:\n"
@@ -3712,61 +3716,51 @@ msgstr ""
 "\"%s\"\n"
 "%s"
 
-#: cvpcb/cvpcb_mainframe.cpp:671
+#: cvpcb/cvpcb_mainframe.cpp:669
 msgid "key words"
 msgstr "parole chiave"
 
-#: cvpcb/cvpcb_mainframe.cpp:684
+#: cvpcb/cvpcb_mainframe.cpp:682
 msgid "pin count"
 msgstr "numero piedini"
 
-#: cvpcb/cvpcb_mainframe.cpp:694
+#: cvpcb/cvpcb_mainframe.cpp:692
 msgid "library"
 msgstr "libreria "
 
-#: cvpcb/cvpcb_mainframe.cpp:702
+#: cvpcb/cvpcb_mainframe.cpp:700
 msgid "search text"
 msgstr "Cerca testo"
 
-#: cvpcb/cvpcb_mainframe.cpp:706
+#: cvpcb/cvpcb_mainframe.cpp:704
 msgid "No filtering"
 msgstr "nessun filtro"
 
-#: cvpcb/cvpcb_mainframe.cpp:708
+#: cvpcb/cvpcb_mainframe.cpp:706
 #, c-format
 msgid "Filtered by %s"
 msgstr "Filtrato per %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:722
+#: cvpcb/cvpcb_mainframe.cpp:720
 #, c-format
 msgid "Description: %s;  Key words: %s"
 msgstr "Descrizione: %s;  Parole chiave: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:738
+#: cvpcb/cvpcb_mainframe.cpp:736
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
 "Nessuna libreria impronte elencata nella tabella librerie impronte corrente."
 
-#: cvpcb/cvpcb_mainframe.cpp:739
+#: cvpcb/cvpcb_mainframe.cpp:737
 msgid "Configuration Error"
 msgstr "Errore di configurazione"
 
-#: cvpcb/cvpcb_mainframe.cpp:743 pcbnew/load_select_footprint.cpp:206
+#: cvpcb/cvpcb_mainframe.cpp:741 pcbnew/load_select_footprint.cpp:206
 msgid "Loading Footprint Libraries"
 msgstr "Caricamento librerie di impronte"
 
-#: cvpcb/cvpcb_mainframe.cpp:764
-msgid "Cvpcb"
-msgstr "Cvpcb"
-
-#: cvpcb/cvpcb_mainframe.cpp:766 eeschema/sch_edit_frame.cpp:1495
-#: kicad/prjconfig.cpp:87 pcbnew/footprint_edit_frame.cpp:802
-#: pcbnew/pcb_edit_frame.cpp:1125
-msgid " [Read Only]"
-msgstr " [Sola lettura]"
-
-#: cvpcb/cvpcb_mainframe.cpp:814
+#: cvpcb/cvpcb_mainframe.cpp:791
 #, c-format
 msgid ""
 "Error loading schematic.\n"
@@ -6091,12 +6085,12 @@ msgid "Generate Bill of &Materials..."
 msgstr "Genera distinta &materiali..."
 
 #: eeschema/menubar.cpp:626
-msgid "A&ssign Footprints"
-msgstr "A&ssegna impronte"
+msgid "A&ssign Footprints..."
+msgstr "A&ssegna impronte..."
 
 #: eeschema/menubar.cpp:627
-msgid "Run CvPcb"
-msgstr "Avvia CvPcb"
+msgid "Assign PCB footprints to schematic symbols"
+msgstr "Assegna impronte del C.S. ai simboli dello schema"
 
 #: eeschema/menubar.cpp:636
 msgid "Simula&tor"
@@ -6307,6 +6301,11 @@ msgstr ""
 #: eeschema/sch_edit_frame.cpp:1480 eeschema/sch_edit_frame.cpp:1487
 msgid "Eeschema"
 msgstr "Eeschema"
+
+#: eeschema/sch_edit_frame.cpp:1495 kicad/prjconfig.cpp:87
+#: pcbnew/footprint_edit_frame.cpp:802 pcbnew/pcb_edit_frame.cpp:1125
+msgid " [Read Only]"
+msgstr " [Sola lettura]"
 
 #: eeschema/sch_edit_frame.cpp:1498
 msgid " [no file]"
