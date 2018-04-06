@@ -88,6 +88,25 @@ static int countChildren( wxXmlNode* aCurrentNode, const wxString& aName )
 }
 
 
+///> Computes a bounding box for all items in a schematic sheet
+static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
+{
+    EDA_RECT bbox;
+
+    SCH_ITEM* item = aSheet->GetScreen()->GetDrawItems();
+    bbox = item->GetBoundingBox();
+    item = item->Next();
+
+    while( item )
+    {
+        bbox.Merge( item->GetBoundingBox() );
+        item = item->Next();
+    }
+
+    return bbox;
+}
+
+
 wxString SCH_EAGLE_PLUGIN::getLibName()
 {
     if( m_libName.IsEmpty() )
@@ -682,21 +701,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
         plainNode = plainNode->GetNext();
     }
 
-    // Find the bounding box of the imported items.
-    EDA_RECT sheetBoundingBox;
-
-    SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems();
-    sheetBoundingBox = item->GetBoundingBox();
-    item = item->Next();
-
-    while( item )
-    {
-        sheetBoundingBox.Merge( item->GetBoundingBox() );
-        item = item->Next();
-    }
-
     // Calculate the new sheet size.
-
+    EDA_RECT sheetBoundingBox = getSheetBbox( m_currentSheet );
     wxSize targetSheetSize = sheetBoundingBox.GetSize();
     targetSheetSize.IncBy( 1500, 1500 );
 
@@ -724,13 +730,10 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     translation.y   = translation.y - translation.y % 100;
 
     // Translate the items.
-    item = m_currentSheet->GetScreen()->GetDrawItems();
-
-    while( item )
+    for( SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
         item->SetPosition( item->GetPosition() + translation );
         item->ClearFlags();
-        item = item->Next();
     }
 }
 
