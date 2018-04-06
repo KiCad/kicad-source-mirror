@@ -932,7 +932,17 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
         return;
 
     if( (int) m_dirtyNets.size() <= aNet )
+    {
+        int lastNet = m_dirtyNets.size() - 1;
+
+        if( lastNet < 0 )
+            lastNet = 0;
+
         m_dirtyNets.resize( aNet + 1 );
+
+        for( int i = lastNet; i < aNet + 1; i++ )
+            m_dirtyNets[i] = true;
+    }
 
     m_dirtyNets[aNet] = true;
 }
