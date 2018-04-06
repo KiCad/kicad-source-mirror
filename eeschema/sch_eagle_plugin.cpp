@@ -516,6 +516,8 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         libraryNode = libraryNode->GetNext();
     }
 
+    m_pi->SaveLibrary( getLibFileName().GetFullPath() );
+
     // find all nets and count how many sheets they appear on.
     // local labels will be used for nets found only on that sheet.
     countNets( aSchematicNode );
