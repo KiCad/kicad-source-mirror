@@ -284,8 +284,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         break;
 
     case ID_RELOAD3D_BOARD:
-        ReloadRequest();
-        m_canvas->Request_refresh();
+        NewDisplay( true );
         break;
 
     case ID_ROTATE3D_X_POS:
@@ -351,7 +350,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
             if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
                 m_canvas->Request_refresh();
             else
-                ReloadRequest();
+                NewDisplay( true );
         }
         return;
 
@@ -361,7 +360,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
             if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
                 m_canvas->Request_refresh();
             else
-                ReloadRequest();
+                NewDisplay( true );
         }
         return;
 
@@ -392,27 +391,27 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_MENU3D_REALISTIC_MODE:
         m_settings.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
         SetMenuBarOptionsState();
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
         m_settings.MaterialModeSet( MATERIAL_MODE_NORMAL );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
         m_settings.MaterialModeSet( MATERIAL_MODE_DIFFUSE_ONLY );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
         m_settings.MaterialModeSet( MATERIAL_MODE_CAD_MODE );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_OPENGL_RENDER_COPPER_THICKNESS:
         m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, isChecked );
-        ReloadRequest();
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX:
@@ -427,12 +426,12 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES:
         m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RAYTRACING_BACKFLOOR:
         m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RAYTRACING_REFRACTIONS:
@@ -447,7 +446,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_FL_RAYTRACING_POST_PROCESSING:
         m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING:
@@ -457,7 +456,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_SHOW_BOARD_BODY:
         m_settings.SetFlag( FL_SHOW_BOARD_BODY, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_AXIS_ONOFF:
@@ -467,52 +466,52 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL:
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL_INSERT:
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_VIRTUAL:
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
         m_settings.SetFlag( FL_ZONE, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_ADHESIVE_ONOFF:
         m_settings.SetFlag( FL_ADHESIVE, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_SILKSCREEN_ONOFF:
         m_settings.SetFlag( FL_SILKSCREEN, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_SOLDER_MASK_ONOFF:
         m_settings.SetFlag( FL_SOLDERMASK, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
         m_settings.SetFlag( FL_SOLDERPASTE, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
         m_settings.SetFlag( FL_COMMENTS, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_ECO_ONOFF:
         m_settings.SetFlag( FL_ECO, isChecked );
-        ReloadRequest( );
+        NewDisplay( true );
         return;
 
     case ID_MENU3D_RESET_DEFAULTS:
@@ -525,10 +524,10 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         // Refresh menu option state
         SetMenuBarOptionsState();
 
-        // Tell canvas that we (may) changed the render engine
+        // Tell canvas that we (may have) changed the render engine
         RenderEngineChanged();
 
-        ReloadRequest();
+        NewDisplay( true );
     }
         return;
 
@@ -1050,7 +1049,7 @@ bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
                                       &definedColors );
 
     if( change )
-        NewDisplay();
+        NewDisplay( true );
 
     return change;
 }
@@ -1086,7 +1085,7 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
                                       &definedColors );
 
     if( change )
-        NewDisplay();
+        NewDisplay( true );
 
     return change;
 }
@@ -1112,7 +1111,7 @@ bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
                                       &definedColors );
 
     if( change )
-        NewDisplay();
+        NewDisplay( true );
 
     return change;
 }
@@ -1142,7 +1141,7 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
                                       &definedColors );
 
     if( change )
-        NewDisplay();
+        NewDisplay( true );
 
     return change;
 }
@@ -1167,7 +1166,7 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
                                       &definedColors );
 
     if( change )
-        NewDisplay();
+        NewDisplay( true );
 
     return change;
 }

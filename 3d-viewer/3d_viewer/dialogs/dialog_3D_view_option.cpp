@@ -54,9 +54,7 @@ void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
     {
         SetMenuBarOptionsState();
 
-        // Force immediate display redraw:
-        ReloadRequest();
-        m_canvas->Request_refresh();
+        NewDisplay( true );
     }
 }
 
