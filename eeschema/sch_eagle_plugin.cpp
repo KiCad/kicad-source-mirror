@@ -107,6 +107,13 @@ static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
 }
 
 
+///> Extracts the net name part from a pin name (e.g. return 'GND' for pin named 'GND@2')
+static inline wxString extractNetName( const wxString& aPinName )
+{
+    return aPinName.BeforeFirst( '@' );
+}
+
+
 wxString SCH_EAGLE_PLUGIN::getLibName()
 {
     if( m_libName.IsEmpty() )
@@ -590,6 +597,57 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             sheetNode = sheetNode->GetNext();
         }
     }
+
+
+    // Handle the missing component units that need to be instantiated
+    // to create the missing implicit connections
+
+    // Calculate the already placed items bounding box and the page size to determine
+    // placement for the new components
+    wxSize pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU();
+    EDA_RECT sheetBbox = getSheetBbox( m_rootSheet );
+    wxPoint newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
+    int maxY = sheetBbox.GetY();
+
+    SCH_SHEET_PATH sheetpath;
+    m_rootSheet->LocatePathOfScreen( m_rootSheet->GetScreen(), &sheetpath );
+
+    for( auto& cmp : m_missingCmps )
+    {
+        const SCH_COMPONENT* origCmp = cmp.second.cmp;
+
+        for( auto unitEntry : cmp.second.units )
+        {
+            if( unitEntry.second == false )
+                continue;     // unit has been already processed
+
+            // Instantiate the missing component unit
+            int unit = unitEntry.first;
+            const wxString& reference = origCmp->GetField( REFERENCE )->GetText();
+            std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT( *origCmp ) );
+            component->SetUnitSelection( &sheetpath, unit );
+            component->SetUnit( unit );
+            component->SetTimeStamp( EagleModuleTstamp( reference, origCmp->GetField( VALUE )->GetText(), unit ) );
+            component->SetOrientation( 0 );
+            component->AddHierarchicalReference( sheetpath.Path(), reference, unit );
+
+            // Calculate the placement position
+            EDA_RECT cmpBbox = component->GetBoundingBox();
+            int posY = newCmpPosition.y + cmpBbox.GetHeight();
+            component->SetPosition( wxPoint( newCmpPosition.x, posY ) );
+            newCmpPosition.x += cmpBbox.GetWidth();
+            maxY = std::max( maxY, posY );
+
+            if( newCmpPosition.x >= pageSizeIU.GetWidth() )             // reached the page boundary?
+                newCmpPosition = wxPoint( sheetBbox.GetLeft(), maxY );  // then start a new row
+
+            // Add the global net labels to recreate the implicit connections
+            addImplicitConnections( component.get(), m_rootSheet->GetScreen(), false );
+            m_rootSheet->GetScreen()->Append( component.release() );
+        }
+    }
+
+    m_missingCmps.clear();
 }
 
 
@@ -734,6 +792,15 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     {
         item->SetPosition( item->GetPosition() + translation );
         item->ClearFlags();
+    }
+
+    // Add global net labels for the named power input pins in this sheet
+    for( SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        addImplicitConnections( static_cast<SCH_COMPONENT*>( item ), m_currentSheet->GetScreen(), true );
     }
 }
 
@@ -2399,4 +2466,72 @@ const SEG* SCH_EAGLE_PLUGIN::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) c
     }
 
     return nullptr;
+}
+
+
+void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
+        SCH_SCREEN* aScreen, bool aUpdateSet )
+{
+    auto& schLibTable = *m_kiway->Prj().SchSymbolLibTable();
+    wxCHECK( aComponent->Resolve( schLibTable ), /*void*/ );
+    aComponent->UpdatePinCache();
+    auto partRef = aComponent->GetPartRef().lock();
+    wxCHECK( partRef, /*void*/ );
+
+    // Normally power parts also have power input pins,
+    // but they already force net names on the attached wires
+    if( partRef->IsPower() )
+        return;
+
+    int unit = aComponent->GetUnit();
+    const wxString& reference = aComponent->GetField( REFERENCE )->GetText();
+    std::vector<LIB_PIN*> pins;
+    partRef->GetPins( pins );
+    std::set<int> missingUnits;
+
+    // Search all units for pins creating implicit connections
+    for( const auto& pin : pins )
+    {
+        if( pin->GetType() == PIN_POWER_IN )
+        {
+            if( !unit || pin->GetUnit() == unit )
+            {
+                // Create a net label to force the net name on the pin
+                SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
+                netLabel->SetPosition( aComponent->GetPinPhysicalPosition( pin ) );
+                netLabel->SetText( extractNetName( pin->GetName() ) );
+                netLabel->SetTextSize( wxSize( 10, 10 ) );
+                netLabel->SetLabelSpinStyle( 0 );
+                aScreen->Append( netLabel );
+            }
+
+            else if( aUpdateSet )
+            {
+                // Found a pin creating implicit connection information in another unit.
+                // Such units will be instantiated if they do not appear in another sheet and
+                // processed later.
+                wxASSERT( pin->GetUnit() );
+                missingUnits.insert( pin->GetUnit() );
+            }
+        }
+    }
+
+    if( aUpdateSet )
+    {
+        auto cmpIt = m_missingCmps.find( reference );
+
+        // Set the flag indicating this unit has been processed
+        if( cmpIt != m_missingCmps.end() )
+            cmpIt->second.units[unit] = false;
+
+        // Save the units that need later processing
+        else if( !missingUnits.empty() )
+        {
+            EAGLE_MISSING_CMP& entry = m_missingCmps[reference];
+            entry.cmp = aComponent;
+
+            for( int i : missingUnits )
+                entry.units.emplace( i, true );
+        }
+    }
 }

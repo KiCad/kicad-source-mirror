@@ -208,6 +208,43 @@ private:
 
     ///> Segments representing wires for intersection checking
     std::vector<SEG_DESC> m_segments;
+
+
+    // Structure describing missing units containing pins creating implicit connections
+    // (named power pins in Eagle).
+    struct EAGLE_MISSING_CMP
+    {
+        EAGLE_MISSING_CMP( const SCH_COMPONENT* aComponent = nullptr )
+            : cmp( aComponent )
+        {
+        }
+
+        ///> Link to the parent component
+        const SCH_COMPONENT* cmp;
+
+        /* Map of the component units: for each unit there is a flag saying
+         * whether the unit needs to be instantiated with appropriate net labels to
+         * emulate implicit connections as is done in Eagle.
+         */
+        std::map<int, bool> units;
+    };
+
+    ///> Map references to missing component units data
+    std::map<wxString, EAGLE_MISSING_CMP> m_missingCmps;
+
+    /**
+     * Creates net labels to emulate implicit connections in Eagle.
+     *
+     * Each named power input pin creates an implicit connection in Eagle. To emulate this behavior
+     * one needs to attach global net labels to the mentioned pins. This is is also expected for the
+     * units that are not instantiated in the schematics, therefore such units need to be stored
+     * in order to create them at later stage.
+     *
+     * @param aComponent is the component to process.
+     * @param aScreen is the screen where net labels should be added.
+     * @param aUpdateSet decides whether the missing units data should be updated.
+     */
+    void addImplicitConnections( SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen, bool aUpdateSet );
 };
 
 #endif  // _SCH_EAGLE_PLUGIN_H_
