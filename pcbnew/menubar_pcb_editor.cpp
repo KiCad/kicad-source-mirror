@@ -84,17 +84,7 @@ static void prepareHelpMenu( wxMenu* aParentMenu );
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
-    wxMenuBar*  menuBar = GetMenuBar();
-
-    if( !menuBar )
-        menuBar = new wxMenuBar();
-
-    // Delete all existing menus so they can be rebuilt.
-    // This allows language changes of the menu text on the fly.
-    menuBar->Freeze();
-
-    while( menuBar->GetMenuCount() )
-        delete menuBar->Remove( 0 );
+    wxMenuBar*  menuBar = new wxMenuBar();
 
     // Recreate all menus:
 
@@ -153,13 +143,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( configmenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    menuBar->Thaw();
-
-    // Associate the menu bar with the frame, if no previous menubar
-    if( GetMenuBar() == NULL )
-        SetMenuBar( menuBar );
-    else
-        menuBar->Refresh();
+    SetMenuBar( menuBar );
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     // Populate the Action Plugin sub-menu
