@@ -40,6 +40,18 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
         const PROJECT* aProject );
 
 /**
+ * Normalizes a file path to an environmental variable, if possible.
+ *
+ * @param aFilePath is the full file path (path and file name) to be normalized.
+ * @param aEnvVars is an optional map of environmental variables to try substition with.
+ * @param aProjectPath is an optional string to normalize the file path to the project path.
+ * @return Normalized full file path (path and file name) if succeeded or empty string if the
+ *          path could not be normalized.
+ */
+wxString NormalizePath(
+        const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars, const wxString& aProjectPath );
+
+/**
  * Searches the default paths trying to find one with the requested file.
  *
  * @param aFileName is the name of the searched file. It might be a relative path.
@@ -48,7 +60,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
  * @return Full path (apth and file name) if the file was found in one of the paths, otherwise
  *      an empty string.
 */
-wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
-        const PROJECT* aProject );
+wxString ResolveFile(
+        const wxString& aFileName, const ENV_VAR_MAP* aEnvVars, const PROJECT* aProject );
 
 #endif /* ENV_PATHS_H */

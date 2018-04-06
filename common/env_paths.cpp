@@ -64,9 +64,8 @@ static bool normalizeAbsolutePaths( const wxFileName& aPathA,
     return true;
 }
 
-
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
-        const PROJECT* aProject )
+        const wxString& aProjectPath )
 {
     wxFileName envPath;
     wxString tmp, varName, normalizedFullPath;
@@ -90,9 +89,10 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
         }
     }
 
-    if( varName.IsEmpty() && aProject )
+    if( varName.IsEmpty() && !aProjectPath.IsEmpty()
+        && wxFileName( aProjectPath ).IsAbsolute() && wxFileName( aFilePath ).IsAbsolute() )
     {
-        envPath.SetPath( aProject->GetProjectPath() );
+        envPath.SetPath( aProjectPath );
 
         if( normalizeAbsolutePaths( envPath, aFilePath, &tmp ) )
             varName = PROJECT_VAR_NAME;
@@ -109,6 +109,15 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
     }
 
     return normalizedFullPath;
+}
+
+wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
+        const PROJECT* aProject )
+{
+  if( aProject )
+    return NormalizePath( aFilePath, aEnvVars, aProject->GetProjectPath() );
+  else
+    return NormalizePath( aFilePath, aEnvVars, "" );
 }
 
 

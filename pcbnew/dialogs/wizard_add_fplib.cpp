@@ -46,6 +46,7 @@
 #include <bitmaps.h>
 
 #include <class_module.h>
+#include <env_paths.h>
 
 #ifdef BUILD_GITHUB_PLUGIN
 #include <../github/github_getliblist.h>
@@ -222,17 +223,14 @@ wxString WIZARD_FPLIB_TABLE::LIBRARY::GetRelativePath( const wxString& aBase, co
 
 wxString WIZARD_FPLIB_TABLE::LIBRARY::GetAutoPath( LIB_SCOPE aScope ) const
 {
-    const wxString& global_env = FP_LIB_TABLE::GlobalPathEnvVariableName();
     const wxString& project_env = PROJECT_VAR_NAME;
     const wxString& github_env( "KIGITHUB" );
 
     wxString rel_path;
 
-    // KISYSMOD check
-    rel_path = replaceEnv( global_env );
-
-    if( !rel_path.IsEmpty() )
-        return rel_path;
+    // The extra KIGITHUB and KIPRJCHECKS are still here since Pgm.GetLocalVariables() does not
+    // contain the KIPRJMOD env var, and the KIGITHUB does not pass the IsAbsolutePath check
+    // that happens in NormalizePath(...) since it starts with https://
 
     // KIGITHUB check
     rel_path = replaceEnv( github_env, false );
@@ -249,8 +247,13 @@ wxString WIZARD_FPLIB_TABLE::LIBRARY::GetAutoPath( LIB_SCOPE aScope ) const
             return rel_path;
     }
 
-    // Return the full path
-    return m_path;
+    rel_path = NormalizePath( wxFileName( m_path ), &Pgm().GetLocalEnvVariables(), project_env );
+
+    // If normalizePath failed, then rel_path will be empty, m_path is the full path.
+    if( rel_path.IsEmpty() )
+      return m_path;
+
+    return rel_path;
 }
 
 
