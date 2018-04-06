@@ -10766,7 +10766,7 @@ msgstr "Voeding input"
 
 #: eeschema/class_pin.cpp:107
 msgid "Power output"
-msgstr "Power output"
+msgstr "Voeding output"
 
 #: eeschema/class_pin.cpp:108
 msgid "Open collector"
@@ -10926,7 +10926,7 @@ msgstr "Uitzoomen (F2)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:170
 msgid "Redraw view (F3)"
-msgstr "Tekening verversen (F3)"
+msgstr "Beeld verversen (F3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:174
 msgid "Zoom auto (Home)"
@@ -11009,7 +11009,7 @@ msgstr "> niet gevonden"
 #: cvpcb/readschematicnetlist.cpp:137
 #, c-format
 msgid "Unknown file format <%s>"
-msgstr "Onbekend bestands formaat <%s>"
+msgstr "Onbekend bestandsformaat <%s>"
 
 #: cvpcb/readschematicnetlist.cpp:143
 msgid "Netlist Format: EESchema"
@@ -11362,7 +11362,7 @@ msgstr "Een nieuw project starten"
 #: kicad/menubar.cpp:110
 #: kicad/menubar.cpp:282
 msgid "Save current project"
-msgstr "Huidige project opslaan"
+msgstr "Huidig project opslaan"
 
 #: kicad/menubar.cpp:118
 msgid "&Archive"
@@ -11378,7 +11378,7 @@ msgstr "&Uitpakken"
 
 #: kicad/menubar.cpp:125
 msgid "Unarchive project files from zip file"
-msgstr "Dearchiveer project bestanden van zip archief"
+msgstr "Projectbestanden van zip archief uitpakken"
 
 #: kicad/menubar.cpp:134
 msgid "Quit KiCad"
@@ -11402,11 +11402,11 @@ msgstr "Lees of bewerk bestanden met tekst editor"
 
 #: kicad/menubar.cpp:169
 msgid "&Text Editor"
-msgstr "&Tekst Editor"
+msgstr "&Tekstverwerker"
 
 #: kicad/menubar.cpp:170
 msgid "Select your prefered text editor"
-msgstr "Selecteer voorkeur tekst editor"
+msgstr "Selecteer voorkeurs tekstverwerker"
 
 #: kicad/menubar.cpp:184
 msgid "Use system default PDF viewer used to browse datasheets"
@@ -11472,7 +11472,7 @@ msgstr "Tekst bestand ("
 
 #: kicad/mainframe.cpp:230
 msgid "Load File to Edit"
-msgstr "Laad bestand om te berken"
+msgstr "Laad bestand om te bewerken"
 
 #: kicad/kicad.cpp:69
 #: kicad/prjconfig.cpp:118
@@ -11535,15 +11535,15 @@ msgstr "Lijst D codes"
 
 #: gerbview/onrightclick.cpp:57
 msgid "Copy Block (shift mouse)"
-msgstr "Kopier Block (shift muis)"
+msgstr "Kopier Blok (shift muis)"
 
 #: gerbview/onrightclick.cpp:59
 msgid "Delete Block (ctrl + drag mouse)"
-msgstr "Verwijder Block (ctrl + muis slepen)"
+msgstr "Verwijder Blok (ctrl + muis slepen)"
 
 #: gerbview/onrightclick.cpp:60
 msgid "Mirror Block"
-msgstr "Spiegel Block"
+msgstr "Spiegel Blok"
 
 #: gerbview/onrightclick.cpp:73
 msgid "Delete Dcode items"
@@ -11551,7 +11551,7 @@ msgstr "Verwijder Dcode items"
 
 #: gerbview/block.cpp:269
 msgid "Ok to delete block ?"
-msgstr "Block verwijderen?"
+msgstr "Blok verwijderen?"
 
 #: gerbview/tool_gerber.cpp:29
 msgid "Load Gerber File"
@@ -11563,7 +11563,7 @@ msgstr "Laad nieuw Gerber bestand aan huidige laag"
 
 #: gerbview/tool_gerber.cpp:33
 msgid "Append Gerber File to Current Layer"
-msgstr "Toevoegen van Gerber Bestand aan Huidige Laag"
+msgstr "Toevoegen van Gerber bestand aan huidige Laag"
 
 #: gerbview/tool_gerber.cpp:34
 msgid "Append a new Gerber file to the current layer"
@@ -11575,7 +11575,7 @@ msgstr "Inc laag en laad Gerber bestand"
 
 #: gerbview/tool_gerber.cpp:39
 msgid "Increment layer number, and Load Gerber file"
-msgstr "Incrementeer laagnummer, en laad Gerber bestand"
+msgstr "Verhoog laagnummer, en laad Gerber bestand"
 
 #: gerbview/tool_gerber.cpp:42
 msgid "Load DCodes"
@@ -11603,7 +11603,7 @@ msgstr "Alle lagen schonen"
 
 #: gerbview/tool_gerber.cpp:53
 msgid "&Export to Pcbnew"
-msgstr "&Exporteren naar PCBNew"
+msgstr "&Exporteer naar PCBNew"
 
 #: gerbview/tool_gerber.cpp:54
 msgid "Export data in pcbnew format"
@@ -11615,7 +11615,7 @@ msgstr "Lagen Op&slaan"
 
 #: gerbview/tool_gerber.cpp:59
 msgid "Save current layers (GERBER format)"
-msgstr "Opslaan huidige lager (GERBER formaat)"
+msgstr "Opslaan huidige lagen (GERBER formaat)"
 
 #: gerbview/tool_gerber.cpp:61
 msgid "Save Layers As..."
@@ -11699,7 +11699,7 @@ msgstr "Over gerbview gerber viewer"
 
 #: gerbview/tool_gerber.cpp:125
 msgid "&Miscellaneous"
-msgstr "&Diverse"
+msgstr "&Diversen"
 
 #: gerbview/tool_gerber.cpp:157
 msgid "New world"
@@ -11739,11 +11739,11 @@ msgstr "Zet polaire coordinaten aan"
 
 #: gerbview/tool_gerber.cpp:291
 msgid "Set units to inches"
-msgstr "Maten in inches"
+msgstr "Eenheden in inches"
 
 #: gerbview/tool_gerber.cpp:295
 msgid "Set units to millimeters"
-msgstr "Maten in millimeters"
+msgstr "Eenheden in millimeters"
 
 #: gerbview/tool_gerber.cpp:304
 msgid "Show spots in sketch mode"
@@ -11800,7 +11800,7 @@ msgstr "D code Bestand ext:"
 #: gerbview/readgerb.cpp:244
 #, c-format
 msgid "%d errors while reading Gerber file [%s]"
-msgstr "%d fouten bij het lezen van Gerber bestand [%s]"
+msgstr "%d fouten tijdens lezen van Gerber bestand [%s]"
 
 #: gerbview/readgerb.cpp:266
 #: gerbview/files.cpp:192
@@ -11860,7 +11860,7 @@ msgstr "Top pasta (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:134
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+msgstr "Keep-out laag (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:135
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
@@ -12140,7 +12140,7 @@ msgstr "Sneltoets configuratie en voorkeuren"
 
 #: common/hotkeys_basic.cpp:737
 msgid "Home directory"
-msgstr "home directory"
+msgstr "Home directory"
 
 #: common/hotkeys_basic.cpp:738
 msgid "Use home directory to load or store Hotkey config files"
@@ -12156,7 +12156,7 @@ msgstr "Gebruik kicad/template map om de Sneltoets config. bestanden te laden"
 
 #: common/hotkeys_basic.cpp:752
 msgid "Location"
-msgstr "Lokatie"
+msgstr "Locatie"
 
 #: common/hotkeys_basic.cpp:753
 msgid "Select hotkey configuration file location"
@@ -12240,7 +12240,7 @@ msgstr "Chinees (versimpeld)"
 
 #: common/edaappl.cpp:212
 msgid "Catalan"
-msgstr "Catalan"
+msgstr "Catalaans"
 
 #: common/edaappl.cpp:220
 msgid "Dutch"
