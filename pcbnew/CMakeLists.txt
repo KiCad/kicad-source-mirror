@@ -746,10 +746,12 @@ if( KICAD_SCRIPTING )
     )
 
     # python shell
-    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/python/kicad_pyshell/
-        DESTINATION ${KICAD_DATA}/scripting/kicad_pyshell
-        FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-    )
+    if ( KICAD_SCRIPTING_WXPYTHON )
+        install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/python/kicad_pyshell/
+            DESTINATION ${KICAD_DATA}/scripting/kicad_pyshell
+            FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+        )
+    endif()
 endif()
 
 
