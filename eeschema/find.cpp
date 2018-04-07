@@ -475,6 +475,7 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
             *m_CurrentSheet = *sheet;
             m_CurrentSheet->UpdateAllScreenReferences();
             SetScreen( sheet->LastScreen() );
+            sheet->LastScreen()->TestDanglingEnds();
         }
 
         // careful here
