@@ -92,6 +92,8 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         aFormatter->Print( 0, ".include \"%s\"\n", (const char*) full_path.c_str() );
     }
 
+    unsigned int NC_counter = 1;
+
     for( const auto& item : m_spiceItems )
     {
         if( !item.m_enabled )
@@ -130,8 +132,9 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
                 // Replace parenthesis with underscore to prevent parse issues with simulators
                 ReplaceForbiddenChars( netName );
 
+                // Borrow LTSpice's nomenclature for unconnected nets
                 if( netName.IsEmpty() )
-                    netName = wxT( "?" );
+                    netName = wxString::Format( wxT( "NC_%.2u" ), NC_counter++ );
 
                 aFormatter->Print( 0, "%s ", TO_UTF8( netName ) );
             }
