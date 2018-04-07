@@ -83,8 +83,11 @@ static void prepareHelpMenu( wxMenu* aParentMenu );
 
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
-    wxString    text;
-    wxMenuBar*  menuBar = new wxMenuBar();
+    // wxWidgets handles the Mac Application menu behind the scenes, but that means
+    // we always have to start from scratch with a new wxMenuBar.
+    wxMenuBar* oldMenuBar = GetMenuBar();
+    wxMenuBar* menuBar = new wxMenuBar();
+    wxString   text;
 
     // Recreate all menus:
 
@@ -144,6 +147,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     SetMenuBar( menuBar );
+    delete oldMenuBar;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     // Populate the Action Plugin sub-menu

@@ -158,21 +158,13 @@ void LIB_VIEW_FRAME::ReCreateVToolbar()
 // Virtual function
 void LIB_VIEW_FRAME::ReCreateMenuBar( void )
 {
-    // Create and try to get the current menubar
-    wxMenuBar* menuBar = GetMenuBar();
-
-    if( !menuBar )
-        menuBar = new wxMenuBar();
-
-    // Delete all existing menus so they can be rebuilt.
-    // This allows language changes of the menu text on the fly.
-    menuBar->Freeze();
-
-    while( menuBar->GetMenuCount() )
-        delete menuBar->Remove( 0 );
+    // wxWidgets handles the Mac Application menu behind the scenes, but that means
+    // we always have to start from scratch with a new wxMenuBar.
+    wxMenuBar* oldMenuBar = GetMenuBar();
+    wxMenuBar* menuBar = new wxMenuBar();
+    wxString   text;
 
     // Recreate all menus:
-    wxString text;
 
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
@@ -237,11 +229,6 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    menuBar->Thaw();
-
-    // Associate the menu bar with the frame, if no previous menubar
-    if( GetMenuBar() == NULL )
-        SetMenuBar( menuBar );
-    else
-        menuBar->Refresh();
+    SetMenuBar( menuBar );
+    delete oldMenuBar;
 }
