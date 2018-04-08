@@ -94,19 +94,12 @@ public:
     bool  CreateJobFile( const wxString& aFullFilename );
 
     /**
-     * Creates a Gerber job file in old gbr format
-     * @param aFullFilename = the full filename
-     * @return true, or false if the file cannot be created
-     */
-    bool  CreateGbrJobFile( const wxString& aFullFilename );
-
-    /**
      * Creates an Gerber job file in JSON format
      * @param aFullFilename = the full filename
      * @param aParams = true for a NPTH file, false for a PTH file
      * @return true, or false if the file cannot be created
      */
-    bool  CreateJSONJobFile( const wxString& aFullFilename );
+    bool  WriteJSONJobFile( const wxString& aFullFilename );
 
 private:
     /** @return SIDE_NONE if no silk screen layer is in list
@@ -203,6 +196,7 @@ private:
     {
         addIndent(); m_JSONbuffer << aParam;
     }
+
     void addJSONObject( const char* aParam )
     {
         addIndent(); m_JSONbuffer << aParam;
@@ -213,7 +207,6 @@ private:
     REPORTER* m_reporter;       // a reporter for messages (can be null)
     JOBFILE_PARAMS m_params;    // the list of various prms and data to write in a job file
     double m_conversionUnits;   // scaling factor to convert brd units to gerber units (mm)
-    bool m_useJSONformat;       // temporary option
     wxString m_JSONbuffer;      // a buffer to build the JSON data
     int m_indent;               // helper for JSON format: the current indentation value
 };
