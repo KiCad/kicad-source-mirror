@@ -191,7 +191,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     static wxString last_vrmlName;  // the last wrml file name built
 
     // If the board name has changed since the last export,
-    // do not use the old path, initialized by an other board
+    // do not use the old path, initialized by another board
     if( last_brdName.IsEmpty() || last_brdName != GetBoard()->GetFileName() )
     {
         last_brdName = GetBoard()->GetFileName();

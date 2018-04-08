@@ -697,7 +697,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             // PCB_EDIT_FRAME::SetCurItem() calls DisplayInfo().
             GetScreen()->SetCurItem( NULL );
             DisplayErrorMessage( this,
-                          _( "DRC error: this start point is inside or too close an other area" ) );
+                          _( "DRC error: this start point is inside or too close another area" ) );
             return 0;
         }
 
@@ -762,7 +762,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
         if( Settings().m_legacyDrcOn && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
         {
             DisplayErrorMessage( this,
-                          _( "DRC error: closing this area creates a DRC error with an other area" ) );
+                          _( "DRC error: closing this area creates a DRC error with another area" ) );
             m_canvas->MoveCursorToCrossHair();
             return false;
         }

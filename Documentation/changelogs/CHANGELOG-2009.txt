@@ -281,7 +281,7 @@ Component library object and other minor improvements.
     Speed up ZONE_CONTAINER::Copy method
     Speed up NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) by using afast binary search
     Switch to kbool V2.1. This version solves others problems in zones calculations.
-    Adding an other way to generate thermal shape; DO NOT USE: this is for kbool tests only
+    Adding another way to generate thermal shape; DO NOT USE: this is for kbool tests only
     (I am thinking some bugs are remaining, so i am always working on kbool tests.
     Klaas Olwerda is supporting me)
 

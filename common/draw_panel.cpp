@@ -142,7 +142,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ignoreMouseEvents = false;
     // Be sure a mouse release button event will be ignored when creating the canvas
     // if the mouse click was not made inside the canvas (can happen sometimes, when
-    // launching an editor from a double click made in an other frame)
+    // launching a editor from a double click made in another frame)
     m_ignoreNextLeftButtonRelease = true;
 
     m_mouseCaptureCallback = NULL;
@@ -778,7 +778,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
         org.y += KiROUND( gridSize.y );
 
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is
-    // high and grid is slowly drawn on some platforms. An other way using blit transfert was used,
+    // high and grid is slowly drawn on some platforms. Another way using blit transfert was used,
     // a long time ago, but it did not give very good results.
     // The better way is highly dependent on the platform and the graphic card.
     int xpos;

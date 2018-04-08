@@ -389,8 +389,9 @@ public:
      * Function TestforNonOrphanLabel
      * Sheet labels are expected to be connected to a hierarchical label.
      * Hierarchical labels are expected to be connected to a sheet label.
-     * Global labels are expected to be not orphan (connected to at least one other global label.
-     * this function tests the connection to an other suitable label
+     * Global labels are expected to be not orphan (connected to at least one
+     * other global label.
+     * This function tests the connection to another suitable label.
      */
     void TestforNonOrphanLabel( unsigned aNetItemRef, unsigned aStartNet );
 

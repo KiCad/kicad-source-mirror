@@ -53,8 +53,8 @@ extern const wxString CommentERC_V[];
 #define ERCE_DUPLICATE_SHEET_NAME 1    // duplicate sheet names within a given sheet
 #define ERCE_PIN_NOT_CONNECTED    2    // pin not connected and not no connect symbol
 #define ERCE_PIN_NOT_DRIVEN       3    // pin connected to some others pins but no pin to drive it
-#define ERCE_PIN_TO_PIN_WARNING   4    // pin connected to an other pin: warning level
-#define ERCE_PIN_TO_PIN_ERROR     5    // pin connected to an other pin: error level
+#define ERCE_PIN_TO_PIN_WARNING   4    // pin connected to another pin: warning level
+#define ERCE_PIN_TO_PIN_ERROR     5    // pin connected to another pin: error level
 #define ERCE_HIERACHICAL_LABEL    6    // mismatch between hierarchical labels and pins sheets
 #define ERCE_NOCONNECT_CONNECTED  7    // a no connect symbol is connected to more than 1 pin
 #define ERCE_GLOBLABEL            8    // global label not connected to any other global label

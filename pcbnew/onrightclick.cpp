@@ -632,7 +632,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         }
     }
 
-    // Allows switching to an other track/via size when routing
+    // Allows switching to another track/via size when routing
     AddMenuItem( PopMenu, Append_Track_Width_List( GetBoard() ), ID_POPUP_PCB_SELECT_WIDTH,
                  _( "Select Track Width" ), KiBitmap( width_track_xpm ) );
 

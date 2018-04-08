@@ -484,7 +484,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         // The archive contains Gerber and/or Excellon drill files. Use the right loader.
         // However it can contain a few other files (reports, pdf files...),
         // which will be skipped.
-        // Gerber files ext is usually "gbr", but can be also an other value, starting by "g"
+        // Gerber files ext is usually "gbr", but can be also another value, starting by "g"
         // old gerber files ext from kicad is .pho
         // drill files do not have a well defined ext
         // It is .drl in kicad, but .txt in Altium for instance

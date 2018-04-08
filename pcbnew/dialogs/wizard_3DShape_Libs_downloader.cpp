@@ -110,7 +110,7 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER::WIZARD_3DSHAPE_LIBS_DOWNLOADER( wxWindow* aParen
     // and not fully visible.
     // Forcing deselection does not work, at least on W7 with wxWidgets 3.0.2
     // So (and also because m_textCtrlGithubURL and m_downloadDir are rarely modified
-    // the focus is given to an other widget.
+    // the focus is given to another widget.
     m_hyperlinkGithubKicad->SetFocus();
 
     Connect( wxEVT_RADIOBUTTON, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER::OnSourceCheck ), NULL, this );

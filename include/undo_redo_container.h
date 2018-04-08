@@ -90,7 +90,7 @@ private:
                                         * edited item. */
     KICAD_T        m_pickedItemType;   /* type of schematic or board item that is concerned */
 
-    EDA_ITEM*      m_link;             /* Pointer on an other item. Used in undo redo command
+    EDA_ITEM*      m_link;             /* Pointer on another item. Used in undo redo command
                                         * used when a duplicate exists i.e. when an item is
                                         * modified, and the copy of initial item exists (the
                                         * duplicate) m_Item points the duplicate (i.e the old

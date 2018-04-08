@@ -183,7 +183,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
  *          its status becomes UR_DELETED
  *          the aAuxiliaryList corresponding picker is removed (if not found : set an error)
  *  >> if the picked zone was flagged as UR_NEW, and was after deleted ,
- *  perhaps combined with an other zone  (i.e. not found in board list):
+ *  perhaps combined with another zone  (i.e. not found in board list):
  *          the picker is removed
  *          the zone itself if really deleted
  *          the aAuxiliaryList corresponding picker is removed (if not found : set an error)
@@ -261,7 +261,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 {
                     DBG( printf(
                         "UpdateCopyOfZonesList(): item not found in aAuxiliaryList,"
-                        "combined with an other zone\n" ) );
+                        "combined with another zone\n" ) );
                 }
                 break;
             }

@@ -371,7 +371,7 @@ public:
     /**
      * Function GetNegativeItemsColor
      * @return the color of negative items.
-     * This is usually the background color, but can be an other color
+     * This is usually the background color, but can be another color
      * in order to see negative objects
      */
     COLOR4D GetNegativeItemsColor();

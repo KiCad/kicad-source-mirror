@@ -213,7 +213,7 @@ static bool scriptingSetup()
     kipython = fn.GetPath();
 
     // If our python install is existing inside kicad, use it
-    // Note: this is usefull only when an other python version is installed
+    // Note: this is usefull only when another python version is installed
     if( wxDirExists( kipython ) )
     {
         // clear any PYTHONPATH and PYTHONHOME env var definition: the default

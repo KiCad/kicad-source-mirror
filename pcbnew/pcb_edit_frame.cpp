@@ -1285,7 +1285,7 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
 
             frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
             // Because the schematic editor frame is not on screen, iconize it:
-            // However, an other valid option is to do not iconize the schematic editor frame
+            // However, another valid option is to do not iconize the schematic editor frame
             // and show it
             frame->Iconize( true );
             // we show the schematic editor frame, because do not show is seen as

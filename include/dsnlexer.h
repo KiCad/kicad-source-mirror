@@ -219,7 +219,7 @@ public:
      * Useable only for DSN lexers which share the same LINE_READER
      * Synchronizes the pointers handling the data read by the LINE_READER
      * Allows 2 DNSLEXER to share the same current line, when switching from a
-     * DNSLEXER to an other DNSLEXER
+     * DNSLEXER to another DNSLEXER
      * @param aLexer = the model
      * @return true if the sync can be made ( at least the same line reader )
      */

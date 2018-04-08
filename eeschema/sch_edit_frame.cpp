@@ -1286,7 +1286,7 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
 
 // This method is not the same as OnRemapSymbols.
 // It allows renaming the lib id of groups of components when a symbol
-// has moved from a library to an other library.
+// has moved from a library to another library.
 // For instance to rename libname1::mysymbol to libname2::mysymbol
 // or any other lib id name
 void SCH_EDIT_FRAME::OnEditComponentSymbolsId( wxCommandEvent& event )

@@ -39,7 +39,7 @@
 #include <class_board.h>
 #include "status_text_reporter.h"
 #include <gl_context_mgr.h>
-#include <profile.h>        // To use GetRunningMicroSecs or an other profiling utility
+#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>

@@ -34,7 +34,7 @@ class PLOTTER;
 
 /**
  * This class handle bitmap images in KiCad.
- * It is not intended to be used alone, but inside an other class,
+ * It is not intended to be used alone, but inside another class,
  * so all methods are protected ( or private )
  * It is used in SCH_BITMAP class and WS_DRAW_ITEM_BITMAP (and other in future)
  *

@@ -480,7 +480,7 @@ void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
             token = NextTok();
         else
         {
-            // If an other token than T_LEFT is read here, this is an error
+            // If another token than T_LEFT is read here, this is an error
             // however, due to a old bug in kicad, the token T_end can be found
             // without T_LEFT in a very few .wks files (perhaps only one in a demo).
             // So this ugly hack disables the error detection.

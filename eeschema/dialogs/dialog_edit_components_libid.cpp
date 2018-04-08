@@ -24,7 +24,7 @@
 
 /**
  * @file eeschema/dialogs/dialog_edit_components_libid.cpp
- * @brief Dialog to remap library id of components to an other library id
+ * @brief Dialog to remap library id of components to another library id
  */
 
 
@@ -81,9 +81,9 @@ public:
  * DIALOG_EDIT_COMPONENTS_LIBID is a dialog to globally edit the LIB_ID of groups if components
  * having the same initial LIB_ID.
  * this is useful when you want:
- *  to move a symbol from a symbol library to an other symbol library
+ *  to move a symbol from a symbol library to another symbol library
  *  to change the nickname of a library
- *  globally replace the symbol used by a group of components by an other symbol.
+ *  globally replace the symbol used by a group of components by another symbol.
  */
 class DIALOG_EDIT_COMPONENTS_LIBID : public DIALOG_EDIT_COMPONENTS_LIBID_BASE
 {

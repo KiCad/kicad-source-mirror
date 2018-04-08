@@ -245,7 +245,7 @@ protected:
     /**
      * Open the library viewer only to browse library contents.
      * If the viewed is already opened from this, raise the viewer
-     * If the viewed is already opened from an other window, close it and reopen
+     * If the viewed is already opened from another window, close it and reopen
      */
     void OnOpenLibraryViewer( wxCommandEvent& event );
 

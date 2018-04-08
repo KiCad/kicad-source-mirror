@@ -123,7 +123,7 @@ private:
     END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
 
     /// useful to avoid false start block in certain cases
-    /// (like switch from a sheet to an other sheet
+    /// (like switch from a sheet to another sheet
     /// >= 0 (or >= n) if a block can start
     int     m_canStartBlock;
 

@@ -1045,7 +1045,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         HPGL_plotter = new HPGL_PLOTTER();
 
         /* HPGL options are a little more convoluted to compute, so
-           they're split in an other function */
+           they're split in another function */
         ConfigureHPGLPenSizes( HPGL_plotter, aPlotOpts );
         plotter = HPGL_plotter;
         break;

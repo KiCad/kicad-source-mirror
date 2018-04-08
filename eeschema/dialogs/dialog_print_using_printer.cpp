@@ -274,7 +274,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
     // modal for its caller only.
-    // An other reason is the fact when closing the frame without this option,
+    // another reason is the fact when closing the frame without this option,
     // all top level frames are reenabled.
     // With this option, only the parent is reenabled.
     // Reenabling all top level frames should be made by the parent dialog.
@@ -435,7 +435,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     // For an obscure reason, OffsetLogicalOrigin creates issues,
     // under some circumstances, when yoffset is not always null
-    // and changes from a page to an other page
+    // and changes from a page to another page
     // This is only a workaround, not a fix
     // see https://bugs.launchpad.net/kicad/+bug/1464773
     // xoffset does not create issues.

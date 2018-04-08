@@ -178,7 +178,7 @@ public:
 
     /**
      * Page layout editor can show the title block using a page number
-     * 1 or an other number.
+     * 1 or another number.
      * This is because some items can be shown (or not) only on page 1
      * (a feature  which look like word processing option
      * "page 1 differs from other pages".

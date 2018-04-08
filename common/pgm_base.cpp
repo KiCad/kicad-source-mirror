@@ -734,7 +734,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
 
     if( !first_time )
     {
-        // If we are here, the user has selected an other language.
+        // If we are here, the user has selected another language.
         // Therefore the new prefered language name is stored in common config.
         // Do NOT store the wxWidgets language Id, it can change between wxWidgets
         // versions, for a given language

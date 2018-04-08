@@ -1128,7 +1128,7 @@ removed: (common/infospgm.cpp) is no longer needed
     When a sheet is deleted by block delete. it is put in undo list.
     It is really deleted after 10 changes (when the undo list is full).
     At this time, the associated data is also deleted.
-    If an other (not deleted) sheet shares the same data, this data is lost.
+    If another (not deleted) sheet shares the same data, this data is lost.
     Need work to solve this problem and keep the undo/redo feature.
 
 

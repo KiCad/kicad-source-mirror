@@ -576,7 +576,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 
         if( !m_BrdSettings->m_NetClasses.Add( nc ) )
         {
-            // this netclass cannot be added because an other netclass with the same name exists
+            // this netclass cannot be added because another netclass with the same name exists
             // Should not occur because OnAddNetclassClick() tests for existing NetClass names
             wxString msg;
             msg.Printf( wxT( "CopyRulesListToBoard(): The NetClass \"%s\" already exists. Skip" ),

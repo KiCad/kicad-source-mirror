@@ -472,11 +472,11 @@ public:
      * created if it is not already in existence.
      *
      * @param aParent is the parent window for wxWidgets. Usually the PCB editor frame
-     * but can be an other dialog
+     * but can be another dialog
      * if aParent == NULL (default), the parent will be the PCB editor frame
      * and the dialog will be not modal (just float on parent
      * if aParent is specified, the dialog will be modal.
-     * The modal mode is mandatory if the dialog is created from an other dialog, not
+     * The modal mode is mandatory if the dialog is created from another dialog, not
      * from the PCB editor frame
      */
     void ShowDRCDialog( wxWindow* aParent = NULL );

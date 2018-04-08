@@ -337,7 +337,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         {
             D_PAD* pad = pads[ii];
 
-            /* No problem if pads are on an other layer,
+            /* No problem if pads are on another layer,
              * But if a drill hole exists	(a pad on a single layer can have a hole!)
              * we must test the hole
              */
@@ -483,7 +483,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
         /*	We have changed axis:
          *  the reference segment is Horizontal.
-         *  3 cases : the segment to test can be parallel, perpendicular or have an other direction
+         *  3 cases : the segment to test can be parallel, perpendicular or have another direction
          */
         if( segStartPoint.y == segEndPoint.y ) // parallel segments
         {

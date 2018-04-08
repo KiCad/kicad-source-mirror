@@ -3754,7 +3754,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
     /* Save field name, if necessary
      * Field name is saved only if it is not the default name.
      * Just because default name depends on the language and can change from
-     * a country to an other
+     * a country to another
      */
     wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
 

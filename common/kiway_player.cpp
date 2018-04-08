@@ -112,7 +112,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
         // We do not want to disable top level windows which are child of the modal one,
         // if they are enabled.
         // An example is an aui toolbar which was moved
-        // or a dialog or an other frame or miniframe opened by the modal one.
+        // or a dialog or another frame or miniframe opened by the modal one.
         wxWindowList wlist = GetChildren();
         std::vector<wxWindow*> enabledTopLevelWindows;
 

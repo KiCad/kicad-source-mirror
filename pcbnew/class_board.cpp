@@ -407,8 +407,8 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
      * on other layers and they change the layer mask.  They can be a track
      * end or not.  They will be analyzer later and vias on terminal points
      * of the track will be considered as part of this track if they do not
-     * connect segments of another track together and will be considered as
-     * part of an other track when removing the via, the segments of that other
+     * connect segments of a other track together and will be considered as
+     * part of a other track when removing the via, the segments of that other
      * track are disconnected.
      */
     for( ; ; )
@@ -1920,16 +1920,16 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
             continue;
 
         /* If a track is found, this via connects also other segments of
-         * another track.  This case happens when a via ends the selected
+         * the other track.  This case happens when a via ends the selected
          * track but must we consider this via is on the selected track, or
-         * on another track.
+         * on a other track.
          * (this is important when selecting a track for deletion: must this
          * via be deleted or not?)
          * We consider this via to be on our track if other segments connected
          * to this via remain connected when removing this via.
          * We search for all other segments connected together:
          * if they are on the same layer, then the via is on the selected track;
-         * if they are on different layers, the via is on another track.
+         * if they are on different layers, the via is on a other track.
          */
         LAYER_NUM layer = track->GetLayer();
 
@@ -1937,8 +1937,8 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
         {
             if( layer != track->GetLayer() )
             {
-                // The via connects segments of another track: it is removed
-                // from list because it is member of another track
+                // The via connects segments of a other track: it is removed
+                // from list because it is member of a other track
                 via->SetState( BUSY, false );
                 break;
             }
@@ -1990,7 +1990,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
         D_PAD * pad_on_end = GetPad( track->GetEnd(), layer_set );
 
         // a segment fully inside a pad does not contribute to the track len
-        // (an other track end inside this pad will contribute to this lenght)
+        // (another track end inside this pad will contribute to this lenght)
         if( pad_on_start && ( pad_on_start == pad_on_end ) )
             continue;
 

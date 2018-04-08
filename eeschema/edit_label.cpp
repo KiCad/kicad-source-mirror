@@ -127,7 +127,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
 
 /*
- * OnConvertTextType is a command event handler to change a text type to an other one.
+ * OnConvertTextType is a command event handler to change a text type to another one.
  * The new text, label, hierarchical label, or global label is created from the old text
  * The old text is deleted.
  * A tricky case is when the 'old" text is being edited (i.e. moving)

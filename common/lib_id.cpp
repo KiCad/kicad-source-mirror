@@ -166,7 +166,7 @@ int LIB_ID::Parse( const UTF8& aId )
         return partNdx;     // Error: no library item name.
 
     // Be sure the item name is valid.
-    // Some chars can be found in legacy files converted files from an other EDA tools.
+    // Some chars can be found in legacy files converted files from other EDA tools.
     std::string fpname = aId.substr( partNdx, revNdx-partNdx );
     ReplaceIllegalFileNameChars( &fpname, '_' );
     SetLibItemName( UTF8( fpname ) );

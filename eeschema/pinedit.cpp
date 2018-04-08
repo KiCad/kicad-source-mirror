@@ -253,7 +253,7 @@ void LIB_EDIT_FRAME::PlacePin()
 
     LIB_PART*      part = GetCurPart();
 
-    // Test for an other pin in same new position in other units:
+    // Test for another pin in same new position in other units:
     bool     ask_for_pin = true;
 
     for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
