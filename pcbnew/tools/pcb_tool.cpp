@@ -131,7 +131,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
                 newItem->ClearFlags();
                 preview.Remove( newItem.get() );
 
-                aPlacer->PlaceItem( newItem.get() );
+                aPlacer->PlaceItem( newItem.get(), commit );
 
                 if( newItem->Type() == PCB_MODULE_T )
                 {
@@ -139,7 +139,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
                     module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Remove, &preview, _1 ) );
                 }
 
-                commit.Add( newItem.release() );
+                newItem.release();
                 commit.Push( aCommitMessage );
 
                 controls()->CaptureCursor( false );
@@ -186,6 +186,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
         {
             // track the cursor
             newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            aPlacer->SnapItem( newItem.get() );
 
             // Show a preview of the item
             view()->Update( &preview );
@@ -227,4 +228,15 @@ SELECTION& PCB_TOOL::selection()
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selTool->GetSelection();
     return selection;
+}
+
+
+void INTERACTIVE_PLACER_BASE::SnapItem( BOARD_ITEM *aItem )
+{
+    // Base implementation performs no snapping
+}
+
+void INTERACTIVE_PLACER_BASE::PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit )
+{
+    aCommit.Add( aItem );
 }
