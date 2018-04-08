@@ -239,7 +239,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
 
 int DIALOG_SIM_SETTINGS::ShowModal()
 {
-    // Fill out comboboxes that allow to select nets
+    // Fill out comboboxes that allows one to select nets
     // Map comoboxes to their current values
     std::map<wxComboBox*, wxString> cmbNet = {
         { m_noiseMeas, m_noiseMeas->GetStringSelection() },
@@ -265,7 +265,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
     }
 
 
-    // Fill out comboboxes that allow to select power sources
+    // Fill out comboboxes that allows one to select power sources
     std::map<wxComboBox*, wxString> cmbSrc = {
         { m_dcSource1, m_dcSource1->GetStringSelection() },
         { m_dcSource2, m_dcSource2->GetStringSelection() },

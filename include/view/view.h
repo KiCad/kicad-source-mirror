@@ -50,7 +50,7 @@ class VIEW_RTREE;
  *    Foreseen for preview windows and printing.
  * Items in a view are grouped in layers (not to be confused with Kicad's PCB layers). Each layer is
  * identified by an integer number. Visibility and rendering order can be set individually for each
- * of the layers. Future versions of the VIEW will also allow to assign different layers to different
+ * of the layers. Future versions of the VIEW will also allows one to assign different layers to different
  * rendering targets, which will be composited at the final stage by the GAL.
  * The VIEW class also provides fast methods for finding all visible objects that are within a given
  * rectangular area, useful for object selection/hit testing.

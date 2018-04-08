@@ -526,7 +526,7 @@ const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
  *      - SMAA::detectMSAAOrder and
  *      - SMAA::msaaReorder
  *
- *    These functions allow to match the standard multisample patterns by
+ *    These functions allows one to match the standard multisample patterns by
  *    detecting the subsample order for a specific GPU, and reordering
  *    them appropriately.
  *
