@@ -38,7 +38,7 @@ class CONNECTIVITY_DATA;
 /**
  * Class EDIT_TOOL
  *
- * The interactive edit tool. Allows to move, rotate, flip and change properties of items selected
+ * The interactive edit tool. Allows one to move, rotate, flip and change properties of items selected
  * using the pcbnew.InteractiveSelection tool.
  */
 

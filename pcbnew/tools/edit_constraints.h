@@ -35,7 +35,7 @@ class EDIT_POINTS;
 /**
  * Class EDIT_CONSTRAINT
  *
- * Allows to describe constraints between two edit handles. After the constrained handle is changed,
+ * Allows one to describe constraints between two edit handles. After the constrained handle is changed,
  * Apply() has to be called to fix its coordinates according to the implemented constraint.
  */
 template<class EDIT_TYPE>

@@ -38,7 +38,7 @@ class DIALOG_POSITION_RELATIVE;
 /**
  * Class POSITION_RELATIVE_TOOL
  *
- * The interactive edit tool. Allows to move, rotate, flip and change properties of items selected
+ * The interactive edit tool. Allows one to move, rotate, flip and change properties of items selected
  * using the pcbnew.InteractiveSelection tool.
  */
 

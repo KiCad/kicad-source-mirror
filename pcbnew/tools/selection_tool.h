@@ -251,7 +251,7 @@ private:
 
     /**
      * Function pickSmallestComponent()
-     * Allows to find the smallest (in terms of bounding box area) item from the list.
+     * Allows one to find the smallest (in terms of bounding box area) item from the list.
      *
      * @param aCollector containes the list of items.
      */

@@ -1132,7 +1132,7 @@ float2 SMAADepthEdgeDetectionPS(float2 texcoord,
 #if !defined(SMAA_DISABLE_DIAG_DETECTION)
 
 /**
- * Allows to decode two binary values from a bilinear-filtered access.
+ * Allows one to decode two binary values from a bilinear-filtered access.
  */
 float2 SMAADecodeDiagBilinearAccess(float2 e) {
     // Bilinear access for fetching 'e' have a 0.25 offset, and we are
