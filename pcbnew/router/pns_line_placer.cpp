@@ -968,10 +968,28 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
 
     LINE pl = Trace();
 
-    if( m_currentMode == RM_MarkObstacles &&
-        !Settings().CanViolateDRC() &&
-        m_world->CheckColliding( &pl ) )
+    if( m_currentMode == RM_MarkObstacles )
+    {
+        // Mark Obstacles is sort of a half-manual, half-automated mode in which the
+        // user has more responsibility and authority.
+
+        if( aEndItem )
+        {
+            // The user has indicated a connection should be made.  If either the
+            // trace or endItem is netless, then allow the connection by adopting the net of the other.
+            if( m_currentNet <= 0 )
+            {
+                m_currentNet = aEndItem->Net();
+                pl.SetNet( m_currentNet );
+            }
+            else if (aEndItem->Net() <= 0 )
+                aEndItem->SetNet( m_currentNet );
+        }
+
+        // Collisions still prevent fixing unless "Allow DRC violations" is checked
+        if( !Settings().CanViolateDRC() && m_world->CheckColliding( &pl ) )
             return false;
+    }
 
     const SHAPE_LINE_CHAIN& l = pl.CLine();
 

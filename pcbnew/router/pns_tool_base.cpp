@@ -120,9 +120,10 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
     if( aLayer > 0 )
         tl = aLayer;
 
-    ITEM* prioritized[4];
+    static const int candidateCount = 5;
+    ITEM* prioritized[candidateCount];
 
-    for( int i = 0; i < 4; i++ )
+    for( int i = 0; i < candidateCount; i++ )
         prioritized[i] = 0;
 
     ITEM_SET candidates = m_router->QueryHoverItems( aWhere );
@@ -139,7 +140,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
         //if( item->Parent() && !item->Parent()->ViewIsVisible() )
         //    continue;
 
-        if( aNet < 0 || item->Net() == aNet )
+        if( aNet <= 0 || item->Net() == aNet )
         {
             if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
             {
@@ -159,11 +160,20 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
                     prioritized[1] = item;
             }
         }
+        // Allow unconnected items as last resort in RM_MarkObstacles mode
+        else if ( item->Net() == 0 && m_router->Settings().Mode() == RM_MarkObstacles )
+        {
+            if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
+                continue;
+
+            if( item->Layers().Overlaps( tl ) )
+                prioritized[4] = item;
+        }
     }
 
     ITEM* rv = NULL;
 
-    for( int i = 0; i < 4; i++ )
+    for( int i = 0; i < candidateCount; i++ )
     {
         ITEM* item = prioritized[i];
 
@@ -274,7 +284,8 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
-    if( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 )
+    if( m_router->Settings().Mode() != RM_MarkObstacles &&
+        ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 ) )
     {
         m_endSnapPoint = snapToItem( snapEnabled, nullptr, mousePos );
         controls()->ForceCursorPosition( true, m_endSnapPoint );
