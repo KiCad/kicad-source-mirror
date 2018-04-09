@@ -34,6 +34,8 @@
 #include <memory>
 
 #include <math/vector2d.h>
+#include <geometry/shape_poly_set.h>
+#include <class_zone.h>
 
 class CN_CLUSTER;
 class CN_CONNECTIVITY_ALGO;
@@ -57,8 +59,14 @@ struct CN_DISJOINT_NET_ENTRY
 
 struct CN_ZONE_ISOLATED_ISLAND_LIST
 {
-    ZONE_CONTAINER *m_zone;
-    std::vector<int> m_islands;
+    CN_ZONE_ISOLATED_ISLAND_LIST( ZONE_CONTAINER* aZone ) :
+        m_zone( aZone ),
+        m_lastPolys( aZone->GetFilledPolysList() )
+    {}
+
+    ZONE_CONTAINER*      m_zone;
+    const SHAPE_POLY_SET m_lastPolys;
+    std::vector<int>     m_islands;
 };
 
 struct RN_DYNAMIC_LINE

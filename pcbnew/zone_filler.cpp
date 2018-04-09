@@ -97,9 +97,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         if( zone->GetIsKeepout() )
             continue;
 
-        CN_ZONE_ISOLATED_ISLAND_LIST l;
-        l.m_zone = zone;
-        toFill.push_back( l );
+        toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST(zone) );
     }
 
     for( unsigned i = 0; i < toFill.size(); i++ )
@@ -117,7 +115,6 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     }
 
     m_next = 0;
-    m_out_of_date = false;
     m_count_done = 0;
     std::vector<std::thread> fillWorkers;
 
@@ -131,9 +128,6 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
                 SHAPE_POLY_SET rawPolys, finalPolys;
                 ZONE_CONTAINER* zone = toFill[i].m_zone;
                 fillSingleZone( zone, rawPolys, finalPolys );
-
-                if( aCheck && zone->GetFilledPolysList().GetHash() != finalPolys.GetHash() )
-                    m_out_of_date.store( true );
 
                 zone->SetRawPolysList( rawPolys );
                 zone->SetFilledPolysList( finalPolys );
@@ -170,6 +164,8 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     connectivity->SetProgressReporter( m_progressReporter );
     connectivity->FindIsolatedCopperIslands( toFill );
 
+    bool outOfDate = false;
+
     for( auto& zone : toFill )
     {
         std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
@@ -181,11 +177,14 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         }
 
         zone.m_zone->SetFilledPolysList( poly );
+
+        if( aCheck && zone.m_lastPolys.GetHash() != poly.GetHash() )
+            outOfDate = true;
     }
 
-    if( aCheck && m_out_of_date )
+    if( aCheck && outOfDate )
     {
-        bool cancel = !IsOK( nullptr, _( "Zone fills may be out-of-date. Re-fill all zones?" ) );
+        bool cancel = !IsOK( nullptr, _( "Zone fills are out-of-date. Re-fill?" ) );
 
         if( m_progressReporter )
         {

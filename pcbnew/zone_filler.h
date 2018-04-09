@@ -122,7 +122,6 @@ private:
     std::atomic_size_t m_next;          // An index into the vector of zones to fill.
                                         // Used by the variuos parallel thread sets during
                                         // fill operations.
-    std::atomic_bool   m_out_of_date;
     std::atomic_size_t m_count_done;
 };
 
