@@ -152,7 +152,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         for( auto marker : markers )
             commit.Add( marker );
 
-        commit.Push( wxEmptyString, false );
+        commit.Push( wxEmptyString, false, false );
     };
 
     // Returns false if we should return false from call site, or true to continue

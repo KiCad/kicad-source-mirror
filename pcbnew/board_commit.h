@@ -42,7 +42,9 @@ public:
 
     virtual ~BOARD_COMMIT();
 
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ), bool aCreateUndoEntry = true ) override;
+    virtual void Push( const wxString& aMessage = wxT( "A commit" ),
+                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) override;
+
     virtual void Revert() override;
 
 private:

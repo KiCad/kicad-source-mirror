@@ -56,7 +56,7 @@ BOARD_COMMIT::~BOARD_COMMIT()
 }
 
 
-void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
+void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST undoList;
@@ -283,7 +283,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
         panel->RedrawRatsnest();
     }
 
-    frame->OnModify();
+    if( aSetDirtyBit )
+        frame->OnModify();
+
     frame->UpdateMsgPanel();
 
     clear();

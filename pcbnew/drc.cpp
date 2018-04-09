@@ -99,7 +99,7 @@ void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
     BOARD_COMMIT commit( m_pcbEditorFrame );
     commit.Add( aMarker );
-    commit.Push( wxEmptyString, false );
+    commit.Push( wxEmptyString, false, false );
 }
 
 
@@ -339,7 +339,7 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
     }
 
     if( aCreateMarkers )
-        commit.Push( wxEmptyString, false );
+        commit.Push( wxEmptyString, false, false );
 
     return nerrors;
 }

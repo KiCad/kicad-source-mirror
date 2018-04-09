@@ -130,7 +130,8 @@ public:
     COMMIT& Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED );
 
     ///> Executes the changes.
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ), bool aCreateUndoEntry = true ) = 0;
+    virtual void Push( const wxString& aMessage = wxT( "A commit" ),
+                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) = 0;
 
     ///> Revertes the commit by restoring the modifed items state.
     virtual void Revert() = 0;
