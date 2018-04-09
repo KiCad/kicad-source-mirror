@@ -182,9 +182,9 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
             outOfDate = true;
     }
 
-    if( aCheck && outOfDate )
+    if( aCheck )
     {
-        bool cancel = !IsOK( nullptr, _( "Zone fills are out-of-date. Re-fill?" ) );
+        bool cancel = !outOfDate || !IsOK( nullptr, _( "Zone fills are out-of-date. Re-fill?" ) );
 
         if( m_progressReporter )
         {
