@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -87,7 +87,10 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizerRenderOptions->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	
-	bSizeLeft->Add( fgSizerRenderOptions, 1, wxEXPAND, 5 );
+	bSizeLeft->Add( fgSizerRenderOptions, 0, wxEXPAND|wxBOTTOM, 5 );
+	
+	
+	bSizeLeft->Add( 0, 10, 0, 0, 5 );
 	
 	m_staticText3DmodelVisibility = new wxStaticText( this, wxID_ANY, _("3D model visibility:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3DmodelVisibility->Wrap( -1 );
@@ -128,7 +131,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer3DVisibility->Add( m_checkBox3DshapesVirtual, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizeLeft->Add( fgSizer3DVisibility, 1, wxEXPAND, 5 );
+	bSizeLeft->Add( fgSizer3DVisibility, 0, wxEXPAND, 5 );
 	
 	
 	bSizerUpper->Add( bSizeLeft, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
@@ -190,9 +193,12 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizerShowBrdLayersOpts->Add( m_checkBoxAdhesive, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizeLayer->Add( fgSizerShowBrdLayersOpts, 1, wxEXPAND, 5 );
+	bSizeLayer->Add( fgSizerShowBrdLayersOpts, 0, wxEXPAND, 5 );
 	
-	m_staticTextUserLayers = new wxStaticText( this, wxID_ANY, _("User layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	bSizeLayer->Add( 0, 10, 0, 0, 5 );
+	
+	m_staticTextUserLayers = new wxStaticText( this, wxID_ANY, _("User layers (not shown in realistic mode):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUserLayers->Wrap( -1 );
 	m_staticTextUserLayers->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
@@ -222,7 +228,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizerShowUserLayersOpts->Add( m_checkBoxECO, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizeLayer->Add( fgSizerShowUserLayersOpts, 1, wxEXPAND, 5 );
+	bSizeLayer->Add( fgSizerShowUserLayersOpts, 0, wxEXPAND, 5 );
 	
 	
 	bSizerRight->Add( bSizeLayer, 1, wxEXPAND, 5 );
@@ -234,7 +240,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
 	
 	m_staticlineH = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticlineH, 0, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( m_staticlineH, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -243,7 +249,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
