@@ -793,13 +793,21 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_DELETE:
-        if ( !itemInEdit )
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-        if( GetDrawItem() )
+        if( blocInProgress )
         {
-            cmd.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
+            cmd.SetId( ID_POPUP_DELETE_BLOCK );
             Process_Special_Functions( cmd );
+        }
+        else
+        {
+            if( !itemInEdit )
+                SetDrawItem( LocateItemUsingCursor( aPosition ) );
+
+            if( GetDrawItem() )
+            {
+                cmd.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
+                Process_Special_Functions( cmd );
+            }
         }
         break;
 
