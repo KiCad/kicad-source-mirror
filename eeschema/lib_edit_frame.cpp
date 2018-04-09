@@ -1266,21 +1266,36 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 {
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     SCH_SCREEN* screen = GetScreen();
+    BLOCK_SELECTOR& block = screen->m_BlockLocate;
+
+    // Change the current item to a block selection, if there were no items in the block selector
+    if( screen->GetCurItem() && block.GetState() == STATE_NO_BLOCK )
+    {
+        ITEM_PICKER picker( screen->GetCurItem() );
+        block.PushItem( picker );
+        block.SetState( STATE_BLOCK_INIT );
+
+        const wxPoint& cursorPos = GetCrossHairPosition();
+        block.SetLastCursorPosition( cursorPos );
+        block.SetOrigin( cursorPos );
+        block.SetEnd( cursorPos );
+    }
+
     // Allows block rotate operation on hot key.
-    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    if( block.GetState() != STATE_NO_BLOCK )
     {
         if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X )
         {
             m_canvas->MoveCursorToCrossHair();
-            screen->m_BlockLocate.SetMessageBlock( this );
-            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
+            block.SetMessageBlock( this );
+            block.SetCommand( BLOCK_MIRROR_X );
             HandleBlockEnd( &dc );
         }
         else if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y )
         {
             m_canvas->MoveCursorToCrossHair();
-            screen->m_BlockLocate.SetMessageBlock( this );
-            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_Y );
+            block.SetMessageBlock( this );
+            block.SetCommand( BLOCK_MIRROR_Y );
             HandleBlockEnd( &dc );
         }
     }
