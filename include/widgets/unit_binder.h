@@ -27,6 +27,7 @@
 
 #include <common.h>
 #include <base_units.h>
+#include <base_struct.h>
 #include <libeval/numeric_evaluator.h>
 
 

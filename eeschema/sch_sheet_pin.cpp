@@ -218,7 +218,7 @@ bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
     wxCHECK_MSG( GetParent() != NULL, false,
                  wxT( "Sheet pin " ) + m_Text + wxT( " does not have a parent sheet!" ) );
 
-    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
 
     if( SCH_ITEM::Matches( m_Text, aSearchData ) )
     {
@@ -341,11 +341,9 @@ void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-wxString SCH_SHEET_PIN::GetSelectMenuText() const
+wxString SCH_SHEET_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString tmp;
-    tmp.Printf( _( "Hierarchical Sheet Pin %s" ), GetChars( ShortenedShownText() ) );
-    return tmp;
+    return wxString::Format( _( "Hierarchical Sheet Pin %s" ), ShortenedShownText() );
 }
 
 BITMAP_DEF SCH_SHEET_PIN::GetMenuImage() const

@@ -537,7 +537,7 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if ( Module )
     {
         MSG_PANEL_ITEMS items;
-        Module->GetMsgPanelInfo( items );
+        Module->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
 

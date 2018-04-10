@@ -315,7 +315,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 }
 
 
-void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     BOARD* board = static_cast<PCB_BASE_FRAME*>( m_parent )->GetBoard();
     wxString txt;

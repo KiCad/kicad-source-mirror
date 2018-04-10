@@ -26,6 +26,7 @@
 #define DRC_ITEM_H
 
 #include <macros.h>
+#include <base_struct.h>
 
 class MARKER_BASE;
 class BOARD;
@@ -91,13 +92,16 @@ public:
                   EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
     {
         m_ErrorCode         = aErrorCode;
-        m_MainText          = aMainItem->GetSelectMenuText();
-        m_AuxiliaryText     = bAuxiliaryItem ? bAuxiliaryItem->GetSelectMenuText() : wxString( wxEmptyString );
+        m_MainText          = aMainItem->GetSelectMenuText( g_UserUnit );
+        m_AuxiliaryText     = wxEmptyString;
         m_MainPosition      = aMainPos;
         m_AuxiliaryPosition = bAuxiliaryPos;
         m_hasSecondItem     = bAuxiliaryItem != nullptr;
         m_noCoordinate      = false;
         m_parent            = nullptr;
+
+        if( m_hasSecondItem )
+            m_AuxiliaryText = bAuxiliaryItem->GetSelectMenuText( g_UserUnit );
 
         // Weak references (void*).  One must search the BOARD_ITEMS or SCH_ITEMS for a match.
         m_mainItemWeakRef   = aMainItem;
@@ -125,8 +129,8 @@ public:
         m_noCoordinate      = false;
         m_parent            = nullptr;
 
-        m_mainItemWeakRef       = nullptr;
-        m_auxItemWeakRef  = nullptr;
+        m_mainItemWeakRef   = nullptr;
+        m_auxItemWeakRef    = nullptr;
     }
 
     /**
@@ -225,7 +229,7 @@ public:
      * @param aPos The position to format
      * @return wxString - The formated string
      */
-    static wxString ShowCoord( const wxPoint& aPos );
+    static wxString ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos );
 };
 
 

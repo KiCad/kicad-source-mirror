@@ -212,7 +212,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( net )
             {
                 MSG_PANEL_ITEMS items;
-                net->GetMsgPanelInfo( items );
+                net->GetMsgPanelInfo( m_UserUnits, items );
                 SetMsgPanel( items );
             }
         }

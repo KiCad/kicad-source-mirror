@@ -89,7 +89,8 @@ void GERBVIEW_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
 }
 
 
-void GERBVIEW_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
+void GERBVIEW_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits,
+                                               std::vector<MSG_PANEL_ITEM>& aList )
 {
 
 }

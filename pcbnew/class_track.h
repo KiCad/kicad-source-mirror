@@ -212,13 +212,7 @@ public:
      */
     bool IsNull();
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
-
-    /**
-     * Function ShowWidth
-     * returns the width of the track in displayable user units.
-     */
-    wxString ShowWidth() const;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -294,7 +288,7 @@ public:
      */
     virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
 
-    virtual wxString GetSelectMenuText() const override;
+    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 
@@ -326,12 +320,12 @@ protected:
      * Display info about the track segment only, and does not calculate the full track length
      * @param aList A list of #MSG_PANEL_ITEM objects to add status information.
      */
-    virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
+    virtual void GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList );
 
 
     /**
      * Helper function for the common panel info */
-    void GetMsgPanelInfoBase_Common( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Helper for drawing the short netname in tracks */
@@ -365,7 +359,7 @@ public:
 
     SEGZONE* Next() const { return static_cast<SEGZONE*>( Pnext ); }
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
@@ -375,7 +369,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 protected:
-    virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 };
 
 
@@ -441,7 +435,7 @@ public:
         return wxT( "VIA" );
     }
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 
@@ -497,7 +491,7 @@ public:
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 protected:
-    virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)

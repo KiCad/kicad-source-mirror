@@ -810,7 +810,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 }
 
 
-void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -1044,7 +1044,7 @@ bool ZONE_CONTAINER::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowD
 }
 
 
-wxString ZONE_CONTAINER::GetSelectMenuText() const
+wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     wxString text;
 
@@ -1057,12 +1057,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     else
         text << GetNetnameMsg();
 
-    wxString msg;
-    msg.Printf( _( "Zone Outline %s on %s" ),
-                GetChars( text ),
-                GetChars( GetLayerName() ) );
-
-    return msg;
+    return wxString::Format( _( "Zone Outline %s on %s" ), text, GetLayerName() );
 }
 
 

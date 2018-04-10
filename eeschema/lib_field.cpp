@@ -532,11 +532,9 @@ void LIB_FIELD::SetText( const wxString& aText )
 }
 
 
-wxString LIB_FIELD::GetSelectMenuText() const
+wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    return wxString::Format( _( "Field %s \"%s\"" ),
-                             GetChars( GetName() ),
-                             GetChars( ShortenedShownText() ) );
+    return wxString::Format( _( "Field %s \"%s\"" ), GetName(), ShortenedShownText() );
 }
 
 
@@ -606,25 +604,24 @@ void LIB_FIELD::calcEdit( const wxPoint& aPosition )
 }
 
 
-void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
     // Display style:
     msg = GetTextStyleName();
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
 
-    msg = StringFromValue( g_UserUnit, GetTextWidth(), true );
+    msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 
-    msg = StringFromValue( g_UserUnit, GetTextHeight(), true );
+    msg = MessageTextFromValue( aUnits, GetTextHeight(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)
-    msg = GetName();
-    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName(), BROWN ) );
 
     // Display field text:
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText(), BROWN ) );

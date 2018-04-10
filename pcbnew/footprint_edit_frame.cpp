@@ -983,7 +983,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateMsgPanel()
 
     if( item )
     {
-        item->GetMsgPanelInfo( items );
+        item->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
     else

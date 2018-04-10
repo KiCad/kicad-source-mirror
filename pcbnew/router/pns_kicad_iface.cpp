@@ -798,7 +798,8 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
                 aZone->GetPosition().x, aZone->GetPosition().y ), KIDIALOG::KD_WARNING );
         dlg.ShowDetailedText(
             wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
-                "Please verify it is not a self-intersecting polygon." ), aZone->GetSelectMenuText() ) );
+                                 "Please verify it is not a self-intersecting polygon." ),
+                              aZone->GetSelectMenuText( g_UserUnit ) ) );
         dlg.DoNotShowCheckbox();
         dlg.ShowModal();
 

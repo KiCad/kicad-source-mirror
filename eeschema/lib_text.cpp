@@ -290,13 +290,13 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
 }
 
 
-void LIB_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = StringFromValue( g_UserUnit, GetThickness(), true );
+    msg = MessageTextFromValue( aUnits, GetThickness(), true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
@@ -357,11 +357,9 @@ void LIB_TEXT::SetText( const wxString& aText )
 }
 
 
-wxString LIB_TEXT::GetSelectMenuText() const
+wxString LIB_TEXT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString msg;
-    msg.Printf( _( "Graphic Text \"%s\"" ), GetChars( ShortenedShownText() ) );
-    return msg;
+    return wxString::Format( _( "Graphic Text \"%s\"" ), ShortenedShownText() );
 }
 
 

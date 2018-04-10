@@ -215,7 +215,6 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     int         arrow_dw_X  = 0, arrow_dw_Y = 0;    // coordinates of arrow line '\'
     int         hx, hy;                             // dimension line interval
     double      angle, angle_f;
-    wxString    msg;
 
     // Init layer :
     m_Text.SetLayer( GetLayer() );
@@ -317,8 +316,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     if( !aDoNotChangeText )
     {
         m_Value = measure;
-        msg     = ::CoordinateToString( m_Value );
-        SetText( msg );
+        SetText( MessageTextFromValue( g_UserUnit, m_Value ) );
     }
 }
 
@@ -379,10 +377,10 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 
 
 // see class_cotation.h
-void DIMENSION::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void DIMENSION::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
-    m_Text.GetMsgPanelInfo( aList );
+    m_Text.GetMsgPanelInfo( aUnits, aList );
 }
 
 
@@ -485,14 +483,9 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
 }
 
 
-wxString DIMENSION::GetSelectMenuText() const
+wxString DIMENSION::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-    text.Printf( _( "Dimension \"%s\" on %s" ),
-                 GetChars( GetText() ),
-                 GetChars( GetLayerName() ) );
-
-    return text;
+    return wxString::Format( _( "Dimension \"%s\" on %s" ), GetText(), GetLayerName() );
 }
 
 

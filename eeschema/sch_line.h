@@ -168,7 +168,7 @@ public:
 
     bool CanConnect( const SCH_ITEM* aItem ) const override;
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

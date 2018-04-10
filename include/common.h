@@ -38,7 +38,6 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 
-#include <base_struct.h>    // For timestamp_t definition
 #include <richio.h>
 #include <gal/color4d.h>
 
@@ -50,6 +49,20 @@
 class wxAboutDialogInfo;
 class SEARCH_STACK;
 class REPORTER;
+
+
+/**
+ * timestamp_t is our type to represent unique IDs for all kinds of elements;
+ * historically simply the timestamp when they were created.
+ *
+ * Long term, this type might be renamed to something like unique_id_t
+ * (and then rename all the methods from {Get,Set}TimeStamp()
+ * to {Get,Set}Id()) ?
+ *
+ * The type should be at least 32 bit and simple to map via swig; swig does
+ * have issues with types such as 'int32_t', so we choose 'long'.
+ */
+typedef long timestamp_t;
 
 
 // Flag for special keys

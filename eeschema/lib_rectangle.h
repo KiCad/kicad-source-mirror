@@ -74,7 +74,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
 
@@ -107,7 +107,7 @@ public:
 
     wxPoint GetEnd() const { return m_End; }
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

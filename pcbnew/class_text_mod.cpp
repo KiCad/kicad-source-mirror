@@ -360,7 +360,7 @@ double TEXTE_MODULE::GetDrawRotation() const
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     MODULE* module = (MODULE*) m_Parent;
 
@@ -403,43 +403,36 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
     aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
 
-    msg = ::CoordinateToString( GetThickness() );
+    msg = MessageTextFromValue( aUnits, GetThickness(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, DARKGREEN ) );
 
-    msg = ::CoordinateToString( GetTextWidth() );
+    msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
 
-    msg = ::CoordinateToString( GetTextHeight() );
+    msg = MessageTextFromValue( aUnits, GetTextHeight(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
 }
 
 
-wxString TEXTE_MODULE::GetSelectMenuText() const
+wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-    const wxChar *reference = GetChars( static_cast<MODULE*>( GetParent() )->GetReference() );
-
     switch( m_Type )
     {
     case TEXT_is_REFERENCE:
-        text.Printf( _( "Reference %s" ), reference );
-        break;
+        return wxString::Format( _( "Reference %s" ),
+                                 static_cast<MODULE*>( GetParent() )->GetReference() );
 
     case TEXT_is_VALUE:
-        text.Printf( _( "Value %s of %s" ),
-                     GetChars( GetShownText() ),
-                     reference );
-        break;
+        return wxString::Format( _( "Value %s of %s" ),
+                                 GetShownText(),
+                                 static_cast<MODULE*>( GetParent() )->GetReference() );
 
     default:    // wrap this one in quotes:
-        text.Printf( _( "Text \"%s\" of %s on %s" ),
-                     GetChars( ShortenedShownText() ),
-                     reference,
-                     GetChars( GetLayerName() ) );
-        break;
+        return wxString::Format( _( "Text \"%s\" of %s on %s" ),
+                                 ShortenedShownText(),
+                                 static_cast<MODULE*>( GetParent() )->GetReference(),
+                                 GetLayerName() );
     }
-
-    return text;
 }
 
 

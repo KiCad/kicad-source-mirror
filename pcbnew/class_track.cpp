@@ -108,13 +108,6 @@ EDA_ITEM* TRACK::Clone() const
 }
 
 
-wxString TRACK::ShowWidth() const
-{
-    wxString msg = ::CoordinateToString( m_Width );
-    return msg;
-}
-
-
 SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_ZONE_T )
 {
@@ -127,15 +120,9 @@ EDA_ITEM* SEGZONE::Clone() const
 }
 
 
-wxString SEGZONE::GetSelectMenuText() const
+wxString SEGZONE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-
-    text.Printf( _( "Zone [%s] on %s" ),
-                 GetChars( GetNetnameMsg() ),
-                 GetChars( GetLayerName() ) );
-
-    return text;
+    return wxString::Format( _( "Zone [%s] on %s" ), GetNetnameMsg(), GetLayerName() );
 }
 
 
@@ -160,9 +147,8 @@ EDA_ITEM* VIA::Clone() const
 }
 
 
-wxString VIA::GetSelectMenuText() const
+wxString VIA::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
     wxString format;
     BOARD* board = GetBoard();
 
@@ -186,23 +172,21 @@ wxString VIA::GetSelectMenuText() const
         PCB_LAYER_ID topLayer;
         PCB_LAYER_ID botLayer;
         LayerPair( &topLayer, &botLayer );
-        text.Printf( format.GetData(),
-                     GetChars( ShowWidth() ),
-                     GetChars( GetNetnameMsg() ),
-                     GetChars( board->GetLayerName( topLayer ) ),
-                     GetChars( board->GetLayerName( botLayer ) ) );
+        return wxString::Format( format.GetData(),
+                                 MessageTextFromValue( aUnits, m_Width ),
+                                 GetNetnameMsg(),
+                                 board->GetLayerName( topLayer ),
+                                 board->GetLayerName( botLayer ) );
 
     }
     else
     {
-        text.Printf( format.GetData(),
-                     GetChars( ShowWidth() ),
-                     GetChars( GetNetnameMsg() ),
-                     wxT( "??" ),
-                     wxT( "??" ) );
+        return wxString::Format( format.GetData(),
+                                 MessageTextFromValue( aUnits, m_Width ),
+                                 GetNetnameMsg(),
+                                 wxT( "??" ),
+                                 wxT( "??" ) );
     }
-
-    return text;
 }
 
 
@@ -1058,13 +1042,13 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 // see class_track.h
-void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
 
     // Display basic infos
-    GetMsgPanelInfoBase( aList );
+    GetMsgPanelInfoBase( aUnits, aList );
 
     // Display full track length (in Pcbnew)
     if( board )
@@ -1080,15 +1064,15 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
             track_buffer_start = track_buffer_start->Back();
 
         board->MarkTrace( track_buffer_start, this, NULL, &trackLen, &lenPadToDie, false );
-        msg = ::MessageTextFromValue( g_UserUnit, trackLen );
+        msg = MessageTextFromValue( aUnits, trackLen );
         aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKCYAN ) );
 
         if( lenPadToDie != 0 )
         {
-            msg = ::MessageTextFromValue( g_UserUnit, trackLen + lenPadToDie );
+            msg = MessageTextFromValue( aUnits, trackLen + lenPadToDie );
             aList.push_back( MSG_PANEL_ITEM( _( "Full Length" ), msg, DARKCYAN ) );
 
-            msg = ::MessageTextFromValue( g_UserUnit, lenPadToDie );
+            msg = MessageTextFromValue( aUnits, lenPadToDie, true );
             aList.push_back( MSG_PANEL_ITEM( _( "Pad To Die Length" ), msg, DARKCYAN ) );
         }
     }
@@ -1098,22 +1082,22 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     if( netclass )
     {
         aList.push_back( MSG_PANEL_ITEM( _( "NC Name" ), netclass->GetName(), DARKMAGENTA ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Clearance" ),
-                                         ::CoordinateToString( netclass->GetClearance(), true ),
-                                         DARKMAGENTA ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Width" ),
-                                         ::CoordinateToString( netclass->GetTrackWidth(), true ),
-                                         DARKMAGENTA ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Size" ),
-                                         ::CoordinateToString( netclass->GetViaDiameter(), true ),
-                                         DARKMAGENTA ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Drill"),
-                                         ::CoordinateToString( netclass->GetViaDrill(), true ),
-                                         DARKMAGENTA ) );
+
+        msg = MessageTextFromValue( aUnits, netclass->GetClearance(), true );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Clearance" ), msg, DARKMAGENTA ) );
+
+        msg = MessageTextFromValue( aUnits, netclass->GetTrackWidth(), true );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Width" ), msg, DARKMAGENTA ) );
+
+        msg = MessageTextFromValue( aUnits, netclass->GetViaDiameter(), true );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Size" ), msg, DARKMAGENTA ) );
+
+        msg = MessageTextFromValue( aUnits, netclass->GetViaDrill(), true );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Drill"), msg, DARKMAGENTA ) );
     }
 }
 
-void TRACK::GetMsgPanelInfoBase_Common( std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -1173,14 +1157,14 @@ void TRACK::GetMsgPanelInfoBase_Common( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
 }
 
-void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD* board = GetBoard();
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Track" ), DARKCYAN ) );
 
-    GetMsgPanelInfoBase_Common( aList );
+    GetMsgPanelInfoBase_Common( aUnits, aList );
 
     // Display layer
     if( board )
@@ -1191,23 +1175,23 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
 
     // Display width
-    msg = ::CoordinateToString( (unsigned) m_Width );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 
     // Display segment length
-    msg = ::MessageTextFromValue( g_UserUnit, GetLength() );
+    msg = ::MessageTextFromValue( aUnits, GetLength() );
     aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
 }
 
-void SEGZONE::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
+void SEGZONE::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD* board = GetBoard();
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Zone " ), DARKCYAN ) );
 
-    GetMsgPanelInfoBase_Common( aList );
+    GetMsgPanelInfoBase_Common( aUnits, aList );
 
     // Display layer
     if( board )
@@ -1218,16 +1202,16 @@ void SEGZONE::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
 
     // Display width
-    msg = ::CoordinateToString( (unsigned) m_Width );
+    msg = MessageTextFromValue( aUnits, m_Width );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 
     // Display segment length
-    msg = ::MessageTextFromValue( g_UserUnit, GetLength() );
+    msg = MessageTextFromValue( aUnits, GetLength() );
     aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
 }
 
-void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
+void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
@@ -1256,7 +1240,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
-    GetMsgPanelInfoBase_Common( aList );
+    GetMsgPanelInfoBase_Common( aUnits, aList );
 
 
     // Display layer pair
@@ -1273,15 +1257,13 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Layers" ), msg, BROWN ) );
 
     // Display width
-    msg = ::CoordinateToString( (unsigned) m_Width );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     // Display diameter value:
     aList.push_back( MSG_PANEL_ITEM( _( "Diameter" ), msg, DARKCYAN ) );
 
     // Display drill value
-    int drill_value = GetDrillValue();
-
-    msg = ::CoordinateToString( drill_value );
+    msg = MessageTextFromValue( aUnits, GetDrillValue() );
 
     wxString title = _( "Drill" );
     title += wxT( " " );
@@ -1301,7 +1283,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
                 drill_class_value = net->GetViaDrillSize();
         }
 
-        drl_specific = drill_value != drill_class_value;
+        drl_specific = GetDrillValue() != drill_class_value;
     }
 
 
@@ -1605,17 +1587,13 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
 }
 
 
-wxString TRACK::GetSelectMenuText() const
+wxString TRACK::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-
-    text.Printf( _("Track %s %s on %s, length: %s" ),
-                 GetChars( ShowWidth() ),
-                 GetChars( GetNetnameMsg() ),
-                 GetChars( GetLayerName() ),
-                 GetChars( ::MessageTextFromValue( g_UserUnit, GetLength() ) ) );
-
-    return text;
+    return wxString::Format( _("Track %s %s on %s, length: %s" ),
+                             MessageTextFromValue( aUnits, m_Width ),
+                             GetNetnameMsg(),
+                             GetLayerName(),
+                             MessageTextFromValue( aUnits, GetLength() ) );
 }
 
 

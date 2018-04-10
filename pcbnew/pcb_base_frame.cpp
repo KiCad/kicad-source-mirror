@@ -756,14 +756,14 @@ void PCB_BASE_FRAME::UpdateMsgPanel()
 
     if( item )
     {
-        item->GetMsgPanelInfo( items );
+        item->GetMsgPanelInfo( m_UserUnits, items );
     }
     else       // show general information about the board
     {
         if( IsGalCanvasActive() )
-            GetGalCanvas()->GetMsgPanelInfo( items );
+            GetGalCanvas()->GetMsgPanelInfo( m_UserUnits, items );
         else
-            m_Pcb->GetMsgPanelInfo( items );
+            m_Pcb->GetMsgPanelInfo( m_UserUnits, items );
     }
 
     SetMsgPanel( items );

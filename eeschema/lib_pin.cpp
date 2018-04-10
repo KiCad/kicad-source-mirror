@@ -1698,19 +1698,17 @@ void LIB_PIN::SetWidth( int aWidth )
 }
 
 
-void LIB_PIN::getMsgPanelInfoBase( MSG_PANEL_ITEMS& aList )
+void LIB_PIN::getMsgPanelInfoBase( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString text = m_number.IsEmpty() ? wxT( "?" ) : m_number;
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name, DARKCYAN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text, DARKCYAN ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ),
-                                     GetText( m_type ),
-                                     RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), GetText( m_type ), RED ) );
 
     text = GetText( m_shape );
 
@@ -1724,33 +1722,33 @@ void LIB_PIN::getMsgPanelInfoBase( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), text, DARKGREEN ) );
 
     // Display pin length
-    text = StringFromValue( g_UserUnit, m_length, true );
+    text = StringFromValue( aUnits, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
     text = getPinOrientationName( (unsigned) GetOrientationIndex( m_orientation ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
-    getMsgPanelInfoBase( aList );
+    getMsgPanelInfoBase( aUnits, aList );
 
     wxString text;
     wxPoint pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coord are top to bottom
                             // lib items coord are bottom to top
 
-    text = StringFromValue( g_UserUnit, pinpos.x, true );
+    text = MessageTextFromValue( aUnits, pinpos.x, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
 
-    text = StringFromValue( g_UserUnit, pinpos.y, true );
+    text = MessageTextFromValue( aUnits, pinpos.y, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList,
+void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList,
                                SCH_COMPONENT* aComponent )
 {
-    getMsgPanelInfoBase( aList );
+    getMsgPanelInfoBase( aUnits, aList );
 
     if( !aComponent )
         return;
@@ -1759,10 +1757,10 @@ void LIB_PIN::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList,
     wxPoint pinpos = aComponent->GetTransform().TransformCoordinate( GetPosition() )
                      + aComponent->GetPosition();
 
-    text = StringFromValue( g_UserUnit, pinpos.x, true );
+    text = MessageTextFromValue( aUnits, pinpos.x, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
 
-    text = StringFromValue( g_UserUnit, pinpos.y, true );
+    text = MessageTextFromValue( aUnits, pinpos.y, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 
     aList.push_back( MSG_PANEL_ITEM( aComponent->GetField( REFERENCE )->GetShownText(),
@@ -1957,23 +1955,18 @@ BITMAP_DEF LIB_PIN::GetMenuImage() const
 }
 
 
-wxString LIB_PIN::GetSelectMenuText() const
+wxString LIB_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString tmp;
-    wxString style;
-
-    style = GetText( m_shape );
-
-    tmp.Printf( _( "Pin %s, %s, %s" ),
-                GetChars( m_number ), GetChars( GetElectricalTypeName() ), GetChars( style ));
-
-    return tmp;
+    return wxString::Format( _( "Pin %s, %s, %s" ),
+                             m_number,
+                             GetElectricalTypeName(),
+                             GetText( m_shape ));
 }
 
 
 bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
 
     // Note: this will have to be modified if we add find and replace capability to the
     // compoment library editor.  Otherwise, you wont be able to replace pin text.
@@ -1981,7 +1974,7 @@ bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* 
         || ( aSearchData.GetFlags() & FR_SEARCH_REPLACE ) )
         return false;
 
-    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
 
     if( EDA_ITEM::Matches( GetName(), aSearchData ) || EDA_ITEM::Matches( m_number, aSearchData ) )
     {

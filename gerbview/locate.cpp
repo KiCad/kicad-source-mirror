@@ -99,7 +99,7 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     if( gerb_item )
     {
         MSG_PANEL_ITEMS items;
-        gerb_item->GetMsgPanelInfo( items );
+        gerb_item->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
 

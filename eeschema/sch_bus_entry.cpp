@@ -332,13 +332,13 @@ void SCH_BUS_ENTRY_BASE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) 
 }
 
 
-wxString SCH_BUS_WIRE_ENTRY::GetSelectMenuText() const
+wxString SCH_BUS_WIRE_ENTRY::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString( _( "Bus to Wire Entry" ) );
 }
 
 
-wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText() const
+wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString( _( "Bus to Bus Entry" ) );
 }

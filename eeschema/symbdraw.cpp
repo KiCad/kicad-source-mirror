@@ -121,7 +121,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     OnModify( );
 
     MSG_PANEL_ITEMS items;
-    DrawItem->GetMsgPanelInfo( items );
+    DrawItem->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
     m_canvas->Refresh();
 }

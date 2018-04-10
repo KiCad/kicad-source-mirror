@@ -139,7 +139,7 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
         {
             item = (*m_Collector)[ii];
 
-            wxString    text = item->GetSelectMenuText();
+            wxString    text = item->GetSelectMenuText( g_UserUnit );
             BITMAP_DEF  xpm  = item->GetMenuImage();
 
             AddMenuItem( &itemMenu,

@@ -737,7 +737,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 
     sub_menu_footprint = new wxMenu;
 
-    msg = aModule->GetSelectMenuText();
+    msg = aModule->GetSelectMenuText( m_UserUnits );
     AddMenuItem( menu, sub_menu_footprint, -1, msg, KiBitmap( module_xpm ) );
 
     if( !flags )
@@ -830,7 +830,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
     wxMenu*  sub_menu_Fp_text;
     int      flags = FpText->GetFlags();
 
-    wxString msg = FpText->GetSelectMenuText();
+    wxString msg = FpText->GetSelectMenuText( m_UserUnits );
 
     sub_menu_Fp_text = new wxMenu;
 
@@ -894,7 +894,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 
     SetCurrentNetClass( Pad->GetNetClassName() );
 
-    wxString msg = Pad->GetSelectMenuText();
+    wxString msg = Pad->GetSelectMenuText( m_UserUnits );
 
     sub_menu_Pad = new wxMenu;
     AddMenuItem( menu, sub_menu_Pad, -1, msg, KiBitmap( pad_xpm ) );
@@ -940,7 +940,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
     wxMenu*  sub_menu_Text;
     int      flags = Text->GetFlags();
 
-    wxString msg = Text->GetSelectMenuText();
+    wxString msg = Text->GetSelectMenuText( m_UserUnits );
 
     sub_menu_Text = new wxMenu;
 

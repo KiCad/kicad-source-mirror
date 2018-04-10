@@ -899,7 +899,7 @@ void FOOTPRINT_VIEWER_FRAME::UpdateMsgPanel()
     {
         MSG_PANEL_ITEMS items;
 
-        footprint->GetMsgPanelInfo( items );
+        footprint->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
     else

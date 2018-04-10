@@ -283,7 +283,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
     MSG_PANEL_ITEMS items;
 
     component->SetCurrentSheetPath( &GetCurrentSheet() );
-    component->GetMsgPanelInfo( items );
+    component->GetMsgPanelInfo( m_UserUnits, items );
 
     SetMsgPanel( items );
     component->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );

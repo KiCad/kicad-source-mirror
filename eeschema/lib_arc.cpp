@@ -478,14 +478,14 @@ start(%d, %d), end(%d, %d), radius %d" ),
 }
 
 
-void LIB_ARC::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void LIB_ARC::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = StringFromValue( g_UserUnit, m_Width, true );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 
@@ -496,12 +496,12 @@ void LIB_ARC::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-wxString LIB_ARC::GetSelectMenuText() const
+wxString LIB_ARC::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Arc center (%s, %s), radius %s" ),
-                             GetChars( CoordinateToString( m_Pos.x ) ),
-                             GetChars( CoordinateToString( m_Pos.y ) ),
-                             GetChars( CoordinateToString( m_Radius ) ) );
+                             MessageTextFromValue( aUnits, m_Pos.x ),
+                             MessageTextFromValue( aUnits, m_Pos.y ),
+                             MessageTextFromValue( aUnits, m_Radius ) );
 }
 
 

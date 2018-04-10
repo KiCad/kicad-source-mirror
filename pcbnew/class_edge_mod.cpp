@@ -232,7 +232,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -250,24 +250,20 @@ void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->GetValue(), BLUE ) );
     msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
     aList.push_back( MSG_PANEL_ITEM( _( "TimeStamp" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Footprint Layer" ),
-                     module->GetLayerName(), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Footprint Layer" ), module->GetLayerName(), RED ) );
 
     // append the features shared with the base class
-    DRAWSEGMENT::GetMsgPanelInfo( aList );
+    DRAWSEGMENT::GetMsgPanelInfo( aUnits, aList );
 }
 
 
 
-wxString EDGE_MODULE::GetSelectMenuText() const
+wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-    text.Printf( _( "Graphic %s of %s on %s" ),
-                 GetChars( ShowShape( m_Shape ) ),
-                 GetChars( ((MODULE*) GetParent())->GetReference() ),
-                 GetChars( GetLayerName() ) );
-
-    return text;
+    return wxString::Format( _( "Graphic %s of %s on %s" ),
+                             ShowShape( m_Shape  ),
+                             ((MODULE*) GetParent())->GetReference(),
+                             GetLayerName() );
 }
 
 

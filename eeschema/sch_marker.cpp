@@ -112,10 +112,8 @@ const EDA_RECT SCH_MARKER::GetBoundingBox() const
 }
 
 
-void SCH_MARKER::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void SCH_MARKER::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
-    wxString msg;
-
     aList.push_back( MSG_PANEL_ITEM( _( "Electronics Rule Check Error" ),
                                      GetReporter().GetErrorText(), DARKRED ) );
 }

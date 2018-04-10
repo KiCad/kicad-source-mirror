@@ -319,14 +319,14 @@ const EDA_RECT LIB_BEZIER::GetBoundingBox() const
 }
 
 
-void LIB_BEZIER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = StringFromValue( g_UserUnit, m_Width, true );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 

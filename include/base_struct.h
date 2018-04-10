@@ -33,12 +33,14 @@
 #define BASE_STRUCT_H_
 
 #include <core/typeinfo.h>
+#include "common.h"
 
 #include <bitmap_types.h>
 #include <view/view_item.h>
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
+
 extern std::ostream& operator <<( std::ostream& out, const wxSize& size );
 
 extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
@@ -140,19 +142,6 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define EDA_ITEM_ALL_FLAGS -1
 
 typedef unsigned STATUS_FLAGS;
-
-/**
- * timestamp_t is our type to represent unique IDs for all kinds of elements;
- * historically simply the timestamp when they were created.
- *
- * Long term, this type might be renamed to something like unique_id_t
- * (and then rename all the methods from {Get,Set}TimeStamp()
- * to {Get,Set}Id()) ?
- *
- * The type should be at least 32 bit and simple to map via swig; swig does
- * have issues with types such as 'int32_t', so we choose 'long'.
- */
-typedef long timestamp_t;
 
 /**
  * Class EDA_ITEM
@@ -285,7 +274,7 @@ public:
      *
      * @param aList is the list to populate.
      */
-    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
     {
     }
 
@@ -382,7 +371,7 @@ public:
      *
      * @return The menu text string.
      */
-    virtual wxString GetSelectMenuText() const;
+    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const;
 
     /**
      * Function GetMenuImage

@@ -236,7 +236,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             wxString    text;
             item = (*m_Collector)[i];
 
-            text = item->GetSelectMenuText();
+            text = item->GetSelectMenuText( m_UserUnits );
 
             BITMAP_DEF xpm = item->GetMenuImage();
 

@@ -87,7 +87,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 
     MSG_PANEL_ITEMS items;
     component->SetCurrentSheetPath( &GetCurrentSheet() );
-    component->GetMsgPanelInfo( items );
+    component->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
 }
 

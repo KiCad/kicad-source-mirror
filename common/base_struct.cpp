@@ -171,7 +171,7 @@ SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_
 }
 
 
-wxString EDA_ITEM::GetSelectMenuText() const
+wxString EDA_ITEM::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     wxFAIL_MSG( wxT( "GetSelectMenuText() was not overridden for schematic item type " ) +
                 GetClass() );

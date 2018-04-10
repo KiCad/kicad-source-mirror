@@ -247,7 +247,7 @@ public:
      *
      * @param aList is the list in which to place the  status information.
      */
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Function Clear

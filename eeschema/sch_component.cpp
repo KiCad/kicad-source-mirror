@@ -1373,7 +1373,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 }
 
 
-void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
@@ -1520,7 +1520,7 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
                              wxPoint* aFindLocation )
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
 
     // Components are searchable via the child field and pin item text.
     return false;
@@ -1682,13 +1682,11 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 }
 
 
-wxString SCH_COMPONENT::GetSelectMenuText() const
+wxString SCH_COMPONENT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString tmp;
-    tmp.Printf( _( "Symbol %s, %s" ),
-                GetChars( GetLibId().GetLibItemName() ),
-                GetChars( GetField( REFERENCE )->GetShownText() ) );
-    return tmp;
+    return wxString::Format( _( "Symbol %s, %s" ),
+                             GetLibId().GetLibItemName().wx_str(),
+                             GetField( REFERENCE )->GetShownText() );
 }
 
 

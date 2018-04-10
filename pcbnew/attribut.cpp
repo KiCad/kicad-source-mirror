@@ -59,7 +59,7 @@ void PCB_EDIT_FRAME::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
     m_canvas->CrossHairOn( DC );    // Display cursor shape
 
     MSG_PANEL_ITEMS items;
-    track->GetMsgPanelInfo( items );
+    track->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
 }
 

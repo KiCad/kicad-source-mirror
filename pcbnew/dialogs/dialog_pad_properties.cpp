@@ -716,11 +716,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
 }
 
 // A small helper function, to display coordinates:
-static wxString formatCoord( wxPoint aCoord )
+static wxString formatCoord( EDA_UNITS_T aUnits, wxPoint aCoord )
 {
     return wxString::Format( "(X:%s Y:%s)",
-                CoordinateToString( aCoord.x, true ),
-                CoordinateToString( aCoord.y, true ) );
+                             MessageTextFromValue( aUnits, aCoord.x, true ),
+                             MessageTextFromValue( aUnits, aCoord.y, true ) );
 }
 
 void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
@@ -743,20 +743,20 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             bs_info[jj].Empty();
 
         bs_info[4] = wxString::Format( _( "width %s" ),
-                                       CoordinateToString( primitive.m_Thickness, true ) );
+                                    MessageTextFromValue( m_units, primitive.m_Thickness, true ) );
 
         switch( primitive.m_Shape )
         {
         case S_SEGMENT:         // usual segment : line with rounded ends
             bs_info[0] = _( "Segment" );
-            bs_info[1] = _( "from " ) + formatCoord( primitive.m_Start );
-            bs_info[2] = _( "to " ) +  formatCoord( primitive.m_End );
+            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive.m_Start );
+            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive.m_End );
             break;
 
         case S_ARC:             // Arc with rounded ends
             bs_info[0] = _( "Arc" );
-            bs_info[1] = _( "center " ) + formatCoord( primitive.m_Start );     // Center
-            bs_info[2] = _( "start " ) + formatCoord( primitive.m_End );       // Start point
+            bs_info[1] = _( "center " ) + formatCoord( m_units, primitive.m_Start );// Center
+            bs_info[2] = _( "start " ) + formatCoord( m_units, primitive.m_End );   // Start point
             bs_info[3] = wxString::Format( _( "angle %s" ), FMT_ANGLE( primitive.m_ArcAngle ) );
             break;
 
@@ -766,9 +766,9 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             else
                 bs_info[0] = _( "circle" );
 
-            bs_info[1] = formatCoord( primitive.m_Start );
+            bs_info[1] = formatCoord( m_units, primitive.m_Start );
             bs_info[2] = wxString::Format( _( "radius %s" ),
-                                CoordinateToString( primitive.m_Radius, true ) );
+                                       MessageTextFromValue( m_units, primitive.m_Radius, true ) );
             break;
 
         case S_POLYGON:         // polygon

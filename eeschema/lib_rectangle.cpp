@@ -209,13 +209,13 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-void LIB_RECTANGLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_RECTANGLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = StringFromValue( g_UserUnit, m_Width, true );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
@@ -291,13 +291,13 @@ bool LIB_RECTANGLE::HitTest( const wxPoint &aPosition, int aThreshold, const TRA
 }
 
 
-wxString LIB_RECTANGLE::GetSelectMenuText() const
+wxString LIB_RECTANGLE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
-                             GetChars( CoordinateToString( m_Pos.x ) ),
-                             GetChars( CoordinateToString( m_Pos.y ) ),
-                             GetChars( CoordinateToString( m_End.x ) ),
-                             GetChars( CoordinateToString( m_End.y ) ) );
+                             MessageTextFromValue( aUnits, m_Pos.x ),
+                             MessageTextFromValue( aUnits, m_Pos.y ),
+                             MessageTextFromValue( aUnits, m_End.x ),
+                             MessageTextFromValue( aUnits, m_End.y ) );
 }
 
 

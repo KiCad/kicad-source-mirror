@@ -56,7 +56,7 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
 }
 
 
-void LIB_ITEM::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 

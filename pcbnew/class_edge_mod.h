@@ -115,14 +115,14 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     wxString GetClass() const override
     {
         return wxT( "MGRAPHIC" );
     }
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

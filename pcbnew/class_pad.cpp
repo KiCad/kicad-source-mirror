@@ -700,10 +700,10 @@ int D_PAD::GetThermalGap() const
 }
 
 
-void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
+void D_PAD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM>& aList )
 {
     MODULE*     module;
-    wxString    Line;
+    wxString    msg;
     BOARD*      board;
 
     module = (MODULE*) m_Parent;
@@ -723,45 +723,46 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
 
-    Line = ::CoordinateToString( m_Size.x );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), Line, RED ) );
+    msg = MessageTextFromValue( aUnits, m_Size.x, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
 
-    Line = ::CoordinateToString( m_Size.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), Line, RED ) );
+    msg = MessageTextFromValue( aUnits, m_Size.y, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
 
-    Line = ::CoordinateToString( (unsigned) m_Drill.x );
+    msg = MessageTextFromValue( aUnits, m_Drill.x, true );
 
     if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "Drill" ), Line, RED ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Drill" ), msg, RED ) );
     }
     else
     {
-        Line = ::CoordinateToString( (unsigned) m_Drill.x );
-        wxString msg;
-        msg = ::CoordinateToString( (unsigned) m_Drill.y );
-        Line += wxT( "/" ) + msg;
-        aList.push_back( MSG_PANEL_ITEM( _( "Drill X / Y" ), Line, RED ) );
+        msg = MessageTextFromValue( aUnits, m_Drill.x, true )
+               + wxT( "/" )
+               + MessageTextFromValue( aUnits, m_Drill.y, true );
+        aList.push_back( MSG_PANEL_ITEM( _( "Drill X / Y" ), msg, RED ) );
     }
 
     double module_orient_degrees = module ? module->GetOrientationDegrees() : 0;
 
     if( module_orient_degrees != 0.0 )
-        Line.Printf( wxT( "%3.1f(+%3.1f)" ),
-                     GetOrientationDegrees() - module_orient_degrees,
-                     module_orient_degrees );
+        msg.Printf( wxT( "%3.1f(+%3.1f)" ),
+                    GetOrientationDegrees() - module_orient_degrees,
+                    module_orient_degrees );
     else
-        Line.Printf( wxT( "%3.1f" ), GetOrientationDegrees() );
+        msg.Printf( wxT( "%3.1f" ), GetOrientationDegrees() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), Line, LIGHTBLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, LIGHTBLUE ) );
 
-    Line = ::CoordinateToString( m_Pos.x ) + wxT( ", " ) + ::CoordinateToString( m_Pos.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Position" ), Line, LIGHTBLUE ) );
+    msg = MessageTextFromValue( aUnits, m_Pos.x )
+           + wxT( ", " )
+           + MessageTextFromValue( aUnits, m_Pos.y );
+    aList.push_back( MSG_PANEL_ITEM( _( "Position" ), msg, LIGHTBLUE ) );
 
     if( GetPadToDieLength() )
     {
-        Line = ::CoordinateToString( GetPadToDieLength() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Length in package" ), Line, CYAN ) );
+        msg = MessageTextFromValue( aUnits, GetPadToDieLength(), true );
+        aList.push_back( MSG_PANEL_ITEM( _( "Length in package" ), msg, CYAN ) );
     }
 }
 
@@ -1199,27 +1200,21 @@ wxString D_PAD::ShowPadAttr() const
 }
 
 
-wxString D_PAD::GetSelectMenuText() const
+wxString D_PAD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-    wxString padlayers( LayerMaskDescribe( GetBoard(), m_layerMask ) );
-    wxString padname( GetName() );
-
-    if( padname.IsEmpty() )
+    if( GetName().IsEmpty() )
     {
-        text.Printf( _( "Pad of %s on %s" ),
-                     GetChars( GetParent()->GetReference() ),
-                     GetChars( padlayers ) );
+        return wxString::Format( _( "Pad of %s on %s" ),
+                                 GetParent()->GetReference(),
+                                 LayerMaskDescribe( GetBoard(), m_layerMask ) );
     }
     else
     {
-        text.Printf( _( "Pad %s of %s on %s" ),
-                     GetChars( GetName() ),
-                     GetChars( GetParent()->GetReference() ),
-                     GetChars( padlayers ) );
+        return wxString::Format( _( "Pad %s of %s on %s" ),
+                                 GetName(),
+                                 GetParent()->GetReference(),
+                                 LayerMaskDescribe( GetBoard(), m_layerMask ) );
     }
-
-    return text;
 }
 
 

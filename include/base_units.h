@@ -82,22 +82,6 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed =
 double To_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils = false );
 
 /**
- * Function CoordinateToString
- * is a helper to convert the \a integer coordinate \a aValue to a string in inches,
- * millimeters, or unscaled units according to the current user units setting.
- *
- * Should be used only to display a coordinate in status, but not in dialogs,
- * because the mantissa of the number displayed has 4 digits max for readability.
- * (i.e. the value shows the decimils or the microns )
- * However the actual internal value could need up to 8 digits to be printed
- *
- * @param aValue The integer coordinate to convert.
- * @param aUseMils Convert inch values to mils if true.
- * @return The converted string for display in user interface elements.
- */
-wxString CoordinateToString( int aValue, bool aUseMils = false );
-
-/**
  * Function AngleToStringDegrees
  * is a helper to convert the \a double \a aAngle (in internal unit)
  * to a string in degrees
@@ -150,16 +134,6 @@ wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol = f
                           bool aUseMils = false );
 
 /**
- * Operator << overload
- * outputs a point to the argument string in a format resembling
- * "@ (x,y)
- * @param aString Where to put the text describing the point value
- * @param aPoint  The point to output.
- * @return wxString& - the input string
- */
-wxString& operator <<( wxString& aString, const wxPoint& aPoint );
-
-/**
  * Function PutValueInLocalUnits
  * converts \a aValue from internal units to user units and append the units notation
  * (mm or ")then inserts the string an \a aTextCtrl.
@@ -196,18 +170,6 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue,
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
 int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils = false );
-
-/**
- * Function ValueFromString
-
- * converts \a aTextValue in \a aUnits to internal units used by the application,
- * unit type will be obtained from g_UserUnit.
- *
- * @param aTextValue A reference to a wxString object containing the string to convert.
- * @return The string from Value, according to units (inch, mm ...) for display,
- */
-
-int ValueFromString( const wxString& aTextValue );
 
 /**
  * Convert the number Value in a string according to the internal units

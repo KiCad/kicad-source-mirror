@@ -1401,7 +1401,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
             {
-                wxString    text = m_collectedItems[i]->GetSelectMenuText();
+                wxString    text = m_collectedItems[i]->GetSelectMenuText( m_UserUnits );
                 BITMAP_DEF  xpm = m_collectedItems[i]->GetMenuImage();
 
                 AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
@@ -1419,7 +1419,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
     if( item )
     {
         MSG_PANEL_ITEMS items;
-        item->GetMsgPanelInfo( items );
+        item->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
     else

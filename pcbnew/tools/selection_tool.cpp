@@ -1417,7 +1417,7 @@ BOARD_ITEM* SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector,
     {
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
-        text = item->GetSelectMenuText();
+        text = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
         wxString menuText = wxString::Format("&%d. %s", i + 1, text );
         menu.Add( menuText, i + 1, item->GetMenuImage() );

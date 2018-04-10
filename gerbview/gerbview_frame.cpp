@@ -1062,7 +1062,7 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
         if( aDisplayInfo )
         {
             MSG_PANEL_ITEMS items;
-            aItem->GetMsgPanelInfo( items );
+            aItem->GetMsgPanelInfo( m_UserUnits, items );
             SetMsgPanel( items );
         }
     }

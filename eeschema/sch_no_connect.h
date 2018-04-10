@@ -87,7 +87,10 @@ public:
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
-    wxString GetSelectMenuText() const override { return wxString( _( "No Connect" ) ); }
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    {
+        return wxString( _( "No Connect" ) );
+    }
 
     BITMAP_DEF GetMenuImage() const override;
 

@@ -97,7 +97,7 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

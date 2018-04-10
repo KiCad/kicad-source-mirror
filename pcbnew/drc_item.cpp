@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,6 @@
  */
 
 
-/*************************************************/
-/* class_drc_item.cpp - DRC_ITEM class functions */
-/*************************************************/
 #include <fctsys.h>
 #include <common.h>
 
@@ -143,22 +140,21 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Footprint has incorrect courtyard (not a closed shape)" ) );
 
     default:
-        return wxString::Format( wxT( "Unknown DRC error code %d" ), m_ErrorCode );
+        return wxString::Format( _( "Unknown DRC error code %d" ), m_ErrorCode );
     }
 }
 
 
-wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
+wxString DRC_ITEM::ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos )
 {
-    return wxString::Format( _( "@(%s, %s)" ),
-                             GetChars( CoordinateToString( aPos.x ) ),
-                             GetChars( CoordinateToString( aPos.y ) ) );
+    return wxString::Format( wxT( "@(%s, %s)" ),
+                             MessageTextFromValue( aUnits, aPos.x ),
+                             MessageTextFromValue( aUnits, aPos.y ) );
 }
 
 
 wxString DRC_ITEM::ShowHtml() const
 {
-    wxString ret;
     wxString mainText = m_MainText;
     // a wxHtmlWindows does not like < and > in the text to display
     // because these chars have a special meaning in html
@@ -173,9 +169,9 @@ wxString DRC_ITEM::ShowHtml() const
     if( m_noCoordinate )
     {
         // omit the coordinate, a NETCLASS has no location
-        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
-                    GetChars( errText ),
-                    GetChars( mainText ) );
+        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
+                                 errText,
+                                 mainText );
     }
     else if( m_hasSecondItem )
     {
@@ -185,43 +181,43 @@ wxString DRC_ITEM::ShowHtml() const
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s: %s" ),
-                    GetChars( errText ),
-                    GetChars( ShowCoord( m_MainPosition )), GetChars( mainText ),
-                    GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( auxText ) );
+        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s: %s" ),
+                                 errText,
+                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 mainText,
+                                 ShowCoord( g_UserUnit, m_AuxiliaryPosition ),
+                                 auxText );
     }
     else
     {
-        ret.Printf( _( "<b>%s</b><br>&nbsp;&nbsp; %s: %s" ),
-                    GetChars( errText ),
-                    GetChars( ShowCoord( m_MainPosition ) ), GetChars( mainText ) );
+        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s: %s" ),
+                                 errText,
+                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 mainText );
     }
-
-    return ret;
 }
 
 
 wxString DRC_ITEM::ShowReport() const
 {
-    wxString ret;
-
     if( m_hasSecondItem )
     {
-        ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                    m_ErrorCode,
-                    GetChars( GetErrorText() ),
-                    GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ),
-                    GetChars( ShowCoord( m_AuxiliaryPosition ) ), GetChars( m_AuxiliaryText ) );
+        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+                                 m_ErrorCode,
+                                 GetErrorText(),
+                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 m_MainText,
+                                 ShowCoord( g_UserUnit, m_AuxiliaryPosition ),
+                                 m_AuxiliaryText );
     }
     else
     {
-        ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
-                    m_ErrorCode,
-                    GetChars( GetErrorText() ),
-                    GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
+        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+                                 m_ErrorCode,
+                                 GetErrorText(),
+                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 m_MainText );
     }
-
-    return ret;
 }
 
 

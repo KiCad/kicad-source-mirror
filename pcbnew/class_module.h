@@ -436,7 +436,7 @@ public:
             const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
-    void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const wxPoint& aPosition ) const override;
 
@@ -598,7 +598,7 @@ public:
         return wxT( "MODULE" );
     }
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

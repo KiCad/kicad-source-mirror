@@ -93,7 +93,7 @@ bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
     return IsCopperLayer( aLayer );
 }
 
-void MARKER_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void MARKER_PCB::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     const DRC_ITEM& rpt = m_drc;
 
@@ -107,13 +107,16 @@ void MARKER_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( errorTxt, wxEmptyString, RED ) );
 
-    wxString txtA;
-    txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT( ": " ) << rpt.GetTextA();
-
+    wxString txtA = wxString::Format( wxT( "%s: %s" ),
+                                      DRC_ITEM::ShowCoord( aUnits, rpt.GetPointA() ),
+                                      rpt.GetTextA() );
     wxString txtB;
-
-    if ( rpt.HasSecondItem() )
-        txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT( ": " ) << rpt.GetTextB();
+    if( rpt.HasSecondItem() )
+    {
+        txtB = wxString::Format( wxT( "%s: %s" ),
+                                 DRC_ITEM::ShowCoord( aUnits, rpt.GetPointB() ),
+                                 rpt.GetTextB() );
+    }
 
     aList.push_back( MSG_PANEL_ITEM( txtA, txtB, DARKBROWN ) );
 }
@@ -131,11 +134,11 @@ void MARKER_PCB::Flip(const wxPoint& aCentre )
 }
 
 
-wxString MARKER_PCB::GetSelectMenuText() const
+wxString MARKER_PCB::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Marker @(%s, %s)" ),
-                             GetChars( CoordinateToString( m_Pos.x ) ),
-                             GetChars( CoordinateToString( m_Pos.y ) ) );
+                             MessageTextFromValue( aUnits, m_Pos.x ),
+                             MessageTextFromValue( aUnits, m_Pos.y ) );
 }
 
 

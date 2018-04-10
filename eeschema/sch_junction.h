@@ -85,7 +85,10 @@ public:
                 ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
     }
 
-    wxString GetSelectMenuText() const override { return wxString( _( "Junction" ) ); }
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    {
+        return wxString( _( "Junction" ) );
+    }
 
     BITMAP_DEF GetMenuImage() const override;
 

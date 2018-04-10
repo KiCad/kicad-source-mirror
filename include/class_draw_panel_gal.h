@@ -37,6 +37,7 @@
 #include <math/vector2d.h>
 #include <msgpanel.h>
 #include <memory>
+#include <common.h>
 
 class BOARD;
 class EDA_DRAW_FRAME;
@@ -159,7 +160,7 @@ public:
      */
     virtual void SetTopLayer( int aLayer );
 
-    virtual void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
+    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList )
     {
         assert( false );
     }

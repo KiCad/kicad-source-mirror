@@ -205,7 +205,7 @@ public:
      */
     void            Mirror( const wxPoint& axis_pos );
 
-    void            GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void            GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     bool            HitTest( const wxPoint& aPosition ) const override;
 
@@ -219,7 +219,7 @@ public:
     // Virtual function
     const EDA_RECT    GetBoundingBox() const override;
 
-    wxString    GetSelectMenuText() const override;
+    wxString    GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

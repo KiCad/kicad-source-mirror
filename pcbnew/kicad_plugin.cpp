@@ -1591,7 +1591,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         const VIA*  via = static_cast<const VIA*>( aTrack );
         BOARD*      board = (BOARD*) via->GetParent();
 
-        wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +
+        wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText( MILLIMETRES ) +
                      wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );

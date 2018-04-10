@@ -128,7 +128,7 @@ public:
 
     bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Display pin info (given by GetMsgPanelInfo) and add some info related to aComponent
@@ -136,7 +136,8 @@ public:
      * @param aList is the message list to fill
      * @param aComponent is the component which "owns" the pin
      */
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList, SCH_COMPONENT* aComponent );
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList,
+                          SCH_COMPONENT* aComponent );
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
@@ -484,7 +485,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -494,7 +495,7 @@ private:
      * they are pin info without the actual pin position, which
      * is not known in schematic without knowing the parent component
      */
-    void getMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
+    void getMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList );
 
 
     /**

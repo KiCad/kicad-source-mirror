@@ -199,13 +199,15 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
-    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits,
+                                  std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     virtual const EDA_RECT GetBoundingBox() const override;
 
     virtual bool HitTest( const wxPoint& aPosition ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true,
+                  int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
     {
@@ -245,7 +247,7 @@ public:
                                                int             aCircleToSegmentsCount,
                                                double          aCorrectionFactor ) const override;
 
-    virtual wxString GetSelectMenuText() const override;
+    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     virtual BITMAP_DEF GetMenuImage() const override;
 

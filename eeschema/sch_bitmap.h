@@ -126,7 +126,10 @@ public:
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    wxString GetSelectMenuText() const override { return wxString( _( "Image" ) ); }
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    {
+        return wxString( _( "Image" ) );
+    }
 
     BITMAP_DEF GetMenuImage() const override;
 

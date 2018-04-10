@@ -988,7 +988,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
         if( netinfo )
         {
             MSG_PANEL_ITEMS items;
-            netinfo->GetMsgPanelInfo( items );
+            netinfo->GetMsgPanelInfo( frame->GetUserUnits(), items );
             frame->SetMsgPanel( items );
             frame->SendCrossProbeNetName( netinfo->GetNetname() );
         }

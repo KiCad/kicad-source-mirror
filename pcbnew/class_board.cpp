@@ -72,8 +72,15 @@ public:
         BOARD_ITEM( nullptr, NOT_USED )
     {}
 
-    wxString GetSelectMenuText() const override { return _( "(Deleted Item)" ); }
-    wxString GetClass() const override { return wxT( "DELETED_BOARD_ITEM" ); }
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    {
+        return _( "(Deleted Item)" );
+    }
+
+    wxString GetClass() const override
+    {
+        return wxT( "DELETED_BOARD_ITEM" );
+    }
 
     // pure virtuals:
     const wxPoint GetPosition() const override { return wxPoint(); }
@@ -1181,7 +1188,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void BOARD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString txt;
     int      viasCount = 0;

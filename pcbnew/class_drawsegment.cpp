@@ -396,7 +396,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     }
 }
 
-void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
+void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -411,7 +411,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     case S_CIRCLE:
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Circle" ), RED ) );
 
-        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
         break;
 
@@ -420,7 +420,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         msg.Printf( wxT( "%.1f" ), m_Angle / 10.0 );
         aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, RED ) );
 
-        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
         break;
 
@@ -432,7 +432,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Segment" ), RED ) );
 
-        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
 
         // angle counter-clockwise from 3'o-clock
@@ -443,15 +443,17 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
     }
 
-    wxString start;
-    start << GetStart();
-
-    wxString end;
-    end << GetEnd();
+    wxString start = wxString::Format( _( "@(%s, %s)" ),
+                                       MessageTextFromValue( aUnits, GetStart().x ),
+                                       MessageTextFromValue( aUnits, GetStart().y ) );
+    wxString end   = wxString::Format( _( "@(%s, %s)" ),
+                                       MessageTextFromValue( aUnits, GetEnd().x ),
+                                       MessageTextFromValue( aUnits, GetEnd().y ) );
 
     aList.push_back( MSG_PANEL_ITEM( start, end, DARKGREEN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKBROWN ) );
-    msg = ::CoordinateToString( m_Width );
+
+    msg = MessageTextFromValue( aUnits, m_Width, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 }
 
@@ -721,16 +723,12 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 }
 
 
-wxString DRAWSEGMENT::GetSelectMenuText() const
+wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-
-    text.Printf( _( "Pcb Graphic %s, length %s on %s" ),
-                 GetChars( ShowShape( m_Shape ) ),
-                 GetChars( ::MessageTextFromValue( g_UserUnit, GetLength() ) ),
-                 GetChars( GetLayerName() ) );
-
-    return text;
+    return wxString::Format( _( "Pcb Graphic %s, length %s on %s" ),
+                             ShowShape( m_Shape ),
+                             MessageTextFromValue( aUnits, GetLength() ),
+                             GetLayerName() );
 }
 
 

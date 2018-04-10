@@ -632,7 +632,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
     {
         wxString text;
         EDA_ITEM* item = ( *aCollector )[i];
-        text = item->GetSelectMenuText();
+        text = item->GetSelectMenuText( m_frame->GetUserUnits() );
         menu.Add( text, i + 1, item->GetMenuImage() );
     }
 

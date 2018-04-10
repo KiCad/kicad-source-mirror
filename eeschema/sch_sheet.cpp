@@ -649,7 +649,7 @@ wxString SCH_SHEET::GetFileName( void ) const
 }
 
 
-void SCH_SHEET::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void SCH_SHEET::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Sheet Name" ), m_name, CYAN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
@@ -735,7 +735,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 
 bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
 
     // Ignore the sheet file name if searching to replace.
     if( !(aSearchData.GetFlags() & FR_SEARCH_REPLACE)
@@ -866,11 +866,9 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
 }
 
 
-wxString SCH_SHEET::GetSelectMenuText() const
+wxString SCH_SHEET::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString tmp;
-    tmp.Printf( _( "Hierarchical Sheet %s" ), GetChars( m_name ) );
-    return tmp;
+    return wxString::Format( _( "Hierarchical Sheet %s" ), m_name );
 }
 
 

@@ -118,7 +118,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         // Force display pin information (the previous display could be a component info)
         MSG_PANEL_ITEMS items;
 
-        Pin->GetMsgPanelInfo( items, component );
+        Pin->GetMsgPanelInfo( m_UserUnits, items, component );
 
         SetMsgPanel( items );
 
@@ -188,7 +188,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
             {
-                wxString text = m_collectedItems[i]->GetSelectMenuText();
+                wxString text = m_collectedItems[i]->GetSelectMenuText( m_UserUnits );
                 BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
                 AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
             }
@@ -214,7 +214,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             ( (SCH_COMPONENT*) item )->SetCurrentSheetPath( &GetCurrentSheet() );
 
         MSG_PANEL_ITEMS items;
-        item->GetMsgPanelInfo( items );
+        item->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
     else

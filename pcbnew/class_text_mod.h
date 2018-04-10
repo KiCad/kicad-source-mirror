@@ -194,7 +194,7 @@ public:
                         GR_DRAWMODE     aDrawMode,
                         const wxPoint&  aOffset = ZeroOffset );
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     virtual bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
 
@@ -215,7 +215,7 @@ public:
         return wxT( "MTEXT" );
     }
 
-    wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

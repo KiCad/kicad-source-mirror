@@ -229,18 +229,18 @@ const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 }
 
 
-void LIB_CIRCLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = StringFromValue( g_UserUnit, m_Width, true );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM(  _( "Line Width" ), msg, BLUE ) );
 
-    msg = StringFromValue( g_UserUnit, m_Radius, true );
+    msg = MessageTextFromValue( aUnits, m_Radius, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
@@ -250,12 +250,12 @@ void LIB_CIRCLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 }
 
 
-wxString LIB_CIRCLE::GetSelectMenuText() const
+wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
-                             GetChars( CoordinateToString( m_Pos.x ) ),
-                             GetChars( CoordinateToString( m_Pos.y ) ),
-                             GetChars( CoordinateToString( m_Radius ) ) );
+                             MessageTextFromValue( aUnits, m_Pos.x ),
+                             MessageTextFromValue( aUnits, m_Pos.y ),
+                             MessageTextFromValue( aUnits, m_Radius ) );
 }
 
 

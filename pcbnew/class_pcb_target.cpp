@@ -183,17 +183,10 @@ const EDA_RECT PCB_TARGET::GetBoundingBox() const
 }
 
 
-wxString PCB_TARGET::GetSelectMenuText() const
+wxString PCB_TARGET::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString text;
-    wxString msg;
-
-    msg = ::CoordinateToString( m_Size );
-
     // Targets are on *every* layer by definition
-    text.Printf( _( "Target size %s" ), GetChars( msg ) );
-
-    return text;
+    return wxString::Format( _( "Target size %s" ), MessageTextFromValue( aUnits, m_Size ) );
 }
 
 

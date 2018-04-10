@@ -90,11 +90,14 @@ public:
      */
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    wxString GetSelectMenuText() const override { return wxString( _( "ERC Marker" ) ); }
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    {
+        return wxString( _( "ERC Marker" ) );
+    }
 
     BITMAP_DEF GetMenuImage() const override;
 

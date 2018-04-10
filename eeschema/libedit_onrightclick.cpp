@@ -95,7 +95,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     if( item )
     {
         MSG_PANEL_ITEMS items;
-        item->GetMsgPanelInfo( items );
+        item->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
     }
     else

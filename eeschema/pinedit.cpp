@@ -193,7 +193,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         OnModify( );
 
         MSG_PANEL_ITEMS items;
-        pin->GetMsgPanelInfo( items );
+        pin->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
         m_canvas->Refresh();
     }
@@ -365,7 +365,7 @@ void LIB_EDIT_FRAME::StartMovePin( LIB_ITEM* aItem )
 
     MSG_PANEL_ITEMS items;
 
-    cur_pin->GetMsgPanelInfo( items );
+    cur_pin->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
 
@@ -654,7 +654,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     m_canvas->CrossHairOn( DC );
 
     MSG_PANEL_ITEMS items;
-    pin->GetMsgPanelInfo( items );
+    pin->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
     OnModify( );
 }

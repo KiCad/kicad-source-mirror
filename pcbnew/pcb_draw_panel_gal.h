@@ -27,6 +27,7 @@
 
 #include <class_draw_panel_gal.h>
 #include <layers_id_colors_and_visibility.h>
+#include <common.h>
 
 namespace KIGFX
 {
@@ -93,7 +94,7 @@ public:
     void SyncLayersVisibility( const BOARD* aBoard );
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
-    void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;

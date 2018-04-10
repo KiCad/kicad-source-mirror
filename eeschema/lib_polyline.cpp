@@ -312,14 +312,14 @@ void LIB_POLYLINE::DeleteSegment( const wxPoint aPosition )
 }
 
 
-void LIB_POLYLINE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_POLYLINE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aList );
+    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = StringFromValue( g_UserUnit, m_Width, true );
+    msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 
@@ -330,11 +330,11 @@ void LIB_POLYLINE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 }
 
 
-wxString LIB_POLYLINE::GetSelectMenuText() const
+wxString LIB_POLYLINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Polyline at (%s, %s) with %d points" ),
-                             GetChars( CoordinateToString( m_PolyPoints[0].x ) ),
-                             GetChars( CoordinateToString( m_PolyPoints[0].y ) ),
+                             MessageTextFromValue( aUnits, m_PolyPoints[0].x ),
+                             MessageTextFromValue( aUnits, m_PolyPoints[0].y ),
                              int( m_PolyPoints.size() ) );
 }
 

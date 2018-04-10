@@ -345,8 +345,14 @@ public:
         SCH_ITEM( nullptr, NOT_USED )
     {}
 
-    wxString GetSelectMenuText() const override { return _( "(Deleted Item)" ); }
-    wxString GetClass() const override { return wxT( "DELETED_SCH_ITEM" ); }
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    {
+        return _( "(Deleted Item)" );
+    }
+    wxString GetClass() const override
+    {
+        return wxT( "DELETED_SCH_ITEM" );
+    }
 
     // define pure virtuals:
     wxPoint GetPosition() const override { return wxPoint(); }
@@ -444,7 +450,7 @@ void SCH_FIND_COLLECTOR::dump()
                 GetChars( m_findReplaceData.GetReplaceString() ) );
 
     for( m_foundIndex = 0;  m_foundIndex < GetCount();  m_foundIndex++ )
-        wxLogTrace( traceFindReplace, wxT( "    " ) + GetText() );
+        wxLogTrace( traceFindReplace, wxT( "    " ) + GetText( MILLIMETRES ) );
 
     m_foundIndex = tmp;
 }
@@ -482,7 +488,7 @@ SCH_FIND_COLLECTOR_DATA SCH_FIND_COLLECTOR::GetFindData( int aIndex )
 }
 
 
-wxString SCH_FIND_COLLECTOR::GetText()
+wxString SCH_FIND_COLLECTOR::GetText( EDA_UNITS_T aUnits )
 {
     wxCHECK_MSG( (GetCount() != 0) && IsValidIndex( m_foundIndex ), wxEmptyString,
                  wxT( "Cannot get found item at invalid index." ) );
@@ -490,23 +496,19 @@ wxString SCH_FIND_COLLECTOR::GetText()
     SCH_FIND_COLLECTOR_DATA data = m_data[ m_foundIndex ];
     EDA_ITEM* foundItem = GetItem( m_foundIndex );
 
-    wxString msg;
-
     if( data.GetParent() )
     {
-        msg.Printf( _( "Child item %s of parent item %s found in sheet %s" ),
-                    GetChars( foundItem->GetSelectMenuText() ),
-                    GetChars( data.GetParent()->GetSelectMenuText() ),
-                    GetChars( data.GetSheetPath() ) );
+        return wxString::Format( _( "Child item %s of parent item %s found in sheet %s" ),
+                                 foundItem->GetSelectMenuText( aUnits ),
+                                 data.GetParent()->GetSelectMenuText( aUnits ),
+                                 data.GetSheetPath() );
     }
     else
     {
-        msg.Printf( _( "Item %s found in sheet %s" ),
-                    GetChars( foundItem->GetSelectMenuText() ),
-                    GetChars( data.GetSheetPath() ) );
+        return wxString::Format( _( "Item %s found in sheet %s" ),
+                                 foundItem->GetSelectMenuText( aUnits ),
+                                 data.GetSheetPath() );
     }
-
-    return msg;
 }
 
 
