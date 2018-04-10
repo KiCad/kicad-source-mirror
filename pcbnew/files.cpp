@@ -428,7 +428,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    if( GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
         int response = YesNoCancelDialog( this, _(
             "The current board has been modified.  Do you wish to save the changes?" ),
