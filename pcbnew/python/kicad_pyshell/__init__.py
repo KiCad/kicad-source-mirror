@@ -104,7 +104,7 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
     def OnAbout(self, event):
         """Display an About window."""
         title = 'About : KiCad:PCBNEW - Python Shell'
-        text = "Enahnced Python Shell for KiCad:PCBNEW\n\n" + \
+        text = "Enhanced Python Shell for KiCad:PCBNEW\n\n" + \
                "This KiCad Python Shell is based on wxPython PyAlaMode.\n\n" + \
                "see: http://wiki.wxpython.org/PyAlaMode\n\n" + \
                "KiCad Revision: %s\n" % "??.??" + \
