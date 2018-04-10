@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-09 15:47+0200\n"
-"PO-Revision-Date: 2018-04-09 15:53+0200\n"
+"POT-Creation-Date: 2018-04-10 20:38+0200\n"
+"PO-Revision-Date: 2018-04-10 20:40+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -340,8 +340,8 @@ msgid "Alias names may not contain any of the characters "
 msgstr "I nomi alias non possono contenere nessuno dei caratteri "
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:379
-#: common/dialogs/dialog_env_var_config.cpp:314
-#: common/dialogs/dialog_env_var_config.cpp:480
+#: common/dialogs/dialog_env_var_config.cpp:319
+#: common/dialogs/dialog_env_var_config.cpp:499
 msgid "Environment Variable Help"
 msgstr "Aiuto variabile ambiente"
 
@@ -1095,51 +1095,51 @@ msgstr "Mostra i perimetri di delimitazione dei modelli"
 msgid "Show filled areas in zones"
 msgstr "Mostra riempimenti nelle zone"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:92
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:95
 msgid "3D model visibility:"
 msgstr "Visibilità modelli 3D:"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:109
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:112
 msgid "Show 3D through hole models"
 msgstr "Mostra i modelli 3D a via passanti"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:121
 msgid "Show 3D SMD models"
 msgstr "Mostra modelli 3D SMD"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:127
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:130
 msgid "Show 3D virtual models"
 msgstr "Mostra modelli 3D virtuali"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:145
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 msgid "Board layers:"
 msgstr "Strati scheda:"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:162
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:165
 msgid "Show silkscreen layers"
 msgstr "Mostra strato Serigrafia"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:174
 msgid "Show solder mask layers"
 msgstr "Mostra strato Maschera saldatura"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:180
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:183
 msgid "Show solder paste layers"
 msgstr "Mostra strato Pasta salda "
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:192
 msgid "Show adhesive layers"
 msgstr "Mostra strato Adesivo"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:195
-msgid "User layers:"
-msgstr "Strati utente:"
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:201
+msgid "User layers (not shown in realistic mode):"
+msgstr "Usa gli strati (non mostrato in modalità realistica):"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:212
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:218
 msgid "Show comments and drawings layers"
 msgstr "Mostra strati commenti e grafica"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:221
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:227
 msgid "Show ECO layers"
 msgstr "Mostra strati ECO"
 
@@ -3092,7 +3092,7 @@ msgid "Browse"
 msgstr "Esplora"
 
 #: common/dialogs/dialog_get_component_base.cpp:25
-#: common/dialogs/dialog_env_var_config.cpp:132
+#: common/dialogs/dialog_env_var_config.cpp:137
 #: common/dialogs/dialog_env_var_config_base.cpp:107
 #: eeschema/dialogs/dialog_netlist_base.cpp:114
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
@@ -3136,20 +3136,20 @@ msgstr "Reimposta"
 msgid "Defaults"
 msgstr "Predefiniti"
 
-#: common/dialogs/dialog_env_var_config.cpp:133
+#: common/dialogs/dialog_env_var_config.cpp:138
 msgid "Path:"
 msgstr "Percorso:"
 
-#: common/dialogs/dialog_env_var_config.cpp:202
+#: common/dialogs/dialog_env_var_config.cpp:207
 msgid "Path already exists."
 msgstr "Percorso già esistente."
 
-#: common/dialogs/dialog_env_var_config.cpp:256
+#: common/dialogs/dialog_env_var_config.cpp:261
 #, c-format
 msgid "Environment variable \"%s\" cannot be renamed."
 msgstr "La variabile ambiente \"%s\" non può essere rinominata."
 
-#: common/dialogs/dialog_env_var_config.cpp:259
+#: common/dialogs/dialog_env_var_config.cpp:264
 msgid ""
 "The selected environment variable name is required for KiCad functionality "
 "and can not be renamed."
@@ -3157,7 +3157,7 @@ msgstr ""
 "Il nome della variabile ambiente selezionata è richiesto per il "
 "funzionamento di KiCad e non può essere rinominato."
 
-#: common/dialogs/dialog_env_var_config.cpp:285
+#: common/dialogs/dialog_env_var_config.cpp:290
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -3171,7 +3171,7 @@ msgstr ""
 "hanno la precedenza su quelle definite in questa tabella.  Perciò (N.d.T. in "
 "caso di corrispondenza) i valori in questa tabella vengono ignorati."
 
-#: common/dialogs/dialog_env_var_config.cpp:291
+#: common/dialogs/dialog_env_var_config.cpp:296
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -3181,7 +3181,7 @@ msgstr ""
 "piattaforme, il campo nome accetterà solo lettere maiuscole, numeri, e "
 "caratteri di sottolineatura."
 
-#: common/dialogs/dialog_env_var_config.cpp:294
+#: common/dialogs/dialog_env_var_config.cpp:299
 msgid ""
 "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol "
 "libraries."
@@ -3189,7 +3189,7 @@ msgstr ""
 "<b>KICAD_SYMBOL_DIR</b> è il percorso base delle librerie di simboli "
 "installate localmente."
 
-#: common/dialogs/dialog_env_var_config.cpp:296
+#: common/dialogs/dialog_env_var_config.cpp:301
 msgid ""
 "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository of the "
 "official KiCad footprint libraries."
@@ -3197,7 +3197,7 @@ msgstr ""
 "<b>KIGITHUB</b> viene usato da KiCad per definire l'URL del repository delle "
 "librerie ufficiali di KiCad."
 
-#: common/dialogs/dialog_env_var_config.cpp:299
+#: common/dialogs/dialog_env_var_config.cpp:304
 msgid ""
 "<b>KISYS3DMOD</b> is the base path of system footprint 3D shapes (.3Dshapes "
 "folders)."
@@ -3205,7 +3205,7 @@ msgstr ""
 "<b>KISYS3DMOD</b> è il percorso base delle forme 3D delle impronte di "
 "sistema (cartelle .3Dshapes)."
 
-#: common/dialogs/dialog_env_var_config.cpp:302
+#: common/dialogs/dialog_env_var_config.cpp:307
 msgid ""
 "<b>KISYSMOD</b> is the base path of locally installed system footprint "
 "libraries (.pretty folders)."
@@ -3213,7 +3213,7 @@ msgstr ""
 "<b>KISYSMOD</b> è il percorso base delle librerie di impronte di sistema "
 "installate localmente (cartelle .pretty)."
 
-#: common/dialogs/dialog_env_var_config.cpp:305
+#: common/dialogs/dialog_env_var_config.cpp:310
 msgid ""
 "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is set "
 "to the absolute path of the currently loaded project file.  This environment "
@@ -3230,7 +3230,7 @@ msgstr ""
 "contenente una libreria impronte specifica del progetto di nome footprints."
 "pretty."
 
-#: common/dialogs/dialog_env_var_config.cpp:311
+#: common/dialogs/dialog_env_var_config.cpp:316
 msgid ""
 "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to create "
 "your own project templates folder."
@@ -3238,24 +3238,24 @@ msgstr ""
 "<b>KICAD_PTEMPLATES</b> è opzionale e può essere definita se si desidera "
 "creare  una propria cartella di modelli di progetto."
 
-#: common/dialogs/dialog_env_var_config.cpp:420
+#: common/dialogs/dialog_env_var_config.cpp:425
 msgid "Select Path for Environment Variable"
 msgstr "Seleziona il percorso per la variabile ambiente"
 
-#: common/dialogs/dialog_env_var_config.cpp:439
+#: common/dialogs/dialog_env_var_config.cpp:458
 msgid "Environment variable name cannot be empty."
 msgstr "Il nome della variabile ambiente non può essere vuoto."
 
-#: common/dialogs/dialog_env_var_config.cpp:446
+#: common/dialogs/dialog_env_var_config.cpp:465
 msgid "Environment variable value cannot be empty."
 msgstr "Il valore della variabile ambiente non può essere vuoto."
 
-#: common/dialogs/dialog_env_var_config.cpp:454
+#: common/dialogs/dialog_env_var_config.cpp:473
 msgid "Environment variable names cannot start with a digit (0-9)."
 msgstr ""
 "Il nome delle variabili ambiente non può cominciare con una cifra (0-9)."
 
-#: common/dialogs/dialog_env_var_config.cpp:466
+#: common/dialogs/dialog_env_var_config.cpp:485
 msgid ""
 "An environment variable is used for string substitutions.<br>Environment "
 "variables are primarily used for paths to make KiCad portable between "
@@ -3588,11 +3588,11 @@ msgstr "Editor immagine"
 msgid "Hotkeys Editor"
 msgstr "Modifica tasti"
 
-#: common/dialogs/dialog_env_var_config_base.h:63
+#: common/dialogs/dialog_env_var_config_base.h:65
 msgid "Environment Variable Configuration"
 msgstr "Configurazione della variabile ambiente"
 
-#: common/dialogs/dialog_env_var_config_base.h:94
+#: common/dialogs/dialog_env_var_config_base.h:97
 msgid "Edit Environment Variable"
 msgstr "Modifica la variabile ambiente"
 
@@ -5622,12 +5622,12 @@ msgstr "Pin %s, %s, %s"
 msgid "(Deleted Item)"
 msgstr "(elemento cancellato)"
 
-#: eeschema/sch_collectors.cpp:487
+#: eeschema/sch_collectors.cpp:496
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
 msgstr "Elemento figlio %s dell'elemento genitore %s trovato nel foglio %s"
 
-#: eeschema/sch_collectors.cpp:494
+#: eeschema/sch_collectors.cpp:503
 #, c-format
 msgid "Item %s found in sheet %s"
 msgstr "Elemento %s trovato nel foglio %s"
@@ -21559,31 +21559,31 @@ msgstr "Obiettivo di allineamento modificato"
 msgid "(not activated)"
 msgstr "(non attivato)"
 
-#: pcbnew/zone_filler.cpp:115
+#: pcbnew/zone_filler.cpp:113
 msgid "Checking zone fills..."
 msgstr "Controllo riempimenti zone..."
 
-#: pcbnew/zone_filler.cpp:166
+#: pcbnew/zone_filler.cpp:160
 msgid "Removing insulated copper islands..."
 msgstr "Rimozione isole di rame isolate..."
 
-#: pcbnew/zone_filler.cpp:188
-msgid "Zone fills may be out-of-date. Re-fill all zones?"
-msgstr "Riempimento zone forse da rifare. Ri-riempire tutte le zone?"
+#: pcbnew/zone_filler.cpp:187
+msgid "Zone fills are out-of-date. Re-fill?"
+msgstr "Riempimenti zone scaduti. Ri-riempire?"
 
-#: pcbnew/zone_filler.cpp:215
+#: pcbnew/zone_filler.cpp:214
 msgid "Performing polygon fills..."
 msgstr "Esecuzione riempimento poligoni..."
 
-#: pcbnew/zone_filler.cpp:267
+#: pcbnew/zone_filler.cpp:266
 msgid "Performing segment fills..."
 msgstr "Esecuzione riempimento segmenti..."
 
-#: pcbnew/zone_filler.cpp:294
+#: pcbnew/zone_filler.cpp:293
 msgid "Committing changes..."
 msgstr "Inserimeno cambiamenti..."
 
-#: pcbnew/zone_filler.cpp:301
+#: pcbnew/zone_filler.cpp:300
 msgid "Fill Zone(s)"
 msgstr "Riempimento zone"
 
@@ -28280,3 +28280,6 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
+
+#~ msgid "User layers:"
+#~ msgstr "Strati utente:"
