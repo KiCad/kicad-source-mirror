@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_env_var_config_base.h"
@@ -61,7 +61,7 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerHelp );
 	m_sdbSizer->Realize();
 	
-	mainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND, 5 );
+	mainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( mainSizer );
@@ -142,7 +142,7 @@ DIALOG_ENV_VAR_SINGLE_BASE::DIALOG_ENV_VAR_SINGLE_BASE( wxWindow* parent, wxWind
 	m_sdbSizer2->AddButton( m_sdbSizer2Cancel );
 	m_sdbSizer2->Realize();
 	
-	bSizerMain->Add( m_sdbSizer2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerMain->Add( m_sdbSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -152,6 +152,7 @@ DIALOG_ENV_VAR_SINGLE_BASE::DIALOG_ENV_VAR_SINGLE_BASE( wxWindow* parent, wxWind
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_envVarName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_ENV_VAR_SINGLE_BASE::onVarNameChange ), NULL, this );
 	m_buttonHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_SINGLE_BASE::onHelpClick ), NULL, this );
 	m_selectPathButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_SINGLE_BASE::OnSelectPath ), NULL, this );
 }
@@ -159,6 +160,7 @@ DIALOG_ENV_VAR_SINGLE_BASE::DIALOG_ENV_VAR_SINGLE_BASE( wxWindow* parent, wxWind
 DIALOG_ENV_VAR_SINGLE_BASE::~DIALOG_ENV_VAR_SINGLE_BASE()
 {
 	// Disconnect Events
+	m_envVarName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_ENV_VAR_SINGLE_BASE::onVarNameChange ), NULL, this );
 	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_SINGLE_BASE::onHelpClick ), NULL, this );
 	m_selectPathButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_SINGLE_BASE::OnSelectPath ), NULL, this );
 	

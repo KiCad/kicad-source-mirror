@@ -577,7 +577,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxBOTTOM|wxEXPAND</property>
+                    <property name="flag">wxBOTTOM|wxALIGN_RIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>
@@ -853,7 +853,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnText"></event>
+                                <event name="OnText">onVarNameChange</event>
                                 <event name="OnTextEnter"></event>
                                 <event name="OnTextMaxLen"></event>
                                 <event name="OnTextURL"></event>
@@ -1305,7 +1305,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_RIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>

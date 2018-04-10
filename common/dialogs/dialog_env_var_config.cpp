@@ -65,6 +65,11 @@ public:
 protected:
     void OnSelectPath( wxCommandEvent& event ) override;
     void onHelpClick( wxCommandEvent& event ) override;
+
+    // Currently, only upper case variable names are acepted. onVarNameChange
+    // changes on the fly any lower case char by the corresponding upper case
+	void onVarNameChange( wxCommandEvent& event ) override;
+
     bool TransferDataFromWindow() override;
 };
 
@@ -424,6 +429,20 @@ void DIALOG_ENV_VAR_SINGLE::OnSelectPath( wxCommandEvent& event )
 
     if( dlg.ShowModal() == wxID_OK )
          m_envVarPath->SetValue( dlg.GetPath() );
+}
+
+
+void DIALOG_ENV_VAR_SINGLE::onVarNameChange( wxCommandEvent& event )
+{
+    wxString upper_var = m_envVarName->GetValue().Upper();
+
+    if( upper_var != m_envVarName->GetValue() )
+    {
+        int pos = m_envVarName->GetInsertionPoint();
+        m_envVarName->ChangeValue( upper_var );
+        m_envVarName->SetInsertionPoint( pos );
+    }
+
 }
 
 

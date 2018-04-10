@@ -80,6 +80,6 @@ FILE_NAME_WITH_PATH_CHAR_VALIDATOR::FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString
 ENVIRONMENT_VARIABLE_CHAR_VALIDATOR::ENVIRONMENT_VARIABLE_CHAR_VALIDATOR( wxString* aValue ) :
     wxTextValidator( wxFILTER_INCLUDE_CHAR_LIST | wxFILTER_EMPTY, aValue )
 {
-    wxString includeChars( wxT( "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" ) );
+    wxString includeChars( wxT( "abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" ) );
     SetCharIncludes( includeChars );
 }
