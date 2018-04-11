@@ -63,7 +63,7 @@ CINFO3D_VISU::CINFO3D_VISU() :
 
     m_boardPos = wxPoint();
     m_boardSize = wxSize();
-    m_boardCenter = SFVEC3F();
+    m_boardCenter = SFVEC3F( 0.0f );
 
     m_boardBoudingBox.Reset();
     m_board2dBBox3DU.Reset();
