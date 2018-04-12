@@ -444,6 +444,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection.SetReferencePoint( cursorPos );
             m_view->Update( &selection );
+            frame()->SetMsgPanel( text );
         }
 
         else if( text && evt->IsAction( &PCB_ACTIONS::properties ) )
@@ -453,7 +454,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->SetNoToolSelected();
+    frame()->SetMsgPanel( nullptr );
+    frame()->SetNoToolSelected();
 
     return 0;
 }
@@ -514,6 +516,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             m_lineWidth += WIDTH_STEP;
             dimension->SetWidth( m_lineWidth );
             m_view->Update( &preview );
+            frame()->SetMsgPanel( dimension );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && step != SET_ORIGIN )
         {
@@ -522,6 +525,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_lineWidth -= WIDTH_STEP;
                 dimension->SetWidth( m_lineWidth );
                 m_view->Update( &preview );
+                frame()->SetMsgPanel( dimension );
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -557,6 +561,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->AdjustDimensionDetails();
 
                 preview.Add( dimension );
+                frame()->SetMsgPanel( dimension );
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
@@ -618,6 +623,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             // Show a preview of the item
             m_view->Update( &preview );
+            frame()->SetMsgPanel( dimension );
         }
     }
 
@@ -625,6 +631,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         delete dimension;
 
     m_view->Remove( &preview );
+    frame()->SetMsgPanel( nullptr );
     m_frame->SetNoToolSelected();
 
     return 0;
@@ -978,6 +985,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             }
 
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
@@ -994,6 +1002,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         {
             aGraphic->SetLayer( getDrawingLayer() );
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1017,6 +1026,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                     line45 = *aGraphic; // used only for direction 45 mode with lines
 
                 preview.Add( aGraphic );
+                frame()->SetMsgPanel( aGraphic );
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
@@ -1062,6 +1072,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
@@ -1069,6 +1080,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             aGraphic->SetWidth( m_lineWidth );
             line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
         {
@@ -1076,6 +1088,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             aGraphic->SetWidth( m_lineWidth );
             line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::resetCoords ) )
         {
@@ -1087,6 +1100,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         m_frame->GetScreen()->m_O_Curseur = wxPoint( 0, 0 );
 
     m_view->Remove( &preview );
+    frame()->SetMsgPanel( nullptr );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
 
@@ -1194,6 +1208,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             m_lineWidth -= WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {
@@ -1209,12 +1224,14 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             updateArcFromConstructionMgr( arcManager, *aGraphic );
             m_view->Update( &preview );
             m_view->Update( &arcAsst );
+            frame()->SetMsgPanel( aGraphic );
         }
     }
 
     preview.Remove( aGraphic );
     m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
+    frame()->SetMsgPanel( nullptr );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
 
