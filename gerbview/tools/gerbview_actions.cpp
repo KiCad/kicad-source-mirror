@@ -49,9 +49,6 @@ OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
     case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
         return ACTIONS::zoomFitScreen.MakeEvent();
 
-    case ID_MENU_ZOOM_SELECTION:
-        return GERBVIEW_ACTIONS::switchZoomToSelectionTool.MakeEvent();
-
     case ID_ZOOM_SELECTION:
         return ACTIONS::zoomTool.MakeEvent();
 

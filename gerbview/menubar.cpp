@@ -205,8 +205,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
     text = AddHotkeyName( _( "Zoom to Selection" ), GerbviewHokeysDescr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_MENU_ZOOM_SELECTION, text,
-                 KiBitmap( zoom_area_xpm ) );
+    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
 
     text = AddHotkeyName( _( "&Redraw" ), GerbviewHokeysDescr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,

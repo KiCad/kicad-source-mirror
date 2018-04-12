@@ -60,7 +60,6 @@ public:
     int ResetCoords( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int ShowHelp( const TOOL_EVENT& aEvent );
-    int SwitchZoomToSelectionTool( const TOOL_EVENT& aEvent );  // On/off main toolbar Zoom to selection tool
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
