@@ -386,3 +386,12 @@ size_t std::hash<wxString>::operator()( const wxString& s ) const
     return std::hash<std::wstring>{}( s.ToStdWstring() );
 }
 #endif
+
+
+bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) const
+{
+    if( aA.x == aB.x )
+        return aA.y < aB.y;
+
+    return aA.x < aB.x;
+}
