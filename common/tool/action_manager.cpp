@@ -29,7 +29,6 @@
 
 #include <hotkeys_basic.h>
 #include <cctype>
-#include <cassert>
 
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
     m_toolMgr( aToolManager )
@@ -62,10 +61,10 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 {
     // TOOL_ACTIONs are supposed to be named [appName.]toolName.actionName (with dots between)
     // action name without specifying at least toolName is not valid
-    assert( aAction->GetName().find( '.', 0 ) != std::string::npos );
+    wxASSERT( aAction->GetName().find( '.', 0 ) != std::string::npos );
 
     // TOOL_ACTIONs must have unique names & ids
-    assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
+    wxASSERT( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
 
     m_actionNameIndex[aAction->m_name] = aAction;
 }
@@ -84,7 +83,7 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
         if( action != actions.end() )
             actions.erase( action );
         else
-            assert( false );
+            wxASSERT( false );
     }
 }
 
@@ -144,7 +143,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         {
             // Store the global action for the hot key in case there was no possible
             // context actions to run
-            assert( global == NULL );       // there should be only one global action per hot key
+            wxASSERT( global == NULL );       // there should be only one global action per hot key
             global = action;
             continue;
         }
@@ -220,7 +219,7 @@ void ACTION_MANAGER::UpdateHotKeys()
                 ++global_actions_cnt;
         }
 
-        assert( global_actions_cnt <= 1 );
+        wxASSERT( global_actions_cnt <= 1 );
     }
 #endif /* not NDEBUG */
 }
