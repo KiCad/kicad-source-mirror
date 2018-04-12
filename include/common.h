@@ -356,7 +356,7 @@ namespace std
         size_t operator()( const wxString& s ) const;
     };
 
-    template<> struct std::less<wxPoint>
+    template<> struct less<wxPoint>
     {
         bool operator()( const wxPoint& aA, const wxPoint& aB ) const;
     };
