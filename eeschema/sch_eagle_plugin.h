@@ -209,6 +209,11 @@ private:
     ///> Segments representing wires for intersection checking
     std::vector<SEG_DESC> m_segments;
 
+    ///> Positions of pins and wire endings mapped to its parent
+    std::map<wxPoint, std::set<const EDA_ITEM*>> m_connPoints;
+
+    ///> Checks if there are other wires or pins at the position of the tested pin
+    bool checkConnections( const SCH_COMPONENT* aComponent, const LIB_PIN* aPin ) const;
 
     // Structure describing missing units containing pins creating implicit connections
     // (named power pins in Eagle).

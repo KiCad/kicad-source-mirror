@@ -1660,7 +1660,7 @@ bool SCH_COMPONENT::IsDangling() const
 }
 
 
-wxPoint SCH_COMPONENT::GetPinPhysicalPosition( LIB_PIN* Pin )
+wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 {
     wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );

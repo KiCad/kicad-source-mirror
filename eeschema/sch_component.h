@@ -564,7 +564,7 @@ public:
      */
     bool IsDangling() const override;
 
-    wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );
+    wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
