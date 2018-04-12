@@ -707,7 +707,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
     msg << wxT( ": " ) << m_footprintListBox->GetCount();
 
-    m_statusLine1->SetLabel( msg );
+    SetStatusText( msg );
 
 
     msg.Empty();
@@ -722,7 +722,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
                                 module->GetKeywords() );
     }
 
-    m_statusLine2->SetLabel( msg );
+    SetStatusText( msg, 1 );
 }
 
 
@@ -943,11 +943,23 @@ DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame()
             ( wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME ) );
 }
 
-const wxString CVPCB_MAINFRAME::GetSelectedFootprint()
+
+wxString CVPCB_MAINFRAME::GetSelectedFootprint()
 {
     // returns the LIB_ID of the selected footprint in footprint listview
     // or a empty string
     return m_footprintListBox->GetSelectedFootprint();
+}
+
+
+void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
+{
+    wxASSERT( aNumber < 2 );
+
+    if( aNumber == 1 )
+        m_statusLine2->SetLabel( aText );
+    else
+        m_statusLine1->SetLabel( aText );
 }
 
 
@@ -981,7 +993,7 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_STATUS:
-        m_statusLine2->SetLabel( payload );
+        SetStatusText( payload, 1 );
         break;
 
     default:

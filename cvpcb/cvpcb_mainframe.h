@@ -293,7 +293,9 @@ public:
      * @return the LIB_ID of the selected footprint in footprint listview
      * or a empty string if no selection
      */
-    const wxString GetSelectedFootprint();
+    wxString GetSelectedFootprint();
+
+    void SetStatusText( const wxString& aText, int aNumber = 0 ) override;
 
 private:
     // UI event handlers.
