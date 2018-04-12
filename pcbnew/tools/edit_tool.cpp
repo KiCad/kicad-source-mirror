@@ -438,6 +438,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     static_cast<BOARD_ITEM*>( item )->Move( movement );
                 }
+
+                frame()->UpdateMsgPanel();
             }
             else if( !m_dragging )    // Prepare to start dragging
             {

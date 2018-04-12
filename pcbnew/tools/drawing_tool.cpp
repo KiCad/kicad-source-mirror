@@ -454,7 +454,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
     }
 
-    frame()->SetMsgPanel( nullptr );
+    frame()->SetMsgPanel( board() );
     frame()->SetNoToolSelected();
 
     return 0;
@@ -631,7 +631,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         delete dimension;
 
     m_view->Remove( &preview );
-    frame()->SetMsgPanel( nullptr );
+    frame()->SetMsgPanel( board() );
     m_frame->SetNoToolSelected();
 
     return 0;
@@ -1072,7 +1072,11 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
             m_view->Update( &preview );
-            frame()->SetMsgPanel( aGraphic );
+
+            if( started )
+                frame()->SetMsgPanel( aGraphic );
+            else
+                frame()->SetMsgPanel( board() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
@@ -1100,7 +1104,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         m_frame->GetScreen()->m_O_Curseur = wxPoint( 0, 0 );
 
     m_view->Remove( &preview );
-    frame()->SetMsgPanel( nullptr );
+    frame()->SetMsgPanel( board() );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
 
@@ -1202,6 +1206,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             m_lineWidth += WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
         {
@@ -1224,14 +1229,18 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             updateArcFromConstructionMgr( arcManager, *aGraphic );
             m_view->Update( &preview );
             m_view->Update( &arcAsst );
-            frame()->SetMsgPanel( aGraphic );
+
+            if(firstPoint)
+                frame()->SetMsgPanel( aGraphic );
+            else
+                frame()->SetMsgPanel( board() );
         }
     }
 
     preview.Remove( aGraphic );
     m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
-    frame()->SetMsgPanel( nullptr );
+    frame()->SetMsgPanel( board() );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
 
