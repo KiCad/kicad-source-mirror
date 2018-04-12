@@ -228,6 +228,6 @@ FOOTPRINT_FILTER_IT FOOTPRINT_FILTER::begin()
 FOOTPRINT_FILTER_IT FOOTPRINT_FILTER::end()
 {
     FOOTPRINT_FILTER_IT end_it( *this );
-    end_it.m_pos = m_list->GetCount();
+    end_it.m_pos = m_list ? m_list->GetCount() : 0;
     return end_it;
 }
