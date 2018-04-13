@@ -532,7 +532,8 @@ void GERBVIEW_FRAME::OnToggleFlashItemDrawMode( wxCommandEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( GetToolId() == aEvent.GetId() );
+    if( aEvent.GetEventObject() == m_drawToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

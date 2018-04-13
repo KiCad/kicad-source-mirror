@@ -572,7 +572,8 @@ void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( GetToolId() == aEvent.GetId() );
+    if( aEvent.GetEventObject() == m_drawToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 
