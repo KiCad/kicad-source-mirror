@@ -538,7 +538,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event
     {
         wxString msg;
 
-        msg.Printf( _( "Foot print filter \"%s\" is already defined." ), GetChars( Line ) );
+        msg.Printf( _( "Footprint filter \"%s\" is already defined." ), GetChars( Line ) );
         DisplayError( this, msg );
         return;
     }
