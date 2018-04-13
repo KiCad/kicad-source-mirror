@@ -391,7 +391,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     }
 
     //Set the part selection in multiple part per package
-    if( m_cmp->GetUnit() )
+    if( m_cmp->GetUnitCount() > 1 )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
 
