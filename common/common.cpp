@@ -388,6 +388,7 @@ size_t std::hash<wxString>::operator()( const wxString& s ) const
 #endif
 
 
+#ifdef USE_KICAD_WXPOINT_LESS
 bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) const
 {
     if( aA.x == aB.x )
@@ -395,3 +396,4 @@ bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) cons
 
     return aA.x < aB.x;
 }
+#endif
