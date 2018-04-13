@@ -131,7 +131,8 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
             m_libName = "noname";
 
         m_libName += "-eagle-import";
-        m_libName = LIB_ID::FixIllegalChars( m_libName );
+        // use ID_SCH as it is more restrictive
+        m_libName = LIB_ID::FixIllegalChars( m_libName, LIB_ID::ID_SCH );
     }
 
     return m_libName;
@@ -1073,7 +1074,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         package = p->second;
     }
 
-    wxString kisymbolname = LIB_ID::FixIllegalChars( symbolname );
+    wxString kisymbolname = LIB_ID::FixIllegalChars( symbolname, LIB_ID::ID_SCH );
 
     LIB_ALIAS* alias = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
                                          m_properties.get() );
@@ -1296,7 +1297,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( gates_count == 1 && ispower )
                 kpart->SetPower();
 
-            wxString name = LIB_ID::FixIllegalChars( kpart->GetName() );
+            wxString name = LIB_ID::FixIllegalChars( kpart->GetName(), LIB_ID::ID_SCH );
             kpart->SetName( name );
             m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *kpart.get() ),
                               m_properties.get() );

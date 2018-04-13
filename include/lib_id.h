@@ -68,6 +68,9 @@ public:
 
     LIB_ID( const wxString& aId );
 
+    ///> Types of library identifiers
+    enum LIB_ID_TYPE { ID_SCH, ID_PCB };
+
     /**
      * This LIB_ID ctor is a special version which ignores the parsing due to symbol
      * names allowing '/' as a valid character.  This was causing the symbol names to
@@ -188,23 +191,37 @@ public:
      * Examine \a aLibItemName for invalid #LIB_ID item name characters.
      *
      * @param aLibItemName is the #LIB_ID name to test for illegal characters.
+     * @param aType is the library identifier type
      * @return true if \a aLibItemName contain illegal characters otherwise false.
      */
-    static bool HasIllegalChars( const UTF8& aLibItemName );
+    static bool HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType );
 
     /**
      * Replace illegal #LIB_ID item name characters with underscores '_'.
      *
      * @param aLibItemName is the #LIB_ID item name to replace illegal characters.
+     * @param aType is the library identifier type
      * @return the corrected version of \a aLibItemName.
      */
-    static UTF8 FixIllegalChars( const UTF8& aLibItemName );
+    static UTF8 FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType );
+
+    /**
+     * Looks for characters that are illegal in library and item names.
+     *
+     * @param aNickname is the logical library name to be tested.
+     * @param aType is the library identifier type
+     * @return Invalid character found in the name or 0 is the name is valid.
+     */
+    static unsigned FindIllegalChar( const UTF8& aNickname, LIB_ID_TYPE aType );
 
 #if defined(DEBUG)
     static void Test();
 #endif
 
 protected:
+    ///> Tests whether a character is a legal LIB_ID character
+    static bool isLegalChar( unsigned aChar, LIB_ID_TYPE aType );
+
     UTF8    nickname;       ///< The nickname of the library or empty.
     UTF8    item_name;      ///< The name of the entry in the logical library.
     UTF8    revision;       ///< The revision of the entry.

@@ -359,21 +359,11 @@ int LIB_ID::compare( const LIB_ID& aLibId ) const
 }
 
 
-bool LIB_ID::HasIllegalChars( const UTF8& aLibItemName )
+bool LIB_ID::HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
 {
     for( auto ch : aLibItemName )
     {
-        switch( ch )
-        {
-        case '\t':
-        case '\n':
-        case '\r':
-        case ':':
-        case '/':
-            return true;
-        }
-
-        if( !wxIsascii( ch ) )
+        if( !isLegalChar( ch, aType ) )
             return true;
     }
 
@@ -381,38 +371,53 @@ bool LIB_ID::HasIllegalChars( const UTF8& aLibItemName )
 }
 
 
-UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName )
+UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
 {
     UTF8 fixedName;
 
     for( UTF8::uni_iter chIt = aLibItemName.ubegin(); chIt < aLibItemName.uend(); ++chIt )
     {
         auto ch = *chIt;
-
-        if( !wxIsascii( ch ) )
-        {
-            fixedName += '_';
-        }
-        else
-        {
-            switch( ch )
-            {
-            case '\t':
-            case '\n':
-            case '\r':
-            case ':':
-            case '/':
-            case '\\':
-                fixedName += '_';
-                break;
-
-            default:
-                fixedName += ch;
-            }
-        }
+        fixedName += isLegalChar( ch, aType ) ? ch : '_';
     }
 
     return fixedName;
+}
+
+
+unsigned LIB_ID::FindIllegalChar( const UTF8& aNickname, LIB_ID_TYPE aType )
+{
+    for( unsigned ch : aNickname )
+    {
+        if( !isLegalChar( ch, aType ) )
+            return ch;
+    }
+
+    return 0;
+}
+
+
+///> Set of characters not accepted in library and entry names
+#define BASE_ILLEGAL_CHARS '\t', '\n', '\r', ':', '/', '\\'
+const unsigned schIllegalChars[] = { BASE_ILLEGAL_CHARS, ' ' };
+const unsigned pcbIllegalChars[] = { BASE_ILLEGAL_CHARS, 0 };
+#define ILL_CHAR_SIZE (sizeof(schIllegalChars) / sizeof(int))
+
+bool LIB_ID::isLegalChar( unsigned aChar, LIB_ID_TYPE aType )
+{
+    const unsigned (&illegalChars)[ILL_CHAR_SIZE] =
+        aType == ID_SCH ? schIllegalChars : pcbIllegalChars;
+
+    for( const unsigned ch : illegalChars )
+    {
+        if( ch == aChar )
+            return false;
+    }
+
+    if( !wxIsascii( aChar ) )
+        return false;
+
+    return true;
 }
 
 
