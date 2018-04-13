@@ -742,7 +742,8 @@ void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
             int last_row = libgrid->GetNumberRows() - 1;
 
             // Add the nickname: currently make it from filename
-            tbl->SetValue( last_row, COL_NICKNAME, it->GetDescription() );
+            tbl->SetValue( last_row, COL_NICKNAME,
+                    LIB_ID::FixIllegalChars( it->GetDescription(), LIB_ID::ID_PCB ) );
 
             // Add the path:
             tbl->SetValue( last_row, COL_URI, it->GetAutoPath( dlg.GetLibScope() ) );

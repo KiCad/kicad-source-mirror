@@ -375,7 +375,8 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             int last_row = m_cur_grid->GetNumberRows() - 1;
             wxFileName fn( filePath );
 
-            m_cur_grid->SetCellValue( last_row, COL_NICKNAME, fn.GetName() );
+            m_cur_grid->SetCellValue( last_row, COL_NICKNAME,
+                    LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_SCH ) );
 
             // TODO the following code can detect only schematic types, not libs
             // SCH_IO_MGR needs to provide file extension information for libraries too
