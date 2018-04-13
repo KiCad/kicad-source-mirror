@@ -545,6 +545,8 @@ endif()
 #
 find_package( GLM 0.9.5.1 REQUIRED )
 
+add_definitions( -DGLM_FORCE_CTOR_INIT )
+
 #
 # Find CURL library, required for github plugin
 #
