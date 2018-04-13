@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@
 #include <eda_base_frame.h>
 #include <menus_helpers.h>
 #include <bitmaps.h>
+#include <trace_helpers.h>
 
 #include <wx/display.h>
 #include <wx/utils.h>
@@ -49,8 +50,6 @@
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
 
 #define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"
-
-const wxChar traceAutoSave[] = wxT( "KICAD_TRACE_AUTOSAVE" );
 
 ///@{
 /// \ingroup config

@@ -45,6 +45,7 @@
 #include <base_units.h>
 #include <math/box2.h>
 #include <lockfile.h>
+#include <trace_helpers.h>
 
 #include <wx/fontdlg.h>
 #include <wx/snglinst.h>
@@ -243,7 +244,7 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 
 void EDA_DRAW_FRAME::OnCharHook( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_FRAME::OnCharHook %s", dumpKeyEvent( event ) );
+    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_FRAME::OnCharHook %s", dump( event ) );
     // Key events can be filtered here.
     // Currently no filtering is made.
     event.Skip();

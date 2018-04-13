@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <trigo.h>
 #include <wildcards_and_files_ext.h>
 #include <filter_reader.h>
+#include <trace_helpers.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -47,29 +48,6 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
 
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable GEDA PCB plugin debug output.
- */
-static const wxString traceFootprintLibrary = wxT( "KICAD_TRACE_GEDA_PLUGIN" );
-
-#ifdef DEBUG
-static void inline traceParams( wxArrayString& aParams )
-{
-    wxString tmp;
-
-    for( unsigned i = 0;  i < aParams.GetCount();  i++ )
-    {
-        if( aParams[i].IsEmpty() )
-            tmp << wxT( "\"\" " );
-        else
-            tmp << aParams[i] << wxT( " " );
-    }
-
-    wxLogTrace( traceFootprintLibrary, tmp );
-}
-#endif
 
 static inline long parseInt( const wxString& aValue, double aScalar )
 {
@@ -117,14 +95,6 @@ static inline long parseInt( const wxString& aValue, double aScalar )
 
     return KiROUND( value * aScalar );
 }
-
-
-// Tracing for token parameter arrays.
-#ifdef DEBUG
-#define TRACE_PARAMS( arr )  traceParams( arr );
-#else
-#define TRACE_PARAMS( arr )                            // Expands to nothing on non-debug builds.
-#endif
 
 
 /**
@@ -532,7 +502,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                 conv_unit = NEW_GPCB_UNIT_CONV;
         }
 
-        wxLogTrace( traceFootprintLibrary, wxT( "%s parameter count = %d." ),
+        wxLogTrace( traceGedaPcbPlugin, wxT( "%s parameter count = %d." ),
                     GetChars( parameters[0] ), paramCnt );
 
         // Parse a line with format: ElementLine [X1 Y1 X2 Y2 Thickness]
@@ -805,7 +775,7 @@ void GPCB_FPL_CACHE::parseParameters( wxArrayString& aParameterList, LINE_READER
             // of a keyword definition.
             if( aParameterList.GetCount() == 1 )
             {
-                TRACE_PARAMS( aParameterList );
+                wxLogTrace( traceGedaPcbPlugin, dump( aParameterList ) );
                 return;
             }
 
@@ -821,7 +791,7 @@ void GPCB_FPL_CACHE::parseParameters( wxArrayString& aParameterList, LINE_READER
 
             tmp.Append( key );
             aParameterList.Add( tmp );
-            TRACE_PARAMS( aParameterList );
+            wxLogTrace( traceGedaPcbPlugin, dump( aParameterList ) );
             return;
 
         case '\n':
@@ -1092,7 +1062,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
         }
     }
 
-    wxLogTrace( traceFootprintLibrary, wxT( "Removing footprint library '%s'" ),
+    wxLogTrace( traceGedaPcbPlugin, wxT( "Removing footprint library '%s'" ),
                 aLibraryPath.GetData() );
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog

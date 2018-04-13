@@ -44,6 +44,7 @@
 #include <ratsnest_data.h>
 #include <kiway.h>
 #include <kiway_player.h>
+#include <trace_helpers.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>

@@ -41,6 +41,7 @@
 #include <draw_frame.h>
 #include <view/view_controls.h>
 #include <gal/gal_display_options.h>
+#include <trace_helpers.h>
 
 #include <kicad_device_context.h>
 
@@ -63,22 +64,6 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 // Definitions for enabling and disabling debugging features in drawpanel.cpp.
 // Please don't forget to turn these off before making any commits to Launchpad.
 #define DEBUG_SHOW_CLIP_RECT       0  // Set to 1 to draw clipping rectangle.
-
-
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable draw panel coordinate debug tracing.
- */
-static const wxString kicadTraceCoords = wxT( "KICAD_TRACE_COORDS" );
-
-
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable wxKeyEvent debug tracing.
- */
-const wxString kicadTraceKeyEvent = "KICAD_KEY_EVENTS";
 
 
 // Events used by EDA_DRAW_PANEL
@@ -1395,29 +1380,9 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-// @todo Move this to a debug helper file in common folder.
-wxString dumpKeyEvent( const wxKeyEvent& aEvent )
-{
-    wxString dump = wxString::Format( "key code %d", aEvent.GetKeyCode() );
-
-    if( aEvent.GetUnicodeKey() )
-        dump += wxString::Format(", unicode key %d", aEvent.GetUnicodeKey() );
-    if( aEvent.HasModifiers() )
-        dump += wxString::Format( ", mod %d", aEvent.GetModifiers() );
-    if( aEvent.ShiftDown() )
-        dump += ", shift";
-    if( aEvent.ControlDown() )
-        dump += ", ctrl";
-    if( aEvent.AltDown() )
-        dump += ", alt";
-
-    return dump;
-}
-
-
 void EDA_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnCharHook %s", dumpKeyEvent( event ) );
+    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnCharHook %s", dump( event ) );
     event.Skip();
 }
 
@@ -1427,7 +1392,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     int localkey;
     wxPoint pos;
 
-    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnKeyEvent %s", dumpKeyEvent( event ) );
+    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnKeyEvent %s", dump( event ) );
 
     localkey = event.GetKeyCode();
 

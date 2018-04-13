@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,14 +59,6 @@ enum  LIBRENTRYOPTIONS
     ENTRY_NORMAL,   // Libentry is a standard part (real or alias)
     ENTRY_POWER     // Libentry is a power symbol
 };
-
-
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable schematic library memory deletion debug output.
- */
-extern const wxChar traceSchLibMem[];
 
 
 /**

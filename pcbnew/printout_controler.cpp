@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,16 +40,9 @@
 #include <pcb_base_frame.h>
 #include <class_board.h>
 #include <pcbnew.h>
+#include <trace_helpers.h>
 
 #include <printout_controler.h>
-
-
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable PCB print controller debug output.
- */
-static const wxString tracePrinting = wxT( "KICAD_TRACE_PCB_PRINT" );
 
 
 PRINT_PARAMETERS::PRINT_PARAMETERS()

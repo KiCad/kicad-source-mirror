@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
 #include <base_units.h>
+#include <trace_helpers.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -55,13 +56,6 @@ using namespace PCB_KEYS_T;
 
 #define FMT_IU     BOARD_ITEM::FormatInternalUnits
 #define FMT_ANGLE  BOARD_ITEM::FormatAngle
-
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable KiCad PCB plugin debug output.
- */
-static const wxString traceFootprintLibrary = wxT( "KICAD_TRACE_FP_PLUGIN" );
 
 
 ///> Removes empty nets (i.e. with node count equal zero) from net classes
@@ -221,7 +215,7 @@ void FP_CACHE::Save( MODULE* aModule )
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
+            wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file %s" ),
                         GetChars( tempFileName ) );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
@@ -2104,7 +2098,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( it != mods.end() )
     {
-        wxLogTrace( traceFootprintLibrary, wxT( "Removing footprint library file '%s'." ),
+        wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library file '%s'." ),
                     fn.GetFullPath().GetData() );
         mods.erase( footprintName );
         wxRemoveFile( fn.GetFullPath() );
@@ -2122,7 +2116,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     if( module->GetLayer() != F_Cu )
         module->Flip( module->GetPosition() );
 
-    wxLogTrace( traceFootprintLibrary, wxT( "Creating s-expression footprint file: %s." ),
+    wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expression footprint file: %s." ),
                 fn.GetFullPath().GetData() );
     mods.insert( footprintName, new FP_CACHE_ITEM( module, fn ) );
     m_cache->Save( module );
@@ -2225,7 +2219,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
         }
     }
 
-    wxLogTrace( traceFootprintLibrary, wxT( "Removing footprint library \"%s\"" ),
+    wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library \"%s\"" ),
                 aLibraryPath.GetData() );
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog

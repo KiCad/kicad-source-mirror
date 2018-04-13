@@ -52,17 +52,6 @@ typedef void ( *MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
 
-/**
- * Debug helper for printing wxKeyEvent information.
- *
- * @param aEvent is the wxKeyEvent to generate the print string from.
- * @return the wxKeyEvent information.
- */
-extern wxString dumpKeyEvent( const wxKeyEvent& aEvent );
-
-extern const wxString kicadTraceKeyEvent;
-
-
 class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:

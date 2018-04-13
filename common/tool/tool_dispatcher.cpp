@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Last changez: 2017
+ * Last changes: 2018
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
  */
 
 #include <pcb_edit_frame.h>
+#include <trace_helpers.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -35,10 +36,6 @@
 #include <pcbnew_id.h>
 
 #include <core/optional.h>
-
-extern wxString dumpKeyEvent( const wxKeyEvent& aEvent );
-
-extern const wxString kicadTraceKeyEvent;
 
 
 ///> Stores information about a mouse button state
@@ -381,7 +378,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             {
                 wxLogTrace( kicadTraceKeyEvent,
                             "TOOL_DISPATCHER::DispatchWxEvent wxEVT_CHAR_HOOK %s",
-                            dumpKeyEvent( *ke ) );
+                            dump( *ke ) );
                 aEvent.Skip();
                 return;
             }
@@ -392,7 +389,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             wxLogTrace( kicadTraceKeyEvent,
                         "TOOL_DISPATCHER::DispatchWxEvent wxEVT_CHAR %s",
-                        dumpKeyEvent( *ke ) );
+                        dump( *ke ) );
         }
 
         int mods = decodeModifiers( ke );

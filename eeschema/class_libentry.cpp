@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <sch_screen.h>
 #include <richio.h>
 #include <kicad_string.h>
+#include <trace_helpers.h>
 
 #include <general.h>
 #include <template_fieldnames.h>
@@ -59,9 +60,6 @@ int LIB_PART::m_subpartIdSeparator = 0;
 // 'A' or '1' usually. (to print U1.A or U1.1)
 // if this a a digit, a number is used as id symbol
 int LIB_PART::m_subpartFirstId = 'A';
-
-
-const wxChar traceSchLibMem[] = wxT( "KICAD_TRACE_SCH_LIB_MEM" );     // public
 
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ):

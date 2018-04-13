@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <common.h>
 #include <gr_basic.h>
 #include <base_struct.h>
+#include <trace_helpers.h>
 #include <sch_item_struct.h>
 #include <sch_screen.h>
 #include <class_drawpanel.h>
@@ -37,8 +38,6 @@
 
 #include <general.h>
 
-
-const wxString traceFindItem = wxT( "KICAD_TRACE_FIND_ITEM" );
 
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time

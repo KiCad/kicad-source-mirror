@@ -38,6 +38,7 @@
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
+#include <trace_helpers.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>

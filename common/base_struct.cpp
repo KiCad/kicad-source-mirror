@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <class_drawpanel.h>
 #include <base_screen.h>
 #include <bitmaps.h>
+#include <trace_helpers.h>
 
 #include "../eeschema/dialogs/dialog_schematic_find.h"
 
@@ -54,8 +55,6 @@ static const unsigned char dummy_png[] = {
 };
 
 static const BITMAP_OPAQUE dummy_xpm[1] = {{ dummy_png, sizeof( dummy_png ), "dummy_xpm" }};
-
-const wxString traceFindReplace = "KICAD_TRACE_FIND_REPLACE";
 
 
 enum textbox {

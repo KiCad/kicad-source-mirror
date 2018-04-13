@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -33,6 +33,7 @@
 #include <richio.h>
 #include <core/typeinfo.h>
 #include <properties.h>
+#include <trace_helpers.h>
 
 #include <general.h>
 #include <sch_bitmap.h>
@@ -77,13 +78,6 @@ const char* delims = " \t\r\n";
 #define T_COLOR "rgb"          // cannot be modifed (used by wxWidgets)
 #define T_COLORA "rgba"        // cannot be modifed (used by wxWidgets)
 #define T_WIDTH "width"
-
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable legacy schematic plugin debug output.
- */
-const wxChar traceSchLegacyPlugin[] = wxT( "KICAD_TRACE_SCH_LEGACY_PLUGIN" );
 
 
 static bool is_eol( char c )

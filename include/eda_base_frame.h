@@ -96,14 +96,6 @@ enum id_librarytype {
 
 
 /**
- * @ingroup trace_env_vars
- *
- * Flag to enable auto save feature debug tracing.
- */
-extern const wxChar traceAutoSave[];
-
-
-/**
  * Class EDA_BASE_FRAME
  * is the base frame for deriving all KiCad main window classes.  This class is not
  * intended to be used directly.  It provides support for automatic calls to

@@ -36,6 +36,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <richio.h>
+#include <trace_helpers.h>
 
 #include <eeschema_id.h>
 #include <class_library.h>
