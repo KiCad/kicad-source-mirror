@@ -1690,6 +1690,8 @@ void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aScreen, KI
     wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
 
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
+
     init( aKiway, aProperties );
 
     wxFileName fn = aFileName;
