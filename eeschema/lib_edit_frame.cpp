@@ -472,7 +472,7 @@ void LIB_EDIT_FRAME::ClearSearchTreeSelection()
 
 void LIB_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_drawToolBar )
+    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 

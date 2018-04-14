@@ -195,7 +195,7 @@ void PCB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_drawToolBar )
+    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 

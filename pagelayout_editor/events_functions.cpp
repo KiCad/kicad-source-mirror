@@ -619,6 +619,5 @@ void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& eve
 
 void PL_EDITOR_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_drawToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
+    aEvent.Check( GetToolId() == aEvent.GetId() );
 }
