@@ -365,8 +365,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Open the GerbView Manual" ),
                  KiBitmap( online_help_xpm ) );
 
+    text = AddHotkeyName( _( "&List Hotkeys..." ), GerbviewHokeysDescr, HK_HELP );
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys..." ),
+                 text,
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
