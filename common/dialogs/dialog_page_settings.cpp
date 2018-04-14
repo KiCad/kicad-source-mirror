@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@
 // List of page formats.
 // they are prefixed by "_HKI" (already in use for hotkeys) instead of "_",
 // because we need both the translated and the not translated version.
-// when displayed in dialog we should explicitely call wxGetTranslation()
+// when displayed in dialog we should explicitly call wxGetTranslation()
 // to show the translated version.
 // See hotkeys_basic.h for more info
 #define _HKI( x ) wxT( x )
@@ -74,7 +74,7 @@ static const wxString pageFmts[] =
     _HKI("USLegal 8.5x14in"),       // USLegal without space is correct
     _HKI("USLedger 11x17in"),       // USLedger without space is correct
     _HKI("User (Custom)"),          // size defined by user. The string must contain "Custom"
-                                    // to be reconized in code
+                                    // to be recognized in code
 };
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
@@ -125,7 +125,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     double      customSizeX;
     double      customSizeY;
 
-    // initalize page format choice box and page format list.
+    // initialize page format choice box and page format list.
     // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();
 
@@ -137,7 +137,6 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     // initialize the page layout descr filename
     SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
-
 
 #ifdef EESCHEMA
     // Init display value for schematic sub-sheet number
@@ -464,13 +463,16 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
             if( m_layout_size.x < MIN_PAGE_SIZE || m_layout_size.y < MIN_PAGE_SIZE ||
                 m_layout_size.x > MAX_PAGE_SIZE || m_layout_size.y > MAX_PAGE_SIZE )
             {
-                wxString msg = wxString::Format( _( "Selected custom paper size\nis out of the permissible \
-limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
+                wxString msg = wxString::Format( _( "Selected custom paper size\n"
+                                                    "is out of the permissible limits\n"
+                                                    "%.1f - %.1f %s!\nSelect another custom "
+                                                    "paper size?" ),
                         g_UserUnit == INCHES ? MIN_PAGE_SIZE / 1000. : MIN_PAGE_SIZE * 25.4 / 1000,
                         g_UserUnit == INCHES ? MAX_PAGE_SIZE / 1000. : MAX_PAGE_SIZE * 25.4 / 1000,
                         g_UserUnit == INCHES ? _( "inches" ) : _( "mm" ) );
 
-                if( wxMessageBox( msg, _( "Warning!" ), wxYES_NO | wxICON_EXCLAMATION, this ) == wxYES )
+                if( wxMessageBox( msg, _( "Warning!" ),
+                                  wxYES_NO | wxICON_EXCLAMATION, this ) == wxYES )
                 {
                     return false;
                 }
@@ -799,13 +801,26 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
     m_layout_size = wxSize( KiROUND( customSizeX ), KiROUND( customSizeY ) );
 }
 
-// Called on .kicad_wks file description selection change
+
 void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
+    wxFileName fn = GetWksFileName();
+    wxString name = GetWksFileName();
+    wxString path;
+
+    if( fn.IsAbsolute() )
+    {
+        path = fn.GetPath();
+        name = fn.GetFullName();
+    }
+    else
+    {
+        path = m_projectPath;
+    }
+
     // Display a file picker dialog
     wxFileDialog fileDialog( this, _( "Select Page Layout Description File" ),
-                             m_projectPath, GetWksFileName(),
-                             PageLayoutDescrFileWildcard(),
+                             path, name, PageLayoutDescrFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( fileDialog.ShowModal() != wxID_OK )
@@ -821,11 +836,11 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     if( shortFileName != GetWksFileName() && shortFileName != fileName )
     {
         wxString msg = wxString::Format( _(
-                "The page layout descr filename has changed.\n"
+                "The page layout description file name has changed.\n"
                 "Do you want to use the relative path:\n"
                 "\"%s\"\n"
                 "instead of\n"
-                "\"%s\"" ), GetChars( shortFileName ), GetChars( fileName ) );
+                "\"%s\"?" ), GetChars( shortFileName ), GetChars( fileName ) );
 
         if( !IsOK( this, msg ) )
             shortFileName = fileName;
