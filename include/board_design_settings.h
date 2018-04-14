@@ -52,6 +52,7 @@
 #define DEFAULT_VIASMINDRILL        0.3     // vias (not micro vias) min drill diameter
 #define DEFAULT_MICROVIASMINSIZE    0.2     // micro vias (not vias) min diameter
 #define DEFAULT_MICROVIASMINDRILL   0.1     // micro vias (not vias) min drill diameter
+#define DEFAULT_HOLETOHOLEMIN       0.25    // separation between drilled hole edges
 
 /**
  * Struct VIA_DIMENSION
@@ -412,6 +413,44 @@ public:
     {
         return m_useCustomTrackVia;
     }
+
+    /**
+     * Function GetMinHoleSeparation
+     * @return The minimum distance between the edges of two holes or 0, which indicates that
+     * hole-to-hole separation should not be checked.
+     */
+    int GetMinHoleSeparation() const;
+
+    /**
+     * Function SetMinHoleSeparation
+     * @param aValue The minimum distance between the edges of two holes or 0 to disable
+     * hole-to-hole separation checking.
+     */
+    void SetMinHoleSeparation( int aDistance );
+
+    /**
+     * Function RequireCourtyardDefinitions
+     * @return True if footprints without courtyard definitions are considered DRC violations.
+     */
+    bool RequireCourtyardDefinitions() const;
+
+    /**
+     * Function SetRequireCourtyardDefinitions
+     * @param aRequire Set to true to generate DRC violations from missing courtyards.
+     */
+    void SetRequireCourtyardDefinitions( bool aRequire );
+
+    /**
+     * Function ProhibitOverlappingCourtyards
+     * @return True if overlapping courtyards are considered DRC violations.
+     */
+    bool ProhibitOverlappingCourtyards() const;
+
+    /**
+     * Function SetProhibitOverlappingCourtyards
+     * @param aRequire Set to true to generate DRC violations from overlapping courtyards.
+     */
+    void SetProhibitOverlappingCourtyards( bool aRequire );
 
     /**
      * Function GetVisibleLayers

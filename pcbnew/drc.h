@@ -91,6 +91,7 @@
 #define DRCE_MICRO_VIA_NOT_ALLOWED             47   ///< micro vias are not allowed
 #define DRCE_BURIED_VIA_NOT_ALLOWED            48   ///< buried vias are not allowed
 #define DRCE_DISABLED_LAYER_ITEM               49   ///< item on a disabled layer
+#define DRCE_DRILLED_HOLES_TOO_CLOSE           50   ///< overlapping drilled holes break drill bits
 
 
 class EDA_DRAW_PANEL;
@@ -172,17 +173,12 @@ private:
     bool     m_doZonesTest;
     bool     m_doKeepoutTest;
     bool     m_doCreateRptFile;
-    bool     m_doFootprintOverlapping;
-    bool     m_doNoCourtyardDefined;
     bool     m_refillZones;
     bool     m_reportAllTrackErrors;
 
     wxString m_rptFilename;
 
     MARKER_PCB* m_currentMarker;
-
-    bool        m_abortDRC;
-    bool        m_drcInProgress;
 
     /**
      * in legacy canvas, when creating a track, the drc test must only display the
@@ -306,6 +302,8 @@ private:
     void testTracks( wxWindow * aActiveWindow, bool aShowProgressBar );
 
     void testPad2Pad();
+
+    void testDrilledHoles();
 
     void testUnconnected();
 
@@ -435,6 +433,7 @@ public:
     ~DRC();
 
     /**
+     * Function Drc
      * tests the current segment and returns the result and displays the error
      * in the status panel only if one exists.
      * No marker created or added to the board. Must be used only during track
@@ -446,6 +445,7 @@ public:
     int DrcOnCreatingTrack( TRACK* aRefSeg, TRACK* aList );
 
     /**
+     * Function Drc
      * tests the outline segment starting at CornerIndex and returns the result and displays
      * the error in the status panel only if one exists.
      *      Test Edge inside other areas
@@ -503,15 +503,12 @@ public:
      * @param aZonesTest Tells whether to test zones.
      * @param aRefillZones Refill zones before performing DRC.
      * @param aKeepoutTest Tells whether to test keepout areas.
-     * @param aCourtyardTest Tells whether to test footprint courtyard overlap.
-     * @param aCourtyardMissingTest Tells whether to test missing courtyard definition in footprint.
      * @param aReportAllTrackErrors Tells whether or not to stop checking track connections after the first error.
      * @param aReportName A string telling the disk file report name entered.
      * @param aSaveReport A boolean telling whether to generate disk file report.
      */
     void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
                       bool aZonesTest, bool aKeepoutTest, bool aRefillZones,
-                      bool aCourtyardTest, bool aCourtyardMissingTest,
                       bool aReportAllTrackErrors,
                       const wxString& aReportName, bool aSaveReport )
     {
@@ -521,8 +518,6 @@ public:
         m_doKeepoutTest         = aKeepoutTest;
         m_rptFilename           = aReportName;
         m_doCreateRptFile       = aSaveReport;
-        m_doFootprintOverlapping = aCourtyardTest;
-        m_doNoCourtyardDefined  = aCourtyardMissingTest;
         m_refillZones           = aRefillZones;
         m_drcInLegacyRoutingMode = false;
         m_reportAllTrackErrors  = aReportAllTrackErrors;

@@ -138,10 +138,6 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_doUnconnectedTest = true;     // enable unconnected tests
     m_doZonesTest = true;           // enable zone to items clearance tests
     m_doKeepoutTest = true;         // enable keepout areas to items clearance tests
-    m_doFootprintOverlapping = true; // enable courtyards areas overlap tests
-    m_doNoCourtyardDefined = true;  // enable missing courtyard in footprint warning
-    m_abortDRC = false;
-    m_drcInProgress = false;
     m_refillZones = false;            // Only fill zones if requested by user.
     m_reportAllTrackErrors = false;
     m_doCreateRptFile = false;
@@ -423,6 +419,15 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         testPad2Pad();
     }
 
+    // test clearances between drilled holes
+    if( aMessages )
+    {
+        aMessages->AppendText( _( "Drill clearances...\n" ) );
+        wxSafeYield();
+    }
+
+    testDrilledHoles();
+
     // test track and via clearances to other tracks, pads, and vias
     if( aMessages )
     {
@@ -493,7 +498,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     testTexts();
 
     // find overlapping courtyard ares.
-    if( m_doFootprintOverlapping || m_doNoCourtyardDefined )
+    if( m_pcb->GetDesignSettings().ProhibitOverlappingCourtyards()
+        || m_pcb->GetDesignSettings().RequireCourtyardDefinitions() )
     {
         if( aMessages )
         {
@@ -703,6 +709,78 @@ void DRC::testPad2Pad()
             wxASSERT( m_currentMarker );
             addMarkerToPcb ( m_currentMarker );
             m_currentMarker = nullptr;
+        }
+    }
+}
+
+
+void DRC::testDrilledHoles()
+{
+    int holeToHoleMin = m_pcb->GetDesignSettings().GetMinHoleSeparation();
+
+    if( holeToHoleMin == 0 )    // No min setting turns testing off.
+        return;
+
+    // Test drilled hole clearances to minimize drill bit breakage.
+    //
+    // Notes: slots are milled, so we're only concerned with circular holes
+    //        microvias are laser-drilled, so we're only concerned with standard vias
+
+    struct DRILLED_HOLE
+    {
+        wxPoint     m_location;
+        int         m_drillRadius;
+        BOARD_ITEM* m_owner;
+    };
+
+    std::vector<DRILLED_HOLE> holes;
+    DRILLED_HOLE              hole;
+
+    for( MODULE* mod : m_pcb->Modules() )
+    {
+        for( D_PAD* pad : mod->Pads( ) )
+        {
+            if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+            {
+                hole.m_location = pad->GetPosition();
+                hole.m_drillRadius = pad->GetDrillSize().x / 2;
+                hole.m_owner = pad;
+                holes.push_back( hole );
+            }
+        }
+    }
+
+    for( TRACK* track : m_pcb->Tracks() )
+    {
+        VIA* via = dynamic_cast<VIA*>( track );
+        if( via && via->GetViaType() == VIA_THROUGH )
+        {
+            hole.m_location = via->GetPosition();
+            hole.m_drillRadius = via->GetDrillValue() / 2;
+            hole.m_owner = via;
+            holes.push_back( hole );
+        }
+    }
+
+    for( size_t ii = 0; ii < holes.size(); ++ii )
+    {
+        const DRILLED_HOLE& refHole = holes[ ii ];
+
+        for( size_t jj = ii + 1; jj < holes.size(); ++jj )
+        {
+            const DRILLED_HOLE& checkHole = holes[ jj ];
+
+            // Holes with identical locations are allowable
+            if( checkHole.m_location == refHole.m_location )
+                continue;
+
+            if( KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) )
+                    <  checkHole.m_drillRadius + refHole.m_drillRadius + holeToHoleMin )
+            {
+                addMarkerToPcb( new MARKER_PCB( DRCE_DRILLED_HOLES_TOO_CLOSE, refHole.m_location,
+                                                refHole.m_owner, refHole.m_location,
+                                                checkHole.m_owner, checkHole.m_location ) );
+            }
         }
     }
 }
@@ -1243,7 +1321,7 @@ bool DRC::doFootprintOverlappingDrc()
     {
         bool is_ok = footprint->BuildPolyCourtyard();
 
-        if( !is_ok && m_doFootprintOverlapping )
+        if( !is_ok && m_pcb->GetDesignSettings().ProhibitOverlappingCourtyards() )
         {
             m_currentMarker = fillMarker( footprint, footprint->GetPosition(),
                                           DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
@@ -1253,7 +1331,7 @@ bool DRC::doFootprintOverlappingDrc()
             success = false;
         }
 
-        if( !m_doNoCourtyardDefined )
+        if( !m_pcb->GetDesignSettings().RequireCourtyardDefinitions() )
             continue;
 
         if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 &&
@@ -1269,7 +1347,7 @@ bool DRC::doFootprintOverlappingDrc()
         }
     }
 
-    if( !m_doFootprintOverlapping )
+    if( !m_pcb->GetDesignSettings().ProhibitOverlappingCourtyards() )
         return success;
 
     // Now test for overlapping on top layer:

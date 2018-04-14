@@ -251,8 +251,6 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
                            true,        // DRC test for zones enabled
                            true,        // DRC test for keepout areas enabled
                            m_cbRefillZones->GetValue(),
-                           m_cbCourtyardOverlap->GetValue(),
-                           m_cbCourtyardMissing->GetValue(),
                            m_cbReportAllTrackErrors->GetValue(),
                            reportName, make_report );
 
@@ -325,8 +323,6 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
                            true,        // DRC test for zones enabled
                            true,        // DRC test for keepout areas enabled
                            m_cbRefillZones->GetValue(),
-                           m_cbCourtyardOverlap->GetValue(),
-                           m_cbCourtyardMissing->GetValue(),
                            m_cbReportAllTrackErrors->GetValue(),
                            reportName, make_report );
 

@@ -97,6 +97,8 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Too small via drill" ) );
     case DRCE_TOO_SMALL_MICROVIA_DRILL:
         return wxString( _( "Too small micro via drill" ) );
+    case DRCE_DRILLED_HOLES_TOO_CLOSE:
+        return wxString( _( "Drilled holes too close together" ) );
 
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:

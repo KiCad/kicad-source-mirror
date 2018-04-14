@@ -35,6 +35,11 @@
 
 #include <class_track.h>
 #include <convert_to_biu.h>
+#include <kiface_i.h>
+
+#define TestMissingCourtyardKey     wxT( "TestMissingCourtyard" )
+#define TestFootprintCourtyardKey   wxT( "TestFootprintCourtyard" )
+#define MinHoleSeparationKey        wxT( "MinHoleSeparation" )
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
@@ -58,12 +63,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_UseConnectedTrackWidth = false;
 
     m_BlindBuriedViaAllowed = false;            // true to allow blind/buried vias
-    m_MicroViasAllowed = false;                 // true to allow micro vias
+    m_MicroViasAllowed  = false;                // true to allow micro vias
 
-    m_DrawSegmentWidth = Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS );     // current graphic line width (not EDGE layer)
+    m_DrawSegmentWidth  = Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS );     // current graphic line width (not EDGE layer)
 
-    m_EdgeSegmentWidth = Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS );    // current graphic line width (EDGE layer only)
-    m_PcbTextWidth     = Millimeter2iu( DEFAULT_TEXT_PCB_THICKNESS );    // current Pcb (not module) Text width
+    m_EdgeSegmentWidth  = Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS );    // current graphic line width (EDGE layer only)
+    m_PcbTextWidth      = Millimeter2iu( DEFAULT_TEXT_PCB_THICKNESS );    // current Pcb (not module) Text width
 
     m_PcbTextSize       = wxSize( Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ),
                                   Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ) );  // current Pcb (not module) Text size
@@ -312,6 +317,70 @@ void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
         m_trackWidthIndex = aIndex;
 
     m_useCustomTrackVia = false;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetMinHoleSeparation() const
+{
+    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
+    // file format unnecessarily.
+    wxConfigBase* config = Kiface().KifaceSettings();
+    int           value;
+
+    config->Read( MinHoleSeparationKey, &value, Millimeter2iu( DEFAULT_HOLETOHOLEMIN ) );
+    return value;
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetMinHoleSeparation( int aDistance )
+{
+    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
+    // file format unnecessarily.
+    wxConfigBase* config = Kiface().KifaceSettings();
+
+    config->Write( MinHoleSeparationKey, aDistance );
+}
+
+
+bool BOARD_DESIGN_SETTINGS::RequireCourtyardDefinitions() const
+{
+    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
+    // file format unnecessarily.
+    wxConfigBase* config = Kiface().KifaceSettings();
+    bool          value;
+
+    config->Read( TestMissingCourtyardKey, &value, false );
+    return value;
+}
+void BOARD_DESIGN_SETTINGS::SetRequireCourtyardDefinitions( bool aRequire )
+{
+    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
+    // file format unnecessarily.
+    wxConfigBase* config = Kiface().KifaceSettings();
+
+    config->Write( TestMissingCourtyardKey, aRequire );
+}
+
+
+bool BOARD_DESIGN_SETTINGS::ProhibitOverlappingCourtyards() const
+{
+    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
+    // file format unnecessarily.
+    wxConfigBase* config = Kiface().KifaceSettings();
+    bool          value;
+
+    config->Read( TestFootprintCourtyardKey, &value, false );
+    return value;
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetProhibitOverlappingCourtyards( bool aRequire )
+{
+    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
+    // file format unnecessarily.
+    wxConfigBase* config = Kiface().KifaceSettings();
+
+    config->Write( TestFootprintCourtyardKey, aRequire );
 }
 
 
