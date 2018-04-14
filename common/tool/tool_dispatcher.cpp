@@ -249,11 +249,11 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 
 // Helper function to know if a special key ( see key list ) should be captured
 // or if the event can be skipped
-// on Linux, the event must be passed to the GUI if they are not used by Kicad,
+// on Linux, the event must be passed to the GUI if they are not used by KiCad,
 // especially the wxEVENT_CHAR_HOOK, if it is not handled
 // unfortunately, m_toolMgr->ProcessEvent( const TOOL_EVENT& aEvent)
 // does not return info about that. So the event is filtered before passed to
-// the GUI. These key codes are known to be used in pcbnew to move the cursor
+// the GUI. These key codes are known to be used in Pcbnew to move the cursor
 // or change active layer, and have a default action (moving scrollbar button) if
 // the event is skipped
 bool isKeySpecialCode( int aKeyCode )
@@ -277,6 +277,7 @@ bool isKeySpecialCode( int aKeyCode )
     return isInList;
 }
 
+
 /* aHelper class that convert some special key codes to an equivalent.
  *  WXK_NUMPAD_UP to WXK_UP,
  *  WXK_NUMPAD_DOWN to WXK_DOWN,
@@ -285,7 +286,7 @@ bool isKeySpecialCode( int aKeyCode )
  *  WXK_NUMPAD_PAGEUP,
  *  WXK_NUMPAD_PAGEDOWN
  * note:
- * wxEVT_CHAR_HOOK does this conversion when it is skipped by fireing a wxEVT_CHAR
+ * wxEVT_CHAR_HOOK does this conversion when it is skipped by firing a wxEVT_CHAR
  * with this converted code, but we do not skip these key events because they also
  * have default action (scroll the panel)
  */
@@ -332,7 +333,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
         type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
         type == wxEVT_LEFT_DCLICK || type == wxEVT_MIDDLE_DCLICK || type == wxEVT_RIGHT_DCLICK ||
-        // Event issued whem mouse retains position in screen coordinates,
+        // Event issued when mouse retains position in screen coordinates,
         // but changes in world coordinates (e.g. autopanning)
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
@@ -369,6 +370,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         key = ke->GetKeyCode();
         keyIsSpecial = isKeySpecialCode( key );
 
+        wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::DispatchWxEvent %s", dump( *ke ) );
+
         // if the key event must be skipped, skip it here if the event is a wxEVT_CHAR_HOOK
         // and do nothing.
         // a wxEVT_CHAR will be fired by wxWidgets later for this key.
@@ -376,25 +379,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             if( !keyIsSpecial )
             {
-                wxLogTrace( kicadTraceKeyEvent,
-                            "TOOL_DISPATCHER::DispatchWxEvent wxEVT_CHAR_HOOK %s",
-                            dump( *ke ) );
                 aEvent.Skip();
                 return;
             }
             else
-            key = translateSpecialCode( key );
-        }
-        else
-        {
-            wxLogTrace( kicadTraceKeyEvent,
-                        "TOOL_DISPATCHER::DispatchWxEvent wxEVT_CHAR %s",
-                        dump( *ke ) );
+                key = translateSpecialCode( key );
         }
 
         int mods = decodeModifiers( ke );
-
-        // wxLogMessage( "key %d evt type %d", key, type );
 
         if( mods & MD_CTRL )
         {
@@ -407,15 +399,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
                 key += 'A' - 1;
         }
 
-        // For some reason on windows with US keyboards, the /? key always returns the '/' key
-        // code where as the <,, .>, ;:, '", [{, ]}, and \| keys return the shifted character
-        // key code.
-#if defined( __WXMSW__ )
-        if( ( mods & MD_SHIFT ) && ( key == '?' ) )
-            mods &= ~MD_SHIFT;
-#endif
-
-        if( key == WXK_ESCAPE ) // ESC is the special key for cancelling tools
+        if( key == WXK_ESCAPE ) // ESC is the special key for canceling tools
             evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
         else
             evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
@@ -425,18 +409,18 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         m_toolMgr->ProcessEvent( *evt );
 
     // pass the event to the GUI, it might still be interested in it
-    // Note wxEVT_CHAR_HOOK event is already skipped for special keys not used by kicad
+    // Note wxEVT_CHAR_HOOK event is already skipped for special keys not used by KiCad
     // and wxEVT_LEFT_DOWN must be always Skipped.
     //
     // On OS X, key events are always meant to be caught.  An uncaught key event is assumed
     // to be a user input error by OS X (as they are pressing keys in a context where nothing
     // is there to catch the event).  This annoyingly makes OS X beep and/or flash the screen
-    // in pcbnew and the footprint editor any time a hotkey is used.  The correct procedure is
+    // in Pcbnew and the footprint editor any time a hotkey is used.  The correct procedure is
     // to NOT pass wxEVT_CHAR events to the GUI under OS X.
     //
-    // On Windows, avoid to call wxEvent::Skip for special keys because some keys (ARROWS, PAGE_UP, PAGE_DOWN
-    // have predefined actions (like move thumbtrack cursor), and we do not want these
-    // actions executed (most are handled by Kicad)
+    // On Windows, avoid to call wxEvent::Skip for special keys because some keys (ARROWS,
+    // PAGE_UP, PAGE_DOWN have predefined actions (like move thumbtrack cursor), and we do
+    // not want these actions executed (most are handled by KiCad)
 
     if( !evt || type == wxEVT_LEFT_DOWN )
         aEvent.Skip();

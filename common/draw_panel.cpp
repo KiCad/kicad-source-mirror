@@ -1430,13 +1430,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     if( event.ShiftDown() && ( keyIsLetter || localkey > 256 ) )
         localkey |= GR_KB_SHIFT;
 
-    // For some reason on windows with US keyboards, the /? key always returns the '/' key code
-    // where as the <,, .>, ;:, '", [{, ]}, and \| keys return the shifted character key code.
-#if defined( __WXMSW__ )
-    if( event.ShiftDown() && localkey == '/' )
-        localkey = '?';
-#endif
-
     if( event.ControlDown() )
         localkey |= GR_KB_CTRL;
 
