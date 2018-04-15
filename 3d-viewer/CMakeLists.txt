@@ -97,6 +97,8 @@ set(3D-VIEWER_SRCS
     3d_rendering/cpostshader.cpp
     3d_rendering/cpostshader_ssao.cpp
     3d_rendering/ctrack_ball.cpp
+    3d_viewer/3d_menubar.cpp
+    3d_viewer/hotkeys.cpp
     3d_rendering/test_cases.cpp
     3d_rendering/trackball.cpp
     3d_viewer/3d_toolbar.cpp

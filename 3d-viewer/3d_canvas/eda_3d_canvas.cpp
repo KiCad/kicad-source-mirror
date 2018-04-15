@@ -701,7 +701,7 @@ void EDA_3D_CANVAS::OnPopUpMenu( wxCommandEvent &event )
         break;
 
     case ID_POPUP_VIEW_XPOS:
-        key = 'x';
+        key = GR_KB_SHIFT + 'X';
         break;
 
     case ID_POPUP_VIEW_XNEG:
@@ -709,7 +709,7 @@ void EDA_3D_CANVAS::OnPopUpMenu( wxCommandEvent &event )
         break;
 
     case ID_POPUP_VIEW_YPOS:
-        key = 'y';
+        key = GR_KB_SHIFT + 'Y';
         break;
 
     case ID_POPUP_VIEW_YNEG:
@@ -717,7 +717,7 @@ void EDA_3D_CANVAS::OnPopUpMenu( wxCommandEvent &event )
         break;
 
     case ID_POPUP_VIEW_ZPOS:
-        key = 'z';
+        key = GR_KB_SHIFT + 'Z';
         break;
 
     case ID_POPUP_VIEW_ZNEG:
@@ -758,12 +758,27 @@ void EDA_3D_CANVAS::OnCharHook( wxKeyEvent &event )
 void EDA_3D_CANVAS::OnKeyEvent( wxKeyEvent& event )
 {
     //wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnKeyEvent" ) );
+    int localkey = event.GetKeyCode();
+
+    // Use only upper char values in comparisons
+    // (the Shift modifier is a separate attribute)
+    if( (localkey >= 'a') && (localkey <= 'z') )
+        localkey += 'A' - 'a';
 
     if( m_camera_is_moving )
         return;
 
-    SetView3D( event.GetKeyCode() );
-    event.Skip();
+    if( event.ShiftDown() )
+        localkey |= GR_KB_SHIFT;
+
+    if( event.ControlDown() )
+        localkey |= GR_KB_CTRL;
+
+    if( event.AltDown() )
+        localkey |= GR_KB_ALT;
+
+    if( !SetView3D( localkey ) )
+        event.Skip();
 }
 
 
@@ -875,54 +890,55 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
 }
 
 
-void EDA_3D_CANVAS::SetView3D( int keycode )
+bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 {
     if( m_camera_is_moving )
-        return;
+        return false;
 
     const float delta_move = m_delta_move_step_factor * m_settings.CameraGet().ZoomGet();
     const float arrow_moving_time_speed = 8.0f;
+    bool handled = false;
 
-    switch( keycode )
+    switch( aKeycode )
     {
     case WXK_SPACE:
         move_pivot_based_on_cur_mouse_position();
-        return;
+        return true;
 
     case WXK_LEFT:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
-        return;
+        return true;
 
     case WXK_RIGHT:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( +delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
-        return;
+        return true;
 
     case WXK_UP:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( 0.0f, +delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
-        return;
+        return true;
 
     case WXK_DOWN:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
-        return;
+        return true;
 
     case WXK_HOME:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
-        return;
+        return true;
 
     case WXK_END:
         break;
@@ -932,25 +948,28 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().RotateZ_T1( glm::radians( 45.0f ) );
         request_start_moving_camera();
+        handled = true;
         break;
 
     case WXK_F1:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
+
         if( m_settings.CameraGet().Zoom_T1( 1.4f ) )
             request_start_moving_camera( 3.0f );
-        return;
+
+        return true;
 
     case WXK_F2:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
+
         if( m_settings.CameraGet().Zoom_T1( 1/1.4f ) )
             request_start_moving_camera( 3.0f );
-        return;
+
+        return true;
 
     case '+':
-        break;
-
     case '-':
         break;
 
@@ -959,6 +978,7 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL,
                             !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
         ReloadRequest();
+        handled = true;
         break;
 
     case 's':
@@ -966,6 +986,7 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT,
                             !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
         ReloadRequest();
+        handled = true;
         break;
 
     case 'v':
@@ -973,6 +994,7 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL,
                             !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
         ReloadRequest();
+        handled = true;
         break;
 
     case 'r':
@@ -981,16 +1003,16 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
-        return;
+        return true;
 
-    case 'x':
+    case GR_KB_SHIFT + 'X':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateZ_T1( glm::radians( -90.0f ) );
         m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
         request_start_moving_camera();
-        return;
+        return true;
 
     case 'X':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
@@ -999,15 +1021,15 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.CameraGet().RotateZ_T1( glm::radians(  90.0f ) );
         m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
         request_start_moving_camera();
-        return;
+        return true;
 
-    case 'y':
+    case GR_KB_SHIFT + 'Y':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
         request_start_moving_camera();
-        return;
+        return true;
 
     case 'Y':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
@@ -1016,15 +1038,15 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.CameraGet().RotateX_T1( glm::radians(  -90.0f ) );
         m_settings.CameraGet().RotateZ_T1( glm::radians( -180.0f ) );
         request_start_moving_camera();
-        return;
+        return true;
 
-    case 'z':
+    case GR_KB_SHIFT + 'Z':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         request_start_moving_camera(
                     glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
-        return;
+        return true;
 
     case 'Z':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
@@ -1033,10 +1055,10 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
         m_settings.CameraGet().RotateX_T1( glm::radians( -180.0f ) );
         request_start_moving_camera(
                     glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
-        return;
+        return true;
 
     default:
-        return;
+        return false;
     }
 
     m_mouse_was_moved = true;
@@ -1045,6 +1067,8 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
 
     DisplayStatus();
     Request_refresh();
+
+    return handled;
 }
 
 
