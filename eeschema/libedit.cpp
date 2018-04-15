@@ -296,6 +296,7 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
     }
 
     wxString name = dlg.GetName();
+    // Currently, symbol names cannot include a space, that breaks libraries:
     name.Replace( " ", "_" );
 
     // Test if there is a component with this name already.

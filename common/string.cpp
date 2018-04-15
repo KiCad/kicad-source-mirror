@@ -515,10 +515,11 @@ bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar )
     bool changed = false;
     wxString result;
     result.reserve( aName.Length() );
+    wxString illWChars = GetIllegalFileNameWxChars();
 
     for( wxString::iterator it = aName.begin();  it != aName.end();  ++it )
     {
-        if( strchr( illegalFileNameChars, *it ) )
+        if( illWChars.Find( *it ) != wxNOT_FOUND )
         {
             if( aReplaceChar )
                 result += aReplaceChar;
