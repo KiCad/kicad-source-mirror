@@ -509,7 +509,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->AddTool( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxEmptyString,
                             KiScaledBitmap( pcb_offset_xpm, this ),
-                            _( "Place the origin point for drill and place files" ),
+                            _( "Place the auxiliary axis origin for some plot file formats,\n"
+                               "and for drill and place files" ),
                             wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_PCB_PLACE_GRID_COORD_BUTT, wxEmptyString,
