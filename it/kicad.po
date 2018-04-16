@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-14 20:13+0200\n"
-"PO-Revision-Date: 2018-04-14 20:17+0200\n"
+"POT-Creation-Date: 2018-04-16 10:27+0200\n"
+"PO-Revision-Date: 2018-04-16 10:29+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -176,7 +176,7 @@ msgstr "Tutti i file (*.*)|*.*"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
 #: eeschema/widgets/tuner_slider_base.cpp:20 eeschema/sch_component.cpp:1444
 #: eeschema/sch_component.cpp:1480 eeschema/lib_pin.cpp:1702
-#: eeschema/viewlibs.cpp:236 eeschema/libedit.cpp:667
+#: eeschema/viewlibs.cpp:236 eeschema/libedit.cpp:668
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:343
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:346
@@ -198,13 +198,13 @@ msgid "Configure Environment Variables"
 msgstr "Configura le variabili ambiente"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
-#: eeschema/viewlibs.cpp:237 eeschema/libedit.cpp:678
+#: eeschema/viewlibs.cpp:237 eeschema/libedit.cpp:679
 msgid "Alias"
 msgstr "Alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:84
 #: common/dialog_about/AboutDialog_main.cpp:114 eeschema/sch_component.cpp:1467
-#: eeschema/viewlibs.cpp:238 eeschema/libedit.cpp:698
+#: eeschema/viewlibs.cpp:238 eeschema/libedit.cpp:699
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:160
 #: eeschema/fields_editor_table_column.h:34 include/lib_table_grid.h:198
@@ -536,6 +536,97 @@ msgstr "Costruisci gli strati tecnici"
 msgid "Build BVH for holes and vias"
 msgstr "Crea BVH (Buried Via Holes) per fori e via"
 
+#: 3d-viewer/3d_viewer/hotkeys.cpp:34 eeschema/hotkeys.cpp:118
+#: gerbview/hotkeys.cpp:68 kicad/menubar.cpp:161
+#: pagelayout_editor/hotkeys.cpp:83 pcbnew/hotkeys.cpp:201
+msgid "Help (this window)"
+msgstr "Aiuto (questa finestra)"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:35
+msgid "Center pivot rotation (Middle mouse click)"
+msgstr "Centra il perno di rotazione (tasto centrale del mouse)"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:36
+msgid "Move board Left"
+msgstr "Sposta la scheda a sinistra"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:37
+msgid "Move board Right"
+msgstr "Sposta la scheda a destra"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:38
+msgid "Move board Up"
+msgstr "Sposta la scheda in alto"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:39
+msgid "Move board Down"
+msgstr "Sposta la scheda in basso"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:40
+msgid "Home view"
+msgstr "Vista iniziale"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:41
+msgid "Reset view"
+msgstr "Reimposta vista"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:43
+msgid "View Front"
+msgstr "Visualizza di fronte"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:44
+msgid "View Back"
+msgstr "Visualizza il retro"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:45
+msgid "View Left"
+msgstr "Visualizza da sinistra"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:46
+msgid "View Right"
+msgstr "Visualizza da destra"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:47
+msgid "View Top"
+msgstr "Visualizza da sopra"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:48
+msgid "View Bot"
+msgstr "Visualizza da sotto"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:50
+msgid "Rotate 45 degrees over Z axis"
+msgstr "Ruota di 45 gradi sull'asse Z"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:51
+msgid "Zoom in "
+msgstr "Ingrandisci"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:52 3d-viewer/3d_viewer/3d_toolbar.cpp:80
+#: eeschema/tool_viewlib.cpp:71 eeschema/help_common_strings.h:44
+#: gerbview/toolbars_gerber.cpp:81 gerbview/menubar.cpp:201
+#: pagelayout_editor/toolbars_pl_editor.cpp:89
+#: pcbnew/footprint_wizard_frame.cpp:692 pcbnew/tool_footprint_editor.cpp:126
+#: pcbnew/tool_footprint_viewer.cpp:83 pcbnew/help_common_strings.h:20
+msgid "Zoom out"
+msgstr "Rimpicciolisci"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:53
+msgid "Toggle 3D models with type Through Hole"
+msgstr "Commuta modelli 3D con tipo fori passanti"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:54
+msgid "Toggle 3D models with type Surface Mount"
+msgstr "Commuta modelli 3D con tipo montaggio SMD"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:55
+msgid "Toggle 3D models with type Virtual"
+msgstr "Commuta modelli 3D con tipo virtuale"
+
+#: 3d-viewer/3d_viewer/hotkeys.cpp:57
+msgid "Viewer 3D"
+msgstr "Visualizzatore 3D"
+
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
 msgstr "Ricarica scheda"
@@ -560,15 +651,6 @@ msgstr "Render della vista corrente con raytracing"
 #: pcbnew/tool_footprint_viewer.cpp:78 pcbnew/help_common_strings.h:19
 msgid "Zoom in"
 msgstr "Ingrandisci"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:80
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1193 eeschema/tool_viewlib.cpp:71
-#: eeschema/help_common_strings.h:44 gerbview/toolbars_gerber.cpp:81
-#: gerbview/menubar.cpp:201 pagelayout_editor/toolbars_pl_editor.cpp:89
-#: pcbnew/footprint_wizard_frame.cpp:692 pcbnew/tool_footprint_editor.cpp:126
-#: pcbnew/tool_footprint_viewer.cpp:83 pcbnew/help_common_strings.h:20
-msgid "Zoom out"
-msgstr "Rimpicciolisci"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:84 eeschema/tool_viewlib.cpp:76
 #: gerbview/toolbars_gerber.cpp:75 pagelayout_editor/toolbars_pl_editor.cpp:82
@@ -625,335 +707,6 @@ msgstr "Sposta in basso"
 msgid "Enable/Disable orthographic projection"
 msgstr "Abilita/Disabilita la proiezione ortogonale"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:148 cvpcb/menubar.cpp:108
-#: eeschema/tool_viewlib.cpp:227 eeschema/menubar.cpp:114
-#: eeschema/menubar_libedit.cpp:347 gerbview/menubar.cpp:391
-#: kicad/menubar.cpp:473 pagelayout_editor/menubar.cpp:233
-#: pcbnew/menubar_pcb_editor.cpp:138 pcbnew/menubar_footprint_editor.cpp:519
-#: pcbnew/tool_footprint_viewer.cpp:192
-msgid "&File"
-msgstr "&File"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:151
-msgid "Export Current View as PNG..."
-msgstr "Esporta la vista corrente come PNG..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:155
-msgid "Export Current View as JPEG..."
-msgstr "Esporta la virta corrente come JPEG..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:160 eeschema/menubar.cpp:468
-#: kicad/menubar.cpp:297 pcbnew/menubar_pcb_editor.cpp:975
-#: pcbnew/menubar_footprint_editor.cpp:150
-msgid "&Exit"
-msgstr "&Esci"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:163 eeschema/menubar.cpp:115
-#: eeschema/menubar_libedit.cpp:348 pagelayout_editor/menubar.cpp:234
-#: pcbnew/menubar_pcb_editor.cpp:139 pcbnew/menubar_footprint_editor.cpp:520
-msgid "&Edit"
-msgstr "&Modifica"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:166
-msgid "Copy 3D Image"
-msgstr "Copia immagine 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:169 cvpcb/menubar.cpp:109
-#: gerbview/menubar.cpp:393 kicad/menubar.cpp:477
-msgid "&Preferences"
-msgstr "&Preferenze"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:172
-msgid "Use Touchpad to Pan"
-msgstr "Pan con il touchpad"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:178
-msgid "Realistic Mode"
-msgstr "Modalità realistica"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:183
-msgid "Render Engine"
-msgstr "Motore di render"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:186
-msgid "OpenGL"
-msgstr "OpenGL"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:190
-msgid "Raytracing"
-msgstr "Raytracing"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:201
-msgid "Render Options"
-msgstr "Opzioni di disegno"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:205
-msgid "Material Properties"
-msgstr "Proprietà del materiale"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:208
-msgid "Use All Properties"
-msgstr "Usa tutte le proprietà"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:209
-msgid "Use all material properties from each 3D model file"
-msgstr "Usa tutte le proprietà del materiale da ogni file modello 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:212
-msgid "Use Diffuse Only"
-msgstr "Usa solo diffusione"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:213
-msgid "Use only the diffuse color property from model 3D model file "
-msgstr "Usa solo la proprietà diffusione colore dal file del modello 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:216
-msgid "CAD Color Style"
-msgstr "Stile colore CAD"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:217
-msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr ""
-"Usa uno stile colore CAD basato sulla diffusione del colore del materiale"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:224
-msgid "OpenGL Options"
-msgstr "Opzioni OpenGL"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:227
-msgid "Show Copper Thickness"
-msgstr "Mostra lo spessore rame"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:228
-msgid "Shows the copper thickness on copper layers (slower loading)"
-msgstr "Mostra lo spessore del rame sugli strati rame (caricamento più lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:232
-msgid "Show Model Bounding Boxes"
-msgstr "Mostra i perimetri di delimitazione del modello"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:240
-msgid "Raytracing Options"
-msgstr "Opzioni raytracing"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:243
-msgid "Render Shadows"
-msgstr "Disegna le ombre"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:247
-msgid "Procedural Textures"
-msgstr "Motivi procedurali"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:248
-msgid "Apply procedural textures to materials (slow)"
-msgstr "Applica motivi procedurali ai materiali (lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:252
-msgid "Add Floor"
-msgstr "Aggiungi pavimento"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:253
-msgid "Adds a floor plane below the board (slow)"
-msgstr "Aggiungi un piano di pavimento sotto la scheda (lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:257
-msgid "Refractions"
-msgstr "Rifrazioni"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:258
-msgid "Render materials with refractions properties on final render (slow)"
-msgstr ""
-"Render dei materiali con proprietà di rifrazione sul render finale (lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:262
-msgid "Reflections"
-msgstr "Riflessioni"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:263
-msgid "Render materials with reflections properties on final render (slow)"
-msgstr ""
-"Render dei materiali con proprietà di riflessione sul render finale (lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:267
-msgid "Anti-aliasing"
-msgstr "Anti-aliasing"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:268
-msgid "Render with improved quality on final render (slow)"
-msgstr "Render con qualità migliorata sul render finale (lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:272
-msgid "Post-processing"
-msgstr "Post-elaborazione"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:273
-msgid ""
-"Apply Screen Space Ambient Occlusion and Global Illumination reflections on "
-"final render (slow)"
-msgstr ""
-"Applica l'occlusione ambiente spazio schermo e le riflessioni "
-"sull'illuminazione globale sul render finale (lento)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:285
-msgid "Choose Colors"
-msgstr "Scegli i colori"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:289
-#: eeschema/widgets/widget_eeschema_color_config.cpp:210
-msgid "Background Color"
-msgstr "Colore di sfondo "
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:292
-msgid "Background Top Color..."
-msgstr "Colore di sfondo in cima..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:295
-msgid "Background Bottom Color..."
-msgstr "Colore di sfondo in fondo..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:298
-msgid "Silkscreen Color..."
-msgstr "Colore serigrafia..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:301
-msgid "Solder Mask Color..."
-msgstr "Colore maschera di saldatura..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:304
-msgid "Solder Paste Color..."
-msgstr "Colore pasta salda..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:307
-msgid "Copper/Surface Finish Color..."
-msgstr "Colore rame/finitura superficiale..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:310
-msgid "Board Body Color..."
-msgstr "Colore corpo scheda..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:313
-msgid "Show 3D &Axis"
-msgstr "Mostra &Assi 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:321
-msgid "3D Grid"
-msgstr "Griglia 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:322
-msgid "No 3D Grid"
-msgstr "No griglia 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:323
-msgid "3D Grid 10 mm"
-msgstr "Griglia 3D 10mm"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:324
-msgid "3D Grid 5 mm"
-msgstr "Griglia 3D 5 mm"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:325
-msgid "3D Grid 2.5 mm"
-msgstr "Griglia 3D 2.5 mm"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:326
-msgid "3D Grid 1 mm"
-msgstr "Griglia 3D 1 mm"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:345
-msgid "Show Board Bod&y"
-msgstr "Mostra il corpo sche&da"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:348
-msgid "Show Zone &Filling"
-msgstr "Mostra riempimenti &zone"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:352
-msgid "Show 3D M&odels"
-msgstr "Mostra m&odelli 3D"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:354
-msgid "Through Hole"
-msgstr "Foro passante"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:355
-msgid "Footprint Properties -> Placement type -> Through hole"
-msgstr "Proprietà impronta -> Tipo piazzamento -> Fori passanti"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:358
-msgid "Surface Mount"
-msgstr "Montaggio superficiale"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:359
-msgid "Footprint Properties -> Placement type -> Surface mount"
-msgstr "Proprietà impronta -> Tipo piazzamento -> Montaggio superficiale"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:362 pcbnew/class_module.cpp:627
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:146
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:102
-msgid "Virtual"
-msgstr "Virtuale"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:363
-msgid ""
-"Footprint Properties -> Placement type -> Virtual (eg: edge connectors, test "
-"points, mechanical parts)"
-msgstr ""
-"Proprietà impronta -> Tipo piazzamento -> Virtuale (p.e. connettori a "
-"pettine, punti di test, parti meccaniche)"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:371
-msgid "Show &Layers"
-msgstr "Mostra g&li strati"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:374
-msgid "Show &Adhesive Layers"
-msgstr "Mostra gli strati &adesivi"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:377
-msgid "Show &Silkscreen Layers"
-msgstr "Mostra gli strati &serigrafia"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:380
-msgid "Show Solder &Mask Layers"
-msgstr "Mostra gli strati &maschera saldatura"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:383
-msgid "Show Solder &Paste Layers"
-msgstr "Mostra gli strati &pasta salda"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:388
-msgid "Show &Comments and Drawings Layers"
-msgstr "Mostra gli strati &commenti e grafica"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:391
-msgid "Show &Eco Layers"
-msgstr "Mostra gli strati &eco"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:398
-msgid "Reset to Default Settings"
-msgstr "Reimposta alle impostazione predefinite"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:403 cvpcb/menubar.cpp:110
-#: eeschema/tool_viewlib.cpp:230 eeschema/menubar.cpp:121
-#: eeschema/menubar_libedit.cpp:353 gerbview/menubar.cpp:395
-#: kicad/menubar.cpp:478 pagelayout_editor/menubar.cpp:238
-#: pcbnew/menubar_pcb_editor.cpp:147 pcbnew/menubar_footprint_editor.cpp:527
-#: pcbnew/tool_footprint_viewer.cpp:195
-msgid "&Help"
-msgstr "&Aiuto"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:406 eeschema/menubar.cpp:644
-#: eeschema/menubar_libedit.cpp:324 gerbview/menubar.cpp:368
-#: pcbnew/menubar_pcb_editor.cpp:487 pcbnew/menubar_footprint_editor.cpp:498
-msgid "&List Hotkeys..."
-msgstr "E&lenco tasti..."
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:407 eeschema/menubar_libedit.cpp:328
-#: gerbview/menubar.cpp:371 kicad/menubar.cpp:452
-#: pagelayout_editor/menubar.cpp:213
-msgid "Displays the current hotkeys list and corresponding commands"
-msgstr "Mostra l'elenco dei tasti correnti e dei comandi corrispondenti"
-
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:348
 msgid "Background Color, Bottom"
 msgstr "Colore di sfondo, basso"
@@ -994,81 +747,334 @@ msgstr "Colore corpo scheda"
 msgid "Solder Paste Color"
 msgstr "Colore pasta salda"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1176
-msgid "Center pivot rotation (Middle mouse click)"
-msgstr "Centra il perno di rotazione (tasto centrale del mouse)"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:50 cvpcb/menubar.cpp:108
+#: eeschema/tool_viewlib.cpp:227 eeschema/menubar.cpp:114
+#: eeschema/menubar_libedit.cpp:347 gerbview/menubar.cpp:391
+#: kicad/menubar.cpp:473 pagelayout_editor/menubar.cpp:233
+#: pcbnew/menubar_pcb_editor.cpp:138 pcbnew/menubar_footprint_editor.cpp:519
+#: pcbnew/tool_footprint_viewer.cpp:192
+msgid "&File"
+msgstr "&File"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1177
-msgid "Move board Left"
-msgstr "Sposta la scheda a sinistra"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:53
+msgid "Export Current View as PNG..."
+msgstr "Esporta la vista corrente come PNG..."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1178
-msgid "Move board Right"
-msgstr "Sposta la scheda a destra"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:57
+msgid "Export Current View as JPEG..."
+msgstr "Esporta la virta corrente come JPEG..."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1179
-msgid "Move board Up"
-msgstr "Sposta la scheda in alto"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:62 eeschema/menubar.cpp:468
+#: kicad/menubar.cpp:297 pcbnew/menubar_pcb_editor.cpp:975
+#: pcbnew/menubar_footprint_editor.cpp:150
+msgid "&Exit"
+msgstr "&Esci"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1180
-msgid "Move board Down"
-msgstr "Sposta la scheda in basso"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:65 eeschema/menubar.cpp:115
+#: eeschema/menubar_libedit.cpp:348 pagelayout_editor/menubar.cpp:234
+#: pcbnew/menubar_pcb_editor.cpp:139 pcbnew/menubar_footprint_editor.cpp:520
+msgid "&Edit"
+msgstr "&Modifica"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1181
-msgid "Home view"
-msgstr "Vista iniziale"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:68
+msgid "Copy 3D Image"
+msgstr "Copia immagine 3D"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1182
-msgid "Reset view"
-msgstr "Reimposta vista"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:71 cvpcb/menubar.cpp:109
+#: gerbview/menubar.cpp:393 kicad/menubar.cpp:477
+msgid "&Preferences"
+msgstr "&Preferenze"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1184
-msgid "View Front"
-msgstr "Visualizza di fronte"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:74
+msgid "Use Touchpad to Pan"
+msgstr "Pan con il touchpad"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1185
-msgid "View Back"
-msgstr "Visualizza il retro"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:80
+msgid "Realistic Mode"
+msgstr "Modalità realistica"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1186
-msgid "View Left"
-msgstr "Visualizza da sinistra"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:85
+msgid "Render Engine"
+msgstr "Motore di render"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1187
-msgid "View Right"
-msgstr "Visualizza da destra"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:88
+msgid "OpenGL"
+msgstr "OpenGL"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1188
-msgid "View Top"
-msgstr "Visualizza da sopra"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:92
+msgid "Raytracing"
+msgstr "Raytracing"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1189
-msgid "View Bot"
-msgstr "Visualizza da sotto"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:103
+msgid "Render Options"
+msgstr "Opzioni di disegno"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1191
-msgid "Rotate 45 degrees over Z axis"
-msgstr "Ruota di 45 gradi sull'asse Z"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:107
+msgid "Material Properties"
+msgstr "Proprietà del materiale"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1192
-msgid "Zoom in "
-msgstr "Ingrandisci"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:110
+msgid "Use All Properties"
+msgstr "Usa tutte le proprietà"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1194
-msgid "Toggle 3D models with type Through Hole"
-msgstr "Commuta modelli 3D con tipo fori passanti"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:111
+msgid "Use all material properties from each 3D model file"
+msgstr "Usa tutte le proprietà del materiale da ogni file modello 3D"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1195
-msgid "Toggle 3D models with type Surface Mount"
-msgstr "Commuta modelli 3D con tipo montaggio SMD"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:114
+msgid "Use Diffuse Only"
+msgstr "Usa solo diffusione"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1196
-msgid "Toggle 3D models with type Virtual"
-msgstr "Commuta modelli 3D con tipo virtuale"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:115
+msgid "Use only the diffuse color property from model 3D model file "
+msgstr "Usa solo la proprietà diffusione colore dal file del modello 3D"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1198
-msgid "Viewer 3D"
-msgstr "Visualizzatore 3D"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:118
+msgid "CAD Color Style"
+msgstr "Stile colore CAD"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:119
+msgid "Use a CAD color style based on the diffuse color of the material"
+msgstr ""
+"Usa uno stile colore CAD basato sulla diffusione del colore del materiale"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:126
+msgid "OpenGL Options"
+msgstr "Opzioni OpenGL"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:129
+msgid "Show Copper Thickness"
+msgstr "Mostra lo spessore rame"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:130
+msgid "Shows the copper thickness on copper layers (slower loading)"
+msgstr "Mostra lo spessore del rame sugli strati rame (caricamento più lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:134
+msgid "Show Model Bounding Boxes"
+msgstr "Mostra i perimetri di delimitazione del modello"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:142
+msgid "Raytracing Options"
+msgstr "Opzioni raytracing"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:145
+msgid "Render Shadows"
+msgstr "Disegna le ombre"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:149
+msgid "Procedural Textures"
+msgstr "Motivi procedurali"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:150
+msgid "Apply procedural textures to materials (slow)"
+msgstr "Applica motivi procedurali ai materiali (lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:154
+msgid "Add Floor"
+msgstr "Aggiungi pavimento"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:155
+msgid "Adds a floor plane below the board (slow)"
+msgstr "Aggiungi un piano di pavimento sotto la scheda (lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:159
+msgid "Refractions"
+msgstr "Rifrazioni"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:160
+msgid "Render materials with refractions properties on final render (slow)"
+msgstr ""
+"Render dei materiali con proprietà di rifrazione sul render finale (lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:164
+msgid "Reflections"
+msgstr "Riflessioni"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:165
+msgid "Render materials with reflections properties on final render (slow)"
+msgstr ""
+"Render dei materiali con proprietà di riflessione sul render finale (lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:169
+msgid "Anti-aliasing"
+msgstr "Anti-aliasing"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:170
+msgid "Render with improved quality on final render (slow)"
+msgstr "Render con qualità migliorata sul render finale (lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:174
+msgid "Post-processing"
+msgstr "Post-elaborazione"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:175
+msgid ""
+"Apply Screen Space Ambient Occlusion and Global Illumination reflections on "
+"final render (slow)"
+msgstr ""
+"Applica l'occlusione ambiente spazio schermo e le riflessioni "
+"sull'illuminazione globale sul render finale (lento)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:187
+msgid "Choose Colors"
+msgstr "Scegli i colori"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:191
+#: eeschema/widgets/widget_eeschema_color_config.cpp:210
+msgid "Background Color"
+msgstr "Colore di sfondo "
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:194
+msgid "Background Top Color..."
+msgstr "Colore di sfondo in cima..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:197
+msgid "Background Bottom Color..."
+msgstr "Colore di sfondo in fondo..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:200
+msgid "Silkscreen Color..."
+msgstr "Colore serigrafia..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:203
+msgid "Solder Mask Color..."
+msgstr "Colore maschera di saldatura..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:206
+msgid "Solder Paste Color..."
+msgstr "Colore pasta salda..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:209
+msgid "Copper/Surface Finish Color..."
+msgstr "Colore rame/finitura superficiale..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:212
+msgid "Board Body Color..."
+msgstr "Colore corpo scheda..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:215
+msgid "Show 3D &Axis"
+msgstr "Mostra &Assi 3D"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:223
+msgid "3D Grid"
+msgstr "Griglia 3D"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:224
+msgid "No 3D Grid"
+msgstr "No griglia 3D"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:225
+msgid "3D Grid 10 mm"
+msgstr "Griglia 3D 10mm"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:226
+msgid "3D Grid 5 mm"
+msgstr "Griglia 3D 5 mm"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:227
+msgid "3D Grid 2.5 mm"
+msgstr "Griglia 3D 2.5 mm"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:228
+msgid "3D Grid 1 mm"
+msgstr "Griglia 3D 1 mm"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:247
+msgid "Show Board Bod&y"
+msgstr "Mostra il corpo sche&da"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:250
+msgid "Show Zone &Filling"
+msgstr "Mostra riempimenti &zone"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:254
+msgid "Show 3D M&odels"
+msgstr "Mostra m&odelli 3D"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:256
+msgid "Through Hole"
+msgstr "Foro passante"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:257
+msgid "Footprint Properties -> Placement type -> Through hole"
+msgstr "Proprietà impronta -> Tipo piazzamento -> Fori passanti"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:260
+msgid "Surface Mount"
+msgstr "Montaggio superficiale"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:261
+msgid "Footprint Properties -> Placement type -> Surface mount"
+msgstr "Proprietà impronta -> Tipo piazzamento -> Montaggio superficiale"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:264 pcbnew/class_module.cpp:627
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:146
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:102
+msgid "Virtual"
+msgstr "Virtuale"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:265
+msgid ""
+"Footprint Properties -> Placement type -> Virtual (eg: edge connectors, test "
+"points, mechanical parts)"
+msgstr ""
+"Proprietà impronta -> Tipo piazzamento -> Virtuale (p.e. connettori a "
+"pettine, punti di test, parti meccaniche)"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:273
+msgid "Show &Layers"
+msgstr "Mostra g&li strati"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:276
+msgid "Show &Adhesive Layers"
+msgstr "Mostra gli strati &adesivi"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:279
+msgid "Show &Silkscreen Layers"
+msgstr "Mostra gli strati &serigrafia"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:282
+msgid "Show Solder &Mask Layers"
+msgstr "Mostra gli strati &maschera saldatura"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:285
+msgid "Show Solder &Paste Layers"
+msgstr "Mostra gli strati &pasta salda"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:290
+msgid "Show &Comments and Drawings Layers"
+msgstr "Mostra gli strati &commenti e grafica"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:293
+msgid "Show &Eco Layers"
+msgstr "Mostra gli strati &eco"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:300
+msgid "Reset to Default Settings"
+msgstr "Reimposta alle impostazione predefinite"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:305 cvpcb/menubar.cpp:110
+#: eeschema/tool_viewlib.cpp:230 eeschema/menubar.cpp:121
+#: eeschema/menubar_libedit.cpp:353 gerbview/menubar.cpp:395
+#: kicad/menubar.cpp:478 pagelayout_editor/menubar.cpp:238
+#: pcbnew/menubar_pcb_editor.cpp:147 pcbnew/menubar_footprint_editor.cpp:527
+#: pcbnew/tool_footprint_viewer.cpp:195
+msgid "&Help"
+msgstr "&Aiuto"
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:307 eeschema/menubar.cpp:644
+#: eeschema/menubar_libedit.cpp:324 gerbview/menubar.cpp:368
+#: pcbnew/menubar_pcb_editor.cpp:487 pcbnew/menubar_footprint_editor.cpp:498
+msgid "&List Hotkeys..."
+msgstr "E&lenco tasti..."
+
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:310 eeschema/menubar_libedit.cpp:328
+#: gerbview/menubar.cpp:371 kicad/menubar.cpp:452
+#: pagelayout_editor/menubar.cpp:213
+msgid "Displays the current hotkeys list and corresponding commands"
+msgstr "Mostra l'elenco dei tasti correnti e dei comandi corrispondenti"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:25
 msgid "Render options:"
@@ -2771,7 +2777,7 @@ msgstr "Stringa non ultimata"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Il limitatore di stringa deve essere un singolo carattere ', \", o $"
 
-#: common/eda_text.cpp:391 eeschema/sch_text.cpp:663 eeschema/libedit.cpp:688
+#: common/eda_text.cpp:391 eeschema/sch_text.cpp:663 eeschema/libedit.cpp:689
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:203
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
@@ -4562,7 +4568,7 @@ msgstr "Modifica proprietà..."
 msgid "Edit Footprint..."
 msgstr "Modifica impronta..."
 
-#: eeschema/onrightclick.cpp:464 eeschema/libedit.cpp:686
+#: eeschema/onrightclick.cpp:464 eeschema/libedit.cpp:687
 msgid "Convert"
 msgstr "Convertito"
 
@@ -4572,7 +4578,7 @@ msgid "Unit %s"
 msgstr "Unità %s"
 
 #: eeschema/onrightclick.cpp:489 eeschema/lib_draw_item.cpp:70
-#: eeschema/cmp_tree_model.cpp:125 eeschema/libedit.cpp:683
+#: eeschema/cmp_tree_model.cpp:125 eeschema/libedit.cpp:684
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:37
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:48
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:59
@@ -5230,7 +5236,7 @@ msgid "No connect symbol"
 msgstr "Simbolo di non connesso"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:70
-#: eeschema/libedit.cpp:690
+#: eeschema/libedit.cpp:691
 msgid "Body"
 msgstr "Corpo"
 
@@ -5361,7 +5367,7 @@ msgid "Footprint"
 msgstr "Impronta"
 
 #: eeschema/sch_component.cpp:1469 eeschema/viewlibs.cpp:239
-#: eeschema/libedit.cpp:699
+#: eeschema/libedit.cpp:700
 msgid "Key words"
 msgstr "Parole chiave"
 
@@ -5431,7 +5437,7 @@ msgstr ""
 "Modificare la tabella globale librerie di simboli nel menu delle preferenze."
 
 #: eeschema/lib_draw_item.cpp:63 eeschema/lib_pin.cpp:1706
-#: eeschema/sch_text.cpp:690 eeschema/libedit.cpp:697
+#: eeschema/sch_text.cpp:690 eeschema/libedit.cpp:698
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:194
@@ -6211,7 +6217,7 @@ msgstr "Esploratore di librerie di simboli -- %s"
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
 
-#: eeschema/viewlibs.cpp:223 eeschema/libedit.cpp:670
+#: eeschema/viewlibs.cpp:223 eeschema/libedit.cpp:671
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:206
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:338
@@ -6528,11 +6534,6 @@ msgstr "Centra zoom"
 #: pcbnew/hotkeys.cpp:179
 msgid "Zoom Redraw"
 msgstr "Aggiorna zoom"
-
-#: eeschema/hotkeys.cpp:118 gerbview/hotkeys.cpp:68 kicad/menubar.cpp:161
-#: pagelayout_editor/hotkeys.cpp:83 pcbnew/hotkeys.cpp:201
-msgid "Help (this window)"
-msgstr "Aiuto (questa finestra)"
 
 #: eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:70
 #: pagelayout_editor/hotkeys.cpp:73 pcbnew/hotkeys.cpp:137
@@ -7668,7 +7669,7 @@ msgstr "Caricamento librerie simboli"
 msgid "Loading library \"%s\""
 msgstr "Caricamento libreria \"%s\""
 
-#: eeschema/cmp_tree_model_adapter_base.cpp:206 eeschema/libedit.cpp:695
+#: eeschema/cmp_tree_model_adapter_base.cpp:206 eeschema/libedit.cpp:696
 msgid "Symbol"
 msgstr "Simbolo"
 
@@ -8008,7 +8009,7 @@ msgstr "Il campo %s non può contenere %s caratteri."
 msgid "Field Validation Error"
 msgstr "Errore validazione campo"
 
-#: eeschema/lib_field.cpp:461 eeschema/libedit.cpp:700
+#: eeschema/lib_field.cpp:461 eeschema/libedit.cpp:701
 #: eeschema/template_fieldnames.cpp:50 eeschema/fields_editor_table_column.h:37
 msgid "Datasheet"
 msgstr "Specifiche"
@@ -8219,54 +8220,54 @@ msgstr ""
 msgid "This new symbol has no name and cannot be created."
 msgstr "Il nuovo simbolo è senza nome e non può essere creato. "
 
-#: eeschema/libedit.cpp:304
+#: eeschema/libedit.cpp:305
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\""
 msgstr "Il simbolo \"%s\" esiste già nella libreria \"%s\""
 
-#: eeschema/libedit.cpp:489
+#: eeschema/libedit.cpp:490
 #, c-format
 msgid "Symbol name \"%s\" not found in library \"%s\""
 msgstr "Simbolo \"%s\" non trovato nella libreria \"%s\""
 
-#: eeschema/libedit.cpp:519
+#: eeschema/libedit.cpp:520
 msgid "No library specified."
 msgstr "Nessuna libreria specificata."
 
-#: eeschema/libedit.cpp:536
+#: eeschema/libedit.cpp:537
 #, c-format
 msgid "Save Library \"%s\" As..."
 msgstr "Salva libreria \"%s\" come..."
 
-#: eeschema/libedit.cpp:574
+#: eeschema/libedit.cpp:575
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
 msgstr ""
 "Fallito il salvataggio dei cambiamenti sul file libreria di simboli \"%s\""
 
-#: eeschema/libedit.cpp:576
+#: eeschema/libedit.cpp:577
 msgid "Error saving library"
 msgstr "Errore durante il salvataggio della libreria"
 
-#: eeschema/libedit.cpp:583
+#: eeschema/libedit.cpp:584
 #, c-format
 msgid "Symbol library file \"%s\" saved"
 msgstr "File di libreria di simboli \"%s\" salvato"
 
-#: eeschema/libedit.cpp:585
+#: eeschema/libedit.cpp:586
 #, c-format
 msgid "Symbol library documentation file \"%s\" saved"
 msgstr "File di documentazione libreria di simboli \"%s\" salvato"
 
-#: eeschema/libedit.cpp:629
+#: eeschema/libedit.cpp:630
 msgid "Save Libraries"
 msgstr "Salva librerie"
 
-#: eeschema/libedit.cpp:630
+#: eeschema/libedit.cpp:631
 msgid "Select libraries to save"
 msgstr "Seleziona le librerie da salvare"
 
-#: eeschema/libedit.cpp:631
+#: eeschema/libedit.cpp:632
 msgid ""
 "Some libraries could not be saved to their original files.\n"
 "\n"
@@ -8276,7 +8277,7 @@ msgstr ""
 "\n"
 "Salvarle in file nuovi?"
 
-#: eeschema/libedit.cpp:693
+#: eeschema/libedit.cpp:694
 msgid "Power Symbol"
 msgstr "Simbolo di alimentazione"
 
@@ -22411,7 +22412,7 @@ msgstr "Mantieni"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Exchange Footprint"
-msgstr "Scambio impronte"
+msgstr "Scambio impronta"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
 msgid ""
