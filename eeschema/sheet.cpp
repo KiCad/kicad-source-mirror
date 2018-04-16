@@ -491,6 +491,10 @@ void SCH_EDIT_FRAME::RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW )
     // Rotation is made around it center
     wxPoint rotPoint = aSheet->GetBoundingBox().Centre();
 
+    // Keep this rotation point on the grid, otherwise all items of this sheet
+    // will be moved off grid
+    rotPoint = GetNearestGridPosition( rotPoint );
+
     // rotate CCW, or CW. to rotate CW, rotate 3 times
     aSheet->Rotate( rotPoint );
 
