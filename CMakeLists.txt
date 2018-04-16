@@ -211,6 +211,44 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 endif()
 
+
+#================================================
+# Provide access to CCACHE
+#================================================
+if (USE_CCACHE)
+  find_program(CCACHE_FOUND ccache)
+  if(CCACHE_FOUND)
+    get_property(RULE_LAUNCH_COMPILE GLOBAL PROPERTY RULE_LAUNCH_COMPILE)
+    set(RULE_LAUNCH_COMPILE "${RULE_LAUNCH_COMPILE} ${CCACHE_FOUND}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${RULE_LAUNCH_COMPILE})
+
+    get_property(RULE_LAUNCH_LINK GLOBAL PROPERTY RULE_LAUNCH_LINK)
+    set(RULE_LAUNCH_LINK "${RULE_LAUNCH_LINK} ${CCACHE_FOUND}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${RULE_LAUNCH_LINK})
+
+    message(STATUS "Used ${CCACHE_FOUND} for compilation.")
+  else(CCACHE_FOUND)
+    message(STATUS "CCache was requested but not found.")
+  endif(CCACHE_FOUND)
+endif(USE_CCACHE)
+
+
+#================================================
+# Provide access to CCACHE
+#================================================
+if (USE_DISTCC)
+  find_program(DISTCC_FOUND distcc)
+  if(DISTCC_FOUND)
+    get_property(RULE_LAUNCH_COMPILE GLOBAL PROPERTY RULE_LAUNCH_COMPILE)
+    set(RULE_LAUNCH_COMPILE "${RULE_LAUNCH_COMPILE} ${DISTCC_FOUND}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${RULE_LAUNCH_COMPILE})
+    message(STATUS "Using ${DISTCC_FOUND} for distributed build.")
+  else(DISTCC_FOUND)
+    message(INFO "Distcc was requested but not found.")
+  endif(DISTCC_FOUND)
+endif(USE_DISTCC)
+
+
 #================================================
 # Set flags for GCC, or treat llvm as GCC
 #================================================
