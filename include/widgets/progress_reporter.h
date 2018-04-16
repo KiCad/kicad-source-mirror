@@ -29,6 +29,7 @@
 #include <atomic>
 
 #include <wx/progdlg.h>
+#include <wx/gauge.h>
 
 /**
  * A progress reporter for use in multi-threaded environments.  The various advancement
@@ -111,6 +112,24 @@ public:
 private:
 
     virtual bool updateUI() override;
+};
+
+
+class GAUGE_PROGRESS_REPORTER : public PROGRESS_REPORTER, public wxGauge
+{
+public:
+    /**
+     * @param aParent is the parent of the wxGauge control
+     * @param aNumPhases is the number of "virtual sections" of the progress bar
+     * aNumPhases = 1 is the usual progress bar
+     * aNumPhases = n creates n virtual progress bar zones: a 0 to 100 percent width
+     * of a virtual zone fills 0 to 1/n progress bar full size of the nth virtual zone index
+     */
+    GAUGE_PROGRESS_REPORTER( wxWindow* aParent, int aNumPhases );
+
+private:
+
+    bool updateUI() override;
 };
 
 #endif

@@ -109,8 +109,13 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         const LIB_ID*                       aHighlight,
         bool                                aAllowFields )
 {
-    wxString          dialogTitle;
-    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
+    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
+    wxString                     dialogTitle;
+    SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
+
+    // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
+    if( !dialogLock.try_lock() )
+        return COMPONENT_SELECTION();
 
     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
     bool loaded = false;

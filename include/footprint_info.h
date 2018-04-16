@@ -50,7 +50,7 @@ class FP_LIB_TABLE;
 class FOOTPRINT_LIST;
 class FOOTPRINT_LIST_IMPL;
 class FOOTPRINT_ASYNC_LOADER;
-class WX_PROGRESS_REPORTER;
+class PROGRESS_REPORTER;
 class wxTopLevelWindow;
 class KIWAY;
 
@@ -243,15 +243,6 @@ public:
     }
 
     /**
-     * Indicates whether or not the table requires loading for the given \a aNickname.
-     */
-    virtual bool RequiresLoading( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr )
-    {
-        return true;    // Implementations which support caching should implement this.
-    }
-
-
-    /**
      * Read all the footprints provided by the combination of aTable and aNickname.
      *
      * @param aTable defines all the libraries.
@@ -264,7 +255,7 @@ public:
      *  GetErrorCount() for that, should be zero to indicate success.
      */
     virtual bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
-                                     WX_PROGRESS_REPORTER* aProgressReporter = nullptr ) = 0;
+                                     PROGRESS_REPORTER* aProgressReporter = nullptr ) = 0;
 
     void DisplayErrors( wxTopLevelWindow* aCaller = NULL );
 
@@ -293,12 +284,6 @@ protected:
      * Join worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
      */
     virtual bool JoinWorkers() = 0;
-
-
-    /**
-     * Return the number of libraries finished (successfully or otherwise).
-     */
-    virtual size_t CountFinished() = 0;
 };
 
 
@@ -356,19 +341,6 @@ public:
      * @return true if no errors occurred
      */
     bool Join();
-
-    /**
-     * Get the current completion percentage. 0 and 100 are reserved values:
-     * 0 will only be returned if Start() has not yet been called, and 100
-     * will only be returned if totally complete (i.e. rounding errors will
-     * never cause a 100% progress despite not being complete).
-     *
-     * If there are no libraries at all, returns 100 (as loading zero libraries
-     * is always complete).
-     *
-     * Threadsafe.
-     */
-    int GetProgress() const;
 
     /**
      * Set a callback to receive notice when loading is complete.

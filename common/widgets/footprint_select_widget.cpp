@@ -34,7 +34,7 @@
 #include <wx/timer.h>
 #include <wx/utils.h>
 #include <wx/wupdlock.h>
-
+#include <widgets/progress_reporter.h>
 
 /**
  * Fixed positions for standard items in the list
@@ -73,9 +73,8 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
 {
     m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
-    m_progress_timer = std::make_unique<wxTimer>( this );
     m_book = new wxSimplebook( this, wxID_ANY );
-    m_progress_ctrl = new wxGauge( m_book, wxID_ANY, 100 );
+    m_progress_ctrl = new GAUGE_PROGRESS_REPORTER( m_book, 2 );
     m_fp_sel_ctrl = new FOOTPRINT_CHOICE( m_book, wxID_ANY );
 
     m_book->SetEffect( wxSHOW_EFFECT_BLEND );
@@ -87,7 +86,6 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
     Layout();
     m_sizer->Fit( this );
 
-    Bind( wxEVT_TIMER, &FOOTPRINT_SELECT_WIDGET::OnProgressTimer, this, m_progress_timer->GetId() );
     m_fp_sel_ctrl->Bind( wxEVT_COMBOBOX, &FOOTPRINT_SELECT_WIDGET::OnComboBox, this );
     m_fp_sel_ctrl->Bind(
             EVT_INTERACTIVE_CHOICE, &FOOTPRINT_SELECT_WIDGET::OnComboInteractive, this );
@@ -103,15 +101,8 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
         auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
         m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
 
-        if( m_fp_list->RequiresLoading( fp_lib_table ) )
-        {
-            m_fp_loader.SetList( &*m_fp_list );
-            m_fp_loader.Start( fp_lib_table );
-
-            m_progress_timer->Start( 200 );
-        }
-        else
-            FootprintsLoaded();
+        m_fp_list->ReadFootprintFiles( fp_lib_table, nullptr, m_progress_ctrl );
+        FootprintsLoaded();
     }
     catch( ... )
     {
@@ -120,27 +111,8 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
 }
 
 
-void FOOTPRINT_SELECT_WIDGET::OnProgressTimer( wxTimerEvent& aEvent )
-{
-    int prog = m_fp_loader.GetProgress();
-    m_progress_ctrl->SetValue( prog );
-
-    if( prog == 100 )
-    {
-        wxBusyCursor busy;
-
-        m_fp_loader.Join();
-        m_progress_timer->Stop();
-
-        FootprintsLoaded();
-    }
-}
-
-
 void FOOTPRINT_SELECT_WIDGET::FootprintsLoaded()
 {
-    m_progress_ctrl->SetValue( 100 );
-
     m_fp_filter.SetList( *m_fp_list );
 
     m_book->SetSelection( PAGE_SELECT );

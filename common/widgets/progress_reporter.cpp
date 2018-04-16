@@ -23,7 +23,7 @@
  */
 
 #include <widgets/progress_reporter.h>
-
+#include <wx/evtloop.h>
 #include <thread>
 
 PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
@@ -136,5 +136,28 @@ bool WX_PROGRESS_REPORTER::updateUI()
     SetRange( 1000 );
     return wxProgressDialog::Update( cur, message );
 }
+
+
+GAUGE_PROGRESS_REPORTER::GAUGE_PROGRESS_REPORTER( wxWindow* aParent, int aNumPhases ) :
+        PROGRESS_REPORTER( aNumPhases ),
+        wxGauge( aParent, wxID_ANY, 1000, wxDefaultPosition, wxDefaultSize,
+                 wxGA_HORIZONTAL, wxDefaultValidator, wxGaugeNameStr )
+{
+}
+
+
+bool GAUGE_PROGRESS_REPORTER::updateUI()
+{
+    int cur = currentProgress();
+
+    if( cur < 0 || cur > 1000 )
+        cur = 0;
+
+    wxGauge::SetValue( cur );
+    wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
+
+    return true;  // No cancel button on a wxGauge
+}
+
 
 

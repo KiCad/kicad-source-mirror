@@ -29,7 +29,7 @@
 class KIWAY;
 class PROJECT;
 class FOOTPRINT_CHOICE;
-class wxGauge;
+class GAUGE_PROGRESS_REPORTER;
 class wxMenu;
 class wxTimer;
 class wxTimerEvent;
@@ -129,28 +129,24 @@ public:
     virtual bool Enable( bool aEnable = true ) override;
 
 private:
-    KIWAY*            m_kiway;
-    wxGauge*          m_progress_ctrl;
-    FOOTPRINT_CHOICE* m_fp_sel_ctrl;
-    wxSizer*          m_sizer;
-    wxSimplebook*     m_book;
+    KIWAY*                   m_kiway;
+    GAUGE_PROGRESS_REPORTER* m_progress_ctrl;
+    FOOTPRINT_CHOICE*        m_fp_sel_ctrl;
+    wxSizer*                 m_sizer;
+    wxSimplebook*            m_book;
 
-    std::unique_ptr<wxTimer> m_progress_timer;
+    bool                     m_update;
+    bool                     m_finished_loading;
+    int                      m_max_items;
+    wxString                 m_default_footprint;
+    wxString                 m_other_footprint;
+    int                      m_last_item;
 
-    bool     m_update;
-    bool     m_finished_loading;
-    int      m_max_items;
-    wxString m_default_footprint;
-    wxString m_other_footprint;
-    int      m_last_item;
-
-    FOOTPRINT_ASYNC_LOADER   m_fp_loader;
     FOOTPRINT_LIST*          m_fp_list;
     FOOTPRINT_FILTER         m_fp_filter;
     bool                     m_zero_filter;
 
     void FootprintsLoaded();
-    void OnProgressTimer( wxTimerEvent& aEvent );
     void OnComboBox( wxCommandEvent& aEvent );
     void OnComboInteractive( wxCommandEvent& aEvent );
 

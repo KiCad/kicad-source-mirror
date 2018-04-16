@@ -115,14 +115,8 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 }
 
 
-bool FOOTPRINT_LIST_IMPL::RequiresLoading( FP_LIB_TABLE* aTable, const wxString* aNickname )
-{
-    return m_list_timestamp != aTable->GenerateTimestamp( aNickname );
-}
-
-
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
-                                              WX_PROGRESS_REPORTER* aProgressReporter )
+                                              PROGRESS_REPORTER* aProgressReporter )
 {
     if( m_list_timestamp == aTable->GenerateTimestamp( aNickname ) )
         return true;
@@ -141,7 +135,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         m_progress_reporter->Report( _( "Fetching Footprint Libraries" ) );
     }
 
-    while( !m_cancelled && loader.GetProgress() < 100 )
+    while( !m_cancelled && m_count_finished.load() < m_loader->m_total_libs )
     {
         if( m_progress_reporter )
             m_cancelled = !m_progress_reporter->KeepRefreshing();
@@ -304,12 +298,6 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
         m_list_timestamp = m_lib_table->GenerateTimestamp( m_library );;
 
     return m_errors.empty();
-}
-
-
-size_t FOOTPRINT_LIST_IMPL::CountFinished()
-{
-    return m_count_finished.load();
 }
 
 

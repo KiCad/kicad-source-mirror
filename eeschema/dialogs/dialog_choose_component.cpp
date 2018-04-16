@@ -48,6 +48,9 @@
 wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
 int DIALOG_CHOOSE_COMPONENT::m_tree_canvas_sash_position = 0;
 
+std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
+
+
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
         CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
         bool aShowFootprints )
@@ -59,10 +62,9 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
           m_show_footprints( aShowFootprints ),
+          m_load_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
-    wxBusyCursor busy_while_loading;
-
     m_fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
     auto sizer = new wxBoxSizer( wxVERTICAL );
@@ -98,6 +100,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     SetSizer( sizer );
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
+    Bind( wxEVT_IDLE, &DIALOG_CHOOSE_COMPONENT::OnIdle, this );
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
     Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
@@ -106,8 +109,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_sch_view_ctrl->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSchViewPaint, this );
 
     if( m_fp_sel_ctrl )
-        m_fp_sel_ctrl->Bind(
-                EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
     Layout();
 
@@ -192,9 +194,17 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
         // This hides the GAL panel and shows the status label
         m_fp_view_ctrl->SetStatusText( wxEmptyString );
     }
+}
 
-    if( m_fp_sel_ctrl )
+
+// Let the dialog display before starting the footprint load
+void DIALOG_CHOOSE_COMPONENT::OnIdle( wxIdleEvent& aEvent )
+{
+    if( m_load_footprints && m_fp_sel_ctrl )
+    {
+        m_load_footprints = false;
         m_fp_sel_ctrl->Load( Kiway(), Prj() );
+    }
 }
 
 

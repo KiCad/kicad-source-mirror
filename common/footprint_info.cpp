@@ -181,29 +181,6 @@ bool FOOTPRINT_ASYNC_LOADER::Join()
 }
 
 
-int FOOTPRINT_ASYNC_LOADER::GetProgress() const
-{
-    if( !m_started )
-        return 0;
-    else if( m_total_libs == 0 || !m_list )
-        return 100;
-    else
-    {
-        int loaded = m_list->CountFinished();
-        int prog = ( 100 * loaded ) / m_total_libs;
-
-        if( loaded == m_total_libs )
-            return 100;
-        else if( loaded < m_total_libs && prog >= 100 )
-            return 99;
-        else if( prog <= 0 )
-            return 1;
-        else
-            return prog;
-    }
-}
-
-
 void FOOTPRINT_ASYNC_LOADER::SetCompletionCallback( std::function<void()> aCallback )
 {
     m_completion_cb = std::move(aCallback);
