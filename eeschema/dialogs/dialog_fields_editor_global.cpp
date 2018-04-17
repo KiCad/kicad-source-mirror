@@ -285,6 +285,16 @@ public:
 
     void RebuildRows( wxCheckBox* groupComponentsBox, wxDataViewListCtrl* fieldsCtrl )
     {
+        if ( GetView() )
+        {
+            // Commit any pending in-place edits before the row gets moved out from under
+            // the editor.
+            GetView()->DisableCellEditControl();
+
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
+            GetView()->ProcessTableMessage( msg );
+        }
+
         m_rows.clear();
 
         for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
@@ -322,6 +332,12 @@ public:
                            wxString rhRef( rhs.GetRef() << rhs.GetRefNumber() );
                            return RefDesStringCompare( lhRef, rhRef ) < 0;
                        } );
+        }
+
+        if ( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
+            GetView()->ProcessTableMessage( msg );
         }
     }
 
