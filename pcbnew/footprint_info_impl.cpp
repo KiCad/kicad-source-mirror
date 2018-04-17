@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
  * Copyright (C) 2013-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -135,7 +135,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         m_progress_reporter->Report( _( "Fetching Footprint Libraries" ) );
     }
 
-    while( !m_cancelled && m_count_finished.load() < m_loader->m_total_libs )
+    while( !m_cancelled && (int)m_count_finished.load() < m_loader->m_total_libs )
     {
         if( m_progress_reporter )
             m_cancelled = !m_progress_reporter->KeepRefreshing();
@@ -272,7 +272,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
         } ) );
     }
 
-    while( !m_cancelled && m_count_finished.load() < total_count )
+    while( !m_cancelled && (size_t)m_count_finished.load() < total_count )
     {
         if( m_progress_reporter )
             m_cancelled = !m_progress_reporter->KeepRefreshing();

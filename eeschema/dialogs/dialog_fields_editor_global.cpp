@@ -94,7 +94,7 @@ public:
     {
         m_fieldNames.push_back( aFieldName );
 
-        for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+        for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
             SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
             timestamp_t compID = comp->GetTimeStamp();
@@ -287,7 +287,7 @@ public:
     {
         m_rows.clear();
 
-        for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+        for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
             SCH_REFERENCE compRef = m_componentRefs[ i ];
             bool matchFound = false;
@@ -328,7 +328,7 @@ public:
 
     void ApplyData( SCH_EDIT_FRAME* aParent )
     {
-        for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+        for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
             SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
 
@@ -464,7 +464,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 {
     std::set<wxString> userFieldNames;
 
-    for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+    for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
     {
         SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
 
