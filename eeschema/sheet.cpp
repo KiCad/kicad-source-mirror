@@ -121,10 +121,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     if( !g_RootSheet->SearchHierarchy( newFilename, &useScreen ) )
     {
         loadFromFile = wxFileExists( newFilename );
+        wxLogDebug( "Sheet requested file \"%s\", %s", newFilename,
+                ( loadFromFile ) ? "found" : "not found" );
     }
-
-    wxLogDebug( "Sheet requested file \"%s\", %s", newFilename,
-                (loadFromFile) ? "found" : "not found" );
 
     // Inside Eeschema, filenames are stored using unix notation
     newFilename.Replace( wxT( "\\" ), wxT( "/" ) );
