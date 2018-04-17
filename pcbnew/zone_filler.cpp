@@ -120,7 +120,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     for( ssize_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        fillWorkers.push_back( std::thread( [ this, aCheck, toFill ]()
+        fillWorkers.push_back( std::thread( [ this, toFill ]()
         {
             size_t i = m_next.fetch_add( 1 );
             while( i < toFill.size() )
