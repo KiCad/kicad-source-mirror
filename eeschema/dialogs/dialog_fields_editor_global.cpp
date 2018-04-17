@@ -191,7 +191,7 @@ public:
     }
 
 
-    static bool cmp( std::vector<SCH_REFERENCE>& lhGroup, std::vector<SCH_REFERENCE>& rhGroup,
+    static bool cmp( const std::vector<SCH_REFERENCE>& lhGroup, const std::vector<SCH_REFERENCE>& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending )
     {
         // Empty rows always go to the bottom, whether ascending or descending
@@ -204,8 +204,8 @@ public:
 
         // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
 
-        wxString lhs = dataModel->GetValue( lhGroup, sortCol );
-        wxString rhs = dataModel->GetValue( rhGroup, sortCol );
+        wxString lhs = dataModel->GetValue( (std::vector<SCH_REFERENCE>&)lhGroup, sortCol );
+        wxString rhs = dataModel->GetValue( (std::vector<SCH_REFERENCE>&)rhGroup, sortCol );
 
         if( lhs == rhs || sortCol == REFERENCE )
         {
@@ -229,8 +229,8 @@ public:
             aColumn = 0;
 
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ this, aColumn, ascending ]( std::vector<SCH_REFERENCE>& lhs,
-                                                 std::vector<SCH_REFERENCE>& rhs ) -> bool
+                   [ this, aColumn, ascending ]( const std::vector<SCH_REFERENCE>& lhs,
+                                                 const std::vector<SCH_REFERENCE>& rhs ) -> bool
                    {
                        return cmp( lhs, rhs, this, aColumn, ascending );
                    } );
@@ -316,7 +316,7 @@ public:
         for( auto& rowGroup : m_rows )
         {
             std::sort( rowGroup.begin(), rowGroup.end(),
-                       []( SCH_REFERENCE& lhs, SCH_REFERENCE& rhs ) -> bool
+                       []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
                        {
                            wxString lhRef( lhs.GetRef() << lhs.GetRefNumber() );
                            wxString rhRef( rhs.GetRef() << rhs.GetRefNumber() );
