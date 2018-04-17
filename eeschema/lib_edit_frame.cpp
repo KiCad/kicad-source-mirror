@@ -1024,11 +1024,16 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 
 void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
+	if( !aPart && !m_my_part )
+		return;
+
     wxASSERT( m_my_part != aPart );
 
     if( m_my_part != aPart )
     {
-        delete m_my_part;
+        if( m_my_part )
+            delete m_my_part;
+
         m_my_part = aPart;
     }
 
