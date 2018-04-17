@@ -120,8 +120,6 @@ set( EESCHEMA_SRCS
     eeschema_config.cpp
     erc.cpp
     events_called_functions_for_edit.cpp
-    fields_editor_table_column.cpp
-    fields_editor_table_model.cpp
     files-io.cpp
     find.cpp
     generate_alias_info.cpp

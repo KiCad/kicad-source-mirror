@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,77 +22,46 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/dialogs/dialog_fields_editor_global.cpp
- * @brief Dialog box for creating bom and other documents from generic netlist.
- */
-
 #ifndef DIALOG_FIELDS_EDITOR_GLOBAL_H
 #define DIALOG_FIELDS_EDITOR_GLOBAL_H
 
-#include <wx/dataview.h>
 
-#include <sch_edit_frame.h>
-#include <sch_sheet.h>
-#include <sch_sheet_path.h>
-#include <sch_component.h>
-#include <invoke_sch_dialog.h>
 #include <dialog_fields_editor_global_base.h>
-#include <netlist_object.h>
 #include <sch_reference_list.h>
-#include <vector>
 
-#include <fields_editor_table_model.h>
+
+class SCH_EDIT_FRAME;
+class FIELDS_EDITOR_GRID_DATA_MODEL;
+
 
 class DIALOG_FIELDS_EDITOR_GLOBAL : public DIALOG_FIELDS_EDITOR_GLOBAL_BASE
 {
-
 public:
     DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent );
     virtual ~DIALOG_FIELDS_EDITOR_GLOBAL();
 
+    bool TransferDataFromWindow() override;
+
 private:
-    //! Parent object (Schematic)
     SCH_EDIT_FRAME* m_parent;
 
-    FIELDS_EDITOR_TABLE_MODEL::MODEL_PTR m_bom;
+    SCH_REFERENCE_LIST             m_componentRefs;
+    FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 
-    void LoadComponents();
+    void AddField( const wxString& aFieldName, bool defaultShow, bool defaultSortBy );
+    void LoadFieldNames();
 
-    void LoadColumnNames();
-    void ReloadColumns();
+    bool Match( SCH_REFERENCE& aRef, SCH_REFERENCE& bRef, bool groupComponents );
+    void RebuildRows();
 
-    void ApplyAllChanges();
+    void OnColSort( wxGridEvent& aEvent );
 
-    // Checkbox event callbacks
     virtual void OnColumnItemToggled( wxDataViewEvent& event ) override;
     virtual void OnGroupComponentsToggled( wxCommandEvent& event ) override;
-
-    virtual void OnRevertFieldChanges( wxCommandEvent& event ) override;
-
-    virtual void OnApplyFieldChanges( wxCommandEvent& event ) override;
-
     virtual void OnRegroupComponents( wxCommandEvent& event ) override;
-
-    // Called after a value in the table has changed
-    virtual void OnTableValueChanged( wxDataViewEvent& event ) override;
-
-    // Called when a cell is left-clicked
-    virtual void OnTableItemActivated( wxDataViewEvent& event ) override;
-
-    // Called when a cell is right-clicked
-    virtual void OnTableItemContextMenu( wxDataViewEvent& event ) override;
-
-    // Called when the dialog is closed
-    virtual void OnDialogClosed( wxCloseEvent& event ) override;
-    virtual void OnCloseButton( wxCommandEvent& event ) override;
-
-    bool CanCloseDialog();
-
-    void UpdateTitle( void );
-
-    virtual void OnUpdateUI( wxUpdateUIEvent& event ) override;
-
+    virtual void OnTableValueChanged( wxGridEvent& event ) override;
+    virtual void OnTableItemContextMenu( wxGridEvent& event ) override;
+    virtual void OnSizeFieldList( wxSizeEvent& event ) override;
 };
 
 #endif /* DIALOG_FIELDS_EDITOR_GLOBAL_H */

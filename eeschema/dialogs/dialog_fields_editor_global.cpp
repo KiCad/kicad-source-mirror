@@ -23,20 +23,22 @@
  */
 
 
-#include <wx/colour.h>
 #include <wx/msgdlg.h>
-#include <wx/progdlg.h>
-#include <wx/file.h>
-#include <wx/filename.h>
+#include <wx/grid.h>
 
 #include <confirm.h>
+#include <bitmaps.h>
+#include <grid_tricks.h>
+#include <kicad_string.h>
 
 #include <build_version.h>
 #include <general.h>
 #include <class_library.h>
 
+#include <sch_edit_frame.h>
+#include <sch_reference_list.h>
+
 #include "dialog_fields_editor_global.h"
-#include <fields_editor_table_model.h>
 
 
 // Create and show fields editor
@@ -47,288 +49,436 @@ void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
 }
 
 
+#define FIELD_NAME_COLUMN 0
+#define SHOW_FIELD_COLUMN 1
+#define GROUP_BY_COLUMN   2
+
+#define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
+
+
+// Indicator that multiple values exist in child rows
+#define ROW_MULT_ITEMS wxString( "< ... >" )
+
+
+class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
+{
+protected:
+    // The data model is fundamentally m_componentRefs X m_fieldNames.
+
+    SCH_REFERENCE_LIST    m_componentRefs;
+    std::vector<wxString> m_fieldNames;
+
+    // However, the grid view can vary in two ways:
+    //   1) the componentRefs can be grouped into fewer rows
+    //   2) some columns can be hidden
+    //
+    // We handle (1) here (ie: a table row maps to a group, and the table is rebuilt
+    // when the groupings change), and we let the wxGrid handle (2) (ie: the number
+    // of columns is constant but are hidden/shown by the wxGrid control).
+
+    std::vector< std::vector<SCH_REFERENCE> > m_rows;
+
+    // Data store
+    // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
+    std::map< timestamp_t, std::map<wxString, wxString> > m_dataStore;
+
+public:
+    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aComponentList )
+    {
+        m_componentRefs = aComponentList;
+        m_componentRefs.SplitReferences();
+    }
+
+
+    void AddColumn( const wxString& aFieldName )
+    {
+        m_fieldNames.push_back( aFieldName );
+
+        for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+        {
+            SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
+            timestamp_t compID = comp->GetTimeStamp();
+
+            m_dataStore[ compID ][ aFieldName ] = comp->GetFieldText( aFieldName );
+        }
+    }
+
+
+    int GetNumberRows() override { return m_rows.size(); }
+
+    // Columns are fieldNames + quantity column
+    int GetNumberCols() override { return m_fieldNames.size() + 1; }
+
+
+    wxString GetColLabelValue( int aCol ) override
+    {
+        if( aCol == QUANTITY_COLUMN )
+            return _T( "Qty" );
+        else
+            return m_fieldNames[ aCol ];
+    }
+
+
+    bool IsEmptyCell( int aRow, int aCol ) override
+    {
+        return false;   // don't allow adjacent cell overflow, even if we are actually empty
+    }
+
+
+    wxString GetValue( int aRow, int aCol ) override
+    {
+        return GetValue( m_rows[ aRow ], aCol );
+    }
+
+
+    wxString GetValue( std::vector<SCH_REFERENCE>& group, int aCol )
+    {
+        std::vector<wxString>  rootReferences;
+        wxString               fieldValue;
+
+        for( const auto& ref : group )
+        {
+            if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
+            {
+                rootReferences.push_back( ref.GetRef() << ref.GetRefNumber() );
+            }
+            else // Other columns are either a single value or ROW_MULTI_ITEMS
+            {
+                timestamp_t compID = ref.GetComp()->GetTimeStamp();
+
+                if( &ref == &group.front() )
+                    fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol ] ];
+                else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol ] ] )
+                    return ROW_MULT_ITEMS;
+            }
+        }
+
+        if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
+        {
+            // Remove duplicates (other units of multi-unit parts)
+            rootReferences.erase( std::unique( rootReferences.begin(), rootReferences.end() ),
+                                  rootReferences.end() );
+        }
+
+        if( aCol == REFERENCE )
+        {
+            for( const auto& ref : rootReferences )
+            {
+                if( fieldValue.length() )
+                    fieldValue += wxT( ", " );
+                fieldValue += ref;
+            }
+        }
+        else if( aCol == QUANTITY_COLUMN )
+        {
+            fieldValue = wxString::Format( wxT( "%d" ), ( int )rootReferences.size() );
+        }
+
+        return fieldValue;
+    }
+
+
+    void SetValue( int aRow, int aCol, const wxString &aValue ) override
+    {
+        if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
+            return;             // Can't modify references or quantity
+
+        std::vector<SCH_REFERENCE>& rowGroup = m_rows[ aRow ];
+        wxString fieldName = m_fieldNames[ aCol ];
+
+        for( const auto& ref : rowGroup )
+            m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = aValue;
+    }
+
+
+    static bool cmp( std::vector<SCH_REFERENCE>& lhGroup, std::vector<SCH_REFERENCE>& rhGroup,
+                     FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending )
+    {
+        // Empty rows always go to the bottom, whether ascending or descending
+        if( lhGroup.size() == 0 )
+            return true;
+        else if( rhGroup.size() == 0 )
+            return false;
+
+        bool retVal;
+
+        // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
+
+        wxString lhs = dataModel->GetValue( lhGroup, sortCol );
+        wxString rhs = dataModel->GetValue( rhGroup, sortCol );
+
+        if( lhs == rhs || sortCol == REFERENCE )
+        {
+            wxString lhRef = lhGroup[ 0 ].GetRef() + lhGroup[ 0 ].GetRefNumber();
+            wxString rhRef = rhGroup[ 0 ].GetRef() + rhGroup[ 0 ].GetRefNumber();
+            retVal = RefDesStringCompare( lhRef, rhRef ) < 0;
+        }
+        else
+            retVal = ValueStringCompare( lhs, rhs ) < 0;
+
+        if( ascending )
+            return retVal;
+        else
+            return !retVal;
+    }
+
+
+    void Sort( int aColumn, bool ascending )
+    {
+        if( aColumn < 0 )
+            aColumn = 0;
+
+        std::sort( m_rows.begin(), m_rows.end(),
+                   [ this, aColumn, ascending ]( std::vector<SCH_REFERENCE>& lhs,
+                                                 std::vector<SCH_REFERENCE>& rhs ) -> bool
+                   {
+                       return cmp( lhs, rhs, this, aColumn, ascending );
+                   } );
+    }
+
+
+    bool match( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef,
+                wxCheckBox* groupComponentsBox, wxDataViewListCtrl* fieldsCtrl )
+    {
+        // Units of same component always match
+        if( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() )
+            return true;
+
+        // If we're not grouping, then nothing else matches
+        if( !groupComponentsBox->GetValue() )
+            return false;
+
+        bool matchFound = false;
+
+        // First check the reference column.  This can be done directly out of the
+        // SCH_REFERENCEs as the references can't be edited in the grid.
+        if( fieldsCtrl->GetToggleValue( REFERENCE, GROUP_BY_COLUMN ) )
+        {
+            // if we're grouping by reference, then only the prefix must match
+            if( lhRef.GetRef() != rhRef.GetRef() )
+                return false;
+
+            matchFound = true;
+        }
+
+        timestamp_t lhRefID = lhRef.GetComp()->GetTimeStamp();
+        timestamp_t rhRefID = rhRef.GetComp()->GetTimeStamp();
+
+        // Now check all the other columns.  This must be done out of the dataStore
+        // for the refresh button to work after editing.
+        for( int i = REFERENCE + 1; i < fieldsCtrl->GetItemCount(); ++i )
+        {
+            if( !fieldsCtrl->GetToggleValue( i, GROUP_BY_COLUMN ) )
+                continue;
+
+            wxString fieldName = fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN );
+
+            if( m_dataStore[ lhRefID ][ fieldName ] != m_dataStore[ rhRefID ][ fieldName ] )
+                return false;
+
+            matchFound = true;
+        }
+
+        return matchFound;
+    }
+
+
+    void RebuildRows( wxCheckBox* groupComponentsBox, wxDataViewListCtrl* fieldsCtrl )
+    {
+        m_rows.clear();
+
+        for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+        {
+            SCH_REFERENCE compRef = m_componentRefs[ i ];
+            bool matchFound = false;
+
+            // See if we already have a group which this component fits into
+            for( auto& rowGroup : m_rows )
+            {
+                // group members are by definition all matching, so just check
+                // against the first member
+                if( match( rowGroup[ 0 ], compRef, groupComponentsBox, fieldsCtrl ) )
+                {
+                    matchFound = true;
+                    rowGroup.push_back( compRef );
+                    break;
+                }
+            }
+
+            if( !matchFound )
+            {
+                std::vector<SCH_REFERENCE> newGroup;
+                newGroup.push_back( compRef );
+                m_rows.push_back( newGroup );
+            }
+        }
+
+        for( auto& rowGroup : m_rows )
+        {
+            std::sort( rowGroup.begin(), rowGroup.end(),
+                       []( SCH_REFERENCE& lhs, SCH_REFERENCE& rhs ) -> bool
+                       {
+                           wxString lhRef( lhs.GetRef() << lhs.GetRefNumber() );
+                           wxString rhRef( rhs.GetRef() << rhs.GetRefNumber() );
+                           return RefDesStringCompare( lhRef, rhRef ) < 0;
+                       } );
+        }
+    }
+
+
+    void ApplyData( SCH_EDIT_FRAME* aParent )
+    {
+        for( int i = 0; i < m_componentRefs.GetCount(); ++i )
+        {
+            SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
+
+            aParent->SetCurrentSheet( m_componentRefs[ i ].GetSheetPath() );
+            aParent->SaveCopyInUndoList( comp, UR_CHANGED, true );
+
+            std::map<wxString, wxString>& fieldStore = m_dataStore[ comp->GetTimeStamp() ];
+
+            for( int j = 0; j < comp->GetFieldCount(); ++j )
+            {
+                SCH_FIELD* field = comp->GetField( j );
+                auto fieldStoreData = fieldStore.find( field->GetName() );
+                if( fieldStoreData != fieldStore.end() )
+                    field->SetText( fieldStoreData->second );
+            }
+        }
+    }
+};
+
+
 DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent ) :
         DIALOG_FIELDS_EDITOR_GLOBAL_BASE( parent ),
         m_parent( parent )
 {
-    m_bom = FIELDS_EDITOR_TABLE_MODEL::Create();
+    // Get all components from the list of schematic sheets
+    SCH_SHEET_LIST sheets( g_RootSheet );
+    sheets.GetComponents( m_componentRefs, false );
 
-    auto nameColumn = m_columnListCtrl->AppendTextColumn( _( "Field" ) );
+    m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 
-    auto showColumn = m_columnListCtrl->AppendToggleColumn(
-                                        _( "Show" ),
-                                        wxDATAVIEW_CELL_ACTIVATABLE,
-                                        100 );
+    m_fieldsCtrl->AppendTextColumn(   _( "Field" ), wxDATAVIEW_CELL_INERT );
+    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 40, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 60, wxALIGN_CENTER, 0 );
 
-    auto sortColumn = m_columnListCtrl->AppendToggleColumn(
-                                        _( "Sort" ),
-                                        wxDATAVIEW_CELL_ACTIVATABLE,
-                                        100 );
+    // The fact that we're a list should keep the control from reserving space for the
+    // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
+    m_fieldsCtrl->SetIndent( 0 );
 
+    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_componentRefs );
 
-    // Read all components
-    LoadComponents();
+    LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
-    LoadColumnNames();
-    ReloadColumns();
+    m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+    m_dataModel->Sort( 0, true );
 
-    m_bom->ReloadTable();
+    m_grid->UseNativeColHeader( true );
+    m_grid->SetTable( m_dataModel, true );
 
-    // Set default column widths for fields table
-    showColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    showColumn->SetResizeable( false );
+    // add Cut, Copy, and Paste to wxGrid
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    nameColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    nameColumn->SetResizeable( true );
+    // give a bit more room for editing
+    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 2 );
 
-    sortColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    sortColumn->SetResizeable( false );
-
-
-    // Reference column is either single reference or a list of references.
-    // Autosize can fill the window in the case of a list so use a fixed width.
-    // wxCOL_WIDTH_DEFAULT is wxDVC_DEFAULT_WIDTH on all platforms and too small.
-    auto refcol = m_bomView->GetColumn( 0 );
-    refcol->SetWidth( wxDVC_DEFAULT_WIDTH * 2 );
-    refcol->SetResizeable( true );
-
-    // Set default column widths for BOM table
-    for( unsigned int ii = 1; ii < m_bomView->GetColumnCount(); ii++ )
+    // set column attributes
+    for( int i = 0; i < m_dataModel->GetRowsCount(); ++i )
     {
-        auto col = m_bomView->GetColumn( ii );
-
-        if( !col )
-            continue;
-
-        col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-        col->SetResizeable( true );
+        m_grid->SetReadOnly( i, 0 );                                   // references
+        m_grid->SetReadOnly( i, m_dataModel->GetColsCount() - 1 );     // quantities
     }
+    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );     // quantities
+    m_grid->SetColMinimalWidth( 0, 100 );                              // references
+    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 40 ); // quantities
+    m_grid->AutoSizeColumns( false );
+
+    m_grid->SetGridCursor( 0, 1 );
+    m_grid->SetFocus();
+
+    m_sdbSizer1OK->SetDefault();
 
     Layout();
-    SetSizeInDU( 400, 240 );
+    SetSizeInDU( 500, 300 );
     Center();
+
+    // Connect Events
+    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
 }
 
 
 DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
 {
-    // Nothing to do.
+    // Disconnect Events
+    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
+
+    // Delete the GRID_TRICKS.
+    m_grid->PopEventHandler( true );
+
+    // we gave ownership of m_dataModel to the wxGrid...
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnCloseButton( wxCommandEvent& event )
+bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
 {
-    // DIALOG_FIELDS_EDITOR_GLOBAL::OnDialogClosed() will be called,
-    // when closing this dialog.
-    // The default wxID_CANCEL handler is not suitable for us,
-    // because it calls DIALOG_SHIM::EndQuasiModal() without calling
-    // DIALOG_FIELDS_EDITOR_GLOBAL::OnDialogClosed()
-    Close();
-}
+    // Commit any pending in-place edits and close the editor
+    m_grid->DisableCellEditControl();
 
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
 
-bool DIALOG_FIELDS_EDITOR_GLOBAL::CanCloseDialog()
-{
-    if( !m_bom->HaveFieldsChanged() )
-        return true;
+    SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
-    int result = DisplayExitDialog( this, _( "Changes exist in component table" ) );
+    m_dataModel->ApplyData( m_parent );
+    m_parent->OnModify();
 
-    switch( result )
-    {
-    case wxID_CANCEL:
-       return false;
-
-    case wxID_NO:
-       break;
-
-    case wxID_YES:
-       ApplyAllChanges();
-       break;
-    }
+    // Reset the view to where we left the user
+    m_parent->SetCurrentSheet( currentSheet );
+    m_parent->Refresh();
 
     return true;
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnDialogClosed( wxCloseEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aFieldName,
+                                            bool defaultShow, bool defaultSortBy )
 {
-    if( !CanCloseDialog() )
-    {
-        event.Veto();
-    }
-    else
-        // Mandatory to call DIALOG_SHIM::OnCloseWindow( wxCloseEvent& aEvent )
-        // and actually close the dialog
-        event.Skip();
+    m_dataModel->AddColumn( aFieldName );
+
+    wxVector<wxVariant> fieldsCtrlDataLine;
+
+    fieldsCtrlDataLine.push_back( wxVariant( aFieldName ) );
+    fieldsCtrlDataLine.push_back( wxVariant( defaultShow ) );
+    fieldsCtrlDataLine.push_back( wxVariant( defaultSortBy ) );
+
+    m_fieldsCtrl->AppendItem( fieldsCtrlDataLine );
 }
 
 
-/* Struct for keeping track of schematic sheet changes
- * Stores:
- * SHEET_PATH - Schematic to apply changes to
- * PICKED_ITEMS_LIST - List of changes to apply
+/**
+ * Constructs the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
+ * field names in use.
  */
-
-typedef struct
+void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 {
-    SCH_SHEET_PATH path;
-    PICKED_ITEMS_LIST items;
-} SheetUndoList;
+    std::set<wxString> userFieldNames;
 
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::ApplyAllChanges()
-{
-    if( !m_bom->HaveFieldsChanged() )
-        return;
-
-     /**
-      * As we may be saving changes across multiple sheets,
-      * we need to first determine which changes need to be made to which sheet.
-      * To this end, we perform the following:
-      * 1. Save the "path" of the currently displayed sheet
-      * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
-      * 3. Push UNDO actions to appropriate sheets
-      * 4. Perform all the update actions
-      * 5. Reset the view to the current sheet
-      */
-
-    auto currentSheet = m_parent->GetCurrentSheet();
-
-    //! Create a map of changes required for each sheet
-    std::map<wxString, SheetUndoList> undoSheetMap;
-
-    // List of components that have changed
-    auto changed = m_bom->GetChangedComponents();
-
-    ITEM_PICKER picker;
-
-    // Iterate through each of the components that were changed
-    for( const auto& ref : changed )
+    for( int i = 0; i < m_componentRefs.GetCount(); ++i )
     {
-        // Extract the SCH_COMPONENT* object
-        auto cmp = ref.GetComp();
+        SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
 
-        wxString path = ref.GetSheetPath().Path();
-
-        // Push the component into the picker list
-        picker = ITEM_PICKER( cmp, UR_CHANGED );
-        picker.SetFlags( cmp->GetFlags() );
-
-        /*
-         * If there is not currently an undo list for the given sheet,
-         * create an empty one
-         */
-
-        if( undoSheetMap.count( path ) == 0 )
-        {
-            SheetUndoList newList;
-
-            newList.path = ref.GetSheetPath();
-
-            undoSheetMap[path] = newList;
-        }
-
-        auto& pickerList = undoSheetMap[path];
-
-        pickerList.items.PushItem( picker );
+        for( int j = MANDATORY_FIELDS; j < comp->GetFieldCount(); ++j )
+            userFieldNames.insert( comp->GetField( j )->GetName() );
     }
 
-    // Iterate through each sheet that needs updating
-    for( auto it = undoSheetMap.begin(); it != undoSheetMap.end(); ++it )
-    {
-        auto undo = it->second;
+    AddField( _( "Reference" ),   true,  true  );
+    AddField( _( "Value" ),       true,  true  );
+    AddField( _( "Footprint" ),   true,  true  );
+    AddField( _( "Datasheet" ),   true,  false );
 
-        m_parent->SetCurrentSheet( undo.path );
-        m_parent->SaveCopyInUndoList( undo.items, UR_CHANGED );
-        m_parent->OnModify();
-    }
-
-    // Make all component changes
-    m_bom->ApplyFieldChanges();
-
-    // Redraw the current sheet and mark as dirty
-    m_parent->Refresh();
-    m_parent->OnModify();
-
-    // Reset the view to where we left the user
-    m_parent->SetCurrentSheet(currentSheet);
-
-    // Instruct the table to set the current values as the new backup values
-    m_bom->SetBackupPoint();
-}
-
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::UpdateTitle()
-{
-    wxString title;
-
-
-    if( m_bom->GetColumnGrouping() )
-    {
-        title.Printf ( _( "Symbol Table - %u symbols in %u groups" ),
-                       m_bom->ComponentCount(),
-                       (unsigned int) m_bom->Groups.size() );
-    }
-    else
-        title.Printf ( _( "Symbol Table - %u components" ),
-                       m_bom->ComponentCount() );
-
-    unsigned int count = m_bom->CountChangedComponents();
-
-    if( count > 0 )
-        title += wxString::Format( _( " - %u changed" ), count );
-
-    // Update title only if it has changed, to avoid flicker created by
-    // useless update, for instance when moving the mouse, because UpdateTitle()
-    // is called by a wxUpdateUIEvent:
-    if( GetTitle() != title )
-        SetTitle( title );
-}
-
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::LoadComponents()
-{
-    if( !m_parent ) return;
-
-    // List of component objects
-    SCH_REFERENCE_LIST refs;
-
-    // Generate a list of schematic sheets
-    SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.GetComponents( refs, false );
-
-    // Pass the references through to the model
-    m_bom->SetComponents( refs, m_parent->GetTemplateFieldNames() );
-}
-
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::LoadColumnNames()
-{
-    m_columnListCtrl->DeleteAllItems();
-
-    wxVector< wxVariant > data;
-
-    for( auto* col : m_bom->ColumnList.Columns )
-    {
-        if( nullptr == col )
-            continue;
-
-        data.clear();
-
-        data.push_back( wxVariant( col->Title() ) );        // Column title      (string)
-        data.push_back( wxVariant( col->IsVisible() ) );    // Column visibility (bool)
-        data.push_back( wxVariant( col->IsUsedToSort() ) ); // Column is used to sort
-
-        m_columnListCtrl->AppendItem( data );
-    }
-}
-
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::ReloadColumns()
-{
-    m_bom->AttachTo( m_bomView );
-    UpdateTitle();
+    for( auto fieldName : userFieldNames )
+        AddField( fieldName,      true,  false );
 }
 
 
@@ -336,41 +486,25 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 {
     wxDataViewItem item = event.GetItem();
 
-    int row = m_columnListCtrl->ItemToRow( item );
+    int row = m_fieldsCtrl->ItemToRow( item );
     int col = event.GetColumn();
-
-    if( row == wxNOT_FOUND || row < 0 || row >= (int) m_bom->ColumnCount() )
-        return;
-
-    FIELDS_EDITOR_COLUMN* bomColumn = m_bom->ColumnList.GetColumnByIndex( row );
-
-    if( nullptr == bomColumn )
-        return;
-
-    bool bValue = m_columnListCtrl->GetToggleValue( row, col );
 
     switch ( col )
     {
     default:
         break;
 
-    case 1: // Column visibility
-        bomColumn->SetVisible( bValue );
-
-        // Insert a new column
-        if( bValue )
-        {
-            m_bom->AddColumn( bomColumn );
-        }
+    case SHOW_FIELD_COLUMN:
+        if( m_fieldsCtrl->GetToggleValue( row, col ) )
+            m_grid->ShowCol( row );
         else
-        {
-            m_bom->RemoveColumn( bomColumn );
-        }
+            m_grid->HideCol( row );     // grid's columns map to fieldsCtrl's rows
         break;
 
-    case 2: // Column used to sort
-        bomColumn->SetUsedToSort( bValue );
-        m_bom->ReloadTable();
+    case GROUP_BY_COLUMN:
+        m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+        m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+        m_grid->ForceRefresh();
         break;
     }
 }
@@ -378,78 +512,62 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnGroupComponentsToggled( wxCommandEvent& event )
 {
-    bool group = m_groupComponentsBox->GetValue();
-
-    m_bom->SetColumnGrouping( group );
-    m_bom->ReloadTable();
-
-    Update();
+    m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+    m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+    m_grid->ForceRefresh();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort( wxGridEvent& aEvent )
 {
-    m_regroupComponentsButton->Enable( m_bom->GetColumnGrouping() );
+    int sortCol = aEvent.GetCol();
+    bool ascending;
 
-    bool changes = m_bom->HaveFieldsChanged();
+    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the
+    // event, and if we ask it will give us pre-event info.
+    if( m_grid->IsSortingBy( sortCol ) )
+        // same column; invert ascending
+        ascending = !m_grid->IsSortOrderAscending();
+    else
+        // different column; start with ascending
+        ascending = true;
 
-    m_applyChangesButton->Enable( changes );
-    m_revertChangesButton->Enable( changes );
-
-    UpdateTitle();
+    m_dataModel->Sort( sortCol, ascending );
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableValueChanged( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableValueChanged( wxGridEvent& event )
 {
-    Update();
+    m_grid->ForceRefresh();
 }
 
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& event )
 {
-    m_bom->ReloadTable();
-    Update();
+    m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+    m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+    m_grid->ForceRefresh();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnApplyFieldChanges( wxCommandEvent& event )
-{
-    ApplyAllChanges();
-    Update();
-}
-
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnRevertFieldChanges( wxCommandEvent& event )
-{
-    if( m_bom->HaveFieldsChanged() )
-    {
-        if( IsOK( this, _( "Revert all symbol table changes?" ) ) )
-        {
-            m_bom->RevertFieldChanges();
-            Update();
-        }
-    }
-}
-
-
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemActivated( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
 {
     /* TODO
-     * - Focus on component selected in SCH_FRAME
+     * - Option to select footprint if FOOTPRINT column selected
      */
 
     event.Skip();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxDataViewEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 {
-    /* TODO
-     * - Display contect menu
-     * - Option to revert local changes if changes have been made
-     * - Option to select footprint if FOOTPRINT column selected
-     */
+    int newWidth = event.GetSize().GetX();
+
+    newWidth -= m_fieldsCtrl->GetColumn( 1 )->GetWidth();
+    newWidth -= m_fieldsCtrl->GetColumn( 2 )->GetWidth();
+
+    m_fieldsCtrl->GetColumn( 0 )->SetWidth( newWidth - 8 );
 
     event.Skip();
 }

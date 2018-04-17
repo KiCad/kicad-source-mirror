@@ -98,6 +98,7 @@ set( BMAPS_SMALL
     pintype_opencoll
     pintype_openemit
     pintype_noconnect
+    refresh
     tree_nosel
     tree_sel
     )

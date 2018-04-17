@@ -140,6 +140,19 @@ public:
         return m_Ref.c_str();
     }
 
+    wxString GetRefNumber() const
+    {
+        wxString ref;
+
+        // To avoid a risk of duplicate, for power components
+        // the ref number is 0nnn instead of nnn.
+        // Just because sometimes only power components are annotated
+        if( GetLibPart() && GetLibPart()->IsPower() )
+            ref = wxT( "0" );
+
+        return ref << m_NumRef;
+    }
+
     int CompareValue( const SCH_REFERENCE& item ) const
     {
         return m_Value->GetText().Cmp( item.m_Value->GetText() );

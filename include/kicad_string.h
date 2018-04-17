@@ -99,7 +99,7 @@ char* StrPurge( char* text );
 wxString DateAndTime();
 
 /**
- * Function StrLenNumCmp
+ * Function StrNumCmp
  * is a routine compatible with qsort() to sort by alphabetical order.
  *
  * This function is equivalent to strncmp() or strncasecmp() if \a aIgnoreCase is true
@@ -126,6 +126,16 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength =
 bool WildCompareString( const wxString& pattern,
                         const wxString& string_to_tst,
                         bool            case_sensitive = true );
+
+/**
+ * Function ValueStringCompare
+ * acts just like the strcmp function but handles numbers and modifiers within the
+ * string text correctly for sorting.  eg. 1mF > 55uF
+ * return -1 if first string is less than the second
+ * return 0 if the strings are equal
+ * return 1 if the first string is greater than the second
+ */
+int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
 
 /**
  * Function RefDesStringCompare

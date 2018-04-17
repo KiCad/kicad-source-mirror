@@ -703,13 +703,7 @@ void SCH_REFERENCE::Annotate()
         m_Ref += '?';
     else
     {
-        // To avoid a risk of duplicate, for power components
-        // the ref number is 0nnn instead of nnn.
-        // Just because sometimes only power components are annotated
-        if( GetLibPart() && GetLibPart()->IsPower() )
-            m_Ref = TO_UTF8( GetRef() << "0" << m_NumRef );
-        else
-            m_Ref = TO_UTF8( GetRef() << m_NumRef );
+        m_Ref = TO_UTF8( GetRef() << GetRefNumber() );
     }
 
     m_RootCmp->SetRef( &m_SheetPath, FROM_UTF8( m_Ref.c_str() ) );

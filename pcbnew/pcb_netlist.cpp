@@ -197,7 +197,7 @@ void NETLIST::SortByFPID()
  */
 bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
 {
-    return StrNumCmp( item1.GetReference(), item2.GetReference(), INT_MAX, true ) < 0;
+    return RefDesStringCompare(item1.GetReference(), item2.GetReference() ) < 0;
 }
 
 

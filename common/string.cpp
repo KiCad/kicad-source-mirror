@@ -362,56 +362,141 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 }
 
 
-int RefDesStringCompare( const wxString& strFWord, const wxString& strSWord )
+bool ApplyModifier( double& value, const wxString& aString )
 {
-    // The different sections of the first string
+    static const wxString modifiers( wxT( "pnumkKM" ) );
+
+    if( !aString.length() )
+        return false;
+
+    wxChar   modifier;
+    wxString units;
+
+    if( modifiers.Find( aString[ 0 ] ) >= 0 )
+    {
+        modifier = aString[ 0 ];
+        units = aString.Mid( 1 ).Trim();
+    }
+    else
+    {
+        modifier = ' ';
+        units = aString.Mid( 0 ).Trim();
+    }
+
+    if( units.length()
+            && !units.CmpNoCase( wxT( "F" ) )
+            && !units.CmpNoCase( wxT( "hz" ) )
+            && !units.CmpNoCase( wxT( "W" ) )
+            && !units.CmpNoCase( wxT( "V" ) )
+            && !units.CmpNoCase( wxT( "H" ) ) )
+        return false;
+
+    if( modifier == 'p' )
+        value *= 1.0e-12;
+    if( modifier == 'n' )
+        value *= 1.0e-9;
+    else if( modifier == 'u' )
+        value *= 1.0e-6;
+    else if( modifier == 'm' )
+        value *= 1.0e-3;
+    else if( modifier == 'k' || modifier == 'K' )
+        value *= 1.0e3;
+    else if( modifier == 'M' )
+        value *= 1.0e6;
+    else if( modifier == 'G' )
+        value *= 1.0e9;
+
+    return true;
+}
+
+
+// Should handle:
+// a) Purely numerical e.g. '22'
+// b) Numerical with included units e.g. '15uF'
+// c) Numerical with included prefix but no units e.g. '20n'
+// d) Numerical with prefix inside number e.g. '4K7'
+// e) Other, e.g. 'MAX232'
+//
+// TODO: case (d) unimplemented !!!
+//
+int ValueStringCompare( const wxString& strFWord, const wxString& strSWord )
+{
+    // The different sections of the two strings
     wxString strFWordBeg, strFWordMid, strFWordEnd;
-
-    // The different sections of the second string
     wxString strSWordBeg, strSWordMid, strSWordEnd;
-
-    int isEqual = 0;            // The numerical results of a string compare
-    int iReturn = 0;            // The variable that is being returned
-
-    long lFirstDigit  = 0;      // The converted middle section of the first string
-    long lSecondDigit = 0;      // The converted middle section of the second string
 
     // Split the two strings into separate parts
     SplitString( strFWord, &strFWordBeg, &strFWordMid, &strFWordEnd );
     SplitString( strSWord, &strSWordBeg, &strSWordMid, &strSWordEnd );
 
     // Compare the Beginning section of the strings
-    isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
+    int isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
 
     if( isEqual > 0 )
-        iReturn = 1;
+        return 1;
     else if( isEqual < 0 )
-        iReturn = -1;
+        return -1;
     else
     {
         // If the first sections are equal compare their digits
+        double lFirstNumber  = 0;
+        double lSecondNumber = 0;
+        bool   endingIsModifier = false;
+
+        strFWordMid.ToDouble( &lFirstNumber );
+        strSWordMid.ToDouble( &lSecondNumber );
+
+        endingIsModifier |= ApplyModifier( lFirstNumber, strFWordEnd );
+        endingIsModifier |= ApplyModifier( lSecondNumber, strSWordEnd );
+
+        if( lFirstNumber > lSecondNumber )
+            return 1;
+        else if( lFirstNumber < lSecondNumber )
+            return -1;
+        // If the first two sections are equal and the endings are modifiers then compare them
+        else if( !endingIsModifier )
+            return strFWordEnd.CmpNoCase( strSWordEnd );
+        // Ran out of things to compare; they must match
+        else
+            return 0;
+    }
+}
+
+
+int RefDesStringCompare( const wxString& strFWord, const wxString& strSWord )
+{
+    // The different sections of the two strings
+    wxString strFWordBeg, strFWordMid, strFWordEnd;
+    wxString strSWordBeg, strSWordMid, strSWordEnd;
+
+    // Split the two strings into separate parts
+    SplitString( strFWord, &strFWordBeg, &strFWordMid, &strFWordEnd );
+    SplitString( strSWord, &strSWordBeg, &strSWordMid, &strSWordEnd );
+
+    // Compare the Beginning section of the strings
+    int isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
+
+    if( isEqual > 0 )
+        return 1;
+    else if( isEqual < 0 )
+        return -1;
+    else
+    {
+        // If the first sections are equal compare their digits
+        long lFirstDigit  = 0;
+        long lSecondDigit = 0;
+
         strFWordMid.ToLong( &lFirstDigit );
         strSWordMid.ToLong( &lSecondDigit );
 
         if( lFirstDigit > lSecondDigit )
-            iReturn = 1;
+            return 1;
         else if( lFirstDigit < lSecondDigit )
-            iReturn = -1;
+            return -1;
+        // If the first two sections are equal compare the endings
         else
-        {
-            // If the first two sections are equal compare the endings
-            isEqual = strFWordEnd.CmpNoCase( strSWordEnd );
-
-            if( isEqual > 0 )
-                iReturn = 1;
-            else if( isEqual < 0 )
-                iReturn = -1;
-            else
-                iReturn = 0;
-        }
+            return strFWordEnd.CmpNoCase( strSWordEnd );
     }
-
-    return iReturn;
 }
 
 
@@ -420,6 +505,8 @@ int SplitString( wxString  strToSplit,
                  wxString* strDigits,
                  wxString* strEnd )
 {
+    static const wxString separators( wxT( ".," ) );
+
     // Clear all the return strings
     strBeginning->Empty();
     strDigits->Empty();
@@ -453,7 +540,7 @@ int SplitString( wxString  strToSplit,
 
         for( ; ii >= 0; ii-- )
         {
-            if( !isdigit( strToSplit[ii] ) )
+            if( !isdigit( strToSplit[ii] ) && separators.Find( strToSplit[ii] ) < 0 )
                 break;
         }
 
