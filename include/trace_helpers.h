@@ -44,50 +44,55 @@
 /// \ingroup trace_env_vars
 
 /**
+ * Flag to enable find debug tracing.
+ */
+extern const wxChar* const traceFindItem;
+
+/**
  * Flag to enable find and replace debug tracing.
  */
-extern wxChar* traceFindReplace;
+extern const wxChar* const traceFindReplace;
 
 /**
  * Flag to enable draw panel coordinate debug tracing.
  */
-extern wxChar* kicadTraceCoords;
+extern const wxChar* const kicadTraceCoords;
 
 
 /**
  * Flag to enable wxKeyEvent debug tracing.
  */
-extern wxChar* kicadTraceKeyEvent;
+extern const wxChar* const kicadTraceKeyEvent;
 
 /**
  * Flag to enable auto save feature debug tracing.
  */
-extern wxChar* traceAutoSave;
+extern const wxChar* const traceAutoSave;
 
 /**
  * Flag to enable schematic library memory deletion debug output.
  */
-extern wxChar* traceSchLibMem;
+extern const wxChar* const traceSchLibMem;
 
 /**
  * Flag to enable legacy schematic plugin debug output.
  */
-extern wxChar* traceSchLegacyPlugin;
+extern const wxChar* const traceSchLegacyPlugin;
 
 /**
  * Flag to enable GEDA PCB plugin debug output.
  */
-extern wxChar* traceKicadPcbPlugin;
+extern const wxChar* const traceKicadPcbPlugin;
 
 /**
  * Flag to enable GEDA PCB plugin debug output.
  */
-extern wxChar* traceGedaPcbPlugin;
+extern const wxChar* const traceGedaPcbPlugin;
 
 /**
  * Flag to enable print controller debug output.
  */
-extern wxChar* tracePrinting;
+extern const wxChar* const tracePrinting;
 
 ///@}
 

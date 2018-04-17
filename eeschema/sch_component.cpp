@@ -57,6 +57,8 @@
 
 #include <eeschema_id.h>    // for MAX_UNIT_COUNT_PER_PACKAGE definition
 
+#include <trace_helpers.h>
+
 #define NULL_STRING "_NONAME_"
 
 /**

@@ -50,6 +50,7 @@
 #include <sch_component.h>
 #include <sch_field.h>
 #include <kicad_string.h>
+#include <trace_helpers.h>
 
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, const wxString& aName ) :

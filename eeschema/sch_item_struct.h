@@ -44,16 +44,6 @@ class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
 
 
-/**
- * @ingroup trace_env_vars
- *
- * Flag to enable finding schematic item debug output.
- *
- * @warning This generates a log of debug output.
- */
-extern const wxString traceFindItem;
-
-
 enum DANGLING_END_T {
     UNKNOWN = 0,
     WIRE_START_END,

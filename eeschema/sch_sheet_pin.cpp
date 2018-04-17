@@ -40,6 +40,7 @@
 #include <general.h>
 #include <sch_sheet.h>
 #include <kicad_string.h>
+#include <trace_helpers.h>
 
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :

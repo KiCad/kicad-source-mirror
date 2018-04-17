@@ -41,6 +41,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <netlist_object.h>
+#include <trace_helpers.h>
 
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
