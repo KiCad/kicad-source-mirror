@@ -125,13 +125,13 @@ TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
 TOOL_ACTION PCB_ACTIONS::drag45Degree( "pcbnew.InteractiveRouter.Drag45Degree",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
         _( "Drag (45 degree mode)" ),
-        _( "todo" ),
+        _( "Drags the track segment while keeping connected tracks at 45 degrees." ),
         drag_segment_withslope_xpm );
 
 TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_ITEM ),
         _( "Drag (free angle)" ),
-        _( "todo" ),
+        _( "Drags the nearest joint in the track without restricting the track angle." ),
         move_xpm );
 
 static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
