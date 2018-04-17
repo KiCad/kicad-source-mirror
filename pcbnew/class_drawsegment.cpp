@@ -410,12 +410,18 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
     case S_CIRCLE:
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Circle" ), RED ) );
+
+        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
         break;
 
     case S_ARC:
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Arc" ), RED ) );
         msg.Printf( wxT( "%.1f" ), m_Angle / 10.0 );
         aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, RED ) );
+
+        msg = ::CoordinateToString( GetLineLength( m_Start, m_End ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
         break;
 
     case S_CURVE:
