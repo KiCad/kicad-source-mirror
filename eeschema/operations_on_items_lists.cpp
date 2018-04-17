@@ -264,7 +264,12 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             case SCH_SHEET_T:
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) newitem;
-                sheet->SetTimeStamp( GetNewTimeStamp() );
+                // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
+                // based sheet name and update the time stamp for each sheet in the block.
+                timestamp_t timeStamp = GetNewTimeStamp();
+
+                sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
+                sheet->SetTimeStamp( timeStamp );
                 break;
             }
 
