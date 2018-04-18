@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wx_html_report_panel.h"
@@ -67,16 +67,16 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	
 	m_mainSizer->Add( m_upperSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	m_middleSizer = new wxBoxSizer( wxVERTICAL );
+	m_changeSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticLine* staticline1;
 	staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_middleSizer->Add( staticline1, 0, wxBOTTOM|wxEXPAND, 2 );
+	m_changeSizer->Add( staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 2 );
 	
 	wxStaticText* newIdLabel;
 	newIdLabel = new wxStaticText( this, wxID_ANY, _("New footprint identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
 	newIdLabel->Wrap( -1 );
-	m_middleSizer->Add( newIdLabel, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
+	m_changeSizer->Add( newIdLabel, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -93,45 +93,44 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	fgSizer2->Add( m_newIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
 	
 	
-	m_middleSizer->Add( fgSizer2, 0, wxEXPAND, 0 );
+	m_changeSizer->Add( fgSizer2, 0, wxEXPAND, 0 );
 	
 	
-	m_mainSizer->Add( m_middleSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_mainSizer->Add( m_changeSizer, 0, wxEXPAND|wxALL, 5 );
+	
+	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxVERTICAL );
+	
+	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove text items which are not in library footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
+	
+	m_updateOptionsSizer->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 5 );
+	
+	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetTextItemLayers, 0, wxBOTTOM|wxRIGHT, 5 );
+	
+	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetTextItemEffects, 0, wxBOTTOM|wxRIGHT, 5 );
+	
+	
+	m_mainSizer->Add( m_updateOptionsSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_MessageWindow->SetMinSize( wxSize( -1,300 ) );
+	m_MessageWindow->SetMinSize( wxSize( -1,240 ) );
 	
 	m_mainSizer->Add( m_MessageWindow, 5, wxALL|wxEXPAND, 5 );
 	
 	wxStaticLine* staticline2;
 	staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_mainSizer->Add( staticline2, 0, wxEXPAND | wxALL, 5 );
+	m_mainSizer->Add( staticline2, 0, wxEXPAND|wxALL, 5 );
 	
-	wxBoxSizer* bottomSizer;
-	bottomSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
 	
-	m_exportButton = new wxButton( this, wxID_ANY, _("Export Footprint Associations"), wxDefaultPosition, wxDefaultSize, 0 );
-	bottomSizer->Add( m_exportButton, 0, wxALL, 5 );
-	
-	wxBoxSizer* paddingSizer;
-	paddingSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxStaticText* padding1;
-	padding1 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	padding1->Wrap( -1 );
-	paddingSizer->Add( padding1, 1, wxALL, 5 );
-	
-	
-	bottomSizer->Add( paddingSizer, 1, 0, 5 );
-	
-	m_applyButton = new wxButton( this, wxID_ANY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
-	bottomSizer->Add( m_applyButton, 0, wxALL, 5 );
-	
-	m_closeButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bottomSizer->Add( m_closeButton, 0, wxALL, 5 );
-	
-	
-	m_mainSizer->Add( bottomSizer, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );
@@ -152,9 +151,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_matchSpecifiedID->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
 	m_specifiedIDBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_newIDBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
-	m_exportButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::RebuildCmpList ), NULL, this );
-	m_applyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClick ), NULL, this );
-	m_closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnQuit ), NULL, this );
+	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClicked ), NULL, this );
 }
 
 DIALOG_EXCHANGE_FOOTPRINTS_BASE::~DIALOG_EXCHANGE_FOOTPRINTS_BASE()
@@ -173,8 +170,6 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::~DIALOG_EXCHANGE_FOOTPRINTS_BASE()
 	m_matchSpecifiedID->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
 	m_specifiedIDBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_newIDBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
-	m_exportButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::RebuildCmpList ), NULL, this );
-	m_applyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClick ), NULL, this );
-	m_closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnQuit ), NULL, this );
+	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClicked ), NULL, this );
 	
 }

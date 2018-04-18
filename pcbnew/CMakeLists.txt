@@ -176,6 +176,7 @@ set( PCBNEW_IMPORT_DXF
 
 set( PCBNEW_EXPORTERS
     exporters/export_d356.cpp
+    exporters/export_footprint_associations.cpp
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
     exporters/export_vrml.cpp

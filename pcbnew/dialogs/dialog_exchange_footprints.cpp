@@ -26,26 +26,17 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <class_draw_panel_gal.h>
-#include <confirm.h>
-#include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <macros.h>
 #include <board_commit.h>
 #include <bitmaps.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <project.h>
 #include <wx_html_report_panel.h>
-
-#include <pcbnew.h>
-#include <dialog_exchange_footprints.h>
-#include <wildcards_and_files_ext.h>
 #include <kiway.h>
 
-
-static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
+#include <dialog_exchange_footprints.h>
 
 
 #define ID_MATCH_FP_ALL 4200
@@ -59,59 +50,38 @@ int DIALOG_EXCHANGE_FOOTPRINTS::m_matchModeForUpdateSelected   = ID_MATCH_FP_REF
 int DIALOG_EXCHANGE_FOOTPRINTS::m_matchModeForExchangeSelected = ID_MATCH_FP_REF;
 
 
-DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* parent, MODULE* Module,
-                                                bool updateMode ) :
-    DIALOG_EXCHANGE_FOOTPRINTS_BASE( parent ), m_commit( parent )
+DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule,
+                                                        bool updateMode ) :
+    DIALOG_EXCHANGE_FOOTPRINTS_BASE( aParent ),
+    m_commit( aParent ),
+    m_parent( aParent ),
+    m_currentModule( aModule ),
+    m_updateMode( updateMode )
 {
-    m_parent = parent;
-    m_currentModule = Module;
-    m_updateMode = updateMode;
-
-    init( m_updateMode );
-
-    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
-    // because the update and change versions of this dialog have different controls.
-    m_hash_key = TO_UTF8( GetTitle() );
-
-    // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
-    // (to fix automatic renaming of button label )
-    m_closeButton->SetLabel( _( "Close" ) );
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
-}
-
-
-void DIALOG_EXCHANGE_FOOTPRINTS::OnQuit( wxCommandEvent& event )
-{
-    Show( false );
-    EndQuasiModal( wxID_CANCEL );
-}
-
-
-void DIALOG_EXCHANGE_FOOTPRINTS::init( bool updateMode )
-{
-    SetFocus();
-
     wxString title = updateMode ? _( "Update Footprints from Library" ) : _( "Change Footprints" );
     wxString verb  = updateMode ? _( "Update" )                         : _( "Change" );
     wxString label;
 
     SetTitle( title );
 
-    if( updateMode )
+    if( m_updateMode )
     {
         label.Printf( m_matchAll->GetLabel(), verb );
         m_matchAll->SetLabel( label );
-
-        m_middleSizer->Show( false );
+        m_changeSizer->Show( false );
     }
     else
     {
         m_upperSizer->FindItem( m_matchAll )->Show( false );
 
         if( m_currentModule )
+        {
             m_newID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+            SetInitialFocus( m_newID );
+        }
+        else
+            SetInitialFocus( m_specifiedRef );
+
         m_newIDBrowseButton->SetBitmap( KiBitmap( library_browse_xpm ) );
     }
 
@@ -171,6 +141,19 @@ void DIALOG_EXCHANGE_FOOTPRINTS::init( bool updateMode )
     case ID_MATCH_FP_ID:
         OnMatchIDClicked( event );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
+    // because the update and change versions of this dialog have different controls.
+    m_hash_key = TO_UTF8( GetTitle() );
+
+    // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
+    // (to fix automatic renaming of button label )
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+
+    m_sdbSizer1Apply->SetDefault();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
@@ -209,15 +192,14 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
     case ID_MATCH_FP_ALL:
         return true;
     case ID_MATCH_FP_REF:
-        // currentModule case goes through changeCurrentFootprint, so we only have
+        // currentModule case goes through processCurrentModule, so we only have
         // to handle specifiedRef case
         return aModule->GetReference() == m_specifiedRef->GetValue();
     case ID_MATCH_FP_VAL:
         // currentValue must also check FPID so we don't get accidental matches that
         // the user didn't intend
         if( m_currentModule )
-            return aModule->GetValue() == m_currentModule->GetValue()
-                    && aModule->GetFPID() == m_currentModule->GetFPID();
+            return aModule->GetValue() == m_currentModule->GetValue() && aModule->GetFPID() == m_currentModule->GetFPID();
         else
             return aModule->GetValue() == m_specifiedValue->GetValue();
     case ID_MATCH_FP_ID:
@@ -305,17 +287,18 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClick( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClicked( wxCommandEvent& event )
 {
-    bool result = false;
+    bool         result = false;
+    wxBusyCursor dummy;
 
     m_MessageWindow->Clear();
     m_MessageWindow->Flush( true );
 
     if( getMatchMode() == ID_MATCH_FP_REF && m_currentModule )
-        result = changeCurrentFootprint();
+        result = processCurrentModule();
     else
-        result = changeSameFootprints();
+        result = processMatchingModules();
 
     if( result )
     {
@@ -329,126 +312,100 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::RebuildCmpList( wxCommandEvent& event )
+bool DIALOG_EXCHANGE_FOOTPRINTS::processCurrentModule()
 {
-    wxString    msg;
-    REPORTER& reporter = m_MessageWindow->Reporter();
-    m_MessageWindow->Clear();
-    m_MessageWindow->Flush( true );
+    LIB_ID newFPID;
 
-    // Build the .cmp file name from the board name
-    wxFileName fn = m_parent->GetBoard()->GetFileName();
-    fn.SetExt( ComponentFileExtension );
-
-    if( RecreateCmpFile( m_parent->GetBoard(), fn.GetFullPath() ) )
-    {
-        msg.Printf( _( "File \"%s\" created\n" ), GetChars( fn.GetFullPath() ) );
-        reporter.Report( msg, REPORTER::RPT_INFO );
-    }
+    if( m_updateMode )
+        newFPID = m_currentModule->GetFPID();
     else
     {
-        msg.Printf( _( "** Could not create file \"%s\" ***\n" ),
-                    GetChars( fn.GetFullPath() ) );
-        reporter.Report( msg, REPORTER::RPT_ERROR );
+        wxString newFPIDStr = m_newID->GetValue();
+
+        if( newFPIDStr.IsEmpty() )
+            return false;
+
+        newFPID = LIB_ID( newFPIDStr );
     }
+
+    return processModule( m_currentModule, newFPID );
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::changeCurrentFootprint()
-{
-    if( m_updateMode )
-        return change_1_Module( m_currentModule, m_currentModule->GetFPID(), true );
-
-    wxString newFPID = m_newID->GetValue();
-
-    if( newFPID == wxEmptyString )
-        return false;
-
-    return change_1_Module( m_currentModule, newFPID, true );
-}
-
-
-bool DIALOG_EXCHANGE_FOOTPRINTS::changeSameFootprints()
+bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
 {
     MODULE*  Module;
     MODULE*  PtBack;
     bool     change = false;
     wxString newFPID = m_newID->GetValue();
     wxString value;
-    int      ShowErr = 3;           // Post 3 error messages max.
 
-    if( m_parent->GetBoard()->m_Modules == NULL )
+    if( !m_parent->GetBoard()->m_Modules )
         return false;
 
     if( !m_updateMode && newFPID == wxEmptyString )
         return false;
 
-    /* The change is done from the last module because
-     * change_1_Module () modifies the last item in the list.
-     *
-     * note: for the first module in chain (the last here), Module->Back()
-     * points the board or is NULL
+    /* The change is done from the last module because processModule() modifies the last item
+     * in the list.
+     * Note: for the first module in chain (the last here), Module->Back() points to the board
+     * or is NULL.
      */
     Module = m_parent->GetBoard()->m_Modules.GetLast();
 
-    for( ; Module && ( Module->Type() == PCB_MODULE_T ); Module = PtBack )
+    for( ; Module && Module->Type() == PCB_MODULE_T; Module = PtBack )
     {
         PtBack = Module->Back();
 
         if( !isMatch( Module ) )
             continue;
 
-        bool result;
         if( m_updateMode )
-            result = change_1_Module( Module, Module->GetFPID(), ShowErr );
+        {
+            if( processModule( Module, Module->GetFPID()) )
+                change = true;
+        }
         else
-            result = change_1_Module( Module, newFPID, ShowErr );
-
-        if( result )
-            change = true;
-        else if( ShowErr )
-            ShowErr--;
+        {
+            if( processModule( Module, newFPID ) )
+                change = true;
+        }
     }
 
     return change;
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::change_1_Module( MODULE*            aModule,
-                                              const LIB_ID&      aNewFootprintFPID,
-                                              bool               aShowError )
+bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& aNewFPID )
 {
-    MODULE* newModule;
-    wxString msg;
-
-    if( aModule == NULL )
-        return false;
-
-    wxBusyCursor dummy;
+    LIB_ID    oldFPID = aModule->GetFPID();
     REPORTER& reporter = m_MessageWindow->Reporter();
+    wxString  msg;
 
-    // Copy parameters from the old footprint.
-    LIB_ID oldFootprintFPID = aModule->GetFPID();
+    // Load new module.
+    msg.Printf( _( "%s footprint \"%s\" (from \"%s\") to \"%s\"" ),
+                m_updateMode ? _( "Update" ) : _( "Change" ),
+                aModule->GetReference(),
+                oldFPID.Format().c_str(),
+                aNewFPID.Format().c_str() );
 
-    // Load module.
-    msg.Printf( _( "Change footprint \"%s\" (from \"%s\") to \"%s\"" ),
-                 GetChars( aModule->GetReference() ),
-                 oldFootprintFPID.Format().c_str(),
-                 aNewFootprintFPID.Format().c_str() );
+    MODULE* newModule = m_parent->LoadFootprint( aNewFPID );
 
-    newModule = m_parent->LoadFootprint( aNewFootprintFPID );
-
-    if( newModule == NULL )  // New module not found.
+    if( !newModule )
     {
-        msg << ": " << _( "footprint not found" );
+        msg << ": " << _( "*** footprint not found ***" );
         reporter.Report( msg, REPORTER::RPT_ERROR );
         return false;
     }
 
-    m_parent->Exchange_Module( aModule, newModule, m_commit );
+    m_parent->Exchange_Module( aModule, newModule, m_commit,
+                               m_removeExtraBox->GetValue(),
+                               m_resetTextItemLayers->GetValue(),
+                               m_resetTextItemEffects->GetValue() );
 
     if( aModule == m_currentModule )
         m_currentModule = newModule;
+
     if( aModule == m_parent->GetCurItem() )
         m_parent->SetCurItem( newModule );
 
@@ -459,48 +416,89 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::change_1_Module( MODULE*            aModule,
 }
 
 
-void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
-                                      MODULE* aNewModule,
-                                      BOARD_COMMIT& aCommit )
+void processTextItem( const TEXTE_MODULE& aSrc, TEXTE_MODULE& aDest,
+                      bool resetText, bool resetTextLayers, bool resetTextEffects )
 {
-    aNewModule->SetParent( GetBoard() );
+    if( !resetText )
+        aDest.SetText( aSrc.GetText() );
+
+    if( !resetTextLayers )
+    {
+        aDest.SetLayer( aSrc.GetLayer() );
+        aDest.SetVisible( aSrc.IsVisible() );
+    }
+
+    if( !resetTextEffects )
+        aDest.SetEffects( aSrc );
+}
+
+
+TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
+{
+    for( auto iItem = aModule->GraphicalItemsList().GetFirst(); iItem; iItem = iItem->Next() )
+    {
+        TEXTE_MODULE* candidate = dyn_cast<TEXTE_MODULE*>( iItem );
+        if( candidate && candidate->GetText() == aRefItem->GetText() )
+            return candidate;
+    }
+
+    return nullptr;
+}
+
+
+void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
+                                      bool deleteExtraTexts,
+                                      bool resetTextLayers, bool resetTextEffects )
+{
+    aDest->SetParent( GetBoard() );
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board */
-    PlaceModule( aNewModule, NULL, false );
+    PlaceModule( aDest, nullptr, false );
 
     // Copy full placement and pad net names (when possible)
     // but not local settings like clearances (use library values)
-    aOldModule->CopyNetlistSettings( aNewModule, false );
+    aSrc->CopyNetlistSettings( aDest, false );
 
     // Copy reference
-    aNewModule->SetReference( aOldModule->GetReference() );
+    processTextItem( aSrc->Reference(), aDest->Reference(),
+                     // never reset reference text
+                     false,
+                     resetTextLayers, resetTextEffects );
 
-    // Copy value unless it is a proxy for the footprint ID (a good example is replacing a
-    // footprint with value "MoutingHole-2.5mm" with one of value "MountingHole-4mm").
-    if( aOldModule->GetValue() != aOldModule->GetFPID().GetLibItemName() )
-        aNewModule->SetValue( aOldModule->GetValue() );
+    // Copy value
+    processTextItem( aSrc->Value(), aDest->Value(),
+                     // reset value text only when it is a proxy for the footprint ID
+                     // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
+                     aSrc->GetValue() == aSrc->GetFPID().GetLibItemName(),
+                     resetTextLayers, resetTextEffects );
 
-    // Compare the footprint name only, in case the nickname is empty or in case
-    // user moved the footprint to a new library.  Chances are if footprint name is
-    // same then the footprint is very nearly the same and the two texts should
-    // be kept at same size, position, and rotation.
-    if( aNewModule->GetFPID().GetLibItemName() == aOldModule->GetFPID().GetLibItemName() )
+    // Copy fields in accordance with the reset* flags
+    for( BOARD_ITEM* item = aSrc->GraphicalItemsList().GetFirst(); item; item = item->Next() )
     {
-        aNewModule->Reference().SetEffects( aOldModule->Reference() );
-        aNewModule->Value().SetEffects( aOldModule->Value() );
+        TEXTE_MODULE* srcItem = dyn_cast<TEXTE_MODULE*>( item );
+
+        if( srcItem )
+        {
+            TEXTE_MODULE* destItem = getMatchingTextItem( srcItem, aDest );
+
+            if( destItem )
+                processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects );
+            else if( !deleteExtraTexts )
+                aDest->GraphicalItemsList().Append( new TEXTE_MODULE( *srcItem ) );
+        }
     }
 
-    // Updating other parameters
-    aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
-    aNewModule->SetPath( aOldModule->GetPath() );
+       // Updating other parameters
+    aDest->SetTimeStamp( aSrc->GetTimeStamp() );
+    aDest->SetPath( aSrc->GetPath() );
 
-    aCommit.Remove( aOldModule );
-    aCommit.Add( aNewModule );
+    aCommit.Remove( aSrc );
+    aCommit.Add( aDest );
 
     // @todo LEGACY should be unnecessary
     GetBoard()->m_Status_Pcb = 0;
-    aNewModule->ClearFlags();
+    aDest->ClearFlags();
 }
 
 
@@ -522,73 +520,3 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
-{
-    wxFileName  fn;
-    MODULE*     module = GetBoard()->m_Modules;
-    wxString    msg;
-    wxString    wildcard;
-
-    if( module == NULL )
-    {
-        DisplayError( this, _( "No footprints!" ) );
-        return;
-    }
-
-    // Build the .cmp file name from the board name
-    fn = GetBoard()->GetFileName();
-    fn.SetExt( ComponentFileExtension );
-    wildcard = ComponentFileWildcard();
-
-    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-
-    wxFileDialog dlg( this, _( "Save Footprint Association File" ), pro_dir,
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    fn = dlg.GetPath();
-
-    if( ! RecreateCmpFile( GetBoard(), fn.GetFullPath() ) )
-    {
-        msg.Printf( _( "Could not create file \"%s\"" ), GetChars(fn.GetFullPath() ) );
-        DisplayError( this, msg );
-        return;
-    }
-}
-
-
-bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
-{
-    FILE* cmpFile;
-
-    cmpFile = wxFopen( aFullCmpFileName, wxT( "wt" ) );
-
-    if( cmpFile == NULL )
-        return false;
-
-    fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );
-
-    MODULE* module = aBrd->m_Modules;
-    for( ; module != NULL; module = module->Next() )
-    {
-        fprintf( cmpFile, "\nBeginCmp\n" );
-        fprintf( cmpFile, "TimeStamp = %8.8lX\n", (unsigned long)module->GetTimeStamp() );
-        fprintf( cmpFile, "Path = %s\n", TO_UTF8( module->GetPath() ) );
-        fprintf( cmpFile, "Reference = %s;\n",
-                 !module->GetReference().IsEmpty() ?
-                 TO_UTF8( module->GetReference() ) : "[NoRef]" );
-        fprintf( cmpFile, "ValeurCmp = %s;\n",
-                 !module->GetValue().IsEmpty() ?
-                 TO_UTF8( module->GetValue() ) : "[NoVal]" );
-        fprintf( cmpFile, "IdModule  = %s;\n", module->GetFPID().Format().c_str() );
-        fprintf( cmpFile, "EndCmp\n" );
-    }
-
-    fprintf( cmpFile, "\nEndListe\n" );
-    fclose( cmpFile );
-
-    return true;
-}

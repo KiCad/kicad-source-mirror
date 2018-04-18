@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_EXCHANGE_FOOTPRINTS_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -31,6 +30,8 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -57,13 +58,17 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxRadioButton* m_matchSpecifiedID;
 		wxTextCtrl* m_specifiedID;
 		wxBitmapButton* m_specifiedIDBrowseButton;
-		wxBoxSizer* m_middleSizer;
+		wxBoxSizer* m_changeSizer;
 		wxTextCtrl* m_newID;
 		wxBitmapButton* m_newIDBrowseButton;
+		wxStaticBoxSizer* m_updateOptionsSizer;
+		wxCheckBox* m_removeExtraBox;
+		wxCheckBox* m_resetTextItemLayers;
+		wxCheckBox* m_resetTextItemEffects;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
-		wxButton* m_exportButton;
-		wxButton* m_applyButton;
-		wxButton* m_closeButton;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -72,9 +77,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		virtual void OnMatchValueClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchIDClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ViewAndSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
-		virtual void RebuildCmpList( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnApplyClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

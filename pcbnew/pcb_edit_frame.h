@@ -1152,11 +1152,13 @@ public:
      * Replaces OldModule by NewModule, using OldModule settings:
      * position, orientation, pad netnames ...)
      * OldModule is deleted or put in undo list.
-     * @param aOldModule = footprint to replace
-     * @param aNewModule = footprint to put
+     * @param aSrc = footprint to replace
+     * @param aDest = footprint to put
      * @param aCommit = commit that should store the changes
      */
-    void Exchange_Module( MODULE* aOldModule, MODULE* aNewModule, BOARD_COMMIT& aCommit );
+    void Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
+                          bool deleteExtraTexts = true,
+                          bool resetTextLayers = true, bool resetTextEffects = true );
 
     // loading modules: see PCB_BASE_FRAME
 
