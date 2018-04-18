@@ -170,40 +170,37 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxAuiPaneInfo( info ).Name( wxT( "m_footprintListBox" ) ).
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
+    // Build the bottom panel, to display 2 sttaus texts and the buttons:
     auto bottomPanel = new wxPanel( this );
-
-    auto panelSizer = new wxBoxSizer( wxHORIZONTAL );
-    auto statusSizer = new wxBoxSizer( wxVERTICAL );
+    auto panelSizer = new wxBoxSizer( wxVERTICAL );
 
     m_statusLine1 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    m_statusLine1->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                                    wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-    statusSizer->Add( m_statusLine1, 0, wxTOP, 5 );
+    panelSizer->Add( m_statusLine1, 0, wxTOP, 5 );
 
     m_statusLine2 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    m_statusLine2->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                                    wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-    statusSizer->Add( m_statusLine2, 0, wxTOP, 4 );
+    panelSizer->Add( m_statusLine2, 0, wxTOP, 4 );
 
-    panelSizer->Add( statusSizer, 1, wxEXPAND|wxLEFT, 5 );
+    // Add buttons:
+    auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+    auto sdbSizer = new wxStdDialogButtonSizer();
 
     m_saveAndContinue = new wxButton( bottomPanel, wxID_SAVE,
-                                      wxT("Apply, Save Schematic && Continue") );
-    panelSizer->Add( m_saveAndContinue, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+                                      "Apply, Save Schematic && Continue" );
+    buttonsSizer->Add( m_saveAndContinue, 0, wxALL, 5 );
 
-    auto sdbSizer1 = new wxStdDialogButtonSizer();
-    auto sdbSizer1OK = new wxButton( bottomPanel, wxID_OK );
-    sdbSizer1->AddButton( sdbSizer1OK );
-    auto sdbSizer1Cancel = new wxButton( bottomPanel, wxID_CANCEL );
-    sdbSizer1->AddButton( sdbSizer1Cancel );
-    sdbSizer1->Realize();
+    auto sdbSizerOK = new wxButton( bottomPanel, wxID_OK );
+    sdbSizer->AddButton( sdbSizerOK );
+    auto sdbSizerCancel = new wxButton( bottomPanel, wxID_CANCEL );
+    sdbSizer->AddButton( sdbSizerCancel );
+    sdbSizer->Realize();
 
-    panelSizer->Add( sdbSizer1, 0, wxEXPAND|wxLEFT, 10 );
+    buttonsSizer->Add( sdbSizer, 0, wxALL, 5 );
+    panelSizer->Add( buttonsSizer, 0, wxALIGN_RIGHT, 5 );
 
     bottomPanel->SetSizer( panelSizer );
     bottomPanel->Fit();
 
-    sdbSizer1OK->SetDefault();
+    sdbSizerOK->SetDefault();
 
     m_auimgr.AddPane( bottomPanel, wxAuiPaneInfo( horiz ).Name( wxT( "buttons" ) ).Bottom() );
 
