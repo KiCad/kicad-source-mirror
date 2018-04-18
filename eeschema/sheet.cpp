@@ -98,6 +98,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 
     wxString msg;
     bool loadFromFile = false;
+    bool clearAnnotation = false;
     SCH_SCREEN* useScreen = NULL;
 
     // Relative file names are relative to the path of the current sheet.  This allows for
@@ -134,22 +135,17 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     {
         if( useScreen || loadFromFile )            // Load from existing file.
         {
-            if( useScreen != NULL )
-            {
-                msg.Printf( _( "A file named \"%s\" already exists in the current schematic "
-                               "hierarchy." ), newFilename );
-            }
-            else
-            {
-                msg.Printf( _( "A file named \"%s\" already exists." ), newFilename );
-            }
+            clearAnnotation = true;
 
-            msg += _( "\n\nDo you want to create a sheet with the contents of this file?" );
+            wxString existsMsg;
+            wxString linkMsg;
+            existsMsg.Printf( _( "\"%s\" already exists." ), fileName.GetFullName() );
+            linkMsg.Printf( _( "Link \"%s\" to this file?" ), dlg.GetSheetName() );
+            msg.Printf( wxT( "%s\n\n%s" ), existsMsg, linkMsg );
 
             if( !IsOK( this, msg ) )
-            {
                 return false;
-            }
+
         }
         else                                                   // New file.
         {
@@ -163,6 +159,15 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     {
         bool isUndoable = true;
         bool renameFile = false;
+        wxString replaceMsg;
+        wxString newMsg;
+        wxString noUndoMsg;
+
+        replaceMsg.Printf( _( "Change \"%s\" link from \"%s\" to \"%s\"?" ),
+                dlg.GetSheetName(), aSheet->GetFileName(), fileName.GetFullName() );
+        newMsg.Printf( _( "Create new file \"%s\" with contents of \"%s\"?" ),
+                fileName.GetFullName(), aSheet->GetFileName() );
+        noUndoMsg = _( "This action cannot be undone." );
 
         // We are always using here a case insensitive comparison
         // to avoid issues under Windows, although under Unix
@@ -175,24 +180,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         {
             // Sheet file name changes cannot be undone.
             isUndoable = false;
-            msg = _( "Changing the sheet file name cannot be undone.  " );
 
             if( useScreen || loadFromFile )                    // Load from existing file.
             {
-                wxString tmp;
+                clearAnnotation = true;
 
-                if( useScreen != NULL )
-                {
-                    tmp.Printf( _( "A file named \"%s\" already exists in the current schematic "
-                                   "hierarchy." ), newFilename );
-                }
-                else
-                {
-                    tmp.Printf( _( "A file named \"%s\" already exists." ), newFilename );
-                }
-
-                msg += tmp;
-                msg += _( "\n\nDo you want to replace the sheet with the contents of this file?" );
+                msg.Printf( wxT( "%s\n\n%s" ), replaceMsg, noUndoMsg );
 
                 if( !IsOK( this, msg ) )
                     return false;
@@ -204,10 +197,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
             {
                 if( aSheet->GetScreenCount() > 1 )
                 {
-                    msg += _( "This sheet uses shared data in a complex hierarchy.\n\n" );
-                    msg += _( "Do you wish to convert it to a simple hierarchical sheet?" );
+                    msg.Printf( wxT( "%s\n\n%s" ), newMsg, noUndoMsg );
 
-                    if( !IsOK( NULL, msg ) )
+                    if( !IsOK( this, msg ) )
                         return false;
                 }
 
@@ -323,6 +315,11 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 
         if( !IsOK( this, msg ) )
             return false;
+    }
+
+    if( clearAnnotation )
+    {
+        newScreens.ClearAnnotation();
     }
 
     m_canvas->MoveCursorToCrossHair();
