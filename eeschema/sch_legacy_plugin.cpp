@@ -3691,7 +3691,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
 {
     wxCHECK_RET( aBezier && aBezier->Type() == LIB_BEZIER_T, "Invalid LIB_BEZIER object." );
 
-    aFormatter->Print( 0, "B %lu %d %d %d", aBezier->GetPoints().size(),
+    aFormatter->Print( 0, "B %u %d %d %d", (unsigned)aBezier->GetPoints().size(),
                        aBezier->GetUnit(), aBezier->GetConvert(), aBezier->GetWidth() );
 
     for( const auto& pt : aBezier->GetPoints() )
