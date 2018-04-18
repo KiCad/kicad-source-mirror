@@ -84,7 +84,7 @@ private:
     // Conversion parameters
     constexpr static double angle_tolerance     = 0.0;
     constexpr static double cusp_limit          = 0.0;
-    constexpr static int    recursion_limit     = 12;
+    constexpr static unsigned int recursion_limit     = 12;
     constexpr static double approximation_scale = 0.5;  // 1
     constexpr static double distance_tolerance_square = ( 0.5 / approximation_scale ) * ( 0.5 / approximation_scale );
 

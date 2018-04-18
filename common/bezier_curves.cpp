@@ -68,7 +68,8 @@ void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput )
 }
 
 
-void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2, int x3, int y3, unsigned int level )
+void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2,
+        int x3, int y3, unsigned int level )
 {
     if( level > recursion_limit )
         return;
@@ -154,11 +155,12 @@ void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2, int x3, int y
     // Continue subdivision
     //----------------------
     recursiveBezier( x1, y1, x12, y12, x123, y123, level + 1 );
-    recursiveBezier( x123, y123, x23, y23, x3, y3, -(level + 1) );
+    recursiveBezier( x123, y123, x23, y23, x3, y3, level + 1 );
 }
 
 
-void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, unsigned int level )
+void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2,
+        int x3, int y3, int x4, int y4, unsigned int level )
 {
     if( level > recursion_limit )
         return;
