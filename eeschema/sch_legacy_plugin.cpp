@@ -3630,7 +3630,6 @@ void SCH_LEGACY_PLUGIN_CACHE::saveSymbol( LIB_PART* aSymbol,
                 saveBezier( (LIB_BEZIER*) &item, aFormatter );
                 break;
 
-
             case LIB_CIRCLE_T:
                 saveCircle( ( LIB_CIRCLE* ) &item, aFormatter );
                 break;
@@ -3692,7 +3691,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
 {
     wxCHECK_RET( aBezier && aBezier->Type() == LIB_BEZIER_T, "Invalid LIB_BEZIER object." );
 
-    aFormatter->Print( 0, "B %lu %d %d %d", (unsigned long)aBezier->GetCornerCount(),
+    aFormatter->Print( 0, "B %lu %d %d %d", aBezier->GetPoints().size(),
                        aBezier->GetUnit(), aBezier->GetConvert(), aBezier->GetWidth() );
 
     for( const auto& pt : aBezier->GetPoints() )
