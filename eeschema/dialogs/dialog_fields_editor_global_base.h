@@ -42,7 +42,6 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxPanel* m_panel;
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_leftPanel;
 		wxCheckBox* m_groupComponentsBox;
@@ -72,7 +71,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		
 		void m_splitter1OnIdle( wxIdleEvent& )
 		{
-			m_splitter1->SetSashPosition( 200 );
+			m_splitter1->SetSashPosition( 230 );
 			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::m_splitter1OnIdle ), NULL, this );
 		}
 	

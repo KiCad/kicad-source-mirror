@@ -375,9 +375,9 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 
-    m_fieldsCtrl->AppendTextColumn(   _( "Field" ), wxDATAVIEW_CELL_INERT );
-    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 40, wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 60, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendTextColumn(   _( "Field" ),    wxDATAVIEW_CELL_INERT );
+    m_fieldsCtrl->AppendToggleColumn( _( "Show" ),     wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 70, wxALIGN_CENTER, 0 );
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
@@ -407,7 +407,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     }
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );     // quantities
     m_grid->SetColMinimalWidth( 0, 100 );                              // references
-    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 40 ); // quantities
+    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 50 ); // quantities
     m_grid->AutoSizeColumns( false );
 
     m_grid->SetGridCursor( 0, 1 );
@@ -415,8 +415,8 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_sdbSizer1OK->SetDefault();
 
-    Layout();
-    SetSizeInDU( 500, 300 );
+    FinishDialogSettings();
+    SetSizeInDU( 600, 300 );
     Center();
 
     // Connect Events
