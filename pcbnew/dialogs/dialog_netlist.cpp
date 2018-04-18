@@ -82,7 +82,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     bool configChanged = !GetLastNetListRead().IsEmpty() && ( netlistName != GetLastNetListRead() );
 
     if( configChanged && !GetBoard()->GetFileName().IsEmpty()
-      && IsOK( NULL, _( "The project configuration has changed.  Do you want to save it?" ) ) )
+      && IsOK( this, _( "The project configuration has changed.  Do you want to save it?" ) ) )
     {
         fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
         fn.SetExt( ProjectFileExtension );
@@ -177,7 +177,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     // Give the user a chance to bail out when making changes from a netlist.
     if( !m_checkDryRun->GetValue() && !m_silentMode
       && !m_parent->GetBoard()->IsEmpty()
-      && !IsOK( NULL, _( "The changes made by reading the netlist cannot be undone.  Are you "
+      && !IsOK( this, _( "The changes made by reading the netlist cannot be undone.  Are you "
                          "sure you want to read the netlist?" ) ) )
         return;
 

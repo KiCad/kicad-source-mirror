@@ -183,7 +183,7 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
     // Test duplicate sheet names:
     if( TestDuplicateSheetNames( false ) > 0 )
     {
-        if( !IsOK( NULL, _( "Error: duplicate sheet names. Continue?" ) ) )
+        if( !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
             return false;
     }
 

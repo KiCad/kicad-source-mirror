@@ -235,7 +235,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
         // This is sometimes useful, for instance for microwave applications ans net tees.
         // Because the DRC does not handle graphic items, it can break boards.
         // Therefore a confirmation is requested
-        if( !IsOK( NULL,
+        if( !IsOK( this,
                    _( "The graphic item will be on a copper layer.\n"
                       "This is very dangerous because DRC does not handle it.\n"
                       "Are you sure?" ) ) )
