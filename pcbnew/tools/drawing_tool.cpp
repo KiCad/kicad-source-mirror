@@ -623,7 +623,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             // Show a preview of the item
             m_view->Update( &preview );
-            frame()->SetMsgPanel( dimension );
+            if( step )
+                frame()->SetMsgPanel( dimension );
+            else
+                frame()->SetMsgPanel( board() );
         }
     }
 
