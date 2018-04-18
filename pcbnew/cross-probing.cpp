@@ -422,7 +422,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         {
             importFormat = std::stoi( payload.substr( 0, split ) );
         }
-        catch( std::invalid_argument& e )
+        catch( std::invalid_argument& )
         {
             wxFAIL;
             importFormat = -1;

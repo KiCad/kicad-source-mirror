@@ -2017,7 +2017,7 @@ MODULE* PCB_IO::doLoadFootprint( const wxString& aLibraryPath,
     {
         validateCache( aLibraryPath, checkModified );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         // do nothing with the error
     }

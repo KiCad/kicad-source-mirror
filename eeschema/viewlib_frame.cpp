@@ -497,7 +497,7 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
         Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames,
                                                        m_listPowerCmpOnly );
     }
-    catch( const IO_ERROR& e ) {}   // ignore, it is handled below
+    catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
     if( aliasNames.IsEmpty() )
     {

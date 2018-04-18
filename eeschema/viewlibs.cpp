@@ -195,7 +195,7 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     {
         entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
     }
-    catch( const IO_ERROR& e ) {} // ignore, it is handled below
+    catch( const IO_ERROR& ) {} // ignore, it is handled below
 
     if( !entry )
         return;

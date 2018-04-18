@@ -447,7 +447,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
             {
                 Prj().SchSymbolLibTable()->EnumerateSymbolLib( lib, aliasNames );
             }
-            catch( const IO_ERROR& e ) {}   // ignore, it is handled below
+            catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
             if( aliasNames.IsEmpty() )
                 continue;

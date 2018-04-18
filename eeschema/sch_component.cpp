@@ -340,7 +340,7 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
             return true;
         }
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         wxLogDebug( "Cannot resolve library symbol %s", m_lib_id.Format().wx_str() );
     }

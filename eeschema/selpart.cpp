@@ -58,7 +58,7 @@ static void DisplayCmpDocAndKeywords( wxString& aSelection, void* aData )
     {
         part = libs->LoadSymbol( id );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         aSelection.Printf( _( "Error occurred loading symbol \"%s\" from library \"%s\"." ),
                            id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );

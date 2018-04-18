@@ -111,7 +111,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     {
         alias = pi->LoadSymbol( filename, symbols[0] );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return;
     }

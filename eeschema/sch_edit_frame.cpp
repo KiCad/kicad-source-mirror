@@ -1171,7 +1171,7 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
         player->Raise();
     }
-    catch( const IO_ERROR& e )
+    catch( const IO_ERROR& )
     {
         DisplayError( this, _( "Could not open CvPcb" ) );
     }

@@ -187,7 +187,7 @@ bool IsUTF8( const char* aString )
             if( next > end )
                 return false;
         }
-        catch( const IO_ERROR& ioe )
+        catch( const IO_ERROR& )
         {
             return false;
         }
