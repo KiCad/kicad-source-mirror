@@ -170,23 +170,27 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxAuiPaneInfo( info ).Name( wxT( "m_footprintListBox" ) ).
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
-    // Build the bottom panel, to display 2 sttaus texts and the buttons:
+    // Build the bottom panel, to display 2 status texts and the buttons:
     auto bottomPanel = new wxPanel( this );
     auto panelSizer = new wxBoxSizer( wxVERTICAL );
+    wxFont statusFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    statusFont.SetSymbolicSize( wxFONTSIZE_SMALL );
 
     m_statusLine1 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    panelSizer->Add( m_statusLine1, 0, wxTOP, 5 );
+    m_statusLine1->SetFont( statusFont );
+    panelSizer->Add( m_statusLine1, 0, wxTOP, 4 );
 
     m_statusLine2 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    panelSizer->Add( m_statusLine2, 0, wxTOP, 4 );
+    m_statusLine2->SetFont( statusFont );
+    panelSizer->Add( m_statusLine2, 0, 0, 4 );
 
     // Add buttons:
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
     auto sdbSizer = new wxStdDialogButtonSizer();
 
     m_saveAndContinue = new wxButton( bottomPanel, wxID_SAVE,
-                                      "Apply, Save Schematic && Continue" );
-    buttonsSizer->Add( m_saveAndContinue, 0, wxALL, 5 );
+                                      _( "Apply, Save Schematic && Continue" ) );
+    buttonsSizer->Add( m_saveAndContinue, 0, wxALIGN_BOTTOM | wxBOTTOM | wxRIGHT, 10 );
 
     auto sdbSizerOK = new wxButton( bottomPanel, wxID_OK );
     sdbSizer->AddButton( sdbSizerOK );
@@ -194,7 +198,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     sdbSizer->AddButton( sdbSizerCancel );
     sdbSizer->Realize();
 
-    buttonsSizer->Add( sdbSizer, 0, wxALL, 5 );
+    buttonsSizer->Add( sdbSizer, 0, 0, 5 );
     panelSizer->Add( buttonsSizer, 0, wxALIGN_RIGHT, 5 );
 
     bottomPanel->SetSizer( panelSizer );
