@@ -370,6 +370,18 @@ if( APPLE )
                 )
             " COMPONENT Runtime
         )
+
+    if( KICAD_SPICE )
+        # bundle libngspice, codemodels and scripts
+        get_filename_component( REAL_LIBNGSPICE ${NGSPICE_LIBRARY} REALPATH )
+        get_filename_component( LIBNGSPICE_PATH ${REAL_LIBNGSPICE} DIRECTORY )
+        install( FILES "${REAL_LIBNGSPICE}"
+                 DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
+        install( DIRECTORY "${LIBNGSPICE_PATH}/ngspice"
+                 DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
+        install( DIRECTORY "${LIBNGSPICE_PATH}/../share/ngspice/scripts"
+                 DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim/ngspice" )
+    endif()
 else()
     install( TARGETS eeschema
         DESTINATION ${KICAD_BIN}
