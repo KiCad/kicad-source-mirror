@@ -116,11 +116,18 @@ PART_LIB* LIB_ALIAS::GetLib()
     return shared->GetLib();
 }
 
-// Helper function to replace illegal chars in symbol names
-// they are same as illegal filename chars, but the ':' is allowed
-// only because it is used to create symbol names in lib cache
-static void replaceIllegalSymbolNameChars( wxString& aName )
+
+void LIB_ALIAS::SetName( const wxString& aName )
 {
+    name = aName;
+    ValidateName( name );
+}
+
+
+void LIB_ALIAS::ValidateName( wxString& aName )
+{
+    // they are same as illegal filename chars, but the ':' is allowed
+    // only because it is used to create symbol names in lib cache
     static const wxString illegalSymbolNameChars( "\\/\"<>|" );
 
     for( wxString::iterator it = aName.begin();  it != aName.end();  ++it )
@@ -128,12 +135,6 @@ static void replaceIllegalSymbolNameChars( wxString& aName )
         if( illegalSymbolNameChars.Find( *it ) != wxNOT_FOUND )
             *it = '_';
     }
-}
-
-void LIB_ALIAS::SetName( const wxString& aName )
-{
-    name = aName;
-    replaceIllegalSymbolNameChars( name );
 }
 
 

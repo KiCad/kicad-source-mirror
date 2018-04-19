@@ -42,7 +42,6 @@
 void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 {
     wxString newFieldValue;
-    wxString title;
     wxString caption;
 
     if( aField == NULL )
@@ -54,16 +53,9 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
     if( aField->GetId() == VALUE )
-    {
         caption = _( "Component Name" );
-        title = _( "Enter a name to create a new component based on this one." );
-    }
     else
-    {
         caption.Printf( _( "Edit Field %s" ), GetChars( aField->GetName() ) );
-        title.Printf( _( "Enter a new value for the %s field." ),
-                      GetChars( aField->GetName().Lower() ) );
-    }
 
     DIALOG_LIB_EDIT_ONE_FIELD dlg( this, caption, aField );
 
@@ -73,6 +65,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         return;
 
     newFieldValue = dlg.GetText();
+    LIB_ALIAS::ValidateName( newFieldValue );
     wxString oldFieldValue = aField->GetFullText( m_unit );
     bool renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
 

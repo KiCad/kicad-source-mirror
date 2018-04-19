@@ -119,6 +119,9 @@ public:
 
     void SetName( const wxString& aName );
 
+    ///> Helper function to replace illegal chars in symbol names
+    static void ValidateName( wxString& aName );
+
     void SetDescription( const wxString& aDescription )
     {
         description = aDescription;
