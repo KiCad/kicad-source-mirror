@@ -128,7 +128,7 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
     // The matching is case insensitive
     wxString name;
 
-    EDA_PATTERN_MATCH_WILDCARD patternFilter;
+    EDA_PATTERN_MATCH_WILDCARD_EXPLICIT patternFilter;
 
     for( auto const& each_filter : m_filter->m_footprint_filters )
     {
@@ -203,7 +203,7 @@ void FOOTPRINT_FILTER::FilterByFootprintFilters( wxArrayString const& aFilters )
 
     for( auto const& each_pattern : aFilters )
     {
-        m_footprint_filters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
+        m_footprint_filters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD_EXPLICIT>() );
         m_footprint_filters.back()->SetPattern( each_pattern.Lower() );
     }
 

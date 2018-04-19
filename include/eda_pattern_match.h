@@ -108,6 +108,13 @@ protected:
 };
 
 
+class EDA_PATTERN_MATCH_WILDCARD_EXPLICIT : public EDA_PATTERN_MATCH_WILDCARD
+{
+public:
+    virtual bool SetPattern( const wxString& aPattern ) override;
+};
+
+
 /**
  * Relational match.
  *

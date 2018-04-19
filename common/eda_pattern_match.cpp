@@ -159,6 +159,44 @@ int EDA_PATTERN_MATCH_WILDCARD::Find( const wxString& aCandidate ) const
 }
 
 
+bool EDA_PATTERN_MATCH_WILDCARD_EXPLICIT::SetPattern( const wxString& aPattern )
+{
+    m_wildcard_pattern = aPattern;
+
+    // Compile the wildcard string to a regular expression
+    wxString regex;
+    regex.Alloc( 2 * aPattern.Length() );   // no need to keep resizing, we know the size roughly
+
+    const wxString to_replace = wxT( ".*+?^${}()|[]/\\" );
+
+    regex +=  wxT( "^" );
+    for( wxString::const_iterator it = aPattern.begin(); it < aPattern.end(); ++it )
+    {
+        wxUniChar c = *it;
+        if( c == '?' )
+        {
+            regex += wxT( "." );
+        }
+        else if( c == '*' )
+        {
+            regex += wxT( ".*" );
+        }
+        else if( to_replace.Find( c ) != wxNOT_FOUND )
+        {
+            regex += "\\";
+            regex += c;
+        }
+        else
+        {
+            regex += c;
+        }
+    }
+    regex += wxT( "$" );
+
+    return EDA_PATTERN_MATCH_REGEX::SetPattern( regex );
+}
+
+
 bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
 {
     bool matches = m_regex_search.Matches( aPattern );
