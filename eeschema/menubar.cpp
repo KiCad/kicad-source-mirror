@@ -585,7 +585,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_OPEN_CMP_TABLE,
-                 _( "S&ymbol Table..." ),
+                 _( "Field&s Editor..." ),
                  KiBitmap( spreadsheet_xpm ) );
 
     AddMenuItem( aParentMenu,
