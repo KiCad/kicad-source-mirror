@@ -63,11 +63,7 @@ public:
     const VECTOR2I GetP1() const;
     const VECTOR2I& GetCenter() const { return m_pc; }
 
-    const BOX2I BBox( int aClearance = 0 ) const override
-    {
-        assert( false );
-        return BOX2I();    // fixme
-    }
+    const BOX2I BBox( int aClearance = 0 ) const override;
 
     bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
     bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;

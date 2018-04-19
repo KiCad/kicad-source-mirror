@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <vector>
+
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
 
@@ -145,6 +147,24 @@ const VECTOR2I SHAPE_ARC::GetP1() const
 
     return p1;
 }
+
+
+const BOX2I SHAPE_ARC::BBox( int aClearance ) const
+{
+    BOX2I bbox;
+    std::vector<VECTOR2I> points;
+    points.push_back( m_pc );
+    points.push_back( m_p0 );
+    points.push_back( GetP1() );
+
+    bbox.Compute( points );
+
+    if( aClearance != 0 )
+        bbox.Inflate( aClearance );
+
+    return bbox;
+}
+
 
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance ) const
 {
