@@ -262,7 +262,7 @@
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
-                                        <property name="border">3</property>
+                                        <property name="border">2</property>
                                         <property name="flag">wxALL|wxBOTTOM|wxEXPAND|wxTOP</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBoxSizer" expanded="1">
@@ -411,7 +411,7 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size">30,28</property>
+                                                    <property name="minimum_size">30,30</property>
                                                     <property name="moveable">1</property>
                                                     <property name="name">m_bRefresh</property>
                                                     <property name="pane_border">1</property>
