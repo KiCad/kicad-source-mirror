@@ -597,3 +597,13 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 
     event.Skip();
 }
+
+
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnSaveAndContinue( wxCommandEvent& aEvent )
+{
+    if( TransferDataFromWindow() )
+    {
+        wxCommandEvent dummyEvent;
+        m_parent->OnSaveProject( dummyEvent );
+    }
+}

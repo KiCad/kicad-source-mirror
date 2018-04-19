@@ -51,17 +51,15 @@ private:
     void AddField( const wxString& aFieldName, bool defaultShow, bool defaultSortBy );
     void LoadFieldNames();
 
-    bool Match( SCH_REFERENCE& aRef, SCH_REFERENCE& bRef, bool groupComponents );
-    void RebuildRows();
-
     void OnColSort( wxGridEvent& aEvent );
 
-    virtual void OnColumnItemToggled( wxDataViewEvent& event ) override;
-    virtual void OnGroupComponentsToggled( wxCommandEvent& event ) override;
-    virtual void OnRegroupComponents( wxCommandEvent& event ) override;
-    virtual void OnTableValueChanged( wxGridEvent& event ) override;
-    virtual void OnTableItemContextMenu( wxGridEvent& event ) override;
-    virtual void OnSizeFieldList( wxSizeEvent& event ) override;
+    void OnColumnItemToggled( wxDataViewEvent& event ) override;
+    void OnGroupComponentsToggled( wxCommandEvent& event ) override;
+    void OnRegroupComponents( wxCommandEvent& event ) override;
+    void OnTableValueChanged( wxGridEvent& event ) override;
+    void OnTableItemContextMenu( wxGridEvent& event ) override;
+    void OnSizeFieldList( wxSizeEvent& event ) override;
+    void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
 };
 
 #endif /* DIALOG_FIELDS_EDITOR_GLOBAL_H */

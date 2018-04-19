@@ -49,6 +49,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxPanel* m_panel4;
 		wxGrid* m_grid;
+		wxButton* m_button1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -60,6 +61,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOK( wxCommandEvent& event ) { event.Skip(); }
 		

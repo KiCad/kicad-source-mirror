@@ -37,12 +37,12 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	bGroupSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_bRefresh = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bRefresh->SetMinSize( wxSize( 30,28 ) );
+	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
 	
 	bGroupSizer->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bLeftSizer->Add( bGroupSizer, 0, wxALL|wxBOTTOM|wxEXPAND|wxTOP, 3 );
+	bLeftSizer->Add( bGroupSizer, 0, wxALL|wxBOTTOM|wxEXPAND|wxTOP, 2 );
 	
 	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fieldsCtrl->SetMinSize( wxSize( 220,220 ) );
@@ -92,6 +92,15 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_splitter1->SplitVertically( m_leftPanel, m_panel4, 230 );
 	bMainSizer->Add( m_splitter1, 1, wxALL|wxEXPAND, 5 );
 	
+	wxBoxSizer* bButtonsSizer;
+	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_button1 = new wxButton( this, wxID_ANY, _("Apply, Save Schematic && Continue"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_button1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
@@ -99,7 +108,10 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bMainSizer->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bButtonsSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
@@ -115,6 +127,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_fieldsCtrl->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSizeFieldList ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableItemContextMenu ), NULL, this );
+	m_button1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSaveAndContinue ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnCancel ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnOK ), NULL, this );
 }
@@ -128,6 +141,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::~DIALOG_FIELDS_EDITOR_GLOBAL_BASE()
 	m_fieldsCtrl->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSizeFieldList ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableItemContextMenu ), NULL, this );
+	m_button1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSaveAndContinue ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnCancel ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnOK ), NULL, this );
 	
