@@ -369,12 +369,15 @@ SELECTION& SELECTION_TOOL::GetSelection()
 
 SELECTION& SELECTION_TOOL::RequestSelection( int aFlags, CLIENT_SELECTION_FILTER aClientFilter )
 {
-    if( m_selection.Empty() )
+    bool selectionEmpty = m_selection.Empty();
+    m_selection.SetIsHover( selectionEmpty );
+
+    if( selectionEmpty )
     {
         if( aFlags & SELECTION_FORCE_UNLOCK )
             m_locked = false;
+
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, aClientFilter );
-        m_selection.SetIsHover( true );
         m_selection.ClearReferencePoint();
     }
 
