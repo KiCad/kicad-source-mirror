@@ -1254,22 +1254,20 @@ void EDIT_TOOL::setTransitions()
 
 bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 {
-    if( aSelection.HasReferencePoint() )
+    if( m_dragging && aSelection.HasReferencePoint() )
         return false;
 
+    // When there is only one item selected, the reference point is its position...
     if( aSelection.Size() == 1 )
     {
         auto item =  static_cast<BOARD_ITEM*>( aSelection.Front() );
         auto pos = item->GetPosition();
         aSelection.SetReferencePoint( VECTOR2I( pos.x, pos.y ) );
     }
+    // ...otherwise modify items with regard to the cursor position
     else
     {
-        // If EDIT_TOOL is not currently active then it means that the cursor position is not
-        // updated, so we have to fetch the latest value
-        if( m_toolMgr->GetCurrentToolId() != m_toolId )
-            m_cursor = getViewControls()->GetCursorPosition();
-
+        m_cursor = getViewControls()->GetCursorPosition();
         aSelection.SetReferencePoint( m_cursor );
     }
 
