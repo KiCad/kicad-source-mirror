@@ -133,7 +133,7 @@ void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorS
 
     OnLayerRightClick( menu );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [this, aColorSwatch]( wxCommandEvent& event ) {
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [aColorSwatch]( wxCommandEvent& event ) {
         if ( event.GetId() == ID_CHANGE_LAYER_COLOR ) {
             aColorSwatch->GetNewSwatchColor();
         } else {
@@ -182,7 +182,7 @@ void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColor
                  _( "Change Render Color for " ) + aRenderName,
                  KiBitmap( setcolor_board_body_xpm ) );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [this, aColorSwatch]( wxCommandEvent& event ) {
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [aColorSwatch]( wxCommandEvent& event ) {
         if ( event.GetId() == ID_CHANGE_RENDER_COLOR ) {
             aColorSwatch->GetNewSwatchColor();
         } else {
