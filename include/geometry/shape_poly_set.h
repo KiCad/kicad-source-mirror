@@ -904,8 +904,19 @@ class SHAPE_POLY_SET : public SHAPE
          */
         bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
 
-        // fixme: add collision support
-        bool Collide( const SEG& aSeg, int aClearance = 0 ) const override { return false; }
+        /**
+         * Function Collide
+         * Checks whether the segment aSeg collides with the inside of the polygon set;  if the
+         * segment touches an edge or a corner of any of the polygons, there is no collision:
+         * the edges do not belong to the polygon itself.
+         * @param  aSeg       is the SEG segment whose collision with respect to the poly set
+         *                    will be tested.
+         * @param  aClearance is the security distance; if the segment passes closer to the polygon
+         *                    than aClearance distance, then there is a collision.
+         * @return bool - true if the segment aSeg collides with the polygon;
+         *                    false in any other case.
+         */
+        bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
 
         /**
          * Function CollideVertex
