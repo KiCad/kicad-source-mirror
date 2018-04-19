@@ -801,12 +801,7 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     if( selection.Empty() )
         return true;
 
-    bool canBeRemoved = ( selection.Front()->Type() != PCB_MODULE_T );
-
-    if( canBeRemoved || IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
-        aToolMgr->RunAction( PCB_ACTIONS::remove, true );
-    else
-        aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    aToolMgr->RunAction( PCB_ACTIONS::remove, true );
 
     return true;
 }
