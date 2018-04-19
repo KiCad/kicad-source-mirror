@@ -108,7 +108,7 @@ void MICROWAVE_TOOL::Reset( RESET_REASON aReason )
 
 bool MICROWAVE_TOOL::Init()
 {
-    auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
+    auto activeToolFunctor = [] ( const SELECTION& aSel ) {
         return true;
     };
 
