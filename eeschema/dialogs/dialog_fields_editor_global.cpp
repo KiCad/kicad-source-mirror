@@ -353,12 +353,15 @@ public:
 
             std::map<wxString, wxString>& fieldStore = m_dataStore[ comp->GetTimeStamp() ];
 
-            for( int j = 0; j < comp->GetFieldCount(); ++j )
+            for( std::pair<wxString, wxString> fieldData : fieldStore )
             {
-                SCH_FIELD* field = comp->GetField( j );
-                auto fieldStoreData = fieldStore.find( field->GetName() );
-                if( fieldStoreData != fieldStore.end() )
-                    field->SetText( fieldStoreData->second );
+                wxString   fieldName = fieldData.first;
+                SCH_FIELD* field = comp->FindField( fieldName );
+
+                if( !field )
+                    field = comp->AddField( SCH_FIELD( wxPoint( 0, 0 ), -1, comp, fieldName ) );
+
+                field->SetText( fieldData.second );
             }
         }
     }
