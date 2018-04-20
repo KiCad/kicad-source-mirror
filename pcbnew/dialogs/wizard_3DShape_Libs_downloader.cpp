@@ -366,7 +366,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
     wxString server = repo.GetScheme() + "://" + repo.GetServer();
 
     // Download libs:
-    for( unsigned ii = 0; ii < aUrlList.GetCount(); ii++ )
+    for( size_t ii = 0; ii < aUrlList.GetCount(); ii++ )
     {
         wxString& libsrc_name = aUrlList[ii];
 
@@ -389,7 +389,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
         wxString libdst_name = fn.GetFullPath();
 
         // Display the name of the library to download in the wxProgressDialog
-        pdlg.SetTitle( wxString::Format( wxT("%s [%d/%d]" ),
+        pdlg.SetTitle( wxString::Format( wxT("%s [%lu/%lu]" ),
                        libsrc_name.AfterLast( '/' ).GetData(),
                        ii + 1, aUrlList.GetCount() ) );
 
