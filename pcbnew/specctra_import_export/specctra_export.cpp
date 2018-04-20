@@ -503,10 +503,10 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             /* calculates the coeff to compensate radius reduction of holes clearance
              * due to the segment approx.
              * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
-             * correctionFactor is 1 /cos( PI/s_CircleToSegmentsCount  )
+             * correctionFactor is cos( PI/s_CircleToSegmentsCount  )
              */
-            double correctionFactor = 1.0 / cos( M_PI / (double) circleToSegmentsCount );
-            int extra_clearance = KiROUND( rradius * (1.0 - correctionFactor ) ) + 1;
+            double correctionFactor = cos( M_PI / (double) circleToSegmentsCount );
+            int extra_clearance = KiROUND( rradius * (1.0 - correctionFactor ) );
             wxSize psize = aPad->GetSize();
             psize.x += extra_clearance*2;
             psize.y += extra_clearance*2;
