@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,15 +39,17 @@
 #include <wx/sizer.h>
 #include <wx/frame.h>
 
-class MODULE_3D_SETTINGS;
-class  S3D_CACHE;
-class  S3D_FILENAME_RESOLVER;
-class  C3D_MODEL_VIEWER;
+#include <dialog_shim.h>
 
-class DLG_SELECT_3DMODEL : public wxDialog
+class MODULE_3D_SETTINGS;
+class S3D_CACHE;
+class S3D_FILENAME_RESOLVER;
+class C3D_MODEL_VIEWER;
+
+class DLG_SELECT_3DMODEL : public DIALOG_SHIM
 {
 private:
-    MODULE_3D_SETTINGS* m_model;                  // data for the selected model
+    MODULE_3D_SETTINGS* m_model;        // data for the selected model
     S3D_CACHE* m_cache;                 // cache manager
     S3D_FILENAME_RESOLVER*  m_resolver; // 3D filename resolver
 

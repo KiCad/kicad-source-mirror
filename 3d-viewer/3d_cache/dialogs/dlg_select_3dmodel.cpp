@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@
 #define ID_CFG_PATHS    ( ID_SET_DIR + 1 )
 
 
-wxBEGIN_EVENT_TABLE( DLG_SELECT_3DMODEL, wxDialog )
+wxBEGIN_EVENT_TABLE( DLG_SELECT_3DMODEL, DIALOG_SHIM )
     EVT_DIRCTRL_SELECTIONCHANGED( ID_FILE_TREE, DLG_SELECT_3DMODEL::OnSelectionChanged )
     EVT_DIRCTRL_FILEACTIVATED( ID_FILE_TREE, DLG_SELECT_3DMODEL::OnFileActivated )
     EVT_CHOICE( ID_SET_DIR, DLG_SELECT_3DMODEL::SetRootDir )
@@ -49,9 +49,9 @@ wxEND_EVENT_TABLE()
 
 DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
     MODULE_3D_SETTINGS* aModelItem, wxString& prevModelSelectDir, int& prevModelWildcard ) :
-    wxDialog( aParent, wxID_ANY, _( "Select 3D Model" ), wxDefaultPosition,
-             wxSize( 500,200 ), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX
-             | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxSYSTEM_MENU ),
+    DIALOG_SHIM( aParent, wxID_ANY, _( "Select 3D Model" ), wxDefaultPosition,
+                 wxSize( 500,200 ), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX
+               | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxSYSTEM_MENU ),
     m_model( aModelItem ), m_cache( aCacheManager ), m_previousDir( prevModelSelectDir ),
     m_previousFilterIndex( prevModelWildcard )
 {
@@ -108,7 +108,6 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 
             if( sL != eL )
                 filter.Append( wxT( "|" ) );
-
         }
 
         if( !filter.empty() )
