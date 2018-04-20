@@ -287,7 +287,7 @@ void WIZARD_3DSHAPE_LIBS_DOWNLOADER::OnWizardFinished( wxWizardEvent& aEvent )
 
     if( !downloadGithubLibsFromList( m_libraries, &error ) )
     {
-        DisplayError( GetParent(), error );
+        DisplayError( this, error );
     }
 }
 
@@ -356,9 +356,10 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
     // Display a progress bar to show the download state
     // The title is updated for each downloaded library.
     // the state will be updated by downloadOneLib() for each file.
+    // for OSX do not enable wPD_APP_MODAL, keep wxPD_AUTO_HIDE
     wxProgressDialog pdlg( _( "Downloading 3D libraries" ), wxEmptyString,
                            aUrlList.GetCount(), this,
-                           wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_AUTO_HIDE );
+                           wxPD_CAN_ABORT | wxPD_AUTO_HIDE );
 
     // Built the full server name string:
     wxURI repo( GetGithubURL() );
@@ -404,7 +405,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
 
 
 bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadOneLib( const wxString& aLibURL,
-                const wxString& aLocalLibName, wxProgressDialog * aIndicator,
+                const wxString& aLocalLibName, wxProgressDialog* aIndicator,
                 wxString* aErrorMessage )
 {
     wxArrayString fileslist;

@@ -77,8 +77,8 @@ public:
     void OnWizardFinished( wxWizardEvent& aEvent ) override;
     void OnBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void OnCheckSaveCopy( wxCommandEvent& aEvent );
-	void OnDefault3DPathButtonClick( wxCommandEvent& event ) override;
-	void OnGridLibReviewSize( wxSizeEvent& event ) override;
+    void OnDefault3DPathButtonClick( wxCommandEvent& event ) override;
+    void OnGridLibReviewSize( wxSizeEvent& event ) override;
     void OnLocalFolderChange( wxCommandEvent& event ) override;
 
 protected:
