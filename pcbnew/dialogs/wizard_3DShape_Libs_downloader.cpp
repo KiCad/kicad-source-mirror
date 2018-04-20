@@ -359,6 +359,9 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadGithubLibsFromList( wxArrayString& 
     // for OSX do not enable wPD_APP_MODAL, keep wxPD_AUTO_HIDE
     wxProgressDialog pdlg( _( "Downloading 3D libraries" ), wxEmptyString,
                            aUrlList.GetCount(), this,
+#ifndef __WXMAC__
+                           wxPD_APP_MODAL |
+#endif
                            wxPD_CAN_ABORT | wxPD_AUTO_HIDE );
 
     // Built the full server name string:
