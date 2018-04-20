@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 20 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,7 +99,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	bButtonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_button1 = new wxButton( this, wxID_ANY, _("Apply, Save Schematic && Continue"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_button1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_button1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -108,7 +108,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bButtonsSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxLEFT, 5 );
+	bButtonsSizer->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 	
 	
 	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
