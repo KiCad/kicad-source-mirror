@@ -34,6 +34,7 @@
 #include <plotter.h>
 #include <base_struct.h>
 #include <draw_graphic_text.h>
+#include <geometry/geometry_utils.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>
 #include <macros.h>
@@ -790,7 +791,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
      * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )
      */
     int circleToSegmentsCount = 32;
-    double correction = 1.0 / cos( M_PI / circleToSegmentsCount );
+    double correction = GetCircletoPolyCorrectionFactor( circleToSegmentsCount );
 
     // Plot pads
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
