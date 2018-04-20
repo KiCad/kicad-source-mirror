@@ -560,7 +560,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_RUN_LIBRARY,
-                 _( "Library &Editor" ), HELP_RUN_LIB_EDITOR,
+                 _( "Symbol Library &Editor" ), HELP_RUN_LIB_EDITOR,
                  KiBitmap( libedit_xpm ) );
 
     AddMenuItem( aParentMenu,
@@ -575,18 +575,20 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  _( "Remap legacy library symbols to symbol library table" ),
                  KiBitmap( rescue_xpm ) );
 
-    AddMenuItem( aParentMenu,
-                 ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-                 _( "Edit Symbol Library Links..." ),
-                 _( "Edit schematic symbol's symbol library links" ),
-                 KiBitmap( edit_cmp_symb_links_xpm ) );
-
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu,
                  ID_OPEN_CMP_TABLE,
-                 _( "Field&s Editor..." ),
+                 _( "Edit Symbol Field&s..." ),
                  KiBitmap( spreadsheet_xpm ) );
+
+    AddMenuItem( aParentMenu,
+                 ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
+                 _( "Edit Symbol Library References..." ),
+                 _( "Edit links between schematic symbols and library symbols" ),
+                 KiBitmap( edit_cmp_symb_links_xpm ) );
+
+    aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu,
                  ID_GET_ANNOTATE,
@@ -665,19 +667,19 @@ void prepareHelpMenu( wxMenu* aParentMenu )
 
 static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 {
-    // Library
-    AddMenuItem( aParentMenu,
-                 ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage Symbol Library Tables..." ),
-                 _( "Edit the global and project symbol library tables (list of active libraries)." ),
-                 KiBitmap( library_table_xpm ) );
-
     // Path configuration edit dialog.
     AddMenuItem( aParentMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure &Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
+
+    // Library
+    AddMenuItem( aParentMenu,
+                 ID_EDIT_SYM_LIB_TABLE,
+                 _( "Manage Symbol Libraries..." ),
+                 _( "Edit the global and project symbol library lists" ),
+                 KiBitmap( library_table_xpm ) );
 
     // Options (Preferences on WXMAC)
 #ifdef __WXMAC__

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_fp_lib_table_base.h"
@@ -17,9 +17,9 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* m_top_sizer;
-	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Library Tables by Scope") ), wxVERTICAL );
+	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
 	
-	m_auinotebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_BOTTOM );
+	m_auinotebook = new wxAuiNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_global_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -29,13 +29,13 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText3 = new wxStaticText( m_global_panel, wxID_ANY, _("Table:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( m_global_panel, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	fgSizer1->Add( m_staticText3, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 4 );
 	
 	m_GblTableFilename = new wxStaticText( m_global_panel, wxID_ANY, _("Table Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_GblTableFilename->Wrap( -1 );
-	fgSizer1->Add( m_GblTableFilename, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_GblTableFilename, 0, wxTOP|wxRIGHT|wxLEFT, 4 );
 	
 	
 	m_global_sizer->Add( fgSizer1, 0, wxEXPAND, 5 );
@@ -130,30 +130,30 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonWizard = new wxButton( this, wxID_ANY, _("Append with Wizard"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonWizard = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Append with Wizard"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer51->Add( m_buttonWizard, 0, wxALL, 5 );
 	
-	m_append_button = new wxButton( this, wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_append_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_append_button->SetToolTip( _("Add a PCB library row to this table") );
 	
 	bSizer51->Add( m_append_button, 0, wxALL, 5 );
 	
-	m_delete_button = new wxButton( this, wxID_ANY, _("Remove Library"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_delete_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Remove Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_delete_button->SetToolTip( _("Remove a PCB library from this library table") );
 	
 	bSizer51->Add( m_delete_button, 0, wxALL, 5 );
 	
-	m_move_up_button = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_move_up_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_move_up_button->SetToolTip( _("Move the currently selected row up one position") );
 	
 	bSizer51->Add( m_move_up_button, 0, wxALL, 5 );
 	
-	m_move_down_button = new wxButton( this, wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_move_down_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_move_down_button->SetToolTip( _("Move the currently selected row down one position") );
 	
 	bSizer51->Add( m_move_down_button, 0, wxALL, 5 );
 	
-	m_edit_options = new wxButton( this, wxID_ANY, _("Options Editor"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_edit_options = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Options Editor"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_edit_options->SetToolTip( _("Zoom into the options table for current row") );
 	
 	bSizer51->Add( m_edit_options, 0, wxALL, 5 );
@@ -162,12 +162,12 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_top_sizer->Add( bSizer51, 0, wxALIGN_CENTER|wxBOTTOM, 8 );
 	
 	
-	bSizer1->Add( m_top_sizer, 1, wxEXPAND, 5 );
+	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions") ), wxVERTICAL );
 	
-	m_path_subs_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_path_subs_grid = new wxGrid( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_path_subs_grid->CreateGrid( 1, 2 );

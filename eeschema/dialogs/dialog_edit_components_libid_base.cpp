@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,8 +37,8 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 30 );
 	m_grid->SetColLabelValue( 0, _("Symbols") );
-	m_grid->SetColLabelValue( 1, _("Current Symbol") );
-	m_grid->SetColLabelValue( 2, _("New Symbol") );
+	m_grid->SetColLabelValue( 1, _("Current Library Reference") );
+	m_grid->SetColLabelValue( 2, _("New Library Reference") );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows

@@ -320,27 +320,26 @@ void prepareInspectMenu( wxMenu* aParentMenu )
 // Build the library management menu
 void prepareLibraryMenu( wxMenu* aParentMenu )
 {
-    AddMenuItem( aParentMenu, ID_PCB_LIB_WIZARD,
-                _( "&Footprint Library Wizard..." ),
-                _( "Add footprint library using wizard" ),
-                KiBitmap( wizard_add_fplib_small_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Footprint Li&brary Table..." ),
-                _( "Configure footprint library table" ),
-                KiBitmap( library_table_xpm ) );
-
-    // Path configuration edit dialog.
     AddMenuItem( aParentMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure Pa&ths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
+    AddMenuItem( aParentMenu, ID_PCB_LIB_WIZARD,
+                _( "&Add Footprint Libraries Wizard..." ),
+                _( "Add footprint libraries using wizard" ),
+                KiBitmap( wizard_add_fplib_small_xpm ) );
+
+    AddMenuItem( aParentMenu, ID_PCB_LIB_TABLE_EDIT,
+                _( "Manage Footprint Li&braries..." ),
+                _( "Edit the global and project footprint library lists" ),
+                KiBitmap( library_table_xpm ) );
+
 #ifdef BUILD_GITHUB_PLUGIN
     AddMenuItem( aParentMenu, ID_PCB_3DSHAPELIB_WIZARD,
-                 _( "&3D Shape Downloader..." ),
-                 _( "Download from Github 3D shape libraries using wizard" ),
+                 _( "Add &3D Shapes Wizard..." ),
+                 _( "Download 3D shape libraries from GitHub" ),
                  KiBitmap( import3d_xpm ) );
 #endif
 }

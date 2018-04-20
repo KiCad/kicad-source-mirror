@@ -47,7 +47,7 @@
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Edit Symbol Library Associations</property>
+            <property name="title">Symbol Library References</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -204,7 +204,7 @@
                                     <property name="close_button">1</property>
                                     <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
                                     <property name="col_label_size">30</property>
-                                    <property name="col_label_values">&quot;Symbols&quot; &quot;Current Symbol&quot; &quot;New Symbol&quot;</property>
+                                    <property name="col_label_values">&quot;Symbols&quot; &quot;Current Library Reference&quot; &quot;New Library Reference&quot;</property>
                                     <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                     <property name="cols">3</property>
                                     <property name="column_sizes">300,200,200</property>

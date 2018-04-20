@@ -47,7 +47,7 @@
             <property name="size">717,600</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">PCB Library Tables</property>
+            <property name="title">Footprint Libraries</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -95,14 +95,15 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Library Tables by Scope</property>
+                        <property name="label">Libraries by Scope</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_top_sizer</property>
                         <property name="orient">wxVERTICAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">none</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
@@ -154,7 +155,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="style">wxAUI_NB_BOTTOM</property>
+                                <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="tab_ctrl_height">-1</property>
                                 <property name="toolbar_pane">0</property>
@@ -171,6 +172,7 @@
                                 <event name="OnAuiNotebookPageChanged">pageChangedHandler</event>
                                 <event name="OnAuiNotebookPageChanging"></event>
                                 <event name="OnAuiNotebookPageClose"></event>
+                                <event name="OnAuiNotebookPageClosed"></event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -294,8 +296,8 @@
                                                     <property name="rows">1</property>
                                                     <property name="vgap">0</property>
                                                     <object class="sizeritem" expanded="1">
-                                                        <property name="border">5</property>
-                                                        <property name="flag">wxRIGHT|wxLEFT</property>
+                                                        <property name="border">4</property>
+                                                        <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -325,7 +327,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Table:</property>
+                                                            <property name="label">File:</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -377,8 +379,8 @@
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
-                                                        <property name="border">5</property>
-                                                        <property name="flag">wxRIGHT|wxLEFT</property>
+                                                        <property name="border">4</property>
+                                                        <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -1573,6 +1575,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">sbSizer1</property>
                         <property name="orient">wxVERTICAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">none</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="0">
