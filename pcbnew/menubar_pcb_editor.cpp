@@ -338,7 +338,7 @@ void prepareLibraryMenu( wxMenu* aParentMenu )
 
 #ifdef BUILD_GITHUB_PLUGIN
     AddMenuItem( aParentMenu, ID_PCB_3DSHAPELIB_WIZARD,
-                 _( "Add &3D Shapes Wizard..." ),
+                 _( "Add &3D Shapes Libraries Wizard..." ),
                  _( "Download 3D shape libraries from GitHub" ),
                  KiBitmap( import3d_xpm ) );
 #endif
