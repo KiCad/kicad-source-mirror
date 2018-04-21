@@ -174,8 +174,8 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
     int minwidth = 30   // a margin
                    + m_grid->GetRowLabelSize() + m_grid->GetColSize( COL_REFS )
                    + m_grid->GetColSize( COL_CURR_LIBID ) + m_grid->GetColSize( COL_NEW_LIBID );
-    m_panelGrid->SetMinSize( wxSize( minwidth, -1) );
-    Layout();
+
+    SetMinClientSize( wxSize( minwidth, VertPixelsFromDU( 250 ) ) );
 
     SetSizeInDU( 500, 400 );
     Center();
