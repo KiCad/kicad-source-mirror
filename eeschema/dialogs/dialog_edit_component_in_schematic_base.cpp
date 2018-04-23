@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -118,7 +118,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	upperSizer->Add( optionsSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* fieldsSizer;
-	fieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("  Fields") ), wxHORIZONTAL );
+	fieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields:") ), wxHORIZONTAL );
 	
 	wxStaticBoxSizer* gridStaticBoxSizer;
 	gridStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( fieldsSizer->GetStaticBox(), wxID_ANY, wxEmptyString ), wxVERTICAL );
