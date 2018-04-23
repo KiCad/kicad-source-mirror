@@ -14,6 +14,7 @@
         <property name="file">dialog_edit_footprint_for_fp_editor_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_edit_footprint_for_fp_editor_base</property>
         <property name="namespace"></property>
@@ -264,7 +265,7 @@
                                         <property name="proportion">1</property>
                                         <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Fields</property>
+                                            <property name="label">Fields:</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">PropLeftSizer</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -303,7 +304,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Document link</property>
+                                                    <property name="label">Document link:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -477,7 +478,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Keywords</property>
+                                                    <property name="label">Keywords:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -651,7 +652,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Reference</property>
+                                                    <property name="label">Reference:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -924,7 +925,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Value</property>
+                                                    <property name="label">Value:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -1207,7 +1208,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Footprint name in library</property>
+                                                    <property name="label">Footprint name in library:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -1381,7 +1382,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Library nickname</property>
+                                                    <property name="label">Library nickname:</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -1535,20 +1536,20 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag"></property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">m_PropRightSizer</property>
                                             <property name="orient">wxVERTICAL</property>
                                             <property name="permission">private</property>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizerAttrib</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -1586,7 +1587,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Placement Type</property>
+                                                            <property name="label">Placement Type:</property>
                                                             <property name="majorDimension">1</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
@@ -1676,7 +1677,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Move and Place</property>
+                                                            <property name="label">Move and Place:</property>
                                                             <property name="majorDimension">1</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
@@ -1735,13 +1736,13 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxALL</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxStaticBoxSizer" expanded="0">
+                                                <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Auto Place</property>
+                                                    <property name="label">Auto Place:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizerAutoplace</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -2160,7 +2161,7 @@
                                                 <property name="proportion">0</property>
                                                 <object class="wxStaticBoxSizer" expanded="0">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Local Clearance Values</property>
+                                                    <property name="label">Local Clearance Values:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizer8</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -3716,7 +3717,7 @@
                             <property name="bitmap"></property>
                             <property name="label">3D Settings</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="0">
+                            <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -3790,7 +3791,7 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxBoxSizer" expanded="0">
+                                <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">bSizerMain3D</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -3801,7 +3802,7 @@
                                         <property name="proportion">0</property>
                                         <object class="wxStaticBoxSizer" expanded="0">
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">3D Shape Names</property>
+                                            <property name="label">3D Shape Names:</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer4</property>
                                             <property name="orient">wxVERTICAL</property>
