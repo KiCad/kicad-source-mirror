@@ -38,7 +38,7 @@
 
 #include <invoke_sch_dialog.h>
 #include <dialog_print_using_printer_base.h>
-
+#include <enabler.h>
 
 
 /**
@@ -299,6 +299,10 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
     wxPrinter printer( &printDialogData );
     SCH_PRINTOUT printout( parent, _( "Print Schematic" ) );
+
+    // Disable 'Print' button to prevent issuing another print
+    // command before the previous one is finished (causes problems on Windows)
+    ENABLER printBtnDisable( *m_buttonPrint, false );
 
     if( !printer.Print( this, &printout, true ) )
     {

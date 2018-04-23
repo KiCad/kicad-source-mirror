@@ -35,6 +35,7 @@
 
 #include <dialog_print_for_modedit_base.h>
 #include <printout_controler.h>
+#include <enabler.h>
 
 static double s_scaleList[] =
 { 0, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0, 4.0, 8.0, 16.0 };
@@ -233,6 +234,10 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     wxPrinter         printer( &printDialogData );
 
     BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_parent, _( "Print Footprint" ) );
+
+    // Disable 'Print' button to prevent issuing another print
+    // command before the previous one is finished (causes problems on Windows)
+    ENABLER printBtnDisable( *m_buttonPrint, false );
 
     if( !printer.Print( this, &printout, true ) )
     {

@@ -39,6 +39,7 @@
 #include <class_board.h>
 
 #include <dialog_print_using_printer_base.h>
+#include <enabler.h>
 
 
 #define PEN_WIDTH_MAX_VALUE ( KiROUND( 5 * IU_PER_MM ) )
@@ -494,6 +495,9 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxString  title = _( "Print" );
     BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_parent, title );
 
+    // Disable 'Print' button to prevent issuing another print
+    // command before the previous one is finished (causes problems on Windows)
+    ENABLER printBtnDisable( *m_buttonPrint, false );
 
     if( !printer.Print( this, &printout, true ) )
     {
