@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bpanelNetClassesSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerUpper;
-	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Classes") ), wxVERTICAL );
+	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Classes:") ), wxVERTICAL );
 	
 	m_grid = new wxGrid( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	
@@ -94,7 +94,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bpanelNetClassesSizer->Add( sbSizerUpper, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxStaticBoxSizer* sbSizerNetSelectMain;
-	sbSizerNetSelectMain = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Class Membership") ), wxHORIZONTAL );
+	sbSizerNetSelectMain = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Class Membership:") ), wxHORIZONTAL );
 	
 	wxBoxSizer* leftNetSelectBoxSizer;
 	leftNetSelectBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -180,7 +180,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bDesignRulesUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbViasOptionSizer;
-	sbViasOptionSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Routing Options") ), wxVERTICAL );
+	sbViasOptionSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Routing Options:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgViaOptionsSize;
 	fgViaOptionsSize = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -188,7 +188,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	fgViaOptionsSize->SetFlexibleDirection( wxBOTH );
 	fgViaOptionsSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_TrackMinWidthTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum track width"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_TrackMinWidthTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum track width:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_TrackMinWidthTitle->Wrap( -1 );
 	fgViaOptionsSize->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
@@ -199,7 +199,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_TrackMinWidthUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_TrackMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
-	m_ViaMinTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via diameter"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ViaMinTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via diameter:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_ViaMinTitle->Wrap( -1 );
 	fgViaOptionsSize->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
@@ -210,7 +210,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_ViaMinUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_ViaMinUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
-	m_ViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via drill"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum via drill:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_ViaMinDrillTitle->Wrap( -1 );
 	fgViaOptionsSize->Add( m_ViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
@@ -239,7 +239,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	fgViaOptionsSize->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_MicroViaMinSizeTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia diameter"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinSizeTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinSizeTitle->Wrap( -1 );
 	fgViaOptionsSize->Add( m_MicroViaMinSizeTitle, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 	
@@ -252,7 +252,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_MicroViaMinSizeUnits->Wrap( -1 );
 	fgViaOptionsSize->Add( m_MicroViaMinSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
-	m_MicroViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia drill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Minimum uVia drill:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinDrillTitle->Wrap( -1 );
 	fgViaOptionsSize->Add( m_MicroViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
@@ -282,7 +282,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bDesignRulesLowerSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sViaSizeBox;
-	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Via Sizes") ), wxVERTICAL );
+	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Via Sizes:") ), wxVERTICAL );
 	
 	m_staticText7 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Drill value: a blank or 0 => default Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
@@ -332,7 +332,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bDesignRulesLowerSizer->Add( sViaSizeBox, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbTracksListSizer;
-	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Track Widths") ), wxVERTICAL );
+	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Track Widths:") ), wxVERTICAL );
 	
 	m_staticText8 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
