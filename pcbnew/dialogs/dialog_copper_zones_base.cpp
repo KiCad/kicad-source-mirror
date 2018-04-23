@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,7 +61,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OptionsBoxSizer->Add( bSizerNets, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* m_NetSortOptSizer;
-	m_NetSortOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Filtering") ), wxVERTICAL );
+	m_NetSortOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Filtering:") ), wxVERTICAL );
 	
 	m_staticTextDisplay = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Display:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDisplay->Wrap( -1 );
@@ -101,19 +101,19 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_MainBoxSizer->Add( m_OptionsBoxSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* m_ExportableSetupSizer;
-	m_ExportableSetupSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Settings") ), wxHORIZONTAL );
+	m_ExportableSetupSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Settings:") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerSettings;
 	bSizerSettings = new wxBoxSizer( wxVERTICAL );
 	
-	m_ClearanceValueTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ClearanceValueTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ClearanceValueTitle->Wrap( -1 );
 	bSizerSettings->Add( m_ClearanceValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ZoneClearanceCtrl = new TEXT_CTRL_EVAL( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSettings->Add( m_ZoneClearanceCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_MinThicknessValueTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Minimum width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MinThicknessValueTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MinThicknessValueTitle->Wrap( -1 );
 	m_MinThicknessValueTitle->SetToolTip( _("Minimum thickness of filled areas.") );
 	
@@ -158,9 +158,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	bSizerPadsConnection->Add( m_PadInZoneOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxStaticBoxSizer* m_ThermalShapesParamsSizer;
-	m_ThermalShapesParamsSizer = new wxStaticBoxSizer( new wxStaticBox( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Thermal Reliefs") ), wxVERTICAL );
+	m_ThermalShapesParamsSizer = new wxStaticBoxSizer( new wxStaticBox( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Thermal Reliefs:") ), wxVERTICAL );
 	
-	m_AntipadSizeText = new wxStaticText( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_ANY, _("Antipad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AntipadSizeText = new wxStaticText( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_ANY, _("Antipad clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AntipadSizeText->Wrap( -1 );
 	m_ThermalShapesParamsSizer->Add( m_AntipadSizeText, 0, wxTOP|wxRIGHT, 5 );
 	
@@ -169,7 +169,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_ThermalShapesParamsSizer->Add( m_AntipadSizeValue, 0, wxEXPAND|wxBOTTOM, 5 );
 	
-	m_CopperBridgeWidthText = new wxStaticText( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_ANY, _("Spoke width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CopperBridgeWidthText = new wxStaticText( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_ANY, _("Spoke width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperBridgeWidthText->Wrap( -1 );
 	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxTOP|wxRIGHT, 5 );
 	
@@ -189,7 +189,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticTextPriorityLevel = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPriorityLevel->Wrap( -1 );
-	m_staticTextPriorityLevel->SetToolTip( _("Zones are filled by priority level, level 3 has higher priority than level 2.\nWhen a zone is inside an other zone:\n* If its priority is higher, its outlines are removed from the other zone.\n* If its priority is equal, a DRC error is set.") );
+	m_staticTextPriorityLevel->SetToolTip( _("Zones are filled by priority level, level 3 has higher priority than level 2.\nWhen a zone is inside another zone:\n* If its priority is higher, its outlines are removed from the other zone.\n* If its priority is equal, a DRC error is set.") );
 	
 	m_MiddleBox->Add( m_staticTextPriorityLevel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
