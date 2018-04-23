@@ -103,9 +103,9 @@ private:
         FinishDialogSettings();
     }
 
-    void SetPrintParameters( );
+    void SetPrintParameters();
     void SetPenWidth();
-    void initValues( );
+    void initValues();
 };
 
 
@@ -477,7 +477,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 {
-    SetPrintParameters( );
+    SetPrintParameters();
 
     // If no layer selected, we have no plot. prompt user if it happens
     // because he could think there is a bug in Pcbnew:
@@ -490,17 +490,15 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxPrintDialogData printDialogData( *s_PrintData );
     printDialogData.SetMaxPage( s_Parameters.m_PageCount );
 
-    wxPrinter         printer( &printDialogData );
+    wxPrinter printer( &printDialogData );
+    wxString  title = _( "Print" );
+    BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_parent, title );
 
-    wxString          title = _( "Print" );
-    BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_parent, title );
 
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing." ) );
-
-        return;
     }
     else
     {

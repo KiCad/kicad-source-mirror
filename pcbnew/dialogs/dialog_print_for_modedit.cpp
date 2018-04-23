@@ -232,14 +232,12 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     wxPrintDialogData printDialogData( *s_PrintData );
     wxPrinter         printer( &printDialogData );
 
-    BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_parent, _( "Print Footprint" ) );
+    BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_parent, _( "Print Footprint" ) );
 
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing." ) );
-
-        return;
     }
     else
     {
