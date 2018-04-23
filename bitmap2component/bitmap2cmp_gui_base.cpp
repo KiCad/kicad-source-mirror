@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -128,12 +128,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	
 	wxString m_radioBoxFormatChoices[] = { _("Eeschema (.lib file)"), _("Pcbnew (.kicad_mod file)"), _("Postscript (.ps file)"), _("Logo for title block (.kicad_wks file)") };
 	int m_radioBoxFormatNChoices = sizeof( m_radioBoxFormatChoices ) / sizeof( wxString );
-	m_radioBoxFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_radioBoxFormatNChoices, m_radioBoxFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_radioBoxFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, m_radioBoxFormatNChoices, m_radioBoxFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxFormat->SetSelection( 1 );
 	brightSizer->Add( m_radioBoxFormat, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options:") ), wxVERTICAL );
 	
 	m_ThresholdText = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Black / White Threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThresholdText->Wrap( -1 );
