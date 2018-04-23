@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -209,7 +209,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticTextSizeUnits->Wrap( -1 );
 	fgSizer3->Add( m_staticTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
-	m_staticTextTimeInterval = new wxStaticText( m_panel3, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTimeInterval = new wxStaticText( m_panel3, wxID_ANY, _("&Auto-save time interval:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTimeInterval->Wrap( -1 );
 	fgSizer3->Add( m_staticTextTimeInterval, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
