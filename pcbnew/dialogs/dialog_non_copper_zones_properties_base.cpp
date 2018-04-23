@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,17 +41,17 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* m_OutilinesBoxOpt;
-	m_OutilinesBoxOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outlines Options") ), wxVERTICAL );
+	m_OutilinesBoxOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outlines Options:") ), wxVERTICAL );
 	
 	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("H, V and 45 deg") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
-	m_OrientEdgesOpt = new wxRadioBox( m_OutilinesBoxOpt->GetStaticBox(), wxID_ANY, _("Zone Edge Orientation"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_OrientEdgesOpt = new wxRadioBox( m_OutilinesBoxOpt->GetStaticBox(), wxID_ANY, _("Zone Edge Orientation:"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientEdgesOpt->SetSelection( 0 );
 	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched outline"), _("Full hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
-	m_OutlineAppearanceCtrl = new wxRadioBox( m_OutilinesBoxOpt->GetStaticBox(), wxID_ANY, _("Outline Appearance"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_OutlineAppearanceCtrl = new wxRadioBox( m_OutilinesBoxOpt->GetStaticBox(), wxID_ANY, _("Outline Appearance:"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_OutlineAppearanceCtrl->SetSelection( 1 );
 	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
 	
