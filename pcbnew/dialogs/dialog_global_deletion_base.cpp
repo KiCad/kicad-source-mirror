@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbSizerLeft;
-	sbSizerLeft = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Items to Delete") ), wxVERTICAL );
+	sbSizerLeft = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Items to Delete:") ), wxVERTICAL );
 	
 	m_DelZones = new wxCheckBox( sbSizerLeft->GetStaticBox(), wxID_ANY, _("Zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerLeft->Add( m_DelZones, 0, wxALL, 5 );
@@ -52,7 +52,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	sbFilter = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Settings") ), wxVERTICAL );
+	sbFilter = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Settings:") ), wxVERTICAL );
 	
 	m_TrackFilterAR = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Automatically routed tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackFilterAR->SetValue(true); 
@@ -81,7 +81,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	
 	wxString m_rbLayersOptionChoices[] = { _("All layers"), _("Current layer only") };
 	int m_rbLayersOptionNChoices = sizeof( m_rbLayersOptionChoices ) / sizeof( wxString );
-	m_rbLayersOption = new wxRadioBox( this, wxID_ANY, _("Layer Filter"), wxDefaultPosition, wxDefaultSize, m_rbLayersOptionNChoices, m_rbLayersOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbLayersOption = new wxRadioBox( this, wxID_ANY, _("Layer Filter:"), wxDefaultPosition, wxDefaultSize, m_rbLayersOptionNChoices, m_rbLayersOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbLayersOption->SetSelection( 0 );
 	bSizerRight->Add( m_rbLayersOption, 0, wxALL|wxEXPAND, 5 );
 	
