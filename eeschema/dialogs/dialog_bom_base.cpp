@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextPluginTitle = new wxStaticText( this, wxID_ANY, _("Plugins"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPluginTitle = new wxStaticText( this, wxID_ANY, _("Plugins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPluginTitle->Wrap( -1 );
 	bLeftSizer->Add( m_staticTextPluginTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
