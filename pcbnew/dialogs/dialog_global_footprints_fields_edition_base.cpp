@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_global_footprints_fields_edition_base.h"
@@ -23,7 +23,7 @@ DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE::DIALOG_GLOBAL_FOOTPRINTS_FIELDS_ED
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint Fields") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint Fields:") ), wxVERTICAL );
 	
 	m_ReferenceOpt = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Reference designator"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_ReferenceOpt, 0, wxALL|wxEXPAND, 5 );
@@ -53,7 +53,7 @@ DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE::DIALOG_GLOBAL_FOOTPRINTS_FIELDS_ED
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerSettings;
-	sbSizerSettings = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current Text Dimensions") ), wxVERTICAL );
+	sbSizerSettings = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current Text Dimensions:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerCurrSettings;
 	fgSizerCurrSettings = new wxFlexGridSizer( 3, 3, 0, 0 );
