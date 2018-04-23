@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,12 +18,12 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	wxString m_modeChoices[] = { _("Highlight collisions"), _("Shove"), _("Walk around"), _("Figure out what's best") };
 	int m_modeNChoices = sizeof( m_modeChoices ) / sizeof( wxString );
-	m_mode = new wxRadioBox( this, wxID_ANY, _("Mode"), wxDefaultPosition, wxDefaultSize, m_modeNChoices, m_modeChoices, 1, wxRA_SPECIFY_COLS );
+	m_mode = new wxRadioBox( this, wxID_ANY, _("Mode:"), wxDefaultPosition, wxDefaultSize, m_modeNChoices, m_modeChoices, 1, wxRA_SPECIFY_COLS );
 	m_mode->SetSelection( 0 );
 	bMainSizer->Add( m_mode, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bOptions;
-	bOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	bOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -89,7 +89,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bEffort;
 	bEffort = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_effortLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("Optimizer effort"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_effortLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("Optimizer effort:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_effortLabel->Wrap( -1 );
 	m_effortLabel->SetToolTip( _("Defines how much time the router shall spend optimizing the routed/shoved traces.\nMore effort means cleaner routing (but slower), less effort means faster routing but somewhat jagged traces.") );
 	
