@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,7 +31,7 @@ DIALOG_SELECT_PRETTY_LIB_BASE::DIALOG_SELECT_PRETTY_LIB_BASE( wxWindow* parent, 
 	
 	m_SizerNewLibName = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextDirname = new wxStaticText( this, wxID_ANY, _("Library folder (.pretty will be added to name, if missing)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDirname = new wxStaticText( this, wxID_ANY, _("Library folder (.pretty will be added to name, if missing):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDirname->Wrap( -1 );
 	m_SizerNewLibName->Add( m_staticTextDirname, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
