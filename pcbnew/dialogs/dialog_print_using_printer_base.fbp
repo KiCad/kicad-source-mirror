@@ -14,6 +14,7 @@
         <property name="file">dialog_print_using_printer_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DialogPrint_base</property>
         <property name="namespace"></property>
@@ -99,7 +100,7 @@
                     <property name="proportion">1</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Included Layers</property>
+                        <property name="label">Included Layers:</property>
                         <property name="minimum_size"></property>
                         <property name="name">sbLayersSizer</property>
                         <property name="orient">wxVERTICAL</property>
@@ -615,7 +616,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Approximate Scale</property>
+                                <property name="label">Approximate Scale:</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -1037,7 +1038,7 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Generic Options</property>
+                                <property name="label">Generic Options:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">sbOptionsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -1076,7 +1077,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Default pen size</property>
+                                        <property name="label">Default pen size:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1429,7 +1430,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Pads Drill Options</property>
+                                <property name="label">Pads Drill Options:</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -1519,7 +1520,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_PRINT_MODE</property>
-                                <property name="label">Print Mode</property>
+                                <property name="label">Print Mode:</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -1620,7 +1621,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_PAGE_MODE</property>
-                                <property name="label">Page Print</property>
+                                <property name="label">Page Print:</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
