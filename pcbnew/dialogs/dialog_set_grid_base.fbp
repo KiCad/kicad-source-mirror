@@ -14,6 +14,7 @@
         <property name="file">dialog_set_grid_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_set_grid</property>
         <property name="namespace"></property>
@@ -108,7 +109,7 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Grid Origin</property>
+                                <property name="label">Grid Origin:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">sbLeftSizer</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -752,7 +753,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">User Defined Grid</property>
+                                        <property name="label">User Defined Grid:</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbUserGridSizer</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -1299,7 +1300,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Fast Switching</property>
+                                        <property name="label">Fast Switching:</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbFastSwitchSizer</property>
                                         <property name="orient">wxVERTICAL</property>

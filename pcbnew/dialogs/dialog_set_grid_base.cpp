@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbLeftSizer;
-	sbLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Origin") ), wxVERTICAL );
+	sbLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Origin:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerGridOrigin;
 	fgSizerGridOrigin = new wxFlexGridSizer( 2, 3, 0, 0 );
@@ -63,7 +63,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbUserGridSizer;
-	sbUserGridSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Defined Grid") ), wxVERTICAL );
+	sbUserGridSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Defined Grid:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer31;
 	fgSizer31 = new wxFlexGridSizer( 2, 3, 0, 0 );
@@ -100,7 +100,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	bRightSizer->Add( sbUserGridSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbFastSwitchSizer;
-	sbFastSwitchSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fast Switching") ), wxVERTICAL );
+	sbFastSwitchSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fast Switching:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 2, 2, 0, 0 );
