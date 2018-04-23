@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,19 +40,19 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
-	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format:"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 2 );
 	m_optionsSizer->Add( m_plotFormatOpt, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_paperOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Paper Options") ), wxVERTICAL );
+	m_paperOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Paper Options:") ), wxVERTICAL );
 	
 	wxString m_PaperSizeOptionChoices[] = { _("Schematic size"), _("A4"), _("A") };
 	int m_PaperSizeOptionNChoices = sizeof( m_PaperSizeOptionChoices ) / sizeof( wxString );
-	m_PaperSizeOption = new wxRadioBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("Page Size"), wxDefaultPosition, wxDefaultSize, m_PaperSizeOptionNChoices, m_PaperSizeOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_PaperSizeOption = new wxRadioBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PaperSizeOptionNChoices, m_PaperSizeOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_PaperSizeOption->SetSelection( 1 );
 	m_paperOptionsSizer->Add( m_PaperSizeOption, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 	
-	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("HPGL Options") ), wxVERTICAL );
+	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("HPGL Options:") ), wxVERTICAL );
 	
 	m_staticText4 = new wxStaticText( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Page size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
@@ -66,7 +66,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	wxString m_plotOriginOptChoices[] = { _("Bottom left"), _("Center on page") };
 	int m_plotOriginOptNChoices = sizeof( m_plotOriginOptChoices ) / sizeof( wxString );
-	m_plotOriginOpt = new wxRadioBox( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Align"), wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_plotOriginOpt = new wxRadioBox( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Align:"), wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotOriginOpt->SetSelection( 0 );
 	m_paperHPGLSizer->Add( m_plotOriginOpt, 0, wxBOTTOM|wxTOP, 5 );
 	
@@ -84,7 +84,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_optionsSizer->Add( m_paperOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerPlotFormat;
-	sbSizerPlotFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
+	sbSizerPlotFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options:") ), wxVERTICAL );
 	
 	m_defaultLineWidthTitle = new wxStaticText( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Default line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_defaultLineWidthTitle->Wrap( -1 );
@@ -97,7 +97,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
-	m_ModeColorOption = new wxRadioBox( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Output Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ModeColorOption = new wxRadioBox( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Output Mode:"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
 	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	

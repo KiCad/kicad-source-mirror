@@ -14,6 +14,7 @@
         <property name="file">dialog_plot_schematic_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">Dialog_plot_schematic_base</property>
         <property name="namespace"></property>
@@ -413,7 +414,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Output Format</property>
+                                <property name="label">Output Format:</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -476,7 +477,7 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Paper Options</property>
+                                <property name="label">Paper Options:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_paperOptionsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -516,7 +517,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Page Size</property>
+                                        <property name="label">Page Size:</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -579,7 +580,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">HPGL Options</property>
+                                        <property name="label">HPGL Options:</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_paperHPGLSizer</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -790,7 +791,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Align</property>
+                                                <property name="label">Align:</property>
                                                 <property name="majorDimension">1</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -1031,7 +1032,7 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">General Options</property>
+                                <property name="label">General Options:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">sbSizerPlotFormat</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -1245,7 +1246,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Output Mode</property>
+                                        <property name="label">Output Mode:</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
