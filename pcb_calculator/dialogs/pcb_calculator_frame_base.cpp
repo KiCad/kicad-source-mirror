@@ -1040,29 +1040,29 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeTransline->Fit( m_panelTransline );
 	m_Notebook->AddPage( m_panelTransline, _("TransLine"), false );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxStaticBoxSizer* sbSizerAtt;
-	sbSizerAtt = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("label") ), wxHORIZONTAL );
+	wxBoxSizer* bSizerAtt;
+	bSizerAtt = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* bLeftSizerAtt;
 	bLeftSizerAtt = new wxBoxSizer( wxVERTICAL );
 	
 	wxString m_AttenuatorsSelectionChoices[] = { _("PI"), _("Tee"), _("Bridged Tee"), _("Resistive Splitter") };
 	int m_AttenuatorsSelectionNChoices = sizeof( m_AttenuatorsSelectionChoices ) / sizeof( wxString );
-	m_AttenuatorsSelection = new wxRadioBox( sbSizerAtt->GetStaticBox(), wxID_ANY, _("Attenuators:"), wxDefaultPosition, wxDefaultSize, m_AttenuatorsSelectionNChoices, m_AttenuatorsSelectionChoices, 1, wxRA_SPECIFY_COLS );
+	m_AttenuatorsSelection = new wxRadioBox( m_panelAttenuators, wxID_ANY, _("Attenuators:"), wxDefaultPosition, wxDefaultSize, m_AttenuatorsSelectionNChoices, m_AttenuatorsSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_AttenuatorsSelection->SetSelection( 0 );
 	bLeftSizerAtt->Add( m_AttenuatorsSelection, 0, wxEXPAND|wxALL, 5 );
 	
-	m_panelDisplayAttenuator = new wxPanel( sbSizerAtt->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( 256,256 ), wxSIMPLE_BORDER|wxTAB_TRAVERSAL );
+	m_panelDisplayAttenuator = new wxPanel( m_panelAttenuators, wxID_ANY, wxDefaultPosition, wxSize( 256,256 ), wxSIMPLE_BORDER|wxTAB_TRAVERSAL );
 	bLeftSizerAtt->Add( m_panelDisplayAttenuator, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	
-	sbSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND, 5 );
+	bSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleSizerAtt;
 	bMiddleSizerAtt = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerAttPrms;
-	sbSizerAttPrms = new wxStaticBoxSizer( new wxStaticBox( sbSizerAtt->GetStaticBox(), wxID_ANY, _("Parameters:") ), wxVERTICAL );
+	sbSizerAttPrms = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("Parameters:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerAttPrms;
 	fgSizerAttPrms = new wxFlexGridSizer( 3, 3, 0, 0 );
@@ -1112,17 +1112,17 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizerAttButt;
 	bSizerAttButt = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonAlcAtt = new wxButton( sbSizerAtt->GetStaticBox(), wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonAlcAtt = new wxButton( m_panelAttenuators, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_bpButtonCalcAtt = new wxBitmapButton( sbSizerAtt->GetStaticBox(), wxID_ANY, wxBitmap( arrow_bottom_xpm ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButtonCalcAtt = new wxBitmapButton( m_panelAttenuators, wxID_ANY, wxBitmap( arrow_bottom_xpm ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizerAttButt->Add( m_bpButtonCalcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bMiddleSizerAtt->Add( bSizerAttButt, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxStaticBoxSizer* sbSizerAttValues;
-	sbSizerAttValues = new wxStaticBoxSizer( new wxStaticBox( sbSizerAtt->GetStaticBox(), wxID_ANY, _("Values") ), wxVERTICAL );
+	sbSizerAttValues = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("Values") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerAttResults;
 	fgSizerAttResults = new wxFlexGridSizer( 3, 3, 0, 0 );
@@ -1169,29 +1169,29 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	bMiddleSizerAtt->Add( sbSizerAttValues, 0, wxEXPAND|wxTOP, 5 );
 	
-	m_staticTextAttMsg = new wxStaticText( sbSizerAtt->GetStaticBox(), wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAttMsg = new wxStaticText( m_panelAttenuators, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAttMsg->Wrap( -1 );
 	bMiddleSizerAtt->Add( m_staticTextAttMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_Attenuator_Messages = new wxHtmlWindow( sbSizerAtt->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
+	m_Attenuator_Messages = new wxHtmlWindow( m_panelAttenuators, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
 	bMiddleSizerAtt->Add( m_Attenuator_Messages, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	sbSizerAtt->Add( bMiddleSizerAtt, 0, wxEXPAND, 5 );
+	bSizerAtt->Add( bMiddleSizerAtt, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbRightSizerFormula;
-	sbRightSizerFormula = new wxStaticBoxSizer( new wxStaticBox( sbSizerAtt->GetStaticBox(), wxID_ANY, _("Formula") ), wxVERTICAL );
+	sbRightSizerFormula = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("Formula") ), wxVERTICAL );
 	
 	m_panelAttFormula = new wxHtmlWindow( sbRightSizerFormula->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	sbRightSizerFormula->Add( m_panelAttFormula, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	sbSizerAtt->Add( sbRightSizerFormula, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerAtt->Add( sbRightSizerFormula, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
-	m_panelAttenuators->SetSizer( sbSizerAtt );
+	m_panelAttenuators->SetSizer( bSizerAtt );
 	m_panelAttenuators->Layout();
-	sbSizerAtt->Fit( m_panelAttenuators );
+	bSizerAtt->Fit( m_panelAttenuators );
 	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), true );
 	m_panelColorCode = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelColorCode;
