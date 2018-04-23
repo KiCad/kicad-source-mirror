@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,7 +78,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	boarderSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerPinSharing;
-	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing") ), wxVERTICAL );
+	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing:") ), wxVERTICAL );
 	
 	m_checkApplyToAllParts = new wxCheckBox( sbSizerPinSharing->GetStaticBox(), wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
@@ -90,7 +90,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	boarderSizer->Add( sbSizerPinSharing, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerSchematicProperties;
-	sbSizerSchematicProperties = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Schematic Properties") ), wxVERTICAL );
+	sbSizerSchematicProperties = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Schematic Properties:") ), wxVERTICAL );
 	
 	m_checkShow = new wxCheckBox( sbSizerSchematicProperties->GetStaticBox(), wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkShow->SetValue(true); 
