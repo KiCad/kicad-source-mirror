@@ -14,6 +14,7 @@
         <property name="file">dialog_display_options_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_display_options_base</property>
         <property name="namespace"></property>
@@ -108,7 +109,7 @@
                             <property name="proportion">1</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Draw Options</property>
+                                <property name="label">Draw Options:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">sbSizerDrawMode</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -475,7 +476,7 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Pan and Zoom</property>
+                                <property name="label">Pan and Zoom:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">sbSizerViewOpt</property>
                                 <property name="orient">wxVERTICAL</property>

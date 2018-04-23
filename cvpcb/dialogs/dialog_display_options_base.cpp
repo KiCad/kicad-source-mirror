@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbSizerDrawMode;
-	sbSizerDrawMode = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Draw Options") ), wxVERTICAL );
+	sbSizerDrawMode = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Draw Options:") ), wxVERTICAL );
 	
 	m_EdgesDisplayOption = new wxCheckBox( sbSizerDrawMode->GetStaticBox(), wxID_ANY, _("Graphic items sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerDrawMode->Add( m_EdgesDisplayOption, 0, wxALL, 5 );
@@ -38,7 +38,7 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	bUpperSizer->Add( sbSizerDrawMode, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerViewOpt;
-	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
+	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom:") ), wxVERTICAL );
 	
 	m_enableZoomNoCenter = new wxCheckBox( sbSizerViewOpt->GetStaticBox(), wxID_ANY, _("Center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_enableZoomNoCenter->SetToolTip( _("Center the cursor on screen when zooming.") );
