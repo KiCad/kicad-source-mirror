@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_layer_selection_base.h"
@@ -116,7 +116,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextTopLayer = new wxStaticText( this, wxID_ANY, _("Top/Front layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTopLayer = new wxStaticText( this, wxID_ANY, _("Top/Front layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTopLayer->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextTopLayer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -154,7 +154,7 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextBottomLayer = new wxStaticText( this, wxID_ANY, _("Bottom/Back layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBottomLayer = new wxStaticText( this, wxID_ANY, _("Bottom/Back layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBottomLayer->Wrap( -1 );
 	bSizerRight->Add( m_staticTextBottomLayer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
