@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bPresetsSizer;
 	bPresetsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextGrouping = new wxStaticText( this, wxID_ANY, _("Preset Layer Groupings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGrouping = new wxStaticText( this, wxID_ANY, _("Preset Layer Groupings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrouping->Wrap( -1 );
 	bPresetsSizer->Add( m_staticTextGrouping, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -38,7 +38,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bCopperLayersSizer;
 	bCopperLayersSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperLayers->Wrap( -1 );
 	bCopperLayersSizer->Add( m_staticTextCopperLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -54,7 +54,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bBrdThicknessSizer;
 	bBrdThicknessSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextBrdThickness = new wxStaticText( this, wxID_ANY, _("Board Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBrdThickness = new wxStaticText( this, wxID_ANY, _("Board Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdThickness->Wrap( -1 );
 	bBrdThicknessSizer->Add( m_staticTextBrdThickness, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -91,7 +91,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* b_layersListSizer;
 	b_layersListSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextLayers = new wxStaticText( this, wxID_ANY, _("Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayers = new wxStaticText( this, wxID_ANY, _("Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLayers->Wrap( -1 );
 	b_layersListSizer->Add( m_staticTextLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
