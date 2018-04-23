@@ -44,6 +44,8 @@ public:
 
 private:
     SCH_EDIT_FRAME* m_parent;
+    int             m_showColWidth;
+    int             m_groupByColWidth;
 
     SCH_REFERENCE_LIST             m_componentRefs;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;

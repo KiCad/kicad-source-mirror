@@ -368,10 +368,6 @@ public:
 };
 
 
-#define SHOW_COL_SIZE    50
-#define GROUPBY_COL_SIZE 70
-
-
 DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent ) :
         DIALOG_FIELDS_EDITOR_GLOBAL_BASE( parent ),
         m_parent( parent )
@@ -382,11 +378,14 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 
-    m_fieldsCtrl->AppendTextColumn(   _( "Field" ), wxDATAVIEW_CELL_INERT );
-    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE,
-                                      SHOW_COL_SIZE, wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE,
-                                      GROUPBY_COL_SIZE, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendTextColumn(   _( "Field" ),    wxDATAVIEW_CELL_INERT,       0, wxALIGN_LEFT,   0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Show" ),     wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+
+    m_fieldsCtrl->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    m_showColWidth = m_fieldsCtrl->GetColumn( 1 )->GetWidth();
+    m_fieldsCtrl->GetColumn( 2 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    m_groupByColWidth = m_fieldsCtrl->GetColumn( 2 )->GetWidth();
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
@@ -587,13 +586,13 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 {
-    int nameColSize = event.GetSize().GetX() - SHOW_COL_SIZE - GROUPBY_COL_SIZE - 8;
+    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
 
     // Linux loses its head and messes these up when resizing the splitter bar:
-    m_fieldsCtrl->GetColumn( 1 )->SetWidth( SHOW_COL_SIZE );
-    m_fieldsCtrl->GetColumn( 2 )->SetWidth( GROUPBY_COL_SIZE );
+    m_fieldsCtrl->GetColumn( 1 )->SetWidth( m_showColWidth );
+    m_fieldsCtrl->GetColumn( 2 )->SetWidth( m_groupByColWidth );
 
-    m_fieldsCtrl->GetColumn( 0 )->SetWidth( nameColSize );
+    m_fieldsCtrl->GetColumn( 0 )->SetWidth( nameColWidth );
 
     event.Skip();
 }
