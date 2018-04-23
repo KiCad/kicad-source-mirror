@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,30 +38,41 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( m_pgAC, wxID_ANY, _("Number of points"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( m_pgAC, wxID_ANY, _("Number of points:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_acPointsNumber = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_acPointsNumber, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText2 = new wxStaticText( m_pgAC, wxID_ANY, _("Start frequency [Hz]"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText2 = new wxStaticText( m_pgAC, wxID_ANY, _("Start frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_acFreqStart = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_acFreqStart, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText3 = new wxStaticText( m_pgAC, wxID_ANY, _("Stop frequency [Hz]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19 = new wxStaticText( m_pgAC, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	fgSizer1->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
+	m_staticText3 = new wxStaticText( m_pgAC, wxID_ANY, _("Stop frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_acFreqStop = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_acFreqStop, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText110 = new wxStaticText( m_pgAC, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText110->Wrap( -1 );
+	fgSizer1->Add( m_staticText110, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	
 	bSizer3->Add( fgSizer1, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -73,49 +84,65 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgAC->SetSizer( bSizer3 );
 	m_pgAC->Layout();
 	bSizer3->Fit( m_pgAC );
-	m_simPages->AddPage( m_pgAC, _("AC"), true );
+	m_simPages->AddPage( m_pgAC, _("AC"), false );
 	m_pgDC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer21;
-	sbSizer21 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 1") ), wxVERTICAL );
+	sbSizer21 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 1:") ), wxVERTICAL );
 	
 	m_dcEnable1 = new wxCheckBox( sbSizer21->GetStaticBox(), wxID_ANY, _("Enable"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dcEnable1->SetValue(true); 
 	sbSizer21->Add( m_dcEnable1, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	wxFlexGridSizer* fgSizer21;
-	fgSizer21 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer21 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer21->SetFlexibleDirection( wxBOTH );
 	fgSizer21->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText41 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("DC source"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText41 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("DC source:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText41->Wrap( -1 );
 	fgSizer21->Add( m_staticText41, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcSource1 = new wxComboBox( sbSizer21->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizer21->Add( m_dcSource1, 0, wxALL, 5 );
 	
-	m_staticText51 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Starting voltage [V]"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer21->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText51 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Starting voltage:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText51->Wrap( -1 );
 	fgSizer21->Add( m_staticText51, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcStart1 = new wxTextCtrl( sbSizer21->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer21->Add( m_dcStart1, 0, wxALL, 5 );
 	
-	m_staticText61 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Final voltage [V]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText511 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText511->Wrap( -1 );
+	fgSizer21->Add( m_staticText511, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
+	m_staticText61 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Final voltage:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText61->Wrap( -1 );
 	fgSizer21->Add( m_staticText61, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcStop1 = new wxTextCtrl( sbSizer21->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer21->Add( m_dcStop1, 0, wxALL, 5 );
 	
-	m_staticText71 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Increment step [V]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText512 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText512->Wrap( -1 );
+	fgSizer21->Add( m_staticText512, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
+	m_staticText71 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Increment step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText71->Wrap( -1 );
 	fgSizer21->Add( m_staticText71, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcIncr1 = new wxTextCtrl( sbSizer21->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer21->Add( m_dcIncr1, 0, wxALL, 5 );
+	
+	m_staticText513 = new wxStaticText( sbSizer21->GetStaticBox(), wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText513->Wrap( -1 );
+	fgSizer21->Add( m_staticText513, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	
 	sbSizer21->Add( fgSizer21, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -124,43 +151,58 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer4->Add( sbSizer21, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 2") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 2:") ), wxVERTICAL );
 	
 	m_dcEnable2 = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Enable"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer2->Add( m_dcEnable2, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText4 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("DC source"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("DC source:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	fgSizer2->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcSource2 = new wxComboBox( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizer2->Add( m_dcSource2, 0, wxALL, 5 );
 	
-	m_staticText5 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Starting voltage [V]"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticText5 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Starting voltage:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	fgSizer2->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcStart2 = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_dcStart2, 0, wxALL, 5 );
 	
-	m_staticText6 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Final voltage [V]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText52 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText52->Wrap( -1 );
+	fgSizer2->Add( m_staticText52, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
+	m_staticText6 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Final voltage:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
 	fgSizer2->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcStop2 = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_dcStop2, 0, wxALL, 5 );
 	
-	m_staticText7 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Increment step [V]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText53 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText53->Wrap( -1 );
+	fgSizer2->Add( m_staticText53, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
+	m_staticText7 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Increment step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
 	fgSizer2->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_dcIncr2 = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_dcIncr2, 0, wxALL, 5 );
+	
+	m_staticText54 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Volts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText54->Wrap( -1 );
+	fgSizer2->Add( m_staticText54, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	
 	sbSizer2->Add( fgSizer2, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -172,7 +214,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgDC->SetSizer( bSizer4 );
 	m_pgDC->Layout();
 	bSizer4->Fit( m_pgDC );
-	m_simPages->AddPage( m_pgDC, _("DC Transfer"), false );
+	m_simPages->AddPage( m_pgDC, _("DC Transfer"), true );
 	m_pgDistortion = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pgDistortion->Hide();
 	
@@ -315,36 +357,48 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer6;
-	fgSizer6 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer6 = new wxFlexGridSizer( 0, 4, 0, 0 );
 	fgSizer6->SetFlexibleDirection( wxBOTH );
 	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText151 = new wxStaticText( m_pgTransient, wxID_ANY, _("Time step [s]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151 = new wxStaticText( m_pgTransient, wxID_ANY, _("Time step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText151->Wrap( -1 );
 	fgSizer6->Add( m_staticText151, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_transStep = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer6->Add( m_transStep, 0, wxALL, 5 );
 	
+	m_staticText1511 = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1511->Wrap( -1 );
+	fgSizer6->Add( m_staticText1511, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
 	
 	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 	
-	m_staticText161 = new wxStaticText( m_pgTransient, wxID_ANY, _("Final time [s]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText161 = new wxStaticText( m_pgTransient, wxID_ANY, _("Final time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161->Wrap( -1 );
 	fgSizer6->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_transFinal = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer6->Add( m_transFinal, 0, wxALL, 5 );
 	
+	m_staticText1512 = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1512->Wrap( -1 );
+	fgSizer6->Add( m_staticText1512, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
 	
 	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 	
-	m_staticText17 = new wxStaticText( m_pgTransient, wxID_ANY, _("Initial time [s]"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17 = new wxStaticText( m_pgTransient, wxID_ANY, _("Initial time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
 	fgSizer6->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_transInitial = new wxTextCtrl( m_pgTransient, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer6->Add( m_transInitial, 0, wxALL, 5 );
+	
+	m_staticText1513 = new wxStaticText( m_pgTransient, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1513->Wrap( -1 );
+	fgSizer6->Add( m_staticText1513, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
 	
 	m_staticText24 = new wxStaticText( m_pgTransient, wxID_ANY, _("(optional; default 0)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );

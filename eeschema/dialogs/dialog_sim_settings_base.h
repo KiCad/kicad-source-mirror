@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,27 +51,35 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_acPointsNumber;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_acFreqStart;
+		wxStaticText* m_staticText19;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_acFreqStop;
+		wxStaticText* m_staticText110;
 		wxPanel* m_pgDC;
 		wxCheckBox* m_dcEnable1;
 		wxStaticText* m_staticText41;
 		wxComboBox* m_dcSource1;
 		wxStaticText* m_staticText51;
 		wxTextCtrl* m_dcStart1;
+		wxStaticText* m_staticText511;
 		wxStaticText* m_staticText61;
 		wxTextCtrl* m_dcStop1;
+		wxStaticText* m_staticText512;
 		wxStaticText* m_staticText71;
 		wxTextCtrl* m_dcIncr1;
+		wxStaticText* m_staticText513;
 		wxCheckBox* m_dcEnable2;
 		wxStaticText* m_staticText4;
 		wxComboBox* m_dcSource2;
 		wxStaticText* m_staticText5;
 		wxTextCtrl* m_dcStart2;
+		wxStaticText* m_staticText52;
 		wxStaticText* m_staticText6;
 		wxTextCtrl* m_dcStop2;
+		wxStaticText* m_staticText53;
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_dcIncr2;
+		wxStaticText* m_staticText54;
 		wxPanel* m_pgDistortion;
 		wxPanel* m_pgNoise;
 		wxStaticText* m_staticText14;
@@ -96,10 +104,13 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 		wxPanel* m_pgTransient;
 		wxStaticText* m_staticText151;
 		wxTextCtrl* m_transStep;
+		wxStaticText* m_staticText1511;
 		wxStaticText* m_staticText161;
 		wxTextCtrl* m_transFinal;
+		wxStaticText* m_staticText1512;
 		wxStaticText* m_staticText17;
 		wxTextCtrl* m_transInitial;
+		wxStaticText* m_staticText1513;
 		wxStaticText* m_staticText24;
 		wxPanel* m_pgCustom;
 		wxStaticText* m_staticText18;
