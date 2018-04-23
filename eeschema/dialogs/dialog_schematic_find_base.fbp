@@ -14,6 +14,7 @@
         <property name="file">dialog_schematic_find_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_sch_find</property>
         <property name="namespace"></property>
@@ -120,7 +121,7 @@
                                 <property name="vgap">3</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">6</property>
-                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
