@@ -182,8 +182,9 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     // and be sure widgets which are relevant are enabled
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
     {
-        m_SizerTextOptions->Show(true);
-        m_SizerTextIncrementLabel->Show( true );
+        m_SizerTextOptions->Show( true );
+        m_staticTextInclabel->Show( true );
+        m_textCtrlTextIncrement->Show( true );
 
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
         item->m_FullText = item->m_TextBase;
@@ -228,8 +229,9 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     }
     else
     {
-        m_SizerTextOptions->Show(false);
-        m_SizerTextIncrementLabel->Show(false);
+        m_SizerTextOptions->Show( false );
+        m_staticTextInclabel->Show( false );
+        m_textCtrlTextIncrement->Show( false );
     }
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON )

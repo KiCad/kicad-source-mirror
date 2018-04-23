@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,14 +58,18 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxChoice* m_choiceVjustify;
 		wxCheckBox* m_checkBoxItalic;
 		wxStaticText* m_staticTexTsizeX;
-		wxTextCtrl* m_textCtrlTextSizeX;
 		wxStaticText* m_staticTextTsizeY;
+		wxTextCtrl* m_textCtrlTextSizeX;
+		wxStaticText* m_units1;
 		wxTextCtrl* m_textCtrlTextSizeY;
+		wxStaticText* m_units11;
 		wxStaticText* m_staticTextConstraints;
 		wxStaticText* m_staticTextConstraintX;
-		wxTextCtrl* m_textCtrlConstraintX;
 		wxStaticText* m_staticTextConstraintY;
+		wxTextCtrl* m_textCtrlConstraintX;
+		wxStaticText* m_units111;
 		wxTextCtrl* m_textCtrlConstraintY;
+		wxStaticText* m_units1111;
 		wxStaticLine* m_staticline6;
 		wxButton* m_buttonOK;
 		wxStaticLine* m_staticline8;
@@ -74,15 +78,19 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticTextPosX;
 		wxTextCtrl* m_textCtrlPosX;
+		wxStaticText* m_units12;
 		wxStaticText* m_staticTextPosY;
 		wxTextCtrl* m_textCtrlPosY;
+		wxStaticText* m_units121;
 		wxStaticText* m_staticTextOrgPos;
 		wxComboBox* m_comboBoxCornerPos;
 		wxBoxSizer* m_SizerEndPosition;
 		wxStaticText* m_staticTextEndX;
 		wxTextCtrl* m_textCtrlEndX;
+		wxStaticText* m_units1211;
 		wxStaticText* m_staticTextEndY;
 		wxTextCtrl* m_textCtrlEndY;
+		wxStaticText* m_units12111;
 		wxStaticText* m_staticTextOrgEnd;
 		wxComboBox* m_comboBoxCornerEnd;
 		wxBoxSizer* m_SizerLineThickness;
@@ -93,41 +101,49 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextRot;
 		wxTextCtrl* m_textCtrlRotation;
-		wxBoxSizer* m_SizerBitmapPPI;
 		wxStaticText* m_staticTextBitmapPPI;
 		wxTextCtrl* m_textCtrlBitmapPPI;
+		wxBoxSizer* m_SizerBitmapPPI;
 		wxStaticLine* m_staticline4;
 		wxStaticText* m_staticTextRepeatPrms;
 		wxStaticText* m_staticTextRepeatCnt;
-		wxTextCtrl* m_textCtrlRepeatCount;
-		wxBoxSizer* m_SizerTextIncrementLabel;
 		wxStaticText* m_staticTextInclabel;
+		wxTextCtrl* m_textCtrlRepeatCount;
 		wxTextCtrl* m_textCtrlTextIncrement;
 		wxStaticText* m_staticTextStepX;
-		wxTextCtrl* m_textCtrlStepX;
 		wxStaticText* m_staticTextStepY;
+		wxTextCtrl* m_textCtrlStepX;
+		wxStaticText* m_units121111;
 		wxTextCtrl* m_textCtrlStepY;
+		wxStaticText* m_units1211111;
 		wxScrolledWindow* m_swGeneralOpts;
 		wxStaticText* m_staticTextDefVal;
 		wxStaticText* m_staticTextDefTsX;
-		wxTextCtrl* m_textCtrlDefaultTextSizeX;
 		wxStaticText* m_staticTextDefTsY;
+		wxTextCtrl* m_textCtrlDefaultTextSizeX;
+		wxStaticText* m_units14;
 		wxTextCtrl* m_textCtrlDefaultTextSizeY;
+		wxStaticText* m_units141;
 		wxStaticText* m_staticTextDefLineW;
-		wxTextCtrl* m_textCtrlDefaultLineWidth;
 		wxStaticText* m_staticText22;
+		wxTextCtrl* m_textCtrlDefaultLineWidth;
+		wxStaticText* m_staticText221;
 		wxTextCtrl* m_textCtrlDefaultTextThickness;
 		wxButton* m_buttonDefault;
 		wxStaticLine* m_staticline9;
 		wxStaticText* m_staticTextMargins;
 		wxStaticText* m_staticTextLeftMargin;
-		wxTextCtrl* m_textCtrlLeftMargin;
 		wxStaticText* m_staticTextDefRightMargin;
+		wxTextCtrl* m_textCtrlLeftMargin;
+		wxStaticText* m_units142;
 		wxTextCtrl* m_textCtrlRightMargin;
+		wxStaticText* m_units143;
 		wxStaticText* m_staticTextTopMargin;
-		wxTextCtrl* m_textCtrlTopMargin;
 		wxStaticText* m_staticTextBottomMargin;
+		wxTextCtrl* m_textCtrlTopMargin;
+		wxStaticText* m_units1431;
 		wxTextCtrl* m_textCtrlDefaultBottomMargin;
+		wxStaticText* m_units1432;
 		wxButton* m_buttonGeneralOptsOK;
 		
 		// Virtual event handlers, overide them in your derived class
