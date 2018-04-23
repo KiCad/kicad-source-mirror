@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,12 +37,12 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	wxString m_rbScopeChoices[] = { _("Use the entire schematic"), _("Use the current page only") };
 	int m_rbScopeNChoices = sizeof( m_rbScopeChoices ) / sizeof( wxString );
-	m_rbScope = new wxRadioBox( this, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, m_rbScopeNChoices, m_rbScopeChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbScope = new wxRadioBox( this, wxID_ANY, _("Scope:"), wxDefaultPosition, wxDefaultSize, m_rbScopeNChoices, m_rbScopeChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbScope->SetSelection( 0 );
 	fgSizer1->Add( m_rbScope, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Order") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Order:") ), wxVERTICAL );
 	
 	wxBoxSizer* bSizerXpos;
 	bSizerXpos = new wxBoxSizer( wxHORIZONTAL );
@@ -79,12 +79,12 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	wxString m_rbOptionsChoices[] = { _("Keep existing annotations"), _("Reset existing annotations"), _("Reset, but keep order of multi-unit parts") };
 	int m_rbOptionsNChoices = sizeof( m_rbOptionsChoices ) / sizeof( wxString );
-	m_rbOptions = new wxRadioBox( this, wxID_ANY, _("Options"), wxDefaultPosition, wxDefaultSize, m_rbOptionsNChoices, m_rbOptionsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbOptions = new wxRadioBox( this, wxID_ANY, _("Options:"), wxDefaultPosition, wxDefaultSize, m_rbOptionsNChoices, m_rbOptionsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbOptions->SetSelection( 0 );
 	fgSizer1->Add( m_rbOptions, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Numbering") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Numbering:") ), wxVERTICAL );
 	
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
