@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -33,7 +33,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_EdgeModEWidthTitle = new wxStaticText( this, wxID_ANY, _("&Graphic line width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeModEWidthTitle = new wxStaticText( this, wxID_ANY, _("&Graphic line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EdgeModEWidthTitle->Wrap( -1 );
 	fgSizer1->Add( m_EdgeModEWidthTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -44,7 +44,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_staticTextGrLineUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextGrLineUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("&Text line width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("&Text line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModWidthTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModWidthTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -55,7 +55,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_staticTextTextWidthUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextTextWidthUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text &height"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text &height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeVTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModSizeVTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -66,7 +66,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_staticTextTextVSizeUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextTextVSizeUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text &width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text &width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeHTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModSizeHTitle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -101,7 +101,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("&Reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("&Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRef->Wrap( -1 );
 	fgSizer2->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -110,7 +110,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	fgSizer2->Add( m_textCtrlRefText, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextRefLayer = new wxStaticText( this, wxID_ANY, _("Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRefLayer = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRefLayer->Wrap( -1 );
 	fgSizer2->Add( m_staticTextRefLayer, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -120,7 +120,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_choiceLayerReference->SetSelection( 0 );
 	fgSizer2->Add( m_choiceLayerReference, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText32 = new wxStaticText( this, wxID_ANY, _("Visibility"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32 = new wxStaticText( this, wxID_ANY, _("Visibility:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
 	fgSizer2->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -130,7 +130,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_choiceVisibleReference->SetSelection( 0 );
 	fgSizer2->Add( m_choiceVisibleReference, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextValue = new wxStaticText( this, wxID_ANY, _("V&alue"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextValue = new wxStaticText( this, wxID_ANY, _("V&alue:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextValue->Wrap( -1 );
 	fgSizer2->Add( m_staticTextValue, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -139,7 +139,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	fgSizer2->Add( m_textCtrlValueText, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextValLayer = new wxStaticText( this, wxID_ANY, _("Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextValLayer = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextValLayer->Wrap( -1 );
 	fgSizer2->Add( m_staticTextValLayer, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -149,7 +149,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_choiceLayerValue->SetSelection( 1 );
 	fgSizer2->Add( m_choiceLayerValue, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextValVisibility = new wxStaticText( this, wxID_ANY, _("Visibility"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextValVisibility = new wxStaticText( this, wxID_ANY, _("Visibility:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextValVisibility->Wrap( -1 );
 	fgSizer2->Add( m_staticTextValVisibility, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
