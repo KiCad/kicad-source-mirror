@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	
 	wxString m_Select_By_TimestampChoices[] = { _("Reference"), _("Timestamp") };
 	int m_Select_By_TimestampNChoices = sizeof( m_Select_By_TimestampChoices ) / sizeof( wxString );
-	m_Select_By_Timestamp = new wxRadioBox( this, wxID_ANY, _("Footprint Selection"), wxDefaultPosition, wxDefaultSize, m_Select_By_TimestampNChoices, m_Select_By_TimestampChoices, 1, wxRA_SPECIFY_COLS );
+	m_Select_By_Timestamp = new wxRadioBox( this, wxID_ANY, _("Footprint Selection:"), wxDefaultPosition, wxDefaultSize, m_Select_By_TimestampNChoices, m_Select_By_TimestampChoices, 1, wxRA_SPECIFY_COLS );
 	m_Select_By_Timestamp->SetSelection( 0 );
 	m_Select_By_Timestamp->SetToolTip( _("Select how footprints are recognized:\nby their reference (U1, R3...) (normal setting)\nor their time stamp (special setting after a full schematic reannotation)") );
 	
@@ -40,7 +40,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	
 	wxString m_ChangeExistingFootprintCtrlChoices[] = { _("Keep"), _("Change") };
 	int m_ChangeExistingFootprintCtrlNChoices = sizeof( m_ChangeExistingFootprintCtrlChoices ) / sizeof( wxString );
-	m_ChangeExistingFootprintCtrl = new wxRadioBox( this, wxID_ANY, _("Exchange Footprint"), wxDefaultPosition, wxDefaultSize, m_ChangeExistingFootprintCtrlNChoices, m_ChangeExistingFootprintCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_ChangeExistingFootprintCtrl = new wxRadioBox( this, wxID_ANY, _("Exchange Footprint:"), wxDefaultPosition, wxDefaultSize, m_ChangeExistingFootprintCtrlNChoices, m_ChangeExistingFootprintCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_ChangeExistingFootprintCtrl->SetSelection( 0 );
 	m_ChangeExistingFootprintCtrl->SetToolTip( _("Keep or change an existing footprint when the netlist gives a different footprint") );
 	
@@ -54,7 +54,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	
 	wxString m_DeleteBadTracksChoices[] = { _("Keep"), _("Delete") };
 	int m_DeleteBadTracksNChoices = sizeof( m_DeleteBadTracksChoices ) / sizeof( wxString );
-	m_DeleteBadTracks = new wxRadioBox( this, wxID_ANY, _("Tracks Connecting 2 Nets"), wxDefaultPosition, wxDefaultSize, m_DeleteBadTracksNChoices, m_DeleteBadTracksChoices, 1, wxRA_SPECIFY_COLS );
+	m_DeleteBadTracks = new wxRadioBox( this, wxID_ANY, _("Tracks Joining Multiple Nets:"), wxDefaultPosition, wxDefaultSize, m_DeleteBadTracksNChoices, m_DeleteBadTracksChoices, 1, wxRA_SPECIFY_COLS );
 	m_DeleteBadTracks->SetSelection( 0 );
 	m_DeleteBadTracks->SetToolTip( _("Keep or delete tracks creating a short circuit between two nets after a netlist change") );
 	
@@ -62,7 +62,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	
 	wxString m_RemoveExtraFootprintsCtrlChoices[] = { _("Keep"), _("Delete") };
 	int m_RemoveExtraFootprintsCtrlNChoices = sizeof( m_RemoveExtraFootprintsCtrlChoices ) / sizeof( wxString );
-	m_RemoveExtraFootprintsCtrl = new wxRadioBox( this, wxID_ANY, _("Extra Footprints"), wxDefaultPosition, wxDefaultSize, m_RemoveExtraFootprintsCtrlNChoices, m_RemoveExtraFootprintsCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_RemoveExtraFootprintsCtrl = new wxRadioBox( this, wxID_ANY, _("Extra Footprints:"), wxDefaultPosition, wxDefaultSize, m_RemoveExtraFootprintsCtrlNChoices, m_RemoveExtraFootprintsCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_RemoveExtraFootprintsCtrl->SetSelection( 0 );
 	m_RemoveExtraFootprintsCtrl->SetToolTip( _("Remove footprints found on the Board but not in netlist\nNote: only not locked footprints will be removed") );
 	
@@ -70,7 +70,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	
 	wxString m_rbSingleNetsChoices[] = { _("Keep"), _("Delete") };
 	int m_rbSingleNetsNChoices = sizeof( m_rbSingleNetsChoices ) / sizeof( wxString );
-	m_rbSingleNets = new wxRadioBox( this, wxID_ANY, _("Single Pad Nets"), wxDefaultPosition, wxDefaultSize, m_rbSingleNetsNChoices, m_rbSingleNetsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbSingleNets = new wxRadioBox( this, wxID_ANY, _("Single Pad Nets:"), wxDefaultPosition, wxDefaultSize, m_rbSingleNetsNChoices, m_rbSingleNetsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbSingleNets->SetSelection( 0 );
 	bTracksSizer->Add( m_rbSingleNets, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	

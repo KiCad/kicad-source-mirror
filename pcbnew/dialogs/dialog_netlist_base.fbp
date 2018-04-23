@@ -14,6 +14,7 @@
         <property name="file">dialog_netlist_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_netlist_base</property>
         <property name="namespace"></property>
@@ -162,7 +163,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Footprint Selection</property>
+                                                        <property name="label">Footprint Selection:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -252,7 +253,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Exchange Footprint</property>
+                                                        <property name="label">Exchange Footprint:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -353,7 +354,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Tracks Connecting 2 Nets</property>
+                                                        <property name="label">Tracks Joining Multiple Nets:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -443,7 +444,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Extra Footprints</property>
+                                                        <property name="label">Extra Footprints:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -533,7 +534,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Single Pad Nets</property>
+                                                        <property name="label">Single Pad Nets:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
