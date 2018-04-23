@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -59,13 +59,13 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	wxString m_LayerCtrlChoices[] = { _("Front"), _("Back") };
 	int m_LayerCtrlNChoices = sizeof( m_LayerCtrlChoices ) / sizeof( wxString );
-	m_LayerCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Board Side"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_LayerCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Board Side:"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_LayerCtrl->SetSelection( 0 );
 	bSizerLeft->Add( m_LayerCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OrientCtrlChoices[] = { _("0.0"), _("+90.0"), _("-90.0"), _("180.0"), _("Other") };
 	int m_OrientCtrlNChoices = sizeof( m_OrientCtrlChoices ) / sizeof( wxString );
-	m_OrientCtrl = new wxRadioBox( m_PanelProperties, ID_LISTBOX_ORIENT_SELECT, _("Rotation"), wxDefaultPosition, wxDefaultSize, m_OrientCtrlNChoices, m_OrientCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_OrientCtrl = new wxRadioBox( m_PanelProperties, ID_LISTBOX_ORIENT_SELECT, _("Rotation:"), wxDefaultPosition, wxDefaultSize, m_OrientCtrlNChoices, m_OrientCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientCtrl->SetSelection( 0 );
 	bSizerLeft->Add( m_OrientCtrl, 0, wxEXPAND|wxALL, 5 );
 	
@@ -145,13 +145,13 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	wxString m_AttributsCtrlChoices[] = { _("Through hole"), _("Surface mount"), _("Virtual") };
 	int m_AttributsCtrlNChoices = sizeof( m_AttributsCtrlChoices ) / sizeof( wxString );
-	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Placement Type"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Placement Type:"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AttributsCtrl->SetSelection( 0 );
 	bSizerAttrib->Add( m_AttributsCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_AutoPlaceCtrlChoices[] = { _("Free"), _("Lock pads"), _("Lock footprint") };
 	int m_AutoPlaceCtrlNChoices = sizeof( m_AutoPlaceCtrlChoices ) / sizeof( wxString );
-	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Move and Place"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Move and Place:"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AutoPlaceCtrl->SetSelection( 0 );
 	bSizerAttrib->Add( m_AutoPlaceCtrl, 1, wxALL|wxEXPAND, 5 );
 	
@@ -159,7 +159,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_PropRightSizer->Add( bSizerAttrib, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerAP;
-	sbSizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Place") ), wxHORIZONTAL );
+	sbSizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Place:") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerRotOpt;
 	bSizerRotOpt = new wxBoxSizer( wxVERTICAL );
@@ -191,7 +191,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_PropRightSizer->Add( sbSizerAP, 0, wxEXPAND|wxALL, 0 );
 	
 	wxStaticBoxSizer* sbSizerLocalProperties;
-	sbSizerLocalProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Local Settings") ), wxVERTICAL );
+	sbSizerLocalProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Local Settings:") ), wxVERTICAL );
 	
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
@@ -318,7 +318,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_Panel3D, wxID_ANY, _("3D Shape Name") ), wxHORIZONTAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_Panel3D, wxID_ANY, _("3D Shape Name:") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizer18;
 	bSizer18 = new wxBoxSizer( wxVERTICAL );
