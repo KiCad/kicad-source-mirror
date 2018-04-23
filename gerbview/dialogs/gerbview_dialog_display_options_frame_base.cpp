@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  2 2018)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,31 +23,31 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	wxString m_PolarDisplayChoices[] = { _("Cartesian coordinates"), _("Polar coordinates") };
 	int m_PolarDisplayNChoices = sizeof( m_PolarDisplayChoices ) / sizeof( wxString );
-	m_PolarDisplay = new wxRadioBox( this, wxID_ANY, _("Coordinates"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
+	m_PolarDisplay = new wxRadioBox( this, wxID_ANY, _("Coordinates:"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
 	m_PolarDisplay->SetSelection( 0 );
 	bLeftSizer->Add( m_PolarDisplay, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_BoxUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_BoxUnitsNChoices = sizeof( m_BoxUnitsChoices ) / sizeof( wxString );
-	m_BoxUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_BoxUnitsNChoices, m_BoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_BoxUnits = new wxRadioBox( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, m_BoxUnitsNChoices, m_BoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_BoxUnits->SetSelection( 0 );
 	bLeftSizer->Add( m_BoxUnits, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayFlashedItemsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayFlashedItemsNChoices = sizeof( m_OptDisplayFlashedItemsChoices ) / sizeof( wxString );
-	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Flashed items"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Flashed items:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayFlashedItems->SetSelection( 1 );
 	bLeftSizer->Add( m_OptDisplayFlashedItems, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayLinesChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayLinesNChoices = sizeof( m_OptDisplayLinesChoices ) / sizeof( wxString );
-	m_OptDisplayLines = new wxRadioBox( this, wxID_ANY, _("Lines"), wxDefaultPosition, wxDefaultSize, m_OptDisplayLinesNChoices, m_OptDisplayLinesChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayLines = new wxRadioBox( this, wxID_ANY, _("Lines:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayLinesNChoices, m_OptDisplayLinesChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayLines->SetSelection( 1 );
 	bLeftSizer->Add( m_OptDisplayLines, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayPolygonsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayPolygonsNChoices = sizeof( m_OptDisplayPolygonsChoices ) / sizeof( wxString );
-	m_OptDisplayPolygons = new wxRadioBox( this, wxID_ANY, _("Polygons"), wxDefaultPosition, wxDefaultSize, m_OptDisplayPolygonsNChoices, m_OptDisplayPolygonsChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayPolygons = new wxRadioBox( this, wxID_ANY, _("Polygons:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayPolygonsNChoices, m_OptDisplayPolygonsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayPolygons->SetSelection( 1 );
 	bLeftSizer->Add( m_OptDisplayPolygons, 0, wxALL|wxEXPAND, 5 );
 	
@@ -63,12 +63,12 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	wxString m_ShowPageLimitsChoices[] = { _("Full size without limits"), _("Full size"), _("Size A4"), _("Size A3"), _("Size A2"), _("Size A"), _("Size B"), _("Size C") };
 	int m_ShowPageLimitsNChoices = sizeof( m_ShowPageLimitsChoices ) / sizeof( wxString );
-	m_ShowPageLimits = new wxRadioBox( this, wxID_ANY, _("Page"), wxDefaultPosition, wxDefaultSize, m_ShowPageLimitsNChoices, m_ShowPageLimitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_ShowPageLimits = new wxRadioBox( this, wxID_ANY, _("Page:"), wxDefaultPosition, wxDefaultSize, m_ShowPageLimitsNChoices, m_ShowPageLimitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_ShowPageLimits->SetSelection( 0 );
 	bRightSizer->Add( m_ShowPageLimits, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bLeftBottomSizer;
-	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
+	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom:") ), wxVERTICAL );
 	
 	m_OptZoomNoCenter = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
