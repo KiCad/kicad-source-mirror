@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,7 +25,7 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbSizerGeneral;
-	sbSizerGeneral = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General") ), wxVERTICAL );
+	sbSizerGeneral = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerGeneral;
 	fgSizerGeneral = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -61,7 +61,7 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	
 	wxString m_lineStyleChoices[] = { _("Solid"), _("Dashed"), _("Dotted"), _("Dash-Dot") };
 	int m_lineStyleNChoices = sizeof( m_lineStyleChoices ) / sizeof( wxString );
-	m_lineStyle = new wxRadioBox( this, wxID_ANY, _("Line Style"), wxDefaultPosition, wxDefaultSize, m_lineStyleNChoices, m_lineStyleChoices, 4, wxRA_SPECIFY_ROWS );
+	m_lineStyle = new wxRadioBox( this, wxID_ANY, _("Line Style:"), wxDefaultPosition, wxDefaultSize, m_lineStyleNChoices, m_lineStyleChoices, 4, wxRA_SPECIFY_ROWS );
 	m_lineStyle->SetSelection( 1 );
 	bSizerUpper->Add( m_lineStyle, 2, wxALL|wxEXPAND, 5 );
 	
