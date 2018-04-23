@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -120,7 +120,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelMatrixSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_PanelERCOptions, wxID_ANY, _("Label to Label Connections") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_PanelERCOptions, wxID_ANY, _("Label to Label Connections:") ), wxVERTICAL );
 	
 	m_cbTestSimilarLabels = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Test similar labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTestSimilarLabels->SetToolTip( _("Similar labels are labels (inside a sheet) which differs only by upper/lower case") );
@@ -136,7 +136,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelMatrixSizer->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_PanelERCOptions, wxID_ANY, _("Pin to Pin Connections") ), wxVERTICAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_PanelERCOptions, wxID_ANY, _("Pin to Pin Connections:") ), wxVERTICAL );
 	
 	m_matrixPanel = new wxPanel( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	sbSizer3->Add( m_matrixPanel, 1, wxEXPAND | wxALL, 5 );
