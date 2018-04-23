@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,13 +82,13 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText4 = new wxStaticText( m_project_panel, wxID_ANY, _("Table:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( m_project_panel, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer2->Add( m_staticText4, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_staticText4, 0, wxLEFT|wxRIGHT|wxTOP, 4 );
 	
 	m_PrjTableFilename = new wxStaticText( m_project_panel, wxID_ANY, _("Table Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PrjTableFilename->Wrap( -1 );
-	fgSizer2->Add( m_PrjTableFilename, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_PrjTableFilename, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	
 	m_project_sizer->Add( fgSizer2, 0, wxEXPAND, 5 );
@@ -161,7 +161,7 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions:") ), wxVERTICAL );
 	
 	m_path_subs_grid = new wxGrid( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
