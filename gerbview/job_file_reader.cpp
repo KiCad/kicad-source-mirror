@@ -85,14 +85,8 @@ public:
 
     ~GERBER_JOBFILE_READER() {}
 
-    bool ReadGerberJobFile();       /// read the .gbj file
+    bool ReadGerberJobFile();       /// read a .gbrjob file
     wxArrayString& GetGerberFiles() { return m_GerberFiles; }
-
-private:
-    /** parse a string starting by "%TJ.L" (layer gerber filename)
-     * and add the filename in m_GerberFiles
-     */
-    bool parseTJLayerString( wxString& aText );
 
 private:
     REPORTER* m_reporter;
@@ -116,7 +110,7 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
     wxString msg;
     wxString data;
 
-    // detect the file format: old gerber format of new JSON format
+    // detect the file format: old (deprecated) gerber format of official JSON format
     bool json_format = false;
 
     char* line = jobfileReader.ReadLine();
@@ -126,7 +120,7 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
     data = line;
 
-    if( data.Contains("{" ) )
+    if( data.Contains( "{" ) )
         json_format = true;
 
     if( json_format )
@@ -150,49 +144,12 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
     }
     else
     {
-        jobfileReader.Rewind();
+        if( m_reporter )
+            m_reporter->Report( _( "This job file uses an outdated format. Please, recreate it" ),
+                                REPORTER::RPT_WARNING );
 
-        while( true )
-        {
-            line = jobfileReader.ReadLine();
-
-            if( !line )     // end of file
-                break;
-
-            wxString text( line );
-            text.Trim( true );
-            text.Trim( false );
-
-            // Search for lines starting by '%', others are not usefull
-            if( text.StartsWith( "%TJ.L.", &data )  // First job file syntax
-                || text.StartsWith( "%TJ.L_", &data )   // current job file syntax
-                )
-            {
-                parseTJLayerString( data );
-                continue;
-            }
-
-            if( text.StartsWith( "M02" ) )  // End of file
-                break;
-        }
+        return false;
     }
-
-    return true;
-}
-
-
-bool GERBER_JOBFILE_READER::parseTJLayerString( wxString& aText )
-{
-    // Parse a line like:
-    // %TJ.L."Copper,L1,Top",Positive,kit-dev-coldfire-xilinx_5213-Top_layer.gbr*%
-    // and extract the .gbr filename
-
-    // The filename is between the last comma in string and the '*' char
-    // the filename cannot contain itself a comma:
-    // this is a not allowed char, that is transcoded in hexa sequence
-    // if found in filename
-    wxString name = aText.AfterLast( ',' ).BeforeFirst( '*' );
-    m_GerberFiles.Add( FormatStringFromGerber( name ) );
 
     return true;
 }
