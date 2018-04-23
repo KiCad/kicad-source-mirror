@@ -14,6 +14,7 @@
         <property name="file">dialog_pad_properties_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_pad_properties_base</property>
         <property name="namespace"></property>
@@ -5494,7 +5495,7 @@
                                                         <property name="proportion">1</property>
                                                         <object class="wxStaticBoxSizer" expanded="0">
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Layers</property>
+                                                            <property name="label">Layers:</property>
                                                             <property name="minimum_size">-1,-1</property>
                                                             <property name="name">m_LayersSizer</property>
                                                             <property name="orient">wxVERTICAL</property>
@@ -6916,11 +6917,11 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="notebookpage" expanded="0">
+                                <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Local Clearance and Settings</property>
                                     <property name="select">0</property>
-                                    <object class="wxPanel" expanded="0">
+                                    <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -6994,16 +6995,16 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnUpdateUI"></event>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizerPanelClearance</property>
                                             <property name="orient">wxVERTICAL</property>
                                             <property name="permission">none</property>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizerClearance</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -7263,7 +7264,7 @@
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticBoxSizer" expanded="0">
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Clearances</property>
+                                                            <property name="label">Clearances:</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbClearancesSizer</property>
                                                             <property name="orient">wxVERTICAL</property>
@@ -8324,7 +8325,7 @@
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticBoxSizer" expanded="0">
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Connection to Copper Zones</property>
+                                                            <property name="label">Connection to Copper Zones:</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="name">m_sbSizerZonesSettings</property>
                                                             <property name="orient">wxVERTICAL</property>
@@ -9052,7 +9053,7 @@
                                                         <property name="proportion">1</property>
                                                         <object class="wxStaticBoxSizer" expanded="0">
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Connection to Copper Zones</property>
+                                                            <property name="label">Connection to Copper Zones:</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="name">m_sbSizerCustomShapedZonesSettings</property>
                                                             <property name="orient">wxVERTICAL</property>
@@ -9426,11 +9427,11 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="notebookpage" expanded="0">
+                                <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Custom Shape Primitives</property>
                                     <property name="select">0</property>
-                                    <object class="wxPanel" expanded="0">
+                                    <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -9504,7 +9505,7 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnUpdateUI"></event>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">m_bSizerPanelPrimitives</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -10371,7 +10372,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Parent Footprint Orientation</property>
+                                        <property name="label">Parent Footprint Orientation:</property>
                                         <property name="minimum_size">-1,-1</property>
                                         <property name="name">sbSizeModuleInfo</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -11234,7 +11235,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Start point</property>
+                                <property name="label">Start point:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -11317,7 +11318,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">X</property>
+                                <property name="label">X:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -11491,7 +11492,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Y</property>
+                                <property name="label">Y:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -11748,7 +11749,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">End point</property>
+                                <property name="label">End point:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -11831,7 +11832,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">X</property>
+                                <property name="label">X:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -12005,7 +12006,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Y</property>
+                                <property name="label">Y:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -12262,7 +12263,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Angle</property>
+                                <property name="label">Angle:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -12549,7 +12550,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Thickness</property>
+                                <property name="label">Thickness:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -12977,7 +12978,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">bSizermain</property>
                 <property name="orient">wxVERTICAL</property>
@@ -13030,7 +13031,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Move vector</property>
+                                <property name="label">Move vector:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -13113,7 +13114,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">X</property>
+                                <property name="label">X:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -13257,7 +13258,7 @@
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -13287,7 +13288,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Y</property>
+                                <property name="label">Y:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -13544,7 +13545,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Rotation</property>
+                                <property name="label">Rotation:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -13831,7 +13832,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Scaling factor</property>
+                                <property name="label">Scaling factor:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -14045,7 +14046,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Duplicate count</property>
+                                <property name="label">Duplicate count:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -15057,7 +15058,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Outline thickness</property>
+                                        <property name="label">Outline thickness:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
