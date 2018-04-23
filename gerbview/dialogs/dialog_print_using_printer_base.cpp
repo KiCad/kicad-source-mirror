@@ -47,7 +47,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_ScaleOption->SetSelection( 0 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
-	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X scale adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustXscaleTitle->Wrap( -1 );
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -56,7 +56,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y scale adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustYscaleTitle->Wrap( -1 );
 	bmiddleLeftSizer->Add( m_FineAdjustYscaleTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
