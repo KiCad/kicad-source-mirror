@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 30 2016)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_edit_label_base.h"
@@ -69,19 +69,19 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	
 	wxString m_TextOrientChoices[] = { _("Right"), _("Up"), _("Left"), _("Down") };
 	int m_TextOrientNChoices = sizeof( m_TextOrientChoices ) / sizeof( wxString );
-	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("O&rientation"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("O&rientation:"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextOrient->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextOrient, 1, wxRIGHT|wxTOP, 3 );
 	
 	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold and italic") };
 	int m_TextStyleNChoices = sizeof( m_TextStyleChoices ) / sizeof( wxString );
-	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("St&yle"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("St&yle:"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextStyle->SetSelection( 3 );
 	m_OptionsSizer->Add( m_TextStyle, 1, wxLEFT|wxRIGHT|wxTOP, 3 );
 	
 	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidirectional"), _("Tri-State"), _("Passive") };
 	int m_TextShapeNChoices = sizeof( m_TextShapeChoices ) / sizeof( wxString );
-	m_TextShape = new wxRadioBox( this, wxID_ANY, _("S&hape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextShape = new wxRadioBox( this, wxID_ANY, _("S&hape:"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextShape->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextShape, 1, wxALL|wxLEFT|wxTOP, 3 );
 	
