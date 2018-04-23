@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Length/skew") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Length/skew:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerLenSkew;
 	fgSizerLenSkew = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -84,7 +84,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	bMainSizer->Add( sbSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Meandering") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Meandering:") ), wxVERTICAL );
 	
 	m_legend = new wxStaticBitmap( sbSizer2->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer2->Add( m_legend, 0, wxALL|wxEXPAND, 5 );
