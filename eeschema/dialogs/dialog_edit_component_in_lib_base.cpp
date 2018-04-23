@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,7 +25,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bSizerBasicPanel = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* m_OptionsBoxSizer;
-	m_OptionsBoxSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General") ), wxVERTICAL );
+	m_OptionsBoxSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General:") ), wxVERTICAL );
 	
 	m_AsConvertButt = new wxCheckBox( m_OptionsBoxSizer->GetStaticBox(), wxID_ANY, _("Has alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style (De Morgan)") );
@@ -62,7 +62,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bSizernbunits;
 	bSizernbunits = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextNbUnits = new wxStaticText( m_PanelBasic, wxID_ANY, _("Number of Units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNbUnits = new wxStaticText( m_PanelBasic, wxID_ANY, _("Number of Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNbUnits->Wrap( -1 );
 	m_staticTextNbUnits->SetToolTip( _("Enter the number of units for a symbol that contains more than one unit") );
 	
@@ -77,7 +77,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bSizerOffset;
 	bSizerOffset = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextskew = new wxStaticText( m_PanelBasic, wxID_ANY, _("Pin Name Position Offset"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextskew = new wxStaticText( m_PanelBasic, wxID_ANY, _("Pin Name Position Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextskew->Wrap( -1 );
 	m_staticTextskew->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
 	
@@ -114,7 +114,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* m_PanelDocBoxSizer;
 	m_PanelDocBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextDescription = new wxStaticText( m_PanelDoc, wxID_ANY, _("Description"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDescription = new wxStaticText( m_PanelDoc, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDescription->Wrap( -1 );
 	m_staticTextDescription->SetToolTip( _("A short description that is displayed in Eeschema.\nCan be a very good help when selecting components in libraries components lists.") );
 	
@@ -123,7 +123,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_DocCtrl = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PanelDocBoxSizer->Add( m_DocCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextKeywords->Wrap( -1 );
 	m_staticTextKeywords->SetToolTip( _("Enter key words that can be used to select this symbol.\nKey words cannot have spaces and are separated by a space.") );
 	
@@ -132,7 +132,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_KeywordsCtrl = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PanelDocBoxSizer->Add( m_KeywordsCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextDocFileName = new wxStaticText( m_PanelDoc, wxID_ANY, _("Documentation File Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDocFileName = new wxStaticText( m_PanelDoc, wxID_ANY, _("Documentation File Name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDocFileName->Wrap( -1 );
 	m_staticTextDocFileName->SetToolTip( _("Enter the documentation file (a .pdf document) associated with the symbol.") );
 	
@@ -165,7 +165,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bLeftBoxSizerPanelAlias;
 	bLeftBoxSizerPanelAlias = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextAlias = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias List"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlias = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias List:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlias->Wrap( -1 );
 	m_staticTextAlias->SetToolTip( _("An alias is a symbol that uses the body of its root symbol.\nIt has its own documentation and keywords.\nA fast way to extend a library with similar symbols.") );
 	
@@ -207,7 +207,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bFpFilterLeftBoxSizer;
 	bFpFilterLeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextFootprints = new wxStaticText( m_PanelFootprintFilter, wxID_ANY, _("Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFootprints = new wxStaticText( m_PanelFootprintFilter, wxID_ANY, _("Footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFootprints->Wrap( -1 );
 	m_staticTextFootprints->SetToolTip( _("A list of footprints names that can be used for this symbol.\nFootprints names can used wildcards like sm* to allow all footprints names starting by sm.") );
 	
