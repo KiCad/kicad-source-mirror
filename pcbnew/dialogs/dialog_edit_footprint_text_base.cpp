@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pcb_layer_box_selector.h"
@@ -103,13 +103,13 @@ DIALOG_EDIT_FPTEXT_BASE::DIALOG_EDIT_FPTEXT_BASE( wxWindow* parent, wxWindowID i
 	
 	wxString m_ShowChoices[] = { _("Visible"), _("Invisible") };
 	int m_ShowNChoices = sizeof( m_ShowChoices ) / sizeof( wxString );
-	m_Show = new wxRadioBox( this, wxID_ANY, _("Display"), wxDefaultPosition, wxDefaultSize, m_ShowNChoices, m_ShowChoices, 1, wxRA_SPECIFY_COLS );
+	m_Show = new wxRadioBox( this, wxID_ANY, _("Display:"), wxDefaultPosition, wxDefaultSize, m_ShowNChoices, m_ShowChoices, 1, wxRA_SPECIFY_COLS );
 	m_Show->SetSelection( 0 );
 	bSizer5->Add( m_Show, 1, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_StyleChoices[] = { _("Normal"), _("Italic") };
 	int m_StyleNChoices = sizeof( m_StyleChoices ) / sizeof( wxString );
-	m_Style = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_StyleNChoices, m_StyleChoices, 1, wxRA_SPECIFY_COLS );
+	m_Style = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleNChoices, m_StyleChoices, 1, wxRA_SPECIFY_COLS );
 	m_Style->SetSelection( 1 );
 	bSizer5->Add( m_Style, 1, wxEXPAND|wxLEFT, 5 );
 	
@@ -118,7 +118,7 @@ DIALOG_EDIT_FPTEXT_BASE::DIALOG_EDIT_FPTEXT_BASE( wxWindow* parent, wxWindowID i
 	
 	wxString m_OrientChoices[] = { _("0.0"), _("+90.0"), _("-90.0"), _("180.0"), _("Other") };
 	int m_OrientNChoices = sizeof( m_OrientChoices ) / sizeof( wxString );
-	m_Orient = new wxRadioBox( this, wxID_ANY, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_OrientNChoices, m_OrientChoices, 1, wxRA_SPECIFY_COLS );
+	m_Orient = new wxRadioBox( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, m_OrientNChoices, m_OrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_Orient->SetSelection( 2 );
 	bSizer4->Add( m_Orient, 0, wxALL|wxEXPAND, 5 );
 	
