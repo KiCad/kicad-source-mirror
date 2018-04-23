@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,7 +77,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Print SVG Options:") ), wxVERTICAL );
 	
-	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPenWidth->Wrap( -1 );
 	m_TextPenWidth->SetToolTip( _("Selection of the pen size used to draw items which have no pen size specified.") );
 	
@@ -88,7 +88,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
-	m_ModeColorOption = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ModeColorOption = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print Mode:"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
 	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
@@ -96,7 +96,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	wxString m_rbSvgPageSizeOptChoices[] = { _("Full page with  frame ref"), _("Current page size"), _("Board area only") };
 	int m_rbSvgPageSizeOptNChoices = sizeof( m_rbSvgPageSizeOptChoices ) / sizeof( wxString );
-	m_rbSvgPageSizeOpt = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("SVG Page Size"), wxDefaultPosition, wxDefaultSize, m_rbSvgPageSizeOptNChoices, m_rbSvgPageSizeOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbSvgPageSizeOpt = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("SVG Page Size:"), wxDefaultPosition, wxDefaultSize, m_rbSvgPageSizeOptNChoices, m_rbSvgPageSizeOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbSvgPageSizeOpt->SetSelection( 0 );
 	sbOptionsSizer->Add( m_rbSvgPageSizeOpt, 0, wxEXPAND|wxALL, 5 );
 	
