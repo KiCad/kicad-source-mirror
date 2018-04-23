@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbAnnotations;
-	sbAnnotations = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Annotations") ), wxVERTICAL );
+	sbAnnotations = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Annotations:") ), wxVERTICAL );
 	
 	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("On pads"), _("On tracks"), _("On pads and tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
@@ -50,7 +50,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bRightSizer->Add( sbAnnotations, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbClearance;
-	sbClearance = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Clearance Outlines") ), wxVERTICAL );
+	sbClearance = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Clearance Outlines:") ), wxVERTICAL );
 	
 	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("New and edited tracks with via area"), _("Always") };
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
