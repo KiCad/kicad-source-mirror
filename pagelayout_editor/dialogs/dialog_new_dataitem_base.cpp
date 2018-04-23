@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_new_dataitem_base.h"
@@ -22,22 +22,38 @@ DIALOG_NEW_DATAITEM_BASE::DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerPos;
 	bSizerPos = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerPosXY;
-	bSizerPosXY = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* bSizerPosXY;
+	bSizerPosXY = new wxFlexGridSizer( 0, 2, 0, 0 );
+	bSizerPosXY->SetFlexibleDirection( wxBOTH );
+	bSizerPosXY->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextPosX = new wxStaticText( this, wxID_ANY, _("Pos X (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextPosX->Wrap( -1 );
-	bSizerPosXY->Add( m_staticTextPosX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_textCtrlPosX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPosXY->Add( m_textCtrlPosX, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	m_staticTextPosY = new wxStaticText( this, wxID_ANY, _("Pos Y (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosY = new wxStaticText( this, wxID_ANY, _("Y start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosY->Wrap( -1 );
 	bSizerPosXY->Add( m_staticTextPosY, 0, wxRIGHT|wxLEFT, 5 );
 	
+	
+	bSizerPosXY->Add( 0, 0, 0, 0, 5 );
+	
 	m_textCtrlPosY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPosXY->Add( m_textCtrlPosY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerPosXY->Add( m_textCtrlPosY, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_units1 = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_units1->Wrap( -1 );
+	bSizerPosXY->Add( m_units1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 1 );
+	
+	m_staticTextPosX = new wxStaticText( this, wxID_ANY, _("X start:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosX->Wrap( -1 );
+	bSizerPosXY->Add( m_staticTextPosX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bSizerPosXY->Add( 0, 0, 0, 0, 0 );
+	
+	m_textCtrlPosX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerPosXY->Add( m_textCtrlPosX, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_units11 = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_units11->Wrap( -1 );
+	bSizerPosXY->Add( m_units11, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 1 );
 	
 	
 	bSizerPos->Add( bSizerPosXY, 1, wxEXPAND, 5 );
@@ -66,25 +82,41 @@ DIALOG_NEW_DATAITEM_BASE::DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID
 	
 	m_SizerEndPosition = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerEndXY;
-	bSizerEndXY = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextEndX = new wxStaticText( this, wxID_ANY, _("End X (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextEndX = new wxStaticText( this, wxID_ANY, _("X end:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextEndX->Wrap( -1 );
-	bSizerEndXY->Add( m_staticTextEndX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_staticTextEndX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_textCtrlEndX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerEndXY->Add( m_textCtrlEndX, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer3->Add( m_textCtrlEndX, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticTextEndY = new wxStaticText( this, wxID_ANY, _("End Y (mm)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_units3 = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_units3->Wrap( -1 );
+	fgSizer3->Add( m_units3, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	
+	m_staticTextEndY = new wxStaticText( this, wxID_ANY, _("Y end:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextEndY->Wrap( -1 );
-	bSizerEndXY->Add( m_staticTextEndY, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_staticTextEndY, 0, wxRIGHT|wxLEFT, 5 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_textCtrlEndY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerEndXY->Add( m_textCtrlEndY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer3->Add( m_textCtrlEndY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_units4 = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_units4->Wrap( -1 );
+	fgSizer3->Add( m_units4, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	
-	m_SizerEndPosition->Add( bSizerEndXY, 1, 0, 5 );
+	m_SizerEndPosition->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer61;
 	bSizer61 = new wxBoxSizer( wxVERTICAL );

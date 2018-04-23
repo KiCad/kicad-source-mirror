@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_NEW_DATAITEM_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -38,18 +36,22 @@ class DIALOG_NEW_DATAITEM_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_staticTextPosX;
-		wxTextCtrl* m_textCtrlPosX;
 		wxStaticText* m_staticTextPosY;
 		wxTextCtrl* m_textCtrlPosY;
+		wxStaticText* m_units1;
+		wxStaticText* m_staticTextPosX;
+		wxTextCtrl* m_textCtrlPosX;
+		wxStaticText* m_units11;
 		wxStaticText* m_staticTextOrgPos;
 		wxChoice* m_choiceCornerPos;
 		wxStaticLine* m_staticline2;
 		wxBoxSizer* m_SizerEndPosition;
 		wxStaticText* m_staticTextEndX;
 		wxTextCtrl* m_textCtrlEndX;
+		wxStaticText* m_units3;
 		wxStaticText* m_staticTextEndY;
 		wxTextCtrl* m_textCtrlEndY;
+		wxStaticText* m_units4;
 		wxStaticText* m_staticTextOrgPos1;
 		wxChoice* m_choiceCornerEnd;
 		wxStaticLine* m_staticlineEndXY;
