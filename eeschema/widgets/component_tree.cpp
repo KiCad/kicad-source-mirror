@@ -41,6 +41,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr ),
+      m_menuActive( false ),
       m_filtering( false )
 {
     // create space for context menu pointers, INVALID is the max value
