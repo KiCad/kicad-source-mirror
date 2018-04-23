@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_template_selector_base.h"
@@ -23,7 +23,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_htmlWin = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
 	bmainSizer->Add( m_htmlWin, 1, wxALL|wxEXPAND, 3 );
 	
-	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Template path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Template path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTpath->Wrap( -1 );
 	bmainSizer->Add( m_staticTextTpath, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
