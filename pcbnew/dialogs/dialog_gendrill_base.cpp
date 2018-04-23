@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	wxString m_Choice_Zeros_FormatChoices[] = { _("Decimal format"), _("Suppress leading zeros"), _("Suppress trailing zeros"), _("Keep zeros") };
 	int m_Choice_Zeros_FormatNChoices = sizeof( m_Choice_Zeros_FormatChoices ) / sizeof( wxString );
-	m_Choice_Zeros_Format = new wxRadioBox( this, wxID_ANY, _("Zeros Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Zeros_FormatNChoices, m_Choice_Zeros_FormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_Choice_Zeros_Format = new wxRadioBox( this, wxID_ANY, _("Zeros Format:"), wxDefaultPosition, wxDefaultSize, m_Choice_Zeros_FormatNChoices, m_Choice_Zeros_FormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Zeros_Format->SetSelection( 0 );
 	m_Choice_Zeros_Format->SetToolTip( _("Choose EXCELLON numbers notation") );
 	
@@ -66,7 +66,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextTitle = new wxStaticText( this, wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTitle = new wxStaticText( this, wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTitle->Wrap( -1 );
 	fgSizer1->Add( m_staticTextTitle, 0, wxALL, 10 );
 	
