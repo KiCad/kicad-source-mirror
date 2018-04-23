@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,7 +71,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_panel->SetSizer( m_global_sizer );
 	m_global_panel->Layout();
 	m_global_sizer->Fit( m_global_panel );
-	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), true, wxNullBitmap );
+	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), false, wxNullBitmap );
 	m_project_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
@@ -81,13 +81,13 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText4 = new wxStaticText( m_project_panel, wxID_ANY, _("Table:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( m_project_panel, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer2->Add( m_staticText4, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_staticText4, 0, wxLEFT|wxRIGHT|wxTOP, 4 );
 	
 	m_PrjTableFilename = new wxStaticText( m_project_panel, wxID_ANY, _("Table Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PrjTableFilename->Wrap( -1 );
-	fgSizer2->Add( m_PrjTableFilename, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_PrjTableFilename, 0, wxLEFT|wxRIGHT|wxTOP, 4 );
 	
 	
 	m_project_sizer->Add( fgSizer2, 0, wxEXPAND, 5 );
@@ -123,7 +123,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_panel->SetSizer( m_project_sizer );
 	m_project_panel->Layout();
 	m_project_sizer->Fit( m_project_panel );
-	m_auinotebook->AddPage( m_project_panel, _("Project Specific Libraries"), false, wxNullBitmap );
+	m_auinotebook->AddPage( m_project_panel, _("Project Specific Libraries"), true, wxNullBitmap );
 	
 	m_top_sizer->Add( m_auinotebook, 6, wxEXPAND | wxALL, 5 );
 	
@@ -165,7 +165,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions:") ), wxVERTICAL );
 	
 	m_path_subs_grid = new wxGrid( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	

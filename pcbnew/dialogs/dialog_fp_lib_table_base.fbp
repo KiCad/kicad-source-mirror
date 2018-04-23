@@ -14,6 +14,7 @@
         <property name="file">dialog_fp_lib_table_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">MyProject1</property>
         <property name="namespace"></property>
@@ -199,7 +200,7 @@
                                 <object class="auinotebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Global Libraries</property>
-                                    <property name="select">1</property>
+                                    <property name="select">0</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -612,7 +613,7 @@
                                 <object class="auinotebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Project Specific Libraries</property>
-                                    <property name="select">0</property>
+                                    <property name="select">1</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -709,8 +710,8 @@
                                                     <property name="rows">1</property>
                                                     <property name="vgap">0</property>
                                                     <object class="sizeritem" expanded="1">
-                                                        <property name="border">5</property>
-                                                        <property name="flag">wxRIGHT|wxLEFT</property>
+                                                        <property name="border">4</property>
+                                                        <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -740,7 +741,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Table:</property>
+                                                            <property name="label">File:</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -792,8 +793,8 @@
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
-                                                        <property name="border">5</property>
-                                                        <property name="flag">wxRIGHT|wxLEFT</property>
+                                                        <property name="border">4</property>
+                                                        <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -1571,7 +1572,7 @@
                     <property name="proportion">0</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Path Substitutions</property>
+                        <property name="label">Path Substitutions:</property>
                         <property name="minimum_size"></property>
                         <property name="name">sbSizer1</property>
                         <property name="orient">wxVERTICAL</property>
