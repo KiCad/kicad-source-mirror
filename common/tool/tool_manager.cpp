@@ -835,6 +835,15 @@ std::string TOOL_MANAGER::GetClipboard() const
 }
 
 
+KIGFX::VC_SETTINGS TOOL_MANAGER::GetCurrentToolVC() const
+{
+    if( TOOL_STATE* active = GetCurrentToolState() )
+        return active->vcSettings;
+
+    return m_viewControls->GetSettings();
+}
+
+
 TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 {
     static int currentId;

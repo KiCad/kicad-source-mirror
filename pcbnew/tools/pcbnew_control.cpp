@@ -751,7 +751,11 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 // Miscellaneous
 int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+    auto vcSettings = m_toolMgr->GetCurrentToolVC();
+
+    // Use either the active tool forced cursor position or the general settings
+    VECTOR2I cursorPos = vcSettings.m_forceCursorPosition ? vcSettings.m_forcedPosition :
+                         getViewControls()->GetCursorPosition();
 
     m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
     m_frame->UpdateStatusBar();
