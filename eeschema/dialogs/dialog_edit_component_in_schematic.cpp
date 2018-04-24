@@ -300,6 +300,19 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
         return;
 
     chipnameTextCtrl->SetValue( sel.LibId.Format() );
+
+    // Update the value field for Power symbols
+    LIB_PART* entry = GetParent()->GetLibPart( sel.LibId );
+
+    if( entry && entry->IsPower() )
+    {
+        m_FieldsBuf[VALUE].SetText( sel.LibId.GetLibItemName() );
+        setRowItem( VALUE, m_FieldsBuf[VALUE] );
+
+        if( s_SelectedRow == VALUE )
+            copySelectedFieldToPanel();
+    }
+
 }
 
 
