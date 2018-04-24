@@ -676,6 +676,43 @@ static void export_vrml_arc( MODEL_VRML& aModel, LAYER_NUM layer,
 }
 
 
+static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer,
+        DRAWSEGMENT *aOutline, double aOrientation, wxPoint aPos )
+{
+    const int circleSegmentsCount = 32;
+
+    if( aOutline->IsPolyShapeValid() )
+    {
+        SHAPE_POLY_SET shape = aOutline->GetPolyShape();
+        VRML_LAYER* vlayer;
+
+        if( !GetLayer( aModel, layer, &vlayer ) )
+                return;
+
+        if( aOutline->GetWidth() )
+        {
+            shape.Inflate( aOutline->GetWidth()/2, circleSegmentsCount );
+            shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+
+        shape.Rotate( -aOrientation, VECTOR2I( 0, 0 ) );
+        shape.Move( aPos );
+        const SHAPE_LINE_CHAIN& outline = shape.COutline( 0 );
+
+        int seg = vlayer->NewContour();
+
+        for( int j = 0; j < outline.PointCount(); j++ )
+        {
+            if( !vlayer->AddVertex( seg, outline.CPoint( j ).x * BOARD_SCALE,
+                                     -outline.CPoint( j ).y * BOARD_SCALE ) )
+                throw( std::runtime_error( vlayer->GetError() ) );
+        }
+
+        vlayer->EnsureWinding( seg, false );
+    }
+}
+
+
 static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
 {
     LAYER_NUM layer = drawseg->GetLayer();
@@ -709,37 +746,7 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
         break;
 
     case S_POLYGON:
-        if( drawseg->IsPolyShapeValid() )
-        {
-            VRML_LAYER* vlayer;
-
-            if( !GetLayer( aModel, layer, &vlayer ) )
-                    break;
-
-            SHAPE_POLY_SET shape = drawseg->GetPolyShape();
-
-            const int circleSegmentsCount = 16;
-
-            if( drawseg->GetWidth() )
-            {
-                shape.Inflate( drawseg->GetWidth()/2, circleSegmentsCount );
-                shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            }
-
-            const SHAPE_LINE_CHAIN& outline = shape.COutline( 0 );
-
-            int seg = vlayer->NewContour();
-
-            for( int j = 0; j < outline.PointCount(); j++ )
-            {
-                if( !vlayer->AddVertex( seg, (double)outline.CPoint( j ).x * BOARD_SCALE,
-                                         -((double)outline.CPoint( j ).y * BOARD_SCALE ) ) )
-                    throw( std::runtime_error( vlayer->GetError() ) );
-
-            }
-
-            vlayer->EnsureWinding( seg, false );
-        }
+        export_vrml_polygon( aModel, layer, drawseg, 0.0, wxPoint( 0, 0 ) );
         break;
 
     default:
@@ -1067,50 +1074,8 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
         break;
 
     case S_POLYGON:
-        if( aOutline->IsPolyShapeValid() )
-        {
-            VRML_LAYER* vl;
-
-            if( !GetLayer( aModel, layer, &vl ) )
-                break;
-
-            SHAPE_POLY_SET shape = aOutline->GetPolyShape();
-
-            const int circleSegmentsCount = 16;
-
-            if( aOutline->GetWidth() )
-            {
-                shape.Inflate( aOutline->GetWidth()/2, circleSegmentsCount );
-                shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            }
-
-            shape.Rotate( -aModule->GetOrientationRadians(), VECTOR2I( 0, 0 ) );
-            shape.Move( aModule->GetPosition() );
-
-            const SHAPE_LINE_CHAIN& outline = shape.COutline( 0 );
-
-            int nvert = outline.PointCount() - 1;
-            int i = 0;
-
-            if( nvert < 3 ) break;
-
-            int seg = vl->NewContour();
-
-            if( seg < 0 )
-                break;
-
-            while( i < nvert )
-            {
-                x = outline.CPoint( i ).x * BOARD_SCALE;
-                y = - ( outline.CPoint( i ).y * BOARD_SCALE );
-
-                if( !vl->AddVertex( seg, x, y ) )
-                    throw( std::runtime_error( vl->GetError() ) );
-
-                ++i;
-            }
-            vl->EnsureWinding( seg, false );
-        }
+        export_vrml_polygon( aModel, layer, aOutline, aModule->GetOrientationRadians(),
+                aModule->GetPosition() );
         break;
 
     default:
@@ -1315,13 +1280,19 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* aPcb, D_PAD* aPad )
 
     if( layer_mask[B_Cu] )
     {
-        export_vrml_padshape( aModel, &aModel.m_bot_tin, aPad );
+        if( layer_mask[B_Mask] )
+            export_vrml_padshape( aModel, &aModel.m_bot_tin, aPad );
+        else
+            export_vrml_padshape( aModel, &aModel.m_bot_copper, aPad );
     }
-
     if( layer_mask[F_Cu] )
     {
-        export_vrml_padshape( aModel, &aModel.m_top_tin, aPad );
+        if( layer_mask[F_Mask] )
+            export_vrml_padshape( aModel, &aModel.m_top_tin, aPad );
+        else
+            export_vrml_padshape( aModel, &aModel.m_top_copper, aPad );
     }
+
 }
 
 
