@@ -114,7 +114,8 @@ LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
 
 void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
-    TOOL_BASE::Reset( aReason );
+    if( aReason == RUN )
+        TOOL_BASE::Reset( aReason );
 }
 
 

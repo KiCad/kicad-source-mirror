@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include <base_units.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
 
@@ -209,7 +211,6 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     SHAPE_LINE_CHAIN rv;
     double r = GetRadius();
     double sa = GetStartAngle();
-    double step;
     auto c = GetCenter();
     int n;
 
@@ -219,8 +220,7 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     }
     else
     {
-        step = 180 / M_PI * acos( r * ( 1.0 - aAccuracy ) / r );
-        n = std::abs( (int) ceil(m_centralAngle / step) );
+        n = GetArcToSegmentCount( r, From_User_Unit( MILLIMETRES, aAccuracy ), m_centralAngle );
     }
 
     for( int i = 0; i <= n ; i++ )

@@ -378,7 +378,8 @@ bool ROUTER_TOOL::Init()
 
 void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
-    TOOL_BASE::Reset( aReason );
+    if( aReason == RUN )
+        TOOL_BASE::Reset( aReason );
 }
 
 

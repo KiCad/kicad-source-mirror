@@ -913,20 +913,15 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 
     for( auto seg : segs )
     {
-        for( int layer = F_Cu; layer <= B_Cu; layer++ )
-        {
-            std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+        std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
-            solid->SetLayer( layer );
-            solid->SetNet( -1 );
-            solid->SetParent( nullptr );
-            solid->SetShape( seg->Clone() );
-            solid->SetRoutable( false );
+        solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+        solid->SetNet( -1 );
+        solid->SetParent( nullptr );
+        solid->SetShape( seg );
+        solid->SetRoutable( false );
 
-            aWorld->Add( std::move( solid ) );
-        }
-
-        delete seg;
+        aWorld->Add( std::move( solid ) );
     }
 
     return true;
