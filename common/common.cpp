@@ -219,28 +219,31 @@ wxString GetKicadConfigPath()
 {
     wxFileName cfgpath;
 
-    // From the wxWidgets wxStandardPaths::GetUserConfigDir() help:
-    //      Unix: ~ (the home directory)
-    //      Windows: "C:\Documents and Settings\username\Application Data"
-    //      Mac: ~/Library/Preferences
+    // http://docs.wxwidgets.org/3.0/classwx_standard_paths.html#a7c7cf595d94d29147360d031647476b0
     cfgpath.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
 
-#if !defined( __WINDOWS__ ) && !defined( __WXMAC__ )
     wxString envstr;
 
-    if( !wxGetEnv( wxT( "XDG_CONFIG_HOME" ), &envstr ) || envstr.IsEmpty() )
-    {
-        // XDG_CONFIG_HOME is not set, so use the fallback
-        cfgpath.AppendDir( wxT( ".config" ) );
-    }
-    else
+    // wxStandardPaths does not default to ~/.config which is the current standard config
+    // location on Linux.  This has been fixed in wxWidgets 3.1.1.
+#if !wxCHECK_VERSION( 3, 1, 1 ) && !defined( __WINDOWS__ ) && !defined( __WXMAC__ )
+    if( wxGetEnv( wxT( "XDG_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )
     {
         // Override the assignment above with XDG_CONFIG_HOME
         cfgpath.AssignDir( envstr );
     }
+
+    cfgpath.AppendDir( wxT( ".config" ) );
 #endif
 
     cfgpath.AppendDir( wxT( "kicad" ) );
+
+    // Use KICAD_CONFIG_HOME to allow the user to force a specific configuration path.
+    if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )
+    {
+        // Override the assignment above with XDG_CONFIG_HOME
+        cfgpath.AssignDir( envstr );
+    }
 
     if( !cfgpath.DirExists() )
     {
