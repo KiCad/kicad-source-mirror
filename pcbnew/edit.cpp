@@ -1279,6 +1279,29 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->Refresh();
         break;
 
+    case ID_POPUP_PCB_SPREAD_ALL_MODULES:
+        if( !IsOK( this,
+                   _("Not locked footprints inside the board will be moved. OK?") ) )
+            break;
+        // Fall through
+    case ID_POPUP_PCB_SPREAD_NEW_MODULES:
+        if( GetBoard()->m_Modules == NULL )
+        {
+            DisplayError( this, _( "No footprint found!" ) );
+            return;
+        }
+        else
+        {
+            MODULE* footprint = GetBoard()->m_Modules;
+            std::vector<MODULE*> footprintList;
+            for( ; footprint != NULL; footprint = footprint->Next() )
+                footprintList.push_back( footprint );
+
+            SpreadFootprints( &footprintList, id == ID_POPUP_PCB_SPREAD_NEW_MODULES,
+                              true, GetCrossHairPosition() );
+        }
+        break;
+
     default:
         wxString msg;
         msg.Printf( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() unknown event id %d" ), id );
