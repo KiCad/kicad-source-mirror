@@ -846,6 +846,13 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
+    ROUTER_TOOL* routerTool = static_cast<ROUTER_TOOL*>
+            ( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+
+    // Do not delete items while actively routing.
+    if( routerTool && routerTool->Router() && routerTool->Router()->RoutingInProgress() )
+        return 0;
+
     // get a copy instead of reference (as we're going to clear the selectio before removing items)
     auto selection = m_selectionTool->RequestSelection( SELECTION_DELETABLE | SELECTION_SANITIZE_PADS );
 
