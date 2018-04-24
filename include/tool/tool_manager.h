@@ -370,7 +370,7 @@ public:
      * Returns the view controls settings for the current tool or the general settings if there is
      * no active tool.
      */
-    KIGFX::VC_SETTINGS& GetCurrentToolVC() const;
+    const KIGFX::VC_SETTINGS& GetCurrentToolVC() const;
 
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
