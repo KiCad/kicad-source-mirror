@@ -382,9 +382,16 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_fieldsCtrl->AppendToggleColumn( _( "Show" ),     wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
 
+#ifdef __WXGTK__
+    // GTK auto-sizing doesn't appear to take into account the column headers, which is
+    // where all the width is in this case.
+    m_fieldsCtrl->GetColumn( 1 )->SetWidth( 50 );
+    m_fieldsCtrl->GetColumn( 2 )->SetWidth( 70 );
+#else
     m_fieldsCtrl->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    m_showColWidth = m_fieldsCtrl->GetColumn( 1 )->GetWidth();
     m_fieldsCtrl->GetColumn( 2 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+#endif
+    m_showColWidth = m_fieldsCtrl->GetColumn( 1 )->GetWidth();
     m_groupByColWidth = m_fieldsCtrl->GetColumn( 2 )->GetWidth();
 
     // The fact that we're a list should keep the control from reserving space for the
