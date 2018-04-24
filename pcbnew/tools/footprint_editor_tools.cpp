@@ -302,6 +302,14 @@ int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
     }
 
     pad->SetShape( pad->GetAnchorPadShape() );
+    // Cleanup the pad primitives data, because the initial pad was a custom
+    // shaped pad, and it contains primitives, that does not exist in non custom pads,
+    // and can create issues later:
+    if( pad->GetShape() != PAD_SHAPE_CUSTOM )   // should be always the case
+    {
+        pad->DeletePrimitivesList();
+    }
+
     commit.Push( _("Explode pad to shapes") );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -441,7 +449,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     pad->SetPosition( wxPoint( anchor->x, anchor->y ) );
     pad->AddPrimitives( shapes );
     pad->ClearFlags();
-    
+
     bool result = pad->MergePrimitivesAsPolygon();
 
     if( !result )
