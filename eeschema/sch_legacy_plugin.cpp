@@ -2424,7 +2424,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
             SCH_PARSE_ERROR( "$CMP command expected", reader, line );
 
         parseUnquotedString( aliasName, reader, line, &line );    // Alias name.
-
+        LIB_ALIAS::ValidateName( aliasName );
         LIB_ALIAS_MAP::iterator it = m_aliases.find( aliasName );
 
         if( it == m_aliases.end() )
