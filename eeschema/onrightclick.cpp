@@ -75,9 +75,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     SCH_ITEM*   item = GetScreen()->GetCurItem();
     bool        blockActive = GetScreen()->IsBlockActive();
     wxString    msg;
-    bool        actionCancelled = false;
 
-    // Do not start a block command  on context menu.
+    // Do not start a block command on context menu.
     m_canvas->SetCanStartBlock( -1 );
 
     if( blockActive )
@@ -139,6 +138,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     // Try to locate items at cursor position.
     if( (item == NULL) || (item->GetFlags() == 0) )
     {
+        bool actionCancelled = false;
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins, 0, &actionCancelled );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
@@ -192,12 +192,13 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
     if( item == NULL )
     {
-        if( GetToolId() == ID_NO_TOOL_SELECTED )
-        {
+        if( GetToolId() == ID_NO_TOOL_SELECTED && m_blockItems.GetCount() > 0 )
+       {
             msg = AddHotkeyName( _( "&Paste" ), g_Schematic_Hokeys_Descr, HK_EDIT_PASTE );
             AddMenuItem( PopMenu, wxID_PASTE, msg,
                         _( "Pastes item(s) from the Clipboard" ),
                         KiBitmap( paste_xpm ) );
+            PopMenu->AppendSeparator();
         }
 
         if( m_CurrentSheet->Last() != g_RootSheet )

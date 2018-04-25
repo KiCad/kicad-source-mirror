@@ -51,7 +51,7 @@
 
 SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KICAD_T aFilterList[],
                                              int aHotKeyCommandId,
-                                             bool* clarificationMenuCancelled )
+                                             bool* aClarificationMenuCancelled )
 {
     SCH_ITEM*      item;
     LIB_PIN*       Pin     = NULL;
@@ -60,14 +60,15 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
     // Check the on grid position first.  There is more likely to be multiple items on
     // grid than off grid.
+    m_canvas->SetAbortRequest( false ); // be sure a old abort request in not pending
     item = LocateItem( gridPosition, aFilterList, aHotKeyCommandId );
 
     // If the user aborted the clarification context menu, don't show it again at the
     // off grid position.
     if( !item && m_canvas->GetAbortRequest() )
     {
-        if( clarificationMenuCancelled )
-            *clarificationMenuCancelled = true;
+        if( aClarificationMenuCancelled )
+            *aClarificationMenuCancelled = true;
 
         m_canvas->SetAbortRequest( false );
         return NULL;
@@ -78,8 +79,8 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
     if( !item )
     {
-        if( clarificationMenuCancelled )
-            *clarificationMenuCancelled = m_canvas->GetAbortRequest();
+        if( aClarificationMenuCancelled )
+            *aClarificationMenuCancelled = m_canvas->GetAbortRequest();
 
         m_canvas->SetAbortRequest( false );  // Just in case the user aborted the context menu.
         return NULL;

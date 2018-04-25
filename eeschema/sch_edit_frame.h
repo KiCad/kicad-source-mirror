@@ -404,12 +404,14 @@ public:
      * @param aFilterList A list of #KICAD_T types to to filter.
      * @param aHotKeyCommandId A hot key command ID for performing additional tests when
      *                         multiple items are found at \a aPosition.
+     * @param aClarifySelectionMenuCancelled is a pointer to a bool to handle a cancel command
+     * from user when the user cancels the locate menu disambiguation (selection between located items)
      * @return A SCH_ITEM pointer of the item found or NULL if no item found
      */
     SCH_ITEM* LocateAndShowItem( const wxPoint& aPosition,
                                  const KICAD_T aFilterList[] = SCH_COLLECTOR::AllItems,
                                  int aHotKeyCommandId = 0,
-                                 bool* clarifySelectionMenuCancelled = nullptr );
+                                 bool* aClarifySelectionMenuCancelled = nullptr );
 
     /**
      * Check for items at \a aPosition matching the types in \a aFilterList.
