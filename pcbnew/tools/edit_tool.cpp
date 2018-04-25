@@ -71,6 +71,11 @@ using namespace std::placeholders;
 
 #include <board_commit.h>
 
+
+extern bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool,
+                       wxSize aGridSize, wxPoint on_grid, wxPoint* curpos );
+
+
 // Edit tool actions
 TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
@@ -1142,11 +1147,10 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
     auto& view = *getView();
     auto& controls = *getViewControls();
+    int   toolID = EditingModules() ? ID_MODEDIT_MEASUREMENT_TOOL : ID_PCB_MEASUREMENT_TOOL;
 
     Activate();
-    frame()->SetToolID( EditingModules() ? ID_MODEDIT_MEASUREMENT_TOOL
-                                         : ID_PCB_MEASUREMENT_TOOL,
-                        wxCURSOR_PENCIL, _( "Measure distance" ) );
+    frame()->SetToolID( toolID, wxCURSOR_PENCIL, _( "Measure distance" ) );
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
 
@@ -1163,6 +1167,20 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     while( auto evt = Wait() )
     {
+        // TODO: magnetic pad & track processing needs to move to VIEW_CONTROLS.
+        wxPoint pos( controls.GetMousePosition().x, controls.GetMousePosition().y );
+        frame()->SetMousePosition( pos );
+
+        wxRealPoint gridSize = frame()->GetScreen()->GetGridSize();
+        wxSize igridsize;
+        igridsize.x = KiROUND( gridSize.x );
+        igridsize.y = KiROUND( gridSize.y );
+
+        if( Magnetize( frame(), toolID, igridsize, pos, &pos ) )
+            controls.ForceCursorPosition( true, pos );
+        else
+            controls.ForceCursorPosition( false );
+
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
         if( evt->IsCancel() || evt->IsActivate() )
