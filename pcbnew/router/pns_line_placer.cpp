@@ -854,19 +854,9 @@ bool LINE_PLACER::SetLayer( int aLayer )
 
 bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
-    VECTOR2I p( aP );
-
-    static int unknowNetIdx = 0;    // -10000;
-    int net = -1;
-
-    if( !aStartItem || aStartItem->Net() < 0 )
-        net = unknowNetIdx--;
-    else
-        net = aStartItem->Net();
-
-    m_currentStart = p;
-    m_currentEnd = p;
-    m_currentNet = net;
+    m_currentStart = VECTOR2I( aP );
+    m_currentEnd = VECTOR2I( aP );
+    m_currentNet = std::max( 0, aStartItem ? aStartItem->Net() : 0 );
     m_startItem = aStartItem;
     m_placingVia = false;
     m_chainedPlacement = false;
