@@ -202,8 +202,8 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     void LoadSettings( wxConfigBase *aCfg ) override;
 
     void OnLeftClick( wxDC *DC, const wxPoint &MousePos );
-
     void OnRightClick( const wxPoint &MousePos, wxMenu *PopMenu );
+    void OnKeyEvent( wxKeyEvent& event );
 
     void RedrawActiveWindow( wxDC *DC, bool EraseBg );
 

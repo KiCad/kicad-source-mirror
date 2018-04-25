@@ -123,6 +123,8 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
      */
     void Request_refresh( bool aRedrawImmediately = true );
 
+    void OnKeyEvent( wxKeyEvent& event );
+
  private:
 
     void OnPaint( wxPaintEvent &event );
@@ -150,8 +152,6 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     void OnPopUpMenu( wxCommandEvent &event );
 
     void OnCharHook( wxKeyEvent& event );
-
-    void OnKeyEvent( wxKeyEvent& event );
 
     void OnTimerTimeout_Editing( wxTimerEvent& event );
 

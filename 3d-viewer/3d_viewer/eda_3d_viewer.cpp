@@ -203,6 +203,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway,
     m_mainToolBar->EnableTool( ID_RENDER_CURRENT_VIEW,
                                (m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY) );
 
+    m_mainToolBar->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( EDA_3D_VIEWER::OnKeyEvent ), NULL, this );
+
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on
     // the canvas before it will respond to mouse wheel events.
@@ -213,6 +215,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway,
 
 EDA_3D_VIEWER::~EDA_3D_VIEWER()
 {
+    m_mainToolBar->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EDA_3D_VIEWER::OnKeyEvent ), NULL, this );
+    
     m_auimgr.UnInit();
 
     // m_canvas delete will be called by wxWidget manager
@@ -901,6 +905,15 @@ void EDA_3D_VIEWER::OnRightClick( const wxPoint &MousePos, wxMenu *PopMenu )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER::OnRightClick" ) );
     // Do nothing
+}
+
+
+void EDA_3D_VIEWER::OnKeyEvent( wxKeyEvent& event )
+{
+    if( m_canvas )
+        return m_canvas->OnKeyEvent( event );
+
+    event.Skip();
 }
 
 
