@@ -385,14 +385,17 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 #ifdef __WXGTK__
     // GTK auto-sizing doesn't appear to take into account the column headers, which is
     // where all the width is in this case.
-    m_fieldsCtrl->GetColumn( 1 )->SetWidth( 50 );
-    m_fieldsCtrl->GetColumn( 2 )->SetWidth( 70 );
+    // So calculate the title size and set the column width
+    m_showColWidth = GetTextSize( m_fieldsCtrl->GetColumn( 1 )->GetTitle(), m_fieldsCtrl ).x + 15;
+    m_groupByColWidth = GetTextSize( m_fieldsCtrl->GetColumn( 2 )->GetTitle(), m_fieldsCtrl ).x + 15;
+    m_fieldsCtrl->GetColumn( 1 )->SetWidth( m_showColWidth );
+    m_fieldsCtrl->GetColumn( 2 )->SetWidth( m_groupByColWidth );
 #else
     m_fieldsCtrl->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     m_fieldsCtrl->GetColumn( 2 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-#endif
     m_showColWidth = m_fieldsCtrl->GetColumn( 1 )->GetWidth();
     m_groupByColWidth = m_fieldsCtrl->GetColumn( 2 )->GetWidth();
+#endif
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
