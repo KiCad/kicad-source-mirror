@@ -318,9 +318,6 @@ int VRML_LAYER::NewContour(  bool aPlatedHole )
 
     std::list<int>* contour = new std::list<int>;
 
-    if( !contour )
-        return -1;
-
     contours.push_back( contour );
     areas.push_back( 0.0 );
 
@@ -348,13 +345,6 @@ bool VRML_LAYER::AddVertex( int aContourID, double aXpos, double aYpos )
     }
 
     VERTEX_3D* vertex = new VERTEX_3D;
-
-    if( !vertex )
-    {
-        error = "AddVertex(): a new vertex could not be allocated";
-        return false;
-    }
-
     vertex->x   = aXpos;
     vertex->y   = aYpos;
     vertex->i   = idx++;
@@ -1409,12 +1399,6 @@ VERTEX_3D* VRML_LAYER::AddExtraVertex( double aXpos, double aYpos, bool aPlatedH
 {
     VERTEX_3D* vertex = new VERTEX_3D;
 
-    if( !vertex )
-    {
-        error = "AddExtraVertex(): could not allocate a new vertex";
-        return NULL;
-    }
-
     if( eidx == 0 )
         eidx = idx + hidx;
 
@@ -1462,9 +1446,6 @@ void VRML_LAYER::glEnd( void )
         {
             // add the loop to the list of outlines
             std::list<int>* loop = new std::list<int>;
-
-            if( !loop )
-                break;
 
             double firstX = 0.0;
             double firstY = 0.0;
