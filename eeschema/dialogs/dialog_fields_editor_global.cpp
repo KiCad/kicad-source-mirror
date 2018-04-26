@@ -388,9 +388,8 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_fieldsCtrl->AppendToggleColumn( _( "Show" ),     wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
 
-    // GTK auto-sizing doesn't take into account the column headers, which is where all the
-    // width is in the checkbox column cases.  So calculate the title sizes and set the column
-    // widths ourselves.
+    // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
+    // set the column widths ourselves.
     auto column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
     m_showColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + CHECKBOX_COLUMN_MARGIN;
     column->SetWidth( m_showColWidth );
@@ -408,10 +407,15 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
     // Now that the fields are loaded we can set the initial location of the splitter
-    // based on the list width.
-    column = m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN );
-    column->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    m_splitter1->SetSashPosition( column->GetWidth() + m_showColWidth + m_groupByColWidth + 40 );
+    // based on the list width.  Again, SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails us on GTK.
+    int nameColWidth = 0;
+    for( unsigned int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
+    {
+        const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+        nameColWidth = std::max( nameColWidth, GetTextSize( fieldName, m_fieldsCtrl ).x );
+    }
+    m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetWidth( nameColWidth );
+    m_splitter1->SetSashPosition( nameColWidth + m_showColWidth + m_groupByColWidth + 40 );
 
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
