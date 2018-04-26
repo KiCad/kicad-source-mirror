@@ -1031,7 +1031,11 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
 
 void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part.expired() )
+    {
+        // no pins; nothing to get
+    }
+    else if( PART_SPTR part = m_part.lock() )
     {
         part->GetPins( aPinsList, m_unit, m_convert );
     }

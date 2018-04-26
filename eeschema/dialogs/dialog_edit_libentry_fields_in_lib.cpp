@@ -351,7 +351,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::EditSpiceModel( wxCommandEvent& event )
     if( dialog.ShowModal() != wxID_OK )
         return;
 
-    // Transfert sch fields to the m_FieldsBuf fields buffer dialog:
+    // Transfer sch fields to the m_FieldsBuf fields buffer dialog:
     m_FieldsBuf.clear();
 
     for( unsigned ii = 0; ii < schfields.size(); ii++ )
@@ -360,6 +360,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::EditSpiceModel( wxCommandEvent& event )
         schfields[ii].ExportValues( libfield );
         m_FieldsBuf.push_back( libfield );
     }
+
+    // ... and to the panel:
+    copySelectedFieldToPanel();
 
     updateDisplay();
 #endif /* KICAD_SPICE */
