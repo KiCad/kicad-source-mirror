@@ -53,10 +53,10 @@ void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
 #define SHOW_FIELD_COLUMN 1
 #define GROUP_BY_COLUMN   2
 
-#ifdef __WXGTK__
-#define CHECKBOX_COLUMN_MARGIN 15
-#else
+#ifdef __WXMAC__
 #define CHECKBOX_COLUMN_MARGIN 5
+#else
+#define CHECKBOX_COLUMN_MARGIN 15
 #endif
 
 #define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
