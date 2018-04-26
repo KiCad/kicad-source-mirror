@@ -34,6 +34,7 @@
 #include <3d_canvas/cinfo3d_visu.h>
 #include <menus_helpers.h>
 #include <3d_viewer_id.h>
+#include "help_common_strings.h"
 
 extern struct EDA_HOTKEY_CONFIG g_3DViewer_Hokeys_Descr[];
 
@@ -44,6 +45,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     wxMenuBar* menuBar   = new wxMenuBar;
     wxMenu*    fileMenu  = new wxMenu;
     wxMenu*    editMenu  = new wxMenu;
+    wxMenu*    viewMenu  = new wxMenu;
     wxMenu*    prefsMenu = new wxMenu;
     wxMenu*    helpMenu  = new wxMenu;
 
@@ -68,6 +70,72 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  _( "Copy 3D Image" ),
                  KiBitmap( copy_xpm ) );
 
+    menuBar->Append( viewMenu, _( "&View" ) );
+
+    AddMenuItem( viewMenu, ID_ZOOM_IN,
+                 _( "Zoom &In" ), HELP_ZOOM_IN,
+                 KiBitmap( zoom_in_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ZOOM_OUT,
+                 _( "Zoom &Out" ), HELP_ZOOM_OUT,
+                 KiBitmap( zoom_out_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE,
+                 _( "Zoom to &Fit" ), HELP_ZOOM_FIT,
+                 KiBitmap( zoom_fit_in_page_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ZOOM_REDRAW,
+                 _( "&Redraw" ), HELP_ZOOM_REDRAW,
+                 KiBitmap( zoom_redraw_xpm ) );
+
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_ROTATE3D_X_NEG,
+                 _( "Rotate X Clockwise" ),
+                 KiBitmap( rotate_neg_x_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ROTATE3D_X_POS,
+                 _( "Rotate X Counterclockwise" ),
+                 KiBitmap( rotate_pos_x_xpm ) );
+
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_ROTATE3D_Y_NEG,
+                 _( "Rotate Y Clockwise" ),
+                 KiBitmap( rotate_neg_y_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ROTATE3D_Y_POS,
+                 _( "Rotate Y Counterclockwise" ),
+                 KiBitmap( rotate_pos_y_xpm ) );
+
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_ROTATE3D_Z_NEG,
+                 _( "Rotate Z Clockwise" ),
+                 KiBitmap( rotate_neg_z_xpm ) );
+
+    AddMenuItem( viewMenu, ID_ROTATE3D_Z_POS,
+                 _( "Rotate Z Counterclockwise" ),
+                 KiBitmap( rotate_pos_z_xpm ) );
+
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_MOVE3D_LEFT,
+                 _( "Move left" ),
+                 KiBitmap( left_xpm ) );
+
+    AddMenuItem( viewMenu, ID_MOVE3D_RIGHT,
+                 _( "Move right" ),
+                 KiBitmap( right_xpm ) );
+
+    AddMenuItem( viewMenu, ID_MOVE3D_UP,
+                 _( "Move up" ),
+                 KiBitmap( up_xpm ) );
+
+    AddMenuItem( viewMenu, ID_MOVE3D_DOWN,
+                 _( "Move down" ),
+                 KiBitmap( down_xpm ) );
+
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_MOUSEWHEEL_PANNING,
@@ -75,6 +143,10 @@ void EDA_3D_VIEWER::CreateMenuBar()
                 KiBitmap( tools_xpm ), wxITEM_CHECK );
 
     prefsMenu->AppendSeparator();
+
+    AddMenuItem( prefsMenu, ID_TOOL_SET_VISIBLE_ITEMS,
+                 _( "Display Options" ),
+                 KiBitmap( read_setup_xpm ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_REALISTIC_MODE,
                  _( "Realistic Mode" ),
@@ -304,11 +376,35 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // /////////////////////////////////////////////////////////////////////////
     menuBar->Append( helpMenu, _( "&Help" ) );
 
+    AddMenuItem( helpMenu, wxID_HELP,
+                 _( "Pcbnew &Manual" ),
+                 _( "Open Pcbnew Manual" ),
+                 KiBitmap( online_help_xpm ) );
+
+    AddMenuItem( helpMenu, wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
+                 KiBitmap( help_xpm ) );
+
     wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_3DViewer_Hokeys_Descr, HK_HELP );
     AddMenuItem( helpMenu, ID_MENU3D_HELP_HOTKEY_SHOW_CURRENT_LIST,
                  text,
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
+
+    helpMenu->AppendSeparator();
+
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
+                 _( "Get &Involved" ),
+                 _( "Contribute to KiCad (opens a web browser)" ),
+                 KiBitmap( info_xpm ) );
+
+    helpMenu->AppendSeparator();
+
+    AddMenuItem( helpMenu, wxID_ABOUT,
+                 _( "&About KiCad" ),
+                 _( "Display KiCad About dialog" ),
+                 KiBitmap( about_xpm ) );
 
     SetMenuBar( menuBar );
     SetMenuBarOptionsState();

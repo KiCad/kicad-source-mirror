@@ -89,29 +89,29 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString,
                             KiBitmap( rotate_neg_x_xpm ),
-                            _( "Rotate X <-" ) );
+                            _( "Rotate X Clockwise" ) );
 
     m_mainToolBar->AddTool( ID_ROTATE3D_X_POS, wxEmptyString,
                             KiBitmap( rotate_pos_x_xpm ),
-                            _( "Rotate X ->" ) );
+                            _( "Rotate X Counterclockwise" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_ROTATE3D_Y_NEG, wxEmptyString,
                             KiBitmap( rotate_neg_y_xpm ),
-                            _( "Rotate Y <-" ) );
+                            _( "Rotate Y Clockwise" ) );
 
     m_mainToolBar->AddTool( ID_ROTATE3D_Y_POS, wxEmptyString,
                             KiBitmap( rotate_pos_y_xpm ),
-                            _( "Rotate Y ->" ) );
+                            _( "Rotate Y Counterclockwise" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_ROTATE3D_Z_NEG, wxEmptyString,
                             KiBitmap( rotate_neg_z_xpm ),
-                            _( "Rotate Z <-" ) );
+                            _( "Rotate Z Clockwise" ) );
 
     m_mainToolBar->AddTool( ID_ROTATE3D_Z_POS, wxEmptyString,
                             KiBitmap( rotate_pos_z_xpm ),
-                            _( "Rotate Z ->" ) );
+                            _( "Rotate Z Counterclockwise" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MOVE3D_LEFT, wxEmptyString, KiBitmap( left_xpm ),
