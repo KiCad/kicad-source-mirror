@@ -54,7 +54,7 @@
 #include <zone_filler.h>
 
 // minimum width (mm) of a VRML line
-#define MIN_VRML_LINEWIDTH 0.12
+#define MIN_VRML_LINEWIDTH 0.05  // previously 0.12
 
 // offset for art layers, mm (silk, paste, etc)
 #define  ART_OFFSET 0.025
