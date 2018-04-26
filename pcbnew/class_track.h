@@ -147,10 +147,13 @@ public:
     /**
      * Function GetBestInsertPoint
      * searches the "best" insertion point within the track linked list.
-     * The best point is the begging of the corresponding net code section.
+     * The best point is currently the end of the corresponding net code section.
      * (The BOARD::m_Track and BOARD::m_Zone lists are sorted by netcode.)
      * @param aPcb The BOARD to search for the insertion point.
-     * @return TRACK* - the item found in the linked list (or NULL if no track)
+     * @return TRACK* - the insertion point in the linked list.
+     * this is the next item after the last item having my net code.
+     * therefore the track to insert must be inserted before the insertion point.
+     * if the best insertion point is the end of list, the returned value is NULL
      */
     TRACK* GetBestInsertPoint( BOARD* aPcb );
 

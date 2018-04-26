@@ -512,7 +512,10 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
             return track->Next();
     }
 
-    return NULL;
+    if( Type() == PCB_ZONE_T )
+        return aPcb->m_Zone.GetFirst();
+    else
+        return aPcb->m_Track.GetFirst();
 }
 
 
