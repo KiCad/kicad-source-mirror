@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 20 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,8 +17,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
-	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::m_splitter1OnIdle ), NULL, this );
-	m_splitter1->SetMinimumPaneSize( 230 );
+	m_splitter1->SetMinimumPaneSize( 200 );
 	
 	m_leftPanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bLeftSizer;
@@ -34,7 +33,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	bGroupSizer->Add( m_groupComponentsBox, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bGroupSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	bGroupSizer->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_bRefresh = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
@@ -45,7 +44,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	bLeftSizer->Add( bGroupSizer, 0, wxALL|wxBOTTOM|wxEXPAND|wxTOP, 2 );
 	
 	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldsCtrl->SetMinSize( wxSize( 220,220 ) );
+	m_fieldsCtrl->SetMinSize( wxSize( -1,220 ) );
 	
 	bLeftSizer->Add( m_fieldsCtrl, 1, wxALL|wxEXPAND, 5 );
 	
@@ -89,7 +88,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_panel4->SetSizer( bRightSizer );
 	m_panel4->Layout();
 	bRightSizer->Fit( m_panel4 );
-	m_splitter1->SplitVertically( m_leftPanel, m_panel4, 230 );
+	m_splitter1->SplitVertically( m_leftPanel, m_panel4, -1 );
 	bMainSizer->Add( m_splitter1, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bButtonsSizer;

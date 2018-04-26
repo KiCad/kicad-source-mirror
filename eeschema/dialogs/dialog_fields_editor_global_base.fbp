@@ -14,7 +14,6 @@
         <property name="file">dialog_fields_editor_global_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_fields_editor_global_base</property>
         <property name="namespace"></property>
@@ -129,7 +128,7 @@
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
-                        <property name="min_pane_size">230</property>
+                        <property name="min_pane_size">200</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size">-1,-1</property>
@@ -143,7 +142,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="sashgravity">0.0</property>
-                        <property name="sashpos">230</property>
+                        <property name="sashpos">-1</property>
                         <property name="sashsize">-1</property>
                         <property name="show">1</property>
                         <property name="size"></property>
@@ -360,8 +359,8 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="0">
-                                                <property name="border">5</property>
-                                                <property name="flag">wxEXPAND</property>
+                                                <property name="border">10</property>
+                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                 <property name="proportion">1</property>
                                                 <object class="spacer" expanded="0">
                                                     <property name="height">0</property>
@@ -478,7 +477,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
-                                            <property name="minimum_size">220,220</property>
+                                            <property name="minimum_size">-1,220</property>
                                             <property name="name">m_fieldsCtrl</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
