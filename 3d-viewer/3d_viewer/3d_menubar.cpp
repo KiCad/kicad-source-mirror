@@ -148,10 +148,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  _( "Display Options" ),
                  KiBitmap( read_setup_xpm ) );
 
-    AddMenuItem( prefsMenu, ID_MENU3D_REALISTIC_MODE,
-                 _( "Realistic Mode" ),
-                 KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
-
     wxMenu * renderEngineList = new wxMenu;
     AddMenuItem( prefsMenu, renderEngineList, ID_MENU3D_ENGINE,
                 _( "Render Engine" ), KiBitmap( render_mode_xpm ) );
@@ -310,60 +306,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
     else
         gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
 
-
-    // Display elements options
-    // /////////////////////////////////////////////////////////////////////////
-    prefsMenu->AppendSeparator();
-
-    AddMenuItem( prefsMenu, ID_MENU3D_SHOW_BOARD_BODY,
-                 _( "Show Board Bod&y" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( prefsMenu, ID_MENU3D_ZONE_ONOFF,
-                 _( "Show Zone &Filling" ), KiBitmap( add_zone_xpm ), wxITEM_CHECK );
-
-    wxMenu * moduleAttributes = new wxMenu;
-    AddMenuItem( prefsMenu, moduleAttributes, ID_MENU3D_MODULE_ONOFF,
-                 _( "Show 3D M&odels" ), KiBitmap( shape_3d_xpm ) );
-    moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL,
-                                       _( "Through Hole" ),
-                                       _( "Footprint Properties -> Placement type -> Through hole" ) );
-
-    moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL_INSERT,
-                                       _( "Surface Mount" ),
-                                       _( "Footprint Properties -> Placement type -> Surface mount" ) );
-
-    moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_VIRTUAL,
-                                       _( "Virtual" ),
-                                       _( "Footprint Properties -> Placement type -> Virtual (eg: edge connectors, test points, mechanical parts)" ) );
-
-    // Layer options
-    // /////////////////////////////////////////////////////////////////////////
-    prefsMenu->AppendSeparator();
-
-    wxMenu * layersMenu = new wxMenu;
-    AddMenuItem( prefsMenu, layersMenu, ID_MENU3D_LAYERS,
-                 _( "Show &Layers" ), KiBitmap( tools_xpm ) );
-
-    AddMenuItem( layersMenu, ID_MENU3D_ADHESIVE_ONOFF,
-                 _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( layersMenu, ID_MENU3D_SILKSCREEN_ONOFF,
-                 _( "Show &Silkscreen Layers" ), KiBitmap( text_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( layersMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
-                 _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( layersMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
-                 _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
-
-    // Other layers are not "board" layers, and are not shown in realistic mode
-    // These menus will be disabled in in realistic mode
-    AddMenuItem( layersMenu, ID_MENU3D_COMMENTS_ONOFF,
-                 _( "Show &Comments and Drawings Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( layersMenu, ID_MENU3D_ECO_ONOFF,
-                 _( "Show &Eco Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
-
     // Reset options
     // /////////////////////////////////////////////////////////////////////////
     prefsMenu->AppendSeparator();
@@ -436,13 +378,6 @@ void EDA_3D_VIEWER::SetMenuBarOptionsState()
     item = menuBar->FindItem( ID_MENU3D_ENGINE_RAYTRACING );
     item->Check( m_settings.RenderEngineGet() == RENDER_ENGINE_RAYTRACING );
 
-    item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
-    item->Check(  m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-    item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
-    item->Enable( !m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-    item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
-    item->Enable( !m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL );
     item->Check( m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL );
 
@@ -482,39 +417,7 @@ void EDA_3D_VIEWER::SetMenuBarOptionsState()
     item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
 
 
-    item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
-    item->Check( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
-
-    item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL );
-    item->Check( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-
-    item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL_INSERT );
-    item->Check( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
-
-    item = menuBar->FindItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_VIRTUAL );
-    item->Check( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
-
-    item = menuBar->FindItem( ID_MENU3D_ZONE_ONOFF );
-    item->Check( m_settings.GetFlag( FL_ZONE ) );
-
     item = menuBar->FindItem( ID_MENU3D_AXIS_ONOFF );
     item->Check( m_settings.GetFlag( FL_AXIS ) );
 
-    item = menuBar->FindItem( ID_MENU3D_ADHESIVE_ONOFF );
-    item->Check( m_settings.GetFlag( FL_ADHESIVE ) );
-
-    item = menuBar->FindItem( ID_MENU3D_SILKSCREEN_ONOFF );
-    item->Check( m_settings.GetFlag( FL_SILKSCREEN ) );
-
-    item = menuBar->FindItem( ID_MENU3D_SOLDER_MASK_ONOFF );
-    item->Check( m_settings.GetFlag( FL_SOLDERMASK ) );
-
-    item = menuBar->FindItem( ID_MENU3D_SOLDER_PASTE_ONOFF );
-    item->Check( m_settings.GetFlag( FL_SOLDERPASTE ) );
-
-    item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
-    item->Check( m_settings.GetFlag( FL_COMMENTS ) );
-
-    item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
-    item->Check( m_settings.GetFlag( FL_ECO ));
 }
