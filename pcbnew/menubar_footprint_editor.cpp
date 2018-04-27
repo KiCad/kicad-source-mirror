@@ -428,20 +428,20 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     //----- Preferences menu -----------------
     wxMenu* prefs_menu = new wxMenu;
 
-    AddMenuItem( prefs_menu, ID_PCB_LIB_WIZARD,
-                _( "&Footprint Library Wizard..." ), _( "Add footprint libraries with wizard" ),
-                KiBitmap( wizard_add_fplib_small_xpm ) );
-
-    AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Footprint Li&brary Table..." ), _( "Configure footprint library table" ),
-                KiBitmap( library_table_xpm ) );
-
     // Path configuration edit dialog.
     AddMenuItem( prefs_menu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure Pa&ths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
+
+    AddMenuItem( prefs_menu, ID_PCB_LIB_WIZARD,
+                _( "Add &Footprint Libraries Wizard..." ), _( "Add footprint libraries with wizard" ),
+                KiBitmap( wizard_add_fplib_small_xpm ) );
+
+    AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
+                _( "Manage Footprint Li&braries..." ), _( "Configure footprint library table" ),
+                KiBitmap( library_table_xpm ) );
 
     // Settings
     AddMenuItem( prefs_menu, wxID_PREFERENCES,
