@@ -169,10 +169,13 @@ def LoadPlugins(bundlepath=None):
 
     Arguments:
     bundlepath -- The path to the bundled scripts.
-                  The bunbled Plugins are relative to this path, in the
+                  The bundled Plugins are relative to this path, in the
                   "plugins" subdirectory.
                 WARNING: bundlepath must use '/' as path separator, and not '\'
-                because it creates issues (\n and \r are seen as escaped seq)
+                because it creates issues:
+                \n and \r are seen as a escaped seq when passing this string to this method
+                I am thinking this is due to the fact LoadPlugins is called from C++ code by
+                PyRun_SimpleString()
 
     NOTE: These are all of the possible "default" search paths for kicad
           python scripts.  These paths will ONLY be added to the python
@@ -203,6 +206,13 @@ def LoadPlugins(bundlepath=None):
     kicad_path = os.environ.get('KICAD_PATH')
     config_path = pcbnew.GetKicadConfigPath()
     plugin_directories=[]
+
+    """
+    To be consistent with others paths, on windows, convert the unix '/' separator
+    to the windows separator, although using '/' works
+    """
+    if sys.platform.startswith('win32'):
+        bundlepath = bundlepath.replace("/","\\")
 
     if bundlepath:
         plugin_directories.append(bundlepath)

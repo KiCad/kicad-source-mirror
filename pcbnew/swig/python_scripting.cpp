@@ -451,8 +451,7 @@ wxString PyScriptingPath()
     scriptPath.MakeAbsolute();
 
     // Convert '\' to '/' in path, because later python script read \n or \r
-    // as escaped sequence, and create issues. Moreover, python uses unix notation in paths
-    // in many cases.
+    // as escaped sequence, and create issues, when calling it by PyRun_SimpleString() method.
     // It can happen on Windows.
     path = scriptPath.GetFullPath();
     path.Replace( '\\', '/' );
@@ -462,5 +461,7 @@ wxString PyScriptingPath()
 
 wxString PyPluginsPath()
 {
-    return PyScriptingPath() + wxFileName::GetPathSeparator() + "plugins";
+    // Note we are using unix path separator, because window separator sometimes
+    // creates issues when passing a command string to a python method by PyRun_SimpleString
+    return PyScriptingPath() + '/' + "plugins";
 }
