@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,7 +450,14 @@ wxString PyScriptingPath()
     wxFileName scriptPath( path );
     scriptPath.MakeAbsolute();
 
-    return scriptPath.GetFullPath();
+    // Convert '\' to '/' in path, because later python script read \n or \r
+    // as escaped sequence, and create issues. Moreover, python uses unix notation in paths
+    // in many cases.
+    // It can happen on Windows.
+    path = scriptPath.GetFullPath();
+    path.Replace( '\\', '/' );
+
+    return path;
 }
 
 wxString PyPluginsPath()
