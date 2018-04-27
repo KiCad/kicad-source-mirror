@@ -99,8 +99,12 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         if( !item.m_enabled )
             continue;
 
-        // Save the node order
-        aFormatter->Print( 0, "%c%s ", item.m_primitive, (const char*) item.m_refName.c_str() );
+        // Add a character determining the device type if the original reference
+        // would result in a different device type
+        if( item.m_primitive != item.m_refName[0] )
+            aFormatter->Print( 0, "%c", item.m_primitive );
+
+        aFormatter->Print( 0, "%s ", (const char*) item.m_refName.c_str() );
 
         size_t pspiceNodes = item.m_pinSequence.empty() ? item.m_pins.size() : item.m_pinSequence.size();
 
