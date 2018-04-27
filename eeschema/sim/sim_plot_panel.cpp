@@ -386,6 +386,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
         case ST_DC:
             m_axis_x = new VOLTAGE_SCALE_X( wxT( "Voltage (sweeped)" ), mpALIGN_BOTTOM );
             m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage (measured)" ), mpALIGN_LEFT );
+            m_axis_y2 = new CURRENT_SCALE( wxT( "Current" ), mpALIGN_RIGHT );
             break;
 
         case ST_NOISE:
