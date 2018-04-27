@@ -133,6 +133,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     icon.CopyFromBitmap( KiBitmap( simulator_xpm ) );
     SetIcon( icon );
 
+    // Gives a minimal size
+    SetSizeHints( 500, 400, -1, -1, -1, -1 );
+
     // Get the previous size and position of windows:
     LoadSettings( config() );
 

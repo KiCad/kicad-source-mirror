@@ -75,8 +75,6 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         long aStyle, const wxString& aFrameName ) :
     wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName )
 {
-    wxSize minsize;
-
     m_Ident = aFrameType;
     m_mainToolBar = NULL;
     m_hasAutoSave = false;
@@ -84,20 +82,14 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_autoSaveInterval = -1;
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath = wxStandardPaths::Get().GetDocumentsDir();
-    minsize.x = 470;
-    minsize.y = 350;
 
-    SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
+    // Gives a reasonable minimal size to the frame:
+    const int minsize_x = 500;
+    const int  minsize_y = 400;
+    SetSizeHints( minsize_x, minsize_y, -1, -1, -1, -1 );
 
-    if( ( aSize.x < minsize.x ) || ( aSize.y < minsize.y ) )
-        SetSize( 0, 0, minsize.x, minsize.y );
-
-    // Create child subwindows.
-
-    // Dimensions of the user area of the main window.
+    // Store dimensions of the user area of the main window.
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
-
-    m_FramePos.x = m_FramePos.y = 0;
 
     Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
              wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
@@ -137,6 +129,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
     // Don't allow closing when a quasi-modal is open.
     wxWindow* quasiModal = findQuasiModalDialog();
+
     if( quasiModal )
     {
         // Raise and notify; don't give the user a warning regarding "quasi-modal dialogs"
