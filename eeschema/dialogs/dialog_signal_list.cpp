@@ -54,7 +54,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
         // Voltage list
         for( const auto& net : m_exporter->GetNetIndexMap() )
         {
-            if( net.first != "GND" )
+            if( net.first != "GND" && net.first != "0" )
                 m_signals->Append( wxString::Format( "V(%s)", net.first ) );
         }
 
