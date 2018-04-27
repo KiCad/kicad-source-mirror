@@ -164,6 +164,12 @@ public:
                 case S_CIRCLE:
                     points->AddPoint( segment->GetCenter() );
                     points->AddPoint( segment->GetEnd() );
+
+                    // Set constraints
+                    // Circle end is on the horizontal axis with the center
+                    points->Point( CIRC_END ).SetConstraint(
+                            new EC_HORIZONTAL( points->Point( CIRC_END ),
+                                               points->Point( CIRC_CENTER ) ) );
                     break;
 
                 case S_POLYGON:

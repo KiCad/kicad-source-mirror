@@ -156,8 +156,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         SetTitle( _( "Circle Properties" ) );
         m_StartPointXLabel->SetLabel( _( "Center X:" ) );
         m_StartPointYLabel->SetLabel( _( "Center Y:" ) );
-        m_EndPointXLabel->SetLabel( _( "Point X:" ) );
-        m_EndPointYLabel->SetLabel( _( "Point Y:" ) );
+        m_EndPointXLabel->SetLabel( _( "Radius:" ) );
+        m_EndPointYLabel->Show( false );
+        m_EndPointYUnit->Show( false );
+        m_EndY_Ctrl->Show( false );
         break;
 
     case S_ARC:
@@ -187,9 +189,15 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     PutValueInLocalUnits( *m_Center_StartYCtrl, m_item->GetStart().y );
 
-    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetEnd().x );
-
-    PutValueInLocalUnits( *m_EndY_Ctrl, m_item->GetEnd().y );
+    if(  m_item->GetShape() == S_CIRCLE )
+    {
+        PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetRadius() );
+    }
+    else
+    {
+        PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetEnd().x );
+        PutValueInLocalUnits( *m_EndY_Ctrl, m_item->GetEnd().y );
+    }
 
     PutValueInLocalUnits( *m_ThicknessCtrl, m_item->GetWidth() );
 
@@ -253,11 +261,19 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     msg = m_Center_StartYCtrl->GetValue();
     m_item->SetStartY( ValueFromString( g_UserUnit, msg ) );
 
-    msg = m_EndX_Radius_Ctrl->GetValue();
-    m_item->SetEndX( ValueFromString( g_UserUnit, msg ) );
+    if( m_item->GetShape() == S_CIRCLE )
+    {
+        msg = m_EndX_Radius_Ctrl->GetValue();
+        m_item->SetEnd( m_item->GetStart() + wxPoint( ValueFromString( g_UserUnit, msg ), 0 ) );
+    }
+    else
+    {
+        msg = m_EndX_Radius_Ctrl->GetValue();
+        m_item->SetEndX( ValueFromString( g_UserUnit, msg ) );
 
-    msg = m_EndY_Ctrl->GetValue();
-    m_item->SetEndY( ValueFromString( g_UserUnit, msg ) );
+        msg = m_EndY_Ctrl->GetValue();
+        m_item->SetEndY( ValueFromString( g_UserUnit, msg ) );
+    }
 
     msg = m_ThicknessCtrl->GetValue();
     m_item->SetWidth( ValueFromString( g_UserUnit, msg ) );
