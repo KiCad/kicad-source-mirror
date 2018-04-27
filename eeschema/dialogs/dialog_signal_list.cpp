@@ -58,7 +58,6 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
                 m_signals->Append( wxString::Format( "V(%s)", net.first ) );
         }
 
-        // For some reason, it is not possible to plot currents in any but transient analysis
         auto simType = m_exporter->GetSimType();
 
         if( simType == ST_TRANSIENT || simType == ST_DC )
