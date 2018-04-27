@@ -117,8 +117,14 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
             try
             {
-                simCmd += wxString::Format( "v%s %s %s %s",
-                    m_dcSource1->GetValue(),
+                wxString dcSource = m_dcSource1->GetValue();
+
+                // Add voltage source prefix if needed
+                if( dcSource[0] != 'v' && dcSource[0] != 'V' )
+                    dcSource += 'v' + dcSource;
+
+                simCmd += wxString::Format( "%s %s %s %s",
+                    dcSource,
                     SPICE_VALUE( m_dcStart1->GetValue() ).ToSpiceString(),
                     SPICE_VALUE( m_dcStop1->GetValue() ).ToSpiceString(),
                     SPICE_VALUE( m_dcIncr1->GetValue() ).ToSpiceString() );
@@ -145,8 +151,14 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
             try
             {
-                simCmd += wxString::Format( "v%s %s %s %s",
-                    m_dcSource2->GetValue(),
+                wxString dcSource = m_dcSource2->GetValue();
+
+                // Add voltage source prefix if needed
+                if( dcSource[0] != 'v' && dcSource[0] != 'V' )
+                    dcSource += 'v' + dcSource;
+
+                simCmd += wxString::Format( "%s %s %s %s",
+                    dcSource,
                     SPICE_VALUE( m_dcStart2->GetValue() ).ToSpiceString(),
                     SPICE_VALUE( m_dcStop2->GetValue() ).ToSpiceString(),
                     SPICE_VALUE( m_dcIncr2->GetValue() ).ToSpiceString() );
@@ -174,9 +186,15 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         wxString ref = empty( m_noiseRef )
             ? wxString() : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
 
+        wxString noiseSource = m_noiseSrc->GetValue();
+
+        // Add voltage source prefix if needed
+        if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )
+            noiseSource += 'v' + noiseSource;
+
         m_simCommand = wxString::Format( ".noise v(%d%s) v%s %s %s %s %s",
             netMap.at( m_noiseMeas->GetValue() ), ref,
-            m_noiseSrc->GetValue(), scaleToString( m_noiseScale->GetSelection() ),
+            noiseSource, scaleToString( m_noiseScale->GetSelection() ),
             m_noisePointsNumber->GetValue(),
             SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
