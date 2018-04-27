@@ -203,8 +203,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // instead of being behind the dialog frame (as it does)
     m_settingsDlg = NULL;
 
-    SetSize( ConvertDialogToPixels( wxSize( 400, 300 ) ) );
-
     // resize the subwindows size. At least on Windows, calling wxSafeYield before
     // resizing the subwindows forces the wxSplitWindows size events automatically generated
     // by wxWidgets to be executed before our resize code.
