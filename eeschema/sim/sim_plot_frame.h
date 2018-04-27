@@ -156,6 +156,11 @@ public:
      */
     SIM_PLOT_PANEL* CurrentPlot() const;
 
+    /**
+     * Returns the netlist exporter object used for simulations.
+     */
+    const NETLIST_EXPORTER_PSPICE_SIM* GetExporter() const;
+
 private:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;

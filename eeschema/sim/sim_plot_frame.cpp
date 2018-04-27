@@ -407,6 +407,12 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
 }
 
 
+const NETLIST_EXPORTER_PSPICE_SIM* SIM_PLOT_FRAME::GetExporter() const
+{
+    return m_exporter.get();
+}
+
+
 void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam )
 {
     SIM_TYPE simType = m_exporter->GetSimType();

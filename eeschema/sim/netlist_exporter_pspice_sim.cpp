@@ -85,21 +85,6 @@ const std::vector<wxString>& NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( SPICE_PRI
 }
 
 
-wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceDevice( const wxString& aComponent ) const
-{
-    const auto& spiceItems = GetSpiceItems();
-
-    auto it = std::find_if( spiceItems.begin(), spiceItems.end(), [&]( const SPICE_ITEM& item ) {
-        return item.m_refName == aComponent;
-    } );
-
-    if( it == spiceItems.end() )
-        return wxEmptyString;
-
-    return wxString( it->m_primitive + it->m_refName );
-}
-
-
 wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
 {
     wxString simCmd;

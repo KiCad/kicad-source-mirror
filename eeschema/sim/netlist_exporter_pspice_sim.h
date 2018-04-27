@@ -54,13 +54,6 @@ public:
             const wxString& aParam = wxEmptyString ) const;
 
     /**
-     * @brief Returns name of Spice device corresponding to a schematic component.
-     * @param aComponent is the component reference.
-     * @return Spice device name or empty string if there is no such component in the netlist.
-     */
-    wxString GetSpiceDevice( const wxString& aComponent ) const;
-
-    /**
      * @brief Returns a list of currents that can be probed in a Spice primitive.
      */
     static const std::vector<wxString>& GetCurrents( SPICE_PRIMITIVE aPrimitive );

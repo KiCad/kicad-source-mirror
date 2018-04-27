@@ -123,6 +123,17 @@ public:
     }
 
     /**
+     * @brief Returns name of Spice device corresponding to a schematic component.
+     *
+     * @param aComponent is the component reference.
+     * @return Spice device name or empty string if there is no such component in the netlist. The
+     * name is either plain reference if the first character of reference corresponds to the
+     * assigned device model type or it is the reference prefixed with a character defining
+     * the device model type.
+     */
+    wxString GetSpiceDevice( const wxString& aComponent ) const;
+
+    /**
      * Function WriteNetlist
      * writes to specified output file
      */

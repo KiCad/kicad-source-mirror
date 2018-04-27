@@ -117,11 +117,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
             try
             {
-                wxString dcSource = m_dcSource1->GetValue();
-
-                // Add voltage source prefix if needed
-                if( dcSource[0] != 'v' && dcSource[0] != 'V' )
-                    dcSource += 'v' + dcSource;
+                wxString dcSource = m_exporter->GetSpiceDevice( m_dcSource1->GetValue() );
 
                 simCmd += wxString::Format( "%s %s %s %s",
                     dcSource,
@@ -151,11 +147,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
             try
             {
-                wxString dcSource = m_dcSource2->GetValue();
-
-                // Add voltage source prefix if needed
-                if( dcSource[0] != 'v' && dcSource[0] != 'V' )
-                    dcSource += 'v' + dcSource;
+                wxString dcSource = m_exporter->GetSpiceDevice( m_dcSource2->GetValue() );
 
                 simCmd += wxString::Format( "%s %s %s %s",
                     dcSource,
@@ -186,7 +178,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         wxString ref = empty( m_noiseRef )
             ? wxString() : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
 
-        wxString noiseSource = m_noiseSrc->GetValue();
+        wxString noiseSource = m_exporter->GetSpiceDevice( m_noiseSrc->GetValue() );
 
         // Add voltage source prefix if needed
         if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )

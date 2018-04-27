@@ -39,6 +39,24 @@
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
+
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceDevice( const wxString& aComponent ) const
+{
+    const auto& spiceItems = GetSpiceItems();
+
+    auto it = std::find_if( spiceItems.begin(), spiceItems.end(), [&]( const SPICE_ITEM& item ) {
+        return item.m_refName == aComponent;
+    } );
+
+    if( it == spiceItems.end() )
+        return wxEmptyString;
+
+    // Prefix the device type if plain reference would result in a different device type
+    return it->m_primitive != it->m_refName[0] ?
+        wxString( it->m_primitive + it->m_refName ) : it->m_refName;
+}
+
+
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     FILE_OUTPUTFORMATTER outputFile( aOutFileName, wxT( "wt" ), '\'' );
@@ -99,12 +117,8 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         if( !item.m_enabled )
             continue;
 
-        // Add a character determining the device type if the original reference
-        // would result in a different device type
-        if( item.m_primitive != item.m_refName[0] )
-            aFormatter->Print( 0, "%c", item.m_primitive );
-
-        aFormatter->Print( 0, "%s ", (const char*) item.m_refName.c_str() );
+        wxString device = GetSpiceDevice( item.m_refName );
+        aFormatter->Print( 0, "%s ", (const char*) device.c_str() );
 
         size_t pspiceNodes = item.m_pinSequence.empty() ? item.m_pins.size() : item.m_pinSequence.size();
 

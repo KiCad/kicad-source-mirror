@@ -27,7 +27,7 @@
 #include <sim/sim_plot_frame.h>
 #include <sch_component.h>
 #include <template_fieldnames.h>
-#include <netlist_exporters/netlist_exporter_pspice.h>
+#include <sim/netlist_exporter_pspice_sim.h>
 
 TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPONENT* aComponent )
     : TUNER_SLIDER_BASE( aParent ), m_component( aComponent ),
@@ -37,10 +37,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPO
     m_name->SetLabel( compName );
     m_value = SPICE_VALUE( aComponent->GetField( VALUE )->GetText() );
     m_changed = false;
-
-    // Generate Spice component name
-    char prim = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, aComponent, 0 )[0];
-    m_spiceName = wxString( prim + compName ).Lower();
+    m_spiceName = aFrame->GetExporter()->GetSpiceDevice( compName ).Lower();
 
     // Call Set*() methods to update fields and slider
     m_max = SPICE_VALUE( 2.0 ) * m_value;
