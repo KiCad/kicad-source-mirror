@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,59 +22,59 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * This file is part of the common libary.
- * @file  dialog_get_component.h
- */
 
 #ifndef __INCLUDE_DIALOG_GET_COMPONENT_H__
 #define __INCLUDE_DIALOG_GET_COMPONENT_H__
 
-#include <../common/dialogs/dialog_get_component_base.h>
+#include "dialog_get_footprint_base.h"
 
-void     AddHistoryComponentName( wxArrayString& HistoryList,
-                                  const wxString& Name );
+class PCB_BASE_FRAME;
+
+void AddHistoryComponentName( const wxString& Name );
+
 
 /* Dialog frame to choose a component name */
-class DIALOG_GET_COMPONENT : public DIALOG_GET_COMPONENT_BASE
+class DIALOG_GET_FOOTPRINT : public DIALOG_GET_FOOTPRINT_BASE
 {
 private:
-    bool        m_auxToolSelector;
-    wxString    m_Text;
-    bool        m_selectionIsKeyword;
-
-public:
-    bool        m_GetExtraFunction;
+    PCB_BASE_FRAME* m_frame;
+    wxString        m_Text;
+    bool            m_selectionIsKeyword;
+    bool            m_selectByBrowser;
 
 public:
     // Constructor and destructor
-    DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent,
-                          wxArrayString& HistoryList, const wxString& Title,
-                          bool show_extra_tool );
-    ~DIALOG_GET_COMPONENT() {};
+    DIALOG_GET_FOOTPRINT( PCB_BASE_FRAME* parent, bool aShowBrowseButton );
+    ~DIALOG_GET_FOOTPRINT() override {};
 
     /**
      * Function GetComponentName
      * @return the selection (name or keyword)
      */
-    wxString GetComponentName( void );
+    wxString GetComponentName();
 
     /**
      * Function IsKeyword
      * @return true if the returned string is a keyword
      */
-    bool     IsKeyword( void )
+    bool IsKeyword()
     {
         return m_selectionIsKeyword;
     }
 
-    void     SetComponentName( const wxString& name );
+    /**
+     * Function SelectByBrowser
+     * @return true if the footprint browser should be shown to select the footprint
+     */
+    bool SelectByBrowser()
+    {
+        return m_selectByBrowser;
+    }
+
+    void SetComponentName( const wxString& name );
 
 private:
-    void     initDialog( wxArrayString& aHistoryList );
-    void     OnCancel( wxCommandEvent& event ) override;
-    void     Accept( wxCommandEvent& event ) override;
-    void     GetExtraSelection( wxCommandEvent& event ) override;
+    void Accept( wxCommandEvent& aEvent ) override;
 };
 
 

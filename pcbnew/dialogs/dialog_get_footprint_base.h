@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GET_COMPONENT_BASE_H__
-#define __DIALOG_GET_COMPONENT_BASE_H__
+#ifndef __DIALOG_GET_FOOTPRINT_BASE_H__
+#define __DIALOG_GET_FOOTPRINT_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -30,12 +30,12 @@
 #define ID_SEL_BY_LISTBOX 1000
 #define ID_ACCEPT_KEYWORD 1001
 #define ID_LIST_ALL 1002
-#define ID_EXTRA_TOOL 1003
+#define ID_BROWSE 1003
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GET_COMPONENT_BASE
+/// Class DIALOG_GET_FOOTPRINT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GET_COMPONENT_BASE : public DIALOG_SHIM
+class DIALOG_GET_FOOTPRINT_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -54,15 +54,13 @@ class DIALOG_GET_COMPONENT_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void Accept( wxCommandEvent& event ) { event.Skip(); }
-		virtual void GetExtraSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_GET_COMPONENT_BASE();
+		DIALOG_GET_FOOTPRINT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Choose Footprint"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_GET_FOOTPRINT_BASE();
 	
 };
 
-#endif //__DIALOG_GET_COMPONENT_BASE_H__
+#endif //__DIALOG_GET_FOOTPRINT_BASE_H__

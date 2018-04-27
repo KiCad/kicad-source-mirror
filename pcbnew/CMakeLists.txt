@@ -100,6 +100,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_gendrill_base.cpp
     dialogs/dialog_general_options.cpp
     dialogs/dialog_general_options_BoardEditor_base.cpp
+    dialogs/dialog_get_footprint.cpp
+    dialogs/dialog_get_footprint_base.cpp
     dialogs/dialog_get_footprint_by_name_base.cpp
     dialogs/dialog_global_deletion.cpp
     dialogs/dialog_global_deletion_base.cpp

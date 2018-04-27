@@ -55,7 +55,7 @@ using namespace std::placeholders;
 #include <footprint_edit_frame.h>
 #include <footprint_info.h>
 #include <footprint_info_impl.h>
-#include <dialog_get_component.h>
+#include <dialog_get_footprint.h>
 #include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>
@@ -168,18 +168,17 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary, bool aU
     const wxString& libName = aLibrary;
     bool            allowWildSeach = true;
 
-    static wxArrayString HistoryList;
-    static wxString      lastComponentName;
+    static wxString lastComponentName;
 
     // Ask for a component name or key words
-    DIALOG_GET_COMPONENT dlg( this, HistoryList, _( "Load Footprint" ), aUseFootprintViewer );
+    DIALOG_GET_FOOTPRINT dlg( this, aUseFootprintViewer );
 
     dlg.SetComponentName( lastComponentName );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;
 
-    if( dlg.m_GetExtraFunction )
+    if( dlg.SelectByBrowser() )
     {
         // SelectFootprintFromLibBrowser() returns the "full" footprint name, i.e.
         // <lib_name>/<footprint name> or LIB_ID format "lib_name:fp_name:rev#"
@@ -286,7 +285,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary, bool aU
     if( module )
     {
         lastComponentName = moduleName;
-        AddHistoryComponentName( HistoryList, moduleName );
+        AddHistoryComponentName( moduleName );
     }
 
     return module;
@@ -343,6 +342,26 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
     }
 
     return module;
+}
+
+
+bool PCB_BASE_FRAME::CheckFootprint( const LIB_ID& aFootprintId )
+{
+    const wxString& libNickname = aFootprintId.GetLibNickname();
+    const wxString& fpName = aFootprintId.GetLibItemName();
+    FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
+
+    try
+    {
+        const FP_LIB_TABLE_ROW* fpTableRow = fpTable->FindRow( aFootprintId.GetLibNickname() );
+
+        if( fpTableRow && fpTableRow->GetIsEnabled() )
+            return fpTable->FootprintLoad( libNickname, fpName ) != nullptr;
+    }
+    catch( ... )
+    { }
+
+    return false;
 }
 
 
