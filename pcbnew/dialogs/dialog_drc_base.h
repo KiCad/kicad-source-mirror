@@ -60,8 +60,6 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_MicroViaMinUnit;
 		wxCheckBox* m_cbRefillZones;
 		wxCheckBox* m_cbReportAllTrackErrors;
-		wxCheckBox* m_cbCourtyardOverlap;
-		wxCheckBox* m_cbCourtyardMissing;
 		wxStaticText* m_messagesLabel;
 		wxTextCtrl* m_Messages;
 		wxCheckBox* m_CreateRptCtrl;

@@ -727,6 +727,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             if( layer != UNDEFINED_LAYER )
             {
+                const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
                 DIMENSION* dimension = new DIMENSION( m_board );
                 m_board->Add( dimension, ADD_APPEND );
 
@@ -752,16 +753,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 // The origin and end are assumed to always be in this order from eagle
                 dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
                 dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
-                dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
-
-                int width = m_board->GetDesignSettings().m_PcbTextWidth;
-                int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
-
-                if( width > maxThickness )
-                    width = maxThickness;
-
-                dimension->Text().SetThickness( width );
-                dimension->SetWidth( width );
+                dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
+                dimension->Text().SetThickness( designSettings.GetTextThickness( layer ) );
+                dimension->SetWidth( designSettings.GetLineThickness( layer ) );
 
                 // check which axis the dimension runs in
                 // because the "height" of the dimension is perpendicular to that axis

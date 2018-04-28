@@ -65,7 +65,7 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	bRightSizer->Add( sbClearance, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
-	bupperSizer->Add( bRightSizer, 1, wxEXPAND|wxTOP, 5 );
+	bupperSizer->Add( bRightSizer, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	
 	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxLEFT, 10 );

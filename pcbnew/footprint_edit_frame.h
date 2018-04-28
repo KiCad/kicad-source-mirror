@@ -80,8 +80,6 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
-    void InstallOptionsFrame( const wxPoint& pos );
-
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseModuleEditor( wxCommandEvent& Event );
 
@@ -374,16 +372,6 @@ public:
      * terminates a move or create edge function
      */
     void End_Edge_Module( EDGE_MODULE* Edge );
-
-    /**
-     * Function Enter_Edge_Width
-     * Edition of width of module outlines
-     * Ask for a new width.
-     * Change the width of EDGE_MODULE Edge if aEdge != NULL
-     * @param aEdge = edge to edit, or NULL
-     * changes ModuleSegmentWidth (global) = new width
-     */
-    void Enter_Edge_Width( EDGE_MODULE* aEdge );
 
     /// Function to initialize the move function params of a graphic item type DRAWSEGMENT
     void Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );

@@ -382,21 +382,7 @@ public:
      */
     void ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC );
 
-    /**
-     * Function ResetModuleTextSizes
-     * resets text size and width of all module text fields of given field
-     * type to current settings in Preferences->Dimensions->Texts and Drawings.
-     * @param aFilter is a filter: footprint names must match this filter.
-     *        an empty filter, or "*" do not filter anything.
-     * @param aRef = true to modify the reference of footprints.
-     * @param aValue = true to modify the value of footprints.
-     * @param aOthers = true to modify the other fields of footprints.
-     */
-    void ResetModuleTextSizes( const wxString & aFilter, bool aRef,
-                               bool aValue, bool aOthers );
-
     void InstallPadOptionsFrame( D_PAD* pad );
-    void InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC );
 
     void AddPad( MODULE* Module, bool draw );
 

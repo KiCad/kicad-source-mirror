@@ -568,8 +568,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     if( m_auxiliaryToolBar )
     {
-        updateTraceWidthSelectBox();
-        updateViaSizeSelectBox();
+        UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
+        UpdateViaSizeSelectBox( m_SelViaSizeBox );
 
         // combobox sizes can have changed: apply new best sizes
         wxAuiToolBarItem* item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
@@ -592,7 +592,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
                                          ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                                          wxDefaultPosition, wxDefaultSize,
                                          0, NULL );
-    updateTraceWidthSelectBox();
+    UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
 
     // Creates box to display and choose vias diameters:
@@ -600,7 +600,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
                                       ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );
-    updateViaSizeSelectBox();
+    UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     KiScaledSeparator( m_auxiliaryToolBar, this );
 
@@ -635,15 +635,15 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 }
 
 
-void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
+void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox )
 {
-    if( m_SelTrackWidthBox == NULL )
+    if( aTrackWidthSelectBox == NULL )
         return;
 
     wxString msg;
     bool mmFirst = GetUserUnits() != INCHES;
 
-    m_SelTrackWidthBox->Clear();
+    aTrackWidthSelectBox->Clear();
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
@@ -663,70 +663,59 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         if( ii == 0 )
             msg << wxT( " *" );
 
-        m_SelTrackWidthBox->Append( msg );
+        aTrackWidthSelectBox->Append( msg );
     }
 
     if( GetDesignSettings().GetTrackWidthIndex() >= GetDesignSettings().m_TrackWidthList.size() )
         GetDesignSettings().SetTrackWidthIndex( 0 );
 
-    m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+    aTrackWidthSelectBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
 }
 
 
-void PCB_EDIT_FRAME::updateViaSizeSelectBox()
+void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox )
 {
-    if( m_SelViaSizeBox == NULL )
+    if( aViaSizeSelectBox == NULL )
         return;
 
-    wxString msg;
+    aViaSizeSelectBox->Clear();
 
-    m_SelViaSizeBox->Clear();
     bool mmFirst = GetUserUnits() != INCHES;
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
-        int diam = GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter;
+        VIA_DIMENSION viaDimension = GetDesignSettings().m_ViasDimensionsList[ii];
+        wxString      msg, mmStr, milsStr;
 
-        double valueMils = To_User_Unit( INCHES, diam ) * 1000;
-        double value_mm = To_User_Unit( MILLIMETRES, diam );
+        double diam = To_User_Unit( MILLIMETRES, viaDimension.m_Diameter );
+        double hole = To_User_Unit( MILLIMETRES, viaDimension.m_Drill );
 
-        if( mmFirst )
-            msg.Printf( _( "Via: %.2f mm (%.1f mils)" ),
-                        value_mm, valueMils );
+        if( hole > 0 )
+            mmStr.Printf( wxT( "%.2f / %.2f mm" ), diam, hole );
         else
-            msg.Printf( _( "Via: %.1f mils (%.2f mm)" ),
-                        valueMils, value_mm );
+            mmStr.Printf( wxT( "%.2f mm" ), diam );
 
-        int hole = GetDesignSettings().m_ViasDimensionsList[ii].m_Drill;
+        diam = To_User_Unit( INCHES, viaDimension.m_Diameter ) * 1000;
+        hole = To_User_Unit( INCHES, viaDimension.m_Drill ) * 1000;
 
-        if( hole )
-        {
-            msg  << wxT("/ ");
-            wxString hole_str;
-            valueMils = To_User_Unit( INCHES, hole ) * 1000;
-            value_mm = To_User_Unit( MILLIMETRES, hole );
+        if( hole > 0 )
+            milsStr.Printf( wxT( "%.1f / %.1f mils" ), diam, hole );
+        else
+            milsStr.Printf( wxT( "%.1f mils" ), diam );
 
-            if( mmFirst )
-                hole_str.Printf( _( "%.2f mm (%.1f mils)" ),
-                            value_mm, valueMils );
-            else
-                hole_str.Printf( _( "%.1f mils (%.2f mm)" ),
-                            valueMils, value_mm );
-
-            msg += hole_str;
-        }
+        msg.Printf( _( "Via: %s (%s)" ), mmFirst ? mmStr : milsStr, mmFirst ? milsStr : mmStr );
 
         // Mark the netclass via size value (the first in list)
         if( ii == 0 )
             msg << wxT( " *" );
 
-        m_SelViaSizeBox->Append( msg );
+        aViaSizeSelectBox->Append( msg );
     }
 
     if( GetDesignSettings().GetViaSizeIndex() >= GetDesignSettings().m_ViasDimensionsList.size() )
         GetDesignSettings().SetViaSizeIndex( 0 );
 
-    m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+    aViaSizeSelectBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
 }
 
 

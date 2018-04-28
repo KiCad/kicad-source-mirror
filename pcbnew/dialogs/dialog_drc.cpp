@@ -51,8 +51,6 @@
  */
 
 // Keywords for read and write config
-#define TestMissingCourtyardKey     wxT( "TestMissingCourtyard" )
-#define TestFootprintCourtyardKey   wxT( "TestFootprintCourtyard" )
 #define RefillZonesBeforeDrc        wxT( "RefillZonesBeforeDrc" )
 
 
@@ -131,8 +129,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
 DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
-    m_config->Write( TestMissingCourtyardKey, m_cbCourtyardMissing->GetValue() );
-    m_config->Write( TestFootprintCourtyardKey,  m_cbCourtyardOverlap->GetValue() );
     m_config->Write( RefillZonesBeforeDrc, m_cbRefillZones->GetValue() );
 
     // Disconnect events
@@ -187,10 +183,6 @@ void DIALOG_DRC_CONTROL::InitValues()
 
     // read options
     bool value;
-    m_config->Read( TestMissingCourtyardKey, &value, false );
-    m_cbCourtyardMissing->SetValue( value );
-    m_config->Read( TestFootprintCourtyardKey, &value, false );
-    m_cbCourtyardOverlap->SetValue( value );
     m_config->Read( RefillZonesBeforeDrc, &value, false );
     m_cbRefillZones->SetValue( value );
 

@@ -43,8 +43,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_itemsGrid->SetColSize( 4, 90 );
 	m_itemsGrid->SetColSize( 5, 48 );
 	m_itemsGrid->SetColSize( 6, 112 );
-	m_itemsGrid->SetColSize( 7, 80 );
-	m_itemsGrid->SetColSize( 8, 48 );
+	m_itemsGrid->SetColSize( 7, 90 );
+	m_itemsGrid->SetColSize( 8, 90 );
 	m_itemsGrid->SetColSize( 9, 90 );
 	m_itemsGrid->SetColSize( 10, 90 );
 	m_itemsGrid->EnableDragColMove( false );
@@ -58,7 +58,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_itemsGrid->SetColLabelValue( 5, _("Italic") );
 	m_itemsGrid->SetColLabelValue( 6, _("Layer") );
 	m_itemsGrid->SetColLabelValue( 7, _("Orientation") );
-	m_itemsGrid->SetColLabelValue( 8, _("Unconstrained") );
+	m_itemsGrid->SetColLabelValue( 8, _("Keep Upright") );
 	m_itemsGrid->SetColLabelValue( 9, _("X Offset") );
 	m_itemsGrid->SetColLabelValue( 10, _("Y Offset") );
 	m_itemsGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
@@ -277,7 +277,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxStaticBoxSizer* sbSizerLocalProperties;
 	sbSizerLocalProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelClearances, wxID_ANY, _("Clearances") ), wxVERTICAL );
 	
-	m_staticTextInfo = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Set values to 0 to use netclass values."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Set values to 0 to use Board Setup values."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
 	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	

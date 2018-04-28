@@ -266,7 +266,7 @@ private:
     void constrainDimension( DIMENSION* dimension );
 
     ///> Returns the appropriate width for a segment depending on the settings.
-    int getSegmentWidth( unsigned int aLayer ) const;
+    int getSegmentWidth( PCB_LAYER_ID aLayer ) const;
 
     ///> Selects a non-copper layer for drawing
     PCB_LAYER_ID getDrawingLayer() const;

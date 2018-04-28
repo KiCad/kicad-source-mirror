@@ -214,9 +214,10 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
             )
             textePcb->SetMirrored( true );
 
-        textePcb->SetTextSize( GetBoard()->GetDesignSettings().m_PcbTextSize );
+        textePcb->SetTextSize( GetBoard()->GetDesignSettings().GetTextSize( layer ) );
         textePcb->SetTextPos( GetCrossHairPosition() );
-        textePcb->SetThickness( GetBoard()->GetDesignSettings().m_PcbTextWidth );
+        textePcb->SetThickness( GetBoard()->GetDesignSettings().GetTextThickness( layer ) );
+        textePcb->SetItalic( GetBoard()->GetDesignSettings().GetTextItalic( layer ) );
 
         InstallTextOptionsFrame( textePcb, aDC );
 

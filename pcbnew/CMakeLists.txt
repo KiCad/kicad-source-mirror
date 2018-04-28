@@ -53,6 +53,7 @@ include_directories(
 set( PCBNEW_DIALOGS
     dialogs/dialog_block_options.cpp
     dialogs/dialog_block_options_base.cpp
+    dialogs/dialog_board_setup.cpp
     dialogs/dialog_cleaning_options.cpp
     dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_copper_zones.cpp
@@ -60,8 +61,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_create_array.cpp
     dialogs/dialog_create_array_base.cpp
     dialogs/dialog_drc.cpp
-    dialogs/dialog_design_rules.cpp
-    dialogs/dialog_design_rules_base.cpp
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp
@@ -98,21 +97,17 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_deletion_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
-    dialogs/dialog_global_footprints_fields_edition.cpp
-    dialogs/dialog_global_footprints_fields_edition_base.cpp
+    dialogs/dialog_global_edit_text_and_graphics.cpp
+    dialogs/dialog_global_edit_text_and_graphics_base.cpp
     dialogs/dialog_global_pads_edition.cpp
     dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
     dialogs/dialog_graphic_item_properties_base.cpp
-    dialogs/dialog_graphic_items_options.cpp
-    dialogs/dialog_graphic_items_options_base.cpp
+    dialogs/dialog_import_settings.cpp
+    dialogs/dialog_import_settings_base.cpp
     dialogs/dialog_keepout_area_properties.cpp
     dialogs/dialog_keepout_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp
-    dialogs/dialog_layers_setup.cpp
-    dialogs/dialog_layers_setup_base.cpp
-    dialogs/dialog_mask_clearance.cpp
-    dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp
     dialogs/dialog_netlist.cpp
@@ -162,6 +157,16 @@ set( PCBNEW_DIALOGS
     dialogs/panel_pcbnew_display_options_base.cpp
     dialogs/panel_pcbnew_settings.cpp
     dialogs/panel_pcbnew_settings_base.cpp
+    dialogs/panel_setup_mask_and_paste.cpp
+    dialogs/panel_setup_mask_and_paste_base.cpp
+    dialogs/panel_setup_feature_constraints.cpp
+    dialogs/panel_setup_feature_constraints_base.cpp
+    dialogs/panel_setup_layers.cpp
+    dialogs/panel_setup_layers_base.cpp
+    dialogs/panel_setup_netclasses.cpp
+    dialogs/panel_setup_netclasses_base.cpp
+    dialogs/panel_setup_text_and_graphics.cpp
+    dialogs/panel_setup_text_and_graphics_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp
@@ -312,7 +317,6 @@ set( PCBNEW_CLASS_SRCS
     tools/position_relative_tool.cpp
     tools/selection.cpp
     tools/selection_tool.cpp
-    tools/size_menu.cpp
     tools/tool_event_utils.cpp
     tools/tools_common.cpp
     tools/zone_create_helper.cpp

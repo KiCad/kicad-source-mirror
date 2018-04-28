@@ -118,15 +118,6 @@ bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller );
 bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
 
 /**
- * Function InvokeLayerSetup
- * shows the layer setup dialog
- * @param aCaller is the PCB_EDIT_FRAME which is invoking the dialog.
- * @param aBoard is the currently edited board.
- * @return bool - true if user pressed OK (did not abort), else false.
- */
-bool InvokeLayerSetup( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
-
-/**
  * Function InvokeExportSVG
  * shows the Export SVG dialog
  * @param aCaller is the PCB_BASE_FRAME which is invoking the dialog.

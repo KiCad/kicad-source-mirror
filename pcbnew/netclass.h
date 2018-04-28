@@ -54,17 +54,6 @@ DECL_SET_FOR_SWIG( STRINGSET, wxString )
 
 class NETCLASS
 {
-private:
-    // Default values used to init a NETCLASS
-    static const int DEFAULT_CLEARANCE;
-    static const int DEFAULT_VIA_DRILL;
-    static const int DEFAULT_UVIA_DRILL;
-    static const int DEFAULT_VIA_DIAMETER;
-    static const int DEFAULT_UVIA_DIAMETER;
-    static const int DEFAULT_TRACK_WIDTH;
-    static const int DEFAULT_DIFF_PAIR_WIDTH;
-    static const int DEFAULT_DIFF_PAIR_GAP;
-
 protected:
     wxString    m_Name;                 ///< Name of the net class
     wxString    m_Description;          ///< what this NETCLASS is for.
@@ -84,6 +73,7 @@ protected:
 
     int         m_diffPairWidth;
     int         m_diffPairGap;
+    int         m_diffPairViaGap;
 
 public:
 
@@ -187,11 +177,14 @@ public:
     int     GetuViaDrill() const            { return m_uViaDrill; }
     void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
 
-    int     GetDiffPairWidth() const            { return m_diffPairWidth; }
-    void    SetDiffPairWidth( int aSize )       { m_diffPairWidth = aSize; }
+    int     GetDiffPairWidth() const        { return m_diffPairWidth; }
+    void    SetDiffPairWidth( int aSize )   { m_diffPairWidth = aSize; }
 
-    int     GetDiffPairGap() const            { return m_diffPairGap; }
-    void    SetDiffPairGap( int aSize )       { m_diffPairGap = aSize; }
+    int     GetDiffPairGap() const          { return m_diffPairGap; }
+    void    SetDiffPairGap( int aSize )     { m_diffPairGap = aSize; }
+
+    int     GetDiffPairViaGap() const       { return m_diffPairViaGap; }
+    void    SetDiffPairViaGap( int aSize )  { m_diffPairViaGap = aSize; }
 
     /**
      * Function SetParams

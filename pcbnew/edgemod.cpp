@@ -168,19 +168,17 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 
     if( aEdge == NULL )
     {
-        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItemsList();
-
         for( BOARD_ITEM *item = module->GraphicalItemsList(); item; item = item->Next() )
         {
             aEdge = dyn_cast<EDGE_MODULE*>( item );
 
             if( aEdge )
-                aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+                aEdge->SetWidth( GetDesignSettings().GetLineThickness( aEdge->GetLayer() ) );
         }
     }
     else
     {
-        aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+        aEdge->SetWidth( GetDesignSettings().GetLineThickness( aEdge->GetLayer() ) );
     }
 
     OnModify();
@@ -243,29 +241,6 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
     {
         module->CalculateBoundingBox();
         module->SetLastEditTime();
-    }
-}
-
-
-void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
-{
-    wxString buffer;
-
-    buffer = StringFromValue( GetUserUnits(), GetDesignSettings().m_ModuleSegmentWidth );
-    WX_TEXT_ENTRY_DIALOG dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return; // canceled by user
-
-    buffer = dlg.GetValue( );
-    GetDesignSettings().m_ModuleSegmentWidth = ValueFromString( GetUserUnits(), buffer );
-
-    if( aEdge )
-    {
-        MODULE* module = GetBoard()->m_Modules;
-        aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
-        module->CalculateBoundingBox();
-        OnModify();
     }
 }
 
@@ -347,7 +322,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
         if( aEdge->GetShape() == S_ARC )
             aEdge->SetAngle( ArcValue );
 
-        aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+        aEdge->SetWidth( GetDesignSettings().GetLineThickness( GetActiveLayer() ) );
         aEdge->SetLayer( GetActiveLayer() );
 
         // Initialize the starting point of the new segment or arc
@@ -387,7 +362,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
                 aEdge = newedge;     // point now new item
 
                 aEdge->SetFlags( IS_NEW );
-                aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+                aEdge->SetWidth( GetDesignSettings().GetLineThickness( aEdge->GetLayer() ) );
                 aEdge->SetStart( GetCrossHairPosition() );
                 aEdge->SetEnd( aEdge->GetStart() );
 

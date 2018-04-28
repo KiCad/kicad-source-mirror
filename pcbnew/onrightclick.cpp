@@ -603,12 +603,12 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                      KiBitmap( delete_net_xpm ) );
     }
 
-    // Add global edition command
+    // Add global editing commands:
     if( !flags )
     {
         PopMenu->AppendSeparator();
         AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                     _( "Edit All Tracks and Vias..." ), KiBitmap( width_track_via_xpm ) );
+                     _( "Set Track and Via Sizes..." ), KiBitmap( width_track_via_xpm ) );
     }
 
     // Add lock/unlock flags menu:

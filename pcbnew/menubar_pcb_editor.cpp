@@ -74,9 +74,6 @@ static void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 // Build the tools menu
 static void prepareToolsMenu( wxMenu* aParentMenu );
 
-// Build the design rules menu
-static void prepareSetupMenu( wxMenu* aParentMenu );
-
 // Build the help menu
 static void prepareHelpMenu( wxMenu* aParentMenu );
 
@@ -102,10 +99,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- View menu -----------------------------------------------------------
     wxMenu* viewMenu = new wxMenu;
     prepareViewMenu( viewMenu, IsGalCanvasActive() );
-
-    //----- Setup menu ----------------------------------------------------------
-    wxMenu* setupMenu = new wxMenu;
-    prepareSetupMenu( setupMenu );
 
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;
@@ -138,7 +131,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( setupMenu, _( "&Setup" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( routeMenu, _( "Ro&ute" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
@@ -155,43 +147,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #endif
 
 }
-
-// Build the setup menu
-void prepareSetupMenu( wxMenu* aParentMenu )
-{
-    AddMenuItem( aParentMenu, ID_PCB_LAYERS_SETUP,
-                 _( "&Layers Setup..." ),
-                 _( "Enable and set layer properties" ),
-                 KiBitmap( copper_layers_setup_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
-                 _( "&Design Rules..." ),
-                 _( "Open design rules editor" ),
-                 KiBitmap( config_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
-                 _( "Te&xts and Drawings..." ),
-                 _( "Adjust dimensions for texts and drawings" ),
-                 KiBitmap( text_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_PAD_SETUP,
-                 _( "Default &Pad Properties..." ),
-                 _( "Adjust default pad characteristics" ),
-                 KiBitmap( pad_dimensions_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_MASK_CLEARANCE,
-                 _( "Pads to &Mask Clearance..." ),
-                 _( "Adjust global clearance between pads and solder resist mask" ),
-                 KiBitmap( pads_mask_layers_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_DIFF_PAIR_DIMENSIONS,
-                 _( "&Differential Pairs..." ),
-                 _( "Define global gap/width for differential pairs." ),
-                 KiBitmap( ps_diff_pair_xpm ) );
-}
-
 
 // Build the preferences menu
 void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
@@ -225,16 +180,6 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 
     // Language submenu
     Pgm().AddMenuLanguageList( aParentMenu );
-
-    AddMenuItem( aParentMenu, ID_CONFIG_SAVE,
-                 _( "&Save Project File..." ),
-                 _( "Save project preferences into a project file" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_CONFIG_READ,
-                 _( "Load P&roject File..." ),
-                 _( "Load project preferences from a project file" ),
-                 KiBitmap( read_setup_xpm ) );
 }
 
 
@@ -523,13 +468,11 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND , KiBitmap( find_xpm ) );
 
     aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, ID_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                     _( "Edit All Tracks and Vias..." ), KiBitmap( width_track_via_xpm ) );
+    AddMenuItem( aParentMenu, ID_PCB_EDIT_TRACKS_AND_VIAS,
+                 _( "Edit &Track && Via Properties..." ), KiBitmap( width_track_via_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
-                 _( "Set Footp&rint Field Sizes..." ),
-                 _( "Set text size and width of footprint fields" ),
-                 KiBitmap( reset_text_xpm ) );
+    AddMenuItem( aParentMenu, ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
+                 _( "Edit Text && &Graphic Properties..." ), KiBitmap( reset_text_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_EXCHANGE_FOOTPRINTS,
                  _( "Change Footprints..." ),
@@ -906,6 +849,13 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  -1, _( "&Fabrication Outputs" ),
                  _( "Generate files for fabrication" ),
                  KiBitmap( fabrication_xpm ) );
+
+    aParentMenu->AppendSeparator();
+
+    AddMenuItem( aParentMenu, ID_BOARD_SETUP_DIALOG,
+                 _( "&Board Setup..." ),
+                 _( "Edit board setup including layers, design rules and various defaults" ),
+                 KiBitmap( config_xpm ) );
 
     aParentMenu->AppendSeparator();
 

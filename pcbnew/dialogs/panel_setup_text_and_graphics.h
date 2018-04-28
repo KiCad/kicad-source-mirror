@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,29 +21,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_MASK_CLEARANCE_H_
-#define _DIALOG_MASK_CLEARANCE_H_
 
-#include <dialog_mask_clearance_base.h>
+#ifndef PANEL_SETUP_TEXT_AND_GRAPHICS_H
+#define PANEL_SETUP_TEXT_AND_GRAPHICS_H
 
-/**
- *  DIALOG_PADS_MASK_CLEARANCE, derived from DIALOG_PADS_MASK_CLEARANCE_BASE
- *  @see dialog_mask_clearance.h and dialog_mask_clearance.cpp,
- *  automatically created by wxFormBuilder
- */
-class DIALOG_PADS_MASK_CLEARANCE : public DIALOG_PADS_MASK_CLEARANCE_BASE
+#include <class_board.h>
+#include <widgets/unit_binder.h>
+#include <widgets/paged_dialog.h>
+
+#include <panel_setup_text_and_graphics_base.h>
+
+class PCB_EDIT_FRAME;
+class BOARD_DESIGN_SETTINGS;
+
+
+class PANEL_SETUP_TEXT_AND_GRAPHICS : public PANEL_SETUP_TEXT_AND_GRAPHICS_BASE
 {
 private:
-    PCB_EDIT_FRAME*  m_parent;
-    BOARD_DESIGN_SETTINGS  m_brdSettings;
+    PAGED_DIALOG*           m_Parent;
+    PCB_EDIT_FRAME*         m_Frame;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+
+private:
+    bool validateData();
+
+    int getGridValue( int aRow, int aCol );
 
 public:
-    DIALOG_PADS_MASK_CLEARANCE( PCB_EDIT_FRAME* parent );
-    ~DIALOG_PADS_MASK_CLEARANCE() {};
-private:
-    void         myInit();
-    virtual void OnButtonOkClick( wxCommandEvent& event ) override;
-    virtual void OnButtonCancelClick( wxCommandEvent& event ) override;
+    PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    ~PANEL_SETUP_TEXT_AND_GRAPHICS( ) override;
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    void ImportSettingsFrom( BOARD* aBoard );
 };
 
-#endif    // _DIALOG_MASK_CLEARANCE_H_
+#endif //PANEL_SETUP_TEXT_AND_GRAPHICS_H

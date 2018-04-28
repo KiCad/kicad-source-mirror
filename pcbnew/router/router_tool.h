@@ -53,13 +53,10 @@ public:
 private:
     int mainLoop( PNS::ROUTER_MODE aMode );
 
-    int getDefaultWidth( int aNetCode );
-
     void performRouting();
     void performDragging( int aMode = PNS::DM_ANY );
     void breakTrack();
 
-    void getNetclassDimensions( int aNetCode, int& aWidth, int& aViaDiameter, int& aViaDrill );
     void handleCommonEvents( const TOOL_EVENT& evt );
 
     int getStartLayer( const PNS::ITEM* aItem );
@@ -67,7 +64,6 @@ private:
 
     int onViaCommand( const TOOL_EVENT& aEvent );
     int onTrackViaSizeChanged( const TOOL_EVENT& aEvent );
-    int onLayerChanged( const TOOL_EVENT& aEvent );
 
     bool prepareInteractive();
     bool finishInteractive();

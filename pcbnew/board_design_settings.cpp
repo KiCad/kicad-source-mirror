@@ -28,24 +28,369 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <class_board.h>
 #include <layers_id_colors_and_visibility.h>
-
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <board_design_settings.h>
 
-#include <class_track.h>
-#include <convert_to_biu.h>
-#include <kiface_i.h>
 
-#define TestMissingCourtyardKey     wxT( "TestMissingCourtyard" )
-#define TestFootprintCourtyardKey   wxT( "TestFootprintCourtyard" )
-#define MinHoleSeparationKey        wxT( "MinHoleSeparation" )
+#define CopperLayerCountKey         wxT( "CopperLayerCount" )
+#define BoardThicknessKey           wxT( "BoardThickness" )
+
+#define LayerKeyPrefix              wxT( "Layer" )
+#define LayerNameKey                wxT( "Name" )
+#define LayerTypeKey                wxT( "Type" )
+
+#define NetclassNameKey             wxT( "Name" )
+#define ClearanceKey                wxT( "Clearance" )
+#define TrackWidthKey               wxT( "TrackWidth" )
+#define ViaDiameterKey              wxT( "ViaDiameter" )
+#define ViaDrillKey                 wxT( "ViaDrill" )
+#define uViaDiameterKey             wxT( "uViaDiameter" )
+#define uViaDrillKey                wxT( "uViaDrill" )
+#define dPairWidthKey               wxT( "dPairWidth" )
+#define dPairGapKey                 wxT( "dPairGap" )
+#define dPairViaGapKey              wxT( "dPairViaGap" )
+
+
+//
+// NOTE: layer configuration info is stored in both the BOARD and BOARD_DESIGN_SETTINGS so one
+// of the two needs to read/write the config so we don't end up with order dependency issues.
+//
+class PARAM_CFG_LAYERS : public PARAM_CFG_BASE
+{
+protected:
+    BOARD* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_LAYERS( BOARD* ptparam, const wxChar* group = nullptr ) :
+            PARAM_CFG_BASE( wxEmptyString, PARAM_LAYERS, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        BOARD*                 board = m_Pt_param;
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        wxString               oldPath = aConfig->GetPath();
+
+        bds.SetCopperLayerCount( aConfig->Read( CopperLayerCountKey, 2 ) );
+
+        double thickness = aConfig->ReadDouble( BoardThicknessKey, DEFAULT_BOARD_THICKNESS_MM );
+        bds.SetBoardThickness( Millimeter2iu( thickness ) );
+
+        for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
+        {
+            PCB_LAYER_ID layer = *seq;
+            wxString     layerName;
+            int          layerType;
+
+            aConfig->SetPath( oldPath );
+            aConfig->SetPath( LayerKeyPrefix + board->GetStandardLayerName( layer ) );
+
+            if( aConfig->Read( LayerNameKey, &layerName ) )
+                board->SetLayerName( layer, layerName );
+
+            if( aConfig->Read( LayerTypeKey, &layerType ) )
+                board->SetLayerType( layer, (LAYER_T) layerType );
+        }
+
+        aConfig->SetPath( oldPath );
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        BOARD*                 board = m_Pt_param;
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        wxString               oldPath = aConfig->GetPath();
+        wxString               layerKeyPrefix = LayerKeyPrefix;
+
+        aConfig->Write( CopperLayerCountKey, board->GetCopperLayerCount() );
+        aConfig->Write( BoardThicknessKey, Iu2Millimeter( bds.GetBoardThickness() ) );
+
+        for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
+        {
+            PCB_LAYER_ID layer = *seq;
+            wxString stdName = board->GetStandardLayerName( layer );
+            wxString layerName = board->GetLayerName( layer );
+            LAYER_T layerType = board->GetLayerType( layer );
+
+            aConfig->SetPath( oldPath );
+            aConfig->SetPath( layerKeyPrefix + wxT( "." ) + stdName );
+
+            if( layerName == stdName && layerType == LT_SIGNAL )
+            {
+                aConfig->DeleteGroup( aConfig->GetPath() );
+            }
+            else
+            {
+                aConfig->Write( LayerNameKey, layerName );
+                aConfig->Write( LayerTypeKey, (int) layerType );
+            }
+        }
+
+        aConfig->SetPath( oldPath );
+    }
+};
+
+
+class PARAM_CFG_TRACKWIDTHS : public PARAM_CFG_BASE
+{
+protected:
+    std::vector<int>* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_TRACKWIDTHS( std::vector<int>* ptparam, const wxChar* group = nullptr ) :
+            PARAM_CFG_BASE( wxEmptyString, PARAM_TRACKWIDTHS, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        m_Pt_param->clear();
+
+        for( int index = 1; ; ++index )
+        {
+            wxString key = TrackWidthKey;
+            double width;
+
+            if( !aConfig->Read( key << index, &width ) )
+                break;
+
+            m_Pt_param->push_back( Millimeter2iu( width ) );
+        }
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        for( size_t index = 1; index <= m_Pt_param->size(); ++index )
+        {
+            wxString key = TrackWidthKey;
+            aConfig->Write( key << index, Iu2Millimeter( m_Pt_param->at( index - 1 ) ) );
+        }
+    }
+};
+
+
+class PARAM_CFG_VIADIMENSIONS : public PARAM_CFG_BASE
+{
+protected:
+    std::vector<VIA_DIMENSION>* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_VIADIMENSIONS( std::vector<VIA_DIMENSION>* ptparam, const wxChar* group = nullptr ) :
+            PARAM_CFG_BASE( wxEmptyString, PARAM_VIADIMENSIONS, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        m_Pt_param->clear();
+
+        for( int index = 1; ; ++index )
+        {
+            double diameter = 0.0, drill = 0.0;
+
+            wxString key = ViaDiameterKey;
+
+            if( !aConfig->Read( key << index, &diameter ) )
+                break;
+
+            key = ViaDrillKey;
+            drill = aConfig->ReadDouble( key << index, 0.0 );
+
+            m_Pt_param->emplace_back( VIA_DIMENSION( Millimeter2iu( diameter ),
+                                                     Millimeter2iu( drill ) ) );
+        }
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        for( size_t index = 1; index <= m_Pt_param->size(); ++index )
+        {
+            wxString key = ViaDiameterKey;
+            aConfig->Write( key << index, Iu2Millimeter( m_Pt_param->at( index - 1 ).m_Diameter ) );
+            key = ViaDrillKey;
+            aConfig->Write( key << index, Iu2Millimeter( m_Pt_param->at( index - 1 ).m_Drill ) );
+        }
+    }
+};
+
+
+class PARAM_CFG_DIFFPAIRDIMENSIONS : public PARAM_CFG_BASE
+{
+protected:
+    std::vector<DIFF_PAIR_DIMENSION>* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_DIFFPAIRDIMENSIONS( std::vector<DIFF_PAIR_DIMENSION>* ptparam,
+                                  const wxChar* group = nullptr ) :
+            PARAM_CFG_BASE( wxEmptyString, PARAM_DIFFPAIRDIMENSIONS, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        m_Pt_param->clear();
+
+        for( int index = 1; ; ++index )
+        {
+            double width, gap, viagap;
+
+            wxString key = dPairWidthKey;
+
+            if( !aConfig->Read( key << index, &width ) )
+                break;
+
+            key = dPairGapKey;
+            gap = aConfig->ReadDouble( key << index, 0.0 );
+
+            key = dPairViaGapKey;
+            viagap = aConfig->ReadDouble( key << index, 0.0 );
+
+            m_Pt_param->emplace_back( DIFF_PAIR_DIMENSION( Millimeter2iu( width ),
+                                                           Millimeter2iu( gap ),
+                                                           Millimeter2iu( viagap ) ) );
+        }
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        for( size_t index = 1; index <= m_Pt_param->size(); ++index )
+        {
+            wxString key = dPairWidthKey;
+            aConfig->Write( key << index, Iu2Millimeter( m_Pt_param->at( index - 1 ).m_Width ) );
+            key = dPairGapKey;
+            aConfig->Write( key << index, Iu2Millimeter( m_Pt_param->at( index - 1 ).m_Gap ) );
+            key = dPairViaGapKey;
+            aConfig->Write( key << index, Iu2Millimeter( m_Pt_param->at( index - 1 ).m_ViaGap ) );
+        }
+    }
+};
+
+
+class PARAM_CFG_NETCLASSES : public PARAM_CFG_BASE
+{
+protected:
+    NETCLASSES* m_Pt_param;     ///<  Pointer to the parameter value
+
+public:
+    PARAM_CFG_NETCLASSES( const wxChar* ident, NETCLASSES* ptparam,
+                          const wxChar* group = nullptr ) :
+        PARAM_CFG_BASE( ident, PARAM_NETCLASSES, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        wxString oldPath = aConfig->GetPath();
+
+        m_Pt_param->Clear();
+
+        for( int index = 1; ; ++index )
+        {
+            wxString pathIndex = wxString() << index;
+            wxString netclassName;
+
+            aConfig->SetPath( oldPath );
+            aConfig->SetPath( m_Ident );
+            aConfig->SetPath( pathIndex );
+
+            if( !aConfig->Read( NetclassNameKey, &netclassName ) )
+                break;
+
+            NETCLASSPTR netclass = std::make_shared<NETCLASS>( netclassName );
+
+#define READ_MM( aKey, aDefault ) Millimeter2iu( aConfig->ReadDouble( aKey, aDefault ) )
+            netclass->SetClearance( READ_MM( ClearanceKey, netclass->GetClearance() ) );
+            netclass->SetTrackWidth( READ_MM( TrackWidthKey, netclass->GetTrackWidth() ) );
+            netclass->SetViaDiameter( READ_MM( ViaDiameterKey, netclass->GetViaDiameter() ) );
+            netclass->SetViaDrill( READ_MM( ViaDrillKey, netclass->GetViaDrill() ) );
+            netclass->SetuViaDiameter( READ_MM( uViaDiameterKey, netclass->GetuViaDiameter() ) );
+            netclass->SetuViaDrill( READ_MM( uViaDrillKey, netclass->GetuViaDrill() ) );
+            netclass->SetDiffPairWidth( READ_MM( dPairWidthKey, netclass->GetDiffPairWidth() ) );
+            netclass->SetDiffPairGap( READ_MM( dPairGapKey, netclass->GetDiffPairGap() ) );
+            netclass->SetDiffPairViaGap( READ_MM( dPairViaGapKey, netclass->GetDiffPairViaGap() ) );
+
+            m_Pt_param->Add( netclass );
+        }
+
+        aConfig->SetPath( oldPath );
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        wxString oldPath = aConfig->GetPath();
+        int      index = 1;
+
+        for( NETCLASSES::const_iterator nc = m_Pt_param->begin(); nc != m_Pt_param->end(); ++nc )
+        {
+            wxString    pathIndex = wxString() << index++;
+            NETCLASSPTR netclass = nc->second;
+
+            aConfig->SetPath( oldPath );
+            aConfig->SetPath( m_Ident );
+            aConfig->SetPath( pathIndex );
+
+            aConfig->Write( NetclassNameKey, netclass->GetName() );
+
+#define WRITE_MM( aKey, aValue ) aConfig->Write( aKey, Iu2Millimeter( aValue ) )
+            WRITE_MM( ClearanceKey,    netclass->GetClearance() );
+            WRITE_MM( TrackWidthKey,   netclass->GetTrackWidth() );
+            WRITE_MM( ViaDiameterKey,  netclass->GetViaDiameter() );
+            WRITE_MM( ViaDrillKey,     netclass->GetViaDrill() );
+            WRITE_MM( uViaDiameterKey, netclass->GetuViaDiameter() );
+            WRITE_MM( uViaDrillKey,    netclass->GetuViaDrill() );
+            WRITE_MM( dPairWidthKey,   netclass->GetDiffPairWidth() );
+            WRITE_MM( dPairGapKey,     netclass->GetDiffPairGap() );
+            WRITE_MM( dPairViaGapKey,  netclass->GetDiffPairViaGap() );
+        }
+
+        aConfig->SetPath( oldPath );
+    }
+};
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_Pad_Master( NULL )
 {
-    LSET    all_set = LSET().set();
+    LSET all_set = LSET().set();
 
     m_enabledLayers = all_set;              // All layers enabled at first.
                                             // SetCopperLayerCount() will adjust this.
@@ -56,61 +401,79 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
     SetCopperLayerCount( 2 );               // Default design is a double sided board
 
-    // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA).
     m_CurrentViaType = VIA_THROUGH;
 
     // if true, when creating a new track starting on an existing track, use this track width
     m_UseConnectedTrackWidth = false;
 
-    m_BlindBuriedViaAllowed = false;            // true to allow blind/buried vias
-    m_MicroViasAllowed  = false;                // true to allow micro vias
+    m_BlindBuriedViaAllowed = false;
+    m_MicroViasAllowed  = false;
 
-    m_DrawSegmentWidth  = Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS );     // current graphic line width (not EDGE layer)
+    m_LineThickness[ LAYER_CLASS_SILK ] = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH );
+    m_TextSize[ LAYER_CLASS_SILK ] = wxSize( Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ),
+                                             Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ) );
+    m_TextThickness[ LAYER_CLASS_SILK ] = Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH );
+    m_TextItalic[ LAYER_CLASS_SILK ] = false;
+    m_TextUpright[ LAYER_CLASS_SILK ] = true;
 
-    m_EdgeSegmentWidth  = Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS );    // current graphic line width (EDGE layer only)
-    m_PcbTextWidth      = Millimeter2iu( DEFAULT_TEXT_PCB_THICKNESS );    // current Pcb (not module) Text width
+    m_LineThickness[ LAYER_CLASS_COPPER ] = Millimeter2iu( DEFAULT_COPPER_LINE_WIDTH );
+    m_TextSize[ LAYER_CLASS_COPPER ] = wxSize( Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE ),
+                                               Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE ) );
+    m_TextThickness[ LAYER_CLASS_COPPER ] = Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH );
+    m_TextItalic[ LAYER_CLASS_COPPER ] = false;
+    m_TextUpright[ LAYER_CLASS_COPPER ] = true;
 
-    m_PcbTextSize       = wxSize( Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ),
-                                  Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ) );  // current Pcb (not module) Text size
+    // Edges & Courtyards; text properties aren't used but better to have them holding
+    // reasonable values than not.
+    m_LineThickness[ LAYER_CLASS_EDGES ] = Millimeter2iu( DEFAULT_EDGE_WIDTH );
+    m_TextSize[ LAYER_CLASS_EDGES ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
+                                              Millimeter2iu( DEFAULT_TEXT_SIZE ) );
+    m_TextThickness[ LAYER_CLASS_EDGES ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
+    m_TextItalic[ LAYER_CLASS_EDGES ] = false;
+    m_TextUpright[ LAYER_CLASS_EDGES ] = true;
+
+    m_LineThickness[ LAYER_CLASS_OTHERS ] = Millimeter2iu( DEFAULT_LINE_WIDTH );
+    m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
+                                               Millimeter2iu( DEFAULT_TEXT_SIZE ) );
+    m_TextThickness[ LAYER_CLASS_OTHERS ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
+    m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
+    m_TextUpright[ LAYER_CLASS_OTHERS ] = true;
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
     m_customViaSize.m_Diameter = Millimeter2iu( DEFAULT_VIASMINSIZE );
     m_customViaSize.m_Drill = Millimeter2iu( DEFAULT_VIASMINDRILL );
 
-    m_TrackMinWidth     = Millimeter2iu( DEFAULT_TRACKMINWIDTH );   // track min width
-    m_ViasMinSize       = Millimeter2iu( DEFAULT_VIASMINSIZE );     // via (not uvia) min diam
-    m_ViasMinDrill      = Millimeter2iu( DEFAULT_VIASMINDRILL );    // via (not uvia) min drill diam
-    m_MicroViasMinSize  = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );// uvia (not via) min diam
-    m_MicroViasMinDrill = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );// uvia (not via) min drill diam
+    m_useCustomDiffPair = false;
+    m_customDiffPair.m_Width = Millimeter2iu( DEFAULT_CUSTOMDPAIRWIDTH );
+    m_customDiffPair.m_Gap = Millimeter2iu( DEFAULT_CUSTOMDPAIRGAP );
+    m_customDiffPair.m_ViaGap = Millimeter2iu( DEFAULT_CUSTOMDPAIRVIAGAP );
+
+    m_TrackMinWidth     = Millimeter2iu( DEFAULT_TRACKMINWIDTH );
+    m_ViasMinSize       = Millimeter2iu( DEFAULT_VIASMINSIZE );
+    m_ViasMinDrill      = Millimeter2iu( DEFAULT_VIASMINDRILL );
+    m_MicroViasMinSize  = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
+    m_MicroViasMinDrill = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
 
     // Global mask margins:
-    m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ); // Solder mask margin
-    m_SolderMaskMinWidth = Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH );   // Solder mask min width
+    m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
+    m_SolderMaskMinWidth = Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH );
     m_SolderPasteMargin = 0;                    // Solder paste margin absolute value
-    m_SolderPasteMarginRatio = 0.0;             // Solder pask margin ratio value of pad size
+    m_SolderPasteMarginRatio = 0.0;             // Solder paste margin as a ratio of pad size
                                                 // The final margin is the sum of these 2 values
                                                 // Usually < 0 because the mask is smaller than pad
-
     // Layer thickness for 3D viewer
     m_boardThickness = Millimeter2iu( DEFAULT_BOARD_THICKNESS_MM );
 
     m_viaSizeIndex = 0;
     m_trackWidthIndex = 0;
+    m_diffPairIndex = 0;
 
-    // Default values for the footprint editor and fp creation
-    // (also covers footprints created on the fly by micor-waves tools)
-    m_ModuleTextSize = wxSize( Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
-                               Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ) );
-    m_ModuleTextWidth = Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS );
-    m_ModuleSegmentWidth = Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS );
-
-    // These values will be overriden by config values after reading the config
-    // Default ref text on fp creation. if empty, use footprint name as default
+    // Default ref text on fp creation. If empty, use footprint name as default
     m_RefDefaultText = wxT( "REF**" );
-    m_RefDefaultVisibility = true;          // Default ref text visibility on fp creation
-    m_RefDefaultlayer = int( F_SilkS );     // Default ref text layer on fp creation
-    // Default value text on fp creation. if empty, use footprint name as default
+    m_RefDefaultVisibility = true;
+    m_RefDefaultlayer = int( F_SilkS );
+    // Default value text on fp creation. If empty, use footprint name as default
     m_ValueDefaultText = wxEmptyString;
     m_ValueDefaultVisibility = true;
     m_ValueDefaultlayer = int( F_Fab );
@@ -118,68 +481,159 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
 // Add parameters to save in project config.
 // values are saved in mm
-void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
+void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResult )
 {
-    m_Pad_Master.AppendConfigs( aResult );
+    aResult->push_back( new PARAM_CFG_LAYERS( aBoard ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PcbTextSizeV" ),
-                    &m_PcbTextSize.y,
-                    Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowMicroVias" ),
+          &m_MicroViasAllowed, false ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PcbTextSizeH" ),
-                    &m_PcbTextSize.x,
-                    Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowBlindVias" ),
+          &m_BlindBuriedViaAllowed, false ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PcbTextThickness" ),
-                    &m_PcbTextWidth,
-                    Millimeter2iu(DEFAULT_TEXT_PCB_THICKNESS ),
-                    Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "RequireCourtyardDefinitions" ),
+          &m_RequireCourtyards, false ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "ModuleTextSizeV" ),
-                    &m_ModuleTextSize.y,
-                    DEFAULT_TEXT_MODULE_SIZE, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "ProhibitOverlappingCourtyards" ),
+          &m_ProhibitOverlappingCourtyards, true ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "ModuleTextSizeH" ),
-                    &m_ModuleTextSize.x,
-                    DEFAULT_TEXT_MODULE_SIZE, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinTrackWidth" ),
+          &m_TrackMinWidth,
+          Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+          nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "ModuleTextSizeThickness" ),
-                    &m_ModuleTextWidth,
-                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ), 1, TEXTS_MAX_WIDTH,
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDiameter" ),
+          &m_ViasMinSize,
+          Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDrill" ),
+          &m_ViasMinDrill,
+          Millimeter2iu( DEFAULT_VIASMINDRILL ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinMicroViaDiameter" ),
+          &m_MicroViasMinSize,
+          Millimeter2iu( DEFAULT_MICROVIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinMicroViaDrill" ),
+          &m_MicroViasMinDrill,
+          Millimeter2iu( DEFAULT_MICROVIASMINDRILL ), Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinHoleToHole" ),
+          &m_HoleToHoleMin,
+          Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), 0, Millimeter2iu( 10.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_TRACKWIDTHS( &m_TrackWidthList ) );
+    aResult->push_back( new PARAM_CFG_VIADIMENSIONS( &m_ViasDimensionsList ) );
+    aResult->push_back( new PARAM_CFG_DIFFPAIRDIMENSIONS( &m_DiffPairDimensionsList ) );
+
+    aResult->push_back( new PARAM_CFG_NETCLASSES( wxT( "Netclasses" ), &m_NetClasses ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkLineWidth" ),
+          &m_LineThickness[ LAYER_CLASS_SILK ],
+          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU, wxT( "ModuleOutlineThickness" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeV" ),
+          &m_TextSize[ LAYER_CLASS_SILK ].y,
+          Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU, wxT( "ModuleTextSizeV" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeH" ),
+          &m_TextSize[ LAYER_CLASS_SILK ].x,
+          Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU, wxT( "ModuleTextSizeH" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeThickness" ),
+          &m_TextThickness[ LAYER_CLASS_SILK ],
+          Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+          nullptr, MM_PER_IU, wxT( "ModuleTextSizeThickness" ) ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "SilkTextItalic" ),
+          &m_TextItalic[ LAYER_CLASS_SILK ], false ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "SilkTextUpright" ),
+          &m_TextUpright[ LAYER_CLASS_SILK ], true ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperLineWidth" ),
+          &m_LineThickness[ LAYER_CLASS_COPPER ],
+          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU, wxT( "DrawSegmentWidth" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextSizeV" ),
+          &m_TextSize[ LAYER_CLASS_COPPER ].y,
+          Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU, wxT( "PcbTextSizeV" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextSizeH" ),
+          &m_TextSize[ LAYER_CLASS_COPPER ].x,
+          Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU, wxT( "PcbTextSizeH" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextThickness" ),
+          &m_TextThickness[ LAYER_CLASS_COPPER ],
+          Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU, wxT( "PcbTextThickness" ) ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextItalic" ),
+          &m_TextItalic[ LAYER_CLASS_COPPER ], false ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextUpright" ),
+          &m_TextUpright[ LAYER_CLASS_COPPER ], true ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "EdgesAndCourtyardsLineWidth" ),
+          &m_LineThickness[ LAYER_CLASS_EDGES ],
+          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU, wxT( "BoardOutlineThickness" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersLineWidth" ),
+          &m_LineThickness[ LAYER_CLASS_OTHERS ],
+          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU, wxT( "ModuleOutlineThickness" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeV" ),
+          &m_TextSize[ LAYER_CLASS_OTHERS ].x,
+          Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeH" ),
+          &m_TextSize[ LAYER_CLASS_OTHERS ].y,
+          Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeThickness" ),
+          &m_TextThickness[ LAYER_CLASS_OTHERS ],
+          Millimeter2iu( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextItalic" ),
+          &m_TextItalic[ LAYER_CLASS_OTHERS ], false ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextUpright" ),
+          &m_TextUpright[ LAYER_CLASS_OTHERS ], true ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskClearance" ),
-                    &m_SolderMaskMargin,
-                    Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ), 0, Millimeter2iu( 1.0 ),
-                    NULL, MM_PER_IU ) );
+          &m_SolderMaskMargin,
+          Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ), Millimeter2iu( -1.0 ), Millimeter2iu( 1.0 ),
+          nullptr, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskMinWidth" ),
-                    &m_SolderMaskMinWidth,
-                    Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH ), 0, Millimeter2iu( 0.5 ),
-                    NULL, MM_PER_IU ) );
+          &m_SolderMaskMinWidth,
+          Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH ), 0, Millimeter2iu( 1.0 ),
+          nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "DrawSegmentWidth" ),
-                    &m_DrawSegmentWidth,
-                    Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS ),
-                    Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderPasteClearance" ),
+          &m_SolderPasteMargin,
+          Millimeter2iu( DEFAULT_SOLDERPASTE_CLEARANCE ), Millimeter2iu( -1.0 ), Millimeter2iu( 1.0 ),
+          nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "BoardOutlineThickness" ),
-                    &m_EdgeSegmentWidth,
-                    Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ),
-                    Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-                    NULL, MM_PER_IU ) );
-
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "ModuleOutlineThickness" ),
-                    &m_ModuleSegmentWidth,
-                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
-                    Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-                    NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_DOUBLE( wxT( "SolderPasteRatio" ),
+          &m_SolderPasteMarginRatio,
+          DEFAULT_SOLDERPASTE_RATIO, 0, 10.0 ) );
 }
 
 
@@ -189,28 +643,39 @@ bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
     bool        lists_sizes_modified = false;
 
     // if not found (should not happen) use the default
-    if( netClass == NULL )
+    if( !netClass )
         netClass = m_NetClasses.GetDefault();
 
     m_currentNetClassName = netClass->GetName();
 
     // Initialize others values:
-    if( m_ViasDimensionsList.size() == 0 )
-    {
-        VIA_DIMENSION viadim;
-        lists_sizes_modified = true;
-        m_ViasDimensionsList.push_back( viadim );
-    }
-
     if( m_TrackWidthList.size() == 0 )
     {
         lists_sizes_modified = true;
         m_TrackWidthList.push_back( 0 );
     }
 
+    if( m_ViasDimensionsList.size() == 0 )
+    {
+        lists_sizes_modified = true;
+        m_ViasDimensionsList.emplace_back( VIA_DIMENSION() );
+    }
+
+    if( m_DiffPairDimensionsList.size() == 0 )
+    {
+        lists_sizes_modified = true;
+        m_DiffPairDimensionsList.emplace_back( DIFF_PAIR_DIMENSION() );
+    }
+
     /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
      * are always the Netclass values
      */
+    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+    {
+        lists_sizes_modified = true;
+        m_TrackWidthList[0] = netClass->GetTrackWidth();
+    }
+
     if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
     {
         lists_sizes_modified = true;
@@ -223,10 +688,22 @@ bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
         m_ViasDimensionsList[0].m_Drill = netClass->GetViaDrill();
     }
 
-    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+    if( m_DiffPairDimensionsList[0].m_Width != netClass->GetDiffPairWidth() )
     {
         lists_sizes_modified = true;
-        m_TrackWidthList[0] = netClass->GetTrackWidth();
+        m_DiffPairDimensionsList[0].m_Width = netClass->GetDiffPairWidth();
+    }
+
+    if( m_DiffPairDimensionsList[0].m_Gap != netClass->GetDiffPairGap() )
+    {
+        lists_sizes_modified = true;
+        m_DiffPairDimensionsList[0].m_Gap = netClass->GetDiffPairGap();
+    }
+
+    if( m_DiffPairDimensionsList[0].m_ViaGap != netClass->GetDiffPairViaGap() )
+    {
+        lists_sizes_modified = true;
+        m_DiffPairDimensionsList[0].m_ViaGap = netClass->GetDiffPairViaGap();
     }
 
     if( GetViaSizeIndex() >= m_ViasDimensionsList.size() )
@@ -234,6 +711,9 @@ bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
 
     if( GetTrackWidthIndex() >= m_TrackWidthList.size() )
         SetTrackWidthIndex( m_TrackWidthList.size() );
+
+    if( GetDiffPairIndex() >= m_DiffPairDimensionsList.size() )
+        SetDiffPairIndex( m_DiffPairDimensionsList.size() );
 
     return lists_sizes_modified;
 }
@@ -287,11 +767,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaDrill()
 
 void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
 {
-    if( aIndex >= m_ViasDimensionsList.size() )
-        m_viaSizeIndex = m_ViasDimensionsList.size();
-    else
-        m_viaSizeIndex = aIndex;
-
+    m_viaSizeIndex = std::min( aIndex, (unsigned) m_ViasDimensionsList.size() );
     m_useCustomTrackVia = false;
 }
 
@@ -311,76 +787,33 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
 
 void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
 {
-    if( aIndex >= m_TrackWidthList.size() )
-        m_trackWidthIndex = m_TrackWidthList.size();
-    else
-        m_trackWidthIndex = aIndex;
-
+    m_trackWidthIndex = std::min( aIndex, (unsigned) m_TrackWidthList.size() );
     m_useCustomTrackVia = false;
 }
 
 
-int BOARD_DESIGN_SETTINGS::GetMinHoleSeparation() const
+void BOARD_DESIGN_SETTINGS::SetDiffPairIndex( unsigned aIndex )
 {
-    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
-    // file format unnecessarily.
-    wxConfigBase* config = Kiface().KifaceSettings();
-    int           value;
-
-    config->Read( MinHoleSeparationKey, &value, Millimeter2iu( DEFAULT_HOLETOHOLEMIN ) );
-    return value;
+    m_diffPairIndex = std::min( aIndex, (unsigned) 8 );
+    m_useCustomDiffPair = false;
 }
 
 
 void BOARD_DESIGN_SETTINGS::SetMinHoleSeparation( int aDistance )
 {
-    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
-    // file format unnecessarily.
-    wxConfigBase* config = Kiface().KifaceSettings();
-
-    config->Write( MinHoleSeparationKey, aDistance );
+    m_HoleToHoleMin = aDistance;
 }
 
 
-bool BOARD_DESIGN_SETTINGS::RequireCourtyardDefinitions() const
-{
-    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
-    // file format unnecessarily.
-    wxConfigBase* config = Kiface().KifaceSettings();
-    bool          value;
-
-    config->Read( TestMissingCourtyardKey, &value, false );
-    return value;
-}
 void BOARD_DESIGN_SETTINGS::SetRequireCourtyardDefinitions( bool aRequire )
 {
-    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
-    // file format unnecessarily.
-    wxConfigBase* config = Kiface().KifaceSettings();
-
-    config->Write( TestMissingCourtyardKey, aRequire );
+    m_RequireCourtyards = aRequire;
 }
 
 
-bool BOARD_DESIGN_SETTINGS::ProhibitOverlappingCourtyards() const
+void BOARD_DESIGN_SETTINGS::SetProhibitOverlappingCourtyards( bool aProhibit )
 {
-    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
-    // file format unnecessarily.
-    wxConfigBase* config = Kiface().KifaceSettings();
-    bool          value;
-
-    config->Read( TestFootprintCourtyardKey, &value, false );
-    return value;
-}
-
-
-void BOARD_DESIGN_SETTINGS::SetProhibitOverlappingCourtyards( bool aRequire )
-{
-    // 6.0 TODO: we need to decide where these go, but until then don't disturb the
-    // file format unnecessarily.
-    wxConfigBase* config = Kiface().KifaceSettings();
-
-    config->Write( TestFootprintCourtyardKey, aRequire );
+    m_ProhibitOverlappingCourtyards = aProhibit;
 }
 
 
@@ -393,10 +826,7 @@ void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 
 void BOARD_DESIGN_SETTINGS::SetLayerVisibility( PCB_LAYER_ID aLayer, bool aNewState )
 {
-    if( aNewState && IsLayerEnabled( aLayer ) )
-        m_visibleLayers.set( aLayer, true );
-    else
-        m_visibleLayers.set( aLayer, false );
+    m_visibleLayers.set( aLayer, aNewState && IsLayerEnabled( aLayer ));
 }
 
 
@@ -449,6 +879,51 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
 }
 
 
+// Return the layer class index { silk, copper, edges & courtyards, others } of the
+// given layer.
+int BOARD_DESIGN_SETTINGS::GetLayerClass( PCB_LAYER_ID aLayer ) const
+{
+    if( aLayer == F_SilkS || aLayer == B_SilkS )
+        return 0;
+    else if( IsCopperLayer( aLayer ) )
+        return 1;
+    else if( aLayer == Edge_Cuts || aLayer == F_CrtYd || aLayer == B_CrtYd )
+        return 2;
+    else
+        return 3;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetLineThickness( PCB_LAYER_ID aLayer ) const
+{
+    return m_LineThickness[ GetLayerClass( aLayer ) ];
+}
+
+
+wxSize BOARD_DESIGN_SETTINGS::GetTextSize( PCB_LAYER_ID aLayer ) const
+{
+    return m_TextSize[ GetLayerClass( aLayer ) ];
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetTextThickness( PCB_LAYER_ID aLayer ) const
+{
+    return m_TextThickness[ GetLayerClass( aLayer ) ];
+}
+
+
+bool BOARD_DESIGN_SETTINGS::GetTextItalic( PCB_LAYER_ID aLayer ) const
+{
+    return m_TextItalic[ GetLayerClass( aLayer ) ];
+}
+
+
+bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
+{
+    return m_TextUpright[ GetLayerClass( aLayer ) ];
+}
+
+
 #ifndef NDEBUG
 struct list_size_check {
    list_size_check()
@@ -460,3 +935,5 @@ struct list_size_check {
 };
 static list_size_check check;
 #endif
+
+

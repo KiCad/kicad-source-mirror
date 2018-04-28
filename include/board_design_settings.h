@@ -30,29 +30,40 @@
 #include <netclass.h>
 #include <config_params.h>
 
-// Some default values for the board editor and the fp editor (given in mm)
-#define DEFAULT_TEXT_MODULE_SIZE     1.0
-#define DEFAULT_GR_MODULE_THICKNESS  0.15         // given in mm
+#define DEFAULT_SILK_LINE_WIDTH       0.12
+#define DEFAULT_COPPER_LINE_WIDTH     0.20
+#define DEFAULT_EDGE_WIDTH            0.05       // used for Edge.Cuts and CrtYds
+#define DEFAULT_LINE_WIDTH            0.10
+
+#define DEFAULT_SILK_TEXT_SIZE        1.0
+#define DEFAULT_COPPER_TEXT_SIZE      1.5
+#define DEFAULT_TEXT_SIZE             1.0
+
+#define DEFAULT_SILK_TEXT_WIDTH       0.15
+#define DEFAULT_COPPER_TEXT_WIDTH     0.30
+#define DEFAULT_TEXT_WIDTH            0.15
 
 // Board thickness, mainly for 3D view:
-#define DEFAULT_BOARD_THICKNESS_MM   1.6
+#define DEFAULT_BOARD_THICKNESS_MM    1.6
 
-// Default values for some board items (given in mm)
-#define DEFAULT_TEXT_PCB_SIZE  1.5
-#define DEFAULT_TEXT_PCB_THICKNESS  0.3
-#define DEFAULT_PCB_EDGE_THICKNESS  0.15
-#define DEFAULT_GRAPHIC_THICKNESS   0.2
+#define DEFAULT_PCB_EDGE_THICKNESS    0.15
 
-#define DEFAULT_SOLDERMASK_CLEARANCE 0.2
-#define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
+#define DEFAULT_SOLDERMASK_CLEARANCE  0.2
+#define DEFAULT_SOLDERMASK_MIN_WIDTH  0.0
+#define DEFAULT_SOLDERPASTE_CLEARANCE 0.0
+#define DEFAULT_SOLDERPASTE_RATIO     0.0
 
-#define DEFAULT_CUSTOMTRACKWIDTH    0.2
-#define DEFAULT_TRACKMINWIDTH       0.2     // track width min value
-#define DEFAULT_VIASMINSIZE         0.4     // vias (not micro vias) min diameter
-#define DEFAULT_VIASMINDRILL        0.3     // vias (not micro vias) min drill diameter
-#define DEFAULT_MICROVIASMINSIZE    0.2     // micro vias (not vias) min diameter
-#define DEFAULT_MICROVIASMINDRILL   0.1     // micro vias (not vias) min drill diameter
-#define DEFAULT_HOLETOHOLEMIN       0.25    // separation between drilled hole edges
+#define DEFAULT_CUSTOMTRACKWIDTH      0.2
+#define DEFAULT_CUSTOMDPAIRWIDTH      0.125
+#define DEFAULT_CUSTOMDPAIRGAP        0.18
+#define DEFAULT_CUSTOMDPAIRVIAGAP     0.18
+
+#define DEFAULT_TRACKMINWIDTH         0.2     // track width min value
+#define DEFAULT_VIASMINSIZE           0.4     // vias (not micro vias) min diameter
+#define DEFAULT_VIASMINDRILL          0.3     // vias (not micro vias) min drill diameter
+#define DEFAULT_MICROVIASMINSIZE      0.2     // micro vias (not vias) min diameter
+#define DEFAULT_MICROVIASMINDRILL     0.1     // micro vias (not vias) min drill diameter
+#define DEFAULT_HOLETOHOLEMIN         0.25    // separation between drilled hole edges
 
 /**
  * Struct VIA_DIMENSION
@@ -92,104 +103,159 @@ struct VIA_DIMENSION
 
 
 /**
+ * Struct DIFF_PAIR_DIMENSION
+ * is a small helper container to handle a stock of specific differential pairs each with
+ * unique track width, gap and via gap.
+ */
+struct DIFF_PAIR_DIMENSION
+{
+    int m_Width;         // <= 0 means use Netclass differential pair width
+    int m_Gap;           // <= 0 means use Netclass differential pair gap
+    int m_ViaGap;        // <= 0 means use Netclass differential pair via gap
+
+    DIFF_PAIR_DIMENSION()
+    {
+        m_Width  = 0;
+        m_Gap    = 0;
+        m_ViaGap = 0;
+    }
+
+    DIFF_PAIR_DIMENSION( int aWidth, int aGap, int aViaGap )
+    {
+        m_Width  = aWidth;
+        m_Gap    = aGap;
+        m_ViaGap = aViaGap;
+    }
+
+    bool operator==( const DIFF_PAIR_DIMENSION& aOther ) const
+    {
+        return ( m_Width == aOther.m_Width )
+                && ( m_Gap == aOther.m_Gap )
+                && ( m_ViaGap == aOther.m_ViaGap );
+    }
+
+    bool operator<( const DIFF_PAIR_DIMENSION& aOther ) const
+    {
+        if( m_Width != aOther.m_Width )
+            return m_Width < aOther.m_Width;
+
+        if( m_Gap != aOther.m_Gap )
+            return m_Gap < aOther.m_Gap;
+
+        return m_ViaGap < aOther.m_ViaGap;
+    }
+};
+
+
+enum
+{
+    LAYER_CLASS_SILK = 0,
+    LAYER_CLASS_COPPER,
+    LAYER_CLASS_EDGES,
+    LAYER_CLASS_OTHERS,
+
+    LAYER_CLASS_COUNT
+};
+
+
+/**
  * Class BOARD_DESIGN_SETTINGS
  * contains design settings for a BOARD object.
  */
 class BOARD_DESIGN_SETTINGS
 {
 public:
-    // The first value is the current netclass via size
-    /// Vias size and drill list
-    std::vector<VIA_DIMENSION> m_ViasDimensionsList;
+    // Note: the first value in each dimensions list is the current netclass value
+    std::vector<int>                 m_TrackWidthList;
+    std::vector<VIA_DIMENSION>       m_ViasDimensionsList;
+    std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
 
-    // The first value is the current netclass track width
-    /// Track width list
-    std::vector<int> m_TrackWidthList;
-
-    /// List of current netclasses. There is always the default netclass.
+    // List of netclasses. There is always the default netclass.
     NETCLASSES m_NetClasses;
 
-    bool    m_MicroViasAllowed;             ///< true to allow micro vias
-    bool    m_BlindBuriedViaAllowed;        ///< true to allow blind/buried vias
-    VIATYPE_T m_CurrentViaType;             ///< via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
+    bool       m_MicroViasAllowed;          ///< true to allow micro vias
+    bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
+    VIATYPE_T  m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
 
-    /// if true, when creating a new track starting on an existing track, use this track width
-    bool    m_UseConnectedTrackWidth;
-    int     m_DrawSegmentWidth;             ///< current graphic line width (not EDGE layer)
-    int     m_EdgeSegmentWidth;             ///< current graphic line width (EDGE layer only)
-    int     m_PcbTextWidth;                 ///< current Pcb (not module) Text width
-    wxSize  m_PcbTextSize;                  ///< current Pcb (not module) Text size
-    int     m_TrackMinWidth;                ///< track min value for width ((min copper size value
-    int     m_ViasMinSize;                  ///< vias (not micro vias) min diameter
-    int     m_ViasMinDrill;                 ///< vias (not micro vias) min drill diameter
-    int     m_MicroViasMinSize;             ///< micro vias (not vias) min diameter
-    int     m_MicroViasMinDrill;            ///< micro vias (not vias) min drill diameter
+    bool       m_RequireCourtyards;         ///< require courtyard definitions in footprints
+    bool       m_ProhibitOverlappingCourtyards;  ///< check for overlapping courtyards in DRC
+
+    // if true, when creating a new track starting on an existing track, use this track width
+    bool       m_UseConnectedTrackWidth;
+    int        m_TrackMinWidth;             ///< track min value for width ((min copper size value
+    int        m_ViasMinSize;               ///< vias (not micro vias) min diameter
+    int        m_ViasMinDrill;              ///< vias (not micro vias) min drill diameter
+    int        m_MicroViasMinSize;          ///< micro vias (not vias) min diameter
+    int        m_MicroViasMinDrill;         ///< micro vias (not vias) min drill diameter
 
     // Global mask margins:
-    int     m_SolderMaskMargin;             ///< Solder mask margin
-    int     m_SolderMaskMinWidth;           ///< Solder mask min width
+    int        m_SolderMaskMargin;          ///< Solder mask margin
+    int        m_SolderMaskMinWidth;        ///< Solder mask min width
                                             // 2 areas near than m_SolderMaskMinWidth
                                             // are merged
-    int     m_SolderPasteMargin;            ///< Solder paste margin absolute value
-    double  m_SolderPasteMarginRatio;       ///< Solder pask margin ratio value of pad size
+    int        m_SolderPasteMargin;         ///< Solder paste margin absolute value
+    double     m_SolderPasteMarginRatio;    ///< Solder pask margin ratio value of pad size
                                             ///< The final margin is the sum of these 2 values
 
-    // Variables used in footprint edition (default value in item/footprint creation)
-    int     m_ModuleSegmentWidth;           ///< Default width for all graphic lines
-                                            // Note: the default layer is the active layer
-    wxSize  m_ModuleTextSize;               ///< Default footprint texts size
-    int     m_ModuleTextWidth;              ///< Default footprint texts thickness
+    int        m_HoleToHoleMin;             ///< Min width of peninsula between two drilled holes
 
-    wxString    m_RefDefaultText;           ///< Default ref text on fp creation
+    // Arrays of default values for the various layer classes.
+    int        m_LineThickness[ LAYER_CLASS_COUNT ];
+    wxSize     m_TextSize[ LAYER_CLASS_COUNT ];
+    int        m_TextThickness[ LAYER_CLASS_COUNT ];
+    bool       m_TextItalic[ LAYER_CLASS_COUNT ];
+    bool       m_TextUpright[ LAYER_CLASS_COUNT ];
+
+    // Variables used in footprint edition (default value in item/footprint creation)
+
+    wxString   m_RefDefaultText;            ///< Default ref text on fp creation
                                             // if empty, use footprint name as default
-    bool    m_RefDefaultVisibility;         ///< Default ref text visibility on fp creation
-    int     m_RefDefaultlayer;              ///< Default ref text layer on fp creation
+    bool       m_RefDefaultVisibility;      ///< Default ref text visibility on fp creation
+    int        m_RefDefaultlayer;           ///< Default ref text layer on fp creation
                                             // should be a PCB_LAYER_ID, but use an int
                                             // to save this param in config
 
-    wxString    m_ValueDefaultText;         ///< Default value text on fp creation
+    wxString   m_ValueDefaultText;          ///< Default value text on fp creation
                                             // if empty, use footprint name as default
-    bool    m_ValueDefaultVisibility;       ///< Default value text visibility on fp creation
-    int     m_ValueDefaultlayer;            ///< Default value text layer on fp creation
+    bool       m_ValueDefaultVisibility;    ///< Default value text visibility on fp creation
+    int        m_ValueDefaultlayer;         ///< Default value text layer on fp creation
                                             // should be a PCB_LAYER_ID, but use an int
                                             // to save this param in config
 
     // Miscellaneous
-    wxPoint m_AuxOrigin;                    ///< origin for plot exports
-    wxPoint m_GridOrigin;                   ///< origin for grid offsets
+    wxPoint    m_AuxOrigin;                 ///< origin for plot exports
+    wxPoint    m_GridOrigin;                ///< origin for grid offsets
 
-    D_PAD   m_Pad_Master;                   ///< A dummy pad to store all default parameters
+    D_PAD      m_Pad_Master;                ///< A dummy pad to store all default parameters
                                             // when importing values or create a new pad
 
 private:
-    /// Index for #m_ViasDimensionsList to select the current via size.
-    /// 0 is the index selection of the default value Netclass
-    unsigned m_viaSizeIndex;
+    // Indicies into the trackWidth, viaSizes and diffPairDimensions lists.
+    // The 0 index is always the current netclass value(s)
+    unsigned   m_trackWidthIndex;
+    unsigned   m_viaSizeIndex;
+    unsigned   m_diffPairIndex;
 
-    // Index for m_TrackWidthList to select the value.
-    /// 0 is the index selection of the default value Netclass
-    unsigned m_trackWidthIndex;
-
-    ///> Use custom values for track/via sizes (not specified in net class nor in the size lists).
-    bool m_useCustomTrackVia;
-
-    ///> Custom track width (used after UseCustomTrackViaSize( true ) was called).
-    int m_customTrackWidth;
-
-    ///> Custom via size (used after UseCustomTrackViaSize( true ) was called).
+    // Custom values for track/via sizes (specified via dialog instead of netclass or lists)
+    bool       m_useCustomTrackVia;
+    int        m_customTrackWidth;
     VIA_DIMENSION m_customViaSize;
 
-    int     m_copperLayerCount; ///< Number of copper layers for this design
+    // Custom values for differential pairs (specified via dialog instead of netclass/lists)
+    bool       m_useCustomDiffPair;
+    DIFF_PAIR_DIMENSION m_customDiffPair;
 
-    LSET    m_enabledLayers;    ///< Bit-mask for layer enabling
-    LSET    m_visibleLayers;    ///< Bit-mask for layer visibility
+    int        m_copperLayerCount; ///< Number of copper layers for this design
 
-    int     m_visibleElements;  ///< Bit-mask for element category visibility
-    int     m_boardThickness;   ///< Board thickness for 3D viewer
+    LSET       m_enabledLayers;    ///< Bit-mask for layer enabling
+    LSET       m_visibleLayers;    ///< Bit-mask for layer visibility
+
+    int        m_visibleElements;  ///< Bit-mask for element category visibility
+    int        m_boardThickness;   ///< Board thickness for 3D viewer
 
     /// Current net class name used to display netclass info.
     /// This is also the last used netclass after starting a track.
-    wxString  m_currentNetClassName;
+    wxString   m_currentNetClassName;
 
 public:
     BOARD_DESIGN_SETTINGS();
@@ -415,11 +481,95 @@ public:
     }
 
     /**
-     * Function GetMinHoleSeparation
-     * @return The minimum distance between the edges of two holes or 0, which indicates that
-     * hole-to-hole separation should not be checked.
+     * Function GetDiffPairIndex
+     * @return the current diff pair dimension list index.
      */
-    int GetMinHoleSeparation() const;
+    inline unsigned GetDiffPairIndex() const { return m_diffPairIndex; }
+
+    /**
+     * Function SetDiffPairIndex
+     * @param aIndex is the diff pair dimensions list index to set.
+     */
+    void SetDiffPairIndex( unsigned aIndex );
+
+    /**
+     * Function SetCustomDiffPairWidth
+     * Sets custom track width for differential pairs (i.e. not available in netclasses or
+     * preset list).
+     * @param aDrill is the new track wdith.
+     */
+    inline void SetCustomDiffPairWidth( int aWidth )
+    {
+        m_customDiffPair.m_Width = aWidth;
+    }
+
+    /**
+     * Function GetCustomDiffPairWidth
+     * @return Current custom track width for differential pairs.
+     */
+    inline int GetCustomDiffPairWidth()
+    {
+        return m_customDiffPair.m_Width;
+    }
+
+    /**
+     * Function SetCustomDiffPairGap
+     * Sets custom gap for differential pairs (i.e. not available in netclasses or preset
+     * list).
+     * @param aGap is the new gap.
+     */
+    inline void SetCustomDiffPairGap( int aGap )
+    {
+        m_customDiffPair.m_Gap = aGap;
+    }
+
+    /**
+     * Function GetCustomDiffPairGap
+     * @return Current custom gap width for differential pairs.
+     */
+    inline int GetCustomDiffPairGap()
+    {
+        return m_customDiffPair.m_Gap;
+    }
+
+    /**
+     * Function SetCustomDiffPairViaGap
+     * Sets custom via gap for differential pairs (i.e. not available in netclasses or
+     * preset list).
+     * @param aGap is the new gap.  Specify 0 to use the DiffPairGap for vias as well.
+     */
+    inline void SetCustomDiffPairViaGap( int aGap )
+    {
+        m_customDiffPair.m_ViaGap = aGap;
+    }
+
+    /**
+     * Function GetCustomDiffPairViaGap
+     * @return Current custom via gap width for differential pairs.
+     */
+    inline int GetCustomDiffPairViaGap()
+    {
+        return m_customDiffPair.m_ViaGap > 0 ? m_customDiffPair.m_ViaGap : m_customDiffPair.m_Gap;
+    }
+
+    /**
+     * Function UseCustomDiffPairDimensions
+     * Enables/disables custom differential pair dimensions.
+     * @param aEnabled decides if custom settings should be used for new differential pairs.
+     */
+    inline void UseCustomDiffPairDimensions( bool aEnabled )
+    {
+        m_useCustomDiffPair = aEnabled;
+    }
+
+    /**
+     * Function UseCustomDiffPairDimensions
+     * @return True if custom sizes of diff pairs are enabled, false otherwise.
+     */
+    inline bool UseCustomDiffPairDimensions() const
+    {
+        return m_useCustomDiffPair;
+    }
 
     /**
      * Function SetMinHoleSeparation
@@ -429,28 +579,16 @@ public:
     void SetMinHoleSeparation( int aDistance );
 
     /**
-     * Function RequireCourtyardDefinitions
-     * @return True if footprints without courtyard definitions are considered DRC violations.
-     */
-    bool RequireCourtyardDefinitions() const;
-
-    /**
      * Function SetRequireCourtyardDefinitions
      * @param aRequire Set to true to generate DRC violations from missing courtyards.
      */
     void SetRequireCourtyardDefinitions( bool aRequire );
 
     /**
-     * Function ProhibitOverlappingCourtyards
-     * @return True if overlapping courtyards are considered DRC violations.
-     */
-    bool ProhibitOverlappingCourtyards() const;
-
-    /**
      * Function SetProhibitOverlappingCourtyards
-     * @param aRequire Set to true to generate DRC violations from overlapping courtyards.
+     * @param aProhibit Set to true to generate DRC violations from overlapping courtyards.
      */
-    void SetProhibitOverlappingCourtyards( bool aRequire );
+    void SetProhibitOverlappingCourtyards( bool aProhibit );
 
     /**
      * Function GetVisibleLayers
@@ -591,10 +729,33 @@ public:
      * allow reading or writing of configuration file information directly into
      * this object.
      */
-    void AppendConfigs( PARAM_CFG_ARRAY* aResult );
+    void AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResult );
 
     inline int GetBoardThickness() const { return m_boardThickness; }
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
+
+    /**
+     * Function GetLineThickness
+     * Returns the default graphic segment thickness from the layer class for the given layer.
+     */
+    int GetLineThickness( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Function GetTextSize
+     * Returns the default text size from the layer class for the given layer.
+     */
+    wxSize GetTextSize( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Function GetTextThickness
+     * Returns the default text thickness from the layer class for the given layer.
+     */
+    int GetTextThickness( PCB_LAYER_ID aLayer ) const;
+
+    bool GetTextItalic( PCB_LAYER_ID aLayer ) const;
+    bool GetTextUpright( PCB_LAYER_ID aLayer ) const;
+
+    int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 
 private:
     void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,

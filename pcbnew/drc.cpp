@@ -500,8 +500,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     testTexts();
 
     // find overlapping courtyard ares.
-    if( m_pcb->GetDesignSettings().ProhibitOverlappingCourtyards()
-        || m_pcb->GetDesignSettings().RequireCourtyardDefinitions() )
+    if( m_pcb->GetDesignSettings().m_ProhibitOverlappingCourtyards
+        || m_pcb->GetDesignSettings().m_RequireCourtyards )
     {
         if( aMessages )
         {
@@ -720,7 +720,7 @@ void DRC::testPad2Pad()
 
 void DRC::testDrilledHoles()
 {
-    int holeToHoleMin = m_pcb->GetDesignSettings().GetMinHoleSeparation();
+    int holeToHoleMin = m_pcb->GetDesignSettings().m_HoleToHoleMin;
 
     if( holeToHoleMin == 0 )    // No min setting turns testing off.
         return;
@@ -1325,7 +1325,7 @@ bool DRC::doFootprintOverlappingDrc()
     {
         bool is_ok = footprint->BuildPolyCourtyard();
 
-        if( !is_ok && m_pcb->GetDesignSettings().ProhibitOverlappingCourtyards() )
+        if( !is_ok && m_pcb->GetDesignSettings().m_ProhibitOverlappingCourtyards )
         {
             m_currentMarker = fillMarker( footprint, footprint->GetPosition(),
                                           DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
@@ -1335,7 +1335,7 @@ bool DRC::doFootprintOverlappingDrc()
             success = false;
         }
 
-        if( !m_pcb->GetDesignSettings().RequireCourtyardDefinitions() )
+        if( !m_pcb->GetDesignSettings().m_RequireCourtyards )
             continue;
 
         if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 &&
@@ -1351,7 +1351,7 @@ bool DRC::doFootprintOverlappingDrc()
         }
     }
 
-    if( !m_pcb->GetDesignSettings().ProhibitOverlappingCourtyards() )
+    if( !m_pcb->GetDesignSettings().m_ProhibitOverlappingCourtyards )
         return success;
 
     // Now test for overlapping on top layer:

@@ -61,7 +61,6 @@ class REPORTER;
 struct PARSE_ERROR;
 class IO_ERROR;
 class FP_LIB_TABLE;
-struct AUTOROUTER_CONTEXT;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
@@ -78,12 +77,8 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     friend struct PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
 
-    void updateTraceWidthSelectBox();
-    void updateViaSizeSelectBox();
-
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
-
 
 protected:
     PCB_LAYER_WIDGET* m_Layers;
@@ -285,7 +280,6 @@ public:
 
     /**
      * Function GetAutoSaveFilePrefix
-     *
      * @return the string to prepend to a file name for automatic save.
      */
     static wxString GetAutoSaveFilePrefix();
@@ -302,20 +296,19 @@ public:
 
     /**
      * Function ToPlotter
-     * Open a dialog frame to create plot and drill files
-     * relative to the current board
+     * Open a dialog frame to create plot and drill files relative to the current board.
      */
     void ToPlotter( wxCommandEvent& event );
 
     /**
      * Function ToPrinter
-     * Install the print dialog
+     * Install the print dialog.
      */
     void ToPrinter( wxCommandEvent& event );
 
     /**
      * Function SVG_Print
-     * shows the print SVG file dialog.
+     * Shows the Export to SVG file dialog.
      */
     void ExportSVG( wxCommandEvent& event );
 
@@ -334,23 +327,16 @@ public:
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
     void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnUpdatePCBFromSch( wxCommandEvent& event );
 
-    /**
-     * called when the alt key is pressed during a mouse wheel action
-     */
-    void OnAltWheel( wxCommandEvent& event );
+    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox );
+    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox );
 
     /**
      * Function PrintPage , virtual
-     * used to print a page
      * Print the page pointed by the current screen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
@@ -445,7 +431,6 @@ public:
 
     /**
      * Get the last net list read with the net list dialog box.
-     *
      * @return - Absolute path and file name of the last net list file successfully read.
      */
     wxString GetLastNetListRead();
@@ -566,11 +551,18 @@ public:
     void OnSelectTool( wxCommandEvent& aEvent );
 
     /**
-     * Function OnResetModuleTextSizes
-     * resets text size and width of all module text fields of given field
-     * type to current settings in Preferences
+     * Function OnEditTextAndGraphics
+     * Dialog for editing properties of text and graphic items, selected by type, layer,
+     * and/or parent footprint.
      */
-    void OnResetModuleTextSizes( wxCommandEvent& event );
+    void OnEditTextAndGraphics( wxCommandEvent& event );
+
+    /**
+     * Function OnEditTracksAndVias
+     * Dialog for editing the properties of tracks and vias, selected by net, netclass,
+     * and/or layer.
+     */
+    void OnEditTracksAndVias( wxCommandEvent& event );
 
     void ProcessMuWaveFunctions( wxCommandEvent& event );
     void MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
@@ -673,10 +665,9 @@ public:
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /**
-     * Function ShowDesignRulesEditor
-     * displays the Design Rules Editor.
+     * Function ShowBoardSetupDialog
      */
-    void ShowDesignRulesEditor( wxCommandEvent& event );
+    void ShowBoardSetupDialog( wxCommandEvent& event );
 
     /* toolbars update UI functions: */
 
@@ -769,12 +760,6 @@ public:
     void Block_Move();
 
     /**
-     * Function Block_Mirror_X
-     * mirrors all items within the currently selected block in the X axis.
-     */
-    void Block_Mirror_X();
-
-    /**
      * Function Block_Duplicate
      * Duplicate all items within the selected block.
      * New location is determined by the current offset from the selected
@@ -782,9 +767,6 @@ public:
      */
     void Block_Duplicate( bool aIncrement );
 
-    void Process_Settings( wxCommandEvent& event );
-    void OnConfigurePcbOptions( wxCommandEvent& aEvent );
-    void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /**
@@ -830,7 +812,6 @@ public:
 
     void InstallDrillFrame( wxCommandEvent& event );
     void GenD356File( wxCommandEvent& event );
-    void ToPostProcess( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
 
@@ -926,9 +907,8 @@ public:
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
 
-    // Drc control
-
-    /* function GetDrcController
+    /**
+     * Function GetDrcController
      * @return the DRC controller
      */
     DRC* GetDrcController() { return m_drc; }
@@ -955,7 +935,8 @@ public:
      *              optional library name to create, stops dialog call.
      *              must be called with aStoreInNewLib as true
      */
-    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString ,  wxString* aLibPath = NULL );
+    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
+                                wxString* aLibPath = NULL );
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -1028,7 +1009,6 @@ public:
      */
     bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
                       bool aUseThou, double aXRef, double aYRef );
-
 
     /**
      * Function OnExportSTEP
@@ -1183,9 +1163,6 @@ public:
      */
     void HighLight( wxDC* DC );
 
-    // Track and via edition:
-    void Via_Edit_Control( wxCommandEvent& event );
-
     /**
      * Function IsMicroViaAcceptable
      * return true if a microvia can be placed on the board.
@@ -1196,7 +1173,7 @@ public:
      * And it is allowed from an external layer to the first inner layer
      * </p>
      */
-    bool IsMicroViaAcceptable( void );
+    bool IsMicroViaAcceptable();
 
     /**
      * Function Other_Layer_Route
@@ -1211,7 +1188,6 @@ public:
      *                the case where DRC would not allow a via.
      */
     bool Other_Layer_Route( TRACK* track, wxDC* DC );
-    void HighlightUnconnectedPads( wxDC* DC );
 
     /**
      * Function Delete_Segment
@@ -1231,25 +1207,6 @@ public:
      * until a pad or a junction point of more than 2 segments is found
      */
     void Remove_One_Track( wxDC* DC, TRACK* pt_segm );
-
-    /**
-     * Function Reset_All_Tracks_And_Vias_To_Netclass_Values
-     * Reset all tracks width and/or vias diameters and drill
-     * to their default Netclass value
-     * @param aTrack : bool true to modify tracks
-     * @param aVia : bool true to modify vias
-     */
-    bool Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, bool aVia );
-
-    /**
-     * Function Change_Net_Tracks_And_Vias_Sizes
-     * Reset all tracks width and vias diameters and drill
-     * to their default Netclass value or current values
-     * @param aNetcode : the netcode of the net to edit
-     * @param aUseNetclassValue : bool. True to use netclass values, false to
-     *                            use current values
-     */
-    bool Change_Net_Tracks_And_Vias_Sizes( int  aNetcode, bool aUseNetclassValue );
 
     /**
      * Function Edit_Track_Width
@@ -1595,23 +1552,6 @@ public:
 
 #endif
 
-    void OnSelectAutoPlaceMode( wxCommandEvent& aEvent );
-
-    /**
-     * Function OnOrientFootprints
-     * install the dialog box for the common Orient Footprints
-     */
-    void OnOrientFootprints( wxCommandEvent& event );
-
-    /**
-     * Function ReOrientModules
-     * Set the orientation of footprints
-     * @param ModuleMask = mask (wildcard allowed) selection
-     * @param Orient = new orientation
-     * @param include_fixe = true to orient locked footprints
-     * @return true if some footprints modified, false if no change
-     */
-    bool ReOrientModules( const wxString& ModuleMask, double Orient, bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
 
     /**

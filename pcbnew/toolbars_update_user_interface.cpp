@@ -54,28 +54,6 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
         if( m_SelTrackWidthBox->GetSelection() != (int) GetDesignSettings().GetTrackWidthIndex() )
             m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
     }
-    else
-    {
-        bool check = ( ( ( ID_POPUP_PCB_SELECT_WIDTH1 +
-                           (int) GetDesignSettings().GetTrackWidthIndex() ) == aEvent.GetId() ) &&
-                               !GetDesignSettings().m_UseConnectedTrackWidth &&
-                               !GetDesignSettings().UseCustomTrackViaSize() );
-
-        aEvent.Check( check );
-    }
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetDesignSettings().m_UseConnectedTrackWidth &&
-            !GetDesignSettings().UseCustomTrackViaSize() );
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetDesignSettings().UseCustomTrackViaSize() );
 }
 
 
@@ -85,15 +63,6 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
     {
         if( m_SelViaSizeBox->GetSelection() != (int) GetDesignSettings().GetViaSizeIndex() )
             m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
-    }
-    else
-    {
-        bool check = ( ( ( ID_POPUP_PCB_SELECT_VIASIZE1 +
-                           (int) GetDesignSettings().GetViaSizeIndex() ) == aEvent.GetId() ) &&
-                       !GetDesignSettings().m_UseConnectedTrackWidth &&
-                       !GetDesignSettings().UseCustomTrackViaSize() );
-
-        aEvent.Check( check );
     }
 }
 
@@ -205,17 +174,6 @@ void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
-
-void PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent )
-{
-    //Nothing to do.
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent )
-{
-    //Nothing to do.
-}
 
 void PCB_EDIT_FRAME::SyncMenusAndToolbars( wxEvent& aEvent )
 {

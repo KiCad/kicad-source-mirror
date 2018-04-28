@@ -532,11 +532,6 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(trace_min %s)\n",
                   FMT_IU( dsnSettings.m_TrackMinWidth ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(segment_width %s)\n",
-                  FMT_IU( dsnSettings.m_DrawSegmentWidth ).c_str() );
-    m_out->Print( aNestLevel+1, "(edge_width %s)\n",
-                  FMT_IU( dsnSettings.m_EdgeSegmentWidth ).c_str() );
-
     // Save current default via size, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(via_size %s)\n",
                   FMT_IU( dsnSettings.GetDefault()->GetViaDiameter() ).c_str() );
@@ -569,19 +564,28 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(uvia_min_drill %s)\n",
                   FMT_IU( dsnSettings.m_MicroViasMinDrill ).c_str() );
 
+    // 6.0 TODO: are we going to update the tokens we save these under?
+    // 6.0 TODO: need to save the LAYER_CLASS_OTHERS stuff
+    // 6.0 TODO: need to save the TextItalic and TextUpright settings
+
+    m_out->Print( aNestLevel+1, "(edge_width %s)\n",
+                  FMT_IU( dsnSettings.m_LineThickness[ LAYER_CLASS_EDGES ] ).c_str() );
+
+    m_out->Print( aNestLevel+1, "(segment_width %s)\n",
+                  FMT_IU( dsnSettings.m_LineThickness[ LAYER_CLASS_COPPER ] ).c_str() );
     m_out->Print( aNestLevel+1, "(pcb_text_width %s)\n",
-                  FMT_IU( dsnSettings.m_PcbTextWidth ).c_str() );
+                  FMT_IU( dsnSettings.m_TextThickness[ LAYER_CLASS_COPPER ] ).c_str() );
     m_out->Print( aNestLevel+1, "(pcb_text_size %s %s)\n",
-                  FMT_IU( dsnSettings.m_PcbTextSize.x ).c_str(),
-                  FMT_IU( dsnSettings.m_PcbTextSize.y ).c_str() );
+                  FMT_IU( dsnSettings.m_TextSize[ LAYER_CLASS_COPPER ].x ).c_str(),
+                  FMT_IU( dsnSettings.m_TextSize[ LAYER_CLASS_COPPER ].y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(mod_edge_width %s)\n",
-                  FMT_IU( dsnSettings.m_ModuleSegmentWidth ).c_str() );
+                  FMT_IU( dsnSettings.m_LineThickness[ LAYER_CLASS_SILK ] ).c_str() );
     m_out->Print( aNestLevel+1, "(mod_text_size %s %s)\n",
-                  FMT_IU( dsnSettings.m_ModuleTextSize.x ).c_str(),
-                  FMT_IU( dsnSettings.m_ModuleTextSize.y ).c_str() );
+                  FMT_IU( dsnSettings.m_TextSize[ LAYER_CLASS_SILK ].x ).c_str(),
+                  FMT_IU( dsnSettings.m_TextSize[ LAYER_CLASS_SILK ].y ).c_str() );
     m_out->Print( aNestLevel+1, "(mod_text_width %s)\n",
-                  FMT_IU( dsnSettings.m_ModuleTextWidth ).c_str() );
+                  FMT_IU( dsnSettings.m_TextThickness[ LAYER_CLASS_SILK ] ).c_str() );
 
     m_out->Print( aNestLevel+1, "(pad_size %s %s)\n",
                   FMT_IU( dsnSettings.m_Pad_Master.GetSize().x ).c_str(),
@@ -1565,7 +1569,7 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     if( orient != 0.0 )
         m_out->Print( 0, " %s", FMT_ANGLE( orient ).c_str() );
 
-    if( aText->IsUnlocked() )
+    if( !aText->IsKeepUpright() )
         m_out->Print( 0, " unlocked" );
 
     m_out->Print( 0, ")" );

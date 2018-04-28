@@ -116,19 +116,25 @@ void SIZES_SETTINGS::Init( BOARD* aBoard, ITEM* aStartItem, int aNet )
     if( bds.UseNetClassVia() && netClass != NULL )   // netclass value
     {
         m_viaDiameter = netClass->GetViaDiameter();
-        m_viaDrill = netClass->GetViaDrill();
+        m_viaDrill    = netClass->GetViaDrill();
     }
     else
     {
         m_viaDiameter = bds.GetCurrentViaSize();
-        m_viaDrill = bds.GetCurrentViaDrill();
+        m_viaDrill    = bds.GetCurrentViaDrill();
     }
 
-    // Set the differential pair width/gap using netclass if selected
-    if( ( bds.UseNetClassTrack() && netClass != NULL ) )
+    if( bds.UseCustomDiffPairDimensions() )
     {
-        m_diffPairWidth = netClass->GetDiffPairWidth();
-        m_diffPairGap = netClass->GetDiffPairGap();
+        m_diffPairWidth  = bds.GetCustomDiffPairWidth();
+        m_diffPairGap    = bds.GetCustomDiffPairGap();
+        m_diffPairViaGap = bds.GetCustomDiffPairViaGap();
+    }
+    else
+    {
+        m_diffPairWidth  = bds.m_DiffPairDimensionsList[ bds.GetDiffPairIndex() ].m_Width;
+        m_diffPairGap    = bds.m_DiffPairDimensionsList[ bds.GetDiffPairIndex() ].m_Gap;
+        m_diffPairViaGap = bds.m_DiffPairDimensionsList[ bds.GetDiffPairIndex() ].m_ViaGap;
     }
 
     m_layerPairs.clear();

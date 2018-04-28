@@ -51,7 +51,6 @@
 #include <footprint_viewer_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
-#include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>
 #include <array_creator.h>
 #include <connectivity_data.h>
@@ -343,26 +342,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         OnModify();
         break;
 
-    case ID_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE:
-        {
-        DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, GetBoard()->GetHighLightNetCode() );
-        dlg.ShowModal();
-        }
-        break;
-
     case ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE:
-        if( GetCurItem() == NULL )
-            break;
         {
-        int type = GetCurItem()->Type();
-
-        if( type == PCB_TRACE_T || type == PCB_VIA_T )
-        {
-            BOARD_CONNECTED_ITEM*item = (BOARD_CONNECTED_ITEM*) GetCurItem();
-            DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNetCode() );
-            dlg.ShowModal();
-        }
-
+            wxCommandEvent dummy;
+            OnEditTracksAndVias( dummy );
         }
         m_canvas->MoveCursorToCrossHair();
         break;
@@ -470,21 +453,22 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_TRACKSEG:
-        if( GetCurItem() == NULL )
-            break;
-
-        m_canvas->MoveCursorToCrossHair();
-        SetCurItem( Delete_Segment( &dc, (TRACK*) GetCurItem() ) );
-        OnModify();
+        if( GetCurItem() )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            SetCurItem( Delete_Segment( &dc, (TRACK*) GetCurItem() ) );
+            OnModify();
+        }
         break;
 
     case ID_POPUP_PCB_DELETE_TRACK:
-        if( GetCurItem() == NULL )
-            break;
-        m_canvas->MoveCursorToCrossHair();
-        Delete_Track( &dc, (TRACK*) GetCurItem() );
-        SetCurItem( NULL );
-        OnModify();
+        if( GetCurItem() )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            Delete_Track( &dc, (TRACK*) GetCurItem() );
+            SetCurItem( NULL );
+            OnModify();
+        }
         break;
 
     case ID_POPUP_PCB_DELETE_TRACKNET:
@@ -524,9 +508,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_ZONE:
         m_canvas->MoveCursorToCrossHair();
 
-        if( GetCurItem() == NULL )
-            break;
-
+        if( GetCurItem() )
         {
             SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
             int      netcode = zsegm->GetNetCode();
@@ -858,19 +840,19 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_UPDATE_FOOTPRINTS:
-        if( GetCurItem() && GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), true );
-        m_canvas->MoveCursorToCrossHair();
+        if( GetCurItem() && GetCurItem()->Type() == PCB_MODULE_T )
+        {
+            InstallExchangeModuleFrame( (MODULE*) GetCurItem(), true );
+            m_canvas->MoveCursorToCrossHair();
+        }
         break;
 
     case ID_POPUP_PCB_EXCHANGE_FOOTPRINTS:
-        if( GetCurItem() && GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), false );
-        m_canvas->MoveCursorToCrossHair();
+        if( GetCurItem() && GetCurItem()->Type() == PCB_MODULE_T )
+        {
+            InstallExchangeModuleFrame( (MODULE*) GetCurItem(), false );
+            m_canvas->MoveCursorToCrossHair();
+        }
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:

@@ -102,7 +102,6 @@ struct LANGUAGE_DESCR
  */
 static LANGUAGE_DESCR s_Languages[] =
 {
-    // Default language
     { wxLANGUAGE_DEFAULT,    ID_LANGUAGE_DEFAULT,    lang_def_xpm,  _( "Default" ) },
     { wxLANGUAGE_ENGLISH,    ID_LANGUAGE_ENGLISH,    lang_en_xpm, wxT( "English" ), true },
     { wxLANGUAGE_FRENCH,     ID_LANGUAGE_FRENCH,     lang_fr_xpm,   _( "French" ) },

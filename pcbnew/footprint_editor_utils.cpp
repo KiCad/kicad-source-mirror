@@ -221,7 +221,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MODEDIT_EDIT_BODY_ITEM:
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
-    case ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH:
     case ID_POPUP_PCB_DELETE_EDGE:
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
     case ID_POPUP_PCB_DELETE_PAD:
@@ -710,24 +709,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH:
-        {
-            EDGE_MODULE* edge = NULL;
-
-            if( GetScreen()->GetCurItem()
-              && ( GetScreen()->GetCurItem()->Type() == PCB_MODULE_EDGE_T ) )
-            {
-                edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
-            }
-
-            Enter_Edge_Width( edge );
-            m_canvas->MoveCursorToCrossHair();
-
-            if( edge )
-                m_canvas->Refresh();
-        }
-        break;
-
     case  ID_POPUP_MODEDIT_EDIT_BODY_ITEM :
         InstallGraphicItemPropertiesDialog( GetScreen()->GetCurItem(), nullptr );
         break;
@@ -757,24 +738,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         m_canvas->Refresh();
-        break;
-
-    case ID_PCB_DRAWINGS_WIDTHS_SETUP:
-        InstallOptionsFrame( pos );
-        break;
-
-    case ID_PCB_PAD_SETUP:
-        {
-            BOARD_ITEM* item = GetCurItem();
-
-            if( item )
-            {
-                if( item->Type() != PCB_PAD_T )
-                    item = NULL;
-            }
-
-            InstallPadOptionsFrame( (D_PAD*) item );
-        }
         break;
 
     case ID_PCB_USER_GRID_SETUP:

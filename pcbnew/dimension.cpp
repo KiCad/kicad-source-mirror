@@ -100,6 +100,8 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
     if( aDimension == NULL )
     {
+        const BOARD_DESIGN_SETTINGS& boardSettings = GetBoard()->GetDesignSettings();
+
         status_dimension = 1;
         pos = GetCrossHairPosition();
 
@@ -109,17 +111,10 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         aDimension->SetOrigin( pos );
         aDimension->SetEnd( pos );
 
-        aDimension->Text().SetTextSize( GetBoard()->GetDesignSettings().m_PcbTextSize );
-        int width = GetBoard()->GetDesignSettings().m_PcbTextWidth;
-        int maxthickness = Clamp_Text_PenSize(width, aDimension->Text().GetTextSize() );
-
-        if( width > maxthickness )
-        {
-            width = maxthickness;
-        }
-
-        aDimension->Text().SetThickness( width );
-        aDimension->SetWidth( width );
+        aDimension->Text().SetTextSize( boardSettings.GetTextSize( GetActiveLayer() ) );
+        aDimension->Text().SetThickness( boardSettings.GetTextThickness( GetActiveLayer() ) );
+        aDimension->Text().SetItalic( boardSettings.GetTextItalic( GetActiveLayer() ) );
+        aDimension->SetWidth( boardSettings.GetLineThickness( GetActiveLayer() ) );
         aDimension->AdjustDimensionDetails( GetUserUnits() );
         aDimension->Draw( m_canvas, aDC, GR_XOR );
 

@@ -940,13 +940,13 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "DrawSegmWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "DrawSegmWidth" ) );
-            bds.m_DrawSegmentWidth = tmp;
+            bds.m_LineThickness[ LAYER_CLASS_COPPER ] = tmp;
         }
 
         else if( TESTLINE( "EdgeSegmWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "EdgeSegmWidth" ) );
-            bds.m_EdgeSegmentWidth = tmp;
+            bds.m_LineThickness[ LAYER_CLASS_EDGES ] = tmp;
         }
 
         else if( TESTLINE( "ViaMinSize" ) )
@@ -1021,7 +1021,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "TextPcbWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TextPcbWidth" ) );
-            bds.m_PcbTextWidth = tmp;
+            bds.m_TextThickness[ LAYER_CLASS_COPPER ] = tmp;
         }
 
         else if( TESTLINE( "TextPcbSize" ) )
@@ -1029,19 +1029,21 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "TextPcbSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_PcbTextSize = wxSize( x, y );
+            bds.m_TextSize[ LAYER_CLASS_COPPER ] = wxSize( x, y );
         }
 
         else if( TESTLINE( "EdgeModWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "EdgeModWidth" ) );
-            bds.m_ModuleSegmentWidth = tmp;
+            bds.m_LineThickness[ LAYER_CLASS_SILK ] = tmp;
+            bds.m_LineThickness[ LAYER_CLASS_OTHERS ] = tmp;
         }
 
         else if( TESTLINE( "TextModWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TextModWidth" ) );
-            bds.m_ModuleTextWidth = tmp;
+            bds.m_TextThickness[ LAYER_CLASS_SILK ] = tmp;
+            bds.m_TextThickness[ LAYER_CLASS_OTHERS ] = tmp;
         }
 
         else if( TESTLINE( "TextModSize" ) )
@@ -1049,7 +1051,8 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "TextModSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_ModuleTextSize = wxSize( x, y );
+            bds.m_TextSize[ LAYER_CLASS_SILK ] = wxSize( x, y );
+            bds.m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( x, y );
         }
 
         else if( TESTLINE( "PadSize" ) )

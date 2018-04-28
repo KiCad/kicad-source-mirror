@@ -299,10 +299,10 @@
                                                     <property name="close_button">1</property>
                                                     <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
                                                     <property name="col_label_size">22</property>
-                                                    <property name="col_label_values">&quot;Text Items&quot; &quot;Show&quot; &quot;Width&quot; &quot;Height&quot; &quot;Thickness&quot; &quot;Italic&quot; &quot;Layer&quot; &quot;Orientation&quot; &quot;Unconstrained&quot; &quot;X Offset&quot; &quot;Y Offset&quot;</property>
+                                                    <property name="col_label_values">&quot;Text Items&quot; &quot;Show&quot; &quot;Width&quot; &quot;Height&quot; &quot;Thickness&quot; &quot;Italic&quot; &quot;Layer&quot; &quot;Orientation&quot; &quot;Keep Upright&quot; &quot;X Offset&quot; &quot;Y Offset&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                                     <property name="cols">11</property>
-                                                    <property name="column_sizes">120,48,90,90,90,48,112,80,48,90,90</property>
+                                                    <property name="column_sizes">120,48,90,90,90,48,112,90,90,90,90</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="default_pane">0</property>
@@ -2895,7 +2895,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Set values to 0 to use netclass values.</property>
+                                                    <property name="label">Set values to 0 to use Board Setup values.</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>

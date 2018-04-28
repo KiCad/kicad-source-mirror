@@ -870,11 +870,14 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     else
         module->SetReference( settings.m_RefDefaultText );
 
-    module->Reference().SetThickness( settings.m_ModuleTextWidth );
-    module->Reference().SetTextSize( settings.m_ModuleTextSize );
-    default_pos.y = GetDesignSettings().m_ModuleTextSize.y / 2;
+    PCB_LAYER_ID layer = ToLAYER_ID( settings.m_RefDefaultlayer );
+    module->Reference().SetThickness( settings.GetTextThickness( layer ) );
+    module->Reference().SetTextSize( settings.GetTextSize( layer ) );
+    module->Reference().SetItalic( settings.GetTextItalic( layer ) );
+    module->Reference().SetKeepUpright( settings.GetTextUpright( layer ) );
+    default_pos.y = GetDesignSettings().GetTextSize( layer ).y / 2;
     module->Reference().SetPosition( default_pos );
-    module->Reference().SetLayer( ToLAYER_ID( settings.m_RefDefaultlayer ) );
+    module->Reference().SetLayer( layer );
     module->Reference().SetVisible( settings.m_RefDefaultVisibility );
 
     // Set the value field to a default value
@@ -883,11 +886,14 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     else
         module->SetValue( settings.m_ValueDefaultText );
 
-    module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    module->Value().SetTextSize( GetDesignSettings().m_ModuleTextSize );
+    layer = ToLAYER_ID( settings.m_ValueDefaultlayer );
+    module->Value().SetThickness( settings.GetTextThickness( layer ) );
+    module->Value().SetTextSize( settings.GetTextSize( layer ) );
+    module->Value().SetItalic( settings.GetTextItalic( layer ) );
+    module->Value().SetKeepUpright( settings.GetTextUpright( layer ) );
     default_pos.y = -default_pos.y;
     module->Value().SetPosition( default_pos );
-    module->Value().SetLayer( ToLAYER_ID( settings.m_ValueDefaultlayer ) );
+    module->Value().SetLayer( layer );
     module->Value().SetVisible( settings.m_ValueDefaultVisibility );
 
     SetMsgPanel( module );

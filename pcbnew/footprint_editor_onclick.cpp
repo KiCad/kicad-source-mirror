@@ -470,15 +470,6 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         PopMenu->AppendSeparator();
     }
 
-    if( ( GetToolId() == ID_MODEDIT_LINE_TOOL ) ||
-        ( GetToolId() == ID_MODEDIT_CIRCLE_TOOL ) ||
-        ( GetToolId() == ID_MODEDIT_ARC_TOOL ) )
-    {
-        AddMenuItem( PopMenu, ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH, _("Set Line Width..." ),
-                     KiBitmap( width_segment_xpm ) );
-        PopMenu->AppendSeparator();
-    }
-
     return true;
 }
 

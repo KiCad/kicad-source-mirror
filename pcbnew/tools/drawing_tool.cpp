@@ -378,14 +378,18 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         {
             if( !text )
             {
+                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
                 // Init the new item attributes
                 if( m_editModules )
                 {
                     TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) m_frame->GetModel() );
 
-                    textMod->SetLayer( m_frame->GetActiveLayer() );
-                    textMod->SetTextSize( dsnSettings.m_ModuleTextSize );
-                    textMod->SetThickness( dsnSettings.m_ModuleTextWidth );
+                    textMod->SetLayer( layer );
+                    textMod->SetTextSize( dsnSettings.GetTextSize( layer ) );
+                    textMod->SetThickness( dsnSettings.GetTextThickness( layer ) );
+                    textMod->SetItalic( dsnSettings.GetTextItalic( layer ) );
+                    textMod->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
                     textMod->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
                     DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod, NULL );
@@ -406,15 +410,15 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an undo entry :| LEGACY_CLEANUP
                     textPcb->SetFlags( IS_NEW );
 
-                    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
                     textPcb->SetLayer( layer );
 
                     // Set the mirrored option for layers on the BACK side of the board
                     if( IsBackLayer( layer ) )
                         textPcb->SetMirrored( true );
 
-                    textPcb->SetTextSize( dsnSettings.m_PcbTextSize );
-                    textPcb->SetThickness( dsnSettings.m_PcbTextWidth );
+                    textPcb->SetTextSize( dsnSettings.GetTextSize( layer ) );
+                    textPcb->SetThickness( dsnSettings.GetTextThickness( layer ) );
+                    textPcb->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     textPcb->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
                     RunMainStack([&]() {
@@ -490,7 +494,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     DIMENSION* dimension = NULL;
     BOARD_COMMIT commit( m_frame );
-    int maxThickness;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
@@ -564,6 +567,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_ORIGIN:
             {
                 PCB_LAYER_ID layer = getDrawingLayer();
+                const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
                 if( layer == Edge_Cuts )        // dimensions are not allowed on EdgeCuts
                     layer = Dwgs_User;
@@ -573,16 +577,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetLayer( layer );
                 dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
                 dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
-
-                int width = m_board->GetDesignSettings().m_PcbTextWidth;
-                maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
-
-                if( width > maxThickness )
-                    width = maxThickness;
-
-                dimension->Text().SetThickness( width );
-                dimension->SetWidth( width );
+                dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
+                dimension->Text().SetThickness( boardSettings.GetTextThickness( layer ) );
+                dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
+                dimension->SetWidth( boardSettings.GetLineThickness( layer ) );
                 dimension->AdjustDimensionDetails( m_frame->GetUserUnits() );
 
                 preview.Add( dimension );
@@ -1710,16 +1708,10 @@ void DRAWING_TOOL::setTransitions()
 }
 
 
-int DRAWING_TOOL::getSegmentWidth( unsigned int aLayer ) const
+int DRAWING_TOOL::getSegmentWidth( PCB_LAYER_ID aLayer ) const
 {
     assert( m_board );
-
-    if( aLayer == Edge_Cuts )
-        return m_board->GetDesignSettings().m_EdgeSegmentWidth;
-    else if( m_editModules )
-        return m_board->GetDesignSettings().m_ModuleSegmentWidth;
-    else
-        return m_board->GetDesignSettings().m_DrawSegmentWidth;
+    return m_board->GetDesignSettings().GetLineThickness( aLayer );
 }
 
 

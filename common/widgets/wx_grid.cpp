@@ -89,7 +89,8 @@ void WX_GRID::ShowHideColumns( const wxString& shownColumns )
 }
 
 
-// An re-implementation of wxGrid::DrawColLabel which left-aligns the first column.
+// An re-implementation of wxGrid::DrawColLabel which left-aligns the first column when
+// there are no row labels.
 void WX_GRID::DrawColLabel( wxDC& dc, int col )
 {
     if( GetColWidth( col ) <= 0 || m_colLabelHeight <= 0 )
@@ -111,7 +112,7 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
     GetColLabelAlignment( &hAlign, &vAlign );
     const int orient = GetColLabelTextOrientation();
 
-    if( col == 0 )
+    if( col == 0 && GetRowLabelSize() == 0 )
         hAlign = wxALIGN_LEFT;
 
     rend.DrawLabel( *this, dc, GetColLabelValue( col ), rect, hAlign, vAlign, orient );

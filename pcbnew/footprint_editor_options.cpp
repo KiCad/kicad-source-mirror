@@ -103,45 +103,99 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
                                                     &settings.m_RefDefaultText, wxT( "REF**" ) ) );
 
     // design settings
-    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorGrlineWidth" ),
-                                                    &settings.m_ModuleSegmentWidth,
-                                                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
-                                                    Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
-                                                    NULL, 1/IU_PER_MM ) );
-    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeH" ),
-                                                    &settings.m_ModuleTextSize.x,
-                                                    Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
-                                                    Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
-                                                    NULL, 1/IU_PER_MM ) );
-    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeV" ),
-                                                    &settings.m_ModuleTextSize.y,
-                                                    Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
-                                                    Millimeter2iu(0.01), Millimeter2iu( 100.0 ),
-                                                    NULL, 1/IU_PER_MM ) );
-    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultThickness" ),
-                                                    &settings.m_ModuleTextWidth,
-                                                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
-                                                    Millimeter2iu( 0.01 ), Millimeter2iu( 20.0 ),
-                                                    NULL, 1/IU_PER_MM ) );
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkLineWidth" ),
+            &settings.m_LineThickness[ LAYER_CLASS_SILK ],
+            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
+            nullptr, 1/IU_PER_MM, wxT( "FpEditorGrlineWidth" ) ) );
+    
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkTextSizeH" ),
+            &settings.m_TextSize[ LAYER_CLASS_SILK ].x,
+            Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+            nullptr, 1/IU_PER_MM, wxT( "FpEditorTextsDefaultSizeH" ) ) );
+    
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkTextSizeV" ),
+            &settings.m_TextSize[ LAYER_CLASS_SILK ].y,
+            Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+            nullptr, 1/IU_PER_MM, wxT( "FpEditorTextsDefaultSizeV" ) ) );
+    
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkTextThickness" ),
+            &settings.m_TextThickness[ LAYER_CLASS_SILK ],
+            Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+            nullptr, 1/IU_PER_MM, wxT( "FpEditorTextsDefaultThickness" ) ) );
 
-    m_configParams.push_back( new PARAM_CFG_WXSTRING( true,
-                                    wxT( "FpEditorRefDefaultText" ),
-                                    &settings.m_RefDefaultText, wxT( "REF**" ) ) );
-    m_configParams.push_back( new PARAM_CFG_BOOL( true,
-                                    wxT( "FpEditorRefDefaultVisibility" ),
-                                    &settings.m_RefDefaultVisibility, true ) );
+    m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorSilkTextItalic" ),
+            &settings.m_TextItalic[ LAYER_CLASS_SILK ] ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorCopperLineWidth" ),
+            &settings.m_LineThickness[ LAYER_CLASS_COPPER ],
+            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorCopperTextSizeV" ),
+            &settings.m_TextSize[ LAYER_CLASS_COPPER ].y,
+            Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorCopperTextSizeH" ),
+            &settings.m_TextSize[ LAYER_CLASS_COPPER ].x,
+            Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorCopperTextThickness" ),
+            &settings.m_TextThickness[ LAYER_CLASS_COPPER ],
+            Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorCopperTextItalic" ),
+            &settings.m_TextItalic[ LAYER_CLASS_COPPER ] ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorEdgesAndCourtyardsLineWidth" ),
+            &settings.m_LineThickness[ LAYER_CLASS_EDGES ],
+            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorOthersLineWidth" ),
+            &settings.m_LineThickness[ LAYER_CLASS_OTHERS ],
+            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorOthersTextSizeV" ),
+            &settings.m_TextSize[ LAYER_CLASS_OTHERS ].x,
+            Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorOthersTextSizeH" ),
+            &settings.m_TextSize[ LAYER_CLASS_OTHERS ].y,
+            Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorOthersTextSizeThickness" ),
+            &settings.m_TextThickness[ LAYER_CLASS_OTHERS ],
+            Millimeter2iu( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorOthersTextItalic" ),
+            &settings.m_TextItalic[ LAYER_CLASS_OTHERS ] ) );
+
+    m_configParams.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorRefDefaultText" ),
+            &settings.m_RefDefaultText, wxT( "REF**" ) ) );
+    
+    m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorRefDefaultVisibility" ),
+            &settings.m_RefDefaultVisibility, true ) );
+    
     m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorRefDefaultLayer" ),
-                                    &settings.m_RefDefaultlayer,
-                                    int( F_SilkS ), int( F_SilkS ), int( F_Fab ) ) );
+            &settings.m_RefDefaultlayer,
+            int( F_SilkS ), int( F_SilkS ), int( F_Fab ) ) );
 
     m_configParams.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorValueDefaultText" ),
-                                                    &settings.m_ValueDefaultText, wxT( "" ) ) );
-    m_configParams.push_back( new PARAM_CFG_BOOL( true,
-                                    wxT( "FpEditorValueDefaultVisibility" ),
-                                    &settings.m_ValueDefaultVisibility, true ) );
+            &settings.m_ValueDefaultText, wxT( "" ) ) );
+    
+    m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorValueDefaultVisibility" ),
+            &settings.m_ValueDefaultVisibility, true ) );
+    
     m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorValueDefaultLayer" ),
-                                    &settings.m_ValueDefaultlayer,
-                                    int( F_Fab ), int( F_SilkS ), int( F_Fab ) ) );
+            &settings.m_ValueDefaultlayer,
+            int( F_Fab ), int( F_SilkS ), int( F_Fab ) ) );
 
     return m_configParams;
 }

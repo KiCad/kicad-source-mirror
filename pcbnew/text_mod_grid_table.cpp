@@ -90,7 +90,7 @@ wxString TEXT_MOD_GRID_TABLE::GetColLabelValue( int aCol )
     case TMC_ITALIC:      return _( "Italic" );
     case TMC_LAYER:       return _( "Layer" );
     case TMC_ORIENTATION: return _( "Orientation" );
-    case TMC_UNLOCKED:    return _( "Unconstrained" );
+    case TMC_UPRIGHT:     return _( "Keep Upright" );
     case TMC_XOFFSET:     return _( "X Offset" );
     case TMC_YOFFSET:     return _( "Y Offset" );
     default:              wxFAIL; return wxEmptyString;
@@ -124,7 +124,7 @@ bool TEXT_MOD_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTy
 
     case TMC_SHOWN:
     case TMC_ITALIC:
-    case TMC_UNLOCKED:
+    case TMC_UPRIGHT:
         return aTypeName == wxGRID_VALUE_BOOL;
 
     case TMC_LAYER:
@@ -157,7 +157,7 @@ wxGridCellAttr* TEXT_MOD_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr
 
     case TMC_SHOWN:
     case TMC_ITALIC:
-    case TMC_UNLOCKED:
+    case TMC_UPRIGHT:
         m_boolColAttr->IncRef();
         return m_boolColAttr;
 
@@ -222,7 +222,7 @@ bool TEXT_MOD_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
     {
     case TMC_SHOWN:    return text.IsVisible();
     case TMC_ITALIC:   return text.IsItalic();
-    case TMC_UNLOCKED: return text.IsUnlocked();
+    case TMC_UPRIGHT:  return text.IsKeepUpright();
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         return false;
@@ -308,8 +308,7 @@ void TEXT_MOD_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
         text.SetItalic( aValue );
         break;
 
-    case TMC_UNLOCKED:
-        text.SetUnlocked( aValue );
+    case TMC_UPRIGHT:text.SetKeepUpright( aValue );
         break;
 
     default:

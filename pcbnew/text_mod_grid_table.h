@@ -43,7 +43,7 @@ enum TEXT_MOD_COL_ORDER
     TMC_ITALIC,
     TMC_LAYER,
     TMC_ORIENTATION,
-    TMC_UNLOCKED,      // orientation is not constrained to between -90 and +90º
+    TMC_UPRIGHT,       // keep text upright when viewed from bottom or right of board
     TMC_XOFFSET,
     TMC_YOFFSET,
 

@@ -331,21 +331,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 #endif
 
 
-    //-------- Setup menu --------------------
-    wxMenu* setupMenu = new wxMenu;
-
-    // Sizes and Widths
-    AddMenuItem( setupMenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
-                 _( "Te&xts and Drawings..." ),
-                 _( "Adjust dimensions for texts and drawings" ),
-                 KiBitmap( text_xpm ) );
-
-    // Pad settings
-    AddMenuItem( setupMenu, ID_MODEDIT_PAD_SETTINGS,
-                 _( "Default &Pad Properties..." ),
-                 _( "Edit settings for new pads" ),
-                 KiBitmap( pad_dimensions_xpm ) );
-
     //-------- Place menu --------------------
     wxMenu* placeMenu = new wxMenu;
 
@@ -507,7 +492,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( setupMenu, _( "&Setup" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );

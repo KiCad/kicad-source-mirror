@@ -103,12 +103,6 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizerOptSettings->Add( m_cbReportAllTrackErrors, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_cbCourtyardOverlap = new wxCheckBox( this, wxID_ANY, _("Check footprint courtyard overlap"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerOptSettings->Add( m_cbCourtyardOverlap, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_cbCourtyardMissing = new wxCheckBox( this, wxID_ANY, _("Check courtyard missing in footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerOptSettings->Add( m_cbCourtyardMissing, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
 	
 	bSizerOptions->Add( bSizerOptSettings, 1, wxEXPAND, 5 );
 	

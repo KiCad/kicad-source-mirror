@@ -30,12 +30,10 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <view/view.h>
-#include <widgets/unit_binder.h>
 #include <invoke_pcb_dialog.h>
 #include <class_board.h>
 #include <collectors.h>
-
-#include <dialog_layers_setup_base.h>
+#include <panel_setup_layers.h>
 
 
 // some define to choose how copper layers widgets are shown
@@ -43,24 +41,6 @@
 // if defined, display only active copper layers
 // if not displays always 1=the full set (32 copper layers)
 #define HIDE_INACTIVE_LAYERS
-
-
-/**
- * Holds the 3 UI control pointers for a single board layer.
- */
-struct CTLs
-{
-    CTLs( wxControl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc )
-    {
-        name     = aName;
-        checkbox = aCheckBox;
-        choice   = aChoiceOrDesc;
-    }
-
-    wxControl*      name;
-    wxCheckBox*     checkbox;
-    wxControl*      choice;
-};
 
 
 static LSEQ dlg_layers()
@@ -128,77 +108,6 @@ static LSEQ dlg_layers()
 }
 
 
-class DIALOG_LAYERS_SETUP : public DIALOG_LAYERS_SETUP_BASE
-{
-public:
-    DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
-
-private:
-    int             m_copperLayerCount;
-    LSET            m_enabledLayers;
-
-    BOARD*          m_pcb;
-
-    UNIT_BINDER     m_pcbThickness;
-
-    void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
-    void setCopperLayerCheckBoxes( int copperCount );
-    void setMandatoryLayerCheckBoxes();
-
-    void showCopperChoice( int copperCount );
-    void showBoardLayerNames();
-    void showSelectedLayerCheckBoxes( LSET enableLayerMask );
-    void showLayerTypes();
-    void showPresets( LSET enabledLayerMask );
-
-    /** Return the selected layer mask within the UI checkboxes */
-    LSET getUILayerMask();
-    wxString getLayerName( LAYER_NUM layer );
-    int getLayerTypeIndex( LAYER_NUM layer );
-
-    void OnInitDialog( wxInitDialogEvent& aEvent ) override;
-    void OnCheckBox( wxCommandEvent& event ) override;
-    void DenyChangeCheckBox( wxCommandEvent& event ) override;
-    void OnPresetsChoice( wxCommandEvent& event ) override;
-    void OnCopperLayersChoice( wxCommandEvent& event ) override;
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    bool testLayerNames();
-
-    /**
-     * Return a list of layers removed from the board that contain items.
-     */
-    LSEQ getRemovedLayersWithItems();
-
-    /**
-     * Return a list of layers in use in footprints, and therefore not removable.
-     */
-    LSEQ getNonRemovableLayers();
-
-    /**
-     * Map \a aLayerNumber to the wx IDs for that layer which are
-     * the layer name control ID, checkbox control ID, and choice control ID
-     */
-    CTLs getCTLs( LAYER_NUM aLayerNumber );
-
-    wxControl* getName( LAYER_NUM aLayer )
-    {
-        return getCTLs( aLayer ).name;
-    }
-
-    wxCheckBox* getCheckBox( LAYER_NUM aLayer )
-    {
-        return getCTLs( aLayer ).checkbox;
-    }
-
-    wxChoice* getChoice( LAYER_NUM aLayer )
-    {
-        return (wxChoice*) getCTLs( aLayer ).choice;
-    }
-};
-
-
 // Layer bit masks for each defined "Preset Layer Grouping"
 static const LSET presets[] =
 {
@@ -225,10 +134,23 @@ static const LSET presets[] =
 };
 
 
-CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
+PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
+        PANEL_SETUP_LAYERS_BASE( aParent ),
+        m_Parent( aParent ),
+        m_pcbThickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true,
+                        Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ) )
 {
-#define RETURN_COPPER(x) return CTLs( x##Name, x##CheckBox, x##Choice )
-#define RETURN_AUX(x)    return CTLs( x##Name, x##CheckBox, x##StaticText )
+    m_pcb = aFrame->GetBoard();
+
+    m_LayersListPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX) );
+
+}
+
+
+PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( LAYER_NUM aLayerNumber )
+{
+#define RETURN_COPPER(x) return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Choice )
+#define RETURN_AUX(x)    return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##StaticText )
 
     switch( aLayerNumber )
     {
@@ -288,49 +210,35 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
     case Dwgs_User:             RETURN_AUX( m_Drawings );
     default:
         wxASSERT_MSG( 0, wxT( "bad layer id" ) );
-        return CTLs( nullptr,  nullptr, nullptr );
+        return PANEL_SETUP_LAYERS_CTLs( nullptr,  nullptr, nullptr );
     }
-
-#undef RETURN_COPPER
-#undef RETURN_AUX
 }
 
 
-DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
-    DIALOG_LAYERS_SETUP_BASE( aParent ),
-    m_pcbThickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true,
-                    Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ) )
+wxControl* PANEL_SETUP_LAYERS::getName( LAYER_NUM aLayer )
 {
-    m_pcb = aBoard;
+    return getCTLs( aLayer ).name;
+}
 
-    m_copperLayerCount = m_pcb->GetCopperLayerCount();
+
+wxCheckBox* PANEL_SETUP_LAYERS::getCheckBox( LAYER_NUM aLayer )
+{
+    return getCTLs( aLayer ).checkbox;
+}
+
+
+wxChoice* PANEL_SETUP_LAYERS::getChoice( LAYER_NUM aLayer )
+{
+    return (wxChoice*) getCTLs( aLayer ).choice;
+}
+
+
+bool PANEL_SETUP_LAYERS::TransferDataToWindow()
+{
     m_enabledLayers = m_pcb->GetEnabledLayers();
 
-    SetAutoLayout( true );
-}
-
-
-void DIALOG_LAYERS_SETUP::OnInitDialog( wxInitDialogEvent& aEvent )
-{
-    wxWindowBase::OnInitDialog( aEvent );
-
-    m_LayersListPanel->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
-
-    SetInitialFocus( m_PresetsChoice );
-    m_sdbSizerOK->SetDefault();
-
-    Layout();
-    FinishDialogSettings();
-}
-
-
-bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
-{
-    if( !wxDialog::TransferDataToWindow() )
-        return false;
-
-    showCopperChoice( m_copperLayerCount );
-    setCopperLayerCheckBoxes( m_copperLayerCount );
+    showCopperChoice( m_pcb->GetCopperLayerCount() );
+    setCopperLayerCheckBoxes( m_pcb->GetCopperLayerCount() );
     m_pcbThickness.SetValue( m_pcb->GetDesignSettings().GetBoardThickness() );
 
     showBoardLayerNames();
@@ -339,21 +247,18 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
     showLayerTypes();
     setMandatoryLayerCheckBoxes();
 
-    // All widgets are now initialized. Fix the min sizes:
-    GetSizer()->SetSizeHints( this );
-
     return true;
 }
 
 
-void DIALOG_LAYERS_SETUP::setMandatoryLayerCheckBoxes()
+void PANEL_SETUP_LAYERS::setMandatoryLayerCheckBoxes()
 {
     for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
         setLayerCheckBox( layer, true );
 }
 
 
-void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
+void PANEL_SETUP_LAYERS::showCopperChoice( int copperCount )
 {
     if( copperCount > MAX_CU_LAYERS )
         copperCount = MAX_CU_LAYERS;
@@ -374,7 +279,7 @@ void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
 }
 
 
-void DIALOG_LAYERS_SETUP::showBoardLayerNames()
+void PANEL_SETUP_LAYERS::showBoardLayerNames()
 {
     // Set all the board's layer names into the dialog by calling BOARD::GetLayerName(),
     // which will call BOARD::GetStandardLayerName() for non-coppers.
@@ -397,7 +302,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 }
 
 
-void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( LSET enabledLayers )
+void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
 {
     // the check boxes
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
@@ -408,7 +313,7 @@ void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( LSET enabledLayers )
 }
 
 
-void DIALOG_LAYERS_SETUP::showPresets( LSET enabledLayers )
+void PANEL_SETUP_LAYERS::showPresets( LSET enabledLayers )
 {
     int presetsNdx = 0;     // the "Custom" setting, matches nothing
 
@@ -425,7 +330,7 @@ void DIALOG_LAYERS_SETUP::showPresets( LSET enabledLayers )
 }
 
 
-void DIALOG_LAYERS_SETUP::showLayerTypes()
+void PANEL_SETUP_LAYERS::showLayerTypes()
 {
     for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
     {
@@ -437,7 +342,7 @@ void DIALOG_LAYERS_SETUP::showLayerTypes()
 }
 
 
-LSET DIALOG_LAYERS_SETUP::getUILayerMask()
+LSET PANEL_SETUP_LAYERS::getUILayerMask()
 {
     LSET layerMaskResult;
 
@@ -454,14 +359,17 @@ LSET DIALOG_LAYERS_SETUP::getUILayerMask()
 }
 
 
-void DIALOG_LAYERS_SETUP::setLayerCheckBox( LAYER_NUM aLayer, bool isChecked )
+void PANEL_SETUP_LAYERS::setLayerCheckBox( LAYER_NUM aLayer, bool isChecked )
 {
-    wxCheckBox* ctl = getCheckBox( aLayer );
-    ctl->SetValue( isChecked );
+    PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( aLayer );
+
+    ctl.checkbox->SetValue( isChecked );
+    ctl.name->Enable( isChecked );
+    ctl.choice->Enable( isChecked );
 }
 
 
-void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
+void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 {
     if( copperCount > 0 )
     {
@@ -483,7 +391,7 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
 #ifdef HIDE_INACTIVE_LAYERS
         // This code hides non-active copper layers, or redisplays hidden
         // layers which are now needed.
-        CTLs ctl = getCTLs( layer );
+        PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
 
         ctl.name->Show( state );
         ctl.checkbox->Show( state );
@@ -502,69 +410,76 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
 }
 
 
-void DIALOG_LAYERS_SETUP::OnCheckBox( wxCommandEvent& event )
+void PANEL_SETUP_LAYERS::OnCheckBox( wxCommandEvent& event )
 {
+    for( LSEQ seq = dlg_layers(); seq; ++seq )
+    {
+        PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( *seq );
+        ctl.name->Enable( ctl.checkbox->GetValue() );
+        ctl.choice->Enable( ctl.checkbox->GetValue() );
+    }
+
     m_enabledLayers = getUILayerMask();
 
     showPresets( m_enabledLayers );
 }
 
 
-void DIALOG_LAYERS_SETUP::DenyChangeCheckBox( wxCommandEvent& event )
+void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 {
     wxObject* source = event.GetEventObject();
-    if( dynamic_cast<wxCheckBox*>( source ) )
+    wxString msg;
+
+    for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
     {
-        wxCheckBox* cb = dynamic_cast<wxCheckBox*>( source );
+        wxCheckBox* copper = getCheckBox( *seq );
 
-        for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
+        if( source == copper )
         {
-            wxCheckBox* candidate = getCheckBox( *seq );
+            wxString controlLabel = m_staticTextCopperLayers->GetLabel();
+            // knock the ':' off the end
+            controlLabel = controlLabel.substr( 0, controlLabel.size() - 1 );
 
-            if( candidate == cb )
-            {
-                wxString ctrlLabel = m_staticTextCopperLayers->GetLabel();
-                DisplayError( this, wxString::Format( _( "Use the \"%s\" control to change \n"
-                                                         "the number of copper layers." ),
-                                                      ctrlLabel.substr( 0, ctrlLabel.size() - 1 ) ) );
-                cb->SetValue( true );
-                return;
-            }
+            msg.Printf( _( "Use the \"%s\" control to change the number of copper layers." ),
+                        controlLabel );
+            DisplayError( this, msg );
+
+            copper->SetValue( true );
+            return;
         }
+    }
 
-        for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
+    for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
+    {
+        wxCheckBox* mandatory = getCheckBox( layer );
+
+        if( source == mandatory )
         {
-            wxCheckBox* candidate = getCheckBox( layer );
-
-            if( candidate == cb )
-            {
-                DisplayError( this, wxString::Format( _( "The %s layer is mandatory." ),
-                                                      getLayerName( layer ) ) );
-                cb->SetValue( true );
-                return;
-            }
+            msg.Printf( _( "The %s layer is mandatory." ), getLayerName( layer ) );
+            DisplayError( this, msg );
+            mandatory->SetValue( true );
+            return;
         }
     }
 }
 
 
-void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
+void PANEL_SETUP_LAYERS::OnPresetsChoice( wxCommandEvent& event )
 {
-    unsigned presetNdx = m_PresetsChoice->GetCurrentSelection();
+    int presetNdx = m_PresetsChoice->GetCurrentSelection();
 
-    if( presetNdx == 0 )        // the Custom setting controls nothing.
+    if( presetNdx <= 0 )        // the Custom setting controls nothing.
         return;
 
-    if( presetNdx < DIM(presets) )
+    if( presetNdx < (int) DIM(presets) )
     {
         m_enabledLayers = presets[ presetNdx ];
         LSET copperSet = m_enabledLayers & LSET::AllCuMask();
         int copperCount = copperSet.count();
 
-        m_copperLayerCount = copperCount;
-        showCopperChoice( m_copperLayerCount );
+        showCopperChoice( copperCount );
         showSelectedLayerCheckBoxes( m_enabledLayers );
-        setCopperLayerCheckBoxes( m_copperLayerCount );
+        setCopperLayerCheckBoxes( copperCount );
     }
 
     // Ensure mandatory layers are activated
@@ -572,21 +487,20 @@ void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
 }
 
 
-void DIALOG_LAYERS_SETUP::OnCopperLayersChoice( wxCommandEvent& event )
+void PANEL_SETUP_LAYERS::OnCopperLayersChoice( wxCommandEvent& event )
 {
-    m_copperLayerCount = m_CopperLayersChoice->GetCurrentSelection() * 2 + 2;
-    setCopperLayerCheckBoxes( m_copperLayerCount );
+    setCopperLayerCheckBoxes( m_CopperLayersChoice->GetCurrentSelection() * 2 + 2 );
     m_enabledLayers = getUILayerMask();
     showPresets( m_enabledLayers );
 }
 
 
-bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
+bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 {
-    if( !wxWindow::TransferDataFromWindow() || !testLayerNames() )
+    if( !m_pcbThickness.Validate( true ) )
         return false;
 
-    if( !m_pcbThickness.Validate( true ) )
+    if( !testLayerNames() )
         return false;
 
     wxString msg;
@@ -685,7 +599,7 @@ bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
 }
 
 
-int DIALOG_LAYERS_SETUP::getLayerTypeIndex( LAYER_NUM aLayer )
+int PANEL_SETUP_LAYERS::getLayerTypeIndex( LAYER_NUM aLayer )
 {
     wxChoice*  ctl =  getChoice( aLayer );
     int ret = ctl->GetCurrentSelection();   // indices must have same sequence as LAYER_T
@@ -693,7 +607,7 @@ int DIALOG_LAYERS_SETUP::getLayerTypeIndex( LAYER_NUM aLayer )
 }
 
 
-wxString DIALOG_LAYERS_SETUP::getLayerName( LAYER_NUM aLayer )
+wxString PANEL_SETUP_LAYERS::getLayerName( LAYER_NUM aLayer )
 {
     wxControl* control = getName( aLayer );
 
@@ -716,7 +630,7 @@ static bool hasOneOf( const wxString& str, const wxString& chars )
 }
 
 
-bool DIALOG_LAYERS_SETUP::testLayerNames()
+bool PANEL_SETUP_LAYERS::testLayerNames()
 {
     std::vector<wxString>    names;
     wxTextCtrl*  ctl;
@@ -746,32 +660,29 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 
         if( !name )
         {
-            DisplayError( this, _( "Layer name may not be empty." ) );
-            ctl->SetFocus();    // on the bad name
+            m_Parent->SetError( _( "Layer must have a name." ), this, ctl );
             return false;
         }
 
         if( hasOneOf( name, badchars ) )
         {
-            DisplayError( this, _( "Layer name has an illegal character, one of: '" ) +
-                          badchars + wxT( "'" ) );
-            ctl->SetFocus();    // on the bad name
+            auto msg = wxString::Format(_( "\"%s\" are forbidden in layer names." ), badchars );
+            m_Parent->SetError( msg, this, ctl );
             return false;
         }
 
         if( name == wxT( "signal" ) )
         {
-            DisplayError( this, _( "Layer name 'signal' is reserved." ) );
-            ctl->SetFocus();    // on the bad name
+            m_Parent->SetError( _( "Layer name \"signal\" is reserved." ), this, ctl );
             return false;
         }
 
-        for( std::vector<wxString>::iterator it = names.begin();  it != names.end();  ++it )
+        for( const wxString& existingName : names )
         {
-            if( name == *it )
+            if( name == existingName )
             {
-                DisplayError( this, _( "Duplicate layer names are not permitted." ) );
-                ctl->SetFocus();    // on the bad name
+                auto msg = wxString::Format(_( "Layer name \"%s\" is already in use." ), name );
+                m_Parent->SetError( msg, this, ctl );
                 return false;
             }
         }
@@ -783,7 +694,7 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 }
 
 
-LSEQ DIALOG_LAYERS_SETUP::getRemovedLayersWithItems()
+LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
 {
     LSEQ removedLayers;
     LSET newLayers = getUILayerMask();
@@ -812,7 +723,7 @@ LSEQ DIALOG_LAYERS_SETUP::getRemovedLayersWithItems()
 }
 
 
-LSEQ DIALOG_LAYERS_SETUP::getNonRemovableLayers()
+LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
 {
      //Build the list of non copper layers in use in footprints.
     LSEQ inUseLayers;
@@ -845,9 +756,12 @@ LSEQ DIALOG_LAYERS_SETUP::getNonRemovableLayers()
 }
 
 
-bool InvokeLayerSetup( PCB_EDIT_FRAME* aCaller, BOARD* aBoard )
+void PANEL_SETUP_LAYERS::ImportSettingsFrom( BOARD* aBoard )
 {
-    DIALOG_LAYERS_SETUP dlg( aCaller, aBoard );
+    BOARD* savedBoard = m_pcb;
 
-    return dlg.ShowModal() == wxID_OK;
+    m_pcb = aBoard;
+    TransferDataToWindow();
+
+    m_pcb = savedBoard;
 }

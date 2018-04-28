@@ -56,7 +56,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     MODULE* module = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
-    m_unlocked = false;
+    m_keepUpright = true;
 
     // Set text thickness to a default value
     SetThickness( Millimeter2iu( 0.15 ) );
@@ -341,11 +341,7 @@ double TEXTE_MODULE::GetDrawRotation() const
     if( module )
         rotation += module->GetOrientation();
 
-    if( m_unlocked )
-    {
-        NORMALIZE_ANGLE_POS( rotation );
-    }
-    else
+    if( m_keepUpright )
     {
         // Keep angle between -90 .. 90 deg. Otherwise the text is not easy to read
         while( rotation > 900 )
@@ -353,6 +349,10 @@ double TEXTE_MODULE::GetDrawRotation() const
 
         while( rotation < -900 )
             rotation += 1800;
+    }
+    else
+    {
+        NORMALIZE_ANGLE_POS( rotation );
     }
 
     return rotation;

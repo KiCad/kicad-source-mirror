@@ -587,8 +587,9 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
     else
         textMod.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
 
-    textMod.SetTextSize( dsnSettings.m_ModuleTextSize );
-    textMod.SetThickness( dsnSettings.m_ModuleTextWidth );
+    textMod.SetTextSize( dsnSettings.GetTextSize( textMod.GetLayer() ) );
+    textMod.SetThickness( dsnSettings.GetTextThickness( textMod.GetLayer() ) );
+    textMod.SetItalic( dsnSettings.GetTextItalic( textMod.GetLayer() ) );
 
     m_texts->push_back( textMod );
 

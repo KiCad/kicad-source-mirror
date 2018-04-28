@@ -585,7 +585,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
     // Init the new item attributes
     target->SetLayer( Edge_Cuts );
-    target->SetWidth( board->GetDesignSettings().m_EdgeSegmentWidth );
+    target->SetWidth( board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
     target->SetSize( Millimeter2iu( 5 ) );
     VECTOR2I cursorPos = controls->GetCursorPosition();
     target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );

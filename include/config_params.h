@@ -78,7 +78,12 @@ enum paramcfg_id {
     PARAM_WXSTRING,
     PARAM_FILENAME,
     PARAM_COMMAND_ERASE,
-    PARAM_FIELDNAME_LIST
+    PARAM_FIELDNAME_LIST,
+    PARAM_LAYERS,
+    PARAM_TRACKWIDTHS,
+    PARAM_VIADIMENSIONS,
+    PARAM_DIFFPAIRDIMENSIONS,
+    PARAM_NETCLASSES
 };
 
 
@@ -99,9 +104,13 @@ public:
     wxString    m_Group;  ///<  Group name (this is like a path in the config data)
     bool        m_Setup;  ///<  Install or Project based parameter, true == install
 
+    // If the m_Ident keyword isn't found, fall back and read values from m_Ident_legacy.
+    // Note that values are always written to the current, non-legacy keyword.
+    wxString    m_Ident_legacy;
+
 public:
-    PARAM_CFG_BASE( const wxString& ident, const paramcfg_id type,
-                const wxChar* group = NULL );
+    PARAM_CFG_BASE( const wxString& ident, const paramcfg_id type, const wxChar* group = NULL,
+                    const wxString& legacy_ident = wxEmptyString );
     virtual ~PARAM_CFG_BASE() {}
 
     /**
@@ -132,16 +141,16 @@ public:
     int  m_Default;     ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_INT( const wxString& ident, int* ptparam,
-                       int default_val = 0,
-                       int min = std::numeric_limits<int>::min(),
-                       int max = std::numeric_limits<int>::max(),
-                       const wxChar* group = NULL );
-    PARAM_CFG_INT( bool Insetup, const wxString& ident, int* ptparam,
-                   int default_val = 0,
+    PARAM_CFG_INT( const wxString& ident, int* ptparam, int default_val = 0,
                    int min = std::numeric_limits<int>::min(),
                    int max = std::numeric_limits<int>::max(),
-                   const wxChar* group = NULL );
+                   const wxChar* group = nullptr,
+                   const wxString& legacy_ident = wxEmptyString );
+    PARAM_CFG_INT( bool Insetup, const wxString& ident, int* ptparam, int default_val = 0,
+                   int min = std::numeric_limits<int>::min(),
+                   int max = std::numeric_limits<int>::max(),
+                   const wxChar* group = nullptr,
+                   const wxString& legacy_ident = wxEmptyString );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
@@ -157,21 +166,20 @@ public:
 class PARAM_CFG_INT_WITH_SCALE : public PARAM_CFG_INT
 {
 public:
-    double  m_BIU_to_cfgunit;   ///<  the factor to convert the saved value in internal value
+    double   m_BIU_to_cfgunit;   ///<  the factor to convert the saved value in internal value
 
 public:
-    PARAM_CFG_INT_WITH_SCALE( const wxString& ident, int* ptparam,
-                       int default_val = 0,
-                       int min = std::numeric_limits<int>::min(),
-                       int max = std::numeric_limits<int>::max(),
-                       const wxChar* group = NULL,
-                       double aBiu2cfgunit = 1.0);
-    PARAM_CFG_INT_WITH_SCALE( bool Insetup, const wxString& ident, int* ptparam,
-                   int default_val = 0,
-                   int min = std::numeric_limits<int>::min(),
-                   int max = std::numeric_limits<int>::max(),
-                   const wxChar* group = NULL,
-                   double aBiu2cfgunit = 1.0 );
+    PARAM_CFG_INT_WITH_SCALE( const wxString& ident, int* ptparam, int default_val = 0,
+                              int min = std::numeric_limits<int>::min(),
+                              int max = std::numeric_limits<int>::max(),
+                              const wxChar* group = NULL, double aBiu2cfgunit = 1.0,
+                              const wxString& legacy_ident = wxEmptyString );
+    PARAM_CFG_INT_WITH_SCALE( bool insetup, const wxString& ident, int* ptparam,
+                              int default_val = 0,
+                              int min = std::numeric_limits<int>::min(),
+                              int max = std::numeric_limits<int>::max(),
+                              const wxChar* group = NULL, double aBiu2cfgunit = 1.0,
+                              const wxString& legacy_ident = wxEmptyString );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;

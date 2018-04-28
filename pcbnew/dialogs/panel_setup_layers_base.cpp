@@ -5,61 +5,45 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_layers_setup_base.h"
+#include "panel_setup_layers_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 200,200 ), wxSize( -1,-1 ) );
-	
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bPresetsSizer;
-	bPresetsSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* leftSizer;
+	leftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextGrouping = new wxStaticText( this, wxID_ANY, _("Preset Layer Groups:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextGrouping->Wrap( -1 );
-	bPresetsSizer->Add( m_staticTextGrouping, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	wxString m_PresetsChoiceChoices[] = { _("Custom"), _("Two layers, parts on Front only"), _("Two layers, parts on Back only"), _("Two layers, parts on Front and Back"), _("Four layers, parts on Front only"), _("Four layers, parts on Front and Back"), _("All layers on") };
+	wxString m_PresetsChoiceChoices[] = { _("Custom layer set"), _("Two layers, parts on Front"), _("Two layers, parts on Back"), _("Two layers, parts on Front & Back"), _("Four layers, parts on Front"), _("Four layers, parts on Front & Back"), _("All layers on") };
 	int m_PresetsChoiceNChoices = sizeof( m_PresetsChoiceChoices ) / sizeof( wxString );
 	m_PresetsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PresetsChoiceNChoices, m_PresetsChoiceChoices, 0 );
 	m_PresetsChoice->SetSelection( 0 );
-	bPresetsSizer->Add( m_PresetsChoice, 1, wxEXPAND|wxALL, 5 );
-	
-	
-	bMainSizer->Add( bPresetsSizer, 0, wxEXPAND|wxALL, 5 );
-	
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	leftSizer->Add( m_PresetsChoice, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer4->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	leftSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
 	
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	bMainSizer->Add( bSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	wxBoxSizer* bCopperLayersSizer;
-	bCopperLayersSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("PCB layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperLayers->Wrap( -1 );
-	bCopperLayersSizer->Add( m_staticTextCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_staticTextCopperLayers, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_CopperLayersChoiceChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
 	int m_CopperLayersChoiceNChoices = sizeof( m_CopperLayersChoiceChoices ) / sizeof( wxString );
 	m_CopperLayersChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersChoiceNChoices, m_CopperLayersChoiceChoices, 0 );
 	m_CopperLayersChoice->SetSelection( 0 );
-	bCopperLayersSizer->Add( m_CopperLayersChoice, 0, wxEXPAND|wxALL, 5 );
-	
-	
-	bCopperLayersSizer->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	gbSizer1->Add( m_CopperLayersChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 10 );
 	
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("PCB thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
-	bCopperLayersSizer->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer1->Add( m_thicknessLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -70,22 +54,25 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	#else
 	m_thicknessCtrl->SetMaxLength( 12 );
 	#endif
-	bCopperLayersSizer->Add( m_thicknessCtrl, 0, wxEXPAND|wxALL, 5 );
+	m_thicknessCtrl->SetMinSize( wxSize( 190,-1 ) );
 	
-	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_thicknessCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 10 );
+	
+	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	bCopperLayersSizer->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_thicknessUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bMainSizer->Add( bCopperLayersSizer, 0, wxEXPAND|wxALL, 5 );
+	gbSizer1->AddGrowableCol( 1 );
+	
+	leftSizer->Add( gbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxRAISED_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );
-	m_LayersListPanel->SetMinSize( wxSize( -1,300 ) );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
-	m_LayerListFlexGridSizer = new wxFlexGridSizer( 0, 3, 2, 0 );
-	m_LayerListFlexGridSizer->AddGrowableCol( 1 );
-	m_LayerListFlexGridSizer->AddGrowableCol( 2 );
+	m_LayerListFlexGridSizer = new wxFlexGridSizer( 0, 3, 2, 2 );
 	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -96,10 +83,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_CrtYdFrontName = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTNAME, _("CrtYd_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontName->Wrap( -1 );
+	m_CrtYdFrontName->SetMinSize( wxSize( 110,-1 ) );
+	
 	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_CrtYdFrontStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontStaticText->Wrap( -1 );
+	m_CrtYdFrontStaticText->SetMinSize( wxSize( 150,-1 ) );
+	
 	m_LayerListFlexGridSizer->Add( m_CrtYdFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_FabFrontCheckBox = new wxCheckBox( m_LayersListPanel, ID_FABFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -1030,136 +1021,130 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_DrawingsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
+	bSizer9->Add( m_LayerListFlexGridSizer, 1, wxEXPAND|wxRIGHT, 20 );
+	
+	
+	m_LayersListPanel->SetSizer( bSizer9 );
 	m_LayersListPanel->Layout();
-	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
-	bMainSizer->Add( m_LayersListPanel, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizer9->Fit( m_LayersListPanel );
+	leftSizer->Add( m_LayersListPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
-	m_sdbSizer = new wxStdDialogButtonSizer();
-	m_sdbSizerOK = new wxButton( this, wxID_OK );
-	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer->AddButton( m_sdbSizerCancel );
-	m_sdbSizer->Realize();
 	
-	bMainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( leftSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 15 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LAYERS_SETUP_BASE::OnInitDialog ) );
-	m_PresetsChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnPresetsChoice ), NULL, this );
-	m_CopperLayersChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCopperLayersChoice ), NULL, this );
-	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_FabFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_AdhesFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SoldPFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SilkSFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_MaskFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_FrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In3CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In4CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In5CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In6CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In7CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In8CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In9CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In10CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In11CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In12CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In13CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In14CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In15CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In16CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In17CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In18CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In19CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In20CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In21CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In22CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In23CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In24CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In25CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In26CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In27CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In28CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In29CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In30CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_BackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_MaskBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SilkSBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SoldPBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_AdhesBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_FabBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_CrtYdBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_PCBEdgesCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_MarginCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Eco1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_Eco2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_CommentsCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_DrawingsCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_PresetsChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnPresetsChoice ), NULL, this );
+	m_CopperLayersChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCopperLayersChoice ), NULL, this );
+	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_FabFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_AdhesFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SoldPFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SilkSFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_MaskFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_FrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In3CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In4CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In5CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In6CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In7CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In8CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In9CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In10CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In11CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In12CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In13CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In14CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In15CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In16CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In17CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In18CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In19CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In20CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In21CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In22CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In23CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In24CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In25CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In26CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In27CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In28CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In29CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In30CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_BackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_MaskBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SilkSBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SoldPBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_AdhesBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_FabBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_CrtYdBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_PCBEdgesCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_MarginCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Eco1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_Eco2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_CommentsCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_DrawingsCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 }
 
-DIALOG_LAYERS_SETUP_BASE::~DIALOG_LAYERS_SETUP_BASE()
+PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LAYERS_SETUP_BASE::OnInitDialog ) );
-	m_PresetsChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnPresetsChoice ), NULL, this );
-	m_CopperLayersChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCopperLayersChoice ), NULL, this );
-	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_FabFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_AdhesFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SoldPFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SilkSFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_MaskFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_FrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In3CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In4CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In5CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In6CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In7CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In8CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In9CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In10CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In11CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In12CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In13CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In14CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In15CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In16CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In17CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In18CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In19CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In20CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In21CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In22CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In23CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In24CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In25CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In26CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In27CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In28CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In29CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_In30CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_BackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_MaskBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SilkSBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_SoldPBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_AdhesBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_FabBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_CrtYdBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_PCBEdgesCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_MarginCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Eco1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_Eco2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_CommentsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
-	m_DrawingsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
+	m_PresetsChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnPresetsChoice ), NULL, this );
+	m_CopperLayersChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCopperLayersChoice ), NULL, this );
+	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_FabFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_AdhesFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SoldPFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SilkSFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_MaskFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_FrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In3CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In4CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In5CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In6CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In7CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In8CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In9CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In10CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In11CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In12CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In13CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In14CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In15CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In16CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In17CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In18CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In19CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In20CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In21CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In22CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In23CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In24CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In25CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In26CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In27CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In28CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In29CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_In30CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_BackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_MaskBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SilkSBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_SoldPBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_AdhesBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_FabBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_CrtYdBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_PCBEdgesCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_MarginCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Eco1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_Eco2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_CommentsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_DrawingsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	
 }

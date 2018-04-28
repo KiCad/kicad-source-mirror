@@ -42,14 +42,15 @@
 const char NETCLASS::Default[] = "Default";
 
 // Initial values for netclass initialization
-const int NETCLASS::DEFAULT_CLEARANCE  = Millimeter2iu( 0.2 ); // track to track and track to pads clearance
-const int NETCLASS::DEFAULT_VIA_DIAMETER  = Millimeter2iu( 0.8 );
-const int NETCLASS::DEFAULT_VIA_DRILL  = Millimeter2iu( 0.4 );
-const int NETCLASS::DEFAULT_UVIA_DIAMETER = Millimeter2iu( 0.3 );
-const int NETCLASS::DEFAULT_UVIA_DRILL = Millimeter2iu( 0.1 );
-const int NETCLASS::DEFAULT_TRACK_WIDTH = Millimeter2iu( 0.25 );
-const int NETCLASS::DEFAULT_DIFF_PAIR_WIDTH = Millimeter2iu( 0.2 );
-const int NETCLASS::DEFAULT_DIFF_PAIR_GAP = Millimeter2iu( 0.25 );
+const int DEFAULT_CLEARANCE        = Millimeter2iu( 0.2 ); // track to track and track to pads clearance
+const int DEFAULT_VIA_DIAMETER     = Millimeter2iu( 0.8 );
+const int DEFAULT_VIA_DRILL        = Millimeter2iu( 0.4 );
+const int DEFAULT_UVIA_DIAMETER    = Millimeter2iu( 0.3 );
+const int DEFAULT_UVIA_DRILL       = Millimeter2iu( 0.1 );
+const int DEFAULT_TRACK_WIDTH      = Millimeter2iu( 0.25 );
+const int DEFAULT_DIFF_PAIR_WIDTH  = Millimeter2iu( 0.2 );
+const int DEFAULT_DIFF_PAIR_GAP    = Millimeter2iu( 0.25 );
+const int DEFAULT_DIFF_PAIR_VIAGAP = Millimeter2iu( 0.25 );
 
 
 NETCLASS::NETCLASS( const wxString& aName ) :
@@ -64,8 +65,9 @@ NETCLASS::NETCLASS( const wxString& aName ) :
     SetTrackWidth( DEFAULT_TRACK_WIDTH );
     SetViaDiameter( DEFAULT_VIA_DIAMETER );
     SetuViaDiameter( DEFAULT_UVIA_DIAMETER );
-    SetDiffPairGap( DEFAULT_DIFF_PAIR_GAP );
     SetDiffPairWidth( DEFAULT_DIFF_PAIR_WIDTH );
+    SetDiffPairGap( DEFAULT_DIFF_PAIR_GAP );
+    SetDiffPairViaGap( DEFAULT_DIFF_PAIR_VIAGAP );
 }
 
 
@@ -79,7 +81,7 @@ void NETCLASS::SetParams( const NETCLASS& aDefaults )
     SetuViaDrill( aDefaults.GetuViaDrill() );
     SetDiffPairWidth( aDefaults.GetDiffPairWidth() );
     SetDiffPairGap( aDefaults.GetDiffPairGap() );
-
+    SetDiffPairViaGap( aDefaults.GetDiffPairViaGap() );
 }
 
 
@@ -225,6 +227,9 @@ void BOARD::SynchronizeNetsAndNetClasses()
     m_designSettings.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
     m_designSettings.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
     m_designSettings.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
+    m_designSettings.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
+    m_designSettings.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
+    m_designSettings.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
 }
 
 
@@ -270,10 +275,11 @@ void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     if( ( DEFAULT_DIFF_PAIR_WIDTH != GetDiffPairWidth() ) ||
         ( DEFAULT_DIFF_PAIR_GAP != GetDiffPairGap() ) )
     {
-        aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n", FMT_IU( GetDiffPairGap() ).c_str() );
         aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n", FMT_IU( GetDiffPairWidth() ).c_str() );
-    }
+        aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n", FMT_IU( GetDiffPairGap() ).c_str() );
 
+        // 6.0 TODO: figure out what to do with DiffPairViaGap...
+    }
 
     for( NETCLASS::const_iterator it = begin(); it != end(); ++it )
         aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );

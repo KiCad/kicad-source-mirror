@@ -11,7 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class TEXT_CTRL_EVAL;
+class WX_GRID;
 
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -20,9 +20,9 @@ class TEXT_CTRL_EVAL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/choice.h>
+#include <wx/sizer.h>
+#include <wx/grid.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,18 +36,7 @@ class PANEL_MODEDIT_DEFAULTS_BASE : public wxPanel
 	private:
 	
 	protected:
-		wxStaticText* m_lineWidthLabel;
-		TEXT_CTRL_EVAL* m_lineWidthCtrl;
-		wxStaticText* m_lineWidthUnits;
-		wxStaticText* m_textThickLabel;
-		TEXT_CTRL_EVAL* m_textThickCtrl;
-		wxStaticText* m_textThickUnits;
-		wxStaticText* m_textHeightLabel;
-		TEXT_CTRL_EVAL* m_textHeightCtrl;
-		wxStaticText* m_textHeightUnits;
-		wxStaticText* m_textWidthLabel;
-		TEXT_CTRL_EVAL* m_textWidthCtrl;
-		wxStaticText* m_textWidthUnits;
+		wxStaticText* m_staticText13;
 		wxStaticText* m_staticTextRef;
 		wxTextCtrl* m_textCtrlRefText;
 		wxChoice* m_choiceLayerReference;
@@ -57,6 +46,8 @@ class PANEL_MODEDIT_DEFAULTS_BASE : public wxPanel
 		wxChoice* m_choiceLayerValue;
 		wxChoice* m_choiceVisibleValue;
 		wxStaticText* m_staticTextInfo;
+		wxStaticText* m_staticText1;
+		WX_GRID* m_grid;
 	
 	public:
 		

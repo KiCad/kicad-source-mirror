@@ -67,8 +67,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     // Project settings are saved in the corresponding <board name>.pro file
     bool configChanged = !GetLastNetListRead().IsEmpty() && ( netlistName != GetLastNetListRead() );
 
-    if( configChanged && !GetBoard()->GetFileName().IsEmpty()
-      && IsOK( this, _( "The project configuration has changed.  Do you want to save it?" ) ) )
+    if( configChanged && !GetBoard()->GetFileName().IsEmpty() )
     {
         wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
         fn.SetExt( ProjectFileExtension );

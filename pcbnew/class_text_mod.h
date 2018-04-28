@@ -87,14 +87,14 @@ public:
 
     void SetTextAngle( double aAngle );
 
-    bool IsUnlocked()
+    bool IsKeepUpright()
     {
-        return m_unlocked;
+        return m_keepUpright;
     }
 
-    void SetUnlocked( bool unlocked )
+    void SetKeepUpright( bool aKeepUpright )
     {
-        m_unlocked = unlocked;
+        m_keepUpright = aKeepUpright;
     }
 
     /// Rotate text, in footprint editor
@@ -243,7 +243,7 @@ private:
     wxPoint   m_Pos0;       ///< text coordinates relative to the footprint anchor, orient 0.
                             ///< text coordinate ref point is the text center
 
-    bool      m_unlocked;
+    bool      m_keepUpright;
 };
 
 #endif // TEXT_MODULE_H_

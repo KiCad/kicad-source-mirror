@@ -31,16 +31,17 @@ class PANEL_MODEDIT_DEFAULTS : public PANEL_MODEDIT_DEFAULTS_BASE
 {
     BOARD_DESIGN_SETTINGS   m_brdSettings;
     FOOTPRINT_EDIT_FRAME*   m_frame;
-
-    UNIT_BINDER             m_lineWidth;
-    UNIT_BINDER             m_textThickness;
-    UNIT_BINDER             m_textWidth;
-    UNIT_BINDER             m_textHeight;
+    PAGED_DIALOG*           m_Parent;
 
 public:
     PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
+    ~PANEL_MODEDIT_DEFAULTS() override;
 
 private:
+    int getGridValue( int aRow, int aCol );
+
+    bool validateData();
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 };

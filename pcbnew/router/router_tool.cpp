@@ -52,7 +52,6 @@ using namespace std::placeholders;
 
 #include <tool/zoom_menu.h>
 #include <tools/pcb_actions.h>
-#include <tools/size_menu.h>
 #include <tools/selection_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/tool_event_utils.h>
@@ -199,110 +198,226 @@ ROUTER_TOOL::ROUTER_TOOL() :
 }
 
 
-class TRACK_WIDTH_MENU: public TRACK_VIA_SIZE_MENU
+class TRACK_WIDTH_MENU: public CONTEXT_MENU
 {
 public:
-    TRACK_WIDTH_MENU( const BOARD* aBoard )
-        : TRACK_VIA_SIZE_MENU( true, true )
+    TRACK_WIDTH_MENU( PCB_EDIT_FRAME& aFrame ) :
+        m_frame( aFrame )
     {
+        SetIcon( width_track_via_xpm );
         SetTitle( _( "Select Track/Via Width" ) );
-        SetBoard( aBoard );
-    }
-
-    void SetBoard( const BOARD* aBoard )
-    {
-        m_board = aBoard;
-
-        Clear();
-
-        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom Size" ),
-                wxEmptyString, wxITEM_CHECK );
-
-        Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use Starting Track Width" ),
-                _( "Route using the width of the starting track." ), wxITEM_CHECK );
-
-        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use Net Class Values" ),
-                _( "Use track and via sizes from the net class" ), wxITEM_CHECK );
-
-        AppendSeparator();
-
-        // Append the list of tracks & via sizes
-        AppendSizes( aBoard );
     }
 
 protected:
     CONTEXT_MENU* create() const override
     {
-        return new TRACK_WIDTH_MENU( m_board );
+        return new TRACK_WIDTH_MENU( m_frame );
+    }
+
+    void update() override
+    {
+        const BOARD_DESIGN_SETTINGS &bds = m_frame.GetBoard()->GetDesignSettings();
+        bool useIndex = !bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize();
+        wxString msg;
+
+        Clear();
+
+        Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use Starting Track Width" ),
+                _( "Route using the width of the starting track." ), wxITEM_CHECK );
+        Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
+               bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize() );
+
+        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use Net Class Values" ),
+                _( "Use track and via sizes from the net class" ), wxITEM_CHECK );
+        Check( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
+               useIndex && bds.GetTrackWidthIndex() == 0 && bds.GetViaSizeIndex() == 0 );
+
+        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Use Custom Values..." ),
+                _( "Specify custom track and via sizes" ), wxITEM_CHECK );
+        Check( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, bds.UseCustomTrackViaSize() );
+
+        AppendSeparator();
+
+        // Append the list of tracks & via sizes
+        for( unsigned i = 0; i < bds.m_TrackWidthList.size(); i++ )
+        {
+            int width = bds.m_TrackWidthList[i];
+
+            if( i == 0 )
+                msg = _( "Track netclass width" );
+            else
+                msg = _( "Track " ) + MessageTextFromValue( g_UserUnit, width, true );
+
+            int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
+            Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
+            Check( menuIdx, useIndex && bds.GetTrackWidthIndex() == i );
+        }
+
+        AppendSeparator();
+
+        for( unsigned i = 0; i < bds.m_ViasDimensionsList.size(); i++ )
+        {
+            VIA_DIMENSION via = bds.m_ViasDimensionsList[i];
+
+            if( i == 0 )
+                msg = _( "Via netclass values" );
+            else
+            {
+                msg = _( "Via " ) + MessageTextFromValue( g_UserUnit, via.m_Diameter, true );
+
+                if( via.m_Drill > 0 )
+                    msg << _(", drill " ) << MessageTextFromValue( g_UserUnit, via.m_Drill, true );
+            }
+
+            int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
+            Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
+            Check( menuIdx, useIndex && bds.GetViaSizeIndex() == i );
+        }
     }
 
     OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
     {
-        BOARD_DESIGN_SETTINGS &bds = m_board->GetDesignSettings();
+        BOARD_DESIGN_SETTINGS &bds = m_frame.GetBoard()->GetDesignSettings();
         int id = aEvent.GetId();
 
-        // On Windows, this handler can be called with a  non existing event ID not existing
-        // in any menuitem.
-        // So we keep trace of in-range/out-of-range event ID
-        bool in_range = true;
-
-        // Initial settings, to be modified below, but only if the ID exists in this menu
-        bool useConnectedTrackWidth = false;
-        bool useCustomTrackViaSize = false;
+        // On Windows, this handler can be called with an event ID not existing in any
+        // menuitem, so only set flags when we have an ID match.
 
         if( id == ID_POPUP_PCB_SELECT_CUSTOM_WIDTH )
         {
-            useCustomTrackViaSize = true;
+            bds.UseCustomTrackViaSize( true );
+            bds.m_UseConnectedTrackWidth = false;
+            m_frame.GetToolManager()->RunAction( ACT_CustomTrackWidth, true );
         }
         else if( id == ID_POPUP_PCB_SELECT_AUTO_WIDTH )
         {
-            useConnectedTrackWidth = true;
+            bds.UseCustomTrackViaSize( false );
+            bds.m_UseConnectedTrackWidth = true;
         }
         else if( id == ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES )
         {
+            bds.UseCustomTrackViaSize( false );
+            bds.m_UseConnectedTrackWidth = false;
             bds.SetViaSizeIndex( 0 );
             bds.SetTrackWidthIndex( 0 );
         }
-        else if( id >= ID_POPUP_PCB_SELECT_VIASIZE1 &&
-                 id <= ID_POPUP_PCB_SELECT_VIASIZE16 )
+        else if( id >= ID_POPUP_PCB_SELECT_VIASIZE1 && id <= ID_POPUP_PCB_SELECT_VIASIZE16 )
         {
-           // via size has changed
+            bds.UseCustomTrackViaSize( false );
+            bds.m_UseConnectedTrackWidth = false;
             bds.SetViaSizeIndex( id - ID_POPUP_PCB_SELECT_VIASIZE1 );
         }
-        else if( id >= ID_POPUP_PCB_SELECT_WIDTH1 &&
-                 id <= ID_POPUP_PCB_SELECT_WIDTH16 )
+        else if( id >= ID_POPUP_PCB_SELECT_WIDTH1 && id <= ID_POPUP_PCB_SELECT_WIDTH16 )
         {
-            // track width has changed
+            bds.UseCustomTrackViaSize( false );
+            bds.m_UseConnectedTrackWidth = false;
             bds.SetTrackWidthIndex( id - ID_POPUP_PCB_SELECT_WIDTH1 );
-        }
-        else
-        {
-            in_range = false;   // This event ID does not exist in the menu
-            wxASSERT_MSG( false, "OPT_TOOL_EVENT EventHandler: unexpected id" );
-            // Fix me: How to return this error as OPT_TOOL_EVENT?
-        }
-
-        if( in_range )
-        {
-            // Update this setup only id the event ID matches the options of this menu
-            bds.m_UseConnectedTrackWidth = useConnectedTrackWidth;
-            bds.UseCustomTrackViaSize( useCustomTrackViaSize );
         }
 
         return OPT_TOOL_EVENT( PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
     }
 
 private:
-    const BOARD* m_board;
+    PCB_EDIT_FRAME& m_frame;
+};
+
+
+class DIFF_PAIR_MENU: public CONTEXT_MENU
+{
+public:
+    DIFF_PAIR_MENU( PCB_EDIT_FRAME& aFrame ) :
+        m_frame( aFrame )
+    {
+        SetIcon( width_track_via_xpm );
+        SetTitle( _( "Select Differential Pair Dimensions" ) );
+    }
+
+protected:
+    CONTEXT_MENU* create() const override
+    {
+        return new DIFF_PAIR_MENU( m_frame );
+    }
+
+    void update() override
+    {
+        EDA_UNITS_T                   units = m_frame.GetUserUnits();
+        const BOARD_DESIGN_SETTINGS&  bds = m_frame.GetBoard()->GetDesignSettings();
+
+        Clear();
+
+        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_DIFFPAIR, _( "Use Net Class Values" ),
+                _( "Use differential pair dimensions from the net class" ), wxITEM_CHECK );
+        Check( ID_POPUP_PCB_SELECT_USE_NETCLASS_DIFFPAIR,
+               !bds.UseCustomDiffPairDimensions() && bds.GetDiffPairIndex() == 0 );
+
+        Append( ID_POPUP_PCB_SELECT_CUSTOM_DIFFPAIR, _( "Use Custom Values..." ),
+                _( "Specify custom differential pair dimensions" ), wxITEM_CHECK );
+        Check( ID_POPUP_PCB_SELECT_CUSTOM_DIFFPAIR, bds.UseCustomDiffPairDimensions() );
+
+        AppendSeparator();
+
+        // Append the list of differential pair dimensions
+
+        // Drop index 0 which is the current netclass dimensions (which are handled above)
+        for( unsigned i = 1; i < bds.m_DiffPairDimensionsList.size(); ++i )
+        {
+            DIFF_PAIR_DIMENSION diffPair = bds.m_DiffPairDimensionsList[i];
+            wxString            msg;
+
+            msg << _( "Width " ) << MessageTextFromValue( units, diffPair.m_Width, true );
+
+            if( diffPair.m_Gap > 0 )
+                msg << _( ", gap " ) << MessageTextFromValue( units, diffPair.m_Gap, true );
+
+            if( diffPair.m_ViaGap > 0 )
+                msg << _( ", via gap " ) << MessageTextFromValue( units, diffPair.m_ViaGap, true );
+
+            int menuIdx = ID_POPUP_PCB_SELECT_DIFFPAIR1 + i - 1;
+            Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
+            Check( menuIdx, !bds.UseCustomDiffPairDimensions() && bds.GetDiffPairIndex() == i );
+        }
+    }
+
+    OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
+    {
+        BOARD_DESIGN_SETTINGS &bds = m_frame.GetBoard()->GetDesignSettings();
+        int id = aEvent.GetId();
+
+        // On Windows, this handler can be called with an event ID not existing in any
+        // menuitem, so only set flags when we have an ID match.
+
+        if( id == ID_POPUP_PCB_SELECT_CUSTOM_DIFFPAIR )
+        {
+            bds.UseCustomDiffPairDimensions( true );
+            TOOL_MANAGER* toolManager = m_frame.GetToolManager();
+            toolManager->RunAction( PCB_ACTIONS::routerActivateDpDimensionsDialog, true );
+        }
+        else if( id == ID_POPUP_PCB_SELECT_USE_NETCLASS_DIFFPAIR )
+        {
+            bds.UseCustomDiffPairDimensions( false );
+            bds.SetDiffPairIndex( 0 );
+        }
+        else if( id >= ID_POPUP_PCB_SELECT_DIFFPAIR1 && id <= ID_POPUP_PCB_SELECT_DIFFPAIR16 )
+        {
+            bds.UseCustomDiffPairDimensions( false );
+            // remember that the menu doesn't contain index 0 (which is the netclass values)
+            bds.SetDiffPairIndex( id - ID_POPUP_PCB_SELECT_DIFFPAIR1 + 1 );
+        }
+
+        return OPT_TOOL_EVENT( PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
+    }
+
+private:
+    PCB_EDIT_FRAME& m_frame;
 };
 
 
 class ROUTER_TOOL_MENU : public CONTEXT_MENU
 {
 public:
-    ROUTER_TOOL_MENU( const BOARD* aBoard, PCB_EDIT_FRAME& aFrame, PNS::ROUTER_MODE aMode ) :
-        m_board( aBoard ), m_frame( aFrame ), m_mode( aMode ),
-        m_widthMenu( aBoard ), m_zoomMenu( &aFrame ), m_gridMenu( &aFrame )
+    ROUTER_TOOL_MENU( PCB_EDIT_FRAME& aFrame, PNS::ROUTER_MODE aMode ) :
+        m_frame( aFrame ), m_mode( aMode ), m_trackViaMenu( aFrame ), m_diffPairMenu( aFrame ),
+        m_zoomMenu( &aFrame ), m_gridMenu( &aFrame )
     {
         SetTitle( _( "Interactive Router" ) );
 
@@ -327,18 +442,15 @@ public:
 
         AppendSeparator();
 
-        m_widthMenu.SetBoard( aBoard );
-        Add( &m_widthMenu );
+        Add( &m_trackViaMenu );
 
-        Add( ACT_CustomTrackWidth );
+        if( m_mode == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
+            Add( &m_diffPairMenu );
 
-        if( aMode == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
-            Add( PCB_ACTIONS::routerActivateDpDimensionsDialog );
-
-        AppendSeparator();
         Add( PCB_ACTIONS::routerActivateSettingsDialog );
 
         AppendSeparator();
+
         Add( &m_zoomMenu );
         Add( &m_gridMenu );
     }
@@ -346,15 +458,15 @@ public:
 private:
     CONTEXT_MENU* create() const override
     {
-        return new ROUTER_TOOL_MENU( m_board, m_frame, m_mode );
+        return new ROUTER_TOOL_MENU( m_frame, m_mode );
     }
 
-    const BOARD* m_board;
-    PCB_EDIT_FRAME& m_frame;
+    PCB_EDIT_FRAME&  m_frame;
     PNS::ROUTER_MODE m_mode;
-    TRACK_WIDTH_MENU m_widthMenu;
-    ZOOM_MENU m_zoomMenu;
-    GRID_MENU m_gridMenu;
+    TRACK_WIDTH_MENU m_trackViaMenu;
+    DIFF_PAIR_MENU   m_diffPairMenu;
+    ZOOM_MENU        m_zoomMenu;
+    GRID_MENU        m_gridMenu;
 };
 
 
@@ -375,39 +487,6 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason == RUN )
         TOOL_BASE::Reset( aReason );
-}
-
-
-int ROUTER_TOOL::getDefaultWidth( int aNetCode )
-{
-    int w, d1, d2;
-
-    getNetclassDimensions( aNetCode, w, d1, d2 );
-
-    return w;
-}
-
-
-void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
-                                         int& aViaDiameter, int& aViaDrill )
-{
-    BOARD_DESIGN_SETTINGS &bds = board()->GetDesignSettings();
-
-    NETCLASSPTR netClass;
-    NETINFO_ITEM* ni = board()->FindNet( aNetCode );
-
-    if( ni )
-    {
-        wxString netClassName = ni->GetClassName();
-        netClass = bds.m_NetClasses.Find( netClassName );
-    }
-
-    if( !netClass )
-        netClass = bds.GetDefault();
-
-    aWidth = netClass->GetTrackWidth();
-    aViaDiameter = netClass->GetViaDiameter();
-    aViaDrill = netClass->GetViaDrill();
 }
 
 
@@ -468,24 +547,15 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
 static VIATYPE_T getViaTypeFromFlags( int aFlags )
 {
-    VIATYPE_T viaType = VIA_THROUGH;
-
     switch( aFlags & VIA_ACTION_FLAGS::VIA_MASK )
     {
-    case VIA_ACTION_FLAGS::VIA:
-        viaType = VIA_THROUGH;
-        break;
-    case VIA_ACTION_FLAGS::BLIND_VIA:
-        viaType = VIA_BLIND_BURIED;
-        break;
-    case VIA_ACTION_FLAGS::MICROVIA:
-        viaType = VIA_MICROVIA;
-        break;
+    case VIA_ACTION_FLAGS::VIA:       return VIA_THROUGH;
+    case VIA_ACTION_FLAGS::BLIND_VIA: return VIA_BLIND_BURIED;
+    case VIA_ACTION_FLAGS::MICROVIA:  return VIA_MICROVIA;
     default:
         wxASSERT_MSG( false, "Unhandled via type" );
+        return VIA_THROUGH;
     }
-
-    return viaType;
 }
 
 
@@ -843,7 +913,6 @@ void ROUTER_TOOL::breakTrack()
 int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-    BOARD* board = getModel<BOARD>();
 
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -857,7 +926,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     ctls->ForceCursorPosition( false );
     m_startSnapPoint = ctls->GetCursorPosition();
 
-    std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, *frame, aMode ) );
+    std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( *frame, aMode ) );
     SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events

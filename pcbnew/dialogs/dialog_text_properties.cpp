@@ -230,7 +230,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_Mirrored->SetValue( m_edaText->IsMirrored() );
 
     if( m_modText )
-        m_KeepUpright->SetValue( !m_modText->IsUnlocked() );
+        m_KeepUpright->SetValue( m_modText->IsKeepUpright() );
 
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -305,7 +305,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_edaText->SetMirrored( m_Mirrored->GetValue() );
 
     if( m_modText )
-        m_modText->SetUnlocked( !m_KeepUpright->GetValue() );
+        m_modText->SetKeepUpright( m_KeepUpright->GetValue() );
 
     switch( m_JustifyChoice->GetSelection() )
     {
