@@ -168,7 +168,6 @@ public:
         {
             LIB_TABLE_ROWS_ITER start = begin() + aPos;
             erase( start, start + aNumRows );
-
             if( GetView() )
             {
                 wxGridTableMessage msg( this,
@@ -178,7 +177,6 @@ public:
 
                 GetView()->ProcessTableMessage( msg );
             }
-
             return true;
         }
 

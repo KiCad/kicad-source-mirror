@@ -560,7 +560,7 @@ bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary )
 }
 
 
-bool LIB_MANAGER::LibraryExists( const wxString& aLibrary ) const
+bool LIB_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) const
 {
     if( aLibrary.IsEmpty() )
         return false;
@@ -568,7 +568,7 @@ bool LIB_MANAGER::LibraryExists( const wxString& aLibrary ) const
     if( m_libs.count( aLibrary ) > 0 )
         return true;
 
-    return symTable()->HasLibrary( aLibrary );
+    return symTable()->HasLibrary( aLibrary, aCheckEnabled );
 }
 
 

@@ -144,9 +144,10 @@ public:
     bool PartExists( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
-     * Returns true if library exists.
+     * Returns true if library exists.  If \a aCheckEnabled is set, then the library must
+     * also be enabled in the library table.
      */
-    bool LibraryExists( const wxString& aLibrary ) const;
+    bool LibraryExists( const wxString& aLibrary, bool aCheckEnabled = false ) const;
 
     /**
      * Returns true if library has unsaved modifications.

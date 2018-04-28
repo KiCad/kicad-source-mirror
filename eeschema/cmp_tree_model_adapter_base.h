@@ -260,6 +260,13 @@ public:
             wxDataViewItem const&   aItem,
             wxDataViewItemArray&    aChildren ) const override;
 
+    // Freezing/Thawing.  Used when updating the table model so that we don't try and fetch
+    // values during updating.  Primarily a problem on OSX which doesn't pay attention to the
+    // wxDataViewCtrl's freeze count when updating the keyWindow.
+    void Freeze() { m_freeze++; }
+    void Thaw() { m_freeze--; }
+    bool IsFrozen() const { return m_freeze; }
+
 protected:
     static wxDataViewItem ToItem( CMP_TREE_NODE const* aNode );
     static CMP_TREE_NODE const* ToNode( wxDataViewItem aItem );
@@ -341,6 +348,7 @@ private:
     bool                m_show_units;
     LIB_ID              m_preselect_lib_id;
     int                 m_preselect_unit;
+    int                 m_freeze;
 
     wxDataViewColumn*   m_col_part;
     wxDataViewColumn*   m_col_desc;

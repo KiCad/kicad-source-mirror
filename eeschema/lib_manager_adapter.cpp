@@ -80,7 +80,7 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
-        if( !m_libMgr->LibraryExists( name ) )
+        if( !m_libMgr->LibraryExists( name, true ) )
         {
             it = deleteLibrary( it );
             continue;
@@ -202,6 +202,12 @@ CMP_TREE_NODE* LIB_MANAGER_ADAPTER::findLibrary( const wxString& aLibNickName )
 void LIB_MANAGER_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                                     unsigned int aCol ) const
 {
+    if( IsFrozen() )
+    {
+        aVariant = wxEmptyString;
+        return;
+    }
+
     auto node = ToNode( aItem );
     wxASSERT( node );
 
@@ -235,6 +241,9 @@ void LIB_MANAGER_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& a
 bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
         wxDataViewItemAttr& aAttr ) const
 {
+    if( IsFrozen() )
+        return false;
+
     // change attributes only for the name field
     if( aCol != 0 )
         return false;

@@ -80,6 +80,7 @@ CMP_TREE_MODEL_ADAPTER_BASE::CMP_TREE_MODEL_ADAPTER_BASE()
     :m_filter( CMP_FILTER_NONE ),
      m_show_units( true ),
      m_preselect_unit( 0 ),
+     m_freeze( 0 ),
      m_col_part( nullptr ),
      m_col_desc( nullptr ),
      m_widget( nullptr )
@@ -331,6 +332,12 @@ void CMP_TREE_MODEL_ADAPTER_BASE::GetValue(
             wxDataViewItem const&   aItem,
             unsigned int            aCol ) const
 {
+    if( IsFrozen() )
+    {
+        aVariant = wxEmptyString;
+        return;
+    }
+
     auto node = ToNode( aItem );
     wxASSERT( node );
 
@@ -352,6 +359,9 @@ bool CMP_TREE_MODEL_ADAPTER_BASE::GetAttr(
             unsigned int            aCol,
             wxDataViewItemAttr&     aAttr ) const
 {
+    if( IsFrozen() )
+        return false;
+
     auto node = ToNode( aItem );
     wxASSERT( node );
 

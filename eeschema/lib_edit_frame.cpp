@@ -453,8 +453,12 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
+    m_libMgr->GetAdapter()->Freeze();
+
     SCH_BASE_FRAME::OnEditSymbolLibTable( aEvent );
     SyncLibraries( true );
+
+    m_libMgr->GetAdapter()->Thaw();
 }
 
 

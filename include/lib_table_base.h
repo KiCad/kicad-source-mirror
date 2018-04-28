@@ -356,9 +356,10 @@ public:
     /**
      * Test for the existence of \a aNickname in the library table.
      *
+     * @param aCheckEnabled if true will only return true for enabled libraries
      * @return true if a library \a aNickname exists in the table.
      */
-    bool HasLibrary( const wxString& aNickname ) const;
+    bool HasLibrary( const wxString& aNickname, bool aCheckEnabled = false ) const;
 
     /**
      * Return the logical library names, all of them that are pertinent to
