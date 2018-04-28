@@ -52,8 +52,19 @@ void CINFO3D_VISU::buildPadShapePolygon( const D_PAD* aPad,
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
-        aPad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aInflateValue.x,
+    {
+        // We are using TransformShapeWithClearanceToPolygon to build the shape.
+        // Currently, this method uses only the same inflate value for X and Y dirs.
+        // so because here this is not the case, we use a inflated dummy pad to build
+        // the polygonal shape
+        // TODO: remove this dummy pad when TransformShapeWithClearanceToPolygon will use
+        // a wxSize to inflate the pad size
+        D_PAD dummy( *aPad );
+        wxSize new_size = aPad->GetSize() + aInflateValue + aInflateValue;
+        dummy.SetSize( new_size );
+        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
                                                     aSegmentsPerCircle, aCorrectionFactor );
+    }
         break;
 
     case PAD_SHAPE_TRAPEZOID:
