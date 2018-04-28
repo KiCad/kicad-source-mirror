@@ -591,6 +591,15 @@ bool SELECTION_TOOL::selectMultiple()
             int width = area.GetEnd().x - area.GetOrigin().x;
             int height = area.GetEnd().y - area.GetOrigin().y;
 
+            /* Selection mode depends on direction of drag-selection:
+             * Left > Right : Select objects that are fully enclosed by selection
+             * Right > Left : Select objects that are crossed by selection
+             */
+            bool windowSelection = width >= 0 ? true : false;
+
+            if( view->IsMirroredX() )
+                windowSelection = !windowSelection;
+
             // Construct an EDA_RECT to determine BOARD_ITEM selection
             EDA_RECT selectionRect( wxPoint( area.GetOrigin().x, area.GetOrigin().y ),
                                     wxSize( width, height ) );
@@ -604,12 +613,7 @@ bool SELECTION_TOOL::selectMultiple()
                 if( !item || !selectable( item ) )
                     continue;
 
-                /* Selection mode depends on direction of drag-selection:
-                 * Left > Right : Select objects that are fully enclosed by selection
-                 * Right > Left : Select objects that are crossed by selection
-                 */
-
-                if( width >= 0 )
+                if( windowSelection )
                 {
                     if( selectionBox.Contains( item->ViewBBox() ) )
                     {

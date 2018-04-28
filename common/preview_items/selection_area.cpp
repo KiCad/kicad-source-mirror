@@ -123,7 +123,13 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetIsFill( true );
 
     gal.SetLineWidth( 1.0 / gal.GetWorldScale() );
+
     // Set the stroke color to indicate window or crossing selection
-    gal.SetStrokeColor( ( m_origin.x <= m_end.x ) ? scheme.outline_l2r : scheme.outline_r2l );
+    bool windowSelection = ( m_origin.x <= m_end.x ) ? true : false;
+
+    if( aView->IsMirroredX() )
+        windowSelection = !windowSelection;
+
+    gal.SetStrokeColor( windowSelection ? scheme.outline_l2r : scheme.outline_r2l );
     gal.DrawRectangle( m_origin, m_end );
 }
