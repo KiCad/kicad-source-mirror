@@ -431,7 +431,7 @@ if( NOT APPLE )
 else()
     # everything without leading / is relative to CMAKE_INSTALL_PREFIX.
     # CMAKE_INSTALL_PREFIX is root of .dmg image
-    set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}
+    set( KICAD_BIN "."
         CACHE PATH "Location of KiCad binaries." FORCE )
 
     # some paths to single app bundle
@@ -861,25 +861,25 @@ if( UNIX AND NOT APPLE )
 
     # Install Mime directory
     install( DIRECTORY ${UNIX_ICON_FILES}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+        DESTINATION share
         COMPONENT resources
         )
 
     # Install Icons
     install( DIRECTORY ${UNIX_MIME_FILES}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+        DESTINATION share
         COMPONENT resources
         )
 
     # Install Applications directory (.desktop files)
     install( DIRECTORY ${UNIX_APPLICATIONS_FILES}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+        DESTINATION share
         COMPONENT resources
         )
 
     # Install AppStream directory (app store entry)
     install( DIRECTORY ${UNIX_APPDATA_FILES}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+        DESTINATION share
         COMPONENT resources
         )
 endif()
