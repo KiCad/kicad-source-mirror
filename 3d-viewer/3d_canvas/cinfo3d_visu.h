@@ -427,11 +427,11 @@ class CINFO3D_VISU
 
     void createNewPad( const D_PAD* aPad,
                        CGENERICCONTAINER2D *aDstContainer,
-                       const wxSize &aInflateValue ) const;
+                       wxSize aInflateValue ) const;
 
     void createNewPadWithClearance( const D_PAD *aPad,
                                     CGENERICCONTAINER2D *aDstContainer,
-                                    int aClearanceValue ) const;
+                                    wxSize aClearanceValue ) const;
 
     COBJECT2D *createNewPadDrill( const D_PAD* aPad, int aInflateValue );
 

@@ -297,10 +297,14 @@ COBJECT2D *CINFO3D_VISU::createNewTrack( const TRACK* aTrack,
 // board_items_to_polygon_shape_transform.cpp
 void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
                                               CGENERICCONTAINER2D *aDstContainer,
-                                              int aClearanceValue ) const
+                                              wxSize aClearanceValue ) const
 {
-    const int dx = (aPad->GetSize().x / 2) + aClearanceValue;
-    const int dy = (aPad->GetSize().y / 2) + aClearanceValue;
+    // note: for most of shapes, aClearanceValue.x = aClearanceValue.y
+    // only rectangular and oval shapes can have different values
+    // when drawn on the solder paste layer, because we can have a margin that is a
+    // percent of pad size
+    const int dx = (aPad->GetSize().x / 2) + aClearanceValue.x;
+    const int dy = (aPad->GetSize().y / 2) + aClearanceValue.y;
 
     if( !dx || !dy )
     {
@@ -328,7 +332,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
 
     case PAD_SHAPE_OVAL:
     {
-        if( abs( dx - dy ) == 0 )
+        if( dx == dy )
         {
             // The segment object cannot store start and end the same position,
             // so add a circle instead
@@ -351,7 +355,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
                 shape_offset.y = dy - dx;
                 iwidth = dx * 2;
             }
-            else    //if( dy <= dx )
+            else    //if( dy < dx )
             {
                 shape_offset.x = dy - dx;
                 iwidth = dy * 2;
@@ -374,8 +378,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
             }
             else
             {
-                aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
-                                                         end3DU,
+                aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
                                                          iwidth * m_biuTo3Dunits,
                                                          *aPad ) );
             }
@@ -386,7 +389,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_RECT:
     {
-        // https://github.com/KiCad/kicad-source-mirror/blob/0cab3e47ad8097db7b898b3cef2cf9b235318ca3/pcbnew/board_items_to_polygon_shape_transform.cpp#L613
+        // see pcbnew/board_items_to_polygon_shape_transform.cpp
 
         wxPoint corners[4];
         aPad->BuildPadPolygon( corners, wxSize( 0, 0), aPad->GetOrientation() );
@@ -419,34 +422,33 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
         // roundsegments that are in the same start and end position
         aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[0],
                                                  corners3DU[1],
-                                                 aClearanceValue * 2.0f * m_biuTo3Dunits,
+                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
                                                  *aPad ) );
 
         aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[1],
                                                  corners3DU[2],
-                                                 aClearanceValue * 2.0f * m_biuTo3Dunits,
+                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
                                                  *aPad ) );
 
         aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[2],
                                                  corners3DU[3],
-                                                 aClearanceValue * 2.0f * m_biuTo3Dunits,
+                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
                                                  *aPad ) );
 
         aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[3],
                                                  corners3DU[0],
-                                                 aClearanceValue * 2.0f * m_biuTo3Dunits,
+                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
                                                  *aPad ) );
     }
     break;
 
     case PAD_SHAPE_ROUNDRECT:
     {
-        const int pad_radius = aPad->GetRoundRectCornerRadius();
-        const int rounding_radius = pad_radius + aClearanceValue;
-
         wxSize shapesize( aPad->GetSize() );
-        shapesize.x += aClearanceValue * 2;
-        shapesize.y += aClearanceValue * 2;
+        shapesize.x += aClearanceValue.x * 2;
+        shapesize.y += aClearanceValue.y * 2;
+
+        int rounding_radius = aPad->GetRoundRectCornerRadius( shapesize );
 
         wxPoint corners[4];
 
@@ -501,8 +503,8 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
         polyList.Append( aPad->GetCustomShapeAsPolygon() );
         aPad->CustomShapeAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
 
-        if( aClearanceValue )
-            polyList.Inflate( aClearanceValue, 32 );
+        if( aClearanceValue.x )
+            polyList.Inflate( aClearanceValue.x, 32 );
 
         // This convert the poly in outline and holes
         polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -576,7 +578,7 @@ COBJECT2D *CINFO3D_VISU::createNewPadDrill( const D_PAD* aPad, int aInflateValue
 // board_items_to_polygon_shape_transform.cpp
 void CINFO3D_VISU::createNewPad( const D_PAD* aPad,
                                        CGENERICCONTAINER2D *aDstContainer,
-                                       const wxSize &aInflateValue ) const
+                                       wxSize aInflateValue ) const
 {
     switch( aPad->GetShape() )
     {
@@ -584,7 +586,7 @@ void CINFO3D_VISU::createNewPad( const D_PAD* aPad,
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
     case PAD_SHAPE_CUSTOM:
-        createNewPadWithClearance( aPad, aDstContainer, aInflateValue.x );
+        createNewPadWithClearance( aPad, aDstContainer, aInflateValue );
         break;
 
     case PAD_SHAPE_TRAPEZOID:
