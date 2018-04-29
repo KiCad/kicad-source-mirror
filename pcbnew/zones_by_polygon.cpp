@@ -129,8 +129,8 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
     else
         success = InvokeNonCopperZonesEditor( this, aZone, &zoneSettings );
 
-    // If the new zone is on the same layer as the the initial zone,
-    // do nothing
+    // If the new zone is on the same layer as the the initial zone we'll end up combining
+    // them which will result in a no-op.  Might as well exit here.
     if( success )
     {
         if( aZone->GetIsKeepout() && ( aZone->GetLayerSet() == zoneSettings.m_Layers ) )
