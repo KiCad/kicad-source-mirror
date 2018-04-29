@@ -780,8 +780,18 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
     case PAD_SHAPE_CUSTOM:
-        TransformShapeWithClearanceToPolygon( aCornerBuffer, aInflateValue.x,
-                                              aSegmentsPerCircle, aCorrectionFactor );
+    {
+        // We are using TransformShapeWithClearanceToPolygon to build the shape.
+        // Currently, this method uses only the same inflate value for X and Y dirs.
+        // so because here this is not the case, we use a inflated dummy pad to build
+        // the polygonal shape
+        // TODO: remove this dummy pad when TransformShapeWithClearanceToPolygon will use
+        // a wxSize to inflate the pad size
+        D_PAD dummy( *this );
+        dummy.SetSize( GetSize() + aInflateValue + aInflateValue );
+        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
+                                                    aSegmentsPerCircle, aCorrectionFactor );
+    }
         break;
 
     case PAD_SHAPE_TRAPEZOID:
