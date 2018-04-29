@@ -616,10 +616,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
         renamedSheet->SetName( wxString::Format( "Sheet%8.8lX", (unsigned long) newtimestamp ) );
     }
 
-    // Clear all annotation in the imported schematic to prevent clashes with existing annotation.
-    newScreens.ClearAnnotation();
-
-    // It is finally save to add the imported schematic.
+    // It is finally safe to add the imported schematic.
     screen->Append( newScreen );
 
     SCH_SCREENS allScreens;
@@ -627,10 +624,13 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 
     OnModify();
 
-    // redraw base screen (ROOT) if necessary
     SCH_SCREENS screens( GetCurrentSheet().Last() );
-
     screens.UpdateSymbolLinks( true );
+
+    // Clear all annotation in the imported schematic to prevent clashes with existing annotation.
+    // Must be done after updating the symbol links as we need to know about multi-unit parts.
+    screens.ClearAnnotation();
+
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
