@@ -1057,6 +1057,9 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     std::swap( m_unit, component->m_unit );
     std::swap( m_convert, component->m_convert );
 
+    std::swap( m_Pins, component->m_Pins );
+    std::swap( m_isDangling, component->m_isDangling );
+
     TRANSFORM tmp = m_transform;
 
     m_transform = component->m_transform;

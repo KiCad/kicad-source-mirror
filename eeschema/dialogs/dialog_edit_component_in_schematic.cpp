@@ -555,6 +555,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         }
     }
 
+    m_cmp->UpdatePinCache();
+
     GetParent()->OnModify();
     GetParent()->GetScreen()->TestDanglingEnds();
 
