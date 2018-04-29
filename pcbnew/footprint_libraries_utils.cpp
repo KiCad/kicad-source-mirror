@@ -755,7 +755,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
         return false;
     }
 
-    aModule->SetFPID( LIB_ID( footprintName ) );
+    aModule->SetFPID( LIB_ID( libraryName, footprintName ) );
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
