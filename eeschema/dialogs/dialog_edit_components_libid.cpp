@@ -66,7 +66,7 @@ public:
     // Returns a string like mylib:symbol_name from the LIB_ID of the component
     wxString GetStringLibId()
     {
-        return wxString( m_Component->GetLibId().Format().c_str() );
+        return m_Component->GetLibId().GetUniStringLibId();
     }
 
     // Returns a string containing the reference of the component

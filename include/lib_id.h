@@ -113,9 +113,16 @@ public:
     int SetLibNickname( const UTF8& aNickname );
 
     /**
-     * @return the library item name, i.e. footprintName.
+     * @return the library item name, i.e. footprintName, in UTF8.
      */
     const UTF8& GetLibItemName() const { return item_name; }
+
+    /**
+     * @return the library item name, i.e. footprintName in a wxString (UTF16 or 32).
+     * useful to display messages in dialogs
+     * Equivalent to item_name.wx_str(), but more explicit when building a Unicode string in messages.
+     */
+    const wxString GetUniStringLibItemName() const { return item_name.wx_str(); }
 
     /**
      * Override the library item name portion of the LIB_ID to @a aLibItemName
@@ -133,9 +140,19 @@ public:
     UTF8 GetLibItemNameAndRev() const;
 
     /**
-     * @return the fully formatted text of the LIB_ID.
+     * @return the fully formatted text of the LIB_ID in a UTF8 string.
      */
     UTF8 Format() const;
+
+    /**
+     * @return the fully formatted text of the LIB_ID in a wxString (UTF16 or UTF32),
+     * suitable to display the LIB_ID in dialogs.
+     * Equivalent to Format().wx_str(), but more explicit when building a Unicode string in messages.
+     */
+    wxString GetUniStringLibId() const
+    {
+        return Format().wx_str();
+    }
 
     /**
      * @return a string in the proper format as an LIB_ID for a combination of

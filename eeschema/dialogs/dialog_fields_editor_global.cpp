@@ -409,11 +409,13 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // Now that the fields are loaded we can set the initial location of the splitter
     // based on the list width.  Again, SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails us on GTK.
     int nameColWidth = 0;
-    for( unsigned int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
+
+    for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
         const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
         nameColWidth = std::max( nameColWidth, GetTextSize( fieldName, m_fieldsCtrl ).x );
     }
+
     m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetWidth( nameColWidth );
     m_splitter1->SetSashPosition( nameColWidth + m_showColWidth + m_groupByColWidth + 40 );
 

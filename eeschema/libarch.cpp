@@ -99,8 +99,8 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             catch( const IO_ERROR& )
             {
                 // Queue up error messages for later.
-                tmp.Printf( _( "Failed to add symbol %s to library file." ),
-                            component->GetLibId().GetLibItemName().wx_str(), aFileName );
+                tmp.Printf( _( "Failed to add symbol \"%s\" to library file \"%s\"." ),
+                            component->GetLibId().GetUniStringLibItemName(), aFileName );
 
                 // Don't bail out here.  Attempt to add as many of the symbols to the library
                 // as possible.
@@ -114,7 +114,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             {
                 // Use the full LIB_ID as the symbol name to prevent symbol name collisions.
                 wxString oldName = part->GetName();
-                part->SetName( component->GetLibId().Format() );
+                part->SetName( component->GetLibId().GetUniStringLibId() );
 
                 // AddPart() does first clone the part before adding.
                 archLib->AddPart( part );
@@ -123,7 +123,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             else
             {
                 tmp.Printf( _( "Symbol %s not found in any library or cache." ),
-                            component->GetLibId().Format().wx_str() );
+                            component->GetLibId().GetUniStringLibId() );
             }
 
             if( !tmp.empty() )
