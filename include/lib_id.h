@@ -236,8 +236,11 @@ public:
 #endif
 
 protected:
-    ///> Tests whether a character is a legal LIB_ID character
-    static bool isLegalChar( unsigned aChar, LIB_ID_TYPE aType );
+    /** Tests whether a unicode character is a legal LIB_ID character
+     * note: aUniChar is expected to be a unicode 32 bits char, not a UTF8 char, that use
+     * a variable lenght coding value
+     */
+    static bool isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType );
 
     UTF8    nickname;       ///< The nickname of the library or empty.
     UTF8    item_name;      ///< The name of the entry in the logical library.

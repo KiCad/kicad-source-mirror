@@ -403,18 +403,19 @@ const unsigned schIllegalChars[] = { BASE_ILLEGAL_CHARS, ' ' };
 const unsigned pcbIllegalChars[] = { BASE_ILLEGAL_CHARS, 0 };
 #define ILL_CHAR_SIZE (sizeof(schIllegalChars) / sizeof(int))
 
-bool LIB_ID::isLegalChar( unsigned aChar, LIB_ID_TYPE aType )
+bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
 {
     const unsigned (&illegalChars)[ILL_CHAR_SIZE] =
         aType == ID_SCH ? schIllegalChars : pcbIllegalChars;
 
     for( const unsigned ch : illegalChars )
     {
-        if( ch == aChar )
+        if( ch == aUniChar )
             return false;
     }
 
-    if( !wxIsascii( aChar ) )
+    // Test for "printable" code (aUniChar is a unicode (32 bits) char, not a ASCII value )
+    if( aUniChar < ' ' )
         return false;
 
     return true;
