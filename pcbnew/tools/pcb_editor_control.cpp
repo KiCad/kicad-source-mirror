@@ -804,7 +804,9 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 
         // If the new zone is on the same layer(s) as the the initial zone,
         // offset it a bit so it can more easily be picked.
-        if( oldZone->GetLayerSet() == zoneSettings.m_Layers )
+        if( oldZone->GetIsKeepout() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
+            newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
+        else if( !oldZone->GetIsKeepout() && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
             newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
 
         commit.Add( newZone.release() );
