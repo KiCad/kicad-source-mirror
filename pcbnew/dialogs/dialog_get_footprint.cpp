@@ -50,7 +50,7 @@ DIALOG_GET_FOOTPRINT::DIALOG_GET_FOOTPRINT( PCB_BASE_FRAME* parent, bool aShowBr
     m_selectByBrowser = false;
     m_selectionIsKeyword = false;
 
-    for( int ii = 0; ii < s_HistoryList.size(); ++ii )
+    for( size_t ii = 0; ii < s_HistoryList.size(); ++ii )
     {
         LIB_ID fpid( s_HistoryList[ ii ] );
         if( m_frame->CheckFootprint( fpid ) )
