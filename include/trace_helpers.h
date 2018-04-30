@@ -94,6 +94,11 @@ extern const wxChar* const traceGedaPcbPlugin;
  */
 extern const wxChar* const tracePrinting;
 
+/**
+ * Flag to enable path and file name debug output.
+ */
+extern const wxChar* const tracePathsAndFiles;
+
 ///@}
 
 /**

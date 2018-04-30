@@ -45,6 +45,7 @@ const wxChar* const traceGedaPcbPlugin = wxT( "KICAD_GEDA_PLUGIN" );
 const wxChar* const traceKicadPcbPlugin = wxT( "KICAD_PCB_PLUGIN" );
 const wxChar* const tracePrinting = wxT( "KICAD_PRINT" );
 const wxChar* const traceAutoSave = wxT( "KICAD_AUTOSAVE" );
+const wxChar* const tracePathsAndFiles = wxT( "KICAD_PATHS_AND_FILES" );
 
 
 wxString dump( const wxArrayString& aArray )

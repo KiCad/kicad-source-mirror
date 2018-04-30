@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <fp_lib_table.h>
 #include <kiway.h>
 #include <kiface_ids.h>
+#include <trace_helpers.h>
 
 
 PROJECT::PROJECT()
@@ -72,7 +73,8 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
     {
         Clear();            // clear the data when the project changes.
 
-        DBG(printf( "%s: old:'%s' new:'%s'\n", __func__, TO_UTF8( GetProjectFullName() ), TO_UTF8( aFullPathAndName ) );)
+        wxLogTrace( tracePathsAndFiles, "%s: old:'%s' new:'%s'", __func__,
+                    TO_UTF8( GetProjectFullName() ), TO_UTF8( aFullPathAndName ) );
 
         m_project_name = aFullPathAndName;
 
@@ -125,8 +127,6 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
 {
     wxFileName  fn = GetProjectFullName();
     wxString    path = fn.GetPath();
-
-    // DBG(printf( "path:'%s'  fn:'%s'\n", TO_UTF8(path), TO_UTF8(fn.GetFullPath()) );)
 
     // if there's no path to the project name, or the name as a whole is bogus or its not
     // write-able then use a template file.
@@ -236,7 +236,7 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
 {
     if( aDestination.IsEmpty() )
     {
-        DBG( printf( "%s: destination is empty.\n", __func__ );)
+        wxLogTrace( tracePathsAndFiles, "%s: destination is empty.", __func__ );
         return false;
     }
 
@@ -246,7 +246,8 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
 
     if( !kicad_pro_template )
     {
-        DBG( printf( "%s: template file '%s' not found using search paths.\n", __func__, TO_UTF8( templateFile ) );)
+        wxLogTrace( tracePathsAndFiles, "%s: template file '%s' not found using search paths.",
+                    __func__, TO_UTF8( templateFile ) );
 
         wxFileName  templ( wxStandardPaths::Get().GetDocumentsDir(),
                             wxT( "kicad" ), ProjectFileExtension );
@@ -265,7 +266,8 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
         kicad_pro_template = templ.GetFullPath();
     }
 
-    DBG( printf( "%s: using template file '%s' as project file.\n", __func__, TO_UTF8( kicad_pro_template ) );)
+    wxLogTrace( tracePathsAndFiles, "%s: using template file '%s' as project file.",
+                __func__, TO_UTF8( kicad_pro_template ) );
 
     // Verify aDestination can be created. if this is not the case, wxCopyFile
     // will generate a crappy log error message, and we *do not want* this kind
@@ -351,7 +353,8 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
 bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupName,
         const PARAM_CFG_ARRAY& aParams, const wxString& aForeignProjectFileName )
 {
-    std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aForeignProjectFileName ) );
+    std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName,
+                                                     aForeignProjectFileName ) );
 
     if( !cfg.get() )
     {
@@ -407,6 +410,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
         // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
         // stack this way, all using the same global fallback table.
         KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+
         if( kiface )
             tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_G_FOOTPRINT_TABLE );
 
@@ -421,7 +425,8 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayErrorMessage( NULL, _( "Error loading project footprint library table" ), ioe.What() );
+            DisplayErrorMessage( NULL, _( "Error loading project footprint library table" ),
+                                 ioe.What() );
         }
     }
 
