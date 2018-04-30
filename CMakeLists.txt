@@ -431,7 +431,7 @@ if( NOT APPLE )
 else()
     # everything without leading / is relative to CMAKE_INSTALL_PREFIX.
     # CMAKE_INSTALL_PREFIX is root of .dmg image
-    set( KICAD_BIN "."
+    set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}
         CACHE PATH "Location of KiCad binaries." FORCE )
 
     # some paths to single app bundle
