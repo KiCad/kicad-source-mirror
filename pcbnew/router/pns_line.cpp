@@ -799,9 +799,9 @@ bool LINE::HasLoops() const
 {
     for( int i = 0; i < PointCount(); i++ )
     {
-        for( int j = 0; j < PointCount(); j++ )
+        for( int j = i + 2; j < PointCount(); j++ )
         {
-            if( ( std::abs( i - j ) > 1 ) && CPoint( i ) == CPoint( j ) )
+            if( CPoint( i ) == CPoint( j ) )
                 return true;
         }
     }
@@ -864,7 +864,9 @@ OPT_BOX2I LINE::ChangedArea( const LINE* aOther ) const
                     i_start = i;
                     break;
                 }
-            } else {
+            }
+            else
+            {
                 i_start = i;
                 break;
             }
