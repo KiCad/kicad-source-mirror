@@ -162,6 +162,11 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
+    inline bool GetCurvedRatsnestLinesEnabled() const
+    {
+        return m_curvedRatsnestlines;
+    }
+
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[GAL_LAYER_ID_END];
@@ -189,6 +194,9 @@ protected:
 
     ///> Flag determining if zones should have outlines drawn
     bool    m_zoneOutlines;
+
+    ///> Flag determining if ratsnest lines should be drawn curved
+    bool    m_curvedRatsnestlines = true;
 
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;

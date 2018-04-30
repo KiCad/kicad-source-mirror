@@ -68,6 +68,10 @@ extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 
 // Display modes
+TOOL_ACTION PCB_ACTIONS::ratsnestLineMode( "pcbnew.Control.ratsnestLineMode",
+        AS_GLOBAL, 0,
+        "", "" );
+
 TOOL_ACTION PCB_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_DISPLAY_MODE ),
         "", "" );
@@ -252,6 +256,18 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
             view()->Update( track, KIGFX::GEOMETRY );
     }
 
+    canvas()->Refresh();
+
+    return 0;
+}
+
+int PCBNEW_CONTROL::RatsnestLineMode( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    Flip( opts->m_DisplayRatsnestLinesCurved );
+    view()->UpdateDisplayOptions( opts );
+    canvas()->RedrawRatsnest();
     canvas()->Refresh();
 
     return 0;
@@ -996,6 +1012,7 @@ void PCBNEW_CONTROL::setTransitions()
 {
     // Display modes
     Go( &PCBNEW_CONTROL::TrackDisplayMode,   PCB_ACTIONS::trackDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::RatsnestLineMode,   PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::PadDisplayMode,     PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ViaDisplayMode,     PCB_ACTIONS::viaDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::GraphicDisplayMode, PCB_ACTIONS::graphicDisplayMode.MakeEvent() );

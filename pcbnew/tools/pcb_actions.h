@@ -262,6 +262,7 @@ public:
     static TOOL_ACTION selectpositionRelativeItem;
 
     // Display modes
+    static TOOL_ACTION ratsnestLineMode;
     static TOOL_ACTION trackDisplayMode;
     static TOOL_ACTION padDisplayMode;
     static TOOL_ACTION viaDisplayMode;

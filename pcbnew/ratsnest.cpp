@@ -104,6 +104,10 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
     COLOR4D color = Settings().Colors().GetItemColor( LAYER_RATSNEST );
 
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+
+    const bool curved_ratsnest = displ_opts->m_DisplayRatsnestLinesCurved;
+
     for( int i = 1 /* skip "No Net" at [0] */; i < connectivity->GetNetCount(); ++i )
     {
         RN_NET* net = connectivity->GetRatsnestForNet( i );
@@ -128,8 +132,17 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
                             || dn->Parent()->GetLocalRatsnestVisible();
 
                 if( enable && show )
-                    GRLine( m_canvas->GetClipBox(), aDC, wxPoint( s.x, s.y ), wxPoint( d.x,
-                                    d.y ), 0, color );
+                {
+                    if (curved_ratsnest) {
+                        auto dx = d.x - s.x;
+                        auto dy = d.y - s.y;
+                        auto cx = s.x + 0.5 * dx + 1.2 * dy;
+                        auto cy = s.y + 0.5 * dy - 1.2 * dx;
+                        GRArc1( m_canvas->GetClipBox(), aDC, s.x, s.y, d.x, d.y, cx, cy, 0, color);
+                    } else {
+                        GRLine( m_canvas->GetClipBox(), aDC, s.x, s.y, d.x, d.y, 0, color );
+                    }
+                }
             }
         }
     }

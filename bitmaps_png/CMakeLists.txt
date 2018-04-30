@@ -173,6 +173,7 @@ set( BMAPS_MID
     cancel
     change_entry_orient
     contrast_mode
+    curved_ratsnest
     create_cmp_file
     checked_ok
     color_materials

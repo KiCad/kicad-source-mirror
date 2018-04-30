@@ -34,6 +34,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <layers_id_colors_and_visibility.h>
+#include <pcb_base_frame.h>
 
 #include <memory>
 #include <utility>
@@ -71,12 +72,14 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 	gal->SetIsStroke( true );
     gal->SetIsFill( false );
     gal->SetLineWidth( 1.0 );
-    auto rs = aView->GetPainter()->GetSettings();
+    auto rs = static_cast<PCB_RENDER_SETTINGS*>(aView->GetPainter()->GetSettings());
     auto color = rs->GetColor( NULL, LAYER_RATSNEST );
 
     int highlightedNet = rs->GetHighlightNetCode();
 
     gal->SetStrokeColor( color.Brightened(0.5) );
+
+    const bool curved_ratsnest = rs->GetCurvedRatsnestLinesEnabled();
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
     for( const auto& l : m_data->GetDynamicRatsnest() )
@@ -145,7 +148,17 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                 }
                 else
                 {
-                    gal->DrawLine( source, target );
+                    if (curved_ratsnest) {
+                        auto dx = target.x - source.x;
+                        auto dy = target.y - source.y;
+                        const auto center = VECTOR2I(
+                            source.x + 0.5 * dx - 0.1 * dy, 
+                            source.y + 0.5 * dy + 0.1 * dx
+                        );
+                        gal->DrawCurve( source, center, center, target );
+                    } else {
+                        gal->DrawLine( source, target );
+                    }
                 }
             }
         }

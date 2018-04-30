@@ -416,6 +416,10 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                KiScaledBitmap( contrast_mode_xpm, this ),
                                _( "Enable high contrast display mode" ),
                                wxITEM_CHECK );
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_CURVED_RATSNEST_LINES, wxEmptyString,
+                               KiScaledBitmap( curved_ratsnest_xpm, this ),
+                               _( "Show ratsnest lines with curved lines" ),
+                               wxITEM_CHECK );
 
     // Tools to show/hide toolbars:
     KiScaledSeparator( m_optionsToolBar, this );
@@ -833,6 +837,13 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
     {
         displ_opts->m_ContrastModeDisplay = state;
+        m_canvas->Refresh();
+        break;
+    }
+
+    case ID_TB_OPTIONS_CURVED_RATSNEST_LINES:
+    {
+        displ_opts->m_DisplayRatsnestLinesCurved = !state;
         m_canvas->Refresh();
         break;
     }

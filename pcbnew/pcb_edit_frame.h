@@ -363,6 +363,7 @@ public:
     void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnUpdatePCBFromSch( wxCommandEvent& event );
     void OnRunEeschema( wxCommandEvent& event );
+    void OnUpdateCurvedRatsnest( wxUpdateUIEvent& aEvent );
 
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, const bool aEdit = true );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, const bool aEdit = true );

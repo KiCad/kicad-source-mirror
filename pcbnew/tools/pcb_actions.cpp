@@ -120,6 +120,9 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_VIEWER_ZOOM_PAGE:
         return ACTIONS::zoomFitScreen.MakeEvent();
 
+    case ID_TB_OPTIONS_CURVED_RATSNEST_LINES:
+        return PCB_ACTIONS::ratsnestLineMode.MakeEvent();
+
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         return PCB_ACTIONS::trackDisplayMode.MakeEvent();
 

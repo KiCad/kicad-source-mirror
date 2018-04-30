@@ -51,6 +51,7 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     // Display modes
+    int RatsnestLineMode( const TOOL_EVENT& aEvent );
     int ZoneDisplayMode( const TOOL_EVENT& aEvent );
     int TrackDisplayMode( const TOOL_EVENT& aEvent );
     int PadDisplayMode( const TOOL_EVENT& aEvent );
