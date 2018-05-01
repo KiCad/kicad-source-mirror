@@ -129,11 +129,16 @@ public:
     }
 
 private:
+    void cacheNetname( D_PAD* aPad, const wxString& aNetname );
+    wxString getNetname( D_PAD* aPad );
+
     wxPoint estimateComponentInsertionPosition();
     MODULE* addNewComponent( COMPONENT* aComponent );
     MODULE* replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent, COMPONENT* aNewComponent );
     bool updateComponentParameters( MODULE* aPcbComponent, COMPONENT* aNewComponent );
     bool updateComponentPadConnections( MODULE* aPcbComponent, COMPONENT* aNewComponent );
+    void cacheCopperZoneConnections();
+    bool updateCopperZoneNets( NETLIST& aNetlist );
     bool deleteUnusedComponents( NETLIST& aNetlist );
     bool deleteSinglePadNets();
     bool testConnectivity( NETLIST& aNetlist );
@@ -142,6 +147,8 @@ private:
     BOARD* m_board;
     REPORTER* m_reporter;
 
+    std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > m_zoneConnectionsCache;
+    std::map< D_PAD*, wxString > m_padNets;
     std::vector<MODULE*> m_addedComponents;
     std::map<wxString, NETINFO_ITEM*> m_addedNets;
 

@@ -2392,6 +2392,17 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     wxPoint        bestPosition;
     wxString       msg;
     std::vector<MODULE*> newFootprints;
+    std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > zoneConnectionsCache;
+
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea( ii );
+
+        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
+            continue;
+
+        zoneConnectionsCache[ zone ] = m_connectivity->GetConnectedPads( zone );
+    }
 
     if( !IsEmpty() )
     {
@@ -2475,8 +2486,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         else                           // An existing footprint.
         {
             // Test for footprint change.
-            if( !component->GetFPID().empty() &&
-                footprint->GetFPID() != component->GetFPID() )
+            if( !component->GetFPID().empty() && footprint->GetFPID() != component->GetFPID() )
             {
                 if( aNetlist.GetReplaceFootprints() )
                 {
@@ -2756,15 +2766,10 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         }
     }
 
-    // Last step: Some tests:
-    // verify all pads found in netlist:
-    // They should exist in footprints, otherwise the footprint is wrong
-    // note also references or time stamps are updated, so we use only
-    // the reference to find a footprint
-    //
-    // Also verify if zones have acceptable nets, i.e. nets with pads.
-    // Zone with no pad belongs to a "dead" net which happens after changes in schematic
-    // when no more pad use this net name.
+    // Verify that board contains all pads in netlist: if it doesn't then footprints are
+    // wrong or missing.
+    // Note that we use references to find the footprints as they're already updated by this
+    // point (whether by-reference or by-timestamp).
     if( aReporter )
     {
         wxString padname;
@@ -2793,20 +2798,53 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
         }
+    }
 
-        // Test copper zones to detect "dead" nets (nets without any pad):
-        for( int ii = 0; ii < GetAreaCount(); ii++ )
+    // Test copper zones to detect "dead" nets (nets without any pad):
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea( ii );
+
+        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
+            continue;
+
+        if( m_connectivity->GetPadCount( zone->GetNetCode() ) == 0 )
         {
-            ZONE_CONTAINER* zone = GetArea( ii );
+            // Look for a pad in the zone's connected-pad-cache which has been updated to
+            // a new net and use that. While this won't always be the right net, the dead
+            // net is guaranteed to be wrong.
+            NETINFO_ITEM* updatedNet = nullptr;
 
-            if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
-                continue;
-
-            if( m_connectivity->GetPadCount( zone->GetNetCode() ) == 0 )
+            for( D_PAD* pad : zoneConnectionsCache[ zone ] )
             {
-                msg.Printf( _( "Copper zone (net name \"%s\"): net has no pads connected." ),
-                           GetChars( zone->GetNet()->GetNetname() ) );
-                aReporter->Report( msg, REPORTER::RPT_WARNING );
+                if( pad->GetNetname() != zone->GetNetname() )
+                {
+                    updatedNet = pad->GetNet();
+                    break;
+                }
+            }
+
+            if( aReporter )
+            {
+                if( updatedNet )
+                {
+                    msg.Printf( _( "Updating copper zone (net name \"%s\") to net name \"%s\"." ),
+                                zone->GetNetname(), updatedNet->GetNetname() );
+                    aReporter->Report( msg, REPORTER::RPT_ACTION );
+                }
+                else
+                {
+                    msg.Printf( _( "Copper zone (net name \"%s\") has no pads connected." ),
+                                zone->GetNetname() );
+                    aReporter->Report( msg, REPORTER::RPT_WARNING );
+                }
+            }
+
+            if( updatedNet && !aNetlist.IsDryRun() )
+            {
+                m_connectivity->Remove( zone );
+                zone->SetNet( updatedNet );
+                m_connectivity->Add( zone );
             }
         }
     }

@@ -372,10 +372,10 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
-                        <property name="minimum_size"></property>
+                        <property name="minimum_size">500,300</property>
                         <property name="name">bLowerSizer</property>
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
@@ -416,7 +416,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">350,200</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_messagePanel</property>
                                 <property name="pane_border">1</property>
@@ -463,7 +463,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">5</property>
@@ -604,7 +604,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">140,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_btnPerformUpdate</property>
                                 <property name="pane_border">1</property>

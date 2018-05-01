@@ -71,6 +71,23 @@ BOARD_NETLIST_UPDATER::~BOARD_NETLIST_UPDATER()
 }
 
 
+// These functions allow inspection of pad nets during dry runs by keeping a cache of
+// current pad netnames indexed by pad.
+
+void BOARD_NETLIST_UPDATER::cacheNetname( D_PAD* aPad, const wxString& aNetname )
+{
+    m_padNets[ aPad ] = aNetname;
+}
+
+wxString BOARD_NETLIST_UPDATER::getNetname( D_PAD* aPad )
+{
+    if( m_isDryRun && m_padNets.count( aPad ) )
+        return m_padNets[ aPad ];
+    else
+        return aPad->GetNetname();
+}
+
+
 wxPoint BOARD_NETLIST_UPDATER::estimateComponentInsertionPosition()
 {
     wxPoint bestPosition;
@@ -344,6 +361,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                 changed = true;
                 pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
             }
+            else
+                cacheNetname( pad, wxEmptyString );
         }
         else                                 // New footprint pad has a net.
         {
@@ -355,10 +374,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                 if( netinfo == nullptr )
                 {
                     // It might be a new net that has not been added to the board yet
-                    auto netIt = m_addedNets.find( netName );
-
-                    if( netIt != m_addedNets.end() )
-                        netinfo = netIt->second;
+                    if( m_addedNets.count( netName ) )
+                        netinfo = m_addedNets[ netName ];
                 }
 
                 if( netinfo == nullptr )
@@ -407,6 +424,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                     changed = true;
                     pad->SetNet( netinfo );
                 }
+                else
+                    cacheNetname( pad, netName );
             }
         }
     }
@@ -415,6 +434,97 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
         m_commit.Modified( aPcbComponent, copy );
     else
         delete copy;
+
+    return true;
+}
+
+
+void BOARD_NETLIST_UPDATER::cacheCopperZoneConnections()
+{
+    for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = m_board->GetArea( ii );
+
+        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
+            continue;
+
+        m_zoneConnectionsCache[ zone ] = m_board->GetConnectivity()->GetConnectedPads( zone );
+    }
+}
+
+
+bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
+{
+    wxString msg;
+    std::set<wxString> netlistNetnames;
+
+    for( int ii = 0; ii < (int) aNetlist.GetCount(); ii++ )
+    {
+        const COMPONENT* component = aNetlist.GetComponent( ii );
+        for( unsigned jj = 0; jj < component->GetNetCount(); jj++ )
+        {
+            const COMPONENT_NET& net = component->GetNet( jj );
+            netlistNetnames.insert( net.GetNetName() );
+        }
+    }
+
+    // Test copper zones to detect "dead" nets (nets without any pad):
+    for( int i = 0; i < m_board->GetAreaCount(); i++ )
+    {
+        ZONE_CONTAINER* zone = m_board->GetArea( i );
+
+        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
+            continue;
+
+        if( netlistNetnames.count( zone->GetNetname() ) == 0 )
+        {
+            // Look for a pad in the zone's connected-pad-cache which has been updated to
+            // a new net and use that. While this won't always be the right net, the dead
+            // net is guaranteed to be wrong.
+            wxString updatedNetname = wxEmptyString;
+
+            for( D_PAD* pad : m_zoneConnectionsCache[ zone ] )
+            {
+                if( getNetname( pad ) != zone->GetNetname() )
+                {
+                    updatedNetname = getNetname( pad );
+                    break;
+                }
+            }
+
+            if( !updatedNetname.IsEmpty() )
+            {
+                msg.Printf( _( "Reconnect copper zone from net \"%s\" to net \"%s\"." ),
+                            zone->GetNetname(), updatedNetname );
+                m_reporter->Report( msg, REPORTER::RPT_ACTION );
+
+                msg.Printf( _( "Changing copper zone net name from \"%s\" to \"%s\"." ),
+                            zone->GetNetname(), updatedNetname );
+                m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+                if( !m_isDryRun )
+                {
+                    NETINFO_ITEM* netinfo = m_board->FindNet( updatedNetname );
+
+                    if( !netinfo )
+                        netinfo = m_addedNets[ updatedNetname ];
+
+                    if( netinfo )
+                    {
+                        m_commit.Modify( zone );
+                        zone->SetNet( netinfo );
+                    }
+                }
+            }
+            else
+            {
+                msg.Printf( _( "Copper zone (net \"%s\") has no pads connected." ),
+                            zone->GetNetname() );
+                m_reporter->Report( msg, REPORTER::RPT_WARNING );
+                ++m_warningCount;
+            }
+        }
+    }
 
     return true;
 }
@@ -467,28 +577,32 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 {
     int         count = 0;
     wxString    netname;
-    wxString msg;
+    wxString    msg;
     D_PAD*      pad = NULL;
     D_PAD*      previouspad = NULL;
 
-    // We need the pad list, for next tests.
-    // padlist is the list of pads, sorted by netname.
+    // We need the pad list for next tests.
 
     m_board->BuildListOfNets();
 
-    if( m_isDryRun )
-        return false;
-
     std::vector<D_PAD*> padlist = m_board->GetPads();
+
+    if( m_isDryRun )
+    {
+        // During a dry run changes are only stored in the m_padNets cache, so we must sort
+        // the list ourselves.
+        std::sort( padlist.begin(), padlist.end(),
+            [ this ]( D_PAD* a, D_PAD* b ) -> bool { return getNetname( a ) < getNetname( b ); } );
+    }
 
     for( unsigned kk = 0; kk < padlist.size(); kk++ )
     {
         pad = padlist[kk];
 
-        if( pad->GetNetname().IsEmpty() )
-                continue;
+        if( getNetname( pad ).IsEmpty() )
+            continue;
 
-        if( netname != pad->GetNetname() )  // End of net
+        if( netname != getNetname( pad ) )  // End of net
         {
             if( previouspad && count == 1 )
             {
@@ -505,7 +619,7 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                     if( zone->GetIsKeepout() )
                         continue;
 
-                    if( zone->GetNet() == previouspad->GetNet() )
+                    if( zone->GetNetname() == getNetname( previouspad ) )
                     {
                         count++;
                         break;
@@ -515,20 +629,23 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                 if( count == 1 )    // Really one pad, and nothing else
                 {
                     msg.Printf( _( "Remove single pad net %s." ),
-                                GetChars( previouspad->GetNetname() ) );
+                                GetChars( getNetname( previouspad ) ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
                     msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n" ),
-                                GetChars( previouspad->GetNetname() ),
+                                GetChars( getNetname( previouspad ) ),
                                 GetChars( previouspad->GetParent()->GetReference() ),
                                 GetChars( previouspad->GetName() ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                    previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                    if( !m_isDryRun )
+                        previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                    else
+                        cacheNetname( previouspad, wxEmptyString );
                 }
             }
 
-            netname = pad->GetNetname();
+            netname = getNetname( pad );
             count = 1;
         }
         else
@@ -541,7 +658,12 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 
     // Examine last pad
     if( pad && count == 1 )
-        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+    {
+        if( !m_isDryRun )
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+        else
+            cacheNetname( pad, wxEmptyString );
+    }
 
     return true;
 }
@@ -549,15 +671,10 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 
 bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
 {
-    // Last step: Some tests:
-    // verify all pads found in netlist:
-    // They should exist in footprints, otherwise the footprint is wrong
-    // note also references or time stamps are updated, so we use only
-    // the reference to find a footprint
-    //
-    // Also verify if zones have acceptable nets, i.e. nets with pads.
-    // Zone with no pad belongs to a "dead" net which happens after changes in schematic
-    // when no more pad use this net name.
+    // Verify that board contains all pads in netlist: if it doesn't then footprints are
+    // wrong or missing.
+    // Note that we use references to find the footprints as they're already updated by this
+    // point (whether by-reference or by-timestamp).
 
     wxString msg;
     wxString padname;
@@ -589,25 +706,6 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
         }
     }
 
-    // Test copper zones to detect "dead" nets (nets without any pad):
-    for( int i = 0; i < m_board->GetAreaCount(); i++ )
-    {
-        ZONE_CONTAINER* zone = m_board->GetArea( i );
-
-        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
-            continue;
-
-        int nc = m_board->GetConnectivity()->GetPadCount( zone->GetNetCode() );
-
-        if( nc == 0 )
-        {
-            msg.Printf( _( "Copper zone (net name \"%s\"): net has no pads connected." ),
-                        GetChars( zone->GetNet()->GetNetname() ) );
-            m_reporter->Report( msg, REPORTER::RPT_WARNING );
-            ++m_warningCount;
-        }
-    }
-
     return true;
 }
 
@@ -617,6 +715,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     wxString msg;
     m_errorCount = 0;
     m_warningCount = 0;
+
+    cacheCopperZoneConnections();
 
     if( !m_isDryRun )
     {
@@ -658,7 +758,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
     }
 
-    //aNetlist.GetDeleteExtraFootprints()
+    updateCopperZoneNets( aNetlist );
 
     if( m_deleteUnusedComponents )
         deleteUnusedComponents( aNetlist );

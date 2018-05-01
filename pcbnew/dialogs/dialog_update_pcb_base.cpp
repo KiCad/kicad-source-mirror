@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,13 +39,12 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 	
+	bLowerSizer->SetMinSize( wxSize( 500,300 ) ); 
 	m_messagePanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_messagePanel->SetMinSize( wxSize( 350,200 ) );
-	
 	bLowerSizer->Add( m_messagePanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	bMainSizer->Add( bLowerSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bLowerSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 1, 5, 0, 0 );
@@ -57,10 +56,12 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer1->Add( m_btnCancel, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
 	m_btnPerformUpdate = new wxButton( this, wxID_ANY, _("Update PCB"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnPerformUpdate->SetMinSize( wxSize( 140,-1 ) );
+	
 	fgSizer1->Add( m_btnPerformUpdate, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bMainSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
+	bMainSizer->Add( fgSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
