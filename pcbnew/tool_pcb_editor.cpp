@@ -319,13 +319,6 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
                             *LayerPairBitmap, SEL_LAYER_HELP );
 
-    KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString, KiScaledBitmap( mode_module_xpm, this ),
-                            _( "Mode footprint: manual and automatic movement and placement" ),
-                            wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString, KiScaledBitmap( mode_track_xpm, this ),
-                            _( "Mode track: autorouting" ), wxITEM_CHECK );
-
     // Fast call to FreeROUTE Web Bases router
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,

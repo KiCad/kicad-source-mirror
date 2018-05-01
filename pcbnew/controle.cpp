@@ -118,12 +118,9 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     }
     else if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
-        if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
-            scanList = GENERAL_COLLECTOR::Modules;
-        else
-            scanList = (displ_opts->m_DisplayZonesMode == 0) ?
-                       GENERAL_COLLECTOR::AllBoardItems :
-                       GENERAL_COLLECTOR::AllButZones;
+        scanList = (displ_opts->m_DisplayZonesMode == 0) ?
+                   GENERAL_COLLECTOR::AllBoardItems :
+                   GENERAL_COLLECTOR::AllButZones;
     }
     else
     {

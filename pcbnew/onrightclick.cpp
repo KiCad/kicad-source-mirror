@@ -142,37 +142,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         {
         case PCB_MODULE_T:
             createPopUpMenuForFootprints( (MODULE*) item, aPopMenu );
-
-            if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
-            {
-                aPopMenu->AppendSeparator();
-
-                if( !( (MODULE*) item )->IsLocked() )
-                {
-                    msg = AddHotkeyName( _("Lock Footprint" ), g_Board_Editor_Hotkeys_Descr,
-                                         HK_LOCK_UNLOCK_FOOTPRINT );
-                    AddMenuItem( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, msg,
-                                 KiBitmap( locked_xpm ) );
-                }
-                else
-                {
-                    msg = AddHotkeyName( _( "Unlock Footprint" ), g_Board_Editor_Hotkeys_Descr,
-                                         HK_LOCK_UNLOCK_FOOTPRINT );
-                    AddMenuItem( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, msg,
-                                 KiBitmap( unlocked_xpm ) );
-                }
-
-                if( !flags )
-                    aPopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,
-                                      _( "Automatically Place Footprint" ) );
-            }
-
-            if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
-            {
-                if( !flags )
-                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_MODULE,
-                                      _( "Automatically Route Footprint" ) );
-            }
             break;
 
         case PCB_PAD_T:
@@ -423,42 +392,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
 
     case ID_NO_TOOL_SELECTED:
-        if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
-        {
-            wxMenu* commands = new wxMenu;
-            AddMenuItem( aPopMenu, commands, ID_POPUP_PCB_AUTOPLACE_COMMANDS,
-                         _( "Global Spread and Place" ), KiBitmap( move_xpm ) );
-            AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES,
-                         _( "Unlock All Footprints" ), KiBitmap( unlocked_xpm ) );
-            AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES,
-                         _( "Lock All Footprints" ), KiBitmap( locked_xpm ) );
-            commands->AppendSeparator();
-            AddMenuItem( commands, ID_POPUP_PCB_SPREAD_ALL_MODULES,
-                         _( "Spread out All Footprints" ), KiBitmap( move_xpm ) );
-            commands->Append( ID_POPUP_PCB_SPREAD_NEW_MODULES,
-                              _( "Spread out Footprints not Already on Board" ) );
-            commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOPLACE_ALL_MODULES,
-                              _( "Automatically Place All Footprints" ) );
-            commands->Append( ID_POPUP_PCB_AUTOPLACE_NEW_MODULES,
-                              _( "Automatically Place New Footprints" ) );
-            commands->Append( ID_POPUP_PCB_AUTOPLACE_NEXT_MODULE,
-                              _( "Automatically Place Next Footprints" ) );
-        }
-
-        if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
-        {
-            wxMenu* commands = new wxMenu;
-            aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_COMMANDS, _( "Autoroute" ), commands );
-            AddMenuItem( commands, ID_POPUP_PCB_SELECT_LAYER_PAIR,
-                         _( "Select Layer Pair..." ), KiBitmap( select_layer_pair_xpm ) );
-            commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES,
-                              _( "Automatically Route All Footprints" ) );
-            commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
-            aPopMenu->AppendSeparator();
-        }
+    {
+        wxMenu* commands = new wxMenu;
+        AddMenuItem( aPopMenu, commands, ID_POPUP_PCB_AUTOPLACE_COMMANDS,
+                     _( "Global Spread and Place" ), KiBitmap( move_xpm ) );
+        AddMenuItem( commands, ID_POPUP_PCB_SPREAD_ALL_MODULES,
+                     _( "Spread out All Footprints" ), KiBitmap( move_xpm ) );
+        commands->Append( ID_POPUP_PCB_SPREAD_NEW_MODULES,
+                          _( "Spread out Footprints not Already on Board" ) );
 
         if( !trackFound )
         {
@@ -474,6 +415,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             aPopMenu->AppendSeparator();
         }
         break;
+    }
     }
 
     return true;
@@ -959,12 +901,6 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     sub_menu_Pad->AppendSeparator();
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD, _( "Delete" ), KiBitmap( delete_pad_xpm ) );
-
-    if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
-    {
-        menu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _( "Automatically Route Pad" ) );
-        menu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Automatically Route Net" ) );
-    }
 
     MODULE* module = Pad->GetParent();
 
