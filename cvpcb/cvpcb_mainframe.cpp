@@ -32,6 +32,7 @@
 #include <kiway_express.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
+#include <kiface_ids.h>
 #include <macros.h>
 #include <confirm.h>
 #include <eda_dde.h>
@@ -47,7 +48,6 @@
 #include <invoke_pcb_dialog.h>
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
-
 
 wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
 wxSize const FRAME_DEFAULT_SIZE_DU( 450, 300 );
@@ -438,8 +438,16 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
-    bool    tableChanged = false;
-    int     r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs( Kiway() ) );
+    FP_LIB_TABLE* globalTable;
+    bool          tableChanged = false;
+    KIFACE*       kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+
+    if( kiface )
+        globalTable = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_GLOBAL_FOOTPRINT_TABLE );
+    else
+        globalTable = &GFootprintTable; // Shouldn't happen now that Cvpcb is integrated
+
+    int r = InvokePcbLibTableEditor( this, globalTable, Prj().PcbFootprintLibs( Kiway() ) );
 
     if( r & 1 )
     {
@@ -447,7 +455,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 
         try
         {
-            GFootprintTable.Save( fileName );
+            globalTable->Save( fileName );
             tableChanged = true;
         }
         catch( const IO_ERROR& ioe )

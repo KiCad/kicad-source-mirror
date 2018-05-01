@@ -61,16 +61,16 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Preferences Menu :
     wxMenu* preferencesMenu = new wxMenu;
 
-    AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Manage Footprint &Libraries..." ), _( "Manage footprint libraries" ),
-                 KiBitmap( library_table_xpm ) );
-
     // Path configuration edit dialog.
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure &Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( editor_xpm ) );
+
+    AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
+                 _( "Manage Footprint &Libraries..." ), _( "Manage footprint libraries" ),
+                 KiBitmap( library_table_xpm ) );
 
     preferencesMenu->AppendSeparator();
     AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,

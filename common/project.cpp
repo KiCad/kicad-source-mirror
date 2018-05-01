@@ -406,13 +406,13 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
 
     if( !tbl )
     {
-        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
+        // Build a new project specific FP_LIB_TABLE with the global table as a fallback.
         // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
         // stack this way, all using the same global fallback table.
         KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
 
         if( kiface )
-            tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_G_FOOTPRINT_TABLE );
+            tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_NEW_FOOTPRINT_TABLE );
 
         wxASSERT( tbl );
         SetElem( ELEM_FPTBL, tbl );

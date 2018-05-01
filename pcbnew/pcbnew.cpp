@@ -159,11 +159,17 @@ static struct IFACE : public KIFACE_I
     {
         switch( aDataId )
         {
-        case KIFACE_NEW_FOOTPRINT_LIST:
+        // Return a pointer to the global instance of the footprint list.
+        case KIFACE_FOOTPRINT_LIST:
             return (void*) &GFootprintList;
 
-        case KIFACE_G_FOOTPRINT_TABLE:
+        // Return a new FP_LIB_TABLE with the global table installed as a fallback.
+        case KIFACE_NEW_FOOTPRINT_TABLE:
             return (void*) new FP_LIB_TABLE( &GFootprintTable );
+
+        // Return a pointer to the global instance of the global footprint table.
+        case KIFACE_GLOBAL_FOOTPRINT_TABLE:
+            return (void*) &GFootprintTable;
 
         default:
             return nullptr;
