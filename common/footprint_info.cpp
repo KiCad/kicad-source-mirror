@@ -136,7 +136,7 @@ static FOOTPRINT_LIST* get_instance_from_id( KIWAY& aKiway, int aId )
 
 FOOTPRINT_LIST* FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
 {
-    return get_instance_from_id( aKiway, KIFACE_NEW_FOOTPRINT_LIST );
+    return get_instance_from_id( aKiway, KIFACE_FOOTPRINT_LIST );
 }
 
 
