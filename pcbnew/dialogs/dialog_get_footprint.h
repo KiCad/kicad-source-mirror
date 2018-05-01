@@ -74,6 +74,7 @@ public:
     void SetComponentName( const wxString& name );
 
 private:
+    void OnHistoryClick( wxCommandEvent& aEvent ) override;
     void Accept( wxCommandEvent& aEvent ) override;
 };
 

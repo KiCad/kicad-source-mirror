@@ -60,9 +60,17 @@ DIALOG_GET_FOOTPRINT::DIALOG_GET_FOOTPRINT( PCB_BASE_FRAME* parent, bool aShowBr
     m_buttonBrowse->Show( aShowBrowseButton );
     m_buttonBrowse->Enable( aShowBrowseButton );
 
+    m_sdbSizerOK->SetDefault();
+
     m_textCmpNameCtrl->SetFocus();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+}
+
+
+void DIALOG_GET_FOOTPRINT::OnHistoryClick( wxCommandEvent& aEvent )
+{
+    m_textCmpNameCtrl->SetValue( m_historyList->GetStringSelection() );
 }
 
 
@@ -76,7 +84,10 @@ void DIALOG_GET_FOOTPRINT::Accept( wxCommandEvent& aEvent )
         break;
 
     case wxID_OK:
-        m_Text = m_textCmpNameCtrl->GetValue();
+        if( m_historyList->HasFocus() )
+            m_Text = m_historyList->GetStringSelection();
+        else
+            m_Text = m_textCmpNameCtrl->GetValue();
         break;
 
     case ID_ACCEPT_KEYWORD:
@@ -98,6 +109,7 @@ void DIALOG_GET_FOOTPRINT::Accept( wxCommandEvent& aEvent )
     m_Text.Trim( true );       // Remove blanks at end
 
     // Put an wxID_OK event through the dialog infrastrucutre
+    aEvent.SetEventType( wxEVT_COMMAND_BUTTON_CLICKED );
     aEvent.SetId( wxID_OK );
     aEvent.Skip();
 }

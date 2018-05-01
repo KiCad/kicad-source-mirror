@@ -79,7 +79,8 @@ DIALOG_GET_FOOTPRINT_BASE::DIALOG_GET_FOOTPRINT_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_historyList->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
+	m_historyList->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::OnHistoryClick ), NULL, this );
+	m_historyList->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
 	m_buttonKW->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
 	m_buttonList->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
@@ -89,7 +90,8 @@ DIALOG_GET_FOOTPRINT_BASE::DIALOG_GET_FOOTPRINT_BASE( wxWindow* parent, wxWindow
 DIALOG_GET_FOOTPRINT_BASE::~DIALOG_GET_FOOTPRINT_BASE()
 {
 	// Disconnect Events
-	m_historyList->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
+	m_historyList->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::OnHistoryClick ), NULL, this );
+	m_historyList->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
 	m_buttonKW->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
 	m_buttonList->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_FOOTPRINT_BASE::Accept ), NULL, this );

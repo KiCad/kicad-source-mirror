@@ -439,8 +439,8 @@
                                         <event name="OnLeftDClick"></event>
                                         <event name="OnLeftDown"></event>
                                         <event name="OnLeftUp"></event>
-                                        <event name="OnListBox">Accept</event>
-                                        <event name="OnListBoxDClick"></event>
+                                        <event name="OnListBox">OnHistoryClick</event>
+                                        <event name="OnListBoxDClick">Accept</event>
                                         <event name="OnMiddleDClick"></event>
                                         <event name="OnMiddleDown"></event>
                                         <event name="OnMiddleUp"></event>

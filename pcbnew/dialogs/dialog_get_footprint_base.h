@@ -53,6 +53,7 @@ class DIALOG_GET_FOOTPRINT_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnHistoryClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Accept( wxCommandEvent& event ) { event.Skip(); }
 		
 	
