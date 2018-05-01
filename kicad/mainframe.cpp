@@ -67,7 +67,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
     SetIcon( icon );
 
-    // Give the last sise and pos to main window
+    // Give the last size and pos to main window
     LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 

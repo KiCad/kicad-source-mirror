@@ -273,16 +273,16 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     wxString baseCfgName = ConfigBaseName();
 
     wxString text = baseCfgName + entryPosX;
-    aCfg->Read( text, &m_FramePos.x );
+    aCfg->Read( text, &m_FramePos.x, m_FramePos.x );
 
     text = baseCfgName + entryPosY;
-    aCfg->Read( text, &m_FramePos.y );
+    aCfg->Read( text, &m_FramePos.y, m_FramePos.y );
 
     text = baseCfgName + entrySizeX;
-    aCfg->Read( text, &m_FrameSize.x, wxDefaultSize.x );
+    aCfg->Read( text, &m_FrameSize.x, m_FrameSize.x );
 
     text = baseCfgName + entrySizeY;
-    aCfg->Read( text, &m_FrameSize.y, wxDefaultSize.x );
+    aCfg->Read( text, &m_FrameSize.y, m_FrameSize.y );
 
     text = baseCfgName + entryMaximized;
     aCfg->Read( text, &maximized, 0 );
