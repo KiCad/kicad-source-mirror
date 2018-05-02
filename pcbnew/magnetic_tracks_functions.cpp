@@ -126,15 +126,19 @@ bool FindBestGridPointOnTrack( wxPoint* aNearPos, wxPoint on_grid, const TRACK* 
  * @param curpos The initial position, and what to adjust if a change is needed.
  * @return bool - true if the position was adjusted magnetically, else false.
  */
-bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
+bool Magnetize( PCB_BASE_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 wxPoint on_grid, wxPoint* curpos )
 {
+    // Note: only used for routing in the Legacy Toolset and for the measurement tool in the
+    // Modern Toolset.  Can be greatly simplified when the Legacy Toolset is retired.
+
     bool    doCheckNet = frame->Settings().m_magneticPads != CAPTURE_ALWAYS && frame->Settings().m_legacyDrcOn;
+    bool    doCheckLayer = aCurrentTool == ID_TRACK_BUTT;
     bool    doTrack = false;
     bool    doPad = false;
     bool    amMovingVia = false;
 
-    BOARD* m_Pcb = frame->GetBoard();
+    BOARD*      m_Pcb = frame->GetBoard();
     TRACK*      currTrack = g_CurrentTrackSegment;
     BOARD_ITEM* currItem  = frame->GetCurItem();
     PCB_SCREEN* screen = frame->GetScreen();
@@ -175,8 +179,11 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
     //  The search precedence order is pads, then tracks/vias
     if( doPad )
     {
-        LSET    layer_mask( screen->m_Active_Layer );
-        D_PAD*  pad = m_Pcb->GetPad( pos, layer_mask );
+        D_PAD*  pad;
+        if( doCheckLayer )
+            pad = m_Pcb->GetPad( pos, LSET( screen->m_Active_Layer ) );
+        else
+            pad = m_Pcb->GetPad( pos );
 
         if( pad )
         {

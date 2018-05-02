@@ -270,6 +270,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize(), true );
 
+    // We should probably allow editing of these in the Footprint Editor's preferences, but
+    // that's not the case at present so copy them from Pcbnew.
+    m_configSettings.m_use45DegreeGraphicSegments = pcbFrame->Settings().m_use45DegreeGraphicSegments;
+    m_configSettings.m_magneticPads = pcbFrame->Settings().m_magneticPads;
+
+    // And this one needs to move to a suite-wide setting.
+    m_configSettings.m_dragSelects = pcbFrame->Settings().m_dragSelects;
+
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings( config() );

@@ -72,7 +72,7 @@ using namespace std::placeholders;
 #include <board_commit.h>
 
 
-extern bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool,
+extern bool Magnetize( PCB_BASE_EDIT_FRAME* frame, int aCurrentTool,
                        wxSize aGridSize, wxPoint on_grid, wxPoint* curpos );
 
 
