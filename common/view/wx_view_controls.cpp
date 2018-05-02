@@ -67,14 +67,6 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), NULL, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
-    m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEUP,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
-    m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
-    m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEUP,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
-    m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEDOWN,
-                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
 
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
