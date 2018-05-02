@@ -161,8 +161,6 @@ class RN_NET::TRIANGULATOR_STATE
 {
 private:
     std::vector<CN_ANCHOR_PTR>  m_allNodes;
-    std::vector<VECTOR2I>  m_prevNodes;
-    std::vector<std::pair<int, int> > m_prevEdges;
 
     std::list<hed::EDGE_PTR> hedTriangulation( std::vector<hed::NODE_PTR>& aNodes )
     {
