@@ -71,6 +71,7 @@
 #include <tools/pcb_actions.h>
 
 #include <wildcards_and_files_ext.h>
+#include <kicad_string.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -274,6 +275,10 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                     PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_POPUP_PCB_SPREAD_ALL_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_POPUP_PCB_SPREAD_NEW_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, PCB_EDIT_FRAME::Process_Special_Functions )
 
     // User interface update event handlers.
     EVT_UPDATE_UI( ID_SAVE_BOARD, PCB_EDIT_FRAME::OnUpdateSave )
@@ -1375,4 +1380,29 @@ void PCB_EDIT_FRAME::SetIconScale( int aScale )
     ReCreateMicrowaveVToolbar();
     Layout();
     SendSizeEvent();
+}
+
+
+void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
+{
+    const wxString ModulesMaskSelection = wxT( "*" );
+    if( aModule )
+    {
+        aModule->SetLocked( aLocked );
+        SetMsgPanel( aModule );
+        OnModify();
+    }
+    else
+    {
+        aModule = GetBoard()->m_Modules;
+
+        for( ; aModule != NULL; aModule = aModule->Next() )
+        {
+            if( WildCompareString( ModulesMaskSelection, aModule->GetReference() ) )
+            {
+                aModule->SetLocked( aLocked );
+                OnModify();
+            }
+        }
+    }
 }

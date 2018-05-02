@@ -400,6 +400,10 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                      _( "Spread out All Footprints" ), KiBitmap( move_xpm ) );
         commands->Append( ID_POPUP_PCB_SPREAD_NEW_MODULES,
                           _( "Spread out Footprints not Already on Board" ) );
+        AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES,
+                _( "Unlock All Footprints" ), KiBitmap( unlocked_xpm ) );
+        AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES,
+                _( "Lock All Footprints" ), KiBitmap( locked_xpm ) );
 
         if( !trackFound )
         {
@@ -798,6 +802,24 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EXCHANGE_FOOTPRINTS,
                      _( "Change Footprint..." ), KiBitmap( exchange_xpm ) );
     }
+
+    sub_menu_footprint->AppendSeparator();
+
+    if( !aModule->IsLocked() )
+    {
+        msg = AddHotkeyName( _("Lock Footprint" ), g_Board_Editor_Hotkeys_Descr,
+                             HK_LOCK_UNLOCK_FOOTPRINT );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, msg,
+                     KiBitmap( locked_xpm ) );
+    }
+    else
+    {
+        msg = AddHotkeyName( _( "Unlock Footprint" ), g_Board_Editor_Hotkeys_Descr,
+                             HK_LOCK_UNLOCK_FOOTPRINT );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, msg,
+                     KiBitmap( unlocked_xpm ) );
+    }
+
 }
 
 

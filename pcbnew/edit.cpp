@@ -157,6 +157,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
     case ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST:
+    case ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES:
+    case ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE:
+    case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
+    case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -1300,6 +1304,21 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SpreadFootprints( &footprintList, id == ID_POPUP_PCB_SPREAD_NEW_MODULES,
                               true, GetCrossHairPosition() );
         }
+        break;
+    case ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE:
+        LockModule( (MODULE*) GetScreen()->GetCurItem(), true );
+        break;
+
+    case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
+        LockModule( (MODULE*) GetScreen()->GetCurItem(), false );
+        break;
+
+    case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
+        LockModule( NULL, false );
+        break;
+
+    case ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES:
+        LockModule( NULL, true );
         break;
 
     default:
