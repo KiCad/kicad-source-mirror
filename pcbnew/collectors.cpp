@@ -134,6 +134,14 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
 };
 
 
+const KICAD_T GENERAL_COLLECTOR::LockableItems[] = {
+    PCB_MODULE_T,
+    PCB_TRACE_T,
+    PCB_VIA_T,
+    EOT
+};
+
+
 const KICAD_T GENERAL_COLLECTOR::Zones[] = {
     PCB_ZONE_AREA_T,
     EOT

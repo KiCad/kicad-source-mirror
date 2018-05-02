@@ -311,7 +311,7 @@ bool PCB_EDITOR_CONTROL::Init()
                 SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
 
         menu.AddMenu( lockMenu.get(), false,
-                SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+                SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ) );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();

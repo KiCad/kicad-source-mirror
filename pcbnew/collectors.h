@@ -305,6 +305,11 @@ public:
     static const KICAD_T Tracks[];
 
     /**
+     * A scan list for TRACKS, VIAS, MODULES
+     */
+    static const KICAD_T LockableItems[];
+
+    /**
      * Constructor GENERALCOLLECTOR
      */
     GENERAL_COLLECTOR()
