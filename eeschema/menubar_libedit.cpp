@@ -74,7 +74,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_LIBRARY,
                  _( "&Save Library" ),
-                 _( "Save the current active library" ),
+                 _( "Save the current library" ),
                  KiBitmap( save_library_xpm ) );
 
     AddMenuItem( fileMenu,

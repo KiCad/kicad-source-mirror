@@ -186,6 +186,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY, LIB_EDIT_FRAME::OnUpdateSaveLib )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY_AS, LIB_EDIT_FRAME::OnUpdateSaveLibAs )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_ALL_LIBS, LIB_EDIT_FRAME::OnUpdateSaveAll )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
@@ -568,6 +569,24 @@ void LIB_EDIT_FRAME::OnUpdateSaveLibAs( wxUpdateUIEvent& event )
     wxString lib = getTargetLib();
 
     event.Enable( m_libMgr->LibraryExists( lib ) );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateSaveAll( wxUpdateUIEvent& event )
+{
+    int modified = 0;
+
+    for( const auto& lib : m_libMgr->GetLibraryNames() )
+    {
+        if( m_libMgr->IsLibraryModified( lib ) )
+            modified++;
+
+        if( modified > 1 )
+            break;
+    }
+
+    event.SetText( modified > 1 ? _( "Save All &Libraries..." ) : _( "Save All &Libraries" ) );
+    event.Enable( modified > 0 );
 }
 
 
@@ -1612,27 +1631,19 @@ LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 
 LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
 {
-    if( m_treePane->GetCmpTree()->IsMenuActive() )
-        return m_treePane->GetCmpTree()->GetSelectedLibId();
+    LIB_ID   id = m_treePane->GetCmpTree()->GetSelectedLibId();
+    wxString nickname = id.GetLibNickname();
 
-    if( LIB_PART* part = GetCurPart() )
-        return part->GetLibId();
+    if( nickname.IsEmpty() && GetCurPart() )
+        id = GetCurPart()->GetLibId();
 
-    return LIB_ID();
+    return id;
 }
 
 
 wxString LIB_EDIT_FRAME::getTargetLib() const
 {
-    if( m_treePane->GetCmpTree()->IsMenuActive() )
-    {
-        LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId();
-        return libId.GetLibNickname();
-    }
-    else
-    {
-        return GetCurLib();
-    }
+    return getTargetLibId().GetLibNickname();
 }
 
 

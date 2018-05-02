@@ -342,6 +342,7 @@ public:
     void OnUpdateRedo( wxUpdateUIEvent& event );
     void OnUpdateSaveLib( wxUpdateUIEvent& event );
     void OnUpdateSaveLibAs( wxUpdateUIEvent& event );
+    void OnUpdateSaveAll( wxUpdateUIEvent& event );
     void OnUpdateViewDoc( wxUpdateUIEvent& event );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePinTable( wxUpdateUIEvent& event );

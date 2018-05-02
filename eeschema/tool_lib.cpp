@@ -119,9 +119,9 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( add_library_xpm, this ),
                             _( "Add an existing library" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_LIBRARY, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_ALL_LIBS, wxEmptyString,
                             KiScaledBitmap( save_library_xpm, this ),
-                            _( "Save current library" ) );
+                            _( "Save all libraries" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
