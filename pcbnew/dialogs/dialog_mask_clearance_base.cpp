@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_mask_clearance_base.h"
@@ -24,9 +24,15 @@ DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* pare
 	wxBoxSizer* bMainUpperSizer;
 	bMainUpperSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: for clearance values:\n- a positive value means a mask bigger than a pad\n- a negative value means a mask smaller than a pad\n"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: for clearance values:\n- a positive value means a mask bigger than a pad.\n- a negative value means a mask smaller than a pad."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	bMainUpperSizer->Add( m_staticTextInfo, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainUpperSizer->Add( m_staticTextInfo, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	
+	m_staticTextInfo2 = new wxStaticText( this, wxID_ANY, _("These global values are used only to build the mask shape\nof pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo2->Wrap( -1 );
+	m_staticTextInfo2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	
+	bMainUpperSizer->Add( m_staticTextInfo2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainUpperSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -119,7 +125,6 @@ DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* pare
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 }
 
 DIALOG_PADS_MASK_CLEARANCE_BASE::~DIALOG_PADS_MASK_CLEARANCE_BASE()

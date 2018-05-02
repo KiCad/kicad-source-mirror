@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -454,23 +454,29 @@ public:
      * Function GetSolderMaskMargin
      * @return the margin for the solder mask layer
      * usually > 0 (mask shape bigger than pad
-     * value is
+     * For pads also on copper layers, the value (used to build a default shape) is
      * 1 - the local value
-     * 2 - if null, the parent footprint value
-     * 1 - if null, the global value
+     * 2 - if 0, the parent footprint value
+     * 3 - if 0, the global value
+     * For pads NOT on copper layers, the value is the local value because there is
+     * not default shape to build
      */
     int GetSolderMaskMargin() const;
 
     /**
      * Function GetSolderPasteMargin
      * @return the margin for the solder mask layer
-     * usually < 0 (mask shape smaller than pad
+     * usually < 0 (mask shape smaller than pad)
      * because the margin can be dependent on the pad size, the margin has a x and a y value
-     * value is
+     *
+     * For pads also on copper layers, the value (used to build a default shape) is
      * 1 - the local value
-     * 2 - if null, the parent footprint value
-     * 1 - if null, the global value
-     */
+     * 2 - if 0, the parent footprint value
+     * 3 - if 0, the global value
+     *
+     * For pads NOT on copper layers, the value is the local value because there is
+     * not default shape to build
+    */
     wxSize GetSolderPasteMargin() const;
 
     void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }

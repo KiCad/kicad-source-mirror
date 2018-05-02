@@ -119,6 +119,11 @@ private:
     void OnResize( wxSizeEvent& event );
 	void OnCancel( wxCommandEvent& event ) override;
 
+    void updateUITextWarning( wxUpdateUIEvent& event ) override
+    {
+        event.Enable( ( m_dummyPad->GetLayerSet() & LSET::AllCuMask() ).any() );
+    }
+
     void OnPadShapeSelection( wxCommandEvent& event ) override;
     void OnDrillShapeSelected( wxCommandEvent& event ) override;
 	void onChangePadMode( wxCommandEvent& event ) override;

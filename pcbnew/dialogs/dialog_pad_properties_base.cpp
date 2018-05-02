@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -400,17 +400,23 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerClearance;
 	bSizerClearance = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextWarning = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Set fields to 0 to use parent or global values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWarning = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Set fields to 0 to use parent or global values."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWarning->Wrap( -1 );
 	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerClearance->Add( m_staticTextWarning, 0, wxALL, 5 );
 	
+	m_staticTextInfo = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("These parameters are used only by  pads on copper layers.\nPads only on technical layers do not use these parameters."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo->Wrap( -1 );
+	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	
+	bSizerClearance->Add( m_staticTextInfo, 0, wxALL, 5 );
+	
 	m_staticTextInfoPosValue = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Positive clearance means area bigger than the pad  (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPosValue->Wrap( -1 );
 	m_staticTextInfoPosValue->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizerClearance->Add( m_staticTextInfoPosValue, 0, wxALL, 5 );
+	bSizerClearance->Add( m_staticTextInfoPosValue, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextInfoNegVal = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoNegVal->Wrap( -1 );
@@ -652,36 +658,36 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticModuleSideValue->Wrap( -1 );
 	sbSizeModuleInfo->Add( m_staticModuleSideValue, 0, wxALL|wxBOTTOM|wxTOP, 5 );
 	
-	wxBoxSizer* bSizer23;
-	bSizer23 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerParentInfo;
+	bSizerParentInfo = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_staticTitleModuleRot = new wxStaticText( sbSizeModuleInfo->GetStaticBox(), wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTitleModuleRot->Wrap( -1 );
-	bSizer23->Add( m_staticTitleModuleRot, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizerParentInfo->Add( m_staticTitleModuleRot, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
-	bSizer23->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerParentInfo->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_staticModuleRotValue = new wxStaticText( sbSizeModuleInfo->GetStaticBox(), wxID_ANY, _("180.0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticModuleRotValue->Wrap( -1 );
-	bSizer23->Add( m_staticModuleRotValue, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizerParentInfo->Add( m_staticModuleRotValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	sbSizeModuleInfo->Add( bSizer23, 1, wxEXPAND, 5 );
-	
-	
-	sbSizeModuleInfo->Add( 0, 0, 1, wxEXPAND, 5 );
+	sbSizeModuleInfo->Add( bSizerParentInfo, 1, wxEXPAND, 5 );
 	
 	
 	bSizerDisplayPad->Add( sbSizeModuleInfo, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 8 );
 	
+	
+	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	m_panelShowPad = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxSize( 220,-1 ), wxFULL_REPAINT_ON_RESIZE|wxSIMPLE_BORDER );
 	m_panelShowPad->SetBackgroundColour( wxColour( 0, 0, 0 ) );
 	
-	bSizerDisplayPad->Add( m_panelShowPad, 12, wxRIGHT|wxTOP|wxEXPAND, 10 );
+	bSizerDisplayPad->Add( m_panelShowPad, 12, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 	
 	m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO);
-	bSizerDisplayPad->Add( m_panelShowPadGal, 12, wxEXPAND|wxRIGHT|wxTOP, 10 );
+	bSizerDisplayPad->Add( m_panelShowPadGal, 12, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 	
 	m_cbShowPadOutline = new wxCheckBox( this, wxID_ANY, _("Show pad in outline mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerDisplayPad->Add( m_cbShowPadOutline, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );
@@ -693,7 +699,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerDisplayPad->Add( m_staticline13, 0, wxALL|wxEXPAND, 4 );
 	
 	
-	bSizerUpper->Add( bSizerDisplayPad, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 10 );
+	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 	
 	
 	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
@@ -744,6 +750,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadLayerDraft->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerECO1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerECO2->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_staticTextWarning->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::updateUITextWarning ), NULL, this );
+	m_staticTextInfo->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::updateUiTextInfo ), NULL, this );
 	m_NetClearanceValueCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_listCtrlPrimitives->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_PAD_PROPERTIES_BASE::onPrimitiveDClick ), NULL, this );
 	m_listCtrlPrimitives->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPrimitiveSelection ), NULL, this );
@@ -791,6 +799,8 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_PadLayerDraft->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerECO1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_PadLayerECO2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_staticTextWarning->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::updateUITextWarning ), NULL, this );
+	m_staticTextInfo->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::updateUiTextInfo ), NULL, this );
 	m_NetClearanceValueCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_listCtrlPrimitives->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_PAD_PROPERTIES_BASE::onPrimitiveDClick ), NULL, this );
 	m_listCtrlPrimitives->Disconnect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPrimitiveSelection ), NULL, this );

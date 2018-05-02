@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -91,6 +92,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticTextInfoValPos;
 		wxStaticText* m_staticTextInfoValNeg;
+		wxStaticText* m_staticTextInfo2;
 		wxStaticText* m_staticTextNetClearance;
 		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;

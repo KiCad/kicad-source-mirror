@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -576,7 +576,17 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 int D_PAD::GetSolderMaskMargin() const
 {
+    // The pad inherits the margin only to calculate a default shape,
+    // therefore only if it is also a copper layer
+    // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
+    // defined by the pad settings only
+    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
+
+    if( !isOnCopperLayer )
+        return 0;
+
     int     margin = m_LocalSolderMaskMargin;
+
     MODULE* module = GetParent();
 
     if( module )
@@ -609,8 +619,18 @@ int D_PAD::GetSolderMaskMargin() const
 
 wxSize D_PAD::GetSolderPasteMargin() const
 {
+    // The pad inherits the margin only to calculate a default shape,
+    // therefore only if it is also a copper layer.
+    // Pads defined only on mask layers (and perhaps on other tech layers) use the shape
+    // defined by the pad settings only
+    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
+
+    if( !isOnCopperLayer )
+        return wxSize( 0, 0 );
+
     int     margin = m_LocalSolderPasteMargin;
     double  mratio = m_LocalSolderPasteMarginRatio;
+
     MODULE* module = GetParent();
 
     if( module )
