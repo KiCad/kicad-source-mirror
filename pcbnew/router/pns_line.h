@@ -236,7 +236,7 @@ public:
             SHAPE_LINE_CHAIN& aPost,
             bool aCw ) const;
 
-    void Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
+    bool Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
             SHAPE_LINE_CHAIN& aPath,
             bool aCw ) const;
 

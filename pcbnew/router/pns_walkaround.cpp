@@ -79,10 +79,13 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
         }
     }
 
-    aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
-                      path_post[0], aWindingDirection );
-    aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
-                      path_post[1], !aWindingDirection );
+    if( ! aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
+                      path_post[0], aWindingDirection ) )
+        return STUCK;
+
+    if( ! aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
+                      path_post[1], !aWindingDirection ) )
+        return STUCK;
 
 #ifdef DEBUG
     m_logger.NewGroup( aWindingDirection ? "walk-cw" : "walk-ccw", m_iteration );

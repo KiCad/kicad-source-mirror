@@ -166,7 +166,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     if( aObstacle.PointInside( line.CPoint( 0 ) ) || aObstacle.PointInside( line.CPoint( -1 ) ) )
         return false;
 
-    SHAPE_LINE_CHAIN::INTERSECTIONS ips, ips2;
+    SHAPE_LINE_CHAIN::INTERSECTIONS ips;
 
     line.Intersect( aObstacle, ips );
 
@@ -226,6 +226,9 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 
     int i = i_first;
 
+    if( i_first < 0 || i_last < 0 )
+        return false;
+
     while( i != i_last )
     {
         aWalk.Append( aObstacle.CPoint( i ) );
@@ -249,14 +252,18 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 }
 
 
-void LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
+bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
 {
     SHAPE_LINE_CHAIN walk, post;
 
-    Walkaround( aObstacle, aPath, walk, post, aCw );
+    if( ! Walkaround( aObstacle, aPath, walk, post, aCw ) )
+        return false;
+
     aPath.Append( walk );
     aPath.Append( post );
     aPath.Simplify();
+
+    return true;
 }
 
 

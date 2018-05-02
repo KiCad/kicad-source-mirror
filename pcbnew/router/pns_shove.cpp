@@ -135,8 +135,11 @@ SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle,
     const SHAPE_LINE_CHAIN hull = aCurrent.Via().Hull( clearance, aObstacle.Width() );
     SHAPE_LINE_CHAIN path_cw, path_ccw;
 
-    aObstacle.Walkaround( hull, path_cw, true );
-    aObstacle.Walkaround( hull, path_ccw, false );
+    if( ! aObstacle.Walkaround( hull, path_cw, true ) )
+        return SH_INCOMPLETE;
+
+    if( ! aObstacle.Walkaround( hull, path_ccw, false ) )
+        return SH_INCOMPLETE;
 
     const SHAPE_LINE_CHAIN& shortest = path_ccw.Length() < path_cw.Length() ? path_ccw : path_cw;
 
@@ -178,7 +181,9 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
         {
             const SHAPE_LINE_CHAIN& hull = aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
 
-            l.Walkaround( hull, path, clockwise );
+            if( ! l.Walkaround( hull, path, clockwise ) )
+                return SH_INCOMPLETE;
+
             path.Simplify();
             l.SetShape( path );
         }
