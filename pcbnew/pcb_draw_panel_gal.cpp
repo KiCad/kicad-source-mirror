@@ -346,7 +346,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
 
     txt.Printf( wxT( "%d" ), board->GetConnectivity()->GetUnconnectedCount() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Unrouted" ), txt, BLUE ) );
 }
 
 
