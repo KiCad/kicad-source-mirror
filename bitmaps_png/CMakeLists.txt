@@ -412,6 +412,7 @@ set( BMAPS_MID
     options_all_vias
     options_arc
     options_circle
+    options_generic
     options_module
     options_pad
     options_pinsheet

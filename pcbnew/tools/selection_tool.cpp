@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,11 +93,11 @@ TOOL_ACTION PCB_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
 
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_TRIVIAL_CONNECTION ),
-        _( "Trivial Connection" ), _( "Selects a connection between two junctions." ) );
+        _( "Trivial Connection" ), _( "Selects a connection between two junctions." ), add_tracks_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_COPPER_CONNECTION ),
-        _( "Copper Connection" ), _( "Selects whole copper connection." ) );
+        _( "Copper Connection" ), _( "Selects whole copper connection." ), net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.ExpandConnection",
         AS_GLOBAL, 0,
@@ -106,16 +106,16 @@ TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
-        _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
+        _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ), mode_track_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL,  0,
-        _( "Sheet" ), _( "Selects all modules and tracks in the schematic sheet" ) );
+        _( "Sheet" ), _( "Selects all modules and tracks in the schematic sheet" ), select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
         AS_GLOBAL,  0,
         _( "Items in Same Hierarchical Sheet" ),
-        _( "Selects all modules and tracks in the same schematic sheet" ) );
+        _( "Selects all modules and tracks in the same schematic sheet" ), select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
@@ -130,7 +130,7 @@ TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0,
         _( "Filter Selection..." ), _( "Filter the types of items in the selection" ),
-        nullptr );
+        options_generic_xpm );
 
 class SELECT_MENU: public CONTEXT_MENU
 {
@@ -138,6 +138,7 @@ public:
     SELECT_MENU()
     {
         SetTitle( _( "Select" ) );
+        SetIcon( options_generic_xpm );
 
         Add( PCB_ACTIONS::filterSelection );
 
