@@ -200,6 +200,18 @@ public:
         }
     }
 
+    bool ContainsNickname( const wxString& aNickname )
+    {
+        for( int i = 0; i < size(); ++i )
+        {
+            LIB_TABLE_ROW* row = at( i );
+
+            if( row->GetNickName() == aNickname )
+                return true;
+        }
+        return false;
+    }
+
 protected:
     virtual LIB_TABLE_ROW* at( size_t aIndex ) = 0;
 

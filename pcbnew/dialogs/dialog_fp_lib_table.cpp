@@ -245,6 +245,7 @@ public:
         m_cur_grid->SetFocus();
 
         SetSizeInDU( 450, 380 );
+        Center();
 
         // On some windows manager (Unity, XFCE), this dialog is
         // not always raised, depending on this dialog is run.
@@ -730,6 +731,7 @@ void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
     bool global_scope = dlg.GetLibScope() == WIZARD_FPLIB_TABLE::GLOBAL;
     wxGrid* libgrid = global_scope ? m_global_grid : m_project_grid;
     FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) libgrid->GetTable();
+    bool skipRemainingDuplicates = false;
 
     for( std::vector<WIZARD_FPLIB_TABLE::LIBRARY>::const_iterator it = libs.begin();
             it != libs.end(); ++it )
@@ -737,13 +739,35 @@ void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
         if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
             continue;
 
+        wxString nickname = LIB_ID::FixIllegalChars( it->GetDescription(), LIB_ID::ID_PCB );
+
+        if( tbl->ContainsNickname( nickname ) )
+        {
+            if( skipRemainingDuplicates )
+                continue;
+
+            int ret = YesNoCancelDialog( this,
+                    _( "Warning: Duplicate Nickname" ),
+                    wxString::Format( _( "A library nicknamed \"%s\" already exists." ), nickname ),
+                    _( "Skip" ),
+                    _( "Skip All Remaining Duplicates" ),
+                    _( "Add Anyway" ) );
+
+            if( ret == wxID_YES )
+                continue;
+            else if ( ret == wxID_NO )
+            {
+                skipRemainingDuplicates = true;
+                continue;
+            }
+        }
+
         if( libgrid->AppendRows( 1 ) )
         {
             int last_row = libgrid->GetNumberRows() - 1;
 
             // Add the nickname: currently make it from filename
-            tbl->SetValue( last_row, COL_NICKNAME,
-                    LIB_ID::FixIllegalChars( it->GetDescription(), LIB_ID::ID_PCB ) );
+            tbl->SetValue( last_row, COL_NICKNAME, nickname );
 
             // Add the path:
             tbl->SetValue( last_row, COL_URI, it->GetAutoPath( dlg.GetLibScope() ) );

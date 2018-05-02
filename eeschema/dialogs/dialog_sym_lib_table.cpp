@@ -218,6 +218,7 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
     }
 
     SetSizeInDU( 450, 400 );
+    Center();
 
     // On some window managers (Unity, XFCE), this dialog is
     // not always raised, depending on this dialog is run.
@@ -363,20 +364,42 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     m_lastBrowseDir = dlg.GetDirectory();
 
+    bool skipRemainingDuplicates = false;
     wxArrayString files;
     dlg.GetFilenames( files );
 
     for( const auto& file : files )
     {
         wxString filePath = dlg.GetDirectory() + wxFileName::GetPathSeparator() + file;
+        wxFileName fn( filePath );
+        wxString nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_SCH );
+
+        if( cur_model()->ContainsNickname( nickname ) )
+        {
+            if( skipRemainingDuplicates )
+                continue;
+
+            int ret = YesNoCancelDialog( this,
+                    _( "Warning: Duplicate Nickname" ),
+                    wxString::Format( _( "A library nicknamed \"%s\" already exists." ), nickname ),
+                    _( "Skip" ),
+                    _( "Skip All Remaining Duplicates" ),
+                    _( "Add Anyway" ) );
+
+            if( ret == wxID_YES )
+                continue;
+            else if ( ret == wxID_NO )
+            {
+                skipRemainingDuplicates = true;
+                continue;
+            }
+        }
 
         if( m_cur_grid->AppendRows( 1 ) )
         {
             int last_row = m_cur_grid->GetNumberRows() - 1;
-            wxFileName fn( filePath );
 
-            m_cur_grid->SetCellValue( last_row, COL_NICKNAME,
-                    LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_SCH ) );
+            m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
 
             // TODO the following code can detect only schematic types, not libs
             // SCH_IO_MGR needs to provide file extension information for libraries too
