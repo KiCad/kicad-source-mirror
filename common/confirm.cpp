@@ -248,12 +248,12 @@ public:
                           const wxString& aYesButtonText = wxEmptyString,
                           const wxString& aNoButtonText = wxEmptyString,
                           const wxString& aCancelButtonText = wxEmptyString ) :
-        DIALOG_EXIT( aParent, aSecondaryMessage )
+        DIALOG_EXIT( aParent, aPrimaryMessage )
     {
-        m_TextInfo->SetLabel( aPrimaryMessage );
-
         if( aSecondaryMessage.IsEmpty() )
             m_staticText2->Hide();
+        else
+            m_staticText2->SetLabel( aSecondaryMessage );
 
         m_buttonSaveAndExit->SetLabel( aYesButtonText.IsEmpty() ? wxGetStockLabel( wxID_YES ) :
                                        aYesButtonText );
