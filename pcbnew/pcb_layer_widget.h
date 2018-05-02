@@ -47,15 +47,11 @@ public:
      * Constructor
      * @param aParent is the parent window
      * @param aFocusOwner is the window that should be sent the focus after
-     * @param aPointSize is the font point size to use within the widget.  This
-     *  effectively sets the overall size of the widget via the row height and bitmap
-     *  button sizes.
      * @param aFpEditorMode false for the board editor (default), true for fp editor
      *  when true, some options or layers which cannot be used in editor mode are not
      * displayed
      */
-    PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner,
-                      int aPointSize = 10, bool aFpEditorMode = false );
+    PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, bool aFpEditorMode = false );
 
     void ReFill();
 

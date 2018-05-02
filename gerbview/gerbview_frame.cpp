@@ -118,14 +118,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
-    wxFont  font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    int     pointSize       = font.GetPointSize();
-    int     screenHeight    = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
-
-    if( screenHeight <= 900 )
-        pointSize = (pointSize * 8) / 10;
-
-    m_LayersManager = new GERBER_LAYER_WIDGET( this, m_canvas, pointSize );
+    m_LayersManager = new GERBER_LAYER_WIDGET( this, m_canvas );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager

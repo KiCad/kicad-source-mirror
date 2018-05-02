@@ -55,9 +55,8 @@
  */
 
 
-GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner,
-                                          int aPointSize ) :
-    LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
+GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner ) :
+    LAYER_WIDGET( aParent, aFocusOwner ),
     myframe( aParent )
 {
     m_alwaysShowActiveLayer = false;

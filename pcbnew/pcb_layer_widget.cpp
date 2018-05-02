@@ -107,8 +107,8 @@ static int s_allowed_in_FpEditor[] =
 
 
 PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner,
-                                    int aPointSize, bool aFpEditorMode ) :
-        LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
+                                    bool aFpEditorMode ) :
+        LAYER_WIDGET( aParent, aFocusOwner ),
         myframe( aParent )
 {
     m_alwaysShowActiveCopperLayer = false;

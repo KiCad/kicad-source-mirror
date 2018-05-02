@@ -75,11 +75,8 @@ public:
      * Constructor
      * @param aParent : the parent frame
      * @param aFocusOwner : the window that has the keyboard focus.
-     * @param aPointSize is the font point size to use within the widget.  This
-     *  effectively sets the overal size of the widget via the row height and bitmap
-     *  button sizes.
      */
-    GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
+    GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner );
 
     void ReFill();
 

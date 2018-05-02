@@ -447,34 +447,33 @@ void LAYER_WIDGET::passOnFocus()
 
 //-----<public>-------------------------------------------------------
 
-LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize,
-        wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) :
+LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID id,
+                            const wxPoint& pos, const wxSize& size, long style ) :
     wxPanel( aParent, id, pos, size, style )
 {
+    int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
+    m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize );
+
+    int pointSize = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
+    int screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+
+    if( screenHeight <= 900 && pointSize >= indicatorSize )
+        pointSize = pointSize * 8 / 10;
+
+    m_PointSize = pointSize;
+
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
 
     m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
 
     wxFont font = m_notebook->GetFont();
 
-    if( aPointSize == -1 )
-    {
-        m_PointSize = font.GetPointSize();
-    }
-    else
-    {
-        m_PointSize = aPointSize;
-
-        // change the font size on the notebook's tabs to match aPointSize
-        font.SetPointSize( aPointSize );
-        m_notebook->SetFont( font );
-        m_notebook->SetNormalFont( font );
-        m_notebook->SetSelectedFont( font );
-        m_notebook->SetMeasuringFont( font );
-    }
-
-    int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
-    m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize );
+    // change the font size on the notebook's tabs to match aPointSize
+    font.SetPointSize( pointSize );
+    m_notebook->SetFont( font );
+    m_notebook->SetNormalFont( font );
+    m_notebook->SetSelectedFont( font );
+    m_notebook->SetMeasuringFont( font );
 
     m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 

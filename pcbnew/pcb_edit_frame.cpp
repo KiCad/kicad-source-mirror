@@ -347,17 +347,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetBoard( new BOARD() );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
-
-    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    int pointSize = font.GetPointSize();
-    int screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
-
-    // printf( "pointSize:%d  80%%:%d\n", pointSize, (pointSize*8)/10 );
-
-    if( screenHeight <= 900 )
-        pointSize = (pointSize * 8) / 10;
-
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), pointSize );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas() );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
     m_plotDialog = nullptr;

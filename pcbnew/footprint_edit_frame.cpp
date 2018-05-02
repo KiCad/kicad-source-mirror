@@ -267,8 +267,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // no net in footprint editor: make it non visible
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize(), true );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
 
     // We should probably allow editing of these in the Footprint Editor's preferences, but
     // that's not the case at present so copy them from Pcbnew.

@@ -259,18 +259,15 @@ public:
     /** Constructor
      * @param aParent is the parent window
      * @param aFocusOwner is the window that should be sent the focus after
-     * @param aPointSize is the font point size to use within the widget.  This
-     *  effectively sets the overal size of the widget via the row height and bitmap
-     *  button sizes.
      * @param id is the wxWindow id ( default = wxID_ANY)
      * @param pos is the window position
      * @param size is the window size
      * @param style is the window style
      * every operation.
      */
-    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize = -1,
-        wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
+    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID id = wxID_ANY,
+                  const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                  long style = wxTAB_TRAVERSAL );
 
     virtual ~LAYER_WIDGET();
 
