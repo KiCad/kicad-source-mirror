@@ -159,8 +159,6 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                            SHAPE_LINE_CHAIN& aWalk, SHAPE_LINE_CHAIN& aPost, bool aCw ) const
 {
     const SHAPE_LINE_CHAIN& line( CLine() );
-    VECTOR2I ip_start;
-    VECTOR2I ip_end;
 
     if( line.SegmentCount() < 1 )
         return false;
