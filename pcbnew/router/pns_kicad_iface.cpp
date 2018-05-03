@@ -42,13 +42,14 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
-#include <geometry/shape_convex.h>
 #include <geometry/shape_arc.h>
 #include <geometry/convex_hull.h>
 
 #include "tools/pcb_tool.h"
 
 #include "pns_kicad_iface.h"
+
+#include "../../include/geometry/shape_simple.h"
 #include "pns_routing_settings.h"
 #include "pns_sizes_settings.h"
 #include "pns_item.h"
@@ -575,15 +576,10 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
         outline.Append( aPad->GetCustomShapeAsPolygon() );
         aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
 
-        SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+        SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
-        // We use the convex hull of the pad shape, because PnS knows
-        // only convex shapes.
-        std::vector<wxPoint> convex_hull;
-        BuildConvexHull( convex_hull, outline );
-
-        for( unsigned ii = 0; ii < convex_hull.size(); ii++ )
-            shape->Append( convex_hull[ii] );
+        for( auto iter = outline.CIterate( 0 ); iter; iter++ )
+            shape->Append( *iter );
 
         solid->SetShape( shape );
     }
@@ -622,7 +618,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             {
                 wxPoint coords[4];
                 aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
-                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
                 for( int ii = 0; ii < 4; ii++ )
                 {
@@ -642,7 +638,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 
                 // TransformRoundRectToPolygon creates only one convex polygon
                 SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
                 for( int ii = 0; ii < poly.PointCount(); ++ii )
                 {
@@ -673,7 +669,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                     wxPoint end;
                     wxPoint corner;
 
-                    SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                    SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
                     int w = aPad->BuildSegmentFromOvalShape( start, end, 0.0, wxSize( 0, 0 ) );
 
@@ -719,7 +715,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 wxPoint coords[4];
                 aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
 
-                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
                 for( int ii = 0; ii < 4; ii++ )
                 {
                     shape->Append( wx_c + coords[ii] );
@@ -738,7 +734,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 
                 // TransformRoundRectToPolygon creates only one convex polygon
                 SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
                 for( int ii = 0; ii < poly.PointCount(); ++ii )
                 {
@@ -837,7 +833,7 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
             {
                 VECTOR2I a, b, c;
                 tri->GetTriangle( i, a, b, c );
-                auto triShape = new SHAPE_CONVEX;
+                auto triShape = new SHAPE_SIMPLE;
 
                 triShape->Append( a );
                 triShape->Append( b );

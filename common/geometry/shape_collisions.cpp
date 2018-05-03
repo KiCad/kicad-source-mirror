@@ -30,7 +30,7 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
-#include <geometry/shape_convex.h>
+#include "../../include/geometry/shape_simple.h"
 
 typedef VECTOR2I::extended_type ecoord;
 
@@ -178,7 +178,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN& aB, 
 }
 
 
-static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_CONVEX& aB, int aClearance,
+static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_SIMPLE& aB, int aClearance,
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     bool found;
@@ -228,14 +228,14 @@ static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_LINE_CHAIN& 
 }
 
 
-static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_CONVEX& aB, int aClearance,
+static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_SIMPLE& aB, int aClearance,
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     return Collide( aA, aB.Vertices(), aClearance, aNeedMTV, aMTV );
 }
 
 
-static inline bool Collide( const SHAPE_CONVEX& aA, const SHAPE_CONVEX& aB, int aClearance,
+static inline bool Collide( const SHAPE_SIMPLE& aA, const SHAPE_SIMPLE& aB, int aClearance,
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     return Collide( aA.Vertices(), aB.Vertices(), aClearance, aNeedMTV, aMTV );
@@ -257,7 +257,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN& aB, in
 }
 
 
-static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CONVEX& aB, int aClearance,
+static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SIMPLE& aB, int aClearance,
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     return Collide( aA, aB.Vertices(), aClearance, aNeedMTV, aMTV );
@@ -288,7 +288,7 @@ static inline bool Collide( const SHAPE_LINE_CHAIN& aA, const SHAPE_SEGMENT& aB,
 }
 
 
-static inline bool Collide( const SHAPE_CONVEX& aA, const SHAPE_SEGMENT& aB, int aClearance,
+static inline bool Collide( const SHAPE_SIMPLE& aA, const SHAPE_SEGMENT& aB, int aClearance,
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     return Collide( aA.Vertices(), aB, aClearance, aNeedMTV, aMTV );
@@ -340,8 +340,8 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SEGMENT:
                     return CollCase<SHAPE_RECT, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-                case SH_CONVEX:
-                    return CollCase<SHAPE_RECT, SHAPE_CONVEX>( aA, aB, aClearance, aNeedMTV, aMTV );
+                case SH_SIMPLE:
+                    return CollCase<SHAPE_RECT, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;
@@ -363,8 +363,8 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SEGMENT:
                     return CollCase<SHAPE_CIRCLE, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-                case SH_CONVEX:
-                    return CollCase<SHAPE_CIRCLE, SHAPE_CONVEX>( aA, aB, aClearance, aNeedMTV, aMTV );
+                case SH_SIMPLE:
+                    return CollCase<SHAPE_CIRCLE, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;
@@ -386,8 +386,8 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SEGMENT:
                     return CollCase<SHAPE_LINE_CHAIN, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-                case SH_CONVEX:
-                    return CollCase<SHAPE_LINE_CHAIN, SHAPE_CONVEX>( aA, aB, aClearance, aNeedMTV, aMTV );
+                case SH_SIMPLE:
+                    return CollCase<SHAPE_LINE_CHAIN, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;
@@ -409,31 +409,31 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SEGMENT:
                     return CollCase<SHAPE_SEGMENT, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-                case SH_CONVEX:
-                    return CollCase<SHAPE_CONVEX, SHAPE_SEGMENT>( aB, aA, aClearance, aNeedMTV, aMTV );
+                case SH_SIMPLE:
+                    return CollCase<SHAPE_SIMPLE, SHAPE_SEGMENT>( aB, aA, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;
             }
             break;
 
-        case SH_CONVEX:
+        case SH_SIMPLE:
             switch( aB->Type() )
             {
                 case SH_RECT:
-                    return CollCase<SHAPE_RECT, SHAPE_CONVEX>( aB, aA, aClearance, aNeedMTV, aMTV );
+                    return CollCase<SHAPE_RECT, SHAPE_SIMPLE>( aB, aA, aClearance, aNeedMTV, aMTV );
 
                 case SH_CIRCLE:
-                    return CollCase<SHAPE_CIRCLE, SHAPE_CONVEX>( aB, aA, aClearance, aNeedMTV, aMTV );
+                    return CollCase<SHAPE_CIRCLE, SHAPE_SIMPLE>( aB, aA, aClearance, aNeedMTV, aMTV );
 
                 case SH_LINE_CHAIN:
-                    return CollCase<SHAPE_LINE_CHAIN, SHAPE_CONVEX>( aB, aA, aClearance, aNeedMTV, aMTV );
+                    return CollCase<SHAPE_LINE_CHAIN, SHAPE_SIMPLE>( aB, aA, aClearance, aNeedMTV, aMTV );
 
                 case SH_SEGMENT:
-                    return CollCase<SHAPE_CONVEX, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
+                    return CollCase<SHAPE_SIMPLE, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
-                case SH_CONVEX:
-                    return CollCase<SHAPE_CONVEX, SHAPE_CONVEX>( aA, aB, aClearance, aNeedMTV, aMTV );
+                case SH_SIMPLE:
+                    return CollCase<SHAPE_SIMPLE, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;

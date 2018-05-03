@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SHAPE_CONVEX_H
-#define __SHAPE_CONVEX_H
+#ifndef __SHAPE_SIMPLE_H
+#define __SHAPE_SIMPLE_H
 
 #include <vector>
 
@@ -31,34 +31,34 @@
 #include <geometry/shape_line_chain.h>
 
 /**
- * Class SHAPE_CONVEX
+ * Class SHAPE_SIMPLE
  *
- * Represents a convex polygon consisting of a zero-thickness closed chain of
+ * Represents a simple polygon consisting of a zero-thickness closed chain of
  * connected line segments.
  *
  * Internally the vertices are held in a SHAPE_LINE_CHAIN, please note that
  * there is a "virtual" line segment between the last and first vertex.
  */
-class SHAPE_CONVEX : public SHAPE
+class SHAPE_SIMPLE : public SHAPE
 {
 public:
     /**
      * Constructor
      * Creates an empty polygon
      */
-    SHAPE_CONVEX() :
-        SHAPE( SH_CONVEX )
+    SHAPE_SIMPLE() :
+        SHAPE( SH_SIMPLE )
     {
         m_points.SetClosed( true );
     }
 
-    SHAPE_CONVEX( const SHAPE_CONVEX& aOther ) :
-       SHAPE( SH_CONVEX ), m_points( aOther.m_points )
+    SHAPE_SIMPLE( const SHAPE_SIMPLE& aOther ) :
+       SHAPE( SH_SIMPLE ), m_points( aOther.m_points )
     {}
 
     SHAPE* Clone() const override
     {
-        return new SHAPE_CONVEX( *this );
+        return new SHAPE_SIMPLE( *this );
     }
 
     /**
@@ -132,9 +132,9 @@ public:
     /**
      * Function Vertices()
      *
-     * Returns the list of vertices defining this convex polygon.
+     * Returns the list of vertices defining this simple polygon.
      *
-     * @return the list of vertices defining this convex polygon
+     * @return the list of vertices defining this simple polygon
      */
     const SHAPE_LINE_CHAIN& Vertices() const
     {
@@ -186,4 +186,4 @@ private:
     SHAPE_LINE_CHAIN m_points;
 };
 
-#endif // __SHAPE_CONVEX_H
+#endif // __SHAPE_SIMPLE_H

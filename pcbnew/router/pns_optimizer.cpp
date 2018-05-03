@@ -21,8 +21,6 @@
 
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
-#include <geometry/shape_convex.h>
-
 #include <cmath>
 
 #include "pns_line.h"
@@ -30,6 +28,8 @@
 #include "pns_node.h"
 #include "pns_solid.h"
 #include "pns_optimizer.h"
+
+#include "../../include/geometry/shape_simple.h"
 #include "pns_utils.h"
 #include "pns_router.h"
 
@@ -669,7 +669,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::convexBreakouts( int aWidth,
         const SHAPE* aShape, bool aPermitDiagonal ) const
 {
     BREAKOUT_LIST breakouts;
-    const SHAPE_CONVEX* convex = static_cast<const SHAPE_CONVEX*>( aShape );
+    const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
 
     BOX2I bbox = convex->BBox( 0 );
     VECTOR2I p0 = bbox.Centre();
@@ -791,7 +791,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::computeBreakouts( int aWidth,
         case SH_CIRCLE:
             return circleBreakouts( aWidth, shape, aPermitDiagonal );
 
-        case SH_CONVEX:
+        case SH_SIMPLE:
             return convexBreakouts( aWidth, shape, aPermitDiagonal );
 
         default:

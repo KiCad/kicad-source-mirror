@@ -334,23 +334,26 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
     if( !m_closed || SegmentCount() < 3 )
         return false;
 
-    int cur = CSegment( 0 ).Side( aP );
+    bool inside = false;
 
-    if( cur == 0 )
-        return false;
-
-    for( int i = 1; i < SegmentCount(); i++ )
+    /**
+     * To check for interior points, we draw a line in the positive x direction from
+     * the point.  If it intersects an even number of segments, the point is outside the
+     * line chain (it had to first enter and then exit).  Otherwise, it is inside the chain.
+     *
+     * Note: slope might be denormal here in the case of a horizontal line but we require our
+     * y to move from above to below the point (or vice versa)
+     */
+    for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG s = CSegment( i );
-
-        if( aP == s.A || aP == s.B ) // edge does not belong to the interior!
-            return false;
-
-        if( s.Side( aP ) != cur )
-            return false;
+        double inv_slope = ( ( double ) s.B.x - s.A.x ) / (s.B.y - s.A.y );
+        if( ( ( s.A.y > aP.y ) != ( s.B.y > aP.y ) ) &&
+                ( aP.x - s.A.x < inv_slope * ( aP.y - s.A.y ) ) )
+            inside = !inside;
     }
 
-    return true;
+    return inside;
 }
 
 

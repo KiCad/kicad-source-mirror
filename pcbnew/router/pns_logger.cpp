@@ -30,7 +30,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
-#include <geometry/shape_convex.h>
+#include "../../include/geometry/shape_simple.h"
 
 namespace PNS {
 
@@ -177,9 +177,9 @@ void LOGGER::dumpShape( const SHAPE* aSh )
         break;
     }
 
-    case SH_CONVEX:
+    case SH_SIMPLE:
     {
-        const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) aSh;
+        const SHAPE_SIMPLE* c = (const SHAPE_SIMPLE*) aSh;
         m_theLog << "convex " << c->PointCount() << " ";
 
         for( int i = 0; i < c->PointCount(); i++ )

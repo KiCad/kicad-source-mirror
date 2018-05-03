@@ -98,7 +98,7 @@ static void MoveDiagonal( SEG& aDiagonal, const SHAPE_LINE_CHAIN& aVertices, int
 }
 
 
-const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_CONVEX& aConvex, int aClearance )
+const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance )
 {
     // this defines the horizontal and vertical lines in the hull octagon
     BOX2I box = aConvex.BBox( aClearance + HULL_MARGIN );
