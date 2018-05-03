@@ -33,6 +33,7 @@
 #include <viewlib_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
+#include <pgm_base.h>
 #include "dialogs/dialog_sym_lib_table.h"
 
 
@@ -257,6 +258,12 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     // refresh units display
     DisplayUnitsMsg();
+}
+
+
+void SCH_BASE_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
+{
+    Pgm().ConfigurePaths( this );
 }
 
 

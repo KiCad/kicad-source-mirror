@@ -905,7 +905,6 @@ private:
     // another library
     void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
-    void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     void OnSelectItem( wxCommandEvent& aEvent );

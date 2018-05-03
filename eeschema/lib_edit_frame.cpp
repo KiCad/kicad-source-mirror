@@ -323,6 +323,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
     Show( true );
 
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnConfigurePaths, this,
+          ID_PREFERENCES_CONFIGURE_PATHS );
+
     Bind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
           ID_EDIT_SYM_LIB_TABLE );
 

@@ -204,6 +204,8 @@ public:
             const LIB_ID*                       aHighlight = nullptr,
             bool                                aAllowFields = true );
 
+    void OnConfigurePaths( wxCommandEvent& aEvent );
+
     virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
     /**
