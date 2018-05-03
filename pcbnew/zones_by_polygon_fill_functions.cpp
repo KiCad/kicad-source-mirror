@@ -105,6 +105,9 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow* aActiveWindow )
 
 void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
 {
+    if( !m_ZoneFillsDirty )
+        return;
+
     std::vector<ZONE_CONTAINER*> toFill;
 
     for( auto zone : GetBoard()->Zones() )
@@ -117,5 +120,7 @@ void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
 
     ZONE_FILLER filler( GetBoard(), &commit );
     filler.SetProgressReporter( progressReporter.get() );
-    filler.Fill( toFill, true );
+
+    if( filler.Fill( toFill, true ) )
+        m_ZoneFillsDirty = false;
 }

@@ -256,6 +256,8 @@ public:
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
 
+    bool m_ZoneFillsDirty;                  // Board has been modified since last zone fill.
+
     virtual ~PCB_EDIT_FRAME();
 
     /**

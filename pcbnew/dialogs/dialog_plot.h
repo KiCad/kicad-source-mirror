@@ -58,6 +58,7 @@ private:
 
     // Event called functions
     void        Plot( wxCommandEvent& event ) override;
+    void        DraftPlot( wxCommandEvent& event ) override;
     void        OnQuit( wxCommandEvent& event ) override;
     void        OnClose( wxCloseEvent& event ) override;
     void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -74,6 +75,7 @@ private:
     void        init_Dialog();      // main initialization
     void        reInitDialog();     // initialization after calling drill dialog
     void        applyPlotSettings();
+    void        doPlot( bool aCheckZones );
     PlotFormat  getPlotFormat();
 
     void        setPlotModeChoiceSelection( EDA_DRAW_MODE_T aPlotMode )

@@ -118,7 +118,9 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
 
     ZONE_FILLER filler( board(), &commit );
     filler.SetProgressReporter( progressReporter.get() );
-    filler.Fill( toFill );
+
+    if( filler.Fill( toFill ) )
+        frame()->m_ZoneFillsDirty = false;
 
     return 0;
 }

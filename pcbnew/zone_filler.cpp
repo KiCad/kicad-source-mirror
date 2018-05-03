@@ -82,7 +82,7 @@ void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
     m_progressReporter = aReporter;
 }
 
-void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
+bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 {
     int parallelThreadCount = std::max( ( int )std::thread::hardware_concurrency(), 2 );
 
@@ -90,7 +90,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     auto connectivity = m_board->GetConnectivity();
 
     if( !connectivity->TryLock() )
-        return;
+        return false;
 
     for( auto zone : aZones )
     {
@@ -202,7 +202,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
             connectivity->SetProgressReporter( nullptr );
             connectivity->Unlock();
-            return;
+            return false;
         }
     }
 
@@ -311,6 +311,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     }
 
     connectivity->Unlock();
+    return true;
 }
 
 

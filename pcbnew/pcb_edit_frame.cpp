@@ -334,6 +334,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_microWaveToolBar = NULL;
     m_Layers = nullptr;
 
+    // We don't know what state board was in when it was lasat saved, so we have to
+    // assume dirty
+    m_ZoneFillsDirty = true;
+
     m_rotationAngle = 900;
 
     // Create GAL canvas
@@ -1087,6 +1091,8 @@ void PCB_EDIT_FRAME::OnModify( )
 
     if( draw3DFrame )
         draw3DFrame->ReloadRequest();
+
+    m_ZoneFillsDirty = true;
 }
 
 

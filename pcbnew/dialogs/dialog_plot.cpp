@@ -52,6 +52,14 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_plotOpts = aParent->GetPlotSettings();
     init_Dialog();
 
+    // We use a sdbSizer here to get the order right, which is platform-dependent
+    m_sdbSizer1OK->SetLabel( _( "Plot" ) );
+    m_sdbSizer1Apply->SetLabel( _( "Draft Plot" ) );
+    m_sdbSizer1Apply->SetToolTip( _( "Plot without running zone fill checks." ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+
+    m_sdbSizer1OK->SetDefault();
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
@@ -753,7 +761,19 @@ void DIALOG_PLOT::OnGerberX2Checked( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT::Plot( wxCommandEvent& event )
+void DIALOG_PLOT::Plot( wxCommandEvent&  )
+{
+    doPlot( true );
+}
+
+
+void DIALOG_PLOT::DraftPlot( wxCommandEvent&  )
+{
+    doPlot( false );
+}
+
+
+void DIALOG_PLOT::doPlot( bool aCheckZones )
 {
     BOARD* board = m_parent->GetBoard();
 
@@ -781,6 +801,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         DisplayError( this, msg );
         return;
     }
+
+    if( aCheckZones )
+        m_parent->Check_All_Zones( this );
 
     m_plotOpts.SetAutoScale( false );
     m_plotOpts.SetScale( 1 );
