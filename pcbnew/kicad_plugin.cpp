@@ -1349,7 +1349,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     // Output the radius ratio for rounded rect pads
     if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
     {
-        m_out->Print( 0,  "(roundrect_rratio %s)",
+        m_out->Print( 0,  " (roundrect_rratio %s)",
                       Double2Str( aPad->GetRoundRectRadiusRatio() ).c_str() );
     }
 
@@ -1364,14 +1364,16 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         StrPrintf( &output, " (die_length %s)", FMT_IU( aPad->GetPadToDieLength() ).c_str() );
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
-        StrPrintf( &output, " (solder_mask_margin %s)", FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
+        StrPrintf( &output, " (solder_mask_margin %s)",
+                   FMT_IU( aPad->GetLocalSolderMaskMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMargin() != 0 )
-        StrPrintf( &output, " (solder_paste_margin %s)", FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
+        StrPrintf( &output, " (solder_paste_margin %s)",
+                   FMT_IU( aPad->GetLocalSolderPasteMargin() ).c_str() );
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
         StrPrintf( &output, " (solder_paste_margin_ratio %s)",
-                Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+                   Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
         StrPrintf( &output, " (clearance %s)", FMT_IU( aPad->GetLocalClearance() ).c_str() );
@@ -1465,9 +1467,11 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                 for( unsigned ii = 0; ii < poly.size(); ii++ )
                 {
                     if( newLine == 0 )
-                        m_out->Print( nested_level+1, " (xy %s)", FMT_IU( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
+                        m_out->Print( nested_level+1, " (xy %s)",
+                                      FMT_IU( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
                     else
-                        m_out->Print( 0, " (xy %s)", FMT_IU( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
+                        m_out->Print( 0, " (xy %s)",
+                                      FMT_IU( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
 
                     if( ++newLine > 4 )
                     {
@@ -2123,7 +2127,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 }
 
 
-void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties )
+void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
