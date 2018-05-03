@@ -122,9 +122,13 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 
     static const int candidateCount = 5;
     ITEM* prioritized[candidateCount];
+    int dist[candidateCount];
 
     for( int i = 0; i < candidateCount; i++ )
+    {
         prioritized[i] = 0;
+        dist[i] = std::numeric_limits<int>::max();
+    }
 
     ITEM_SET candidates = m_router->QueryHoverItems( aWhere );
 
@@ -147,10 +151,18 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
                 if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
                     continue;
 
-                if( !prioritized[2] )
+                int itemDist = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
+
+                if( !prioritized[2] || itemDist < dist[2] )
+                {
                     prioritized[2] = item;
-                if( item->Layers().Overlaps( tl ) )
+                    dist[2] = itemDist;
+                }
+                if( item->Layers().Overlaps( tl ) &&  itemDist < dist[0] )
+                {
                     prioritized[0] = item;
+                    dist[0] = itemDist;
+                }
             }
             else
             {
