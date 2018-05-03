@@ -79,6 +79,7 @@ bool InvokeFPEditorPrefsDlg( FOOTPRINT_EDIT_FRAME* aCaller )
 void DIALOG_MODEDIT_OPTIONS::initValues()
 {
     EDA_UNITS_T units = g_UserUnit;
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_parent->GetDisplayOptions();
 
     // Modules: graphic lines width:
     m_staticTextGrLineUnit->SetLabel( GetAbbreviatedUnitsLabel( units ) );
@@ -107,6 +108,15 @@ void DIALOG_MODEDIT_OPTIONS::initValues()
     m_choiceLayerValue->SetSelection( sel );
     sel = m_brdSettings.m_ValueDefaultVisibility ? 0 : 1;
     m_choiceVisibleValue->SetSelection( sel );
+
+    // Display options
+    m_PolarDisplay->SetSelection( displ_opts->m_DisplayPolarCood ? 1 : 0 );
+    m_UnitsSelection->SetSelection( g_UserUnit == INCHES ? 0 : 1 );
+
+    // Editing options
+    m_Segments_45_Only_Ctrl->SetValue( m_parent->Settings().m_use45DegreeGraphicSegments );
+    m_MagneticPads->SetValue( m_parent->Settings().m_magneticPads == CAPTURE_ALWAYS );
+    m_dragSelects->SetValue( m_parent->Settings().m_dragSelects );
 }
 
 
@@ -132,7 +142,22 @@ void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
     m_brdSettings.m_ValueDefaultVisibility = sel != 1;
 
     m_parent->SetDesignSettings( m_brdSettings );
-    m_parent->OnModify();
+
+    // Display options
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_parent->GetDisplayOptions();
+    displ_opts->m_DisplayPolarCood = m_PolarDisplay->GetSelection() != 0;
+
+    EDA_UNITS_T units = ( m_UnitsSelection->GetSelection() == 0 ) ? INCHES : MILLIMETRES;
+    if( units != g_UserUnit )
+    {
+        g_UserUnit = units;
+        m_parent->ReCreateAuxiliaryToolbar();
+    }
+
+    // Editing options
+    m_parent->Settings().m_use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
+    m_parent->Settings().m_magneticPads = m_MagneticPads->GetValue() ? CAPTURE_ALWAYS : NO_EFFECT;
+    m_parent->Settings().m_dragSelects = m_dragSelects->GetValue();
 
     EndModal( wxID_OK );
 }

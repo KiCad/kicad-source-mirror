@@ -40,12 +40,9 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
         break;
 
     case FRAME_PCB_MODULE_EDITOR:
-        /* No point in reading/writing these when the user can't edit them.  Fetch them from
-         * Pcbnew for now.
         Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
         Add( "MagneticPads", reinterpret_cast<int*>( &m_magneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
         Add( "DragSelects", &m_dragSelects, true );
-         */
         break;
 
     default:

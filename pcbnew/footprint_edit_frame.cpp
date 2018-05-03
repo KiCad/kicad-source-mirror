@@ -75,7 +75,7 @@
 ///@{
 /// \ingroup config
 
-static const wxString IconScaleEntry =          "ModIconScale";
+static const wxString IconScaleEntry =          "PcbIconScale";
 
 ///@}
 
@@ -268,14 +268,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
-
-    // We should probably allow editing of these in the Footprint Editor's preferences, but
-    // that's not the case at present so copy them from Pcbnew.
-    m_configSettings.m_use45DegreeGraphicSegments = pcbFrame->Settings().m_use45DegreeGraphicSegments;
-    m_configSettings.m_magneticPads = pcbFrame->Settings().m_magneticPads;
-
-    // And this one needs to move to a suite-wide setting.
-    m_configSettings.m_dragSelects = pcbFrame->Settings().m_dragSelects;
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -534,9 +526,9 @@ double FOOTPRINT_EDIT_FRAME::BestZoom()
 
 void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() && GetBoard()->m_Modules )
     {
-        int ii = DisplayExitDialog( this, _( "Save the changes to the footprint before closing?" ) );
+        int ii = DisplayExitDialog( this, _( "Save changes to footprint before closing?" ) );
 
         switch( ii )
         {
@@ -544,18 +536,12 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            // code from FOOTPRINT_EDIT_FRAME::Process_Special_Functions,
-            // at case ID_MODEDIT_SAVE_LIBMODULE
-            if( GetBoard()->m_Modules )
+            if( !SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules ) )
             {
-                if( SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules ) )
-                {
-                    // save was correct
-                    GetScreen()->ClrModify();
-                    break;
-                }
+                Event.Veto();
+                return;
             }
-            // fall through: cancel the close because of an error
+            break;
 
         case wxID_CANCEL:
             Event.Veto();
@@ -1012,19 +998,9 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
 int FOOTPRINT_EDIT_FRAME::GetIconScale()
 {
-    // All environmental settings will move to app for 6.0, so just inherit from pcbnew
-    // for now.
-    if( m_iconScale == -1 )
-    {
-        bool isBoardEditorRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
-        PCB_BASE_FRAME* pcbFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
-        m_iconScale = pcbFrame->GetIconScale();
-
-        if( !isBoardEditorRunning )
-            pcbFrame->Destroy();
-    }
-
-    return m_iconScale;
+    int scale = 0;
+    Kiface().KifaceSettings()->Read( IconScaleEntry, &scale, 0 );
+    return scale;
 }
 
 

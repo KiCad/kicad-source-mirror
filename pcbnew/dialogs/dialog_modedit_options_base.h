@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,13 +22,18 @@ class TEXT_CTRL_EVAL;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
+#include <wx/statbox.h>
+#include <wx/radiobox.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define wxID_POLAR_CTRL 1000
+#define wxID_UNITS 1001
+#define wxID_SEGMENTS45 1002
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MODEDIT_OPTIONS_BASE
@@ -38,7 +43,6 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_staticText281;
 		wxStaticText* m_EdgeModEWidthTitle;
 		TEXT_CTRL_EVAL* m_OptModuleGrLineWidth;
 		wxStaticText* m_staticTextGrLineUnit;
@@ -51,21 +55,20 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_TextModSizeHTitle;
 		TEXT_CTRL_EVAL* m_OptModuleTextHSize;
 		wxStaticText* m_staticTextTextHSizeUnit;
-		wxStaticLine* m_staticline1;
-		wxStaticText* m_staticText28;
-		wxStaticText* m_staticTextInfo;
+		wxRadioBox* m_PolarDisplay;
+		wxRadioBox* m_UnitsSelection;
 		wxStaticText* m_staticTextRef;
 		wxTextCtrl* m_textCtrlRefText;
-		wxStaticText* m_staticTextRefLayer;
 		wxChoice* m_choiceLayerReference;
-		wxStaticText* m_staticText32;
 		wxChoice* m_choiceVisibleReference;
 		wxStaticText* m_staticTextValue;
 		wxTextCtrl* m_textCtrlValueText;
-		wxStaticText* m_staticTextValLayer;
 		wxChoice* m_choiceLayerValue;
-		wxStaticText* m_staticTextValVisibility;
 		wxChoice* m_choiceVisibleValue;
+		wxStaticText* m_staticTextInfo;
+		wxCheckBox* m_MagneticPads;
+		wxCheckBox* m_Segments_45_Only_Ctrl;
+		wxCheckBox* m_dragSelects;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
