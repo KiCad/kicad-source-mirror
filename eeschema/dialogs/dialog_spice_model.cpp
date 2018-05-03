@@ -652,11 +652,18 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
         }
     }
 
+    wxArrayString models;
+
     // Refresh the model name combobox values
     m_modelName->Clear();
 
     for( const auto& model : m_models )
+    {
         m_modelName->Append( model.first );
+        models.Add( model.first );
+    }
+
+    m_modelName->AutoComplete( models );
 
     // Restore the previous value or if there is none - pick the first one from the loaded library
     if( !curModel.IsEmpty() )
