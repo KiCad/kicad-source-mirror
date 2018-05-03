@@ -69,6 +69,7 @@ private:
     // Events handlers:
     void OnInitDialog( wxInitDialogEvent& event ) override;
     void OnCloseDialog( wxCloseEvent& event ) override;
+    void OnSizeFieldsList( wxSizeEvent& event ) override;
 
     void OnListItemDeselected( wxListEvent& event ) override;
     void OnListItemSelected( wxListEvent& event ) override;
@@ -257,6 +258,14 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnCloseDialog( wxCloseEvent& event )
     // and calls EndQuasiModal.
     // Therefore calling EndQuasiModal here is not mandatory but it creates no issues.
     EndQuasiModal( wxID_CANCEL );
+}
+
+
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnSizeFieldsList( wxSizeEvent& event )
+{
+    int newWidth = event.GetSize().GetX();
+    fieldListCtrl->SetColumnWidth( COLUMN_TEXT, newWidth - fieldListCtrl->GetColumnWidth( 0 ) );
+    event.Skip();
 }
 
 
@@ -708,8 +717,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const wxStri
     fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aValue );
 
     // recompute the column widths here, after setting texts
+    int totalWidth = fieldListCtrl->GetSize().GetWidth();
     fieldListCtrl->SetColumnWidth( COLUMN_FIELD_NAME, wxLIST_AUTOSIZE );
-    fieldListCtrl->SetColumnWidth( COLUMN_TEXT, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( COLUMN_TEXT, totalWidth - fieldListCtrl->GetColumnWidth( 0 ) );
 }
 
 

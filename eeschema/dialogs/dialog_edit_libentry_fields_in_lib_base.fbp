@@ -14,7 +14,6 @@
         <property name="file">dialog_edit_libentry_fields_in_lib_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DialogEditLibentryFields_in_lib_base</property>
         <property name="namespace"></property>
@@ -27,7 +26,7 @@
         <property name="ui_table">UI</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Dialog" expanded="0">
+        <object class="Dialog" expanded="1">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
             <property name="bg"></property>
@@ -89,16 +88,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">mainSizer</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxBoxSizer" expanded="0">
+                    <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizerFieldsSetup</property>
                         <property name="orient">wxHORIZONTAL</property>
@@ -213,7 +212,7 @@
                                         <event name="OnRightDown"></event>
                                         <event name="OnRightUp"></event>
                                         <event name="OnSetFocus"></event>
-                                        <event name="OnSize"></event>
+                                        <event name="OnSize">OnSizeFieldsList</event>
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
