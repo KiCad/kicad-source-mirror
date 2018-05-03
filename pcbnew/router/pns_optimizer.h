@@ -161,7 +161,7 @@ private:
     BREAKOUT_LIST circleBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST rectBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST ovalBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
-    BREAKOUT_LIST convexBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
+    BREAKOUT_LIST customBreakouts( int aWidth, const ITEM* aItem, bool aPermitDiagonal ) const;
     BREAKOUT_LIST computeBreakouts( int aWidth, const ITEM* aItem, bool aPermitDiagonal ) const;
 
     int smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVertex );

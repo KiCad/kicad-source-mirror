@@ -665,14 +665,14 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::circleBreakouts( int aWidth,
 }
 
 
-OPTIMIZER::BREAKOUT_LIST OPTIMIZER::convexBreakouts( int aWidth,
-        const SHAPE* aShape, bool aPermitDiagonal ) const
+OPTIMIZER::BREAKOUT_LIST OPTIMIZER::customBreakouts( int aWidth,
+        const ITEM* aItem, bool aPermitDiagonal ) const
 {
     BREAKOUT_LIST breakouts;
-    const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
+    const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aItem->Shape() );
 
     BOX2I bbox = convex->BBox( 0 );
-    VECTOR2I p0 = bbox.Centre();
+    VECTOR2I p0 = static_cast<const SOLID*>( aItem )->Pos();
     // must be large enough to guarantee intersecting the convex polygon
     int length = bbox.GetSize().EuclideanNorm() / 2 + 5;
 
@@ -792,11 +792,13 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::computeBreakouts( int aWidth,
             return circleBreakouts( aWidth, shape, aPermitDiagonal );
 
         case SH_SIMPLE:
-            return convexBreakouts( aWidth, shape, aPermitDiagonal );
+            return customBreakouts( aWidth, aItem, aPermitDiagonal );
 
         default:
             break;
         }
+
+        break;
     }
 
     default:
