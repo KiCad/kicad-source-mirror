@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 09:46+0200\n"
-"PO-Revision-Date: 2018-05-04 02:00+0800\n"
+"PO-Revision-Date: 2018-05-04 11:34+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: E:/kicad\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
@@ -1471,9 +1471,8 @@ msgid "Unable to find \"%s\" template config file."
 msgstr "无法找到 '%s' 模板配置文件."
 
 #: common/project.cpp:261
-#, fuzzy
 msgid "Error copying project file template"
-msgstr "从模板新建工程"
+msgstr "复制项目文件模板错误"
 
 #: common/project.cpp:282
 #, fuzzy, c-format
@@ -1827,9 +1826,8 @@ msgid "Lib Version Info"
 msgstr "库版本信息"
 
 #: common/dialog_about/dialog_about_base.cpp:67
-#, fuzzy
 msgid "Show Version Info"
-msgstr "复制版本信息"
+msgstr "显示版本信息"
 
 #: common/dialog_about/dialog_about_base.cpp:70
 msgid "Copy Version Info"
@@ -1886,7 +1884,6 @@ msgid "Copied..."
 msgstr "复制..."
 
 #: common/dialog_about/AboutDialog_main.cpp:118
-#, fuzzy
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
@@ -1897,28 +1894,24 @@ msgid "KiCad on the web"
 msgstr "KiCad相关站点"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
-#, fuzzy
 msgid "The official KiCad website - "
-msgstr "KiCad官方网站"
+msgstr "KiCad官方网站 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
-#, fuzzy
 msgid "Developer website on Launchpad - "
-msgstr "在Launchpad的开发者网站"
+msgstr "在Launchpad的开发者网站 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
-#, fuzzy
 msgid "Official KiCad library repositories - "
-msgstr "非官方库"
+msgstr "Kicad官方库"
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Bug tracker"
 msgstr "bug追踪"
 
 #: common/dialog_about/AboutDialog_main.cpp:154
-#, fuzzy
 msgid "Report or examine bugs - "
-msgstr "报告或查验bug"
+msgstr "报告或查验bug - "
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 #, fuzzy
@@ -1926,14 +1919,12 @@ msgid "KiCad user's groups and community"
 msgstr "KiCad的用户群和社区"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
-#, fuzzy
 msgid "KiCad forum - "
-msgstr "KiCad 用户论坛"
+msgstr "KiCad 用户论坛 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:171
-#, fuzzy
 msgid "KiCad user's group - "
-msgstr "KiCad用户群"
+msgstr "KiCad用户群 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:185
 msgid "The complete KiCad EDA Suite is released under the"
@@ -1956,14 +1947,12 @@ msgid "3D models by"
 msgstr "3D模型设计"
 
 #: common/dialog_about/AboutDialog_main.cpp:428
-#, fuzzy
 msgid "Symbols by"
-msgstr "符号"
+msgstr "符号设计"
 
 #: common/dialog_about/AboutDialog_main.cpp:435
-#, fuzzy
 msgid "Footprints by"
-msgstr "封装"
+msgstr "封装设计"
 
 #: common/wildcards_and_files_ext.cpp:107
 msgid "All files (*)|*"
@@ -2085,9 +2074,8 @@ msgid "CSV Files (*.csv)|*."
 msgstr "所有文件 (*.*)|*.*"
 
 #: common/wildcards_and_files_ext.cpp:255
-#, fuzzy
 msgid "Portable document format files (*.pdf)|*."
-msgstr "PDF文件 (*.pdf)|*.pdf"
+msgstr "便携式文档格式文件 (*.pdf)|*.pdf"
 
 #: common/wildcards_and_files_ext.cpp:261
 #, fuzzy
@@ -2095,9 +2083,8 @@ msgid "PostScript files (.ps)|*."
 msgstr "PostScript 文件(.ps)|*.ps"
 
 #: common/wildcards_and_files_ext.cpp:267
-#, fuzzy
 msgid "Report files (*.rpt)|*."
-msgstr "报告文件 (*.rpt)|*.rpt"
+msgstr "报告文件 (*.rpt)|*."
 
 #: common/wildcards_and_files_ext.cpp:273
 #, fuzzy
@@ -2215,9 +2202,8 @@ msgid "Edit hotkeys list"
 msgstr "编辑快捷键(&E)"
 
 #: common/hotkeys_basic.cpp:807 eeschema/menubar.cpp:708
-#, fuzzy
 msgid "E&xport Hotkeys..."
-msgstr "导出快捷键(&X)"
+msgstr "导出快捷键(&X)..."
 
 #: common/hotkeys_basic.cpp:808 eeschema/menubar.cpp:709
 #, fuzzy
@@ -2225,9 +2211,8 @@ msgid "Export current hotkeys into configuration file"
 msgstr "无法打开配置文件"
 
 #: common/hotkeys_basic.cpp:813 eeschema/menubar.cpp:714
-#, fuzzy
 msgid "&Import Hotkeys..."
-msgstr "导入快捷键(&I)"
+msgstr "导入快捷键(&I)..."
 
 #: common/hotkeys_basic.cpp:814 eeschema/menubar.cpp:715
 #, fuzzy
@@ -4082,9 +4067,9 @@ msgid "Lib: %s"
 msgstr "库: %s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: \"%s\""
-msgstr "工程文件 '%s'"
+msgstr "工程文件：'%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:99
 #, fuzzy
@@ -4300,9 +4285,8 @@ msgid "Save (all sheets)"
 msgstr "离开 图页"
 
 #: eeschema/tool_sch.cpp:75
-#, fuzzy
 msgid "Edit Page settings"
-msgstr "页面设置"
+msgstr "编辑页面设置"
 
 #: eeschema/tool_sch.cpp:80
 msgid "Print schematic"
@@ -4355,7 +4339,7 @@ msgstr "编辑 %s 字段"
 
 #: eeschema/tool_sch.cpp:177
 msgid "Run Pcbnew to layout printed circuit board"
-msgstr "运行Pcbnew布局PCB"
+msgstr "运行Pcbnew设计PCB"
 
 #: eeschema/tool_sch.cpp:204 pcbnew/tools/pcb_editor_control.cpp:1051
 #: pcbnew/tool_pcb_editor.cpp:451 pcbnew/edit.cpp:1560
@@ -6181,7 +6165,7 @@ msgstr "打开PCB编辑器(&O)"
 
 #: eeschema/menubar.cpp:556 kicad/menubar.cpp:148
 msgid "Run Pcbnew"
-msgstr "Pcbnew PCB 板编辑器"
+msgstr "运行Pcbnew"
 
 #: eeschema/menubar.cpp:563
 #, fuzzy
@@ -6285,18 +6269,16 @@ msgid "Edit Eeschema preferences"
 msgstr "Eeschema 设置"
 
 #: eeschema/menubar.cpp:729 pcbnew/menubar_pcb_editor.cpp:245
-#, fuzzy
 msgid "&Save Project File..."
-msgstr "保存工程文件(&S)"
+msgstr "保存工程文件(&S)..."
 
 #: eeschema/menubar.cpp:730 pcbnew/menubar_pcb_editor.cpp:246
 msgid "Save project preferences into a project file"
 msgstr ""
 
 #: eeschema/menubar.cpp:735 pcbnew/menubar_pcb_editor.cpp:250
-#, fuzzy
 msgid "Load P&roject File..."
-msgstr "读取工程文件"
+msgstr "载入工程文件(&P)..."
 
 #: eeschema/menubar.cpp:736 pcbnew/menubar_pcb_editor.cpp:251
 #, fuzzy
@@ -7187,9 +7169,8 @@ msgid "No item found matching %s."
 msgstr "未找到匹配 %s 的项。"
 
 #: eeschema/eeschema_config.cpp:176 pcbnew/pcbnew_config.cpp:195
-#, fuzzy
 msgid "Load Project File"
-msgstr "读取工程文件"
+msgstr "载入工程文件"
 
 #: eeschema/eeschema_config.cpp:413 pcbnew/pcbnew_config.cpp:271
 msgid "Save Project File"
@@ -8381,9 +8362,8 @@ msgid "New Library"
 msgstr "新建库"
 
 #: eeschema/lib_edit_frame.cpp:1693
-#, fuzzy
 msgid "Project"
-msgstr "新建工程"
+msgstr "工程"
 
 #: eeschema/lib_edit_frame.cpp:1695
 #, fuzzy
@@ -12781,9 +12761,8 @@ msgid "Zoom to &Fit"
 msgstr "缩小"
 
 #: gerbview/menubar.cpp:212
-#, fuzzy
 msgid "Refresh screen"
-msgstr "刷新工程目录"
+msgstr "刷新屏幕"
 
 #: gerbview/menubar.cpp:221 pcbnew/menubar_pcb_editor.cpp:650
 #: pcbnew/menubar_footprint_editor.cpp:250
@@ -12926,9 +12905,8 @@ msgid "Clear the graphic layer currently selected"
 msgstr "当前选定的字段的文本(或数值)"
 
 #: gerbview/menubar.cpp:356 pagelayout_editor/menubar.cpp:182
-#, fuzzy
 msgid "Set &Text Editor..."
-msgstr "设置文本编辑器(&S)"
+msgstr "设置文本编辑器(&T)..."
 
 #: gerbview/menubar.cpp:357 pagelayout_editor/menubar.cpp:183
 msgid "Select your preferred text editor"
@@ -13815,12 +13793,10 @@ msgstr ""
 "%s\n"
 
 #: kicad/menubar.cpp:143
-#, fuzzy
 msgid "New Project From Template"
-msgstr "从模板新建工程(&T)"
+msgstr "从模板新建工程"
 
 #: kicad/menubar.cpp:145
-#, fuzzy
 msgid "Refresh Project Tree"
 msgstr "刷新工程目录"
 
@@ -13857,12 +13833,10 @@ msgid "New Project"
 msgstr "新建工程"
 
 #: kicad/menubar.cpp:159
-#, fuzzy
 msgid "Open Project"
-msgstr "打开工程(&O)"
+msgstr "打开工程"
 
 #: kicad/menubar.cpp:160
-#, fuzzy
 msgid "Save Project"
 msgstr "保存工程"
 
@@ -13871,9 +13845,8 @@ msgid "Kicad Manager Hotkeys"
 msgstr "KiCad快捷键管理"
 
 #: kicad/menubar.cpp:219
-#, fuzzy
 msgid "&Project..."
-msgstr "新建工程(&N)"
+msgstr "工程(&P)..."
 
 #: kicad/menubar.cpp:221
 msgid "Create new blank project"
@@ -13898,9 +13871,8 @@ msgid "Create new project"
 msgstr "新建工程"
 
 #: kicad/menubar.cpp:235
-#, fuzzy
 msgid "&Open Project..."
-msgstr "打开工程(&O)"
+msgstr "打开工程(&O)..."
 
 #: kicad/menubar.cpp:237
 #, fuzzy
@@ -13908,9 +13880,8 @@ msgid "Open an existing project"
 msgstr "打开工程"
 
 #: kicad/menubar.cpp:247
-#, fuzzy
 msgid "Open a recent project"
-msgstr "打开最近原理图工程"
+msgstr "打开最近工程"
 
 #: kicad/menubar.cpp:256 kicad/menubar.cpp:525
 msgid "Save current project"
@@ -13925,9 +13896,8 @@ msgid "Import EAGLE CAD XML schematic and board"
 msgstr ""
 
 #: kicad/menubar.cpp:270
-#, fuzzy
 msgid "Import Project"
-msgstr "解压工程"
+msgstr "导入工程"
 
 #: kicad/menubar.cpp:271
 #, fuzzy
@@ -13935,18 +13905,16 @@ msgid "Import project files from other software"
 msgstr "选择一个ZIP工程文件，并解压缩"
 
 #: kicad/menubar.cpp:280
-#, fuzzy
 msgid "&Archive Project..."
-msgstr "把存档文件解压缩(&U)"
+msgstr "存档工程(&A)..."
 
 #: kicad/menubar.cpp:281
 msgid "Archive all needed project files into zip archive"
 msgstr "把当前工程打包成ZIP文件"
 
 #: kicad/menubar.cpp:287
-#, fuzzy
 msgid "&Unarchive Project..."
-msgstr "把存档文件解压缩(&U)"
+msgstr "解压工程(&U)..."
 
 #: kicad/menubar.cpp:288 kicad/menubar.cpp:538
 msgid "Unarchive project files from zip archive"
@@ -13957,9 +13925,8 @@ msgid "Close KiCad"
 msgstr "关闭KiCad"
 
 #: kicad/menubar.cpp:305
-#, fuzzy
 msgid "&Refresh"
-msgstr "参考编号（&R）"
+msgstr "刷新(&R)"
 
 #: kicad/menubar.cpp:307 kicad/menubar.cpp:545
 msgid "Refresh project tree"
@@ -13974,9 +13941,8 @@ msgid "Launch preferred text editor"
 msgstr "打开首选文本编辑器"
 
 #: kicad/menubar.cpp:327
-#, fuzzy
 msgid "&Open Local File..."
-msgstr "打开本地文件(&O)"
+msgstr "打开本地文件(&O)..."
 
 #: kicad/menubar.cpp:328
 msgid "Edit local file"
@@ -13984,14 +13950,12 @@ msgstr "编辑本地文件"
 
 #: kicad/menubar.cpp:337 pcbnew/menubar_pcb_editor.cpp:325
 #: pcbnew/menubar_footprint_editor.cpp:434
-#, fuzzy
 msgid "Configure Pa&ths..."
-msgstr "配置路径(&T)"
+msgstr "配置路径(&T)..."
 
 #: kicad/menubar.cpp:344
-#, fuzzy
 msgid "&Set Text Editor..."
-msgstr "设置文本编辑器(&S)"
+msgstr "设置文本编辑器(&S)..."
 
 #: kicad/menubar.cpp:345
 msgid "Set your preferred text editor"
@@ -14006,9 +13970,8 @@ msgid "Use system default PDF viewer"
 msgstr "使用系统默认PDF浏览器"
 
 #: kicad/menubar.cpp:362
-#, fuzzy
 msgid "&Favorite PDF Viewer"
-msgstr "自定义PDF浏览器(&F)"
+msgstr "最喜欢的PDF浏览器(&F)"
 
 #: kicad/menubar.cpp:363
 #, fuzzy
@@ -14016,14 +13979,12 @@ msgid "Use favorite PDF viewer"
 msgstr "使用自定义PDF浏览器"
 
 #: kicad/menubar.cpp:373
-#, fuzzy
 msgid "Set &PDF Viewer..."
-msgstr "设置PDF浏览器(&P)"
+msgstr "设置PDF浏览器(&P)..."
 
 #: kicad/menubar.cpp:374
-#, fuzzy
 msgid "Set favorite PDF viewer"
-msgstr "设置默认PDF浏览器"
+msgstr "设置最喜欢的PDF浏览器"
 
 #: kicad/menubar.cpp:379
 msgid "&PDF Viewer"
@@ -14031,37 +13992,31 @@ msgstr "PDF浏览器(&P)"
 
 #: kicad/menubar.cpp:380
 msgid "PDF viewer preferences"
-msgstr "PDF默认浏览器"
+msgstr "PDF浏览器首选项"
 
 #: kicad/menubar.cpp:399
-#, fuzzy
 msgid "Edit Schematic"
-msgstr "打印原理图"
+msgstr "编辑原理图"
 
 #: kicad/menubar.cpp:402
-#, fuzzy
 msgid "Edit Schematic Symbols"
-msgstr "打印原理图"
+msgstr "编辑原理图符号"
 
 #: kicad/menubar.cpp:406
-#, fuzzy
 msgid "Edit PCB Layout"
-msgstr "打印边框"
+msgstr "编辑PCB"
 
 #: kicad/menubar.cpp:410
-#, fuzzy
 msgid "Edit PCB Footprints"
-msgstr "编辑 封装"
+msgstr "编辑PCB封装"
 
 #: kicad/menubar.cpp:414
-#, fuzzy
 msgid "View Gerber Files"
-msgstr "打开 Gerber 文件"
+msgstr "查看Gerber文件"
 
 #: kicad/menubar.cpp:418
-#, fuzzy
 msgid "Convert Image"
-msgstr "移动 图片"
+msgstr "图片转换"
 
 #: kicad/menubar.cpp:421
 #, fuzzy
@@ -14071,18 +14026,16 @@ msgid ""
 msgstr "Bitmap2Component - 转换位图到 Eeschema 或  Pcbnew "
 
 #: kicad/menubar.cpp:425
-#, fuzzy
 msgid "Run PCB Calculator"
-msgstr "Pcb Calculator PCB计算器"
+msgstr "运行PCB计算器"
 
 #: kicad/menubar.cpp:427
 msgid "Pcb calculator - Calculator for components, track width, etc."
 msgstr "计量工具 - 计算布线宽度等"
 
 #: kicad/menubar.cpp:430
-#, fuzzy
 msgid "Edit Page Layout"
-msgstr "打印边框"
+msgstr "编辑页面布局"
 
 #: kicad/menubar.cpp:432
 msgid "Pl editor - Worksheet layout editor"
@@ -14358,7 +14311,7 @@ msgstr "修改文件名称"
 
 #: kicad/preferences.cpp:63
 msgid "You must choose a PDF viewer before using this option."
-msgstr "你必须选择一个PDF浏览器."
+msgstr "在使用此选项之前，你必须选择一个PDF浏览器."
 
 #: kicad/preferences.cpp:75
 msgid "Executable files ("
@@ -18536,9 +18489,8 @@ msgid "&Interactive Router Settings..."
 msgstr "交互布线设置"
 
 #: pcbnew/menubar_pcb_editor.cpp:293
-#, fuzzy
 msgid "Configure interactive router"
-msgstr "配置交互式布线器。"
+msgstr "配置交互式布线器"
 
 #: pcbnew/menubar_pcb_editor.cpp:302
 msgid "&List Nets"
@@ -18731,9 +18683,8 @@ msgid "Execute or reload python action plugins"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:463
-#, fuzzy
 msgid "&Refresh Plugins"
-msgstr "移除插件"
+msgstr "刷新插件(&R)"
 
 #: pcbnew/menubar_pcb_editor.cpp:464
 msgid "Reload all python plugins and refresh plugin menus"
