@@ -27,6 +27,9 @@
 #include <dlist.h>
 #include <base_struct.h>
 
+// verifies conditions for setting a parent list for an element, i.e.
+// element either does not belong to any list or it already belongs to the same list
+#define CHECK_OWNERSHIP(a) wxASSERT( !a->GetList() || a->GetList() == this );
 
 /* Implement the class DHEAD from dlist.h */
 
@@ -40,6 +43,7 @@ DHEAD::~DHEAD()
 
 void DHEAD::DeleteAll()
 {
+    wxCHECK( meOwner, /*void*/ );   // only owning lists may delete the contents
     EDA_ITEM* next;
     EDA_ITEM* item = first;
 
@@ -62,16 +66,20 @@ void DHEAD::append( EDA_ITEM* aNewElement )
 
     if( first )        // list is not empty, first is not touched
     {
-        wxCHECK( last, /*void*/ );
+        wxASSERT( count > 0 );
+        wxCHECK( last, /*void*/ );      // 'first' is non-null, so 'last' should be non-null too
 
         aNewElement->SetNext( 0 );
         aNewElement->SetBack( last );
 
+        wxASSERT( !last->Next() );      // the last element should point to nullptr
         last->SetNext( aNewElement );
         last = aNewElement;
     }
     else        // list is empty, first and last are changed
     {
+        wxASSERT( count == 0 );
+        wxASSERT( !last );              // 'first' is null, then 'last' should be too
         aNewElement->SetNext( 0 );
         aNewElement->SetBack( 0 );
 
@@ -79,6 +87,7 @@ void DHEAD::append( EDA_ITEM* aNewElement )
         last  = aNewElement;
     }
 
+    CHECK_OWNERSHIP( aNewElement );
     aNewElement->SetList( this );
 
     ++count;
@@ -91,7 +100,10 @@ void DHEAD::append( DHEAD& aList )
     {
         // Change the item's list to me.
         for( EDA_ITEM* item = aList.first;  item;  item = item->Next() )
+        {
+            CHECK_OWNERSHIP( item );
             item->SetList( this );
+        }
 
         if( first )       // this list is not empty, set last item's next to the first item in aList
         {
@@ -127,7 +139,7 @@ void DHEAD::insert( EDA_ITEM* aNewElement, EDA_ITEM* aAfterMe )
         wxCHECK( aAfterMe->GetList() == this, /*void*/ );
 
         // the list cannot be empty if aAfterMe is supposedly on the list
-        wxASSERT( first && last );
+        wxASSERT( first && last && count > 0 );
 
         if( first == aAfterMe )
         {
@@ -150,6 +162,7 @@ void DHEAD::insert( EDA_ITEM* aNewElement, EDA_ITEM* aAfterMe )
             oldBack->SetNext( aNewElement );
         }
 
+        CHECK_OWNERSHIP( aNewElement );
         aNewElement->SetList( this );
 
         ++count;
@@ -186,6 +199,7 @@ void DHEAD::remove( EDA_ITEM* aElement )
     aElement->SetList( 0 );
 
     --count;
+    wxASSERT( ( first && last ) || count == 0 );
 }
 
 #if defined(DEBUG)
