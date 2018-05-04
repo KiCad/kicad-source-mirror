@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 30 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,37 +20,34 @@
 #include <wx/settings.h>
 #include <wx/dataview.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
+#include <wx/choice.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define ID_M_ORIENTEDGESOPT 1000
+#define ID_M_OUTLINEAPPEARANCECTRL 1001
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-		
-		// Private event handlers
-		void _wxFB_OnLayerSelection( wxDataViewEvent& event ){ OnLayerSelection( event ); }
-		
 	
 	protected:
 		wxStaticText* m_staticTextLayerSelection;
 		wxDataViewListCtrl* m_layers;
-		wxStaticText* m_staticTextprops;
-		wxRadioBox* m_OrientEdgesOpt;
-		wxRadioBox* m_OutlineAppearanceCtrl;
 		wxCheckBox* m_cbTracksCtrl;
 		wxCheckBox* m_cbViasCtrl;
 		wxCheckBox* m_cbCopperPourCtrl;
+		wxStaticText* m_staticTextSlope;
+		wxChoice* m_OrientEdgesOpt;
+		wxStaticText* m_staticTextStyle;
+		wxChoice* m_OutlineAppearanceCtrl;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
@@ -58,6 +55,7 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnSizeLayersList( wxSizeEvent& event ) { event.Skip(); }
 		
 	
 	public:

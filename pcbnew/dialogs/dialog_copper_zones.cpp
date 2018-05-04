@@ -38,6 +38,7 @@
 #include <base_units.h>
 #include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
+#include <widgets/color_swatch.h>
 
 #include <class_zone.h>
 #include <class_board.h>
@@ -46,7 +47,6 @@
 #include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
 #include <wx/listctrl.h>
 #include <layers_id_colors_and_visibility.h>
-
 
 /**
  * Class DIALOG_COPPER_ZONE
@@ -112,19 +112,10 @@ private:
      * according to m_NetDisplayOption selection.
      */
     void initListNetsParams();
-
-    /**
-     * Function makeLayerBitmap
-     * creates the colored rectangle bitmaps used in the layer selection widget.
-     * @param aColor is the color to fill the rectangle with.
-     * @param aBackground is the background color in case aColor is transparent.
-     */
-    wxBitmap makeLayerBitmap( COLOR4D aColor, COLOR4D aBackground );
 };
 
 
-#define LAYER_BITMAP_SIZE_X     20
-#define LAYER_BITMAP_SIZE_Y     10
+const static wxSize LAYER_BITMAP_SIZE( 20, 14 );
 
 // Initialize static member variables
 wxString DIALOG_COPPER_ZONE::m_netNameShowFilter( wxT( "*" ) );
@@ -241,7 +232,7 @@ void DIALOG_COPPER_ZONE::initDialog()
     column0.SetId( 0 );
     m_LayerSelectionCtrl->InsertColumn( 0, column0 );
 
-    wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
+    wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE.x, LAYER_BITMAP_SIZE.y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
 
     int ctrlWidth = 0;  // Min width for m_LayerSelectionCtrl to show the layers names
@@ -257,32 +248,28 @@ void DIALOG_COPPER_ZONE::initDialog()
         m_LayerId.push_back( layer );
 
         msg = board->GetLayerName( layer );
-
         msg.Trim();
+        wxSize tsize( GetTextSize( msg, m_LayerSelectionCtrl ) );
+        ctrlWidth = std::max( ctrlWidth, tsize.x );
 
         COLOR4D layerColor = m_Parent->Settings().Colors().GetLayerColor( layer );
+        imageList->Add( COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE ) );
 
-        imageList->Add( makeLayerBitmap( layerColor, backgroundColor ) );
-
-        int itemIndex = m_LayerSelectionCtrl->InsertItem(
-                m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
+        int itemIndex = m_LayerSelectionCtrl->GetItemCount();
+        m_LayerSelectionCtrl->InsertItem( itemIndex, msg, imgIdx );
 
         if( m_settings.m_CurrentZone_Layer == layer )
             m_LayerSelectionCtrl->Select( itemIndex );
-
-        wxSize tsize( GetTextSize( msg, m_LayerSelectionCtrl ) );
-        ctrlWidth = std::max( ctrlWidth, tsize.x );
     }
 
     // The most easy way to ensure the right size is to use wxLIST_AUTOSIZE
     // unfortunately this option does not work well both on
     // wxWidgets 2.8 ( column width too small), and
     // wxWidgets 2.9 ( column width too large)
-    ctrlWidth += LAYER_BITMAP_SIZE_X + 25;      // Add bitmap width + margin between bitmap and text
+    ctrlWidth += LAYER_BITMAP_SIZE.x + 25;      // Add bitmap width + margin before text
     m_LayerSelectionCtrl->SetColumnWidth( 0, ctrlWidth );
 
-    ctrlWidth += 25;        // add small margin between text and window borders
-                            // and room for vertical scroll bar
+    ctrlWidth += 25;                            // Add margin after text + width for scroll bar
     m_LayerSelectionCtrl->SetMinSize( wxSize( ctrlWidth, -1 ) );
 
     wxString netNameDoNotShowFilter = wxT( "Net-*" );
@@ -686,23 +673,3 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
     }
 }
 
-
-wxBitmap DIALOG_COPPER_ZONE::makeLayerBitmap( COLOR4D aColor, COLOR4D aBackground )
-{
-    wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
-    wxBrush     brush;
-    wxMemoryDC  iconDC;
-
-    iconDC.SelectObject( bitmap );
-
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
-
-    brush.SetColour( aColor.ToColour() );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
-
-    return bitmap;
-}

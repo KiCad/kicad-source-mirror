@@ -612,7 +612,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 {
     int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
 
-    // Linux loses its head and messes these up when resizing the splitter bar:
+    // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( 1 )->SetWidth( m_showColWidth );
     m_fieldsCtrl->GetColumn( 2 )->SetWidth( m_groupByColWidth );
 

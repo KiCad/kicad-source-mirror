@@ -28,6 +28,7 @@
  */
 
 #include <wx/wx.h>
+#include <wx/display.h>
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <confirm.h>
@@ -36,6 +37,7 @@
 #include <class_zone.h>
 #include <zones.h>
 #include <base_units.h>
+#include <widgets/color_swatch.h>
 
 #include <zone_settings.h>
 #include <class_board.h>
@@ -43,8 +45,6 @@
 
 #include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
 #include <wx/listctrl.h>
-
-
 
 /**
  * Class DIALOG_KEEPOUT_AREA_PROPERTIES
@@ -71,9 +71,11 @@ private:
     /**
      * automatically called by wxWidgets before closing the dialog
      */
-    virtual bool TransferDataFromWindow() override;
+    bool TransferDataFromWindow() override;
 
-    virtual void OnLayerSelection( wxDataViewEvent& event ) override;
+    void OnLayerSelection( wxDataViewEvent& event ) override;
+
+    void OnSizeLayersList( wxSizeEvent& event ) override;
 
     /**
      * Function AcceptOptionsForKeepOut
@@ -81,18 +83,15 @@ private:
      * @return bool - false if incorrect options, true if ok.
      */
     bool AcceptOptionsForKeepOut();
-
-    /**
-     * Function makeLayerIcon
-     * creates the colored rectangle icons used in the layer selection widget.
-     * @param aColor is the color to fill the rectangle with.
-     */
-    wxIcon makeLayerIcon( COLOR4D aColor );
 };
 
 
-#define LAYER_BITMAP_SIZE_X     25
-#define LAYER_BITMAP_SIZE_Y     15
+#ifdef __WXMAC__
+const static wxSize LAYER_BITMAP_SIZE( 28, 28 );  // Things get wonky if this isn't square...
+#else
+const static wxSize LAYER_BITMAP_SIZE( 20, 14 );
+#endif
+
 
 ZONE_EDIT_T InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 {
@@ -127,7 +126,7 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
 void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 {
     BOARD* board = m_parent->GetBoard();
-
+    COLOR4D backgroundColor = m_parent->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
     wxString msg;
 
     if( m_zonesettings.m_Zone_45_Only )
@@ -155,24 +154,25 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     auto* layerColumn = m_layers->AppendIconTextColumn( wxEmptyString );
 
     wxVector<wxVariant> row;
+    int minNamesWidth = 0;
 
-    int imgIdx = 0;
-
-    for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
+    for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack )
     {
         PCB_LAYER_ID layer = *cu_stack;
 
         msg = board->GetLayerName( layer );
+        wxSize tsize( GetTextSize( msg, m_layers ) );
+        minNamesWidth = std::max( minNamesWidth, tsize.x );
 
         COLOR4D layerColor = m_parent->Settings().Colors().GetLayerColor( layer );
+        wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE );
+        wxIcon icon;
+        icon.CopyFromBitmap( bitmap );
 
         row.clear();
         row.push_back( m_zonesettings.m_Layers.test( layer ) );
-        auto iconItem = wxDataViewIconText( msg, makeLayerIcon( layerColor ) );
-        row.push_back( wxVariant( iconItem ) );
-
+        row.push_back( wxVariant( wxDataViewIconText( msg, icon ) ) );
         m_layers->AppendItem( row );
-
     }
 
     // Init keepout parameters:
@@ -180,11 +180,13 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
     m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 
-    checkColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    layerColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    checkColumn->SetWidth( 25 );    // if only wxCOL_WIDTH_AUTOSIZE worked on all platforms...
+    layerColumn->SetMinWidth( minNamesWidth + LAYER_BITMAP_SIZE.x + 25 );
 
-    m_layers->SetExpanderColumn( layerColumn );
-    m_layers->SetMinSize( wxSize( 300, -1 ) );
+    // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
+    // for the tree expanders... but you'd be wrong.  Force indent to 0.
+    m_layers->SetIndent( 0 );
+    m_layers->SetMinSize( wxSize( checkColumn->GetWidth() + layerColumn->GetWidth(), -1 ) );
 
     m_layers->Update();
 
@@ -286,21 +288,13 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
 }
 
 
-wxIcon DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerIcon( COLOR4D aColor )
+void DIALOG_KEEPOUT_AREA_PROPERTIES::OnSizeLayersList( wxSizeEvent& event )
 {
-    wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
-    wxBrush     brush;
-    wxMemoryDC  iconDC;
+    int nameColWidth = event.GetSize().GetX() - m_layers->GetColumn( 0 )->GetWidth() - 8;
 
-    iconDC.SelectObject( bitmap );
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    m_layers->GetColumn( 1 )->SetWidth( nameColWidth );
 
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
-
-    iconDC.SelectObject( wxNullBitmap );    // mandatory before using bitmap data
-    wxIcon icon;
-    icon.CopyFromBitmap( bitmap );
-    return icon;
+    event.Skip();
 }
+
+

@@ -73,6 +73,8 @@ public:
      */
     void GetNewSwatchColor();
 
+    static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize );
+
 private:
 
     /**
