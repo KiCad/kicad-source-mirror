@@ -2071,19 +2071,28 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( !m_cache->IsWritable() )
     {
-        wxString msg;
         if( !m_cache->Exists() )
         {
-            msg = wxString::Format( _ ( "Library \"%s\" does not exist" ),
+            const wxString msg = wxString::Format( _( "Library \"%s\" does not exist.\n"
+                                                "Would you like to create it?"),
                     GetChars( aLibraryPath ) );
+            const wxString title = wxString::Format( _( "Create new library \"%s\"?"),
+                    GetChars( aLibraryPath ) );
+
+            if( wxMessageBox( msg, title, wxYES_NO | wxICON_QUESTION ) != wxYES )
+                return;
+
+            // Save throws its own IO_ERROR on failure, so no need to recreate here
+            m_cache->Save( NULL );
         }
         else
         {
-            msg = wxString::Format( _( "Library \"%s\" is read only" ),
+            wxString msg = wxString::Format( _( "Library \"%s\" is read only" ),
                 GetChars( aLibraryPath ) );
+            THROW_IO_ERROR( msg );
         }
 
-        THROW_IO_ERROR( msg );
+
     }
 
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
