@@ -58,11 +58,11 @@ void DHEAD::DeleteAll()
 
 void DHEAD::append( EDA_ITEM* aNewElement )
 {
-    wxASSERT( aNewElement != NULL );
+    wxCHECK( aNewElement, /*void*/ );
 
     if( first )        // list is not empty, first is not touched
     {
-        wxASSERT( last != NULL );
+        wxCHECK( last, /*void*/ );
 
         aNewElement->SetNext( 0 );
         aNewElement->SetBack( last );
@@ -118,13 +118,13 @@ void DHEAD::append( DHEAD& aList )
 
 void DHEAD::insert( EDA_ITEM* aNewElement, EDA_ITEM* aAfterMe )
 {
-    wxASSERT( aNewElement != NULL );
+    wxCHECK( aNewElement, /*void*/ );
 
     if( !aAfterMe )
         append( aNewElement );
     else
     {
-        wxASSERT( aAfterMe->GetList() == this );
+        wxCHECK( aAfterMe->GetList() == this, /*void*/ );
 
         // the list cannot be empty if aAfterMe is supposedly on the list
         wxASSERT( first && last );
@@ -159,8 +159,7 @@ void DHEAD::insert( EDA_ITEM* aNewElement, EDA_ITEM* aAfterMe )
 
 void DHEAD::remove( EDA_ITEM* aElement )
 {
-    wxASSERT( aElement );
-    wxASSERT( aElement->GetList() == this );
+    wxCHECK( aElement && aElement->GetList() == this, /*void*/ );
 
     if( aElement->Next() )
     {
