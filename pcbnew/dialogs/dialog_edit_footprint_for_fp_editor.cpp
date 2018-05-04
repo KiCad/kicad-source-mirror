@@ -91,6 +91,12 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
     initModeditProperties();
 
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    m_staticTextInfoValNeg->SetFont( infoFont );
+    m_staticTextInfoValPos->SetFont( infoFont );
+    m_staticTextInfo2->SetFont( infoFont );
+
     m_NoteBook->SetSelection( m_page );
 
     m_sdbSizerStdButtonsOK->SetDefault();
@@ -216,6 +222,26 @@ void DIALOG_FOOTPRINT_FP_EDITOR::initModeditProperties()
 
     m_CostRot90Ctrl->SetValue( m_currentModule->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
+
+    switch( m_currentModule->GetZoneConnection() )
+    {
+    default:
+    case PAD_ZONE_CONN_INHERITED:
+        m_ZoneConnectionChoice->SetSelection( 0 );
+        break;
+
+    case PAD_ZONE_CONN_FULL:
+        m_ZoneConnectionChoice->SetSelection( 1 );
+        break;
+
+    case PAD_ZONE_CONN_THERMAL:
+        m_ZoneConnectionChoice->SetSelection( 2 );
+        break;
+
+    case PAD_ZONE_CONN_NONE:
+        m_ZoneConnectionChoice->SetSelection( 3 );
+        break;
+    }
 
     // Initialize dialog relative to masks clearances
     m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
@@ -511,20 +537,40 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     m_currentModule->SetDescription( m_DocCtrl->GetValue() );
     m_currentModule->SetKeywords( m_KeywordCtrl->GetValue() );
 
-    // Init footprint name in library
+    // Set footprint name in library
     if( ! footprintName.IsEmpty() )
     {
         m_currentFPID.SetLibItemName( footprintName, false );
         m_currentModule->SetFPID( m_currentFPID );
     }
 
-    // Init Fields:
+    // Set fields
     TEXTE_MODULE& reference = m_currentModule->Reference();
     reference = *m_referenceCopy;
     TEXTE_MODULE& value = m_currentModule->Value();
     value = *m_valueCopy;
 
-    // Initialize masks clearances
+    switch( m_ZoneConnectionChoice->GetSelection() )
+    {
+    default:
+    case 0:
+        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_INHERITED );
+        break;
+
+    case 1:
+        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_FULL );
+        break;
+
+    case 2:
+        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_THERMAL );
+        break;
+
+    case 3:
+        m_currentModule->SetZoneConnection( PAD_ZONE_CONN_NONE );
+        break;
+    }
+
+    // Set masks clearances
     m_currentModule->SetLocalClearance( localNetClearance );
     m_currentModule->SetLocalSolderMaskMargin( ValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
     m_currentModule->SetLocalSolderPasteMargin( ValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
@@ -532,7 +578,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
 
-    // A  -50% margin ratio means no paste on a pad, the ratio must be >= -50 %
+    // A -50% margin ratio means no paste on a pad, the ratio must be >= -50%
     if( dtmp < -50.0 )
         dtmp = -50.0;
 

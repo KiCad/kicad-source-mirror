@@ -119,9 +119,10 @@ private:
     void OnResize( wxSizeEvent& event );
 	void OnCancel( wxCommandEvent& event ) override;
 
-    void updateUITextWarning( wxUpdateUIEvent& event ) override
+    void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override
     {
-        event.Enable( ( m_dummyPad->GetLayerSet() & LSET::AllCuMask() ).any() );
+        bool isOnCopperLayer = ( m_dummyPad->GetLayerSet() & LSET::AllCuMask() ).any();
+        m_nonCopperWarningBook->SetSelection( isOnCopperLayer ? 0 : 1 );
     }
 
     void OnPadShapeSelection( wxCommandEvent& event ) override;

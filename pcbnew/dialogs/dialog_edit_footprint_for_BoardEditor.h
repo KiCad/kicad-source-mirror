@@ -75,7 +75,6 @@ private:
     // virtual event functions
     void OnEditValue( wxCommandEvent& event ) override;
     void OnEditReference( wxCommandEvent& event ) override;
-    void On3DShapeSelection( wxCommandEvent& event );
     void On3DShapeNameSelected( wxCommandEvent& event ) override;
     void Edit3DShapeFilename( wxCommandEvent& event ) override
     {

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -29,6 +28,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/statline.h>
+#include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -69,7 +69,6 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxRadioBox* m_OrientCtrl;
 		wxStaticText* m_staticTextRotation;
 		TEXT_CTRL_EVAL* m_OrientValueCtrl;
-		wxStaticText* m_staticTextPos;
 		wxStaticText* m_XPosLabel;
 		TEXT_CTRL_EVAL* m_ModPositionX;
 		wxStaticText* m_XPosUnit;
@@ -89,16 +88,13 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxSlider* m_CostRot180Ctrl;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticTextInfoValPos;
 		wxStaticText* m_staticTextInfoValNeg;
-		wxStaticText* m_staticTextInfo2;
 		wxStaticText* m_staticTextNetClearance;
 		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;
-		wxStaticLine* m_staticline1;
-		wxStaticLine* m_staticline2;
-		wxStaticLine* m_staticline3;
 		wxStaticText* m_MaskClearanceTitle;
 		TEXT_CTRL_EVAL* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
@@ -108,6 +104,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextRatio;
 		TEXT_CTRL_EVAL* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
+		wxStaticText* m_staticTextInfo2;
 		wxPanel* m_Panel3D;
 		wxBoxSizer* bSizerMain3D;
 		wxListBox* m_3D_ShapeNameListBox;

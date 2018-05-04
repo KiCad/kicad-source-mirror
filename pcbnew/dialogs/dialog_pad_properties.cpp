@@ -125,6 +125,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_cbShowPadOutline->SetValue( m_drawPadOutlineMode );
 
+    m_FlippedWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+    m_nonCopperWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
@@ -134,6 +137,12 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
         *m_dummyPad = *m_padMaster;
 
     initValues();
+
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_staticTextInfoNegVal->SetFont( infoFont );
+    m_staticTextInfoPosValue->SetFont( infoFont );
+    m_nonCopperNote->SetFont( infoFont );
 
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widgets sizes, and FinishDialogSettings can
@@ -549,8 +558,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_primitives = m_dummyPad->GetPrimitives();
 
-    m_FlippedWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
-    m_FlippedWarningSizer->Show(m_isFlipped);
+    m_FlippedWarningSizer->Show( m_isFlipped );
 
     m_PadNumCtrl->SetValue( m_dummyPad->GetName() );
     m_PadNetNameCtrl->SetValue( m_dummyPad->GetNetname() );
