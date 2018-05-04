@@ -126,6 +126,7 @@ public:
 
     wxString    GetPath() const { return m_lib_path.GetPath(); }
     bool        IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
+    bool        Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
     MODULE_MAP& GetModules() { return m_modules; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
@@ -2070,10 +2071,17 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( !m_cache->IsWritable() )
     {
-        wxString msg = wxString::Format(
-                _( "Library \"%s\" is read only" ),
-                GetChars( aLibraryPath )
-                );
+        wxString msg;
+        if( !m_cache->Exists() )
+        {
+            msg = wxString::Format( _ ( "Library \"%s\" does not exist" ),
+                    GetChars( aLibraryPath ) );
+        }
+        else
+        {
+            msg = wxString::Format( _( "Library \"%s\" is read only" ),
+                GetChars( aLibraryPath ) );
+        }
 
         THROW_IO_ERROR( msg );
     }
