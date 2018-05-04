@@ -700,6 +700,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
     return true;
 }
 
+
 int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
@@ -726,29 +727,22 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
         netcode = curr_area->GetNetCode();
 
-        if( firstZone )
-        {
-            if( firstZone->GetNetCode() != netcode )
-                continue;
+        if( firstZone->GetNetCode() != netcode )
+            continue;
 
-            if( curr_area->GetPriority() != firstZone->GetPriority() )
-                continue;
+        if( curr_area->GetPriority() != firstZone->GetPriority() )
+            continue;
 
-            if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
-                continue;
+        if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
+            continue;
 
-            if( curr_area->GetLayer() != firstZone->GetLayer() )
-                continue;
+        if( curr_area->GetLayer() != firstZone->GetLayer() )
+            continue;
 
-            if( !board->TestAreaIntersection( curr_area, firstZone ) )
-                continue;
+        if( !board->TestAreaIntersection( curr_area, firstZone ) )
+            continue;
 
-            toMerge.push_back( curr_area );
-        }
-        else
-        {
-            toMerge.push_back( curr_area );
-        }
+        toMerge.push_back( curr_area );
     }
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );

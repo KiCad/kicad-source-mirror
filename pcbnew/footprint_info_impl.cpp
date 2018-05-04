@@ -295,7 +295,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
     if( m_cancelled )
         m_list_timestamp = 0;       // God knows what we got before we were cancelled
     else
-        m_list_timestamp = m_lib_table->GenerateTimestamp( m_library );;
+        m_list_timestamp = m_lib_table->GenerateTimestamp( m_library );
 
     return m_errors.empty();
 }
@@ -303,6 +303,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
 FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
     m_loader( nullptr ),
+    m_library( nullptr ),
     m_count_finished( 0 ),
     m_list_timestamp( 0 ),
     m_progress_reporter( nullptr ),

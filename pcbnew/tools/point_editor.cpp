@@ -219,7 +219,7 @@ private:
 
 POINT_EDITOR::POINT_EDITOR() :
     PCB_TOOL( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_editedPoint( NULL ),
-    m_original( VECTOR2I( 0, 0 ) ), m_altConstrainer( VECTOR2I( 0, 0 ) )
+    m_original( VECTOR2I( 0, 0 ) ), m_altConstrainer( VECTOR2I( 0, 0 ) ), m_refill( false )
 {
 }
 

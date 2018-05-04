@@ -409,12 +409,16 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     if( m_refillZones )
     {
-        aMessages->AppendText( _( "Refilling all zones...\n" ) );
+        if( aMessages )
+            aMessages->AppendText( _( "Refilling all zones...\n" ) );
+
         m_pcbEditorFrame->Fill_All_Zones( caller );
     }
     else
     {
-        aMessages->AppendText( _( "Checking zone fills...\n" ) );
+        if( aMessages )
+            aMessages->AppendText( _( "Checking zone fills...\n" ) );
+
         m_pcbEditorFrame->Check_All_Zones( caller );
     }
 
