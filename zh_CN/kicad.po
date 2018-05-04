@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 09:46+0200\n"
-"PO-Revision-Date: 2018-05-04 11:34+0800\n"
+"PO-Revision-Date: 2018-05-04 13:10+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -740,9 +740,8 @@ msgid "&Edit"
 msgstr "编辑(&E)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
-#, fuzzy
 msgid "Copy 3D Image"
-msgstr "将三维图像复制到剪贴板"
+msgstr "复制三维图像"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:71 cvpcb/menubar.cpp:109
 #: gerbview/menubar.cpp:393 kicad/menubar.cpp:477
@@ -1974,9 +1973,8 @@ msgid "KiCad project files (*.pro)|*."
 msgstr "KiCad 工程文件 (*.pro)|*.pro"
 
 #: common/wildcards_and_files_ext.cpp:130
-#, fuzzy
 msgid "KiCad schematic files (*.sch)|*."
-msgstr "KiCad 原理图文件 (*.sch)|*.sch"
+msgstr "KiCad 原理图文件(*.sch)|*."
 
 #: common/wildcards_and_files_ext.cpp:136
 #, fuzzy
@@ -2612,7 +2610,7 @@ msgstr "复制 块"
 
 #: common/block_commande.cpp:93
 msgid "Block Paste"
-msgstr "粘贴 块"
+msgstr "粘贴块"
 
 #: common/block_commande.cpp:101
 msgid "Block Rotate"
@@ -3966,13 +3964,13 @@ msgstr "显示极坐标"
 #: gerbview/toolbars_gerber.cpp:237 pcbnew/tool_pcb_editor.cpp:365
 #: pcbnew/tool_footprint_editor.cpp:223
 msgid "Set units to inches"
-msgstr "单位 Inches"
+msgstr "将单位设置为英寸"
 
 #: cvpcb/display_footprints_frame.cpp:190 eeschema/tool_lib.cpp:259
 #: gerbview/toolbars_gerber.cpp:241 pcbnew/tool_pcb_editor.cpp:368
 #: pcbnew/tool_footprint_editor.cpp:227
 msgid "Set units to millimeters"
-msgstr "单位 mm"
+msgstr "将单位设置为毫米"
 
 #: cvpcb/display_footprints_frame.cpp:195 eeschema/tool_sch.cpp:301
 #: eeschema/menubar.cpp:213 eeschema/tool_lib.cpp:264
@@ -4435,9 +4433,8 @@ msgstr "结束工具操作"
 #: eeschema/onrightclick.cpp:197 eeschema/menubar.cpp:499
 #: eeschema/libedit_onrightclick.cpp:105 pcbnew/menubar_pcb_editor.cpp:533
 #: pcbnew/menubar_footprint_editor.cpp:180
-#, fuzzy
 msgid "&Paste"
-msgstr "粘贴"
+msgstr "粘贴(&P)"
 
 #: eeschema/onrightclick.cpp:199 eeschema/menubar.cpp:501
 #: eeschema/libedit_onrightclick.cpp:107 pcbnew/menubar_pcb_editor.cpp:535
@@ -4617,9 +4614,8 @@ msgid "Edit Properties..."
 msgstr "属性编辑(&P)"
 
 #: eeschema/onrightclick.cpp:458
-#, fuzzy
 msgid "Edit Footprint..."
-msgstr "编辑 封装"
+msgstr "编辑封装..."
 
 #: eeschema/onrightclick.cpp:465 eeschema/libedit.cpp:688
 msgid "Convert"
@@ -5212,19 +5208,16 @@ msgstr "添加库"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:56 eeschema/menubar_libedit.cpp:76
 #: eeschema/lib_edit_frame.cpp:561
-#, fuzzy
 msgid "&Save Library"
-msgstr "保存库"
+msgstr "保存库(&S)"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:58 eeschema/menubar_libedit.cpp:82
-#, fuzzy
 msgid "Save Library As..."
-msgstr "当前库另存为(&C)..."
+msgstr "当前库另存为..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:60
-#, fuzzy
 msgid "Revert Library"
-msgstr "移除库"
+msgstr "恢复库"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:64
 #, fuzzy
@@ -5237,19 +5230,16 @@ msgid "&Import Symbol..."
 msgstr "导入图形符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:68
-#, fuzzy
 msgid "Paste Symbol"
-msgstr "电源符号"
+msgstr "粘贴符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:72
-#, fuzzy
 msgid "&Edit Symbol"
-msgstr "符号"
+msgstr "编辑符号(&E)"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:74
-#, fuzzy
 msgid "Remove Symbol"
-msgstr "电源符号"
+msgstr "删除符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:76
 #, fuzzy
@@ -5258,24 +5248,20 @@ msgstr "导出图形符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:78 eeschema/menubar_libedit.cpp:194
 #: eeschema/lib_edit_frame.cpp:511
-#, fuzzy
 msgid "&Save Symbol"
-msgstr "电源符号"
+msgstr "保存符号(&S)"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:80
-#, fuzzy
 msgid "Revert Symbol"
-msgstr "电源符号"
+msgstr "恢复符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:84
-#, fuzzy
 msgid "Cut Symbol"
-msgstr "符号"
+msgstr "剪切符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:86
-#, fuzzy
 msgid "Copy Symbol"
-msgstr "符号"
+msgstr "复制符号"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:88
 #, fuzzy
@@ -5293,9 +5279,8 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider_base.cpp:66 eeschema/hotkeys.cpp:225
 #: pagelayout_editor/hotkeys.cpp:98 pcbnew/hotkeys.cpp:261
-#, fuzzy
 msgid "Save"
-msgstr "保存(&S)"
+msgstr "保存"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:58
 msgid "Wire"
@@ -5474,9 +5459,9 @@ msgid "Symbol not found in %s!!!"
 msgstr ""
 
 #: eeschema/sch_component.cpp:1736
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s, %s"
-msgstr "符号"
+msgstr "符号 %s, %s"
 
 #: eeschema/hierarch.cpp:149
 msgid "Navigator"
@@ -5732,19 +5717,18 @@ msgid "Item %s found in sheet %s"
 msgstr "项 %s 在图页 %s 中找到"
 
 #: eeschema/symbedit.cpp:64 eeschema/lib_export.cpp:60
-#, fuzzy
 msgid "Import Symbol"
-msgstr "导入图形符号"
+msgstr "导入符号"
 
 #: eeschema/symbedit.cpp:90 eeschema/lib_export.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library \"%s\"."
-msgstr "无法创建全局库列表路径 '%s'."
+msgstr "无法导入符号库 '%s'."
 
 #: eeschema/symbedit.cpp:97 eeschema/lib_export.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file \"%s\" is empty."
-msgstr "部件库 <%s> 为空."
+msgstr "符号库 <%s> 为空."
 
 #: eeschema/symbedit.cpp:104
 #, fuzzy, c-format
@@ -5752,9 +5736,8 @@ msgid "More than one symbol found in symbol file \"%s\"."
 msgstr "部件文件 '%s' 内不止一个部件。"
 
 #: eeschema/symbedit.cpp:171 eeschema/lib_export.cpp:123
-#, fuzzy
 msgid "Export Symbol"
-msgstr "导出图形符号"
+msgstr "导出符号"
 
 #: eeschema/symbedit.cpp:194
 #, fuzzy, c-format
@@ -5778,9 +5761,9 @@ msgid "%8.8lX/"
 msgstr "%8.8lX/"
 
 #: eeschema/plot_schematic_SVG.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create file \"%s\".\n"
-msgstr "无法创建文件 <%s>\n"
+msgstr "无法创建文件 %s\n"
 
 #: eeschema/menubar.cpp:117 eeschema/menubar_libedit.cpp:351
 #: pagelayout_editor/menubar.cpp:236 pcbnew/menubar_pcb_editor.cpp:142
@@ -5791,7 +5774,7 @@ msgstr "放置(&P)"
 #: eeschema/menubar.cpp:118 pcbnew/menubar_pcb_editor.cpp:144
 #: pcbnew/menubar_footprint_editor.cpp:524
 msgid "&Inspect"
-msgstr ""
+msgstr "检查(&I)"
 
 #: eeschema/menubar.cpp:119 kicad/menubar.cpp:475
 #: pcbnew/menubar_pcb_editor.cpp:145 pcbnew/menubar_footprint_editor.cpp:525
@@ -5806,9 +5789,8 @@ msgstr "设置(&R)"
 
 #: eeschema/menubar.cpp:134 pcbnew/menubar_pcb_editor.cpp:596
 #: pcbnew/menubar_footprint_editor.cpp:196
-#, fuzzy
 msgid "&Library Browser"
-msgstr "库浏览"
+msgstr "库浏览器(&L)"
 
 #: eeschema/menubar.cpp:139
 msgid "Show &Hierarchical Navigator"
@@ -5826,19 +5808,18 @@ msgstr "显示格点(&G)"
 
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_pcb_editor.cpp:656 pcbnew/menubar_footprint_editor.cpp:256
-#, fuzzy
 msgid "&Imperial"
-msgstr "导入(&I)"
+msgstr "纸张尺寸(&I)"
 
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_pcb_editor.cpp:656 pcbnew/menubar_footprint_editor.cpp:256
 msgid "Use imperial units"
-msgstr ""
+msgstr "使用英制单位"
 
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:660 pcbnew/menubar_footprint_editor.cpp:260
 msgid "&Metric"
-msgstr ""
+msgstr "公制(&M)"
 
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:660 pcbnew/menubar_footprint_editor.cpp:260
@@ -5848,31 +5829,28 @@ msgstr "测量单位 (&M):"
 
 #: eeschema/menubar.cpp:205 gerbview/menubar.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:664 pcbnew/menubar_footprint_editor.cpp:264
-#, fuzzy
 msgid "&Units"
-msgstr "单位"
+msgstr "单位(&U)"
 
 #: eeschema/menubar.cpp:206 gerbview/menubar.cpp:236
 #: pcbnew/menubar_pcb_editor.cpp:665 pcbnew/menubar_footprint_editor.cpp:265
-#, fuzzy
 msgid "Select which units are displayed"
-msgstr "选择要显示的库"
+msgstr "选择要显示的单元"
 
 #: eeschema/menubar.cpp:212 eeschema/menubar.cpp:217
 #: pcbnew/menubar_pcb_editor.cpp:671 pcbnew/menubar_pcb_editor.cpp:676
 #: pcbnew/menubar_footprint_editor.cpp:270
 #: pcbnew/menubar_footprint_editor.cpp:275
 msgid "Full Window Crosshair"
-msgstr ""
+msgstr "十字光标全屏"
 
 #: eeschema/menubar.cpp:218
 msgid "Change cursor shape (not supported in Legacy graphics)"
 msgstr ""
 
 #: eeschema/menubar.cpp:239 eeschema/menubar_libedit.cpp:350
-#, fuzzy
 msgid "&Symbol"
-msgstr "符号"
+msgstr "符号(&S)"
 
 #: eeschema/menubar.cpp:245
 msgid "&Power Port"
@@ -5940,25 +5918,21 @@ msgid "&Image"
 msgstr "图片(&I)"
 
 #: eeschema/menubar.cpp:365
-#, fuzzy
 msgid "&New..."
-msgstr "新建(&N)"
+msgstr "新建(&N)..."
 
 #: eeschema/menubar.cpp:367
-#, fuzzy
 msgid "Clear current schematic hierarchy and start new schematic root sheet"
-msgstr "清除当前层次原理图和开始新的原理图图页"
+msgstr "清除当前层次原理图并启动新的原理图图页"
 
 #: eeschema/menubar.cpp:370 pagelayout_editor/menubar.cpp:67
 #: pcbnew/menubar_pcb_editor.cpp:807
-#, fuzzy
 msgid "&Open..."
-msgstr "打开(&O)"
+msgstr "打开(&O)..."
 
 #: eeschema/menubar.cpp:372
-#, fuzzy
 msgid "Open existing schematic"
-msgstr "打开当前原理图层次"
+msgstr "打开当前原理图"
 
 #: eeschema/menubar.cpp:376 kicad/menubar.cpp:246
 #: pagelayout_editor/menubar.cpp:77 pcbnew/menubar_pcb_editor.cpp:813
@@ -5966,9 +5940,8 @@ msgid "Open &Recent"
 msgstr "最近打开(&R)"
 
 #: eeschema/menubar.cpp:377
-#, fuzzy
 msgid "Open recently opened schematic"
-msgstr "最近打开的原理图工程"
+msgstr "打开最近的原理图"
 
 #: eeschema/menubar.cpp:383 kicad/menubar.cpp:254
 #: pagelayout_editor/menubar.cpp:83 pcbnew/menubar_pcb_editor.cpp:820
@@ -5977,23 +5950,20 @@ msgid "&Save"
 msgstr "保存(&S)"
 
 #: eeschema/menubar.cpp:386
-#, fuzzy
 msgid "Save all sheets in schematic"
-msgstr "保存原理图所有图页"
+msgstr "保存原理图中所有图页"
 
 #: eeschema/menubar.cpp:391
-#, fuzzy
 msgid "Save &Current Sheet"
-msgstr "仅保存当前图页(&C)"
+msgstr "保存当前图页(&C)"
 
 #: eeschema/menubar.cpp:392
 msgid "Save only current schematic sheet"
 msgstr "仅保存当前原理图页"
 
 #: eeschema/menubar.cpp:397
-#, fuzzy
 msgid "Save C&urrent Sheet As..."
-msgstr "另存当前电路图页(&U)"
+msgstr "另存当前图页(&U)"
 
 #: eeschema/menubar.cpp:401
 #, fuzzy
@@ -6001,24 +5971,20 @@ msgid "Save current schematic sheet with new name"
 msgstr "另存当前原理图页..."
 
 #: eeschema/menubar.cpp:408
-#, fuzzy
 msgid "App&end Schematic Sheet..."
-msgstr "追加原理图页(&E)"
+msgstr "添加原理图页(&E)"
 
 #: eeschema/menubar.cpp:409
-#, fuzzy
 msgid "Import schematic sheet content from another project to current sheet"
 msgstr "从其它项目中导入原理图到当前图页"
 
 #: eeschema/menubar.cpp:413
-#, fuzzy
 msgid "&Import Non KiCad Schematic File..."
-msgstr "导入非KiCad电路板文件"
+msgstr "导入非KiCad原理图文件(&I)..."
 
 #: eeschema/menubar.cpp:414
-#, fuzzy
 msgid "Import schematic file from other applications"
-msgstr "从其它项目中导入原理图到当前图页"
+msgstr "从其它应用程序中导入原理图文件"
 
 #: eeschema/menubar.cpp:423
 #, fuzzy
@@ -6050,14 +6016,12 @@ msgid "E&xport"
 msgstr "导出(&X)"
 
 #: eeschema/menubar.cpp:445 pcbnew/menubar_footprint_editor.cpp:124
-#, fuzzy
 msgid "Export files"
-msgstr "导入文件"
+msgstr "导出文件"
 
 #: eeschema/menubar.cpp:452 pcbnew/menubar_pcb_editor.cpp:936
-#, fuzzy
 msgid "Page S&ettings..."
-msgstr "页面设置"
+msgstr "页面设置(&S)..."
 
 #: eeschema/menubar.cpp:453 pcbnew/menubar_pcb_editor.cpp:937
 #, fuzzy
@@ -6067,9 +6031,8 @@ msgstr "设置图页和图框"
 #: eeschema/menubar.cpp:456 gerbview/menubar.cpp:163
 #: pagelayout_editor/menubar.cpp:95 pcbnew/menubar_pcb_editor.cpp:940
 #: pcbnew/menubar_footprint_editor.cpp:132
-#, fuzzy
 msgid "&Print..."
-msgstr "打印(&P)"
+msgstr "打印(&P)..."
 
 #: eeschema/menubar.cpp:458
 msgid "Print schematic sheet"
@@ -6110,9 +6073,8 @@ msgstr "复制选择单元到剪贴板"
 
 #: eeschema/menubar.cpp:494 pcbnew/menubar_pcb_editor.cpp:528
 #: pcbnew/menubar_footprint_editor.cpp:177
-#, fuzzy
 msgid "&Copy"
-msgstr "复制"
+msgstr "复制(&C)"
 
 #: eeschema/menubar.cpp:496 pcbnew/menubar_pcb_editor.cpp:530
 #: pcbnew/menubar_footprint_editor.cpp:179
@@ -6126,19 +6088,16 @@ msgid "&Delete"
 msgstr "删除(&D)"
 
 #: eeschema/menubar.cpp:512 pcbnew/menubar_pcb_editor.cpp:545
-#, fuzzy
 msgid "&Find..."
-msgstr "查找(&F)"
+msgstr "查找(&F)..."
 
 #: eeschema/menubar.cpp:516
-#, fuzzy
 msgid "Find and Re&place..."
-msgstr "查找和替换(&P)"
+msgstr "查找和替换(&P)..."
 
 #: eeschema/menubar.cpp:525
-#, fuzzy
 msgid "Update Field Values..."
-msgstr "更新电压值"
+msgstr "更新字段值..."
 
 #: eeschema/menubar.cpp:526
 #, fuzzy
@@ -6534,9 +6493,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:399
-#, fuzzy
 msgid "Append Schematic"
-msgstr "打开原理图"
+msgstr "添加原理图"
 
 #: eeschema/files-io.cpp:448 eeschema/sheet.cpp:262
 msgid ""
@@ -6871,9 +6829,8 @@ msgstr "重做"
 
 #: eeschema/hotkeys.cpp:240 pcbnew/tools/edit_tool.cpp:185
 #: pcbnew/hotkeys.cpp:275
-#, fuzzy
 msgid "Cut"
-msgstr "计数:"
+msgstr "剪切"
 
 #: eeschema/hotkeys.cpp:348 pagelayout_editor/hotkeys.cpp:126
 #: pcbnew/hotkeys.cpp:374
@@ -10227,9 +10184,8 @@ msgstr ""
 "文本字段不能被修改。"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:112
-#, fuzzy
 msgid "Update Field Values"
-msgstr "更新电压值"
+msgstr "更新字段值"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:113
 #, fuzzy
@@ -11988,9 +11944,8 @@ msgid "Redraw schematic view"
 msgstr "刷新显示"
 
 #: eeschema/help_common_strings.h:51
-#, fuzzy
 msgid "Find symbols and text"
-msgstr "查找元件和文本"
+msgstr "查找符号和文本"
 
 #: eeschema/help_common_strings.h:52
 msgid "Find and replace text in schematic items"
@@ -17177,9 +17132,8 @@ msgid "Copy selected content to clipboard"
 msgstr "复制选择单元到剪贴板"
 
 #: pcbnew/tools/edit_tool.cpp:185
-#, fuzzy
 msgid "Cut selected content to clipboard"
-msgstr "复制选择单元到剪贴板"
+msgstr "将选定的内容剪切到剪贴板"
 
 #: pcbnew/tools/edit_tool.cpp:621
 #, fuzzy
@@ -17591,9 +17545,8 @@ msgid "Selects all modules and tracks in the same schematic sheet"
 msgstr "选择所有属于同一网络的布线与过孔。"
 
 #: pcbnew/tools/selection_tool.cpp:122
-#, fuzzy
 msgid "Find Item..."
-msgstr "查找项"
+msgstr "查找项..."
 
 #: pcbnew/tools/selection_tool.cpp:122
 msgid "Searches the document for an item"
@@ -22312,7 +22265,6 @@ msgid "Open Board File"
 msgstr "打开电路板文件"
 
 #: pcbnew/files.cpp:143
-#, fuzzy
 msgid "Import Non KiCad Board File"
 msgstr "导入非KiCad电路板文件"
 
