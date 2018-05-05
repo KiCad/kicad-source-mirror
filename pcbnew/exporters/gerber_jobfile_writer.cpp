@@ -678,7 +678,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             addJSONObject( wxString::Format( "\"Thickness\":  %f,\n", thickness ) );
 
         std::string strname = formatStringToGerber(  m_pcb->GetLayerName( layer ) );
-        addJSONObject( wxString::Format( "\"S_Notes\":  \"Layer %s\",\n", strname.c_str() ) );
+        addJSONObject( wxString::Format( "\"Notes\":  \"Layer %s\",\n", strname.c_str() ) );
         removeJSONSepararator();
         closeBlockWithSep();
 
