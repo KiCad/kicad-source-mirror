@@ -545,6 +545,12 @@ bool SCH_EDIT_FRAME::AppendSchematic()
                         newLib.SetFullName( uri.AfterLast( '}' ) );
                         uri = newLib.GetFullPath();
                     }
+                    else if( uri.Contains( "$(KIPRJMOD)" ) )
+                    {
+                        newLib.SetPath( fn.GetPath() );
+                        newLib.SetFullName( uri.AfterLast( ')' ) );
+                        uri = newLib.GetFullPath();
+                    }
                     else
                     {
                         uri = table.GetFullURI( libName );

@@ -75,8 +75,7 @@ void DLG_3D_PATH_CONFIG::initDialog()
         size_t listsize = rpaths->size();
         size_t listidx = 0;
 
-        while( rI != rE && ( (*rI).m_alias.StartsWith( "${" )
-            || (*rI).m_alias.StartsWith( "$(" ) ) )
+        while( rI != rE && ( (*rI).m_alias.StartsWith( "${" ) || (*rI).m_alias.StartsWith( "$(" ) ) )
         {
             ++listidx;
             ++rI;

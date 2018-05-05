@@ -374,8 +374,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     }
 
     // ${ENV_VAR} paths have already been checked; skip them
-    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" )
-        || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     // at this point the filename must contain an alias or else it is invalid
@@ -641,8 +640,7 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
     std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
-    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" )
-        || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );

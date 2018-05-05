@@ -446,39 +446,6 @@ void LIB_TABLE::Save( const wxString& aFileName ) const
 }
 
 
-size_t LIB_TABLE::GetEnvVars( wxArrayString& aEnvVars ) const
-{
-    const LIB_TABLE* cur = this;
-
-    do
-    {
-        for( unsigned i = 0;  i < cur->rows.size();  i++ )
-        {
-            wxString uri = cur->rows[i].GetFullURI( false );
-
-            int start = uri.Find( "${" );
-
-            if( start == wxNOT_FOUND )
-                continue;
-
-            int end = uri.Find( '}' );
-
-            if( end == wxNOT_FOUND || end < start+2 )
-                continue;
-
-            wxString envVar = uri.Mid( start+2, end - (start+2) );
-
-            if( aEnvVars.Index( envVar, false ) == wxNOT_FOUND )
-                aEnvVars.Add( envVar );
-        }
-
-        // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
-
-    return aEnvVars.GetCount();
-}
-
-
 PROPERTIES* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
 {
     if( aOptionsList.size() )

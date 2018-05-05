@@ -603,51 +603,36 @@ bool DIALOG_SYMBOL_LIB_TABLE::TransferDataFromWindow()
 
 void DIALOG_SYMBOL_LIB_TABLE::populateEnvironReadOnlyTable()
 {
-    wxRegEx re( ".*?\\$\\{(.+?)\\}.*?", wxRE_ADVANCED );
+    wxRegEx re( ".*?(\\$\\{(.+?)\\})|(\\$\\((.+?)\\)).*?", wxRE_ADVANCED );
     wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
 
-    std::set< wxString >        unique;
-    typedef std::set<wxString>::const_iterator      SET_CITER;
+    std::set< wxString > unique;
 
     // clear the table
     m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
 
-    SYMBOL_LIB_TABLE_GRID*   gbl = global_model();
-    SYMBOL_LIB_TABLE_GRID*   prj = project_model();
-
-    int gblRowCount = gbl->GetNumberRows();
-    int prjRowCount = prj->GetNumberRows();
-    int row;
-
-    for( row = 0;  row < gblRowCount;  ++row )
+    for( int i = 0; i < 2; ++i )
     {
-        wxString uri = gbl->GetValue( row, COL_URI );
+        SYMBOL_LIB_TABLE_GRID* tbl = i == 0 ? global_model() : project_model();
 
-        while( re.Matches( uri ) )
+        for( int row = 0; row < tbl->GetNumberRows(); ++row )
         {
-            wxString envvar = re.GetMatch( uri, 1 );
+            wxString uri = tbl->GetValue( row, COL_URI );
 
-            // ignore duplicates
-            unique.insert( envvar );
+            while( re.Matches( uri ) )
+            {
+                wxString envvar = re.GetMatch( uri, 2 );
 
-            // delete the last match and search again
-            uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
-        }
-    }
+                // if not ${...} form then must be $(...)
+                if( envvar.IsEmpty() )
+                    envvar = re.GetMatch( uri, 4 );
 
-    for( row = 0;  row < prjRowCount;  ++row )
-    {
-        wxString uri = prj->GetValue( row, COL_URI );
+                // ignore duplicates
+                unique.insert( envvar );
 
-        while( re.Matches( uri ) )
-        {
-            wxString envvar = re.GetMatch( uri, 1 );
-
-            // ignore duplicates
-            unique.insert( envvar );
-
-            // delete the last match and search again
-            uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
+                // delete the last match and search again
+                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
+            }
         }
     }
 
@@ -659,9 +644,9 @@ void DIALOG_SYMBOL_LIB_TABLE::populateEnvironReadOnlyTable()
 
     m_path_subs_grid->AppendRows( unique.size() );
 
-    row = 0;
+    int row = 0;
 
-    for( SET_CITER it = unique.begin();  it != unique.end();  ++it, ++row )
+    for( auto it = unique.begin();  it != unique.end();  ++it, ++row )
     {
         wxString    evName = *it;
         wxString    evValue;
