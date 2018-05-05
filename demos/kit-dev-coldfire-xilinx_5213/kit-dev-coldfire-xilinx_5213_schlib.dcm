@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DIODE
+D Diode, alternativ symbol
+K diode
+$ENDCMP
+#
+#End Doc Library

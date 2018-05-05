@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# +3.3V
+# kit-dev-coldfire-xilinx_5213_schlib:+3,3V
 #
-DEF +3.3V #PWR 0 0 Y Y 1 F P
+DEF kit-dev-coldfire-xilinx_5213_schlib:+3,3V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -40 30 H I C CNN
-F1 "+3.3V" 0 110 30 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:+3,3V" 0 110 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS +3,3V
@@ -16,11 +16,25 @@ X +3.3V 1 0 0 0 U 30 30 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# 74AHC1G14
+# kit-dev-coldfire-xilinx_5213_schlib:+3.3V
 #
-DEF 74AHC1G14 U 0 30 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR 0 0 Y Y 1 F P
+F0 "#PWR" 0 -40 30 H I C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:+3.3V" 0 110 30 H V C CNN
+F2 "" 0 0 60 H V C CNN
+F3 "" 0 0 60 H V C CNN
+DRAW
+C 0 60 20 0 1 0 N
+P 3 0 1 0 0 0 0 40 0 40 N
+X +3.3V 1 0 0 0 U 30 30 0 0 W N
+ENDDRAW
+ENDDEF
+#
+# kit-dev-coldfire-xilinx_5213_schlib:74AHC1G14
+#
+DEF kit-dev-coldfire-xilinx_5213_schlib:74AHC1G14 U 0 30 Y Y 1 F N
 F0 "U" 145 115 40 H V C CNN
-F1 "74AHC1G14" 200 -100 40 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:74AHC1G14" 200 -100 40 H V C CNN
 F2 "" 95 -135 30 H V C CNN
 F3 "" 145 115 60 H V C CNN
 DRAW
@@ -34,11 +48,11 @@ X ~ 4 450 0 300 L 60 60 1 2 O
 ENDDRAW
 ENDDEF
 #
-# 74LS125
+# kit-dev-coldfire-xilinx_5213_schlib:74LS125
 #
-DEF 74LS125 U 0 30 Y Y 4 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:74LS125 U 0 30 Y Y 4 F N
 F0 "U" 0 100 50 H V L BNN
-F1 "74LS125" 50 -150 40 H V L TNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:74LS125" 50 -150 40 H V L TNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -60,11 +74,11 @@ X D 12 -450 0 300 R 50 30 4 1 I
 ENDDRAW
 ENDDEF
 #
-# C
+# kit-dev-coldfire-xilinx_5213_schlib:C
 #
-DEF C C 0 10 N Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:C C 0 10 N Y 1 F N
 F0 "C" 0 100 40 H V L CNN
-F1 "C" 6 -85 40 H V L CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:C" 6 -85 40 H V L CNN
 F2 "" 38 -150 30 H V C CNN
 F3 "" 0 100 30 H V C CNN
 $FPLIST
@@ -80,11 +94,11 @@ X ~ 2 0 -200 170 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CONN_1
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_1
 #
-DEF ~CONN_1 P 0 30 N N 1 F N
+DEF ~kit-dev-coldfire-xilinx_5213_schlib:CONN_1 P 0 30 N N 1 F N
 F0 "P" 80 0 40 H V L CNN
-F1 "CONN_1" 0 55 30 H I C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_1" 0 55 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -94,11 +108,11 @@ X 1 1 -150 0 100 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CONN_13X2
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_13X2
 #
-DEF CONN_13X2 P 0 10 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_13X2 P 0 10 Y N 1 F N
 F0 "P" 0 700 60 H V C CNN
-F1 "CONN_13X2" 0 0 50 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_13X2" 0 0 50 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -132,11 +146,11 @@ X P9 9 -400 200 300 R 40 30 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_2
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_2
 #
-DEF CONN_2 P 0 40 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_2 P 0 40 Y N 1 F N
 F0 "P" -50 0 40 V V C CNN
-F1 "CONN_2" 50 0 40 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_2" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -146,11 +160,11 @@ X PM 2 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_20X2
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_20X2
 #
-DEF CONN_20X2 P 0 10 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_20X2 P 0 10 Y N 1 F N
 F0 "P" 0 1050 60 H V C CNN
-F1 "CONN_20X2" 0 0 50 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_20X2" 0 0 50 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -198,11 +212,11 @@ X P9 9 -400 550 300 R 60 30 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_2X2
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_2X2
 #
-DEF CONN_2X2 P 0 40 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_2X2 P 0 40 Y N 1 F N
 F0 "P" 0 150 50 H V C CNN
-F1 "CONN_2X2" 10 -130 40 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_2X2" 10 -130 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -214,11 +228,11 @@ X 4 4 400 -50 300 L 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_3
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_3
 #
-DEF CONN_3 K 0 40 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_3 K 0 40 Y N 1 F N
 F0 "K" -50 0 50 V V C CNN
-F1 "CONN_3" 50 0 40 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_3" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -229,11 +243,11 @@ X P3 3 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_30X2
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_30X2
 #
-DEF CONN_30X2 P 0 10 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_30X2 P 0 10 Y N 1 F N
 F0 "P" 0 1550 60 H V C CNN
-F1 "CONN_30X2" 0 0 50 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_30X2" 0 0 50 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -302,11 +316,11 @@ X P9 9 -400 1050 300 R 60 30 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_4X2
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_4X2
 #
-DEF CONN_4X2 P 0 40 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_4X2 P 0 40 Y N 1 F N
 F0 "P" 0 250 50 H V C CNN
-F1 "CONN_4X2" 0 0 40 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_4X2" 0 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -322,11 +336,11 @@ X 8 8 400 -150 300 L 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CONN_6
+# kit-dev-coldfire-xilinx_5213_schlib:CONN_6
 #
-DEF CONN_6 P 0 30 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CONN_6 P 0 30 Y N 1 F N
 F0 "P" -50 0 60 V V C CNN
-F1 "CONN_6" 50 0 60 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CONN_6" 50 0 60 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -340,11 +354,11 @@ X 6 6 -350 -250 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# CP
+# kit-dev-coldfire-xilinx_5213_schlib:CP
 #
-DEF CP C 0 10 N N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CP C 0 10 N N 1 F N
 F0 "C" 50 100 40 H V L CNN
-F1 "CP" 50 -100 40 H V L CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CP" 50 -100 40 H V L CNN
 F2 "" 100 -150 30 H V C CNN
 F3 "" 50 100 30 H V C CNN
 ALIAS CAPAPOL
@@ -360,11 +374,11 @@ X ~ 2 0 -200 150 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# CRYSTAL
+# kit-dev-coldfire-xilinx_5213_schlib:CRYSTAL
 #
-DEF CRYSTAL X 0 40 N N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:CRYSTAL X 0 40 N N 1 F N
 F0 "X" 0 150 60 H V C CNN
-F1 "CRYSTAL" 0 -150 60 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:CRYSTAL" 0 -150 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -376,11 +390,11 @@ X 2 2 300 0 200 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DB9
+# kit-dev-coldfire-xilinx_5213_schlib:DB9
 #
-DEF DB9 J 0 40 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:DB9 J 0 40 Y N 1 F N
 F0 "J" 0 550 70 H V C CNN
-F1 "DB9" 0 -550 70 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:DB9" 0 -550 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -429,30 +443,34 @@ X P9 9 -450 300 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# DIODE
+# kit-dev-coldfire-xilinx_5213_schlib:DIODE
 #
-DEF DIODE D 0 40 N N 1 F N
-F0 "D" 0 100 40 H V C CNN
-F1 "DIODE" 0 -100 40 H V C CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
+DEF kit-dev-coldfire-xilinx_5213_schlib:DIODE D 0 40 N N 1 F N
+F0 "D" 0 100 50 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:DIODE" 0 -100 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
 $FPLIST
- D?
- S*
+ TO-???*
+ *SingleDiode
+ *_Diode_*
+ *SingleDiode*
+ D_*
 $ENDFPLIST
 DRAW
-P 2 0 1 6 50 50 50 -50 N
-P 3 0 1 0 -50 50 50 0 -50 -50 F
-X A 1 -200 0 150 R 40 40 1 1 P
-X K 2 200 0 150 L 40 40 1 1 P
+P 2 0 1 8 -50 50 -50 -50 N
+P 2 0 1 0 50 0 -50 0 N
+P 4 0 1 8 50 50 50 -50 -50 0 50 50 F
+X K 1 -150 0 100 R 50 50 1 1 P
+X A 2 150 0 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# FUSE
+# kit-dev-coldfire-xilinx_5213_schlib:FUSE
 #
-DEF FUSE F 0 10 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:FUSE F 0 10 Y Y 1 F N
 F0 "F" 100 50 40 H V C CNN
-F1 "FUSE" -100 -50 40 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:FUSE" -100 -50 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -463,11 +481,11 @@ X ~ 2 250 0 100 L 40 40 1 1 I
 ENDDRAW
 ENDDEF
 #
-# GND
+# kit-dev-coldfire-xilinx_5213_schlib:GND
 #
-DEF ~GND #PWR 0 0 Y Y 1 F P
+DEF ~kit-dev-coldfire-xilinx_5213_schlib:GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "GND" 0 -70 30 H I C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:GND" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -476,11 +494,11 @@ X GND 1 0 0 0 U 30 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# GNDA
+# kit-dev-coldfire-xilinx_5213_schlib:GNDA
 #
-DEF GNDA #PWR 0 0 Y Y 1 F P
+DEF kit-dev-coldfire-xilinx_5213_schlib:GNDA #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 40 H I C CNN
-F1 "GNDA" 0 -70 40 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:GNDA" 0 -70 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -489,11 +507,11 @@ X GNDA 1 0 0 0 U 40 40 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# INDUCTOR
+# kit-dev-coldfire-xilinx_5213_schlib:INDUCTOR
 #
-DEF INDUCTOR L 0 40 N N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:INDUCTOR L 0 40 N N 1 F N
 F0 "L" -50 0 40 V V C CNN
-F1 "INDUCTOR" 100 0 40 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:INDUCTOR" 100 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -506,11 +524,11 @@ X 2 2 0 -300 100 U 70 70 1 1 P
 ENDDRAW
 ENDDEF
 #
-# JACK_2P
+# kit-dev-coldfire-xilinx_5213_schlib:JACK_2P
 #
-DEF JACK_2P J 0 40 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:JACK_2P J 0 40 Y Y 1 F N
 F0 "J" -350 -200 60 H V C CNN
-F1 "JACK_2P" -150 250 60 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:JACK_2P" -150 250 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -528,11 +546,11 @@ X ~ 3 450 150 150 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# JUMPER
+# kit-dev-coldfire-xilinx_5213_schlib:JUMPER
 #
-DEF JUMPER JP 0 30 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:JUMPER JP 0 30 Y N 1 F N
 F0 "JP" 0 150 60 H V C CNN
-F1 "JUMPER" 0 -80 40 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:JUMPER" 0 -80 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -544,11 +562,11 @@ X 2 2 300 0 165 L 60 60 0 1 P
 ENDDRAW
 ENDDEF
 #
-# LED
+# kit-dev-coldfire-xilinx_5213_schlib:LED
 #
-DEF LED D 0 40 Y N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "LED" 0 -100 50 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:LED" 0 -100 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -570,11 +588,11 @@ X K 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# LT1129_QPACK
+# kit-dev-coldfire-xilinx_5213_schlib:LT1129_QPACK
 #
-DEF LT1129_QPACK U 0 30 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:LT1129_QPACK U 0 30 Y Y 1 F N
 F0 "U" 250 450 60 H V C CNN
-F1 "LT1129_QPACK" 500 -495 60 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:LT1129_QPACK" 500 -495 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS LT_1129_QP
@@ -588,11 +606,11 @@ X IN 5 -800 300 300 R 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# MAX232
+# kit-dev-coldfire-xilinx_5213_schlib:MAX202
 #
-DEF MAX232 U 0 40 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:MAX202 U 0 40 Y Y 1 F N
 F0 "U" 0 850 70 H V C CNN
-F1 "MAX232" 0 -850 70 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:MAX202" 0 -850 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS MAX202
@@ -621,11 +639,11 @@ X R2OUT 9 -800 -700 300 R 60 50 1 1 O
 ENDDRAW
 ENDDEF
 #
-# MC34064P
+# kit-dev-coldfire-xilinx_5213_schlib:MC34064P
 #
-DEF MC34064P U 0 20 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:MC34064P U 0 20 Y Y 1 F N
 F0 "U" 50 200 60 H V C CNN
-F1 "MC34064P" 300 -190 60 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:MC34064P" 300 -190 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS MC33064P
@@ -637,11 +655,11 @@ X Gbd 3 0 -300 150 U 60 40 1 1 I
 ENDDRAW
 ENDDEF
 #
-# MCF5213-LQFP100
+# kit-dev-coldfire-xilinx_5213_schlib:MCF5213-LQFP100
 #
-DEF MCF5213-LQFP100 U 0 40 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:MCF5213-LQFP100 U 0 40 Y Y 1 F N
 F0 "U" 1150 2700 60 H V L CNN
-F1 "MCF5213-LQFP100" 600 -2650 60 H V L CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:MCF5213-LQFP100" 600 -2650 60 H V L CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -749,11 +767,11 @@ X UTXD1/PUB0 99 2000 300 300 L 50 50 1 1 B
 ENDDRAW
 ENDDEF
 #
-# PCA82C251
+# kit-dev-coldfire-xilinx_5213_schlib:PCA82C251
 #
-DEF PCA82C251 U 0 0 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:PCA82C251 U 0 0 Y Y 1 F N
 F0 "U" 150 450 60 H V C CNN
-F1 "PCA82C251" 300 -350 60 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:PCA82C251" 300 -350 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -781,11 +799,11 @@ X Rsl 8 -450 0 300 R 50 40 1 1 I
 ENDDRAW
 ENDDEF
 #
-# PNP
+# kit-dev-coldfire-xilinx_5213_schlib:PNP
 #
-DEF PNP Q 0 0 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:PNP Q 0 0 Y Y 1 F N
 F0 "Q" 0 -150 60 H V R CNN
-F1 "PNP" 0 150 60 H V R CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:PNP" 0 150 60 H V R CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -801,11 +819,11 @@ X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# PWR_FLAG
+# kit-dev-coldfire-xilinx_5213_schlib:PWR_FLAG
 #
-DEF PWR_FLAG #FLG 0 0 N N 1 F P
+DEF kit-dev-coldfire-xilinx_5213_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 95 30 H I C CNN
-F1 "PWR_FLAG" 0 180 30 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:PWR_FLAG" 0 180 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -814,11 +832,11 @@ X pwr 1 0 0 0 U 20 20 0 0 w
 ENDDRAW
 ENDDEF
 #
-# R
+# kit-dev-coldfire-xilinx_5213_schlib:R
 #
-DEF R R 0 0 N Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:R R 0 0 N Y 1 F N
 F0 "R" 80 0 40 V V C CNN
-F1 "R" 7 1 40 V V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:R" 7 1 40 V V C CNN
 F2 "" -70 0 30 V V C CNN
 F3 "" 0 0 30 H V C CNN
 $FPLIST
@@ -835,11 +853,11 @@ X ~ 2 0 -250 100 U 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# SWITCH_INV
+# kit-dev-coldfire-xilinx_5213_schlib:SWITCH_INV
 #
-DEF SWITCH_INV SW 0 0 N Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:SWITCH_INV SW 0 0 N Y 1 F N
 F0 "SW" -200 150 50 H V C CNN
-F1 "SWITCH_INV" -150 -150 50 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:SWITCH_INV" -150 -150 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -853,11 +871,11 @@ X 3 3 500 -100 300 L 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# SW_PUSH
+# kit-dev-coldfire-xilinx_5213_schlib:SW_PUSH
 #
-DEF SW_PUSH SW 0 40 N N 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:SW_PUSH SW 0 40 N N 1 F N
 F0 "SW" 150 110 50 H V C CNN
-F1 "SW_PUSH" 0 -80 50 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:SW_PUSH" 0 -80 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -868,11 +886,11 @@ X 2 2 300 0 200 L 60 60 0 1 P I
 ENDDRAW
 ENDDEF
 #
-# VCC
+# kit-dev-coldfire-xilinx_5213_schlib:VCC
 #
-DEF VCC #PWR 0 0 Y Y 1 F P
+DEF kit-dev-coldfire-xilinx_5213_schlib:VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 30 H I C CNN
-F1 "VCC" 0 100 30 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:VCC" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -882,11 +900,11 @@ X VCC 1 0 0 0 U 20 20 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# VDD
+# kit-dev-coldfire-xilinx_5213_schlib:VDD
 #
-DEF VDD #PWR 0 0 Y Y 1 F P
+DEF kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 30 H I C CNN
-F1 "VDD" 0 110 30 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:VDD" 0 110 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -896,11 +914,11 @@ X VDD 1 0 0 0 U 40 40 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# XCR3256-TQ144
+# kit-dev-coldfire-xilinx_5213_schlib:XCR3256-TQ144
 #
-DEF XCR3256-TQ144 U 0 20 Y Y 1 F N
+DEF kit-dev-coldfire-xilinx_5213_schlib:XCR3256-TQ144 U 0 20 Y Y 1 F N
 F0 "U" 0 3500 70 H V C CNN
-F1 "XCR3256-TQ144" 0 -3600 60 H V C CNN
+F1 "kit-dev-coldfire-xilinx_5213_schlib:XCR3256-TQ144" 0 -3600 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
