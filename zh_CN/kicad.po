@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 09:46+0200\n"
-"PO-Revision-Date: 2018-05-04 13:10+0800\n"
+"PO-Revision-Date: 2018-05-06 12:49+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: E:/kicad\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
@@ -795,9 +795,8 @@ msgid "Use only the diffuse color property from model 3D model file "
 msgstr "在模型的3D模型文件只使用漫反射颜色属性"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:118
-#, fuzzy
 msgid "CAD Color Style"
-msgstr "CAD色彩样式"
+msgstr "CAD颜色风格"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:119
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -1312,7 +1311,6 @@ msgid "User layer Eco1"
 msgstr "ECO1用户层"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:153
-#, fuzzy
 msgid "User layer Eco2"
 msgstr "ECO1用户层"
 
@@ -1694,9 +1692,8 @@ msgid "Supersampling (4x)"
 msgstr "间隔 (s):"
 
 #: common/widgets/gal_options_panel.cpp:107
-#, fuzzy
 msgid "Grid Options"
-msgstr "Gerbview 选项"
+msgstr "网格选项"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Dots"
@@ -1733,9 +1730,8 @@ msgid "Min grid spacing:"
 msgstr "垂直间距："
 
 #: common/widgets/gal_options_panel.cpp:182
-#, fuzzy
 msgid "Cursor Options"
-msgstr "Gerber 设置"
+msgstr "光标选项"
 
 #: common/widgets/gal_options_panel.cpp:196
 #, fuzzy
@@ -1982,9 +1978,8 @@ msgid "Eagle XML schematic files (*.sch)|*."
 msgstr "KiCad 原理图文件 (*.sch)|*.sch"
 
 #: common/wildcards_and_files_ext.cpp:142
-#, fuzzy
 msgid "Eagle XML files (*.sch *.brd)|*."
-msgstr "Eagle ver. 6.x XML PCB 文件 (*.brd)|*.brd"
+msgstr "Eagle XML 文件 (*.sch *.brd)|*."
 
 #: common/wildcards_and_files_ext.cpp:149
 #, fuzzy
@@ -1992,9 +1987,8 @@ msgid "KiCad netlist files (*.net)|*."
 msgstr "KiCad 网络列表文件 (*.net)|*.net"
 
 #: common/wildcards_and_files_ext.cpp:155
-#, fuzzy
 msgid "Gerber files (*.pho)|*."
-msgstr "Gerber 文件 (*.pho)|*.pho"
+msgstr "Gerber 文件 (*.pho)|*."
 
 #: common/wildcards_and_files_ext.cpp:161
 #, fuzzy
@@ -2002,9 +1996,8 @@ msgid "KiCad printed circuit board files (*.brd)|*."
 msgstr "KiCad PCB文件 (*.brd)|*.brd"
 
 #: common/wildcards_and_files_ext.cpp:167
-#, fuzzy
 msgid "Eagle ver. 6.x XML PCB files (*.brd)|*."
-msgstr "Eagle ver. 6.x XML PCB 文件 (*.brd)|*.brd"
+msgstr "Eagle ver. 6.x XML PCB 文件 (*.brd)|*."
 
 #: common/wildcards_and_files_ext.cpp:173
 #, fuzzy
@@ -2032,14 +2025,12 @@ msgid "Legacy footprint library files (*.mod)|*."
 msgstr "旧版封装库文件 (*.mod)|*.mod"
 
 #: common/wildcards_and_files_ext.cpp:204
-#, fuzzy
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*."
-msgstr "Eagle ver. 6.x XML 库文件 (*.lbr)|*.lbr"
+msgstr "Eagle ver. 6.x XML 库文件 (*.lbr)|*."
 
 #: common/wildcards_and_files_ext.cpp:210
-#, fuzzy
 msgid "Geda PCB footprint library files (*.fp)|*."
-msgstr "Geda PCB封装库文件 (*.fp)|*.fp"
+msgstr "Geda PCB封装库文件 (*.fp)|*."
 
 #: common/wildcards_and_files_ext.cpp:216
 #, fuzzy
@@ -2062,9 +2053,8 @@ msgid "SVG files (*.svg)|*."
 msgstr "SVG 文件 (*.svg)|*.svg;*.SVG"
 
 #: common/wildcards_and_files_ext.cpp:242
-#, fuzzy
 msgid "HTML files (*.html)|*."
-msgstr "HTML 文件 (*.html)|*.htm;*.html"
+msgstr "HTML 文件 (*.html)|*."
 
 #: common/wildcards_and_files_ext.cpp:249
 #, fuzzy
@@ -2110,9 +2100,8 @@ msgid "Legacy footprint export files (*.emp)|*."
 msgstr "导出旧版封装文件 (*.emp)|*.emp"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "Electronic rule check file (.erc)|*."
-msgstr "ERC文件 (.erc)|*.erc"
+msgstr "电气规则检查文件 (.erc)|*."
 
 #: common/wildcards_and_files_ext.cpp:310
 #, fuzzy
@@ -2125,9 +2114,8 @@ msgid "SPICE netlist file (.cir)|*."
 msgstr "SPICE 网络列表文件 (.cir)|*.cir"
 
 #: common/wildcards_and_files_ext.cpp:322
-#, fuzzy
 msgid "CadStar netlist file (.frp)|*."
-msgstr "CadStar 网络列表文件 (.frp)|*.frp"
+msgstr "CadStar 网络列表文件 (.frp)|*."
 
 #: common/wildcards_and_files_ext.cpp:328
 #, fuzzy
@@ -2140,9 +2128,8 @@ msgid "Zip file (*.zip)|*."
 msgstr "Zip 文件 (*.zip)|*.zip"
 
 #: common/wildcards_and_files_ext.cpp:340
-#, fuzzy
 msgid "GenCAD 1.4 board files (.cad)|*."
-msgstr "GenCAD 1.4 线路板文件 (.cad)|*.cad"
+msgstr "GenCAD 1.4 线路板文件 (.cad)|*."
 
 #: common/wildcards_and_files_ext.cpp:346
 #, fuzzy
@@ -2150,9 +2137,8 @@ msgid "DXF Files (*.dxf)|*."
 msgstr "所有文件 (*.*)|*.*"
 
 #: common/wildcards_and_files_ext.cpp:352
-#, fuzzy
 msgid "Gerber job file (*.gbrjob)|*."
-msgstr "Gerber 文件 (*.pho)|*.pho"
+msgstr "Gerber工作文件 (*.gbrjob)|*."
 
 #: common/wildcards_and_files_ext.cpp:359
 #, fuzzy
@@ -2165,9 +2151,8 @@ msgid "IPC-D-356 Test Files (.d356)|*."
 msgstr "IPC-D-356 测试文件  (.d356)|*.d356"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Workbook file (*.wbk)|*."
-msgstr "Gerber 文件 (*.pho)|*.pho"
+msgstr "工作簿文件 (*.wbk)|*."
 
 #: common/wildcards_and_files_ext.cpp:377
 #, fuzzy
@@ -2632,7 +2617,7 @@ msgid ""
 msgstr ""
 
 #: common/fp_lib_table.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "fp-lib-table files contain no library with nickname \"%s\""
 msgstr "fp-lib-table 文件不包含 '%s' 别名"
 
@@ -6223,9 +6208,8 @@ msgid "General &Options"
 msgstr "常规选项"
 
 #: eeschema/menubar.cpp:691
-#, fuzzy
 msgid "Edit Eeschema preferences"
-msgstr "Eeschema 设置"
+msgstr "编辑Eeschema 首选项"
 
 #: eeschema/menubar.cpp:729 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Save Project File..."
@@ -6398,9 +6382,8 @@ msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 msgstr "保存元件库 '%s' 时发生错误."
 
 #: eeschema/sch_edit_frame.cpp:1480 eeschema/sch_edit_frame.cpp:1487
-#, fuzzy
 msgid "Eeschema"
-msgstr "Eeschema 原理图编辑"
+msgstr "Eeschema"
 
 #: eeschema/sch_edit_frame.cpp:1495 kicad/prjconfig.cpp:87
 #: pcbnew/footprint_edit_frame.cpp:803 pcbnew/pcb_edit_frame.cpp:1126
@@ -6856,9 +6839,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_lib_table.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "sym-lib-table files contain no library with nickname \"%s\""
-msgstr "fp-lib-table 文件不包含 '%s' 别名"
+msgstr "sym-lib-table 文件不包含 '%s' 别名"
 
 #: eeschema/viewlib_frame.cpp:117 pcbnew/footprint_viewer_frame.cpp:768
 msgid "Library Browser"
@@ -9387,9 +9370,8 @@ msgid "Solid"
 msgstr "实心"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
-#, fuzzy
 msgid "Dashed"
-msgstr "Datasheet数据手册"
+msgstr "虚线"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dotted"
@@ -9559,9 +9541,8 @@ msgstr "页面尺寸:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:55
 #: pcbnew/dialogs/dialog_plot_base.cpp:267
-#, fuzzy
 msgid "HPGL Options:"
-msgstr "HPGL 选项"
+msgstr "HPGL 选项："
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:57
 #, fuzzy
@@ -9602,9 +9583,8 @@ msgid "D"
 msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-#, fuzzy
 msgid "E"
-msgstr "Er"
+msgstr "E"
 
 # orペア下層
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
@@ -12328,9 +12308,8 @@ msgid "Attr:"
 msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:160
-#, fuzzy
 msgid "DCode:"
-msgstr "D码"
+msgstr "D码："
 
 #: gerbview/toolbars_gerber.cpp:221
 msgid "Measure distance between two points"
@@ -12436,9 +12415,8 @@ msgid "Show polygons in fill mode"
 msgstr "焊盘填充模式"
 
 #: gerbview/toolbars_gerber.cpp:574
-#, fuzzy
 msgid "Hide DCodes"
-msgstr "D码"
+msgstr "隐藏D码"
 
 #: gerbview/toolbars_gerber.cpp:574
 #, fuzzy
@@ -15047,9 +15025,8 @@ msgstr "电阻系数"
 
 #: pcb_calculator/transline_ident.cpp:142
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:649
-#, fuzzy
 msgid "Er:"
-msgstr "Er"
+msgstr "Er："
 
 #: pcb_calculator/transline_ident.cpp:142
 msgid "Epsilon R: substrate relative dielectric constant"
@@ -15129,9 +15106,8 @@ msgstr "趋肤深度"
 #: pcb_calculator/transline_ident.cpp:341
 #: pcb_calculator/transline_ident.cpp:377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:681
-#, fuzzy
 msgid "H:"
-msgstr "H"
+msgstr "H:"
 
 #: pcb_calculator/transline_ident.cpp:171
 #: pcb_calculator/transline_ident.cpp:208
@@ -15445,7 +15421,6 @@ msgid "Number of Twists per Length"
 msgstr "每个长度的绞合数"
 
 #: pcb_calculator/transline_ident.cpp:415
-#, fuzzy
 msgid "ErEnv:"
 msgstr "ErEnv"
 
@@ -15588,9 +15563,8 @@ msgstr "三端稳压"
 
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:60
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:147
-#, fuzzy
 msgid "Iadj:"
-msgstr "Iadj"
+msgstr "Iadj："
 
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:67
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:156
@@ -17859,9 +17833,8 @@ msgid "%s pin %s found"
 msgstr "%s 引脚 %s 被找到"
 
 #: pcbnew/cross-probing.cpp:382
-#, fuzzy
 msgid "Eeschema netlist"
-msgstr "EEschema 网络列表"
+msgstr "EEschema 网络表"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:76
 msgid "Exception on python action plugin code"
@@ -18210,12 +18183,10 @@ msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "错误:禁布区仅允许在铜层."
 
 #: pcbnew/zones_by_polygon.cpp:700
-#, fuzzy
 msgid "DRC error: this start point is inside or too close another area"
-msgstr "DRC错误: 开始点位于另一区域之内(或过于靠近另一区域)"
+msgstr "DRC错误: 开始点位于另一区域之内或过于靠近另一区域"
 
 #: pcbnew/zones_by_polygon.cpp:765
-#, fuzzy
 msgid "DRC error: closing this area creates a DRC error with another area"
 msgstr "DRC错误: 关闭该区域导致与其他区域发生DRC错误"
 
@@ -18976,9 +18947,8 @@ msgid "Import routed \"Specctra Session\" (*.ses) file"
 msgstr "导入一个已经自动布线的 \"Specctra Session\" (*.ses) 文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:883
-#, fuzzy
 msgid "&DXF File..."
-msgstr "DXF 文件(&D)"
+msgstr "DXF 文件(&D)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:884
 #, fuzzy
@@ -19027,9 +18997,8 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "创建 IPC-D-356 网络文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:924
-#, fuzzy
 msgid "&BOM File..."
-msgstr "BOM文件(&B)"
+msgstr "BOM文件(&B)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:925
 #, fuzzy
@@ -19102,9 +19071,8 @@ msgid "Export current board to \"Specctra DSN\" file"
 msgstr "将当前电路板导出为 \"Specctra DSN\" 文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:987
-#, fuzzy
 msgid "&GenCAD..."
-msgstr "&GenCAD"
+msgstr "GenCAD(&G)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:987
 msgid "Export GenCAD format"
@@ -19121,9 +19089,8 @@ msgid "Export VRML board representation"
 msgstr "VRML 板"
 
 #: pcbnew/menubar_pcb_editor.cpp:996
-#, fuzzy
 msgid "I&DFv3..."
-msgstr "I&DFv3"
+msgstr "IDFv3(&D)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:996
 #, fuzzy
@@ -27898,9 +27865,8 @@ msgid "Please select the URL for the 3D libraries to download"
 msgstr "请选择3D库下载URL"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
-#, fuzzy
 msgid "https://github.com/KiCad/packages3d"
-msgstr "https://github.com/KiCad"
+msgstr "https://github.com/KiCad/packages3d"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:56
 msgid "3D shape local folder:"
@@ -28064,9 +28030,8 @@ msgstr ""
 "两个焊盘区超过此值将会在绘图过程中合并"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:223
-#, fuzzy
 msgid "Gerber Options:"
-msgstr "Gerber 设置"
+msgstr "Gerber选项："
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid "Use Protel filename extensions"
