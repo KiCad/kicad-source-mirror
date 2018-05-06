@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 09:46+0200\n"
-"PO-Revision-Date: 2018-05-06 15:01+0800\n"
+"PO-Revision-Date: 2018-05-06 19:11+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -115,9 +115,8 @@ msgid "Path"
 msgstr "路径"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:54
-#, fuzzy
 msgid "Configure Environment Variables"
-msgstr "环境变量"
+msgstr "配置环境变量"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
 #: eeschema/viewlibs.cpp:242 eeschema/libedit.cpp:680
@@ -902,9 +901,8 @@ msgid "Silkscreen Color..."
 msgstr "丝印颜色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:203
-#, fuzzy
 msgid "Solder Mask Color..."
-msgstr "阻焊颜色"
+msgstr "阻焊颜色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:206
 #, fuzzy
@@ -1332,9 +1330,8 @@ msgid "Image Files "
 msgstr "图像文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:491
-#, fuzzy
 msgid "Create Logo File"
-msgstr "创建LOGO文件"
+msgstr "创建Logo文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:509
 #: bitmap2component/bitmap2cmp_gui.cpp:547
@@ -1345,14 +1342,12 @@ msgid "File \"%s\" could not be created."
 msgstr "无法创建文件 %s。"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:527
-#, fuzzy
 msgid "Create Postscript File"
 msgstr "创建PostScript文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:565
-#, fuzzy
 msgid "Create Symbol Library"
-msgstr "打开当前库(&C)"
+msgstr "创建符号库"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:602
 #, fuzzy
@@ -1647,9 +1642,8 @@ msgid "Zoom out plot view."
 msgstr ""
 
 #: common/widgets/footprint_preview_widget.cpp:96
-#, fuzzy
 msgid "Footprint not found"
-msgstr "封装 '%s' 没有找到"
+msgstr "封装没有找到"
 
 #: common/widgets/gal_options_panel.cpp:75
 msgid " (not supported in Legacy Toolset)"
@@ -1713,12 +1707,11 @@ msgstr "线宽 (&L):"
 #: common/widgets/gal_options_panel.cpp:140
 #: common/widgets/gal_options_panel.cpp:157
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:145
-#, fuzzy
 msgid "Min grid spacing:"
-msgstr "垂直间距："
+msgstr "最小网格间距："
 
 #: common/widgets/gal_options_panel.cpp:182
 msgid "Cursor Options"
@@ -2021,9 +2014,8 @@ msgid "KiCad symbol footprint link files (*.cmp)|*."
 msgstr "KiCad 符号/封装链接文件 (*.cmp)|*."
 
 #: common/wildcards_and_files_ext.cpp:230
-#, fuzzy
 msgid "Drill files (*.drl)|*."
-msgstr "钻孔文件 (*.drl)|*.drl;*.DRL"
+msgstr "钻孔文件 (*.drl)|*."
 
 #: common/wildcards_and_files_ext.cpp:236
 #, fuzzy
@@ -2100,9 +2092,8 @@ msgid "Symbol footprint association files (*.equ)|*."
 msgstr "元件/封装 equ 文件 (*.equ)|*.equ"
 
 #: common/wildcards_and_files_ext.cpp:334
-#, fuzzy
 msgid "Zip file (*.zip)|*."
-msgstr "Zip 文件 (*.zip)|*.zip"
+msgstr "Zip 文件 (*.zip)|*."
 
 #: common/wildcards_and_files_ext.cpp:340
 msgid "GenCAD 1.4 board files (.cad)|*."
@@ -2131,9 +2122,8 @@ msgid "Workbook file (*.wbk)|*."
 msgstr "工作簿文件 (*.wbk)|*."
 
 #: common/wildcards_and_files_ext.cpp:377
-#, fuzzy
 msgid "PNG file (*.png)|*."
-msgstr "Zip 文件 (*.zip)|*.zip"
+msgstr "PNG文件 (*.zip)|*."
 
 #: common/selcolor.cpp:85 eeschema/dialogs/dialog_eeschema_options_base.cpp:317
 msgid "Colors"
@@ -3133,9 +3123,9 @@ msgid "Path already exists."
 msgstr "路径已在使用"
 
 #: common/dialogs/dialog_env_var_config.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Environment variable \"%s\" cannot be renamed."
-msgstr "环境变量名称不能为空."
+msgstr "环境变量%s不能重命名."
 
 #: common/dialogs/dialog_env_var_config.cpp:264
 #, fuzzy
@@ -3211,9 +3201,8 @@ msgstr ""
 "<b>KICAD_PTEMPLATES</b>可选定义项，可以定义你所创建的自己的项目模板文件夹。"
 
 #: common/dialogs/dialog_env_var_config.cpp:425
-#, fuzzy
 msgid "Select Path for Environment Variable"
-msgstr "环境变量"
+msgstr "选择环境变量的路径"
 
 #: common/dialogs/dialog_env_var_config.cpp:458
 msgid "Environment variable name cannot be empty."
@@ -3224,9 +3213,8 @@ msgid "Environment variable value cannot be empty."
 msgstr "环境变量值不允许为空."
 
 #: common/dialogs/dialog_env_var_config.cpp:473
-#, fuzzy
 msgid "Environment variable names cannot start with a digit (0-9)."
-msgstr "环境变量名称不能为空."
+msgstr "环境变量名不能以数字(0-9)开头"
 
 #: common/dialogs/dialog_env_var_config.cpp:485
 msgid ""
@@ -3562,14 +3550,12 @@ msgid "Hotkeys Editor"
 msgstr "快捷键编辑器"
 
 #: common/dialogs/dialog_env_var_config_base.h:65
-#, fuzzy
 msgid "Environment Variable Configuration"
-msgstr "环境变量"
+msgstr "环境变量配置"
 
 #: common/dialogs/dialog_env_var_config_base.h:97
-#, fuzzy
 msgid "Edit Environment Variable"
-msgstr "环境变量"
+msgstr "编辑环境变量"
 
 #: cvpcb/menubar.cpp:57
 msgid "&Save Schematic\tCtrl+S"
@@ -3586,9 +3572,8 @@ msgid "Edit path configuration environment variables"
 msgstr "编辑环境变量路径配置"
 
 #: cvpcb/menubar.cpp:72
-#, fuzzy
 msgid "Manage Footprint &Libraries..."
-msgstr "封装库(&B)"
+msgstr "管理封装库(&L)..."
 
 #: cvpcb/menubar.cpp:72
 #, fuzzy
@@ -3645,9 +3630,8 @@ msgid "Project file \"%s\" is not writable"
 msgstr "工程文件 '%s' 不可写"
 
 #: cvpcb/cvpcb_mainframe.cpp:109
-#, fuzzy
 msgid "Assign Footprints"
-msgstr "指定封装 "
+msgstr "分配封装"
 
 #: cvpcb/cvpcb_mainframe.cpp:192
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:100
@@ -3737,9 +3721,8 @@ msgid "Configuration Error"
 msgstr "配置错误"
 
 #: cvpcb/cvpcb_mainframe.cpp:750 pcbnew/load_select_footprint.cpp:205
-#, fuzzy
 msgid "Loading Footprint Libraries"
-msgstr "封装库(&B)"
+msgstr "载入封装库"
 
 #: cvpcb/cvpcb_mainframe.cpp:800
 #, fuzzy, c-format
@@ -3997,7 +3980,7 @@ msgid "3D Viewer"
 msgstr "查看3D效果"
 
 #: cvpcb/display_footprints_frame.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint \"%s\" not found"
 msgstr "封装 '%s' 没有找到"
 
@@ -4216,7 +4199,6 @@ msgid "New schematic"
 msgstr "新建原理图"
 
 #: eeschema/tool_sch.cpp:65
-#, fuzzy
 msgid "Open schematic"
 msgstr "打开原理图"
 
@@ -4264,18 +4246,16 @@ msgid "Perform electrical rules check"
 msgstr "执行设计规则检查"
 
 #: eeschema/tool_sch.cpp:162
-#, fuzzy
 msgid "Run CvPcb to associate footprints to symbols"
-msgstr "打开CvPcb关联元件和封装"
+msgstr "运行CvPcb分配封装与符号"
 
 #: eeschema/tool_sch.cpp:165
 msgid "Generate netlist"
 msgstr "生成网络列表"
 
 #: eeschema/tool_sch.cpp:168
-#, fuzzy
 msgid "Edit symbol fields"
-msgstr "编辑 %s 字段"
+msgstr "编辑符号字段"
 
 #: eeschema/tool_sch.cpp:177
 msgid "Run Pcbnew to layout printed circuit board"
@@ -4297,11 +4277,11 @@ msgstr "关闭网格"
 
 #: eeschema/tool_sch.cpp:292
 msgid "Set unit to inch"
-msgstr "单位 Inch"
+msgstr "设置单位为英寸"
 
 #: eeschema/tool_sch.cpp:296
 msgid "Set unit to mm"
-msgstr "单位 mm"
+msgstr "设置单位为毫米"
 
 #: eeschema/tool_sch.cpp:312 eeschema/menubar.cpp:225
 #: eeschema/sch_edit_frame.cpp:799
@@ -4476,12 +4456,12 @@ msgstr "逆时针旋转"
 #: eeschema/onrightclick.cpp:387 eeschema/onrightclick.cpp:800
 #: eeschema/onrightclick.cpp:927
 msgid "Mirror Around Horizontal(X) Axis"
-msgstr ""
+msgstr "水平(X)轴镜像"
 
 #: eeschema/onrightclick.cpp:390 eeschema/onrightclick.cpp:803
 #: eeschema/onrightclick.cpp:930
 msgid "Mirror Around Vertical(Y) Axis"
-msgstr ""
+msgstr "垂直(Y)轴镜像"
 
 #: eeschema/onrightclick.cpp:393
 msgid "Reset to Default"
@@ -4817,7 +4797,7 @@ msgstr "插件 '%s' 不能执行 '%s' 功能."
 #: eeschema/sch_io_mgr.cpp:33 pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr " '%s' 类型插件没有找到。"
+msgstr "'%s' 类型插件没有找到。"
 
 #: eeschema/sch_io_mgr.cpp:85
 #, c-format
@@ -5147,9 +5127,8 @@ msgid "Revert Library"
 msgstr "恢复库"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:64
-#, fuzzy
 msgid "New Sy&mbol..."
-msgstr "电源符号"
+msgstr "新建符号 (&M)..."
 
 #: eeschema/widgets/cmp_tree_pane.cpp:66 eeschema/menubar_libedit.cpp:202
 #, fuzzy
@@ -5367,7 +5346,7 @@ msgstr "< 未知 >"
 #: pcbnew/load_select_footprint.cpp:474 pcbnew/load_select_footprint.cpp:538
 #: pcbnew/class_edge_mod.cpp:249 pcbnew/class_text_mod.cpp:378
 msgid "Footprint"
-msgstr "封装 "
+msgstr "封装"
 
 #: eeschema/sch_component.cpp:1478 eeschema/viewlibs.cpp:244
 #: eeschema/libedit.cpp:701
@@ -5382,7 +5361,7 @@ msgstr "没有指定库。"
 #: eeschema/sch_component.cpp:1500
 #, c-format
 msgid "Symbol not found in %s!!!"
-msgstr ""
+msgstr "在%s中没有找到封装！！！"
 
 #: eeschema/sch_component.cpp:1736
 #, c-format
@@ -5467,9 +5446,8 @@ msgid "Converted"
 msgstr "转换"
 
 #: eeschema/backanno.cpp:221
-#, fuzzy
 msgid "Load Symbol Footprint Link File"
-msgstr "打开元件和封装链接文件"
+msgstr "载入符号封装关联文件"
 
 #: eeschema/backanno.cpp:232
 msgid "Keep existing footprint field visibility"
@@ -6032,9 +6010,8 @@ msgid "Electrical Rules &Checker"
 msgstr "设计规则检查(&C)"
 
 #: eeschema/menubar.cpp:544 pcbnew/menubar_pcb_editor.cpp:423
-#, fuzzy
 msgid "Update PCB from Schematic..."
-msgstr "从原理图更新PCB"
+msgstr "从原理图更新PCB..."
 
 #: eeschema/menubar.cpp:549
 #, fuzzy
@@ -6072,9 +6049,8 @@ msgid "Remap legacy library symbols to symbol library table"
 msgstr "从这个库列表中移除一个PCB库"
 
 #: eeschema/menubar.cpp:582
-#, fuzzy
 msgid "Edit Symbol Field&s..."
-msgstr "编辑 %s 字段"
+msgstr "编辑符号字段(&S)..."
 
 #: eeschema/menubar.cpp:587
 msgid "Edit Symbol Library References..."
@@ -6102,22 +6078,20 @@ msgid "Generate Bill of &Materials..."
 msgstr "生成材料清单(&M)..."
 
 #: eeschema/menubar.cpp:615
-#, fuzzy
 msgid "A&ssign Footprints..."
-msgstr "指定封装 "
+msgstr "分配封装(&S)..."
 
 #: eeschema/menubar.cpp:616
 msgid "Assign PCB footprints to schematic symbols"
-msgstr ""
+msgstr "分配PCB封装到原理图符号"
 
 #: eeschema/menubar.cpp:625
-#, fuzzy
 msgid "Simula&tor"
-msgstr "运行模拟器(&R)"
+msgstr "模拟器(&T)"
 
 #: eeschema/menubar.cpp:625
 msgid "Simulate circuit"
-msgstr ""
+msgstr "模拟电路"
 
 #: eeschema/menubar.cpp:637
 msgid "Open Eeschema Manual"
@@ -6436,13 +6410,12 @@ msgid "An error occurred loading the symbol library table \"%s\"."
 msgstr "保存符号文件 '%s' 发生错误"
 
 #: eeschema/files-io.cpp:646
-#, fuzzy
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
-"此操作不可撤消,而且层次图页不会被追加\n"
+"此操作不可恢复\n"
 "\n"
 "是否在执行该操作前保存当前原理图?"
 
@@ -6683,7 +6656,6 @@ msgid "Save All Libraries"
 msgstr "保存所有库"
 
 #: eeschema/hotkeys.cpp:215 pcbnew/dialogs/dialog_update_pcb_base.h:53
-#, fuzzy
 msgid "Update PCB from Schematic"
 msgstr "从原理图更新PCB"
 
@@ -6698,9 +6670,8 @@ msgstr "新建"
 
 #: eeschema/hotkeys.cpp:224 pagelayout_editor/hotkeys.cpp:97
 #: pagelayout_editor/files.cpp:135 pcbnew/hotkeys.cpp:260
-#, fuzzy
 msgid "Open"
-msgstr "打开(&O)"
+msgstr "打开"
 
 #: eeschema/hotkeys.cpp:226 pagelayout_editor/hotkeys.cpp:99
 #: pagelayout_editor/pl_editor_frame.cpp:246 pagelayout_editor/files.cpp:172
@@ -7146,9 +7117,8 @@ msgid "Export current drawing"
 msgstr "导出当前图形"
 
 #: eeschema/tool_lib.cpp:116
-#, fuzzy
 msgid "Create a new library"
-msgstr "创建一个新目录"
+msgstr "创建一个新库"
 
 #: eeschema/tool_lib.cpp:120
 #, fuzzy
@@ -7160,28 +7130,24 @@ msgid "Save current library"
 msgstr "保存当前库"
 
 #: eeschema/tool_lib.cpp:130
-#, fuzzy
 msgid "Create new symbol"
-msgstr "创建元件作为电源符号"
+msgstr "创建新符号"
 
 #: eeschema/tool_lib.cpp:134
 msgid "Save current symbol"
 msgstr "保存当前符号"
 
 #: eeschema/tool_lib.cpp:138
-#, fuzzy
 msgid "Import symbol"
-msgstr "电源符号"
+msgstr "导入符号"
 
 #: eeschema/tool_lib.cpp:142
-#, fuzzy
 msgid "Export symbol"
-msgstr "导出电路板"
+msgstr "导出符号"
 
 #: eeschema/tool_lib.cpp:161 eeschema/menubar_libedit.cpp:217
-#, fuzzy
 msgid "Edit symbol properties"
-msgstr "编辑元件属性"
+msgstr "编辑符号属性"
 
 #: eeschema/tool_lib.cpp:165 eeschema/menubar_libedit.cpp:223
 #, fuzzy
@@ -7280,9 +7246,8 @@ msgid "Hierarchical Label %s"
 msgstr "层次标签 %s"
 
 #: eeschema/menubar_libedit.cpp:61
-#, fuzzy
 msgid "Creates an empty library"
-msgstr "创建一个新目录"
+msgstr "创建一个新库"
 
 #: eeschema/menubar_libedit.cpp:67
 msgid "Adds a previously created library"
@@ -7310,18 +7275,16 @@ msgid "Export Current View as &PNG..."
 msgstr "导出当前视图为PNG(&P)"
 
 #: eeschema/menubar_libedit.cpp:97
-#, fuzzy
 msgid "Create a PNG file from the current view"
-msgstr "从当前加载组件创建SVG文件"
+msgstr "从当前视图创建一个PNG文件"
 
 #: eeschema/menubar_libedit.cpp:103
 msgid "Create S&VG File..."
 msgstr "创建 SVG 文件(&V)..."
 
 #: eeschema/menubar_libedit.cpp:104
-#, fuzzy
 msgid "Create a SVG file from the current symbol"
-msgstr "从当前加载组件创建SVG文件"
+msgstr "从当前符号创建一个SVG文件"
 
 #: eeschema/menubar_libedit.cpp:113
 msgid "&Quit"
@@ -7349,9 +7312,8 @@ msgid "Toggles the search tree visibility"
 msgstr "启用可见性"
 
 #: eeschema/menubar_libedit.cpp:188
-#, fuzzy
 msgid "&New Symbol..."
-msgstr "电源符号"
+msgstr "新建符号(&N)..."
 
 #: eeschema/menubar_libedit.cpp:189
 #, fuzzy
@@ -7374,9 +7336,8 @@ msgid "&Export Symbol..."
 msgstr "导出图形符号"
 
 #: eeschema/menubar_libedit.cpp:209
-#, fuzzy
 msgid "Export the current symbol"
-msgstr "导出当前图形"
+msgstr "导出当前符号"
 
 #: eeschema/menubar_libedit.cpp:216
 #, fuzzy
@@ -7384,9 +7345,8 @@ msgid "&Properties..."
 msgstr "属性..."
 
 #: eeschema/menubar_libedit.cpp:222
-#, fuzzy
 msgid "&Fields..."
-msgstr "字段"
+msgstr "字段(&F)..."
 
 #: eeschema/menubar_libedit.cpp:230
 #, fuzzy
@@ -7492,9 +7452,8 @@ msgid "Save as .csv file"
 msgstr "另保存为. csv文件"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:45
-#, fuzzy
 msgid "Exit Simulation"
-msgstr "运行模拟器(&R)"
+msgstr "退出模拟器"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:48
 #, fuzzy
@@ -7502,9 +7461,8 @@ msgid "File"
 msgstr "文件(&F)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:51 eeschema/sim/sim_plot_frame.cpp:171
-#, fuzzy
 msgid "Run Simulation"
-msgstr "运行模拟器(&R)"
+msgstr "运行模拟"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:56
 msgid "Add signals..."
@@ -7533,9 +7491,8 @@ msgid "Settings..."
 msgstr "设置..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:73
-#, fuzzy
 msgid "Simulation"
-msgstr "运行模拟器(&R)"
+msgstr "模拟"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:91
 #, fuzzy
@@ -7570,14 +7527,12 @@ msgid "Cursors"
 msgstr "光标"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:241 eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Tune"
-msgstr "调整: "
+msgstr "调整"
 
 #: eeschema/sim/sim_plot_frame.cpp:170
-#, fuzzy
 msgid "Run/Stop Simulation"
-msgstr "运行模拟器(&R)"
+msgstr "运行/停止模拟器"
 
 #: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Add Signals"
@@ -8649,7 +8604,7 @@ msgstr "1e-9"
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:45
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:60
 msgid "u"
-msgstr "U"
+msgstr "u"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:121
 msgid "micro"
@@ -8841,7 +8796,7 @@ msgstr "画笔宽度"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:406
 msgid "Period:"
-msgstr "周期"
+msgstr "周期："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:421
 msgid "Pulse"
@@ -9073,9 +9028,8 @@ msgstr "上对齐"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:79
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
-#, fuzzy
 msgid "Vertical Align:"
-msgstr "垂直间距："
+msgstr "垂直对齐："
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:81
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:60
@@ -9108,9 +9062,8 @@ msgstr "样式:"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:215
-#, fuzzy
 msgid "Field Name:"
-msgstr "字段名称"
+msgstr "字段名称："
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:133
@@ -9119,9 +9072,8 @@ msgstr "当前选定的字段的文本(或数值)"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:128
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:224
-#, fuzzy
 msgid "Field Value:"
-msgstr "字段值"
+msgstr "字段值："
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:137
 msgid "Show in Browser"
@@ -9802,9 +9754,8 @@ msgid "Use the current page only"
 msgstr "仅当前页 (&p)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
-#, fuzzy
 msgid "Scope:"
-msgstr "范围"
+msgstr "范围："
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 msgid "Order:"
@@ -9909,7 +9860,6 @@ msgid "Invalid symbol library identifier"
 msgstr "过孔直径无效"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:25
-#, fuzzy
 msgid "Unit:"
 msgstr "单位:"
 
@@ -10059,9 +10009,8 @@ msgstr "字段设置为0时，使用全局设置"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:121
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:26
-#, fuzzy
 msgid "Fields:"
-msgstr "字段"
+msgstr "字段："
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:148
 msgid "Delete optional field"
@@ -10105,9 +10054,8 @@ msgid "Align bottom"
 msgstr "底部对齐"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:177
-#, fuzzy
 msgid "Vertical Position:"
-msgstr "垂直偏移："
+msgstr "垂直位置:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:191
 msgid "Make selected field visible"
@@ -10462,9 +10410,8 @@ msgid "Create symbol with alternate body style (DeMorgan)"
 msgstr "创建可替换的主体风格部件"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:66
-#, fuzzy
 msgid "Create symbol as power symbol"
-msgstr "创建元件作为电源符号"
+msgstr "创建符号作为电源符号"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:69
 msgid "Units are not interchangeable"
@@ -10626,7 +10573,7 @@ msgstr "浏览封装"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:802
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1003
 msgid "Open the footprint browser to choose a footprint and assign it."
-msgstr "打开封装浏览器，选择封装并指定。"
+msgstr "打开封装浏览器，选择一个封装并指定它。"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:808
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1009
@@ -10656,7 +10603,7 @@ msgstr "插件文件:"
 
 #: eeschema/dialogs/dialog_bom.cpp:646
 msgid "Plugin file name not found. Cannot edit plugin file"
-msgstr "没有找到插件，无法编辑。"
+msgstr "没有找到插件，无法编辑"
 
 #: eeschema/dialogs/dialog_bom.cpp:656
 msgid "No text editor selected in KiCad. Please choose it"
@@ -11362,9 +11309,8 @@ msgstr ""
 "窗口下方勾选检查缓存库冲突再次打开该工具."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:324
-#, fuzzy
 msgid "Rescue Symbols"
-msgstr "恢复元件"
+msgstr "恢复符号"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config_base.cpp:22
 msgid ""
@@ -11504,7 +11450,6 @@ msgid "Select"
 msgstr "选择"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:65
-#, fuzzy
 msgid "Power symbol value text cannot be modified!"
 msgstr "电源元件值不能修改"
 
@@ -11614,9 +11559,8 @@ msgstr "这是只读列表,其显示了相关的环境变量。"
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
-#, fuzzy
 msgid "Remap Symbols"
-msgstr "电源符号"
+msgstr "重新映射符号"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:263
 #, fuzzy, c-format
@@ -11738,7 +11682,7 @@ msgstr "这个坐标已经被另一个引脚占用, 继续吗?"
 
 #: eeschema/pinedit.cpp:697
 msgid "No pins!"
-msgstr "没有引脚"
+msgstr "没有引脚！"
 
 #: eeschema/pinedit.cpp:707
 msgid "Marker Information"
@@ -11760,7 +11704,7 @@ msgstr ""
 
 #: eeschema/pinedit.cpp:750 eeschema/pinedit.cpp:790
 msgid "  of converted"
-msgstr "转换"
+msgstr " 转换"
 
 #: eeschema/pinedit.cpp:752 eeschema/pinedit.cpp:792
 msgid "  of normal"
@@ -11805,9 +11749,8 @@ msgid "Find and replace text in schematic items"
 msgstr "查找并替换原理图项的文字"
 
 #: eeschema/help_common_strings.h:53
-#, fuzzy
 msgid "Place symbol"
-msgstr "电源符号"
+msgstr "放置符号"
 
 #: eeschema/help_common_strings.h:54
 msgid "Place power port"
@@ -11830,14 +11773,12 @@ msgid "Place bus to bus entry"
 msgstr "放置 总线到总线入口"
 
 #: eeschema/help_common_strings.h:59
-#, fuzzy
 msgid "Place no connection flag"
-msgstr "放置 不连接标记"
+msgstr "放置不连接标记"
 
 #: eeschema/help_common_strings.h:61
-#, fuzzy
 msgid "Place net label"
-msgstr "放置 网络名称(局部标签)"
+msgstr "放置网络标签"
 
 #: eeschema/help_common_strings.h:64
 msgid ""
@@ -11849,7 +11790,6 @@ msgstr ""
 "警告: 所有名称相同的全局标签, 在整个层次结构中都是联通的。"
 
 #: eeschema/help_common_strings.h:66
-#, fuzzy
 msgid ""
 "Place a hierarchical label. Label will be seen as a hierarchical pin in the "
 "sheet"
@@ -11886,9 +11826,8 @@ msgid "Annotate schematic symbols"
 msgstr "批注原理图元件"
 
 #: eeschema/help_common_strings.h:77
-#, fuzzy
 msgid "Create, delete, and edit symbols"
-msgstr "创建元件作为电源符号"
+msgstr "创建，删除 和编辑符号"
 
 #: eeschema/help_common_strings.h:78
 msgid "Browse symbol libraries"
@@ -11973,9 +11912,8 @@ msgid "Circle"
 msgstr "圆"
 
 #: eeschema/sim/sim_plot_frame_base.h:109
-#, fuzzy
 msgid "Spice Simulator"
-msgstr "运行模拟器(&R)"
+msgstr "Spice模拟器"
 
 #: eeschema/sch_bitmap.h:129
 msgid "Image"
@@ -12186,7 +12124,6 @@ msgid "Measure distance between two points"
 msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:233
-#, fuzzy
 msgid "Turn polar coordinates on"
 msgstr "打开极坐标"
 
@@ -12266,7 +12203,6 @@ msgid "Turn on rectangular coordinates"
 msgstr "显示座标"
 
 #: gerbview/toolbars_gerber.cpp:527
-#, fuzzy
 msgid "Turn on polar coordinates"
 msgstr "打开极坐标"
 
@@ -12392,9 +12328,8 @@ msgid "This job file uses an outdated format. Please, recreate it"
 msgstr "此作业文件使用过时的格式， 请重新创建它。"
 
 #: gerbview/job_file_reader.cpp:172
-#, fuzzy
 msgid "Open Gerber Job File"
-msgstr "打开 Gerber 文件"
+msgstr "打开Gerber工作文件"
 
 #: gerbview/job_file_reader.cpp:220 gerbview/files.cpp:642
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
@@ -12452,19 +12387,16 @@ msgid "Cannot create file \"%s\""
 msgstr "无法创建文件 <%s>"
 
 #: gerbview/menubar.cpp:56
-#, fuzzy
 msgid "Open &Gerber File(s)..."
-msgstr "打开 Gerber 文件"
+msgstr "打开Gerber文件(&G)..."
 
 #: gerbview/menubar.cpp:62
-#, fuzzy
 msgid "Open &Excellon Drill File(s)..."
-msgstr "打开最近钻孔文件(&L)"
+msgstr "打开Excellon 钻孔文件..."
 
 #: gerbview/menubar.cpp:68
-#, fuzzy
 msgid "Open Gerber &Job File..."
-msgstr "打开 Gerber 文件"
+msgstr "打开Gerber工作文件(&J)..."
 
 #: gerbview/menubar.cpp:69
 msgid ""
@@ -12472,9 +12404,8 @@ msgid ""
 msgstr ""
 
 #: gerbview/menubar.cpp:74
-#, fuzzy
 msgid "Open &Zip Archive File..."
-msgstr "打开钻孔文件"
+msgstr "打开Zip档案文件 (&Z)..."
 
 #: gerbview/menubar.cpp:75
 #, fuzzy
@@ -12491,9 +12422,8 @@ msgid "Open a recently opened Gerber file"
 msgstr "打开最近Gerber文件"
 
 #: gerbview/menubar.cpp:106
-#, fuzzy
 msgid "Open Recent Excellon Dri&ll File"
-msgstr "打开最近钻孔文件(&L)"
+msgstr "打开最近的钻孔文件(&L)"
 
 #: gerbview/menubar.cpp:107
 #, fuzzy
@@ -12511,9 +12441,8 @@ msgid "Open a recently opened gerber job file"
 msgstr "打开最近Gerber文件"
 
 #: gerbview/menubar.cpp:134
-#, fuzzy
 msgid "Open Recent Zip &Archive File"
-msgstr "打开最近钻孔文件(&L)"
+msgstr "打开最近的Zip档案文件 (&A)"
 
 #: gerbview/menubar.cpp:135
 #, fuzzy
@@ -12529,7 +12458,6 @@ msgid "Clear all layers. All data will be deleted"
 msgstr "清除所有层，所有数据将被删除"
 
 #: gerbview/menubar.cpp:154
-#, fuzzy
 msgid "E&xport to Pcbnew..."
 msgstr "导出到 pcbnew (&X)"
 
@@ -13121,7 +13049,6 @@ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "底层主焊盘 (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:199
-#, fuzzy
 msgid "Open Gerber File(s)"
 msgstr "打开 Gerber 文件"
 
@@ -13131,9 +13058,8 @@ msgid "Loading Gerber files..."
 msgstr "载入Gerber文件(&G)"
 
 #: gerbview/files.cpp:355
-#, fuzzy
 msgid "Open Excellon Drill File(s)"
-msgstr "打开最近钻孔文件(&L)"
+msgstr "打开最近的钻孔文件"
 
 #: gerbview/files.cpp:454
 #, fuzzy, c-format
@@ -13156,9 +13082,8 @@ msgid "<b>unzipped file %s read error</b>\n"
 msgstr ""
 
 #: gerbview/files.cpp:605
-#, fuzzy
 msgid "Open Zip File"
-msgstr "打开文件"
+msgstr "打开Zip文件"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:113
 msgid "Select Layer:"
@@ -13269,9 +13194,8 @@ msgstr "设置 Y 方向调整比例使输出更精确"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:129
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:36
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:91
-#, fuzzy
 msgid "Print Mode:"
-msgstr "打印模式"
+msgstr "打印模式："
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:87
 msgid ""
@@ -13657,9 +13581,8 @@ msgid "Create new blank project"
 msgstr "新建空工程"
 
 #: kicad/menubar.cpp:223
-#, fuzzy
 msgid "Project from &Template..."
-msgstr "从模板新建工程(&T)"
+msgstr "从模板新建工程(&T)..."
 
 #: kicad/menubar.cpp:226 kicad/menubar.cpp:512
 msgid "Create new project from template"
@@ -13679,9 +13602,8 @@ msgid "&Open Project..."
 msgstr "打开工程(&O)..."
 
 #: kicad/menubar.cpp:237
-#, fuzzy
 msgid "Open an existing project"
-msgstr "打开工程"
+msgstr "打开一个现有工程"
 
 #: kicad/menubar.cpp:247
 msgid "Open a recent project"
@@ -13924,7 +13846,7 @@ msgstr "解压文件 '%s'"
 
 #: kicad/files-io.cpp:113
 msgid " OK\n"
-msgstr "确定\n"
+msgstr " 确定\n"
 
 #: kicad/files-io.cpp:116
 msgid " *ERROR*\n"
@@ -14027,9 +13949,8 @@ msgid "PCB layout editor"
 msgstr "PCB板编辑器"
 
 #: kicad/commandframe.cpp:87
-#, fuzzy
 msgid "Footprint library editor"
-msgstr "封装库浏览"
+msgstr "封装库编辑器"
 
 #: kicad/commandframe.cpp:94
 msgid "Gerber viewer"
@@ -14184,9 +14105,8 @@ msgid "Cannot write to folder \"%s\"."
 msgstr "无法写入报告到文件 '%s'."
 
 #: kicad/prjconfig.cpp:376
-#, fuzzy
 msgid "Error!"
-msgstr "错误"
+msgstr "错误!"
 
 #: kicad/prjconfig.cpp:377
 msgid "Please check your access permissions to this folder and try again."
@@ -14322,9 +14242,8 @@ msgstr ""
 "是否放弃当前修改并打开文件？"
 
 #: pagelayout_editor/menubar.cpp:99
-#, fuzzy
 msgid "Print Pre&view..."
-msgstr "打印预览(&V)"
+msgstr "打印预览(&V)..."
 
 #: pagelayout_editor/menubar.cpp:105
 #, fuzzy
@@ -14535,9 +14454,9 @@ msgstr ""
 "是否放弃当前修改并打开文件？"
 
 #: pagelayout_editor/files.cpp:63 pagelayout_editor/files.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" loaded"
-msgstr "打开文件 <%s> "
+msgstr "文件 <%s>已加载"
 
 #: pagelayout_editor/files.cpp:108
 #, fuzzy
@@ -14634,9 +14553,8 @@ msgid "Horizontal align:"
 msgstr "水平间距："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:95
-#, fuzzy
 msgid "Vertical align:"
-msgstr "垂直间距："
+msgstr "垂直对齐："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:149
 msgid "Constraints:"
@@ -14961,7 +14879,7 @@ msgstr "介电损耗"
 #: pcb_calculator/transline_ident.cpp:374
 #: pcb_calculator/transline_ident.cpp:407
 msgid "Skin Depth:"
-msgstr "趋肤深度"
+msgstr "趋肤深度:"
 
 #: pcb_calculator/transline_ident.cpp:171
 #: pcb_calculator/transline_ident.cpp:208
@@ -14997,9 +14915,8 @@ msgstr "方框高度"
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:382
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:705
-#, fuzzy
 msgid "T:"
-msgstr "T"
+msgstr "T:"
 
 #: pcb_calculator/transline_ident.cpp:175
 #: pcb_calculator/transline_ident.cpp:210
@@ -15131,9 +15048,8 @@ msgstr "电气长度"
 #: pcb_calculator/transline_ident.cpp:218
 #: pcb_calculator/transline_ident.cpp:250
 #: pcb_calculator/transline_ident.cpp:355
-#, fuzzy
 msgid "S:"
-msgstr "S"
+msgstr "S:"
 
 #: pcb_calculator/transline_ident.cpp:218
 #: pcb_calculator/transline_ident.cpp:250
@@ -15263,7 +15179,7 @@ msgstr "奇模阻抗（由通用电压的线路驱动）"
 #: pcb_calculator/transline_ident.cpp:362
 #, fuzzy
 msgid "Zodd:"
-msgstr "Zodd"
+msgstr "Zodd："
 
 #: pcb_calculator/transline_ident.cpp:362
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -15443,14 +15359,12 @@ msgid "Vout = Vref * (R1 + R2) / R2"
 msgstr "Vout = Vref * (R1 + R2) / R2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:89
-#, fuzzy
 msgid "R1:"
-msgstr "R1"
+msgstr "R1："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:103
-#, fuzzy
 msgid "R2:"
-msgstr "R2"
+msgstr "R2："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:117
 #, fuzzy
@@ -15626,9 +15540,8 @@ msgstr "mm ^ 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:383
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
-#, fuzzy
 msgid "Resistance:"
-msgstr "阻抗"
+msgstr "阻抗："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:395
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:484
@@ -16208,9 +16121,8 @@ msgstr "精确移动..."
 #: pcbnew/onrightclick.cpp:179 pcbnew/onrightclick.cpp:790
 #: pcbnew/tools/edit_tool.cpp:125 pcbnew/footprint_editor_onclick.cpp:372
 #: pcbnew/footprint_editor_onclick.cpp:415
-#, fuzzy
 msgid "Create Array..."
-msgstr "创建阵列"
+msgstr "创建阵列..."
 
 #: pcbnew/onrightclick.cpp:194
 msgid "Delete All Drawings on Layer"
@@ -16934,9 +16846,8 @@ msgid "Delete (Alternative)"
 msgstr "删除封装"
 
 #: pcbnew/tools/edit_tool.cpp:157
-#, fuzzy
 msgid "Update the footprint from the library"
-msgstr "从库中打开一个封装"
+msgstr "从库中更新封装"
 
 #: pcbnew/tools/edit_tool.cpp:162
 #, fuzzy
@@ -17578,7 +17489,6 @@ msgid "Distributes selected items along the horizontal axis"
 msgstr "所选项沿水平轴分布"
 
 #: pcbnew/tools/placement_tool.cpp:77
-#, fuzzy
 msgid "Distribute Vertically"
 msgstr "垂直分布"
 
@@ -17630,9 +17540,8 @@ msgid "Distribute vertically"
 msgstr "垂直分布"
 
 #: pcbnew/tools/pcbnew_control.cpp:243
-#, fuzzy
 msgid "Paste content from clipboard"
-msgstr "从库载入封装"
+msgstr "从剪贴板粘贴内容"
 
 #: pcbnew/tools/pcbnew_control.cpp:733 pcbnew/edit.cpp:1528
 msgid "Adjust grid origin"
@@ -18095,7 +18004,7 @@ msgstr "没有找到封装."
 
 #: pcbnew/load_select_footprint.cpp:517
 msgid "Description: "
-msgstr "描述："
+msgstr "描述: "
 
 #: pcbnew/load_select_footprint.cpp:518
 msgid ""
@@ -18148,7 +18057,6 @@ msgid "&Design Rules..."
 msgstr "设计规则(&D)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:169
-#, fuzzy
 msgid "Open design rules editor"
 msgstr "打开设计规则编辑器"
 
@@ -18241,7 +18149,6 @@ msgid "Tune Differential Pair &Length"
 msgstr "调整差分对长度(&L)"
 
 #: pcbnew/menubar_pcb_editor.cpp:281
-#, fuzzy
 msgid "Tune length of differential pair"
 msgstr "调整差分对布线长度"
 
@@ -18294,9 +18201,8 @@ msgid "Add footprint libraries using wizard"
 msgstr "添加封装库向导"
 
 #: pcbnew/menubar_pcb_editor.cpp:335 pcbnew/menubar_footprint_editor.cpp:443
-#, fuzzy
 msgid "Manage Footprint Li&braries..."
-msgstr "封装库(&B)"
+msgstr "管理封装库(&B)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:336
 #, fuzzy
@@ -18461,9 +18367,8 @@ msgid "Pcbnew &Manual"
 msgstr "Pcbnew手册(&M)"
 
 #: pcbnew/menubar_pcb_editor.cpp:478
-#, fuzzy
 msgid "Open Pcbnew Manual"
-msgstr "打开Pcbnew用户手册"
+msgstr "打开Pcbnew手册"
 
 #: pcbnew/menubar_pcb_editor.cpp:489
 #, fuzzy
@@ -18538,9 +18443,8 @@ msgid "Show Microwa&ve Toolbar"
 msgstr "显示高频设计工具栏"
 
 #: pcbnew/menubar_pcb_editor.cpp:597 pcbnew/menubar_footprint_editor.cpp:197
-#, fuzzy
 msgid "Open the Library Browser"
-msgstr "封装库浏览"
+msgstr "打开库浏览器"
 
 #: pcbnew/menubar_pcb_editor.cpp:600 pcbnew/menubar_footprint_editor.cpp:200
 msgid "&3D Viewer"
@@ -18551,9 +18455,8 @@ msgid "Show board in 3D viewer"
 msgstr "电路板3D浏览"
 
 #: pcbnew/menubar_pcb_editor.cpp:646 pcbnew/menubar_footprint_editor.cpp:246
-#, fuzzy
 msgid "Grid &Settings..."
-msgstr "字段设置"
+msgstr "网格设置(&S)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:646 pcbnew/menubar_footprint_editor.cpp:246
 #, fuzzy
@@ -18692,18 +18595,16 @@ msgid "&Contrast Mode"
 msgstr "对比度模式(&C)"
 
 #: pcbnew/menubar_pcb_editor.cpp:767
-#, fuzzy
 msgid "Flip &Board View"
-msgstr "打开电路板文件"
+msgstr "翻转电路板(&B)"
 
 #: pcbnew/menubar_pcb_editor.cpp:768
 msgid "Flip (mirror) the board view"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:804
-#, fuzzy
 msgid "Create new board"
-msgstr "创建新的封装"
+msgstr "创建新的电路板"
 
 #: pcbnew/menubar_pcb_editor.cpp:809 pcbnew/tool_pcb_editor.cpp:248
 msgid "Open existing board"
@@ -18741,7 +18642,7 @@ msgstr "恢复 (&U)"
 
 #: pcbnew/menubar_pcb_editor.cpp:851
 msgid "Clear board and get last rescue file automatically saved by Pcbnew"
-msgstr " 清除电路板以便恢复最后的自动备份Pcnnew文件"
+msgstr "清除电路板以便恢复最后的自动备份Pcnnew文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:857
 #, fuzzy
@@ -18763,9 +18664,8 @@ msgid "Import board file from other applications"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:868
-#, fuzzy
 msgid "Revert to Las&t Backup"
-msgstr "从备份恢复(&T)"
+msgstr "恢复到上次备份(&T)"
 
 #: pcbnew/menubar_pcb_editor.cpp:869
 msgid "Clear board and get previous backup version of board"
@@ -18913,9 +18813,8 @@ msgid "Export GenCAD format"
 msgstr "导出 GenCAD 格式"
 
 #: pcbnew/menubar_pcb_editor.cpp:991
-#, fuzzy
 msgid "&VRML..."
-msgstr "&VRML"
+msgstr "&VRML…"
 
 #: pcbnew/menubar_pcb_editor.cpp:992
 #, fuzzy
@@ -18994,7 +18893,7 @@ msgstr "不锁定封装在板内将可移动, 确定吗?"
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:139
 #: pcbnew/edit.cpp:1290
 msgid "No footprint found!"
-msgstr "没有找到封装"
+msgstr "没有找到封装!"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:164
 msgid "Footprints NOT LOCKED will be moved"
@@ -19377,9 +19276,8 @@ msgid "Fetching Footprint Libraries"
 msgstr "封装库(&B)"
 
 #: pcbnew/footprint_info_impl.cpp:154
-#, fuzzy
 msgid "Loading Footprints"
-msgstr "打开封装"
+msgstr "载入封装"
 
 #: pcbnew/footprint_info_impl.cpp:166
 msgid "Loading incomplete; cancelled by user."
@@ -19503,7 +19401,6 @@ msgid "Zoom auto"
 msgstr "自动缩放"
 
 #: pcbnew/footprint_wizard_frame.cpp:711
-#, fuzzy
 msgid "Export footprint to editor"
 msgstr "导出封装到编辑器"
 
@@ -19808,9 +19705,8 @@ msgid ""
 msgstr "添加埋盲孔过孔并结束当前布线."
 
 #: pcbnew/router/router_tool.cpp:185
-#, fuzzy
 msgid "Custom Track/Via Size..."
-msgstr "自定义布线/过孔尺寸"
+msgstr "自定义布线/过孔尺寸..."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Shows a dialog for changing the track width and via size."
@@ -19833,9 +19729,8 @@ msgid "Select Track/Via Width"
 msgstr "选择 布线/过孔 宽度"
 
 #: pcbnew/router/router_tool.cpp:223
-#, fuzzy
 msgid "Custom Size"
-msgstr "自定义尺寸:"
+msgstr "自定义尺寸"
 
 #: pcbnew/router/router_tool.cpp:226
 #, fuzzy
@@ -19933,9 +19828,8 @@ msgid "Footprint from &Current Board..."
 msgstr "从当前PCB设计载入封装(&C)"
 
 #: pcbnew/menubar_footprint_editor.cpp:91
-#, fuzzy
 msgid "Import a footprint from the current board"
-msgstr "从当前PCB设计载入封装"
+msgstr "从当前电路板导入封装"
 
 #: pcbnew/menubar_footprint_editor.cpp:95
 #, fuzzy
@@ -19966,9 +19860,8 @@ msgid "Export active library"
 msgstr "导出活动的库"
 
 #: pcbnew/menubar_footprint_editor.cpp:118
-#, fuzzy
 msgid "&Footprint..."
-msgstr "封装(&F)"
+msgstr "封装(&F)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:119
 #, fuzzy
@@ -21431,7 +21324,7 @@ msgstr "焊盘填充模式"
 
 #: pcbnew/pcb_base_frame.cpp:955
 msgid "Zoom "
-msgstr "缩放"
+msgstr "缩放 "
 
 #: pcbnew/build_BOM_from_board.cpp:85
 msgid "Cannot export BOM: there are no footprints in the PCB"
@@ -21472,7 +21365,6 @@ msgid "Supplier and ref"
 msgstr "供应商和REF"
 
 #: pcbnew/array_creator.cpp:113
-#, fuzzy
 msgid "Create an array"
 msgstr "创建阵列"
 
@@ -21827,7 +21719,7 @@ msgstr "线段长度"
 
 #: pcbnew/class_track.cpp:1220
 msgid "Zone "
-msgstr "覆铜"
+msgstr "覆铜 "
 
 #: pcbnew/class_track.cpp:1260
 msgid "Blind/Buried Via"
@@ -21965,7 +21857,7 @@ msgstr ""
 #: pcbnew/edit.cpp:786 pcbnew/edit.cpp:814 pcbnew/edit.cpp:842
 #, c-format
 msgid "Footprint %s found, but it is locked"
-msgstr " %s 封装被锁定"
+msgstr "%s 封装被锁定"
 
 #: pcbnew/edit.cpp:920 pcbnew/edit.cpp:939
 #, c-format
@@ -22376,9 +22268,9 @@ msgid "Unable to create job file \"%s\""
 msgstr "无法建立文件 %s"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Create Gerber job file \"%s\""
-msgstr "创建文件 %s\n"
+msgstr "创建Gerber工作文件 %s"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:194
 #: pcbnew/dialogs/dialog_SVG_print.cpp:220
@@ -23846,9 +23738,8 @@ msgid "Single page"
 msgstr "单一页"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:143
-#, fuzzy
 msgid "Page Print:"
-msgstr "打印页"
+msgstr "页面打印："
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 #, fuzzy
@@ -23856,9 +23747,8 @@ msgid "Select a STEP export filename"
 msgstr "选择导出IDF文件名"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
-#, fuzzy
 msgid "Coordinate origin options:"
-msgstr "打印设置:"
+msgstr "坐标原点选择："
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:44
 #, fuzzy
@@ -25006,9 +24896,8 @@ msgstr "移动并放置"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:162
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:118
-#, fuzzy
 msgid "Auto Place:"
-msgstr "自动放置"
+msgstr "自动放置："
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:167
 msgid "Rotate 90 degrees"
@@ -26095,9 +25984,8 @@ msgid "Minimum via diameter:"
 msgstr "导孔最小直径"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:213
-#, fuzzy
 msgid "Minimum via drill:"
-msgstr "钻孔最小直径"
+msgstr "最小钻孔直径："
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:227
 msgid "Allow blind/buried vias"
@@ -26370,9 +26258,8 @@ msgid "Grid Origin:"
 msgstr "网格原点:"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:66
-#, fuzzy
 msgid "User Defined Grid:"
-msgstr "自定义格点"
+msgstr "使用自定义格点："
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:103
 msgid "Fast Switching:"
@@ -26642,7 +26529,6 @@ msgid "ring"
 msgstr "共享"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:813
-#, fuzzy
 msgid "circle"
 msgstr "圆"
 
@@ -27506,7 +27392,7 @@ msgid "Change Footprints"
 msgstr "修改封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" created\n"
 msgstr "创建文件 <%s>\n"
 
@@ -27521,9 +27407,8 @@ msgid "Change footprint \"%s\" (from \"%s\") to \"%s\""
 msgstr "修改封装 '%s' (由 '%s') 到 '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:443
-#, fuzzy
 msgid "footprint not found"
-msgstr "封装 '%s' 没有找到"
+msgstr "封装没有找到"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:530
 msgid "No footprints!"
@@ -27801,9 +27686,8 @@ msgid "Line width for, e.g., sheet references."
 msgstr "图页边框参考线宽."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:190
-#, fuzzy
 msgid "Solder Mask Options:"
-msgstr "阻焊颜色"
+msgstr "阻焊选项："
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:199
 msgid "Margin between pads and solder mask"
@@ -28678,9 +28562,8 @@ msgid "DRC Control"
 msgstr "DRC"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.h:79
-#, fuzzy
 msgid "Footprint Libraries"
-msgstr "封装库(&B)"
+msgstr "封装库"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.h:88
 msgid "Add Footprint Libraries Wizard"
