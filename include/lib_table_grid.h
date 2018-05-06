@@ -202,7 +202,7 @@ public:
 
     bool ContainsNickname( const wxString& aNickname )
     {
-        for( int i = 0; i < size(); ++i )
+        for( size_t i = 0; i < size(); ++i )
         {
             LIB_TABLE_ROW* row = at( i );
 
