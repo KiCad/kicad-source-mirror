@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 09:46+0200\n"
-"PO-Revision-Date: 2018-05-06 12:49+0800\n"
+"PO-Revision-Date: 2018-05-06 13:27+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -721,11 +721,11 @@ msgstr "文件(&F)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:53
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "导出当前视图为PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:57
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "导出当前视图为JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62 eeschema/menubar.cpp:468
 #: kicad/menubar.cpp:297 pcbnew/menubar_pcb_editor.cpp:974
@@ -833,7 +833,7 @@ msgstr "纹理"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:150
 msgid "Apply procedural textures to materials (slow)"
-msgstr ""
+msgstr "将过程纹理应用于材质（较慢）"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:154
 #, fuzzy
@@ -970,7 +970,7 @@ msgstr "通孔"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:257
 msgid "Footprint Properties -> Placement type -> Through hole"
-msgstr ""
+msgstr "封装属性 -> 放置类型 -> 通孔"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:260
 #, fuzzy
@@ -1283,7 +1283,7 @@ msgstr "页面选项"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:138
 msgid "Black / White Threshold:"
-msgstr ""
+msgstr "黑/白阈值:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:143
 msgid ""
@@ -1661,7 +1661,7 @@ msgstr "封装 '%s' 没有找到"
 
 #: common/widgets/gal_options_panel.cpp:75
 msgid " (not supported in Legacy Toolset)"
-msgstr ""
+msgstr "（不支持传统工具箱）"
 
 #: common/widgets/gal_options_panel.cpp:83
 #, fuzzy
@@ -1675,11 +1675,11 @@ msgstr "抗锯齿"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Subpixel Antialiasing (High Quality)"
-msgstr ""
+msgstr "亚像素抗锯齿（高品质）"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Subpixel Antialiasing (Ultra Quality)"
-msgstr ""
+msgstr "亚像素抗锯齿（超质量）"
 
 #: common/widgets/gal_options_panel.cpp:89
 #, fuzzy
@@ -1740,7 +1740,7 @@ msgstr "小十字"
 
 #: common/widgets/gal_options_panel.cpp:197
 msgid "Full window crosshair"
-msgstr ""
+msgstr "十字光标全屏"
 
 #: common/widgets/gal_options_panel.cpp:200
 #, fuzzy
@@ -1749,11 +1749,11 @@ msgstr "改变光标形状"
 
 #: common/widgets/gal_options_panel.cpp:208
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "用于绘图，放置和移动工具的光标形状"
 
 #: common/widgets/gal_options_panel.cpp:214
 msgid "Always display crosshairs"
-msgstr ""
+msgstr "总是显示十字光标"
 
 #: common/widgets/gal_options_panel.cpp:219
 msgid "Always display crosshairs (not in Legacy)"
@@ -2792,7 +2792,7 @@ msgid "%s is a duplicate"
 msgstr "%s 重复"
 
 #: common/dsnlexer.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "need a NUMBER for \"%s\""
 msgstr " '%s' 需要一个数字"
 
@@ -4871,9 +4871,9 @@ msgid "Plugin \"%s\" does not implement the \"%s\" function."
 msgstr "插件 '%s' 不能执行 '%s' 功能."
 
 #: eeschema/sch_io_mgr.cpp:33 pcbnew/io_mgr.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr " '%s' 类型插件没有找到."
+msgstr " '%s' 类型插件没有找到。"
 
 #: eeschema/sch_io_mgr.cpp:85
 #, c-format
@@ -4963,7 +4963,6 @@ msgid "Show as \"De Morgan\" normal symbol"
 msgstr "\"De Morgan\" 显示为标准部件"
 
 #: eeschema/tool_viewlib.cpp:94 eeschema/tool_lib.cpp:199
-#, fuzzy
 msgid "Show as \"De Morgan\" convert symbol"
 msgstr " \"De Morgan\" 显示为转换部件"
 
@@ -5260,7 +5259,7 @@ msgstr "搜索:"
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
-msgstr ""
+msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66 eeschema/hotkeys.cpp:225
 #: pagelayout_editor/hotkeys.cpp:98 pcbnew/hotkeys.cpp:261
@@ -5369,7 +5368,7 @@ msgstr "ERC错误"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:94
 msgid "Brightened"
-msgstr ""
+msgstr "高亮"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:395
@@ -6048,7 +6047,7 @@ msgstr "重做(&R)"
 
 #: eeschema/menubar.cpp:489 pcbnew/menubar_pcb_editor.cpp:523
 msgid "&Cut"
-msgstr ""
+msgstr "剪切(&C)"
 
 #: eeschema/menubar.cpp:491 pcbnew/menubar_pcb_editor.cpp:525
 #: pcbnew/menubar_footprint_editor.cpp:176
@@ -6118,7 +6117,7 @@ msgstr "库编辑器(&E)"
 
 #: eeschema/menubar.cpp:568
 msgid "&Rescue Symbols..."
-msgstr ""
+msgstr "恢复符号(&R)..."
 
 #: eeschema/menubar.cpp:569
 #, fuzzy
@@ -6127,7 +6126,7 @@ msgstr "在工程中找到旧的元件重命名或恢复它们"
 
 #: eeschema/menubar.cpp:574
 msgid "Remap Symbols..."
-msgstr ""
+msgstr "重新映射符号..."
 
 #: eeschema/menubar.cpp:575
 #, fuzzy
@@ -6141,7 +6140,7 @@ msgstr "编辑 %s 字段"
 
 #: eeschema/menubar.cpp:587
 msgid "Edit Symbol Library References..."
-msgstr ""
+msgstr "编辑符号库参考..."
 
 #: eeschema/menubar.cpp:588
 msgid "Edit links between schematic symbols and library symbols"
@@ -6196,7 +6195,7 @@ msgstr "显示当前快捷键列表和相应命令"
 
 #: eeschema/menubar.cpp:680 eeschema/menubar_libedit.cpp:291
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "管理符号库…"
 
 #: eeschema/menubar.cpp:681
 msgid "Edit the global and project symbol library lists"
@@ -7386,7 +7385,7 @@ msgstr "保存库"
 
 #: eeschema/menubar_libedit.cpp:96
 msgid "Export Current View as &PNG..."
-msgstr ""
+msgstr "导出当前视图为PNG(&P)"
 
 #: eeschema/menubar_libedit.cpp:97
 #, fuzzy
@@ -7547,7 +7546,7 @@ msgstr "未知"
 
 #: eeschema/sim/spice_value.cpp:251
 msgid "Please, fill required fields"
-msgstr ""
+msgstr "请填写必填字段"
 
 #: eeschema/sim/spice_value.cpp:270
 #, fuzzy, c-format
@@ -7561,7 +7560,7 @@ msgstr "新建工程"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
 msgid "Open Workbook"
-msgstr ""
+msgstr "打开工作簿"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 #, fuzzy
@@ -7610,7 +7609,7 @@ msgstr "元件值"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Show SPICE Netlist..."
-msgstr ""
+msgstr "显示SPICE网表..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
@@ -7643,11 +7642,11 @@ msgstr "视图(&V)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:142
 msgid "Start the simulation by clicking the Run Simulation button"
-msgstr ""
+msgstr "点击运行模拟按钮开始模拟"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:162
 msgid "a page"
-msgstr ""
+msgstr "页面"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:205
 #, fuzzy
@@ -7681,7 +7680,7 @@ msgstr "添加引脚到元件"
 
 #: eeschema/sim/sim_plot_frame.cpp:174
 msgid "Probe"
-msgstr ""
+msgstr "探针"
 
 #: eeschema/sim/sim_plot_frame.cpp:175
 #, fuzzy
@@ -7705,15 +7704,15 @@ msgstr "焊盘布局设置"
 
 #: eeschema/sim/sim_plot_frame.cpp:201
 msgid "Welcome!"
-msgstr ""
+msgstr "欢迎！"
 
 #: eeschema/sim/sim_plot_frame.cpp:293 eeschema/sim/sim_plot_frame.cpp:1029
 msgid "There were errors during netlist export, aborted."
-msgstr ""
+msgstr "在网表导出过程中出现错误，中止。"
 
 #: eeschema/sim/sim_plot_frame.cpp:299
 msgid "You need to select the simulation settings first."
-msgstr ""
+msgstr "你需要先选择模拟设置。"
 
 #: eeschema/sim/sim_plot_frame.cpp:569 eeschema/sim/sim_plot_frame.cpp:1166
 #, fuzzy
@@ -7722,19 +7721,19 @@ msgstr "信号"
 
 #: eeschema/sim/sim_plot_frame.cpp:815
 msgid "Open simulation workbook"
-msgstr ""
+msgstr "打开模拟工作簿"
 
 #: eeschema/sim/sim_plot_frame.cpp:824
 msgid "There was an error while opening the workbook file"
-msgstr ""
+msgstr "打开工作簿文件时出现错误。"
 
 #: eeschema/sim/sim_plot_frame.cpp:833
 msgid "Save Simulation Workbook"
-msgstr ""
+msgstr "保存模拟工作簿"
 
 #: eeschema/sim/sim_plot_frame.cpp:842
 msgid "There was an error while saving the workbook file"
-msgstr ""
+msgstr "保存工作簿文件时出现错误。"
 
 #: eeschema/sim/sim_plot_frame.cpp:851
 #, fuzzy
@@ -7748,7 +7747,7 @@ msgstr "另存为默认"
 
 #: eeschema/sim/sim_plot_frame.cpp:1063
 msgid "You need to run simulation first."
-msgstr ""
+msgstr "你需要先运行模拟。"
 
 #: eeschema/sim/sim_plot_frame.cpp:1295
 #, fuzzy
@@ -7803,7 +7802,7 @@ msgid "expected unquoted string"
 msgstr "需要不带括号的字符"
 
 #: eeschema/sch_legacy_plugin.cpp:786
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
 msgstr "'%s' 似乎不是一个eeschema文件"
 
@@ -8683,11 +8682,11 @@ msgstr "阻抗"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:36
 msgid "Capacitor"
-msgstr ""
+msgstr "电容"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:37
 msgid "Inductor"
-msgstr ""
+msgstr "电感"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:41
 #, fuzzy
@@ -8719,7 +8718,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:89
 msgid "1e-15"
-msgstr ""
+msgstr "1e-15"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:93
 #, fuzzy
@@ -8732,7 +8731,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:101
 msgid "1e-12"
-msgstr ""
+msgstr "1e-12"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:105
 #, fuzzy
@@ -8745,7 +8744,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:113
 msgid "1e-9"
-msgstr ""
+msgstr "1e-9"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:117
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:34
@@ -8760,12 +8759,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:125
 msgid "1e-6"
-msgstr ""
+msgstr "1e-6"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:129
-#, fuzzy
 msgid "m"
-msgstr " mm"
+msgstr "m"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:133
 #, fuzzy
@@ -8774,11 +8772,11 @@ msgstr "mm"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:137
 msgid "1e-3"
-msgstr ""
+msgstr "1e-3"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:141
 msgid "k"
-msgstr ""
+msgstr "k"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:145
 msgid "kilo"
@@ -8812,7 +8810,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:173
 msgid "1e9"
-msgstr ""
+msgstr "1e9"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:177
 msgid "t"
@@ -8843,19 +8841,19 @@ msgstr "模式"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:238
 msgid "Subcircuit"
-msgstr ""
+msgstr "支路"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:239
 msgid "BJT"
-msgstr ""
+msgstr "BJT"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "MOSFET"
-msgstr ""
+msgstr "MOSFET"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:241
 msgid "Diode"
-msgstr ""
+msgstr "二极管"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:256
 #, fuzzy
@@ -8864,11 +8862,11 @@ msgstr "模式"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:264
 msgid "DC/AC analysis:"
-msgstr ""
+msgstr "DC/AC分析："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:273
 msgid "DC:"
-msgstr ""
+msgstr "DC:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:282
 #: eeschema/dialogs/dialog_spice_model_base.cpp:304
@@ -8880,7 +8878,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:518
 #: eeschema/dialogs/dialog_spice_model_base.cpp:607
 msgid "Volts/Amps"
-msgstr ""
+msgstr "电压/电流"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:295
 msgid "AC magnitude:"
@@ -8888,7 +8886,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:308
 msgid "AC phase:"
-msgstr ""
+msgstr "交流相位："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:317
 #, fuzzy
@@ -8897,7 +8895,7 @@ msgstr "弧度"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:328
 msgid "Transient analysis:"
-msgstr ""
+msgstr "瞬态分析："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:338
 #: eeschema/dialogs/dialog_spice_model_base.cpp:498
@@ -8913,7 +8911,7 @@ msgstr "当前值"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:362
 msgid "Delay time:"
-msgstr ""
+msgstr " 延迟时间："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:369
 #: eeschema/dialogs/dialog_spice_model_base.cpp:380
@@ -8933,11 +8931,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:373
 msgid "Rise time:"
-msgstr ""
+msgstr "上升时间："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:384
 msgid "Fall time:"
-msgstr ""
+msgstr "下降时间："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:395
 #, fuzzy
@@ -8946,11 +8944,11 @@ msgstr "画笔宽度"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:406
 msgid "Period:"
-msgstr ""
+msgstr "周期"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:421
 msgid "Pulse"
-msgstr ""
+msgstr "脉冲"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:429
 #, fuzzy
@@ -8959,7 +8957,7 @@ msgstr "形状偏移X:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:442
 msgid "Amplitude:"
-msgstr ""
+msgstr "幅度："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:453
 #: pcb_calculator/transline_ident.cpp:156
@@ -8980,7 +8978,7 @@ msgstr "显示:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:475
 msgid "Damping factor:"
-msgstr ""
+msgstr "阻尼因数："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:482
 msgid "1/seconds"
@@ -8988,11 +8986,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:490
 msgid "Sinusoidal"
-msgstr ""
+msgstr "正弦"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:522
 msgid "Rise delay time:"
-msgstr ""
+msgstr "上升延迟时间："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:533
 #, fuzzy
@@ -9006,7 +9004,7 @@ msgstr "梯形增量尺寸:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:555
 msgid "Fall time constant:"
-msgstr ""
+msgstr "下降延迟时间"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:570
 #, fuzzy
@@ -9019,7 +9017,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:587
 msgid "Time:"
-msgstr ""
+msgstr "时间："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:596
 msgid "second"
@@ -9045,7 +9043,7 @@ msgstr "传输线路"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:645
 msgid "Random"
-msgstr ""
+msgstr "随机"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:649
 #, fuzzy
@@ -9063,7 +9061,7 @@ msgstr "电流"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:658
 msgid "Source type:"
-msgstr ""
+msgstr "源类型："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:666
 #, fuzzy
@@ -9343,7 +9341,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_fields_base.cpp:44
 msgid "Omit empty fields"
-msgstr ""
+msgstr "忽略空字段"
 
 #: eeschema/dialogs/dialog_update_fields_base.cpp:45
 msgid "Do not clear existing entries if library field is empty"
@@ -9375,7 +9373,7 @@ msgstr "虚线"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dotted"
-msgstr ""
+msgstr "点线"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dash-Dot"
@@ -9709,7 +9707,7 @@ msgstr "频率"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:62
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:73
 msgid "Hertz"
-msgstr ""
+msgstr "赫兹"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:66
 #, fuzzy
@@ -9723,7 +9721,7 @@ msgstr "A"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:93
 msgid "DC sweep source 1:"
-msgstr ""
+msgstr "直流扫描源 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:95
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:156
@@ -9734,12 +9732,12 @@ msgstr "启用"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:104
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:164
 msgid "DC source:"
-msgstr ""
+msgstr "直流源："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:174
 msgid "Starting voltage:"
-msgstr ""
+msgstr "开始电压 [V]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:121
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
@@ -9791,7 +9789,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:257
 msgid "Noise source"
-msgstr ""
+msgstr "噪音源"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:287
 #, fuzzy
@@ -9800,15 +9798,15 @@ msgstr "单元编号"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:294
 msgid "Start frequency [Hz]"
-msgstr ""
+msgstr "开始频率 [Hz]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:301
 msgid "Stop frequency [Hz]"
-msgstr ""
+msgstr "停止频率 [Hz]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:318
 msgid "Noise"
-msgstr ""
+msgstr "噪音"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:328
 #, fuzzy
@@ -10070,7 +10068,7 @@ msgstr "+90"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:48
 msgid "+180"
-msgstr ""
+msgstr "+180"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:48
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:134
@@ -10894,7 +10892,7 @@ msgstr "新建库"
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:70
 msgid ""
 "Warning: Changes made from this dialog cannot be undone, after closing it."
-msgstr ""
+msgstr "警告:在关闭对话框后，该对话框的更改无法撤消。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:96
 #, fuzzy
@@ -11756,7 +11754,7 @@ msgid "Symbol \"%s\" not found in library \"%s\""
 msgstr "入口 '%s' 没有在库 '%s'中找到."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol \"%s\" found in library \"%s\""
 msgstr "'%s' 在库中 '%s'找到"
 
@@ -11917,7 +11915,7 @@ msgstr "重做最后操作"
 
 #: eeschema/help_common_strings.h:45
 msgid "Zoom to fit schematic page"
-msgstr ""
+msgstr "缩放原理图至适合页面"
 
 #: eeschema/help_common_strings.h:46
 msgid "Redraw schematic view"
@@ -12518,7 +12516,7 @@ msgstr "未知 Excellon G 代码: &lt;%s&gt;"
 
 #: gerbview/job_file_reader.cpp:148
 msgid "This job file uses an outdated format. Please, recreate it"
-msgstr ""
+msgstr "此作业文件使用过时的格式， 请重新创建它。"
 
 #: gerbview/job_file_reader.cpp:172
 #, fuzzy
@@ -12795,7 +12793,7 @@ msgstr ""
 #: gerbview/menubar.cpp:315 pcbnew/menubar_pcb_editor.cpp:222
 #: pcbnew/menubar_footprint_editor.cpp:464
 msgid "Modern Toolset (&Accelerated)"
-msgstr ""
+msgstr "现代工具箱 (加速&A)"
 
 #: gerbview/menubar.cpp:318 pcbnew/menubar_pcb_editor.cpp:225
 #: pcbnew/menubar_footprint_editor.cpp:467
@@ -12804,7 +12802,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:321 pcbnew/menubar_pcb_editor.cpp:228
 msgid "Modern Toolset (Fallba&ck)"
-msgstr ""
+msgstr "现代工具箱 (后退 &c)"
 
 #: gerbview/menubar.cpp:324 pcbnew/menubar_pcb_editor.cpp:231
 #: pcbnew/menubar_footprint_editor.cpp:473
@@ -12925,6 +12923,12 @@ msgid ""
 "If you'd like to choose later, select Modern Toolset (Accelerated) in the "
 "Preferences menu."
 msgstr ""
+"KiCad可以使用你的显卡给你一个更流畅和更快的体验。此选项在默认情况下是关闭的，"
+"因为它与部分计算机不兼容。\n"
+"\n"
+"你愿意尝试启用图形加速码？\n"
+"\n"
+"如果你希望稍后选择，请在首选项菜单中选择现代工具箱。"
 
 #: gerbview/gerbview_frame.cpp:225 pcbnew/pcb_edit_frame.cpp:479
 #, fuzzy
@@ -13037,7 +13041,7 @@ msgstr ""
 
 #: gerbview/hotkeys.cpp:108 pcbnew/hotkeys.cpp:281
 msgid "Measure Distance (Modern Toolset only)"
-msgstr ""
+msgstr "测量距离（仅适用于现代工具箱）"
 
 #: gerbview/hotkeys.cpp:131
 msgid "Gerbview Hotkeys"
@@ -13178,6 +13182,8 @@ msgid ""
 "\n"
 "<b>Not loaded:</b> <i>%s</i>"
 msgstr ""
+"\n"
+"<b>未加载:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:56
 msgid "Gerber files"
@@ -13272,7 +13278,7 @@ msgstr "无法打开该文件。"
 #: gerbview/files.cpp:496
 #, c-format
 msgid "Info: skip file <i>\"%s\"</i> (unknown type)\n"
-msgstr ""
+msgstr "信息: 跳过文件 <i>“%s”</i> (未知类型)\n"
 
 #: gerbview/files.cpp:538
 #, fuzzy, c-format
@@ -13614,7 +13620,7 @@ msgstr "缩放时光标不居中"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:44
 msgid "User Interface:"
-msgstr ""
+msgstr "用户界面："
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 #, fuzzy
@@ -13822,11 +13828,11 @@ msgstr "保存当前工程"
 
 #: kicad/menubar.cpp:263
 msgid "EAGLE CAD..."
-msgstr ""
+msgstr "EAGLE CAD..."
 
 #: kicad/menubar.cpp:264
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr ""
+msgstr "导入EAGLE CAD XML原理图和电路板"
 
 #: kicad/menubar.cpp:270
 msgid "Import Project"
@@ -14029,13 +14035,13 @@ msgid "Unzip Project"
 msgstr "解压工程"
 
 #: kicad/files-io.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open \"%s\"\n"
 msgstr ""
 "\n"
-"打开 '%s'\n"
+"打开 \"%s\"\n"
 
 #: kicad/files-io.cpp:73
 msgid "Target Directory"
@@ -14083,7 +14089,7 @@ msgid " >>Error\n"
 msgstr " >>错误\n"
 
 #: kicad/files-io.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Zip archive \"%s\" created (%d bytes)"
@@ -14524,9 +14530,9 @@ msgstr "设计"
 
 #: pagelayout_editor/pl_editor_frame.cpp:202
 #: pagelayout_editor/pl_editor.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Error when loading file \"%s\""
-msgstr " <%s> 文件加载错误"
+msgstr "<%s> 文件加载错误"
 
 #: pagelayout_editor/pl_editor_frame.cpp:225
 msgid "Save changes in a new file before closing?"
@@ -14596,7 +14602,7 @@ msgstr "删除选择项"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:92
 msgid "Zoom to fit page"
-msgstr ""
+msgstr "缩放到适合页面"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:104
 msgid ""
@@ -14701,11 +14707,11 @@ msgstr "文件 <%s> 写入"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
-msgstr ""
+msgstr "起点 Y："
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:44
 msgid "X start:"
-msgstr ""
+msgstr "起点 X："
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
@@ -14744,11 +14750,11 @@ msgstr "左下"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
-msgstr ""
+msgstr "终点 X："
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:104
 msgid "Y end:"
-msgstr ""
+msgstr "终点 Y："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:44
 #, fuzzy
@@ -15055,7 +15061,7 @@ msgstr "电阻或导体的电阻率（Ω*米）"
 
 #: pcb_calculator/transline_ident.cpp:156
 msgid "Frequency of the input signal"
-msgstr ""
+msgstr "输入信号的频率"
 
 #: pcb_calculator/transline_ident.cpp:165
 #: pcb_calculator/transline_ident.cpp:202
@@ -16090,11 +16096,11 @@ msgstr "RF衰减器"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1200
 msgid "10% / 5%"
-msgstr ""
+msgstr "10% / 5%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1200
 msgid "<= 2%"
-msgstr ""
+msgstr "<= 2%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1202
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1231
@@ -16311,9 +16317,9 @@ msgstr "元素 %d 参数."
 
 #: pcbnew/gpcb_plugin.cpp:1008 pcbnew/footprint_libraries_utils.cpp:556
 #: pcbnew/kicad_plugin.cpp:2070 pcbnew/kicad_plugin.cpp:2136
-#, fuzzy, c-format
+#, c-format
 msgid "Library \"%s\" is read only"
-msgstr " '%s' 库为只读"
+msgstr "'%s' 库为只读"
 
 #: pcbnew/gpcb_plugin.cpp:1027 pcbnew/kicad_plugin.cpp:2184
 #, fuzzy, c-format
@@ -17651,7 +17657,7 @@ msgstr "添加线或多边形"
 
 #: pcbnew/tools/position_relative_tool.cpp:44
 msgid "Position Relative To..."
-msgstr ""
+msgstr "相対位置..."
 
 #: pcbnew/tools/position_relative_tool.cpp:45
 #, fuzzy
@@ -18477,7 +18483,7 @@ msgstr "封装(&F)"
 
 #: pcbnew/menubar_pcb_editor.cpp:359
 msgid "&Via"
-msgstr ""
+msgstr "过孔(&V)"
 
 #: pcbnew/menubar_pcb_editor.cpp:360
 #, fuzzy
@@ -18600,7 +18606,7 @@ msgstr "显示/隐藏Python脚本控制台"
 
 #: pcbnew/menubar_pcb_editor.cpp:458
 msgid "&External Plugins..."
-msgstr ""
+msgstr "外部插件(&E)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "Execute or reload python action plugins"
@@ -18612,7 +18618,7 @@ msgstr "刷新插件(&R)"
 
 #: pcbnew/menubar_pcb_editor.cpp:464
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr ""
+msgstr "重新加载所有的Python插件并刷新插件菜单"
 
 #: pcbnew/menubar_pcb_editor.cpp:477 pcbnew/menubar_footprint_editor.cpp:489
 #: pcbnew/tool_footprint_viewer.cpp:175
@@ -19099,7 +19105,7 @@ msgstr "IDFv3 板和元件导出"
 
 #: pcbnew/menubar_pcb_editor.cpp:1000
 msgid "S&TEP..."
-msgstr ""
+msgstr "步骤(&T)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:1000
 #, fuzzy
@@ -19108,7 +19114,7 @@ msgstr "导出"
 
 #: pcbnew/menubar_pcb_editor.cpp:1004
 msgid "&SVG..."
-msgstr ""
+msgstr "SVG (&S)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:1005
 #, fuzzy
@@ -20173,7 +20179,7 @@ msgstr "重做最后撤消操作"
 
 #: pcbnew/menubar_footprint_editor.cpp:174
 msgid "Cu&t"
-msgstr ""
+msgstr "剪切(&T)"
 
 #: pcbnew/menubar_footprint_editor.cpp:228 pcbnew/tool_footprint_viewer.cpp:93
 #: pcbnew/tool_footprint_viewer.cpp:156
@@ -20808,10 +20814,10 @@ msgid "Unable to find or load footprint from path \"%s\""
 msgstr "无法从路径 '%s'找到或载入封装"
 
 #: pcbnew/footprint_libraries_utils.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The footprint library \"%s\" could not be found in any of the search paths."
-msgstr " 在任何路径中均搜索不到封装库 '%s'."
+msgstr "在任何路径中均搜索不到封装库 '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:70
 #, fuzzy, c-format
@@ -28704,7 +28710,7 @@ msgstr "填充模式:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
 msgid "Boundary mode:"
-msgstr ""
+msgstr "边界模式："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
 #, fuzzy
