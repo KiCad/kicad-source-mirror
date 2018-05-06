@@ -122,5 +122,12 @@ void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
     filler.SetProgressReporter( progressReporter.get() );
 
     if( filler.Fill( toFill, true ) )
+    {
         m_ZoneFillsDirty = false;
+
+        if( IsGalCanvasActive() && GetGalCanvas() )
+            GetGalCanvas()->ForceRefresh();
+
+        GetCanvas()->Refresh();
+    }
 }
