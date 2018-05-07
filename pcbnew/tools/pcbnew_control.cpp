@@ -929,7 +929,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
 {
     std::vector<BOARD_ITEM*> items;
 
-    for( auto track : aBoard->Tracks() )
+    while( auto track = aBoard->m_Track.PopBack() )
     {
         if( track->GetFlags() & FLAG0 )
             track->ClearFlags( FLAG0 );
@@ -937,7 +937,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
             items.push_back( track );
     }
 
-    for( auto module : aBoard->Modules() )
+    while( auto module = aBoard->m_Modules.PopBack() )
     {
         if( module->GetFlags() & FLAG0 )
             module->ClearFlags( FLAG0 );
@@ -945,7 +945,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
             items.push_back( module );
     }
 
-    for( auto drawing : aBoard->Drawings() )
+    while( auto drawing = aBoard->DrawingsList().PopBack() )
     {
         if( drawing->GetFlags() & FLAG0 )
             drawing->ClearFlags( FLAG0 );
@@ -953,7 +953,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
             items.push_back( drawing );
     }
 
-    for( auto zone : aBoard->Zones() )
+    while( auto zone = aBoard->m_Zone.PopBack() )
     {
         if( zone->GetFlags() & FLAG0 )
             zone->ClearFlags( FLAG0 );
