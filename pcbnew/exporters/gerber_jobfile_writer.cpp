@@ -695,7 +695,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             if( !dielectric.IsEmpty() )
                 addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", dielectric ) );
 
-            addJSONObject( wxString::Format( "\"S_Notes\":  \"Layers L%d/L%d\",\n",
+            addJSONObject( wxString::Format( "\"Notes\":  \"Layers L%d/L%d\",\n",
                           layer+1, layer+2 ) );
             removeJSONSepararator();
             closeBlockWithSep();
