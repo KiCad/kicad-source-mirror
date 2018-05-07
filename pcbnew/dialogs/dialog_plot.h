@@ -58,7 +58,6 @@ private:
 
     // Event called functions
     void        Plot( wxCommandEvent& event ) override;
-    void        DraftPlot( wxCommandEvent& event ) override;
     void        OnQuit( wxCommandEvent& event ) override;
     void        OnClose( wxCloseEvent& event ) override;
     void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;

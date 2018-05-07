@@ -51,7 +51,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 			ID_PRINT_REF = 1000,
 			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
 			ID_MIROR_OPT,
-			ID_CREATE_DRILL_FILE,
 			ID_LAYER_FAB,
 			ID_SELECT_COPPER_LAYERS,
 			ID_DESELECT_COPPER_LAYERS,
@@ -75,9 +74,10 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxCheckBox* m_excludePadsFromSilkscreen;
+		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
-		wxCheckBox* m_useAuxOriginCheckBox;
+		wxCheckBox* m_zoneFillCheck;
 		wxStaticText* m_staticText11;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* m_staticText12;
@@ -86,6 +86,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_plotModeOpt;
 		wxStaticText* m_textDefaultPenSize;
 		wxTextCtrl* m_linesWidth;
+		wxStaticBoxSizer* m_sizerSoldMaskLayerOpt;
 		wxStaticText* m_SolderMaskMarginLabel;
 		wxStaticText* m_SolderMaskMarginCurrValue;
 		wxStaticText* m_solderMaskMinWidthLabel;
@@ -113,7 +114,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxButton* m_buttonDRC;
-		wxButton* m_buttonDrill;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
@@ -131,7 +131,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DraftPlot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPopUpLayers( wxCommandEvent& event ) { event.Skip(); }

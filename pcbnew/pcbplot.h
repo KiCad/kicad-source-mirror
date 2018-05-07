@@ -61,6 +61,7 @@ class REPORTER;
 #define OPTKEY_PLOT_X_FINESCALE_ADJ  wxT( "PlotXFineScaleAdj" )
 #define OPTKEY_PLOT_Y_FINESCALE_ADJ  wxT( "PlotYFineScaleAdj" )
 #define CONFIG_PS_FINEWIDTH_ADJ      wxT( "PSPlotFineWidthAdj" )
+#define OPTKEY_PLOT_CHECK_ZONES      wxT( "CheckZonesBeforePlotting" )
 
 ///@}
 
