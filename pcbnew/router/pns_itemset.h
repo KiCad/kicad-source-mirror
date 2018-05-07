@@ -120,6 +120,9 @@ public:
     {
         int n = 0;
 
+        if( aKindMask == -1 || aKindMask == ITEM::ANY_T )
+            return m_items.size();
+
         for( ITEM* item : m_items )
         {
             if( item->Kind() & aKindMask )
