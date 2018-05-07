@@ -303,6 +303,12 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
+    // Ensure the frame is shown when opening the file(s), to avoid issues (crash) on GAL
+    // when trying to change the view if it is not fully initialized.
+    // It happens when starting Gerbview with a gerber job file to load
+    if( !IsShown() )
+        Show();
+
     // The current project path is also a valid command parameter.  Check if a single path
     // rather than a file name was passed to GerbView and use it as the initial MRU path.
     if( aFileSet.size() > 0 )
