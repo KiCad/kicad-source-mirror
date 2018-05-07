@@ -1518,15 +1518,20 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         void SnapItem( BOARD_ITEM *aItem ) override
         {
-#if 0
             // If you place a Via on a track but not on its centerline, the current
             // connectivity algorithm will require us to put a kink in the track when
             // we break it (so that each of the two segments ends on the via center).
             // That's not ideal, and is in fact probably worse than forcing snap in
             // this situation.
-            if( m_frame->Settings().m_magneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL
-                || m_frame->Settings().m_magneticTracks == CAPTURE_ALWAYS )
-#endif
+
+//          bool do_snap = ( m_frame->Settings().m_magneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL
+//                || m_frame->Settings().m_magneticTracks == CAPTURE_ALWAYS );
+            bool do_snap = true;
+
+            if( m_modifiers & MD_SHIFT )
+                do_snap = !do_snap;
+
+            if( do_snap )
             {
                 auto    via = static_cast<VIA*>( aItem );
                 wxPoint pos = via->GetPosition();

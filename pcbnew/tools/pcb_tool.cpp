@@ -59,6 +59,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
 
     aPlacer->m_board = board();
     aPlacer->m_frame = frame();
+    aPlacer->m_modifiers = 0;
 
     if( aOptions & IPO_SINGLE_CLICK )
     {
@@ -74,6 +75,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         VECTOR2I cursorPos = controls()->GetCursorPosition();
+        aPlacer->m_modifiers = evt->Modifier();
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {

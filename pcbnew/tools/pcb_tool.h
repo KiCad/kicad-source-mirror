@@ -57,6 +57,7 @@ struct INTERACTIVE_PLACER_BASE
 
     PCB_EDIT_FRAME* m_frame;
     BOARD* m_board;
+    int m_modifiers;
 };
 
 
