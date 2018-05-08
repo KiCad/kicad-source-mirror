@@ -887,7 +887,7 @@ void SHOVE::unwindStack( ITEM* aItem )
 
 bool SHOVE::pushLine( const LINE& aL, bool aKeepCurrentOnTop )
 {
-    if( !aL.IsLinkedChecked() )
+    if( !aL.IsLinkedChecked() && aL.SegmentCount() != 0 )
         return false;
 
     if( aKeepCurrentOnTop && m_lineStack.size() > 0)
