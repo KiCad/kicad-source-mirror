@@ -828,19 +828,17 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
-    BOARD tmpBoard;
     BOARD_ITEM* clipItem = pi.Parse();
 
     if( !clipItem )
-    {
         return 0;
-    }
 
     if( clipItem->Type() == PCB_T )
-        static_cast<BOARD*>(clipItem)->ClearAllNetCodes();
+        static_cast<BOARD*>( clipItem )->ClearAllNetCodes();
 
     bool editModules = m_editModules || frame()->IsType( FRAME_PCB_MODULE_EDITOR );
 
@@ -853,7 +851,6 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-
     switch( clipItem->Type() )
     {
         case PCB_T:
@@ -864,28 +861,29 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
                 return 0;
             }
 
-		    placeBoardItems( static_cast<BOARD*>( clipItem ) );
+            placeBoardItems( static_cast<BOARD*>( clipItem ) );
             break;
         }
 
         case PCB_MODULE_T:
         {
-            std::vector<BOARD_ITEM *> items;
+            std::vector<BOARD_ITEM*> items;
 
             clipItem->SetParent( board() );
 
             if( editModules )
             {
-                auto mod = static_cast<MODULE *>( clipItem );
+                auto mod = static_cast<MODULE*>( clipItem );
 
                 for( auto pad : mod->Pads() )
                 {
-                    pad->SetParent ( board()->m_Modules.GetFirst() );
+                    pad->SetParent( board()->m_Modules.GetFirst() );
                     items.push_back( pad );
                 }
+
                 for( auto item : mod->GraphicalItems() )
                 {
-                    item->SetParent ( board()->m_Modules.GetFirst() );
+                    item->SetParent( board()->m_Modules.GetFirst() );
                     items.push_back( item );
                 }
             }
@@ -897,13 +895,15 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
             placeBoardItems( items, true );
             break;
         }
+
         default:
             m_frame->DisplayToolMsg( _( "Invalid clipboard contents" ) );
-            // FAILED
             break;
     }
+
     return 1;
 }
+
 
 int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 {
@@ -924,6 +924,7 @@ int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 
     return AppendBoard( *pi, fileName );
 }
+
 
 int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
 {
@@ -1077,7 +1078,6 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     enabledLayers |= initialEnabledLayers;
     brd->SetEnabledLayers( enabledLayers );
     brd->SetVisibleLayers( enabledLayers );
-
 
     return placeBoardItems( brd );
 }
