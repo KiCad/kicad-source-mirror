@@ -113,6 +113,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_DXF_plotModeOpt;
 		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
+		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

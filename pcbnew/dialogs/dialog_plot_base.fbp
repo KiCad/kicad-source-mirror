@@ -4482,9 +4482,9 @@
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">bSizerButtons</property>
+                        <property name="name">m_sizerButtons</property>
                         <property name="orient">wxHORIZONTAL</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>

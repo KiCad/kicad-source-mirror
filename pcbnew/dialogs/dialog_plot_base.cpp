@@ -376,14 +376,13 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_MainSizer->Add( sbSizerMsg, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+	m_sizerButtons = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonDRC = new wxButton( this, wxID_ANY, _("Run DRC..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonDRC, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_sizerButtons->Add( m_buttonDRC, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	bSizerButtons->Add( 10, 0, 1, wxEXPAND, 5 );
+	m_sizerButtons->Add( 10, 0, 1, wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -394,10 +393,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bSizerButtons->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	m_sizerButtons->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
 	
 	
-	m_MainSizer->Add( bSizerButtons, 0, wxALIGN_RIGHT|wxEXPAND|wxLEFT, 5 );
+	m_MainSizer->Add( m_sizerButtons, 0, wxALIGN_RIGHT|wxEXPAND|wxLEFT, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
