@@ -136,11 +136,11 @@ private:
 
     FOOTPRINT_LIST* m_list;
 
-    wxString                            m_lib_name;
-    wxString                            m_filter_pattern;
-    int                                 m_pin_count;
-    int                                 m_filter_type;
-    EDA_PATTERN_MATCH_WILDCARD_EXPLICIT m_filter;
+    wxString                    m_lib_name;
+    wxString                    m_filter_pattern;
+    int                         m_pin_count;
+    int                         m_filter_type;
+    EDA_PATTERN_MATCH_WILDCARD  m_filter;
 
     std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_footprint_filters;
 };

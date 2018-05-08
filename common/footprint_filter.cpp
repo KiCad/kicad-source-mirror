@@ -128,8 +128,6 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
     // The matching is case insensitive
     wxString name;
 
-    EDA_PATTERN_MATCH_WILDCARD_EXPLICIT patternFilter;
-
     for( auto const& each_filter : m_filter->m_footprint_filters )
     {
         name.Empty();
