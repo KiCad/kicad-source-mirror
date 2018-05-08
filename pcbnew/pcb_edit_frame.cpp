@@ -403,7 +403,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     lyrs.LayersToolbarPane();
     lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
     lyrs.BestSize( m_Layers->GetBestSize() );
-    lyrs.Caption( _( "Visibles" ) );
+    lyrs.Caption( _( "Layers Manager" ) );
     lyrs.TopDockable( false ).BottomDockable( false );
 
     if( m_mainToolBar )    // The main horizontal toolbar
