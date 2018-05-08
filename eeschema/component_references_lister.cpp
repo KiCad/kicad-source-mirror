@@ -1,12 +1,12 @@
 /**
  * @file component_references_lister.cpp
- * @brief Code for creating a flat list of components needed for annotation and BOM.
+ * @brief functions to create a component flat list and to annotate schematic.
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 jean-pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2018 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -32,6 +32,7 @@
 #include <wx/regex.h>
 #include <algorithm>
 #include <vector>
+#include <unordered_set>
 
 #include <fctsys.h>
 #include <kicad_string.h>
@@ -271,6 +272,17 @@ int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFi
 }
 
 
+// A helper function to build a full reference string of a SCH_REFERENCE item
+wxString buildFullReference( const SCH_REFERENCE& aItem )
+{
+    wxString fullref;
+    fullref = aItem.GetRef() + aItem.GetRefNumber();
+    fullref << ".." << aItem.GetUnit();
+
+    return fullref;
+}
+
+
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
       SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap )
 {
@@ -304,6 +316,18 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         minRefId = componentFlatList[first].m_SheetNum * aSheetIntervalId + 1;
     else
         minRefId = aStartNumber + 1;
+
+    // For multi units components, when "keep order of multi unit" option is selected,
+    // store the list of already used full references.
+    // The algorithm try to allocate the new reference to components having the same
+    // old reference.
+    // This algo works fine as long as the previous annotation has no duplicates.
+    // But when a hierarchy is reannotated with this option, the previous anotation can
+    // have duplicate references, and obviously we must fix these duplicate.
+    // therefore do not try to allocate a full reference more than once when trying
+    // to keep this order of multi units.
+    // inUseRefs keep trace of previously allocated references
+    std::unordered_set<wxString> inUseRefs;
 
     // This is the list of all Id already in use for a given reference prefix.
     // Will be refilled for each new reference prefix.
@@ -345,7 +369,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             if( aUseSheetNum )
                 minRefId = componentFlatList[ii].m_SheetNum * aSheetIntervalId;
 
-            LastReferenceNumber = componentFlatList.GetLastReference( ii, minRefId );
+            LastReferenceNumber = GetLastReference( ii, minRefId );
+
 #else
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
@@ -399,27 +424,44 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         if( lockedList != NULL )
         {
             unsigned n_refs = lockedList->GetCount();
+
             for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
             {
                 SCH_REFERENCE &thisRef = (*lockedList)[thisRefI];
+
                 if( thisRef.IsSameInstance( componentFlatList[ii] ) )
                 {
                     // This is the component we're currently annotating. Hold the unit!
                     componentFlatList[ii].m_Unit = thisRef.m_Unit;
                 }
 
-                if( thisRef.CompareValue( componentFlatList[ii] ) != 0 ) continue;
-                if( thisRef.CompareLibName( componentFlatList[ii] ) != 0 ) continue;
+                if( thisRef.CompareValue( componentFlatList[ii] ) != 0 )
+                    continue;
+
+                if( thisRef.CompareLibName( componentFlatList[ii] ) != 0 )
+                    continue;
 
                 // Find the matching component
                 for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
                 {
-                    if( ! thisRef.IsSameInstance( componentFlatList[jj] ) ) continue;
-                    componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
-                    componentFlatList[jj].m_Unit = thisRef.m_Unit;
-                    componentFlatList[jj].m_IsNew = false;
-                    componentFlatList[jj].m_Flag = 1;
-                    break;
+                    if( ! thisRef.IsSameInstance( componentFlatList[jj] ) )
+                        continue;
+
+                    wxString ref_candidate = buildFullReference( componentFlatList[ii] );
+
+                    // propagate the new reference and unit selection to the "old" component,
+                    // if this new full reference is not already used (can happens when initial
+                    // multiunits components have duplicate references)
+                    if( inUseRefs.find( ref_candidate ) == inUseRefs.end() )
+                    {
+                        componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
+                        componentFlatList[jj].m_Unit = thisRef.m_Unit;
+                        componentFlatList[jj].m_IsNew = false;
+                        componentFlatList[jj].m_Flag = 1;
+                        // lock this new full reference
+                        inUseRefs.insert( ref_candidate );
+                        break;
+                    }
                 }
             }
         }
