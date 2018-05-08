@@ -149,10 +149,12 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     }
 }
 
+
 void DRAGGER::SetMode( int aMode )
 {
     m_mode = aMode;
 }
+
 
 bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
 {
@@ -301,6 +303,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         {
             if( newVia )
                 m_draggedVia = newVia;
+
             m_draggedItems.Clear();
         }
 
@@ -316,9 +319,11 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
 
 bool DRAGGER::FixRoute()
 {
-    if( m_dragStatus )
+    NODE* node = CurrentNode();
+
+    if( node )
     {
-        Router()->CommitRouting( CurrentNode() );
+        Router()->CommitRouting( node );
         return true;
     }
 
