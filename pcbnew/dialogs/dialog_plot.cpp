@@ -53,7 +53,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     init_Dialog();
 
     // We use a sdbSizer here to get the order right, which is platform-dependent
-    m_sdbSizer1OK->SetLabel( _( "Plot" ) );
+    m_sdbSizer1OK->SetLabel( _( "   Plot   " ) );
     m_sdbSizer1Apply->SetLabel( _( "Generate Drill Files..." ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_sdbSizer1->Layout();
