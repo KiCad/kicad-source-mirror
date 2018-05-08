@@ -174,7 +174,7 @@ private:
 
     void generate_3D_Vias_and_Pads();
 
-    void load_3D_models();
+    void load_3D_models( REPORTER *aStatusTextReporter );
 
     /**
      * @brief render_3D_models
