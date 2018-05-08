@@ -926,44 +926,32 @@ int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 }
 
 
+// Helper function for PCBNEW_CONTROL::placeBoardItems()
+template<typename T>
+static void moveNoFlagToVector( DLIST<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
+{
+    for( auto obj = aIsNew ? aList.PopFront() : aList.GetFirst(); obj;
+            obj = aIsNew ? aList.PopFront() : obj->Next() )
+    {
+        if( obj->GetFlags() & FLAG0 )
+            obj->ClearFlags( FLAG0 );
+        else
+            aTarget.push_back( obj );
+    }
+}
+
+
 int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
 {
-    std::vector<BOARD_ITEM*> items;
-
-    while( auto track = aBoard->m_Track.PopBack() )
-    {
-        if( track->GetFlags() & FLAG0 )
-            track->ClearFlags( FLAG0 );
-        else
-            items.push_back( track );
-    }
-
-    while( auto module = aBoard->m_Modules.PopBack() )
-    {
-        if( module->GetFlags() & FLAG0 )
-            module->ClearFlags( FLAG0 );
-        else
-            items.push_back( module );
-    }
-
-    while( auto drawing = aBoard->DrawingsList().PopBack() )
-    {
-        if( drawing->GetFlags() & FLAG0 )
-            drawing->ClearFlags( FLAG0 );
-        else
-            items.push_back( drawing );
-    }
-
-    while( auto zone = aBoard->m_Zone.PopBack() )
-    {
-        if( zone->GetFlags() & FLAG0 )
-            zone->ClearFlags( FLAG0 );
-        else
-            items.push_back( zone );
-    }
-
     // items are new if the current board is not the board source
     bool isNew = board() != aBoard;
+    std::vector<BOARD_ITEM*> items;
+
+    moveNoFlagToVector( aBoard->m_Track, items, isNew );
+    moveNoFlagToVector( aBoard->m_Modules, items, isNew );
+    moveNoFlagToVector( aBoard->DrawingsList(), items, isNew );
+    moveNoFlagToVector( aBoard->m_Zone, items, isNew );
+
     return placeBoardItems( items, isNew );
 }
 
