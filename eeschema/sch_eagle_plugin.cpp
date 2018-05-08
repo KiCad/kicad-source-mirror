@@ -1266,6 +1266,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             wxXmlNode* gateNode = getChildrenNodes( aDeviceSetChildren, "gates" );
             int gates_count = countChildren( aDeviceSetChildren["gates"], "gate" );
             kpart->SetUnitCount( gates_count );
+            kpart->LockUnits( true );
 
             LIB_FIELD* reference = kpart->GetField( REFERENCE );
 
