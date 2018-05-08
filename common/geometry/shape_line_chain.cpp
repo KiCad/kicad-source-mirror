@@ -331,7 +331,7 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
 {
-    if( !m_closed || SegmentCount() < 3 )
+    if( !m_closed || SegmentCount() < 3 || !BBox().Contains( aP ) )
         return false;
 
     bool inside = false;
@@ -359,6 +359,12 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 {
+    return CheckClearance( aP, 1 );
+}
+
+
+bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist) const
+{
 	if( !PointCount() )
 		return false;
 
@@ -372,7 +378,7 @@ bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
         if( s.A == aP || s.B == aP )
             return true;
 
-        if( s.Distance( aP ) <= 1 )
+        if( s.Distance( aP ) <= aDist )
             return true;
     }
 

@@ -532,7 +532,7 @@ public:
     /**
      * Function PointInside()
      *
-     * Checks if point aP lies inside a convex polygon defined by the line chain. For closed
+     * Checks if point aP lies inside a polygon (any type) defined by the line chain. For closed
      * shapes only.
      * @param aP point to check
      * @return true if the point is inside the shape (edge is not treated as being inside).
@@ -547,6 +547,16 @@ public:
      * @return true if the point lies on the edge.
      */
     bool PointOnEdge( const VECTOR2I& aP ) const;
+
+    /**
+     * Function CheckClearance()
+     *
+     * Checks if point aP is closer to (or on) an edge or vertex of the line chain.
+     * @param aP point to check
+     * @param aDist distance in internal units
+     * @return true if the point is equal to or closer than aDist to the line chain.
+     */
+    bool CheckClearance( const VECTOR2I& aP, const int aDist) const;
 
     /**
      * Function SelfIntersecting()
