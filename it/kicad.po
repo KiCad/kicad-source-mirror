@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-06 17:30+0200\n"
-"PO-Revision-Date: 2018-05-06 17:33+0200\n"
+"POT-Creation-Date: 2018-05-09 12:50+0200\n"
+"PO-Revision-Date: 2018-05-09 12:52+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1229,6 +1229,11 @@ msgstr "Caricamento modelli 3D"
 msgid "Reload time %.3f s"
 msgstr "Tempo di ricaricamento %.3f s"
 
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:954
+#, c-format
+msgid "Loading %s"
+msgstr "Caricamento di %s"
+
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:357
 #, c-format
 msgid "Rendering time %.3f s"
@@ -1618,7 +1623,7 @@ msgstr "Griglia"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
 #: pcbnew/dialogs/dialog_update_pcb.cpp:160
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:104
-#: pcbnew/dialogs/dialog_plot.cpp:59 pcbnew/dialogs/dialog_find_base.cpp:46
+#: pcbnew/dialogs/dialog_plot.cpp:58 pcbnew/dialogs/dialog_find_base.cpp:46
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:129
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:130
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
@@ -2740,17 +2745,17 @@ msgstr "Info marcatore"
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Il ribaltamento lungo l'asse Y non è ancora supportato"
 
-#: common/common.cpp:298
+#: common/common.cpp:295
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
 msgstr "Impossibile rendere il percorso \"%s\" assuluto rispetto a \"%s\"."
 
-#: common/common.cpp:316
+#: common/common.cpp:313
 #, c-format
 msgid "Output directory \"%s\" created.\n"
 msgstr "Cartella risultati \"%s\" creata.\n"
 
-#: common/common.cpp:325
+#: common/common.cpp:322
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
 msgstr "Impossibile creare la cartella risultati \"%s\".\n"
@@ -3051,7 +3056,7 @@ msgstr "Altezza foglio personalizzata"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_global_footprints_fields_edition_base.cpp:64
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:27
-#: pcbnew/dialogs/dialog_plot_base.cpp:207
+#: pcbnew/dialogs/dialog_plot_base.cpp:209
 msgid "Width:"
 msgstr "Larghezza:"
 
@@ -6178,7 +6183,7 @@ msgstr "nessuna libreria selezionata"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:338
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:543
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:592
-#: pcbnew/dialogs/dialog_plot_base.cpp:143
+#: pcbnew/dialogs/dialog_plot_base.cpp:146
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:129
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 msgid "None"
@@ -7621,8 +7626,8 @@ msgstr "Desc"
 #: eeschema/sch_legacy_plugin.cpp:236 eeschema/sch_legacy_plugin.cpp:280
 #: eeschema/sch_legacy_plugin.cpp:322 eeschema/sch_legacy_plugin.cpp:335
 #: eeschema/sch_legacy_plugin.cpp:384 eeschema/sch_legacy_plugin.cpp:397
-#: eeschema/sch_legacy_plugin.cpp:416 eeschema/sch_legacy_plugin.cpp:986
-#: eeschema/sch_legacy_plugin.cpp:2747
+#: eeschema/sch_legacy_plugin.cpp:416 eeschema/sch_legacy_plugin.cpp:979
+#: eeschema/sch_legacy_plugin.cpp:2740
 msgid "unexpected end of line"
 msgstr "fine riga non previsto"
 
@@ -7630,91 +7635,91 @@ msgstr "fine riga non previsto"
 msgid "expected unquoted string"
 msgstr "attesa stringa senza virgolette"
 
-#: eeschema/sch_legacy_plugin.cpp:786
+#: eeschema/sch_legacy_plugin.cpp:779
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
 msgstr "\"%s\" non sembra essere un file di Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:814
+#: eeschema/sch_legacy_plugin.cpp:807
 msgid "Missing 'EELAYER END'"
 msgstr "\"EELAYER END\" mancante"
 
-#: eeschema/sch_legacy_plugin.cpp:862 eeschema/sch_legacy_plugin.cpp:1124
-#: eeschema/sch_legacy_plugin.cpp:1132 eeschema/sch_legacy_plugin.cpp:2319
+#: eeschema/sch_legacy_plugin.cpp:855 eeschema/sch_legacy_plugin.cpp:1117
+#: eeschema/sch_legacy_plugin.cpp:1125 eeschema/sch_legacy_plugin.cpp:2312
 msgid "unexpected end of file"
 msgstr "fine file inaspettata"
 
-#: eeschema/sch_legacy_plugin.cpp:1091
+#: eeschema/sch_legacy_plugin.cpp:1084
 msgid "Unexpected end of file"
 msgstr "Fine file non prevista"
 
-#: eeschema/sch_legacy_plugin.cpp:1379
+#: eeschema/sch_legacy_plugin.cpp:1372
 msgid "expected 'Italics' or '~'"
 msgstr "previsto \"Italics\" o \"~\""
 
-#: eeschema/sch_legacy_plugin.cpp:1602
+#: eeschema/sch_legacy_plugin.cpp:1595
 msgid "component field text attributes must be 3 characters wide"
 msgstr ""
 "gli attributi del campo testo del componente devono essere larghi 3 caratteri"
 
-#: eeschema/sch_legacy_plugin.cpp:2402
+#: eeschema/sch_legacy_plugin.cpp:2395
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr "non si dispone dei permessi necessari per salvare il file \"%s\""
 
-#: eeschema/sch_legacy_plugin.cpp:2410
+#: eeschema/sch_legacy_plugin.cpp:2403
 msgid "symbol document library file is empty"
 msgstr "il file della libreria di documentazione componenti è vuoto"
 
-#: eeschema/sch_legacy_plugin.cpp:4005 eeschema/sch_legacy_plugin.cpp:4040
+#: eeschema/sch_legacy_plugin.cpp:3998 eeschema/sch_legacy_plugin.cpp:4033
 #, c-format
 msgid "library %s does not contain an alias %s"
 msgstr "la libreria %s non contiene un alias %s"
 
-#: eeschema/sch_legacy_plugin.cpp:4223
+#: eeschema/sch_legacy_plugin.cpp:4216
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
 "la libreria di simboli \"%s\" esiste già, non ne verrà creata una nuova"
 
-#: eeschema/sch_legacy_plugin.cpp:4251 pcbnew/legacy_plugin.cpp:3469
+#: eeschema/sch_legacy_plugin.cpp:4244 pcbnew/legacy_plugin.cpp:3469
 #, c-format
 msgid "library \"%s\" cannot be deleted"
 msgstr "La libreria \"%s\" non può essere cancellata"
 
-#: eeschema/component_references_lister.cpp:506
+#: eeschema/component_references_lister.cpp:548
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Elemento non annotato: %s%s (unità %d)\n"
 
-#: eeschema/component_references_lister.cpp:513
+#: eeschema/component_references_lister.cpp:555
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Elemento non annotato: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:534
+#: eeschema/component_references_lister.cpp:576
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
 msgstr "Errore: simbolo %s%s unità %d e il simbolo ha solo %d unità definite\n"
 
-#: eeschema/component_references_lister.cpp:572
-#: eeschema/component_references_lister.cpp:602
+#: eeschema/component_references_lister.cpp:614
+#: eeschema/component_references_lister.cpp:644
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Elemento multiplo %s%s (unità %d)\n"
 
-#: eeschema/component_references_lister.cpp:579
-#: eeschema/component_references_lister.cpp:609
+#: eeschema/component_references_lister.cpp:621
+#: eeschema/component_references_lister.cpp:651
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Elemento multiplo %s%s\n"
 
-#: eeschema/component_references_lister.cpp:623
+#: eeschema/component_references_lister.cpp:665
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:656
+#: eeschema/component_references_lister.cpp:698
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Duplicata marcatura temporale (%s) per %s%d e %s%d"
@@ -9325,7 +9330,7 @@ msgid "Page Size:"
 msgstr "Dimensioni pagina:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:55
-#: pcbnew/dialogs/dialog_plot_base.cpp:267
+#: pcbnew/dialogs/dialog_plot_base.cpp:269
 msgid "HPGL Options:"
 msgstr "Opzioni HPGL:"
 
@@ -10967,7 +10972,7 @@ msgstr "%"
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:158
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:109
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:66
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
+#: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "Auto"
 msgstr "Auto"
 
@@ -11107,13 +11112,13 @@ msgstr "Campi predefiniti"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:170
 #: pcbnew/exporters/gen_footprints_placefile.cpp:187
 #: pcbnew/exporters/gen_footprints_placefile.cpp:622
-#: pcbnew/dialogs/dialog_plot.cpp:370 pcbnew/dialogs/dialog_SVG_print.cpp:213
+#: pcbnew/dialogs/dialog_plot.cpp:374 pcbnew/dialogs/dialog_SVG_print.cpp:213
 #: pcbnew/dialogs/dialog_gendrill.cpp:311
 msgid "Select Output Directory"
 msgstr "Seleziona percorso di uscita"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:182
-#: pcbnew/dialogs/dialog_plot.cpp:380 pcbnew/dialogs/dialog_gendrill.cpp:321
+#: pcbnew/dialogs/dialog_plot.cpp:384 pcbnew/dialogs/dialog_gendrill.cpp:321
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -11126,7 +11131,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:193
 #: pcbnew/exporters/gen_footprints_placefile.cpp:195
 #: pcbnew/exporters/gen_footprints_placefile.cpp:204
-#: pcbnew/dialogs/dialog_plot.cpp:383 pcbnew/dialogs/dialog_plot.cpp:390
+#: pcbnew/dialogs/dialog_plot.cpp:387 pcbnew/dialogs/dialog_plot.cpp:394
 #: pcbnew/dialogs/dialog_SVG_print.cpp:221
 #: pcbnew/dialogs/dialog_SVG_print.cpp:232
 #: pcbnew/dialogs/dialog_gendrill.cpp:323
@@ -11135,7 +11140,7 @@ msgid "Plot Output Directory"
 msgstr "Cartella risultati tracciature"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:192
-#: pcbnew/dialogs/dialog_plot.cpp:389 pcbnew/dialogs/dialog_gendrill.cpp:329
+#: pcbnew/dialogs/dialog_plot.cpp:393 pcbnew/dialogs/dialog_gendrill.cpp:329
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Impossibile rendere il percorso relativo (volume di destinazione diverso da "
@@ -11143,7 +11148,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:349
 #: pcbnew/exporters/gen_footprints_placefile.cpp:264
-#: pcbnew/dialogs/dialog_plot.cpp:799 pcbnew/dialogs/dialog_SVG_print.cpp:273
+#: pcbnew/dialogs/dialog_plot.cpp:793 pcbnew/dialogs/dialog_SVG_print.cpp:273
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella \"%s\"."
@@ -12581,8 +12586,7 @@ msgid "Sort Layers if X2 Mode"
 msgstr "Ordina gli strati se in modalità X2"
 
 #: gerbview/gerbview_frame.cpp:159 gerbview/events_called_functions.cpp:445
-#: pcbnew/footprint_edit_frame.cpp:315 pcbnew/pcb_edit_frame.cpp:406
-#: pcbnew/pcb_edit_frame.cpp:1039
+#: pcbnew/footprint_edit_frame.cpp:315 pcbnew/pcb_edit_frame.cpp:1039
 msgid "Visibles"
 msgstr "Visibili"
 
@@ -12618,29 +12622,29 @@ msgstr "Abilita acc&elerazione grafica"
 msgid "&No Thanks"
 msgstr "&No grazie"
 
-#: gerbview/gerbview_frame.cpp:654
+#: gerbview/gerbview_frame.cpp:660
 msgid "D Codes"
 msgstr "Codici D"
 
-#: gerbview/gerbview_frame.cpp:763
+#: gerbview/gerbview_frame.cpp:769
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Strato grafico %d non in uso"
 
-#: gerbview/gerbview_frame.cpp:775
+#: gerbview/gerbview_frame.cpp:781
 msgid "GerbView"
 msgstr "GerbView"
 
-#: gerbview/gerbview_frame.cpp:777
+#: gerbview/gerbview_frame.cpp:783
 msgid " (with X2 attributes)"
 msgstr " (con attributi X2)"
 
-#: gerbview/gerbview_frame.cpp:785
+#: gerbview/gerbview_frame.cpp:791
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Nome immagine: \"%s\"  Nome strato: \"%s\""
 
-#: gerbview/gerbview_frame.cpp:799
+#: gerbview/gerbview_frame.cpp:805
 msgid "X2 attr"
 msgstr "Attr X2"
 
@@ -13047,7 +13051,7 @@ msgid "Approximate Scale:"
 msgstr "Scala approssimata:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
-#: pcbnew/dialogs/dialog_plot_base.cpp:293
+#: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "X scale:"
 msgstr "Scala X:"
 
@@ -13057,7 +13061,7 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Imposta l'asse X per un esatta tracciatura"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
-#: pcbnew/dialogs/dialog_plot_base.cpp:308
+#: pcbnew/dialogs/dialog_plot_base.cpp:310
 msgid "Y scale:"
 msgstr "Scala Y:"
 
@@ -13093,13 +13097,13 @@ msgstr "Errore info inizializzazione stampante"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:300
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:357
-#: pcbnew/dialogs/dialog_plot.cpp:858
+#: pcbnew/dialogs/dialog_plot.cpp:852
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attenzione: scala impostata ad un valore molto alto"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:306
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:367
-#: pcbnew/dialogs/dialog_plot.cpp:854
+#: pcbnew/dialogs/dialog_plot.cpp:848
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attenzione: scala impostata ad un valore molto basso"
 
@@ -13206,14 +13210,14 @@ msgstr "Unità:"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:36
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:42
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:48
-#: pcbnew/dialogs/dialog_plot_base.cpp:163
+#: pcbnew/dialogs/dialog_plot_base.cpp:166
 msgid "Sketch"
 msgstr "Schizzo"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:36
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:42
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:48
-#: pcbnew/dialogs/dialog_plot_base.cpp:163
+#: pcbnew/dialogs/dialog_plot_base.cpp:166
 msgid "Filled"
 msgstr "Pieno"
 
@@ -16959,11 +16963,11 @@ msgstr "Piazza un elemento DXF"
 msgid "Move the footprint reference anchor"
 msgstr "Sposta l'ancoraggio di riferimento dell'impronta"
 
-#: pcbnew/tools/drawing_tool.cpp:1641 pcbnew/tool_pcb_editor.cpp:465
+#: pcbnew/tools/drawing_tool.cpp:1646 pcbnew/tool_pcb_editor.cpp:465
 msgid "Add vias"
 msgstr "Aggiungi via"
 
-#: pcbnew/tools/drawing_tool.cpp:1643
+#: pcbnew/tools/drawing_tool.cpp:1648
 msgid "Place via"
 msgstr "Piazza via"
 
@@ -17270,11 +17274,11 @@ msgstr "Incolla il contenuto degli appunti"
 msgid "Adjust grid origin"
 msgstr "Imposta origine griglia"
 
-#: pcbnew/tools/pcbnew_control.cpp:901
+#: pcbnew/tools/pcbnew_control.cpp:900
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
-#: pcbnew/tools/pcbnew_control.cpp:1057
+#: pcbnew/tools/pcbnew_control.cpp:1046
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -17283,7 +17287,7 @@ msgstr ""
 "Errore nel caricamento della scheda.\n"
 "%s"
 
-#: pcbnew/tools/pcbnew_control.cpp:1096
+#: pcbnew/tools/pcbnew_control.cpp:1084
 msgid "Not available in OpenGL/Cairo canvases."
 msgstr "Non disponibile con schermo OpenGL/Cairo."
 
@@ -21826,6 +21830,10 @@ msgstr ""
 msgid "Netlist update successful!"
 msgstr "Aggiornamento netlist effettuato con successo!"
 
+#: pcbnew/pcb_edit_frame.cpp:406
+msgid "Layers Manager"
+msgstr "Gestione livelli"
+
 #: pcbnew/pcb_edit_frame.cpp:705
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
@@ -21948,7 +21956,7 @@ msgid "Component Placement File generation OK."
 msgstr "Generazione file piazzamento componenti OK."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:340
-#: pcbnew/dialogs/dialog_plot.cpp:910 pcbnew/dialogs/dialog_SVG_print.cpp:310
+#: pcbnew/dialogs/dialog_plot.cpp:904 pcbnew/dialogs/dialog_SVG_print.cpp:310
 #, c-format
 msgid "Unable to create file \"%s\"."
 msgstr "Impossibile creare il file \"%s\"."
@@ -23377,7 +23385,7 @@ msgstr "Spessore penna predefinito:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:102
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:104
-#: pcbnew/dialogs/dialog_plot_base.cpp:171
+#: pcbnew/dialogs/dialog_plot_base.cpp:174
 msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
 "Used mainly to draw items in sketch mode."
@@ -23492,7 +23500,7 @@ msgstr ""
 "Genera una nuova forma per ogni istanza di impronta (non riusare le forme)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
-#: pcbnew/dialogs/dialog_plot_base.cpp:128
+#: pcbnew/dialogs/dialog_plot_base.cpp:122
 msgid "Use auxiliary axis as origin"
 msgstr "Usa asse ausiliario come origine"
 
@@ -26102,30 +26110,26 @@ msgid "Plot"
 msgstr "Traccia"
 
 #: pcbnew/dialogs/dialog_plot.cpp:57
-msgid "Draft Plot"
-msgstr "Traccia a schizzo"
+msgid "Generate Drill Files..."
+msgstr "Genera file forature..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:58
-msgid "Plot without running zone fill checks."
-msgstr "Traccia senza effettuare i controlli per lo riempimento delle zone."
-
-#: pcbnew/dialogs/dialog_plot.cpp:637
+#: pcbnew/dialogs/dialog_plot.cpp:641
 msgid "HPGL pen size constrained."
 msgstr "Dimensioni penna HPGL limitate."
 
-#: pcbnew/dialogs/dialog_plot.cpp:649
+#: pcbnew/dialogs/dialog_plot.cpp:653
 msgid "Default line width constrained."
 msgstr "Spessore predefinito della linea limitato."
 
-#: pcbnew/dialogs/dialog_plot.cpp:662
+#: pcbnew/dialogs/dialog_plot.cpp:666
 msgid "X scale constrained."
 msgstr "Scala X limitata."
 
-#: pcbnew/dialogs/dialog_plot.cpp:676
+#: pcbnew/dialogs/dialog_plot.cpp:680
 msgid "Y scale constrained."
 msgstr "Scala Y limitata."
 
-#: pcbnew/dialogs/dialog_plot.cpp:690
+#: pcbnew/dialogs/dialog_plot.cpp:696
 #, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
@@ -26135,11 +26139,11 @@ msgstr ""
 "larghezza deve essere compresa tra [%+f; %+f] (%s) per le attuali regole di "
 "progettazione."
 
-#: pcbnew/dialogs/dialog_plot.cpp:786
+#: pcbnew/dialogs/dialog_plot.cpp:780
 msgid "No layer selected, Nothing to plot"
 msgstr "Nessun strato selezionato, niente da tracciare"
 
-#: pcbnew/dialogs/dialog_plot.cpp:905
+#: pcbnew/dialogs/dialog_plot.cpp:899
 #, c-format
 msgid "Plot file \"%s\" created."
 msgstr "File tracciatura \"%s\" creato."
@@ -26766,7 +26770,7 @@ msgid "Error List"
 msgstr "Elenco errori"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:48
-#: pcbnew/dialogs/dialog_plot_base.cpp:197
+#: pcbnew/dialogs/dialog_plot_base.cpp:199
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:109
 msgid "Clearance:"
 msgstr "Distanza:"
@@ -27302,76 +27306,80 @@ msgstr ""
 "Disabilitare questa opzione se si desidera creare disegni di assemblaggio "
 "dagli strati serigrafici."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:122
-msgid "Mirrored plot"
-msgstr "Tracciatura speculare"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:125
-msgid "Negative plot"
-msgstr "Tracciatura in negativo"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:129
+#: pcbnew/dialogs/dialog_plot_base.cpp:123
 msgid "Use auxiliary axis as coordinates origin in plot files"
 msgstr "Usa asse ausiliario come coordinate di origine nei file tracciati"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:139
+#: pcbnew/dialogs/dialog_plot_base.cpp:127
+msgid "Mirrored plot"
+msgstr "Tracciatura speculare"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:130
+msgid "Negative plot"
+msgstr "Tracciatura in negativo"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:133
+msgid "Check zone fills before plotting"
+msgstr "Controllo riempimento zone prima della tracciatura"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:142
 msgid "Drill marks:"
 msgstr "Marcatori foratura:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:143
+#: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Small"
 msgstr "Dimensioni ridotte"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:143
+#: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Actual size"
 msgstr "Dimensione correnti"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:149
+#: pcbnew/dialogs/dialog_plot_base.cpp:152
 msgid "Scaling:"
 msgstr "Scala:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
+#: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "1:1"
 msgstr "1:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
+#: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "3:2"
 msgstr "3:2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
+#: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "2:1"
 msgstr "2:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
+#: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "3:1"
 msgstr "3:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:159
+#: pcbnew/dialogs/dialog_plot_base.cpp:162
 msgid "Plot mode:"
 msgstr "Modalità di tracciatura:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:169
+#: pcbnew/dialogs/dialog_plot_base.cpp:172
 msgid "Line width:"
 msgstr "Larghezza pista:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:176
+#: pcbnew/dialogs/dialog_plot_base.cpp:179
 msgid "Line width for, e.g., sheet references."
 msgstr "Larghezza linea per riferimenti foglio."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:190
+#: pcbnew/dialogs/dialog_plot_base.cpp:192
 msgid "Solder Mask Options:"
 msgstr "Opzioni maschera di saldatura:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:199
+#: pcbnew/dialogs/dialog_plot_base.cpp:201
 msgid "Margin between pads and solder mask"
 msgstr "Regola la distanza tra piazzole e maschera di saldatura"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:203
-#: pcbnew/dialogs/dialog_plot_base.cpp:213
+#: pcbnew/dialogs/dialog_plot_base.cpp:205
+#: pcbnew/dialogs/dialog_plot_base.cpp:215
 msgid "val"
 msgstr "val"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:209
+#: pcbnew/dialogs/dialog_plot_base.cpp:211
 msgid ""
 "Minimum distance between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting"
@@ -27379,15 +27387,15 @@ msgstr ""
 "Distanza minima tra le aree di 2 piazzole.\n"
 "Due aree vicine più di questo valore verranno fuse durante la tracciatura"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:223
+#: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Gerber Options:"
 msgstr "Opzioni Gerber:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:228
+#: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Use Protel filename extensions"
 msgstr "Usa le estensioni dei nomi file Protel"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:229
+#: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
@@ -27395,11 +27403,11 @@ msgstr ""
 "L'uso delle estensione Gerber Protel (.GBL, .GTL, ecc. ...)\n"
 "Non è più raccomandato. Il suffisso ufficiale è .gbr"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:233
+#: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Include extended (X2) attributes"
 msgstr "Includi gli attributi estesi (X2)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:234
+#: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid ""
 "Include extended attributes (X2 Gerber files format) in the Gerber file.\n"
 "Mainly File Format attributes."
@@ -27407,11 +27415,11 @@ msgstr ""
 "Includi attributi estesi (formato file Gerber X2) nel file Gerber.\n"
 "Principalmente attributi del formato file."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:238
+#: pcbnew/dialogs/dialog_plot_base.cpp:240
 msgid "Include advanced X2 features"
 msgstr "Includi le caratteristiche avanzate X2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:239
+#: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid ""
 "Only available in X2 Gerber files format.\n"
 "Include netlist metadata and aperture attributes."
@@ -27419,11 +27427,11 @@ msgstr ""
 "Disponibile solo nel formato file Gerber X2.\n"
 "Include i metadati della netlist e gli attributi delle aperture."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:243
+#: pcbnew/dialogs/dialog_plot_base.cpp:245
 msgid "Generate Gerber job file"
 msgstr "Genera file di lavoro Gerber"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:244
+#: pcbnew/dialogs/dialog_plot_base.cpp:246
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
@@ -27431,27 +27439,27 @@ msgstr ""
 "Genera un file di lavoro Gerber che contiene informazioni sulla scheda,\n"
 "e l'elenco dei file Gerber generati"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:248
+#: pcbnew/dialogs/dialog_plot_base.cpp:250
 msgid "Subtract soldermask from silkscreen"
 msgstr "Sottrai maschera di saldatura dalla serigrafia"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:249
+#: pcbnew/dialogs/dialog_plot_base.cpp:251
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "Rimuovi serigrafia dalle aree non coperte dalla maschera di saldatura"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:256
+#: pcbnew/dialogs/dialog_plot_base.cpp:258
 msgid "4.5, unit mm"
 msgstr "4.5, unità mm"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:256
+#: pcbnew/dialogs/dialog_plot_base.cpp:258
 msgid "4.6, unit mm"
 msgstr "4.6, unità mm"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:258
+#: pcbnew/dialogs/dialog_plot_base.cpp:260
 msgid "Coordinate Format"
 msgstr "Formato coordinate"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:260
+#: pcbnew/dialogs/dialog_plot_base.cpp:262
 msgid ""
 "Resolution of coordinates in Gerber files.\n"
 "Use the higher value if possible."
@@ -27459,27 +27467,27 @@ msgstr ""
 "Risoluzione delle coordinate nei file Gerber.\n"
 "Usa il valore più alto possibile"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:272
+#: pcbnew/dialogs/dialog_plot_base.cpp:274
 msgid "Pen size:"
 msgstr "Dimensioni penna:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:285
+#: pcbnew/dialogs/dialog_plot_base.cpp:287
 msgid "Postscript Options:"
 msgstr "Opzioni Postscript:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:298
+#: pcbnew/dialogs/dialog_plot_base.cpp:300
 msgid "Set global X scale adjust for exact scale postscript output."
 msgstr "Imposta l'asse X per un esatta tracciatura"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:313
+#: pcbnew/dialogs/dialog_plot_base.cpp:315
 msgid "Set global Y scale adjust for exact scale postscript output."
 msgstr "Imposta l'asse Y per un esatta tracciatura"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:323
+#: pcbnew/dialogs/dialog_plot_base.cpp:325
 msgid "Width correction:"
 msgstr "Correzione larghezza:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:328
+#: pcbnew/dialogs/dialog_plot_base.cpp:330
 msgid ""
 "Set global width correction for exact width postscript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -27494,19 +27502,19 @@ msgstr ""
 "Il valore possibile di correzione deve essere compreso tra [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:338
+#: pcbnew/dialogs/dialog_plot_base.cpp:340
 msgid "Force A4 output"
 msgstr "Forza formato A4"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:344
+#: pcbnew/dialogs/dialog_plot_base.cpp:346
 msgid "DXF options:"
 msgstr "Opzioni DXF:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:346
+#: pcbnew/dialogs/dialog_plot_base.cpp:348
 msgid "Plot all layers in outline (polygon) mode"
 msgstr "Traccia tutti gli strati in modalità contorno (poligono)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:348
+#: pcbnew/dialogs/dialog_plot_base.cpp:350
 msgid ""
 "DXF only:\n"
 "Check to plot all layers in polygon mode.\n"
@@ -27521,11 +27529,11 @@ msgstr ""
 "e tracciare in modalità poligono gli altri strati (*.Cu, *.Adhes, *.Paste, *."
 "Mask)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:352
+#: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Use Pcbnew font to plot texts"
 msgstr "Usa i font di Pcbnew per tracciare i testi"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:353
+#: pcbnew/dialogs/dialog_plot_base.cpp:355
 msgid ""
 "Check to use Pcbnew stroke font\n"
 "Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
@@ -27534,31 +27542,27 @@ msgstr ""
 "Deselezionare per tracciare i testi ASCII uniriga come testi modificabili "
 "(usando font DXF)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:380
+#: pcbnew/dialogs/dialog_plot_base.cpp:381
 msgid "Run DRC..."
 msgstr "Avvia DRC..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:383
-msgid "Generate Drill File..."
-msgstr "Genera file forature..."
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:409
+#: pcbnew/dialogs/dialog_plot_base.cpp:407
 msgid "Select Fab Layers"
 msgstr "Seleziona strati fabbricazione"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:413
+#: pcbnew/dialogs/dialog_plot_base.cpp:411
 msgid "Select all Copper Layers"
 msgstr "Seleziona tutti gli strati in rame"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:417
+#: pcbnew/dialogs/dialog_plot_base.cpp:415
 msgid "Deselect all Copper Layers"
 msgstr "Deseleziona tutti gli strati in rame"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:421
+#: pcbnew/dialogs/dialog_plot_base.cpp:419
 msgid "Select all Layers"
 msgstr "Seleziona tutti gli strati:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:425
+#: pcbnew/dialogs/dialog_plot_base.cpp:423
 msgid "Deselect all Layers"
 msgstr "Deseleziona tutti gli strati"
 
