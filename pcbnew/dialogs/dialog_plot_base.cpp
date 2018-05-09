@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 20 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -220,7 +220,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_sizerSoldMaskLayerOpt->Add( fgSizerSoldMaskOpts, 1, wxEXPAND, 5 );
 	
 	
-	m_PlotOptionsSizer->Add( m_sizerSoldMaskLayerOpt, 1, wxEXPAND, 5 );
+	m_PlotOptionsSizer->Add( m_sizerSoldMaskLayerOpt, 1, wxALL|wxEXPAND, 3 );
 	
 	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options:") ), wxHORIZONTAL );
 	
@@ -357,7 +357,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_SizerDXF_options->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 2 );
 	
 	
-	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxALL|wxEXPAND, 3 );
 	
 	
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 5 );
@@ -396,7 +396,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_sizerButtons->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
 	
 	
-	m_MainSizer->Add( m_sizerButtons, 0, wxALIGN_RIGHT|wxEXPAND|wxLEFT, 5 );
+	m_MainSizer->Add( m_sizerButtons, 0, wxALIGN_RIGHT|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
