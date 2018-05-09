@@ -119,10 +119,12 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_parent = aParent;
     m_boardPath = aBoardPath;
     m_config = Kiface().KifaceSettings();
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizer->Layout();
 
     // Build default output file name
     wxFileName brdFile = m_parent->GetBoard()->GetFileName();
-    brdFile.SetExt( "stp" );
+    brdFile.SetExt( "step" );
     m_filePickerSTEP->SetPath( brdFile.GetFullPath() );
 
     SetFocus();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -62,9 +62,10 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
-		wxStaticLine* m_staticline1;
-		wxButton* m_btnClose;
-		wxButton* m_btnExport;
+		wxStaticLine* m_staticline;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -75,7 +76,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export STEP"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export STEP"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 552,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXPORT_STEP_BASE();
 	
 };
