@@ -178,7 +178,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bSizerRotOpt;
 	bSizerRotOpt = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText11 = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 90º rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	bSizerRotOpt->Add( m_staticText11, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -191,7 +191,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bSizerMoveOpt;
 	bSizerMoveOpt = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText12 = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 180º rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12 = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	bSizerMoveOpt->Add( m_staticText12, 0, wxRIGHT|wxLEFT, 5 );
 	
