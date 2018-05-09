@@ -24,6 +24,7 @@
  */
 
 #include <sch_io_mgr.h>
+#include <stack>
 
 
 class KIWAY;
@@ -162,6 +163,7 @@ protected:
     wxString          m_error;
 
     wxString          m_path;       ///< Root project path for loading child sheets.
+    std::stack<wxString>  m_currentPath;    ///< Stack to maintain nested sheet paths
     const PROPERTIES* m_props;      ///< Passed via Save() or Load(), no ownership, may be NULL.
     KIWAY*            m_kiway;      ///< Required for path to legacy component libraries.
     SCH_SHEET*        m_rootSheet;  ///< The root sheet of the schematic being loaded..

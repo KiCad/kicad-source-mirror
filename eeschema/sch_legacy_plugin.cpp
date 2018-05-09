@@ -615,6 +615,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         m_path = aKiway->Prj().GetProjectPath();
     }
 
+    m_currentPath.push( m_path );
     init( aKiway, aProperties );
 
     if( aAppendToMe == NULL )
@@ -636,6 +637,8 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         loadHierarchy( sheet );
     }
 
+    wxASSERT( m_currentPath.size() == 1 );  // only the project path should remain
+
     return sheet;
 }
 
@@ -652,20 +655,17 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         // stores the file name and extension.  Add the project path to the file name and
         // extension to compare when calling SCH_SHEET::SearchHierarchy().
         wxFileName fileName = aSheet->GetFileName();
-        size_t dirCount = 0;
 
         if( !fileName.IsAbsolute() )
-        {
-            dirCount = fileName.GetDirCount();
-            fileName.MakeAbsolute( m_path );
-        }
+            fileName.MakeAbsolute( m_currentPath.top() );
 
         // Save the current path so that it gets restored when decending and ascending the
         // sheet hierarchy which allows for sheet schematic files to be nested in folders
         // relative to the last path a schematic was loaded from.
-        m_path = fileName.GetPath();
-
-        wxLogTrace( traceSchLegacyPlugin, "Saving last path \"%s\"", m_path );
+        wxLogTrace( traceSchLegacyPlugin, "Saving path    \"%s\"", m_currentPath.top() );
+        m_currentPath.push( fileName.GetPath() );
+        wxLogTrace( traceSchLegacyPlugin, "Current path   \"%s\"", m_currentPath.top() );
+        wxLogTrace( traceSchLegacyPlugin, "Loading        \"%s\"", fileName.GetFullPath() );
 
         m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
 
@@ -720,15 +720,8 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
             }
         }
 
-        // Back out any relative paths so the last sheet file path is correct.
-        while( dirCount )
-        {
-            fileName.RemoveLastDir();
-            dirCount--;
-        }
-
-        wxLogTrace( traceSchLegacyPlugin, "Restoring last path \"%s\"", fileName.GetPath() );
-        m_path = fileName.GetPath();
+        m_currentPath.pop();
+        wxLogTrace( traceSchLegacyPlugin, "Restoring path \"%s\"", m_currentPath.top() );
     }
 }
 
