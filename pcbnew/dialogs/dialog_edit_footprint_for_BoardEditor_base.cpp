@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 20 2018)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -313,7 +313,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	gbSizer1->AddGrowableCol( 1 );
 	
-	sbSizerLocalProperties->Add( gbSizer1, 0, wxEXPAND, 5 );
+	sbSizerLocalProperties->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
 	m_PropRightSizer->Add( sbSizerLocalProperties, 0, wxALL|wxEXPAND, 5 );

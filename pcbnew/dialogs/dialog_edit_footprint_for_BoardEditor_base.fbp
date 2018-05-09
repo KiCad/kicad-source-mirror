@@ -2845,7 +2845,7 @@
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxLEFT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxGridBagSizer" expanded="1">
                                                             <property name="empty_cell_size">0,0</property>
