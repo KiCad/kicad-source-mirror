@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 20 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,54 +28,54 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizerNewGraphicItems = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Default Values for New Graphic Items") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_EdgeModEWidthTitle = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("&Graphic line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EdgeModEWidthTitle->Wrap( -1 );
-	fgSizer1->Add( m_EdgeModEWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_EdgeModEWidthTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleGrLineWidth = new TEXT_CTRL_EVAL( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptModuleGrLineWidth, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_OptModuleGrLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextGrLineUnit = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrLineUnit->Wrap( -1 );
-	fgSizer1->Add( m_staticTextGrLineUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextGrLineUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TextModWidthTitle = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("&Text line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModWidthTitle->Wrap( -1 );
-	fgSizer1->Add( m_TextModWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_TextModWidthTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleTextWidth = new TEXT_CTRL_EVAL( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptModuleTextWidth, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_OptModuleTextWidth, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextTextWidthUnit = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTextWidthUnit->Wrap( -1 );
-	fgSizer1->Add( m_staticTextTextWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextTextWidthUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TextModSizeVTitle = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("Text &height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeVTitle->Wrap( -1 );
-	fgSizer1->Add( m_TextModSizeVTitle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_TextModSizeVTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleTextVSize = new TEXT_CTRL_EVAL( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptModuleTextVSize, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_OptModuleTextVSize, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextTextVSizeUnit = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTextVSizeUnit->Wrap( -1 );
-	fgSizer1->Add( m_staticTextTextVSizeUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextTextVSizeUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TextModSizeHTitle = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("Text &width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeHTitle->Wrap( -1 );
-	fgSizer1->Add( m_TextModSizeHTitle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_TextModSizeHTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleTextHSize = new TEXT_CTRL_EVAL( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptModuleTextHSize, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_OptModuleTextHSize, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextTextHSizeUnit = new wxStaticText( sbSizerNewGraphicItems->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTextHSizeUnit->Wrap( -1 );
-	fgSizer1->Add( m_staticTextTextHSizeUnit, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextTextHSizeUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	sbSizerNewGraphicItems->Add( fgSizer1, 0, wxEXPAND, 20 );
@@ -109,59 +109,59 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizerNewFootprints = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Default Values for New Footprints") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 4, 5, 5 );
 	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticTextRef = new wxStaticText( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, _("&Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRef->Wrap( -1 );
-	fgSizer2->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlRefText = new wxTextCtrl( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlRefText->SetToolTip( _("Default text for reference\nLeave blank to use the footprint name") );
 	
-	fgSizer2->Add( m_textCtrlRefText, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_textCtrlRefText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_choiceLayerReferenceChoices[] = { _("SilkScreen"), _("Fab. Layer") };
 	int m_choiceLayerReferenceNChoices = sizeof( m_choiceLayerReferenceChoices ) / sizeof( wxString );
 	m_choiceLayerReference = new wxChoice( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLayerReferenceNChoices, m_choiceLayerReferenceChoices, 0 );
 	m_choiceLayerReference->SetSelection( 0 );
-	fgSizer2->Add( m_choiceLayerReference, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_choiceLayerReference, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_choiceVisibleReferenceChoices[] = { _("Visible"), _("Invisible") };
 	int m_choiceVisibleReferenceNChoices = sizeof( m_choiceVisibleReferenceChoices ) / sizeof( wxString );
 	m_choiceVisibleReference = new wxChoice( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVisibleReferenceNChoices, m_choiceVisibleReferenceChoices, 0 );
 	m_choiceVisibleReference->SetSelection( 0 );
-	fgSizer2->Add( m_choiceVisibleReference, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_choiceVisibleReference, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticTextValue = new wxStaticText( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, _("V&alue:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextValue->Wrap( -1 );
-	fgSizer2->Add( m_staticTextValue, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextValue, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlValueText = new wxTextCtrl( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlValueText->SetToolTip( _("Default text for value\nLeave blank to use the footprint name") );
 	
-	fgSizer2->Add( m_textCtrlValueText, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_textCtrlValueText, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_choiceLayerValueChoices[] = { _("SilkScreen"), _("Fab. Layer") };
 	int m_choiceLayerValueNChoices = sizeof( m_choiceLayerValueChoices ) / sizeof( wxString );
 	m_choiceLayerValue = new wxChoice( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLayerValueNChoices, m_choiceLayerValueChoices, 0 );
 	m_choiceLayerValue->SetSelection( 1 );
-	fgSizer2->Add( m_choiceLayerValue, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_choiceLayerValue, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_choiceVisibleValueChoices[] = { _("Visible"), _("Invisible") };
 	int m_choiceVisibleValueNChoices = sizeof( m_choiceVisibleValueChoices ) / sizeof( wxString );
 	m_choiceVisibleValue = new wxChoice( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVisibleValueNChoices, m_choiceVisibleValueChoices, 0 );
 	m_choiceVisibleValue->SetSelection( 0 );
-	fgSizer2->Add( m_choiceVisibleValue, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_choiceVisibleValue, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	sbSizerNewFootprints->Add( fgSizer2, 0, wxEXPAND, 20 );
 	
 	m_staticTextInfo = new wxStaticText( sbSizerNewFootprints->GetStaticBox(), wxID_ANY, _("Leave reference and/or value blank to use footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	sbSizerNewFootprints->Add( m_staticTextInfo, 0, wxALL, 5 );
+	sbSizerNewFootprints->Add( m_staticTextInfo, 0, wxTOP, 5 );
 	
 	
 	fgSizer3->Add( sbSizerNewFootprints, 0, wxALL|wxEXPAND, 5 );
@@ -204,7 +204,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
