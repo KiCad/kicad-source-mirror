@@ -24,6 +24,7 @@
 
 #include <algorithm>
 
+#include <common.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 
@@ -331,7 +332,7 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
 {
-    if( !m_closed || SegmentCount() < 3 || !BBox().Contains( aP ) )
+    if( !m_closed || PointCount() < 3 || !BBox().Contains( aP ) )
         return false;
 
     bool inside = false;
@@ -344,12 +345,14 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
      * Note: slope might be denormal here in the case of a horizontal line but we require our
      * y to move from above to below the point (or vice versa)
      */
-    for( int i = 0; i < SegmentCount(); i++ )
+    for( int i = 0; i < PointCount(); i++ )
     {
-        const SEG s = CSegment( i );
-        double inv_slope = ( ( double ) s.B.x - s.A.x ) / (s.B.y - s.A.y );
-        if( ( ( s.A.y > aP.y ) != ( s.B.y > aP.y ) ) &&
-                ( aP.x - s.A.x < inv_slope * ( aP.y - s.A.y ) ) )
+        const VECTOR2D p1 = CPoint( i );
+        const VECTOR2D p2 = CPoint( i + 1 ); // CPoint wraps, so ignore counts
+        const VECTOR2D diff = p2 - p1;
+
+        if( ( ( p1.y > aP.y ) != ( p2.y > aP.y ) ) &&
+                ( aP.x - p1.x < ( diff.x / diff.y ) * ( aP.y - p1.y ) ) )
             inside = !inside;
     }
 
@@ -359,7 +362,31 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 {
-    return CheckClearance( aP, 1 );
+    if( !PointCount() )
+        return false;
+    else if( PointCount() == 1 )
+        return m_points[0] == aP;
+
+    for( int i = 0; i < PointCount(); i++ )
+    {
+        const VECTOR2I& p1 = CPoint( i );
+        const VECTOR2I& p2 = CPoint( i + 1 );
+
+        if( aP == p1 )
+            return true;
+
+        if( p1.x == p2.x && p1.x == aP.x && ( p1.y > aP.y ) != ( p2.y > aP.y ) )
+            return true;
+
+        const VECTOR2D diff = p2 - p1;
+        if( aP.x >= p1.x && aP.x <= p2.x )
+        {
+            if( KiROUND( p1.y + ( diff.y / diff.x ) * ( aP.x - p1.x ) ) == aP.y )
+                return true;
+        }
+    }
+
+    return false;
 }
 
 
