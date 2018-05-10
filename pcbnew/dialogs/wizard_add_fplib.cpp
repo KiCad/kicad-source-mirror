@@ -54,7 +54,7 @@
 
 // a key to store the default Kicad Github libs URL
 #define KICAD_FPLIBS_URL_KEY wxT( "kicad_fplib_url" )
-#define KICAD_FPLIBS_LAST_DOWNLOAD_DIR wxT( "kicad_fplib_last_download_dir" )
+#define KICAD_FPLIBS_LAST_DIR wxT( "kicad_fplib_last_download_dir" )
 
 // Filters for the file picker
 static const int FILTER_COUNT = 4;
@@ -303,7 +303,7 @@ WIZARD_FPLIB_TABLE::WIZARD_FPLIB_TABLE( wxWindow* aParent ) :
 
     wxConfigBase* cfg = Pgm().CommonSettings();
     cfg->Read( KICAD_FPLIBS_URL_KEY, &githubUrl );
-    cfg->Read( KICAD_FPLIBS_LAST_DOWNLOAD_DIR, &m_lastGithubDownloadDirectory );
+    cfg->Read( KICAD_FPLIBS_LAST_DIR, &m_lastGithubDownloadDirectory );
 
 
     if( !m_lastGithubDownloadDirectory.IsEmpty() )
@@ -541,7 +541,7 @@ void WIZARD_FPLIB_TABLE::OnBrowseButtonClick( wxCommandEvent& aEvent )
         setDownloadDir( path );
 
         wxConfigBase* cfg = Pgm().CommonSettings();
-        cfg->Write( KICAD_FPLIBS_LAST_DOWNLOAD_DIR, path );
+        cfg->Write( KICAD_FPLIBS_LAST_DIR, path );
 
         updateGithubControls();
     }
@@ -574,6 +574,9 @@ bool WIZARD_FPLIB_TABLE::checkFiles() const
         if( !passesFilter( candidates[i], m_filePicker->GetFilterIndex() ) )
             return false;
     }
+
+    wxConfigBase* cfg = Pgm().CommonSettings();
+    cfg->Write( KICAD_FPLIBS_LAST_DIR, candidates[0] );
 
     return true;
 }
