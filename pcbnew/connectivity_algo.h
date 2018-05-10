@@ -570,8 +570,7 @@ public:
 
     bool ContainsAnchor( const CN_ANCHOR_PTR anchor ) const
     {
-        auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
-        return m_cachedPoly->ContainsPoint( anchor->Pos(), zone->GetMinThickness() );
+        return ContainsPoint( anchor->Pos() );
     }
 
     bool ContainsPoint( const VECTOR2I p ) const
@@ -630,13 +629,23 @@ public:
 template <class T>
 void CN_LIST::FindNearby( BOX2I aBBox, T aFunc, bool aDirtyOnly )
 {
-    for( auto p : m_anchors )
+    sort();
+
+    CN_ANCHOR_PTR lower_ptr = std::make_shared<CN_ANCHOR>
+                            ( aBBox.GetPosition(), m_anchors[0]->Item() );
+
+    auto lower_it = std::lower_bound( m_anchors.begin(), m_anchors.end(), lower_ptr,
+            [](  const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) -> bool
+            { return a->Pos().x < b->Pos().x; } );
+
+    for( auto it = lower_it; it != m_anchors.end(); it++)
     {
-        if( p->Valid() && aBBox.Contains( p->Pos() ) )
-        {
-            if( !aDirtyOnly || p->IsDirty() )
-                aFunc( p );
-        }
+        if( (*it)->Pos().x > aBBox.GetRight() )
+            break;
+
+        if( (*it)->Valid() && ( !aDirtyOnly || (*it)->IsDirty() )
+                           && aBBox.Contains( (*it)->Pos() ) )
+            aFunc( *it );
     }
 }
 
@@ -664,96 +673,28 @@ void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirty
 {
     /* Search items in m_Candidates that position is <= aDistMax from aPosition
      * (Rectilinear distance)
-     * m_Candidates is sorted by X then Y values, so a fast binary search is used
-     * to locate the "best" entry point in list
-     * The best entry is a pad having its m_Pos.x == (or near) aPosition.x
-     * All candidates are near this candidate in list
-     * So from this entry point, a linear search is made to find all candidates
+     * m_Candidates is sorted by X then Y values, so binary search is made for the first
+     * element.  Then a linear iteration is made to identify all element that are also
+     * in the correct y range.
      */
 
     sort();
 
-    int idxmax = m_anchors.size() - 1;
+    CN_ANCHOR_PTR lower = std::make_shared<CN_ANCHOR>
+                            ( aPosition - VECTOR2I( aDistMax + 1, 0 ), m_anchors[0]->Item() );
 
-    int delta = idxmax + 1;
-    int idx = 0;        // Starting index is the beginning of list
+    auto lower_it = std::lower_bound( m_anchors.begin(), m_anchors.end(), lower,
+            [](  const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) -> bool
+            { return a->Pos().x < b->Pos().x; } );
 
-    while( delta )
+    for( auto it = lower_it; it != m_anchors.end(); it++ )
     {
-        // Calculate half size of remaining interval to test.
-        // Ensure the computed value is not truncated (too small)
-        if( ( delta & 1 ) && ( delta > 1 ) )
-            delta++;
-
-        delta /= 2;
-
-        auto p = m_anchors[idx];
-
-        int dist = p->Pos().x - aPosition.x;
-
-        if( std::abs( dist ) <= aDistMax )
-        {
-            break;                              // A good entry point is found. The list can be scanned from this point.
-        }
-        else if( p->Pos().x < aPosition.x )     // We should search after this point
-        {
-            idx += delta;
-
-            if( idx > idxmax )
-                idx = idxmax;
-        }
-        else    // We should search before this p
-        {
-            idx -= delta;
-
-            if( idx < 0 )
-                idx = 0;
-        }
-    }
-
-    /* Now explore the candidate list from the "best" entry point found
-     * (candidate "near" aPosition.x)
-     * We exp the list until abs(candidate->m_Point.x - aPosition.x) > aDistMashar* Currently a linear search is made because the number of candidates
-     * having the right X position is usually small
-     */
-    // search next candidates in list
-    VECTOR2I diff;
-
-    for( int ii = idx; ii <= idxmax; ii++ )
-    {
-        auto& p = m_anchors[ii];
-        diff = p->Pos() - aPosition;;
-
-        if( std::abs( diff.x ) > aDistMax )
-            break; // Exit: the distance is to long, we cannot find other candidates
-
-        if( std::abs( diff.y ) > aDistMax )
-            continue; // the y distance is to long, but we can find other candidates
-
-        // We have here a good candidate: add it
-        if( p->Valid() )
-            if( !aDirtyOnly || p->IsDirty() )
-                aFunc( p );
-    }
-
-    // search previous candidates in list
-    for( int ii = idx - 1; ii >=0; ii-- )
-    {
-        auto& p = m_anchors[ii];
-        diff = p->Pos() - aPosition;
-
-        if( abs( diff.x ) > aDistMax )
+        if( (*it)->Pos().x > aDistMax + aPosition.x )
             break;
 
-        if( abs( diff.y ) > aDistMax )
-            continue;
-
-        // We have here a good candidate:add it
-        if( p->Valid() )
-        {
-            if( !aDirtyOnly || p->IsDirty() )
-                aFunc( p );
-        }
+        if( (*it)->Valid() && std::abs( (*it)->Pos().y - aPosition.y ) < aDistMax
+                       && ( !aDirtyOnly || (*it)->IsDirty() ) )
+            aFunc( *it );
     }
 }
 
