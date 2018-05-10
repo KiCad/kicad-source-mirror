@@ -33,12 +33,12 @@
 
 
 /**
- * Function KeyWordOk
+ * Function KeywordMatch
  * searches \a aKeyList for any words found in \a aDatabase.
  *
- * @return 0 if no keyword is found or 1 if keyword is found.
+ * @return true if keyword is found.
  */
-int KeyWordOk( const wxString& aKeyList, const wxString& aDatabase );
+bool KeywordMatch( const wxString& aKeys, const wxString& aDatabase );
 
 /**
  * Function GetAssociatedDocument

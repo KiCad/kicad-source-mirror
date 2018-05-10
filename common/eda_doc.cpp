@@ -211,34 +211,27 @@ bool GetAssociatedDocument( wxWindow* aParent,
 }
 
 
-int KeyWordOk( const wxString& KeyList, const wxString& Database )
+bool KeywordMatch( const wxString& aKeys, const wxString& aDatabase )
 {
-    wxString KeysCopy, DataList;
+    if( aKeys.IsEmpty() )
+        return false;
 
-    if( KeyList.IsEmpty() )
-        return 0;
+    wxStringTokenizer keyTokenizer( aKeys, wxT( ", \t\n\r" ), wxTOKEN_STRTOK );
 
-    KeysCopy = KeyList; KeysCopy.MakeUpper();
-    DataList = Database; DataList.MakeUpper();
-
-    wxStringTokenizer Token( KeysCopy, wxT( " \n\r" ) );
-
-    while( Token.HasMoreTokens() )
+    while( keyTokenizer.HasMoreTokens() )
     {
-        wxString          Key = Token.GetNextToken();
+        wxString key = keyTokenizer.GetNextToken();
 
-        // Search Key in Datalist:
-        wxStringTokenizer Data( DataList, wxT( " \n\r" ) );
+        // Search for key in aDatabase:
+        wxStringTokenizer dataTokenizer( aDatabase, wxT( ", \t\n\r" ), wxTOKEN_STRTOK );
 
-        while( Data.HasMoreTokens() )
+        while( dataTokenizer.HasMoreTokens() )
         {
-            wxString word = Data.GetNextToken();
-
-            if( word == Key )
-                return 1; // Key found !
+            if( dataTokenizer.GetNextToken() == key )
+                return true;
         }
     }
 
     // keyword not found
-    return 0;
+    return false;
 }

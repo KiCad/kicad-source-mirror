@@ -430,9 +430,11 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 
     if( !aKeyWord.IsEmpty() )       // Create a list of modules found by keyword.
     {
+        wxString keyword = aKeyWord.Upper();
+
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
         {
-            if( KeyWordOk( aKeyWord, MList.GetItem( ii ).GetKeywords() ) )
+            if( KeywordMatch( keyword, MList.GetItem( ii ).GetKeywords().Upper() ) )
             {
                 wxArrayString   cols;
                 cols.Add( MList.GetItem( ii ).GetFootprintName() );
