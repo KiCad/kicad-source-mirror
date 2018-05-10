@@ -144,8 +144,8 @@ set_target_properties( cvpcb_kiface PROPERTIES
 target_link_libraries( cvpcb_kiface
     pcbcommon
     pcad2kicadpcb
-    common
     3d-viewer
+    common
     bitmaps
     polygon
     gal
