@@ -1497,66 +1497,7 @@ bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool
 
 bool SHAPE_POLY_SET::pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const
 {
-    int result = 0;
-    int cnt = aPath.PointCount();
-
-    if( !aPath.BBox().Contains( aP ) ) // test with bounding box first
-        return false;
-
-    if( cnt < 3 )
-        return false;
-
-    VECTOR2I ip = aPath.CPoint( 0 );
-
-    for( int i = 1; i <= cnt; ++i )
-    {
-        VECTOR2I ipNext = ( i == cnt ? aPath.CPoint( 0 ) : aPath.CPoint( i ) );
-
-        if( ipNext.y == aP.y )
-        {
-            if( ( ipNext.x == aP.x ) || ( ip.y == aP.y
-                                          && ( ( ipNext.x > aP.x ) == ( ip.x < aP.x ) ) ) )
-                return true;
-        }
-
-        if( ( ip.y < aP.y ) != ( ipNext.y < aP.y ) )
-        {
-            if( ip.x >= aP.x )
-            {
-                if( ipNext.x > aP.x )
-                    result = 1 - result;
-                else
-                {
-                    int64_t d = (int64_t) ( ip.x - aP.x ) * (int64_t) ( ipNext.y - aP.y ) -
-                                (int64_t) ( ipNext.x - aP.x ) * (int64_t) ( ip.y - aP.y );
-
-                    if( !d )
-                        return true;
-
-                    if( ( d > 0 ) == ( ipNext.y > ip.y ) )
-                        result = 1 - result;
-                }
-            }
-            else
-            {
-                if( ipNext.x > aP.x )
-                {
-                    int64_t d = (int64_t) ( ip.x - aP.x ) * (int64_t) ( ipNext.y - aP.y ) -
-                                (int64_t) ( ipNext.x - aP.x ) * (int64_t) ( ip.y - aP.y );
-
-                    if( !d )
-                        return true;
-
-                    if( ( d > 0 ) == ( ipNext.y > ip.y ) )
-                        result = 1 - result;
-                }
-            }
-        }
-
-        ip = ipNext;
-    }
-
-    return result ? true : false;
+    return aPath.PointInside( aP );
 }
 
 
