@@ -186,10 +186,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
 
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame )
-        draw3DFrame->NewDisplay( true );
+    Update3DView();
 }
 
 
@@ -372,10 +369,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 updateView();
                 m_canvas->Refresh();
 
-                EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-                if( draw3DFrame )
-                    draw3DFrame->NewDisplay( true );
+                Update3DView();
 
                 GetScreen()->ClrModify();
             }
@@ -495,12 +489,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->ClrModify();
         Zoom_Automatique( false );
         m_canvas->Refresh();
-        {
-        EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-        if( draw3DFrame )
-            draw3DFrame->NewDisplay( true );
-        }
+        Update3DView();
 
         break;
 
@@ -567,12 +556,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         Zoom_Automatique( false );
 
-        {
-        EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-        if( draw3DFrame )
-            draw3DFrame->NewDisplay( true );
-        }
+        Update3DView();
 
         GetScreen()->ClrModify();
 

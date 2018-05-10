@@ -52,8 +52,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
  public:
 
-    EDA_3D_VIEWER( KIWAY *aKiway,
-                   PCB_BASE_FRAME *aParent,
+    EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
                    const wxString &aTitle,
                    long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
 
@@ -93,14 +92,14 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     void SetDefaultFileName( const wxString &aFn )
     {
         wxFileName fn( aFn );
-        m_defaultFileName = fn.GetName();
+        m_defaultSaveScreenshotFileName = fn.GetName();
     }
 
     /**
      *  Function GetDefaultFileName
      *  @return the default suggested file name
      */
-    const wxString &GetDefaultFileName() const { return m_defaultFileName; }
+    const wxString &GetDefaultFileName() const { return m_defaultSaveScreenshotFileName; }
 
     /**
      * Function GetSettings
@@ -226,7 +225,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     /**
      *  Filename to propose for save a screenshot
      */
-    wxString m_defaultFileName;
+    wxString m_defaultSaveScreenshotFileName;
 
     /**
      *  The canvas where the openGL context will be rendered

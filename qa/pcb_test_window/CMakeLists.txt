@@ -82,6 +82,7 @@ target_link_libraries( test_window
     pnsrouter
     common
     pcbcommon
+    3d-viewer
     bitmaps
     gal
     pcad2kicadpcb

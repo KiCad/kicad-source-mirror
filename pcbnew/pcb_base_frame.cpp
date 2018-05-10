@@ -137,6 +137,30 @@ EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 }
 
 
+bool PCB_BASE_FRAME::Update3DView( const wxString* aTitle )
+{
+    // Update the 3D view only if the viewer is opened by this frame
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame == NULL )
+        return false;
+
+    // Ensure the viewer was created by me, and not by an other editor:
+    PCB_BASE_FRAME* owner = draw3DFrame->Parent();
+
+    // if I am not the owner, do not use the current viewer instance
+    if( this != owner )
+        return false;
+
+    if( aTitle )
+        draw3DFrame->SetTitle( *aTitle );
+
+    draw3DFrame->NewDisplay( true );
+
+    return true;
+}
+
+
 FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
 {
     // This is a lazy loading function, it loads the project specific table when
@@ -403,6 +427,48 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
 // Virtual functions: Do nothing for PCB_BASE_FRAME window
 void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
+}
+
+
+bool PCB_BASE_FRAME::CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner )
+{
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
+
+    // Ensure the viewer was created by me, and not by an other editor:
+    PCB_BASE_FRAME* owner = draw3DFrame ? draw3DFrame->Parent() : nullptr;
+
+    // if I am not the owner, do not use the current viewer instance
+    if( draw3DFrame && this != owner )
+    {
+        if( aForceRecreateIfNotOwner )
+        {
+            draw3DFrame->Destroy();
+            draw3DFrame = nullptr;
+        }
+        else
+            return false;
+    }
+
+    if( !draw3DFrame )
+    {
+        draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
+        draw3DFrame->Raise();     // Needed with some Window Managers
+        draw3DFrame->Show( true );
+        return true;
+    }
+
+    // Raising the window does not show the window on Windows if iconized.
+    // This should work on any platform.
+    if( draw3DFrame->IsIconized() )
+         draw3DFrame->Iconize( false );
+
+    draw3DFrame->Raise();
+
+    // Raising the window does not set the focus on Linux.  This should work on any platform.
+    if( wxWindow::FindFocus() != draw3DFrame )
+        draw3DFrame->SetFocus();
+
+    return true;
 }
 
 

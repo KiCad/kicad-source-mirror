@@ -686,27 +686,8 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame )
-    {
-        // Raising the window does not show the window on Windows if iconized.
-        // This should work on any platform.
-        if( draw3DFrame->IsIconized() )
-             draw3DFrame->Iconize( false );
-
-        draw3DFrame->Raise();
-
-        // Raising the window does not set the focus on Linux.  This should work on any platform.
-        if( wxWindow::FindFocus() != draw3DFrame )
-            draw3DFrame->SetFocus();
-
-        return;
-    }
-
-    draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
-    draw3DFrame->Raise();     // Needed with some Window Managers
-    draw3DFrame->Show( true );
+    bool forceRecreateIfNotOwner = true;
+    CreateAndShow3D_Frame( forceRecreateIfNotOwner );
 }
 
 
@@ -748,13 +729,7 @@ bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
 void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
-
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame )
-    {
-        draw3DFrame->NewDisplay( true );
-    }
+    Update3DView();
 }
 
 

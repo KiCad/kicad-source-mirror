@@ -141,24 +141,17 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway,
-                              PCB_BASE_FRAME *aParent,
-                              const wxString &aTitle,
-                              long style ) :
+EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
+                              const wxString &aTitle, long style ) :
 
-                KIWAY_PLAYER( aKiway,
-                              aParent,
-                              FRAME_PCB_DISPLAY3D,
-                              aTitle,
-                              wxDefaultPosition,
-                              wxDefaultSize,
-                              style,
-                              VIEWER3D_FRAMENAME )
+                KIWAY_PLAYER( aKiway, aParent,
+                              FRAME_PCB_DISPLAY3D, aTitle,
+                              wxDefaultPosition, wxDefaultSize,
+                              style, VIEWER3D_FRAMENAME )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER::EDA_3D_VIEWER %s" ), aTitle );
 
     m_canvas = NULL;
-    m_defaultFileName = "";
 
     // Give it an icon
     wxIcon icon;
@@ -216,7 +209,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway,
 EDA_3D_VIEWER::~EDA_3D_VIEWER()
 {
     m_mainToolBar->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EDA_3D_VIEWER::OnKeyEvent ), NULL, this );
-    
+
     m_auimgr.UnInit();
 
     // m_canvas delete will be called by wxWidget manager
@@ -946,7 +939,7 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
         fn.SetExt( file_ext );
 
         fullFileName = EDA_FILE_SELECTOR( _( "3D Image File Name:" ), fn.GetPath(),
-                                          m_defaultFileName, file_ext, mask, this,
+                                          m_defaultSaveScreenshotFileName, file_ext, mask, this,
                                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT, true );
 
         if( fullFileName.IsEmpty() )

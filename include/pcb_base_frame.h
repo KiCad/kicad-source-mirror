@@ -107,6 +107,15 @@ public:
     EDA_3D_VIEWER* Get3DViewerFrame();
 
     /**
+     * Update the 3D view, if the viewer is opened by this frame
+     * @param aTitle = the new title of the 3D frame, or nullptr
+     * to do not change the frame title
+     * @return false if the 3D view cannot be updated (because the
+     * owner of the viewer is not this frame)
+     */
+    bool Update3DView( const wxString* aTitle = nullptr );
+
+    /**
      * Function LoadFootprint
      * attempts to load \a aFootprintId from the footprint library table.
      *
@@ -218,7 +227,22 @@ public:
      */
     const wxString GetZoomLevelIndicator() const override;
 
+    /**
+     * Shows the 3D view frame.
+     * If it does not exist, it is created.
+     * If it exists, and if I am the owner, it is bring to the foreground
+     */
     virtual void Show3D_Frame( wxCommandEvent& event );
+
+    /**
+     * Shows the 3D view frame.
+     * If it does not exist, it is created.
+     * If it exists, it is bring to the foreground
+     * @param aForceRecreateIfNotOwner = true to recreate the 3D frame viewer,
+     * when the owner is not me
+     * @return true if it is shown with me as owner
+     */
+    virtual bool CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner );
 
     // Read/write functions:
     EDA_ITEM* ReadDrawSegmentDescr( LINE_READER* aReader );

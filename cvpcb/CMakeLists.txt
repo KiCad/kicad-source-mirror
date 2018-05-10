@@ -142,10 +142,10 @@ set_target_properties( cvpcb_kiface PROPERTIES
     SUFFIX          ${KIFACE_SUFFIX}
     )
 target_link_libraries( cvpcb_kiface
-    3d-viewer
     pcbcommon
     pcad2kicadpcb
     common
+    3d-viewer
     bitmaps
     polygon
     gal

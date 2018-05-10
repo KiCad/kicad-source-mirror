@@ -314,12 +314,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
 FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame )
-        draw3DFrame->Destroy();
 }
-
 
 
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
@@ -706,21 +701,10 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 {
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame == NULL )
-        return;
-
     wxString title = wxString::Format( _( "3D Viewer" ) + wxT( " \u2014 %s" ),
                                        getCurFootprintName() );
 
-    draw3DFrame->SetTitle( title );
-
-    if( aForceReloadFootprint )
-    {
-        // Force 3D screen refresh immediately
-        draw3DFrame->NewDisplay( true );
-    }
+    Update3DView( &title );
 }
 
 
