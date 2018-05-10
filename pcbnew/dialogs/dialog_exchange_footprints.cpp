@@ -473,9 +473,13 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
     // but not local settings like clearances (use library values)
     aOldModule->CopyNetlistSettings( aNewModule, false );
 
-    // Copy reference and value
+    // Copy reference
     aNewModule->SetReference( aOldModule->GetReference() );
-    aNewModule->SetValue( aOldModule->GetValue() );
+
+    // Copy value unless it is a proxy for the footprint ID (a good example is replacing a
+    // footprint with value "MoutingHole-2.5mm" with one of value "MountingHole-4mm").
+    if( aOldModule->GetValue() != aOldModule->GetFPID().GetLibItemName() )
+        aNewModule->SetValue( aOldModule->GetValue() );
 
     // Compare the footprint name only, in case the nickname is empty or in case
     // user moved the footprint to a new library.  Chances are if footprint name is
