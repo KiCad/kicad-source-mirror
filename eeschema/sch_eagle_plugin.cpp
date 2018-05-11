@@ -1152,9 +1152,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
             SCH_FIELD* field;
 
-            if( attr.name == "name" || attr.name == "value" )
+            if( attr.name.Lower() == "name" || attr.name.Lower() == "value" )
             {
-                if( attr.name == "name" )
+                if( attr.name.Lower() == "name" )
                 {
                     field = component->GetField( REFERENCE );
                     nameAttributeFound = true;
@@ -1175,7 +1175,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
                 bool spin = attr.rot ? attr.rot->spin : false;
 
-                if( attr.display == EATTR::Off )
+                if( attr.display == EATTR::Off || attr.display == EATTR::NAME )
                     field->SetVisible( false );
 
                 int rotation = einstance.rot ? einstance.rot->degrees : 0;
