@@ -45,7 +45,7 @@
 
 
 static void AbortCreateNewLine( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
-static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
+static void ComputeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint& new_pos );
 
 static DLIST< SCH_ITEM > s_wires;       // when creating a new set of wires,
                                         // stores here the new wires.
@@ -145,7 +145,7 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     wxPoint endpos = frame->GetCrossHairPosition();
 
     if( frame->GetForceHVLines() ) /* Coerce the line to vertical or horizontal one: */
-        ComputeBreakPoint( (SCH_LINE*) s_wires.GetLast()->Back(), endpos );
+        ComputeBreakPoint( frame->GetScreen(), (SCH_LINE*) s_wires.GetLast()->Back(), endpos );
     else
         ( (SCH_LINE*) s_wires.GetLast() )->SetEndPoint( endpos );
 
@@ -346,6 +346,27 @@ void SCH_EDIT_FRAME::EndSegment()
 }
 
 
+// A helper function to find any sheet pins at the specified position.
+static const SCH_SHEET_PIN* getSheetPin( SCH_SCREEN* aScreen, const wxPoint& aPosition )
+{
+    for( SCH_ITEM* item = aScreen->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
+
+            for( const SCH_SHEET_PIN& pin : sheet->GetPins() )
+            {
+                if( pin.GetPosition() == aPosition )
+                    return &pin;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+
 /**
  * Function ComputeBreakPoint
  * computes the middle coordinate for 2 segments from the start point to \a aPosition
@@ -356,43 +377,54 @@ void SCH_EDIT_FRAME::EndSegment()
  * @param aPosition A reference to a wxPoint object containing the coordinates of the
  *                  position used to calculate the line break point.
  */
-static void ComputeBreakPoint( SCH_LINE* aSegment, const wxPoint& aPosition )
+static void ComputeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint& aPosition )
 {
-    wxCHECK_RET( aSegment != NULL, wxT( "Cannot compute break point of NULL line segment." ) );
+    wxCHECK_RET( aSegment != nullptr, wxT( "Cannot compute break point of NULL line segment." ) );
 
     SCH_LINE* nextSegment = aSegment->Next();
-    wxPoint midPoint = aPosition;
 
-    wxCHECK_RET( nextSegment != NULL,
-                 wxT( "Cannot compute break point of NULL second line segment." ) );
-
-#if 0
-    if( ABS( midPoint.x - aSegment->GetStartPoint().x ) <
-        ABS( midPoint.y - aSegment->GetStartPoint().y ) )
-        midPoint.x = aSegment->GetStartPoint().x;
-    else
-        midPoint.y = aSegment->GetStartPoint().y;
-#else
+    wxPoint midPoint;
     int iDx = aSegment->GetEndPoint().x - aSegment->GetStartPoint().x;
     int iDy = aSegment->GetEndPoint().y - aSegment->GetStartPoint().y;
 
-    if( iDy != 0 )         // keep the first segment orientation (currently horizontal)
+    const SCH_SHEET_PIN* connectedPin = getSheetPin( aScreen, aSegment->GetStartPoint() );
+    auto force = connectedPin ? connectedPin->GetEdge() : SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE;
+
+    if( force == SCH_SHEET_PIN::SHEET_LEFT_SIDE || force == SCH_SHEET_PIN::SHEET_RIGHT_SIDE )
+    {
+        if( aPosition.x == connectedPin->GetPosition().x )  // push outside sheet boundary
+        {
+            int direction = ( force == SCH_SHEET_PIN::SHEET_LEFT_SIDE ) ? -1 : 1;
+            aPosition.x += aScreen->GetGridSize().x * direction;
+        }
+
+        midPoint.x = aPosition.x;
+        midPoint.y = aSegment->GetStartPoint().y;     // force horizontal
+    }
+    else if( iDy != 0 )    // keep the first segment orientation (vertical)
     {
         midPoint.x = aSegment->GetStartPoint().x;
+        midPoint.y = aPosition.y;
     }
-    else if( iDx != 0 )    // keep the first segment orientation (currently vertical)
+    else if( iDx != 0 )    // keep the first segment orientation (horizontal)
     {
+        midPoint.x = aPosition.x;
         midPoint.y = aSegment->GetStartPoint().y;
     }
     else
     {
-        if( std::abs( midPoint.x - aSegment->GetStartPoint().x ) <
-            std::abs( midPoint.y - aSegment->GetStartPoint().y ) )
+        if( std::abs( aPosition.x - aSegment->GetStartPoint().x ) <
+            std::abs( aPosition.y - aSegment->GetStartPoint().y ) )
+        {
             midPoint.x = aSegment->GetStartPoint().x;
+            midPoint.y = aPosition.y;
+        }
         else
+        {
+            midPoint.x = aPosition.x;
             midPoint.y = aSegment->GetStartPoint().y;
+        }
     }
-#endif
 
     aSegment->SetEndPoint( midPoint );
     nextSegment->SetStartPoint( midPoint );
