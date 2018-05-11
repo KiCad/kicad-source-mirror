@@ -233,7 +233,8 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        wxMessageBox( wxT( "virtual BOARD_ITEM::Move used, should not occur" ), GetClass() );
+        wxFAIL_MSG( wxString::Format( wxT( "virtual BOARD_ITEM::Move called for %s" ),
+                                      GetClass() ) );
     }
 
     void Move( const VECTOR2I& aMoveVector )
