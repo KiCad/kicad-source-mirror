@@ -101,7 +101,7 @@ void DHEAD::append( DHEAD& aList )
         // Change the item's list to me.
         for( EDA_ITEM* item = aList.first;  item;  item = item->Next() )
         {
-            CHECK_OWNERSHIP( item );
+            wxASSERT( item->GetList() == &aList );
             item->SetList( this );
         }
 
