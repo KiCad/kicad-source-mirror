@@ -67,7 +67,7 @@
 
 #include <netlist_exporter_kicad.h>
 #include <kiway.h>
-
+#include <dialogs/dialog_fields_editor_global.h>
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -941,11 +941,8 @@ void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
 
 void SCH_EDIT_FRAME::OnLaunchBomManager( wxCommandEvent& event )
 {
-    // First ensure that entire schematic is annotated
-    if( !prepareForNetlist() )
-        return;
-
-    InvokeDialogCreateBOMEditor( this );
+    DIALOG_FIELDS_EDITOR_GLOBAL dlg( this );
+    dlg.ShowQuasiModal();
 }
 
 

@@ -144,6 +144,9 @@ public:
     {
         wxString ref;
 
+        if( m_NumRef < 0 )
+            return wxT( "?" );
+
         // To avoid a risk of duplicate, for power components
         // the ref number is 0nnn instead of nnn.
         // Just because sometimes only power components are annotated

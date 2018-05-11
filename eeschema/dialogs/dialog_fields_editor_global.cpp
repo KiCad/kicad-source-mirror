@@ -41,14 +41,6 @@
 #include "dialog_fields_editor_global.h"
 
 
-// Create and show fields editor
-void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
-{
-    DIALOG_FIELDS_EDITOR_GLOBAL dlg( aCaller );
-    dlg.ShowQuasiModal();
-}
-
-
 #define FIELD_NAME_COLUMN 0
 #define SHOW_FIELD_COLUMN 1
 #define GROUP_BY_COLUMN   2
@@ -162,8 +154,16 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
         {
             // Remove duplicates (other units of multi-unit parts)
-            rootReferences.erase( std::unique( rootReferences.begin(), rootReferences.end() ),
-                                  rootReferences.end() );
+            auto logicalEnd = std::unique( rootReferences.begin(), rootReferences.end(),
+                    []( const wxString& l, const wxString& r )
+                    {
+                        // If not annotated then we don't really know if it's a duplicate
+                        if( l.EndsWith( wxT( "?" ) ) )
+                            return false;
+
+                        return l == r;
+                    } );
+            rootReferences.erase( logicalEnd, rootReferences.end() );
         }
 
         if( aCol == REFERENCE )
@@ -247,7 +247,8 @@ public:
                 wxCheckBox* groupComponentsBox, wxDataViewListCtrl* fieldsCtrl )
     {
         // Units of same component always match
-        if( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() )
+        if( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() != wxT( "?" )
+            && lhRef.GetRefNumber() == rhRef.GetRefNumber() )
             return true;
 
         // If we're not grouping, then nothing else matches

@@ -77,9 +77,6 @@ int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
 /// DIALOG_BOM::ShowModal() returns.
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 
-/// Create and show DIALOG_BOM_EDITOR
-void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller );
-
 /// Update symbol fields
 int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller,
         const std::list<SCH_COMPONENT*> aComponents, bool aCreateUndoEntry );
