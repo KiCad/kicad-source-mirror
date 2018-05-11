@@ -473,6 +473,8 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 #ifdef PROFILE
     PROF_COUNTER search_cnt( "search-connections" );
     PROF_COUNTER search_basic( "search-basic" );
+    PROF_COUNTER search_pads( "search-pads" );
+    PROF_COUNTER search_tracks( "search-tracks" );
 #endif
 
     if( m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
@@ -484,10 +486,13 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
             auto pad = static_cast<D_PAD*> ( padItem->Parent() );
             auto searchPads = std::bind( checkForConnection, _1, padItem );
 
-            m_padList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads );
-            m_trackList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads );
-            m_viaList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads );
+            m_padList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads, pad->GetLayerSet() );
+            m_trackList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads, pad->GetLayerSet() );
+            m_viaList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads, pad->GetLayerSet() );
         }
+#ifdef PROFILE
+        search_pads.Show();
+#endif
 
         for( auto& trackItem : m_trackList )
         {
@@ -495,9 +500,12 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
             int dist_max = track->GetWidth() / 2;
             auto searchTracks = std::bind( checkForConnection, _1, trackItem, dist_max );
 
-            m_trackList.FindNearby( track->GetStart(), dist_max, searchTracks );
-            m_trackList.FindNearby( track->GetEnd(), dist_max, searchTracks );
+            m_trackList.FindNearby( track->GetStart(), dist_max, searchTracks, track->GetLayerSet() );
+            m_trackList.FindNearby( track->GetEnd(), dist_max, searchTracks, track->GetLayerSet() );
         }
+#ifdef PROFILE
+        search_tracks.Show();
+#endif
 
         for( auto& viaItem : m_viaList )
         {
@@ -602,6 +610,15 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
         } );
 
     m_anchors.resize( lastAnchor - m_anchors.begin() );
+    for( auto i = 0; i < PCB_LAYER_ID_COUNT; i++ )
+    {
+        lastAnchor = std::remove_if(m_layer_anchors[i].begin(), m_layer_anchors[i].end(),
+                [] ( const CN_ANCHOR_PTR anchor ) {
+                    return !anchor->Valid();
+                } );
+
+        m_layer_anchors[i].resize( lastAnchor - m_layer_anchors[i].begin() );
+    }
 
     auto lastItem = std::remove_if(m_items.begin(), m_items.end(), [&aGarbage] ( CN_ITEM* item ) {
         if( !item->Valid() )

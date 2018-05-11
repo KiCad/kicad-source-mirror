@@ -408,13 +408,21 @@ class CN_LIST
 private:
     bool m_dirty;
     std::vector<CN_ANCHOR_PTR> m_anchors;
+    CN_ANCHORS m_layer_anchors[PCB_LAYER_ID_COUNT];
 
 protected:
     std::vector<CN_ITEM*> m_items;
 
     void addAnchor( VECTOR2I pos, CN_ITEM* item )
     {
-        m_anchors.push_back( item->AddAnchor( pos ) );
+        CN_ANCHOR_PTR new_anchor = item->AddAnchor( pos );
+        m_anchors.push_back( new_anchor );
+
+        for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
+        {
+            if( ( item->Parent()->GetLayerSet() & LSET( 1, i ) ).any() )
+                m_layer_anchors[i].push_back( new_anchor );
+        }
     }
 
 private:
@@ -424,6 +432,11 @@ private:
         if( m_dirty )
         {
             std::sort( m_anchors.begin(), m_anchors.end() );
+
+            for( auto i = 0; i < PCB_LAYER_ID_COUNT; i++ )
+            {
+                std::sort( m_layer_anchors[i].begin(), m_layer_anchors[i].end() );
+            }
 
             m_dirty = false;
         }
@@ -453,10 +466,10 @@ public:
     std::vector<CN_ANCHOR_PTR>& Anchors() { return m_anchors; }
 
     template <class T>
-    void FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirtyOnly = false );
+    void FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, LSET aLayers = LSET::AllLayersMask(), bool aDirtyOnly = false );
 
     template <class T>
-    void FindNearby( BOX2I aBBox, T aFunc, bool aDirtyOnly = false );
+    void FindNearby( BOX2I aBBox, T aFunc, LSET aLayers = LSET::AllLayersMask(), bool aDirtyOnly = false );
 
     void SetDirty( bool aDirty = true )
     {
@@ -627,18 +640,27 @@ public:
 
 
 template <class T>
-void CN_LIST::FindNearby( BOX2I aBBox, T aFunc, bool aDirtyOnly )
+void CN_LIST::FindNearby( BOX2I aBBox, T aFunc, LSET aLayers, bool aDirtyOnly )
 {
     sort();
 
-    CN_ANCHOR_PTR lower_ptr = std::make_shared<CN_ANCHOR>
-                            ( aBBox.GetPosition(), m_anchors[0]->Item() );
+    CN_ANCHORS *anchor_set = &m_anchors;
+    PCB_LAYER_ID layer = aLayers.ExtractLayer();
 
-    auto lower_it = std::lower_bound( m_anchors.begin(), m_anchors.end(), lower_ptr,
+    if( layer > 0 )
+        anchor_set = &(m_layer_anchors[ layer ]);
+
+    if( (*anchor_set).size() == 0 )
+        return;
+
+    CN_ANCHOR_PTR lower_ptr = std::make_shared<CN_ANCHOR>
+                            ( aBBox.GetPosition(), (*anchor_set)[0]->Item() );
+
+    auto lower_it = std::lower_bound( anchor_set->begin(), anchor_set->end(), lower_ptr,
             [](  const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) -> bool
             { return a->Pos().x < b->Pos().x; } );
 
-    for( auto it = lower_it; it != m_anchors.end(); it++)
+    for( auto it = lower_it; it != anchor_set->end(); it++)
     {
         if( (*it)->Pos().x > aBBox.GetRight() )
             break;
@@ -669,7 +691,7 @@ void CN_ZONE_LIST::FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly )
 
 
 template <class T>
-void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirtyOnly )
+void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, LSET aLayers, bool aDirtyOnly )
 {
     /* Search items in m_Candidates that position is <= aDistMax from aPosition
      * (Rectilinear distance)
@@ -680,14 +702,23 @@ void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirty
 
     sort();
 
-    CN_ANCHOR_PTR lower = std::make_shared<CN_ANCHOR>
-                            ( aPosition - VECTOR2I( aDistMax + 1, 0 ), m_anchors[0]->Item() );
+    CN_ANCHORS *anchor_set = &m_anchors;
+    PCB_LAYER_ID layer = aLayers.ExtractLayer();
 
-    auto lower_it = std::lower_bound( m_anchors.begin(), m_anchors.end(), lower,
+    if( layer > 0 )
+        anchor_set = &(m_layer_anchors[ layer ]);
+
+    if( (*anchor_set).size() == 0 )
+        return;
+
+    CN_ANCHOR_PTR lower = std::make_shared<CN_ANCHOR>
+                            ( aPosition - VECTOR2I( aDistMax, 0 ), (*anchor_set)[0]->Item() );
+
+    auto lower_it = std::lower_bound( anchor_set->begin(), anchor_set->end(), lower,
             [](  const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) -> bool
             { return a->Pos().x < b->Pos().x; } );
 
-    for( auto it = lower_it; it != m_anchors.end(); it++ )
+    for( auto it = lower_it; it != anchor_set->end(); it++ )
     {
         if( (*it)->Pos().x > aDistMax + aPosition.x )
             break;
