@@ -432,15 +432,19 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // give a bit more room for editing
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 2 );
 
-    // set column attributes
-    for( int i = 0; i < m_dataModel->GetRowsCount(); ++i )
-    {
-        m_grid->SetReadOnly( i, 0 );                                   // references
-        m_grid->SetReadOnly( i, m_dataModel->GetColsCount() - 1 );     // quantities
-    }
-    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );     // quantities
-    m_grid->SetColMinimalWidth( 0, 100 );                              // references
-    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 50 ); // quantities
+    // set reference column attributes
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_grid->SetColAttr( 0, attr );
+    m_grid->SetColMinimalWidth( 0, 100 );
+
+    // set quantities column attributes
+    attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
+    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
+    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 50 );
+
     m_grid->AutoSizeColumns( false );
 
     m_grid->SetGridCursor( 0, 1 );
