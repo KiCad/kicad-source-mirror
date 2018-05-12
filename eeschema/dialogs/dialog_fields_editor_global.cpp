@@ -41,17 +41,38 @@
 #include "dialog_fields_editor_global.h"
 
 
+enum GROUP_TYPE
+{
+    GROUP_SINGLETON,
+    GROUP_COLLAPSED,
+    GROUP_EXPANDED,
+    CHILD_ITEM
+};
+
+struct DATA_MODEL_ROW
+{
+    DATA_MODEL_ROW( SCH_REFERENCE aFirstReference, GROUP_TYPE aType )
+    {
+        m_Refs.push_back( aFirstReference );
+        m_Flag = aType;
+    }
+
+    GROUP_TYPE                 m_Flag;
+    std::vector<SCH_REFERENCE> m_Refs;
+};
+
+
 #define FIELD_NAME_COLUMN 0
 #define SHOW_FIELD_COLUMN 1
 #define GROUP_BY_COLUMN   2
+
+#define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
 
 #ifdef __WXMAC__
 #define CHECKBOX_COLUMN_MARGIN 5
 #else
 #define CHECKBOX_COLUMN_MARGIN 15
 #endif
-
-#define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
 
 
 // Indicator that multiple values exist in child rows
@@ -74,7 +95,7 @@ protected:
     // when the groupings change), and we let the wxGrid handle (2) (ie: the number
     // of columns is constant but are hidden/shown by the wxGrid control).
 
-    std::vector< std::vector<SCH_REFERENCE> > m_rows;
+    std::vector< DATA_MODEL_ROW > m_rows;
 
     // Data store
     // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
@@ -129,12 +150,12 @@ public:
     }
 
 
-    wxString GetValue( std::vector<SCH_REFERENCE>& group, int aCol )
+    wxString GetValue( DATA_MODEL_ROW& group, int aCol )
     {
         std::vector<wxString>  rootReferences;
         wxString               fieldValue;
 
-        for( const auto& ref : group )
+        for( const auto& ref : group.m_Refs )
         {
             if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             {
@@ -144,7 +165,7 @@ public:
             {
                 timestamp_t compID = ref.GetComp()->GetTimeStamp();
 
-                if( &ref == &group.front() )
+                if( &ref == &group.m_Refs.front() )
                     fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol ] ];
                 else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol ] ] )
                     return ROW_MULT_ITEMS;
@@ -174,6 +195,16 @@ public:
                     fieldValue += wxT( ", " );
                 fieldValue += ref;
             }
+
+            // Poor-man's tree controls
+            if( group.m_Flag == GROUP_COLLAPSED )
+                fieldValue = wxT( ">  " ) + fieldValue;
+            else if (group.m_Flag == GROUP_EXPANDED )
+                fieldValue = wxT( "v  " ) + fieldValue;
+            else if( group.m_Flag == CHILD_ITEM )
+                fieldValue = wxT( "        " ) + fieldValue;
+            else
+                fieldValue = wxT( "    " ) + fieldValue;
         }
         else if( aCol == QUANTITY_COLUMN )
         {
@@ -189,34 +220,34 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             return;             // Can't modify references or quantity
 
-        std::vector<SCH_REFERENCE>& rowGroup = m_rows[ aRow ];
+        DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
         wxString fieldName = m_fieldNames[ aCol ];
 
-        for( const auto& ref : rowGroup )
+        for( const auto& ref : rowGroup.m_Refs )
             m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = aValue;
     }
 
 
-    static bool cmp( const std::vector<SCH_REFERENCE>& lhGroup, const std::vector<SCH_REFERENCE>& rhGroup,
+    static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending )
     {
         // Empty rows always go to the bottom, whether ascending or descending
-        if( lhGroup.size() == 0 )
+        if( lhGroup.m_Refs.size() == 0 )
             return true;
-        else if( rhGroup.size() == 0 )
+        else if( rhGroup.m_Refs.size() == 0 )
             return false;
 
         bool retVal;
 
         // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
 
-        wxString lhs = dataModel->GetValue( (std::vector<SCH_REFERENCE>&)lhGroup, sortCol );
-        wxString rhs = dataModel->GetValue( (std::vector<SCH_REFERENCE>&)rhGroup, sortCol );
+        wxString lhs = dataModel->GetValue( (DATA_MODEL_ROW&) lhGroup, sortCol );
+        wxString rhs = dataModel->GetValue( (DATA_MODEL_ROW&) rhGroup, sortCol );
 
         if( lhs == rhs || sortCol == REFERENCE )
         {
-            wxString lhRef = lhGroup[ 0 ].GetRef() + lhGroup[ 0 ].GetRefNumber();
-            wxString rhRef = rhGroup[ 0 ].GetRef() + rhGroup[ 0 ].GetRefNumber();
+            wxString lhRef = lhGroup.m_Refs[ 0 ].GetRef() + lhGroup.m_Refs[ 0 ].GetRefNumber();
+            wxString rhRef = rhGroup.m_Refs[ 0 ].GetRef() + rhGroup.m_Refs[ 0 ].GetRefNumber();
             retVal = RefDesStringCompare( lhRef, rhRef ) < 0;
         }
         else
@@ -234,27 +265,30 @@ public:
         if( aColumn < 0 )
             aColumn = 0;
 
+        CollapseAll();
+
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ this, aColumn, ascending ]( const std::vector<SCH_REFERENCE>& lhs,
-                                                 const std::vector<SCH_REFERENCE>& rhs ) -> bool
+                   [ this, aColumn, ascending ]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
                    {
                        return cmp( lhs, rhs, this, aColumn, ascending );
                    } );
     }
 
 
-    bool match( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef,
-                wxCheckBox* groupComponentsBox, wxDataViewListCtrl* fieldsCtrl )
+    bool unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
     {
-        // Units of same component always match
-        if( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() != wxT( "?" )
-            && lhRef.GetRefNumber() == rhRef.GetRefNumber() )
-            return true;
-
-        // If we're not grouping, then nothing else matches
-        if( !groupComponentsBox->GetValue() )
+        // If items are unannotated then we can't tell if they're units of the same
+        // component or not
+        if( lhRef.GetRefNumber() != wxT( "?" ) )
             return false;
 
+        return ( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() );
+    }
+
+
+    bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef,
+                     wxDataViewListCtrl* fieldsCtrl )
+    {
         bool matchFound = false;
 
         // First check the reference column.  This can be done directly out of the
@@ -306,33 +340,37 @@ public:
 
         for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
-            SCH_REFERENCE compRef = m_componentRefs[ i ];
+            SCH_REFERENCE ref = m_componentRefs[ i ];
             bool matchFound = false;
 
-            // See if we already have a group which this component fits into
-            for( auto& rowGroup : m_rows )
+            // See if we already have a row which this component fits into
+            for( auto& row : m_rows )
             {
-                // group members are by definition all matching, so just check
-                // against the first member
-                if( match( rowGroup[ 0 ], compRef, groupComponentsBox, fieldsCtrl ) )
+                // all group members must have identical refs so just use the first one
+                SCH_REFERENCE rowRef = row.m_Refs[ 0 ];
+
+                if( unitMatch( ref, rowRef ) )
                 {
                     matchFound = true;
-                    rowGroup.push_back( compRef );
+                    row.m_Refs.push_back( ref );
+                    break;
+                }
+                else if (groupComponentsBox->GetValue() && groupMatch( ref, rowRef, fieldsCtrl ) )
+                {
+                    matchFound = true;
+                    row.m_Refs.push_back( ref );
+                    row.m_Flag = GROUP_COLLAPSED;
                     break;
                 }
             }
 
             if( !matchFound )
-            {
-                std::vector<SCH_REFERENCE> newGroup;
-                newGroup.push_back( compRef );
-                m_rows.push_back( newGroup );
-            }
+                m_rows.push_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
         }
 
-        for( auto& rowGroup : m_rows )
+        for( auto& row : m_rows )
         {
-            std::sort( rowGroup.begin(), rowGroup.end(),
+            std::sort( row.m_Refs.begin(), row.m_Refs.end(),
                        []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
                        {
                            wxString lhRef( lhs.GetRef() << lhs.GetRefNumber() );
@@ -345,6 +383,83 @@ public:
         {
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
             GetView()->ProcessTableMessage( msg );
+        }
+    }
+
+
+    void ExpandRow( int aRow )
+    {
+        std::vector<DATA_MODEL_ROW> children;
+
+        for( auto& ref : m_rows[ aRow ].m_Refs )
+        {
+            bool matchFound = false;
+
+            // See if we already have a child group which this component fits into
+            for( auto& child : children )
+            {
+                // group members are by definition all matching, so just check
+                // against the first member
+                if( unitMatch( ref, child.m_Refs[ 0 ] ) )
+                {
+                    matchFound = true;
+                    child.m_Refs.push_back( ref );
+                    break;
+                }
+            }
+
+            if( !matchFound )
+                children.push_back( DATA_MODEL_ROW( ref, CHILD_ITEM ) );
+        }
+
+        if( children.size() < 2 )
+            return;
+
+        m_rows[ aRow ].m_Flag = GROUP_EXPANDED;
+        m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
+
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
+        GetView()->ProcessTableMessage( msg );
+    }
+
+
+    void CollapseRow( int aRow )
+    {
+        auto firstChild = m_rows.begin() + aRow + 1;
+        auto afterLastChild = firstChild;
+        int  deleted = 0;
+
+        while( afterLastChild != m_rows.end() && afterLastChild->m_Flag == CHILD_ITEM )
+        {
+            deleted++;
+            afterLastChild++;
+        }
+
+        m_rows[ aRow ].m_Flag = GROUP_COLLAPSED;
+        m_rows.erase( firstChild, afterLastChild );
+
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
+        GetView()->ProcessTableMessage( msg );
+    }
+
+
+    void ExpandCollapseRow( int aRow )
+    {
+        DATA_MODEL_ROW& group = m_rows[ aRow ];
+
+        if( group.m_Flag == GROUP_COLLAPSED )
+            ExpandRow( aRow );
+        else if( group.m_Flag == GROUP_EXPANDED )
+            CollapseRow( aRow );
+    }
+
+
+    void CollapseAll()
+    {
+        for( int i = 0; i < m_rows.size(); ++i )
+        {
+            if( m_rows[ i ].m_Flag == GROUP_EXPANDED )
+                CollapseRow( i );
         }
     }
 
@@ -600,6 +715,15 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& event )
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
+}
+
+
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
+{
+    if( event.GetCol() == REFERENCE )
+        m_dataModel->ExpandCollapseRow( event.GetRow());
+    else
+        event.Skip();
 }
 
 

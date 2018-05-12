@@ -704,8 +704,8 @@
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnGridCellChange">OnTableValueChanged</event>
-                                            <event name="OnGridCellLeftClick"></event>
-                                            <event name="OnGridCellLeftDClick"></event>
+                                            <event name="OnGridCellLeftClick">OnTableCellClick</event>
+                                            <event name="OnGridCellLeftDClick">OnTableCellClick</event>
                                             <event name="OnGridCellRightClick">OnTableItemContextMenu</event>
                                             <event name="OnGridCellRightDClick"></event>
                                             <event name="OnGridCmdCellChange"></event>

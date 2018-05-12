@@ -59,6 +59,7 @@ private:
     void OnGroupComponentsToggled( wxCommandEvent& event ) override;
     void OnRegroupComponents( wxCommandEvent& event ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
+    void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableItemContextMenu( wxGridEvent& event ) override;
     void OnSizeFieldList( wxSizeEvent& event ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
