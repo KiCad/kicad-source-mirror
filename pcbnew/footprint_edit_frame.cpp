@@ -979,3 +979,23 @@ int FOOTPRINT_EDIT_FRAME::GetIconScale()
 }
 
 
+void FOOTPRINT_EDIT_FRAME::UpdateMsgPanel()
+{
+    // If a item is currently selected, displays the item info.
+    // If nothing selected, display the current footprint info
+    BOARD_ITEM* item = GetScreen()->GetCurItem();
+
+    if( !item )
+        item = GetBoard()->m_Modules;
+
+    MSG_PANEL_ITEMS items;
+
+    if( item )
+    {
+        item->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
+    else
+        ClearMsgPanel();
+}
+

@@ -57,6 +57,13 @@ public:
     virtual COLOR4D GetGridColor() override;
 
     /**
+     * redraws the message panel.
+     * display the current footprint info, or
+     * clear the message panel if nothing is loaded
+     */
+    void UpdateMsgPanel() override;
+
+    /**
      * Function ReCreateLibraryList
      *
      * Creates or recreates the list of current loaded libraries.

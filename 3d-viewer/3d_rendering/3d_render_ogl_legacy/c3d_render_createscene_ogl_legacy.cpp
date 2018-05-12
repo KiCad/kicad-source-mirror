@@ -956,6 +956,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
                     }
 
                     // Check if the model is not present in our cache map
+                    // (Not already loaded in memory)
                     if( m_3dmodel_map.find( sM->m_Filename ) == m_3dmodel_map.end() )
                     {
                         // It is not present, try get it from cache

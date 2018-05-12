@@ -479,6 +479,15 @@ public:
 
     int GetIconScale() override;
 
+    /**
+     * redraws the message panel.
+     * If a item is currently selected, displays the item info.
+     * If nothing selected, display the current footprint info, or
+     * clear the message panel if nothing is edited
+     */
+    void UpdateMsgPanel() override;
+
+
     DECLARE_EVENT_TABLE()
 
 protected:

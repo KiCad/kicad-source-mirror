@@ -885,14 +885,25 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     m_canvas->DrawBackGround( DC );
     GetBoard()->Draw( m_canvas, DC, GR_COPY );
 
-    MODULE* module = GetBoard()->m_Modules;
-
     m_canvas->DrawCrossHair( DC );
 
-    ClearMsgPanel();
+    UpdateMsgPanel();
+}
 
-    if( module )
-        SetMsgPanel( module );
+
+void FOOTPRINT_VIEWER_FRAME::UpdateMsgPanel()
+{
+    BOARD_ITEM* footprint = GetBoard()->m_Modules;
+
+    if( footprint )
+    {
+        MSG_PANEL_ITEMS items;
+
+        footprint->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
+    else
+        ClearMsgPanel();
 }
 
 
@@ -905,6 +916,7 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
         dp->DisplayBoard( GetBoard() );
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+        UpdateMsgPanel();
     }
 }
 

@@ -392,10 +392,10 @@ bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist) const
 {
-	if( !PointCount() )
-		return false;
+    if( !PointCount() )
+        return false;
 
-	else if( PointCount() == 1 )
+    else if( PointCount() == 1 )
         return m_points[0] == aP;
 
     for( int i = 0; i < SegmentCount(); i++ )
