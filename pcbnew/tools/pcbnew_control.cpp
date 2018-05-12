@@ -940,6 +940,40 @@ static void moveNoFlagToVector( DLIST<T>& aList, std::vector<BOARD_ITEM*>& aTarg
     }
 }
 
+static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
+{
+    auto obj = aList.front();
+    int idx = 0;
+
+    if( aIsNew )
+    {
+        obj = aList.back();
+        aList.pop_back();
+    }
+
+    for( ; obj ; )
+    {
+        if( obj->GetFlags() & FLAG0 )
+            obj->ClearFlags( FLAG0 );
+        else
+            aTarget.push_back( obj );
+
+        if( aIsNew )
+        {
+            if( aList.size() )
+            {
+                obj = aList.back();
+                aList.pop_back();
+            }
+            else
+                obj = nullptr;
+        }
+        else
+            obj = idx < int(aList.size()-1) ? aList[++idx] : nullptr;
+    }
+}
+
+
 
 int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
 {
@@ -950,7 +984,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
     moveNoFlagToVector( aBoard->m_Track, items, isNew );
     moveNoFlagToVector( aBoard->m_Modules, items, isNew );
     moveNoFlagToVector( aBoard->DrawingsList(), items, isNew );
-    moveNoFlagToVector( aBoard->m_Zone, items, isNew );
+    moveNoFlagToVector( aBoard->Zones(), items, isNew );
 
     return placeBoardItems( items, isNew );
 }
