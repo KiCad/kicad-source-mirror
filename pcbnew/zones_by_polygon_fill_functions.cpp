@@ -72,9 +72,10 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, timestamp_t aTimestamp
     else
         TimeStamp = aZone->GetTimeStamp(); // Save reference time stamp (aZone will be deleted)
 
+    // SEGZONE is a deprecated item, only used for compatibility with very old boards
     SEGZONE* next;
 
-    for( SEGZONE* zone = GetBoard()->m_Zone; zone != NULL; zone = next )
+    for( SEGZONE* zone = GetBoard()->m_SegZoneDeprecated; zone != NULL; zone = next )
     {
         next = zone->Next();
 

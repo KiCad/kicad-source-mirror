@@ -157,9 +157,9 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         track->Draw( aPanel, DC, aDrawMode );
     }
 
-    // SEGZONE is outdated, only her for compatibility with
+    // SEGZONE is deprecated, only for compatibility with
     // very old designs
-    for( SEGZONE* zone = m_Zone; zone; zone = zone->Next() )
+    for( SEGZONE* zone = m_SegZoneDeprecated; zone; zone = zone->Next() )
     {
         if( zone->IsMoving() )
             continue;

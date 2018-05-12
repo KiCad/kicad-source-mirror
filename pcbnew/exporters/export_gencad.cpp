@@ -1064,24 +1064,12 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
     for( track = aPcb->m_Track; track; track = track->Next() )
         nbitems++;
 
-    for( track = aPcb->m_Zone; track; track = track->Next() )
-    {
-        if( track->Type() == PCB_ZONE_T )
-            nbitems++;
-    }
-
     tracklist = (TRACK**) operator new( (nbitems + 1)* sizeof( TRACK* ) );
 
     nbitems = 0;
 
     for( track = aPcb->m_Track; track; track = track->Next() )
         tracklist[nbitems++] = track;
-
-    for( track = aPcb->m_Zone; track; track = track->Next() )
-    {
-        if( track->Type() == PCB_ZONE_T )
-            tracklist[nbitems++] = track;
-    }
 
     tracklist[nbitems] = NULL;
 
@@ -1239,23 +1227,6 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
     unsigned          ii;
 
     for( track = aPcb->m_Track; track; track = track->Next() )
-    {
-        if( last_width != track->GetWidth() ) // Find a thickness already used.
-        {
-            for( ii = 0; ii < trackinfo.size(); ii++ )
-            {
-                if( trackinfo[ii] == track->GetWidth() )
-                    break;
-            }
-
-            if( ii == trackinfo.size() )    // not found
-                trackinfo.push_back( track->GetWidth() );
-
-            last_width = track->GetWidth();
-        }
-    }
-
-    for( track = aPcb->m_Zone; track; track = track->Next() )
     {
         if( last_width != track->GetWidth() ) // Find a thickness already used.
         {

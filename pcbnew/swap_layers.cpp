@@ -406,8 +406,8 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
         }
     }
 
-    // Change zones.
-    for( TRACK* segm = GetBoard()->m_Zone; segm; segm = segm->Next() )
+    // Change deprecated zones segments, only found in very old boards.
+    for( TRACK* segm = GetBoard()->m_SegZoneDeprecated; segm; segm = segm->Next() )
     {
         OnModify();
         int jj = segm->GetLayer();

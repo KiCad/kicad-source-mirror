@@ -872,9 +872,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_ZONE_T:
         if( aMode == ADD_APPEND )
-            m_Zone.PushBack( (SEGZONE*) aBoardItem );
+            m_SegZoneDeprecated.PushBack( (SEGZONE*) aBoardItem );
         else
-            m_Zone.PushFront( (SEGZONE*) aBoardItem );
+            m_SegZoneDeprecated.PushFront( (SEGZONE*) aBoardItem );
 
         break;
 
@@ -967,7 +967,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_ZONE_T:
-        m_Zone.Remove( (SEGZONE*) aBoardItem );
+        m_SegZoneDeprecated.Remove( (SEGZONE*) aBoardItem );
         break;
 
     case PCB_DIMENSION_T:
@@ -1015,7 +1015,7 @@ int BOARD::GetNumSegmTrack() const
 
 int BOARD::GetNumSegmZone() const
 {
-    return m_Zone.GetCount();
+    return m_SegZoneDeprecated.GetCount();
 }
 
 
@@ -1075,7 +1075,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
 
         // Check segment zones
-        for( TRACK* track = m_Zone; track; track = track->Next() )
+        for( TRACK* track = m_SegZoneDeprecated; track; track = track->Next() )
         {
             if( !hasItems )
                 area = track->GetBoundingBox();
@@ -1303,7 +1303,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         case PCB_ZONE_T:
-            result = IterateForward( m_Zone, inspector, testData, p );
+            result = IterateForward( m_SegZoneDeprecated, inspector, testData, p );
             ++p;
             break;
 

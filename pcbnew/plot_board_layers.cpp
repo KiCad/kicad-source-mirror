@@ -139,9 +139,9 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     aPlotter->EndBlock( NULL );
 
-    // Plot segments used to fill zone areas (outdated, but here for old boards
+    // Plot segments used to fill zone areas (deprecated, but here for very old boards
     // compatibility):
-    for( SEGZONE* seg = aBoard->m_Zone; seg; seg = seg->Next() )
+    for( SEGZONE* seg = aBoard->m_SegZoneDeprecated; seg; seg = seg->Next() )
     {
         if( !aLayerMask[ seg->GetLayer() ] )
             continue;
@@ -545,8 +545,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     aPlotter->EndBlock( NULL );
 
-    // Plot zones (outdated, for old boards compatibility):
-    for( TRACK* track = aBoard->m_Zone; track; track = track->Next() )
+    // Plot zones (deprecated, for very old boards compatibility):
+    for( TRACK* track = aBoard->m_SegZoneDeprecated; track; track = track->Next() )
     {
         if( !aLayerMask[track->GetLayer()] )
             continue;

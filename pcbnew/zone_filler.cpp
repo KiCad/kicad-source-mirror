@@ -206,8 +206,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         }
     }
 
-    // Remove segment zones
-    m_board->m_Zone.DeleteAll();
+    // Remove deprecaded segment zones (only found in very old boards)
+    m_board->m_SegZoneDeprecated.DeleteAll();
 
     if( m_progressReporter )
     {

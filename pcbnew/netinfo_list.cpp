@@ -227,8 +227,8 @@ void NETINFO_MAPPING::Update()
         }
     }
 
-    // Segzones
-    for( SEGZONE* zone = m_board->m_Zone; zone; zone = zone->Next() )
+    // Segzones (should be removed: used only in very old boards)
+    for( SEGZONE* zone = m_board->m_SegZoneDeprecated; zone; zone = zone->Next() )
         nets.insert( zone->GetNetCode() );
 
     // Prepare the new mapping

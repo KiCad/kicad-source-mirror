@@ -238,13 +238,14 @@ public:
 
 
 private:
-    DLIST<BOARD_ITEM>           m_Drawings;              // linked list of lines & texts
+    DLIST<BOARD_ITEM>           m_Drawings;             // linked list of lines & texts
 
 public:
 
-    DLIST<MODULE>               m_Modules;               // linked list of MODULEs
-    DLIST<TRACK>                m_Track;                 // linked list of TRACKs and VIAs
-    DLIST<SEGZONE>              m_Zone;                  // linked list of SEGZONEs
+    DLIST<MODULE>               m_Modules;              // linked list of MODULEs
+    DLIST<TRACK>                m_Track;                // linked list of TRACKs and VIAs
+    DLIST<SEGZONE>              m_SegZoneDeprecated;    // linked list of SEGZONEs, for really very old boards
+                                                        // should be removed one day
 
     DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
     DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
@@ -268,7 +269,7 @@ public:
     bool IsEmpty() const
     {
         return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 &&
-               m_Track.GetCount() == 0 && m_Zone.GetCount() == 0;
+               m_Track.GetCount() == 0 && m_SegZoneDeprecated.GetCount() == 0;
     }
 
     void Move( const wxPoint& aMoveVector ) override;

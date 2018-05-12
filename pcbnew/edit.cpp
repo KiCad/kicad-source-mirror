@@ -662,7 +662,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        GetBoard()->m_Zone.DeleteAll();                 // remove zone segments used to fill zones.
+        GetBoard()->m_SegZoneDeprecated.DeleteAll();    // remove deprecated zone segments used
+                                                        // to fill zones in very old boards.
 
         for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
         {

@@ -213,8 +213,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         }
     }
 
-    // Outdated: only for compatibility to old boards
-    for( TRACK* track = Pcb->m_Zone; track; track = track->Next() )
+    // Deprecated: only for compatibility with very old boards
+    for( TRACK* track = Pcb->m_SegZoneDeprecated; track; track = track->Next() )
     {
         if( !( aPrintMask & track->GetLayerSet() ).any() )
             continue;
