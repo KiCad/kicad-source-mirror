@@ -149,6 +149,8 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 
 void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
+    // Currently, do nothing
+    event.Skip();
 }
 
 
