@@ -691,7 +691,7 @@ public:
      * Function GetNodesCount
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
-    unsigned GetNodesCount() const;
+    unsigned GetNodesCount();
 
     /**
      * Function GetUnconnectedNetCount
@@ -703,7 +703,7 @@ public:
      * Function GetPadCount
      * @return the number of pads in board
      */
-    unsigned GetPadCount() const;
+    unsigned GetPadCount();
 
     /**
      * Function GetPad

@@ -1019,9 +1019,17 @@ int BOARD::GetNumSegmZone() const
 }
 
 
-unsigned BOARD::GetNodesCount() const
+unsigned BOARD::GetNodesCount()
 {
-    return m_connectivity->GetPadCount();
+    unsigned retval = 0;
+    for( auto mod : Modules() )
+    {
+        for( auto pad : mod->Pads() )
+            if( pad->GetNetCode() > 0 )
+                retval++;
+    }
+
+    return retval;
 }
 
 
@@ -2941,9 +2949,15 @@ const std::vector<D_PAD*> BOARD::GetPads()
 }
 
 
-unsigned BOARD::GetPadCount() const
+unsigned BOARD::GetPadCount()
 {
-    return m_connectivity->GetPadCount();
+    unsigned retval = 0;
+    for( auto mod : Modules() )
+    {
+        retval += mod->Pads().Size();
+    }
+
+    return retval;
 }
 
 
