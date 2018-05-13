@@ -34,6 +34,7 @@
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <hotkeys.h>
 
 #include "pns_segment.h"
 #include "pns_router.h"
@@ -45,13 +46,15 @@
 
 using namespace KIGFX;
 
-static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", AS_CONTEXT, 'X',
+static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", AS_CONTEXT,
+        TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
     _( "New Track" ), _( "Starts laying a new track." ) );
 
 static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", AS_CONTEXT, WXK_END,
     _( "End Track" ), _( "Stops laying the current meander." ) );
 
-static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", AS_CONTEXT, 'L',
+static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", AS_CONTEXT,
+        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SETTINGS ),
     _( "Length Tuning Settings..." ), _( "Sets the length tuning parameters for currently routed item." ),
     router_len_tuner_setup_xpm );
 

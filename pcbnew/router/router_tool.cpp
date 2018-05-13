@@ -90,7 +90,7 @@ TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffP
         _( "Run push & shove router (differential pairs)" ), ps_diff_pair_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTING_OPTIONS ),
         _( "Interactive Router Settings..." ),
         _( "Open Interactive Router settings" ), NULL, AF_ACTIVATE );
 

@@ -106,7 +106,7 @@ static EDA_HOTKEY HkRouteTuneDiffPair( _HKI( "Tune Differential Pair Length (Mod
 static EDA_HOTKEY HkRouteTuneSkew( _HKI( "Tune Differential Pair Skew (Modern Toolset only)" ),
                                    HK_ROUTE_TUNE_SKEW, '9' );
 static EDA_HOTKEY HkRouteTuneSettings( _HKI( "Length Tuning Settings (Modern Toolset only)" ),
-                                       HK_ROUTE_TUNE_SETTINGS, 'L' );
+                                       HK_ROUTE_TUNE_SETTINGS, 'L' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),
@@ -314,41 +314,96 @@ EDA_HOTKEY* common_basic_Hotkey_List[] =
 // List of hotkey descriptors for Pcbnew
 EDA_HOTKEY* board_edit_Hotkey_List[] =
 {
-    &HkTrackDisplayMode,       &HkDelete,
-    &HkBackspace,
+    // Adding Items
+    &HkPlaceItem,
+    &HkAddModule,
+
+    // Routing and options during routing
     &HkAddNewTrack,
+    &HkSwitchTrackPosture,
+    &HkDragTrackKeepSlope,
+    &HkAddThroughVia,
+    &HkAddBlindBuriedVia,
+    &HkAddMicroVia,
+
+    // Routing
     &HkRouteDiffPair,
     &HkRouteTuneSingle,
     &HkRouteTuneDiffPair,
     &HkRouteTuneSkew,
-    &HkAddThroughVia, &HkAddBlindBuriedVia,
-    &HkAddMicroVia,
-    &HkSelLayerAndAddThroughVia, &HkSelLayerAndAddBlindBuriedVia,
-    &HkSwitchTrackPosture,
-    &HkDragTrackKeepSlope,
-    &HkPlaceItem,              &HkCopyItem,
-    &HkMoveItem,
-    &HkFlipItem,
-    &HkRotateItem,             &HkRotateItemClockwise,
-    &HkMoveItemExact,          &HkPositionItemRelative,
-    &HkDuplicateItem,          &HkDuplicateItemAndIncrement, &HkCreateArray,
-    &HkDragFootprint,
-    &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,
-    &HkFindItem,               &HkEditBoardItem,
-    &HkEditWithModedit,
-    &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,
-    &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
-    &HkSwitch2InnerLayer5,     &HkSwitch2InnerLayer6,        &HkSwitch2ComponentLayer,
-    &HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer,&HkAddModule,
-    &HkSwitchTrackWidthToNext, &HkSwitchTrackWidthToPrevious,&HkSwitchGridToFastGrid1,
-    &HkSwitchGridToFastGrid2,  &HkSwitchGridToNext,          &HkSwitchGridToPrevious,
-    &HkSwitchHighContrastMode,
-    &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
-    &HkZoneFillOrRefill,       &HkZoneRemoveFilled,
-    &HkSelectConnection,       &HkSelectCopper,
-    &HkRoutingOptions,         &HkCustomTrackWidth,          &HkDpDimension,
-    &HkViaSizeInc,             &HkViaSizeDec,
+
+    // Routing Options
+    &HkRoutingOptions,
+    &HkRouteTuneSettings,
+    &HkDpDimension,
+
+    // Zones
+    &HkZoneFillOrRefill,
+    &HkZoneRemoveFilled,
+
+    // Highlight and display
+    &HkSelectConnection,
+    &HkSelectCopper,
     &HkHighlightNetSelection,
+    &HkTrackDisplayMode,
+
+    // Adjust track/via sizes
+    &HkCustomTrackWidth,
+    &HkSwitchTrackWidthToNext,
+    &HkSwitchTrackWidthToPrevious,
+    &HkViaSizeInc,
+    &HkViaSizeDec,
+
+    // Remove items
+    &HkDelete,
+    &HkBackspace,
+
+    // Edit placement
+    &HkDragFootprint,
+    &HkCopyItem,
+    &HkMoveItem,
+    &HkGetAndMoveFootprint,
+    &HkMoveItemExact,
+    &HkPositionItemRelative,
+    &HkFlipItem,
+    &HkRotateItem,
+    &HkRotateItemClockwise,
+
+    &HkSelLayerAndAddThroughVia,
+    &HkSelLayerAndAddBlindBuriedVia,
+
+    &HkDuplicateItem,
+    &HkDuplicateItemAndIncrement,
+    &HkCreateArray,
+    &HkLock_Unlock_Footprint,
+
+    &HkFindItem,
+    &HkEditBoardItem,
+    &HkEditWithModedit,
+
+    // Active Layer
+    &HkSwitch2ComponentLayer,
+    &HkSwitch2CopperLayer,
+    &HkSwitch2InnerLayer1,
+    &HkSwitch2InnerLayer2,
+    &HkSwitch2InnerLayer3,
+    &HkSwitch2InnerLayer4,
+    &HkSwitch2InnerLayer5,
+    &HkSwitch2InnerLayer6,
+    &HkSwitch2NextCopperLayer,
+    &HkSwitch2PreviousCopperLayer,
+
+    // Grids
+    &HkSwitchGridToFastGrid1,
+    &HkSwitchGridToFastGrid2,
+    &HkSwitchGridToNext,
+    &HkSwitchGridToPrevious,
+
+    // Display
+    &HkSwitchHighContrastMode,
+    &HkCanvasDefault,
+    &HkCanvasCairo,
+    &HkCanvasOpenGL,
     NULL
 };
 
