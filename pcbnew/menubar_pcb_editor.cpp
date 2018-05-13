@@ -264,32 +264,37 @@ void prepareRouteMenu( wxMenu* aParentMenu )
                  _( "Interactively route single track" ),
                  KiBitmap( add_tracks_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_DIFF_PAIR_BUTT,
-                 _( "&Differential Pair" ),
+    text = AddHotkeyName( _( "&Differential Pair" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ROUTE_DIFF_PAIR, IS_ACCELERATOR );
+    AddMenuItem( aParentMenu, ID_DIFF_PAIR_BUTT, text,
                  _( "Interactively route differential pair" ),
                  KiBitmap( ps_diff_pair_xpm ) );
 
     aParentMenu->AppendSeparator();
 
-    AddMenuItem( aParentMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT,
-                 _( "&Tune Track Length" ),
+    text = AddHotkeyName( _( "&Tune Track Length" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ROUTE_TUNE_SINGLE, IS_ACCELERATOR );
+    AddMenuItem( aParentMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT, text,
                  _( "Tune length of single track" ),
                  KiBitmap( ps_tune_length_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT,
-                 _( "Tune Differential Pair &Length" ),
+    text = AddHotkeyName( _( "Tune Differential Pair &Length" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ROUTE_TUNE_DIFF_PAIR, IS_ACCELERATOR );
+    AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT, text,
                  _( "Tune length of differential pair" ),
                  KiBitmap( ps_diff_pair_tune_length_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT,
-                 _( "Tune Differential Pair &Skew/Phase" ),
+    text = AddHotkeyName( _( "Tune Differential Pair &Skew/Phase" ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ROUTE_TUNE_SKEW, IS_ACCELERATOR );
+    AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT, text,
                  _( "Tune skew/phase of a differential pair" ),
                  KiBitmap( ps_diff_pair_tune_phase_xpm ) );
 
     aParentMenu->AppendSeparator();
 
-    AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
-                 _( "&Interactive Router Settings..." ),
+    text = AddHotkeyName( _( "&Interactive Router Settings..." ), g_Pcbnew_Editor_Hotkeys_Descr,
+                          HK_ROUTING_OPTIONS, IS_ACCELERATOR );
+    AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS, text,
                  _( "Configure interactive router" ),
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 }
