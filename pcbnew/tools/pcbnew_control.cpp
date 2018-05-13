@@ -942,6 +942,9 @@ static void moveNoFlagToVector( DLIST<T>& aList, std::vector<BOARD_ITEM*>& aTarg
 
 static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
+    if( aList.size() == 0 )
+        return;
+
     auto obj = aList.front();
     int idx = 0;
 
