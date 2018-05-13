@@ -287,7 +287,7 @@ public:
     {
         // If items are unannotated then we can't tell if they're units of the same
         // component or not
-        if( lhRef.GetRefNumber() != wxT( "?" ) )
+        if( lhRef.GetRefNumber() == wxT( "?" ) )
             return false;
 
         return ( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() );
