@@ -217,7 +217,7 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
         }
 
         // Append zones segm:
-        for( BOARD_ITEM* item = currentPcb->m_Zone; item != NULL; item = item->Next() )
+        for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
         {
             ITEM_PICKER picker( item, UR_CHANGED );
             itemsList.PushItem( picker );
@@ -343,7 +343,7 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
             }
         }
 
-        for( BOARD_ITEM* item = currentPcb->m_Zone; item != NULL; item = item->Next() )
+        for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
         {
             if( !oldBuffer->ContainsItem( item ) )
             {
