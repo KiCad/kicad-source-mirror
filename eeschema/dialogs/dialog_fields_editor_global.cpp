@@ -45,6 +45,7 @@ enum GROUP_TYPE
 {
     GROUP_SINGLETON,
     GROUP_COLLAPSED,
+    GROUP_COLLAPSED_DURING_SORT,
     GROUP_EXPANDED,
     CHILD_ITEM
 };
@@ -86,6 +87,8 @@ protected:
 
     SCH_REFERENCE_LIST    m_componentRefs;
     std::vector<wxString> m_fieldNames;
+    int                   m_sortColumn;
+    bool                  m_sortAscending;
 
     // However, the grid view can vary in two ways:
     //   1) the componentRefs can be grouped into fewer rows
@@ -100,6 +103,7 @@ protected:
     // Data store
     // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
     std::map< timestamp_t, std::map<wxString, wxString> > m_dataStore;
+
 
 public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aComponentList )
@@ -146,20 +150,33 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
-        return GetValue( m_rows[ aRow ], aCol );
+        if( aCol == REFERENCE )
+        {
+            // Poor-man's tree controls
+            if( m_rows[ aRow ].m_Flag == GROUP_COLLAPSED )
+                return wxT( ">  " ) + GetValue( m_rows[ aRow ], aCol );
+            else if (m_rows[ aRow ].m_Flag == GROUP_EXPANDED )
+                return wxT( "v  " ) + GetValue( m_rows[ aRow ], aCol );
+            else if( m_rows[ aRow ].m_Flag == CHILD_ITEM )
+                return wxT( "        " ) + GetValue( m_rows[ aRow ], aCol );
+            else
+                return wxT( "    " ) + GetValue( m_rows[ aRow ], aCol );
+        }
+        else
+            return GetValue( m_rows[ aRow ], aCol );
     }
 
 
     wxString GetValue( DATA_MODEL_ROW& group, int aCol )
     {
-        std::vector<wxString>  rootReferences;
-        wxString               fieldValue;
+        std::vector<SCH_REFERENCE> references;
+        wxString                   fieldValue;
 
         for( const auto& ref : group.m_Refs )
         {
             if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             {
-                rootReferences.push_back( ref.GetRef() << ref.GetRefNumber() );
+                references.push_back( ref );
             }
             else // Other columns are either a single value or ROW_MULTI_ITEMS
             {
@@ -175,40 +192,26 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
         {
             // Remove duplicates (other units of multi-unit parts)
-            auto logicalEnd = std::unique( rootReferences.begin(), rootReferences.end(),
-                    []( const wxString& l, const wxString& r )
+            auto logicalEnd = std::unique( references.begin(), references.end(),
+                    []( const SCH_REFERENCE& l, const SCH_REFERENCE& r )
                     {
-                        // If not annotated then we don't really know if it's a duplicate
-                        if( l.EndsWith( wxT( "?" ) ) )
+                        // If unannotated then we can't tell what units belong together
+                        // so we have to leave them all
+                        if( l.GetRefNumber() == wxT( "?" ) )
                             return false;
 
-                        return l == r;
+                        return( l.GetRef() == r.GetRef() && l.GetRefNumber() == r.GetRefNumber() );
                     } );
-            rootReferences.erase( logicalEnd, rootReferences.end() );
+            references.erase( logicalEnd, references.end() );
         }
 
         if( aCol == REFERENCE )
         {
-            for( const auto& ref : rootReferences )
-            {
-                if( fieldValue.length() )
-                    fieldValue += wxT( ", " );
-                fieldValue += ref;
-            }
-
-            // Poor-man's tree controls
-            if( group.m_Flag == GROUP_COLLAPSED )
-                fieldValue = wxT( ">  " ) + fieldValue;
-            else if (group.m_Flag == GROUP_EXPANDED )
-                fieldValue = wxT( "v  " ) + fieldValue;
-            else if( group.m_Flag == CHILD_ITEM )
-                fieldValue = wxT( "        " ) + fieldValue;
-            else
-                fieldValue = wxT( "    " ) + fieldValue;
+            fieldValue = SCH_REFERENCE_LIST::Shorthand( references );
         }
         else if( aCol == QUANTITY_COLUMN )
         {
-            fieldValue = wxString::Format( wxT( "%d" ), ( int )rootReferences.size() );
+            fieldValue = wxString::Format( wxT( "%d" ), ( int )references.size() );
         }
 
         return fieldValue;
@@ -265,13 +268,18 @@ public:
         if( aColumn < 0 )
             aColumn = 0;
 
-        CollapseAll();
+        m_sortColumn = aColumn;
+        m_sortAscending = ascending;
+
+        CollapseForSort();
 
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ this, aColumn, ascending ]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
+                   [ this ]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
                    {
-                       return cmp( lhs, rhs, this, aColumn, ascending );
+                       return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                    } );
+
+        ExpandAfterSort();
     }
 
 
@@ -368,17 +376,6 @@ public:
                 m_rows.push_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
         }
 
-        for( auto& row : m_rows )
-        {
-            std::sort( row.m_Refs.begin(), row.m_Refs.end(),
-                       []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
-                       {
-                           wxString lhRef( lhs.GetRef() << lhs.GetRefNumber() );
-                           wxString rhRef( rhs.GetRef() << rhs.GetRefNumber() );
-                           return RefDesStringCompare( lhRef, rhRef ) < 0;
-                       } );
-        }
-
         if ( GetView() )
         {
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
@@ -414,6 +411,12 @@ public:
 
         if( children.size() < 2 )
             return;
+
+        std::sort( children.begin(), children.end(),
+                   [ this ] ( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
+                   {
+                       return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
+                   } );
 
         m_rows[ aRow ].m_Flag = GROUP_EXPANDED;
         m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
@@ -454,12 +457,25 @@ public:
     }
 
 
-    void CollapseAll()
+    void CollapseForSort()
     {
         for( size_t i = 0; i < m_rows.size(); ++i )
         {
             if( m_rows[ i ].m_Flag == GROUP_EXPANDED )
+            {
                 CollapseRow( i );
+                m_rows[ i ].m_Flag = GROUP_COLLAPSED_DURING_SORT;
+            }
+        }
+    }
+
+
+    void ExpandAfterSort()
+    {
+        for( int i = 0; i < m_rows.size(); ++i )
+        {
+            if( m_rows[ i ].m_Flag == GROUP_COLLAPSED_DURING_SORT )
+                ExpandRow( i );
         }
     }
 

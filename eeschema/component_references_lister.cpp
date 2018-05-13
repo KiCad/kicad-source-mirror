@@ -804,3 +804,53 @@ void SCH_REFERENCE::Split()
         SetRefStr( refText );
     }
 }
+
+
+wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
+{
+    wxString retVal;
+
+    std::sort( aList.begin(), aList.end(),
+               []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
+               {
+                   wxString lhRef( lhs.GetRef() << lhs.GetRefNumber() );
+                   wxString rhRef( rhs.GetRef() << rhs.GetRefNumber() );
+                   return RefDesStringCompare( lhRef, rhRef ) < 0;
+               } );
+
+    int i = 0;
+
+    while( i < aList.size() )
+    {
+        wxString ref = aList[ i ].GetRef();
+
+        int j = i;
+
+        while( j + 1 < aList.size() && aList[ j + 1 ].GetRef() == ref )
+            j = j + 1;
+
+        if( !retVal.IsEmpty() )
+            retVal << wxT( ", " );
+
+        if( j == i )
+        {
+            retVal << ref << aList[ i ].GetRefNumber();
+        }
+        else if( j == i + 1 )
+        {
+            retVal << ref << aList[ i ].GetRefNumber();
+            retVal << wxT( ", " );
+            retVal << ref << aList[ j ].GetRefNumber();
+        }
+        else
+        {
+            retVal << ref << aList[ i ].GetRefNumber();
+            retVal << wxT( " - " );
+            retVal << ref << aList[ j ].GetRefNumber();
+        }
+
+        i = j + 1;
+    }
+
+    return retVal;
+}
