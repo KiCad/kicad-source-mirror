@@ -382,8 +382,7 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags, CLIENT_SELECTION_FILTER
         m_selection.ClearReferencePoint();
     }
 
-    // Be careful with iterators: items can be removed from list
-    // that invalidate iterators.
+    // Be careful with iterators: items can be removed from list that invalidate iterators.
     for( unsigned ii = 0; ii < m_selection.GetSize(); ii++ )
     {
         EDA_ITEM* item = m_selection[ii];
@@ -391,6 +390,9 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags, CLIENT_SELECTION_FILTER
         if( ( aFlags & SELECTION_EDITABLE ) && item->Type() == PCB_MARKER_T )
         {
             unselect( static_cast<BOARD_ITEM *>( item ) );
+
+            // unselect() removed the item from list.  Back up to catch the following item.
+            ii--;
         }
     }
 
