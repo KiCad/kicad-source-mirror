@@ -133,7 +133,7 @@ bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, ch
         }
 
         // end of current line, read another one.
-        if( aBuffer )
+        if( aBuffer && aFile )
         {
             if( fgets( aBuffer, aBuffSize, aFile ) == NULL )
             {

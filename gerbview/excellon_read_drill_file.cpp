@@ -104,10 +104,10 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               wxSize            aPenSize,
                               bool              aLayerNegative  );
 
-// Getber X2 files have a file attribute which specify the type of image
+// Gerber X2 files have a file attribute which specify the type of image
 // (copper, solder paste ... and sides tpo, bottom or inner copper layers)
 // Excellon drill files do not have attributes, so, just to identify the image
-// In gerbview, we add this attribute, like a Gerber drill file
+// In gerbview, we add this attribute, similat to a Gerber drill file
 static const char file_attribute[] = ".FileFunction,Other,Drill*";
 
 static EXCELLON_CMD excellonHeaderCmdList[] =
@@ -314,7 +314,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
     X2_ATTRIBUTE dummy;
     char* text = (char*)file_attribute;
     int dummyline = 0;
-    dummy.ParseAttribCmd( m_Current_File, NULL, 0, text, dummyline );
+    dummy.ParseAttribCmd( NULL, NULL, 0, text, dummyline );
     delete m_FileFunction;
     m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
 

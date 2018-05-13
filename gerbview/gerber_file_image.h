@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,9 +175,8 @@ private:
                                                                 // 0 = no negative items found
                                                                 // 1 = have negative items found
     /**
-     * Function GetNextLine
      * test for an end of line
-     * if an end of line is found:
+     * if a end of line is found:
      *   read a new line
      * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
      * @param aText = pointer to the last useful char in aBuff
@@ -189,6 +188,44 @@ private:
     char* GetNextLine( char *aBuff, unsigned int aBuffSize, char* aText, FILE* aFile );
 
     bool GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char*& aText, FILE* aGerberFile );
+
+    /**
+      * reads a single RS274X command terminated with a %
+     */
+    bool ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, char*& aText );
+
+    /**
+     * executes a RS274X command
+     */
+    bool ExecuteRS274XCommand( int aCommand, char* aBuff,
+                               unsigned int aBuffSize, char*& aText );
+
+    /**
+     * reads two bytes of data and assembles them into an int with the first
+     * byte in the sequence put into the most significant part of a 16 bit value
+     * to build a RS274X command identifier.
+     * @param text A reference to a pointer to read bytes from and to advance as
+     *             they are read.
+     * @return a RS274X command identifier.
+     */
+    int ReadXCommandID( char*& text );
+
+    /**
+     * reads in an aperture macro and saves it in m_aperture_macros.
+     * @param aBuff a character buffer at least GERBER_BUFZ long that can be
+     *          used to read successive lines from the gerber file.
+     * @param text A reference to a character pointer which gives the initial
+     *              text to read from.
+     * @param aBuffSize is the size of aBuff
+     * @param gerber_file Which file to read from for continuation.
+     * @return bool - true if a macro was read in successfully, else false.
+     */
+    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
+                            char* & text, FILE * gerber_file );
+
+    // functions to execute G commands or D basic commands:
+    bool    Execute_G_Command( char*& text, int G_command );
+    bool    Execute_DCODE_Command( char*& text, int D_command );
 
 public:
     GERBER_FILE_IMAGE( int layer );
@@ -275,7 +312,6 @@ public:
     wxPoint ReadXYCoord( char*& Text );
 
     /**
-     * Function ReadIJCoord
      * Returns the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
      * These coordinates are relative, so if coordinate is absent, it's value
      * defaults to 0
@@ -285,48 +321,6 @@ public:
     // functions to read G commands or D commands:
     int     GCodeNumber( char*& Text );
     int     DCodeNumber( char*& Text );
-
-    // functions to execute G commands or D commands:
-    bool    Execute_G_Command( char*& text, int G_command );
-    bool    Execute_DCODE_Command( char*& text, int D_command );
-
-    /**
-     * Function ReadRS274XCommand
-     * reads a single RS274X command terminated with a %
-     */
-    bool ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, char*& aText );
-
-    /**
-     * Function ExecuteRS274XCommand
-     * executes a RS274X command
-     */
-    bool ExecuteRS274XCommand( int aCommand, char* aBuff,
-                               unsigned int aBuffSize, char*& aText );
-
-    /**
-     * reads two bytes of data and assembles them into an int with the first
-     * byte in the sequence put into the most significant part of a 16 bit value
-     * to build a RS274X command identifier.
-     * @param text A reference to a pointer to read bytes from and to advance as
-     *             they are read.
-     * @return a RS274X command identifier.
-     */
-    int ReadXCommandID( char*& text );
-
-    /**
-     * Function ReadApertureMacro
-     * reads in an aperture macro and saves it in m_aperture_macros.
-     * @param aBuff a character buffer at least GERBER_BUFZ long that can be
-     *          used to read successive lines from the gerber file.
-     * @param text A reference to a character pointer which gives the initial
-     *              text to read from.
-     * @param aBuffSize is the size of aBuff
-     * @param gerber_file Which file to read from for continuation.
-     * @return bool - true if a macro was read in successfully, else false.
-     */
-    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
-                            char* & text, FILE * gerber_file );
-
 
     /**
      * Function GetDCODEOrCreate
