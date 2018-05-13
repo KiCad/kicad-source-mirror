@@ -298,11 +298,20 @@ public:
 
     /**
      * Function ExecuteRS274XCommand
-     * executes 1 command
+     * executes a RS274X command
      */
     bool ExecuteRS274XCommand( int aCommand, char* aBuff,
                                unsigned int aBuffSize, char*& aText );
 
+    /**
+     * reads two bytes of data and assembles them into an int with the first
+     * byte in the sequence put into the most significant part of a 16 bit value
+     * to build a RS274X command identifier.
+     * @param text A reference to a pointer to read bytes from and to advance as
+     *             they are read.
+     * @return a RS274X command identifier.
+     */
+    int ReadXCommandID( char*& text );
 
     /**
      * Function ReadApertureMacro

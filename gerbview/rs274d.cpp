@@ -42,7 +42,7 @@
  * G01 linear interpolation (right trace)
  * G02, G20, G21 Circular interpolation, meaning trig <0 (clockwise)
  * G03, G30, G31 Circular interpolation, meaning trigo> 0 (counterclockwise)
- * G04 = comment. Since Sept 2014, file attributes can be found here
+ * G04 = comment. Since Sept 2014, file attributes and other X2 attributes can be found here
  *       if the line starts by G04 #@!
  * G06 parabolic interpolation
  * G07 Cubic Interpolation
@@ -478,22 +478,32 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_COMMENT:
-        // Skip comment, but only if the line does not start by "G04 #@! TF"
-        // which is a metadata
-        if( strncmp( text, " #@! TF", 7 ) == 0 )
+        // Skip comment, but only if the line does not start by "G04 #@! "
+        // which is a metadata, i.e. a X2 command inside the comment.
+        // this comment is called a "structured comment"
+        if( strncmp( text, " #@! ", 5 ) == 0 )
         {
-            text += 7;
-            X2_ATTRIBUTE dummy;
-            dummy.ParseAttribCmd( m_Current_File, NULL, 0, text, m_LineNum );
-            if( dummy.IsFileFunction() )
+            text += 5;
+            // The string starting at text is the same as the X2 attribute,
+            // but a X2 attribute ends by '%'. So we build the X2 attribute string
+            std::string x2buf;
+
+            while( *text && (*text != '*') )
             {
-                delete m_FileFunction;
-                m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
+                x2buf += *text;
+                text++;
             }
+            // add the end of X2 attribute string
+            x2buf += "*%";
+            x2buf += '\0';
+
+            char* cptr = (char*)x2buf.data();
+            int code_command = ReadXCommandID( cptr );
+            ExecuteRS274XCommand( code_command, NULL, 0, cptr );
         }
 
-        while ( *text && (*text != '*') )
-                    text++;
+        while( *text && (*text != '*') )
+            text++;
         break;
 
     case GC_LINEAR_INTERPOL_10X:

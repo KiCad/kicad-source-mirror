@@ -83,6 +83,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     }
 
     auto canvas = GetGalCanvas();
+
     if( canvas )
     {
         auto view = canvas->GetView();

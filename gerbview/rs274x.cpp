@@ -111,17 +111,11 @@ enum RS274X_PARAMETERS {
 };
 
 
-/**
- * Function ReadXCommand
- * reads in two bytes of data and assembles them into an int with the first
- * byte in the sequence put into the most significant part of a 16 bit value
- * and the second byte put into the least significant part of the 16 bit value.
- * @param text A reference to a pointer to read bytes from and to advance as
- *             they are read.
- * @return int - with 16 bits of data in the ls bits, upper bits zeroed.
- */
-static int ReadXCommand( char*& text )
+int GERBER_FILE_IMAGE::ReadXCommandID( char*& text )
 {
+    /* reads  two bytes of data and assembles them into an int with the first
+     * byte in the sequence put into the most significant part of a 16 bit value
+     */
     int result;
     int currbyte;
 
@@ -218,7 +212,7 @@ bool GERBER_FILE_IMAGE::ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, 
                 break;
 
             default:
-                code_command = ReadXCommand( aText );
+                code_command = ReadXCommandID( aText );
                 ok = ExecuteRS274XCommand( code_command, aBuff, aBuffSize, aText );
                 if( !ok )
                     goto exit;
@@ -403,7 +397,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case MODE_OF_UNITS:
-        code = ReadXCommand( aText );
+        code = ReadXCommandID( aText );
         if( code == INCH )
             m_GerbMetric = false;
         else if( code == MILLIMETER )
@@ -433,7 +427,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
      }
         break;
 
-    case APERTURE_ATTRIBUTE:    // Command %TA ... Not yet supported
+    case APERTURE_ATTRIBUTE:    // Command %TA
         {
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, aBuff, aBuffSize, aText, m_LineNum );
