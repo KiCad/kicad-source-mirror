@@ -213,19 +213,19 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  _( "Graphics acceleration, grid, cursor, annotation and clearance outline settings." ),
                  KiBitmap( display_options_xpm ) );
 
-    text = AddHotkeyName( _( "Legacy Tool&set" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Legacy Tool&set" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_LEGACY );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY, text,
                  _( "Use Legacy Toolset (not all features will be available)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
@@ -258,13 +258,13 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "&Single Track" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Single Track" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ADD_NEW_TRACK, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_TRACK_BUTT, text,
                  _( "Interactively route single track" ),
                  KiBitmap( add_tracks_xpm ) );
 
-    text = AddHotkeyName( _( "&Differential Pair" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Differential Pair" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ROUTE_DIFF_PAIR, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_DIFF_PAIR_BUTT, text,
                  _( "Interactively route differential pair" ),
@@ -272,19 +272,19 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Tune Track Length" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Tune Track Length" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ROUTE_TUNE_SINGLE, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT, text,
                  _( "Tune length of single track" ),
                  KiBitmap( ps_tune_length_xpm ) );
 
-    text = AddHotkeyName( _( "Tune Differential Pair &Length" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Tune Differential Pair &Length" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ROUTE_TUNE_DIFF_PAIR, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT, text,
                  _( "Tune length of differential pair" ),
                  KiBitmap( ps_diff_pair_tune_length_xpm ) );
 
-    text = AddHotkeyName( _( "Tune Differential Pair &Skew/Phase" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Tune Differential Pair &Skew/Phase" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ROUTE_TUNE_SKEW, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT, text,
                  _( "Tune skew/phase of a differential pair" ),
@@ -292,7 +292,7 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Interactive Router Settings..." ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Interactive Router Settings..." ), g_Board_Editor_Hotkeys_Descr,
                           HK_ROUTING_OPTIONS, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS, text,
                  _( "Configure interactive router" ),
@@ -303,13 +303,15 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 // Build the inspect menu
 void prepareInspectMenu( wxMenu* aParentMenu )
 {
+    wxString text;
+
     AddMenuItem( aParentMenu, ID_MENU_LIST_NETS,
                  _( "&List Nets" ),
                  _( "View list of nets with names and IDs" ),
                  KiBitmap( list_nets_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_MEASUREMENT_TOOL,
-                 _( "&Measure" ),
+    text = AddHotkeyName( _( "&Measure" ), g_Board_Editor_Hotkeys_Descr, HK_MEASURE_TOOL );
+    AddMenuItem( aParentMenu, ID_PCB_MEASUREMENT_TOOL, text,
                  _( "Measure distance" ),
                  KiBitmap( measurement_xpm ) );
 
@@ -350,51 +352,50 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "&Footprint" ), g_Pcbnew_Editor_Hotkeys_Descr,
-                          HK_ADD_MODULE );
-    AddMenuItem( aParentMenu, ID_PCB_MODULE_BUTT, text,
-                 _( "Add footprint" ), KiBitmap( module_xpm ) );
+    text = AddHotkeyName( _( "&Footprint" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_MODULE );
+    AddMenuItem( aParentMenu, ID_PCB_MODULE_BUTT, text, _( "Add footprint" ),
+                 KiBitmap( module_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_DRAW_VIA_BUTT,
-                 _( "&Via" ),
-                 _( "Add via" ), KiBitmap( add_via_xpm ) );
+    text = AddHotkeyName( _( "&Via" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_FREE_VIA );
+    AddMenuItem( aParentMenu, ID_PCB_DRAW_VIA_BUTT, text, _( "Add via" ),
+                 KiBitmap( add_via_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_ZONES_BUTT,
-                 _( "&Zone" ), _( "Add filled zone" ), KiBitmap( add_zone_xpm ) );
+    text = AddHotkeyName( _( "&Zone" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_ZONE );
+    AddMenuItem( aParentMenu, ID_PCB_ZONES_BUTT, text, _( "Add filled zone" ),
+                 KiBitmap( add_zone_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_KEEPOUT_AREA_BUTT,
-                 _( "&Keepout Area" ), _( "Add keepout area" ), KiBitmap( add_keepout_area_xpm ) );
+    text = AddHotkeyName( _( "&Keepout Area" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_KEEPOUT );
+    AddMenuItem( aParentMenu, ID_PCB_KEEPOUT_AREA_BUTT, text, _( "Add keepout area" ),
+                 KiBitmap( add_keepout_area_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_ADD_TEXT_BUTT,
-                 _( "Te&xt" ), _( "Add text on copper layers or graphic text" ),
-                 KiBitmap( text_xpm ) );
+    text = AddHotkeyName( _( "Te&xt" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_TEXT );
+    AddMenuItem( aParentMenu, ID_PCB_ADD_TEXT_BUTT, text,
+                 _( "Add text on copper layers or graphic text" ), KiBitmap( text_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_ARC_BUTT,
-                 _( "&Arc" ), _( "Add graphic arc" ),KiBitmap( add_arc_xpm ) );
+    text = AddHotkeyName( _( "&Arc" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_ARC );
+    AddMenuItem( aParentMenu, ID_PCB_ARC_BUTT, text, _( "Add graphic arc" ),
+                 KiBitmap( add_arc_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_CIRCLE_BUTT,
-                 _( "&Circle" ), _( "Add graphic circle" ),
+    text = AddHotkeyName( _( "&Circle" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_CIRCLE );
+    AddMenuItem( aParentMenu, ID_PCB_CIRCLE_BUTT, text, _( "Add graphic circle" ),
                  KiBitmap( add_circle_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_ADD_LINE_BUTT,
-                 _( "&Line" ),
-                 _( "Add graphic line" ),
+    text = AddHotkeyName( _( "&Line" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_LINE );
+    AddMenuItem( aParentMenu, ID_PCB_ADD_LINE_BUTT, text, _( "Add graphic line" ),
                  KiBitmap( add_graphical_segments_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_ADD_POLYGON_BUTT,
-                  _( "&Polygon" ),
-                  _( "Add graphic polygon" ),
-                  KiBitmap( add_graphical_polygon_xpm ) );
+    text = AddHotkeyName( _( "&Polygon" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_POLYGON );
+    AddMenuItem( aParentMenu, ID_PCB_ADD_POLYGON_BUTT, text, _( "Add graphic polygon" ),
+                 KiBitmap( add_graphical_polygon_xpm ) );
 
     aParentMenu->AppendSeparator();
 
-    AddMenuItem( aParentMenu, ID_PCB_DIMENSION_BUTT,
-                 _( "&Dimension" ), _( "Add dimension" ),
+    text = AddHotkeyName( _( "&Dimension" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_DIMENSION );
+    AddMenuItem( aParentMenu, ID_PCB_DIMENSION_BUTT, text, _( "Add dimension" ),
                  KiBitmap( add_dimension_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_TARGET_BUTT,
-                 _( "La&yer Alignment Target" ), _( "Add layer alignment target" ),
-                 KiBitmap( add_pcb_target_xpm ) );
+    AddMenuItem( aParentMenu, ID_PCB_TARGET_BUTT, _( "La&yer Alignment Target" ),
+            _( "Add layer alignment target" ), KiBitmap( add_pcb_target_xpm ) );
 
     aParentMenu->AppendSeparator();
 
@@ -478,7 +479,7 @@ void prepareHelpMenu( wxMenu* aParentMenu )
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_HELP );
+    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_Board_Editor_Hotkeys_Descr, HK_HELP );
     AddMenuItem( aParentMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  text,
                  _( "Display current hotkeys list and corresponding commands" ),
@@ -505,27 +506,27 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 {
     wxString text;
 
-    text  = AddHotkeyName( _( "&Undo" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_UNDO );
+    text  = AddHotkeyName( _( "&Undo" ), g_Board_Editor_Hotkeys_Descr, HK_UNDO );
     AddMenuItem( aParentMenu, wxID_UNDO, text, HELP_UNDO, KiBitmap( undo_xpm ) );
 
-    text  = AddHotkeyName( _( "&Redo" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_REDO );
+    text  = AddHotkeyName( _( "&Redo" ), g_Board_Editor_Hotkeys_Descr, HK_REDO );
     AddMenuItem( aParentMenu, wxID_REDO, text, HELP_REDO, KiBitmap( redo_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     if( aUseGal )
     {
-        text = AddHotkeyName( _( "&Cut" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_EDIT_CUT );
+        text = AddHotkeyName( _( "&Cut" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_CUT );
         AddMenuItem( aParentMenu, ID_EDIT_CUT, text,
                      _( "Cuts the selected item(s) to the Clipboard" ),
                      KiBitmap( cut_xpm ) );
 
-        text = AddHotkeyName( _( "&Copy" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_EDIT_COPY );
+        text = AddHotkeyName( _( "&Copy" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_COPY );
         AddMenuItem( aParentMenu, ID_EDIT_COPY, text,
                      _( "Copies the selected item(s) to the Clipboard" ),
                      KiBitmap( copy_xpm ) );
 
-        text = AddHotkeyName( _( "&Paste" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_EDIT_PASTE );
+        text = AddHotkeyName( _( "&Paste" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_PASTE );
         AddMenuItem( aParentMenu, ID_EDIT_PASTE, text,
                      _( "Pastes item(s) from the Clipboard" ),
                      KiBitmap( paste_xpm ) );
@@ -537,7 +538,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Find..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find..." ), g_Board_Editor_Hotkeys_Descr, HK_FIND_ITEM );
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND , KiBitmap( find_xpm ) );
 
     aParentMenu->AppendSeparator();
@@ -592,7 +593,7 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Open the Library Browser" ),
                  KiBitmap( modview_icon_xpm ) );
 
-    text = AddHotkeyName( _( "&3D Viewer" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_3D_VIEWER );
+    text = AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER );
     AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_3D_FRAME,
                  text, _( "Show board in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
@@ -610,24 +611,24 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
      * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
      */
-    text = AddHotkeyName( _( "Zoom &In" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Zoom &In" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Zoom &Out" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom to &Fit" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Zoom to &Fit" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ZOOM_AUTO  );
     AddMenuItem( aParentMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom to Selection" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Zoom to Selection" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ZOOM_SELECTION );
     AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), g_Board_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( aParentMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
@@ -707,7 +708,7 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Sketch &Vias" ), _( "Show vias in outline mode" ),
                  KiBitmap( via_sketch_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "Sketch &Tracks" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Sketch &Tracks" ), g_Board_Editor_Hotkeys_Descr,
                           HK_SWITCH_TRACK_DISPLAY_MODE );
     AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, text,
                  _( "Show tracks in outline mode" ),
@@ -733,7 +734,7 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
     // Contrast Mode Submenu
     wxMenu* contrastModeSubMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "&High Contrast Mode" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&High Contrast Mode" ), g_Board_Editor_Hotkeys_Descr,
                           HK_SWITCH_HIGHCONTRAST_MODE );
     AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                  text, _( "Use high contrast display mode" ),
@@ -741,13 +742,13 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
 
     contrastModeSubMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
                           HK_DEC_LAYER_ALPHA );
     AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
                  text, _( "Make the current layer more transparent" ),
                  KiBitmap( contrast_mode_xpm ) );
 
-    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
                           HK_INC_LAYER_ALPHA );
     AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
                  text, _( "Make the current layer less transparent" ),
@@ -794,12 +795,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     if( aIsOutsideProject )
     {
-        text = AddHotkeyName( _( "&New" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_NEW );
+        text = AddHotkeyName( _( "&New" ), g_Board_Editor_Hotkeys_Descr, HK_NEW );
         AddMenuItem( aParentMenu, ID_NEW_BOARD,
                 text, _( "Create new board" ),
                 KiBitmap( new_board_xpm ) );
 
-        text = AddHotkeyName( _( "&Open..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_OPEN );
+        text = AddHotkeyName( _( "&Open..." ), g_Board_Editor_Hotkeys_Descr, HK_OPEN );
         AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
                 _( "Open existing board" ),
                 KiBitmap( open_brd_file_xpm ) );
@@ -812,7 +813,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
         aParentMenu->AppendSeparator();
     }
 
-    text = AddHotkeyName( _( "&Save" ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVE );
+    text = AddHotkeyName( _( "&Save" ), g_Board_Editor_Hotkeys_Descr, HK_SAVE );
     AddMenuItem( aParentMenu, ID_SAVE_BOARD, text,
                  _( "Save current board" ),
                  KiBitmap( save_xpm ) );
@@ -824,7 +825,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // when not under a project mgr, we are free to change filenames, cwd ...
     if( Kiface().IsSingle() )      // not when under a project mgr (pcbnew is run as stand alone)
     {
-        text = AddHotkeyName( _( "Sa&ve As..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVEAS );
+        text = AddHotkeyName( _( "Sa&ve As..." ), g_Board_Editor_Hotkeys_Descr, HK_SAVEAS );
         AddMenuItem( aParentMenu, ID_SAVE_BOARD_AS, text,
                      _( "Save current board with new name" ),
                      KiBitmap( save_as_xpm ) );
@@ -833,7 +834,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // but do not change the current board file name
     else
     {
-        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_SAVEAS );
+        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Board_Editor_Hotkeys_Descr, HK_SAVEAS );
         AddMenuItem( aParentMenu, ID_COPY_BOARD_AS, text,
                      _( "Save copy of the current board" ),
                      KiBitmap( save_as_xpm ) );
@@ -932,7 +933,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Settings for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
-    text = AddHotkeyName( _( "&Print..." ), g_Pcbnew_Editor_Hotkeys_Descr, HK_PRINT );
+    text = AddHotkeyName( _( "&Print..." ), g_Board_Editor_Hotkeys_Descr, HK_PRINT );
     AddMenuItem( aParentMenu, wxID_PRINT, text,
                  _( "Print board" ),
                  KiBitmap( print_button_xpm ) );

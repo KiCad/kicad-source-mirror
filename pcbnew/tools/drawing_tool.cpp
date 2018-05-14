@@ -67,66 +67,66 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
 // Drawing tool actions
 TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LINE ),
         _( "Draw Line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawGraphicPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_POLYGON ),
         _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CIRCLE ),
         _( "Draw Circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ARC ),
         _( "Draw Arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
-        AS_GLOBAL, 0,
+        AS_GLOBAL,  TOOL_ACTION::LegacyHotKey( HK_ADD_LINE ),
         _( "Add Text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DIMENSION ),
         _( "Add Dimension" ), _( "Add a dimension" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ZONE ),
         _( "Add Filled Zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_FREE_VIA ),
         _( "Add Vias" ), _( "Add free-standing vias" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_KEEPOUT ),
         _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CUTOUT ),
         _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
         add_zone_cutout_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_SIMILAR_ZONE ),
         _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
         add_zone_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DXF ),
         "Place DXF", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ANCHOR ),
         _( "Place the Footprint Anchor" ), _( "Place the footprint anchor" ),
         NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
-        AS_CONTEXT, '+',
+        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_INC_LINE_WIDTH ),
         _( "Increase Line Width" ), _( "Increase the line width" ) );
 
 TOOL_ACTION PCB_ACTIONS::decWidth( "pcbnew.InteractiveDrawing.decWidth",
-        AS_CONTEXT, '-',
+        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_DEC_LINE_WIDTH ),
         _( "Decrease Line Width" ), _( "Decrease the line width" ) );
 
 TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
@@ -218,6 +218,9 @@ DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
 
 int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
 
@@ -254,6 +257,9 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT*    circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     BOARD_COMMIT    commit( m_frame );
@@ -283,6 +289,9 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT*    arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     BOARD_COMMIT    commit( m_frame );
@@ -312,6 +321,9 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     BOARD_ITEM* text = NULL;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -474,6 +486,9 @@ void DRAWING_TOOL::constrainDimension( DIMENSION* dimension )
 
 int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     DIMENSION* dimension = NULL;
     BOARD_COMMIT commit( m_frame );
     int maxThickness;
@@ -691,6 +706,9 @@ int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawGraphicPolygon( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::GRAPHIC_POLYGON );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_POLYGON_TOOL : ID_PCB_ADD_POLYGON_BUTT,
@@ -892,6 +910,9 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 {
     assert( m_editModules );
+
+    if( !m_frame->GetModel() )
+        return 0;
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
 

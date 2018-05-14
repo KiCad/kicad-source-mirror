@@ -148,6 +148,24 @@ static EDA_HOTKEY HkDelete( _HKI( "Delete Track or Footprint" ), HK_DELETE, WXK_
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ), HK_SWITCH_HIGHCONTRAST_MODE,'H');
 
+static EDA_HOTKEY HkAddLine( _HKI( "Draw Line" ), HK_ADD_LINE, 'L' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddPolygon( _HKI( "Draw Graphic Polygon" ), HK_ADD_POLYGON, 'P' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddCircle( _HKI( "Draw Circle" ), HK_ADD_CIRCLE, 'C' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddArc( _HKI( "Draw Arc" ), HK_ADD_ARC, 'A' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddText( _HKI( "Add Text" ), HK_ADD_TEXT, 'T' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddDimension( _HKI( "Add Dimension" ), HK_ADD_DIMENSION, 'H' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddFilledZone( _HKI( "Add Filled Zone" ), HK_ADD_ZONE, 'Z' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddFreeVia( _HKI( "Add Vias" ), HK_ADD_FREE_VIA, 'V' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddKeepout( _HKI( "Add Keepout Area" ), HK_ADD_KEEPOUT, 'K' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddZoneCutout( _HKI( "Add a Zone Cutout" ), HK_ADD_CUTOUT, 'C' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddSimilarZone( _HKI( "Add a Similar Zone" ), HK_ADD_SIMILAR_ZONE, '.' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddDXF( _HKI( "Place DXF" ), HK_ADD_DXF, 'D' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddAnchor( _HKI( "Place the Footprint Anchor" ), HK_ADD_ANCHOR, 'N' + GR_KB_SHIFTCTRL );
+
+static EDA_HOTKEY HkIncreaseLineWidth( _HKI( "Increase Line Width" ), HK_INC_LINE_WIDTH, '+' + GR_KB_CTRL );
+static EDA_HOTKEY HkDecreaseLineWidth( _HKI( "Decrease Line Width" ), HK_DEC_LINE_WIDTH, '-' + GR_KB_CTRL );
+
+
 static EDA_HOTKEY HkSetGridOrigin( _HKI( "Set Grid Origin" ), HK_SET_GRID_ORIGIN, 'S' );
 static EDA_HOTKEY HkResetGridOrigin( _HKI( "Reset Grid Origin" ), HK_RESET_GRID_ORIGIN, 'Z' );
 
@@ -257,7 +275,7 @@ static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTION
 
 static EDA_HOTKEY HkCustomTrackWidth( _HKI( "Custom Track/Via Size" ), HK_CUSTOM_TRACK_WIDTH, 'Q' );
 
-static EDA_HOTKEY HkDpDimension( _HKI( "Differential Pair Dimensions" ), HK_DP_DIMENSIONS, 'P' );
+static EDA_HOTKEY HkDpDimension( _HKI( "Differential Pair Dimensions" ), HK_DP_DIMENSIONS, 'R' + GR_KB_SHIFTCTRL );
 
 static EDA_HOTKEY HkViaSizeInc( _HKI( "Increase Via Size" ), HK_VIA_SIZE_INC, '\'' );
 
@@ -326,6 +344,18 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     // Adding Items
     &HkPlaceItem,
     &HkAddModule,
+    &HkAddFreeVia,
+    &HkAddFilledZone,
+    &HkAddKeepout,
+    &HkAddZoneCutout,
+    &HkAddSimilarZone,
+    &HkAddLine,
+    &HkAddCircle,
+    &HkAddArc,
+    &HkAddPolygon,
+    &HkAddText,
+    &HkAddDimension,
+    &HkAddDXF,
 
     // Routing and options during routing
     &HkAddNewTrack,
@@ -422,10 +452,31 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 
 // List of hotkey descriptors for the module editor
 EDA_HOTKEY* module_edit_Hotkey_List[] = {
-    &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
-    &HkMoveItemExact,          &HkDuplicateItem,             &HkDuplicateItemAndIncrement,
-    &HkCreateArray,            &HkDelete,                    &HkSwitchHighContrastMode,
-    &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
+    // Add Items
+    &HkAddLine,
+    &HkAddCircle,
+    &HkAddArc,
+    &HkAddPolygon,
+    &HkAddText,
+    &HkAddAnchor,
+
+    // Delete/Move
+    &HkDelete,
+    &HkMoveItem,
+    &HkMoveItemExact,
+    &HkRotateItem,
+
+    // Edit/Duplicate
+    &HkEditBoardItem,
+    &HkDuplicateItem,
+    &HkDuplicateItemAndIncrement,
+    &HkCreateArray,
+
+    // Display
+    &HkSwitchHighContrastMode,
+    &HkCanvasDefault,
+    &HkCanvasCairo,
+    &HkCanvasOpenGL,
     NULL
  };
 

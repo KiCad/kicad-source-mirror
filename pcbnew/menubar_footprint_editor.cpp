@@ -357,36 +357,41 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AppendSeparator();
 
     // Text
+    text = AddHotkeyName( _( "&Text" ), m_hotkeysDescrList, HK_ADD_TEXT );
     AddMenuItem( placeMenu, ID_MODEDIT_TEXT_TOOL,
-                 _( "&Text" ), _( "Add graphic text" ),
+                 text, _( "Add graphic text" ),
                  KiBitmap( text_xpm ) );
 
     // Arc
+    text = AddHotkeyName( _( "&Arc" ), m_hotkeysDescrList, HK_ADD_ARC );
     AddMenuItem( placeMenu, ID_MODEDIT_ARC_TOOL,
-                 _( "&Arc" ), _( "Add graphic arc" ),
+                 text, _( "Add graphic arc" ),
                  KiBitmap( add_arc_xpm ) );
 
     // Circle
+    text = AddHotkeyName( _( "&Circle" ), m_hotkeysDescrList, HK_ADD_CIRCLE );
     AddMenuItem( placeMenu, ID_MODEDIT_CIRCLE_TOOL,
-                 _( "&Circle" ), _( "Add graphic circle" ),
+                 text, _( "Add graphic circle" ),
                  KiBitmap( add_circle_xpm ) );
 
     // Line
+    text = AddHotkeyName( _( "&Line" ), m_hotkeysDescrList, HK_ADD_LINE );
     AddMenuItem( placeMenu, ID_MODEDIT_LINE_TOOL,
-                 _( "&Line" ), _( "Add graphic line" ),
+                 text, _( "Add graphic line" ),
                  KiBitmap( add_graphical_segments_xpm ) );
 
     // Polygon
+    text = AddHotkeyName( _( "&Polygon" ), m_hotkeysDescrList, HK_ADD_POLYGON );
     AddMenuItem( placeMenu, ID_MODEDIT_POLYGON_TOOL,
-                 _( "&Polygon" ), _( "Add graphic polygon" ),
+                 text, _( "Add graphic polygon" ),
                  KiBitmap( add_graphical_polygon_xpm ) );
 
     placeMenu->AppendSeparator();
 
     // Anchor
+    text = AddHotkeyName( _( "A&nchor" ), m_hotkeysDescrList, HK_ADD_ANCHOR );
     AddMenuItem( placeMenu, ID_MODEDIT_ANCHOR_TOOL,
-                 _( "A&nchor" ),
-                 _( "Place footprint reference anchor" ),
+                 text, _( "Place footprint reference anchor" ),
                  KiBitmap( anchor_xpm ) );
 
     // Origin
@@ -399,9 +404,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     //----- Inspect menu ---------------------
     wxMenu* inspectMenu = new wxMenu;
 
+
+    text = AddHotkeyName( _( "&Measure" ), m_hotkeysDescrList, HK_MEASURE_TOOL );
     AddMenuItem( inspectMenu, ID_MODEDIT_MEASUREMENT_TOOL,
-                 _( "&Measure" ),
-                 _( "Measure distance" ),
+                 text, _( "Measure distance" ),
                  KiBitmap( measurement_xpm ) );
 
     //----- Tools menu ---------------------
