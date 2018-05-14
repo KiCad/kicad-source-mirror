@@ -216,13 +216,19 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
     BOARD_COMMIT commit( m_pcbEditorFrame );
     int nerrors = 0;
 
+    std::vector<SHAPE_POLY_SET> smoothed_polys;
+    smoothed_polys.resize( board->GetAreaCount() );
+
+    for( int ia = 0; ia < board->GetAreaCount(); ia++ )
+    {
+        ZONE_CONTAINER* zoneRef = board->GetArea( ia );
+        zoneRef->BuildSmoothedPoly( smoothed_polys[ia] );
+    }
+
     // iterate through all areas
     for( int ia = 0; ia < board->GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* zoneRef = board->GetArea( ia );
-        SHAPE_POLY_SET refSmoothedPoly;
-
-        zoneRef->BuildSmoothedPoly( refSmoothedPoly );
 
         if( !zoneRef->IsOnCopperLayer() )
             continue;
@@ -231,12 +237,11 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
         if( aZone && ( aZone != zoneRef) )
             continue;
 
-        for( int ia2 = 0; ia2 < board->GetAreaCount(); ia2++ )
+        // If we are testing a single zone, then iterate through all other zones
+        // Otherwise, we have already tested the zone combination
+        for( int ia2 = ( aZone ? 0 : ia + 1 ); ia2 < board->GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* zoneToTest = board->GetArea( ia2 );
-            SHAPE_POLY_SET testSmoothedPoly;
-
-            zoneToTest->BuildSmoothedPoly( testSmoothedPoly );
 
             if( zoneRef == zoneToTest )
                 continue;
@@ -270,12 +275,12 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                 zone2zoneClearance = 1;
 
             // test for some corners of zoneRef inside zoneToTest
-            for( auto iterator = refSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
+            for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
             {
                 VECTOR2I currentVertex = *iterator;
                 wxPoint pt( currentVertex.x, currentVertex.y );
 
-                if( testSmoothedPoly.Contains( currentVertex ) )
+                if( smoothed_polys[ia2].Contains( currentVertex ) )
                 {
                     if( aCreateMarkers )
                         commit.Add( newMarker( pt, zoneRef, zoneToTest, DRCE_ZONES_INTERSECT ) );
@@ -285,12 +290,12 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
             }
 
             // test for some corners of zoneToTest inside zoneRef
-            for( auto iterator = testSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
+            for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
             {
                 VECTOR2I currentVertex = *iterator;
                 wxPoint pt( currentVertex.x, currentVertex.y );
 
-                if( refSmoothedPoly.Contains( currentVertex ) )
+                if( smoothed_polys[ia].Contains( currentVertex ) )
                 {
                     if( aCreateMarkers )
                         commit.Add( newMarker( pt, zoneToTest, zoneRef, DRCE_ZONES_INTERSECT ) );
@@ -302,13 +307,13 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
             // Iterate through all the segments of refSmoothedPoly
             std::set<wxPoint> conflictPoints;
 
-            for( auto refIt = refSmoothedPoly.IterateSegmentsWithHoles(); refIt; refIt++ )
+            for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
             {
                 // Build ref segment
                 SEG refSegment = *refIt;
 
-                // Iterate through all the segments in testSmoothedPoly
-                for( auto testIt = testSmoothedPoly.IterateSegmentsWithHoles(); testIt; testIt++ )
+                // Iterate through all the segments in smoothed_polys[ia2]
+                for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
                 {
                     // Build test segment
                     SEG testSegment = *testIt;
