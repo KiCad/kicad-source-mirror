@@ -117,7 +117,15 @@ namespace SEXPR
             else if( *it == '"' )
             {
                 size_t startPos = std::distance(aString.begin(), it) + 1;
-                size_t closingPos = aString.find_first_of('"', startPos);
+                size_t closingPos = startPos > 0 ? startPos - 1 : startPos;
+
+                // find the closing quote character, be sure it is not escaped
+                do
+                {
+                    closingPos = aString.find_first_of( '"', closingPos + 1 );
+                }
+                while( closingPos != std::string::npos
+                        && ( closingPos > 0 && aString[closingPos - 1] == '\\' ) );
 
                 if( closingPos != std::string::npos )
                 {
