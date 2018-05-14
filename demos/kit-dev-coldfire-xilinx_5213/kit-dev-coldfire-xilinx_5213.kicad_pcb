@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.0.0-rc2-dev-670-ga3770bf)")
+(kicad_pcb (version 20171130) (host pcbnew "(5.0.0-rc2-dev-728-g2832f99-dirty)")
 
   (general
     (thickness 1.6)
@@ -2274,10 +2274,10 @@
       (net 91 GND))
     (pad 1 thru_hole rect (at 0 0 90) (size 1 1) (drill 0.6) (layers *.Cu *.Mask)
       (net 95 "Net-(C3-Pad1)"))
-    (model ${KISYS3DMOD}/TO_SOT_Packages_THT.3dshapes/TO-92_Molded_Narrow.wrl
-      (offset (xyz 1.269999980926514 0 0))
+    (model ${KISYS3DMOD}/Package_TO_SOT_THT.3dshapes/TO-92.wrl
+      (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 -90))
+      (rotate (xyz 0 0 0))
     )
   )
 
@@ -7524,7 +7524,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 36 /inout_user/RTS0))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model ${KISYS3DMOD}/Conn_DBxx.3dshapes/db9_female_pin90deg.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -7571,7 +7571,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 37 /inout_user/RTS1))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model ${KISYS3DMOD}/Conn_DBxx.3dshapes/db9_female_pin90deg.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -7618,7 +7618,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 38 /inout_user/RTS2))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model ${KISYS3DMOD}/Conn_DBxx.3dshapes/db9_female_pin90deg.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/db9_female_pin90deg.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
