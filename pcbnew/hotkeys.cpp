@@ -108,6 +108,15 @@ static EDA_HOTKEY HkRouteTuneSkew( _HKI( "Tune Differential Pair Skew (Modern To
 static EDA_HOTKEY HkRouteTuneSettings( _HKI( "Length Tuning Settings (Modern Toolset only)" ),
                                        HK_ROUTE_TUNE_SETTINGS, 'L' + GR_KB_CTRL );
 
+static EDA_HOTKEY HkRouteTuneIncreaseSpacing( _HKI( "Increase meander spacing by one step." ),
+        HK_ROUTE_TUNE_INCREASE_SPACING, '1' );
+static EDA_HOTKEY HkRouteTuneDecreaseSpacing( _HKI( "Decrease meander spacing by one step." ),
+        HK_ROUTE_TUNE_DECREASE_SPACING, '2' );
+static EDA_HOTKEY HkRouteTuneIncreaseAmp( _HKI( "Increase meander amplitude by one step." ),
+        HK_ROUTE_TUNE_INCREASE_AMP, '3' );
+static EDA_HOTKEY HkRouteTuneDecreaseAmp( _HKI( "Decrease meander amplitude by one step." ),
+        HK_ROUTE_TUNE_DECREASE_AMP, '4' );
+
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),
                                               HK_SEL_LAYER_AND_ADD_THROUGH_VIA, '<' );
@@ -335,6 +344,10 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     // Routing Options
     &HkRoutingOptions,
     &HkRouteTuneSettings,
+    &HkRouteTuneIncreaseSpacing,
+    &HkRouteTuneDecreaseSpacing,
+    &HkRouteTuneIncreaseAmp,
+    &HkRouteTuneDecreaseAmp,
     &HkDpDimension,
 
     // Zones

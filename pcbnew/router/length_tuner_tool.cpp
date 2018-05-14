@@ -58,19 +58,23 @@ static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", AS_CONTEXT,
     _( "Length Tuning Settings..." ), _( "Sets the length tuning parameters for currently routed item." ),
     router_len_tuner_setup_xpm );
 
-static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", AS_CONTEXT, '1',
+static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", AS_CONTEXT,
+        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_INCREASE_SPACING ),
     _( "Increase Spacing" ), _( "Increase meander spacing by one step." ),
     router_len_tuner_dist_incr_xpm );
 
-static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", AS_CONTEXT, '2',
+static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", AS_CONTEXT,
+        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DECREASE_SPACING ),
     _( "Decrease Spacing" ), _( "Decrease meander spacing by one step." ),
     router_len_tuner_dist_decr_xpm );
 
-static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", AS_CONTEXT, '3',
+static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", AS_CONTEXT,
+        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_INCREASE_AMP ),
     _( "Increase Amplitude" ), _( "Increase meander amplitude by one step." ),
     router_len_tuner_amplitude_incr_xpm );
 
-static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", AS_CONTEXT, '4',
+static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", AS_CONTEXT,
+        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DECREASE_AMP ),
     _( "Decrease Amplitude" ), _( "Decrease meander amplitude by one step." ),
     router_len_tuner_amplitude_decr_xpm );
 
