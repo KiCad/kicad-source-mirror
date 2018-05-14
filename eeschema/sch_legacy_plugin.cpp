@@ -3076,13 +3076,17 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
     if( *line == '"' )
         parseQuotedString( str, aReader, line, &line );
     else
+    {
         parseUnquotedString( str, aReader, line, &line );
+
+        // In old libs, "spaces" are replaced by '~' in unquoted strings:
+        str.Replace( "~", " " );
+    }
 
     if( !str.IsEmpty() )
     {
         // convert two apostrophes back to double quote
         str.Replace( "''", "\"" );
-        str.Replace( wxT( "~" ), wxT( " " ) );
     }
 
     text->SetText( str );
@@ -3916,17 +3920,11 @@ void SCH_LEGACY_PLUGIN_CACHE::saveText( LIB_TEXT* aText,
 
     wxString text = aText->GetText();
 
-    if( text.Contains( wxT( "~" ) ) || text.Contains( wxT( "\"" ) ) )
+    if( text.Contains( wxT( " " ) ) || text.Contains( wxT( "~" ) ) || text.Contains( wxT( "\"" ) ) )
     {
         // convert double quote to similar-looking two apostrophes
         text.Replace( wxT( "\"" ), wxT( "''" ) );
         text = wxT( "\"" ) + text + wxT( "\"" );
-    }
-    else
-    {
-        // Spaces are not allowed in text because it is not double quoted:
-        // changed to '~'
-        text.Replace( wxT( " " ), wxT( "~" ) );
     }
 
     aFormatter->Print( 0, "T %g %d %d %d %d %d %d %s", aText->GetTextAngle(),
