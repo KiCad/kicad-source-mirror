@@ -64,10 +64,6 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
                             _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_GERBVIEW_SET_PAGE_BORDER, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
-                            _( "Show/hide frame reference and select paper size for printing" ) );
-
-    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
                             _( "Print layers" ) );
 

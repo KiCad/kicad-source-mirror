@@ -49,18 +49,6 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 
 #define CLIP_BOX_PADDING 2
 
-///@{
-/// \ingroup config
-
-#define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
-#define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
-#define ENBL_MIDDLE_BUTT_PAN_KEY        wxT( "MiddleButtonPAN" )
-#define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
-#define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
-
-///@}
-
-
 // Definitions for enabling and disabling debugging features in drawpanel.cpp.
 // Please don't forget to turn these off before making any commits to Launchpad.
 #define DEBUG_SHOW_CLIP_RECT       0  // Set to 1 to draw clipping rectangle.

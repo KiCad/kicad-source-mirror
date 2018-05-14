@@ -30,7 +30,6 @@
 #include <config_params.h>
 #include <draw_frame.h>
 #include <layers_id_colors_and_visibility.h>
-
 #include <gerbview.h>
 #include <convert_to_biu.h>
 #include <gbr_layout.h>
@@ -756,8 +755,15 @@ public:
      */
     void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
 
-    int GetIconScale() override;
-    void SetIconScale( int aScale ) override;
+    /**
+     * Allows Gerbview to install its preferences panels into the preferences dialog.
+     */
+    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+
+    /**
+     * Called after the preferences dialog is run.
+     */
+    void CommonSettingsChanged() override;
 
     DECLARE_EVENT_TABLE()
 };

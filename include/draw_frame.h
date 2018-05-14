@@ -178,6 +178,8 @@ protected:
      */
     virtual void unitsChangeRefresh();
 
+    void CommonSettingsChanged() override;
+
     /**
      * Function GeneralControlKeyMovement
      * Handle the common part of GeneralControl dedicated to global
@@ -276,6 +278,9 @@ public:
      */
     virtual const wxPoint& GetGridOrigin() const = 0;
     virtual void SetGridOrigin( const wxPoint& aPosition ) = 0;
+
+    int GetLastGridSizeId() const { return m_LastGridSizeId; }
+    void SetLastGridSizeId( int aId ) { m_LastGridSizeId = aId; }
 
     //-----<BASE_SCREEN API moved here>------------------------------------------
     /**

@@ -44,6 +44,7 @@ public:
     bool    m_DisplayPolygonsFill;      ///< Option to draw polygons (filled/sketch)
     bool    m_DisplayPolarCood;         ///< Option to display coordinates in status bar in X,Y or Polar coords
     bool    m_DisplayDCodes;            ///< Option to show dcode values on items drawn with a dcode tool
+    bool    m_DisplayPageLimits;
     bool    m_DisplayNegativeObjects;   ///< Option to draw negative objects in a specific color
     bool    m_IsPrinting;               ///< true when printing a page, false when drawing on screen
     bool    m_ForceBlackAndWhite;       ///< Option print in blackand white (ont used id draw mode
@@ -62,6 +63,7 @@ public:
         m_DisplayPolygonsFill = true;
         m_DisplayPolarCood = false;
         m_DisplayDCodes = false;
+        m_DisplayPageLimits = false;
         m_IsPrinting = false;
         m_DisplayNegativeObjects = false;
         m_ForceBlackAndWhite    = false;

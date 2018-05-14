@@ -33,13 +33,10 @@
 #include <pcb_edit_frame.h>
 #include <collectors.h>
 #include <build_version.h>
-#include <macros.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <msgpanel.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <trace_helpers.h>
-
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <drc.h>
@@ -58,28 +55,26 @@
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <invoke_pcb_dialog.h>
-
+#include <dialog_configure_paths.h>
 #include <class_track.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <worksheet_viewitem.h>
 #include <connectivity_data.h>
 #include <ratsnest_viewitem.h>
-
+#include <wildcards_and_files_ext.h>
+#include <kicad_string.h>
+#include <pcb_draw_panel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <functional>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
-
-#include <wildcards_and_files_ext.h>
-#include <kicad_string.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
 #endif
 
-#include <pcb_draw_panel_gal.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <functional>
 
 using namespace std::placeholders;
 
@@ -150,15 +145,13 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, PCB_EDIT_FRAME::OnConfigurePaths )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( wxID_PREFERENCES, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_LAYERS_SETUP, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_MASK_CLEARANCE, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_PAD_SETUP, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, PCB_EDIT_FRAME::InstallDisplayOptionsDialog )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
     // menu Postprocess
@@ -1216,7 +1209,8 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 
 void PCB_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this, Prj().Get3DCacheManager()->GetResolver() );
+    DIALOG_CONFIGURE_PATHS dlg( this, Prj().Get3DCacheManager()->GetResolver() );
+    dlg.ShowModal();
 }
 
 
@@ -1343,18 +1337,10 @@ int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module, bool updateMode 
 }
 
 
-int PCB_EDIT_FRAME::GetIconScale()
+void PCB_EDIT_FRAME::CommonSettingsChanged()
 {
-    int scale = 0;
-    Kiface().KifaceSettings()->Read( IconScaleEntry, &scale, 0 );
-    return scale;
-}
+    PCB_BASE_EDIT_FRAME::CommonSettingsChanged();
 
-
-void PCB_EDIT_FRAME::SetIconScale( int aScale )
-{
-    Kiface().KifaceSettings()->Write( IconScaleEntry, aScale );
-    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();

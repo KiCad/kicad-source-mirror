@@ -130,7 +130,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
         m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY );
-        sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND, 5 );
+        sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
 
         m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
                 wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
@@ -147,7 +147,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
         m_gridMinSpacing = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY);
-        sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxEXPAND, 5 );
+        sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
 
         m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
                 wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
@@ -209,14 +209,14 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         sCursorSettings->Add( m_cursorShape, 0, wxALL | wxEXPAND, 5 );
 
-#ifndef __APPLE__
+#ifdef __APPLE__
         // Whole section is galOnly on OSX; no need for further qualifier here
-        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always display crosshairs" ) );
+        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always show crosshairs" ) );
 #else
         // User a shorter galOnly qualifier as otherwise the label is obnoxiously long
         // @todo LEGACY remove this
         m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY,
-                                         _( "Always display crosshairs (not in Legacy)" ) );
+                                         _( "Always show crosshairs (not in Legacy)" ) );
 #endif
 
         sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );

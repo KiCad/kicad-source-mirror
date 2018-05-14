@@ -1300,11 +1300,9 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
     TRACE* trace = plot->GetTrace( m_signal );
 
     if( trace->HasCursor() )
-        AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ),
-                     wxEmptyString, KiBitmap( pcb_target_xpm ) );
+        AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( pcb_target_xpm ) );
     else
-        AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ),
-                     wxEmptyString, KiBitmap( pcb_target_xpm ) );
+        AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ), KiBitmap( pcb_target_xpm ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
 }

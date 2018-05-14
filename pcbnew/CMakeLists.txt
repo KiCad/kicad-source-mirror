@@ -64,8 +64,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_design_rules.cpp
     dialogs/dialog_design_rules_base.cpp
     dialogs/dialog_dimension_editor_base.cpp
-    dialogs/dialog_display_options.cpp
-    dialogs/dialog_display_options_base.cpp
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor.cpp
@@ -96,8 +94,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_gencad_export_options.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
-    dialogs/dialog_general_options.cpp
-    dialogs/dialog_general_options_BoardEditor_base.cpp
     dialogs/dialog_get_footprint.cpp
     dialogs/dialog_get_footprint_base.cpp
     dialogs/dialog_get_footprint_by_name_base.cpp
@@ -121,9 +117,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_layers_setup_base.cpp
     dialogs/dialog_mask_clearance.cpp
     dialogs/dialog_mask_clearance_base.cpp
-    dialogs/dialog_modedit_display_options.cpp
-    dialogs/dialog_modedit_options.cpp
-    dialogs/dialog_modedit_options_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp
     dialogs/dialog_netlist.cpp
@@ -162,6 +155,17 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_track_via_size_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
+    dialogs/panel_modedit_defaults.cpp
+    dialogs/panel_modedit_defaults_base.cpp
+    dialogs/panel_modedit_display_options.cpp
+    dialogs/panel_modedit_settings.cpp
+    dialogs/panel_modedit_settings_base.cpp
+    dialogs/panel_pcbnew_display_options.cpp
+    dialogs/panel_pcbnew_display_options_base.cpp
+    dialogs/panel_pcbnew_display_options.cpp
+    dialogs/panel_pcbnew_display_options_base.cpp
+    dialogs/panel_pcbnew_settings.cpp
+    dialogs/panel_pcbnew_settings_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp

@@ -26,14 +26,14 @@
 #include <kiway.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-
 #include <class_library.h>
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
-#include <pgm_base.h>
+#include <dialog_configure_paths.h>
+
 #include "dialogs/dialog_sym_lib_table.h"
 
 
@@ -263,7 +263,8 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
 void SCH_BASE_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this, nullptr );
+    DIALOG_CONFIGURE_PATHS dlg( this, nullptr );
+    dlg.ShowModal();
 }
 
 

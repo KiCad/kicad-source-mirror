@@ -22,7 +22,6 @@ set( KICAD_SRCS
     kicad.cpp
     mainframe.cpp
     menubar.cpp
-    preferences.cpp
     prjconfig.cpp
     project_template.cpp
     tree_project_frame.cpp

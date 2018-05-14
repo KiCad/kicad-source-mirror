@@ -71,20 +71,13 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         h = dynamic_cast<KIWAY_HOLDER*>( aParent );
     }
 
-    if( h )
-    {
-        // Inherit units from parent
-        m_units = h->GetUserUnits();
+    wxASSERT_MSG( h, "Dialog parent is not a KIWAY_HOLDER" );
 
-        // Set up the message bus
-        SetKiway( this, &h->Kiway() );
-    }
-    else
-    {
-        // There are a few dialogs, such as Configure Paths, which are called
-        // from the top-level wxFrame.
-        m_units = MILLIMETRES;
-    }
+    // Inherit units from parent
+    m_units = h->GetUserUnits();
+
+    // Set up the message bus
+    SetKiway( this, &h->Kiway() );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );

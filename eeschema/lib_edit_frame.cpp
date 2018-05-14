@@ -155,8 +155,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Multiple item selection context menu commands.
     EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, LIB_EDIT_FRAME::OnSelectItem )
 
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    LIB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_EDIT_FRAME::Process_Config )
 
     // Context menu events and commands.
     EVT_MENU( ID_LIBEDIT_EDIT_PIN, LIB_EDIT_FRAME::OnEditPin )
@@ -1779,20 +1778,12 @@ void LIB_EDIT_FRAME::emptyScreen()
 }
 
 
-int LIB_EDIT_FRAME::GetIconScale()
+void LIB_EDIT_FRAME::CommonSettingsChanged()
 {
-    int scale = 0;
-    Kiface().KifaceSettings()->Read( LibIconScaleEntry, &scale, 0 );
-    return scale;
-}
+    SCH_BASE_FRAME::CommonSettingsChanged();
 
-
-void LIB_EDIT_FRAME::SetIconScale( int aScale )
-{
-    Kiface().KifaceSettings()->Write( LibIconScaleEntry, aScale );
-    ReCreateMenuBar();
-    ReCreateVToolbar();
     ReCreateHToolbar();
+    ReCreateVToolbar();
     ReCreateOptToolbar();
     Layout();
     SendSizeEvent();

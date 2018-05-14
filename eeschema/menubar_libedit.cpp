@@ -304,15 +304,12 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Default values and options
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
-                 _( "General &Options..." ),
-                 _( "Set Symbol Editor default values and options" ),
+                 _( "Preferences..." ),
+                 _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
-
-    // Hotkey submenu
-    AddHotkeyConfigMenu( preferencesMenu );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
@@ -346,11 +343,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // About Eeschema
     helpMenu->AppendSeparator();
 
-    AddMenuItem( helpMenu,
-                 wxID_ABOUT,
-                 _( "&About KiCad" ),
-                 _( "About KiCad" ),
-                 KiBitmap( about_xpm ) );
+    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
 
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );

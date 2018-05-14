@@ -99,10 +99,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  KiBitmap( help_xpm ) );
 
     // About CvPcb
-    AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About KiCad" ),
-                 _( "About KiCad" ),
-                 KiBitmap( about_xpm ) );
+    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
 
     // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&File" ) );

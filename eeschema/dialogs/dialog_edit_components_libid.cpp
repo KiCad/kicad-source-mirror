@@ -511,7 +511,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
     // Use dialog symbol selector to choose a symbol
     SCH_BASE_FRAME::HISTORY_LIST dummy;
     SCH_BASE_FRAME::COMPONENT_SELECTION sel =
-                m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0, false );
+                m_frame->SelectComponentFromLibrary( NULL, dummy, true, 0, 0, false );
 #else
     // Use library viewer to choose a symbol
     LIB_ID aPreselectedLibid;

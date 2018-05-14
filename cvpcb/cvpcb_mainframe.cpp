@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <build_version.h>
 #include <kiway_express.h>
-#include <pgm_base.h>
 #include <kiface_i.h>
 #include <kiface_ids.h>
 #include <macros.h>
@@ -42,13 +41,14 @@
 #include <bitmaps.h>
 #include <widgets/progress_reporter.h>
 #include <3d_cache/3d_cache.h>
-
-#include <cvpcb_mainframe.h>
+#include <dialog_configure_paths.h>
 #include <cvpcb.h>
 #include <listboxes.h>
 #include <invoke_pcb_dialog.h>
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
+
+#include <cvpcb_mainframe.h>
 
 wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
 wxSize const FRAME_DEFAULT_SIZE_DU( 450, 300 );
@@ -975,7 +975,8 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 
 void CVPCB_MAINFRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    Pgm().ConfigurePaths( this, Prj().Get3DCacheManager()->GetResolver() );
+    DIALOG_CONFIGURE_PATHS dlg( this, Prj().Get3DCacheManager()->GetResolver() );
+    dlg.ShowModal();
 }
 
 

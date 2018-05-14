@@ -1279,18 +1279,10 @@ void GERBVIEW_FRAME::setupTools()
 }
 
 
-int GERBVIEW_FRAME::GetIconScale()
+void GERBVIEW_FRAME::CommonSettingsChanged()
 {
-    int scale = 0;
-    Kiface().KifaceSettings()->Read( IconScaleEntry, &scale, 0 );
-    return scale;
-}
+    EDA_DRAW_FRAME::CommonSettingsChanged();
 
-
-void GERBVIEW_FRAME::SetIconScale( int aScale )
-{
-    Kiface().KifaceSettings()->Write( IconScaleEntry, aScale );
-    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateOptToolbar();
     ReCreateAuxiliaryToolbar();

@@ -510,7 +510,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, const HOTKEY_SECTIONS
     :   TWO_COLUMN_TREE_LIST( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
         m_sections( aSections )
 {
-    AppendColumn( _( "Command" ) );
+    AppendColumn( _( "Command (double-click to edit)" ) );
     AppendColumn( _( "Hotkey" ) );
     SetRubberBandColumn( 0 );
     SetClampedMinWidth( HOTKEY_MIN_WIDTH );

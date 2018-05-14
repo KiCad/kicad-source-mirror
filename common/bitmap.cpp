@@ -102,7 +102,8 @@ int KiIconScale( wxWindow* aWindow )
 
 static int get_scale_factor( EDA_BASE_FRAME* aWindow )
 {
-    const int requested_scale = aWindow->GetIconScale();
+    int requested_scale;
+    Pgm().CommonSettings()->Read( ICON_SCALE_KEY, &requested_scale, 0 );
 
     if( requested_scale > 0 )
         return requested_scale;
@@ -179,7 +180,8 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
     item = new wxMenuItem( aMenu, aId, aText, wxEmptyString, aType );
 
     // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+    bool useImagesInMenus;
+    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
 
     if( useImagesInMenus )
     {
@@ -214,7 +216,8 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
     item = new wxMenuItem( aMenu, aId, aText, aHelpText, aType );
 
     // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+    bool useImagesInMenus;
+    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
 
     if( useImagesInMenus )
     {
@@ -249,7 +252,8 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
     item->SetSubMenu( aSubMenu );
 
     // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+    bool useImagesInMenus;
+    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
 
     if( useImagesInMenus )
         item->SetBitmap( aImage );
@@ -270,7 +274,8 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
     item->SetSubMenu( aSubMenu );
 
     // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+    bool useImagesInMenus;
+    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
 
     if( useImagesInMenus )
         item->SetBitmap( aImage );

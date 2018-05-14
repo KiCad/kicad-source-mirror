@@ -37,8 +37,6 @@
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
     EVT_KIWAY_EXPRESS( KIWAY_PLAYER::kiway_express )
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, KIWAY_PLAYER::language_change )
-    EVT_MENU_RANGE( ID_KICAD_SELECT_ICONS_OPTIONS, ID_KICAD_SELECT_ICON_OPTIONS_END,
-                    KIWAY_PLAYER::OnChangeIconsOptions )
 END_EVENT_TABLE()
 
 
@@ -192,8 +190,3 @@ void KIWAY_PLAYER::language_change( wxCommandEvent& event )
 }
 
 
-void KIWAY_PLAYER::OnChangeIconsOptions( wxCommandEvent& event )
-{
-    EDA_BASE_FRAME::OnChangeIconsOptions( event );
-    Kiway().ShowChangedIcons();
-}

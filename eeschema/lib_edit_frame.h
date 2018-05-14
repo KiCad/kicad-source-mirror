@@ -35,10 +35,8 @@
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
-
 #include <lib_draw_item.h>
 #include <lib_collectors.h>
-
 #include <core/optional.h>
 
 class SCH_EDIT_FRAME;
@@ -179,10 +177,12 @@ public:
     /** @return the default pin num text size.
      */
     static int GetPinNumDefaultSize() { return m_textPinNumDefaultSize; }
+    static void SetPinNumDefaultSize( int aSize ) { m_textPinNumDefaultSize = aSize; }
 
-    /** @return The default  pin name text size setting.
+    /** @return The default pin name text size setting.
      */
     static int GetPinNameDefaultSize() { return m_textPinNameDefaultSize; }
+    static void SetPinNameDefaultSize( int aSize ) { m_textPinNameDefaultSize = aSize; }
 
     /** @return The default pin len setting.
      */
@@ -710,8 +710,15 @@ public:
      */
     void SyncLibraries( bool aLoad );
 
-    int GetIconScale() override;
-    void SetIconScale( int aScale ) override;
+    /**
+     * Allows Libedit to install its preferences panel into the preferences dialog.
+     */
+    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+
+    /**
+     * Called after the preferences dialog is run.
+     */
+    void CommonSettingsChanged() override;
 
 private:
     ///> Helper screen used when no part is loaded

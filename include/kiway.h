@@ -361,12 +361,11 @@ public:
     VTBL_ENTRY void SetLanguage( int aLanguage );
 
     /**
-     * Function ShowChangedIcons
-     * Calls ShowChangedIcons() on all KIWAY_PLAYERs.
-     * Used after changing options related to icons in menus and toolbars
-     * (like enable/disable icons in menus)
+     * Function CommonSettingsChanged
+     * Calls CommonSettingsChanged() on all KIWAY_PLAYERs.
+     * Used after changing suite-wide options such as panning, autosave interval, etc.
      */
-    VTBL_ENTRY void ShowChangedIcons();
+    VTBL_ENTRY void CommonSettingsChanged();
 
     KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = NULL );
 

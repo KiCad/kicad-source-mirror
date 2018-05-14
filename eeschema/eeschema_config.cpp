@@ -33,27 +33,20 @@
 #include <gestfich.h>
 #include <sch_edit_frame.h>
 #include <invoke_sch_dialog.h>
-#include <common.h>
-
-#include <eeschema_id.h>
-#include <general.h>
 #include <lib_edit_frame.h>
 #include <eeschema_config.h>
 #include <hotkeys.h>
-#include <sch_sheet.h>
-#include <class_libentry.h>
 #include <worksheet_shape_builder.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
-
-#include <dialog_hotkeys_editor.h>
-
-#include <dialogs/dialog_eeschema_options.h>
-#include <dialogs/dialog_libedit_options.h>
-#include <dialogs/dialog_schematic_find.h>
 #include <dialog_erc.h>
-
 #include <wildcards_and_files_ext.h>
+#include <widgets/paged_dialog.h>
+#include <dialogs/panel_eeschema_template_fieldnames.h>
+#include <dialogs/panel_eeschema_settings.h>
+#include <dialogs/panel_eeschema_display_options.h>
+#include <widgets/widget_eeschema_color_config.h>
+#include <dialogs/panel_libedit_settings.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
@@ -129,23 +122,10 @@ COLOR4D GetInvisibleItemColor()
 
 void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
-    int        id = event.GetId();
+    int id = event.GetId();
 
     switch( id )
     {
-    // Hotkey IDs
-    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr, g_Libedit_Hokeys_Descr );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
-        break;
-
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for LibEdit.
         DisplayHotkeyList( this, g_Libedit_Hokeys_Descr );
@@ -196,19 +176,6 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         }
         break;
 
-    // Hotkey IDs
-    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Eeschema_Hokeys_Descr, g_Schematic_Hokeys_Descr );
-        break;
-
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for eeschema.
         DisplayHotkeyList( this, g_Schematic_Hokeys_Descr );
@@ -222,114 +189,25 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
-    wxArrayString units;
-    GRIDS grid_list = GetScreen()->GetGrids();
-    bool saveProjectConfig = false;
-
-    DIALOG_EESCHEMA_OPTIONS dlg( this );
-
-    units.Add( GetUnitsLabel( INCHES ) );
-    units.Add( GetUnitsLabel( MILLIMETRES ) );
-
-    dlg.SetUnits( units, GetUserUnits() );
-    dlg.SetGridSizes( grid_list, GetScreen()->GetGridCmdId() );
-    dlg.SetBusWidth( GetDefaultBusThickness() );
-    dlg.SetLineWidth( GetDefaultLineThickness() );
-    dlg.SetTextSize( GetDefaultTextSize() );
-    dlg.SetRepeatHorizontal( GetRepeatStep().x );
-    dlg.SetRepeatVertical( GetRepeatStep().y );
-    dlg.SetRepeatLabel( GetRepeatDeltaLabel() );
-    dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
-    dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator(),
-                           LIB_PART::GetSubpartFirstId() );
-
-    dlg.SetShowGrid( IsGridVisible() );
-    dlg.SetShowHiddenPins( m_showAllPins );
-    dlg.SetEnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-    dlg.SetEnableZoomNoCenter( m_canvas->GetEnableZoomNoCenter() );
-    dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
-    dlg.SetEnableHVBusOrientation( GetForceHVLines() );
-    dlg.SetShowPageLimits( m_showPageLimits );
-    dlg.SetFootprintPreview( m_footprintPreview );
-    dlg.SetAutoplaceFields( m_autoplaceFields );
-    dlg.SetAutoplaceJustify( m_autoplaceJustify );
-    dlg.SetAutoplaceAlign( m_autoplaceAlign );
-    dlg.Layout();
-    dlg.Fit();
-    dlg.SetMinSize( dlg.GetSize() );
-    dlg.SetTemplateFields( m_TemplateFieldNames.GetTemplateFieldNames() );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetId( (dlg.GetUnitsSelection() == MILLIMETRES) ?
-                ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
-    GetEventHandler()->ProcessEvent( cmd );
-
-    wxRealPoint  gridsize = grid_list[ (size_t) dlg.GetGridSelection() ].m_Size;
-    m_LastGridSizeId = GetScreen()->SetGrid( gridsize );
-
-    int sep, firstId;
-    dlg.GetRefIdSeparator( sep, firstId);
-
-    if( sep != (int)LIB_PART::GetSubpartIdSeparator() ||
-        firstId != (int)LIB_PART::GetSubpartFirstId() )
+    if( ShowPreferences( g_Eeschema_Hokeys_Descr, g_Schematic_Hokeys_Descr, wxT( "eeschema" ) ) )
     {
-        LIB_PART::SetSubpartIdNotation( sep, firstId );
-        saveProjectConfig = true;
+        SaveSettings( config() );  // save values shared by eeschema applications.
+        m_canvas->Refresh( true );
     }
+}
 
-    SetDefaultBusThickness( dlg.GetBusWidth() );
-    SetDefaultLineThickness( dlg.GetLineWidth() );
 
-    if( dlg.GetTextSize() != GetDefaultTextSize() )
-    {
-        SetDefaultTextSize( dlg.GetTextSize() );
-        saveProjectConfig = true;
-    }
-
-    wxPoint step;
-    step.x = dlg.GetRepeatHorizontal();
-    step.y = dlg.GetRepeatVertical();
-    SetRepeatStep( step );
-    SetRepeatDeltaLabel( dlg.GetRepeatLabel() );
-
-    SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
-    SetGridVisibility( dlg.GetShowGrid() );
-    m_showAllPins = dlg.GetShowHiddenPins();
-    m_canvas->SetEnableMousewheelPan( dlg.GetEnableMousewheelPan() );
-    m_canvas->SetEnableZoomNoCenter( dlg.GetEnableZoomNoCenter() );
-    m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
-    SetForceHVLines( dlg.GetEnableHVBusOrientation() );
-    m_showPageLimits = dlg.GetShowPageLimits();
-    m_autoplaceFields = dlg.GetAutoplaceFields();
-    m_autoplaceJustify = dlg.GetAutoplaceJustify();
-    m_autoplaceAlign = dlg.GetAutoplaceAlign();
-    m_footprintPreview = dlg.GetFootprintPreview();
-
-    // Delete all template fieldnames and then restore them using the template field data from
-    // the options dialog
-    DeleteAllTemplateFieldNames();
-    TEMPLATE_FIELDNAMES newFieldNames = dlg.GetTemplateFields();
-
-    for( TEMPLATE_FIELDNAMES::iterator dlgfld = newFieldNames.begin();
-         dlgfld != newFieldNames.end(); ++dlgfld )
-    {
-        TEMPLATE_FIELDNAME fld = *dlgfld;
-        AddTemplateFieldName( fld );
-    }
-
-    SaveSettings( config() );  // save values shared by eeschema applications.
-
-    if( saveProjectConfig )
-        SaveProjectSettings( true );
-
-    m_canvas->Refresh( true );
+void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+{
+    aParent->AddPage( new PANEL_EESCHEMA_SETTINGS( this, aParent ), _( "Eeschema" ) );
+    aParent->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    aParent->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, aParent ), _( "Colors" ) );
+    aParent->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, aParent ), _( "Field Name Templates" ) );
 }
 
 
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
+
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
@@ -722,41 +600,17 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
-    wxArrayString units;
-    GRIDS grid_list = GetScreen()->GetGrids();
+    if( ShowPreferences( g_Eeschema_Hokeys_Descr, g_Libedit_Hokeys_Descr, wxT( "eeschema" ) ) )
+    {
+        SaveSettings( config() );  // save values shared by eeschema applications.
+        m_canvas->Refresh( true );
+    }
+}
 
-    DIALOG_LIBEDIT_OPTIONS dlg( this );
 
-    dlg.SetGridSizes( grid_list, GetScreen()->GetGridCmdId() );
-    dlg.SetLineWidth( GetDefaultLineThickness() );
-    dlg.SetPinLength( GetDefaultPinLength() );
-    dlg.SetPinNumSize( m_textPinNumDefaultSize );
-    dlg.SetPinNameSize( m_textPinNameDefaultSize );
-
-    dlg.SetShowGrid( IsGridVisible() );
-    dlg.SetShowElectricalType( GetShowElectricalType() );
-    dlg.Layout();
-    dlg.Fit();
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxRealPoint  gridsize = grid_list[ (size_t) dlg.GetGridSelection() ].m_Size;
-    m_LastGridSizeId = GetScreen()->SetGrid( gridsize );
-
-    SetDefaultLineThickness( dlg.GetLineWidth() );
-    SetDefaultPinLength( dlg.GetPinLength() );
-    m_textPinNumDefaultSize = dlg.GetPinNumSize();
-    m_textPinNameDefaultSize = dlg.GetPinNameSize();
-    SetGridVisibility( dlg.GetShowGrid() );
-    SetRepeatPinStep( dlg.GetPinRepeatStep() );
-    SetRepeatStep( dlg.GetItemRepeatStep() );
-    SetRepeatDeltaLabel( dlg.GetRepeatLabelInc() );
-    SetShowElectricalType( dlg.GetShowElectricalType() );
-
-    SaveSettings( config() );  // save values shared by eeschema applications.
-
-    m_canvas->Refresh( true );
+void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+{
+    aParent->AddPage( new PANEL_LIBEDIT_SETTINGS( this, aParent ), _( "Symbol Editor" ) );
 }
 
 

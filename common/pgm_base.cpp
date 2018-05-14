@@ -54,7 +54,6 @@
 #include <lockfile.h>
 #include <systemdirsappend.h>
 
-
 #define KICAD_COMMON                     wxT( "kicad_common" )
 
 // some key strings used to store parameters in KICAD_COMMON
@@ -65,8 +64,7 @@ static const wxChar languageCfgKey[]   = wxT( "LanguageID" );
 static const wxChar pathEnvVariables[] = wxT( "EnvironmentVariables" );
 static const wxChar showEnvVarWarningDialog[] = wxT( "ShowEnvVarWarningDialog" );
 static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
-///< enable/disable icons in menus
-static const wxChar entryUseIconsInMenus[] = wxT( "UseIconsInMenus" );
+
 
 
 /**
@@ -105,181 +103,28 @@ struct LANGUAGE_DESCR
 static LANGUAGE_DESCR s_Languages[] =
 {
     // Default language
-    {
-        wxLANGUAGE_DEFAULT,
-        ID_LANGUAGE_DEFAULT,
-        lang_def_xpm,
-        _( "Default" )
-    },
-
-    // English language
-    {
-        wxLANGUAGE_ENGLISH,
-        ID_LANGUAGE_ENGLISH,
-        lang_en_xpm,
-        wxT( "English" ),
-        true
-    },
-
-    // French language
-    {
-        wxLANGUAGE_FRENCH,
-        ID_LANGUAGE_FRENCH,
-        lang_fr_xpm,
-        _( "French" )
-    },
-
-    // Finnish language
-    {
-        wxLANGUAGE_FINNISH,
-        ID_LANGUAGE_FINNISH,
-        lang_fi_xpm,
-        _( "Finnish" )
-    },
-
-    // Spanish language
-    {
-        wxLANGUAGE_SPANISH,
-        ID_LANGUAGE_SPANISH,
-        lang_es_xpm,
-        _( "Spanish" )
-    },
-
-    // Portuguese language
-    {
-        wxLANGUAGE_PORTUGUESE,
-        ID_LANGUAGE_PORTUGUESE,
-        lang_pt_xpm,
-        _( "Portuguese" )
-    },
-
-    // Italian language
-    {
-        wxLANGUAGE_ITALIAN,
-        ID_LANGUAGE_ITALIAN,
-        lang_it_xpm,
-        _( "Italian" )
-    },
-
-    // German language
-    {
-        wxLANGUAGE_GERMAN,
-        ID_LANGUAGE_GERMAN,
-        lang_de_xpm,
-        _( "German" )
-    },
-
-    // Greek language
-    {
-        wxLANGUAGE_GREEK,
-        ID_LANGUAGE_GREEK,
-        lang_gr_xpm,
-        _( "Greek" )
-    },
-
-    // Slovenian language
-    {
-        wxLANGUAGE_SLOVENIAN,
-        ID_LANGUAGE_SLOVENIAN,
-        lang_sl_xpm,
-        _( "Slovenian" )
-    },
-
-    // Slovenian language
-    {
-        wxLANGUAGE_SLOVAK,
-        ID_LANGUAGE_SLOVAK,
-        lang_sk_xpm,
-        _( "Slovak" )
-    },
-
-    // Hungarian language
-    {
-        wxLANGUAGE_HUNGARIAN,
-        ID_LANGUAGE_HUNGARIAN,
-        lang_hu_xpm,
-        _( "Hungarian" )
-    },
-
-    // Polish language
-    {
-        wxLANGUAGE_POLISH,
-        ID_LANGUAGE_POLISH,
-        lang_pl_xpm,
-        _( "Polish" )
-    },
-
-    // Czech language
-    {
-        wxLANGUAGE_CZECH,
-        ID_LANGUAGE_CZECH,
-        lang_cs_xpm,
-        _( "Czech" )
-    },
-
-    // Russian language
-    {
-        wxLANGUAGE_RUSSIAN,
-        ID_LANGUAGE_RUSSIAN,
-        lang_ru_xpm,
-        _( "Russian" )
-    },
-
-    // Korean language
-    {
-        wxLANGUAGE_KOREAN,
-        ID_LANGUAGE_KOREAN,
-        lang_ko_xpm,
-        _( "Korean" )
-    },
-
-    // Chinese simplified
-    {
-        wxLANGUAGE_CHINESE_SIMPLIFIED,
-        ID_LANGUAGE_CHINESE_SIMPLIFIED,
-        lang_chinese_xpm,
-        _( "Chinese simplified" )
-    },
-
-    // Catalan language
-    {
-        wxLANGUAGE_CATALAN,
-        ID_LANGUAGE_CATALAN,
-        lang_catalan_xpm,
-        _( "Catalan" )
-    },
-
-    // Dutch language
-    {
-        wxLANGUAGE_DUTCH,
-        ID_LANGUAGE_DUTCH,
-        lang_nl_xpm,
-        _( "Dutch" )
-    },
-
-    // Japanese language
-    {
-        wxLANGUAGE_JAPANESE,
-        ID_LANGUAGE_JAPANESE,
-        lang_jp_xpm,
-        _( "Japanese" )
-    },
-
-    // Bulgarian language
-    {
-        wxLANGUAGE_BULGARIAN,
-        ID_LANGUAGE_BULGARIAN,
-        lang_bg_xpm,
-        _( "Bulgarian" )
-    },
-
-    // Lithuanian language
-    {
-        wxLANGUAGE_LITHUANIAN,
-        ID_LANGUAGE_LITHUANIAN,
-        lang_lt_xpm,
-        _( "Lithuanian" )
-    }
+    { wxLANGUAGE_DEFAULT,    ID_LANGUAGE_DEFAULT,    lang_def_xpm,  _( "Default" ) },
+    { wxLANGUAGE_ENGLISH,    ID_LANGUAGE_ENGLISH,    lang_en_xpm, wxT( "English" ), true },
+    { wxLANGUAGE_FRENCH,     ID_LANGUAGE_FRENCH,     lang_fr_xpm,   _( "French" ) },
+    { wxLANGUAGE_FINNISH,    ID_LANGUAGE_FINNISH,    lang_fi_xpm,   _( "Finnish" ) },
+    { wxLANGUAGE_SPANISH,    ID_LANGUAGE_SPANISH,    lang_es_xpm,   _( "Spanish" ) },
+    { wxLANGUAGE_PORTUGUESE, ID_LANGUAGE_PORTUGUESE, lang_pt_xpm,   _( "Portuguese" ) },
+    { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    lang_it_xpm,   _( "Italian" ) },
+    { wxLANGUAGE_GERMAN,     ID_LANGUAGE_GERMAN,     lang_de_xpm,   _( "German" ) },
+    { wxLANGUAGE_GREEK,      ID_LANGUAGE_GREEK,      lang_gr_xpm,   _( "Greek" ) },
+    { wxLANGUAGE_SLOVENIAN,  ID_LANGUAGE_SLOVENIAN,  lang_sl_xpm,   _( "Slovenian" ) },
+    { wxLANGUAGE_SLOVAK,     ID_LANGUAGE_SLOVAK,     lang_sk_xpm,   _( "Slovak" ) },
+    { wxLANGUAGE_HUNGARIAN,  ID_LANGUAGE_HUNGARIAN,  lang_hu_xpm,   _( "Hungarian" ) },
+    { wxLANGUAGE_POLISH,     ID_LANGUAGE_POLISH,     lang_pl_xpm,   _( "Polish" ) },
+    { wxLANGUAGE_CZECH,      ID_LANGUAGE_CZECH,      lang_cs_xpm,   _( "Czech" ) },
+    { wxLANGUAGE_RUSSIAN,    ID_LANGUAGE_RUSSIAN,    lang_ru_xpm,   _( "Russian" ) },
+    { wxLANGUAGE_KOREAN,     ID_LANGUAGE_KOREAN,     lang_ko_xpm,   _( "Korean" ) },
+    { wxLANGUAGE_CHINESE_SIMPLIFIED, ID_LANGUAGE_CHINESE_SIMPLIFIED, lang_zh_xpm, _( "Chinese simplified" ) },
+    { wxLANGUAGE_CATALAN,    ID_LANGUAGE_CATALAN,    lang_ca_xpm,   _( "Catalan" ) },
+    { wxLANGUAGE_DUTCH,      ID_LANGUAGE_DUTCH,      lang_nl_xpm,   _( "Dutch" ) },
+    { wxLANGUAGE_JAPANESE,   ID_LANGUAGE_JAPANESE,   lang_jp_xpm,   _( "Japanese" ) },
+    { wxLANGUAGE_BULGARIAN,  ID_LANGUAGE_BULGARIAN,  lang_bg_xpm,   _( "Bulgarian" ) },
+    { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, lang_lt_xpm,   _( "Lithuanian" ) }
 };
 
 
@@ -288,8 +133,6 @@ PGM_BASE::PGM_BASE()
     m_pgm_checker = NULL;
     m_locale = NULL;
     m_common_settings = NULL;
-    m_iconsScale = 1.0;
-    m_useIconsInMenus = true;   // will be set later after reading the config
 
     m_show_env_var_dialog = true;
 
@@ -675,18 +518,39 @@ void PGM_BASE::loadCommonSettings()
 
     m_help_size.x = 500;
     m_help_size.y = 400;
-    m_iconsScale  = 1.0;
 
     // This only effect the first time KiCad is run.  The user's setting will be used for all
     // subsequent runs.  Menu icons are off by default on OSX and on for all other platforms.
 #if defined( __WXMAC__ )
-    m_useIconsInMenus = false;
+    bool defaultUseIconsInMenus = false;
 #else
-    m_useIconsInMenus = true;
+    bool defaultUseIconsInMenus = true;
 #endif
 
     m_common_settings->Read( showEnvVarWarningDialog, &m_show_env_var_dialog );
-    m_common_settings->Read( entryUseIconsInMenus, &m_useIconsInMenus, m_useIconsInMenus );
+
+    if( !m_common_settings->HasEntry( USE_ICONS_IN_MENUS_KEY ) )
+        m_common_settings->Write( USE_ICONS_IN_MENUS_KEY, defaultUseIconsInMenus );
+
+    if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
+    {
+        // 5.0 and earlier saved these for each app; we arbitrarily pick pcbnew to fetch them from
+        wxConfigBase* cfg = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
+        wxString value;
+        bool option;
+
+        cfg->Read( "PcbIconScale", &value );
+        m_common_settings->Write( ICON_SCALE_KEY, value );
+
+        cfg->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
+        m_common_settings->Write( ENBL_MOUSEWHEEL_PAN_KEY, option );
+
+        cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &option, false );
+        m_common_settings->Write( ENBL_ZOOM_NO_CENTER_KEY, option );
+
+        cfg->Read( ENBL_AUTO_PAN_KEY, &option, true );
+        m_common_settings->Write( ENBL_AUTO_PAN_KEY, option );
+    }
 
     m_editor_name = m_common_settings->Read( wxT( "Editor" ) );
 
@@ -731,7 +595,6 @@ void PGM_BASE::SaveCommonSettings()
 
         m_common_settings->Write( workingDirKey, cur_dir );
         m_common_settings->Write( showEnvVarWarningDialog, m_show_env_var_dialog );
-        m_common_settings->Write( entryUseIconsInMenus, m_useIconsInMenus);
 
         // Save the local environment variables.
         m_common_settings->SetPath( pathEnvVariables );
@@ -972,11 +835,4 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
                     GetChars( it->first ), GetChars( it->second.GetValue() ) );
         wxSetEnv( it->first, it->second.GetValue() );
     }
-}
-
-
-void PGM_BASE::ConfigurePaths( wxWindow* aParent, FILENAME_RESOLVER* aResolver )
-{
-    DIALOG_CONFIGURE_PATHS dlg( aParent, aResolver );
-    dlg.ShowModal();
 }

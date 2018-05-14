@@ -42,8 +42,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_line_style.cpp
     dialogs/dialog_edit_line_style_base.cpp
     dialogs/dialog_edit_one_field.cpp
-    dialogs/dialog_eeschema_options.cpp
-    dialogs/dialog_eeschema_options_base.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
     dialogs/dialog_global_sym_lib_table_config.cpp
@@ -58,8 +56,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
-    dialogs/dialog_libedit_options.cpp
-    dialogs/dialog_libedit_options_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_base.cpp
     dialogs/dialog_plot_schematic.cpp
@@ -80,6 +76,14 @@ set( EESCHEMA_DLGS
     dialogs/dialog_symbol_remap_base.cpp
     dialogs/dialog_update_fields.cpp
     dialogs/dialog_update_fields_base.cpp
+    dialogs/panel_eeschema_template_fieldnames.cpp
+    dialogs/panel_eeschema_template_fieldnames_base.cpp
+    dialogs/panel_eeschema_display_options.cpp
+    dialogs/panel_eeschema_display_options_base.cpp
+    dialogs/panel_eeschema_settings.cpp
+    dialogs/panel_eeschema_settings_base.cpp
+    dialogs/panel_libedit_settings.cpp
+    dialogs/panel_libedit_settings_base.cpp
     )
 
 set( EESCHEMA_WIDGETS

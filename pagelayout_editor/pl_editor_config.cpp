@@ -35,7 +35,7 @@
 
 #include <pl_editor_frame.h>
 #include <hotkeys.h>
-#include <dialog_hotkeys_editor.h>
+#include <panel_hotkeys_editor.h>
 #include <pl_editor_id.h>
 
 #define GROUP wxT("/pl_editor")
@@ -54,31 +54,19 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
             SetDrawBgColor( WHITE );
 
         GetMenuBar()->SetLabel( ID_MENU_SWITCH_BGCOLOR,
-                                GetDrawBgColor() == WHITE ?
-                                _( "&Background Black" ) :
-                                _( "&Background White" ) );
+                                GetDrawBgColor() == WHITE ? _( "&Background Black" ) : _( "&Background White" ) );
         m_canvas->Refresh();
         break;
 
     case ID_MENU_GRID_ONOFF:
         SetGridVisibility( ! IsGridVisible() );
         GetMenuBar()->SetLabel( ID_MENU_GRID_ONOFF,
-                                IsGridVisible() ? _( "Hide &Grid" ) :
-                                _( "Show &Grid" ) );
+                                IsGridVisible() ? _( "Hide &Grid" ) : _( "Show &Grid" ) );
         m_canvas->Refresh();
         break;
 
-    // Standard basic hotkey IDs
-    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, PlEditorHokeysDescr );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( PlEditorHokeysDescr, wxT( "pl_editor" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( PlEditorHokeysDescr, wxT( "pl_editor" ) );
+    case wxID_PREFERENCES:
+        ShowPreferences( PlEditorHokeysDescr, PlEditorHokeysDescr, wxT( "pl_editor" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:

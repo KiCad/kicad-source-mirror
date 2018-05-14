@@ -46,6 +46,7 @@
 #include <common.h>
 #include <layers_id_colors_and_visibility.h>
 #include <frame_type.h>
+#include "hotkeys_basic.h"
 
 #ifdef USE_WX_OVERLAY
 #include <wx/overlay.h>
@@ -85,6 +86,7 @@ class MSG_PANEL_ITEM;
 class TOOL_MANAGER;
 class TOOL_DISPATCHER;
 class ACTIONS;
+class PAGED_DIALOG;
 
 
 enum id_librarytype {
@@ -226,7 +228,18 @@ public:
 
     void GetKicadAbout( wxCommandEvent& event );
 
+    bool ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
+                          const wxString& aHotkeysNickname );
+
     void PrintMsg( const wxString& text );
+
+    /**
+     * Function InstallPreferences
+     * allows a Frame to load its preference panels (if any) into the preferences
+     * dialog.
+     * @param aParent a paged dialog into which the preference panels should be installed
+     */
+    virtual void InstallPreferences( PAGED_DIALOG* aParent ) { }
 
     /**
      * Function LoadSettings
@@ -272,14 +285,6 @@ public:
      * @param aAskForSave = true to open a dialog before saving the settings
      */
     virtual void SaveProjectSettings( bool aAskForSave ) {};
-
-    /**
-     * Function OnSelectPreferredEditor
-     * Open a dialog to select the editor that will used in KiCad
-     * to edit or display files (reports ... )
-     * The full filename editor is saved in configuration (global params)
-     */
-    virtual void OnSelectPreferredEditor( wxCommandEvent& event );
 
     // Read/Save and Import/export hotkeys config
 
@@ -397,28 +402,11 @@ public:
     virtual void ShowChangedLanguage();
 
     /**
-     * Function OnChangeIconsOptions
-     * Selects the current icons options in menus (or toolbars) in Kicad
-     * (the default for toolbars/menus is 26x26 pixels, and shows icons in menus).
+     * Function CommonSettingsChanged
+     * Notification event that some of the common (suite-wide) settings have changed.
+     * Update menus, toolbars, local variables, etc.
      */
-    virtual void OnChangeIconsOptions( wxCommandEvent& event );
-
-    /**
-     * Function ShowChangedIcons
-     * redraws items menus after a icon was changed option.
-     */
-    virtual void ShowChangedIcons();
-
-    /**
-     * Function AddMenuIconsOptions
-     * creates a menu list for icons in menu and icon sizes choice,
-     * and add it as submenu to \a MasterMenu.
-     *
-     * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
-     *                   item with id ID_KICAD_SELECT_ICONS_OPTIONS
-     */
-    void AddMenuIconsOptions( wxMenu* MasterMenu );
-
+    virtual void CommonSettingsChanged();
 
     /**
      * Function PostCommandMenuEvent
@@ -427,21 +415,6 @@ public:
      * bound to menu items.
      */
     bool PostCommandMenuEvent( int evt_type );
-
-    /**
-     * Function GetIconScale
-     *
-     * Return the desired scaling for toolbar/menubar icons in fourths (e.g. 4 is unity).
-     * A negative number indicates autoscale based on font size.
-     */
-    virtual int GetIconScale() { return -1; }
-
-    /**
-     * Function SetIconScale
-     *
-     * Modify the scale of icons in the window; should refresh them and save the setting.
-     */
-    virtual void SetIconScale( int aScale ) {}
 };
 
 

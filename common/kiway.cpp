@@ -428,7 +428,7 @@ void KIWAY::SetLanguage( int aLanguage )
     }
 }
 
-void KIWAY::ShowChangedIcons()
+void KIWAY::CommonSettingsChanged()
 {
 #if 1
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
@@ -439,7 +439,7 @@ void KIWAY::ShowChangedIcons()
         EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_top );
 
         if( top )
-            top->ShowChangedIcons();
+            top->CommonSettingsChanged();
     }
 #endif
 
@@ -449,7 +449,7 @@ void KIWAY::ShowChangedIcons()
 
         if( frame )
         {
-            frame->ShowChangedIcons();
+            frame->CommonSettingsChanged();
         }
     }
 }

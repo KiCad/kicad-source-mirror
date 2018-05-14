@@ -243,8 +243,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU( ID_CONFIG_SAVE, SCH_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, SCH_EDIT_FRAME::Process_Config )
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    SCH_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, SCH_EDIT_FRAME::Process_Config )
 
     EVT_TOOL( wxID_PREFERENCES, SCH_EDIT_FRAME::OnPreferencesOptions )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, SCH_EDIT_FRAME::OnConfigurePaths )
@@ -1499,18 +1498,10 @@ void SCH_EDIT_FRAME::UpdateTitle()
 }
 
 
-int SCH_EDIT_FRAME::GetIconScale()
+void SCH_EDIT_FRAME::CommonSettingsChanged()
 {
-    int scale = 0;
-    Kiface().KifaceSettings()->Read( SchIconScaleEntry, &scale, 0 );
-    return scale;
-}
+    SCH_BASE_FRAME::CommonSettingsChanged();
 
-
-void SCH_EDIT_FRAME::SetIconScale( int aScale )
-{
-    Kiface().KifaceSettings()->Write( SchIconScaleEntry, aScale );
-    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();

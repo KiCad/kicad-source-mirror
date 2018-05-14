@@ -158,14 +158,16 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_display_info_HTML_base.cpp
     dialogs/dialog_exit_base.cpp
     dialogs/dialog_file_dir_picker.cpp
-    dialogs/dialog_hotkeys_editor.cpp
-    dialogs/dialog_hotkeys_editor_base.cpp
     dialogs/dialog_image_editor.cpp
     dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_list_selector_base.cpp
     dialogs/dialog_page_settings_base.cpp
     dialogs/dialog_text_entry_base.cpp
     dialogs/dialog_text_entry.cpp
+    dialogs/panel_common_settings.cpp
+    dialogs/panel_common_settings_base.cpp
+    dialogs/panel_hotkeys_editor.cpp
+    dialogs/panel_hotkeys_editor_base.cpp
     dialogs/wx_html_report_panel.cpp
     dialogs/wx_html_report_panel_base.cpp
     )
@@ -182,6 +184,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_icon_text_helpers.cpp
     widgets/indicator_icon.cpp
     widgets/mathplot.cpp
+    widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
     widgets/text_ctrl_eval.cpp
     widgets/two_column_tree_list.cpp

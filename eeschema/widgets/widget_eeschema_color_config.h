@@ -59,14 +59,19 @@ public:
     WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
 
     bool TransferDataFromControl();
+};
 
-    /**
-     * Method InstallOnPanel
-     * Install this WIDGET_EESCHEMA_COLOR_CONFIG onto an empty panel. This is useful
-     * when combining with wxFormBuilder, as an empty panel can be left as a
-     * placeholder in the layout.
-     */
-    void InstallOnPanel( wxPanel* aPanel );
+
+class PANEL_EESCHEMA_COLOR_CONFIG : public wxPanel
+{
+public:
+    PANEL_EESCHEMA_COLOR_CONFIG( EDA_DRAW_FRAME* aFrame, wxWindow* aParent );
+
+protected:
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    WIDGET_EESCHEMA_COLOR_CONFIG* m_colorConfig;
 };
 
 #endif    // WIDGET_EESCHEMA_COLOR_CONFIG_H_

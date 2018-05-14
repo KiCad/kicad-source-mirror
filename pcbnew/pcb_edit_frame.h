@@ -1720,8 +1720,15 @@ public:
      */
     void UpdateTitle();
 
-    int GetIconScale() override;
-    void SetIconScale( int aScale ) override;
+    /**
+     * Allows Pcbnew to install its preferences panel into the preferences dialog.
+     */
+    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+
+    /**
+     * Called after the preferences dialog is run.
+     */
+    void CommonSettingsChanged() override;
 
     void SyncMenusAndToolbars( wxEvent& aEvent ) override;
 

@@ -24,6 +24,6 @@ static const unsigned char png[] = {
  0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE lang_catalan_xpm[1] = {{ png, sizeof( png ), "lang_catalan_xpm" }};
+const BITMAP_OPAQUE lang_ca_xpm[1] = {{ png, sizeof( png ), "lang_ca_xpm" }};
 
 //EOF

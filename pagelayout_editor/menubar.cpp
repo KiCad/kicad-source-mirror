@@ -72,9 +72,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     openRecentMenu = new wxMenu();
     Kiface().GetFileHistory().UseMenu( openRecentMenu );
     Kiface().GetFileHistory().AddFilesToMenu();
-    AddMenuItem( fileMenu, openRecentMenu,
-                 wxID_ANY,
-                 _( "Open &Recent" ),
+    AddMenuItem( fileMenu, openRecentMenu, wxID_ANY, _( "Open &Recent" ),
                  _( "Open recent page layout design file" ),
                  KiBitmap(  recent_xpm ) );
 
@@ -93,16 +91,15 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     msg = AddHotkeyName( _( "&Print..." ), PlEditorHokeysDescr, HK_PRINT );
-    AddMenuItem( fileMenu, wxID_PRINT, msg,
-                 wxEmptyString, KiBitmap( print_button_xpm ) );
+    AddMenuItem( fileMenu, wxID_PRINT, msg, KiBitmap( print_button_xpm ) );
 
-    AddMenuItem( fileMenu, wxID_PREVIEW, _( "Print Pre&view..." ),
-                 wxEmptyString, KiBitmap( print_button_xpm ) );
+    AddMenuItem( fileMenu, wxID_PREVIEW, _( "Print Pre&view..." ), KiBitmap( print_button_xpm ) );
 
     fileMenu->AppendSeparator();
 
     AddMenuItem( fileMenu, wxID_EXIT, _( "&Close" ),
-                 _( "Close Page Layout Editor" ), KiBitmap( exit_xpm ) );
+                 _( "Close Page Layout Editor" ),
+                 KiBitmap( exit_xpm ) );
 
 
     // Edit Menu:
@@ -136,6 +133,16 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
+    AddMenuItem( viewMenu, ID_MENU_SWITCH_BGCOLOR,
+                 GetDrawBgColor() == WHITE ?  _( "&Background Black" ) : _( "&Background White" ),
+                 wxEmptyString, KiBitmap( palette_xpm ) );
+
+    AddMenuItem( viewMenu, ID_MENU_GRID_ONOFF,
+                 IsGridVisible() ? _( "Hide &Grid" ) :  _( "Show &Grid" ),
+                 wxEmptyString, KiBitmap( grid_xpm ) );
+
+    viewMenu->AppendSeparator();
+
     msg = AddHotkeyName( _( "Redraw View" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, msg, wxEmptyString, KiBitmap( zoom_redraw_xpm ) );
 
@@ -165,46 +172,22 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Menu for preferences
     wxMenu* preferencesMenu = new wxMenu;
 
-    AddMenuItem( preferencesMenu,
-                 ID_MENU_SWITCH_BGCOLOR,
-                 GetDrawBgColor() == WHITE ?
-                 _( "&Background Black" ) : _( "&Background White" ),
-                 wxEmptyString, KiBitmap( palette_xpm ) );
-
-    AddMenuItem( preferencesMenu,
-                 ID_MENU_GRID_ONOFF,
-                 IsGridVisible() ? _( "Hide &Grid" ) :  _( "Show &Grid" ),
-                 wxEmptyString, KiBitmap( grid_xpm ) );
-
-    // Text editor selection
-    AddMenuItem( preferencesMenu,
-                 ID_MENU_PL_EDITOR_SELECT_PREFERED_EDITOR,
-                 _( "Set &Text Editor..." ),
-                 _( "Select your preferred text editor" ),
-                 KiBitmap( editor_xpm ) );
+    AddMenuItem( preferencesMenu, wxID_PREFERENCES,  _( "&Preferences..." ),
+                 _( "Show preferences for all open tools" ),
+                 KiBitmap( preference_xpm ) );
 
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
-
-    // Icons options submenu
-    AddMenuIconsOptions( preferencesMenu );
-
-    // Hotkey submenu
-    AddHotkeyConfigMenu( preferencesMenu );
 
     // Menu Help
     wxMenu* helpMenu = new wxMenu;
 
     // Contents
-    AddMenuItem( helpMenu,
-                 wxID_HELP,
-                 _( "Page Layout Editor &Manual" ),
+    AddMenuItem( helpMenu, wxID_HELP, _( "Page Layout Editor &Manual" ),
                  _( "Open the Page Layout Editor Manual" ),
                  KiBitmap( online_help_xpm ) );
 
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
+    AddMenuItem( helpMenu, wxID_INDEX, _( "&Getting Started in KiCad" ),
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
@@ -214,8 +197,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  KiBitmap( hotkeys_xpm ) );
 
     helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED, _( "Get &Involved" ),
                  _( "Contribute to KiCad (opens a web browser)" ),
                  KiBitmap( info_xpm ) );
 
@@ -223,11 +205,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     helpMenu->AppendSeparator();
 
     // About Kicad
-    AddMenuItem( helpMenu,
-                 wxID_ABOUT,
-                 _( "&About KiCad" ),
-                 _( "About KiCad" ),
-                 KiBitmap( about_xpm ) );
+    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), wxEmptyString, KiBitmap( about_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );

@@ -477,7 +477,15 @@ public:
      */
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
-    int GetIconScale() override;
+    /**
+     * Allows Modedit to install its preferences panel into the preferences dialog.
+     */
+    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+
+    /**
+     * Called after the preferences dialog is run.
+     */
+    void CommonSettingsChanged() override;
 
     /**
      * redraws the message panel.
@@ -499,9 +507,6 @@ protected:
 
     /// List of footprint editor configuration parameters.
     PARAM_CFG_ARRAY   m_configParams;
-
-    /// Pretty much what it says on the tin.
-    int               m_iconScale;
 
     /**
      * Function UpdateTitle

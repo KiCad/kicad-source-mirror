@@ -33,12 +33,11 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <config_params.h>
-
-#include <gerbview.h>
 #include <gerbview_frame.h>
 #include <hotkeys.h>
-#include <dialog_hotkeys_editor.h>
-
+#include <widgets/paged_dialog.h>
+#include <dialogs/panel_gerbview_settings.h>
+#include <dialogs/panel_gerbview_display_options.h>
 
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 {
@@ -46,21 +45,11 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    // Hotkey IDs
-    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( GerbviewHokeysDescr, wxT( "gerbview" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( GerbviewHokeysDescr, wxT( "gerbview" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, GerbviewHokeysDescr );
+    case wxID_PREFERENCES:
+        ShowPreferences( GerbviewHokeysDescr, GerbviewHokeysDescr, wxT( "gerbview" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-
         // Display current hotkey list for GerbView.
         DisplayHotkeyList( this, GerbviewHokeysDescr );
         break;
@@ -69,6 +58,13 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
         wxMessageBox( wxT( "GERBVIEW_FRAME::Process_Config error" ) );
         break;
     }
+}
+
+
+void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+{
+    aParent->AddPage( new PANEL_GERBVIEW_SETTINGS( this, aParent ), _( "Gerbview" ) );
+    aParent->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
 }
 
 

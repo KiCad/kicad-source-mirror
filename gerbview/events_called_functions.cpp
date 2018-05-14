@@ -41,7 +41,6 @@
 #include <dialog_helpers.h>
 #include <DCodeSelectionbox.h>
 #include <gerbview_layer_widget.h>
-#include <dialog_show_page_borders.h>
 
 #include <gerbview_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -62,7 +61,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_LOAD_JOB_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_SET_PAGE_BORDER, GERBVIEW_FRAME::Process_Special_Functions )
 
     // Menu Files:
     EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
@@ -83,10 +81,9 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, GERBVIEW_FRAME::OnQuit )
 
     // menu Preferences
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    GERBVIEW_FRAME::Process_Config )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, GERBVIEW_FRAME::Process_Config )
 
-    EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::InstallGerberOptionsDialog )
+    EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::Process_Config )
     EVT_UPDATE_UI( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
@@ -97,8 +94,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     // menu Postprocess
     EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_MENU( ID_GERBVIEW_SHOW_SOURCE, GERBVIEW_FRAME::OnShowGerberSourceFile )
-    EVT_MENU( ID_MENU_GERBVIEW_SELECT_PREFERED_EDITOR,
-              EDA_BASE_FRAME::OnSelectPreferredEditor )
 
     // menu Miscellaneous
     EVT_MENU( ID_GERBVIEW_ERASE_CURR_LAYER, GERBVIEW_FRAME::Process_Special_Functions )
@@ -215,15 +210,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_GERBVIEW_SET_PAGE_BORDER:
-        {
-            DIALOG_PAGE_SHOW_PAGE_BORDERS dlg( this );
-
-            if( dlg.ShowModal() == wxID_OK )
-                m_canvas->Refresh();
-        }
-        break;
-
     case ID_GERBVIEW_ERASE_CURR_LAYER:
         Erase_Current_DrawLayer( true );
         ClearMsgPanel();

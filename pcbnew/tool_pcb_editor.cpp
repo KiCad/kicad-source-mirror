@@ -48,6 +48,7 @@
 
 #include <wx/wupdlock.h>
 #include <memory>
+#include <pgm_base.h>
 
 extern bool IsWxPythonLoaded();
 
@@ -102,7 +103,8 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                    previous_Route_Layer_BOTTOM_color, previous_via_color,
                    previous_background_color;
 
-    const int  requested_scale = GetIconScale();
+    int requested_scale;
+    Pgm().CommonSettings()->Read( ICON_SCALE_KEY, &requested_scale, 0 );
 
     if( requested_scale != previous_requested_scale )
     {

@@ -136,12 +136,4 @@ bool InvokeLayerSetup( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
  */
 bool InvokeSVGPrint( wxTopLevelWindow* aCaller, BOARD* aBoard, PCB_PLOT_PARAMS* aSettings );
 
-/**
- * Function InvokeSVGPrint
- * shows the SVG print dialog
- * @param aCaller is the FOOTPRINT_EDIT_FRAME which is invoking the dialog.
- * @return bool - true if user pressed OK (did not abort), else false.
- */
-bool InvokeFPEditorPrefsDlg( FOOTPRINT_EDIT_FRAME* aCaller );
-
 #endif  // INVOKE_A_DIALOG_H_

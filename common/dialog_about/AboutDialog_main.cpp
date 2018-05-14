@@ -258,7 +258,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Catalan (CA)",
-                                          aInfo.CreateKiBitmap( lang_catalan_xpm ) ) );
+                                          aInfo.CreateKiBitmap( lang_ca_xpm ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Martin Kratoška" ),
                                           wxEmptyString,
                                           wxEmptyString,

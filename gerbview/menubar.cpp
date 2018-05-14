@@ -285,89 +285,63 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     wxMenu* configMenu = new wxMenu;
 
     // Options (Preferences on WXMAC)
-#ifdef __WXMAC__
-    configMenu->Append(wxID_PREFERENCES);
-#else
     AddMenuItem( configMenu, wxID_PREFERENCES,
-                 _( "&Options" ),
-                 _( "Set options to draw items" ),
+                 _( "&Preferences..." ),
+                 wxEmptyString,
                  KiBitmap( preference_xpm ) );
-#endif // __WXMAC__
-
-    // Language submenu
-    Pgm().AddMenuLanguageList( configMenu );
-
-    // Icons options submenu
-    AddMenuIconsOptions( configMenu );
-
-    // Hotkey submenu
-    AddHotkeyConfigMenu( configMenu );
 
     // Canvas selection
     configMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHokeysDescr,
-                          HK_CANVAS_LEGACY );
+    text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHokeysDescr, HK_CANVAS_LEGACY );
     AddMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
                  text, _( "Use Legacy Toolset (not all features will be available)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHokeysDescr,
-                          HK_CANVAS_OPENGL );
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHokeysDescr, HK_CANVAS_OPENGL );
     AddMenuItem( configMenu, ID_MENU_CANVAS_OPENGL, text,
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHokeysDescr,
-                          HK_CANVAS_CAIRO );
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHokeysDescr, HK_CANVAS_CAIRO );
     AddMenuItem( configMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
+
+    configMenu->AppendSeparator();
+
+    // Language submenu
+    Pgm().AddMenuLanguageList( configMenu );
 
     // Menu miscellaneous
     wxMenu* miscellaneousMenu = new wxMenu;
 
     // List dcodes
-    AddMenuItem( miscellaneousMenu, ID_GERBVIEW_SHOW_LIST_DCODES,
-                 _( "&List DCodes" ),
+    AddMenuItem( miscellaneousMenu, ID_GERBVIEW_SHOW_LIST_DCODES, _( "&List DCodes..." ),
                  _( "List D-codes defined in Gerber files" ),
                  KiBitmap( show_dcodenumber_xpm ) );
 
     // Show source
-    AddMenuItem( miscellaneousMenu, ID_GERBVIEW_SHOW_SOURCE,
-                 _( "&Show Source" ),
+    AddMenuItem( miscellaneousMenu, ID_GERBVIEW_SHOW_SOURCE, _( "&Show Source..." ),
                  _( "Show source file for the current layer" ),
                  KiBitmap( tools_xpm ) );
 
-    // Separator
     miscellaneousMenu->AppendSeparator();
 
     // Erase graphic layer
-    AddMenuItem( miscellaneousMenu, ID_GERBVIEW_ERASE_CURR_LAYER,
-                 _( "&Clear Current Layer" ),
+    AddMenuItem( miscellaneousMenu, ID_GERBVIEW_ERASE_CURR_LAYER, _( "&Clear Current Layer..." ),
                  _( "Clear the graphic layer currently selected" ),
                  KiBitmap( delete_sheet_xpm ) );
-
-    // Separator
-    miscellaneousMenu->AppendSeparator();
-
-    // Text editor (usefull to browse source files)
-    AddMenuItem( miscellaneousMenu, ID_MENU_GERBVIEW_SELECT_PREFERED_EDITOR,
-                 _( "Set &Text Editor..." ),
-                 _( "Select your preferred text editor" ),
-                 KiBitmap( editor_xpm ) );
 
     // Help menu
     wxMenu* helpMenu = new wxMenu;
 
-    AddMenuItem( helpMenu, wxID_HELP,
-                 _( "Gerbview &Manual" ),
+    AddMenuItem( helpMenu, wxID_HELP, _( "Gerbview &Manual" ),
                  _( "Open the GerbView Manual" ),
                  KiBitmap( online_help_xpm ) );
 
     text = AddHotkeyName( _( "&List Hotkeys..." ), GerbviewHokeysDescr, HK_HELP );
-    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 text,
+    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, text,
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
@@ -375,23 +349,20 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     helpMenu->AppendSeparator();
 
     // Get involved with KiCad
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED, _( "Get &Involved" ),
                  _( "Contribute to KiCad (opens a web browser)" ),
                  KiBitmap( info_xpm ) );
 
     helpMenu->AppendSeparator();
 
     // About Kicad
-    AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About KiCad" ), _( "About KiCad" ),
-                 KiBitmap( about_xpm ) );
+    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( miscellaneousMenu, _( "&Tools" ) );
     menuBar->Append( configMenu, _( "&Preferences" ) );
-    menuBar->Append( miscellaneousMenu, _( "&Miscellaneous" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     // Associate the menu bar with the frame, if no previous menubar

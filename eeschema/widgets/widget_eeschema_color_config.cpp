@@ -135,7 +135,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         COLORBUTTON* buttons = groups->m_Buttons;
 
         columnBoxSizer = new wxBoxSizer( wxVERTICAL );
-        m_mainBoxSizer->Add( columnBoxSizer, 1, wxALIGN_TOP | wxLEFT | wxTOP, 5 );
+        m_mainBoxSizer->Add( columnBoxSizer, 1, wxALIGN_TOP | wxLEFT, 5 );
         wxBoxSizer* rowBoxSizer = new wxBoxSizer( wxHORIZONTAL );
         columnBoxSizer->Add( rowBoxSizer, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
@@ -315,10 +315,25 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 }
 
 
-void WIDGET_EESCHEMA_COLOR_CONFIG::InstallOnPanel( wxPanel* aPanel )
+PANEL_EESCHEMA_COLOR_CONFIG::PANEL_EESCHEMA_COLOR_CONFIG( EDA_DRAW_FRAME* aFrame,
+                                                          wxWindow* aParent ) :
+    wxPanel( aParent )
 {
-    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+    auto sizer = new wxBoxSizer( wxVERTICAL );
+    SetSizer( sizer );
 
-    sizer->Add( this, 1, wxALL | wxEXPAND, 0 );
-    aPanel->SetSizer( sizer );
+    m_colorConfig = new WIDGET_EESCHEMA_COLOR_CONFIG( this, aFrame );
+    sizer->Add( m_colorConfig, 1, wxEXPAND | wxTOP | wxLEFT, 10 );
+}
+
+
+bool PANEL_EESCHEMA_COLOR_CONFIG::TransferDataToWindow()
+{
+    return true;
+}
+
+
+bool PANEL_EESCHEMA_COLOR_CONFIG::TransferDataFromWindow()
+{
+    return m_colorConfig->TransferDataFromControl();
 }

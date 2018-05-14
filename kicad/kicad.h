@@ -35,7 +35,7 @@
 
 #include <id.h>
 #include <eda_base_frame.h>
-
+#include <kiway_player.h>
 
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
 
@@ -116,10 +116,6 @@ enum id_kicad_frm {
 
     ID_TO_TEXT_EDITOR,
     ID_BROWSE_AN_SELECT_FILE,
-    ID_SELECT_PREFERED_EDITOR,
-    ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-    ID_SELECT_PREFERED_PDF_BROWSER,
-    ID_SELECT_DEFAULT_PDF_BROWSER,
     ID_SAVE_AND_ZIP_FILES,
     ID_READ_ZIP_ARCHIVE,
     ID_INIT_WATCHED_PATHS,
@@ -134,7 +130,7 @@ enum id_kicad_frm {
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
  */
-class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
+class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME, public KIWAY_HOLDER
 {
 public:
     KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
@@ -144,12 +140,6 @@ public:
 
     void OnCloseWindow( wxCloseEvent& Event );
     void OnSize( wxSizeEvent& event );
-
-    /**
-     * Select the current icons options in menus (or toolbars) in Kicad
-     * (the default for toolbars/menus is 26x26 pixels, and shows icons in menus).
-     */
-    void OnChangeIconsOptions( wxCommandEvent& event ) override;
 
     /**
      * Load an exiting project (.pro) file.
@@ -182,13 +172,12 @@ public:
     void OnRunPageLayoutEditor( wxCommandEvent& event );
 
     void OnConfigurePaths( wxCommandEvent& aEvent );
+    void OnPreferences( wxCommandEvent& aEvent );
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );
-    void OnOpenFileInEditor( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
     void OnExit( wxCommandEvent& event );
-    void Process_Preferences( wxCommandEvent& event );
 
     void Process_Config( wxCommandEvent& event );
 
@@ -218,11 +207,6 @@ public:
     void ClearMsg();
 
     void OnRefresh( wxCommandEvent& event );
-    void OnSelectDefaultPdfBrowser( wxCommandEvent& event );
-    void OnSelectPreferredPdfBrowser( wxCommandEvent& event );
-
-    void OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
-    void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdateRequiresProject( wxUpdateUIEvent& event );
 
     /**

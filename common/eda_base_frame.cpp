@@ -31,19 +31,17 @@
 
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/display.h>
 
 #include <dialog_shim.h>
 #include <eda_doc.h>
 #include <id.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <eda_base_frame.h>
-#include <menus_helpers.h>
-#include <bitmaps.h>
 #include <trace_helpers.h>
-
-#include <wx/display.h>
-#include <wx/utils.h>
+#include <panel_hotkeys_editor.h>
+#include <dialogs/panel_common_settings.h>
+#include <widgets/paged_dialog.h>
 
 
 /// The default auto save interval is 10 minutes.
@@ -259,8 +257,13 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 }
 
 
-void EDA_BASE_FRAME::ShowChangedIcons()
+void EDA_BASE_FRAME::CommonSettingsChanged()
 {
+    int autosaveInterval;
+    Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
+    SetAutoSaveInterval( autosaveInterval );
+
+    // For icons in menus & icon scaling
     ReCreateMenuBar();
     GetMenuBar()->Refresh();
 }
@@ -507,23 +510,6 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 }
 
 
-void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
-{
-    // Ask for the current editor and instruct GetEditorName() to not show
-    // unless we pass false as argument.
-    wxString editorname = Pgm().GetEditorName( false );
-
-    // Ask the user to select a new editor, but suggest the current one as the default.
-    editorname = Pgm().AskUserForPreferredEditor( editorname );
-
-    // If we have a new editor name request it to be copied to m_editor_name and saved
-    // to the preferences file. If the user cancelled the dialog then the previous
-    // value will be retained.
-    if( !editorname.IsEmpty() )
-        Pgm().SetEditorName( editorname );
-}
-
-
 void EDA_BASE_FRAME::GetKicadContribute( wxCommandEvent& event )
 {
     if( !wxLaunchDefaultBrowser( URL_GET_INVOLVED ) )
@@ -541,6 +527,28 @@ void EDA_BASE_FRAME::GetKicadAbout( wxCommandEvent& event )
 {
     void ShowAboutDialog(EDA_BASE_FRAME * aParent); // See AboutDialog_main.cpp
     ShowAboutDialog( this );
+}
+
+
+bool EDA_BASE_FRAME::ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
+                                      const wxString& aHotkeysNickname )
+{
+    PAGED_DIALOG dlg( this, _( "Preferences" ) );
+
+    dlg.AddPage( new PANEL_COMMON_SETTINGS( &dlg ),
+                 _( "Common" ) );
+    dlg.AddPage( new PANEL_HOTKEYS_EDITOR( this, &dlg, aHotkeys, aShowHotkeys, aHotkeysNickname ),
+                 _( "Hotkeys" ) );
+
+    for( unsigned i = 0; i < KIWAY_PLAYER_COUNT;  ++i )
+    {
+        KIWAY_PLAYER* frame = dlg.Kiway().Player( (FRAME_T) i, false );
+
+        if( frame )
+            frame->InstallPreferences( &dlg );
+    }
+
+    return( dlg.ShowModal() != wxID_CANCEL );
 }
 
 
@@ -671,36 +679,3 @@ bool EDA_BASE_FRAME::PostCommandMenuEvent( int evt_type )
     return false;
 }
 
-
-void EDA_BASE_FRAME::OnChangeIconsOptions( wxCommandEvent& event )
-{
-    if( event.GetId() == ID_KICAD_SELECT_ICONS_IN_MENUS )
-    {
-        Pgm().SetUseIconsInMenus( event.IsChecked() );
-    }
-
-    ReCreateMenuBar();
-}
-
-
-void EDA_BASE_FRAME::AddMenuIconsOptions( wxMenu* MasterMenu )
-{
-    wxMenu*      menu = NULL;
-    wxMenuItem*  item = MasterMenu->FindItem( ID_KICAD_SELECT_ICONS_OPTIONS );
-
-    if( item )     // This menu exists, do nothing
-        return;
-
-    menu = new wxMenu;
-
-    menu->Append( new wxMenuItem( menu, ID_KICAD_SELECT_ICONS_IN_MENUS,
-                  _( "Icons in Menus" ), wxEmptyString,
-                  wxITEM_CHECK ) );
-    menu->Check( ID_KICAD_SELECT_ICONS_IN_MENUS, Pgm().GetUseIconsInMenus() );
-
-    AddMenuItem( MasterMenu, menu,
-                 ID_KICAD_SELECT_ICONS_OPTIONS,
-                 _( "Icons Options" ),
-                 _( "Select show icons in menus and icons sizes" ),
-                 KiBitmap( icon_xpm ) );
-}

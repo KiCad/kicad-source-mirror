@@ -42,24 +42,22 @@
 #include <board_design_settings.h>
 #include <plotter.h>
 #include <worksheet.h>
-#include <dialog_hotkeys_editor.h>
+#include <panel_hotkeys_editor.h>
+#include <panel_pcbnew_settings.h>
+#include <panel_pcbnew_display_options.h>
 #include <fp_lib_table.h>
 #include <worksheet_shape_builder.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbplot.h>
-#include <pcbnew.h>
+#include <widgets/paged_dialog.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <footprint_viewer_frame.h>
-
 #include <invoke_pcb_dialog.h>
-#include <dialog_mask_clearance.h>
-#include <dialog_general_options.h>
 #include <wildcards_and_files_ext.h>
 #include <view/view.h>
-
+#include <dialogs/dialog_mask_clearance.h>
 
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
@@ -167,10 +165,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case wxID_PREFERENCES:
-        {
-            DIALOG_GENERALOPTIONS dlg( this );
-            dlg.ShowModal();
-        }
+        ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Board_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PCB_PAD_SETUP:
@@ -210,18 +205,6 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     // Hotkey IDs
-    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Pcbnew_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Pcbnew_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, g_Pcbnew_Editor_Hotkeys_Descr, g_Board_Editor_Hotkeys_Descr );
-        break;
-
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for Pcbnew.
         DisplayHotkeyList( this, g_Board_Editor_Hotkeys_Descr );
@@ -232,6 +215,13 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                 wxString::Format(  "PCB_EDIT_FRAME::Process_Config received ID %d", id ) );
         break;
     }
+}
+
+
+void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+{
+    aParent->AddPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Pcbnew" ) );
+    aParent->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
 }
 
 

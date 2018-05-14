@@ -35,9 +35,9 @@
 #include <hotkeys.h>
 #include <gerbview_frame.h>
 
-const wxChar* g_GerberPageSizeList[] = {
-    wxT( "GERBER" ),    // index 0: full size page selection, and do not show page limits
-    wxT( "GERBER" ),    // index 1: full size page selection, and show page limits
+const wxChar* g_GerberPageSizeList[] =
+{
+    wxT( "GERBER" ),    // index 0: full size page selection
     wxT( "A4" ),
     wxT( "A3" ),
     wxT( "A2" ),

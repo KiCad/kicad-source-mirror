@@ -199,19 +199,9 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 
     wxString text;
 
-#ifdef __WXMAC__
-    aParentMenu->Append( wxID_PREFERENCES );
-#else
     AddMenuItem( aParentMenu, wxID_PREFERENCES,
-                 _( "&General Settings" ), _( "Select general options for Pcbnew" ),
+                 _( "&Preferences..." ), _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
-#endif
-
-    // Display Settings
-    AddMenuItem( aParentMenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display Options..." ),
-                 _( "Graphics acceleration, grid, cursor, annotation and clearance outline settings." ),
-                 KiBitmap( display_options_xpm ) );
 
     text = AddHotkeyName( _( "Legacy Tool&set" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_LEGACY );
@@ -235,11 +225,6 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 
     // Language submenu
     Pgm().AddMenuLanguageList( aParentMenu );
-
-    // Hotkey submenu
-    AddHotkeyConfigMenu( aParentMenu );
-
-    aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_CONFIG_SAVE,
                  _( "&Save Project File..." ),
@@ -493,10 +478,7 @@ void prepareHelpMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    AddMenuItem( aParentMenu, wxID_ABOUT,
-                 _( "&About KiCad" ),
-                 _( "Display KiCad About dialog" ),
-                 KiBitmap( about_xpm ) );
+    AddMenuItem( aParentMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
 }
 
 

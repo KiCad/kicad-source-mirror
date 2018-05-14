@@ -37,7 +37,7 @@
 #include <gestfich.h>
 #include <eda_base_frame.h>
 #include <macros.h>
-#include <dialog_hotkeys_editor.h>
+#include <panel_hotkeys_editor.h>
 #include <menus_helpers.h>
 #include <draw_frame.h>
 #include <tool/tool_manager.h>
@@ -801,39 +801,3 @@ void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
     SetMruPath( wxFileName( filename ).GetPath() );
 }
 
-
-/* add hotkey config options submenu to aMenu
- */
-void AddHotkeyConfigMenu( wxMenu* aMenu )
-{
-    if( aMenu == nullptr )
-        return;
-
-    wxMenu* HotkeySubmenu = new wxMenu();
-
-    // Call hotkeys editor
-    AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
-                 _( "&Edit Hotkeys..." ),
-                 _( "Edit hotkeys list" ),
-                 KiBitmap( config_xpm ) );
-
-    HotkeySubmenu->AppendSeparator();
-
-    // create hotkey file to export current hotkeys config
-    AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
-                 _( "E&xport Hotkeys..." ),
-                 _( "Export current hotkeys into configuration file" ),
-                 KiBitmap( hotkeys_export_xpm ) );
-
-    // Reload hotkey file
-    AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
-                 _( "&Import Hotkeys..." ),
-                 _( "Load existing hotkey configuration file" ),
-                 KiBitmap( hotkeys_import_xpm ) );
-
-    // Append HotkeySubmenu to menu
-    AddMenuItem( aMenu, HotkeySubmenu,
-                 wxID_ANY, _( "&Hotkeys Options" ),
-                 _( "Edit hotkeys configuration and preferences" ),
-                 KiBitmap( hotkeys_xpm ) );
-}

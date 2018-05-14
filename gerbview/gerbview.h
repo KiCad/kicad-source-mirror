@@ -33,7 +33,7 @@
 #define CURSEUR_OFF_GRILLE 1
 
 /// List of page sizes
-extern const wxChar* g_GerberPageSizeList[8];
+extern const wxChar* g_GerberPageSizeList[7];
 
 
 // Interpolation type

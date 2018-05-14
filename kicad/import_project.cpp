@@ -53,7 +53,7 @@
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {
     // Close other windows.
-    if( !Kiway.PlayersClose( false ) )
+    if( !Kiway().PlayersClose( false ) )
         return;
 
 
@@ -122,13 +122,13 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     if( sch.FileExists() )
     {
-        KIWAY_PLAYER* schframe = Kiway.Player( FRAME_SCH, false );
+        KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, false );
 
         if( !schframe )
         {
             try     // SCH frame was not available, try to start it
             {
-                schframe = Kiway.Player( FRAME_SCH, true );
+                schframe = Kiway().Player( FRAME_SCH, true );
             }
             catch( const IO_ERROR& err )
             {
@@ -157,13 +157,13 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     if( pcb.FileExists() )
     {
-        KIWAY_PLAYER* pcbframe = Kiway.Player( FRAME_PCB, false );
+        KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB, false );
 
         if( !pcbframe )
         {
             try     // PCB frame was not available, try to start it
             {
-                pcbframe = Kiway.Player( FRAME_PCB, true );
+                pcbframe = Kiway().Player( FRAME_PCB, true );
             }
             catch( const IO_ERROR& err )
             {

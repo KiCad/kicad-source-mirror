@@ -274,6 +274,21 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
     UpdateMsgPanel();
 }
 
+void EDA_DRAW_FRAME::CommonSettingsChanged()
+{
+    EDA_BASE_FRAME::CommonSettingsChanged();
+
+    bool option;
+    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
+    m_canvas->SetEnableMousewheelPan( option );
+
+    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
+    m_canvas->SetEnableZoomNoCenter( option );
+
+    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &option );
+    m_canvas->SetEnableAutoPan( option );
+}
+
 
 void EDA_DRAW_FRAME::EraseMsgBox()
 {

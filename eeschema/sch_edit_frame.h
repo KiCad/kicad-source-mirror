@@ -237,15 +237,24 @@ public:
     void SetForceHVLines( bool aForceHVdirection ) { m_forceHVLines = aForceHVdirection; }
 
     bool GetShowAllPins() const { return m_showAllPins; }
-
     void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
 
-    const wxString GetNetListFormatName() const { return m_netListFormat; }
+    bool GetFootprintPreview() const { return m_footprintPreview; }
+    void SetFootprintPreview( bool aEnable ) { m_footprintPreview = aEnable; }
 
+    bool GetAutoplaceFields() const { return m_autoplaceFields; }
+    void SetAutoplaceFields( bool aEnable ) { m_autoplaceFields = aEnable; }
+
+    bool GetAutoplaceAlign() const { return m_autoplaceAlign; }
+    void SetAutoplaceAlign( bool aEnable ) { m_autoplaceAlign = aEnable; }
+
+    bool GetAutoplaceJustify() const { return m_autoplaceJustify; }
+    void SetAutoplaceJustify( bool aEnable ) { m_autoplaceJustify = aEnable; }
+
+    const wxString GetNetListFormatName() const { return m_netListFormat; }
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
     bool GetSpiceAjustPassiveValues() const { return m_spiceAjustPassiveValues; }
-
     void SetSpiceAjustPassiveValues( bool aEnable ) { m_spiceAjustPassiveValues = aEnable; }
 
     /// accessor to the destination directory to use when generating plot files.
@@ -1504,8 +1513,15 @@ public:
      */
     void doUpdatePcb( const wxString& aUpdateOptions = "" );
 
-    int GetIconScale() override;
-    void SetIconScale( int aScale ) override;
+    /**
+     * Allows Eeschema to install its preferences panels into the preferences dialog.
+     */
+    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+
+    /**
+     * Called after the preferences dialog is run.
+     */
+    void CommonSettingsChanged() override;
 
     ///> Probe cursor, used by circuit simulator
     const static wxCursor CURSOR_PROBE;

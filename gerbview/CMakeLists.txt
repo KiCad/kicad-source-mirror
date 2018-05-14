@@ -16,14 +16,14 @@ include_directories(
 
 
 set( DIALOGS_SRCS
-    dialogs/gerbview_dialog_display_options_frame_base.cpp
-    dialogs/gerbview_dialog_display_options_frame.cpp
+    dialogs/panel_gerbview_display_options.cpp
+    dialogs/panel_gerbview_display_options_base.cpp
+    dialogs/panel_gerbview_settings.cpp
+    dialogs/panel_gerbview_settings_base.cpp
     dialogs/dialog_layers_select_to_pcb_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_select_one_pcb_layer.cpp
-    dialogs/dialog_show_page_borders.cpp
-    dialogs/dialog_show_page_borders_base.cpp
     )
 
 set( GERBVIEW_SRCS

@@ -37,6 +37,20 @@
 #include <wx/gdicmn.h>
 
 
+///@{
+/// \ingroup config
+
+#define USE_ICONS_IN_MENUS_KEY          wxT( "UseIconsInMenus" )
+#define ICON_SCALE_KEY                  wxT( "IconScale" )
+#define AUTOSAVE_INTERVAL_KEY           wxT( "AutoSaveInterval" )
+#define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
+#define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
+#define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
+#define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
+
+///@}
+
+
 class wxConfigBase;
 class wxSingleInstanceChecker;
 class wxApp;
@@ -44,6 +58,7 @@ class wxMenu;
 class wxWindow;
 
 class FILENAME_RESOLVER;
+class EDA_DRAW_FRAME;
 
 
 // inter program module calling
@@ -275,16 +290,6 @@ public:
     }
 
     /**
-     * Function ConfigurePaths
-     *
-     * presents a dialog to the user to edit local environment variable settings for use in
-     * the footprint library table and the 3D model importer.  It was added to PGM_BASE because
-     * it will eventually find use for in schematic I/O design so it needs to accessible by
-     * almost every KiCad application.
-     */
-    VTBL_ENTRY void ConfigurePaths(  wxWindow* aParent, FILENAME_RESOLVER* aResolver  );
-
-    /**
      * Function App
      * returns a bare naked wxApp, which may come from wxPython, SINGLE_TOP, or kicad.exe.
      * Should return what wxGetApp() returns.
@@ -319,14 +324,6 @@ public:
      */
     void SaveCommonSettings();
 
-    /// Scaling factor for menus and tool icons
-    void SetIconsScale( double aValue ) { m_iconsScale = aValue; }
-    double GetIconsScale() { return m_iconsScale; }
-    /// True to use menu icons
-    void SetUseIconsInMenus( bool aUseIcons ) { m_useIconsInMenus = aUseIcons; }
-    bool GetUseIconsInMenus() { return m_useIconsInMenus; }
-
-
 protected:
 
     /**
@@ -356,11 +353,6 @@ protected:
 
     /// true to use the selected PDF browser, if exists, or false to use the default
     bool            m_use_system_pdf_browser;
-
-    /// Scaling factor for menus and tool icons
-    double          m_iconsScale;
-    /// True to use menu icons
-    bool            m_useIconsInMenus;
 
     /// Trap all changes in here, simplifies debugging
     void setLanguageId( int aId )       { m_language_id = aId; }

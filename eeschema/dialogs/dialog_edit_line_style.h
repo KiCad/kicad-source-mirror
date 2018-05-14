@@ -34,8 +34,6 @@
 #include <dialog_edit_line_style_base.h>
 #include <sch_line.h>
 
-class WIDGET_EESCHEMA_COLOR_CONFIG;
-
 class DIALOG_EDIT_LINE_STYLE : public DIALOG_EDIT_LINE_STYLE_BASE
 {
 public:
