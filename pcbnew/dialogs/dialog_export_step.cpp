@@ -345,6 +345,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     }
     else
     {
-        reporter.Report( _( "STEP file has been created succesfully." ), REPORTER::RPT_INFO );
+        reporter.Report( _( "STEP file has been created successfully." ), REPORTER::RPT_INFO );
     }
 }
