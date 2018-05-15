@@ -443,6 +443,9 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
     printf("Search start\n");
 #endif
 
+#ifdef PROFILE
+    PROF_COUNTER garbage_collection( "garbage-collection" );
+#endif
     std::vector<CN_ITEM*> garbage;
     garbage.reserve( 1024 );
 
@@ -471,10 +474,10 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
     #endif
 
 #ifdef PROFILE
+    garbage_collection.Show();
     PROF_COUNTER search_cnt( "search-connections" );
     PROF_COUNTER search_basic( "search-basic" );
     PROF_COUNTER search_pads( "search-pads" );
-    PROF_COUNTER search_tracks( "search-tracks" );
 #endif
 
     if( m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
@@ -492,6 +495,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
         }
 #ifdef PROFILE
         search_pads.Show();
+        PROF_COUNTER search_tracks( "search-tracks" );
 #endif
 
         for( auto& trackItem : m_trackList )
@@ -604,23 +608,8 @@ void CN_ITEM::RemoveInvalidRefs()
 
 void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 {
-    auto lastAnchor = std::remove_if(m_anchors.begin(), m_anchors.end(),
-        [] ( const CN_ANCHOR_PTR anchor ) {
-            return !anchor->Valid();
-        } );
-
-    m_anchors.resize( lastAnchor - m_anchors.begin() );
-    for( auto i = 0; i < PCB_LAYER_ID_COUNT; i++ )
+    auto lastItem = std::remove_if(m_items.begin(), m_items.end(), [&aGarbage] ( CN_ITEM* item )
     {
-        lastAnchor = std::remove_if(m_layer_anchors[i].begin(), m_layer_anchors[i].end(),
-                [] ( const CN_ANCHOR_PTR anchor ) {
-                    return !anchor->Valid();
-                } );
-
-        m_layer_anchors[i].resize( lastAnchor - m_layer_anchors[i].begin() );
-    }
-
-    auto lastItem = std::remove_if(m_items.begin(), m_items.end(), [&aGarbage] ( CN_ITEM* item ) {
         if( !item->Valid() )
         {
             aGarbage.push_back ( item );
@@ -630,10 +619,28 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
         return false;
     } );
 
-    m_items.resize( lastItem - m_items.begin() );
+    if( lastItem != m_items.end())
+    {
+        auto lastAnchor = std::remove_if(m_anchors.begin(), m_anchors.end(),
+            [] ( const CN_ANCHOR_PTR anchor ) {
+                return !anchor->Valid();
+            } );
+
+        m_anchors.resize( lastAnchor - m_anchors.begin() );
+        for( auto i = 0; i < PCB_LAYER_ID_COUNT; i++ )
+        {
+            lastAnchor = std::remove_if(m_layer_anchors[i].begin(), m_layer_anchors[i].end(),
+                    [] ( const CN_ANCHOR_PTR anchor ) {
+                        return !anchor->Valid();
+                    } );
+
+            m_layer_anchors[i].resize( lastAnchor - m_layer_anchors[i].begin() );
+        }
+
+        m_items.resize( lastItem - m_items.begin() );
+    }
 
     // fixme: mem leaks
-
     for( auto item : m_items )
         item->RemoveInvalidRefs();
 }
