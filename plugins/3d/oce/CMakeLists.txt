@@ -13,6 +13,7 @@
 #
 
 include_directories( SYSTEM
+    ${OCE_INCLUDE_DIRS}
     ${OCC_INCLUDE_DIR}
 )
 

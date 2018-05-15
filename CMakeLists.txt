@@ -627,11 +627,16 @@ if( KICAD_SPICE )
 endif()
 
 # Find OpenCascade Community Edition, required for STEP plugin and tools
-if( KICAD_USE_OCE OR KICAD_USE_OCC )
+if( KICAD_USE_OCE )
+    set( OCC_LIBRARIES TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
+
+    find_package( OCE 0.16 REQUIRED ${OCC_LIBRARIES} )
+
+elseif( KICAD_USE_OCC )
     find_package(OpenCASCADE)
     if( NOT OCC_FOUND )
         MESSAGE( FATAL_ERROR "================================================================\n"
-                             "Neither OpenCASCADE Community Edition nor OpenCASCADE was found!\n"
+                             " KICAD_USE_OCC=True but OpenCASCADE was no found!\n"
                              "================================================================\n")
     endif()
     if( OCC_VERSION_STRING VERSION_LESS 6.8.0 )

@@ -4,7 +4,8 @@ include_directories( BEFORE
     ${CMAKE_SOURCE_DIR}/include
 )
 
-include_directories( SYSTEM 
+include_directories( SYSTEM
+    ${OCE_INCLUDE_DIRS}
     ${OCC_INCLUDE_DIR}
 )
 
