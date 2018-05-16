@@ -472,7 +472,7 @@ public:
 
     void ExpandAfterSort()
     {
-        for( int i = 0; i < m_rows.size(); ++i )
+        for( size_t i = 0; i < m_rows.size(); ++i )
         {
             if( m_rows[ i ].m_Flag == GROUP_COLLAPSED_DURING_SORT )
                 ExpandRow( i );
