@@ -13,12 +13,12 @@ include_directories(
     ${GLEW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${CURL_INCLUDE_DIRS}
-    ${OCE_INCLUDE_DIRS}
-    ${OCC_INCLUDE_DIR}
     ../3d-viewer
     ../pcbnew
     ../polygon
     ${INC_AFTER}
+    ${OCE_INCLUDE_DIRS}
+    ${OCC_INCLUDE_DIR}
     )
 
 
