@@ -368,7 +368,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             }
 
             // Now offset the pad size by margin + width_adj
-            // this is easy for most shapes, but not for a trapezoid
+            // this is easy for most shapes, but not for a trapezoid or a custom shape
             wxSize padPlotsSize;
             wxSize extraSize = margin * 2;
             extraSize.x += width_adj;
@@ -425,12 +425,13 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             // Temporary set the pad size to the required plot size:
             wxSize tmppadsize = pad->GetSize();
-            pad->SetSize( padPlotsSize );
 
             switch( pad->GetShape() )
             {
             case PAD_SHAPE_CIRCLE:
             case PAD_SHAPE_OVAL:
+                pad->SetSize( padPlotsSize );
+
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
                     ( pad->GetSize() == pad->GetDrillSize() ) &&
                     ( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ) )
@@ -439,8 +440,30 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_RECT:
             case PAD_SHAPE_ROUNDRECT:
-            default:
                 itemplotter.PlotPad( pad, color, plotMode );
+                break;
+
+            case PAD_SHAPE_CUSTOM:
+                // inflate/deflate a custom shape is a bit complex.
+                // so build a similar pad shape, and inflate/deflate the polygonal shape
+                {
+                // we expect margin.x = margin.y for custom pads
+                if( margin.x < 0 )
+                    // be sure the anchor pad is not bigger than the deflated shape
+                    // because this anchor will be added to the pad shape when plotting
+                    // the pad
+                    pad->SetSize( padPlotsSize );
+
+                D_PAD dummy( *pad );
+                SHAPE_POLY_SET shape;
+                pad->MergePrimitivesAsPolygon( &shape, 64 );
+                shape.Inflate( margin.x, 32 );
+                dummy.DeletePrimitivesList();
+                dummy.AddPrimitive( shape, 0 );
+                dummy.MergePrimitivesAsPolygon();
+
+                itemplotter.PlotPad( &dummy, color, plotMode );
+                }
                 break;
             }
 
