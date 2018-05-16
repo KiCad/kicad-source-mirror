@@ -311,10 +311,12 @@ private:
      *
      * The pad list must be sorted by x coordinate.
      *
-     * @param aRefPad The pad to test
-     * @param aStart The start of the pad list to test against
-     * @param aEnd Marks the end of the list and is not included
-     * @param x_limit is used to stop the test (when the any pad's X coord exceeds this)
+     * @param aRefPad is the pad to test
+     * @param aStart is the first pad of the list to test against aRefPad
+     * @param aEnd is the end of the list and is not included
+     * @param x_limit is used to stop the test
+     * (i.e. when the current pad pos X in list exceeds this limit, because the list
+     * is sorted by X coordinate)
      */
     bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
 
@@ -322,7 +324,7 @@ private:
      * Test the current segment.
      *
      * @param aRefSeg The segment to test
-     * @param aStart The head of a list of tracks to test against (usually BOARD::m_Track)
+     * @param aStart the first item of track list to test against (usually BOARD::m_Track)
      * @param doPads true if should do pads test
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.

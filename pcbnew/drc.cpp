@@ -633,6 +633,9 @@ void DRC::testPad2Pad()
 
     m_pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
+    if( sortedPads.size() == 0 )
+        return;
+
     // find the max size of the pads (used to stop the test)
     int max_size = 0;
 
@@ -647,9 +650,10 @@ void DRC::testPad2Pad()
             max_size = radius;
     }
 
-    // Test the pads
-    D_PAD** listEnd = &sortedPads[ sortedPads.size() ];
+    // Upper limit of pad list (limit not included)
+    D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
 
+    // Test the pads
     for( unsigned i = 0; i< sortedPads.size(); ++i )
     {
         D_PAD* pad = sortedPads[i];
