@@ -111,7 +111,18 @@ public:
             double aCenterAngle,
             double aRadius );
 */
-    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 0.02f ) const;
+
+    /**
+     * Constructs a SHAPE_LINE_CHAIN of segments from a given arc
+     * @param aAccuracy maximum divergence from true arc given in internal units
+     *   ** Note that the default of 500.0 here is given using ARC_DEF_HIGH_ACCURACY
+     *      for pcbnew units.  This is to allow common geometry collision functions
+     *      Other programs should call this using explicit accuracy values
+     *      TODO: unify KiCad internal units
+     *
+     * @return a SHAPE_LINE_CHAIN
+     */
+    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 500.0 ) const;
 
 private:
 

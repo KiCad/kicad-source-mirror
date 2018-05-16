@@ -220,7 +220,7 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     }
     else
     {
-        n = GetArcToSegmentCount( r, From_User_Unit( MILLIMETRES, aAccuracy ), m_centralAngle );
+        n = GetArcToSegmentCount( r, aAccuracy, m_centralAngle );
     }
 
     for( int i = 0; i <= n ; i++ )

@@ -26,6 +26,7 @@
 #include <math.h>
 
 #include <geometry/shape.h>
+#include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
@@ -300,6 +301,53 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aCle
     return Collide( aA.Outline(), aB.Outline(), aClearance, aNeedMTV, aMTV );
 }
 
+static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    const auto lc = aA.ConvertToPolyline();
+    return Collide( lc, aB.Outline(), aClearance, aNeedMTV, aMTV );
+}
+
+static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    const auto lc = aA.ConvertToPolyline();
+    bool rv = Collide( aB, lc, aClearance, aNeedMTV, aMTV );
+
+    if( rv && aNeedMTV )
+        aMTV = -aMTV;
+
+    return rv;
+}
+
+static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    const auto lc = aA.ConvertToPolyline();
+    return Collide( lc, aB, aClearance, aNeedMTV, aMTV );
+}
+
+static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    const auto lc = aA.ConvertToPolyline();
+    return Collide( lc, aB, aClearance, aNeedMTV, aMTV );
+}
+
+static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SIMPLE& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    const auto lc = aA.ConvertToPolyline();
+    return Collide( lc, aB.Vertices(), aClearance, aNeedMTV, aMTV );
+}
+
+static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    const auto lcA = aA.ConvertToPolyline();
+    const auto lcB = aB.ConvertToPolyline();
+    return Collide( lcA, lcB, aClearance, aNeedMTV, aMTV );
+}
 
 template<class ShapeAType, class ShapeBType>
 inline bool CollCase( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeedMTV, VECTOR2I& aMTV )
@@ -343,6 +391,9 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SIMPLE:
                     return CollCase<SHAPE_RECT, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
+                case SH_ARC:
+                    return CollCaseReversed<SHAPE_RECT, SHAPE_ARC>( aA, aB, aClearance, aNeedMTV, aMTV );
+
                 default:
                     break;
             }
@@ -365,6 +416,9 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
 
                 case SH_SIMPLE:
                     return CollCase<SHAPE_CIRCLE, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                case SH_ARC:
+                    return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;
@@ -389,6 +443,9 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SIMPLE:
                     return CollCase<SHAPE_LINE_CHAIN, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
+                case SH_ARC:
+                    return CollCaseReversed<SHAPE_LINE_CHAIN, SHAPE_ARC>( aA, aB, aClearance, aNeedMTV, aMTV );
+
                 default:
                     break;
             }
@@ -411,6 +468,9 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
 
                 case SH_SIMPLE:
                     return CollCase<SHAPE_SIMPLE, SHAPE_SEGMENT>( aB, aA, aClearance, aNeedMTV, aMTV );
+
+                case SH_ARC:
+                    return CollCaseReversed<SHAPE_SEGMENT, SHAPE_ARC>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 default:
                     break;
@@ -435,6 +495,35 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 case SH_SIMPLE:
                     return CollCase<SHAPE_SIMPLE, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 
+                case SH_ARC:
+                    return CollCaseReversed<SHAPE_SIMPLE, SHAPE_ARC>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                default:
+                    break;
+            }
+            break;
+
+        case SH_ARC:
+            switch( aB->Type() )
+            {
+                case SH_RECT:
+                    return CollCase<SHAPE_ARC, SHAPE_RECT>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                case SH_CIRCLE:
+                    return CollCase<SHAPE_ARC, SHAPE_CIRCLE>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                case SH_LINE_CHAIN:
+                    return CollCase<SHAPE_ARC, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                case SH_SEGMENT:
+                    return CollCase<SHAPE_ARC, SHAPE_SEGMENT>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                case SH_SIMPLE:
+                    return CollCase<SHAPE_ARC, SHAPE_SIMPLE>( aA, aB, aClearance, aNeedMTV, aMTV );
+
+                case SH_ARC:
+                    return CollCase<SHAPE_ARC, SHAPE_ARC>( aA, aB, aClearance, aNeedMTV, aMTV );
+
                 default:
                     break;
             }
@@ -453,17 +542,17 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
 }
 
 
-bool SHAPE::Collide( const SHAPE* aShape, int aClerance, VECTOR2I& aMTV ) const
+bool SHAPE::Collide( const SHAPE* aShape, int aClearance, VECTOR2I& aMTV ) const
 {
-    return CollideShapes( this, aShape, aClerance, true, aMTV );
+    return CollideShapes( this, aShape, aClearance, true, aMTV );
 }
 
 
-bool SHAPE::Collide( const SHAPE* aShape, int aClerance ) const
+bool SHAPE::Collide( const SHAPE* aShape, int aClearance ) const
 {
     VECTOR2I dummy;
 
-    return CollideShapes( this, aShape, aClerance, false, dummy );
+    return CollideShapes( this, aShape, aClearance, false, dummy );
 }
 
 
