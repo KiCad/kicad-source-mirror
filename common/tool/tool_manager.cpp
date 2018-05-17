@@ -750,6 +750,8 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
         // Deactivate the tool if there are no other contexts saved on the stack
         if( it != m_activeTools.end() )
             it = m_activeTools.erase( it );
+
+        aState->idle = true;
     }
 
     if( aState == m_activeState )
@@ -760,8 +762,6 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
     if( tool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
-
-    aState->idle = true;
 
     return it;
 }
