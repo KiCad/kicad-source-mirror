@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
  */
 
 /**
- * @file GERBER_gerber.cpp
- * @brief Kicad: specialized plotter for GERBER files format
+ * @file GERBER_plotter.cpp
+ * @brief specialized plotter for GERBER files format
  */
 
 #include <fctsys.h>
@@ -113,7 +113,10 @@ void GERBER_PLOTTER::clearNetAttribute()
         return;
 
     // Remove all net attributes from object attributes dictionnary
-    fputs( "%TD*%\n", outputFile );
+    if( m_useX2Attributes )
+        fputs( "%TD*%\n", outputFile );
+    else
+        fputs( "G04 #@! TD*\n", outputFile );
 
     m_objectAttributesDictionnary.clear();
 }
@@ -138,14 +141,21 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
     // print a Gerber net attribute record.
     // it is added to the object attributes dictionnary
     // On file, only modified or new attributes are printed.
-    if( aData == NULL  || !m_useX2Attributes || !m_useNetAttributes )
+    if( aData == NULL )
+        return;
+
+    bool useX1StructuredComment = false;
+
+    if( !m_useX2Attributes )
+        useX1StructuredComment = true;
+    else if( !m_useNetAttributes )
         return;
 
     bool clearDict;
     std::string short_attribute_string;
 
     if( !FormatNetAttribute( short_attribute_string, m_objectAttributesDictionnary,
-                        aData, clearDict, false ) )
+                        aData, clearDict, useX1StructuredComment ) )
         return;
 
     if( clearDict )
@@ -290,7 +300,8 @@ std::vector<APERTURE>::iterator GERBER_PLOTTER::getAperture( const wxSize& aSize
     {
         last_D_code = tool->m_DCode;
 
-        if( (tool->m_Type == aType) && (tool->m_Size == aSize) && (tool->m_ApertureAttribute == aApertureAttribute) )
+        if( (tool->m_Type == aType) && (tool->m_Size == aSize) &&
+            (tool->m_ApertureAttribute == aApertureAttribute) )
             return tool;
 
         ++tool;
@@ -317,7 +328,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
                   ( currentAperture->m_Type != aType ) ||
                   ( currentAperture->m_Size != aSize );
 
-    if( !m_useX2Attributes || !m_useNetAttributes )
+    if( m_useX2Attributes && !m_useNetAttributes )
         aApertureAttribute = 0;
     else
         change = change || ( currentAperture->m_ApertureAttribute != aApertureAttribute );
@@ -336,6 +347,11 @@ void GERBER_PLOTTER::writeApertureList()
     wxASSERT( outputFile );
     char cbuf[1024];
 
+    bool useX1StructuredComment = false;
+
+    if( !m_useX2Attributes )
+        useX1StructuredComment = true;
+
     // Init
     for( std::vector<APERTURE>::iterator tool = apertures.begin();
          tool != apertures.end(); ++tool )
@@ -350,9 +366,11 @@ void GERBER_PLOTTER::writeApertureList()
         int attribute = tool->m_ApertureAttribute;
 
         if( attribute != m_apertureAttribute )
+        {
             fputs( GBR_APERTURE_METADATA::FormatAttribute(
-                    (GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB) attribute, false ).c_str(),
-                   outputFile );
+                    (GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB) attribute,
+                            useX1StructuredComment ).c_str(), outputFile );
+        }
 
         char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool->m_DCode );
 
@@ -394,7 +412,11 @@ void GERBER_PLOTTER::writeApertureList()
         // is to store the last attribute
         if( attribute )
         {
-            fputs( "%TD*%\n", outputFile );
+            if( m_useX2Attributes )
+                fputs( "%TD*%\n", outputFile );
+            else
+                fputs( "G04 #@! TD*\n", outputFile );
+
             m_apertureAttribute = 0;
         }
 
