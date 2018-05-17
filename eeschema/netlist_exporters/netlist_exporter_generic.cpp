@@ -91,17 +91,18 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 {
     if( comp->GetUnitCount() > 1 )
     {
-        // Sadly, each unit of a component can have its own unique fields.  This block
-        // finds the last non blank field and records it.  Last guy wins and the order
-        // of units occuring in a schematic hierarchy is variable.  Therefore user
-        // is best off setting fields into only one unit.  But this scavenger algorithm
-        // will find any non blank fields in all units and use the last non-blank field
+        // Sadly, each unit of a component can have its own unique fields. This
+        // block finds the unit with the lowest number having a non blank field
+        // value and records it.  Therefore user is best off setting fields
+        // into only the first unit.  But this scavenger algorithm will find
+        // any non blank fields in all units and use the first non-blank field
         // for each unique field name.
 
         COMP_FIELDS fields;
         wxString    ref = comp->GetRef( aSheet );
 
         SCH_SHEET_LIST sheetList( g_RootSheet );
+        int minUnit = comp->GetUnit();
 
         for( unsigned i = 0;  i < sheetList.size();  i++ )
         {
@@ -117,26 +118,34 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                 if( ref2.CmpNoCase( ref ) != 0 )
                     continue;
 
-                // The last guy wins.  User should only set fields in any one unit.
+                int unit = comp2->GetUnit();
+
+                // The lowest unit number wins.  User should only set fields in any one unit.
                 // remark: IsVoid() returns true for empty strings or the "~" string (empty field value)
-                if( !comp2->GetField( VALUE )->IsVoid() )
+                if( !comp2->GetField( VALUE )->IsVoid()
+                        && ( unit < minUnit || fields.value.IsEmpty() ) )
                     fields.value = comp2->GetField( VALUE )->GetText();
 
-                if( !comp2->GetField( FOOTPRINT )->IsVoid() )
+                if( !comp2->GetField( FOOTPRINT )->IsVoid()
+                        && ( unit < minUnit || fields.footprint.IsEmpty() ) )
                     fields.footprint = comp2->GetField( FOOTPRINT )->GetText();
 
-                if( !comp2->GetField( DATASHEET )->IsVoid() )
+                if( !comp2->GetField( DATASHEET )->IsVoid()
+                        && ( unit < minUnit || fields.datasheet.IsEmpty() ) )
                     fields.datasheet = comp2->GetField( DATASHEET )->GetText();
 
                 for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp2->GetFieldCount();  ++fldNdx )
                 {
-                    SCH_FIELD*  f = comp2->GetField( fldNdx );
+                    SCH_FIELD* f = comp2->GetField( fldNdx );
 
-                    if( f->GetText().size() )
+                    if( f->GetText().size()
+                        && ( unit < minUnit || fields.f.count( f->GetName() ) == 0 ) )
                     {
                         fields.f[ f->GetName() ] = f->GetText();
                     }
                 }
+
+                minUnit = std::min( unit, minUnit );
             }
         }
 
