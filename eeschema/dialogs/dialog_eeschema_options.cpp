@@ -127,7 +127,7 @@ void DIALOG_EESCHEMA_OPTIONS::SetRefIdSeparator( wxChar aSep, wxChar aFirstId)
     }
 
     if( aFirstId == '1' )
-        sel = 4;
+        sel += 3;
 
     m_choiceSeparatorRefId->SetSelection( sel );
 }
