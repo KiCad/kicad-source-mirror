@@ -368,6 +368,19 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 }
 
 
+bool SCH_FIELD::IsReplaceable() const
+{
+    if( m_id != VALUE )
+        return true;
+
+    SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( GetParent() );
+    LIB_PART*      part = component ? component->GetPartRef().lock().get() : nullptr;
+    bool           isPower = part ? part->IsPower() : false;
+
+    return !isPower;
+}
+
+
 bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool isReplaced;

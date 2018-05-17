@@ -182,7 +182,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    bool IsReplaceable() const override { return true; }
+    bool IsReplaceable() const override;
 
     wxPoint GetLibPosition() const { return EDA_TEXT::GetTextPos(); }
 
