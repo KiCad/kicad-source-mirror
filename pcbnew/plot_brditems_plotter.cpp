@@ -48,7 +48,7 @@
 
 #include <pcbnew.h>
 #include <pcbplot.h>
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 
 /* class BRDITEMS_PLOTTER is a helper class to plot board items
  * and a group of board items

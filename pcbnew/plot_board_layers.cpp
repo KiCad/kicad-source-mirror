@@ -51,7 +51,7 @@
 
 #include <pcbnew.h>
 #include <pcbplot.h>
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 
 // Local
 /* Plot a solder mask layer.

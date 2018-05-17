@@ -44,7 +44,7 @@
 #include <gerber_jobfile_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 
 
 GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )

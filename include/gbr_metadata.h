@@ -23,15 +23,15 @@
  */
 
 /**
- * a class to handle special data during plot.
+ * a class to handle special data (items attributes) during plot.
  * used in Gerber plotter to generate auxiliary data during plot
- * (for instance info associated to flashed pads)
+ * (for instance info associated to apertures and flashed pads)
  *
- * @file plot_auxiliary_data.h
+ * @file gbr_metadata.h
  */
 
-#ifndef PLOT_EXTRA_DATA_H
-#define PLOT_EXTRA_DATA_H
+#ifndef GBR_METADATA_H
+#define GBR_METADATA_H
 
 #include <gbr_netlist_metadata.h>
 
@@ -188,4 +188,4 @@ wxString FormatStringFromGerber( const wxString& aString );
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,
                          GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes );
 
-#endif      // PLOT_EXTRA_DATA_H
+#endif      // GBR_METADATA_H

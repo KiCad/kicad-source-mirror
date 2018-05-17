@@ -40,7 +40,7 @@
 
 #include <build_version.h>
 
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 
 
 GERBER_PLOTTER::GERBER_PLOTTER()

@@ -44,7 +44,7 @@
 #include <gendrill_gerber_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 #include <class_module.h>
 
 

@@ -37,7 +37,7 @@
 #include <gerber_file_image_list.h>
 #include <gerbview_frame.h>
 #include <reporter.h>
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 #include <html_messagebox.h>
 #include <view/view.h>
 

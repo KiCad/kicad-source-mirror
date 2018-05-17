@@ -29,7 +29,7 @@
  */
 
 #include <fctsys.h>
-#include <plot_auxiliary_data.h>
+#include <gbr_metadata.h>
 
 
 std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribute )
