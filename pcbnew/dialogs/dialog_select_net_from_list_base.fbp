@@ -87,18 +87,18 @@
             <event name="OnRightDown"></event>
             <event name="OnRightUp"></event>
             <event name="OnSetFocus"></event>
-            <event name="OnSize"></event>
+            <event name="OnSize">updateSize</event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizerMain</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxFlexGridSizer" expanded="0">
+                    <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">3</property>
                         <property name="flexible_direction">wxBOTH</property>
                         <property name="growablecols">1</property>
@@ -405,7 +405,7 @@
                         <property name="col_label_values">&quot;Net name&quot; &quot;Number of pads&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                         <property name="cols">2</property>
-                        <property name="column_sizes">325,100</property>
+                        <property name="column_sizes">300,130</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="default_pane">0</property>
@@ -484,7 +484,7 @@
                         <event name="OnGridCmdRangeSelect"></event>
                         <event name="OnGridCmdRowSize"></event>
                         <event name="OnGridCmdSelectCell"></event>
-                        <event name="OnGridColSize"></event>
+                        <event name="OnGridColSize">onColumnResize</event>
                         <event name="OnGridEditorCreated"></event>
                         <event name="OnGridEditorHidden"></event>
                         <event name="OnGridEditorShown"></event>
@@ -494,7 +494,7 @@
                         <event name="OnGridLabelRightDClick"></event>
                         <event name="OnGridRangeSelect"></event>
                         <event name="OnGridRowSize"></event>
-                        <event name="OnGridSelectCell"></event>
+                        <event name="OnGridSelectCell">onSelectCell</event>
                         <event name="OnKeyDown"></event>
                         <event name="OnKeyUp"></event>
                         <event name="OnKillFocus"></event>

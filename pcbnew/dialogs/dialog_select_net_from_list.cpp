@@ -67,10 +67,15 @@ public:
 private:
     void onCellClick( wxGridEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
+    void onColumnResize( wxGridSizeEvent& event ) override;
+    void onSelectCell( wxGridEvent& event ) override;
+    void updateSize( wxSizeEvent& event ) override;
 
+    void setColumnSize();
     void buildNetsList();
 
     wxString m_selection;
+    int m_firstWidth;
     bool m_wasSelected;
     BOARD* m_brd;
     PCB_EDIT_FRAME* m_frame;
@@ -98,12 +103,14 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
 
     // Choose selection mode
     m_netsListGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
     buildNetsList();
 
     m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Center();
+
+    m_firstWidth = m_netsListGrid->GetColumnWidth( 0 );
+    setColumnSize();
 }
 
 
@@ -194,6 +201,13 @@ void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( bool aEnabled, const wxString& a
     }
 }
 
+void DIALOG_SELECT_NET_FROM_LIST::setColumnSize()
+{
+    auto size = m_netsListGrid->GetGridWindow()->GetSize();
+
+    m_netsListGrid->SetColumnWidth( 0, m_firstWidth );
+    m_netsListGrid->SetColumnWidth( 1, size.x - m_firstWidth );
+}
 
 DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
 {
@@ -206,9 +220,38 @@ void DIALOG_SELECT_NET_FROM_LIST::onFilterChange( wxCommandEvent& event )
 }
 
 
+void DIALOG_SELECT_NET_FROM_LIST::updateSize( wxSizeEvent& event )
+{
+    setColumnSize();
+    this->Refresh();
+    event.Skip();
+}
+
+
+void DIALOG_SELECT_NET_FROM_LIST::onColumnResize( wxGridSizeEvent& event )
+{
+    m_firstWidth = m_netsListGrid->GetColumnWidth( 0 );
+    setColumnSize();
+}
+
+
+void DIALOG_SELECT_NET_FROM_LIST::onSelectCell( wxGridEvent& event )
+{
+
+    int selected_row = event.GetRow();
+    m_selection = m_netsListGrid->GetCellValue( selected_row, COL_NETNAME );
+
+    // Select the full row when clicking on any cell off the row
+    m_netsListGrid->SelectRow( selected_row, false );
+
+    HighlightNet( true, m_selection );
+}
+
+
 void DIALOG_SELECT_NET_FROM_LIST::onCellClick( wxGridEvent& event )
 {
     int selected_row = event.GetRow();
+
     m_selection = m_netsListGrid->GetCellValue( selected_row, COL_NETNAME );
     m_wasSelected = true;
 
