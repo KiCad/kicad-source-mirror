@@ -818,13 +818,13 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
                    return RefDesStringCompare( lhRef, rhRef ) < 0;
                } );
 
-    int i = 0;
+    size_t i = 0;
 
     while( i < aList.size() )
     {
         wxString ref = aList[ i ].GetRef();
 
-        int j = i;
+        size_t j = i;
 
         while( j + 1 < aList.size() && aList[ j + 1 ].GetRef() == ref )
             j = j + 1;
