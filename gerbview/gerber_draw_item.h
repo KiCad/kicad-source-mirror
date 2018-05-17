@@ -322,8 +322,11 @@ public:
     ///> @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
+    ///> @copydoc EDA_ITEM::GetSelectMenuText()
     virtual wxString GetSelectMenuText() const override;
 
+    ///> @copydoc EDA_ITEM::GetMenuImage()
+    BITMAP_DEF GetMenuImage() const override;
 };
 
 

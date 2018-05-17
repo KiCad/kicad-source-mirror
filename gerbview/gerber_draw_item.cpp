@@ -30,6 +30,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>
+#include <bitmaps.h>
 #include <class_drawpanel.h>
 #include <msgpanel.h>
 #include <gerbview_frame.h>
@@ -759,6 +760,34 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     }
 
     aList.push_back( MSG_PANEL_ITEM( net_msg, cmp_pad_msg, DARKCYAN ) );
+}
+
+
+BITMAP_DEF GERBER_DRAW_ITEM::GetMenuImage() const
+{
+    if( m_Flashed )
+        return pad_xpm;
+
+    switch( m_Shape )
+    {
+    case GBR_SEGMENT:
+    case GBR_ARC:
+    case GBR_CIRCLE:
+        return add_line_xpm;
+
+    case GBR_SPOT_OVAL:
+    case GBR_SPOT_CIRCLE:
+    case GBR_SPOT_RECT:
+    case GBR_SPOT_POLY:
+    case GBR_SPOT_MACRO:
+        // should be handles by m_Flashed == true
+        return pad_xpm;
+
+    case GBR_POLYGON:
+        return add_graphical_polygon_xpm;
+    }
+
+    return info_xpm;
 }
 
 

@@ -657,10 +657,11 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
         wxString text;
         EDA_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
-        menu.Add( text, i + 1 );
+        menu.Add( text, i + 1, item->GetMenuImage() );
     }
 
     menu.SetTitle( _( "Clarify selection" ) );
+    menu.SetIcon( info_xpm );
     menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
 
