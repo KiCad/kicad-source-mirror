@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -97,10 +97,10 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTrackNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
