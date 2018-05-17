@@ -145,7 +145,7 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
     std::string short_attribute_string;
 
     if( !FormatNetAttribute( short_attribute_string, m_objectAttributesDictionnary,
-                        aData, clearDict ) )
+                        aData, clearDict, false ) )
         return;
 
     if( clearDict )
@@ -351,7 +351,8 @@ void GERBER_PLOTTER::writeApertureList()
 
         if( attribute != m_apertureAttribute )
             fputs( GBR_APERTURE_METADATA::FormatAttribute(
-                    (GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB) attribute ).c_str(), outputFile );
+                    (GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB) attribute, false ).c_str(),
+                   outputFile );
 
         char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool->m_DCode );
 

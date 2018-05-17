@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,11 +82,17 @@ public:
     /**
      * @return the full command string corresponding to the aperture attribute
      * like "%TA.AperFunction,<function>*%"
+     * @param aUseX1StructuredComment = false in X2 mode,
+     * and true in X1 mode to add the net attribut
+     * inside a compatible X1 structured comment starting by "G04 #@! "
+     * like "G04 #@! TA.AperFunction,<function>*"
      */
-    static std::string FormatAttribute( GBR_APERTURE_ATTRIB aAttribute );
-    std::string FormatAttribute()
+    static std::string FormatAttribute( GBR_APERTURE_ATTRIB aAttribute,
+                                        bool aUseX1StructuredComment );
+
+    std::string FormatAttribute( bool aUseX1StructuredComment )
     {
-        return FormatAttribute( m_ApertAttribute );
+        return FormatAttribute( m_ApertAttribute, aUseX1StructuredComment );
     }
 
     // The id of the aperture attribute
@@ -180,12 +186,15 @@ wxString FormatStringFromGerber( const wxString& aString );
  * @param aClearPreviousAttributes returns true if the full set of attributes
  * must be deleted from file before adding new attribute (happens when a previous
  * attribute does not exist no more).
+ * @param aUseX1StructuredComment = false in X2 mode, and true in X1 mode to add the net attribut
+ * in compatible X1 structured comment (i.e. prefixed by "G04 #@! ")
  * @return false if nothing can be done (GBR_NETLIST_METADATA has GBR_APERTURE_ATTRIB_NONE,
  * and true if OK
  * if the new attribute(s) is the same as current attribute(s), aPrintedText
  * will be empty
  */
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,
-                         GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes );
+                         GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,
+                         bool aUseX1StructuredComment );
 
 #endif      // GBR_METADATA_H
