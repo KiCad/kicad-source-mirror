@@ -33,8 +33,10 @@
 #include <wx/xml/xml.h>
 
 class D_PAD;
+class TEXTE_MODULE;
 
 typedef std::map<wxString, MODULE*>  MODULE_MAP;
+typedef std::vector<ZONE_CONTAINER*> ZONES;
 typedef std::map<wxString, ENET>     NET_MAP;
 typedef NET_MAP::const_iterator      NET_MAP_CITER;
 
@@ -230,6 +232,12 @@ private:
 
     void loadLibraries( wxXmlNode* aLibs );
     void loadElements( wxXmlNode* aElements );
+
+    /** Loads a copper or keepout polygon and adds it to the board.
+     *
+     * @return The loaded zone or nullptr if was not processed.
+     */
+    ZONE_CONTAINER* loadPolygon( wxXmlNode* aPolyNode );
 
     void orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr, const EATTR* valueAttr );
     void orientModuleText( MODULE* m, const EELEMENT& e, TEXTE_MODULE* txt, const EATTR* a );
