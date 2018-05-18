@@ -198,9 +198,12 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     bool linesOnly = aA->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::LINE_T )
                   && aB->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::LINE_T );
 
-    if( linesOnly && net_a >= 0 && net_b >= 0 && m_netClearanceCache[net_a].coupledNet == net_b )
+    if( net_a >= 0 && net_b >= 0 && m_netClearanceCache[net_a].coupledNet == net_b )
     {
-        cl_a = cl_b = m_router->Sizes().DiffPairGap() - 2 * PNS_HULL_MARGIN;
+        if( linesOnly )
+            cl_a = cl_b = m_router->Sizes().DiffPairGap() - 2 * PNS_HULL_MARGIN;
+        else
+            cl_a = cl_b = m_router->Sizes().DiffPairViaGap() - 2 * PNS_HULL_MARGIN;
     }
 
     int pad_a = localPadClearance( aA );
