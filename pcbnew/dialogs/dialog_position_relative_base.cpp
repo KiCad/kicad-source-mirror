@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -18,7 +18,15 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
+	m_staticTextHelp = new wxStaticText( this, wxID_ANY, _("The Anchor position is the origin of coordinates for the transform."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextHelp->Wrap( -1 );
+	bMainSizer->Add( m_staticTextHelp, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
 	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_polarCoords->SetValue(true); 
 	bMainSizer->Add( m_polarCoords, 0, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer2;
@@ -69,18 +77,20 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_clearRot = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgSizer2->Add( m_clearRot, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_anchor_xLabel = new wxStaticText( this, wxID_ANY, _("Anchor X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_anchor_xLabel = new wxStaticText( this, wxID_ANY, _("Anchor position X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_anchor_xLabel->Wrap( -1 );
+	m_anchor_xLabel->SetToolTip( _("The Anchor position is the origin of coordinates for the transform.") );
+	
 	fgSizer2->Add( m_anchor_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_anchor_x = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_anchor_x = new TEXT_CTRL_EVAL( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_anchor_x, 0, wxALL, 5 );
 	
 	m_anchor_yLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_anchor_yLabel->Wrap( -1 );
 	fgSizer2->Add( m_anchor_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_anchor_y = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_anchor_y = new TEXT_CTRL_EVAL( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_anchor_y, 0, wxALL, 5 );
 	
 	
@@ -89,8 +99,14 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_select_anchor_button = new wxButton( this, wxID_ANY, _("Select Anchor Item"), wxDefaultPosition, wxDefaultSize, 0 );
-	bMainSizer->Add( m_select_anchor_button, 0, wxALL, 5 );
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_select_anchor_button = new wxButton( this, wxID_ANY, _("Select Anchor Position"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBottom->Add( m_select_anchor_button, 0, wxALL, 5 );
+	
+	
+	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -99,7 +115,10 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 	
-	bMainSizer->Add( m_stdButtons, 0, wxALL|wxEXPAND, 5 );
+	bSizerBottom->Add( m_stdButtons, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

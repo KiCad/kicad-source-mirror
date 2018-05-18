@@ -58,6 +58,9 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, TOO
     m_rotEntry->SetValue( wxString::FromDouble( m_options.entryRotation ) );
     updateDlgTexts( m_polarCoords->IsChecked() );
 
+    PutValueInLocalUnits( *m_anchor_x, m_anchor_position.x );
+    PutValueInLocalUnits( *m_anchor_y, m_anchor_position.y );
+
     m_stdButtonsOK->SetDefault();
 
     GetSizer()->SetSizeHints( this );
@@ -138,15 +141,15 @@ void DIALOG_POSITION_RELATIVE::updateDlgTexts( bool aPolar )
 {
     if( aPolar )
     {
-        m_xLabel->SetLabelText( _( "Distance:" ) );     // Polar radius
+        m_xLabel->SetLabelText( _( "Distance from anchor:" ) );     // Polar radius
         m_yLabel->SetLabelText( _( "Angle:" ) );        // Polar theta or angle
 
         m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( DEGREES ) );
     }
     else
     {
-        m_xLabel->SetLabelText( _( "Move vector X:" ) );
-        m_yLabel->SetLabelText( _( "Move vector Y:" ) );
+        m_xLabel->SetLabelText( _( "Position from anchor X:" ) );
+        m_yLabel->SetLabelText( _( "Position from anchor Y:" ) );
 
         m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
     }
@@ -187,11 +190,11 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_POSITION_RELATIVE::UpdateAnchor( BOARD_ITEM* aBoardItem )
+void DIALOG_POSITION_RELATIVE::UpdateAnchor( const wxPoint& aPosition )
 {
-    m_anchor_position = aBoardItem->GetPosition();
-    PutValueInLocalUnits( *m_anchor_x, m_anchor_position.x );
-    PutValueInLocalUnits( *m_anchor_y, m_anchor_position.y );
+    m_anchor_position = aPosition;
+    PutValueInLocalUnits( *m_anchor_x, aPosition.x );
+    PutValueInLocalUnits( *m_anchor_y, aPosition.y );
 }
 
 

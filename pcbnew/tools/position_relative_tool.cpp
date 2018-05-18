@@ -41,8 +41,8 @@ using namespace std::placeholders;
 
 TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRelative",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_POSITION_RELATIVE ),
-        _( "Position Relative To..." ), _(
-                "Positions the selected item(s) by an exact amount relative to another" ),
+        _( "Position Relative To..." ),
+        _( "Positions the selected item(s) by an exact amount relative to another" ),
         move_relative_xpm );
 
 
@@ -180,7 +180,7 @@ void POSITION_RELATIVE_TOOL::UpdateAnchor( BOARD_ITEM* aItem )
     m_anchor_item = aItem;
 
     if( m_position_relative_dialog )
-        m_position_relative_dialog->UpdateAnchor( aItem );
+        m_position_relative_dialog->UpdateAnchor( aItem->GetPosition() );
 }
 
 

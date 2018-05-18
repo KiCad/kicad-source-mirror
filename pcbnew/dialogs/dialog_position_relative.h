@@ -46,7 +46,7 @@ public:
             double& rotation, wxPoint& anchorposition );
     ~DIALOG_POSITION_RELATIVE();
 
-    void UpdateAnchor( BOARD_ITEM* aBoardItem );
+    void UpdateAnchor( const wxPoint& aPosition );
 
 private:
 
