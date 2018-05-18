@@ -247,11 +247,11 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
 
     aux_polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-    // Merge all polygons with the initial pad anchot shape
+    // Merge all polygons with the initial pad anchor shape
     if( aux_polyset.OutlineCount() )
     {
-        aMergedPolygon->BooleanAdd( aux_polyset, SHAPE_POLY_SET::PM_FAST );
-        aMergedPolygon->Fracture( SHAPE_POLY_SET::PM_FAST );
+        aMergedPolygon->BooleanAdd( aux_polyset, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        aMergedPolygon->Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
 
     return aMergedPolygon->OutlineCount() <= 1;
