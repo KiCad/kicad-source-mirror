@@ -103,6 +103,8 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_select_anchor_button = new wxButton( this, wxID_ANY, _("Select Anchor Position"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_select_anchor_button->SetToolTip( _("Click and select a board item.\nThe anchor position will be the position of the selected item.") );
+	
 	bSizerBottom->Add( m_select_anchor_button, 0, wxALL, 5 );
 	
 	
