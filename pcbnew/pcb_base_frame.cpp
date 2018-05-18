@@ -833,15 +833,15 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         switch( g_UserUnit )
         {
         case INCHES:
-            formatter = wxT( "Ro %.6f  Th %.1f" );
+            formatter = wxT( "r %.6f  theta %.1f" );
             break;
 
         case MILLIMETRES:
-            formatter = wxT( "Ro %.6f  Th %.1f" );
+            formatter = wxT( "r %.6f  theta %.1f" );
             break;
 
         case UNSCALED_UNITS:
-            formatter = wxT( "Ro %f  Th %f" );
+            formatter = wxT( "r %f  theta %f" );
             break;
 
         case DEGREES:
