@@ -663,6 +663,25 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
 }
 
 
+class LIBRARY_NAME_CLEARER
+{
+    MODULE*  m_module;
+    LIB_ID   m_savedFPID;
+
+public:
+    LIBRARY_NAME_CLEARER( MODULE* aModule )
+    {
+        m_module = aModule;
+        m_savedFPID = aModule->GetFPID();
+        m_module->SetFPID( LIB_ID( m_savedFPID.GetLibItemName() ) );
+    }
+    ~LIBRARY_NAME_CLEARER()
+    {
+        m_module->SetFPID( m_savedFPID );
+    }
+};
+
+
 bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODULE* aModule )
 {
     if( aModule == NULL )
@@ -776,6 +795,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
 
         module_exists = m != nullptr;
         delete m;
+
+        LIBRARY_NAME_CLEARER temp( aModule );
 
         // this always overwrites any existing footprint, but should yell on its
         // own if the library or footprint is not writable.
