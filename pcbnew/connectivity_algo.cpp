@@ -27,7 +27,7 @@
 
 #include <thread>
 #include <mutex>
-#define PROFILE
+
 #ifdef PROFILE
 #include <profile.h>
 #endif
