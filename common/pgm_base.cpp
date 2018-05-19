@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -482,6 +482,7 @@ bool PGM_BASE::InitPgm()
 
     // KISYSMOD
     envVarName = wxT( "KISYSMOD" );
+
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
         tmpFileName.AssignDir( envValue );
@@ -493,11 +494,13 @@ bool PGM_BASE::InitPgm()
         tmpFileName.AppendDir( wxT( "modules" ) );
         envVarItem.SetDefinedExternally( false );
     }
+
     envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KISYS3DMOD
     envVarName = wxT( "KISYS3DMOD" );
+
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
         tmpFileName.AssignDir( envValue );
@@ -508,11 +511,13 @@ bool PGM_BASE::InitPgm()
         tmpFileName.AppendDir( wxT( "packages3d" ) );
         envVarItem.SetDefinedExternally( false );
     }
+
     envVarItem.SetValue( tmpFileName.GetFullPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
-    // KICAD_PTEMPLATES
-    envVarName = wxT( "KICAD_PTEMPLATES" );
+    // KICAD_TEMPLATE_DIR
+    envVarName = "KICAD_TEMPLATE_DIR";
+
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
         tmpFileName.AssignDir( envValue );
@@ -520,15 +525,67 @@ bool PGM_BASE::InitPgm()
     }
     else
     {
-        tmpFileName = baseSharePath;
-        tmpFileName.AppendDir( wxT( "template" ) );
+        // Attempt to find the best default template path.
+        SEARCH_STACK bases;
+        SEARCH_STACK templatePaths;
+
+        SystemDirsAppend( &bases );
+
+        for( unsigned i = 0; i < bases.GetCount(); ++i )
+        {
+            wxFileName fn( bases[i], wxEmptyString );
+
+            // Add KiCad template file path to search path list.
+            fn.AppendDir( "template" );
+
+            // Only add path if exists and can be read by the user.
+            if( fn.DirExists() && fn.IsDirReadable() )
+            {
+                wxLogDebug( "Checking template path '%s' exists", fn.GetPath() );
+                templatePaths.AddPaths( fn.GetPath() );
+            }
+        }
+
+        if( templatePaths.IsEmpty() )
+        {
+            tmpFileName = baseSharePath;
+            tmpFileName.AppendDir( "template" );
+        }
+        else
+        {
+            // Take the first one.  There may be more but this will likely be the best option.
+            tmpFileName.AssignDir( templatePaths[0] );
+        }
+
         envVarItem.SetDefinedExternally( false );
     }
+
+    envVarItem.SetValue( tmpFileName.GetPath() );
+    m_local_env_vars[ envVarName ] = envVarItem;
+
+    // KICAD_USER_TEMPLATE_DIR
+    envVarName = "KICAD_USER_TEMPLATE_DIR";
+
+    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+    {
+        tmpFileName.AssignDir( envValue );
+        envVarItem.SetDefinedExternally( true );
+    }
+    else
+    {
+        // Default user template path.
+        tmpFileName = wxStandardPaths::Get().GetDocumentsDir();
+        tmpFileName.AppendDir( "kicad" );
+        tmpFileName.AppendDir( "template" );
+        envVarItem.SetDefinedExternally( false );
+    }
+
     envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_SYMBOLS
     envVarName = wxT( "KICAD_SYMBOL_DIR" );
+
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
         tmpFileName.AssignDir( envValue );
@@ -540,6 +597,7 @@ bool PGM_BASE::InitPgm()
         tmpFileName.AppendDir( wxT( "library" ) );
         envVarItem.SetDefinedExternally( false );
     }
+
     envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 

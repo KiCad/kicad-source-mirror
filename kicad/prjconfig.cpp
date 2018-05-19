@@ -270,82 +270,27 @@ void KICAD_MANAGER_FRAME::OnNewProject( wxCommandEvent& aEvent )
 
 void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
 {
-    wxString    default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
-    wxString    title = _( "New Project Folder" );
-    wxDirDialog dlg( this, title, default_dir );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    // Builds the project .pro filename, from the new project folder name
-    wxFileName fn;
-    fn.AssignDir( dlg.GetPath() );
-    fn.SetName( dlg.GetPath().AfterLast( SEP() ) );
-    fn.SetExt( wxT( "pro" ) );
-
-    wxChar      sep[2] = { SEP(), 0 };  // nul terminated separator wxChar string.
-
-    ClearMsg();
-
     DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( this );
 
     wxFileName  templatePath;
     wxString    envStr;
 
-#ifndef __WXMAC__
-    wxGetEnv( wxT( "KICAD" ), &envStr );
+    // KiCad system template path.
+    ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( "KICAD_TEMPLATE_DIR" );
 
-    // Add a new tab for system templates
-    if( !envStr.empty() )
+    if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {
-        // user may or may not have including terminating separator.
-        if( !envStr.EndsWith( sep ) )
-            envStr += sep;
-
-        templatePath = envStr + wxT( "template" ) + sep;
+        templatePath.AssignDir( it->second.GetValue() );
+        ps->AddTemplatesPage( _( "System Templates" ), templatePath );
     }
-    else
+
+    // User template path.
+    it =  Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
+
+    if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {
-        // The standard path should be in the share directory for kicad. As
-        // it is normal on Windows to only have the share directory and not
-        // the kicad sub-directory we fall back to that if the directory
-        // doesn't exist
-        templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) +
-                       sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "kicad" ) +
-                       sep + wxT( "template" ) + sep;
-
-        if( !wxDirExists( templatePath.GetFullPath() ) )
-        {
-            templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) + sep +
-                           wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "template" ) + sep;
-        }
-    }
-#else
-        // Use what is provided in the bundle data dir
-    templatePath = GetOSXKicadDataDir() + sep + wxT( "template" );
-#endif
-
-    ps->AddTemplatesPage( _( "System Templates" ), templatePath );
-
-    // Add a new tab for user templates
-    wxFileName userPath = wxStandardPaths::Get().GetDocumentsDir() + sep + wxT( "kicad" ) +
-                          sep + wxT( "template" ) + sep;
-
-    ps->AddTemplatesPage( _( "User Templates" ), userPath );
-
-    // Check to see if a custom template location is available and setup a
-    // new selection tab if there is.
-    envStr.clear();
-    wxGetEnv( wxT( "KICAD_PTEMPLATES" ), &envStr );
-
-    if( !envStr.empty() )
-    {
-        if( !envStr.EndsWith( sep ) )
-            envStr += sep;
-
-        wxFileName envPath = envStr;
-
-        ps->AddTemplatesPage( _( "Portable Templates" ), envPath );
+        templatePath.AssignDir( it->second.GetValue() );
+        ps->AddTemplatesPage( _( "User Templates" ), templatePath );
     }
 
     // Show the project template selector dialog
@@ -362,7 +307,21 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
         return;
     }
 
-    // Make sure the user has write permissions to the base path.
+    // Get project destination folder and project file name.
+    wxString    default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
+    wxString    title = _( "New Project Folder" );
+    wxDirDialog dlg( this, title, default_dir );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    // Builds the project .pro filename, from the new project folder name
+    wxFileName fn;
+    fn.AssignDir( dlg.GetPath() );
+    fn.SetName( dlg.GetPath().AfterLast( SEP() ) );
+    fn.SetExt( "pro" );
+
+    // Make sure the user has write permissions to the project path.
     wxFileName prjPath = fn;
 
     while( !prjPath.DirExists() )
@@ -379,6 +338,8 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
         msgDlg.ShowModal();
         return;
     }
+
+    ClearMsg();
 
     // Make sure we are not overwriting anything in the destination folder.
     std::vector< wxFileName > destFiles;

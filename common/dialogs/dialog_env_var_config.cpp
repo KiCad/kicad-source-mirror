@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@ protected:
     void OnSelectPath( wxCommandEvent& event ) override;
     void onHelpClick( wxCommandEvent& event ) override;
 
-    // Currently, only upper case variable names are acepted. onVarNameChange
+    // Currently, only upper case variable names are accepted. onVarNameChange
     // changes on the fly any lower case char by the corresponding upper case
 	void onVarNameChange( wxCommandEvent& event ) override;
 
@@ -285,6 +285,7 @@ void DIALOG_ENV_VAR_CONFIG::EditSelectedEntry()
     }
 }
 
+
 void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
 {
     wxString msg = _( "Enter the name and value for each environment variable.  Grey entries "
@@ -296,10 +297,12 @@ void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
     msg << _( "To ensure environment variable names are valid on all platforms, the name field "
               "will only accept upper case letters, digits, and the underscore characters." );
     msg << wxT( "</b><br><br>" );
-    msg << _( "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol libraries." );
+    msg << _( "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol "
+              "libraries." );
     msg << wxT( "<br><br>" );
     msg << _( "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository "
-              "of the official KiCad footprint libraries." );
+              "of the official KiCad footprint libraries.  This is only required if the "
+              "Github plugin is used to access footprint libraries" );
     msg << wxT( "<br><br>" );
     msg << _( "<b>KISYS3DMOD</b> is the base path of system footprint 3D "
               "shapes (.3Dshapes folders)." );
@@ -313,8 +316,11 @@ void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
               "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
               "folder containing a project specific footprint library named footprints.pretty." );
     msg << wxT( "<br><br>" );
-    msg << _( "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to "
-              "create your own project templates folder." );
+    msg << _( "<b>KICAD_TEMPLATE_DIR</b> is required and is the path containing the project "
+              "templates installed with KiCad." );
+    msg << wxT( "<br><br>" );
+    msg << _( "<b>KICAD_USER_TEMPLATE_DIR</b> is required and is the path containing any user "
+              "specific project templates." );
 
     HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
     dlg.SetDialogSizeInDU( 400, 350 );
@@ -337,8 +343,9 @@ bool DIALOG_ENV_VAR_CONFIG::IsEnvVarImmutable( const wxString aEnvVar )
             "KISYS3DMOD",
             "KISYSMOD",
             "KIPRJMOD",
-            "KICAD_PTEMPLATES",
-            "KICAD_SYMBOL_DIR"
+            "KICAD_SYMBOL_DIR",
+            "KICAD_TEMPLATE_DIR",
+            "KICAD_USER_TEMPLATE_DIR"
     };
 
     for( unsigned int ii=0; ii<6; ii++ )

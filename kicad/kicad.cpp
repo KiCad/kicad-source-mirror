@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,6 +59,7 @@ KIFACE_I& Kiface()
     throw std::logic_error( "Unexpected call to Kiface() in kicad/kicad.cpp" );
 }
 
+
 static PGM_KICAD program;
 
 
@@ -104,8 +105,24 @@ bool PGM_KICAD::OnPgmInit()
 
             // Add KiCad template file path to search path list.
             fn.AppendDir( wxT( "template" ) );
-            m_bm.m_search.AddPaths( fn.GetPath() );
+
+            // Only add path if exists and can be read by the user.
+            if( fn.DirExists() && fn.IsDirReadable() )
+                m_bm.m_search.AddPaths( fn.GetPath() );
         }
+
+        // The KICAD_TEMPLATE_DIR takes precedence over the search stack template path.
+        ENV_VAR_MAP_CITER it = GetLocalEnvVariables().find( "KICAD_TEMPLATE_DIR" );
+
+        if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
+            m_bm.m_search.Insert( it->second.GetValue(), 0 );
+
+        // The KICAD_USER_TEMPLATE_DIR takes precedence over KICAD_TEMPLATE_DIR and the search
+        // stack template path.
+        it = GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
+
+        if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
+            m_bm.m_search.Insert( it->second.GetValue(), 0 );
     }
 
     // Must be called before creating the main frame in order to
@@ -203,8 +220,9 @@ struct APP_KICAD : public wxApp
 #if defined (__LINUX__)
     APP_KICAD(): wxApp()
     {
-        // Disable proxy menu in Unity window manager. Only usual menubar works with wxWidgets (at least <= 3.1)
-        // When the proxy menu menubar is enable, some important things for us do not work: menuitems UI events and shortcuts.
+        // Disable proxy menu in Unity window manager. Only usual menubar works with
+        // wxWidgets (at least <= 3.1).  When the proxy menu menubar is enable, some
+        // important things for us do not work: menuitems UI events and shortcuts.
         wxString wm;
 
         if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
@@ -251,9 +269,8 @@ struct APP_KICAD : public wxApp
     }
 
     /**
-     * Function MacOpenFile
-     * is specific to MacOSX (not used under Linux or Windows).
-     * MacOSX requires it for file association.
+     * Set MacOS file associations.
+     *
      * @see http://wiki.wxwidgets.org/WxMac-specific_topics
      */
     void MacOpenFile( const wxString& aFileName )
