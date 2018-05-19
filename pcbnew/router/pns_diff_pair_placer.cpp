@@ -437,7 +437,8 @@ OPT_VECTOR2I DIFF_PAIR_PLACER::getDanglingAnchor( NODE* aNode, ITEM* aItem )
 
 
 
-bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem, DP_PRIMITIVE_PAIR& aPair )
+bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
+                                            DP_PRIMITIVE_PAIR& aPair, wxString* aErrorMsg )
 {
     int netP, netN;
 
@@ -446,7 +447,15 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem, DP_
     bool result = m_world->GetRuleResolver()->DpNetPair( aItem, netP, netN );
 
     if( !result )
+    {
+        if( aErrorMsg )
+        {
+            *aErrorMsg = _( "Unable to find complementary differential pair "
+                            "nets. Make sure the names of the nets belonging "
+                            "to a differential pair end with either _N/_P or +/-." );
+        }
         return false;
+    }
 
     int refNet = aItem->Net();
     int coupledNet = ( refNet == netP ) ? netN : netP;
@@ -459,7 +468,15 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem, DP_
     wxLogTrace( "PNS", "refAnchor %p", aItem );
 
     if( !refAnchor )
+    {
+        if( aErrorMsg )
+        {
+            *aErrorMsg = _( "Can't find a suitable starting point.  If starting "
+                            "from an existing differential pair make sure you are "
+                            "at the end. " );
+        }
         return false;
+    }
 
     std::set<ITEM*> coupledItems;
 
@@ -503,7 +520,18 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem, DP_
         }
     }
 
-    return found;
+    if( !found )
+    {
+        if( aErrorMsg )
+        {
+            *aErrorMsg = wxString::Format( _( "Can't find a suitable starting point "
+                                              "for coupled net \"%s\"." ),
+                                           m_world->GetRuleResolver()->NetName( coupledNet ) );
+        }
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -522,6 +550,7 @@ int DIFF_PAIR_PLACER::gap() const
 bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
     VECTOR2I p( aP );
+    wxString msg;
 
     if( !aStartItem )
     {
@@ -533,11 +562,9 @@ bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     setWorld( Router()->GetWorld() );
     m_currentNode = m_world;
 
-    if( !findDpPrimitivePair( aP, aStartItem, m_start ) )
+    if( !findDpPrimitivePair( aP, aStartItem, m_start, &msg ) )
     {
-        Router()->SetFailureReason( _( "Unable to find complementary differential pair "
-                                       "net. Make sure the names of the nets belonging "
-                                       "to a differential pair end with either _N/_P or +/-." ) );
+        Router()->SetFailureReason( msg );
         return false;
     }
 

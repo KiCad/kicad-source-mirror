@@ -76,6 +76,7 @@ public:
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
+    virtual wxString NetName( int aNet ) override;
 
 private:
     struct CLEARANCE_ENT
@@ -312,6 +313,12 @@ int PNS_PCBNEW_RULE_RESOLVER::DpCoupledNet( int aNet )
     }
 
     return -1;
+}
+
+
+wxString PNS_PCBNEW_RULE_RESOLVER::NetName( int aNet )
+{
+    return m_board->FindNet( aNet )->GetNetname();
 }
 
 

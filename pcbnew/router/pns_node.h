@@ -65,6 +65,7 @@ public:
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( ITEM* aItem, int& aNetP, int& aNetN ) = 0;
+    virtual wxString NetName( int aNet ) = 0;
 };
 
 /**
