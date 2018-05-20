@@ -105,6 +105,8 @@ static EDA_HOTKEY HkRouteTuneDiffPair( _HKI( "Tune Differential Pair Length (Mod
                                        HK_ROUTE_TUNE_DIFF_PAIR, '8' );
 static EDA_HOTKEY HkRouteTuneSkew( _HKI( "Tune Differential Pair Skew (Modern Toolset only)" ),
                                    HK_ROUTE_TUNE_SKEW, '9' );
+static EDA_HOTKEY HkRouteTuneSettings( _HKI( "Length Tuning Settings (Modern Toolset only)" ),
+                                       HK_ROUTE_TUNE_SETTINGS, 'L' );
 
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),

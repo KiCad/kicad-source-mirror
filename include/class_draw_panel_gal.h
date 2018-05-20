@@ -236,11 +236,14 @@ public:
         return BOX2I();
     }
 
+    /**
+     * Used to forward events to the canvas from popups, etc.
+     */
+    void OnEvent( wxEvent& aEvent );
 
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
-    void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
     void onLostFocus( wxFocusEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );

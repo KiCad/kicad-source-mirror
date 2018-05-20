@@ -57,9 +57,12 @@ public:
 protected:
     void updateSize();
 
+    void onCharHook( wxKeyEvent& aEvent );
+
     ///> Expire timer even handler
     void onExpire( wxTimerEvent& aEvent );
 
+    EDA_DRAW_FRAME* m_frame;
     wxPanel* m_panel;
     wxBoxSizer* m_topSizer;
     wxTimer m_expireTimer;

@@ -30,7 +30,9 @@
 #include <draw_frame.h>
 
 STATUS_POPUP::STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
-    wxPopupWindow( aParent ), m_expireTimer( this )
+        wxPopupWindow( aParent ),
+        m_frame( aParent ),
+        m_expireTimer( this )
 {
     m_panel = new wxPanel( this, wxID_ANY );
     m_panel->SetBackgroundColour( *wxLIGHT_GREY );
@@ -40,6 +42,27 @@ STATUS_POPUP::STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
     m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
     Connect( wxEVT_TIMER, wxTimerEventHandler( STATUS_POPUP::onExpire ), NULL, this );
+
+#ifdef __WXOSX_MAC__
+    // Key events from popups don't get put through the wxWidgets event system on OSX,
+    // so we have to fall back to the CHAR_HOOK to forwared hotkeys from the popup to
+    // the canvas / frame.
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( STATUS_POPUP::onCharHook ), nullptr, this );
+#endif
+}
+
+
+void STATUS_POPUP::onCharHook( wxKeyEvent& aEvent )
+{
+    // Key events from popups don't get put through the wxWidgets event system on OSX,
+    // so we have to fall back to the CHAR_HOOK to forward hotkeys from the popup to
+    // the canvas / frame.
+    aEvent.SetEventType( wxEVT_CHAR );
+
+    if( m_frame->IsGalCanvasActive() )
+        m_frame->GetGalCanvas()->OnEvent( aEvent );
+    else
+        m_frame->ProcessEvent( aEvent );
 }
 
 

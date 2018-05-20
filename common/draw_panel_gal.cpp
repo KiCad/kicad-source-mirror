@@ -96,7 +96,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     for( wxEventType eventType : events )
     {
-        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
+        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ),
                  NULL, m_eventDispatcher );
     }
 
@@ -401,7 +401,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 }
 
 
-void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
+void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 {
     if( m_lostFocus && m_stealsFocus )
         SetFocus();

@@ -167,7 +167,10 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
 int MEANDER_SHAPE::cornerRadius() const
 {
-    return (int64_t) spacing() * Settings().m_cornerRadiusPercentage / 200;
+    // TODO: fix diff-pair meandering so we can use non-100% radii
+    int rPercent = m_type == PNS_MODE_TUNE_DIFF_PAIR ? 100 : Settings().m_cornerRadiusPercentage;
+
+    return (int64_t) spacing() * rPercent / 200;
 }
 
 

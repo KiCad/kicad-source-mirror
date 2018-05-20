@@ -39,15 +39,21 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
     m_settings( aSettings ),
     m_mode( aMode )
 {
-    m_miterStyle->Enable( true );
-    m_radiusText->Enable( aMode != PNS::PNS_MODE_TUNE_DIFF_PAIR );
-    //m_minAmpl.Enable ( aMode != PNS_MODE_TUNE_DIFF_PAIR_SKEW );
+    if( aMode == PNS::PNS_MODE_TUNE_DIFF_PAIR )
+    {
+        // TODO: fix diff-pair meandering so we can use non-100% radii
+        m_radiusText->SetValue( wxT( "100" ) );
+        m_radiusText->Enable( false );
+    }
+    else
+    {
+        m_radiusText->SetValue( wxString::Format( wxT( "%i" ), m_settings.m_cornerRadiusPercentage ) );
+    }
 
     m_minAmpl.SetValue( m_settings.m_minAmplitude );
     m_maxAmpl.SetValue( m_settings.m_maxAmplitude );
 
     m_spacing.SetValue( m_settings.m_spacing );
-    m_radiusText->SetValue( wxString::Format( wxT( "%i" ), m_settings.m_cornerRadiusPercentage ) );
 
     m_miterStyle->SetSelection( m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND ? 1 : 0 );
 

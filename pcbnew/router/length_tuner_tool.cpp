@@ -151,8 +151,7 @@ void LENGTH_TUNER_TOOL::performTuning()
         return;
     }
 
-    PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>(
-        m_router->Placer() );
+    auto placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
 
     placer->UpdateSettings( m_savedMeanderSettings );
 
@@ -208,6 +207,13 @@ void LENGTH_TUNER_TOOL::performTuning()
             m_router->Move( end, NULL );
             updateStatusPopup( statusPopup );
         }
+        else if( evt->IsAction( &ACT_Settings ) )
+        {
+            statusPopup.Hide();
+            TOOL_EVENT dummy;
+            meanderSettingsDialog( dummy );
+            statusPopup.Show();
+        }
     }
 
     m_router->StopRouting();
@@ -241,8 +247,6 @@ void LENGTH_TUNER_TOOL::setTransitions()
     Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
-
-    Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog, ACT_Settings.MakeEvent() );
 }
 
 
@@ -278,6 +282,11 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
             updateStartItem( *evt );
             performTuning();
         }
+        else if( evt->IsAction( &ACT_Settings ) )
+        {
+            TOOL_EVENT dummy;
+            meanderSettingsDialog( dummy );
+        }
     }
 
     frame()->SetNoToolSelected();
@@ -294,16 +303,16 @@ int LENGTH_TUNER_TOOL::meanderSettingsDialog( const TOOL_EVENT& aEvent )
 {
     PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
 
-    if( !placer )
-        return 0;
-
-    PNS::MEANDER_SETTINGS settings = placer->MeanderSettings();
+    PNS::MEANDER_SETTINGS settings = placer ? placer->MeanderSettings() : m_savedMeanderSettings;
     DIALOG_PNS_LENGTH_TUNING_SETTINGS settingsDlg( frame(), settings, m_router->Mode() );
 
     if( settingsDlg.ShowModal() )
-        placer->UpdateSettings( settings );
+    {
+        if( placer )
+            placer->UpdateSettings( settings );
 
-    m_savedMeanderSettings = placer->MeanderSettings();
+        m_savedMeanderSettings = settings;
+    }
 
     return 0;
 }
