@@ -551,7 +551,7 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
             {
                 msg.Printf( _( "Footprint %s is locked, skipping removal.\n" ),
                             GetChars( module->GetReference() ) );
-                m_reporter->Report( msg, REPORTER::RPT_INFO );
+                m_reporter->Report( msg, REPORTER::RPT_WARNING );
                 continue;
             }
 
