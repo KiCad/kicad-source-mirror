@@ -223,7 +223,7 @@ static PARAM_CFG_ARRAY& cfg_params()
         CLR( "Color4DErcEEx",             LAYER_ERC_ERR,              COLOR4D( RED ) )
         CLR( "Color4DGridEx",             LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) )
         CLR( "Color4DBgCanvasEx",         LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) )
-        CLR( "Color4DBrighenedEx",        LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) )
+        CLR( "Color4DBrightenedEx",       LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) )
     }
 
     return ca;
