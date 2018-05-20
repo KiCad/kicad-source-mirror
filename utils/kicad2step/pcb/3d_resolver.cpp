@@ -388,22 +388,6 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         return tname;
     }
 
-    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the
-    // file either does not exist or the ENV_VAR is not defined
-    if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
-    {
-        if( !( m_errflags & ERRFLG_ENVPATH ) )
-        {
-            m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
-            errmsg.append( "\n" );
-            errmsg.append( tname );
-            wxLogMessage( "%s\n", errmsg.ToUTF8() );
-        }
-
-        return wxEmptyString;
-    }
-
     // at this point aFileName is:
     // a. an aliased shortened name or
     // b. cannot be determined
