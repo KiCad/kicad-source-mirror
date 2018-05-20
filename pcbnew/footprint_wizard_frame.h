@@ -39,8 +39,6 @@ class wxGrid;
 class wxGridEvent;
 class FOOTPRINT_EDIT_FRAME;
 
-// A helper class to display messages when building a footprint
-class FOOTPRINT_WIZARD_MESSAGES;
 
 enum WizardParameterColumnNames
 {
@@ -55,14 +53,15 @@ enum WizardParameterColumnNames
 class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 {
 private:
+    wxPanel*        m_parametersPanel;      ///< Panel for the page list and parameter grid
     wxListBox*      m_pageList;             ///< The list of pages
-    int             m_pageListWidth;        ///< width of the window
     wxGrid*         m_parameterGrid;        ///< The list of parameters
-    int             m_parameterGridWidth;   ///< size of the grid
     int             m_parameterGridPage;    ///< the page currently displayed by m_parameterGrid
                                             ///< it is most of time the m_pageList selection, but can differ
                                             ///< during transitions between pages.
-    FOOTPRINT_WIZARD_MESSAGES* m_messagesFrame;
+    wxTextCtrl*     m_buildMessageBox;
+
+    wxString        m_auiPerspective;       ///< Encoded string describing the AUI layout
 
 protected:
     wxString        m_wizardName;           ///< name of the current wizard
@@ -225,27 +224,5 @@ private:
 };
 
 
-// A miniframe to display messages from the builder
-class FOOTPRINT_WIZARD_MESSAGES: public wxMiniFrame
-{
-public:
-    FOOTPRINT_WIZARD_MESSAGES( FOOTPRINT_WIZARD_FRAME* aParent, wxConfigBase* aCfg );
-    ~FOOTPRINT_WIZARD_MESSAGES();
-    void PrintMessage( const wxString& aMessage );
-    void ClearScreen();
-    void SaveSettings();
-    void LoadSettings();
-
-private:
-    wxTextCtrl* m_messageWindow;
-    wxPoint m_position;
-    wxSize m_size;
-    wxConfigBase* m_config;
-    bool m_canClose;        // false to veto a close event, true to allow it
-
-    void OnCloseMsgWindow( wxCloseEvent& aEvent );
-
-    DECLARE_EVENT_TABLE()
-};
 
 #endif    // FOOTPRINT_WIZARD_FRM_H_
