@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_footprint_wizard_list_base.h"
@@ -47,7 +47,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	// Rows
 	m_footprintGeneratorsGrid->AutoSizeRows();
 	m_footprintGeneratorsGrid->EnableDragRowSize( true );
-	m_footprintGeneratorsGrid->SetRowLabelSize( 1 );
+	m_footprintGeneratorsGrid->SetRowLabelSize( 0 );
 	m_footprintGeneratorsGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -95,14 +95,11 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	wxBoxSizer* bSizerLower;
 	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
 	
-	
-	bSizerLower->Add( 0, 0, 1, wxEXPAND, 5 );
-	
 	m_buttonUpdateModules = new wxButton( this, wxID_ANY, _("Update Python Modules"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLower->Add( m_buttonUpdateModules, 0, wxALL, 5 );
+	bSizerLower->Add( m_buttonUpdateModules, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	bSizerLower->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
+	bSizerLower->Add( 0, 0, 1, wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -114,7 +111,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	bSizerLower->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
 	
 	
-	bSizerMain->Add( bSizerLower, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerLower, 0, wxEXPAND|wxLEFT, 10 );
 	
 	
 	this->SetSizer( bSizerMain );
