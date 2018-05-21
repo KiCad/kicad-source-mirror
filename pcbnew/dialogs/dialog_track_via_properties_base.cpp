@@ -251,6 +251,9 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	
 	m_MainSizer->Add( m_sbViaSizer, 0, wxALL|wxEXPAND, 5 );
 	
+	
+	m_MainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	m_StdButtons = new wxStdDialogButtonSizer();
 	m_StdButtonsOK = new wxButton( this, wxID_OK );
 	m_StdButtons->AddButton( m_StdButtonsOK );
