@@ -36,6 +36,7 @@
 #include "kicadpcb.h"
 
 #include "3d_resolver.h"
+#include "../../../include/trace_helpers.h"
 
 // configuration file version
 #define CFGFILE_VERSION 1
@@ -388,6 +389,23 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         return tname;
     }
 
+    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the
+    // file either does not exist or the ENV_VAR is not defined
+    if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
+    {
+        if( !( m_errflags & ERRFLG_ENVPATH ) )
+        {
+            m_errflags |= ERRFLG_ENVPATH;
+            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
+            errmsg.append( "\n" );
+            errmsg.append( tname );
+            errmsg.append( "\n" );
+            wxLogTrace( tracePathsAndFiles, errmsg );
+        }
+
+        return wxEmptyString;
+    }
+
     // at this point aFileName is:
     // a. an aliased shortened name or
     // b. cannot be determined
@@ -459,7 +477,8 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = "[3D File Resolver] No such path";
             errmsg.append( "\n" );
             errmsg.append( tname );
-            wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
+            errmsg.append( "\n" );
+            wxLogTrace( tracePathsAndFiles, errmsg );
         }
 
         return wxEmptyString;
@@ -496,7 +515,8 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         wxString errmsg = "[3D File Resolver] No such path; ensure the path alias is defined";
         errmsg.append( "\n" );
         errmsg.append( tname.substr( 1 ) );
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
+        errmsg.append( "\n" );
+        wxLogTrace( tracePathsAndFiles, errmsg );
     }
 
     return wxEmptyString;
@@ -528,10 +548,11 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
         // suppress the message if the missing pathvar is the legacy KISYS3DMOD variable
         if( aPath.m_pathvar != "${KISYS3DMOD}" && aPath.m_pathvar != "$(KISYS3DMOD)" )
         {
-            wxString msg = _( "The given path does not exist" );
-            msg.append( "\n" );
-            msg.append( tpath.m_pathvar );
-            wxLogMessage( "%s\n", msg.ToUTF8() );
+            wxString errmsg = _( "The given path does not exist" );
+            errmsg.append( "\n" );
+            errmsg.append( tpath.m_pathvar );
+            errmsg.append( "\n" );
+            wxLogTrace( tracePathsAndFiles, errmsg );
         }
 
         tpath.m_pathexp.clear();

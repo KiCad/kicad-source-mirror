@@ -29,6 +29,7 @@
 #include <wx/log.h>
 #include <wx/msgdlg.h>
 #include <pgm_base.h>
+#include <trace_helpers.h>
 
 #include "common.h"
 #include "3d_filename_resolver.h"
@@ -307,6 +308,23 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         return tname;
     }
 
+    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the
+    // file either does not exist or the ENV_VAR is not defined
+    if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
+    {
+        if( !( m_errflags & ERRFLG_ENVPATH ) )
+        {
+            m_errflags |= ERRFLG_ENVPATH;
+            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
+            errmsg.append( "\n" );
+            errmsg.append( tname );
+            errmsg.append( "\n" );
+            wxLogTrace( tracePathsAndFiles, errmsg );
+        }
+
+        return wxEmptyString;
+    }
+
     // at this point aFileName is:
     // a. an aliased shortened name or
     // b. cannot be determined
@@ -375,7 +393,8 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = "[3D File Resolver] No such path";
             errmsg.append( "\n" );
             errmsg.append( tname );
-            wxLogTrace( MASK_3D_RESOLVER, errmsg );
+            errmsg.append( "\n" );
+            wxLogTrace( tracePathsAndFiles, errmsg );
         }
 
         return wxEmptyString;
@@ -411,7 +430,8 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         wxString errmsg = "[3D File Resolver] No such path; ensure the path alias is defined";
         errmsg.append( "\n" );
         errmsg.append( tname.substr( 1 ) );
-        wxLogTrace( MASK_3D_RESOLVER, errmsg );
+        errmsg.append( "\n" );
+        wxLogTrace( tracePathsAndFiles, errmsg );
     }
 
     return wxEmptyString;
