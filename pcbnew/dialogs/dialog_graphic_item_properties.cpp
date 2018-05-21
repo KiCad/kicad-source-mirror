@@ -325,9 +325,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
     {
     case S_ARC:
         // Check angle of arc.
-        if( m_AngleValue == 0.0 )
+        double angle;
+        m_AngleCtrl->GetValue().ToDouble( &angle );
+
+        if( angle == 0.0 )
         {
-            error_msgs.Add( _( "The arc angle must be greater than zero." ) );
+            error_msgs.Add( _( "The arc angle cannot be zero." ) );
         }
 
         // Fall through.

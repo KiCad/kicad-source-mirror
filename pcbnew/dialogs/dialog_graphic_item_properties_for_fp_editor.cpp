@@ -74,6 +74,16 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void OnLayerChoice( wxCommandEvent& event );
+
+    void OnInitDlg( wxInitDialogEvent& event ) override
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
+
     bool Validate() override;
 };
 
@@ -156,18 +166,20 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
     {
     case S_CIRCLE:
         SetTitle( _( "Circle Properties" ) );
-        m_StartPointXLabel->SetLabel( _( "Center X" ) );
-        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
-        m_EndPointXLabel->SetLabel( _( "Point X" ) );
-        m_EndPointYLabel->SetLabel( _( "Point Y" ) );
+        m_StartPointXLabel->SetLabel( _( "Center X:" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y:" ) );
+        m_EndPointXLabel->SetLabel( _( "Radius:" ) );
+        m_EndPointYLabel->Show( false );
+        m_EndPointYUnit->Show( false );
+        m_EndY_Ctrl->Show( false );
         break;
 
     case S_ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_StartPointXLabel->SetLabel( _( "Center X" ) );
-        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
-        m_EndPointXLabel->SetLabel( _( "Start Point X" ) );
-        m_EndPointYLabel->SetLabel( _( "Start Point Y" ) );
+        m_StartPointXLabel->SetLabel( _( "Center X:" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y:" ) );
+        m_EndPointXLabel->SetLabel( _( "Start Point X:" ) );
+        m_EndPointYLabel->SetLabel( _( "Start Point Y:" ) );
 
         m_AngleValue = m_item->GetAngle() / 10.0;
         break;
@@ -189,9 +201,15 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
 
     PutValueInLocalUnits( *m_Center_StartYCtrl, m_item->GetStart().y );
 
-    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetEnd().x );
-
-    PutValueInLocalUnits( *m_EndY_Ctrl, m_item->GetEnd().y );
+    if(  m_item->GetShape() == S_CIRCLE )
+    {
+        PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetRadius() );
+    }
+    else
+    {
+        PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetEnd().x );
+        PutValueInLocalUnits( *m_EndY_Ctrl, m_item->GetEnd().y );
+    }
 
     PutValueInLocalUnits( *m_ThicknessCtrl, m_item->GetWidth() );
 
@@ -252,12 +270,21 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->SetStart( coord );
     m_item->SetStart0( coord );
 
-    msg = m_EndX_Radius_Ctrl->GetValue();
-    coord.x = ValueFromString( g_UserUnit, msg );
-    msg = m_EndY_Ctrl->GetValue();
-    coord.y = ValueFromString( g_UserUnit, msg );
-    m_item->SetEnd( coord );
-    m_item->SetEnd0( coord );
+    if( m_item->GetShape() == S_CIRCLE )
+    {
+        msg = m_EndX_Radius_Ctrl->GetValue();
+        m_item->SetEnd( coord + wxPoint( ValueFromString( g_UserUnit, msg ), 0 ) );
+        m_item->SetEnd0( m_item->GetEnd() );
+    }
+    else
+    {
+        msg = m_EndX_Radius_Ctrl->GetValue();
+        coord.x = ValueFromString( g_UserUnit, msg );
+        msg = m_EndY_Ctrl->GetValue();
+        coord.y = ValueFromString( g_UserUnit, msg );
+        m_item->SetEnd( coord );
+        m_item->SetEnd0( coord );
+    }
 
     msg = m_ThicknessCtrl->GetValue();
     m_item->SetWidth( ValueFromString( g_UserUnit, msg ) );
@@ -303,19 +330,19 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
         // Check angle of arc.
         double angle;
         m_AngleCtrl->GetValue().ToDouble( &angle );
-        angle = NormalizeAngle360Max( angle );
 
-        if( angle == 0 )
+        if( angle == 0.0 )
         {
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
         }
 
         // Fall through.
     case S_CIRCLE:
-
         // Check radius.
         if( (startx == endx) && (starty == endy) )
+        {
             error_msgs.Add( _( "The radius must be greater than zero." ) );
+        }
 
         break;
 
@@ -323,10 +350,11 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
         break;
 
     default:
-
         // Check start and end are not the same.
         if( (startx == endx) && (starty == endy) )
+        {
             error_msgs.Add( _( "The start and end points cannot be the same." ) );
+        }
 
         break;
     }
@@ -352,7 +380,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
 
     if( error_msgs.GetCount() )
     {
-        HTML_MESSAGE_BOX dlg( this, _( "Error list" ) );
+        HTML_MESSAGE_BOX dlg( this, _( "Error List" ) );
         dlg.ListSet( error_msgs );
         dlg.ShowModal();
     }
