@@ -36,7 +36,6 @@
 #include "kicadpcb.h"
 
 #include "3d_resolver.h"
-#include "../../../include/trace_helpers.h"
 
 // configuration file version
 #define CFGFILE_VERSION 1
@@ -345,10 +344,10 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     // first attempt to use the name as specified:
     wxString tname = aFileName;
 
-    #ifdef _WIN32
+#ifdef _WIN32
     // translate from KiCad's internal UNIX-like path to MSWin paths
     tname.Replace( "/", "\\" );
-    #endif
+#endif
 
     // Note: variable expansion must preferably be performed via a
     // threadsafe wrapper for the getenv() system call. If we allow the
@@ -399,8 +398,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
             errmsg.append( "\n" );
             errmsg.append( tname );
-            errmsg.append( "\n" );
-            wxLogTrace( tracePathsAndFiles, errmsg );
+            wxLogMessage( "%s\n", errmsg.ToUTF8() );
         }
 
         return wxEmptyString;
@@ -477,8 +475,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = "[3D File Resolver] No such path";
             errmsg.append( "\n" );
             errmsg.append( tname );
-            errmsg.append( "\n" );
-            wxLogTrace( tracePathsAndFiles, errmsg );
+            wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
         }
 
         return wxEmptyString;
@@ -515,8 +512,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         wxString errmsg = "[3D File Resolver] No such path; ensure the path alias is defined";
         errmsg.append( "\n" );
         errmsg.append( tname.substr( 1 ) );
-        errmsg.append( "\n" );
-        wxLogTrace( tracePathsAndFiles, errmsg );
+        wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
     }
 
     return wxEmptyString;
@@ -532,13 +528,13 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
 
     S3D_ALIAS tpath = aPath;
 
-    #ifdef _WIN32
+#ifdef _WIN32
     while( tpath.m_pathvar.EndsWith( "\\" ) )
         tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
-    #else
+#else
     while( tpath.m_pathvar.EndsWith( "/" ) &&  tpath.m_pathvar.length() > 1 )
         tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
-    #endif
+#endif
 
     wxFileName path( tpath.m_pathvar, "" );
     path.Normalize();
@@ -548,11 +544,10 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
         // suppress the message if the missing pathvar is the legacy KISYS3DMOD variable
         if( aPath.m_pathvar != "${KISYS3DMOD}" && aPath.m_pathvar != "$(KISYS3DMOD)" )
         {
-            wxString errmsg = _( "The given path does not exist" );
-            errmsg.append( "\n" );
-            errmsg.append( tpath.m_pathvar );
-            errmsg.append( "\n" );
-            wxLogTrace( tracePathsAndFiles, errmsg );
+            wxString msg = _( "The given path does not exist" );
+            msg.append( "\n" );
+            msg.append( tpath.m_pathvar );
+            wxLogMessage( "%s\n", msg.ToUTF8() );
         }
 
         tpath.m_pathexp.clear();
@@ -561,13 +556,13 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
     {
         tpath.m_pathexp = path.GetFullPath();
 
-        #ifdef _WIN32
+#ifdef _WIN32
         while( tpath.m_pathexp.EndsWith( "\\" ) )
         tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
-        #else
+#else
         while( tpath.m_pathexp.EndsWith( "/" ) &&  tpath.m_pathexp.length() > 1 )
             tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
-        #endif
+#endif
     }
 
     wxString pname = path.GetPath();
@@ -724,7 +719,7 @@ bool S3D_RESOLVER::writePathList( void )
     std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
     while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" )
-        || sPL->m_alias.StartsWith( "$(" ) ) )
+                           || sPL->m_alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
@@ -734,8 +729,8 @@ bool S3D_RESOLVER::writePathList( void )
     if( sPL == ePL )
     {
         wxMessageDialog md( NULL,
-            _( "3D search path list is empty;\ncontinue to write empty file?" ),
-            _( "Write 3D search path list" ), wxYES_NO );
+                            _( "3D search path list is empty;\ncontinue to write empty file?" ),
+                            _( "Write 3D search path list" ), wxYES_NO );
 
         if( md.ShowModal() == wxID_YES )
         {
@@ -744,7 +739,7 @@ bool S3D_RESOLVER::writePathList( void )
             if( !cfgFile.is_open() )
             {
                 wxMessageBox( _( "Could not open configuration file" ),
-                    _( "Write 3D search path list" ) );
+                              _( "Write 3D search path list" ) );
 
                 return false;
             }
@@ -925,10 +920,10 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
         {
             fname = fname.substr( fps.size() );
 
-            #ifdef _WIN32
+#ifdef _WIN32
             // ensure only the '/' separator is used in the internal name
             fname.Replace( "\\", "/" );
-            #endif
+#endif
 
             if( sL->m_alias.StartsWith( "${" ) || sL->m_alias.StartsWith( "$(" ) )
             {
@@ -972,7 +967,7 @@ const std::list< S3D_ALIAS >* S3D_RESOLVER::GetPaths( void )
 
 
 bool S3D_RESOLVER::SplitAlias( const wxString& aFileName,
-    wxString& anAlias, wxString& aRelPath )
+                               wxString& anAlias, wxString& aRelPath )
 {
     anAlias.clear();
     aRelPath.clear();
@@ -1107,7 +1102,7 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
     size_t pos0 = aFileName.find( ':' );
 
     // ensure that the file separators suit the current platform
-    #ifdef __WINDOWS__
+#ifdef __WINDOWS__
     filename.Replace( "/", "\\" );
 
     // if we see the :\ pattern then it must be a drive designator
@@ -1122,9 +1117,9 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
         if( pos1 != wxString::npos )
             pos0 = wxString::npos;
     }
-    #else
+#else
     filename.Replace( "\\", "/" );
-    #endif
+#endif
 
     // names may not end with ':'
     if( pos0 == aFileName.length() -1 )
