@@ -19,6 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+
 #include "wx_html_report_panel.h"
 
 #include <wildcards_and_files_ext.h>
@@ -62,15 +64,19 @@ REPORTER& WX_HTML_REPORT_PANEL::Reporter()
 }
 
 
-void WX_HTML_REPORT_PANEL::Report( const wxString& aText, REPORTER::SEVERITY aSeverity )
+void WX_HTML_REPORT_PANEL::Report( const wxString& aText, REPORTER::SEVERITY aSeverity,
+        REPORTER::LOCATION aLocation )
 {
     REPORT_LINE line;
     line.message = aText;
     line.severity = aSeverity;
 
-    m_report.push_back( line );
-
-    m_html += generateHtml( line );
+    if( aLocation == REPORTER::LOC_HEAD )
+        m_reportHead.push_back( line );
+    else if( aLocation == REPORTER::LOC_TAIL )
+        m_reportTail.push_back( line );
+    else
+        m_report.push_back( line );
 
     if( !m_lazyUpdate )
     {
@@ -86,9 +92,29 @@ void WX_HTML_REPORT_PANEL::SetLazyUpdate( bool aLazyUpdate )
 }
 
 
-void WX_HTML_REPORT_PANEL::Flush()
+void WX_HTML_REPORT_PANEL::Flush( bool aSort )
 {
-    m_htmlView->SetPage( addHeader( m_html ) );
+    wxString html;
+
+    if( aSort )
+    {
+        std::sort( m_report.begin(), m_report.end(),
+                []( REPORT_LINE& a, REPORT_LINE& b)
+                {
+                    return a.severity < b.severity;
+                });
+    }
+
+    for( auto line : m_reportHead )
+        html += generateHtml( line );
+
+    for( auto line : m_report )
+        html += generateHtml( line );
+
+    for( auto line : m_reportTail )
+        html += generateHtml( line );
+
+    m_htmlView->SetPage( addHeader( html ) );
     scrollToBottom();
 }
 
@@ -189,20 +215,6 @@ void WX_HTML_REPORT_PANEL::updateBadges()
     }
     else
         m_warningsBadge->Show( false );
-}
-
-
-void WX_HTML_REPORT_PANEL::refreshView()
-{
-    wxString html;
-
-    for( const REPORT_LINE& l : m_report )
-    {
-        html += generateHtml( l );
-    }
-
-    m_htmlView->SetPage( addHeader( html ) );
-    scrollToBottom();
 }
 
 
@@ -310,7 +322,7 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
         m_showAll = false;
 
     syncCheckboxes();
-    refreshView();
+    Flush( true );
 }
 
 
@@ -326,45 +338,45 @@ void WX_HTML_REPORT_PANEL::syncCheckboxes()
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowWarnings( wxCommandEvent& event )
 {
-    if ( event.IsChecked() )
+    if( event.IsChecked() )
         m_severities |= REPORTER::RPT_WARNING;
     else
         m_severities &= ~REPORTER::RPT_WARNING;
 
-     refreshView();
+    Flush( true );
 }
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowErrors( wxCommandEvent& event )
 {
-    if ( event.IsChecked() )
-         m_severities |= REPORTER::RPT_ERROR;
-     else
-         m_severities &= ~REPORTER::RPT_ERROR;
+    if( event.IsChecked() )
+        m_severities |= REPORTER::RPT_ERROR;
+    else
+        m_severities &= ~REPORTER::RPT_ERROR;
 
-     refreshView();
+    Flush( true );
 }
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowInfos( wxCommandEvent& event )
 {
-    if ( event.IsChecked() )
-         m_severities |= REPORTER::RPT_INFO;
-     else
-         m_severities &= ~REPORTER::RPT_INFO;
+    if( event.IsChecked() )
+        m_severities |= REPORTER::RPT_INFO;
+    else
+        m_severities &= ~REPORTER::RPT_INFO;
 
-     refreshView();
+    Flush( true );
 }
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowActions( wxCommandEvent& event )
 {
-    if ( event.IsChecked() )
-         m_severities |= REPORTER::RPT_ACTION;
-     else
-         m_severities &= ~REPORTER::RPT_ACTION;
+    if( event.IsChecked() )
+        m_severities |= REPORTER::RPT_ACTION;
+    else
+        m_severities &= ~REPORTER::RPT_ACTION;
 
-     refreshView();
+    Flush( true );
 }
 
 
@@ -406,8 +418,9 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
 
 void WX_HTML_REPORT_PANEL::Clear()
 {
-    m_html.clear();
     m_report.clear();
+    m_reportHead.clear();
+    m_reportTail.clear();
 }
 
 

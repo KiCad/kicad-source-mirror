@@ -188,14 +188,14 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 
     wxString msg;
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
-    reporter.Report( msg, REPORTER::RPT_INFO );
+    reporter.ReportHead( msg, REPORTER::RPT_INFO );
 
     if( m_Select_By_Timestamp->GetSelection() == 1 )
         msg = _( "Using time stamps to match components and footprints.\n" );
     else
         msg = _( "Using references to match components and footprints.\n" );
 
-    reporter.Report( msg, REPORTER::RPT_INFO );
+    reporter.ReportHead( msg, REPORTER::RPT_INFO );
     m_MessageWindow->SetLazyUpdate( true ); // use a "lazy" update to speed up the creation of the report
                                             // (The window is not updated for each message)
 
@@ -208,7 +208,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
                               m_checkDryRun->GetValue() );
     // The creation of the report was made without window update:
     // the full page must be displayed
-    m_MessageWindow->Flush();
+    m_MessageWindow->Flush( true );
 }
 
 

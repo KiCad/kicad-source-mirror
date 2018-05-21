@@ -110,7 +110,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         {
             wxString msg;
             msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
-            aReporter.Report( msg, REPORTER::RPT_WARNING );
+            aReporter.ReportTail( msg, REPORTER::RPT_WARNING );
         }
     }
 
@@ -228,7 +228,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // Final control (just in case ... ).
     if( !CheckAnnotate( aReporter, !aAnnotateSchematic ) )
-        aReporter.Report( _( "Annotation complete." ), REPORTER::RPT_ACTION );
+        aReporter.ReportTail( _( "Annotation complete." ), REPORTER::RPT_ACTION );
 
     OnModify();
 

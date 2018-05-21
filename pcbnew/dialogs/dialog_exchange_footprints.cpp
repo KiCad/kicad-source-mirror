@@ -310,7 +310,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClick( wxCommandEvent& event )
     bool result = false;
 
     m_MessageWindow->Clear();
-    m_MessageWindow->Flush();
+    m_MessageWindow->Flush( true );
 
     if( getMatchMode() == ID_MATCH_FP_REF && m_currentModule )
         result = changeCurrentFootprint();
@@ -334,7 +334,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::RebuildCmpList( wxCommandEvent& event )
     wxString    msg;
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->Clear();
-    m_MessageWindow->Flush();
+    m_MessageWindow->Flush( true );
 
     // Build the .cmp file name from the board name
     wxFileName fn = m_parent->GetBoard()->GetFileName();

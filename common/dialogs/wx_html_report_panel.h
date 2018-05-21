@@ -52,8 +52,14 @@ public:
     ///> returns the reporter object that reports to this panel
     REPORTER& Reporter();
 
-    ///> reports a string directly.
-    void Report( const wxString& aText, REPORTER::SEVERITY aSeverity );
+    /**
+     * Reports the string
+     * @param aText string message to report
+     * @param aSeverity string classification level bitfield
+     * @param aLocation REPORTER::LOCATION enum for placement of message
+     */
+    void Report( const wxString& aText, REPORTER::SEVERITY aSeverity,
+            REPORTER::LOCATION aLocation = REPORTER::LOC_BODY );
 
     ///> clears the report panel
     void Clear();
@@ -70,7 +76,8 @@ public:
     void SetLazyUpdate( bool aLazyUpdate );
 
     ///> Forces updating the HTML page, after the report is built in lazy mode
-    void Flush();
+    ///> If aSort = true, the body messages will be ordered by severity
+    void Flush( bool aSort = false );
 
     ///> Set the visible severity filter.
     ///> if aSeverities < 0 the m_showAll option is set
@@ -94,7 +101,6 @@ private:
     wxString generatePlainText( const REPORT_LINE& aLine );
     void updateBadges();
 
-    void refreshView();
     void scrollToBottom();
     void syncCheckboxes();
 
@@ -111,6 +117,12 @@ private:
     ///> copy of the report, stored for filtering
     REPORT_LINES m_report;
 
+    ///> Lines to print at the very end of the report, regardless of sorting
+    REPORT_LINES m_reportTail;
+
+    ///> Lines to print at the very beginning of the report, regardless of sorting
+    REPORT_LINES m_reportHead;
+
     ///> the reporter
     WX_HTML_PANEL_REPORTER m_reporter;
 
@@ -119,8 +131,6 @@ private:
 
     ///> show all messages flag (overrides m_severities)
     bool m_showAll;
-
-    wxString m_html;
 
     bool m_lazyUpdate;
 };

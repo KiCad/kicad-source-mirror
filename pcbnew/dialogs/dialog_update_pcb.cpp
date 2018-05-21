@@ -95,9 +95,9 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     {
         wxString msg;
 
-        reporter.Report( _( "Failed to load one or more footprints. Please add the missing libraries in PCBNew configuration. "
+        reporter.ReportTail( _( "Failed to load one or more footprints. Please add the missing libraries in PCBNew configuration. "
                             "The PCB will not update completely." ), REPORTER::RPT_ERROR );
-        reporter.Report( error.What(), REPORTER::RPT_INFO );
+        reporter.ReportTail( error.What(), REPORTER::RPT_INFO );
     }
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
@@ -109,7 +109,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetDeleteSinglePadNets( false );
     updater.UpdateNetlist( *m_netlist );
 
-    m_messagePanel->Flush();
+    m_messagePanel->Flush( true );
 
     if( aDryRun )
         return;

@@ -475,7 +475,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( m_parent->CheckAnnotate( aReporter, false ) )
     {
         if( aReporter.HasMessage() )
-            aReporter.Report( _( "Annotation required!" ), REPORTER::RPT_ERROR );
+            aReporter.ReportTail( _( "Annotation required!" ), REPORTER::RPT_ERROR );
 
         return;
     }
@@ -624,7 +624,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     m_parent->GetCanvas()->Refresh();
 
     // Display message
-    aReporter.Report( _( "Finished" ), REPORTER::RPT_INFO );
+    aReporter.ReportTail( _( "Finished" ), REPORTER::RPT_INFO );
 
     if( m_writeErcFile )
     {

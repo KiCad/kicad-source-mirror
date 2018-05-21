@@ -223,7 +223,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
                                   (ANNOTATE_OPTION_T) GetAnnotateAlgo(), GetStartNumber(),
                                   GetResetItems() , true, GetLockUnits(), reporter );
 
-    m_MessageWindow->Flush();                   // Now update to show all messages
+    m_MessageWindow->Flush( true );                   // Now update to show all messages
 
     m_Parent->GetCanvas()->Refresh();
 

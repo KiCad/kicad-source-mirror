@@ -214,10 +214,10 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             {
                 msg.Printf( _( "Failed to write project symbol library table. Error:\n  %s" ),
                             ioe.What() );
-                aReporter.Report( msg, REPORTER::RPT_ERROR );
+                aReporter.ReportTail( msg, REPORTER::RPT_ERROR );
             }
 
-            aReporter.Report( _( "Created project symbol library table.\n" ), REPORTER::RPT_INFO );
+            aReporter.ReportTail( _( "Created project symbol library table.\n" ), REPORTER::RPT_INFO );
         }
     }
 }

@@ -774,15 +774,15 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     }
 
     // Update the ratsnest
-    m_reporter->Report( wxT( "" ), REPORTER::RPT_ACTION );
-    m_reporter->Report( wxT( "" ), REPORTER::RPT_ACTION );
+    m_reporter->ReportTail( wxT( "" ), REPORTER::RPT_ACTION );
+    m_reporter->ReportTail( wxT( "" ), REPORTER::RPT_ACTION );
 
     msg.Printf( _( "Total warnings: %d, errors: %d." ), m_warningCount, m_errorCount );
-    m_reporter->Report( msg, REPORTER::RPT_ACTION );
+    m_reporter->ReportTail( msg, REPORTER::RPT_ACTION );
 
     if( m_errorCount )
     {
-        m_reporter->Report( _( "Errors occurred during the netlist update. Unless you "
+        m_reporter->ReportTail( _( "Errors occurred during the netlist update. Unless you "
                                "fix them, your board will not be consistent with the schematics." ),
                             REPORTER::RPT_ERROR );
 
@@ -790,7 +790,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     }
     else
     {
-        m_reporter->Report( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
+        m_reporter->ReportTail( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
     }
 
     return true;

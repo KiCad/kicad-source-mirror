@@ -114,16 +114,14 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
 
             msg << _( "Run command:" ) << wxT( "\n" ) << commandLine << wxT( "\n\n" );
 
-            aReporter->Report( msg, REPORTER::RPT_ACTION );
+            aReporter->ReportHead( msg, REPORTER::RPT_ACTION );
 
             if( diag != 0 )
-                aReporter->Report( wxString::Format(
+                aReporter->ReportTail( wxString::Format(
                                     _("Command error. Return code %d" ), diag ),
                                     REPORTER::RPT_ERROR );
             else
-                aReporter->Report( _( "Success" ), REPORTER::RPT_INFO );
-
-            *aReporter << wxT("\n");
+                aReporter->ReportTail( _( "Success" ), REPORTER::RPT_INFO );
 
             if( output.GetCount() )
             {
