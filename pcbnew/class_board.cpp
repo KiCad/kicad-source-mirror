@@ -2727,9 +2727,9 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     {
         std::vector<unsigned int> padCount( connAlgo->NetCount() );
 
-        for( const auto cnItem : connAlgo->PadList() )
+        for( const auto cnItem : connAlgo->ItemList() )
         {
-            if( !cnItem->Valid() )
+            if( !cnItem->Valid() || cnItem->Parent()->Type() != PCB_PAD_T )
                 continue;
 
             int net = cnItem->Parent()->GetNetCode();

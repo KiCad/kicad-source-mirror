@@ -43,6 +43,7 @@
 #include <deque>
 #include <intrusive_list.h>
 
+#include <connectivity_rtree.h>
 #include <connectivity_data.h>
 
 class CN_ITEM;
@@ -286,6 +287,9 @@ private:
     ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
     bool m_dirty;
 
+    ///> bounding box for the item
+    BOX2I m_bbox;
+
 public:
     void Dump();
 
@@ -301,11 +305,9 @@ public:
 
     virtual ~CN_ITEM() {};
 
-    CN_ANCHOR_PTR AddAnchor( const VECTOR2I& aPos )
+    void AddAnchor( const VECTOR2I& aPos )
     {
-        m_anchors.emplace_back( std::make_shared<CN_ANCHOR>( aPos, this ) );
-        //printf("%p add %d\n", this, m_anchors.size() );
-        return m_anchors.back();
+        m_anchors.emplace_back( std::make_unique<CN_ANCHOR>( aPos, this ) );
     }
 
     CN_ANCHORS& Anchors()
@@ -331,6 +333,16 @@ public:
     bool Dirty() const
     {
         return m_dirty;
+    }
+
+    const BOX2I BBox()
+    {
+        if( m_dirty )
+        {
+            EDA_RECT box = m_parent->GetBoundingBox();
+            m_bbox = BOX2I( box.GetPosition(), box.GetSize() );
+        }
+        return m_bbox;
     }
 
     BOARD_CONNECTED_ITEM* Parent() const
@@ -407,45 +419,23 @@ class CN_LIST
 {
 private:
     bool m_dirty;
-    std::vector<CN_ANCHOR_PTR> m_anchors;
-    CN_ANCHORS m_layer_anchors[PCB_LAYER_ID_COUNT];
+    bool m_hasInvalid;
+
+    CN_RTREE<CN_ITEM*> m_index;
 
 protected:
     std::vector<CN_ITEM*> m_items;
 
-    void addAnchor( VECTOR2I pos, CN_ITEM* item )
+    void addItemtoTree( CN_ITEM* item )
     {
-        CN_ANCHOR_PTR new_anchor = item->AddAnchor( pos );
-        m_anchors.push_back( new_anchor );
-
-        for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
-        {
-            if( ( item->Parent()->GetLayerSet() & LSET( 1, i ) ).any() )
-                m_layer_anchors[i].push_back( new_anchor );
-        }
-    }
-
-private:
-
-    void sort()
-    {
-        if( m_dirty )
-        {
-            std::sort( m_anchors.begin(), m_anchors.end() );
-
-            for( auto i = 0; i < PCB_LAYER_ID_COUNT; i++ )
-            {
-                std::sort( m_layer_anchors[i].begin(), m_layer_anchors[i].end() );
-            }
-
-            m_dirty = false;
-        }
+        m_index.Insert( item );
     }
 
 public:
     CN_LIST()
     {
         m_dirty = false;
+        m_hasInvalid = false;
     }
 
     void Clear()
@@ -454,6 +444,7 @@ public:
             delete item;
 
         m_items.clear();
+        m_index.RemoveAll();
     }
 
     using ITER = decltype(m_items)::iterator;
@@ -463,13 +454,13 @@ public:
 
     CN_ITEM* operator[] ( int aIndex ) { return m_items[aIndex]; }
 
-    std::vector<CN_ANCHOR_PTR>& Anchors() { return m_anchors; }
-
     template <class T>
-    void FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, LSET aLayers = LSET::AllLayersMask(), bool aDirtyOnly = false );
+    void FindNearby( CN_ITEM *aItem, T aFunc );
 
-    template <class T>
-    void FindNearby( BOX2I aBBox, T aFunc, LSET aLayers = LSET::AllLayersMask(), bool aDirtyOnly = false );
+    void SetHasInvalid( bool aInvalid = true )
+    {
+        m_hasInvalid = aInvalid;
+    }
 
     void SetDirty( bool aDirty = true )
     {
@@ -479,12 +470,6 @@ public:
     bool IsDirty() const
     {
         return m_dirty;
-    }
-
-    void ClearConnections()
-    {
-        for( auto& anchor : m_anchors )
-            anchor->Item()->ClearConnections();
     }
 
     void RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage );
@@ -509,52 +494,35 @@ public:
     {
         return m_items.size();
     }
-};
 
-
-class CN_PAD_LIST : public CN_LIST
-{
-public:
     CN_ITEM* Add( D_PAD* pad )
     {
         auto item = new CN_ITEM( pad, false, 2 );
-
-        addAnchor( pad->ShapePos(), item );
+        item->AddAnchor( pad->ShapePos() );
+        addItemtoTree( item );
         m_items.push_back( item );
-
         SetDirty();
         return item;
     }
-};
 
-
-class CN_TRACK_LIST : public CN_LIST
-{
-public:
     CN_ITEM* Add( TRACK* track )
     {
         auto item = new CN_ITEM( track, true );
-
         m_items.push_back( item );
-
-        addAnchor( track->GetStart(), item );
-        addAnchor( track->GetEnd(), item );
+        item->AddAnchor( track->GetStart() );
+        item->AddAnchor( track->GetEnd() );
+        addItemtoTree( item );
         SetDirty();
-
         return item;
     }
-};
 
-
-class CN_VIA_LIST : public CN_LIST
-{
-public:
     CN_ITEM* Add( VIA* via )
     {
         auto item = new CN_ITEM( via, true );
 
         m_items.push_back( item );
-        addAnchor( via->GetStart(), item );
+        item->AddAnchor( via->GetStart() );
+        addItemtoTree( item );
         SetDirty();
         return item;
     }
@@ -624,9 +592,10 @@ public:
             const auto& outline = zone->GetFilledPolysList().COutline( j );
 
             for( int k = 0; k < outline.PointCount(); k++ )
-                addAnchor( outline.CPoint( k ), zitem );
+                zitem->AddAnchor( outline.CPoint( k ) );
 
             m_items.push_back( zitem );
+            addItemtoTree( zitem );
             rv.push_back( zitem );
             SetDirty();
         }
@@ -637,39 +606,6 @@ public:
     template <class T>
     void FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly = false );
 };
-
-
-template <class T>
-void CN_LIST::FindNearby( BOX2I aBBox, T aFunc, LSET aLayers, bool aDirtyOnly )
-{
-    sort();
-
-    CN_ANCHORS *anchor_set = &m_anchors;
-    PCB_LAYER_ID layer = aLayers.ExtractLayer();
-
-    if( layer > 0 )
-        anchor_set = &(m_layer_anchors[ layer ]);
-
-    if( (*anchor_set).size() == 0 )
-        return;
-
-    CN_ANCHOR_PTR lower_ptr = std::make_shared<CN_ANCHOR>
-                            ( aBBox.GetPosition(), (*anchor_set)[0]->Item() );
-
-    auto lower_it = std::lower_bound( anchor_set->begin(), anchor_set->end(), lower_ptr,
-            [](  const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) -> bool
-            { return a->Pos().x < b->Pos().x; } );
-
-    for( auto it = lower_it; it != anchor_set->end(); it++)
-    {
-        if( (*it)->Pos().x > aBBox.GetRight() )
-            break;
-
-        if( (*it)->Valid() && ( !aDirtyOnly || (*it)->IsDirty() )
-                           && aBBox.Contains( (*it)->Pos() ) )
-            aFunc( *it );
-    }
-}
 
 
 template <class T>
@@ -689,46 +625,11 @@ void CN_ZONE_LIST::FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly )
     }
 }
 
-
 template <class T>
-void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, LSET aLayers, bool aDirtyOnly )
+void CN_LIST::FindNearby( CN_ITEM *aItem, T aFunc )
 {
-    /* Search items in m_Candidates that position is <= aDistMax from aPosition
-     * (Rectilinear distance)
-     * m_Candidates is sorted by X then Y values, so binary search is made for the first
-     * element.  Then a linear iteration is made to identify all element that are also
-     * in the correct y range.
-     */
-
-    sort();
-
-    CN_ANCHORS *anchor_set = &m_anchors;
-    PCB_LAYER_ID layer = aLayers.ExtractLayer();
-
-    if( layer > 0 )
-        anchor_set = &(m_layer_anchors[ layer ]);
-
-    if( (*anchor_set).size() == 0 )
-        return;
-
-    CN_ANCHOR_PTR lower = std::make_shared<CN_ANCHOR>
-                            ( aPosition - VECTOR2I( aDistMax, 0 ), (*anchor_set)[0]->Item() );
-
-    auto lower_it = std::lower_bound( anchor_set->begin(), anchor_set->end(), lower,
-            [](  const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) -> bool
-            { return a->Pos().x < b->Pos().x; } );
-
-    for( auto it = lower_it; it != anchor_set->end(); it++ )
-    {
-        if( (*it)->Pos().x > aDistMax + aPosition.x )
-            break;
-
-        if( (*it)->Valid() && std::abs( (*it)->Pos().y - aPosition.y ) < aDistMax
-                       && ( !aDirtyOnly || (*it)->IsDirty() ) )
-            aFunc( *it );
-    }
+    m_index.Query( aItem->BBox(), aFunc );
 }
-
 
 class CN_CONNECTIVITY_ALGO
 {
@@ -743,8 +644,6 @@ public:
     using CLUSTERS = std::vector<CN_CLUSTER_PTR>;
 
 private:
-
-    bool m_lastSearchWithZones = false;
 
     class ITEM_MAP_ENTRY
     {
@@ -776,10 +675,7 @@ public:
         std::list<CN_ITEM*> m_items;
     };
 
-
-    CN_PAD_LIST m_padList;
-    CN_TRACK_LIST m_trackList;
-    CN_VIA_LIST m_viaList;
+    CN_LIST m_itemList;
     CN_ZONE_LIST m_zoneList;
 
     using ITEM_MAP_PAIR = std::pair <const BOARD_CONNECTED_ITEM*, ITEM_MAP_ENTRY>;
@@ -874,7 +770,7 @@ public:
     const CLUSTERS& GetClusters();
     int             GetUnconnectedCount();
 
-    CN_PAD_LIST& PadList() { return m_padList; }
+    CN_LIST& ItemList() { return m_itemList; }
 
     void ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc );
     void ForEachItem( const std::function<void( CN_ITEM& )>& aFunc );
@@ -885,5 +781,34 @@ public:
 };
 
 bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b );
+
+
+/**
+ * Struct CN_VISTOR
+ **/
+class CN_VISITOR {
+
+public:
+
+    CN_VISITOR( CN_ITEM* aItem, std::mutex* aListLock ) :
+        m_item( aItem ),
+        m_listLock( aListLock )
+    {}
+
+    bool operator()( CN_ITEM* aCandidate );
+
+protected:
+
+    void checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem );
+
+    void checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB );
+
+    ///> the item we are looking for connections to
+    CN_ITEM* m_item;
+
+    ///> the mutex protecting our connection list
+    std::mutex* m_listLock;
+
+};
 
 #endif

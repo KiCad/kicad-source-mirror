@@ -24,6 +24,7 @@
 
 #include <connectivity_algo.h>
 #include <widgets/progress_reporter.h>
+#include <geometry/geometry_utils.h>
 
 #include <thread>
 #include <mutex>
@@ -168,25 +169,25 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
             m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( pad ) );
         }
 
-        m_padList.SetDirty( true );
+        m_itemList.SetDirty( true );
         break;
 
     case PCB_PAD_T:
         m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
         m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
-        m_padList.SetDirty( true );
+        m_itemList.SetDirty( true );
         break;
 
     case PCB_TRACE_T:
         m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
         m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
-        m_trackList.SetDirty( true );
+        m_itemList.SetDirty( true );
         break;
 
     case PCB_VIA_T:
         m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
         m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
-        m_viaList.SetDirty( true );
+        m_itemList.SetDirty( true );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -201,6 +202,10 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     default:
         return false;
     }
+
+    // Once we delete an item, it may connect between lists, so mark both as potentially invalid
+    m_itemList.SetHasInvalid( true );
+    m_zoneList.SetHasInvalid( true );
 
     return true;
 }
@@ -243,7 +248,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
             if( m_itemMap.find( pad ) != m_itemMap.end() )
                 return false;
 
-            add( m_padList, pad );
+            add( m_itemList, pad );
         }
 
         break;
@@ -252,7 +257,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         if( m_itemMap.find ( static_cast<D_PAD*>( aItem ) ) != m_itemMap.end() )
             return false;
 
-        add( m_padList, static_cast<D_PAD*>( aItem ) );
+        add( m_itemList, static_cast<D_PAD*>( aItem ) );
 
         break;
 
@@ -261,7 +266,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         if( m_itemMap.find( static_cast<TRACK*>( aItem ) ) != m_itemMap.end() )
             return false;
 
-        add( m_trackList, static_cast<TRACK*>( aItem ) );
+        add( m_itemList, static_cast<TRACK*>( aItem ) );
 
         break;
     }
@@ -270,7 +275,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         if( m_itemMap.find( static_cast<VIA*>( aItem ) ) != m_itemMap.end() )
             return false;
 
-        add( m_viaList, static_cast<VIA*>( aItem ) );
+        add( m_itemList, static_cast<VIA*>( aItem ) );
 
         break;
 
@@ -302,143 +307,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 {
     std::mutex cnListLock;
 
-    int totalDirtyCount = 0;
-
-    if( m_lastSearchWithZones != aIncludeZones )
-    {
-        m_padList.MarkAllAsDirty();
-        m_viaList.MarkAllAsDirty();
-        m_trackList.MarkAllAsDirty();
-        m_zoneList.MarkAllAsDirty();
-    }
-
-    m_lastSearchWithZones = aIncludeZones;
-
-    auto checkForConnection = [ &cnListLock ] ( const CN_ANCHOR_PTR point, CN_ITEM* aRefItem, int aMaxDist = 0 )
-    {
-        const auto parent = aRefItem->Parent();
-
-        assert( point->Item() );
-        assert( point->Item()->Parent() );
-        assert( aRefItem->Parent() );
-
-        if( !point->Item()->Valid() )
-            return;
-
-        if( !aRefItem->Valid() )
-            return;
-
-        if( parent == point->Item()->Parent() )
-            return;
-
-        if( !( parent->GetLayerSet() &
-                point->Item()->Parent()->GetLayerSet() ).any() )
-            return;
-
-        switch( parent->Type() )
-        {
-            case PCB_PAD_T:
-            case PCB_VIA_T:
-
-                if( parent->HitTest( wxPoint( point->Pos().x, point->Pos().y ) ) )
-                {
-                    std::lock_guard<std::mutex> lock( cnListLock );
-                    CN_ITEM::Connect( aRefItem, point->Item() );
-                }
-
-                break;
-
-            case PCB_TRACE_T:
-            {
-                const auto track = static_cast<TRACK*> ( parent );
-
-                const VECTOR2I d_start( VECTOR2I( track->GetStart() ) - point->Pos() );
-                const VECTOR2I d_end( VECTOR2I( track->GetEnd() ) - point->Pos() );
-
-                if( d_start.EuclideanNorm() < aMaxDist
-                    || d_end.EuclideanNorm() < aMaxDist )
-                {
-                    std::lock_guard<std::mutex> lock( cnListLock );
-                    CN_ITEM::Connect( aRefItem, point->Item() );
-                }
-                break;
-            }
-
-            case PCB_ZONE_T:
-            case PCB_ZONE_AREA_T:
-            {
-                const auto zone = static_cast<ZONE_CONTAINER*> ( parent );
-                auto zoneItem = static_cast<CN_ZONE*> ( aRefItem );
-
-                if( point->Item()->Net() != parent->GetNetCode() )
-                    return;
-
-                if( !( zone->GetLayerSet() &
-                                            point->Item()->Parent()->GetLayerSet() ).any() )
-                    return;
-
-                if( zoneItem->ContainsAnchor( point ) )
-                {
-                    std::lock_guard<std::mutex> lock( cnListLock );
-                    CN_ITEM::Connect( zoneItem, point->Item() );
-                }
-
-                break;
-
-            }
-            default :
-                assert( false );
-        }
-    };
-
-    auto checkInterZoneConnection = [ &cnListLock ] ( CN_ZONE* testedZone, CN_ZONE* aRefZone )
-    {
-        const auto parentZone = static_cast<const ZONE_CONTAINER*>( aRefZone->Parent() );
-
-        if( testedZone->Parent()->Type () != PCB_ZONE_AREA_T )
-            return;
-
-        if( testedZone == aRefZone )
-             return;
-
-        if( testedZone->Parent() == aRefZone->Parent() )
-            return;
-
-        if( testedZone->Net() != parentZone->GetNetCode() )
-            return; // we only test zones belonging to the same net
-
-        if( !( testedZone->Parent()->GetLayerSet() & parentZone->GetLayerSet() ).any() )
-            return; // and on same layer
-
-        const auto& outline = parentZone->GetFilledPolysList().COutline( aRefZone->SubpolyIndex() );
-
-        for( int i = 0; i < outline.PointCount(); i++ )
-        {
-            if( testedZone->ContainsPoint( outline.CPoint( i ) ) )
-            {
-                std::lock_guard<std::mutex> lock( cnListLock );
-
-                CN_ITEM::Connect( aRefZone, testedZone );
-                return;
-            }
-        }
-
-        const auto testedZoneParent = static_cast<const ZONE_CONTAINER*>( testedZone->Parent() );
-
-        const auto& outline2 = testedZoneParent->GetFilledPolysList().COutline( testedZone->SubpolyIndex() );
-
-        for( int i = 0; i < outline2.PointCount(); i++ )
-        {
-            if( aRefZone->ContainsPoint( outline2.CPoint( i ) ) )
-            {
-                std::lock_guard<std::mutex> lock( cnListLock );
-
-                CN_ITEM::Connect( aRefZone, testedZone );
-                return;
-            }
-        }
-    };
-
 #ifdef CONNECTIVITY_DEBUG
     printf("Search start\n");
 #endif
@@ -449,15 +317,11 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
     std::vector<CN_ITEM*> garbage;
     garbage.reserve( 1024 );
 
-    m_padList.RemoveInvalidItems( garbage );
-    m_viaList.RemoveInvalidItems( garbage );
-    m_trackList.RemoveInvalidItems( garbage );
+    m_itemList.RemoveInvalidItems( garbage );
     m_zoneList.RemoveInvalidItems( garbage );
 
     for( auto item : garbage )
         delete item;
-
-    //auto all = allItemsInBoard();
 
     #ifdef CONNECTIVITY_DEBUG
         for( auto item : m_padList )
@@ -477,49 +341,20 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
     garbage_collection.Show();
     PROF_COUNTER search_cnt( "search-connections" );
     PROF_COUNTER search_basic( "search-basic" );
-    PROF_COUNTER search_pads( "search-pads" );
 #endif
 
-    if( m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
+    if( m_itemList.IsDirty() )
     {
-        totalDirtyCount++;
-
-        for( auto padItem : m_padList )
+        for( auto item : m_itemList )
         {
-            auto pad = static_cast<D_PAD*> ( padItem->Parent() );
-            auto searchPads = std::bind( checkForConnection, _1, padItem );
+            if( item->Dirty() )
+            {
+                CN_VISITOR visitor( item, &cnListLock );
+                m_itemList.FindNearby( item, visitor );
 
-            m_padList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads, pad->GetLayerSet() );
-            m_trackList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads, pad->GetLayerSet() );
-            m_viaList.FindNearby( pad->ShapePos(), pad->GetBoundingRadius(), searchPads, pad->GetLayerSet() );
-        }
-#ifdef PROFILE
-        search_pads.Show();
-        PROF_COUNTER search_tracks( "search-tracks" );
-#endif
-
-        for( auto& trackItem : m_trackList )
-        {
-            auto track = static_cast<TRACK*> ( trackItem->Parent() );
-            int dist_max = track->GetWidth() / 2;
-            auto searchTracks = std::bind( checkForConnection, _1, trackItem, dist_max );
-
-            m_trackList.FindNearby( track->GetStart(), dist_max, searchTracks, track->GetLayerSet() );
-            m_trackList.FindNearby( track->GetEnd(), dist_max, searchTracks, track->GetLayerSet() );
-        }
-#ifdef PROFILE
-        search_tracks.Show();
-#endif
-
-        for( auto& viaItem : m_viaList )
-        {
-            auto via = static_cast<VIA*> ( viaItem->Parent() );
-            int dist_max = via->GetWidth() / 2;
-            auto searchVias = std::bind( checkForConnection, _1, viaItem, dist_max );
-
-            totalDirtyCount++;
-            m_viaList.FindNearby( via->GetStart(), dist_max, searchVias );
-            m_trackList.FindNearby( via->GetStart(), dist_max, searchVias );
+                if( aIncludeZones )
+                    m_zoneList.FindNearby( item, visitor );
+            }
         }
     }
 
@@ -529,8 +364,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 
     if( aIncludeZones )
     {
-        int cnt = 0;
-
         if( m_progressReporter )
         {
             m_progressReporter->SetMaxProgress( m_zoneList.Size() );
@@ -556,25 +389,17 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
             {
                 auto item = m_zoneList[i];
                 auto zoneItem = static_cast<CN_ZONE *> (item);
-                auto searchZones = std::bind( checkForConnection, _1, zoneItem );
 
-                if( zoneItem->Dirty() || m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
+                if( zoneItem->Dirty() )
                 {
-                    totalDirtyCount++;
-                    m_viaList.FindNearby( zoneItem->BBox(), searchZones );
-                    m_trackList.FindNearby( zoneItem->BBox(), searchZones );
-                    m_padList.FindNearby( zoneItem->BBox(), searchZones );
-                    m_zoneList.FindNearbyZones( zoneItem->BBox(), std::bind( checkInterZoneConnection, _1, zoneItem ) );
+                    CN_VISITOR visitor( item, &cnListLock );
+                    m_itemList.FindNearby( item, visitor );
+                    m_zoneList.FindNearby( item, visitor );
                 }
 
+                if (m_progressReporter)
                 {
-                    std::lock_guard<std::mutex> lock( cnListLock );
-                    cnt++;
-
-                    if (m_progressReporter)
-                    {
-                        m_progressReporter->AdvanceProgress();
-                    }
+                    m_progressReporter->AdvanceProgress();
                 }
             }
         }
@@ -582,9 +407,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
         m_zoneList.ClearDirtyFlags();
     }
 
-    m_padList.ClearDirtyFlags();
-    m_viaList.ClearDirtyFlags();
-    m_trackList.ClearDirtyFlags();
+    m_itemList.ClearDirtyFlags();
 
 #ifdef CONNECTIVITY_DEBUG
     printf("Search end\n");
@@ -608,6 +431,9 @@ void CN_ITEM::RemoveInvalidRefs()
 
 void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 {
+    if( !m_hasInvalid )
+        return;
+
     auto lastItem = std::remove_if(m_items.begin(), m_items.end(), [&aGarbage] ( CN_ITEM* item )
     {
         if( !item->Valid() )
@@ -619,36 +445,22 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
         return false;
     } );
 
-    if( lastItem != m_items.end())
-    {
-        auto lastAnchor = std::remove_if(m_anchors.begin(), m_anchors.end(),
-            [] ( const CN_ANCHOR_PTR anchor ) {
-                return !anchor->Valid();
-            } );
-
-        m_anchors.resize( lastAnchor - m_anchors.begin() );
-        for( auto i = 0; i < PCB_LAYER_ID_COUNT; i++ )
-        {
-            lastAnchor = std::remove_if(m_layer_anchors[i].begin(), m_layer_anchors[i].end(),
-                    [] ( const CN_ANCHOR_PTR anchor ) {
-                        return !anchor->Valid();
-                    } );
-
-            m_layer_anchors[i].resize( lastAnchor - m_layer_anchors[i].begin() );
-        }
-
-        m_items.resize( lastItem - m_items.begin() );
-    }
+    m_items.resize( lastItem - m_items.begin() );
 
     // fixme: mem leaks
     for( auto item : m_items )
         item->RemoveInvalidRefs();
+
+    for( auto item : aGarbage )
+        m_index.Remove( item );
+
+    m_hasInvalid = false;
 }
 
 
 bool CN_CONNECTIVITY_ALGO::isDirty() const
 {
-    return m_viaList.IsDirty() || m_trackList.IsDirty() || m_zoneList.IsDirty() || m_padList.IsDirty();
+    return m_itemList.IsDirty() || m_zoneList.IsDirty();
 }
 
 
@@ -706,9 +518,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
             head->ListInsert( aItem );
     };
 
-    std::for_each( m_padList.begin(), m_padList.end(), addToSearchList );
-    std::for_each( m_trackList.begin(), m_trackList.end(), addToSearchList );
-    std::for_each( m_viaList.begin(), m_viaList.end(), addToSearchList );
+    std::for_each( m_itemList.begin(), m_itemList.end(), addToSearchList );
 
     if( includeZones )
     {
@@ -972,6 +782,116 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 }
 
 
+void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
+{
+    auto zoneItem = static_cast<CN_ZONE*> ( aZone );
+
+    if( zoneItem->Net() != aItem->Net() && !aItem->CanChangeNet() )
+        return;
+
+    if( zoneItem->ContainsPoint( aItem->GetAnchor( 0 ) ) ||
+            ( aItem->Parent()->Type() == PCB_TRACE_T &&
+              zoneItem->ContainsPoint( aItem->GetAnchor( 1 ) ) ) )
+    {
+        std::lock_guard<std::mutex> lock( *m_listLock );
+        CN_ITEM::Connect( zoneItem, aItem );
+    }
+}
+
+void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
+{
+    const auto refParent = static_cast<const ZONE_CONTAINER*>( aZoneA->Parent() );
+    const auto testedParent = static_cast<const ZONE_CONTAINER*>( aZoneB->Parent() );
+
+    if( testedParent->Type () != PCB_ZONE_AREA_T )
+        return;
+
+    if( aZoneB == aZoneA  || refParent == testedParent )
+        return;
+
+    if( aZoneB->Net() != aZoneA->Net() )
+        return; // we only test zones belonging to the same net
+
+    const auto& outline = refParent->GetFilledPolysList().COutline( aZoneA->SubpolyIndex() );
+
+    for( int i = 0; i < outline.PointCount(); i++ )
+    {
+        if( aZoneB->ContainsPoint( outline.CPoint( i ) ) )
+        {
+            std::lock_guard<std::mutex> lock( *m_listLock );
+            CN_ITEM::Connect( aZoneA, aZoneB );
+            return;
+        }
+    }
+
+    const auto& outline2 = testedParent->GetFilledPolysList().COutline( aZoneB->SubpolyIndex() );
+
+    for( int i = 0; i < outline2.PointCount(); i++ )
+    {
+        if( aZoneA->ContainsPoint( outline2.CPoint( i ) ) )
+        {
+            std::lock_guard<std::mutex> lock( *m_listLock );
+            CN_ITEM::Connect( aZoneA, aZoneB );
+            return;
+        }
+    }
+}
+
+
+bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
+{
+    const auto parentA = aCandidate->Parent();
+    const auto parentB = m_item->Parent();
+
+    if( !aCandidate->Valid() || !m_item->Valid() )
+        return true;
+
+    if( parentA == parentB )
+        return true;
+
+    if( !( parentA->GetLayerSet() & parentB->GetLayerSet() ).any() )
+        return true;
+
+    // We should handle zone-zone connection separately
+    if ( ( parentA->Type() == PCB_ZONE_AREA_T || parentA->Type() == PCB_ZONE_T ) &&
+         ( parentB->Type() == PCB_ZONE_AREA_T || parentB->Type() == PCB_ZONE_T ) )
+    {
+        checkZoneZoneConnection( static_cast<CN_ZONE*>( m_item ),
+                static_cast<CN_ZONE*>( aCandidate ) );
+        return true;
+    }
+
+    if( parentA->Type() == PCB_ZONE_AREA_T || parentA->Type() == PCB_ZONE_T)
+    {
+        checkZoneItemConnection( static_cast<CN_ZONE*>( aCandidate ), m_item );
+        return true;
+    }
+
+    if( parentB->Type() == PCB_ZONE_AREA_T || parentB->Type() == PCB_ZONE_T)
+    {
+        checkZoneItemConnection( static_cast<CN_ZONE*>( m_item ), aCandidate );
+        return true;
+    }
+
+    // Items do not necessarily have reciprocity as we only check for anchors
+    //  therefore, we check HitTest both directions A->B & B->A
+    // TODO: Check for collision geometry on extended features
+    wxPoint ptA1( aCandidate->GetAnchor( 0 ).x, aCandidate->GetAnchor( 0 ).y );
+    wxPoint ptA2( aCandidate->GetAnchor( 1 ).x, aCandidate->GetAnchor( 1 ).y );
+    wxPoint ptB1( m_item->GetAnchor( 0 ).x, m_item->GetAnchor( 0 ).y );
+    wxPoint ptB2( m_item->GetAnchor( 1 ).x, m_item->GetAnchor( 1 ).y );
+    if( parentA->HitTest( ptB1 ) || parentB->HitTest( ptA1 ) ||
+            ( parentA->Type() == PCB_TRACE_T && parentB->HitTest( ptA2 ) ) ||
+            ( parentB->Type() == PCB_TRACE_T && parentA->HitTest( ptB2 ) ) )
+    {
+        std::lock_guard<std::mutex> lock( *m_listLock );
+        CN_ITEM::Connect( m_item, aCandidate );
+    }
+
+    return true;
+};
+
+
 int CN_ITEM::AnchorCount() const
 {
     if( !m_valid )
@@ -1064,9 +984,7 @@ void CN_CONNECTIVITY_ALGO::Clear()
     m_ratsnestClusters.clear();
     m_connClusters.clear();
     m_itemMap.clear();
-    m_padList.Clear();
-    m_trackList.Clear();
-    m_viaList.Clear();
+    m_itemList.Clear();
     m_zoneList.Clear();
 
 }
@@ -1074,13 +992,8 @@ void CN_CONNECTIVITY_ALGO::Clear()
 
 void CN_CONNECTIVITY_ALGO::ForEachItem( const std::function<void( CN_ITEM& )>& aFunc )
 {
-    for( auto item : m_padList )
-        aFunc( *item );
 
-    for( auto item : m_viaList )
-        aFunc( *item );
-
-    for( auto item : m_trackList )
+    for( auto item : m_itemList )
         aFunc( *item );
 
     for( auto item : m_zoneList )
@@ -1090,17 +1003,11 @@ void CN_CONNECTIVITY_ALGO::ForEachItem( const std::function<void( CN_ITEM& )>& a
 
 void CN_CONNECTIVITY_ALGO::ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc )
 {
-    for( const auto& anchor : m_padList.Anchors() )
-        aFunc( *anchor );
-
-    for( const auto& anchor : m_viaList.Anchors() )
-        aFunc( *anchor );
-
-    for( const auto& anchor : m_trackList.Anchors() )
-        aFunc( *anchor );
-
-    for( const auto& anchor : m_zoneList.Anchors() )
-        aFunc( *anchor );
+    ForEachItem( [aFunc] ( CN_ITEM& item ) {
+        for( const auto& anchor : item.Anchors() )
+            aFunc( *anchor );
+        }
+    );
 }
 
 
