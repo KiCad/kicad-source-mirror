@@ -437,11 +437,6 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  _( "Set &Layer Pair..." ), _( "Change active layer pair" ),
                  KiBitmap( select_layer_pair_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
-                 _( "&FreeRoute" ),
-                 _( "Fast access to the FreeROUTE external advanced router" ),
-                 KiBitmap( web_support_xpm ) );
-
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     AddMenuItem( aParentMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                  _( "&Scripting Console" ),

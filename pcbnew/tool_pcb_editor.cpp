@@ -319,12 +319,6 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
                             *LayerPairBitmap, SEL_LAYER_HELP );
 
-    // Fast call to FreeROUTE Web Bases router
-    KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,
-                            KiScaledBitmap( web_support_xpm, this ),
-                            _( "Fast access to the FreeROUTE external advanced router" ) );
-
     // Access to the scripting console
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     if( IsWxPythonLoaded() )

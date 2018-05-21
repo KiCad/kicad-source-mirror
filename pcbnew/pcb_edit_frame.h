@@ -1074,12 +1074,6 @@ public:
     void ImportSpecctraDesign( wxCommandEvent& event );
 
     /**
-     * Function Access_to_External_Tool
-     * Run an external tool (like freeroute )
-     */
-    void Access_to_External_Tool( wxCommandEvent& event );
-
-    /**
      * Function ListAndSelectModuleName
      * builds and shows a list of existing modules on board that the user can select.
      * @return a pointer to the selected module or NULL.
