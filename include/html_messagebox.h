@@ -44,10 +44,8 @@ protected:
     void OnCloseButtonClick( wxCommandEvent& event ) override;
 
 public:
-    /**
-     * Constructor
-     */
     HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle );
+    ~HTML_MESSAGE_BOX() override;
 
     /**
      * set the dialog size, using a "logical value.

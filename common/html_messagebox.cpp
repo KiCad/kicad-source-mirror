@@ -41,6 +41,14 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle) :
 }
 
 
+HTML_MESSAGE_BOX::~HTML_MESSAGE_BOX()
+{
+    // Prevent wxWidgets bug which fails to release when closing the window on an <esc>.
+    if( m_htmlWindow->HasCapture() )
+        m_htmlWindow->ReleaseMouse();
+}
+
+
 void HTML_MESSAGE_BOX::OnCloseButtonClick( wxCommandEvent& event )
 {
     // the dialog can be shown modal or not modal.
