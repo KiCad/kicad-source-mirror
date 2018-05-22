@@ -582,6 +582,15 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
 
+    // sync m_grid's column visiblities to Show checkboxes in m_fieldsCtrl
+    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
+    {
+        if( m_fieldsCtrl->GetToggleValue( i, 1 ) )
+            m_grid->ShowCol( i );
+        else
+            m_grid->HideCol( i );
+    }
+
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
