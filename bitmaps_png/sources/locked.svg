@@ -12,7 +12,7 @@
    width="26"
    version="1.0"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.92.0 r15299"
    sodipodi:docname="locked.svg">
   <metadata
      id="metadata188">
@@ -34,15 +34,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1033"
      id="namedview186"
      showgrid="true"
      inkscape:zoom="30.731949"
-     inkscape:cx="11.296694"
+     inkscape:cx="5.4721366"
      inkscape:cy="9.6647768"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -454,7 +454,7 @@
      rx="1.5"
      ry="1.5" />
   <path
-     style="fill:none;stroke:#808080;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     style="fill:none;stroke:#826465;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      d="M 18,12 18,8 C 18,8 18.5,3 13,3 7.5,3 8,8 8,8 l 0,4"
      id="path3944"
      inkscape:connector-curvature="0"

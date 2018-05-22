@@ -13,7 +13,7 @@
    version="1.0"
    id="svg2"
    inkscape:version="0.92.0 r15299"
-   sodipodi:docname="unlocked.svg">
+   sodipodi:docname="lock_unlock.svg">
   <metadata
      id="metadata188">
     <rdf:RDF>
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -40,7 +40,7 @@
      id="namedview186"
      showgrid="true"
      inkscape:zoom="15.365974"
-     inkscape:cx="-7.1105702"
+     inkscape:cx="4.5385449"
      inkscape:cy="11.395488"
      inkscape:window-x="-4"
      inkscape:window-y="-4"
@@ -416,13 +416,19 @@
     </filter>
   </defs>
   <path
-     style="fill:none;stroke:#607a63;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     style="fill:none;stroke:#6e8c6e;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      d="m 25,12 0,-4 c 0,0 0.5,-5 -5,-5 -5.5,0 -5,5 -5,5 l 0,4"
      id="path3944"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cczcc" />
+  <path
+     style="fill:none;stroke:#906e6e;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 15,12 V 8 C 15,8 15.5,3 10,3 4.5,3 5,8 5,8 v 4"
+     id="path3944-5"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cczcc" />
   <rect
-     style="fill:#333333;fill-opacity:1;stroke:none"
+     style="fill:#292b2b;fill-opacity:1;stroke:none"
      id="rect3169"
      width="17.999996"
      height="13"

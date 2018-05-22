@@ -345,6 +345,7 @@ set( BMAPS_MID
     load_module_board
     load_module_lib
     local_ratsnest
+    lock_unlock
     locked
     measurement
     minus

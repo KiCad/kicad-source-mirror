@@ -119,15 +119,15 @@ TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchT
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LOCK_UNLOCK_FOOTPRINT ),
-        "Toggle Lock", "" );
+        "Toggle Lock", "", lock_unlock_xpm );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
         AS_GLOBAL, 0,
-        _( "Lock" ), "" );
+        _( "Lock" ), "", locked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
         AS_GLOBAL, 0,
-        _( "Unlock" ), "" );
+        _( "Unlock" ), "", unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0,
