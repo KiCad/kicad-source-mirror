@@ -334,7 +334,8 @@ public:
      * @param aIncludeDefaultFields is used to search the default library symbol fields in the
      *                              search.
      */
-    wxString GetFieldText( const wxString& aFieldName, bool aIncludeDefaultFields = true ) const;
+    wxString GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame,
+                           bool aIncludeDefaultFields = true ) const;
 
     /**
      * Populates a std::vector with SCH_FIELDs.

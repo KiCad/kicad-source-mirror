@@ -368,6 +368,9 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToFieldGrid()
 
 bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromFieldGrid()
 {
+    // Commit any pending in-place edits and close the editor
+    m_fieldGrid->DisableCellEditControl();
+
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         templateFields[row].m_Name  = m_fieldGrid->GetCellValue( row, 0 );
