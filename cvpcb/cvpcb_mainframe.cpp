@@ -214,6 +214,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Connect Events
     m_saveAndContinue->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ), NULL, this );
+    m_footprintListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ), NULL, this );
 }
 
 
@@ -221,6 +222,7 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
     // Disconnect Events
     m_saveAndContinue->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ), NULL, this );
+    m_footprintListBox->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ), NULL, this );
 
     m_auimgr.UnInit();
 }
@@ -503,6 +505,16 @@ void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
     GetFootprintViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
+}
+
+
+void CVPCB_MAINFRAME::OnFootprintRightClick( wxMouseEvent& event )
+{
+    wxMenu menu;
+
+    menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ), _( "Show the current footprint in the footprint viewer" ) );
+
+    PopupMenu( &menu );
 }
 
 
