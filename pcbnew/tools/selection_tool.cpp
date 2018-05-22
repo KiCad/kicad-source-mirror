@@ -863,11 +863,17 @@ int SELECTION_TOOL::expandSelectedConnection( const TOOL_EVENT& aEvent )
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
 
+    // We use the BUSY flag to mark connections
+    for( auto item : selection )
+        item->SetState( BUSY, false );
+
     for( auto item : selection )
     {
         TRACK* trackItem = dynamic_cast<TRACK*>( item );
 
-        if( trackItem )
+        // Track items marked BUSY have already been visited
+        //  therefore their connections have already been marked
+        if( trackItem && !trackItem->GetState( BUSY ) )
             selectAllItemsConnectedToTrack( *trackItem );
     }
 
