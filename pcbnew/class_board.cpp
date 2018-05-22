@@ -1556,7 +1556,10 @@ D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
-        D_PAD* pad = module->GetPad( aPosition, aLayerSet );
+        D_PAD* pad = NULL;
+
+        if( module->HitTest( aPosition ) )
+            pad = module->GetPad( aPosition, aLayerSet );
 
         if( pad )
             return pad;
@@ -1572,16 +1575,7 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 
     LSET lset( aTrace->GetLayer() );
 
-    for( MODULE* module = m_Modules;  module;  module = module->Next() )
-    {
-        D_PAD*  pad = module->GetPad( aPosition, lset );
-
-        if( pad )
-            return pad;
-    }
-
-    return NULL;
-
+    return GetPad( aPosition, lset );
 }
 
 
