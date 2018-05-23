@@ -78,6 +78,8 @@ protected:
                        FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) override;
     bool JoinWorkers() override;
 
+    void StopWorkers() override;
+
     /**
      * Function loader_job
      * loads footprints from m_queue_in.

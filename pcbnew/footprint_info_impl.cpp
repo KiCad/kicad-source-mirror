@@ -143,27 +143,23 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
             wxMilliSleep( 20 );
     }
 
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase();
-
-    if( !m_cancelled )
+    if( m_cancelled )
+    {
+        loader.Abort();
+    }
+    else
     {
         if( m_progress_reporter )
         {
+            m_progress_reporter->AdvancePhase();
             m_progress_reporter->SetMaxProgress( m_queue_out.size() );
             m_progress_reporter->Report( _( "Loading Footprints" ) );
         }
 
         loader.Join();
-    }
 
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase();
-
-    if( m_cancelled )
-    {
-        m_errors.move_push( std::make_unique<IO_ERROR>
-                    ( _( "Loading incomplete; cancelled by user." ), nullptr, nullptr, 0 ) );
+        if( m_progress_reporter )
+            m_progress_reporter->AdvancePhase();
     }
 
     m_progress_reporter = nullptr;
@@ -201,6 +197,23 @@ void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aN
     {
         m_threads.push_back( std::thread( &FOOTPRINT_LIST_IMPL::loader_job, this ) );
     }
+}
+
+void FOOTPRINT_LIST_IMPL::StopWorkers()
+{
+    // To safely stop our workers, we set the cancellation flag (they will each
+    // exit on their next safe loop location when this is set).  Then we need to wait
+    // for all threads to finish as closing the implementation will free the queues
+    // that the threads write to.
+    m_cancelled = true;
+
+    for( auto& i : m_threads )
+        i.join();
+
+    m_threads.clear();
+    m_queue_in.clear();
+    m_count_finished.store( 0 );
+    m_list_timestamp = 0;
 }
 
 bool FOOTPRINT_LIST_IMPL::JoinWorkers()

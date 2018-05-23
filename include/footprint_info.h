@@ -284,6 +284,11 @@ protected:
      * Join worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
      */
     virtual bool JoinWorkers() = 0;
+
+    /**
+     * Stop worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
+     */
+    virtual void StopWorkers() = 0;
 };
 
 
@@ -341,6 +346,11 @@ public:
      * @return true if no errors occurred
      */
     bool Join();
+
+    /**
+     * Safely stop the current process.
+     */
+    void Abort();
 
     /**
      * Set a callback to receive notice when loading is complete.

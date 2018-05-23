@@ -181,6 +181,16 @@ bool FOOTPRINT_ASYNC_LOADER::Join()
 }
 
 
+void FOOTPRINT_ASYNC_LOADER::Abort()
+{
+    if( m_list )
+    {
+        m_list->StopWorkers();
+        m_list = nullptr;
+    }
+}
+
+
 void FOOTPRINT_ASYNC_LOADER::SetCompletionCallback( std::function<void()> aCallback )
 {
     m_completion_cb = std::move(aCallback);
