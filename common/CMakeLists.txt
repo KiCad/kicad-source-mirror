@@ -157,6 +157,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_env_var_config.cpp
     dialogs/dialog_env_var_config_base.cpp
     dialogs/dialog_exit_base.cpp
+    dialogs/dialog_file_dir_picker.cpp
     dialogs/dialog_hotkeys_editor.cpp
     dialogs/dialog_hotkeys_editor_base.cpp
     dialogs/dialog_image_editor.cpp
