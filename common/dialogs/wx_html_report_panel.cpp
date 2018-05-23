@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -99,7 +99,7 @@ void WX_HTML_REPORT_PANEL::Flush( bool aSort )
     if( aSort )
     {
         std::sort( m_report.begin(), m_report.end(),
-                []( REPORT_LINE& a, REPORT_LINE& b)
+                []( const REPORT_LINE& a, const REPORT_LINE& b)
                 {
                     return a.severity < b.severity;
                 });

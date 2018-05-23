@@ -631,7 +631,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
     // Update the config values for the show and group-by checkboxes
     wxString showTokens, groupTokens;
 
-    for( unsigned i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
+    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
     {
         if( m_fieldsCtrl->GetToggleValue( i, 1 ) )
         {
