@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-21 12:08+0200\n"
-"PO-Revision-Date: 2018-05-21 12:15+0200\n"
+"PO-Revision-Date: 2018-05-23 12:30+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -7452,7 +7452,7 @@ msgstr "Regola il valore componente"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Show SPICE Netlist..."
-msgstr "Mostra netlist SPICE..."
+msgstr "Mostra netlist Spice..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
@@ -8946,7 +8946,7 @@ msgstr "Aggiungi un nuovo campo personalizzato"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
 msgid "Edit Spice model"
-msgstr "Modifica modello spice"
+msgstr "Modifica modello Spice"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:71
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
@@ -9875,7 +9875,7 @@ msgstr "ID univoco che identifica il simbolo"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:104
 msgid "Edit Spice Model"
-msgstr "Modifica modello spice"
+msgstr "Modifica modello Spice"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:107
 msgid "Reset Field Properties"
