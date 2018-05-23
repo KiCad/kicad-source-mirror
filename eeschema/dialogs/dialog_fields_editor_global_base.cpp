@@ -48,6 +48,9 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	
 	bLeftSizer->Add( m_fieldsCtrl, 1, wxALL|wxEXPAND, 5 );
 	
+	m_addFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Add Field..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftSizer->Add( m_addFieldButton, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	m_leftPanel->SetSizer( bLeftSizer );
 	m_leftPanel->Layout();
@@ -125,6 +128,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_bRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnRegroupComponents ), NULL, this );
 	m_fieldsCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnColumnItemToggled ), NULL, this );
 	m_fieldsCtrl->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSizeFieldList ), NULL, this );
+	m_addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnAddField ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableCellClick ), NULL, this );
@@ -141,6 +145,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::~DIALOG_FIELDS_EDITOR_GLOBAL_BASE()
 	m_bRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnRegroupComponents ), NULL, this );
 	m_fieldsCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnColumnItemToggled ), NULL, this );
 	m_fieldsCtrl->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnSizeFieldList ), NULL, this );
+	m_addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnAddField ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL_BASE::OnTableCellClick ), NULL, this );

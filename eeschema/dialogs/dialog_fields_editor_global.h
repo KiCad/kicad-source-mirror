@@ -43,10 +43,10 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    wxConfigBase*   m_config;
-    SCH_EDIT_FRAME* m_parent;
-    int             m_showColWidth;
-    int             m_groupByColWidth;
+    wxConfigBase*                  m_config;
+    SCH_EDIT_FRAME*                m_parent;
+    int                            m_showColWidth;
+    int                            m_groupByColWidth;
 
     SCH_REFERENCE_LIST             m_componentRefs;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
@@ -63,6 +63,7 @@ private:
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableItemContextMenu( wxGridEvent& event ) override;
     void OnSizeFieldList( wxSizeEvent& event ) override;
+    void OnAddField( wxCommandEvent& event ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;

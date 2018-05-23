@@ -725,6 +725,51 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 }
 
 
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
+{
+    // quantities column will become new field column, so it needs to be reset
+    auto attr = new wxGridCellAttr;
+    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
+    m_grid->SetColFormatCustom( m_dataModel->GetColsCount() - 1, wxGRID_VALUE_STRING );
+
+    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Add Field" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxString fieldName = dlg.GetValue();
+
+    if( fieldName.IsEmpty() )
+    {
+        DisplayError( this, _( "Field must have a name." ) );
+        return;
+    }
+
+    for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
+    {
+        if( fieldName == m_dataModel->GetColLabelValue( i ) )
+        {
+            DisplayError( this, wxString::Format( _( "Field name \"%s\" already in use." ), fieldName ) );
+            return;
+        }
+    }
+
+    m_config->Write( "SymbolFieldEditor/Show/" + fieldName, true );
+
+    AddField( fieldName, true, false );
+
+    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_INSERTED, m_fieldsCtrl->GetItemCount(), 1 );
+    m_grid->ProcessTableMessage( msg );
+
+    // set up attributes on the new quantities column
+    attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
+    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
+    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 50 );
+}
+
+
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 {
     wxDataViewItem item = event.GetItem();
