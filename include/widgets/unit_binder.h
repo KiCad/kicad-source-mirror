@@ -59,6 +59,13 @@ public:
                  bool aAllowEval = true );
 
     /**
+     * Function SetUnits
+     * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
+     * used to set to DEGREES for angular controls.
+     */
+     virtual void SetUnits( EDA_UNITS_T aUnits, bool aUseMils = false );
+
+    /**
      * Function SetValue
      * Sets new value (in Internal Units) for the text field, taking care of units conversion.
      * @param aValue is the new value.
@@ -91,9 +98,15 @@ public:
 
     /**
      * Function Enable
-     * Enables/diasables the label, text input widget, and units label.
+     * Enables/diasables the label, widget and units label.
      */
     void Enable( bool aEnable );
+
+    /**
+     * Function Show
+     * Shows/hides the label, widget and units label.
+     */
+    void Show( bool aShow );
 
 protected:
 

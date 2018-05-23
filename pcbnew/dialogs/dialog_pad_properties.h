@@ -47,8 +47,7 @@
 #include <dialog_pad_properties_base.h>
 #include <widgets/text_ctrl_eval.h>
 #include <pcb_draw_panel_gal.h>
-
-
+#include <widgets/unit_binder.h>
 
 /**
  * class DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,
@@ -66,33 +65,38 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    KIGFX::ORIGIN_VIEWITEM* m_axisOrigin;
     D_PAD*  m_currentPad;           // pad currently being edited
     D_PAD*  m_dummyPad;             // a working copy used to show changes
-    D_PAD*  m_padMaster;            // The pad used to create new pads in board or
-                                    // footprint editor
-    BOARD*  m_board;                // the main board: this is the board handled by
-                                    // the PCB editor, if running or the dummy
-                                    // board used by the footprint editor
-                                    // (could happen when the Footprint editor will be run
-                                    // alone, outside the board editor
-    bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
-                                    // in this case, some Y coordinates values must be negated
+    D_PAD*  m_padMaster;            // pad used to create new pads in board or footprint editor
+    BOARD*  m_board;                // the main board: this is the board handled by the PCB
+                                    //    editor or the dummy board used by the footprint editor
+    bool    m_isFlipped;            // indicates the parent footprint is flipped (mirrored) in
+                                    //    which case some Y coordinates values must be negated
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
 
-    // for free shape pads: the list of primitives (basic shapes),
-    // in local coordinates, orient 0, coordinates relative to m_Pos
-    // They are expected to define only one copper area.
-    std::vector<PAD_CS_PRIMITIVE> m_primitives;
+    std::vector<PAD_CS_PRIMITIVE> m_primitives;    // the list of custom shape primitives (basic
+                                                   //     shapes), in local coords, orient 0
+                                                   //     must define a single copper area
+    COLOR4D                       m_selectedColor; // color used to draw selected primitives when
+                                                   //     editing a custom pad shape
 
-    std::vector<DRAWSEGMENT*> m_highligth;     // shapes highlighted in GAL mode
+    std::vector<DRAWSEGMENT*>     m_highlight;     // shapes highlighted in GAL mode
+    KIGFX::ORIGIN_VIEWITEM*       m_axisOrigin;    // origin of the preview canvas
+    static bool                   m_sketchPreview; // session storage
 
+    UNIT_BINDER m_posX, m_posY;
+    UNIT_BINDER m_sizeX, m_sizeY;
+    UNIT_BINDER m_offsetX, m_offsetY;
+    UNIT_BINDER m_padToDie;
+    UNIT_BINDER m_trapDelta;
+    UNIT_BINDER m_cornerRadius;
+    UNIT_BINDER m_holeX, m_holeY;
     wxFloatingPointValidator<double>    m_OrientValidator;
-    double  m_OrientValue;
-    static bool m_drawPadOutlineMode;   // Stores the pad draw option during a session
-    COLOR4D m_selectedColor;            // Color used to draw selected primitives when
-                                        // editing a custom pad shape
+    double      m_OrientValue;
+    UNIT_BINDER m_clearance;
+    UNIT_BINDER m_maskClearance, m_pasteClearance;
+    UNIT_BINDER m_spokeWidth, m_thermalGap;
 
 private:
     void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
@@ -169,7 +173,8 @@ private:
 class DIALOG_PAD_PRIMITIVES_PROPERTIES: public DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE
 {
 public:
-    DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
+    DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
+                                      PAD_CS_PRIMITIVE * aShape );
 
     /**
      * Function TransferDataFromWindow
@@ -186,6 +191,13 @@ private:
 
     // The basic shape currently edited
     PAD_CS_PRIMITIVE * m_shape;
+
+    UNIT_BINDER        m_startX;
+    UNIT_BINDER        m_startY;
+    UNIT_BINDER        m_endX;
+    UNIT_BINDER        m_endY;
+    UNIT_BINDER        m_radius;
+    UNIT_BINDER        m_thickness;
 };
 
 
@@ -200,8 +212,11 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS: public DIALOG_PAD_PRIMITIVE_POLY_PROPS_BA
     // The working copy of the basic shape currently edited
     PAD_CS_PRIMITIVE m_currshape;
 
+    UNIT_BINDER      m_thickness;
+
 public:
-    DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
+    DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
+                                     PAD_CS_PRIMITIVE * aShape );
     ~DIALOG_PAD_PRIMITIVE_POLY_PROPS();
 
     /**
@@ -224,7 +239,7 @@ private:
 
     // Events handlers:
     void OnValidateButton( wxCommandEvent& event );
-    void onButtonAdd( wxCommandEvent& event ) override;
+    void OnButtonAdd( wxCommandEvent& event ) override;
     void OnButtonDelete( wxCommandEvent& event ) override;
     void onPaintPolyPanel( wxPaintEvent& event ) override;
     void onPolyPanelResize( wxSizeEvent& event ) override;
@@ -234,6 +249,9 @@ private:
     {
         event.Skip();
     }
+
+    bool doValidate( bool aRemoveRedundantCorners );
+
 };
 
 
@@ -247,8 +265,8 @@ private:
 class DIALOG_PAD_PRIMITIVES_TRANSFORM : public DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE
 {
 public:
-    DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent,
-                                      std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate );
+    DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
+                                     std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate );
 
     /**
      * Apply geometric transform (rotation, move, scale) defined in dialog
@@ -266,6 +284,10 @@ public:
 
 private:
     std::vector<PAD_CS_PRIMITIVE*>& m_list;
+
+    UNIT_BINDER  m_vectorX;
+    UNIT_BINDER  m_vectorY;
+    UNIT_BINDER  m_rotation;
 };
 
 #endif      // #ifndef _DIALOG_PAD_PROPERTIES_H_

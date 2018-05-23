@@ -66,6 +66,8 @@ void WIDGET_NET_SELECTOR::SetSelectedNet ( int aNetcode )
             return;
         }
     }
+
+    SetSelection( 0 );
 }
 
 

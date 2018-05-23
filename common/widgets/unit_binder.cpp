@@ -51,11 +51,19 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     if( textEntry )
         textEntry->SetValue( wxT( "0" ) );
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, aUseMils ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
 
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
     m_value->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( UNIT_BINDER::onTextEnter ), NULL, this );
+}
+
+
+void UNIT_BINDER::SetUnits( EDA_UNITS_T aUnits, bool aUseMils )
+{
+    m_units = aUnits;
+    m_useMils = aUseMils;
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
 }
 
 
@@ -234,5 +242,13 @@ void UNIT_BINDER::Enable( bool aEnable )
     m_label->Enable( aEnable );
     m_value->Enable( aEnable );
     m_unitLabel->Enable( aEnable );
+}
+
+
+void UNIT_BINDER::Show( bool aShow )
+{
+    m_label->Show( aShow );
+    m_value->Show( aShow );
+    m_unitLabel->Show( aShow );
 }
 
