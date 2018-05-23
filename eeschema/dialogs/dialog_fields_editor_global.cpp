@@ -488,14 +488,14 @@ public:
     }
 
 
-    bool isDefaultField( std::pair<wxString, wxString> aFieldData )
+    bool isModifiedDefaultField( std::pair<wxString, wxString> aFieldData )
     {
         wxString name = aFieldData.first;
         wxString value = aFieldData.second;
 
         for( auto defaultField : m_frame->GetTemplateFieldNames() )
         {
-            if( name == defaultField.m_Name && value == defaultField.m_Value )
+            if( name == defaultField.m_Name && value != defaultField.m_Value )
                 return true;
         }
 
@@ -514,16 +514,17 @@ public:
 
             std::map<wxString, wxString>& fieldStore = m_dataStore[ comp->GetTimeStamp() ];
 
-            for( std::pair<wxString, wxString> fieldData : fieldStore )
+            for( std::pair<wxString, wxString> srcData : fieldStore )
             {
-                wxString   fieldName = fieldData.first;
-                SCH_FIELD* field = comp->FindField( fieldName );
+                wxString   srcName = srcData.first;
+                wxString   srcValue = srcData.second;
+                SCH_FIELD* destField = comp->FindField( srcName );
 
-                if( !field && !isDefaultField( fieldData ) )
-                    field = comp->AddField( SCH_FIELD( wxPoint( 0, 0 ), -1, comp, fieldName ) );
+                if( !destField && ( !srcValue.IsEmpty() || isModifiedDefaultField( srcData ) ) )
+                    destField = comp->AddField( SCH_FIELD( wxPoint( 0, 0 ), -1, comp, srcName ) );
 
-                if( field )
-                    field->SetText( fieldData.second );
+                if( destField )
+                    destField->SetText( srcValue );
             }
         }
     }
