@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 - 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <gr_basic.h>
-#include <base_units.h>
 #include <bitmaps.h>
 
 #include <lib_edit_frame.h>
@@ -33,23 +32,40 @@
 #include <lib_pin.h>
 
 #include <dialog_lib_edit_pin.h>
+#include <confirm.h>
 
-DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin ) :
-    DIALOG_LIB_EDIT_PIN_BASE( parent )
+
+DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin ) :
+    DIALOG_LIB_EDIT_PIN_BASE( parent ),
+    m_frame( parent ),
+    m_pin( aPin ),
+    m_posX( parent, m_posXLabel, m_posXCtrl, m_posXUnits, true ),
+    m_posY( parent, m_posYLabel, m_posYCtrl, m_posYUnits, true ),
+    m_pinLength( parent, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits, true, 0 ),
+    m_nameSize( parent, m_nameSizeLabel, m_nameSizeCtrl, m_nameSizeUnits, true, 0 ),
+    m_numberSize( parent, m_numberSizeLabel, m_numberSizeCtrl, m_numberSizeUnits, true, 0 )
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
-    m_dummyPin = new LIB_PIN( *aPin );
+    m_dummyPin = new LIB_PIN( *m_pin );
 
     // m_dummyPin changes do not propagate to other pins of the current lib component,
     // so set parent to null and clear flags
-    m_dummyPin->SetParent( NULL );
+    m_dummyPin->SetParent( nullptr );
     m_dummyPin->ClearFlags();
 
     m_panelShowPin->SetBackgroundColour( parent->GetDrawBgColor().ToColour() );
 
-    // Set tab order
-    m_textPadName->MoveAfterInTabOrder(m_textPinName);
+    const wxArrayString& orientationNames = LIB_PIN::GetOrientationNames();
+    const BITMAP_DEF*    orientationBitmaps = LIB_PIN::GetOrientationSymbols();
+
+    for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
+        m_choiceOrientation->Insert( orientationNames[ii], KiBitmap( orientationBitmaps[ii] ), ii );
+
     m_sdbSizerButtonsOK->SetDefault();
+    SetInitialFocus( m_textPinName );
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 
     // On some windows manager (Unity, XFCE), this dialog is
     // not always raised, depending on this dialog is run.
@@ -63,17 +79,69 @@ DIALOG_LIB_EDIT_PIN::~DIALOG_LIB_EDIT_PIN()
     delete m_dummyPin;
 }
 
-void DIALOG_LIB_EDIT_PIN::OnInitDialog( wxInitDialogEvent& event )
-{
-    m_textPinName->SetFocus();
 
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+bool DIALOG_LIB_EDIT_PIN::TransferDataToWindow()
+{
+    if( !DIALOG_SHIM::TransferDataToWindow() )
+        return false;
+
+    m_choiceOrientation->SetSelection( LIB_PIN::GetOrientationIndex( m_pin->GetOrientation() ) );
+    m_choiceStyle->SetSelection( m_pin->GetShape() );
+    m_choiceElectricalType->SetSelection( m_pin->GetType() );
+    m_textPinName->SetValue( m_pin->GetName() );
+    m_nameSize.SetValue( m_pin->GetNameTextSize() );
+    m_posX.SetValue( m_pin->GetPosition().x );
+    m_posY.SetValue( -m_pin->GetPosition().y );
+    m_textPinNumber->SetValue( m_pin->GetNumber() );
+    m_numberSize.SetValue( m_pin->GetNumberTextSize() );
+    m_pinLength.SetValue( m_pin->GetLength() );
+    m_checkApplyToAllParts->SetValue( m_pin->GetUnit() == 0 );
+    m_checkApplyToAllConversions->SetValue( m_pin->GetConvert() == 0 );
+    m_checkShow->SetValue( m_pin->IsVisible() );
+
+    return true;
 }
 
+
+bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
+{
+    if( !DIALOG_SHIM::TransferDataFromWindow() )
+        return false;
+
+    const int acceptable_mingrid = 50;
+
+    if( ( m_posX.GetValue() % acceptable_mingrid ) || ( m_posY.GetValue() % acceptable_mingrid ) )
+    {
+        auto msg = wxString::Format( _( "This pin is not on a %d mils grid which will make it\n"
+                                        "difficult to connect to in the schematic.\n"
+                                        "Do you want to continue?" ),
+                                     acceptable_mingrid );
+        if( !IsOK( this, msg ) )
+            return false;
+    }
+
+    if( !m_pin->InEditMode() )
+        m_frame->SaveCopyInUndoList( m_pin->GetParent() );
+
+    m_pin->SetName( m_textPinName->GetValue() );
+    m_pin->SetNumber( m_textPinNumber->GetValue() );
+    m_pin->SetNameTextSize( m_nameSize.GetValue() );
+    m_pin->SetNumberTextSize( m_numberSize.GetValue() );
+    m_pin->SetOrientation( LIB_PIN::GetOrientationCode( m_choiceOrientation->GetSelection() ) );
+    m_pin->SetLength( m_pinLength.GetValue() );
+    m_pin->SetPinPosition( wxPoint( m_posX.GetValue(), -m_posY.GetValue() ) );
+    m_pin->SetType( m_choiceElectricalType->GetPinTypeSelection() );
+    m_pin->SetShape( m_choiceStyle->GetPinShapeSelection() );
+    m_pin->SetConversion( m_checkApplyToAllConversions->GetValue() ? 0 : m_frame->GetConvert() );
+    m_pin->SetPartNumber( m_checkApplyToAllParts->GetValue() ? 0 : m_frame->GetUnit() );
+    m_pin->SetVisible( m_checkShow->GetValue() );
+
+    return true;
+}
+
+
 /*
- * Draw (on m_panelShowPin) the pin currently edited
- * accroding to current settings in dialog
+ * Draw (on m_panelShowPin) the pin currently edited accroding to current settings in dialog
  */
 void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 {
@@ -96,80 +164,34 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     // Give a 10% margin
     scale *= 0.9;
     dc.SetUserScale( scale, scale );
-
-    wxPoint offset = -bBox.Centre();
-
     GRResetPenAndBrush( &dc );
 
     // This is a flag for m_dummyPin->Draw
     uintptr_t flags = uintptr_t( PIN_DRAW_TEXTS | PIN_DRAW_DANGLING );
 
-    m_dummyPin->Draw( NULL, &dc, offset, COLOR4D::UNSPECIFIED, GR_COPY,
-                      (void*)flags, DefaultTransform );
+    m_dummyPin->Draw( nullptr, &dc, -bBox.Centre(), COLOR4D::UNSPECIFIED, GR_COPY, (void*)flags,
+                      DefaultTransform );
 
-    m_dummyPin->SetParent(NULL);
+    m_dummyPin->SetParent( nullptr );
 
     event.Skip();
 }
 
-void DIALOG_LIB_EDIT_PIN::OnCloseDialog( wxCloseEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
 
-void DIALOG_LIB_EDIT_PIN::OnCancelButtonClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-void DIALOG_LIB_EDIT_PIN::OnOKButtonClick( wxCommandEvent& event )
-{
-    EndModal( wxID_OK );
-}
-
-// Called when a pin properties changes
 void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
 {
-    if( ! IsShown() )   // do nothing at init time
+    if( !IsShown() )   // do nothing at init time
         return;
 
-    int pinNameSize = ValueFromString( m_units, GetPinNameTextSize() );
-    int pinNumSize = ValueFromString( m_units, GetPadNameTextSize());
-    int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
-    int pinLength = ValueFromString( m_units, GetLength() );
-    GRAPHIC_PINSHAPE pinShape = GetStyle();
-    ELECTRICAL_PINTYPE pinType = GetElectricalType();
-
-    m_dummyPin->SetName( GetPinName() );
-    m_dummyPin->SetNameTextSize( pinNameSize );
-    m_dummyPin->SetNumber( GetPadName() );
-    m_dummyPin->SetNumberTextSize( pinNumSize );
-    m_dummyPin->SetOrientation( pinOrient );
-    m_dummyPin->SetLength( pinLength );
-    m_dummyPin->SetShape( pinShape );
-    m_dummyPin->SetVisible( GetVisible() );
-    m_dummyPin->SetType( pinType );
+    m_dummyPin->SetName( m_textPinName->GetValue() );
+    m_dummyPin->SetNumber( m_textPinNumber->GetValue() );
+    m_dummyPin->SetNameTextSize( m_nameSize.GetValue() );
+    m_dummyPin->SetNumberTextSize( m_numberSize.GetValue() );
+    m_dummyPin->SetOrientation( LIB_PIN::GetOrientationCode( m_choiceOrientation->GetSelection() ) );
+    m_dummyPin->SetLength( m_pinLength.GetValue() );
+    m_dummyPin->SetType( m_choiceElectricalType->GetPinTypeSelection() );
+    m_dummyPin->SetShape( m_choiceStyle->GetPinShapeSelection() );
+    m_dummyPin->SetVisible( m_checkShow->GetValue() );
 
     m_panelShowPin->Refresh();
-}
-
-void DIALOG_LIB_EDIT_PIN::SetDlgUnitsLabel( const wxString& units )
-{
-        m_staticNameTextSizeUnits->SetLabel( units );
-        m_staticNumberTextSizeUnits->SetLabel( units );
-        m_staticLengthUnits->SetLabel( units );
-        m_staticPosXUnits->SetLabel( units );
-        m_staticPosYUnits->SetLabel( units );
-}
-
-void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,
-                                              const BITMAP_DEF* aBitmaps )
-{
-    for ( unsigned ii = 0; ii < list.GetCount(); ii++ )
-    {
-        if( aBitmaps == NULL )
-            m_choiceOrientation->Append( list[ii] );
-        else
-            m_choiceOrientation->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
-    }
 }
