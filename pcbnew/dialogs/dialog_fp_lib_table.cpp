@@ -44,8 +44,52 @@
 #include <invoke_pcb_dialog.h>
 #include <grid_tricks.h>
 #include <confirm.h>
-#include <wizard_add_fplib.h>
 #include <lib_table_grid.h>
+#include <wildcards_and_files_ext.h>
+#include <pgm_base.h>
+#include <env_paths.h>
+#include <dialogs/dialog_file_dir_picker.h>
+
+// Filters for the file picker
+static constexpr int FILTER_COUNT = 4;
+static const struct
+{
+    wxString m_Description; ///< Description shown in the file picker dialog
+    wxString m_Extension;   ///< In case of folders it stands for extensions of files stored inside
+    bool m_IsFile;          ///< Whether the library is a folder or a file
+    IO_MGR::PCB_FILE_T m_Plugin;
+} fileFilters[FILTER_COUNT] =
+{
+    // wxGenericDirCtrl does not handle regexes in wildcards
+    { "KiCad (folder with .kicad_mod files)", "kicad_mod", false, IO_MGR::KICAD_SEXP },
+    { "Eagle 6.x (*.lbr)",                    "lbr",       true,  IO_MGR::EAGLE },
+    { "KiCad legacy (*.mod)",                 "mod",       true,  IO_MGR::LEGACY },
+    { "Geda (folder with *.fp files)",        "fp",        false, IO_MGR::GEDA_PCB },
+};
+
+
+// Returns the filter string for the file picker
+static wxString getFilterString()
+{
+    wxString filterAll = _( "All supported library formats|" );
+    wxString filter;
+
+    for( int i = 0; i < FILTER_COUNT; ++i )
+    {
+        // "All supported formats" filter
+        if( i != 0 )
+            filterAll += ";";
+
+        filterAll += "*." + fileFilters[i].m_Extension;
+
+
+        // Rest of the filter string
+        filter += "|" + fileFilters[i].m_Description +
+                  "|" + ( fileFilters[i].m_IsFile ? "*." + fileFilters[i].m_Extension : "" );
+    }
+
+    return filterAll + filter;
+}
 
 
 /**
@@ -568,7 +612,74 @@ private:
         }
     }
 
-    void OnClickLibraryWizard( wxCommandEvent& event ) override;
+    void browseLibrariesHandler( wxCommandEvent& event ) override
+    {
+        if( m_lastBrowseDir.IsEmpty() )
+            m_lastBrowseDir = Prj().GetProjectPath();
+
+        DIALOG_FILE_DIR_PICKER dlg( this, _( "Select Library" ), m_lastBrowseDir,
+                getFilterString(), FD_MULTIPLE );
+
+        auto result = dlg.ShowModal();
+
+        if( result == wxID_CANCEL )
+            return;
+
+        m_lastBrowseDir = dlg.GetDirectory();
+
+        // Drop the last directory if the path is a .pretty folder
+        if( m_lastBrowseDir.EndsWith( KiCadFootprintLibPathExtension ) )
+            m_lastBrowseDir = m_lastBrowseDir.BeforeLast( wxFileName::GetPathSeparator() );
+
+        bool skipRemainingDuplicates = false;
+        wxArrayString files;
+        dlg.GetFilenames( files );
+
+        for( const auto& filePath : files )
+        {
+            wxFileName fn( filePath );
+            wxString nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_PCB );
+
+            if( cur_model()->ContainsNickname( nickname ) )
+            {
+                if( skipRemainingDuplicates )
+                    continue;
+
+                int ret = YesNoCancelDialog( this,
+                        _( "Warning: Duplicate Nickname" ),
+                        wxString::Format( _( "A library nicknamed \"%s\" already exists." ), nickname ),
+                        _( "Skip" ),
+                        _( "Skip All Remaining Duplicates" ),
+                        _( "Add Anyway" ) );
+
+                if( ret == wxID_YES )
+                    continue;
+                else if ( ret == wxID_NO )
+                {
+                    skipRemainingDuplicates = true;
+                    continue;
+                }
+            }
+
+            if( m_cur_grid->AppendRows( 1 ) )
+            {
+                int last_row = m_cur_grid->GetNumberRows() - 1;
+
+                m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
+
+                auto type = IO_MGR::GuessPluginTypeFromLibPath( filePath );
+                m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( type ) );
+
+                // try to use path normalized to an environmental variable or project path
+                wxString normalizedPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(), &Prj() );
+                m_cur_grid->SetCellValue( last_row, COL_URI,
+                        normalizedPath.IsEmpty() ? fn.GetFullPath() : normalizedPath );
+            }
+        }
+
+        if( !files.IsEmpty() )
+            scrollToRow( m_cur_grid->GetNumberRows() - 1 );  // scroll to the new libraries
+    }
 
     void onCancelButtonClick( wxCommandEvent& event ) override
     {
@@ -676,6 +787,15 @@ private:
         m_path_subs_grid->AutoSizeColumns();
     }
 
+    /// Makes a specific row visible
+    void scrollToRow( int aRowNumber )
+    {
+        // wx documentation is wrong, SetGridCursor does not make visible.
+        m_cur_grid->MakeCellVisible( aRowNumber, 0 );
+        m_cur_grid->SetGridCursor( aRowNumber, 0 );
+        m_cur_grid->SelectRow( m_cur_grid->GetGridCursorRow() );
+    }
+
     //-----</event handlers>---------------------------------
 
     // caller's tables are modified only on OK button and successful verification.
@@ -699,80 +819,12 @@ private:
 
     wxGrid*          m_cur_grid;     ///< changed based on tab choice
     static int       m_pageNdx;      ///< Remember the last notebook page selected during a session
+
+    wxString         m_lastBrowseDir; ///< last browsed directory
 };
 
 
 int DIALOG_FP_LIB_TABLE::m_pageNdx = 0;
-
-
-void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
-{
-    WIZARD_FPLIB_TABLE dlg( this );
-
-    if( !dlg.RunWizard( dlg.GetFirstPage() ) )
-        return;     // Aborted by user
-
-    const std::vector<WIZARD_FPLIB_TABLE::LIBRARY>& libs = dlg.GetLibraries();
-    bool global_scope = dlg.GetLibScope() == WIZARD_FPLIB_TABLE::GLOBAL;
-    wxGrid* libgrid = global_scope ? m_global_grid : m_project_grid;
-    FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) libgrid->GetTable();
-    bool skipRemainingDuplicates = false;
-
-    for( std::vector<WIZARD_FPLIB_TABLE::LIBRARY>::const_iterator it = libs.begin();
-            it != libs.end(); ++it )
-    {
-        if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
-            continue;
-
-        wxString nickname = LIB_ID::FixIllegalChars( it->GetDescription(), LIB_ID::ID_PCB );
-
-        if( tbl->ContainsNickname( nickname ) )
-        {
-            if( skipRemainingDuplicates )
-                continue;
-
-            int ret = YesNoCancelDialog( this,
-                    _( "Warning: Duplicate Nickname" ),
-                    wxString::Format( _( "A library nicknamed \"%s\" already exists." ), nickname ),
-                    _( "Skip" ),
-                    _( "Skip All Remaining Duplicates" ),
-                    _( "Add Anyway" ) );
-
-            if( ret == wxID_YES )
-                continue;
-            else if ( ret == wxID_NO )
-            {
-                skipRemainingDuplicates = true;
-                continue;
-            }
-        }
-
-        if( libgrid->AppendRows( 1 ) )
-        {
-            int last_row = libgrid->GetNumberRows() - 1;
-
-            // Add the nickname: currently make it from filename
-            tbl->SetValue( last_row, COL_NICKNAME, nickname );
-
-            // Add the path:
-            tbl->SetValue( last_row, COL_URI, it->GetAutoPath( dlg.GetLibScope() ) );
-
-            // Add the plugin name:
-            tbl->SetValue( last_row, COL_TYPE, it->GetPluginName() );
-
-            libgrid->MakeCellVisible( last_row, 0 );
-            libgrid->SetGridCursor( last_row, 0 );
-        }
-    }
-
-    // Switch to the current scope tab
-    if( global_scope )
-        m_auinotebook->SetSelection( 0 );
-    else
-        m_auinotebook->SetSelection( 1 );
-
-    libgrid->SelectRow( libgrid->GetGridCursorRow() );
-}
 
 
 int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
@@ -783,36 +835,4 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
     int dialogRet = dlg.ShowModal();    // returns value passed to EndModal() above
 
     return dialogRet;
-}
-
-
-int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
-                           FP_LIB_TABLE* aProject )
-{
-    WIZARD_FPLIB_TABLE dlg( aParent );
-
-    if( !dlg.RunWizard( dlg.GetFirstPage() ) )
-        return 0;     // Aborted by user
-
-    const std::vector<WIZARD_FPLIB_TABLE::LIBRARY>& libs = dlg.GetLibraries();
-    WIZARD_FPLIB_TABLE::LIB_SCOPE scope = dlg.GetLibScope();
-    FP_LIB_TABLE* fp_tbl = ( scope == WIZARD_FPLIB_TABLE::GLOBAL ? aGlobal : aProject );
-
-    if( fp_tbl )
-    {
-        for( std::vector<WIZARD_FPLIB_TABLE::LIBRARY>::const_iterator it = libs.begin();
-                it != libs.end(); ++it )
-        {
-            if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
-                continue;
-
-            FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( it->GetDescription(),
-                                                          it->GetAutoPath( scope ),
-                                                          it->GetPluginName(),
-                                                          wxEmptyString );     // options
-            fp_tbl->InsertRow( row );
-        }
-    }
-
-    return scope;
 }

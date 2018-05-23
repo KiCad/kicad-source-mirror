@@ -162,8 +162,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_track_via_size_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
-    dialogs/wizard_add_fplib.cpp
-    dialogs/wizard_add_fplib_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp

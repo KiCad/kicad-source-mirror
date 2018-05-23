@@ -138,8 +138,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
-    EVT_MENU( ID_PCB_LIB_WIZARD,
-              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( wxID_PREFERENCES,
@@ -840,16 +838,10 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         DisplayHotkeyList( this, g_Module_Editor_Hotkeys_Descr );
         break;
 
-    case ID_PCB_LIB_WIZARD:
     case ID_PCB_LIB_TABLE_EDIT:
         {
             bool tableChanged = false;
-            int r = 0;
-
-            if( id == ID_PCB_LIB_TABLE_EDIT )
-                r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
-            else
-                r = InvokeFootprintWizard( this, &GFootprintTable, Prj().PcbFootprintLibs() );
+            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
 
             if( r & 1 )
             {

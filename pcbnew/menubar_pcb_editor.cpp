@@ -326,11 +326,6 @@ void prepareLibraryMenu( wxMenu* aParentMenu )
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_LIB_WIZARD,
-                _( "&Add Footprint Libraries Wizard..." ),
-                _( "Add footprint libraries using wizard" ),
-                KiBitmap( wizard_add_fplib_small_xpm ) );
-
     AddMenuItem( aParentMenu, ID_PCB_LIB_TABLE_EDIT,
                 _( "Manage Footprint Li&braries..." ),
                 _( "Edit the global and project footprint library lists" ),

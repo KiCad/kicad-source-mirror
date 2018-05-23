@@ -29,8 +29,6 @@ set( CVPCB_DIALOGS
     ../pcbnew/dialogs/dialog_fp_lib_table_base.cpp
     ../pcbnew/dialogs/dialog_fp_plugin_options.cpp
     ../pcbnew/dialogs/dialog_fp_plugin_options_base.cpp
-    ../pcbnew/dialogs/wizard_add_fplib_base.cpp
-    ../pcbnew/dialogs/wizard_add_fplib.cpp
     )
 
 set( CVPCB_SRCS

@@ -90,16 +90,10 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         }
         break;
 
-    case ID_PCB_LIB_WIZARD:
     case ID_PCB_LIB_TABLE_EDIT:
         {
             bool tableChanged = false;
-            int r = 0;
-
-            if( id == ID_PCB_LIB_TABLE_EDIT )
-                r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
-            else
-                r = InvokeFootprintWizard( this, &GFootprintTable, Prj().PcbFootprintLibs() );
+            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
 
             if( r & 1 )
             {

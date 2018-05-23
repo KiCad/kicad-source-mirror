@@ -76,24 +76,6 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
                              FP_LIB_TABLE* aProject );
 
 /**
- * Function InvokeFootprintWizard
- * Runs the footprint library wizard for easy library addition.
- *
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
- * @param aGlobal is the common footprint library table file being edited. If aGlobal is NULL, then
- *                  it will not be updated.
- * @param aProject is the project specific footprint library table file being edited. if aProject
- *                  is NULL, then it will not be updated.
- *
- * @return int 0 - no changes
- *             1 - changes in the global table
- *             2 - changes in the project table
- *             3 - changes in both tables
- */
-int InvokeFootprintWizard( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
-                           FP_LIB_TABLE* aProject );
-
-/**
  * Function Invoke3DShapeLibsDownloaderWizard
  * Runs the downloader wizard for easy 3D shape libraries download from
  * the official Kicad Github repository of *.3Dshape libraries.
