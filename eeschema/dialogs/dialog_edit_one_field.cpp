@@ -30,11 +30,9 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <base_units.h>
 #include <kiway.h>
 #include <confirm.h>
 
-#include <general.h>
 #include <sch_base_frame.h>
 #include <sch_component.h>
 #include <class_libentry.h>
@@ -78,7 +76,8 @@ EDA_TEXT_VJUSTIFY_T IntToEdaTextVertJustify( int aVertJustify )
 
 DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                               const EDA_TEXT* aTextItem ) :
-    DIALOG_LIB_EDIT_TEXT_BASE( aParent )
+    DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true, 0 )
 {
     SetTitle( aTitle );
 
@@ -101,8 +100,8 @@ void DIALOG_EDIT_ONE_FIELD::init()
 {
     wxString msg;
 
-    m_TextValue->SetFocus();
-    SCH_BASE_FRAME* parent = static_cast<SCH_BASE_FRAME*>( GetParent() );
+    SetInitialFocus( m_TextValue );
+    SCH_BASE_FRAME* parent = GetParent();
     m_TextValue->SetValidator( SCH_FIELD_VALIDATOR(
                                     parent->IsType( FRAME_SCH_LIB_EDITOR ),
                                     m_fieldId, &m_text ) );
@@ -112,20 +111,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     m_CommonUnit->Show( false );
 
     // Show the footprint selection dialog if this is the footprint field.
-    if( m_fieldId == FOOTPRINT )
-    {
-        m_TextValueSelectButton->Show();
-        m_TextValueSelectButton->Enable();
-    }
-    else
-    {
-        m_TextValueSelectButton->Hide();
-        m_TextValueSelectButton->Disable();
-    }
-
-    msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();
-    m_TextSizeText->SetLabel( msg );
-
+    m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT );
 
     // Value fields of power components cannot be modified. This will grey out
     // the text box and display an explanation.
@@ -171,15 +157,13 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
     {
         if( m_text.find_first_of( '?' ) != m_text.npos )
         {
-            m_TextValue->SetSelection( m_text.find_first_of( '?' ),
-                                       m_text.find_last_of( '?' ) + 1 );
+            m_TextValue->SetSelection( m_text.find_first_of( '?' ), m_text.find_last_of( '?' ) + 1 );
         }
         else
         {
             wxString num = m_text;
 
-            while( !num.IsEmpty() && ( !isdigit( num.Last() ) ||
-                                       !isdigit( num.GetChar( 0 ) ) ) )
+            while( !num.IsEmpty() && ( !isdigit( num.Last() ) || !isdigit( num.GetChar( 0 ) ) ) )
             {
                 if( !isdigit( num.Last() ) )
                     num.RemoveLast();
@@ -187,8 +171,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
                     num = num.Right( num.Length() - 1);
             }
 
-            m_TextValue->SetSelection( m_text.Find( num ),
-                                       m_text.Find( num ) + num.Length() );
+            m_TextValue->SetSelection( m_text.Find( num ), m_text.Find( num ) + num.Length() );
 
             if( num.IsEmpty() )
                 m_TextValue->SetSelection( -1, -1 );
@@ -200,10 +183,10 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
     }
 
     m_Orient->SetValue( m_orientation );
-    m_TextSize->SetValue( StringFromValue( g_UserUnit, m_size ) );
+    m_textSize.SetValue( m_size );
     m_TextHJustificationOpt->SetSelection( m_horizontalJustification );
     m_TextVJustificationOpt->SetSelection( m_verticalJustification );
-    m_Invisible->SetValue( !m_isVisible );
+    m_visible->SetValue( m_isVisible );
     m_TextShapeOpt->SetSelection( m_style );
 
     return true;
@@ -226,10 +209,10 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
     }
 
     m_orientation = m_Orient->GetValue();
-    m_size = ValueFromString( g_UserUnit, m_TextSize->GetValue() );
+    m_size = m_textSize.GetValue();
     m_horizontalJustification = m_TextHJustificationOpt->GetSelection();
     m_verticalJustification = m_TextVJustificationOpt->GetSelection();
-    m_isVisible = !m_Invisible->GetValue();
+    m_isVisible = m_visible->GetValue();
     m_style = m_TextShapeOpt->GetSelection();
 
     return true;
@@ -270,7 +253,7 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
     const SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
-    wxASSERT_MSG( component != NULL && component->Type() == SCH_COMPONENT_T,
+    wxASSERT_MSG( component && component->Type() == SCH_COMPONENT_T,
                   wxT( "Invalid schematic field parent item." ) );
 
     // The library symbol may have been removed so using SCH_COMPONENT::GetPartRef() here
@@ -287,32 +270,28 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
 void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
 {
-    wxASSERT( aField != NULL || aField->Type() != SCH_FIELD_T );
-
     if( aField->GetId() == REFERENCE )
     {
-        wxASSERT( aSheetPath != NULL );
+        wxASSERT( aSheetPath  );
 
         SCH_COMPONENT* component = dynamic_cast< SCH_COMPONENT* >( aField->GetParent() );
 
-        wxASSERT( component != NULL );
+        wxASSERT( component  );
 
-        if( component != NULL )
+        if( component )
             component->SetRef( aSheetPath, m_text );
     }
 
     bool modified = false;
 
-    modified = ( modified ||
-                 ( ( aField->GetTextAngle() == TEXT_ANGLE_VERT ) != m_orientation ) );
+    if( ( aField->GetTextAngle() == TEXT_ANGLE_VERT ) != m_orientation )
+        modified = true;
 
-    modified = ( modified ||
-                 ( ( aField->GetHorizJustify() !=
-                     IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) ) ) );
+    if( ( aField->GetHorizJustify() != IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) ) )
+        modified = true;
 
-    modified = ( modified ||
-                 ( ( aField->GetVertJustify() !=
-                     IntToEdaTextVertJustify( m_verticalJustification - 1 ) ) ) );
+    if( ( aField->GetVertJustify() != IntToEdaTextVertJustify( m_verticalJustification - 1 ) ) )
+        modified = true;
 
     aField->SetText( m_text );
     updateText( aField );

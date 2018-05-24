@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,9 +22,8 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/statline.h>
-#include <wx/statbox.h>
 #include <wx/radiobox.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,17 +39,18 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_TextValue;
 		wxButton* m_TextValueSelectButton;
-		wxStaticText* m_TextSizeText;
-		wxTextCtrl* m_TextSize;
 		wxStaticText* m_PowerComponentValues;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
+		wxCheckBox* m_visible;
 		wxCheckBox* m_Orient;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_CommonUnit;
 		wxCheckBox* m_CommonConvert;
-		wxCheckBox* m_Invisible;
 		wxRadioBox* m_TextShapeOpt;
 		wxRadioBox* m_TextHJustificationOpt;
 		wxRadioBox* m_TextVJustificationOpt;
+		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
@@ -58,8 +58,6 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnTextValueSelectButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

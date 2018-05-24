@@ -57,8 +57,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxStaticText* m_defaultLineWidthTitle;
 		wxTextCtrl* m_DefaultLineSizeCtrl;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;
+		wxStaticText* m_plotOriginTitle;
 		wxChoice* m_plotOriginOpt;
-		wxStaticText* m_penHPLGWidthTitle;
+		wxStaticText* m_penHPGLWidthTitle;
 		wxTextCtrl* m_penHPGLWidthCtrl;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;
 		wxStdDialogButtonSizer* m_sdbSizer1;

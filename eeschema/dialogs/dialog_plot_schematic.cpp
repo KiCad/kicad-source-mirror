@@ -125,10 +125,11 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
     // Set the default line width (pen width which should be used for
     // items that do not have a pen size defined (like frame ref)
-    PutValueInLocalUnits( *m_DefaultLineSizeCtrl, GetDefaultLineThickness() );
+    int defaultLineSize = GetDefaultLineThickness();
+    m_DefaultLineSizeCtrl->SetValue( StringFromValue( m_units, defaultLineSize, true, true ) );
 
     // Initialize HPGL specific widgets
-    PutValueInLocalUnits( *m_penHPGLWidthCtrl, m_HPGLPenSize );
+    m_penHPGLWidthCtrl->SetValue( StringFromValue( m_units, m_HPGLPenSize, true, true ) );
 
     // Plot directory
     wxString path = m_parent->GetPlotDirectoryName();
@@ -237,11 +238,13 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
     m_paperSizeOption->Set( paperSizes );
     m_paperSizeOption->SetSelection( selection );
 
-    m_DefaultLineSizeCtrl->Enable( fmt == PLOT_FORMAT_POST
-                                   || fmt == PLOT_FORMAT_PDF
-                                   || fmt == PLOT_FORMAT_SVG );
+    bool enable = fmt == PLOT_FORMAT_POST || fmt == PLOT_FORMAT_PDF || fmt == PLOT_FORMAT_SVG;
+    m_defaultLineWidthTitle->Enable( enable );
+    m_DefaultLineSizeCtrl->Enable( enable );
 
+    m_plotOriginTitle->Enable( fmt == PLOT_FORMAT_HPGL );
     m_plotOriginOpt->Enable( fmt == PLOT_FORMAT_HPGL );
+    m_penHPGLWidthTitle->Enable( fmt == PLOT_FORMAT_HPGL );
     m_penHPGLWidthCtrl->Enable( fmt == PLOT_FORMAT_HPGL );
 }
 
@@ -257,7 +260,8 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     // HPGL Pen Size is stored in mm in config
     m_config->Write( PLOT_HPGL_PEN_SIZE_KEY, m_HPGLPenSize/IU_PER_MM );
 
-    SetDefaultLineThickness( ValueFromTextCtrl( *m_DefaultLineSizeCtrl ) );
+    int thickness = ValueFromString( GetUserUnits(), m_DefaultLineSizeCtrl->GetValue(), true );
+    SetDefaultLineThickness( thickness );
 
     // Plot directory
     wxString path = m_outputDirectoryName->GetValue();

@@ -1,8 +1,3 @@
-/**
- * @file dialog_lib_edit_text.cpp
- * @brief dialog to editing graphic texts (not fields) in body components.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -28,12 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <common.h>
-#include <class_drawpanel.h>
-#include <base_units.h>
-
-#include <general.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_text.h>
@@ -42,128 +31,84 @@
 
 
 DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
-    DIALOG_LIB_EDIT_TEXT_BASE( aParent )
+    DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true, 0 )
 {
     m_parent = aParent;
     m_graphicText = aText;
-    initDlg();
+
+    // Disable options for fieldedit, not existing in  graphic text
+    m_visible->Show( false );
+    m_TextValueSelectButton->Hide();
+    m_PowerComponentValues->Show( false );
+
+    SetInitialFocus( m_TextValue );
+
+    m_sdbSizerButtonsOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
 
 
-void DIALOG_LIB_EDIT_TEXT::initDlg( )
+bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
 {
-    wxString msg;
-
-    m_TextValue->SetFocus();
-
-    // Disable options for fieldedition, not existing in  graphic text
-    m_Invisible->Show(false);
-
     if( m_graphicText )
     {
-        msg = StringFromValue( g_UserUnit, m_graphicText->GetTextWidth() );
-        m_TextSize->SetValue( msg );
+        m_textSize.SetValue( m_graphicText->GetTextWidth() );
         m_TextValue->SetValue( m_graphicText->GetText() );
 
-        if( m_graphicText->GetUnit() == 0 )
-            m_CommonUnit->SetValue( true );
-        if( m_graphicText->GetConvert() == 0 )
-            m_CommonConvert->SetValue( true );
-        if( m_graphicText->GetTextAngle() == TEXT_ANGLE_VERT )
-            m_Orient->SetValue( true );
+        m_CommonUnit->SetValue( m_graphicText->GetUnit() == 0 );
+        m_CommonConvert->SetValue( m_graphicText->GetConvert() == 0 );
+        m_Orient->SetValue( m_graphicText->GetTextAngle() == TEXT_ANGLE_VERT );
 
         int shape = 0;
         if( m_graphicText->IsItalic() )
             shape = 1;
         if( m_graphicText->IsBold() )
             shape |= 2;
-
         m_TextShapeOpt->SetSelection( shape );
 
         switch ( m_graphicText->GetHorizJustify() )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:
-            m_TextHJustificationOpt->SetSelection( 0 );
-            break;
-
-        case GR_TEXT_HJUSTIFY_CENTER:
-            m_TextHJustificationOpt->SetSelection( 1 );
-            break;
-
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            m_TextHJustificationOpt->SetSelection( 2 );
-            break;
+        case GR_TEXT_HJUSTIFY_LEFT:   m_TextHJustificationOpt->SetSelection( 0 ); break;
+        case GR_TEXT_HJUSTIFY_CENTER: m_TextHJustificationOpt->SetSelection( 1 ); break;
+        case GR_TEXT_HJUSTIFY_RIGHT:  m_TextHJustificationOpt->SetSelection( 2 ); break;
         }
 
         switch ( m_graphicText->GetVertJustify() )
         {
-        case GR_TEXT_VJUSTIFY_TOP:
-            m_TextVJustificationOpt->SetSelection( 0 );
-            break;
-
-        case GR_TEXT_VJUSTIFY_CENTER:
-            m_TextVJustificationOpt->SetSelection( 1 );
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            m_TextVJustificationOpt->SetSelection( 2 );
-            break;
+        case GR_TEXT_VJUSTIFY_TOP:    m_TextVJustificationOpt->SetSelection( 0 ); break;
+        case GR_TEXT_VJUSTIFY_CENTER: m_TextVJustificationOpt->SetSelection( 1 ); break;
+        case GR_TEXT_VJUSTIFY_BOTTOM: m_TextVJustificationOpt->SetSelection( 2 ); break;
         }
     }
     else
     {
-        msg = StringFromValue( g_UserUnit, m_parent->m_textSize );
-        m_TextSize->SetValue( msg );
+        m_textSize.SetValue( m_parent->m_textSize );
 
-        if( ! m_parent->m_drawSpecificUnit )
-            m_CommonUnit->SetValue( true );
-        if( ! m_parent->m_drawSpecificConvert )
-            m_CommonConvert->SetValue( true );
-        if( m_parent->m_current_text_angle == TEXT_ANGLE_VERT )
-            m_Orient->SetValue( true );
+        m_CommonUnit->SetValue( !m_parent->m_drawSpecificUnit );
+        m_CommonConvert->SetValue( !m_parent->m_drawSpecificConvert );
+        m_Orient->SetValue( m_parent->m_current_text_angle == TEXT_ANGLE_VERT );
     }
 
-    msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();
-    m_TextSizeText->SetLabel( msg );
-
-    m_sdbSizerButtonsOK->SetDefault();
-
-    // Hide the select button as the child dialog classes use this
-    m_TextValueSelectButton->Hide();
-
-    // Hide the "Power component value text cannot be modified!" warning
-    m_PowerComponentValues->Show( false );
-    Fit();
+    return true;
 }
 
 
-void DIALOG_LIB_EDIT_TEXT::OnCancelClick( wxCommandEvent& event )
+bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 {
-    EndModal(wxID_CANCEL);
-}
-
-
-/* Updates the different parameters for the component being edited */
-void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
-{
-    wxString Line;
-
-    Line = m_TextValue->GetValue();
     m_parent->m_current_text_angle = m_Orient->GetValue() ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ;
-    wxString msg = m_TextSize->GetValue();
-    m_parent->m_textSize = ValueFromString( g_UserUnit, msg );
-    m_parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
-    m_parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
+    m_parent->m_textSize = m_textSize.GetValue();
+    m_parent->m_drawSpecificConvert = !m_CommonConvert->GetValue();
+    m_parent->m_drawSpecificUnit = !m_CommonUnit->GetValue();
 
     if( m_graphicText )
     {
-        if( ! Line.IsEmpty() )
-            m_graphicText->SetText( Line );
-        else
+        if( m_TextValue->GetValue().IsEmpty() )
             m_graphicText->SetText( wxT( "[null]" ) );
+        else
+            m_graphicText->SetText( m_TextValue->GetValue() );
 
         m_graphicText->SetTextSize( wxSize( m_parent->m_textSize, m_parent->m_textSize ) );
         m_graphicText->SetTextAngle( m_parent->m_current_text_angle );
@@ -183,37 +128,21 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
 
         switch( m_TextHJustificationOpt->GetSelection() )
         {
-        case 0:
-            m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            break;
-
-        case 1:
-            m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            break;
-
-        case 2:
-            m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            break;
+        case 0: m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );   break;
+        case 1: m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER ); break;
+        case 2: m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );  break;
         }
 
         switch( m_TextVJustificationOpt->GetSelection() )
         {
-        case 0:
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            break;
-
-        case 1:
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-            break;
-
-        case 2:
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            break;
+        case 0: m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
+        case 1: m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER ); break;
+        case 2: m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
         }
     }
 
     if( m_parent->GetDrawItem() )
         m_parent->SetMsgPanel( m_parent->GetDrawItem() );
 
-    EndModal(wxID_OK);
+    return true;
 }

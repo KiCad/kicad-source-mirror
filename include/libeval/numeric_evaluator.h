@@ -68,7 +68,6 @@ Supported units are millimeters (mm), Mil (mil) and inch (")
 #ifndef NUMERIC_EVALUATOR_H_
 #define NUMERIC_EVALUATOR_H_
 
-#include "grammar.h"
 #include <stddef.h>
 #include <string>
 #include <string>

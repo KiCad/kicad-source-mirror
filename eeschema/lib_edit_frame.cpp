@@ -1125,9 +1125,11 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
         DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, g_XorMode, NULL,
                         DefaultTransform );
 
-    DIALOG_LIB_EDIT_TEXT* frame = new DIALOG_LIB_EDIT_TEXT( this, (LIB_TEXT*) DrawItem );
-    frame->ShowModal();
-    frame->Destroy();
+    DIALOG_LIB_EDIT_TEXT dlg( this, (LIB_TEXT*) DrawItem );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
     OnModify();
 
     // Display new text
