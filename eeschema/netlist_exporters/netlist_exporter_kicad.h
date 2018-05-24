@@ -38,10 +38,9 @@ class OUTPUTFORMATTER;
 class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_GENERIC
 {
 public:
-    NETLIST_EXPORTER_KICAD( NETLIST_OBJECT_LIST* aMasterList, SYMBOL_LIB_TABLE* aLibTable ) :
-        NETLIST_EXPORTER_GENERIC( aMasterList, aLibTable )
-    {
-    }
+    NETLIST_EXPORTER_KICAD( SCH_EDIT_FRAME* aFrame, NETLIST_OBJECT_LIST* aMasterList ) :
+        NETLIST_EXPORTER_GENERIC( aFrame, aMasterList )
+    {}
 
     /**
      * Function WriteNetlist

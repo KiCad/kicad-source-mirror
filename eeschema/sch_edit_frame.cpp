@@ -905,7 +905,7 @@ void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
     }
 
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchSymbolLibTable() );
+    NETLIST_EXPORTER_KICAD exporter( this, net_atoms );
     STRING_FORMATTER formatter;
 
     exporter.Format( &formatter, GNL_ALL );

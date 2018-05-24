@@ -89,6 +89,8 @@ struct COMP_FIELDS
 
 void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheet )
 {
+    COMP_FIELDS fields;
+
     if( comp->GetUnitCount() > 1 )
     {
         // Sadly, each unit of a component can have its own unique fields. This
@@ -98,7 +100,6 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
         // any non blank fields in all units and use the first non-blank field
         // for each unique field name.
 
-        COMP_FIELDS fields;
         wxString    ref = comp->GetRef( aSheet );
 
         SCH_SHEET_LIST sheetList( g_RootSheet );
@@ -149,65 +150,54 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
             }
         }
 
-        // Do not output field values blank in netlist:
-        if( fields.value.size() )
-            xcomp->AddChild( node( "value", fields.value ) );
-        else    // value field always written in netlist
-            xcomp->AddChild( node( "value", "~" ) );
-
-        if( fields.footprint.size() )
-            xcomp->AddChild( node( "footprint", fields.footprint ) );
-
-        if( fields.datasheet.size() )
-            xcomp->AddChild( node( "datasheet", fields.datasheet ) );
-
-        if( fields.f.size() )
-        {
-            XNODE* xfields;
-            xcomp->AddChild( xfields = node( "fields" ) );
-
-            // non MANDATORY fields are output alphabetically
-            for( std::map< wxString, wxString >::const_iterator it = fields.f.begin();
-                    it != fields.f.end();  ++it )
-            {
-                XNODE*  xfield;
-                xfields->AddChild( xfield = node( "field", it->second ) );
-                xfield->AddAttribute( "name", it->first );
-            }
-        }
     }
     else
     {
-        xcomp->AddChild( node( "value", comp->GetField( VALUE )->GetText() ) );
+        fields.value = comp->GetField( VALUE )->GetText();
+        fields.footprint = comp->GetField( FOOTPRINT )->GetText();
+        fields.datasheet = comp->GetField( DATASHEET )->GetText();
 
-        if( !comp->GetField( FOOTPRINT )->IsVoid() )
-            xcomp->AddChild( node( "footprint", comp->GetField( FOOTPRINT )->GetText() ) );
-
-        if( !comp->GetField( DATASHEET )->IsVoid() )
-            xcomp->AddChild( node( "datasheet", comp->GetField( DATASHEET )->GetText() ) );
-
-        // Export all user defined fields within the component,
-        // which start at field index MANDATORY_FIELDS.  Only output the <fields>
-        // container element if there are any <field>s.
-        if( comp->GetFieldCount() > MANDATORY_FIELDS )
+        for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
         {
-            XNODE* xfields;
-            xcomp->AddChild( xfields = node( "fields" ) );
-
-            for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
-            {
-                SCH_FIELD*  f = comp->GetField( fldNdx );
-
-                // only output a field if non empty and not just "~"
-                if( !f->IsVoid() )
-                {
-                    XNODE*  xfield;
-                    xfields->AddChild( xfield = node( "field", f->GetText() ) );
-                    xfield->AddAttribute( "name", f->GetName() );
-                }
-            }
+            SCH_FIELD*  f = comp->GetField( fldNdx );
+            fields.f[ f->GetName() ] = f->GetText();
         }
     }
+
+    // Add in non-empty default fields which have not been explicitly defined
+    for( auto defaultField : m_frame->GetTemplateFieldNames() )
+    {
+        if( defaultField.m_Value.size() && fields.f.count( defaultField.m_Name ) == 0 )
+            fields.f[ defaultField.m_Name ] = defaultField.m_Value;
+    }
+
+    // Do not output field values blank in netlist:
+    if( fields.value.size() )
+        xcomp->AddChild( node( "value", fields.value ) );
+    else    // value field always written in netlist
+        xcomp->AddChild( node( "value", "~" ) );
+
+    if( fields.footprint.size() )
+        xcomp->AddChild( node( "footprint", fields.footprint ) );
+
+    if( fields.datasheet.size() )
+        xcomp->AddChild( node( "datasheet", fields.datasheet ) );
+
+    if( fields.f.size() )
+    {
+        XNODE* xfields;
+        xcomp->AddChild( xfields = node( "fields" ) );
+
+        // non MANDATORY fields are output alphabetically
+        for( std::map< wxString, wxString >::const_iterator it = fields.f.begin();
+             it != fields.f.end();  ++it )
+        {
+            XNODE*  xfield;
+            xfields->AddChild( xfield = node( "field", it->second ) );
+            xfield->AddAttribute( "name", it->first );
+        }
+    }
+
 }
 
 
