@@ -2,13 +2,13 @@
 %warnfilter(325) NETINFO_MAPPING::iterator;
 %ignore NETINFO_MAPPING;        // no code generation for this class
 
+%feature("notabstract")     NETINFO_ITEM;
+
 %include netinfo.h
 
 %{
 #include <netinfo.h>
 %}
-
-%feature("notabstract")     NETINFO_ITEM;
 
 // http://swig.10945.n7.nabble.com/std-containers-and-pointers-td3728.html
 %{
