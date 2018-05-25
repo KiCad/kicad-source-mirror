@@ -2050,6 +2050,12 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
         BOX2D viewportD = getView()->GetViewport();
         BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+        double maxCoverRatio = footprintMaxCoverRatio;
+
+        // MODULE::CoverageRatio() doesn't take zone handles & borders into account so just
+        // use a more aggressive cutoff point if zones are involved.
+        if(  aCollector.CountType( PCB_ZONE_AREA_T ) )
+            maxCoverRatio /= 2;
 
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
@@ -2060,7 +2066,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     rejected.insert( mod );
                 // footprints completely covered with other features have no other
                 // means of selection, so must be kept
-                else if( mod->CoverageRatio( aCollector ) > footprintMaxCoverRatio )
+                else if( mod->CoverageRatio( aCollector ) > maxCoverRatio )
                     rejected.erase( mod );
                 // if a footprint is much smaller than the largest overlapping
                 // footprint then it should be considered for selection
