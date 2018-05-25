@@ -377,27 +377,27 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     switch( m_type )
     {
         case ST_AC:
-            m_axis_x = new FREQUENCY_LOG_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new GAIN_SCALE( wxT( "Gain" ), mpALIGN_LEFT );
-            m_axis_y2 = new PHASE_SCALE( wxT( "Phase" ), mpALIGN_RIGHT );
+            m_axis_x = new FREQUENCY_LOG_SCALE( _( "Frequency" ), mpALIGN_BOTTOM );
+            m_axis_y1 = new GAIN_SCALE( _( "Gain" ), mpALIGN_LEFT );
+            m_axis_y2 = new PHASE_SCALE( _( "Phase" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale( m_axis_y1 );
             break;
 
         case ST_DC:
-            m_axis_x = new VOLTAGE_SCALE_X( wxT( "Voltage (sweeped)" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage (measured)" ), mpALIGN_LEFT );
-            m_axis_y2 = new CURRENT_SCALE( wxT( "Current" ), mpALIGN_RIGHT );
+            m_axis_x = new VOLTAGE_SCALE_X( _( "Voltage (sweeped)" ), mpALIGN_BOTTOM );
+            m_axis_y1 = new VOLTAGE_SCALE_Y( _( "Voltage (measured)" ), mpALIGN_LEFT );
+            m_axis_y2 = new CURRENT_SCALE( _( "Current" ), mpALIGN_RIGHT );
             break;
 
         case ST_NOISE:
-            m_axis_x = new FREQUENCY_LOG_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new mpScaleY( wxT( "noise [(V or A)^2/Hz]" ), mpALIGN_LEFT );
+            m_axis_x = new FREQUENCY_LOG_SCALE( _( "Frequency" ), mpALIGN_BOTTOM );
+            m_axis_y1 = new mpScaleY( _( "noise [(V or A)^2/Hz]" ), mpALIGN_LEFT );
             break;
 
         case ST_TRANSIENT:
-            m_axis_x = new TIME_SCALE( wxT( "Time" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage" ), mpALIGN_LEFT );
-            m_axis_y2 = new CURRENT_SCALE( wxT( "Current" ), mpALIGN_RIGHT );
+            m_axis_x = new TIME_SCALE( _( "Time" ), mpALIGN_BOTTOM );
+            m_axis_y1 = new VOLTAGE_SCALE_Y( _( "Voltage" ), mpALIGN_LEFT );
+            m_axis_y2 = new CURRENT_SCALE( _( "Current" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale( m_axis_y1 );
             break;
 

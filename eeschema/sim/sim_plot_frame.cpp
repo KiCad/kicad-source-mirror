@@ -329,7 +329,7 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
         m_welcomePanel = nullptr;
     }
 
-    m_plotNotebook->AddPage( plotPanel, wxString::Format( wxT( "Plot%u" ),
+    m_plotNotebook->AddPage( plotPanel, wxString::Format( _( "Plot%u" ),
             (unsigned int) m_plotNotebook->GetPageCount() + 1 ), true );
 
     m_plots[plotPanel] = PLOT_INFO();
