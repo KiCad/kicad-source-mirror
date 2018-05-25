@@ -59,17 +59,9 @@ POTDIRS=`cat $LOCALDIR/POTDIRS|grep -v '^#'|grep -v '^\s*$'` #Read file without 
 
 cd $SOURCEDIR
 
-#Generate source file list
-for f in $POTDIRS
-do
-  find $f -name "*.cpp" >>$LOCALDIR/POTFILES #List files
-  find $f -name "*.h"   >>$LOCALDIR/POTFILES #List files
-done
-
 #Generate/update template pot file
-xgettext -f $LOCALDIR/POTFILES -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
-
-rm $LOCALDIR/POTFILES
+find $POTDIRS -name '*.cpp' -or -name '*.h' |
+  xgettext -f- -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
 
 #check if present in locale list
 validate() { echo $LINGUAS | grep -F -q -w "$1"; }
