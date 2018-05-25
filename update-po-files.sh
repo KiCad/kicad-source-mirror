@@ -61,6 +61,7 @@ cd $SOURCEDIR
 
 #Generate/update template pot file
 find $POTDIRS -name '*.cpp' -or -name '*.h' |
+  sort |
   xgettext -f- -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
 
 #check if present in locale list
