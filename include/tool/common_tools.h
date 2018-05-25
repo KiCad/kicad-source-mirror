@@ -66,6 +66,11 @@ private:
     ///> Pointer to the currently used edit frame.
     EDA_DRAW_FRAME* m_frame;
 
+    int doZoomInOut( bool aDirection, bool aCenterOnCursor );
+
+    ///> Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
+    int doZoomToPreset( int idx, bool aCenterOnCursor );
+
     ///> Applies the legacy canvas grid settings for GAL.
     void updateGrid();
 };

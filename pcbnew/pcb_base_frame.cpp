@@ -676,12 +676,14 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     if( m_zoomSelectBox == NULL || m_auxiliaryToolBar == NULL )
         return;
 
-    int current = 0;
+    int current = 0;    // display Auto if no match found
+
+    // check for a match within 1%
     double zoom = IsGalCanvasActive() ? GetGalCanvas()->GetLegacyZoom() : GetScreen()->GetZoom();
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
-        if( std::fabs( zoom - GetScreen()->m_ZoomList[i] ) < 1e-6 )
+        if( std::fabs( zoom - GetScreen()->m_ZoomList[i] ) < ( zoom / 100.0 ) )
         {
             current = i + 1;
             break;

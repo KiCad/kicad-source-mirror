@@ -60,27 +60,27 @@
 
 static const double pcbZoomList[] =
 {
-    ZOOM_FACTOR( 0.1 ),
-    ZOOM_FACTOR( 0.2 ),
-    ZOOM_FACTOR( 0.3 ),
-    ZOOM_FACTOR( 0.5 ),
+    ZOOM_FACTOR( 0.035 ),
+    ZOOM_FACTOR( 0.05 ),
+    ZOOM_FACTOR( 0.08 ),
+    ZOOM_FACTOR( 0.13 ),
+    ZOOM_FACTOR( 0.22 ),
+    ZOOM_FACTOR( 0.35 ),
+    ZOOM_FACTOR( 0.6 ),
     ZOOM_FACTOR( 1.0 ),
     ZOOM_FACTOR( 1.5 ),
-    ZOOM_FACTOR( 2.0 ),
-    ZOOM_FACTOR( 3.0 ),
-    ZOOM_FACTOR( 4.5 ),
-    ZOOM_FACTOR( 6.0 ),
+    ZOOM_FACTOR( 2.2 ),
+    ZOOM_FACTOR( 3.5 ),
+    ZOOM_FACTOR( 5.0 ),
     ZOOM_FACTOR( 8.0 ),
-    ZOOM_FACTOR( 11.0 ),
-    ZOOM_FACTOR( 15.0 ),
-    ZOOM_FACTOR( 22.0 ),
+    ZOOM_FACTOR( 13.0 ),
+    ZOOM_FACTOR( 20.0 ),
     ZOOM_FACTOR( 35.0 ),
     ZOOM_FACTOR( 50.0 ),
     ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 110.0 ),
-    ZOOM_FACTOR( 150.0 ),
-    ZOOM_FACTOR( 200.0 ),
-    ZOOM_FACTOR( 300.0 ),
+    ZOOM_FACTOR( 130.0 ),
+    ZOOM_FACTOR( 220.0 ),
+    ZOOM_FACTOR( 350.0 )
 /*
     The largest distance that wx can support is INT_MAX, since it represents
     distance often in a wxCoord or wxSize. As a scalar, a distance is always
