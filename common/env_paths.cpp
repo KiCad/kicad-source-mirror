@@ -36,7 +36,7 @@ static bool normalizeAbsolutePaths( const wxFileName& aPathA,
       || ( aPathA.HasVolume() && !aPathB.HasVolume() )
       || ( !aPathA.HasVolume() && aPathB.HasVolume() )
       || ( ( aPathA.HasVolume() && aPathB.HasVolume() )
-         && ( aPathA.GetVolume() == aPathB.GetVolume() ) ) )
+         && ( aPathA.GetVolume() != aPathB.GetVolume() ) ) )
         return false;
 
     wxArrayString aDirs = aPathA.GetDirs();
