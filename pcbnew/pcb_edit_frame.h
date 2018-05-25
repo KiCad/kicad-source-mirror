@@ -90,8 +90,6 @@ protected:
 
     DRC* m_drc;                                 ///< the DRC controller, see drc.cpp
 
-    DIALOG_PLOT*      m_plotDialog;
-
     PARAM_CFG_ARRAY   m_configParams;         ///< List of Pcbnew configuration settings.
 
     wxString          m_lastNetListRead;        ///< Last net list read with relative path.

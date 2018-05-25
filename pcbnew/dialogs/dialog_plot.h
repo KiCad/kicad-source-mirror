@@ -29,6 +29,9 @@
 #include <dialog_plot_base.h>
 #include <pcb_plot_params.h>
 
+// the plot dialog window name, used by wxWidgets
+#define DLG_WINDOW_NAME "plot_dialog-window"
+
 /**
  * Class DIALOG_PLOT is the dialog to set the plot options, and create plot files
  * in various formats.
@@ -40,6 +43,7 @@ public:
 
 private:
     PCB_EDIT_FRAME*     m_parent;
+    EDA_UNITS_T         m_userUnits;                // units used when creating the dialog
     wxConfigBase*       m_config;
     LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate

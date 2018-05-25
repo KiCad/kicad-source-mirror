@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013-2018 KiCad Developers, see AUTHORS.txt for contributors.
@@ -352,7 +352,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas() );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
-    m_plotDialog = nullptr;
 
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
@@ -535,7 +534,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
     delete m_drc;
-    delete m_plotDialog;
 }
 
 
@@ -1183,10 +1181,15 @@ void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
-    if( !m_plotDialog )
-        m_plotDialog = new DIALOG_PLOT( this );
+    // Force rebuild the dialog if currently open because the old dialog can be not up to date
+    // if the board (or units) has changed
+    wxWindow* dlg =  wxWindow::FindWindowByName( DLG_WINDOW_NAME );
 
-    m_plotDialog->Show( true );
+    if( dlg )
+        dlg->Destroy();
+
+    dlg = new DIALOG_PLOT( this );
+    dlg->Show( true );
 }
 
 

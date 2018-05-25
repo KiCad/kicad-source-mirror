@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,8 @@
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent )
 {
+    SetName( DLG_WINDOW_NAME );
+    m_userUnits = g_UserUnit;
     m_config = Kiface().KifaceSettings();
     m_plotOpts = aParent->GetPlotSettings();
     init_Dialog();
@@ -118,23 +120,24 @@ void DIALOG_PLOT::init_Dialog()
         break;
     }
 
-    msg = StringFromValue( g_UserUnit, board->GetDesignSettings().m_SolderMaskMargin, true );
+    msg = StringFromValue( m_userUnits, board->GetDesignSettings().m_SolderMaskMargin, true );
     m_SolderMaskMarginCurrValue->SetLabel( msg );
-    msg = StringFromValue( g_UserUnit, board->GetDesignSettings().m_SolderMaskMinWidth, true );
+    msg = StringFromValue( m_userUnits, board->GetDesignSettings().m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
-    // Set units and value for HPGL pen size (this param in in mils).
-    AddUnitSymbol( *m_textPenSize, g_UserUnit );
-    msg = StringFromValue( g_UserUnit,
-                           m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
-    m_HPGLPenSizeOpt->AppendText( msg );
+    // Set units and value for HPGL pen size (this param is in mils).
+    AddUnitSymbol( *m_textPenSize, m_userUnits );
 
-    AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
-    msg = StringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
-    m_linesWidth->AppendText( msg );
+    msg = StringFromValue( m_userUnits,
+                           m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
+    m_HPGLPenSizeOpt->SetValue( msg );
+
+    AddUnitSymbol( *m_textDefaultPenSize, m_userUnits );
+    msg = StringFromValue( m_userUnits, m_plotOpts.GetLineWidth() );
+    m_linesWidth->SetValue( msg );
 
     // Set units for PS global width correction.
-    AddUnitSymbol( *m_textPSFineAdjustWidth, g_UserUnit );
+    AddUnitSymbol( *m_textPSFineAdjustWidth, m_userUnits );
 
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
@@ -145,14 +148,14 @@ void DIALOG_PLOT::init_Dialog()
     m_fineAdjustXscaleOpt->AppendText( msg );
 
     msg.Printf( wxT( "%f" ), m_YScaleAdjust );
-    m_fineAdjustYscaleOpt->AppendText( msg );
+    m_fineAdjustYscaleOpt->SetValue( msg );
 
     // Test for a reasonable PS width correction value. Set to 0 if problem.
     if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
         m_PSWidthAdjust = 0.;
 
-    msg.Printf( wxT( "%f" ), To_User_Unit( g_UserUnit, m_PSWidthAdjust ) );
-    m_PSFineAdjustWidthOpt->AppendText( msg );
+    msg.Printf( wxT( "%f" ), To_User_Unit( m_userUnits, m_PSWidthAdjust ) );
+    m_PSFineAdjustWidthOpt->SetValue( msg );
 
     m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
     m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
@@ -249,21 +252,18 @@ void DIALOG_PLOT::reInitDialog()
     m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
 }
 
+
 void DIALOG_PLOT::OnQuit( wxCommandEvent& event )
 {
-    // Put a wxID_CANCEL event through the dialog infrastrucutre
-    event.SetId( wxID_CANCEL );
     event.Skip();
+
+    Destroy();
 }
 
 
 void DIALOG_PLOT::OnClose( wxCloseEvent& event )
 {
-    applyPlotSettings();
-
-    // Put an wxID_OK event through the dialog infrastrucutre
-    event.SetId( wxID_OK );
-    event.Skip();
+    Destroy();
 }
 
 
@@ -632,11 +632,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // read HPLG pen size (this param is stored in mils)
     wxString    msg = m_HPGLPenSizeOpt->GetValue();
-    int         tmp = ValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
+    int         tmp = ValueFromString( m_userUnits, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHPGLPenDiameter( tmp ) )
     {
-        msg = StringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
+        msg = StringFromValue( m_userUnits, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained." ) );
         reporter.Report( msg, REPORTER::RPT_INFO );
@@ -644,11 +644,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Default linewidth
     msg = m_linesWidth->GetValue();
-    tmp = ValueFromString( g_UserUnit, msg );
+    tmp = ValueFromString( m_userUnits, msg );
 
     if( !tempOptions.SetLineWidth( tmp ) )
     {
-        msg = StringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
+        msg = StringFromValue( m_userUnits, tempOptions.GetLineWidth() );
         m_linesWidth->SetValue( msg );
         msg.Printf( _( "Default line width constrained." ) );
         reporter.Report( msg, REPORTER::RPT_INFO );
@@ -687,18 +687,18 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
-    int itmp = ValueFromString( g_UserUnit, msg );
+    int itmp = ValueFromString( m_userUnits, msg );
 
     if( !setInt( &m_PSWidthAdjust, itmp, m_widthAdjustMinValue, m_widthAdjustMaxValue ) )
     {
-        msg = StringFromValue( g_UserUnit, m_PSWidthAdjust );
+        msg = StringFromValue( m_userUnits, m_PSWidthAdjust );
         m_PSFineAdjustWidthOpt->SetValue( msg );
         msg.Printf( _( "Width correction constrained. "
                        "The reasonable width correction value must be in a range of "
                        " [%+f; %+f] (%s) for current design rules." ),
-                    To_User_Unit( g_UserUnit, m_widthAdjustMinValue ),
-                    To_User_Unit( g_UserUnit, m_widthAdjustMaxValue ),
-                    ( g_UserUnit == INCHES ) ? wxT( "\"" ) : wxT( "mm" ) );
+                    To_User_Unit( m_userUnits, m_widthAdjustMinValue ),
+                    To_User_Unit( m_userUnits, m_widthAdjustMaxValue ),
+                    ( m_userUnits == INCHES ) ? wxT( "\"" ) : wxT( "mm" ) );
         reporter.Report( msg, REPORTER::RPT_WARNING );
     }
 
