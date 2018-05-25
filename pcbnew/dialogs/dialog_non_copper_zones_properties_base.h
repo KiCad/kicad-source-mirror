@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,11 +18,12 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listctrl.h>
+#include <wx/dataview.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
-#include <wx/statbox.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -34,29 +35,29 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-		
-		// Private event handlers
-		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
-		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
-		
 	
 	protected:
+		enum
+		{
+			ID_M_OUTLINEAPPEARANCECTRL = 1000
+		};
+		
 		wxStaticText* m_staticTextLayerSelection;
-		wxListView* m_LayerSelectionCtrl;
-		wxRadioBox* m_OrientEdgesOpt;
-		wxRadioBox* m_OutlineAppearanceCtrl;
-		wxStaticText* m_MinThicknessValueTitle;
-		wxTextCtrl* m_ZoneMinThicknessCtrl;
+		wxDataViewListCtrl* m_layers;
+		wxCheckBox* m_ConstrainOpt;
+		wxStaticText* m_staticTextStyle;
+		wxChoice* m_OutlineAppearanceCtrl;
+		wxStaticText* m_MinWidthLabel;
+		wxTextCtrl* m_MinWidthCtrl;
+		wxStaticText* m_MinWidthUnits;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
 		
 	
 	public:

@@ -36,8 +36,7 @@
 
 #include <zone_filler.h>
 
-ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool,
-                   const PARAMS& aParams ):
+ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, const PARAMS& aParams ):
         m_tool( aTool ),
         m_params( aParams ),
         m_parentView( *aTool.getView() )
@@ -70,7 +69,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         // Get the current default settings for zones
 
         // Show options dialog
-        ZONE_EDIT_T dialogResult;
+        int dialogResult;
 
         if( m_params.m_keepout )
             dialogResult = InvokeKeepoutAreaEditor( &frame, &zoneInfo );
@@ -79,13 +78,11 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
             if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
                 dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
             else
-                dialogResult = InvokeNonCopperZonesEditor( &frame, nullptr, &zoneInfo );
+                dialogResult = InvokeNonCopperZonesEditor( &frame, &zoneInfo );
         }
 
-        if( dialogResult == ZONE_ABORT )
-        {
+        if( dialogResult == wxID_CANCEL )
             return nullptr;
-        }
     }
 
     auto newZone = std::make_unique<ZONE_CONTAINER>( &board );
@@ -113,29 +110,28 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createZoneFromExisting(
 }
 
 
-void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aExistingZone,
-                                            ZONE_CONTAINER& aCutout )
+void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINER& aCutout )
 {
     BOARD* board = m_tool.getModel<BOARD>();
-    int curr_hole = aExistingZone.Outline()->NewHole( 0 );
+    int curr_hole = aZone.Outline()->NewHole( 0 );
 
     // Copy cutout corners into existing zone, in the new hole
     for( int ii = 0; ii < aCutout.GetNumCorners(); ii++ )
     {
-        aExistingZone.Outline()->Append( aCutout.GetCornerPosition( ii ), 0, curr_hole );
+        aZone.Outline()->Append( aCutout.GetCornerPosition( ii ), 0, curr_hole );
     }
 
     // Be sure the current corner list is closed
-    aExistingZone.Outline()->Hole( 0, curr_hole ).SetClosed( true );
+    aZone.Outline()->Hole( 0, curr_hole ).SetClosed( true );
 
     // Combine holes and simplify the new outline:
-    board->OnAreaPolygonModified( nullptr, &aExistingZone );
+    board->OnAreaPolygonModified( nullptr, &aZone );
 
     // Re-fill if needed
-    if( aExistingZone.IsFilled() )
+    if( aZone.IsFilled() )
     {
         ZONE_FILLER filler( board );
-        filler.Fill( { &aExistingZone } );
+        filler.Fill( { &aZone } );
     }
 }
 

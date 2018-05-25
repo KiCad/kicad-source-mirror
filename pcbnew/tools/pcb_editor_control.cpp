@@ -764,9 +764,8 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool->GetSelection();
 
-    // because this pops up the zone editor, it would be confusing
-    // to handle multiple zones, so just handle single selections
-    // containing exactly one zone
+    // because this pops up the zone editor, it would be confusing to handle multiple zones,
+    // so just handle single selections containing exactly one zone
     if( selection.Size() != 1 )
         return 0;
 
@@ -775,37 +774,37 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     if( !oldZone )
         return 0;
 
+    ZONE_SETTINGS zoneSettings;
+    zoneSettings << *oldZone;
+    int dialogResult;
+
+    if( oldZone->GetIsKeepout() )
+        dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneSettings );
+    else if( oldZone->IsOnCopperLayer() )
+        dialogResult = InvokeCopperZonesEditor( m_frame, &zoneSettings );
+    else
+        dialogResult = InvokeNonCopperZonesEditor( m_frame, &zoneSettings );
+
+    if( dialogResult != wxID_OK )
+        return 0;
+
+    // duplicate the zone
+    BOARD_COMMIT commit( m_frame );
+
     auto newZone = std::make_unique<ZONE_CONTAINER>( *oldZone );
     newZone->ClearSelected();
     newZone->UnFill();
-    ZONE_SETTINGS zoneSettings;
-    zoneSettings << *oldZone;
+    zoneSettings.ExportSetting( *newZone );
 
-    bool success = false;
+    // If the new zone is on the same layer(s) as the the initial zone,
+    // offset it a bit so it can more easily be picked.
+    if( oldZone->GetIsKeepout() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
+        newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
+    else if( !oldZone->GetIsKeepout() && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+        newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
 
-    if( oldZone->GetIsKeepout() )
-        success = InvokeKeepoutAreaEditor( m_frame, &zoneSettings );
-    else if( oldZone->IsOnCopperLayer() )
-        success = InvokeCopperZonesEditor( m_frame, &zoneSettings );
-    else
-        success = InvokeNonCopperZonesEditor( m_frame, oldZone, &zoneSettings );
-
-    // duplicate the zone
-    if( success )
-    {
-        BOARD_COMMIT commit( m_frame );
-        zoneSettings.ExportSetting( *newZone );
-
-        // If the new zone is on the same layer(s) as the the initial zone,
-        // offset it a bit so it can more easily be picked.
-        if( oldZone->GetIsKeepout() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
-            newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
-        else if( !oldZone->GetIsKeepout() && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
-            newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
-
-        commit.Add( newZone.release() );
-        commit.Push( _( "Duplicate zone" ) );
-    }
+    commit.Add( newZone.release() );
+    commit.Push( _( "Duplicate zone" ) );
 
     return 0;
 }

@@ -115,76 +115,65 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* aZone )
 
 void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
 {
-    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( *aZone );
-    newZone->UnFill();
     ZONE_SETTINGS zoneSettings;
     zoneSettings << *aZone;
-
-    bool success;
+    int dialogResult;
 
     if( aZone->GetIsKeepout() )
-        success = InvokeKeepoutAreaEditor( this, &zoneSettings );
+        dialogResult = InvokeKeepoutAreaEditor( this, &zoneSettings );
     else if( aZone->IsOnCopperLayer() )
-        success = InvokeCopperZonesEditor( this, &zoneSettings );
+        dialogResult = InvokeCopperZonesEditor( this, &zoneSettings );
     else
-        success = InvokeNonCopperZonesEditor( this, aZone, &zoneSettings );
+        dialogResult = InvokeNonCopperZonesEditor( this, &zoneSettings );
+
+    if( dialogResult != wxID_OK )
+        return;
 
     // If the new zone is on the same layer as the the initial zone we'll end up combining
     // them which will result in a no-op.  Might as well exit here.
-    if( success )
+    if( aZone->GetIsKeepout() && ( aZone->GetLayerSet() == zoneSettings.m_Layers ) )
     {
-        if( aZone->GetIsKeepout() && ( aZone->GetLayerSet() == zoneSettings.m_Layers ) )
-        {
-            DisplayErrorMessage(
-                        this, _( "The duplicated zone cannot be on the same layers as the original zone." ) );
-            success = false;
-        }
-        else if( !aZone->GetIsKeepout() && ( aZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
-        {
-            DisplayErrorMessage(
-                    this, _(  "The duplicated zone cannot be on the same layer as the original zone." ) );
-            success = false;
-        }
+        DisplayErrorMessage( this, _( "The duplicated zone cannot be on the same layers as the original zone." ) );
+        return;
+    }
+    else if( !aZone->GetIsKeepout() && ( aZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+    {
+        DisplayErrorMessage( this, _(  "The duplicated zone cannot be on the same layer as the original zone." ) );
+        return;
     }
 
-    if( success )
-    {
-        zoneSettings.ExportSetting( *newZone );
-        newZone->Hatch();
+    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( *aZone );
+    newZone->UnFill();
+    zoneSettings.ExportSetting( *newZone );
+    newZone->Hatch();
 
-        s_AuxiliaryList.ClearListAndDeleteItems();
-        s_PickedList.ClearListAndDeleteItems();
-        SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNetCode(), newZone->GetLayer() );
-        GetBoard()->Add( newZone );
+    s_AuxiliaryList.ClearListAndDeleteItems();
+    s_PickedList.ClearListAndDeleteItems();
+    SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNetCode(), newZone->GetLayer() );
+    GetBoard()->Add( newZone );
 
-        ITEM_PICKER picker( newZone, UR_NEW );
-        s_PickedList.PushItem( picker );
+    ITEM_PICKER picker( newZone, UR_NEW );
+    s_PickedList.PushItem( picker );
 
-        GetScreen()->SetCurItem( NULL );       // This outline may be deleted when merging outlines
+    GetScreen()->SetCurItem( NULL );       // This outline may be deleted when merging outlines
 
-        // Combine zones if possible
-        GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, newZone );
+    // Combine zones if possible
+    GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, newZone );
 
-        // Redraw zones
-        GetBoard()->RedrawAreasOutlines( m_canvas, aDC, GR_OR, newZone->GetLayer() );
-        GetBoard()->RedrawFilledAreas( m_canvas, aDC, GR_OR, newZone->GetLayer() );
+    // Redraw zones
+    GetBoard()->RedrawAreasOutlines( m_canvas, aDC, GR_OR, newZone->GetLayer() );
+    GetBoard()->RedrawFilledAreas( m_canvas, aDC, GR_OR, newZone->GetLayer() );
 
-        DRC drc( this );
+    DRC drc( this );
 
-        if( GetBoard()->GetAreaIndex( newZone ) >= 0
-           && drc.TestZoneToZoneOutline( newZone, true ) )
-        {
-            DisplayInfoMessage( this, _( "Warning: The new zone fails DRC" ) );
-        }
+    if( GetBoard()->GetAreaIndex( newZone ) >= 0 && drc.TestZoneToZoneOutline( newZone, true ) )
+        DisplayInfoMessage( this, _( "Warning: The new zone fails DRC" ) );
 
-        UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
-        SaveCopyInUndoList( s_PickedList, UR_UNSPECIFIED );
-        s_PickedList.ClearItemsList();
+    UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
+    SaveCopyInUndoList( s_PickedList, UR_UNSPECIFIED );
+    s_PickedList.ClearItemsList();
 
-        OnModify();
-    }
-    else
-        delete newZone;
+    OnModify();
 }
 
 
@@ -567,7 +556,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     {
         if( !s_CurrentZone )            // A new outline is created, from scratch
         {
-            ZONE_EDIT_T edited;
+            int dialogResult;
 
             // Prompt user for parameters:
             m_canvas->SetIgnoreMouseEvents( true );
@@ -608,27 +597,27 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     zoneInfo.SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_NONE );
                     zoneInfo.SetCornerRadius( 0 );
 
-                    edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
+                    dialogResult = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else
                 {
                     zoneInfo.m_CurrentZone_Layer = GetActiveLayer();    // Preselect a layer
                     zoneInfo.SetIsKeepout( false );
-                    edited = InvokeCopperZonesEditor( this, &zoneInfo );
+                    dialogResult = InvokeCopperZonesEditor( this, &zoneInfo );
                 }
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
-                zone->SetLayer( GetActiveLayer() );     // Preselect a layer
+                zoneInfo.m_CurrentZone_Layer = GetActiveLayer();   // Preselect a layer
                 zoneInfo.SetIsKeepout( false );
-                zoneInfo.m_NetcodeSelection = 0;        // No net for non copper zones
-                edited = InvokeNonCopperZonesEditor( this, zone, &zoneInfo );
+                zoneInfo.m_NetcodeSelection = 0;                   // No net for non copper zones
+                dialogResult = InvokeNonCopperZonesEditor( this, &zoneInfo );
             }
 
             m_canvas->MoveCursorToCrossHair();
             m_canvas->SetIgnoreMouseEvents( false );
 
-            if( edited == ZONE_ABORT )
+            if( dialogResult == wxID_CANCEL )
             {
                 GetBoard()->m_CurrentZoneContour = NULL;
                 delete zone;
@@ -697,8 +686,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             // SCREEN::SetCurItem(), so the DRC error remains on screen.
             // PCB_EDIT_FRAME::SetCurItem() calls DisplayInfo().
             GetScreen()->SetCurItem( NULL );
-            DisplayErrorMessage( this,
-                          _( "DRC error: this start point is inside or too close another area" ) );
+            DisplayErrorMessage( this, _( "DRC error: this start point is inside or too close another area" ) );
             return 0;
         }
 
@@ -765,8 +753,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
         if( Settings().m_legacyDrcOn &&
             m_drc->DrcOnCreatingZone( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
         {
-            DisplayErrorMessage( this,
-                          _( "DRC error: closing this area creates a DRC error with another area" ) );
+            DisplayErrorMessage( this, _( "DRC error: closing this area creates a DRC error with another area" ) );
             m_canvas->MoveCursorToCrossHair();
             return false;
         }
@@ -877,8 +864,8 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
 void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
 {
-    ZONE_EDIT_T     edited;
-    ZONE_SETTINGS   zoneInfo = GetZoneSettings();
+    int           dialogResult;
+    ZONE_SETTINGS zoneInfo = GetZoneSettings();
 
     BOARD_COMMIT commit( this );
     m_canvas->SetIgnoreMouseEvents( true );
@@ -893,24 +880,24 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     {
         // edit a keepout area on a copper layer
         zoneInfo << *aZone;
-        edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
+        dialogResult = InvokeKeepoutAreaEditor( this, &zoneInfo );
     }
     else if( IsCopperLayer( aZone->GetLayer() ) )
     {
         // edit a zone on a copper layer
         zoneInfo << *aZone;
-        edited = InvokeCopperZonesEditor( this, &zoneInfo );
+        dialogResult = InvokeCopperZonesEditor( this, &zoneInfo );
     }
     else
     {
         zoneInfo << *aZone;
-        edited = InvokeNonCopperZonesEditor( this, aZone, &zoneInfo );
+        dialogResult = InvokeNonCopperZonesEditor( this, &zoneInfo );
     }
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
 
-    if( edited == ZONE_ABORT )
+    if( dialogResult == wxID_CANCEL )
     {
         s_AuxiliaryList.ClearListAndDeleteItems();
         s_PickedList.ClearListAndDeleteItems();
@@ -920,7 +907,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     SetZoneSettings( zoneInfo );
     OnModify();
 
-    if( edited == ZONE_EXPORT_VALUES )
+    if( dialogResult == ZONE_EXPORT_VALUES )
     {
         UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
         commit.Stage( s_PickedList );

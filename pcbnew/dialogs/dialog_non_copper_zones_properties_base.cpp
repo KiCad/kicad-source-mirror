@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,11 +8,6 @@
 #include "dialog_non_copper_zones_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
-
-BEGIN_EVENT_TABLE( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_CANCEL, DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::_wxFB_OnCancelClick )
-	EVT_BUTTON( wxID_OK, DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::_wxFB_OnOkClick )
-END_EVENT_TABLE()
 
 DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
@@ -27,52 +22,61 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layer selection:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLayerSelection->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextLayerSelection, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_LayerSelectionCtrl = new wxListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizerLeft->Add( m_LayerSelectionCtrl, 1, wxALL|wxEXPAND, 5 );
+	m_layers = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER|wxSUNKEN_BORDER );
+	m_layers->SetMinSize( wxSize( -1,200 ) );
+	
+	bSizerLeft->Add( m_layers, 0, wxALL, 5 );
 	
 	
-	m_UpperSizer->Add( bSizerLeft, 1, wxEXPAND, 5 );
+	m_UpperSizer->Add( bSizerLeft, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* m_OutilinesBoxOpt;
-	m_OutilinesBoxOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outlines Options:") ), wxVERTICAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("H, V and 45 deg") };
-	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
-	m_OrientEdgesOpt = new wxRadioBox( m_OutilinesBoxOpt->GetStaticBox(), wxID_ANY, _("Zone Edge Orientation:"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_OrientEdgesOpt->SetSelection( 0 );
-	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL|wxEXPAND, 5 );
+	m_ConstrainOpt = new wxCheckBox( this, wxID_ANY, _("Constrain outline to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_ConstrainOpt, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 	
-	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched outline"), _("Full hatched") };
+	m_staticTextStyle = new wxStaticText( this, wxID_ANY, _("Outline display:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStyle->Wrap( -1 );
+	gbSizer1->Add( m_staticTextStyle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
-	m_OutlineAppearanceCtrl = new wxRadioBox( m_OutilinesBoxOpt->GetStaticBox(), wxID_ANY, _("Outline Appearance:"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OutlineAppearanceCtrl->SetSelection( 1 );
-	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
+	m_OutlineAppearanceCtrl = new wxChoice( this, ID_M_OUTLINEAPPEARANCECTRL, wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 0 );
+	m_OutlineAppearanceCtrl->SetSelection( 0 );
+	gbSizer1->Add( m_OutlineAppearanceCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	
+	m_MinWidthLabel = new wxStaticText( this, wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MinWidthLabel->Wrap( -1 );
+	gbSizer1->Add( m_MinWidthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_MinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_MinWidthCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	
+	m_MinWidthUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MinWidthUnits->Wrap( -1 );
+	gbSizer1->Add( m_MinWidthUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bSizerRight->Add( m_OutilinesBoxOpt, 0, wxEXPAND|wxALL, 5 );
-	
-	m_MinThicknessValueTitle = new wxStaticText( this, wxID_ANY, _("Zone min thickness value:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MinThicknessValueTitle->Wrap( -1 );
-	bSizerRight->Add( m_MinThicknessValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_ZoneMinThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRight->Add( gbSizer1, 1, wxEXPAND, 5 );
 	
 	
-	m_UpperSizer->Add( bSizerRight, 0, wxEXPAND, 5 );
+	m_UpperSizer->Add( bSizerRight, 0, wxEXPAND|wxALL, 10 );
 	
 	
-	m_MainSizer->Add( m_UpperSizer, 1, wxEXPAND, 5 );
+	m_MainSizer->Add( m_UpperSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_MainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	m_MainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
@@ -81,7 +85,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
 	
-	m_MainSizer->Add( m_sdbSizerButtons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_MainSizer->Add( m_sdbSizerButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );
@@ -89,8 +93,14 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	m_MainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
+	
+	// Connect Events
+	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnLayerSelection ), NULL, this );
 }
 
 DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::~DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE()
 {
+	// Disconnect Events
+	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnLayerSelection ), NULL, this );
+	
 }

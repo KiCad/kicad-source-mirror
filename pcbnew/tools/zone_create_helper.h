@@ -104,10 +104,10 @@ public:
      * Cut one zone out of another one (i.e. subtraction) and
      * update the zone.
      *
-     * @param aExistingZone the zone to removed area from
+     * @param aZone the zone to removed area from
      * @param aCutout the area to remove
      */
-    void performZoneCutout( ZONE_CONTAINER& aExistingZone, ZONE_CONTAINER& aCutout );
+    void performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINER& aCutout );
 
     /**
      * Commit the current zone-in-progress to the BOARD. This might

@@ -31,9 +31,13 @@
 
 #include <convert_to_biu.h>
 #include <pcbnew.h>
+#include <pcb_base_frame.h>
+#include <class_board.h>
 #include <zones.h>
 
 #include <class_zone.h>
+#include <wx/dataview.h>
+#include <widgets/color_swatch.h>
 
 ZONE_SETTINGS::ZONE_SETTINGS()
 {
@@ -145,3 +149,59 @@ void ZONE_SETTINGS::SetCornerRadius( int aRadius )
     else
         m_cornerRadius = aRadius;
 }
+
+
+const static wxSize LAYER_BITMAP_SIZE( 28, 28 );  // Mac unhappy if this isn't square...
+
+// A helper for setting up a dialog list for specifying zone layers.  Used by all three
+// zone settings dialogs.
+void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
+                                     bool aShowCopper )
+{
+    BOARD* board = aFrame->GetBoard();
+    COLOR4D backgroundColor = aFrame->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
+    LSET layers = aShowCopper ? LSET::AllCuMask( board->GetCopperLayerCount() )
+                              : LSET::AllNonCuMask();
+
+    wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString );
+    wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );
+    wxDataViewColumn* layerIDColumn = aList->AppendIconTextColumn( wxEmptyString );
+    layerIDColumn->SetHidden( true );
+
+    int minWidth = 0;
+
+    for( LSEQ layer = layers.UIOrder(); layer; ++layer )
+    {
+        PCB_LAYER_ID layerID = *layer;
+        wxString     layerName = board->GetLayerName( layerID );
+
+        // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
+        minWidth = std::max( minWidth, GetTextSize( layerName, aList ).x );
+
+        COLOR4D layerColor = aFrame->Settings().Colors().GetLayerColor( layerID );
+        auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE );
+        wxIcon icon;
+        icon.CopyFromBitmap( bitmap );
+
+        wxVector<wxVariant> row;
+        row.push_back( wxVariant( m_Layers.test( layerID ) ) );
+        row.push_back( wxVariant( wxDataViewIconText( layerName, icon ) ) );
+        row.push_back( wxVariant( layerID ) );
+        aList->AppendItem( row );
+
+        if( m_CurrentZone_Layer == layerID )
+            aList->SetToggleValue( true, (unsigned) aList->GetItemCount() - 1, 0 );
+    }
+
+    checkColumn->SetWidth( 25 );
+    layerColumn->SetMinWidth( minWidth + LAYER_BITMAP_SIZE.x + 25 );
+
+    // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
+    // for the tree expanders... but you'd be wrong.  Force indent to 0.
+    aList->SetIndent( 0 );
+
+    minWidth = checkColumn->GetWidth() + layerColumn->GetWidth();
+    aList->SetMinSize( wxSize( minWidth, aList->GetMinSize().GetHeight() ) );
+}
+
+

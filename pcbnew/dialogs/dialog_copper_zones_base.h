@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class TEXT_CTRL_EVAL;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -20,18 +18,20 @@ class TEXT_CTRL_EVAL;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listctrl.h>
+#include <wx/dataview.h>
 #include <wx/sizer.h>
 #include <wx/listbox.h>
-#include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
-#include <wx/statbox.h>
-#include <wx/spinctrl.h>
+#include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/choice.h>
+#include <wx/spinctrl.h>
+#include <wx/gbsizer.h>
+#include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,13 +47,11 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		// Private event handlers
 		void _wxFB_OnClose( wxCloseEvent& event ){ OnClose( event ); }
 		void _wxFB_OnUpdateUI( wxUpdateUIEvent& event ){ OnUpdateUI( event ); }
-		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
+		void _wxFB_OnLayerSelection( wxDataViewEvent& event ){ OnLayerSelection( event ); }
 		void _wxFB_OnRunFiltersButtonClick( wxCommandEvent& event ){ OnRunFiltersButtonClick( event ); }
-		void _wxFB_OnCornerSmoothingModeChoice( wxCommandEvent& event ){ OnCornerSmoothingModeChoice( event ); }
-		void _wxFB_OnPadsInZoneClick( wxCommandEvent& event ){ OnPadsInZoneClick( event ); }
+		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
 		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
-		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		
 	
 	protected:
@@ -61,61 +59,57 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		{
 			ID_DIALOG_COPPER_ZONE_BASE = 1000,
 			ID_NETNAME_SELECTION,
-			ID_M_NETDISPLAYOPTION,
 			ID_TEXTCTRL_NETNAMES_FILTER,
 			wxID_APPLY_FILTERS,
 			ID_CORNER_SMOOTHING,
 			ID_M_CORNERSMOOTHINGCTRL,
+			ID_M_PRIORITYLEVELCTRL,
+			ID_M_OUTLINEAPPEARANCECTRL,
 			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,
 			wxID_COPPER_BRIDGE_VALUE,
-			ID_M_PRIORITYLEVELCTRL,
-			ID_M_FILLMODECTRL,
-			ID_M_ARCAPPROXIMATIONOPT,
-			ID_M_ORIENTEDGESOPT,
-			ID_M_OUTLINEAPPEARANCECTRL,
 			wxID_BUTTON_EXPORT
 		};
 		
 		wxBoxSizer* m_MainBoxSizer;
 		wxStaticText* m_staticTextLayers;
-		wxListView* m_LayerSelectionCtrl;
+		wxDataViewListCtrl* m_layers;
 		wxStaticText* m_staticTextNets;
 		wxListBox* m_ListNetNameSelection;
 		wxStaticText* m_staticTextDisplay;
-		wxChoice* m_NetDisplayOption;
-		wxStaticText* m_staticTextHfilter;
 		wxTextCtrl* m_DoNotShowNetNameFilter;
 		wxStaticText* m_staticTextVFilter;
 		wxTextCtrl* m_ShowNetNameFilter;
 		wxButton* m_buttonRunFilter;
-		wxStaticText* m_ClearanceValueTitle;
-		TEXT_CTRL_EVAL* m_ZoneClearanceCtrl;
-		wxStaticText* m_MinThicknessValueTitle;
-		TEXT_CTRL_EVAL* m_ZoneMinThicknessCtrl;
-		wxStaticText* m_staticTextSmoothing;
-		wxChoice* m_cornerSmoothingChoice;
-		wxStaticText* m_cornerSmoothingValue;
-		TEXT_CTRL_EVAL* m_cornerSmoothingCtrl;
-		wxStaticText* m_staticTextPadConnection;
-		wxChoice* m_PadInZoneOpt;
-		wxStaticText* m_AntipadSizeText;
-		TEXT_CTRL_EVAL* m_AntipadSizeValue;
-		wxStaticText* m_CopperBridgeWidthText;
-		TEXT_CTRL_EVAL* m_CopperWidthValue;
-		wxStaticText* m_staticTextPriorityLevel;
-		wxSpinCtrl* m_PriorityLevelCtrl;
-		wxStaticText* m_staticTextFillMode;
-		wxChoice* m_FillModeCtrl;
-		wxStaticText* m_staticTextSegmCnt;
-		wxChoice* m_ArcApproximationOpt;
-		wxStaticText* m_staticTextSlope;
-		wxChoice* m_OrientEdgesOpt;
-		wxStaticText* m_staticTextStyle;
-		wxChoice* m_OutlineAppearanceCtrl;
+		wxCheckBox* m_showAllNetsOpt;
+		wxCheckBox* m_sortByPadsOpt;
 		wxBoxSizer* m_bNoNetWarning;
 		wxStaticBitmap* m_bitmapNoNetWarning;
 		wxStaticText* m_staticText18;
+		wxCheckBox* m_constrainOutline;
+		wxStaticText* m_staticTextSmoothing;
+		wxChoice* m_cornerSmoothingChoice;
+		wxStaticText* m_cornerRadiusLabel;
+		wxTextCtrl* m_cornerRadiusCtrl;
+		wxStaticText* m_cornerRadiusUnits;
+		wxStaticText* m_staticTextPriorityLevel;
+		wxSpinCtrl* m_PriorityLevelCtrl;
+		wxStaticText* m_staticTextStyle;
+		wxChoice* m_OutlineAppearanceCtrl;
+		wxStaticText* m_clearanceLabel;
+		wxTextCtrl* m_clearanceCtrl;
+		wxStaticText* m_clearanceUnits;
+		wxStaticText* m_minWidthLabel;
+		wxTextCtrl* m_minWidthCtrl;
+		wxStaticText* m_minWidthUnits;
+		wxStaticText* m_connectionLabel;
+		wxChoice* m_PadInZoneOpt;
+		wxStaticText* m_antipadLabel;
+		wxTextCtrl* m_antipadCtrl;
+		wxStaticText* m_antipadUnits;
+		wxStaticText* m_spokeWidthLabel;
+		wxTextCtrl* m_spokeWidthCtrl;
+		wxStaticText* m_spokeWidthUnits;
 		wxButton* m_ExportSetupButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -124,13 +118,11 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnRunFiltersButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCornerSmoothingModeChoice( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPadsInZoneClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

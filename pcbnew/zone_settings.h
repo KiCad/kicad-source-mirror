@@ -30,7 +30,8 @@
 #ifndef ZONE_SETTINGS_H_
 #define ZONE_SETTINGS_H_
 
-#include "zones.h"
+#include <zones.h>
+#include <wx/dataview.h>
 
 #define MAX_ZONE_CORNER_RADIUS_MILS 400
 
@@ -107,6 +108,12 @@ public:
      * @param aSource: the given zone
      */
     ZONE_SETTINGS& operator << ( const ZONE_CONTAINER& aSource );
+
+    /**
+     * A helper routine for the various zone dialogs (copper, non-copper, keepout).
+     * @param aShowCopper indicates whether copper or technical layers should be shown
+     */
+    void SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame, bool aShowCopper );
 
     /**
      * Function ExportSetting

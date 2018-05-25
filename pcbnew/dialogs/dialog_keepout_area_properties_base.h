@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 20 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,8 +28,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_M_ORIENTEDGESOPT 1000
-#define ID_M_OUTLINEAPPEARANCECTRL 1001
+#define ID_M_OUTLINEAPPEARANCECTRL 1000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE
@@ -44,8 +43,7 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbTracksCtrl;
 		wxCheckBox* m_cbViasCtrl;
 		wxCheckBox* m_cbCopperPourCtrl;
-		wxStaticText* m_staticTextSlope;
-		wxChoice* m_OrientEdgesOpt;
+		wxCheckBox* m_cbConstrainCtrl;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineAppearanceCtrl;
 		wxStaticLine* m_staticline1;

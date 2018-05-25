@@ -1,13 +1,9 @@
-/**
- * @file dialog_copper_zones.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,31 +23,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <confirm.h>
-#include <PolyLine.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <zones.h>
-#include <base_units.h>
-#include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
-#include <widgets/color_swatch.h>
-
+#include <widgets/unit_binder.h>
 #include <class_zone.h>
 #include <class_board.h>
+
 #include <dialog_copper_zones_base.h>
 
-#include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
-#include <wx/listctrl.h>
-#include <layers_id_colors_and_visibility.h>
 
-/**
- * Class DIALOG_COPPER_ZONE
- * is the derived class from dialog_copper_zone_frame created by wxFormBuilder
- */
 class DIALOG_COPPER_ZONE : public DIALOG_COPPER_ZONE_BASE
 {
 public:
@@ -59,97 +43,77 @@ public:
 
 private:
     PCB_BASE_FRAME* m_Parent;
-    wxConfigBase*   m_Config;               ///< Current config
+    wxConfigBase*   m_Config;               // Current config
 
-    ZONE_EDIT_T     m_OnExitCode;           ///< exit code: ZONE_ABORT if no change,
-                                            ///< ZONE_OK if new values accepted
-                                            ///< ZONE_EXPORT_VALUES if values are exported to others zones
+    bool            m_settingsExported;     // settings were written to all other zones
 
     ZONE_SETTINGS   m_settings;
     ZONE_SETTINGS*  m_ptr;
 
-    bool            m_NetSortingByPadCount; ///< false = alphabetic sort.
-                                            ///< true = pad count sort.
-
+    bool            m_NetSortingByPadCount;
     long            m_NetFiltering;
+    static wxString m_netNameShowFilter;    // the filter to show nets (default * "*").
+                                            // static to keep this pattern for an entire Pcbnew session
+    UNIT_BINDER     m_cornerRadius;
+    UNIT_BINDER     m_clearance;
+    UNIT_BINDER     m_minWidth;
+    UNIT_BINDER     m_antipadClearance ;
+    UNIT_BINDER     m_spokeWidth;
 
-    std::vector<PCB_LAYER_ID> m_LayerId;    ///< Handle the real layer number from layer
-                                            ///< name position in m_LayerSelectionCtrl
-
-    static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
-                                            ///< static to keep this pattern for an entire Pcbnew session
-
-    /**
-     * Function initDialog
-     * fills in the dialog controls using the current settings.
-     */
-    void initDialog();
-
-    void OnButtonOkClick( wxCommandEvent& event ) override;
-    void OnButtonCancelClick( wxCommandEvent& event ) override;
-    void OnClose( wxCloseEvent& event ) override;
-    void OnCornerSmoothingModeChoice( wxCommandEvent& event ) override;
-    void OnUpdateUI( wxUpdateUIEvent& ) override;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
     /**
      * Function AcceptOptions
-     * @param aPromptForErrors is true to prompt user on incorrect params.
      * @param aUseExportableSetupOnly is true to use exportable parameters only (used to export this setup to other zones).
      * @return bool - false if incorrect options, true if ok.
      */
-    bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
+    bool AcceptOptions( bool aUseExportableSetupOnly = false );
 
+    void OnLayerSelection( wxDataViewEvent& event ) override;
     void OnNetSortingOptionSelected( wxCommandEvent& event ) override;
     void ExportSetupToOtherCopperZones( wxCommandEvent& event ) override;
-    void OnPadsInZoneClick( wxCommandEvent& event ) override;
     void OnRunFiltersButtonClick( wxCommandEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& ) override;
+    void OnButtonCancelClick( wxCommandEvent& event ) override;
+    void OnClose( wxCloseEvent& event ) override;
 
     void buildAvailableListOfNets();
-
-    /**
-     * Function initListNetsParams
-     * initializes m_NetSortingByPadCount and m_NetFiltering values
-     * according to m_NetDisplayOption selection.
-     */
-    void initListNetsParams();
 };
 
-
-const static wxSize LAYER_BITMAP_SIZE( 20, 14 );
 
 // Initialize static member variables
 wxString DIALOG_COPPER_ZONE::m_netNameShowFilter( wxT( "*" ) );
 
 
-ZONE_EDIT_T InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
+int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 {
     DIALOG_COPPER_ZONE dlg( aCaller, aSettings );
 
-    ZONE_EDIT_T result = ZONE_EDIT_T( dlg.ShowModal() );
-    return result;
+    return dlg.ShowModal();
 }
 
 
 DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
-    DIALOG_COPPER_ZONE_BASE( aParent )
+    DIALOG_COPPER_ZONE_BASE( aParent ),
+    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true, 0 ),
+    m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true, 0, ZONE_CLEARANCE_MAX_VALUE_MIL*IU_PER_MILS ),
+    m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true, ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS ),
+    m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits, true, 0 ),
+    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true, 0 )
 {
     m_Parent = aParent;
     m_Config = Kiface().KifaceSettings();
+    m_bitmapNoNetWarning->SetBitmap( KiBitmap( dialog_warning_xpm ) );
 
     m_ptr = aSettings;
     m_settings = *aSettings;
+    m_settings.SetupLayersList( m_layers, m_Parent, true );
 
+    m_settingsExported = false;
+
+    m_NetFiltering = false;
     m_NetSortingByPadCount = true;      // false = alphabetic sort, true = pad count sort
-    m_OnExitCode = ZONE_ABORT;
-
-    SetReturnCode( ZONE_ABORT );        // Will be changed on buttons click
-
-    // Fix static text widget minimum width to a suitable value so that
-    // resizing the dialog is not necessary when changing the corner smoothing type.
-    // Depends on the default text in the widget.
-    m_cornerSmoothingValue->SetMinSize( m_cornerSmoothingValue->GetSize() );
-
-    initDialog();
 
     m_sdbSizerOK->SetDefault();
 
@@ -157,294 +121,165 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 }
 
 
-void DIALOG_COPPER_ZONE::initDialog()
+bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 {
-    BOARD* board = m_Parent->GetBoard();
-
-    m_bitmapNoNetWarning->SetBitmap( KiBitmap( dialog_warning_xpm ) );
-
-    wxString msg;
-
-    if( m_settings.m_Zone_45_Only )
-        m_OrientEdgesOpt->SetSelection( 1 );
-
-    m_FillModeCtrl->SetSelection( m_settings.m_FillMode == ZFM_SEGMENTS ? 1 : 0 );
-
-    AddUnitSymbol( *m_ClearanceValueTitle, g_UserUnit );
-    msg = StringFromValue( g_UserUnit, m_settings.m_ZoneClearance );
-    m_ZoneClearanceCtrl->SetValue( msg );
-
-    AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
-    msg = StringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
-    m_ZoneMinThicknessCtrl->SetValue( msg );
-
-    switch( m_settings.GetPadConnection() )
-    {
-    case PAD_ZONE_CONN_THT_THERMAL:   // Thermals only for THT pads
-        m_PadInZoneOpt->SetSelection( 2 );
-        break;
-
-    case PAD_ZONE_CONN_NONE:        // Pads are not covered
-        m_PadInZoneOpt->SetSelection( 3 );
-        break;
-
-    default:
-    case PAD_ZONE_CONN_THERMAL:     // Use thermal relief for pads
-        m_PadInZoneOpt->SetSelection( 1 );
-        break;
-
-    case PAD_ZONE_CONN_FULL:        // pads are covered by copper
-        m_PadInZoneOpt->SetSelection( 0 );
-        break;
-    }
-
-    m_PriorityLevelCtrl->SetValue( m_settings.m_ZonePriority );
-
-    AddUnitSymbol( *m_AntipadSizeText, g_UserUnit );
-    AddUnitSymbol( *m_CopperBridgeWidthText, g_UserUnit );
-    PutValueInLocalUnits( *m_AntipadSizeValue, m_settings.m_ThermalReliefGap );
-    PutValueInLocalUnits( *m_CopperWidthValue, m_settings.m_ThermalReliefCopperBridge );
-
+    m_constrainOutline->SetValue( m_settings.m_Zone_45_Only );
     m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
-
-    PutValueInLocalUnits( *m_cornerSmoothingCtrl, m_settings.GetCornerRadius() );
+    m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
+    m_PriorityLevelCtrl->SetValue( m_settings.m_ZonePriority );
 
     switch( m_settings.m_Zone_HatchingStyle )
     {
-    case ZONE_CONTAINER::NO_HATCH:
-        m_OutlineAppearanceCtrl->SetSelection( 0 );
-        break;
-
-    case ZONE_CONTAINER::DIAGONAL_EDGE:
-        m_OutlineAppearanceCtrl->SetSelection( 1 );
-        break;
-
-    case ZONE_CONTAINER::DIAGONAL_FULL:
-        m_OutlineAppearanceCtrl->SetSelection( 2 );
-        break;
+    case ZONE_CONTAINER::NO_HATCH:      m_OutlineAppearanceCtrl->SetSelection( 0 ); break;
+    case ZONE_CONTAINER::DIAGONAL_EDGE: m_OutlineAppearanceCtrl->SetSelection( 1 ); break;
+    case ZONE_CONTAINER::DIAGONAL_FULL: m_OutlineAppearanceCtrl->SetSelection( 2 ); break;
     }
 
-    m_ArcApproximationOpt->SetSelection(
-        m_settings.m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
+    m_clearance.SetValue( m_settings.m_ZoneClearance );
+    m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
 
-    // Create one column in m_LayerSelectionCtrl
-    wxListItem column0;
-    column0.SetId( 0 );
-    m_LayerSelectionCtrl->InsertColumn( 0, column0 );
-
-    wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE.x, LAYER_BITMAP_SIZE.y );
-    m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
-
-    int ctrlWidth = 0;  // Min width for m_LayerSelectionCtrl to show the layers names
-    int imgIdx = 0;
-
-    LSET cu_set = LSET::AllCuMask( board->GetCopperLayerCount() );
-
-    COLOR4D backgroundColor = m_Parent->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
-    for( LSEQ cu_stack = cu_set.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
+    switch( m_settings.GetPadConnection() )
     {
-        PCB_LAYER_ID layer = *cu_stack;
-
-        m_LayerId.push_back( layer );
-
-        msg = board->GetLayerName( layer );
-        msg.Trim();
-        wxSize tsize( GetTextSize( msg, m_LayerSelectionCtrl ) );
-        ctrlWidth = std::max( ctrlWidth, tsize.x );
-
-        COLOR4D layerColor = m_Parent->Settings().Colors().GetLayerColor( layer );
-        imageList->Add( COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE ) );
-
-        int itemIndex = m_LayerSelectionCtrl->GetItemCount();
-        m_LayerSelectionCtrl->InsertItem( itemIndex, msg, imgIdx );
-
-        if( m_settings.m_CurrentZone_Layer == layer )
-            m_LayerSelectionCtrl->Select( itemIndex );
+    default:
+    case PAD_ZONE_CONN_THERMAL:     m_PadInZoneOpt->SetSelection( 1 ); break;
+    case PAD_ZONE_CONN_THT_THERMAL: m_PadInZoneOpt->SetSelection( 2 ); break;
+    case PAD_ZONE_CONN_NONE:        m_PadInZoneOpt->SetSelection( 3 ); break;
+    case PAD_ZONE_CONN_FULL:        m_PadInZoneOpt->SetSelection( 0 ); break;
     }
 
-    // The most easy way to ensure the right size is to use wxLIST_AUTOSIZE
-    // unfortunately this option does not work well both on
-    // wxWidgets 2.8 ( column width too small), and
-    // wxWidgets 2.9 ( column width too large)
-    ctrlWidth += LAYER_BITMAP_SIZE.x + 25;      // Add bitmap width + margin before text
-    m_LayerSelectionCtrl->SetColumnWidth( 0, ctrlWidth );
-
-    ctrlWidth += 25;                            // Add margin after text + width for scroll bar
-    m_LayerSelectionCtrl->SetMinSize( wxSize( ctrlWidth, -1 ) );
+    // Do not enable/disable antipad clearance and spoke width.  They might be needed if
+    // a module or pad overrides the zone to specify a thermal connection.
+    m_antipadClearance.SetValue( m_settings.m_ThermalReliefGap );
+    m_spokeWidth.SetValue( m_settings.m_ThermalReliefCopperBridge );
 
     wxString netNameDoNotShowFilter = wxT( "Net-*" );
+    m_NetFiltering = false;
+    m_NetSortingByPadCount = true;
+
     if( m_Config )
     {
         int opt = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
-        m_NetDisplayOption->SetSelection( opt );
+        m_NetFiltering = opt >= 2;
+        m_NetSortingByPadCount = opt % 2;
         m_Config->Read( ZONE_NET_FILTER_STRING_KEY, netNameDoNotShowFilter );
     }
-    else
-        m_NetDisplayOption->SetSelection( 1 );
 
     m_ShowNetNameFilter->SetValue( m_netNameShowFilter );
-    initListNetsParams();
+    m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
+    m_showAllNetsOpt->SetValue( !m_NetFiltering );
+    m_sortByPadsOpt->SetValue( m_NetSortingByPadCount );
 
     // Build list of nets:
-    m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
     buildAvailableListOfNets();
 
-    wxCommandEvent event;
-    OnCornerSmoothingModeChoice( event );
+    return true;
 }
 
 
 void DIALOG_COPPER_ZONE::OnUpdateUI( wxUpdateUIEvent& )
 {
+    if( m_ListNetNameSelection->GetSelection() < 0 )
+        m_ListNetNameSelection->SetSelection( 0 );
+
     m_bNoNetWarning->Show( m_ListNetNameSelection->GetSelection() == 0 );
+
+    if( m_cornerSmoothingChoice->GetSelection() == ZONE_SETTINGS::SMOOTHING_CHAMFER )
+        m_cornerRadiusLabel->SetLabel( _( "Chamfer distance:" ) );
+    else
+        m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
 }
+
 
 void DIALOG_COPPER_ZONE::OnButtonCancelClick( wxCommandEvent& event )
 {
+    // After an "Export Settings to Other Zones" cancel and close must return
+    // ZONE_EXPORT_VALUES instead of wxID_CANCEL.
     Close( true );
 }
 
-void DIALOG_COPPER_ZONE::OnButtonOkClick( wxCommandEvent& event )
+
+bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
-    if( AcceptOptions( true ) )
-    {
-        *m_ptr = m_settings;
-        EndModal( ZONE_OK );
-    }
+    if( !AcceptOptions() )
+        return false;
+
+    *m_ptr = m_settings;
+    return true;
 }
 
-
-// called on system close button
 void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 {
-    if( m_OnExitCode != ZONE_ABORT )
-        *m_ptr = m_settings;
-
-    EndModal( m_OnExitCode );
+    EndModal( m_settingsExported ? ZONE_EXPORT_VALUES : wxID_CANCEL );
 }
 
 
-bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly )
+bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 {
+    if( m_settings.m_FillMode == ZFM_SEGMENTS )
+    {
+        KIDIALOG dlg( this, _( "The legacy segment fill mode is not recommended."
+                               "Convert zone to polygon fill? "), _( "Legacy Warning" ),
+                      wxYES_NO | wxICON_WARNING );
+        dlg.DoNotShowCheckbox();
+
+        if( dlg.ShowModal() == wxYES )
+            m_settings.m_FillMode = ZFM_POLYGONS;
+    }
+
     switch( m_PadInZoneOpt->GetSelection() )
     {
-    case 3:
-        // Pads are not covered
-        m_settings.SetPadConnection( PAD_ZONE_CONN_NONE );
-        break;
-
-    case 2:
-        // Use thermal relief for THT pads
-        m_settings.SetPadConnection( PAD_ZONE_CONN_THT_THERMAL );
-        break;
-
-    case 1:
-        // Use thermal relief for pads
-        m_settings.SetPadConnection( PAD_ZONE_CONN_THERMAL );
-        break;
-
-    case 0:
-        // pads are covered by copper
-        m_settings.SetPadConnection( PAD_ZONE_CONN_FULL );
-        break;
+    case 3: m_settings.SetPadConnection( PAD_ZONE_CONN_NONE );        break;
+    case 2: m_settings.SetPadConnection( PAD_ZONE_CONN_THT_THERMAL ); break;
+    case 1: m_settings.SetPadConnection( PAD_ZONE_CONN_THERMAL );     break;
+    case 0: m_settings.SetPadConnection( PAD_ZONE_CONN_FULL );        break;
     }
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
-    case 0:
-        m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::NO_HATCH;
-        break;
-
-    case 1:
-        m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE;
-        break;
-
-    case 2:
-        m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_FULL;
-        break;
+    case 0: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::NO_HATCH;      break;
+    case 1: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE; break;
+    case 2: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_FULL; break;
     }
-
-    m_settings.m_ArcToSegmentsCount = m_ArcApproximationOpt->GetSelection() == 1 ?
-                                           ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF :
-                                           ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
 
     if( m_Config )
     {
-        m_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-                         (long) m_settings.m_Zone_HatchingStyle );
+        m_Config->Write( ZONE_NET_OUTLINES_STYLE_KEY, (long) m_settings.m_Zone_HatchingStyle );
         wxString filter = m_DoNotShowNetNameFilter->GetValue();
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, filter );
     }
 
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
-    m_settings.m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? ZFM_POLYGONS : ZFM_SEGMENTS;
 
-    wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
-    m_settings.m_ZoneClearance = ValueFromString( g_UserUnit, txtvalue );
-
-    // Test if this is a reasonable value for this parameter
-    // A too large value can hang Pcbnew
-    #define CLEARANCE_MAX_VALUE ZONE_CLEARANCE_MAX_VALUE_MIL*IU_PER_MILS
-
-    if( m_settings.m_ZoneClearance > CLEARANCE_MAX_VALUE )
-    {
-        wxString msg;
-        msg.Printf( _( "Clearance must be smaller than %f\" / %f mm." ),
-            ZONE_CLEARANCE_MAX_VALUE_MIL / 1000.0, ZONE_CLEARANCE_MAX_VALUE_MIL * 0.0254 );
-        DisplayError( this, msg );
+    if( !m_clearance.Validate( true ) )
         return false;
-    }
+    m_settings.m_ZoneClearance = m_clearance.GetValue();
 
-    txtvalue = m_ZoneMinThicknessCtrl->GetValue();
-    m_settings.m_ZoneMinThickness = ValueFromString( g_UserUnit, txtvalue );
-
-    if( m_settings.m_ZoneMinThickness < (ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS) )
-    {
-        wxString msg;
-        msg.Printf( _( "Minimum width must be larger than %f\" / %f mm." ),
-            ZONE_THICKNESS_MIN_VALUE_MIL / 1000.0, ZONE_THICKNESS_MIN_VALUE_MIL * 0.0254 );
-        DisplayError( this, msg );
+    if( !m_minWidth.Validate( true ) )
         return false;
-    }
+    m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
-    txtvalue = m_cornerSmoothingCtrl->GetValue();
-    m_settings.SetCornerRadius( ValueFromString( g_UserUnit, txtvalue ) );
+    m_settings.SetCornerRadius( m_cornerRadius.GetValue() );
 
     m_settings.m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 
-    if( m_OrientEdgesOpt->GetSelection() == 0 )
-        m_settings.m_Zone_45_Only = false;
-    else
-        m_settings.m_Zone_45_Only = true;
+    m_settings.m_Zone_45_Only = m_constrainOutline->GetValue();
 
-    m_settings.m_ThermalReliefGap = ValueFromTextCtrl( *m_AntipadSizeValue );
-    m_settings.m_ThermalReliefCopperBridge = ValueFromTextCtrl( *m_CopperWidthValue );
+    m_settings.m_ThermalReliefGap = m_antipadClearance.GetValue();
+    m_settings.m_ThermalReliefCopperBridge = m_spokeWidth.GetValue();
 
     if( m_Config )
     {
         ConfigBaseWriteDouble( m_Config, ZONE_CLEARANCE_WIDTH_STRING_KEY,
                                (double) m_settings.m_ZoneClearance / IU_PER_MILS );
-
         ConfigBaseWriteDouble( m_Config, ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
-            (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
-
+                               (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
         ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-            (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
-
+                               (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
         ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-            (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
-    }
-
-    if( (   m_settings.GetPadConnection() == PAD_ZONE_CONN_THT_THERMAL
-         || m_settings.GetPadConnection() == PAD_ZONE_CONN_THERMAL )
-        && m_settings.m_ThermalReliefCopperBridge <= m_settings.m_ZoneMinThickness )
-    {
-        DisplayError( this,
-                      _( "Thermal relief spoke must be greater than the minimum width." ) );
-        return false;
+                               (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
     }
 
     // If we use only exportable to others zones parameters, exit here:
@@ -452,78 +287,73 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         return true;
 
     // Get the layer selection for this zone
-    int ii = m_LayerSelectionCtrl->GetFirstSelected();
+    int layer = -1;
+    for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
+    {
+        if( m_layers->GetToggleValue( (unsigned) ii, 0 ) )
+        {
+            layer = ii;
+            break;
+        }
+    }
 
-    if( ii < 0 && aPromptForErrors )
+    if( layer < 0 )
     {
         DisplayError( this, _( "No layer selected." ) );
         return false;
     }
 
-    m_settings.m_CurrentZone_Layer = ToLAYER_ID( m_LayerId[ii] );
-
-    // Get the net name selection for this zone
-    ii = m_ListNetNameSelection->GetSelection();
-
-    if( ii < 0 && aPromptForErrors )
-    {
-        DisplayError( this, _( "No net selected." ) );
-        return false;
-    }
-
-    wxString net_name = m_ListNetNameSelection->GetString( ii );
-
-    m_settings.m_NetcodeSelection = 0;
+    NETINFO_ITEM* net = nullptr;
 
     // Search net_code for this net, if a net was selected
     if( m_ListNetNameSelection->GetSelection() > 0 )
-    {
-        NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet( net_name );
+        net = m_Parent->GetBoard()->FindNet( m_ListNetNameSelection->GetStringSelection() );
 
-        if( net )
-            m_settings.m_NetcodeSelection = net->GetNet();
-    }
+    m_settings.m_NetcodeSelection = net ? net->GetNet() : 0;
 
     return true;
 }
 
 
-void DIALOG_COPPER_ZONE::OnCornerSmoothingModeChoice( wxCommandEvent& event )
+void DIALOG_COPPER_ZONE::OnLayerSelection( wxDataViewEvent& event )
 {
-    int selection = m_cornerSmoothingChoice->GetSelection();
+    if( event.GetColumn() != 0 )
+        return;
 
-    switch( selection )
+    int row = m_layers->ItemToRow( event.GetItem() );
+
+    if( m_layers->GetToggleValue( row, 0 ) )
     {
-    case ZONE_SETTINGS::SMOOTHING_NONE:
-        m_cornerSmoothingValue->Enable( false );
-        m_cornerSmoothingCtrl->Enable( false );
-        break;
-    case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        m_cornerSmoothingValue->Enable( true );
-        m_cornerSmoothingCtrl->Enable( true );
-        m_cornerSmoothingValue->SetLabel( _( "Chamfer distance" ) );
-        AddUnitSymbol( *m_cornerSmoothingValue, g_UserUnit );
-        break;
-    case ZONE_SETTINGS::SMOOTHING_FILLET:
-        m_cornerSmoothingValue->Enable( true );
-        m_cornerSmoothingCtrl->Enable( true );
-        m_cornerSmoothingValue->SetLabel( _( "Fillet radius" ) );
-        AddUnitSymbol( *m_cornerSmoothingValue, g_UserUnit );
-        break;
+        wxVariant layerID;
+        m_layers->GetValue( layerID, row, 2 );
+        m_settings.m_CurrentZone_Layer = ToLAYER_ID( layerID.GetInteger() );
+
+        // Turn all other checkboxes off.
+        for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
+        {
+            if( ii != row )
+                m_layers->SetToggleValue( false, ii, 0 );
+        }
     }
 }
 
 
 void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 {
-    initListNetsParams();
-    buildAvailableListOfNets();
-
+    m_NetFiltering = !m_showAllNetsOpt->GetValue();
+    m_NetSortingByPadCount = m_sortByPadsOpt->GetValue();
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
+
+    buildAvailableListOfNets();
 
     if( m_Config )
     {
-        m_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetDisplayOption->GetSelection() );
+        long configValue = m_NetFiltering ? 2 : 0;
+
+        if( m_NetSortingByPadCount )
+            configValue += 1;
+
+        m_Config->Write( ZONE_NET_SORT_OPTION_KEY, configValue );
         wxString Filter = m_DoNotShowNetNameFilter->GetValue();
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
@@ -532,7 +362,7 @@ void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 
 void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 {
-    if( !AcceptOptions( true, true ) )
+    if( !AcceptOptions( true ) )
         return;
 
     // Export settings ( but layer and netcode ) to others copper zones
@@ -548,61 +378,17 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
             continue;
 
         m_settings.ExportSetting( *zone, false );  // false = partial export
+        m_settingsExported = true;
         m_Parent->OnModify();
-    }
-
-    m_OnExitCode = ZONE_EXPORT_VALUES;     // values are exported to others zones
-}
-
-
-void DIALOG_COPPER_ZONE::OnPadsInZoneClick( wxCommandEvent& event )
-{
-    // Antipad and spokes are significant only for thermals
-    // However, even if thermals are disabled, these parameters must be set
-    // for pads which have local settings with thermal enabled
-    // Previously, wxTextCtrl widgets related to thermal settings were disabled,
-    // but this is not a good idea. We leave them always enabled.
-}
-
-
-void DIALOG_COPPER_ZONE::initListNetsParams()
-{
-    switch( m_NetDisplayOption->GetSelection() )
-    {
-    case 0:
-        m_NetSortingByPadCount = false;
-        m_NetFiltering = false;
-        break;
-
-    case 1:
-        m_NetSortingByPadCount = true;
-        m_NetFiltering = false;
-        break;
-
-    case 2:
-        m_NetSortingByPadCount = false;
-        m_NetFiltering = true;
-        break;
-
-    case 3:
-        m_NetSortingByPadCount = true;
-        m_NetFiltering = true;
-        break;
     }
 }
 
 
 void DIALOG_COPPER_ZONE::OnRunFiltersButtonClick( wxCommandEvent& event )
 {
-    m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
+    m_NetFiltering = true;
+    m_showAllNetsOpt->SetValue( false );
 
-    // Ensure filtered option for nets
-    if( m_NetDisplayOption->GetSelection() == 0 )
-        m_NetDisplayOption->SetSelection( 2 );
-    else if( m_NetDisplayOption->GetSelection() == 1 )
-        m_NetDisplayOption->SetSelection( 3 );
-
-    initListNetsParams();
     buildAvailableListOfNets();
 }
 
@@ -636,40 +422,29 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
     listNetName.Insert( wxT( "<no net>" ), 0 );
 
     // Ensure currently selected net for the zone is visible, regardless of filters
-    int selectedNetListNdx = -1;
+    int selectedNetListNdx = 0;
     int net_select = m_settings.m_NetcodeSelection;
 
     if( net_select > 0 )
     {
-        NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
-        if( equipot )
+        NETINFO_ITEM* selectedNet = m_Parent->GetBoard()->FindNet( net_select );
+        if( selectedNet )
         {
-            selectedNetListNdx = listNetName.Index( equipot->GetNetname() );
+            selectedNetListNdx = listNetName.Index( selectedNet->GetNetname() );
 
             if( wxNOT_FOUND == selectedNetListNdx )
             {
                 // the currently selected net must *always* be visible.
-		// <no net> is the zero'th index, so pick next lowest
-                listNetName.Insert( equipot->GetNetname(), 1 );
+		        // <no net> is the zero'th index, so pick next lowest
+                listNetName.Insert( selectedNet->GetNetname(), 1 );
                 selectedNetListNdx = 1;
             }
         }
     }
-    else if( net_select == 0 )
-        selectedNetListNdx = 0;     // SetSelection() on "<no net>"
-    else
-    {
-        // selectedNetListNdx remains -1, no net selected.
-    }
 
     m_ListNetNameSelection->Clear();
     m_ListNetNameSelection->InsertItems( listNetName, 0 );
-    m_ListNetNameSelection->SetSelection( 0 );
-
-    if( selectedNetListNdx >= 0 )
-    {
-        m_ListNetNameSelection->SetSelection( selectedNetListNdx );
-        m_ListNetNameSelection->EnsureVisible( selectedNetListNdx );
-    }
+    m_ListNetNameSelection->SetSelection( selectedNetListNdx );
+    m_ListNetNameSelection->EnsureVisible( selectedNetListNdx );
 }
 

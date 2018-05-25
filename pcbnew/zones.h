@@ -26,7 +26,7 @@
 #define ZONES_H_
 
 // keys used to store net sort option in config file :
-#define ZONE_NET_OUTLINES_HATCH_OPTION_KEY          wxT( "Zone_Ouline_Hatch_Opt" )
+#define ZONE_NET_OUTLINES_STYLE_KEY                 wxT( "Zone_Ouline_Hatch_Opt" )
 #define ZONE_NET_SORT_OPTION_KEY                    wxT( "Zone_NetSort_Opt" )
 #define ZONE_NET_FILTER_STRING_KEY                  wxT( "Zone_Filter_Opt" )
 #define ZONE_THERMAL_RELIEF_GAP_STRING_KEY          wxT( "Zone_TH_Gap" )
@@ -43,13 +43,8 @@
 #define ZONE_CLEARANCE_MAX_VALUE_MIL 500    // maximum acceptable value for ZONE_SETTINGS::m_ZoneClearance
 
 
-/// Exit codes for zone editing dialogs
-enum ZONE_EDIT_T {
-    ZONE_ABORT,             ///<  if no change
-    ZONE_OK,                ///<  if new values were accepted
-    ZONE_EXPORT_VALUES      ///<  if values were exported to others zones
-};
-
+#define ZONE_EXPORT_VALUES  1004        // Copper zone dialog reports wxID_OK, wxID_CANCEL or
+                                        // ZONE_EXPORT_VALUES
 
 /// How pads are covered by copper in zone
 enum ZoneConnection {
@@ -70,12 +65,10 @@ class PCB_BASE_FRAME;
  *
  * @param aParent is the PCB_BASE_FRAME calling parent window for the modal dialog,
  *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
- * @param aZone is the ZONE_CONTAINER to edit.
  * @param aSettings points to the ZONE_SETTINGS to edit.
- * @return ZONE_EDIT_T - tells if user aborted, changed only one zone, or all of them.
+ * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_CONTAINER* aZone,
-                                        ZONE_SETTINGS* aSettings );
+int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
 
 /**
  * Function InvokeCopperZonesEditor
@@ -84,9 +77,9 @@ ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_CONTAINER*
  * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
  *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
  * @param aSettings points to the ZONE_SETTINGS to edit.
- * @return ZONE_EDIT_T - tells if user aborted, changed only one zone, or all of them.
+ * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-ZONE_EDIT_T InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
+int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
 
 /**
  * Function InvokeKeepoutAreaEditor
@@ -95,8 +88,8 @@ ZONE_EDIT_T InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSe
  * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
  *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
  * @param aSettings points to the ZONE_SETTINGS to edit.
- * @return ZONE_EDIT_T - tells if user aborted, changed only one zone, or all of them.
+ * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-ZONE_EDIT_T InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
+int InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
 
 #endif  // ZONES_H_
