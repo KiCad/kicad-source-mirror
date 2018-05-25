@@ -180,10 +180,6 @@ msgstr "Nenhum Módulo!"
 msgid "Save Bill of Materials"
 msgstr "Salvar lista de Materiais"
 
-#: pcbnew/build_BOM_from_board.cpp:80 pcbnew/gendrill.cpp:322
-#: pcbnew/gendrill.cpp:830 pcbnew/xchgmod.cpp:592
-msgid "Unable to create file"
-msgstr "Impossível criar arquivo"
 
 #: pcbnew/build_BOM_from_board.cpp:87
 msgid "Id"
