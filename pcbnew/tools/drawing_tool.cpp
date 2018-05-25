@@ -1071,9 +1071,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             // 45 degree lines
             if( direction45 && aShape == S_SEGMENT )
                 make45DegLine( aGraphic, &line45 );
-            else if( aShape == S_CIRCLE )
-                aGraphic->SetEnd( aGraphic->GetStart() + wxPoint(
-                        EuclideanNorm( wxPoint( cursorPos - aGraphic->GetStart() ) ), 0 ) );
             else
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
