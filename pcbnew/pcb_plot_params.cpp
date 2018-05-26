@@ -33,7 +33,7 @@
 #define PLOT_LINEWIDTH_MAX        (2*IU_PER_MM)     // max value for default line thickness
 #define PLOT_LINEWIDTH_DEFAULT    (0.15*IU_PER_MM)  // def. value for default line thickness
 #define HPGL_PEN_DIAMETER_MIN     0
-#define HPGL_PEN_DIAMETER_MAX     100       // Unit = mil
+#define HPGL_PEN_DIAMETER_MAX     100.0     // Unit = mil
 #define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
 #define HPGL_PEN_SPEED_MAX        99        // this param is always in cm/s
 #define HPGL_PEN_NUMBER_MIN       1
@@ -60,7 +60,7 @@ static const char* getTokenName( T aTok )
 }
 
 
-static bool setInt( int* aInt, int aValue, int aMin, int aMax )
+static bool setInt( int* aTarget, int aValue, int aMin, int aMax )
 {
     int temp = aValue;
 
@@ -69,7 +69,21 @@ static bool setInt( int* aInt, int aValue, int aMin, int aMax )
     else if( aValue > aMax )
         temp = aMax;
 
-    *aInt = temp;
+    *aTarget = temp;
+    return (temp == aValue);
+}
+
+
+static bool setDouble( double* aTarget, double aValue, double aMin, double aMax )
+{
+    double temp = aValue;
+
+    if( aValue < aMin )
+        temp = aMin;
+    else if( aValue > aMax )
+        temp = aMax;
+
+    *aTarget = temp;
     return (temp == aValue);
 }
 
@@ -182,7 +196,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
                        m_HPGLPenSpeed );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpendiameter ),
+    aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_hpglpendiameter ),
                        m_HPGLPenDiam );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psnegative ),
                        m_negative ? trueStr : falseStr );
@@ -301,9 +315,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
 }
 
 
-bool PCB_PLOT_PARAMS::SetHPGLPenDiameter( int aValue )
+bool PCB_PLOT_PARAMS::SetHPGLPenDiameter( double aValue )
 {
-    return setInt( &m_HPGLPenDiam, aValue, HPGL_PEN_DIAMETER_MIN, HPGL_PEN_DIAMETER_MAX );
+    return setDouble( &m_HPGLPenDiam, aValue, HPGL_PEN_DIAMETER_MIN, HPGL_PEN_DIAMETER_MAX );
 }
 
 
@@ -449,8 +463,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_hpglpendiameter:
-            aPcbPlotParams->m_HPGLPenDiam = parseInt( HPGL_PEN_DIAMETER_MIN,
-                                                      HPGL_PEN_DIAMETER_MAX );
+            aPcbPlotParams->m_HPGLPenDiam = parseDouble();
             break;
 
         case T_hpglpenoverlay:

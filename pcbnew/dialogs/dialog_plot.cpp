@@ -125,7 +125,7 @@ void DIALOG_PLOT::init_Dialog()
     msg = StringFromValue( m_userUnits, board->GetDesignSettings().m_SolderMaskMinWidth, true );
     m_SolderMaskMinWidthCurrValue->SetLabel( msg );
 
-    // Set units and value for HPGL pen size (this param is in mils).
+    // Set units and value for HPGL pen size (this param is stored in mils).
     AddUnitSymbol( *m_textPenSize, m_userUnits );
 
     msg = StringFromValue( m_userUnits,
@@ -632,7 +632,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // read HPLG pen size (this param is stored in mils)
     wxString    msg = m_HPGLPenSizeOpt->GetValue();
-    int         tmp = ValueFromString( m_userUnits, msg ) / IU_PER_MILS;
+    double      tmp = DoubleValueFromString( m_userUnits, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHPGLPenDiameter( tmp ) )
     {

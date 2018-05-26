@@ -3,7 +3,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,7 +162,8 @@ private:
 
     int         m_HPGLPenNum;           ///< HPGL only: pen number selection(1 to 9)
     int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
-    int         m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
+    double      m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
+                                        ///< However, it is in mm in hpgl files.
     COLOR4D     m_color;                ///< Color for plotting the current layer. Provided, but not really used
 
 public:
@@ -278,10 +279,15 @@ public:
     void        SetA4Output( int aForce ) { m_A4Output = aForce; };
     bool        GetA4Output() const { return m_A4Output; };
 
-    int         GetHPGLPenDiameter() const { return m_HPGLPenDiam; };
-    bool        SetHPGLPenDiameter( int aValue );
+    // For historical reasons, this parameter is stored in mils
+    // (but is in mm in hpgl files...)
+    double      GetHPGLPenDiameter() const { return m_HPGLPenDiam; };
+    bool        SetHPGLPenDiameter( double aValue );
+
+    // This parameter is always in cm, due to hpgl file format constraint
     int         GetHPGLPenSpeed() const { return m_HPGLPenSpeed; };
     bool        SetHPGLPenSpeed( int aValue );
+
     void        SetHPGLPenNum( int aVal ) { m_HPGLPenNum = aVal; }
     int         GetHPGLPenNum() const { return m_HPGLPenNum; }
 
