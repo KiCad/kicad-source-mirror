@@ -113,6 +113,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     if( GetBoard() )
         board->SetDesignSettings( GetBoard()->GetDesignSettings() );
 
+    board->SynchronizeNetsAndNetClasses();
     SetBoard( board );
 
     SetCurItem( NULL );
