@@ -629,22 +629,31 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.
+    wxString    msg;
 
     // read HPLG pen size (this param is stored in mils)
-    wxString    msg = m_HPGLPenSizeOpt->GetValue();
-    double      tmp = DoubleValueFromString( m_userUnits, msg ) / IU_PER_MILS;
-
-    if( !tempOptions.SetHPGLPenDiameter( tmp ) )
+    // However, due to issues when converting this value from or to mm
+    // that can slightly change the value, update this param only if it
+    // is in use
+    if( m_HPGLPenSizeOpt->IsEnabled() )
     {
-        msg = StringFromValue( m_userUnits, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
-        m_HPGLPenSizeOpt->SetValue( msg );
-        msg.Printf( _( "HPGL pen size constrained." ) );
-        reporter.Report( msg, REPORTER::RPT_INFO );
+        msg = m_HPGLPenSizeOpt->GetValue();
+        double dtmp = DoubleValueFromString( m_userUnits, msg ) / IU_PER_MILS;
+
+        if( !tempOptions.SetHPGLPenDiameter( dtmp ) )
+        {
+            msg = StringFromValue( m_userUnits, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
+            m_HPGLPenSizeOpt->SetValue( msg );
+            msg.Printf( _( "HPGL pen size constrained." ) );
+            reporter.Report( msg, REPORTER::RPT_INFO );
+        }
     }
+    else    // keep the last value (initial value if no HPGL plot made)
+        tempOptions.SetHPGLPenDiameter( m_plotOpts.GetHPGLPenDiameter() );
 
     // Default linewidth
     msg = m_linesWidth->GetValue();
-    tmp = ValueFromString( m_userUnits, msg );
+    int tmp = ValueFromString( m_userUnits, msg );
 
     if( !tempOptions.SetLineWidth( tmp ) )
     {
