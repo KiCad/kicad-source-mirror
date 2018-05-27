@@ -7418,7 +7418,7 @@ msgstr ""
 #: eeschema/sim/sim_plot_panel.cpp:389 eeschema/sim/sim_plot_panel.cpp:400
 #: eeschema/dialogs/dialog_spice_model_base.cpp:656
 msgid "Current"
-msgstr "Aktuell"
+msgstr "Strom"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
 msgid "noise [(V or A)^2/Hz]"
