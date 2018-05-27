@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-23 16:22+0800\n"
-"PO-Revision-Date: 2018-05-26 20:43+0800\n"
+"PO-Revision-Date: 2018-05-27 15:34+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -604,36 +604,32 @@ msgid "&Redraw"
 msgstr "刷新显示(&R)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:94 3d-viewer/3d_viewer/3d_toolbar.cpp:92
-#, fuzzy
-#| msgid "Rotate Clockwise"
 msgid "Rotate X Clockwise"
-msgstr "顺时针旋转"
+msgstr "沿X轴顺时针旋转"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:98 3d-viewer/3d_viewer/3d_toolbar.cpp:96
 msgid "Rotate X Counterclockwise"
-msgstr "X轴逆时针旋转"
+msgstr "沿X轴逆时针旋转"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:104
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:101
-#, fuzzy
-#| msgid "Rotate Clockwise"
 msgid "Rotate Y Clockwise"
-msgstr "顺时针旋转"
+msgstr "沿Y轴顺时针旋转"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:108
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:105
 msgid "Rotate Y Counterclockwise"
-msgstr "Y轴逆时针旋转"
+msgstr "沿Y轴逆时针旋转"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:114
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:110
 msgid "Rotate Z Clockwise"
-msgstr "沿 Z 轴顺时针旋转"
+msgstr "沿Z轴顺时针旋转"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:114
 msgid "Rotate Z Counterclockwise"
-msgstr "Z轴逆时针旋转"
+msgstr "沿Z轴逆时针旋转"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:124
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:118
@@ -658,7 +654,7 @@ msgstr "下移"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139 cvpcb/menubar.cpp:109
 #: gerbview/menubar.cpp:393 kicad/menubar.cpp:477
 msgid "&Preferences"
-msgstr "设置(&P)"
+msgstr "首选项(&P)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 msgid "Use Touchpad to Pan"
@@ -1002,7 +998,7 @@ msgstr "显示模型边框"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:78
 #: pcbnew/menubar_pcb_editor.cpp:689 pcbnew/tool_pcb_editor.cpp:382
 msgid "Show filled areas in zones"
-msgstr "填充区域"
+msgstr "显示填充区域"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:95
 msgid "3D model visibility:"
@@ -1014,11 +1010,11 @@ msgstr "显示3D通孔模型"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:121
 msgid "Show 3D SMD models"
-msgstr "显示三维SMD模型"
+msgstr "显示3D贴片模型"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:130
 msgid "Show 3D virtual models"
-msgstr "显示三维虚拟模型"
+msgstr "显示3D虚拟模型"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 msgid "Board layers:"
@@ -1050,7 +1046,7 @@ msgstr "注释和图纸"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:227
 msgid "Show ECO layers"
-msgstr "ECO层"
+msgstr "显示ECO层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:88
 msgid "3D Display Options"
@@ -1165,7 +1161,7 @@ msgstr "放大"
 #: 3d-viewer/3d_viewer/hotkeys.cpp:53
 #, fuzzy
 msgid "Toggle 3D models with type Through Hole"
-msgstr "显示3D通孔模型"
+msgstr "显示通孔类型的3D封装模型"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:54
 #, fuzzy
@@ -1804,9 +1800,8 @@ msgid "Copy Version Info"
 msgstr "复制版本信息"
 
 #: common/dialog_about/dialog_about_base.cpp:71
-#, fuzzy
 msgid "Copy KiCad version info to the clipboard"
-msgstr "复制版本信息"
+msgstr "复制KiCad版本信息到剪贴板"
 
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
@@ -1917,6 +1912,8 @@ msgid ""
 "<b>KICAD_USER_TEMPLATE_DIR</b> is required and is the path containing any "
 "user specific project templates."
 msgstr ""
+"<b>KICAD_USER_TEMPLATE_DIR</b>是必需的，并且是包含任何用户特定工程模板的路"
+"径。"
 
 #: common/dialogs/dialog_env_var_config.cpp:432
 msgid "Select Path for Environment Variable"
@@ -3151,7 +3148,7 @@ msgstr "无抗锯齿"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Subpixel Antialiasing (High Quality)"
-msgstr "亚像素抗锯齿（高品质）"
+msgstr "亚像素抗锯齿（高质量）"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Subpixel Antialiasing (Ultra Quality)"
@@ -3188,7 +3185,7 @@ msgstr "网格风格:"
 
 #: common/widgets/gal_options_panel.cpp:128
 msgid "Grid thickness:"
-msgstr "网格厚度："
+msgstr "网格大小："
 
 #: common/widgets/gal_options_panel.cpp:140
 #: common/widgets/gal_options_panel.cpp:157
@@ -3871,7 +3868,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:286 pcbnew/menubar_pcb_editor.cpp:703
 #: pcbnew/pcb_base_frame.cpp:625 pcbnew/tool_pcb_editor.cpp:393
 msgid "Show pads in outline mode"
-msgstr "焊盘边线模式"
+msgstr "在轮廓模式下显示焊盘"
 
 #: cvpcb/display_footprints_frame.cpp:206
 msgid "Show texts in line mode"
@@ -4633,9 +4630,8 @@ msgid "Has alternate symbol (DeMorgan)"
 msgstr "有可交换符号 (DeMorgan)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:31
-#, fuzzy
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr "勾选此项时, 如果元件有可交换的主体样式  (De Morgan)"
+msgstr "如果符号具有替换的主体风格（德摩根），请选中此选项"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:35
 msgid "Show pin number"
@@ -4675,9 +4671,8 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "为包含多于一个单元的元件输入单元数"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:80
-#, fuzzy
 msgid "Pin Name Position Offset:"
-msgstr "引脚文字坐标偏移量："
+msgstr "引脚名称位置偏移："
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:82
 msgid ""
@@ -5003,13 +4998,12 @@ msgid "Convert shape"
 msgstr "转换形状"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:65
-#, fuzzy
 msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"该元件使用交换形状\n"
-"这个门是\"De Morgan\"转换"
+"使用此符号的备用形状。\n"
+"对于门而言，这是“德摩根”转换。"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:70
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:63
@@ -5286,7 +5280,7 @@ msgstr "%s 引脚 %s 未找到"
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:504
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "所有 %u 链接已解决"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:527
 msgid "Invalid symbol library identifier"
@@ -6030,11 +6024,13 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please "
 "use the default selection."
 msgstr ""
+"KiCad首次使用新的符号库表来访问符号库。 为了让KiCad访问符号库，你必须配置你的"
+"全局符号库表。 请从下面的选项中进行选择， 如果你不确定要选择哪个选项，请使用"
+"默认选项。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config_base.cpp:29
-#, fuzzy
 msgid "Copy default global symbol library table (recommended)"
-msgstr "复制自定义全局符号库表"
+msgstr "复制默认的全局符号库表(推荐)"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config_base.cpp:31
 msgid ""
@@ -6070,9 +6066,8 @@ msgid "Select a file"
 msgstr "选择文件"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config_base.h:58
-#, fuzzy
 msgid "Configure Global Symbol Library Table"
-msgstr "创建一个空的全局符号库表"
+msgstr "配置全局符号库表"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:34
 msgid "&Width:"
@@ -6634,7 +6629,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:106
 msgid "Plot border and title block"
-msgstr "绘图边框和标题栏"
+msgstr "绘制边框和标题栏"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:108
 #, fuzzy
@@ -6647,7 +6642,7 @@ msgstr "绘图当前页"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:124
 msgid "Plot All Pages"
-msgstr "绘图所有页"
+msgstr "绘制所有页"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -6944,9 +6939,8 @@ msgid "Frequency scale"
 msgstr "频率刻度"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:45
-#, fuzzy
 msgid "Number of points:"
-msgstr "形状不包含任何点!"
+msgstr "点数："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:55
 msgid "Start frequency:"
@@ -6955,7 +6949,7 @@ msgstr "起始频率："
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:62
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:73
 msgid "Hertz"
-msgstr "赫兹"
+msgstr "Hz"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:66
 msgid "Stop frequency:"
@@ -6982,7 +6976,7 @@ msgstr "直流源："
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:174
 msgid "Starting voltage:"
-msgstr "开始电压 [V]"
+msgstr "开始电压:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:121
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
@@ -6991,7 +6985,7 @@ msgstr "开始电压 [V]"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:192
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:203
 msgid "Volts"
-msgstr "电压"
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:125
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:185
@@ -7032,9 +7026,8 @@ msgid "Noise source"
 msgstr "噪音源"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:287
-#, fuzzy
 msgid "Number of points"
-msgstr "形状不包含任何点!"
+msgstr "点数"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:294
 msgid "Start frequency [Hz]"
@@ -7057,9 +7050,8 @@ msgid "Operating Point"
 msgstr "操作点"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:343
-#, fuzzy
 msgid "Pole-Zero"
-msgstr "调整为0"
+msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:347
 msgid "Sensitivity"
@@ -7087,7 +7079,7 @@ msgstr "时间步长："
 #: eeschema/dialogs/dialog_spice_model_base.cpp:551
 #: eeschema/dialogs/dialog_spice_model_base.cpp:562
 msgid "seconds"
-msgstr ""
+msgstr "秒"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:378
 msgid "Final time:"
@@ -7170,10 +7162,12 @@ msgid ""
 "In Spice values,the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
+"在Spice值中，小数点分隔符是点。\n"
+"值可以使用Spice单位符号。"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr ""
+msgstr "Spice单位符号值(不区分大小写)"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:81
 msgid "f"
@@ -7268,7 +7262,7 @@ msgstr "g"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:169
 msgid "giga"
-msgstr ""
+msgstr "吉"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:173
 msgid "1e9"
@@ -7280,7 +7274,7 @@ msgstr "t"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:181
 msgid "tera"
-msgstr ""
+msgstr "太"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:185
 msgid "1e12"
@@ -7304,7 +7298,7 @@ msgstr "支路"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:239
 msgid "BJT"
-msgstr "BJT"
+msgstr "双极型晶体管"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "MOSFET"
@@ -7366,7 +7360,7 @@ msgstr "脉冲值"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:362
 msgid "Delay time:"
-msgstr " 延迟时间："
+msgstr "延迟时间："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:373
 msgid "Rise time:"
@@ -7456,17 +7450,16 @@ msgid "second"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:629
-#, fuzzy
 msgid "Piece-wise Linear"
 msgstr "分段线性"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:633
 msgid "FM"
-msgstr "FM"
+msgstr "调频"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:637
 msgid "AM"
-msgstr "AM"
+msgstr "调幅"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:641
 msgid "Transient noise"
@@ -7482,7 +7475,7 @@ msgstr "外部数据"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:656
 msgid "Voltage"
-msgstr "电压"
+msgstr "V"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:656
 msgid "Current"
@@ -7501,9 +7494,8 @@ msgid "Disable symbol for simulation"
 msgstr "禁用符号模拟"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:679
-#, fuzzy
 msgid "Alternate node sequence:"
-msgstr "参考节点"
+msgstr "替代节点序列："
 
 #: eeschema/dialogs/dialog_spice_model_base.h:198
 msgid "Spice Model Editor"
@@ -8383,11 +8375,11 @@ msgstr "添加图片"
 
 #: eeschema/hierarch.cpp:149
 msgid "Navigator"
-msgstr "图页"
+msgstr "导航"
 
 #: eeschema/hierarch.cpp:161
 msgid "Root"
-msgstr "Root"
+msgstr "根"
 
 #: eeschema/highlight_connection.cpp:51
 msgid "Error: duplicate sub-sheet names found in current sheet. Fix it"
@@ -8491,7 +8483,7 @@ msgstr "元件默认方向"
 
 #: eeschema/hotkeys.cpp:161 pcbnew/hotkeys.cpp:124
 msgid "Rotate Item"
-msgstr "旋转项"
+msgstr "旋转 项"
 
 #: eeschema/hotkeys.cpp:162 pcbnew/hotkeys.cpp:121
 msgid "Edit Item"
@@ -9360,7 +9352,7 @@ msgstr "工具(&T)"
 #: pagelayout_editor/menubar.cpp:237 pcbnew/menubar_footprint_editor.cpp:526
 #: pcbnew/menubar_pcb_editor.cpp:146
 msgid "P&references"
-msgstr "设置(&R)"
+msgstr "首选项(&R)"
 
 #: eeschema/menubar.cpp:134
 msgid "Library &Browser"
@@ -9406,9 +9398,8 @@ msgstr "公制(&M)"
 
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_footprint_editor.cpp:260 pcbnew/menubar_pcb_editor.cpp:655
-#, fuzzy
 msgid "Use metric units"
-msgstr "使用英制单位"
+msgstr "使用公制单位"
 
 #: eeschema/menubar.cpp:205 gerbview/menubar.cpp:235
 #: pcbnew/menubar_footprint_editor.cpp:264 pcbnew/menubar_pcb_editor.cpp:659
@@ -11296,9 +11287,8 @@ msgid "Add signals..."
 msgstr "添加信号..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:59
-#, fuzzy
 msgid "Probe from schematics"
-msgstr "探针"
+msgstr "原理图探针"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:62
 msgid "Tune component value"
@@ -11414,8 +11404,6 @@ msgid "Add an existing library"
 msgstr "打开已有的库"
 
 #: eeschema/tool_lib.cpp:124
-#, fuzzy
-#| msgid "Save All Libraries"
 msgid "Save all libraries"
 msgstr "保存所有库"
 
@@ -11441,7 +11429,7 @@ msgstr "显示为\"德摩根\" 标准符号"
 
 #: eeschema/tool_lib.cpp:199 eeschema/tool_viewlib.cpp:94
 msgid "Show as \"De Morgan\" convert symbol"
-msgstr " \"De Morgan\" 显示为转换部件"
+msgstr "显示\"德摩根\" 转换符号"
 
 #: eeschema/tool_lib.cpp:205
 msgid "Show associated datasheet or document"
@@ -11454,6 +11442,9 @@ msgid ""
 "pin number modification.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
+"同步引脚编辑模式\n"
+"同步引脚编辑模式传播到其他单元的所有引脚变化，除了引脚编号修改。\n"
+"默认情况下为可更换单元的多单元部件启用。"
 
 #: eeschema/tool_lib.cpp:251 eeschema/tool_sch.cpp:288
 #: gerbview/toolbars_gerber.cpp:229
@@ -12564,20 +12555,18 @@ msgid "Open &Gerber File(s)..."
 msgstr "打开Gerber文件(&G)..."
 
 #: gerbview/menubar.cpp:57 gerbview/toolbars_gerber.cpp:60
-#, fuzzy
 msgid "Open Gerber file(s) on the current layer. Previous data will be deleted"
-msgstr "在当前图层上加载excellon钻孔文件。以前的数据将被删除"
+msgstr "打开当前图层上的Gerber文件。 以前的数据将被删除"
 
 #: gerbview/menubar.cpp:62
 msgid "Open &Excellon Drill File(s)..."
 msgstr "打开Excellon 钻孔文件..."
 
 #: gerbview/menubar.cpp:63 gerbview/toolbars_gerber.cpp:64
-#, fuzzy
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
-msgstr "在当前图层上加载excellon钻孔文件。以前的数据将被删除"
+msgstr "在当前图层上打开Excellon钻取文件。 以前的数据将被删除"
 
 #: gerbview/menubar.cpp:68
 msgid "Open Gerber &Job File..."
@@ -12685,7 +12674,7 @@ msgstr "草图图形项目(&G)"
 #: gerbview/menubar.cpp:242 gerbview/toolbars_gerber.cpp:257
 #: gerbview/toolbars_gerber.cpp:538
 msgid "Show flashed items in outline mode"
-msgstr "在大纲模式下显示闪烁的项目"
+msgstr ""
 
 #: gerbview/menubar.cpp:246
 msgid "Sketch &Lines"
@@ -12715,7 +12704,7 @@ msgstr "显示或隐藏D码"
 
 #: gerbview/menubar.cpp:258
 msgid "Show &Negative Objects"
-msgstr "显示负片对象"
+msgstr "显示负片对象(&N)"
 
 #: gerbview/menubar.cpp:258 gerbview/toolbars_gerber.cpp:586
 msgid "Show negative objects in ghost color"
@@ -12781,7 +12770,7 @@ msgstr "传统工具箱(&S)"
 #: gerbview/menubar.cpp:312 pcbnew/menubar_footprint_editor.cpp:461
 #: pcbnew/menubar_pcb_editor.cpp:219
 msgid "Use Legacy Toolset (not all features will be available)"
-msgstr ""
+msgstr "使用传统工具箱(并不是所有工具都可用)"
 
 #: gerbview/menubar.cpp:315 pcbnew/menubar_footprint_editor.cpp:464
 #: pcbnew/menubar_pcb_editor.cpp:222
@@ -12795,7 +12784,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:321 pcbnew/menubar_pcb_editor.cpp:228
 msgid "Modern Toolset (Fallba&ck)"
-msgstr "现代工具箱 (后退 &c)"
+msgstr "现代工具箱 (后退 &C)"
 
 #: gerbview/menubar.cpp:324 pcbnew/menubar_footprint_editor.cpp:473
 #: pcbnew/menubar_pcb_editor.cpp:231
@@ -12911,31 +12900,29 @@ msgstr "导出的电路板没有足够的铜层处理选择的内层"
 
 #: gerbview/toolbars_gerber.cpp:57
 msgid "Clear all layers"
-msgstr "擦除所有层"
+msgstr "清除所有层"
 
 #: gerbview/toolbars_gerber.cpp:68
 msgid "Show/hide frame reference and select paper size for printing"
 msgstr "显示/隐藏 图框和选择纸张的大小"
 
 #: gerbview/toolbars_gerber.cpp:124
-#, fuzzy
 msgid "Select a component and highlight items belonging to this component"
-msgstr "选择所有属于同一网络的布线与过孔。"
+msgstr "选择一个元件并突出显示属于该元件的项"
 
 #: gerbview/toolbars_gerber.cpp:125
 msgid "Cmp: "
 msgstr "Cmp:"
 
 #: gerbview/toolbars_gerber.cpp:136
-#, fuzzy
 msgid "Select a net name and highlight graphic items belonging to this net"
-msgstr "选择所有属于同一网络的布线与过孔。"
+msgstr "选择一个网络名称，并突出显示属于该网络的图形项"
 
 #: gerbview/toolbars_gerber.cpp:148
 msgid ""
 "Select an aperture attribute and highlight graphic items having this "
 "attribute"
-msgstr ""
+msgstr "选择一个光圈属性并突出显示具有此属性的图形项"
 
 #: gerbview/toolbars_gerber.cpp:149
 msgid "Attr:"
@@ -12947,7 +12934,7 @@ msgstr "D码："
 
 #: gerbview/toolbars_gerber.cpp:221
 msgid "Measure distance between two points"
-msgstr ""
+msgstr "测量两点之间的距离"
 
 #: gerbview/toolbars_gerber.cpp:233
 msgid "Turn polar coordinates on"
@@ -15082,7 +15069,7 @@ msgstr "颜色代码"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1273
 msgid "Note: Values are minimal values"
-msgstr "注：该值为最小值"
+msgstr "注意：该值为最小值"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1292
 msgid "Class 1"
@@ -15671,9 +15658,9 @@ msgid "Block Operation"
 msgstr "块操作"
 
 #: pcbnew/board_netlist_updater.cpp:125 pcbnew/class_board.cpp:2449
-#, fuzzy, c-format
+#, c-format
 msgid "Adding new symbol \"%s:%s\" footprint \"%s\".\n"
-msgstr "添加符号 %s, 封装: %s.\n"
+msgstr "添加新符号 \"%s: %s\" 封装: \"%s\"。\n"
 
 #: pcbnew/board_netlist_updater.cpp:131
 #, c-format
@@ -16244,7 +16231,7 @@ msgstr "网络组间距"
 
 #: pcbnew/class_track.cpp:1116
 msgid "NC Width"
-msgstr "网络组宽度"
+msgstr "NC宽度"
 
 #: pcbnew/class_track.cpp:1119
 msgid "NC Via Size"
@@ -16480,7 +16467,7 @@ msgstr "铜层："
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:42
 msgid "Technical layers:"
-msgstr "技术层:"
+msgstr "工艺层："
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:78
 msgid "Print SVG Options:"
@@ -16780,7 +16767,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:164
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:543
 msgid "Thermal relief"
-msgstr "热风焊盘(散热式镂空)"
+msgstr "热风焊盘"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 msgid "THT thermal"
@@ -17875,14 +17862,13 @@ msgstr "封装编辑器"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:160
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:105
-#, fuzzy
 msgid "Through hole"
 msgstr "通孔"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:160
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:105
 msgid "Surface mount"
-msgstr "Surface 计数"
+msgstr "表面贴装"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:162
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:107
@@ -17930,7 +17916,7 @@ msgstr "局部设置:"
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:216
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:160
 msgid "Pad connection to zones:"
-msgstr "连接焊盘到铜区:"
+msgstr "焊盘连接到铜区:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:220
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:164
@@ -17939,29 +17925,25 @@ msgstr "使用区域设置"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:232
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:176
-#, fuzzy
-#| msgid "Set clearances to 0 to use global values"
 msgid "Set clearances to 0 to use netclass values."
-msgstr "间距字段设置为0时，使用全局设置"
+msgstr "设置间隙为0，使用网络类值。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:238
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:182
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask)."
-msgstr "间距必须小于 %f\" / %f mm."
+msgstr "正间隙指的是比焊盘大的区域（通常为阻焊）"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:244
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:188
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste)."
-msgstr "间距必须小于 %f\" / %f mm."
+msgstr "负间隙指的是比焊盘小的区域（通常为助焊）"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:253
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:197
 msgid "Pad clearance:"
-msgstr "焊盘间距:"
+msgstr "焊盘间隙:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:255
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:199
@@ -17979,7 +17961,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:46
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:444
 msgid "Solder mask clearance:"
-msgstr "阻焊间距:"
+msgstr "阻焊间隙:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:268
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:212
@@ -17998,7 +17980,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:81
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:457
 msgid "Solder paste clearance:"
-msgstr "助焊间距:"
+msgstr "助焊间隙:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:283
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:227
@@ -18019,7 +18001,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:94
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
 msgid "Solder paste ratio clearance:"
-msgstr "助焊间距比例:"
+msgstr "助焊间隙比例:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:296
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:240
@@ -18044,7 +18026,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:514
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-msgstr ""
+msgstr "注意：阻焊和助焊值仅适用于铜层上的焊盘。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:333
 msgid "3D Shape Name:"
@@ -18511,12 +18493,11 @@ msgstr "查找标记"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:146
 msgid "All footprint generator scripts were loaded"
-msgstr ""
+msgstr "所有的封装生成器脚本都已加载"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
-#, fuzzy
 msgid "Available Footprint Generators"
-msgstr "封装生成"
+msgstr "可用的封装生成器"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
@@ -19646,7 +19627,7 @@ msgstr "启用"
 #: pcbnew/dialogs/dialog_layers_setup.cpp:645
 #, c-format
 msgid "Board thickness %s is out of range."
-msgstr ""
+msgstr "电路板厚度 %s 超出范围"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:662
 #, c-format
@@ -20266,15 +20247,14 @@ msgid "Layer Setup"
 msgstr "图层设置"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:27
-#, fuzzy
 msgid ""
 "Note: for clearance values:\n"
 "- a positive value means a mask bigger than a pad.\n"
 "- a negative value means a mask smaller than a pad."
 msgstr ""
-"说明：对于间隙值:\n"
-"- 正值则掩模比焊盘更大\n"
-"- 负值则掩模比焊盘更小\n"
+"注意：对于间隙值:\n"
+"- 正值则阻焊比焊盘更大\n"
+"- 负值则阻焊比焊盘更小"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:31
 msgid ""
@@ -20954,7 +20934,7 @@ msgstr "连接器"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
 msgid "NPTH, Mechanical"
-msgstr "NPTH,机械定位"
+msgstr "非金属化孔，机械"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
@@ -21145,22 +21125,19 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:404
-#, fuzzy
-#| msgid "Set fields to 0 to use parent or global values"
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr "字段设置为0时，使用全局设置"
+msgstr "设置值为0，使用父级封装或网络类值。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:410
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
-msgstr "间距必须小于 %f\" / %f mm."
+msgstr "正间隙指的是比焊盘大的区域（通常为阻焊间隙）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:416
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
+msgstr "负间隙指的是比焊盘小的区域（通常为助焊间隙）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:423
 msgid "Clearances"
@@ -21168,7 +21145,7 @@ msgstr "间隙"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:431
 msgid "Net pad clearance:"
-msgstr "网络焊盘间距:"
+msgstr "网络焊盘间隙:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:433
 msgid ""
@@ -21222,7 +21199,7 @@ msgstr "连接到铜区"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Pad connection:"
-msgstr "连接焊盘:"
+msgstr "焊盘连接:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:543
 msgid "From parent footprint"
@@ -21252,7 +21229,7 @@ msgstr "使用焊盘形状"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:621
 msgid "Local Clearance and Settings"
-msgstr "局部间距值"
+msgstr "局部间隙和设置"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:625
 #, fuzzy
@@ -21675,9 +21652,8 @@ msgid "DXF options:"
 msgstr "DXF选项:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:348
-#, fuzzy
 msgid "Plot all layers in outline (polygon) mode"
-msgstr "焊盘边线模式"
+msgstr "在轮廓模式下(多边形)绘制所有层"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:350
 msgid ""
@@ -22840,13 +22816,13 @@ msgstr "图形线"
 #: pcbnew/menubar_pcb_editor.cpp:373 pcbnew/tool_footprint_editor.cpp:175
 #: pcbnew/tool_pcb_editor.cpp:477 pcbnew/tools/drawing_tool.cpp:293
 msgid "Add graphic arc"
-msgstr "图形圆弧"
+msgstr "添加圆弧"
 
 #: pcbnew/edit.cpp:1560 pcbnew/menubar_footprint_editor.cpp:371
 #: pcbnew/menubar_pcb_editor.cpp:376 pcbnew/tool_footprint_editor.cpp:172
 #: pcbnew/tool_pcb_editor.cpp:474 pcbnew/tools/drawing_tool.cpp:264
 msgid "Add graphic circle"
-msgstr "图形圆"
+msgstr "添加圆"
 
 #: pcbnew/edit.cpp:1572 pcbnew/menubar_pcb_editor.cpp:392
 #: pcbnew/tool_pcb_editor.cpp:487 pcbnew/tools/drawing_tool.cpp:482
@@ -23121,7 +23097,7 @@ msgstr "镜像 块 (alt + 鼠标拖拉)"
 
 #: pcbnew/footprint_editor_onclick.cpp:263
 msgid "Rotate Block (ctrl + drag mouse)"
-msgstr "旋转 块 (ctrl + 鼠标拖拉)"
+msgstr "旋转块 (ctrl + 拖动鼠标)"
 
 #: pcbnew/footprint_editor_onclick.cpp:266
 msgid "Delete Block (shift+ctrl + drag mouse)"
@@ -23485,9 +23461,8 @@ msgid "ModView: 3D Viewer [%s]"
 msgstr "模型浏览: 三维查看 [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:655
-#, fuzzy
 msgid "Select wizard script to run"
-msgstr "载入和运行选择向导脚本"
+msgstr "选择向导脚本运行"
 
 #: pcbnew/footprint_wizard_frame.cpp:661
 msgid "Reset wizard parameters to default"
@@ -23778,7 +23753,7 @@ msgstr "翻转项"
 
 #: pcbnew/hotkeys.cpp:125
 msgid "Rotate Item Clockwise (Modern Toolset only)"
-msgstr ""
+msgstr "顺时针旋转项(仅适用于现代工具箱)"
 
 #: pcbnew/hotkeys.cpp:128
 msgid "Move Item Exactly"
@@ -24299,9 +24274,8 @@ msgid "Save footprint"
 msgstr "保存封装"
 
 #: pcbnew/menubar_footprint_editor.cpp:90
-#, fuzzy
 msgid "Footprint from &Current Board..."
-msgstr "从当前电路板打开封装"
+msgstr "当前电路板封装..."
 
 #: pcbnew/menubar_footprint_editor.cpp:91
 msgid "Import a footprint from the current board"
@@ -24316,9 +24290,8 @@ msgid "Import a footprint from an existing footprint file"
 msgstr "从现有封装文件导入封装"
 
 #: pcbnew/menubar_footprint_editor.cpp:100
-#, fuzzy
 msgid "Footprint Outlines from &DXF File..."
-msgstr "从Kicad文件导入封装(&K)..."
+msgstr "DXF文件中的封装轮廓(&D)"
 
 #: pcbnew/menubar_footprint_editor.cpp:101
 #, fuzzy
@@ -24396,9 +24369,8 @@ msgid "Grid &Settings..."
 msgstr "网格设置(&S)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:246 pcbnew/menubar_pcb_editor.cpp:641
-#, fuzzy
 msgid "Adjust custom user-defined grid dimensions"
-msgstr "设置自定义网格"
+msgstr "调整自定义网格尺寸"
 
 #: pcbnew/menubar_footprint_editor.cpp:270
 #: pcbnew/menubar_footprint_editor.cpp:275 pcbnew/menubar_pcb_editor.cpp:666
@@ -24624,9 +24596,8 @@ msgid "Pads to &Mask Clearance..."
 msgstr "焊盘与阻焊间隙(&M)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:186
-#, fuzzy
 msgid "Adjust global clearance between pads and solder resist mask"
-msgstr "全局设置焊盘与阻焊间距"
+msgstr "调整焊盘和阻焊掩膜之间的全局间隙"
 
 #: pcbnew/menubar_pcb_editor.cpp:190
 msgid "&Differential Pairs..."
@@ -24940,7 +24911,7 @@ msgstr "草图过孔(&V)"
 #: pcbnew/menubar_pcb_editor.cpp:707 pcbnew/tool_pcb_editor.cpp:397
 #: pcbnew/toolbars_update_user_interface.cpp:152
 msgid "Show vias in outline mode"
-msgstr "过孔显示线框模式"
+msgstr "在轮廓模式下显示过孔"
 
 #: pcbnew/menubar_pcb_editor.cpp:710
 msgid "Sketch &Tracks"
@@ -25416,7 +25387,7 @@ msgstr ""
 
 #: pcbnew/onleftclick.cpp:455
 msgid "Measurement Tool not available in Legacy Toolset"
-msgstr ""
+msgstr "测量工具在传统工具箱中不可用"
 
 #: pcbnew/onrightclick.cpp:194
 msgid "Delete All Drawings on Layer"
@@ -25747,7 +25718,7 @@ msgstr "显示座标"
 
 #: pcbnew/pcb_base_frame.cpp:626
 msgid "Show pads in fill mode"
-msgstr "焊盘填充模式"
+msgstr "在填充模式下显示焊盘"
 
 #: pcbnew/pcb_base_frame.cpp:1021
 msgid "Zoom "
@@ -25975,9 +25946,8 @@ msgid "Show All Front Layers"
 msgstr "显示所有层"
 
 #: pcbnew/pcb_layer_widget.cpp:205
-#, fuzzy
 msgid "Show All Back Layers"
-msgstr "显示所有层"
+msgstr "显示所有支持层"
 
 #: pcbnew/pcb_layer_widget.cpp:505
 msgid "Front copper layer"
@@ -26175,7 +26145,6 @@ msgstr ""
 "你应该验证并编辑它 (运行DRC测试)."
 
 #: pcbnew/pcbnew.cpp:341
-#, fuzzy
 msgid ""
 "You have run Pcbnew for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -26186,10 +26155,10 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb or Pcbnew "
 "documentation for more information."
 msgstr ""
-"您已经在第一次运行PCBnew时使用了封装寻找新封装库表的方法，\n"
-"PCBnew已经不是复制的默认表，或在您的HOME文件夹中创建了一个空表。\n"
-"您必须首先配置库表，包括不包含所有的KiCad封装库。\n"
-"见CvPcb或PCBNEW文档的“封装库表”一节以获取更多信息。"
+"你首次使用新的封装库表方法来运行Pcbnew以查找封装。\n"
+"Pcbnew已复制默认表或在kicad配置文件夹中创建一个空表。\n"
+"你必须首先配置库表以包含要使用的所有封装库。\n"
+"有关更多信息，请参阅CvPcb或Pcbnew文档的“封装库表”部分。"
 
 #: pcbnew/pcbnew.cpp:358
 msgid ""
@@ -26736,7 +26705,7 @@ msgstr "建立一个新的库并保存当前封装"
 
 #: pcbnew/tool_footprint_editor.cpp:61 pcbnew/tool_pcb_editor.cpp:265
 msgid "Open footprint viewer"
-msgstr "打开 封装浏览器"
+msgstr "打开封装浏览器"
 
 #: pcbnew/tool_footprint_editor.cpp:65
 msgid "Delete part from active library"
@@ -26808,7 +26777,7 @@ msgstr "显示文本草图"
 
 #: pcbnew/tool_footprint_editor.cpp:251
 msgid "Show Edges Sketch"
-msgstr "显示边线草图"
+msgstr "显示边框草图"
 
 #: pcbnew/tool_footprint_viewer.cpp:54
 msgid "Select library to browse"
@@ -26888,7 +26857,7 @@ msgstr "打开封装编辑"
 
 #: pcbnew/tool_pcb_editor.cpp:277
 msgid "Plot (HPGL, PostScript, or GERBER format)"
-msgstr "Plot绘图输出(HPGL, PostScript, 或 GERBER 格式)"
+msgstr "绘制(HPGL, PostScript, 或 GERBER 格式)"
 
 #: pcbnew/tool_pcb_editor.cpp:302
 msgid "Read netlist"
@@ -27098,7 +27067,6 @@ msgid "Add a filled zone"
 msgstr "添加 填充区域"
 
 #: pcbnew/tools/drawing_tool.cpp:99
-#, fuzzy
 msgid "Add Vias"
 msgstr "添加过孔"
 
@@ -27108,7 +27076,6 @@ msgid "Add free-standing vias"
 msgstr "添加过孔"
 
 #: pcbnew/tools/drawing_tool.cpp:103
-#, fuzzy
 msgid "Add Keepout Area"
 msgstr "添加禁布区"
 
@@ -27194,9 +27161,8 @@ msgid "Draw a dimension"
 msgstr "尺寸标注(&D)"
 
 #: pcbnew/tools/drawing_tool.cpp:668
-#, fuzzy
 msgid "Add zone cutout"
-msgstr "添加 挖空区域"
+msgstr "添加挖空区域"
 
 #: pcbnew/tools/drawing_tool.cpp:689
 #, fuzzy
@@ -27229,9 +27195,8 @@ msgid "Opens the selected footprint in the Footprint Editor"
 msgstr "在封装编辑器中打开选择的封装"
 
 #: pcbnew/tools/edit_tool.cpp:88
-#, fuzzy
 msgid "Copy Pad Properties to Default Pad Properties"
-msgstr "将选定焊盘的属性复制到默认焊盘属性中"
+msgstr "复制焊盘属性到默认焊盘属性"
 
 #: pcbnew/tools/edit_tool.cpp:89
 msgid ""
@@ -27328,9 +27293,8 @@ msgid "Measuring Tool"
 msgstr "取消当前工具"
 
 #: pcbnew/tools/edit_tool.cpp:180
-#, fuzzy
 msgid "Copy selected content to clipboard"
-msgstr "将选定的内容剪切到剪贴板"
+msgstr "将选定内容复制到剪贴板"
 
 #: pcbnew/tools/edit_tool.cpp:185
 msgid "Cut selected content to clipboard"
@@ -27358,7 +27322,6 @@ msgid "Select reference point for the block being copied..."
 msgstr ""
 
 #: pcbnew/tools/footprint_editor_tools.cpp:63
-#, fuzzy
 msgid "Add Pad"
 msgstr "添加焊盘"
 
@@ -27448,7 +27411,6 @@ msgid "Add Microwave Line"
 msgstr "添加微波线"
 
 #: pcbnew/tools/microwave_tool.cpp:160
-#, fuzzy
 msgid "Add Stub (Arc)"
 msgstr "添加圆弧短线"
 
@@ -27461,7 +27423,6 @@ msgid "Add microwave inductor"
 msgstr "添加微波电感"
 
 #: pcbnew/tools/microwave_tool.cpp:300
-#, fuzzy
 msgid "Add Microwave Inductor"
 msgstr "添加微波电感"
 
@@ -27471,14 +27432,12 @@ msgid "Copy current pad's properties to the default pad properties"
 msgstr "将选定焊盘的属性复制到默认焊盘属性中"
 
 #: pcbnew/tools/pad_tool.cpp:57
-#, fuzzy
 msgid "Copy the default pad properties to the current pad"
-msgstr "将选定焊盘的属性复制到默认焊盘属性中"
+msgstr "复制默认焊盘属性到当前焊盘"
 
 #: pcbnew/tools/pad_tool.cpp:63
-#, fuzzy
 msgid "Copy the current pad settings to other pads"
-msgstr "复制当前设置到焊盘"
+msgstr "复制当前焊盘设置到其他焊盘"
 
 #: pcbnew/tools/pcb_editor_control.cpp:96
 msgid "Merge Zones"
@@ -27634,12 +27593,10 @@ msgid "Selection contains locked items. Do you want to continue?"
 msgstr "选择包含锁定项, 你要继续吗?"
 
 #: pcbnew/tools/placement_tool.cpp:286
-#, fuzzy
 msgid "Align to top"
 msgstr "顶部对齐"
 
 #: pcbnew/tools/placement_tool.cpp:326
-#, fuzzy
 msgid "Align to bottom"
 msgstr "底部对齐"
 
@@ -27652,13 +27609,12 @@ msgid "Align to right"
 msgstr "右对齐:"
 
 #: pcbnew/tools/placement_tool.cpp:477
-#, fuzzy
 msgid "Align to middle"
 msgstr "居中对齐"
 
 #: pcbnew/tools/placement_tool.cpp:518
 msgid "Align to center"
-msgstr ""
+msgstr "居中对齐"
 
 #: pcbnew/tools/placement_tool.cpp:569
 msgid "Distribute horizontally"
