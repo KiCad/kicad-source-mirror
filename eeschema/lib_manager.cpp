@@ -221,7 +221,6 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
 
 bool LIB_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 {
-    wxCHECK( LibraryExists( aLibrary ), false );
     auto it = m_libs.find( aLibrary );
     return it != m_libs.end() ? it->second.IsModified() : false;
 }
@@ -229,7 +228,6 @@ bool LIB_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 
 bool LIB_MANAGER::IsPartModified( const wxString& aAlias, const wxString& aLibrary ) const
 {
-    wxCHECK( LibraryExists( aLibrary ), false );
     auto libIt = m_libs.find( aLibrary );
 
     if( libIt == m_libs.end() )
