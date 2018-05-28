@@ -2177,8 +2177,8 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case EAGLE_LAYER::BPLACE:        kiLayer = B_SilkS;      break;
         case EAGLE_LAYER::TNAMES:        kiLayer = F_SilkS;      break;
         case EAGLE_LAYER::BNAMES:        kiLayer = B_SilkS;      break;
-        case EAGLE_LAYER::TVALUES:       kiLayer = F_SilkS;      break;
-        case EAGLE_LAYER::BVALUES:       kiLayer = B_SilkS;      break;
+        case EAGLE_LAYER::TVALUES:       kiLayer = F_Fab;        break;
+        case EAGLE_LAYER::BVALUES:       kiLayer = B_Fab;        break;
         case EAGLE_LAYER::TSTOP:         kiLayer = F_Mask;       break;
         case EAGLE_LAYER::BSTOP:         kiLayer = B_Mask;       break;
         case EAGLE_LAYER::TCREAM:        kiLayer = F_Paste;      break;
