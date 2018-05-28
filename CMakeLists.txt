@@ -410,6 +410,9 @@ if( NOT APPLE )
     set( KICAD_BIN bin
         CACHE PATH "Location of KiCad binaries." )
 
+    set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
+        CACHE PATH "Location of KiCad data files." )
+
     if( WIN32 )
         set( KICAD_PLUGINS ${KICAD_BIN}/scripting/plugins
             CACHE PATH "Location of KiCad plugins." )
@@ -420,7 +423,7 @@ if( NOT APPLE )
         set( KICAD_USER_PLUGIN ${KICAD_BIN}/plugins
             CACHE PATH "Location of KiCad user-loaded plugins" )
     else()
-        set( KICAD_PLUGINS ${CMAKE_INSTALL_LIBDIR}/kicad/plugins
+        set( KICAD_PLUGINS ${KICAD_DATA}/plugins
             CACHE PATH "Location of KiCad plugins." )
 
         set( KICAD_LIB ${CMAKE_INSTALL_LIBDIR}
@@ -430,8 +433,6 @@ if( NOT APPLE )
             CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
-    set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
-        CACHE PATH "Location of KiCad data files." )
     set( KICAD_DOCS ${CMAKE_INSTALL_DATADIR}/doc/kicad
         CACHE PATH "Location of KiCad documentation files." )
     set( KICAD_DEMOS ${KICAD_DATA}/demos
