@@ -748,8 +748,8 @@ public:
 
         if( m_minV == m_maxV )
         {
-            m_minV  = -1.0;
-            m_maxV  = 1.0;
+            m_minV = m_minV - 1.0;
+            m_maxV = m_maxV + 1.0;
         }
     }
 
