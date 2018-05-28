@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-25 11:36+0200\n"
-"PO-Revision-Date: 2018-05-25 11:32+0200\n"
+"POT-Creation-Date: 2018-05-28 15:50+0200\n"
+"PO-Revision-Date: 2018-05-28 11:18+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -398,7 +398,7 @@ msgstr "pollici"
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:142
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78 common/base_units.cpp:164
 #: common/base_units.cpp:251 common/base_units.cpp:438
-#: common/base_units.cpp:496 common/draw_frame.cpp:570
+#: common/base_units.cpp:496 common/draw_frame.cpp:569
 #: common/preview_items/preview_utils.cpp:44
 #: common/dialogs/dialog_page_settings.cpp:472
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:44
@@ -1622,7 +1622,7 @@ msgstr "Griglia"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
 #: pcbnew/dialogs/dialog_update_pcb.cpp:160
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:104
-#: pcbnew/dialogs/dialog_plot.cpp:58 pcbnew/dialogs/dialog_find_base.cpp:46
+#: pcbnew/dialogs/dialog_plot.cpp:60 pcbnew/dialogs/dialog_find_base.cpp:46
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:129
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:130
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
@@ -1832,7 +1832,7 @@ msgstr "Predefinita"
 msgid "Other..."
 msgstr "Altro..."
 
-#: common/draw_frame.cpp:197 common/draw_frame.cpp:566
+#: common/draw_frame.cpp:197 common/draw_frame.cpp:565
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:30
 #: pagelayout_editor/pl_editor_frame.cpp:119
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:116
@@ -1851,7 +1851,7 @@ msgstr "Nascondi griglia"
 msgid "Show grid"
 msgstr "Mostra griglia"
 
-#: common/draw_frame.cpp:574 pcbnew/footprint_wizard_frame.cpp:307
+#: common/draw_frame.cpp:573 pcbnew/footprint_wizard_frame.cpp:307
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:99
 msgid "Units"
 msgstr "Unità"
@@ -2319,7 +2319,7 @@ msgstr "Annulla strumento corrente"
 
 #: common/tool/actions.cpp:36 eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:61
 #: pagelayout_editor/hotkeys.cpp:75 pcbnew/hotkeys.cpp:170
-#: pcbnew/hotkeys.cpp:172 pcbnew/pcb_base_frame.cpp:1016
+#: pcbnew/hotkeys.cpp:172 pcbnew/pcb_base_frame.cpp:1018
 msgid "Zoom Auto"
 msgstr "Inquadra tutto"
 
@@ -6201,7 +6201,7 @@ msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
 #: eeschema/sch_edit_frame.cpp:657 pagelayout_editor/pl_editor_frame.cpp:227
-#: pcbnew/pcb_edit_frame.cpp:649
+#: pcbnew/pcb_edit_frame.cpp:647
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -6272,7 +6272,7 @@ msgid "Eeschema"
 msgstr "Eeschema"
 
 #: eeschema/sch_edit_frame.cpp:1492 kicad/prjconfig.cpp:87
-#: pcbnew/footprint_edit_frame.cpp:768 pcbnew/pcb_edit_frame.cpp:1102
+#: pcbnew/footprint_edit_frame.cpp:768 pcbnew/pcb_edit_frame.cpp:1100
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -7405,6 +7405,18 @@ msgstr ""
 msgid "Unknown"
 msgstr "Sconosciuto"
 
+#: eeschema/sim/spice_value.cpp:40
+msgid "Spice value cannot be empty"
+msgstr "Il valore Spice non può essere vuoto"
+
+#: eeschema/sim/spice_value.cpp:45
+msgid "Invalid Spice value string"
+msgstr "Valore stringa Spice valido"
+
+#: eeschema/sim/spice_value.cpp:78
+msgid "Invalid unit prefix"
+msgstr "Prefisso unità non valido"
+
 #: eeschema/sim/spice_value.cpp:251
 msgid "Please, fill required fields"
 msgstr "Riempire i campi richiesti"
@@ -8453,6 +8465,18 @@ msgstr "Esplora plugin"
 #: eeschema/dialogs/dialog_edit_one_field.cpp:223
 msgid "Illegal reference field value!"
 msgstr "Valore campo riferimento errato!"
+
+#: eeschema/dialogs/dialog_sim_settings.cpp:99
+msgid "You need to enable at least one source"
+msgstr "È necessario abilitare almeno una sorgente"
+
+#: eeschema/dialogs/dialog_sim_settings.cpp:109
+msgid "You need to select DC source (sweep 1)"
+msgstr "È necessario selezionare la sorgente DC (sweep 1)"
+
+#: eeschema/dialogs/dialog_sim_settings.cpp:139
+msgid "You need to select DC source (sweep 2)"
+msgstr "È necessario selezionare la sorgente DC (sweep 2)"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:286
 msgid "No footprint specified"
@@ -11189,7 +11213,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:349
 #: pcbnew/exporters/gen_footprints_placefile.cpp:264
-#: pcbnew/dialogs/dialog_plot.cpp:793 pcbnew/dialogs/dialog_SVG_print.cpp:273
+#: pcbnew/dialogs/dialog_plot.cpp:802 pcbnew/dialogs/dialog_SVG_print.cpp:273
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella \"%s\"."
@@ -12628,11 +12652,11 @@ msgid "Sort Layers if X2 Mode"
 msgstr "Ordina gli strati se in modalità X2"
 
 #: gerbview/gerbview_frame.cpp:159 gerbview/events_called_functions.cpp:445
-#: pcbnew/footprint_edit_frame.cpp:312 pcbnew/pcb_edit_frame.cpp:1017
+#: pcbnew/footprint_edit_frame.cpp:312 pcbnew/pcb_edit_frame.cpp:1015
 msgid "Visibles"
 msgstr "Visibili"
 
-#: gerbview/gerbview_frame.cpp:211 pcbnew/pcb_edit_frame.cpp:469
+#: gerbview/gerbview_frame.cpp:211 pcbnew/pcb_edit_frame.cpp:468
 msgid ""
 "KiCad can use your graphics card to give you a smoother and faster "
 "experience. This option is turned off by default since it is not compatible "
@@ -12652,15 +12676,15 @@ msgstr ""
 "Se si preferisce, è possibile selezionare in un secondo momento gli "
 "strumenti moderni (accelerati) nel menu delle preferenze."
 
-#: gerbview/gerbview_frame.cpp:218 pcbnew/pcb_edit_frame.cpp:476
+#: gerbview/gerbview_frame.cpp:218 pcbnew/pcb_edit_frame.cpp:475
 msgid "Enable Graphics Acceleration"
 msgstr "Abilita accelerazione grafica"
 
-#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:479
+#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:478
 msgid "&Enable Acceleration"
 msgstr "Abilita acc&elerazione grafica"
 
-#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:479
+#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:478
 msgid "&No Thanks"
 msgstr "&No grazie"
 
@@ -13139,13 +13163,13 @@ msgstr "Errore info inizializzazione stampante"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:300
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:357
-#: pcbnew/dialogs/dialog_plot.cpp:852
+#: pcbnew/dialogs/dialog_plot.cpp:861
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attenzione: scala impostata ad un valore molto alto"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:306
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:367
-#: pcbnew/dialogs/dialog_plot.cpp:848
+#: pcbnew/dialogs/dialog_plot.cpp:857
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attenzione: scala impostata ad un valore molto basso"
 
@@ -16450,23 +16474,23 @@ msgstr "Elimina vertice"
 msgid "Remove corner"
 msgstr "Elimina vertice"
 
-#: pcbnew/tools/point_editor.cpp:242 pcbnew/tools/drawing_tool.cpp:1292
+#: pcbnew/tools/point_editor.cpp:237 pcbnew/tools/drawing_tool.cpp:1289
 msgid "Self-intersecting polygons are not allowed"
 msgstr "I poligoni autointersecanti non permessi"
 
-#: pcbnew/tools/point_editor.cpp:363
+#: pcbnew/tools/point_editor.cpp:358
 msgid "Drag a corner"
 msgstr "Sposta un angolo"
 
-#: pcbnew/tools/point_editor.cpp:951
+#: pcbnew/tools/point_editor.cpp:946
 msgid "Add a zone corner"
 msgstr "Aggiungi un vertice alla zona"
 
-#: pcbnew/tools/point_editor.cpp:990
+#: pcbnew/tools/point_editor.cpp:985
 msgid "Split segment"
 msgstr "Dividi segmento"
 
-#: pcbnew/tools/point_editor.cpp:1063
+#: pcbnew/tools/point_editor.cpp:1058
 msgid "Remove a zone/polygon corner"
 msgstr "Elimina zona/vertice poligono"
 
@@ -17000,11 +17024,11 @@ msgstr "Piazza un elemento DXF"
 msgid "Move the footprint reference anchor"
 msgstr "Sposta l'ancoraggio di riferimento dell'impronta"
 
-#: pcbnew/tools/drawing_tool.cpp:1649 pcbnew/tool_pcb_editor.cpp:459
+#: pcbnew/tools/drawing_tool.cpp:1646 pcbnew/tool_pcb_editor.cpp:459
 msgid "Add vias"
 msgstr "Aggiungi via"
 
-#: pcbnew/tools/drawing_tool.cpp:1651
+#: pcbnew/tools/drawing_tool.cpp:1648
 msgid "Place via"
 msgstr "Piazza via"
 
@@ -20989,7 +21013,7 @@ msgstr "Mostra coordinate rettangolari"
 msgid "Show pads in fill mode"
 msgstr "Mostra piazzole in modalità piena"
 
-#: pcbnew/pcb_base_frame.cpp:1021
+#: pcbnew/pcb_base_frame.cpp:1023
 msgid "Zoom "
 msgstr "Zoom "
 
@@ -21860,24 +21884,24 @@ msgstr ""
 msgid "Netlist update successful!"
 msgstr "Aggiornamento netlist effettuato con successo!"
 
-#: pcbnew/pcb_edit_frame.cpp:404
+#: pcbnew/pcb_edit_frame.cpp:403
 msgid "Layers Manager"
 msgstr "Gestione livelli"
 
-#: pcbnew/pcb_edit_frame.cpp:703
+#: pcbnew/pcb_edit_frame.cpp:701
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcb_edit_frame.cpp:1106
+#: pcbnew/pcb_edit_frame.cpp:1104
 msgid " [new file]"
 msgstr " [nuovo file]"
 
-#: pcbnew/pcb_edit_frame.cpp:1110
+#: pcbnew/pcb_edit_frame.cpp:1108
 msgid "Pcbnew"
 msgstr "PcbNew"
 
-#: pcbnew/pcb_edit_frame.cpp:1216
+#: pcbnew/pcb_edit_frame.cpp:1219
 msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
@@ -21986,7 +22010,7 @@ msgid "Component Placement File generation OK."
 msgstr "Generazione file piazzamento componenti OK."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:340
-#: pcbnew/dialogs/dialog_plot.cpp:904 pcbnew/dialogs/dialog_SVG_print.cpp:310
+#: pcbnew/dialogs/dialog_plot.cpp:913 pcbnew/dialogs/dialog_SVG_print.cpp:310
 #, c-format
 msgid "Unable to create file \"%s\"."
 msgstr "Impossibile creare il file \"%s\"."
@@ -26058,33 +26082,33 @@ msgstr ""
 msgid "Generate File"
 msgstr "Genera file"
 
-#: pcbnew/dialogs/dialog_plot.cpp:56
+#: pcbnew/dialogs/dialog_plot.cpp:58
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:126
-#: pcbnew/dialogs/dialog_plot_base.h:142
+#: pcbnew/dialogs/dialog_plot_base.h:144
 msgid "Plot"
 msgstr "Traccia"
 
-#: pcbnew/dialogs/dialog_plot.cpp:57
+#: pcbnew/dialogs/dialog_plot.cpp:59
 msgid "Generate Drill Files..."
 msgstr "Genera file forature..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:641
+#: pcbnew/dialogs/dialog_plot.cpp:647
 msgid "HPGL pen size constrained."
 msgstr "Dimensioni penna HPGL limitate."
 
-#: pcbnew/dialogs/dialog_plot.cpp:653
+#: pcbnew/dialogs/dialog_plot.cpp:662
 msgid "Default line width constrained."
 msgstr "Spessore predefinito della linea limitato."
 
-#: pcbnew/dialogs/dialog_plot.cpp:666
+#: pcbnew/dialogs/dialog_plot.cpp:675
 msgid "X scale constrained."
 msgstr "Scala X limitata."
 
-#: pcbnew/dialogs/dialog_plot.cpp:680
+#: pcbnew/dialogs/dialog_plot.cpp:689
 msgid "Y scale constrained."
 msgstr "Scala Y limitata."
 
-#: pcbnew/dialogs/dialog_plot.cpp:696
+#: pcbnew/dialogs/dialog_plot.cpp:705
 #, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
@@ -26094,11 +26118,11 @@ msgstr ""
 "larghezza deve essere compresa tra [%+f; %+f] (%s) per le attuali regole di "
 "progettazione."
 
-#: pcbnew/dialogs/dialog_plot.cpp:780
+#: pcbnew/dialogs/dialog_plot.cpp:789
 msgid "No layer selected, Nothing to plot"
 msgstr "Nessun strato selezionato, niente da tracciare"
 
-#: pcbnew/dialogs/dialog_plot.cpp:899
+#: pcbnew/dialogs/dialog_plot.cpp:908
 #, c-format
 msgid "Plot file \"%s\" created."
 msgstr "File tracciatura \"%s\" creato."
