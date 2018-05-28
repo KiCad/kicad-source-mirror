@@ -61,7 +61,7 @@ namespace std {
         {
             static const bool sz64 = sizeof( uintptr_t ) == 8;
             static const size_t mask = sz64 ? 0xF000000000000000uLL : 0xF0000000uL;
-            static const size_t offset = sz64 ? 28 : 60;
+            static const size_t offset = sz64 ? 60 : 28;
 
             // The hash only needs to be fast and simple, not necessarily accurate - a collision
             // only makes things slower, not broken. BITMAP_DEF is a pointer, so the most
