@@ -41,7 +41,7 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_DUPLICATE_SHEET_NAME:
         return wxString( _("Duplicate sheet names within a given sheet") );
     case ERCE_PIN_NOT_CONNECTED:
-        return wxString( _("Pin not connected (and no connect symbol found on this pin)") );
+        return wxString( _("Pin not connected (use a \"no connection\" flag to suppress this error)") );
     case ERCE_PIN_NOT_DRIVEN:
         return wxString( _("Pin connected to some others pins but no pin to drive it") );
     case ERCE_PIN_TO_PIN_WARNING:
@@ -51,7 +51,7 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_HIERACHICAL_LABEL:
         return wxString( _("Mismatch between hierarchical labels and pins sheets"));
     case ERCE_NOCONNECT_CONNECTED:
-        return wxString( _("A no connect symbol is connected to more than 1 pin"));
+        return wxString( _("A pin with a \"no connection\" flag is connected"));
     case ERCE_GLOBLABEL:
         return wxString( _("Global label not connected to any other global label") );
     case ERCE_SIMILAR_LABELS:
