@@ -96,7 +96,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         // At least one source has to be enabled
         if( !m_dcEnable1->IsChecked() && !m_dcEnable2->IsChecked() )
         {
-            DisplayError( this, wxT( "You need to enable at least one source" ) );
+            DisplayError( this, _( "You need to enable at least one source" ) );
             return false;
         }
 
@@ -106,7 +106,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         {
             if( empty( m_dcSource1 ) )
             {
-                DisplayError( this, wxT( "You need to select DC source (sweep 1)" ) );
+                DisplayError( this, _( "You need to select DC source (sweep 1)" ) );
                 return false;
             }
 
@@ -136,7 +136,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         {
             if( empty( m_dcSource2 ) )
             {
-                DisplayError( this, wxT( "You need to select DC source (sweep 2)" ) );
+                DisplayError( this, _( "You need to select DC source (sweep 2)" ) );
                 return false;
             }
 

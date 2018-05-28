@@ -37,12 +37,12 @@ SPICE_VALUE::SPICE_VALUE( const wxString& aString )
     char buf[8] = { 0, };
 
     if( aString.IsEmpty() )
-        throw std::invalid_argument( "Spice value cannot be empty" );
+        throw std::invalid_argument( _( "Spice value cannot be empty" ) );
 
     LOCALE_IO dummy;    // All numeric values should be in "C" locale(decimal separator = .)
 
     if( sscanf( (const char*) aString.c_str(), "%lf%7s", &m_base, buf ) == 0 )
-        throw std::invalid_argument( "Invalid Spice value string" );
+        throw std::invalid_argument( _( "Invalid Spice value string" ) );
 
     if( *buf == 0 )
     {
@@ -75,7 +75,7 @@ SPICE_VALUE::SPICE_VALUE( const wxString& aString )
             case 't': m_prefix = PFX_TERA; break;
 
             default:
-                throw std::invalid_argument( "Invalid unit prefix" );
+                throw std::invalid_argument( _( "Invalid unit prefix" ) );
         }
     }
 
