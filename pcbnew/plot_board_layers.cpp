@@ -431,15 +431,17 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             case PAD_SHAPE_CIRCLE:
             case PAD_SHAPE_OVAL:
                 pad->SetSize( padPlotsSize );
-
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
                     ( pad->GetSize() == pad->GetDrillSize() ) &&
                     ( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ) )
-                    break;
-                // Fall through:
+
+                itemplotter.PlotPad( pad, color, plotMode );
+                break;
+
             case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_RECT:
             case PAD_SHAPE_ROUNDRECT:
+                pad->SetSize( padPlotsSize );
                 itemplotter.PlotPad( pad, color, plotMode );
                 break;
 
