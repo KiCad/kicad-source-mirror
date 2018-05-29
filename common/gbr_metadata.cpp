@@ -90,7 +90,7 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
 
     case GBR_APERTURE_ATTRIB_BGAPAD_CUDEF:  // print info associated to a flashed BGA pad with
                                             // a solder mask defined by the solder mask
-        attribute_string = "%TA.AperFunction,BGAPad,CuDef";
+        attribute_string = "TA.AperFunction,BGAPad,CuDef";
         break;
 
     case GBR_APERTURE_ATTRIB_CONNECTORPAD:  // print info associated to a flashed edge connector pad (outer layers)
