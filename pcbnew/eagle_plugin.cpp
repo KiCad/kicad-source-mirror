@@ -865,7 +865,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
     {
         if( element->GetName() != "element" )
         {
-            wxLogMessage( "expected: <element> read <%s>. Skip it", element->GetName() );
+            wxLogDebug( "expected: <element> read <%s>. Skip it", element->GetName() );
             // Get next item
             element = element->GetNext();
             continue;
@@ -959,7 +959,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             {
                 if( attribute->GetName() != "attribute" )
                 {
-                    wxLogMessage( "expected: <attribute> read <%s>. Skip it", attribute->GetName() );
+                    wxLogDebug( "expected: <attribute> read <%s>. Skip it", attribute->GetName() );
                     attribute = attribute->GetNext();
                     continue;
                 }
@@ -1392,8 +1392,8 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                    "Line on copper layer in package %s (%f mm, %f mm) (%f mm, %f mm)."
-                    "\nMoving to Dwgs.User layer",
+                    _( "Line on copper layer in package %s (%f mm, %f mm) (%f mm, %f mm)."
+                    "\nMoving to Dwgs.User layer" ),
                     aModule->GetFPID().GetLibItemName().c_str(), w.x1.ToMm(), w.y1.ToMm(),
                     w.x2.ToMm(), w.y2.ToMm() ) );
         layer = Dwgs_User;
@@ -1513,7 +1513,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper texts
     {
         wxLogMessage( wxString::Format(
-                "Unsupported text on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                _( "Unsupported text on copper layer in package %s.\nMoving to Dwgs.User layer." ),
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -1627,7 +1627,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                "Unsupported rectangle on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                _( "Unsupported rectangle on copper layer in package %s.\nMoving to Dwgs.User layer." ),
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -1670,7 +1670,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                "Unsupported polygon on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                _( "Unsupported polygon on copper layer in package %s.\nMoving to Dwgs.User layer." ),
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -1755,7 +1755,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                "Unsupported circle on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                _( "Unsupported circle on copper layer in package %s.\nMoving to Dwgs.User layer." ),
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -2212,7 +2212,7 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case EAGLE_LAYER::HOLES:
         default:
             // some layers do not map to KiCad
-            wxLogMessage( wxString::Format( "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer",
+            wxLogMessage( wxString::Format( _( "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer" ),
                     eagle_layer_name( aEagleLayer ), aEagleLayer ) );
 
             kiLayer = Dwgs_User;
