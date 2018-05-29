@@ -61,10 +61,10 @@ static const struct
 } fileFilters[FILTER_COUNT] =
 {
     // wxGenericDirCtrl does not handle regexes in wildcards
-    { "KiCad (folder with .kicad_mod files)", "kicad_mod", false, IO_MGR::KICAD_SEXP },
-    { "Eagle 6.x (*.lbr)",                    "lbr",       true,  IO_MGR::EAGLE },
-    { "KiCad legacy (*.mod)",                 "mod",       true,  IO_MGR::LEGACY },
-    { "Geda (folder with *.fp files)",        "fp",        false, IO_MGR::GEDA_PCB },
+    { "KiCad (folder with .kicad_mod files)", "",    false, IO_MGR::KICAD_SEXP },
+    { "Eagle 6.x (*.lbr)",                    "lbr", true,  IO_MGR::EAGLE },
+    { "KiCad legacy (*.mod)",                 "mod", true,  IO_MGR::LEGACY },
+    { "Geda (folder with *.fp files)",        "",    false, IO_MGR::GEDA_PCB },
 };
 
 
@@ -72,18 +72,25 @@ static const struct
 static wxString getFilterString()
 {
     wxString filterAll = _( "All supported library formats|" );
+    bool firstFilterAll = true;
     wxString filter;
 
     for( int i = 0; i < FILTER_COUNT; ++i )
     {
-        // "All supported formats" filter
-        if( i != 0 )
-            filterAll += ";";
+        if( fileFilters[i].m_IsFile )
+        {
+            // "All supported formats" filter
+            if( firstFilterAll )
+                firstFilterAll = false;
+            else
+                filterAll += ";";
 
-        filterAll += "*." + fileFilters[i].m_Extension;
+            wxASSERT( !fileFilters[i].m_Extension.IsEmpty() );
+            filterAll += "*." + fileFilters[i].m_Extension;
+        }
 
 
-        // Rest of the filter string
+        // Individual filter strings
         filter += "|" + fileFilters[i].m_Description +
                   "|" + ( fileFilters[i].m_IsFile ? "*." + fileFilters[i].m_Extension : "" );
     }
