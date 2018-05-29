@@ -214,7 +214,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 
         if( renameFile )
         {
-            aSheet->GetScreen()->SetFileName( newFilename );
+            // If the the associated screen is shared by more than one sheet, do not
+            // change the filename of the corresponding screen here.
+            // (a new screen will be created later)
+            // if it is not shared, update the filename
+            if( aSheet->GetScreenCount() <= 1 )
+                aSheet->GetScreen()->SetFileName( newFilename );
 
             try
             {
