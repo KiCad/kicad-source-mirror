@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-25 11:36+0200\n"
-"PO-Revision-Date: 2018-05-03 10:56+0200\n"
+"PO-Revision-Date: 2018-05-28 21:05-0500\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1111,7 +1111,7 @@ msgstr "Mostrar capas de adhesivo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:201
 msgid "User layers (not shown in realistic mode):"
-msgstr "Capas de usuario (no se muestran en modo realístico):"
+msgstr "Capas de usuario (no se muestran en modo realista):"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:218
 msgid "Show comments and drawings layers"
@@ -1322,7 +1322,7 @@ msgid ""
 "screen layer."
 msgstr ""
 "Seleccione la capa para situar el contorno.\n"
-"Los dos campos invisibles, referencia y valor, siempre se situan en la capa "
+"Los dos campos invisibles, referencia y valor, siempre se sitúan en la capa "
 "de serigrafía."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:270 eeschema/edit_bitmap.cpp:103
@@ -2459,7 +2459,7 @@ msgstr "No se ha encontrado editor por defecto, debe configurar uno"
 
 #: common/pgm_base.cpp:379
 msgid "Executable file (*.exe)|*.exe"
-msgstr "Archivo ejecutale (*.exe)|*.exe"
+msgstr "Archivo ejecutable (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:381
 msgid "Executable file (*)|*"
@@ -6110,12 +6110,12 @@ msgstr "Seleccionar símbolo (%d elementos cargados)"
 #: eeschema/viewlibs.cpp:182
 #, c-format
 msgid "Symbol Library Browser -- %s"
-msgstr "Explorardor de librerías de símbolos -- %s"
+msgstr "Explorador de librerías de símbolos -- %s"
 
 #: eeschema/viewlibs.cpp:183 eeschema/libedit.cpp:73
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "no library selected"
-msgstr "no se ha selecionado una librería"
+msgstr "no se ha seleccionado una librería"
 
 #: eeschema/viewlibs.cpp:228 eeschema/libedit.cpp:672
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
@@ -6168,7 +6168,7 @@ msgid ""
 "mode. In order to create/update PCBs from schematics, you need to launch "
 "Kicad shell and create a PCB project."
 msgstr ""
-"No puede actualizarse la placa ya que el Editor de esquemas está abieto en "
+"No puede actualizarse la placa ya que el Editor de esquemas está abierto en "
 "modo independiente. Para crear/actualizar placas desde el esquema es "
 "necesario crear un projecto de placa desde la ventana principal de KiCad."
 
@@ -6191,7 +6191,7 @@ msgstr "Abrir esquema"
 
 #: eeschema/sch_edit_frame.cpp:1173
 msgid "Could not open CvPcb"
-msgstr "No ha pudido abrirse CvPcb"
+msgstr "No ha podido abrirse CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1210
 msgid "Error: not a symbol or no symbol."
@@ -6305,7 +6305,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:399
 msgid "Append Schematic"
-msgstr "Añadirr esquema"
+msgstr "Añadir esquema"
 
 #: eeschema/files-io.cpp:448 eeschema/sheet.cpp:262
 msgid ""
@@ -7652,7 +7652,7 @@ msgstr "se esperaba 'Itálica' o '~'"
 #: eeschema/sch_legacy_plugin.cpp:1595
 msgid "component field text attributes must be 3 characters wide"
 msgstr ""
-"los atributos del texto del campo del componente debe teer tres caracteres "
+"los atributos del texto del campo del componente debe tener tres caracteres "
 "de ancho"
 
 #: eeschema/sch_legacy_plugin.cpp:2395
@@ -9431,7 +9431,7 @@ msgid ""
 "or in black and white mode, better to print it when using  black and white "
 "printers"
 msgstr ""
-"Seleccionelo si desea imprimir la hoja tal y cómo se muestra en la "
+"Selecciónelo si desea imprimir la hoja tal y cómo se muestra en la "
 "pantalla,\n"
 "o en blanco y negro, para una calidad superior en impresoras monocromas"
 
@@ -10194,7 +10194,7 @@ msgstr ""
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
 "Añadiendo la librería \"%s\", archivo \"%s\" a la tabla de librerías de "
-"símbolos del projecto."
+"símbolos del provecto."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:198
 #, c-format
@@ -10207,7 +10207,7 @@ msgid ""
 "Failed to write project symbol library table. Error:\n"
 "  %s"
 msgstr ""
-"No ha podido escribirse la tabla de librerías de símbolos del projecto. "
+"No ha podido escribirse la tabla de librerías de símbolos del provecto. "
 "Error:\n"
 " %s"
 
@@ -10274,7 +10274,7 @@ msgstr "No ha podido crearse el archivo de respaldo \"%s\".\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:395
 #, c-format
 msgid "Failed to create backup folder \"%s\"\n"
-msgstr "No ha puedido crearse la carpeta de copia de seguridad \"%s\"\n"
+msgstr "No ha podido crearse la carpeta de copia de seguridad \"%s\"\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:476
 msgid "Some of the project files could not be backed up."
@@ -10850,7 +10850,7 @@ msgid ""
 "Key words cannot have spaces and are separated by a space."
 msgstr ""
 "Introduzca palabras clave que puedan utilizarse para seleccionar este "
-"sñimbolo.\n"
+"símbolo.\n"
 "Las palabras clave no pueden contener espacios y se separan con un espacio."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:135
@@ -11038,7 +11038,7 @@ msgid ""
 msgstr ""
 "Tiempo de espera después del primer cambio para crear una copia de respaldo "
 "de la placa en disco.\n"
-"Si se indica 0, se desabilitará la copia de respaldo"
+"Si se indica 0, se deshabilitara la copia de respaldo"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:221
 msgid "minutes"
@@ -11483,7 +11483,7 @@ msgstr "No se ha encontrado el símbolo \"%s\" en la librería \"%s\""
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:286
 #, c-format
 msgid "Symbol \"%s\" found in library \"%s\""
-msgstr "Se ha encrontrado el símbolo \"%s\" en la librería \"%s\""
+msgstr "Se ha encontrado el símbolo \"%s\" en la librería \"%s\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:373
 #, c-format
@@ -11552,7 +11552,7 @@ msgstr "Muestra el tipo &eléctrico del pin"
 #, c-format
 msgid "Illegal character \"%c\" found in Nickname: \"%s\" in row %d"
 msgstr ""
-"Se ha encontrado el caracter ilegal \"%c\" en el apodo: \"%s\" en la fila %d"
+"Se ha encontrado el carácter ilegal \"%c\" en el apodo: \"%s\" en la fila %d"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:288
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:366
@@ -11800,7 +11800,7 @@ msgstr "Añadir texto al cuerpo del símbolo"
 
 #: eeschema/help_common_strings.h:86
 msgid "Add graphic rectangle to symbol body"
-msgstr "Añadir rectágulo gráfico al cuerpo del símbolo"
+msgstr "Añadir rectángulo gráfico al cuerpo del símbolo"
 
 #: eeschema/help_common_strings.h:87
 msgid "Add circles to symbol body"
@@ -12092,7 +12092,7 @@ msgid ""
 "shown)"
 msgstr ""
 "Mostrar capas en modo raw\n"
-"(podría tener problemas con elementos negativos cuandose muestran más de un "
+"(podría tener problemas con elementos negativos cuando se muestran más de un "
 "archivo de gerber)"
 
 #: gerbview/toolbars_gerber.cpp:288
@@ -12321,7 +12321,7 @@ msgstr "Abrir archivo de traba&jo Gerber..."
 msgid ""
 "Open a Gerber job file, and it's associated gerber files depending on the job"
 msgstr ""
-"Abrir un archivo de trabajo Gerber, y cargar archivos asociados Gerrber en "
+"Abrir un archivo de trabajo Gerber, y cargar archivos asociados Gerber en "
 "función del trabajo"
 
 #: gerbview/menubar.cpp:74
@@ -12490,7 +12490,7 @@ msgstr "Herramientas modernas (&acelerado)"
 #: pcbnew/menubar_footprint_editor.cpp:463
 msgid "Use Modern Toolset with hardware-accelerated graphics (recommended)"
 msgstr ""
-"Utilizar Herramientas modernas con aceleración grápica por hardware "
+"Utilizar Herramientas modernas con aceleración gráfica por hardware "
 "(recomendado)"
 
 #: gerbview/menubar.cpp:321 pcbnew/menubar_pcb_editor.cpp:228
@@ -13071,7 +13071,7 @@ msgstr "Escala X:"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:78
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Ajuster escala X para trazado a escala precisa"
+msgstr "Ajustar escala X para trazado a escala precisa"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
 #: pcbnew/dialogs/dialog_plot_base.cpp:310
@@ -13081,7 +13081,7 @@ msgstr "Escala Y:"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:87
 msgid "Set Y scale adjust for exact scale plotting"
-msgstr "Ajuster escala Y para trazado a escala precisa"
+msgstr "Ajustar escala Y para trazado a escala precisa"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:129
@@ -13120,7 +13120,7 @@ msgstr "Atención: la escala se ha ajustado a un valor muy grande"
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:367
 #: pcbnew/dialogs/dialog_plot.cpp:848
 msgid "Warning: Scale option set to a very small value"
-msgstr "Atencíon: la escala se ha ajustado a un valor muy pequeño"
+msgstr "Atención: la escala se ha ajustado a un valor muy pequeño"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:355
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:434
@@ -13476,7 +13476,7 @@ msgstr "Proyecto desde plan&tilla..."
 
 #: kicad/menubar.cpp:226 kicad/menubar.cpp:512
 msgid "Create new project from template"
-msgstr "Craer nuevo proyecto desde una plantilla"
+msgstr "Crear nuevo proyecto desde una plantilla"
 
 #: kicad/menubar.cpp:230 pagelayout_editor/menubar.cpp:62
 #: pcbnew/menubar_pcb_editor.cpp:792
@@ -13998,7 +13998,7 @@ msgstr "Sobreescribiendo archivos:"
 msgid "Are you sure you want to overwrite files in the destination folder?"
 msgstr ""
 "¿Está seguro de que desea sobreescribir los archivos en la carpeta de "
-"destinoi?"
+"destino?"
 
 #: kicad/prjconfig.cpp:372
 msgid "Overwrite"
@@ -14564,7 +14564,7 @@ msgid ""
 "will be calculated. The width for the other trace to also handle this "
 "current will then be calculated."
 msgstr ""
-"Si especifica uno d elos anchos de pista, se calculará la intensidad máxima "
+"Si especifica uno de los anchos de pista, se calculará la intensidad máxima "
 "admitida. También se calculará el ancho necesario de la otra pista pata "
 "admitir esa corriente."
 
@@ -14578,7 +14578,7 @@ msgid ""
 "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
 "(10mm)."
 msgstr ""
-"Los calculos son válidos para intensidades de hasta 35A (externos) o 17,5A "
+"Los cálculos son válidos para intensidades de hasta 35A (externos) o 17,5A "
 "(internos), la temperatura aumenta hasta 100ºC y las pistas tendrán un ancho "
 "de 10mm (400mil)."
 
@@ -14663,7 +14663,7 @@ msgstr "TanD:"
 
 #: pcb_calculator/transline_ident.cpp:145
 msgid "Tangent delta: dielectric loss factor."
-msgstr "Tangente delta: factor de pérdida dielectrica."
+msgstr "Tangente delta: factor de pérdida dieléctrica."
 
 #: pcb_calculator/transline_ident.cpp:150
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:669
@@ -14719,7 +14719,7 @@ msgstr "Pérdidas dieléctricas:"
 #: pcb_calculator/transline_ident.cpp:374
 #: pcb_calculator/transline_ident.cpp:407
 msgid "Skin Depth:"
-msgstr "Profundidad suoerficial:"
+msgstr "Profundidad superficial:"
 
 #: pcb_calculator/transline_ident.cpp:171
 #: pcb_calculator/transline_ident.cpp:208
@@ -15468,7 +15468,7 @@ msgstr ""
 "*  B1 - Conductores internos\n"
 "*  B2 - Conductores externos, sin recubrir, de nivel de mar a 3050 m\n"
 "*  B3 - Conductores externos, sin recubrir, sobre 3050 m\n"
-"*  B4 - Conductores externos, con recubrimiento permanete de polímeros "
+"*  B4 - Conductores externos, con recubrimiento permanente de polímeros "
 "(cualquier elevación)\n"
 "*  A5 - Conductores externos, con recubrimiento sobre el ensamblaje "
 "(cualquier elevación)\n"
@@ -15772,7 +15772,7 @@ msgid ""
 "The graphic item will be on a copper layer.\n"
 "This is very dangerous. Are you sure?"
 msgstr ""
-"El elemento gráfico se eituará en una capa de cobre.\n"
+"El elemento gráfico se situara en una capa de cobre.\n"
 "Esto es muy peligroso. ¿Está seguro?"
 
 #: pcbnew/edgemod.cpp:255
@@ -16017,7 +16017,7 @@ msgstr "Arrastrar segmentos, mantener inclinación"
 
 #: pcbnew/onrightclick.cpp:486
 msgid "Drag Segment"
-msgstr "Arrastar segmento"
+msgstr "Arrastrar segmento"
 
 #: pcbnew/onrightclick.cpp:501
 msgid "Create Track Array..."
@@ -16441,7 +16441,7 @@ msgstr "Eliminar esquina"
 
 #: pcbnew/tools/point_editor.cpp:242 pcbnew/tools/drawing_tool.cpp:1292
 msgid "Self-intersecting polygons are not allowed"
-msgstr "No se permiten los polígonos que se intersectan a si mismos"
+msgstr "No se permiten los polígonos que se interceptan a si mismos"
 
 #: pcbnew/tools/point_editor.cpp:363
 msgid "Drag a corner"
@@ -16786,7 +16786,7 @@ msgid ""
 msgstr ""
 "No pueden convertirse los elementos en un pad personalizado:\n"
 "no puede determinarse la posición del ancla.\n"
-"Considere añadir un ancla a la selección e intentelo de nuevo."
+"Considere añadir un ancla a la selección e inténtelo de nuevo."
 
 #: pcbnew/tools/footprint_editor_tools.cpp:458
 msgid ""
@@ -18218,7 +18218,7 @@ msgstr "Pis&tas en boceto"
 #: pcbnew/menubar_pcb_editor.cpp:708
 #: pcbnew/toolbars_update_user_interface.cpp:163 pcbnew/tool_pcb_editor.cpp:401
 msgid "Show tracks in outline mode"
-msgstr "Mostras pistas en modo contorno"
+msgstr "Mostrar pistas en modo contorno"
 
 #: pcbnew/menubar_pcb_editor.cpp:712
 msgid "Sketch &Graphic Items"
@@ -18268,7 +18268,7 @@ msgstr "&Disminuir opacidad de capa"
 
 #: pcbnew/menubar_pcb_editor.cpp:742 pcbnew/menubar_footprint_editor.cpp:315
 msgid "Make the current layer more transparent"
-msgstr "Aumentar la transparecia de la capa activa"
+msgstr "Aumentar la transparencia de la capa activa"
 
 #: pcbnew/menubar_pcb_editor.cpp:745 pcbnew/menubar_footprint_editor.cpp:318
 msgid "&Increase Layer Opacity"
@@ -18276,7 +18276,7 @@ msgstr "Aumentar opac&idad de capa"
 
 #: pcbnew/menubar_pcb_editor.cpp:748 pcbnew/menubar_footprint_editor.cpp:321
 msgid "Make the current layer less transparent"
-msgstr "Disminuir la transparencvia de la capa activa"
+msgstr "Disminuir la transparencia de la capa activa"
 
 #: pcbnew/menubar_pcb_editor.cpp:752 pcbnew/menubar_footprint_editor.cpp:325
 msgid "&Contrast Mode"
@@ -18422,7 +18422,7 @@ msgstr "Archivos de &fabricación"
 
 #: pcbnew/menubar_pcb_editor.cpp:920
 msgid "Generate files for fabrication"
-msgstr "Generar archvos de fabricación"
+msgstr "Generar archivos de fabricación"
 
 #: pcbnew/menubar_pcb_editor.cpp:932 pcbnew/tool_pcb_editor.cpp:275
 msgid "Print board"
@@ -18812,7 +18812,7 @@ msgstr "Fondo"
 
 #: pcbnew/pcb_layer_widget.cpp:92
 msgid "PCB Background"
-msgstr "Fonde de la PCB"
+msgstr "Fondo de la PCB"
 
 #: pcbnew/pcb_layer_widget.cpp:172
 msgid "Show All Copper Layers"
@@ -18844,7 +18844,7 @@ msgstr "Mostrar todas las capas frontales"
 
 #: pcbnew/pcb_layer_widget.cpp:205
 msgid "Show All Back Layers"
-msgstr "Mostras todas las capas traseras"
+msgstr "Mostrar todas las capas traseras"
 
 #: pcbnew/pcb_layer_widget.cpp:505
 msgid "Front copper layer"
@@ -19136,12 +19136,11 @@ msgid "Tune Diff Pair Skew"
 msgstr "Afinar desvío de par diferencial"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:453
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
 msgstr ""
-"No puede encontrarse la red complementaria del par diferencial. Asegurese de "
+"No puede encontrarse la red complementaria del par diferencial. Asegúrese de "
 "que los nombres de las redes que pertenecen al mismo par terminan en _N/_P o "
 "+/-."
 
@@ -19197,7 +19196,7 @@ msgid ""
 "_N/_P or +/-."
 msgstr ""
 "No puede encontrarse la red complementaria del par diferencial para el "
-"afinado del desvío. Asegurese de que los nombres de las redes que pertenecen "
+"afinado del desvío. Asegúrese de que los nombres de las redes que pertenecen "
 "al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:154
@@ -19251,7 +19250,7 @@ msgid ""
 "_N/_P or +/-."
 msgstr ""
 "No puede encontrarse la red complementaria del par diferencial para el "
-"afinado de la longitud. Asegurese de que los nombres de las redes que "
+"afinado de la longitud. Asegúrese de que los nombres de las redes que "
 "pertenecen al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/router_tool.cpp:84
@@ -19329,7 +19328,8 @@ msgstr "Arrastrar (ángulo libre)"
 #: pcbnew/router/router_tool.cpp:134
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "Arrastra la unión más cercana en la pista sin restriciones de ángulos."
+msgstr ""
+"Arrastra la unión más cercana en la pista sin restricciones de ángulos."
 
 #: pcbnew/router/router_tool.cpp:142
 msgid "Stops laying the current track."
@@ -19341,7 +19341,7 @@ msgstr "Finalizado de pista automático"
 
 #: pcbnew/router/router_tool.cpp:145
 msgid "Automagically finishes currently routed track."
-msgstr "Termina la pista en proceso de enrutado automágicamente."
+msgstr "Termina la pista en proceso de enrutado automáticamente."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Adds a through-hole via at the end of currently routed track."
@@ -19999,7 +19999,7 @@ msgstr "No se permiten textos en la capa de perímetro"
 
 #: pcbnew/onleftclick.cpp:397
 msgid "Dimension not allowed on Copper or Edge Cut layers"
-msgstr "No se permitaen dimensiones en las capas de cobre o de perímetro"
+msgstr "No se permiten dimensiones en las capas de cobre o de perímetro"
 
 #: pcbnew/onleftclick.cpp:450
 msgid "Via Tool not available in Legacy Toolset"
@@ -20604,7 +20604,7 @@ msgstr "Gráfico placa: %s, longitud %s en %s"
 #: pcbnew/legacy_netlist_reader.cpp:120
 msgid "Cannot parse time stamp in symbol section of netlist."
 msgstr ""
-"No puede interpretarse la marca de tiempo en la sección de símboloss de la "
+"No puede interpretarse la marca de tiempo en la sección de símbolos de la "
 "lista de redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:130
@@ -21907,7 +21907,7 @@ msgid ""
 msgstr ""
 "No puede encontrase el siguiente segmento delimitador con un punto final en "
 "(%s mm, %s mm).\n"
-"Edite el gráfico, formando polígonos contínuos."
+"Edite el gráfico, formando polígonos continuos."
 
 #: pcbnew/deltrack.cpp:161
 msgid "Delete NET?"
@@ -22807,7 +22807,7 @@ msgid ""
 "If set to 0, auto backup is disabled."
 msgstr ""
 "Tiempo de espera después del primer cambio para crear una copia de respaldo "
-"de la placa en disco. Si se indica 0, se desabilitará la copia de respaldo."
+"de la placa en disco. Si se indica 0, se deshabilitará la copia de respaldo."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:75
 msgid "Show icons in menus"
@@ -22962,7 +22962,7 @@ msgstr "Forzar direcciones a H, V o 45 grados al dibujar una pista."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:219
 msgid "&Use double segmented tracks"
-msgstr "&Utilizar pistas de docle segmento"
+msgstr "&Utilizar pistas de doble segmento"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:221
 msgid ""
@@ -23001,7 +23001,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:351
 msgid "Change text properties"
-msgstr "Cmabiar propiedades de texto"
+msgstr "Cambiar propiedades de texto"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 #: pcbnew/dialogs/dialog_export_step_base.cpp:22
@@ -23169,7 +23169,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_create_array.cpp:276
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "Valor númerico erróneo para %s: %s"
+msgstr "Valor numérico erróneo para %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:299
 msgid "horizontal count"
@@ -23744,7 +23744,7 @@ msgstr "El nombre de la capa no debe estar vacío."
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:811
 msgid "Layer name has an illegal character, one of: '"
-msgstr "El nombre de la placa tiene un carácter no pemritido, uno de: '"
+msgstr "El nombre de la placa tiene un carácter no permitido, uno de: '"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:819
 msgid "Layer name 'signal' is reserved."
@@ -24921,7 +24921,7 @@ msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the front silk screen layer. Please, fix it"
 msgstr ""
-"Este elemento tienen un identificardor de capa ilegal.\n"
+"Este elemento tienen un identificador de capa ilegal.\n"
 "Se ha forzado a la capa de serigrafía frontal. Por favor, corríjalo"
 
 #: pcbnew/dialogs/dialog_edit_footprint_text.cpp:348
@@ -26533,7 +26533,7 @@ msgstr "Página completa con marco"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Current page size"
-msgstr "Támaño de página actual"
+msgstr "Tamaño de página actual"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Board area only"
@@ -27619,11 +27619,11 @@ msgstr "Polígono incorrecto: menos de 3 esquinas"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:298
 msgid "Incorrect polygon: too few corners after simplification"
-msgstr "Polígono incorrecto: insuficientes esquitas tras la simplificación"
+msgstr "Polígono incorrecto: insuficientes esquinas tras la simplificación"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:304
 msgid "Incorrect polygon: self intersecting"
-msgstr "Polígono incorrecto: se intersecta a sí mismo"
+msgstr "Polígono incorrecto: se intercepta a sí mismo"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:309
 msgid "Polygon:"
@@ -27831,7 +27831,7 @@ msgstr "Rotar:"
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr "Rotar y mover el elemento. Las secciones múltiples se moveran juntas."
+msgstr "Rotar y mover el elemento. Las secciones múltiples se moverán juntas."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
 msgid "Pad Numbering Options:"
@@ -28038,7 +28038,7 @@ msgstr "No se ha seleccionado ninguna red."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:504
 msgid "Chamfer distance"
-msgstr "Distacia de biselado"
+msgstr "Distancia de biselado"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:510
 msgid "Fillet radius"
@@ -28128,7 +28128,7 @@ msgstr "Opciones de capa"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:64
 msgid "Generate Footprint Position Files"
-msgstr "Generar archivos de posicción de huellas"
+msgstr "Generar archivos de posición de huellas"
 
 #: pcbnew/dialogs/dialog_global_footprints_fields_edition_base.h:61
 msgid "Set Text Size"
