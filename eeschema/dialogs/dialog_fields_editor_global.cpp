@@ -488,21 +488,6 @@ public:
     }
 
 
-    bool isModifiedDefaultField( std::pair<wxString, wxString> aFieldData )
-    {
-        wxString name = aFieldData.first;
-        wxString value = aFieldData.second;
-
-        for( auto defaultField : m_frame->GetTemplateFieldNames() )
-        {
-            if( name == defaultField.m_Name && value != defaultField.m_Value )
-                return true;
-        }
-
-        return false;
-    }
-
-
     void ApplyData()
     {
         for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
@@ -520,7 +505,7 @@ public:
                 wxString   srcValue = srcData.second;
                 SCH_FIELD* destField = comp->FindField( srcName );
 
-                if( !destField && ( !srcValue.IsEmpty() || isModifiedDefaultField( srcData ) ) )
+                if( !destField && !srcValue.IsEmpty() )
                     destField = comp->AddField( SCH_FIELD( wxPoint( 0, 0 ), -1, comp, srcName ) );
 
                 if( destField )

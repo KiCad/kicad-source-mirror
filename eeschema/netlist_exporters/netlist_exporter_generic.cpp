@@ -160,15 +160,10 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
         for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
         {
             SCH_FIELD*  f = comp->GetField( fldNdx );
-            fields.f[ f->GetName() ] = f->GetText();
-        }
-    }
 
-    // Add in non-empty default fields which have not been explicitly defined
-    for( auto defaultField : m_frame->GetTemplateFieldNames() )
-    {
-        if( defaultField.m_Value.size() && fields.f.count( defaultField.m_Name ) == 0 )
-            fields.f[ defaultField.m_Name ] = defaultField.m_Value;
+            if( f->GetText().size() )
+                fields.f[ f->GetName() ] = f->GetText();
+        }
     }
 
     // Do not output field values blank in netlist:

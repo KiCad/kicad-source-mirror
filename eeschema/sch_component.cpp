@@ -902,20 +902,12 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 }
 
 
-wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame,
-                                      bool aIncludeDefaultFields ) const
+wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const
 {
     for( unsigned int ii = 0; ii < m_Fields.size(); ii++ )
     {
         if( aFieldName == m_Fields[ii].GetName() )
             return m_Fields[ii].GetText();
-    }
-
-    if( aIncludeDefaultFields )
-    {
-        for( auto defaultField : aFrame->GetTemplateFieldNames() )
-            if( aFieldName == defaultField.m_Name )
-                return defaultField.m_Value;
     }
 
     return wxEmptyString;

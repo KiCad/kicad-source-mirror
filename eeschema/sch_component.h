@@ -331,11 +331,8 @@ public:
      * Search for a field named \a aFieldName and returns text associated with this field.
      *
      * @param aFieldName is the name of the field
-     * @param aIncludeDefaultFields is used to search the default library symbol fields in the
-     *                              search.
      */
-    wxString GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame,
-                           bool aIncludeDefaultFields = true ) const;
+    wxString GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const;
 
     /**
      * Populates a std::vector with SCH_FIELDs.

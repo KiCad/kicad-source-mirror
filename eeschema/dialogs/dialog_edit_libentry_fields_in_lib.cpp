@@ -650,12 +650,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
         if( !libField )
         {
             fld.SetName( it->m_Name );
-            fld.SetText( it->m_Value );   // empty? ok too.
-
-            if( !it->m_Visible )
-                fld.SetVisible( false );
-            else
-                fld.SetVisible( true );
+            fld.SetVisible( it->m_Visible );
         }
         else
         {

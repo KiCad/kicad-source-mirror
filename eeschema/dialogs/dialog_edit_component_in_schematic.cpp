@@ -824,12 +824,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         // values from the component will be set.
         if( !schField )
         {
-            if( !it->m_Visible )
-                fld.SetVisible( false );
-            else
-                fld.SetVisible( true );
-
-            fld.SetText( it->m_Value );   // empty? ok too.
+            fld.SetVisible( it->m_Visible );
         }
         else
         {

@@ -207,7 +207,6 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 
     // Add a new fieldname to the fieldname list
     TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "Fieldname" );
-    newFieldname.m_Value = wxT( "Value" );
     newFieldname.m_Visible = false;
     templateFields.insert( pos, newFieldname );
     TransferDataToFieldGrid();
@@ -345,18 +344,15 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToFieldGrid()
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         m_fieldGrid->SetCellValue( row, 0, templateFields[row].m_Name );
-        m_fieldGrid->SetCellValue( row, 1, templateFields[row].m_Value );
-        m_fieldGrid->SetCellValue( row, 2,
-                templateFields[row].m_Visible ? wxT( "1" ) : wxEmptyString );
+        m_fieldGrid->SetCellValue( row, 1, templateFields[row].m_Visible ? wxT( "1" ) : wxEmptyString );
 
         // Set cell properties
         m_fieldGrid->SetCellAlignment( row, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-        m_fieldGrid->SetCellAlignment( row, 1, wxALIGN_LEFT, wxALIGN_CENTRE );
 
         // Render the Visible column as a check box
-        m_fieldGrid->SetCellEditor( row, 2, new wxGridCellBoolEditor() );
-        m_fieldGrid->SetCellRenderer( row, 2, new wxGridCellBoolRenderer() );
-        m_fieldGrid->SetCellAlignment( row, 2, wxALIGN_CENTRE, wxALIGN_CENTRE );
+        m_fieldGrid->SetCellEditor( row, 1, new wxGridCellBoolEditor() );
+        m_fieldGrid->SetCellRenderer( row, 1, new wxGridCellBoolRenderer() );
+        m_fieldGrid->SetCellAlignment( row, 1, wxALIGN_CENTRE, wxALIGN_CENTRE );
     }
 
     m_fieldGrid->AutoSizeRows();
@@ -374,8 +370,7 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromFieldGrid()
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         templateFields[row].m_Name  = m_fieldGrid->GetCellValue( row, 0 );
-        templateFields[row].m_Value = m_fieldGrid->GetCellValue( row, 1 );
-        templateFields[row].m_Visible = ( m_fieldGrid->GetCellValue( row, 2 ) != wxEmptyString );
+        templateFields[row].m_Visible = ( m_fieldGrid->GetCellValue( row, 1 ) != wxEmptyString );
     }
 
     return true;

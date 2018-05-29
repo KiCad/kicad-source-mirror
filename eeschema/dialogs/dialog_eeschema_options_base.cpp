@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -327,24 +327,20 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_fieldGrid = new wxGrid( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_fieldGrid->CreateGrid( 0, 3 );
+	m_fieldGrid->CreateGrid( 0, 2 );
 	m_fieldGrid->EnableEditing( true );
 	m_fieldGrid->EnableGridLines( true );
 	m_fieldGrid->EnableDragGridSize( false );
 	m_fieldGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_fieldGrid->SetColSize( 0, 150 );
-	m_fieldGrid->SetColSize( 1, 150 );
-	m_fieldGrid->SetColSize( 2, 75 );
+	m_fieldGrid->SetColSize( 0, 300 );
+	m_fieldGrid->SetColSize( 1, 75 );
 	m_fieldGrid->EnableDragColMove( false );
 	m_fieldGrid->EnableDragColSize( true );
-	m_fieldGrid->SetColLabelSize( 30 );
+	m_fieldGrid->SetColLabelSize( 22 );
 	m_fieldGrid->SetColLabelValue( 0, _("Name") );
-	m_fieldGrid->SetColLabelValue( 1, _("Default Value") );
-	m_fieldGrid->SetColLabelValue( 2, _("Visible") );
-	m_fieldGrid->SetColLabelValue( 3, _("Name") );
-	m_fieldGrid->SetColLabelValue( 4, wxEmptyString );
+	m_fieldGrid->SetColLabelValue( 1, _("Visible") );
 	m_fieldGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
@@ -380,7 +376,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Default Fields"), false );
+	m_notebook->AddPage( m_panel2, _("Field Name Templates"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	
