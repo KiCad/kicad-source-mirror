@@ -92,8 +92,11 @@ static int countChildren( wxXmlNode* aCurrentNode, const wxString& aName )
 static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
 {
     EDA_RECT bbox;
-
     SCH_ITEM* item = aSheet->GetScreen()->GetDrawItems();
+
+    if( !item )
+        return bbox;
+
     bbox = item->GetBoundingBox();
     item = item->Next();
 
