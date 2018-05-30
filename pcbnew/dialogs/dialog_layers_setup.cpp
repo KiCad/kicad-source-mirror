@@ -26,14 +26,12 @@
 
 #include <fctsys.h>
 #include <macros.h>
-
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <view/view.h>
-
+#include <widgets/unit_binder.h>
 #include <invoke_pcb_dialog.h>
-
 #include <class_board.h>
 #include <collectors.h>
 
@@ -52,19 +50,16 @@
  */
 struct CTLs
 {
-    CTLs( wxControl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc,
-          wxPanel* aPanel = NULL )
+    CTLs( wxControl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc )
     {
         name     = aName;
         checkbox = aCheckBox;
         choice   = aChoiceOrDesc;
-        panel    = aPanel;
     }
 
     wxControl*      name;
     wxCheckBox*     checkbox;
     wxControl*      choice;
-    wxPanel *       panel;
 };
 
 
@@ -144,14 +139,11 @@ private:
 
     BOARD*          m_pcb;
 
-    wxStaticText*   m_nameStaticText;
-    wxStaticText*   m_enabledStaticText;
-    wxStaticText*   m_typeStaticText;
+    UNIT_BINDER     m_pcbThickness;
 
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
-    // Force mandatory non copper layers enabled
-    void setStateMandatoryLayerCheckBoxes();
+    void setMandatoryLayerCheckBoxes();
 
     void showCopperChoice( int copperCount );
     void showBoardLayerNames();
@@ -204,30 +196,6 @@ private:
     {
         return (wxChoice*) getCTLs( aLayer ).choice;
     }
-
-    void moveTitles()
-    {
-        wxArrayInt widths = m_LayerListFlexGridSizer->GetColWidths();
-
-        int offset = 0;
-        wxSize txtz;
-
-        wxSize panel_sz = m_TitlePanel->GetSize();
-        int voffset = panel_sz.y/2 - VertPixelsFromDU( 4 );
-
-        txtz = m_nameStaticText->GetSize();
-        m_nameStaticText->Move( offset + (widths[0] - txtz.x)/2, voffset );
-        offset += widths[0];
-
-        txtz = m_enabledStaticText->GetSize();
-        m_enabledStaticText->Move( offset + (widths[1] - txtz.x)/2, voffset );
-        offset += widths[1];
-
-        txtz = m_typeStaticText->GetSize();
-        m_typeStaticText->Move( offset + (widths[2] - txtz.x)/2, voffset );
-    }
-
-    void OnSize( wxSizeEvent& event ) override;
 };
 
 
@@ -259,77 +227,79 @@ static const LSET presets[] =
 
 CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
 {
-#define RETCOP(x)    return CTLs( x##Name, x##CheckBox, x##Choice, x##Panel );
-#define RETAUX(x)    return CTLs( x##Name, x##CheckBox, x##StaticText, x##Panel );
+#define RETURN_COPPER(x) return CTLs( x##Name, x##CheckBox, x##Choice )
+#define RETURN_AUX(x)    return CTLs( x##Name, x##CheckBox, x##StaticText )
 
     switch( aLayerNumber )
     {
-    case F_CrtYd:               RETAUX( m_CrtYdFront );
-    case F_Fab:                 RETAUX( m_FabFront );
-    case F_Adhes:               RETAUX( m_AdhesFront );
-    case F_Paste:               RETAUX( m_SoldPFront );
-    case F_SilkS:               RETAUX( m_SilkSFront );
-    case F_Mask:                RETAUX( m_MaskFront );
-    case F_Cu:                  RETCOP( m_Front );
+    case F_CrtYd:               RETURN_AUX( m_CrtYdFront );
+    case F_Fab:                 RETURN_AUX( m_FabFront );
+    case F_Adhes:               RETURN_AUX( m_AdhesFront );
+    case F_Paste:               RETURN_AUX( m_SoldPFront );
+    case F_SilkS:               RETURN_AUX( m_SilkSFront );
+    case F_Mask:                RETURN_AUX( m_MaskFront );
+    case F_Cu:                  RETURN_COPPER( m_Front );
 
-    case In1_Cu:                RETCOP( m_In1 );
-    case In2_Cu:                RETCOP( m_In2 );
-    case In3_Cu:                RETCOP( m_In3 );
-    case In4_Cu:                RETCOP( m_In4 );
-    case In5_Cu:                RETCOP( m_In5 );
-    case In6_Cu:                RETCOP( m_In6 );
-    case In7_Cu:                RETCOP( m_In7 );
-    case In8_Cu:                RETCOP( m_In8 );
-    case In9_Cu:                RETCOP( m_In9 );
-    case In10_Cu:               RETCOP( m_In10 );
-    case In11_Cu:               RETCOP( m_In11 );
-    case In12_Cu:               RETCOP( m_In12 );
-    case In13_Cu:               RETCOP( m_In13 );
-    case In14_Cu:               RETCOP( m_In14 );
-    case In15_Cu:               RETCOP( m_In15 );
+    case In1_Cu:                RETURN_COPPER( m_In1 );
+    case In2_Cu:                RETURN_COPPER( m_In2 );
+    case In3_Cu:                RETURN_COPPER( m_In3 );
+    case In4_Cu:                RETURN_COPPER( m_In4 );
+    case In5_Cu:                RETURN_COPPER( m_In5 );
+    case In6_Cu:                RETURN_COPPER( m_In6 );
+    case In7_Cu:                RETURN_COPPER( m_In7 );
+    case In8_Cu:                RETURN_COPPER( m_In8 );
+    case In9_Cu:                RETURN_COPPER( m_In9 );
+    case In10_Cu:               RETURN_COPPER( m_In10 );
+    case In11_Cu:               RETURN_COPPER( m_In11 );
+    case In12_Cu:               RETURN_COPPER( m_In12 );
+    case In13_Cu:               RETURN_COPPER( m_In13 );
+    case In14_Cu:               RETURN_COPPER( m_In14 );
+    case In15_Cu:               RETURN_COPPER( m_In15 );
 
-    case In16_Cu:               RETCOP( m_In16 );
-    case In17_Cu:               RETCOP( m_In17 );
-    case In18_Cu:               RETCOP( m_In18 );
-    case In19_Cu:               RETCOP( m_In19 );
-    case In20_Cu:               RETCOP( m_In20 );
-    case In21_Cu:               RETCOP( m_In21 );
-    case In22_Cu:               RETCOP( m_In22 );
-    case In23_Cu:               RETCOP( m_In23 );
-    case In24_Cu:               RETCOP( m_In24 );
-    case In25_Cu:               RETCOP( m_In25 );
-    case In26_Cu:               RETCOP( m_In26 );
-    case In27_Cu:               RETCOP( m_In27 );
-    case In28_Cu:               RETCOP( m_In28 );
-    case In29_Cu:               RETCOP( m_In29 );
-    case In30_Cu:               RETCOP( m_In30 );
+    case In16_Cu:               RETURN_COPPER( m_In16 );
+    case In17_Cu:               RETURN_COPPER( m_In17 );
+    case In18_Cu:               RETURN_COPPER( m_In18 );
+    case In19_Cu:               RETURN_COPPER( m_In19 );
+    case In20_Cu:               RETURN_COPPER( m_In20 );
+    case In21_Cu:               RETURN_COPPER( m_In21 );
+    case In22_Cu:               RETURN_COPPER( m_In22 );
+    case In23_Cu:               RETURN_COPPER( m_In23 );
+    case In24_Cu:               RETURN_COPPER( m_In24 );
+    case In25_Cu:               RETURN_COPPER( m_In25 );
+    case In26_Cu:               RETURN_COPPER( m_In26 );
+    case In27_Cu:               RETURN_COPPER( m_In27 );
+    case In28_Cu:               RETURN_COPPER( m_In28 );
+    case In29_Cu:               RETURN_COPPER( m_In29 );
+    case In30_Cu:               RETURN_COPPER( m_In30 );
 
-    case B_Cu:                  RETCOP( m_Back );
-    case B_Mask:                RETAUX( m_MaskBack );
-    case B_SilkS:               RETAUX( m_SilkSBack );
-    case B_Paste:               RETAUX( m_SoldPBack );
-    case B_Adhes:               RETAUX( m_AdhesBack );
-    case B_Fab:                 RETAUX( m_FabBack );
-    case B_CrtYd:               RETAUX( m_CrtYdBack );
+    case B_Cu:                  RETURN_COPPER( m_Back );
+    case B_Mask:                RETURN_AUX( m_MaskBack );
+    case B_SilkS:               RETURN_AUX( m_SilkSBack );
+    case B_Paste:               RETURN_AUX( m_SoldPBack );
+    case B_Adhes:               RETURN_AUX( m_AdhesBack );
+    case B_Fab:                 RETURN_AUX( m_FabBack );
+    case B_CrtYd:               RETURN_AUX( m_CrtYdBack );
 
-    case Edge_Cuts:             RETAUX( m_PCBEdges );
-    case Margin:                RETAUX( m_Margin );
-    case Eco2_User:             RETAUX( m_Eco2 );
-    case Eco1_User:             RETAUX( m_Eco1 );
-    case Cmts_User:             RETAUX( m_Comments );
-    case Dwgs_User:             RETAUX( m_Drawings );
+    case Edge_Cuts:             RETURN_AUX( m_PCBEdges );
+    case Margin:                RETURN_AUX( m_Margin );
+    case Eco2_User:             RETURN_AUX( m_Eco2 );
+    case Eco1_User:             RETURN_AUX( m_Eco1 );
+    case Cmts_User:             RETURN_AUX( m_Comments );
+    case Dwgs_User:             RETURN_AUX( m_Drawings );
     default:
         wxASSERT_MSG( 0, wxT( "bad layer id" ) );
-        return CTLs( 0, 0, 0 );
+        return CTLs( nullptr,  nullptr, nullptr );
     }
 
-#undef RETCOP
-#undef RETAUX
+#undef RETURN_COPPER
+#undef RETURN_AUX
 }
 
 
 DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
-    DIALOG_LAYERS_SETUP_BASE( aParent )
+    DIALOG_LAYERS_SETUP_BASE( aParent ),
+    m_pcbThickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true,
+                    Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ) )
 {
     m_pcb = aBoard;
 
@@ -337,18 +307,6 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* aParent, BOARD* aBoard
     m_enabledLayers = m_pcb->GetEnabledLayers();
 
     SetAutoLayout( true );
-
-    // these 3 controls are handled outside wxformbuilder so that we can add
-    // them without a sizer.  Then we position them manually based on the column
-    // widths from m_LayerListFlexGridSizer->GetColWidths()
-    m_nameStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _( "Name" ),
-                                         wxDefaultPosition, wxDefaultSize, 0 );
-
-    m_enabledStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _( "Enabled" ),
-                                            wxDefaultPosition, wxDefaultSize, 0 );
-
-    m_typeStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _( "Type" ),
-                                         wxDefaultPosition, wxDefaultSize, 0 );
 }
 
 
@@ -356,19 +314,13 @@ void DIALOG_LAYERS_SETUP::OnInitDialog( wxInitDialogEvent& aEvent )
 {
     wxWindowBase::OnInitDialog( aEvent );
 
-    m_TitlePanel->SetMinSize( wxSize( -1, VertPixelsFromDU( 10 ) ) );
-
     m_LayersListPanel->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
 
-    Layout();
-    SetSizeInDU( 240, 240 );
-    Center();
-
-    m_sdbSizerOK->SetFocus();
+    SetInitialFocus( m_PresetsChoice );
     m_sdbSizerOK->SetDefault();
 
-    // OnSize() will fix the title spacing.
-    QueueEvent( new wxSizeEvent( GetSize() ) );
+    Layout();
+    FinishDialogSettings();
 }
 
 
@@ -379,15 +331,13 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
 
     showCopperChoice( m_copperLayerCount );
     setCopperLayerCheckBoxes( m_copperLayerCount );
-    m_staticTextBrdThicknessUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    PutValueInLocalUnits( *m_textCtrlBrdThickness,
-                          m_pcb->GetDesignSettings().GetBoardThickness() );
+    m_pcbThickness.SetValue( m_pcb->GetDesignSettings().GetBoardThickness() );
 
     showBoardLayerNames();
     showSelectedLayerCheckBoxes( m_enabledLayers );
     showPresets( m_enabledLayers );
     showLayerTypes();
-    setStateMandatoryLayerCheckBoxes();
+    setMandatoryLayerCheckBoxes();
 
     // All widgets are now initialized. Fix the min sizes:
     GetSizer()->SetSizeHints( this );
@@ -396,26 +346,10 @@ bool DIALOG_LAYERS_SETUP::TransferDataToWindow()
 }
 
 
-void DIALOG_LAYERS_SETUP::setStateMandatoryLayerCheckBoxes()
+void DIALOG_LAYERS_SETUP::setMandatoryLayerCheckBoxes()
 {
-    int layerList[4] =
-    {
-        F_CrtYd, B_CrtYd, Edge_Cuts, Margin
-    };
-
-    for( int ii = 0; ii < 4; ii++ )
-    {
-        setLayerCheckBox( layerList[ii], true );
-        getCheckBox( layerList[ii] )->Enable( false );  // do not allow changes
-    }
-}
-
-
-void DIALOG_LAYERS_SETUP::OnSize( wxSizeEvent& event )
-{
-    moveTitles();
-    event.Skip();
-    Refresh();
+    for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
+        setLayerCheckBox( layer, true );
 }
 
 
@@ -442,26 +376,22 @@ void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
 
 void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 {
-    // Establish all the board's layer names into the dialog presentation, by
-    // obtaining them from BOARD::GetLayerName() which calls
-    // BOARD::GetStandardLayerName() for non-coppers.
+    // Set all the board's layer names into the dialog by calling BOARD::GetLayerName(),
+    // which will call BOARD::GetStandardLayerName() for non-coppers.
 
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
-
-        wxControl*  ctl = getName( layer );
-
-        wxASSERT( ctl );
+        wxControl*   ctl = getName( layer );
 
         if( ctl )
         {
             wxString lname = m_pcb->GetLayerName( layer );
 
-            if( ctl->IsKindOf( CLASSINFO( wxTextCtrl ) ) )
-                ((wxTextCtrl*)ctl)->SetValue( lname );     // wxTextCtrl
+            if( dynamic_cast<wxTextCtrl*>( ctl ) )
+                dynamic_cast<wxTextCtrl*>( ctl )->SetValue( lname );     // wxTextCtrl
             else
-                ctl->SetLabel( lname );     // wxStaticText
+                ctl->SetLabel( lname );                                  // wxStaticText
         }
     }
 }
@@ -513,13 +443,11 @@ LSET DIALOG_LAYERS_SETUP::getUILayerMask()
 
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
-        PCB_LAYER_ID    layer = *seq;
-        wxCheckBox* ctl = getCheckBox( layer );
+        PCB_LAYER_ID layer = *seq;
+        wxCheckBox*  ctl = getCheckBox( layer );
 
         if( ctl->GetValue() )
-        {
             layerMaskResult.set( layer );
-        }
     }
 
     return layerMaskResult;
@@ -528,8 +456,8 @@ LSET DIALOG_LAYERS_SETUP::getUILayerMask()
 
 void DIALOG_LAYERS_SETUP::setLayerCheckBox( LAYER_NUM aLayer, bool isChecked )
 {
-    wxCheckBox*  ctl = getCheckBox( aLayer );
-    ctl->SetValue(  isChecked );
+    wxCheckBox* ctl = getCheckBox( aLayer );
+    ctl->SetValue( isChecked );
 }
 
 
@@ -560,9 +488,6 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
         ctl.name->Show( state );
         ctl.checkbox->Show( state );
         ctl.choice->Show( state );
-
-        if( ctl.panel )
-            ctl.panel->Show( state );
 #endif
 
         setLayerCheckBox( layer, state );
@@ -587,13 +512,39 @@ void DIALOG_LAYERS_SETUP::OnCheckBox( wxCommandEvent& event )
 
 void DIALOG_LAYERS_SETUP::DenyChangeCheckBox( wxCommandEvent& event )
 {
-    // user may not change copper layer checkboxes from anything other than
-    // either presets choice or the copper layer choice controls.
+    wxObject* source = event.GetEventObject();
+    if( dynamic_cast<wxCheckBox*>( source ) )
+    {
+        wxCheckBox* cb = dynamic_cast<wxCheckBox*>( source );
 
-    // I tried to simply disable the copper CheckBoxes but they look like crap,
-    // so leave them enabled and reverse the user's attempt to toggle them.
+        for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
+        {
+            wxCheckBox* candidate = getCheckBox( *seq );
 
-    setCopperLayerCheckBoxes( m_copperLayerCount );
+            if( candidate == cb )
+            {
+                wxString ctrlLabel = m_staticTextCopperLayers->GetLabel();
+                DisplayError( this, wxString::Format( _( "Use the \"%s\" control to change \n"
+                                                         "the number of copper layers." ),
+                                                      ctrlLabel.substr( 0, ctrlLabel.size() - 1 ) ) );
+                cb->SetValue( true );
+                return;
+            }
+        }
+
+        for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
+        {
+            wxCheckBox* candidate = getCheckBox( layer );
+
+            if( candidate == cb )
+            {
+                DisplayError( this, wxString::Format( _( "The %s layer is mandatory." ),
+                                                      getLayerName( layer ) ) );
+                cb->SetValue( true );
+                return;
+            }
+        }
+    }
 }
 
 
@@ -617,7 +568,7 @@ void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
     }
 
     // Ensure mandatory layers are activated
-    setStateMandatoryLayerCheckBoxes();
+    setMandatoryLayerCheckBoxes();
 }
 
 
@@ -635,18 +586,12 @@ bool DIALOG_LAYERS_SETUP::TransferDataFromWindow()
     if( !wxWindow::TransferDataFromWindow() || !testLayerNames() )
         return false;
 
+    if( !m_pcbThickness.Validate( true ) )
+        return false;
+
     wxString msg;
 
-    // Make sure the board thickness is sane.
-    int thickness = ValueFromTextCtrl( *m_textCtrlBrdThickness );
-
-    if( thickness < Millimeter2iu( 0.1 ) || thickness > Millimeter2iu( 10.0 ) )
-    {
-        msg.Printf( _( "Board thickness %s is out of range." ),
-                    StringFromValue( g_UserUnit, thickness, true ) );
-        DisplayError( this, msg );
-        return false;
-    }
+    int thickness = m_pcbThickness.GetValue();
 
     // Check for removed layers with items which will get deleted from the board.
     LSEQ removedLayers = getRemovedLayersWithItems();
@@ -750,12 +695,12 @@ int DIALOG_LAYERS_SETUP::getLayerTypeIndex( LAYER_NUM aLayer )
 
 wxString DIALOG_LAYERS_SETUP::getLayerName( LAYER_NUM aLayer )
 {
-    wxString ret;
-    wxASSERT( IsCopperLayer( aLayer ) );
-    wxTextCtrl*  ctl = (wxTextCtrl*) getName( aLayer );
-    ret = ctl->GetValue().Trim();
+    wxControl* control = getName( aLayer );
 
-    return ret;
+    if( dynamic_cast<wxTextCtrl*>( control ) )
+        return dynamic_cast<wxTextCtrl*>( control )->GetValue().Trim();
+    else
+        return dynamic_cast<wxStaticText*>( control )->GetLabel();
 }
 
 
