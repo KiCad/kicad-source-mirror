@@ -61,7 +61,7 @@ protected:
     // Virtual function
     COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
     {
-        return m_frame->Settings().Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
+        return m_frame->Settings().Colors().GetLayerColor( aLayer );
     }
 
     // Returns the name of the layer id

@@ -584,11 +584,11 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     // destroys the GAL color setup
     if( !myframe->IsGalCanvasActive() )
     {
-        COLOR4D oldColor = myframe->Settings().Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
+        COLOR4D oldColor = myframe->Settings().Colors().GetLayerColor( aLayer );
         aColor.a = oldColor.a;
     }
 
-    myframe->Settings().Colors().SetLayerColor( ToLAYER_ID( aLayer ), aColor );
+    myframe->Settings().Colors().SetLayerColor( aLayer, aColor );
 
     if( myframe->IsGalCanvasActive() )
     {

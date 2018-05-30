@@ -56,7 +56,7 @@
 
 COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    COLOR4D color = m_board->Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
+    COLOR4D color = m_board->Colors().GetLayerColor( aLayer );
 
     // A hack to avoid plotting ahite itmen in white color, expecting the paper
     // is also white: use a non white color:
