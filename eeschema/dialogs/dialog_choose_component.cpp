@@ -65,8 +65,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_load_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
-    m_fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
-
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Use a slightly different layout, with a details pane spanning the entire window,
@@ -161,8 +159,10 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 
     if( m_show_footprints )
     {
+        FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
+
         if( m_allow_field_edits )
-            m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, m_fp_list, true );
+            m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, fp_list, true );
 
         m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
 

@@ -211,7 +211,6 @@ protected:
     bool                        m_external_browser_requested;
     wxString                    m_fp_override;
 
-    FOOTPRINT_LIST*                        m_fp_list;
     std::vector<std::pair<int, wxString>>  m_field_edits;
 
     // Remember the dialog size during a session
