@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-25 18:03+0300\n"
-"PO-Revision-Date: 2018-05-25 18:51+0300\n"
+"POT-Creation-Date: 2018-05-29 19:56+0300\n"
+"PO-Revision-Date: 2018-05-30 08:09+0300\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -3553,7 +3553,7 @@ msgstr "Масштаб: "
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:71
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:104
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:220
-#: pcbnew/dialogs/dialog_netlist_base.cpp:98 pcbnew/dialogs/dialog_plot.cpp:58
+#: pcbnew/dialogs/dialog_netlist_base.cpp:98 pcbnew/dialogs/dialog_plot.cpp:60
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:160
@@ -6509,7 +6509,7 @@ msgstr ""
 "различные)!"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:349
-#: pcbnew/dialogs/dialog_SVG_print.cpp:273 pcbnew/dialogs/dialog_plot.cpp:793
+#: pcbnew/dialogs/dialog_SVG_print.cpp:273 pcbnew/dialogs/dialog_plot.cpp:802
 #: pcbnew/exporters/gen_footprints_placefile.cpp:264
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
@@ -6977,6 +6977,18 @@ msgstr "Заменить"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "Replace &All"
 msgstr "Заменить всё"
+
+#: eeschema/dialogs/dialog_sim_settings.cpp:99
+msgid "You need to enable at least one source"
+msgstr "Необходимо включить как минимум один источник"
+
+#: eeschema/dialogs/dialog_sim_settings.cpp:109
+msgid "You need to select DC source (sweep 1)"
+msgstr "Необходимо выбрать источник постоянного тока (развёртка 1)"
+
+#: eeschema/dialogs/dialog_sim_settings.cpp:139
+msgid "You need to select DC source (sweep 2)"
+msgstr "Необходимо выбрать источник постоянного тока (развёртка 2)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:273
@@ -7565,57 +7577,57 @@ msgid "Spice Model Editor"
 msgstr "Редактор Spice модели"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:274
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:352
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:359
 #, c-format
 msgid "Illegal character \"%c\" found in Nickname: \"%s\" in row %d"
 msgstr ""
 "Неправильный символ \"%c\" найден в уникальном имени: \"%s\" в строке %d"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:288
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:366
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:373
 msgid "No Colon in Nicknames"
 msgstr "Нет двоеточия в уникальном имени"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:318
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:396
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:403
 #, c-format
 msgid "Duplicate Nickname: \"%s\" in rows %d and %d"
 msgstr "Дубликат уникального имени: \"%s\" в строке %d и %d"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:333
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:411
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:418
 msgid "Please Delete or Modify One"
 msgstr "Удалите или исправьте один"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:354
-#: eeschema/lib_edit_frame.cpp:1598 pcbnew/dialogs/dialog_fp_lib_table.cpp:620
+#: eeschema/lib_edit_frame.cpp:1598 pcbnew/dialogs/dialog_fp_lib_table.cpp:627
 #: pcbnew/footprint_libraries_utils.cpp:81
 msgid "Select Library"
 msgstr "Выбрать библиотеку"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:383
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:649
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:656
 msgid "Warning: Duplicate Nickname"
 msgstr "Предупреждение: дублирование имён"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:384
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:650
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:657
 #, c-format
 msgid "A library nicknamed \"%s\" already exists."
 msgstr "Библиотека с именем \"%s\" уже существует."
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:385
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:651
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:658
 msgid "Skip"
 msgstr "Пропустить"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:386
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:652
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:659
 msgid "Skip All Remaining Duplicates"
 msgstr "Пропустить все остальные дубликаты"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:387
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:653
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:660
 msgid "Add Anyway"
 msgstr "Добавить в любом случае"
 
@@ -8998,17 +9010,17 @@ msgstr "Не удалось найти библиотеку \"%s\" в табли
 msgid "Cannot flush library changes (\"%s\")"
 msgstr "Не удалось отменить изменения библиотеки (\"%s\")"
 
-#: eeschema/lib_manager.cpp:301 eeschema/lib_manager.cpp:681
+#: eeschema/lib_manager.cpp:299 eeschema/lib_manager.cpp:679
 #, c-format
 msgid "Cannot enumerate library \"%s\""
 msgstr "Не удалось перечислить библиотеку \"%s\""
 
-#: eeschema/lib_manager.cpp:339
+#: eeschema/lib_manager.cpp:337
 #, c-format
 msgid "Cannot load aliases from library \"%s\""
 msgstr "Не удалось загрузить псевдонимы из библиотеки \"%s\""
 
-#: eeschema/lib_manager.cpp:370 eeschema/lib_manager.cpp:535
+#: eeschema/lib_manager.cpp:368 eeschema/lib_manager.cpp:533
 #, c-format
 msgid "Cannot load symbol \"%s\" from library \"%s\""
 msgstr "Не удалось загрузить компонент \"%s\" из библиотеки \"%s\""
@@ -10680,11 +10692,16 @@ msgstr "Компонента не найден в %s!!!"
 msgid "Symbol %s, %s"
 msgstr "Компонент %s, %s"
 
-#: eeschema/sch_eagle_plugin.cpp:382 pcbnew/eagle_plugin.cpp:226
+#: eeschema/sch_eagle_plugin.cpp:385 pcbnew/eagle_plugin.cpp:226
 #: pcbnew/eagle_plugin.cpp:2310
 #, c-format
 msgid "Unable to read file \"%s\""
 msgstr "Не удалось прочитать файл \"%s\""
+
+#: eeschema/sch_eagle_plugin.cpp:1088
+#, c-format
+msgid "Could not find %s in the imported library"
+msgstr "Не удалось найти %s в импортируемой библиотеке"
 
 #: eeschema/sch_edit_frame.cpp:177 pcbnew/class_zone.cpp:1085
 msgid "Not Found"
@@ -10695,7 +10712,7 @@ msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
 #: eeschema/sch_edit_frame.cpp:657 pagelayout_editor/pl_editor_frame.cpp:227
-#: pcbnew/pcb_edit_frame.cpp:649
+#: pcbnew/pcb_edit_frame.cpp:647
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -10765,7 +10782,7 @@ msgid "Eeschema"
 msgstr "Eeschema"
 
 #: eeschema/sch_edit_frame.cpp:1492 kicad/prjconfig.cpp:87
-#: pcbnew/footprint_edit_frame.cpp:768 pcbnew/pcb_edit_frame.cpp:1102
+#: pcbnew/footprint_edit_frame.cpp:768 pcbnew/pcb_edit_frame.cpp:1100
 msgid " [Read Only]"
 msgstr " [Только чтение]"
 
@@ -11470,6 +11487,18 @@ msgstr "шум [(U или I)^2/F]"
 msgid "Time"
 msgstr "Время"
 
+#: eeschema/sim/spice_value.cpp:40
+msgid "Spice value cannot be empty"
+msgstr "Значение Spice-модели не может быть пустым"
+
+#: eeschema/sim/spice_value.cpp:45
+msgid "Invalid Spice value string"
+msgstr "Неверное значение Spice-модели"
+
+#: eeschema/sim/spice_value.cpp:78
+msgid "Invalid unit prefix"
+msgstr "Неверный множитель единиц измерения"
+
 #: eeschema/sim/spice_value.cpp:251
 msgid "Please, fill required fields"
 msgstr "Пожалуйста заполните требуемые поля"
@@ -11939,13 +11968,13 @@ msgid "Layer"
 msgstr "Слой"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:300
-#: pcbnew/dialogs/dialog_plot.cpp:852
+#: pcbnew/dialogs/dialog_plot.cpp:861
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:357
 msgid "Warning: Scale option set to a very large value"
 msgstr "Предупреждение: параметр масштаба установлен в очень большое значение"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:306
-#: pcbnew/dialogs/dialog_plot.cpp:848
+#: pcbnew/dialogs/dialog_plot.cpp:857
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:367
 msgid "Warning: Scale option set to a very small value"
 msgstr ""
@@ -12249,7 +12278,7 @@ msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
 #: gerbview/events_called_functions.cpp:445 gerbview/gerbview_frame.cpp:159
-#: pcbnew/footprint_edit_frame.cpp:312 pcbnew/pcb_edit_frame.cpp:1017
+#: pcbnew/footprint_edit_frame.cpp:312 pcbnew/pcb_edit_frame.cpp:1015
 msgid "Visibles"
 msgstr "Видимость"
 
@@ -12510,7 +12539,7 @@ msgstr "Выровнять смещение изображения"
 msgid "Graphic layer %d"
 msgstr "Слой графики %d"
 
-#: gerbview/gerbview_frame.cpp:211 pcbnew/pcb_edit_frame.cpp:469
+#: gerbview/gerbview_frame.cpp:211 pcbnew/pcb_edit_frame.cpp:468
 msgid ""
 "KiCad can use your graphics card to give you a smoother and faster "
 "experience. This option is turned off by default since it is not compatible "
@@ -12530,15 +12559,15 @@ msgstr ""
 "Если вы хотите выбрать позже, выберите Современный инструментарий "
 "(ускоренный) в меню Настройки."
 
-#: gerbview/gerbview_frame.cpp:218 pcbnew/pcb_edit_frame.cpp:476
+#: gerbview/gerbview_frame.cpp:218 pcbnew/pcb_edit_frame.cpp:475
 msgid "Enable Graphics Acceleration"
 msgstr "Задействовать ускорение отображения"
 
-#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:479
+#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:478
 msgid "&Enable Acceleration"
 msgstr "Задействовать ускорение"
 
-#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:479
+#: gerbview/gerbview_frame.cpp:221 pcbnew/pcb_edit_frame.cpp:478
 msgid "&No Thanks"
 msgstr "Нет, спасибо"
 
@@ -16516,7 +16545,7 @@ msgstr ""
 msgid "Plot: \"%s\" OK."
 msgstr "Черчение: \"%s\" OK."
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:310 pcbnew/dialogs/dialog_plot.cpp:904
+#: pcbnew/dialogs/dialog_SVG_print.cpp:310 pcbnew/dialogs/dialog_plot.cpp:913
 #: pcbnew/exporters/gen_footprints_placefile.cpp:340
 #, c-format
 msgid "Unable to create file \"%s\"."
@@ -16608,7 +16637,7 @@ msgid "File Option:"
 msgstr "Параметры файла:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:126
-#: pcbnew/dialogs/dialog_plot.cpp:56 pcbnew/dialogs/dialog_plot_base.h:142
+#: pcbnew/dialogs/dialog_plot.cpp:58 pcbnew/dialogs/dialog_plot_base.h:144
 msgid "Plot"
 msgstr "Чертить"
 
@@ -21540,27 +21569,27 @@ msgstr "Выравнивание:"
 msgid "Orientation (deg):"
 msgstr "Ориентация ( ° ):"
 
-#: pcbnew/dialogs/dialog_plot.cpp:57
+#: pcbnew/dialogs/dialog_plot.cpp:59
 msgid "Generate Drill Files..."
 msgstr "Сформировать файлы сверловки..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:641
+#: pcbnew/dialogs/dialog_plot.cpp:647
 msgid "HPGL pen size constrained."
 msgstr "HPGL размер пера задан."
 
-#: pcbnew/dialogs/dialog_plot.cpp:653
+#: pcbnew/dialogs/dialog_plot.cpp:662
 msgid "Default line width constrained."
 msgstr "Толщина линии по умолчанию задана."
 
-#: pcbnew/dialogs/dialog_plot.cpp:666
+#: pcbnew/dialogs/dialog_plot.cpp:675
 msgid "X scale constrained."
 msgstr "Масштаб по X задан."
 
-#: pcbnew/dialogs/dialog_plot.cpp:680
+#: pcbnew/dialogs/dialog_plot.cpp:689
 msgid "Y scale constrained."
 msgstr "Масштаб по Y задан."
 
-#: pcbnew/dialogs/dialog_plot.cpp:696
+#: pcbnew/dialogs/dialog_plot.cpp:705
 #, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
@@ -21569,11 +21598,11 @@ msgstr ""
 "Коррекция ширины ограничена. Допустимое значение коррекции ширины должно "
 "быть в диапозоне [%+f; %+f] (%s) для текущих правил проектирования."
 
-#: pcbnew/dialogs/dialog_plot.cpp:780
+#: pcbnew/dialogs/dialog_plot.cpp:789
 msgid "No layer selected, Nothing to plot"
 msgstr "Слой не выбран, нечего чертить"
 
-#: pcbnew/dialogs/dialog_plot.cpp:899
+#: pcbnew/dialogs/dialog_plot.cpp:908
 #, c-format
 msgid "Plot file \"%s\" created."
 msgstr "Файл чертежа \"%s\" создан."
@@ -22861,6 +22890,57 @@ msgstr "<package> наименование:\"%s\" дублирован в eagle 
 #, c-format
 msgid "No \"%s\" package in library \"%s\""
 msgstr "Посадочного места \"%s\" нет в библиотеке \"%s\""
+
+#: pcbnew/eagle_plugin.cpp:1395
+#, c-format
+msgid ""
+"Line on copper layer in package %s (%f mm, %f mm) (%f mm, %f mm).\n"
+"Moving to Dwgs.User layer"
+msgstr ""
+"Линия размещена на слое меди в посадочном месте %s (%f мм, %f мм) (%f мм, %f "
+"мм).\n"
+"Перемещение на слой Dwgs.User"
+
+#: pcbnew/eagle_plugin.cpp:1516
+#, c-format
+msgid ""
+"Unsupported text on copper layer in package %s.\n"
+"Moving to Dwgs.User layer."
+msgstr ""
+"Не поддерживаемый текст на слое меди в посадочном месте %s.\n"
+"Перемещение на слой Dwgs.User"
+
+#: pcbnew/eagle_plugin.cpp:1630
+#, c-format
+msgid ""
+"Unsupported rectangle on copper layer in package %s.\n"
+"Moving to Dwgs.User layer."
+msgstr ""
+"Не поддерживаемый прямоугольник на слое меди в посадочном месте %s.\n"
+"Перемещение на слой Dwgs.User"
+
+#: pcbnew/eagle_plugin.cpp:1673
+#, c-format
+msgid ""
+"Unsupported polygon on copper layer in package %s.\n"
+"Moving to Dwgs.User layer."
+msgstr ""
+"Не поддерживаемый полигон на слое меди в посадочном месте %s.\n"
+"Перемещение на слой Dwgs.User"
+
+#: pcbnew/eagle_plugin.cpp:1758
+#, c-format
+msgid ""
+"Unsupported circle on copper layer in package %s.\n"
+"Moving to Dwgs.User layer."
+msgstr ""
+"Не поддерживаемая окружность на слое меди в посадочном месте %s.\n"
+"Перемещение на слой Dwgs.User"
+
+#: pcbnew/eagle_plugin.cpp:2215
+#, c-format
+msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
+msgstr "Не поддерживаемый слой Eagle '%s' (%d) перенесено на слой Dwgs.User"
 
 #: pcbnew/edgemod.cpp:214
 msgid ""
@@ -25818,24 +25898,24 @@ msgstr "Показать конт.пл. в режиме заливки"
 msgid "Zoom "
 msgstr "Масштаб "
 
-#: pcbnew/pcb_edit_frame.cpp:404
+#: pcbnew/pcb_edit_frame.cpp:403
 msgid "Layers Manager"
 msgstr "Менеджер слоёв"
 
-#: pcbnew/pcb_edit_frame.cpp:703
+#: pcbnew/pcb_edit_frame.cpp:701
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Файл автосохранения \"%s\" не может быть удалён!"
 
-#: pcbnew/pcb_edit_frame.cpp:1106
+#: pcbnew/pcb_edit_frame.cpp:1104
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcb_edit_frame.cpp:1110
+#: pcbnew/pcb_edit_frame.cpp:1108
 msgid "Pcbnew"
 msgstr "Pcbnew"
 
-#: pcbnew/pcb_edit_frame.cpp:1216
+#: pcbnew/pcb_edit_frame.cpp:1219
 msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
@@ -26997,7 +27077,7 @@ msgstr "Добавить посад.места"
 msgid "Route tracks"
 msgstr "Трассировать дорожки"
 
-#: pcbnew/tool_pcb_editor.cpp:459 pcbnew/tools/drawing_tool.cpp:1649
+#: pcbnew/tool_pcb_editor.cpp:459 pcbnew/tools/drawing_tool.cpp:1646
 msgid "Add vias"
 msgstr "Добавить перех.отв."
 
@@ -27287,11 +27367,11 @@ msgstr "Разместить графику DXF"
 msgid "Move the footprint reference anchor"
 msgstr "Переместить точку привязки поз.обозн. посад.места"
 
-#: pcbnew/tools/drawing_tool.cpp:1292 pcbnew/tools/point_editor.cpp:242
+#: pcbnew/tools/drawing_tool.cpp:1289 pcbnew/tools/point_editor.cpp:237
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Само пересекающиеся полигоны не допустимы"
 
-#: pcbnew/tools/drawing_tool.cpp:1651
+#: pcbnew/tools/drawing_tool.cpp:1648
 msgid "Place via"
 msgstr "Разместить перех.отв."
 
@@ -27747,19 +27827,19 @@ msgstr "Удалить угол"
 msgid "Remove corner"
 msgstr "Убрать угол"
 
-#: pcbnew/tools/point_editor.cpp:363
+#: pcbnew/tools/point_editor.cpp:358
 msgid "Drag a corner"
 msgstr "Перетащить угол"
 
-#: pcbnew/tools/point_editor.cpp:951
+#: pcbnew/tools/point_editor.cpp:946
 msgid "Add a zone corner"
 msgstr "Добавить угол зоны"
 
-#: pcbnew/tools/point_editor.cpp:990
+#: pcbnew/tools/point_editor.cpp:985
 msgid "Split segment"
 msgstr "Разделить сегмент"
 
-#: pcbnew/tools/point_editor.cpp:1063
+#: pcbnew/tools/point_editor.cpp:1058
 msgid "Remove a zone/polygon corner"
 msgstr "Удалить угол зоны/полигона"
 
