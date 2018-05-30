@@ -199,6 +199,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnUpdateElectricalType )
+    EVT_UPDATE_UI( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, LIB_EDIT_FRAME::OnUpdateSearchTreeTool )
 
 END_EVENT_TABLE()
 
@@ -486,6 +487,13 @@ void LIB_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 void LIB_EDIT_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetShowElectricalType() );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_optionsToolBar )
+        aEvent.Check( IsSearchTreeShown() );
 }
 
 

@@ -351,6 +351,7 @@ public:
     void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
     void OnUpdateSelectAlias( wxUpdateUIEvent& event );
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
+    void OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent );
 
     void UpdateAliasSelectList();
     void UpdatePartSelectList();
