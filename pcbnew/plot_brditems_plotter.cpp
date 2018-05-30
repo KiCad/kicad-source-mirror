@@ -210,43 +210,22 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
 
 bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 {
-    // see if we want to plot VALUE and REF fields
-    bool trace_val = GetPlotValue();
-    bool trace_ref = GetPlotReference();
-
     TEXTE_MODULE* textModule = &aModule->Reference();
     LAYER_NUM     textLayer = textModule->GetLayer();
 
-    if( textLayer >= PCB_LAYER_ID_COUNT )       // how will this ever be true?
-        return false;
-
-    if( !m_layerMask[textLayer] )
-        trace_ref = false;
-
-    if( !textModule->IsVisible() && !GetPlotInvisibleText() )
-        trace_ref = false;
+    if( GetPlotReference() && m_layerMask[textLayer]
+        && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
+    {
+        PlotTextModule( textModule, getColor( textLayer ) );
+    }
 
     textModule = &aModule->Value();
     textLayer = textModule->GetLayer();
 
-    if( textLayer > PCB_LAYER_ID_COUNT )        // how will this ever be true?
-        return false;
-
-    if( !m_layerMask[textLayer] )
-        trace_val = false;
-
-    if( !textModule->IsVisible() && !GetPlotInvisibleText() )
-        trace_val = false;
-
-    // Plot text fields, if allowed
-    if( trace_ref )
+    if( GetPlotValue() && m_layerMask[textLayer]
+        && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotTextModule( &aModule->Reference(), getColor( textLayer ) );
-    }
-
-    if( trace_val )
-    {
-        PlotTextModule( &aModule->Value(), getColor( textLayer ) );
+        PlotTextModule( textModule, getColor( textLayer ) );
     }
 
     for( BOARD_ITEM* item = aModule->GraphicalItemsList().GetFirst(); item; item = item->Next() )

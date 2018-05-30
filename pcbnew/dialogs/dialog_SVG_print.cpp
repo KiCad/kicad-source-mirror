@@ -88,7 +88,7 @@ private:
         return m_rbSvgPageSizeOpt->GetSelection() == 0;
     }
 
-    bool CreateSVGFile( const wxString& FullFileName, bool aOnlyOneFile );
+    bool CreateSVGFile( const wxString& FullFileName );
 
     LSET getCheckBoxSelectedLayers() const;
 };
@@ -298,7 +298,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         if( m_PrintBoardEdgesCtrl->IsChecked() )
             m_printMaskLayer.set( Edge_Cuts );
 
-        if( CreateSVGFile( fn.GetFullPath(), aOnlyOneFile ) )
+        if( CreateSVGFile( fn.GetFullPath() ) )
         {
             reporter.Report (
                     wxString::Format( _( "Plot: \"%s\" OK." ), GetChars( fn.GetFullPath() ) ),
@@ -318,7 +318,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
 
 
 // Actual SVG file export  function.
-bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName, bool aOnlyOneFile )
+bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
 {
     PCB_PLOT_PARAMS plot_opts;
 
@@ -359,15 +359,10 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName, bool aOnlyO
     if( plotter )
     {
         plotter->SetColorMode( !m_printBW );
-        if( aOnlyOneFile )
-        {
-            for( LSEQ seq = m_printMaskLayer.SeqStackupBottom2Top();  seq;  ++seq )
-                PlotOneBoardLayer( m_board, plotter, *seq, plot_opts );
-        }
-        else
-        {
-            PlotStandardLayer( m_board, plotter, m_printMaskLayer, plot_opts );
-        }
+
+        for( LSEQ seq = m_printMaskLayer.SeqStackupBottom2Top();  seq;  ++seq )
+            PlotOneBoardLayer( m_board, plotter, *seq, plot_opts );
+
         plotter->EndPlot();
     }
 
