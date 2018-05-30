@@ -795,7 +795,7 @@ LSEQ LSET::UIOrder() const
 
 PCB_LAYER_ID ToLAYER_ID( int aLayer )
 {
-    wxASSERT( unsigned( aLayer ) < GAL_LAYER_ID_END );
+    wxASSERT( unsigned( aLayer ) < PCB_LAYER_ID_COUNT );
     return PCB_LAYER_ID( aLayer );
 }
 
