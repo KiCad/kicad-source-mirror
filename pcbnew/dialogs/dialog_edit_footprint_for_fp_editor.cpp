@@ -39,8 +39,8 @@
 #include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
-
 #include <class_module.h>
 #include <footprint_edit_frame.h>
 #include <dialog_edit_footprint_for_fp_editor.h>
@@ -60,8 +60,7 @@ int DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page d
 DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
                                                         MODULE* aModule ) :
     DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent ),
-    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits,
-    false, 0 ),
+    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits, false, 0 ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits )
 {
@@ -86,16 +85,14 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_itemsGrid->SetDefaultRowSize( m_itemsGrid->GetDefaultRowSize() + 4 );
     m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
 
-    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
-    GRID_TRICKS::SetGridTable( m_itemsGrid, m_texts );
-
+    m_itemsGrid->SetTable( m_texts );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
     m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
     // Show/hide columns according to the user's preference
     wxString shownColumns;
     m_config->Read( LibFootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
-    GRID_TRICKS::ShowHideGridColumns( m_itemsGrid, shownColumns );
+    m_itemsGrid->ShowHideColumns( shownColumns );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -150,10 +147,10 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
 
 DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
 {
-    m_config->Write( LibFootprintTextShownColumnsKey, GRID_TRICKS::GetShownColumns( m_itemsGrid ) );
+    m_config->Write( LibFootprintTextShownColumnsKey, m_itemsGrid->GetShownColumns() );
 
     // Prevents crash bug in wxGrid's d'tor
-    GRID_TRICKS::DestroyGridTable( m_itemsGrid, m_texts );
+    m_itemsGrid->DestroyTable( m_texts );
 
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );

@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_edit_libentry_fields_in_lib_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -19,7 +21,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxBoxSizer* bSizerFieldsSetup;
 	bSizerFieldsSetup = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_grid->CreateGrid( 4, 11 );

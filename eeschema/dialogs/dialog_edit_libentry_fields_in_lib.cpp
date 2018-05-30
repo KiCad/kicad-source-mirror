@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <sch_edit_frame.h>
 #include <kiface_i.h>
+#include <widgets/wx_grid.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
 #include <sch_component.h>
@@ -134,9 +135,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 2 );
 
-    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
-    GRID_TRICKS::SetGridTable( m_grid, m_fields );
-
+    m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     stdDialogButtonSizerOK->SetDefault();
@@ -156,10 +155,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT
 
 DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB()
 {
-    m_config->Write( LibEditFieldsShownColumnsKey, GRID_TRICKS::GetShownColumns( m_grid ) );
+    m_config->Write( LibEditFieldsShownColumnsKey, m_grid->GetShownColumns() );
 
     // Prevents crash bug in wxGrid's d'tor
-    GRID_TRICKS::DestroyGridTable( m_grid, m_fields );
+    m_grid->DestroyTable( m_fields );
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnGridCellChanging ), NULL, this );
 
@@ -191,7 +190,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::TransferDataToWindow()
 
     // Show/hide columns according to the user's preference
     m_config->Read( LibEditFieldsShownColumnsKey, &m_shownColumns, wxT( "0 1 2 3 4 5 6 7" ) );
-    GRID_TRICKS::ShowHideGridColumns( m_grid, m_shownColumns );
+    m_grid->ShowHideColumns( m_shownColumns );
 
     Layout();
 
@@ -453,7 +452,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::AdjustGridColumns( int aWidth )
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString shownColumns = GRID_TRICKS::GetShownColumns( m_grid );
+    wxString shownColumns = m_grid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {

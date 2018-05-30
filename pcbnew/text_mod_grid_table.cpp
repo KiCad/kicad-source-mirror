@@ -336,31 +336,3 @@ void TEXT_MOD_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
     }
 }
 
-
-// An override of wxGrid::DrawColLabel which left-aligns the first column.
-void TEXT_MOD_GRID::DrawColLabel( wxDC& dc, int col )
-{
-    if( GetColWidth( col ) <= 0 || m_colLabelHeight <= 0 )
-        return;
-
-    int colLeft = GetColLeft( col );
-
-    wxRect rect( colLeft, 0, GetColWidth( col ), m_colLabelHeight );
-    static wxGridColumnHeaderRendererDefault rend;
-
-    // It is reported that we need to erase the background to avoid display
-    // artefacts, see #12055.
-    wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
-    dc.DrawRectangle(rect);
-
-    rend.DrawBorder( *this, dc, rect );
-
-    int hAlign, vAlign;
-    GetColLabelAlignment( &hAlign, &vAlign );
-    const int orient = GetColLabelTextOrientation();
-
-    if( col == 0 )
-        hAlign = wxALIGN_LEFT;
-
-    rend.DrawLabel( *this, dc, GetColLabelValue( col ), rect, hAlign, vAlign, orient );
-}

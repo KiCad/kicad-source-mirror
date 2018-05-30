@@ -54,18 +54,6 @@ public:
 
     explicit GRID_TRICKS( wxGrid* aGrid );
 
-    /// Helper routines for column visibility preferences
-    static void ShowHideGridColumns( wxGrid* aGrid, const wxString& shownColumns );
-    static wxString GetShownColumns( wxGrid* aGrid );
-
-    /// Workaround for wxGrid::SetTable(), which messes up the column widths that were set
-    /// in wxFormBuilder.)
-    static void SetGridTable( wxGrid* aGrid, wxGridTableBase* aTable );
-
-    /// Workaround for crash bug in wxGrid where it tries to call the table in the d'tor
-    /// in order to hide the cell editor
-    static void DestroyGridTable( wxGrid* aGrid, wxGridTableBase* aTable );
-
 protected:
     wxGrid* m_grid;     ///< I don't own the grid, but he owns me
 

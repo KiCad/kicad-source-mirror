@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_edit_component_in_schematic_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -19,7 +21,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxStaticBoxSizer* sbFields;
 	sbFields = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxVERTICAL );
 	
-	m_grid = new wxGrid( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_grid->CreateGrid( 4, 11 );

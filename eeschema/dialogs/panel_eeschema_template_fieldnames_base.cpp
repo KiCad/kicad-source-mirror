@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "panel_eeschema_template_fieldnames_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -17,7 +19,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_grid->CreateGrid( 0, 2 );

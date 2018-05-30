@@ -23,8 +23,6 @@
 
 
 #include <wx/tooltip.h>
-#include <wx/grid.h>
-
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
@@ -32,7 +30,7 @@
 #include <sch_edit_frame.h>
 #include <grid_tricks.h>
 #include <menus_helpers.h>
-
+#include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
@@ -162,14 +160,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
-    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
-    GRID_TRICKS::SetGridTable( m_grid, m_fields );
-
+    m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     // Show/hide columns according to user's preference
     m_config->Read( SymbolFieldsShownColumnsKey, &m_shownColumns, wxT( "0 1 2 3 4 5 6 7" ) );
-    GRID_TRICKS::ShowHideGridColumns( m_grid, m_shownColumns );
+    m_grid->ShowHideColumns( m_shownColumns );
 
     wxToolTip::Enable( true );
     m_stdDialogButtonSizerOK->SetDefault();
@@ -190,10 +186,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
 {
-    m_config->Write( SymbolFieldsShownColumnsKey, GRID_TRICKS::GetShownColumns( m_grid ) );
+    m_config->Write( SymbolFieldsShownColumnsKey, m_grid->GetShownColumns() );
 
     // Prevents crash bug in wxGrid's d'tor
-    GRID_TRICKS::DestroyGridTable( m_grid, m_fields );
+    m_grid->DestroyTable( m_fields );
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ), NULL, this );
 
@@ -709,7 +705,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::AdjustGridColumns( int aWidth )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString shownColumns = GRID_TRICKS::GetShownColumns( m_grid );
+    wxString shownColumns = m_grid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )
     {

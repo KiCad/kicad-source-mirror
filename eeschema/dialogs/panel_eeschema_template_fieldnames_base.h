@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -35,7 +37,7 @@ class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE : public wxPanel
 	private:
 	
 	protected:
-		wxGrid* m_grid;
+		WX_GRID* m_grid;
 		wxBitmapButton* m_addFieldButton;
 		wxBitmapButton* m_deleteFieldButton;
 		

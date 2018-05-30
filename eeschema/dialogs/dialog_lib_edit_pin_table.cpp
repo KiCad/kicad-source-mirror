@@ -26,7 +26,7 @@
 #include "pin_number.h"
 #include "grid_tricks.h"
 #include <widgets/grid_icon_text_helpers.h>
-
+#include <widgets/wx_grid.h>
 #include <queue>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -360,14 +360,12 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
-    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
-    GRID_TRICKS::SetGridTable( m_grid, m_dataModel );
-
+    m_grid->SetTable( m_dataModel );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
     // Show/hide columns according to the user's preference
     m_config->Read( PinTableShownColumnsKey, &m_columnsShown, wxT( "0 1 2 3 4 8 9" ) );
-    GRID_TRICKS::ShowHideGridColumns( m_grid, m_columnsShown );
+    m_grid->ShowHideColumns( m_columnsShown );
 
     // Set special attributes
     wxGridCellAttr* attr;
@@ -416,13 +414,13 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
-    m_config->Write( PinTableShownColumnsKey, GRID_TRICKS::GetShownColumns( m_grid ) );
+    m_config->Write( PinTableShownColumnsKey, m_grid->GetShownColumns() );
 
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
 
     // Prevents crash bug in wxGrid's d'tor
-    GRID_TRICKS::DestroyGridTable( m_grid, m_dataModel );
+    m_grid->DestroyTable( m_dataModel );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -583,7 +581,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    wxString columnsShown = GRID_TRICKS::GetShownColumns( m_grid );
+    wxString columnsShown = m_grid->GetShownColumns();
 
     if( columnsShown != m_columnsShown )
     {

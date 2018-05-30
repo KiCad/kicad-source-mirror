@@ -186,11 +186,12 @@ set( COMMON_WIDGET_SRCS
     widgets/mathplot.cpp
     widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
+    widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
     widgets/two_column_tree_list.cpp
     widgets/unit_binder.cpp
     widgets/widget_hotkey_list.cpp
-    widgets/stepped_slider.cpp
+    widgets/wx_grid.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS

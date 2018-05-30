@@ -32,7 +32,7 @@ protected:
     SCH_EDIT_FRAME*     m_frame;
     TEMPLATE_FIELDNAMES m_fields;
 
-    int                 m_checkboxWidth;
+    int                 m_checkboxColWidth;
 
     /**
      * Function OnAddButtonClick

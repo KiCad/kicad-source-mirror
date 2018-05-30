@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -44,7 +46,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxGrid* m_grid;
+		WX_GRID* m_grid;
 		wxBitmapButton* m_bpAdd;
 		wxBitmapButton* m_bpDelete;
 		wxBitmapButton* m_bpMoveUp;

@@ -37,19 +37,19 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <dialog_text_entry.h>
-
 #include <class_module.h>
 #include <validators.h>
+#include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
 #include <filename_resolver.h>
-
-#include <dialog_edit_footprint_for_BoardEditor.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
-
 #include <dialog_edit_footprint_text.h>
 #include <bitmaps.h>
 #include <3d_viewer.h>
+
+#include <dialog_edit_footprint_for_BoardEditor.h>
+
 
 #define FootprintTextShownColumnsKey   wxT( "FootprintTextShownColumns" )
 
@@ -88,16 +88,14 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_itemsGrid->SetDefaultRowSize( m_itemsGrid->GetDefaultRowSize() + 4 );
     m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
 
-    // wxGrid::SetTable() messes up the column widths; use GRID_TRICKS version instead
-    GRID_TRICKS::SetGridTable( m_itemsGrid, m_texts );
-
+    m_itemsGrid->SetTable( m_texts );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
     m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
     // Show/hide text item columns according to the user's preference
     wxString shownColumns;
     m_config->Read( FootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
-    GRID_TRICKS::ShowHideGridColumns( m_itemsGrid, shownColumns );
+    m_itemsGrid->ShowHideColumns( shownColumns );
 
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -156,10 +154,10 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
 DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 {
-    m_config->Write( FootprintTextShownColumnsKey, GRID_TRICKS::GetShownColumns( m_itemsGrid ) );
+    m_config->Write( FootprintTextShownColumnsKey, m_itemsGrid->GetShownColumns() );
 
     // Prevents crash bug in wxGrid's d'tor
-    GRID_TRICKS::DestroyGridTable( m_itemsGrid, m_texts );
+    m_itemsGrid->DestroyTable( m_texts );
 
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );

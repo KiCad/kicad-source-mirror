@@ -24,6 +24,7 @@
 
 #include <fctsys.h>
 #include <base_screen.h>
+#include <widgets/wx_grid.h>
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
 #include <sch_edit_frame.h>
@@ -39,7 +40,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
     m_addFieldButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_deleteFieldButton->SetBitmap( KiBitmap( trash_xpm ) );
 
-    m_checkboxWidth = m_grid->GetColSize( 1 );
+    m_checkboxColWidth = m_grid->GetColSize( 1 );
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 }
@@ -157,8 +158,8 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
-    m_grid->SetColSize( 0, aWidth - m_checkboxWidth );
-    m_grid->SetColSize( 1, m_checkboxWidth );
+    m_grid->SetColSize( 0, aWidth - m_checkboxColWidth );
+    m_grid->SetColSize( 1, m_checkboxColWidth );
 }
 
 

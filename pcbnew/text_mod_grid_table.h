@@ -91,20 +91,4 @@ private:
 };
 
 
-// A sub-class of wxGrid which draws the first column label left-aligned.
-
-class TEXT_MOD_GRID : public wxGrid
-{
-public:
-    TEXT_MOD_GRID( wxWindow *parent, wxWindowID id,
-                   const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                   long style = wxWANTS_CHARS, const wxString& name = wxGridNameStr ) :
-            wxGrid( parent, id, pos, size, style, name )
-    {
-    }
-
-    void DrawColLabel( wxDC& dc, int col ) override;
-};
-
-
 #endif  // TEXT_MOD_GRID_TABLE_H

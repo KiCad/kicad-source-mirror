@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_lib_edit_pin_table_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -16,7 +18,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	wxBoxSizer* top_sizer;
 	top_sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_grid->CreateGrid( 5, 10 );

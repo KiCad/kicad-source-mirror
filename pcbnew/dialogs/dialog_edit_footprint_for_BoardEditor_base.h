@@ -12,7 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class TEXT_CTRL_EVAL;
-class TEXT_MOD_GRID;
+class WX_GRID;
 
 #include "dialog_shim.h"
 #include <wx/colour.h>
@@ -60,14 +60,14 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelGeneral;
-		TEXT_MOD_GRID* m_itemsGrid;
+		WX_GRID* m_itemsGrid;
 		wxBitmapButton* m_bpAdd;
 		wxBitmapButton* m_bpDelete;
 		wxStaticText* m_XPosLabel;
-		TEXT_CTRL_EVAL* m_ModPositionX;
+		wxTextCtrl* m_ModPositionX;
 		wxStaticText* m_XPosUnit;
 		wxStaticText* m_YPosLabel;
-		TEXT_CTRL_EVAL* m_ModPositionY;
+		wxTextCtrl* m_ModPositionY;
 		wxStaticText* m_YPosUnit;
 		wxRadioButton* m_Orient0;
 		wxRadioButton* m_Orient90;
@@ -90,13 +90,13 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoValPos;
 		wxStaticText* m_staticTextInfoValNeg;
 		wxStaticText* m_NetClearanceLabel;
-		TEXT_CTRL_EVAL* m_NetClearanceCtrl;
+		wxTextCtrl* m_NetClearanceCtrl;
 		wxStaticText* m_NetClearanceUnits;
 		wxStaticText* m_SolderMaskMarginLabel;
-		TEXT_CTRL_EVAL* m_SolderMaskMarginCtrl;
+		wxTextCtrl* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
 		wxStaticText* m_SolderPasteMarginLabel;
-		TEXT_CTRL_EVAL* m_SolderPasteMarginCtrl;
+		wxTextCtrl* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
 		wxStaticText* m_staticTextRatio;
 		TEXT_CTRL_EVAL* m_SolderPasteMarginRatioCtrl;
