@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,6 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
         }
     }
 
-    bbox.Inflate( ( bbox.GetWidth() / 10 ) + 100 );
     bbox.Normalize();
 
     m_BoundingBox = bbox;
