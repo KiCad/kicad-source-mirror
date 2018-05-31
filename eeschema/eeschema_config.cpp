@@ -779,20 +779,21 @@ SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
 
         wxGetEnv( PROJECT_VAR_NAME, &prjPath );
 
-        wxASSERT( !prjPath.empty() );
-
-        wxFileName fn( prjPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-
-        try
+        if( !prjPath.IsEmpty() )
         {
-            tbl->Load( fn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg;
-            msg.Printf( _( "An error occurred loading the symbol library table \"%s\"." ),
-                        fn.GetFullPath() );
-            DisplayErrorMessage( NULL, msg, ioe.What() );
+            wxFileName fn( prjPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+
+            try
+            {
+                tbl->Load( fn.GetFullPath() );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg;
+                msg.Printf( _( "An error occurred loading the symbol library table \"%s\"." ),
+                            fn.GetFullPath() );
+                DisplayErrorMessage( NULL, msg, ioe.What() );
+            }
         }
     }
 
