@@ -786,6 +786,74 @@ class FootprintWizardDrawingAids:
 
         self.PopTransform(num=2)
 
+    def RoundedBox(self, x, y, w, h, rad):
+        """!
+        Draw a box with rounded corners (i.e. a 90-degree circular arc)
+
+        :param x: the x co-ordinate of the box's centre
+        :param y: the y co-ordinate of the box's centre
+        :param w: the width of the box
+        :param h: the height of the box
+        :param rad: the radius of the corner rounds
+        """
+
+        x_inner = w - rad * 2
+        y_inner = h - rad * 2
+
+        x_left = x - w / 2
+        y_top = y - h / 2
+
+        # Draw straight sections
+        self.HLine(x_left + rad, y_top, x_inner)
+        self.HLine(x_left + rad, -y_top, x_inner)
+
+        self.VLine(x_left, y_top + rad, y_inner)
+        self.VLine(-x_left, y_top + rad, y_inner)
+
+        # corner arcs
+        ninety_deg = 90 * 10  # deci-degs
+        cx = x - w / 2 + rad
+        cy = y - h / 2 + rad
+
+        # top left
+        self.Arc(+cx, +cy, +x_left, +cy, +ninety_deg)
+        self.Arc(-cx, +cy, -x_left, +cy, -ninety_deg)
+        self.Arc(+cx, -cy, +x_left, -cy, -ninety_deg)
+        self.Arc(-cx, -cy, -x_left, -cy, +ninety_deg)
+
+    def ChamferedBox(self, x, y, w, h, chamfer_x, chamfer_y):
+        """!
+        Draw a box with chamfered corners.
+
+        :param x: the x co-ordinate of the box's centre
+        :param y: the y co-ordinate of the box's centre
+        :param w: the width of the box
+        :param h: the height of the box
+        :param chamfer_x: the size of the chamfer set-back in the x direction
+        :param chamfer_y: the size of the chamfer set-back in the y direction
+        """
+        # outermost dimensions
+        x_left = x - w / 2
+        y_top = y - h / 2
+
+        # x and y co-ordinates of inner edges of chamfers
+        x_inner = x_left + chamfer_x
+        y_inner = y_top + chamfer_y
+
+        pts = [
+            [+x_inner, +y_top],
+            [-x_inner, +y_top],
+            [-x_left,  +y_inner],
+            [-x_left,  -y_inner],
+            [-x_inner, -y_top],
+            [+x_inner, -y_top],
+            [+x_left,  -y_inner],
+            [+x_left,  +y_inner],
+            [+x_inner, +y_top],
+        ]
+
+        self.draw.Polyline(pts)
+
     def MarkerArrow(self, x, y, direction=dirN, width=pcbnew.FromMM(1)):
         """!
         Draw a marker arrow facing in the given direction, with the
