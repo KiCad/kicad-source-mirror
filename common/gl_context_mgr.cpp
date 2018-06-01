@@ -65,10 +65,14 @@ void GL_CONTEXT_MANAGER::DestroyCtx( wxGLContext* aContext )
 
 void GL_CONTEXT_MANAGER::DeleteAll()
 {
+    m_glCtxMutex.lock();
+
     for( auto& ctx : m_glContexts )
         delete ctx.first;
 
     m_glContexts.clear();
+    m_glCtx = NULL;
+    m_glCtxMutex.unlock();
 }
 
 

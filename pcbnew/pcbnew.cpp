@@ -372,12 +372,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
 void IFACE::OnKifaceEnd()
 {
-    // This function deletes OpenGL contexts used (if any) by wxGLCanvas objects.
-    // It can be called only when closing the application, because it deletes an OpenGL context
-    // which can still be in usage. Destroying OpenGL contexts earlier may crash the application.
-    GL_CONTEXT_MANAGER::Get().DeleteAll();
-
-    end_common();
 #if defined( KICAD_SCRIPTING_WXPYTHON )
     // Restore the thread state and tell Python to cleanup after itself.
     // wxPython will do its own cleanup as part of that process.
@@ -386,4 +380,6 @@ void IFACE::OnKifaceEnd()
     if( IsWxPythonLoaded() )
         pcbnewFinishPythonScripting();
 #endif
+
+    end_common();
 }
