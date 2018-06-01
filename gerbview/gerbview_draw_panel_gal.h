@@ -21,6 +21,12 @@
 #define GERBVIEW_DRAW_PANEL_GAL_H_
 
 #include <class_draw_panel_gal.h>
+#include <worksheet_viewitem.h>
+
+namespace KIGFX
+{
+    class WORKSHEET_VIEWITEM;
+}
 
 class COLORS_DESIGN_SETTINGS;
 
@@ -55,9 +61,19 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
     virtual void SetTopLayer( int aLayer ) override;
 
+    /**
+     * Sets (or updates) worksheet used by the draw panel.
+     * @param aWorksheet is the worksheet to be used.
+     *        The object is then owned by GERBVIEW_DRAW_PANEL_GAL.
+     */
+    void SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet );
+
 protected:
     ///> Sets rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
+
+    ///> Currently used worksheet
+    std::unique_ptr<KIGFX::WORKSHEET_VIEWITEM> m_worksheet;
 };
 
 

@@ -21,6 +21,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gerbview_painter.h>
+#include <worksheet_viewitem.h>
 
 #include <colors_design_settings.h>
 #include <gerbview_frame.h>
@@ -134,9 +135,17 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_GRID );
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_AXES );
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_BACKGROUND );
+    m_view->SetLayerDisplayOnly( LAYER_WORKSHEET );
 
     m_view->SetLayerTarget( LAYER_GP_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY );
+}
+
+
+void GERBVIEW_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet )
+{
+    m_worksheet.reset( aWorksheet );
+    m_view->Add( m_worksheet.get() );
 }
 
 

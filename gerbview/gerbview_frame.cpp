@@ -75,9 +75,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                                              // obviously depends on the monitor,
                                              // but this is an acceptable value
 
-    PAGE_INFO pageInfo( wxT( "GERBER" ) );
-    SetPageSettings( pageInfo );
-
     m_show_layer_manager_tools = true;
 
     m_showAxis = true;                      // true to show X and Y axis on screen
@@ -399,8 +396,6 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     }
 
     SetPageSettings( pageInfo );
-
-    GetScreen()->InitDataPoints( pageInfo.GetSizeIU() );
 
     bool tmp;
     aCfg->Read( cfgShowDCodes, &tmp, true );
@@ -990,9 +985,29 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     m_paper = aPageSettings;
+    GBR_SCREEN* screen = static_cast<GBR_SCREEN*>( GetScreen() );
 
-    if( GetScreen() )
-        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
+    if( screen )
+        screen->InitDataPoints( aPageSettings.GetSizeIU() );
+
+    if( IsGalCanvasActive() )
+    {
+        GERBVIEW_DRAW_PANEL_GAL* drawPanel =
+                static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+        // Prepare worksheet template
+        KIGFX::WORKSHEET_VIEWITEM* worksheet;
+        worksheet = new KIGFX::WORKSHEET_VIEWITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
+
+        if( screen != NULL )
+        {
+            worksheet->SetSheetNumber( 1 );
+            worksheet->SetSheetCount( 1 );
+        }
+
+        // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
+        drawPanel->SetWorksheet( worksheet );
+    }
 }
 
 
@@ -1218,6 +1233,8 @@ void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
         m_colorsSettings->SetLegacyMode( false );
 
         galCanvas->GetGAL()->SetGridColor( GetLayerColor( LAYER_GERBVIEW_GRID ) );
+
+        SetPageSettings( GetPageSettings() );
 
         galCanvas->GetView()->RecacheAllItems();
         galCanvas->SetEventDispatcher( m_toolDispatcher );

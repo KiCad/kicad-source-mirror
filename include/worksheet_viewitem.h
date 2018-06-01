@@ -48,7 +48,8 @@ class GAL;
 class WORKSHEET_VIEWITEM : public EDA_ITEM
 {
 public:
-    WORKSHEET_VIEWITEM( const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
+    WORKSHEET_VIEWITEM( int aMils2IUscalefactor,
+                        const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
 
     /**
      * Function SetFileName()
@@ -135,6 +136,10 @@ public:
     }
 
 protected:
+    /// the factor between mils (units used in worksheet and internal units)
+    /// it is the value IU_PER_MILS used in the caller
+    int m_mils2IUscalefactor;
+
     /// File name displayed in the title block
     std::string m_fileName;
 

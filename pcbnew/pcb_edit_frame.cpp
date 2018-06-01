@@ -567,7 +567,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
         // Prepare worksheet template
         KIGFX::WORKSHEET_VIEWITEM* worksheet;
-        worksheet = new KIGFX::WORKSHEET_VIEWITEM( &m_Pcb->GetPageSettings(),
+        worksheet = new KIGFX::WORKSHEET_VIEWITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
                                                    &m_Pcb->GetTitleBlock() );
         worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 

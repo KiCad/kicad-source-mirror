@@ -37,8 +37,10 @@
 
 using namespace KIGFX;
 
-WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
+WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( int aMils2IUscalefactor,
+            const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
     EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
+    m_mils2IUscalefactor( aMils2IUscalefactor ),
     m_titleBlock( aTitleBlock ), m_pageInfo( aPageInfo ), m_sheetNumber( 1 ), m_sheetCount( 1 ) {}
 
 
@@ -61,8 +63,8 @@ const BOX2I WORKSHEET_VIEWITEM::ViewBBox() const
     if( m_pageInfo != NULL )
     {
         bbox.SetOrigin( VECTOR2I( 0, 0 ) );
-        bbox.SetEnd( VECTOR2I( m_pageInfo->GetWidthMils() * 25400,
-                               m_pageInfo->GetHeightMils() * 25400 ) );
+        bbox.SetEnd( VECTOR2I( m_pageInfo->GetWidthMils() * m_mils2IUscalefactor,
+                               m_pageInfo->GetHeightMils() * m_mils2IUscalefactor ) );
     }
     else
     {
@@ -82,10 +84,10 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
     WS_DRAW_ITEM_LIST drawList;
 
     drawList.SetPenSize( settings->GetWorksheetLineWidth() );
-    // Sorry, but I don't get this multi #ifdef from include/convert_to_biu.h, so here goes a magic
-    // number. IU_PER_MILS should be 25400 (as in a different compilation unit), but somehow
-    // it equals 1 in this case..
-    drawList.SetMilsToIUfactor( 25400 /* IU_PER_MILS */ );
+    // Adjust the scaling factor for worksheet items:
+    // worksheet items coordinates and sizes are stored in mils,
+    // and must be scaled to the same units as the caller
+    drawList.SetMilsToIUfactor( m_mils2IUscalefactor );
     drawList.SetSheetNumber( m_sheetNumber );
     drawList.SetSheetCount( m_sheetCount );
     drawList.SetFileName( fileName );

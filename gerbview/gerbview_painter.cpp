@@ -102,6 +102,9 @@ const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int a
     if( IsDCodeLayer( aLayer ) )
         return m_layerColors[ LAYER_DCODES ];
 
+    if( aLayer == LAYER_WORKSHEET )
+        return m_layerColors[ LAYER_WORKSHEET ];
+
     if( item )
     {
         if( item->IsSelected() )
