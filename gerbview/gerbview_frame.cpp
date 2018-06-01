@@ -925,8 +925,6 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible,
         break;
 
     case LAYER_GERBVIEW_GRID:
-        // Ensure grid always has low alpha
-        aColor.a = 0.8;
         SetGridColor( aColor );
         m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
         break;

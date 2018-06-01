@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2016 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -1004,7 +1004,7 @@ void OPENGL_GAL::DrawGrid()
     if( axesEnabled )
     {
         glLineWidth( minorLineWidth );
-        glColor4d( axesColor.r, axesColor.g, axesColor.b, 1.0 );
+        glColor4d( axesColor.r, axesColor.g, axesColor.b, axesColor.a );
 
         glBegin( GL_LINES );
         glVertex2d( worldStartPoint.x, 0 );
@@ -1060,7 +1060,7 @@ void OPENGL_GAL::DrawGrid()
     }
     else
     {
-        glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
+        glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
     }
 
     if( gridStyle == GRID_STYLE::SMALL_CROSS )
@@ -1127,7 +1127,7 @@ void OPENGL_GAL::DrawGrid()
         if( gridStyle == GRID_STYLE::DOTS )
         {
             glStencilFunc( GL_NOTEQUAL, 0, 1 );
-            glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
+            glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
         }
 
         // Horizontal lines
