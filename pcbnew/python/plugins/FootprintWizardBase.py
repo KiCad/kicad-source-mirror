@@ -18,20 +18,21 @@ from __future__ import division
 import pcbnew
 import math
 
+
 # Base class for creating footprint wizards
 # Inherit this class to make a new wizard
 class FootprintWizard(pcbnew.FootprintWizardPlugin):
 
     # Copy units from pcbnew
-    uMM         = pcbnew.uMM
-    uMils       = pcbnew.uMils
-    uFloat      = pcbnew.uFloat
-    uInteger    = pcbnew.uInteger
-    uBool       = pcbnew.uBool
-    uRadians    = pcbnew.uRadians
-    uDegrees    = pcbnew.uDegrees
-    uPercent    = pcbnew.uPercent
-    uString     = pcbnew.uString
+    uMM = pcbnew.uMM
+    uMils = pcbnew.uMils
+    uFloat = pcbnew.uFloat
+    uInteger = pcbnew.uInteger
+    uBool = pcbnew.uBool
+    uRadians = pcbnew.uRadians
+    uDegrees = pcbnew.uDegrees
+    uPercent = pcbnew.uPercent
+    uString = pcbnew.uString
 
     """
     A class to simplify many aspects of footprint creation, leaving only
@@ -52,7 +53,7 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
 
     def GetName(self):
         """
-        Retun the name of the footprint wizard
+        Return the name of the footprint wizard
         """
         raise NotImplementedError
 
@@ -72,7 +73,7 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
         """
         Footprint parameter specification is done here
         """
-    	raise NotImplementedError
+        raise NotImplementedError
 
     def CheckParameters(self):
         """
@@ -84,43 +85,46 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
         """
         Draw the footprint.
 
-        This is specific to each footprint class, you need to implment
+        This is specific to each footprint class, you need to implement
         this to draw what you want
         """
         raise NotImplementedError
 
     # Do not override this method!
-    def BuildFootprint( self ):
+    def BuildFootprint(self):
         """
-        Actually make the footprint. We defer all but the setup to
+        Actually make the footprint. We defer all but the set-up to
         the implementing class
         """
 
         self.buildmessages = ""
         self.module = pcbnew.MODULE(None)  # create a new module
 
-        # Perform default checks on all params
+        # Perform default checks on all parameters
         for p in self.params:
             p.ClearErrors()
-            p.Check() # use defaults
+            p.Check()  # use defaults
 
-        self.CheckParameters() # User error checks
-
+        self.CheckParameters()  # User error checks
 
         if self.AnyErrors():  # Errors were detected!
 
-            self.buildmessages = "Cannot build footprint: Parameters have errors:\n"
+            self.buildmessages = ("Cannot build footprint: "
+                                  "Parameters have errors:\n")
 
             for p in self.params:
                 if len(p.error_list) > 0:
-                    self.buildmessages +="['{page}']['{name}']:\n".format(page=p.page,name=p.name)
+                    self.buildmessages += "['{page}']['{name}']:\n".format(
+                        page=p.page, name=p.name)
 
                     for error in p.error_list:
                         self.buildmessages += "\t" + error + "\n"
 
             return
 
-        self.buildmessages = ("Building new {name} footprint with the following parameters:\n".format(name=self.name))
+        self.buildmessages = (
+            "Building new {name} footprint with the following parameters:\n"
+            .format(name=self.name))
 
         self.buildmessages += self.Show()
 
@@ -133,7 +137,7 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
         fpid = pcbnew.LIB_ID(self.module.GetValue())  # the name in library
         self.module.SetFPID(fpid)
 
-        self.SetModule3DModel()  # add a 3d module if specified
+        self.SetModule3DModel()  # add a 3D module if specified
 
         thick = self.GetTextThickness()
 
@@ -160,6 +164,7 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
         """
         return pcbnew.FromMM(0.15)
 
+
 class FootprintWizardDrawingAids:
     """
     Collection of handy functions to simplify drawing shapes from within
@@ -180,10 +185,10 @@ class FootprintWizardDrawingAids:
     dirNW = 315
 
     # flip constants
-    flipNone = 0
-    flipX = 1  # flip X values, i.e. about Y
-    flipY = 2  # flip Y valuersabout X
-    flipBoth = 3
+    flipNone = 0  # no flip transform
+    flipX = 1  # flip X values, i.e. about the Y-axis
+    flipY = 2  # flip Y values, i.e. about the X-axis
+    flipBoth = 3  # flip X and Y values, equivalent to a 180-degree rotation
 
     xfrmIDENTITY = [1, 0, 0, 0, 1, 0]  # no transform
 
@@ -235,13 +240,13 @@ class FootprintWizardDrawingAids:
     def _ComposeMatricesWithIdentity(self, mats):
         """
         Compose a sequence of matrices together by sequential
-        pre-mutiplciation with the identity matrix
+        pre-multiplication with the identity matrix
         """
 
         x = self.xfrmIDENTITY
 
         for mat in mats:
-            #precompose with each transform in turn
+            # Pre-compose with each transform in turn
             x = [
                 x[0] * mat[0] + x[1] * mat[3],
                 x[0] * mat[1] + x[1] * mat[4],
@@ -262,7 +267,7 @@ class FootprintWizardDrawingAids:
 
     def TransformTranslate(self, x, y, push=True):
         """
-        Set up and return a transform matrix representing a translartion
+        Set up and return a transform matrix representing a translation
         optionally pushing onto the stack
 
         (   1  0   x  )
@@ -307,7 +312,7 @@ class FootprintWizardDrawingAids:
                 self.TransformFlipOrigin(flip, push=False),
                 self.TransformTranslate(-x, -y, push=False)]
 
-        #distill into a single matrix
+        # Distil into a single matrix
         mat = self._ComposeMatricesWithIdentity(mats)
 
         if push:
@@ -343,7 +348,7 @@ class FootprintWizardDrawingAids:
                 self.TransformRotationOrigin(rot, push=False),
                 self.TransformTranslate(-x, -y, push=False)]
 
-        #distill into a single matrix
+        # Distil into a single matrix
         mat = self._ComposeMatricesWithIdentity(mats)
 
         if push:
@@ -390,7 +395,8 @@ class FootprintWizardDrawingAids:
     def SetLineTickness(self, lineThickness):
         """
         Old version of SetLineThickness.
-        Does the same thing, but is is only here for compatibility with old scripts
+        Does the same thing, but is is only here for compatibility with old
+        scripts.
         Set the current pen lineThickness used for subsequent drawing
         operations
         """
@@ -457,7 +463,7 @@ class FootprintWizardDrawingAids:
         The transform matrix is applied
 
         Note that this won't work properly if the result is not a
-        circular arc (eg a horizontal scale)
+        circular arc (e.g. a horizontal scale)
         """
         circle = pcbnew.EDGE_MODULE(self.module)
         circle.SetWidth(self.dc['lineThickness'])
@@ -491,7 +497,7 @@ class FootprintWizardDrawingAids:
 
     def Polyline(self, pts, mirrorX=None, mirrorY=None):
         """
-        Draw a polyline, optinally mirroring around the given points
+        Draw a polyline, optionally mirroring around the given points
         """
 
         def _PolyLineInternal(pts):
@@ -518,8 +524,7 @@ class FootprintWizardDrawingAids:
             _PolyLineInternal(pts)
             self.PopTransform()
 
-
-    def Reference(self, x, y, size, orientation_degree = 0):
+    def Reference(self, x, y, size, orientation_degree=0):
         """
         Draw the module's reference as the given point.
 
@@ -533,9 +538,10 @@ class FootprintWizardDrawingAids:
         self.module.Reference().SetPosition(
             self.module.Reference().GetPos0())
         self.module.Reference().SetTextSize(text_size)
-        self.module.Reference().SetTextAngle(orientation_degree*10)   # internal angles are in 0.1 deg
+        # internal angles are in 0.1 deg
+        self.module.Reference().SetTextAngle(orientation_degree * 10)
 
-    def Value(self, x, y, size, orientation_degree = 0):
+    def Value(self, x, y, size, orientation_degree=0):
         """
         As for references, draw the module's value
         """
@@ -545,7 +551,8 @@ class FootprintWizardDrawingAids:
         self.module.Value().SetPosition(self.module.Value().GetPos0())
         self.module.Value().SetTextSize(text_size)
         self.module.Value().SetLayer(self.DefaultTextValueLayer())
-        self.module.Value().SetTextAngle(orientation_degree*10)   # internal angles are in 0.1 deg
+        # internal angles are in 0.1 deg
+        self.module.Value().SetTextAngle(orientation_degree * 10)
 
     def Box(self, x, y, w, h):
         """
@@ -563,7 +570,7 @@ class FootprintWizardDrawingAids:
 
     def NotchedCircle(self, x, y, r, notch_w, notch_h, rotate=0):
         """
-        Circle radus r centred at (x, y) with a raised or depressed notch
+        Circle radius r centred at (x, y) with a raised or depressed notch
         at the top
         Notch height is measured from the top of the circle radius
         """
@@ -580,7 +587,7 @@ class FootprintWizardDrawingAids:
         # NOTE: this may be out by a factor of ten one day
         arc_angle = (math.pi * 2 - angle_intercept * 2) * (1800/math.pi)
 
-        self.Arc(x,y, sx, sy, arc_angle)
+        self.Arc(x, y, sx, sy, arc_angle)
 
         pts = [[sx,  sy],
                [sx,  -r - notch_h],
