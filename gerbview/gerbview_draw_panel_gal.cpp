@@ -168,3 +168,12 @@ void GERBVIEW_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 
     m_view->UpdateAllLayersOrder();
 }
+
+
+BOX2I GERBVIEW_DRAW_PANEL_GAL::GetDefaultViewBBox() const
+{
+    if( m_worksheet )
+        return m_worksheet->ViewBBox();
+
+    return BOX2I();
+}

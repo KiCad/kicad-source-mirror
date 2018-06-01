@@ -55,6 +55,9 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
         canvas->GetView()->Clear();
+
+        // Reinit the worksheet view, cleared by GetView()->Clear():
+        SetPageSettings( GetPageSettings() );
     }
 
     GetImagesList()->DeleteAllImages();

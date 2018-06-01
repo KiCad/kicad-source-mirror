@@ -61,6 +61,9 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
     virtual void SetTopLayer( int aLayer ) override;
 
+    ///> @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
+    BOX2I GetDefaultViewBBox() const override;
+
     /**
      * Sets (or updates) worksheet used by the draw panel.
      * @param aWorksheet is the worksheet to be used.

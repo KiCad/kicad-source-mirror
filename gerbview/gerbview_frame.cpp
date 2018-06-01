@@ -75,6 +75,10 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                                              // obviously depends on the monitor,
                                              // but this is an acceptable value
 
+    // Be sure a page info is set. this default value will be overwritten later.
+    PAGE_INFO pageInfo( wxT( "GERBER" ) );
+    SetPageSettings( pageInfo );
+
     m_show_layer_manager_tools = true;
 
     m_showAxis = true;                      // true to show X and Y axis on screen
