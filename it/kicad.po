@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-01 10:05+0200\n"
-"PO-Revision-Date: 2018-06-01 10:14+0200\n"
+"PO-Revision-Date: 2018-06-01 13:48+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -7566,7 +7566,7 @@ msgstr "Regola"
 
 #: eeschema/sim/sim_plot_frame.cpp:170
 msgid "Run/Stop Simulation"
-msgstr "Esegui/ferma la simulazione"
+msgstr "Avvia/ferma la simulazione"
 
 #: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Add Signals"
