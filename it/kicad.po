@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-01 10:05+0200\n"
-"PO-Revision-Date: 2018-06-01 13:48+0200\n"
+"PO-Revision-Date: 2018-06-01 13:53+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -7544,7 +7544,7 @@ msgstr "Visualizza"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:142
 msgid "Start the simulation by clicking the Run Simulation button"
-msgstr "Avvia la simulazione facendo clic sul pulsante Esegui simulazione"
+msgstr "Avvia la simulazione facendo clic sul pulsante Avvia simulazione"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:162
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:502
