@@ -669,7 +669,7 @@ msgstr "Material Properties"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:178
 msgid "Use All Properties"
-msgstr "Use All properties"
+msgstr "Use All Properties"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:179
 msgid "Use all material properties from each 3D model file"
@@ -677,7 +677,7 @@ msgstr "Use all material properties from each 3D model file"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:182
 msgid "Use Diffuse Only"
-msgstr "Use Diffuse only"
+msgstr "Use Diffuse Only"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:183
 msgid "Use only the diffuse color property from model 3D model file "
@@ -4390,11 +4390,11 @@ msgstr "Sort components by &Y position"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Keep existing annotations"
-msgstr "Keep existing annotation"
+msgstr "Keep existing annotations"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset existing annotations"
-msgstr "Reset existing annotation"
+msgstr "Reset existing annotations"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset, but keep order of multi-unit parts"
@@ -5797,9 +5797,8 @@ msgid "De&lete"
 msgstr "De&lete"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:379
-#, fuzzy
 msgid "Field Name Templates"
-msgstr "System Templates"
+msgstr "Field Name Templates"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:138
 msgid "Schematic Editor Options"
@@ -10643,9 +10642,9 @@ msgid "Unable to read file \"%s\""
 msgstr "Unable to read file “%s”"
 
 #: eeschema/sch_eagle_plugin.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find %s in the imported library"
-msgstr "Could not open the library file."
+msgstr "Could not find “%s” in the imported library"
 
 #: eeschema/sch_edit_frame.cpp:177 pcbnew/class_zone.cpp:1085
 msgid "Not Found"
@@ -11255,9 +11254,9 @@ msgid "You need to select the simulation settings first."
 msgstr "You need to select the simulation settings first."
 
 #: eeschema/sim/sim_plot_frame.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Plot%u"
-msgstr "Plot"
+msgstr "Plot%u"
 
 #: eeschema/sim/sim_plot_frame.cpp:569 eeschema/sim/sim_plot_frame.cpp:1167
 msgid "Signal"
@@ -11398,9 +11397,8 @@ msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
 #: eeschema/sim/sim_plot_panel.cpp:380 eeschema/sim/sim_plot_panel.cpp:393
-#, fuzzy
 msgid "Frequency"
-msgstr "Frequency:"
+msgstr "Frequency"
 
 #: eeschema/sim/sim_plot_panel.cpp:381
 msgid "Gain"
@@ -11411,9 +11409,8 @@ msgid "Phase"
 msgstr "Phase"
 
 #: eeschema/sim/sim_plot_panel.cpp:387
-#, fuzzy
 msgid "Voltage (sweeped)"
-msgstr "Voltage drop:"
+msgstr "Voltage (sweeped)"
 
 #: eeschema/sim/sim_plot_panel.cpp:388
 msgid "Voltage (measured)"
@@ -11424,24 +11421,20 @@ msgid "noise [(V or A)^2/Hz]"
 msgstr "noise [(V or A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:398
-#, fuzzy
 msgid "Time"
-msgstr "Time:"
+msgstr "Time"
 
 #: eeschema/sim/spice_value.cpp:40
-#, fuzzy
 msgid "Spice value cannot be empty"
-msgstr "Environment variable value cannot be empty."
+msgstr "Spice value cannot be empty"
 
 #: eeschema/sim/spice_value.cpp:45
-#, fuzzy
 msgid "Invalid Spice value string"
-msgstr "“%s” is not a valid Spice value"
+msgstr "Invalid Spice value string"
 
 #: eeschema/sim/spice_value.cpp:78
-#, fuzzy
 msgid "Invalid unit prefix"
-msgstr "Invalid footprint specified"
+msgstr "Invalid unit prefix"
 
 #: eeschema/sim/spice_value.cpp:251
 msgid "Please, fill required fields"
