@@ -137,8 +137,8 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 
     while( !m_cancelled && (int)m_count_finished.load() < m_loader->m_total_libs )
     {
-        if( m_progress_reporter )
-            m_cancelled = !m_progress_reporter->KeepRefreshing();
+        if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
+            m_cancelled = true;
         else
             wxMilliSleep( 20 );
     }
@@ -161,8 +161,6 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         if( m_progress_reporter )
             m_progress_reporter->AdvancePhase();
     }
-
-    m_progress_reporter = nullptr;
 
     return m_errors.empty();
 }
@@ -287,8 +285,8 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
     while( !m_cancelled && (size_t)m_count_finished.load() < total_count )
     {
-        if( m_progress_reporter )
-            m_cancelled = !m_progress_reporter->KeepRefreshing();
+        if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
+            m_cancelled = true;
         else
             wxMilliSleep( 20 );
     }
