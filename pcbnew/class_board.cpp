@@ -6,11 +6,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1388,12 +1388,17 @@ MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeSt
 }
 
 
-// Sort nets by decreasing pad count. For same pad count, sort by alphabetic names
+
+// The pad count for each netcode, stored in a buffer for a fast access.
+// This is needed by the sort function sortNetsByNodes()
+static std::vector<int> padCountListByNet;
+
+// Sort nets by decreasing pad count.
+// For same pad count, sort by alphabetic names
 static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
-    auto connectivity = a->GetParent()->GetConnectivity();
-    int countA = connectivity->GetPadCount( a->GetNet() );
-    int countB = connectivity->GetPadCount( b->GetNet() );
+    int countA = padCountListByNet[a->GetNet()];
+    int countB = padCountListByNet[b->GetNet()];
 
     if( countA == countB )
         return a->GetNetname() < b->GetNetname();
@@ -1426,7 +1431,25 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 
     // sort the list
     if( aSortbyPadsCount )
+    {
+        // Build the pad count by net:
+        padCountListByNet.clear();
+        std::vector<D_PAD*> pads = GetPads();
+
+        // Calculate the max value of net codes, and creates the buffer to
+        // store the pad count by net code
+        int max_netcode = 0;
+
+        for( D_PAD* pad : pads )
+            max_netcode = std::max( max_netcode, pad->GetNetCode() );
+
+        padCountListByNet.assign( max_netcode+1, 0 );
+
+        for( D_PAD* pad : pads )
+            padCountListByNet[pad->GetNetCode()]++;
+
         sort( netBuffer.begin(), netBuffer.end(), sortNetsByNodes );
+    }
     else
         sort( netBuffer.begin(), netBuffer.end(), sortNetsByNames );
 
