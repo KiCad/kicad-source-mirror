@@ -732,10 +732,9 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
     {
         EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
 
-        if( line )
+        if( line && m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T )
         {
-            if( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T )
-                m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*)( new EC_CONVERGING( *line, *m_editPoints ) ) );
+            m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*)( new EC_CONVERGING( *line, *m_editPoints ) ) );
         }
         else
         {
