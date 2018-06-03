@@ -55,7 +55,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
-                            _( "Deselect current tool" ), wxITEM_CHECK );
+                            HELP_SELECT, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiScaledBitmap( pin_xpm, this ),
                             HELP_ADD_PIN, wxITEM_CHECK  );

@@ -215,7 +215,7 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, _( "Select item" ),
                             KiScaledBitmap( cursor_xpm, this ) );
     KiScaledSeparator( m_mainToolBar, this );
 

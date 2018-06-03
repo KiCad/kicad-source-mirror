@@ -48,8 +48,10 @@
 #define HELP_DELETE_ITEMS         _( "Delete item" )
 
 // Schematic editor:
-#define HELP_FIND _( "Find symbols and text" )
-#define HELP_REPLACE _( "Find and replace text in schematic items" )
+#define HELP_SELECT               _( "Select item" )
+#define HELP_HIGHLIGHT            _( "Highlight net" )
+#define HELP_FIND                 _( "Find symbols and text" )
+#define HELP_REPLACE              _( "Find and replace text in schematic items" )
 #define HELP_PLACE_COMPONENTS     _( "Place symbol" )
 #define HELP_PLACE_POWERPORT      _( "Place power port" )
 #define HELP_PLACE_WIRE           _( "Place wire" )

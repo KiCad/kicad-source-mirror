@@ -143,7 +143,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
-                            wxEmptyString, wxITEM_CHECK );
+                            _( "Select item" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->AddTool( ID_MODEDIT_PAD_TOOL, wxEmptyString, KiScaledBitmap( pad_xpm, this ),
