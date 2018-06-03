@@ -53,7 +53,14 @@ ORIGIN_VIEWITEM* ORIGIN_VIEWITEM::Clone() const
 const BOX2I ORIGIN_VIEWITEM::ViewBBox() const
 {
     BOX2I bbox;
-    bbox.SetMaximum();
+
+    if( m_drawAtZero )
+        bbox.SetOrigin( VECTOR2I( -m_size / 2, -m_size / 2 ) );
+    else
+        bbox.SetOrigin( VECTOR2I( m_position.x, m_position.y ) - VECTOR2I( m_size / 2, m_size / 2 ) );
+
+    bbox.SetSize( VECTOR2I( m_size, m_size ) );
+
     return bbox;
 }
 
