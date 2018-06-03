@@ -440,24 +440,6 @@ public:
      */
     int Drc( ZONE_CONTAINER* aArea, int aCornerIndex );
 
-    /**
-     * Test the current segment and returns the result.  Any error is not
-     * displayed in the status panel.
-     *
-     * @param aRefSeg The current segment to test.
-     * @param aList The track list to test (usually m_Pcb->m_Track)
-     * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
-     */
-    int DrcBlind( TRACK* aRefSeg, TRACK* aList )
-    {
-        updatePointers();
-
-        if( ! doTrackDrc( aRefSeg, aList ) )
-            return BAD_DRC;
-
-        return doTrackKeepoutDrc( aRefSeg ) ? OK_DRC : BAD_DRC;
-    }
-
     /*
      * Tests whether distance between zones complies with the DRC rules.
      *
