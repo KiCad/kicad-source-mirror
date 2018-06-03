@@ -461,6 +461,17 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 }
 
 
+void DRAWING_TOOL::constrainDimension( DIMENSION* dimension )
+{
+    VECTOR2I lineVector( dimension->GetEnd() - dimension->GetOrigin() );
+    double angle = lineVector.Angle();
+    double newAngle = KiROUND( angle / M_PI_4 ) * M_PI_4;
+    VECTOR2I newLineVector = lineVector.Rotate( newAngle - angle );
+
+    dimension->SetEnd( dimension->GetOrigin() + static_cast<wxPoint>( newLineVector ) );
+}
+
+
 int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     DIMENSION* dimension = NULL;
@@ -571,6 +582,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
                 dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
+                if( !!evt->Modifier( MD_CTRL ) )
+                    constrainDimension( dimension );
+
                 // Dimensions that have origin and end in the same spot are not valid
                 if( dimension->GetOrigin() == dimension->GetEnd() )
                     --step;
@@ -606,6 +620,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
             case SET_END:
                 dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                if( !!evt->Modifier( MD_CTRL ) )
+                    constrainDimension( dimension );
+
                 break;
 
             case SET_HEIGHT:

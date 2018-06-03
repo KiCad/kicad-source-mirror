@@ -258,6 +258,13 @@ private:
      */
     void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
 
+    /**
+     * Function constrainDimension()
+     * Forces the dimension lime to be drawn on multiple of 45 degrees
+     * @param aDimension is the dimension element currently being drawn
+     */
+    void constrainDimension( DIMENSION* dimension );
+
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( unsigned int aLayer ) const;
 
