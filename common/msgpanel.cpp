@@ -196,7 +196,8 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 
 void EDA_MSG_PANEL::showItem( wxDC& aDC, const MSG_PANEL_ITEM& aItem )
 {
-    COLOR4D color = aItem.m_Color;
+    // COLOR4D color = aItem.m_Color;
+    COLOR4D color = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
     aDC.SetTextForeground( color.ToColour() );
 
