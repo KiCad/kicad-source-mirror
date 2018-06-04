@@ -689,9 +689,10 @@ public:
 
     /**
      * Function GetNodesCount
+     * @param aNet Only count nodes belonging to this net
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
-    unsigned GetNodesCount();
+    unsigned GetNodesCount( int aNet = -1 );
 
     /**
      * Function GetUnconnectedNetCount

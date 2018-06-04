@@ -136,9 +136,9 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
                 continue;
         }
 
-        unsigned nPads = m_brd->GetConnectivity()->GetPadCount( netcode );
+        unsigned nodes = m_brd->GetNodesCount( netcode );
 
-        if( !m_cbShowZeroPad->IsChecked() && nPads == 0 )
+        if( !m_cbShowZeroPad->IsChecked() && nodes == 0 )
             continue;
 
         if( m_netsListGrid->GetNumberRows() <= row_idx )
@@ -151,7 +151,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
         if( netcode )
         {
-            txt.Printf( wxT( "%u" ), nPads );
+            txt.Printf( wxT( "%u" ), nodes );
             m_netsListGrid->SetCellValue( row_idx, COL_NETINFO, txt );
         }
         else    // For the net 0 (unconnected pads), the pad count is not known

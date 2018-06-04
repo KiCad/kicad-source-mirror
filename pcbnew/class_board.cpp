@@ -1019,14 +1019,16 @@ int BOARD::GetNumSegmZone() const
 }
 
 
-unsigned BOARD::GetNodesCount()
+unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
     for( auto mod : Modules() )
     {
         for( auto pad : mod->Pads() )
-            if( pad->GetNetCode() > 0 )
+        {
+            if( ( aNet == -1 && pad->GetNetCode() > 0 ) || aNet == pad->GetNetCode() )
                 retval++;
+        }
     }
 
     return retval;
