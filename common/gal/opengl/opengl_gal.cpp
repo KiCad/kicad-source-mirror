@@ -73,6 +73,13 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     mouseListener( aMouseListener ), paintListener( aPaintListener ), currentManager( nullptr ),
     cachedManager( nullptr ), nonCachedManager( nullptr ), overlayManager( nullptr ), mainBuffer( 0 ), overlayBuffer( 0 )
 {
+#if wxCHECK_VERSION( 3, 0, 3 )
+    const int attr[] = { WX_GL_MAJOR_VERSION, 2, WX_GL_MINOR_VERSION, 1, 0 };
+
+    if( !IsDisplaySupported( attr ) )
+        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
+#endif /* wxCHECK_VERSION( 3, 0, 3 ) */
+
     if( glMainContext == NULL )
     {
         glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
