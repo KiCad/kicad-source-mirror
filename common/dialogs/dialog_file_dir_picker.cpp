@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -27,6 +29,8 @@ DIALOG_FILE_DIR_PICKER::DIALOG_FILE_DIR_PICKER( wxWindow* parent, const wxString
     : DIALOG_SHIM( parent, wxID_ANY, title, wxDefaultPosition,
        wxSize( 500, 600 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
+    m_showHidden = nullptr;
+
     wxString path = defaultPath.IsEmpty() ? wxGetCwd() : defaultPath;
     m_filesOnly = style & FD_RETURN_FILESONLY;
 

@@ -96,6 +96,7 @@ public:
                  aMainText, aMainText,
                  aMainPos, aMainPos );
         m_hasSecondItem = false;
+        m_parent = nullptr;
     }
 
     /**

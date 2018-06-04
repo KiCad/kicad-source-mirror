@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -214,6 +214,7 @@ public:
      */
     OPTIONAL_XML_ATTRIBUTE( const wxString& aData )
     {
+        m_data = T();
         m_isAvailable = !aData.IsEmpty();
 
         if( m_isAvailable )

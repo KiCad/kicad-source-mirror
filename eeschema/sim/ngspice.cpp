@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2018 CERN
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -37,7 +39,8 @@ using namespace std;
 
 static const wxChar* const traceNgspice = wxT( "KICAD_NGSPICE" );
 
-NGSPICE::NGSPICE()
+NGSPICE::NGSPICE() :
+    m_error( false )
 {
     init_dll();
 }

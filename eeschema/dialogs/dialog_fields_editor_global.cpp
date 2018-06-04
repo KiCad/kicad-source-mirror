@@ -115,7 +115,8 @@ protected:
 public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aComponentList ) :
             m_frame( aFrame ),
-            m_componentRefs( aComponentList )
+            m_componentRefs( aComponentList ),
+            m_sortAscending( false )
     {
         m_componentRefs.SplitReferences();
     }
