@@ -231,27 +231,19 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                 auto handler = GetEventHandler();
                 handler->ProcessEvent( evt );
             }
-            else
+            else if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
             {
                 // If they were on legacy, switch them to Cairo
-
-                if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                {
-                    wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
-                    auto handler = GetEventHandler();
-                    handler->ProcessEvent( evt );
-                }
+                wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
+                auto handler = GetEventHandler();
+                handler->ProcessEvent( evt );
             }
         }
 
         m_firstRunDialogSetting = 1;
         SaveSettings( config() );
     }
-
-    // Canvas may have been updated by the dialog
-    canvasType = loadCanvasTypeSetting();
-
-    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+    else if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
     {
         if( GetGalCanvas()->SwitchBackend( canvasType ) )
             UseGalCanvas( true );
