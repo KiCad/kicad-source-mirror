@@ -286,11 +286,11 @@
                                 <property name="name">bSizerLeft</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -369,11 +369,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxTextCtrl" expanded="1">
+                                    <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -454,17 +454,17 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnText"></event>
-                                        <event name="OnTextEnter"></event>
+                                        <event name="OnTextEnter">OnOKClick</event>
                                         <event name="OnTextMaxLen"></event>
                                         <event name="OnTextURL"></event>
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -543,11 +543,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxTextCtrl" expanded="1">
+                                    <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -628,17 +628,17 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnText"></event>
-                                        <event name="OnTextEnter"></event>
+                                        <event name="OnTextEnter">OnOKClick</event>
                                         <event name="OnTextMaxLen"></event>
                                         <event name="OnTextURL"></event>
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -717,11 +717,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxTextCtrl" expanded="1">
+                                    <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -802,17 +802,17 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnText"></event>
-                                        <event name="OnTextEnter"></event>
+                                        <event name="OnTextEnter">OnOKClick</event>
                                         <event name="OnTextMaxLen"></event>
                                         <event name="OnTextURL"></event>
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -891,11 +891,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxTextCtrl" expanded="1">
+                                    <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -976,17 +976,17 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnText"></event>
-                                        <event name="OnTextEnter"></event>
+                                        <event name="OnTextEnter">OnOKClick</event>
                                         <event name="OnTextMaxLen"></event>
                                         <event name="OnTextURL"></event>
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -1065,11 +1065,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxTextCtrl" expanded="1">
+                                    <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -1150,7 +1150,7 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnText"></event>
-                                        <event name="OnTextEnter"></event>
+                                        <event name="OnTextEnter">OnOKClick</event>
                                         <event name="OnTextMaxLen"></event>
                                         <event name="OnTextURL"></event>
                                         <event name="OnUpdateUI"></event>
@@ -1158,20 +1158,20 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="1">
+                            <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerRight</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxRadioBox" expanded="1">
+                                    <object class="wxRadioBox" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -1257,11 +1257,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="1">
+                                    <object class="wxStaticText" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -1340,11 +1340,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBitmapComboBox" expanded="1">
+                                    <object class="wxBitmapComboBox" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>

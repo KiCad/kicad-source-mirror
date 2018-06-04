@@ -114,12 +114,22 @@ DIALOG_DIMENSION_EDITOR_BASE::DIALOG_DIMENSION_EDITOR_BASE( wxWindow* parent, wx
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_TxtSizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_TxtSizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_TxtWidthCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_textCtrlPosX->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_textCtrlPosY->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
 	m_sdbSizerBtsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
 }
 
 DIALOG_DIMENSION_EDITOR_BASE::~DIALOG_DIMENSION_EDITOR_BASE()
 {
 	// Disconnect Events
+	m_TxtSizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_TxtSizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_TxtWidthCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_textCtrlPosX->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
+	m_textCtrlPosY->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
 	m_sdbSizerBtsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DIMENSION_EDITOR_BASE::OnOKClick ), NULL, this );
 	
 }
