@@ -147,8 +147,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     {
         if( m_progressReporter )
             m_progressReporter->KeepRefreshing();
-        else
-            wxMilliSleep( 20 );
+
+        wxMilliSleep( 20 );
     }
 
     for( size_t ii = 0; ii < fillWorkers.size(); ++ii )
@@ -242,8 +242,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     {
         if( m_progressReporter )
             m_progressReporter->KeepRefreshing();
-        else
-            wxMilliSleep( 10 );
+
+        wxMilliSleep( 10 );
     }
 
     for( size_t ii = 0; ii < triangulationWorkers.size(); ++ii )

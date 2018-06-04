@@ -92,8 +92,6 @@ bool PROGRESS_REPORTER::KeepRefreshing( bool aWait )
     }
     else
     {
-        wxMilliSleep( 20 );
-
         return updateUI();
     }
 }

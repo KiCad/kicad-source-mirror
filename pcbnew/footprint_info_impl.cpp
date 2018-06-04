@@ -39,6 +39,7 @@
 #include <widgets/progress_reporter.h>
 
 #include <thread>
+#include <mutex>
 
 
 void FOOTPRINT_INFO_IMPL::load()
@@ -139,8 +140,8 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     {
         if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
             m_cancelled = true;
-        else
-            wxMilliSleep( 20 );
+
+        wxMilliSleep( 20 );
     }
 
     if( m_cancelled )
@@ -199,29 +200,36 @@ void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aN
 
 void FOOTPRINT_LIST_IMPL::StopWorkers()
 {
+    std::lock_guard<std::mutex> lock1( m_join );
+
     // To safely stop our workers, we set the cancellation flag (they will each
     // exit on their next safe loop location when this is set).  Then we need to wait
     // for all threads to finish as closing the implementation will free the queues
     // that the threads write to.
-    m_cancelled = true;
-
     for( auto& i : m_threads )
         i.join();
 
     m_threads.clear();
     m_queue_in.clear();
     m_count_finished.store( 0 );
-    m_list_timestamp = 0;
+
+    // If we have cancelled in the middle of a load, clear our timestamp to re-load next time
+    if( m_cancelled )
+        m_list_timestamp = 0;
 }
 
 bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 {
-    for( auto& i : m_threads )
-        i.join();
+    {
+        std::lock_guard<std::mutex> lock1( m_join );
 
-    m_threads.clear();
-    m_queue_in.clear();
-    m_count_finished.store( 0 );
+        for( auto& i : m_threads )
+            i.join();
+
+        m_threads.clear();
+        m_queue_in.clear();
+        m_count_finished.store( 0 );
+    }
 
     size_t total_count = m_queue_out.size();
 
@@ -287,8 +295,8 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
     {
         if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
             m_cancelled = true;
-        else
-            wxMilliSleep( 20 );
+
+        wxMilliSleep( 20 );
     }
 
     for( auto& thr : threads )
@@ -325,6 +333,5 @@ FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
 
 FOOTPRINT_LIST_IMPL::~FOOTPRINT_LIST_IMPL()
 {
-    for( auto& i : m_threads )
-        i.join();
+    StopWorkers();
 }

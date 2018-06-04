@@ -315,6 +315,8 @@ public:
      */
     FOOTPRINT_ASYNC_LOADER();
 
+    ~FOOTPRINT_ASYNC_LOADER();
+
     /**
      * Assign a FOOTPRINT_LIST to the loader. This does not take ownership of
      * the list.

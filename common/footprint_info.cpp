@@ -147,6 +147,13 @@ FOOTPRINT_ASYNC_LOADER::FOOTPRINT_ASYNC_LOADER() : m_list( nullptr )
 }
 
 
+FOOTPRINT_ASYNC_LOADER::~FOOTPRINT_ASYNC_LOADER()
+{
+    // This is NOP if the load has finished
+    Abort();
+}
+
+
 void FOOTPRINT_ASYNC_LOADER::SetList( FOOTPRINT_LIST* aList )
 {
     m_list = aList;

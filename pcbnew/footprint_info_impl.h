@@ -65,6 +65,7 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
     long long                m_list_timestamp;
     PROGRESS_REPORTER*       m_progress_reporter;
     std::atomic_bool         m_cancelled;
+    std::mutex               m_join;
 
     /**
      * Call aFunc, pushing any IO_ERRORs and std::exceptions it throws onto m_errors.
