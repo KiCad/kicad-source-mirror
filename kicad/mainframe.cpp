@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -311,7 +311,7 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
         {
             frame = Kiway.Player( FRAME_SCH, true );
         }
-        catch( IO_ERROR err )
+        catch( const IO_ERROR& err )
         {
             wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
                           _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
@@ -358,7 +358,7 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
         {
             frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, true );
         }
-        catch( IO_ERROR err )
+        catch( const IO_ERROR& err )
         {
             wxMessageBox( _( "Component library editor failed to load:\n" ) + err.What(),
                           _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
@@ -384,7 +384,7 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
     {
         frame = Kiway.Player( FRAME_PCB, true );
     }
-    catch( IO_ERROR err )
+    catch( const IO_ERROR& err )
     {
         wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.What(), _( "KiCad Error" ),
                       wxOK | wxICON_ERROR, this );
@@ -430,7 +430,7 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
         {
             frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, true );
         }
-        catch( IO_ERROR err )
+        catch( const IO_ERROR& err )
         {
             wxMessageBox( _( "Footprint library editor failed to load:\n" ) + err.What(),
                           _( "KiCad Error" ), wxOK | wxICON_ERROR, this );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Russell Oliver <roliver8143@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -130,7 +130,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             {
                 schframe = Kiway.Player( FRAME_SCH, true );
             }
-            catch( IO_ERROR err )
+            catch( const IO_ERROR& err )
             {
                 wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
                         _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
@@ -139,7 +139,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         }
 
         schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE,
-                wxString::Format( "%d\n%s", SCH_IO_MGR::SCH_EAGLE, sch.GetFullPath() ).ToStdString(), this );
+                wxString::Format( "%d\n%s", SCH_IO_MGR::SCH_EAGLE,
+                                  sch.GetFullPath() ).ToStdString(), this );
 
         if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
                                         // but no project loaded.

@@ -647,7 +647,7 @@ public:
         }
     }
 
-    void addVertex( DRW_Vertex v )
+    void addVertex( const DRW_Vertex& v )
     {
         DRW_Vertex* vert = new DRW_Vertex();
 
