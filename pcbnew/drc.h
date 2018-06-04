@@ -183,6 +183,14 @@ private:
     bool        m_abortDRC;
     bool        m_drcInProgress;
 
+    /**
+     * in legacy canvas, when creating a track, the drc test must only display the
+     * error message, and do not create a DRC marker.
+     * if m_drcInLegacyRoutingMode it true only the message will be displayed
+     * m_drcInLegacyRoutingMode = false is the normal Drc mode
+     */
+    bool        m_drcInLegacyRoutingMode;
+
     /* In DRC functions, many calculations are using coordinates relative
      * to the position of the segment under test (segm to segm DRC, segm to pad DRC
      * Next variables store coordinates relative to the start point of this segment
@@ -419,33 +427,36 @@ public:
     ~DRC();
 
     /**
-     * Function Drc
      * tests the current segment and returns the result and displays the error
      * in the status panel only if one exists.
+     * No marker created or added to the board. Must be used only during track
+     * creation in legacy canvas
      * @param aRefSeg The current segment to test.
      * @param aList The track list to test (usually m_Pcb->m_Track)
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
-    int Drc( TRACK* aRefSeg, TRACK* aList );
+    int DrcOnCreatingTrack( TRACK* aRefSeg, TRACK* aList );
 
     /**
-     * Function Drc
      * tests the outline segment starting at CornerIndex and returns the result and displays
      * the error in the status panel only if one exists.
      *      Test Edge inside other areas
      *      Test Edge too close other areas
-     * @param aArea The areaparent which contains the corner.
+     * No marker created or added to the board. Must be used only during zone
+     * creation in legacy canvas
+     * @param aArea The area parent which contains the corner.
      * @param aCornerIndex The starting point of the segment to test.
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
-    int Drc( ZONE_CONTAINER* aArea, int aCornerIndex );
+    int DrcOnCreatingZone( ZONE_CONTAINER* aArea, int aCornerIndex );
 
-    /*
+    /**
      * Tests whether distance between zones complies with the DRC rules.
      *
      * @param aZone: zone to compare with other zones, or if NULL then
      *          all zones are compared to all others.
-     * @param aCreateMarkers: if true create DRC markers. False: do not creates anything
+     * @param aCreateMarkers: if true create DRC markers.
+     * False: do not create markers. only fing drc errors
      * @return Errors count
      */
     int TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers );
@@ -505,6 +516,7 @@ public:
         m_doFootprintOverlapping = aCourtyardTest;
         m_doNoCourtyardDefined  = aCourtyardMissingTest;
         m_refillZones           = aRefillZones;
+        m_drcInLegacyRoutingMode = false;
         m_reportAllTrackErrors  = aReportAllTrackErrors;
     }
 
@@ -529,7 +541,6 @@ public:
     {
         return m_currentMarker;
     }
-
 };
 
 

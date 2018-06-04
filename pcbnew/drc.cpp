@@ -97,9 +97,20 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
 
 void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
-    BOARD_COMMIT commit( m_pcbEditorFrame );
-    commit.Add( aMarker );
-    commit.Push( wxEmptyString, false, false );
+    // In legacy routing mode, do not add markers to the board.
+    // only shows the drc error message
+    if( m_drcInLegacyRoutingMode )
+    {
+        m_pcbEditorFrame->SetMsgPanel( aMarker );
+        delete aMarker;
+        m_currentMarker = nullptr;
+    }
+    else
+    {
+        BOARD_COMMIT commit( m_pcbEditorFrame );
+        commit.Add( aMarker );
+        commit.Push( wxEmptyString, false, false );
+    }
 }
 
 
@@ -126,6 +137,7 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_drcDialog  = NULL;
 
     // establish initial values for everything:
+    m_drcInLegacyRoutingMode = false;
     m_doPad2PadTest     = true;     // enable pad to pad clearance tests
     m_doUnconnectedTest = true;     // enable unconnected tests
     m_doZonesTest = true;           // enable zone to items clearance tests
@@ -160,15 +172,23 @@ DRC::~DRC()
 }
 
 
-int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
+int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACK* aList )
 {
     updatePointers();
+
+    // Set right options for this on line drc
+    int drc_state = m_drcInLegacyRoutingMode;
+    m_drcInLegacyRoutingMode = true;
+    int rpt_state = m_reportAllTrackErrors;
+    m_reportAllTrackErrors = false;
 
     if( !doTrackDrc( aRefSegm, aList, true ) )
     {
         if( m_currentMarker )
             m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
 
+        m_drcInLegacyRoutingMode = drc_state;
+        m_reportAllTrackErrors = rpt_state;
         return BAD_DRC;
     }
 
@@ -177,9 +197,15 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
         wxASSERT( m_currentMarker );
 
         m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
+        delete m_currentMarker;
+        m_currentMarker = nullptr;
+        m_drcInLegacyRoutingMode = drc_state;
+        m_reportAllTrackErrors = rpt_state;
         return BAD_DRC;
     }
 
+    m_drcInLegacyRoutingMode = drc_state;
+    m_reportAllTrackErrors = rpt_state;
     return OK_DRC;
 }
 
@@ -345,17 +371,29 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
 }
 
 
-int DRC::Drc( ZONE_CONTAINER* aArea, int aCornerIndex )
+int DRC::DrcOnCreatingZone( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
     updatePointers();
+
+    // Set right options for this on line drc
+    int drc_state = m_drcInLegacyRoutingMode;
+    m_drcInLegacyRoutingMode = true;
+    int rpt_state = m_reportAllTrackErrors;
+    m_reportAllTrackErrors = false;
 
     if( !doEdgeZoneDrc( aArea, aCornerIndex ) )
     {
         wxASSERT( m_currentMarker );
         m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
+        delete m_currentMarker;
+        m_currentMarker = nullptr;
+        m_drcInLegacyRoutingMode = drc_state;
+        m_reportAllTrackErrors = rpt_state;
         return BAD_DRC;
     }
 
+    m_drcInLegacyRoutingMode = drc_state;
+    m_reportAllTrackErrors = rpt_state;
     return OK_DRC;
 }
 

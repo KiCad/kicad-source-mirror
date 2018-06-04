@@ -147,12 +147,26 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
     auto commitMarkers = [&]()
     {
-        BOARD_COMMIT commit( m_pcbEditorFrame );
+        // In legacy routing mode, do not add markers to the board.
+        // only shows the drc error message
+        if( m_drcInLegacyRoutingMode )
+        {
+            while( markers.size() > 0 )
+            {
+                m_pcbEditorFrame->SetMsgPanel( markers.back() );
+                delete  markers.back();
+                markers.pop_back();
+            }
+        }
+        else
+        {
+            BOARD_COMMIT commit( m_pcbEditorFrame );
 
-        for( auto marker : markers )
-            commit.Add( marker );
+            for( auto marker : markers )
+                commit.Add( marker );
 
-        commit.Push( wxEmptyString, false, false );
+            commit.Push( wxEmptyString, false, false );
+        }
     };
 
     // Returns false if we should return false from call site, or true to continue

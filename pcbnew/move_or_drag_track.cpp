@@ -803,15 +803,15 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     // DRC control:
     if( Settings().m_legacyDrcOn )
     {
-        errdrc = m_drc->Drc( Track, GetBoard()->m_Track );
+        errdrc = m_drc->DrcOnCreatingTrack( Track, GetBoard()->m_Track );
 
         if( errdrc == BAD_DRC )
             return false;
 
-        // Redraw the dragged segments
+        // Test the dragged segments
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
-            errdrc = m_drc->Drc( g_DragSegmentList[ii].m_Track, GetBoard()->m_Track );
+            errdrc = m_drc->DrcOnCreatingTrack( g_DragSegmentList[ii].m_Track, GetBoard()->m_Track );
 
             if( errdrc == BAD_DRC )
                 return false;

@@ -214,7 +214,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         if( Settings().m_legacyDrcOn )
         {
-            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+            if( BAD_DRC == m_drc->DrcOnCreatingTrack( g_CurrentTrackSegment, GetBoard()->m_Track ) )
             {
                 return g_CurrentTrackSegment;
             }
@@ -225,13 +225,14 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         // Test for a D.R.C. error:
         if( Settings().m_legacyDrcOn )
         {
-            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+            if( BAD_DRC == m_drc->DrcOnCreatingTrack( g_CurrentTrackSegment, GetBoard()->m_Track ) )
                 return NULL;
 
             // We must handle 2 segments
             if( Settings().m_legacyUseTwoSegmentTracks && g_CurrentTrackSegment->Back() )
             {
-                if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), GetBoard()->m_Track ) )
+                if( BAD_DRC == m_drc->DrcOnCreatingTrack( g_CurrentTrackSegment->Back(),
+                                                          GetBoard()->m_Track ) )
                     return NULL;
             }
         }
@@ -355,7 +356,8 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
         else
             newTrack->SetEnd( wxPoint(newTrack->GetEnd().x - segm_step_45, newTrack->GetEnd().y) );
 
-        if( Settings().m_legacyDrcOn && BAD_DRC == m_drc->Drc( curTrack, GetBoard()->m_Track ) )
+        if( Settings().m_legacyDrcOn &&
+            BAD_DRC == m_drc->DrcOnCreatingTrack( curTrack, GetBoard()->m_Track ) )
         {
             delete newTrack;
             return false;
@@ -390,7 +392,8 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
         else
             newTrack->SetEnd( wxPoint(newTrack->GetEnd().x, newTrack->GetEnd().y - segm_step_45) );
 
-        if( Settings().m_legacyDrcOn && BAD_DRC==m_drc->Drc( newTrack, GetBoard()->m_Track ) )
+        if( Settings().m_legacyDrcOn &&
+            BAD_DRC == m_drc->DrcOnCreatingTrack( newTrack, GetBoard()->m_Track ) )
         {
             delete newTrack;
             return false;
@@ -414,7 +417,8 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     if( aTrack == NULL )
         return false;
 
-    if( Settings().m_legacyDrcOn && BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+    if( Settings().m_legacyDrcOn &&
+        BAD_DRC == m_drc->DrcOnCreatingTrack( g_CurrentTrackSegment, GetBoard()->m_Track ) )
         return false;
 
     // Saving the coordinate of end point of the trace
