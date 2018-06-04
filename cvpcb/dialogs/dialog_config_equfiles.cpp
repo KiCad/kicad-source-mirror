@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,13 +49,15 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
     m_Config = Pgm().CommonSettings();
 
     PROJECT&    prj = Prj();
-    SetTitle( wxString::Format( _( "Project file: \"%s\"" ), GetChars( prj.GetProjectFullName() ) ) );
+    SetTitle( wxString::Format( _( "Project file: \"%s\"" ),
+                                GetChars( prj.GetProjectFullName() ) ) );
 
     Init( );
 
     GetSizer()->SetSizeHints( this );
     Center();
 }
+
 
 void CVPCB_MAINFRAME::OnEditEquFilesList( wxCommandEvent& aEvent )
 {
@@ -69,7 +71,9 @@ void DIALOG_CONFIG_EQUFILES::Init()
 {
     m_sdbSizerOK->SetDefault();
     m_ListChanged = false;
-    m_ListEquiv->InsertItems( m_Parent->m_EquFilesNames, 0 );
+
+    if( !m_Parent->m_EquFilesNames.IsEmpty() )
+        m_ListEquiv->InsertItems( m_Parent->m_EquFilesNames, 0 );
 
     if( getEnvVarCount() < 2 )
         m_gridEnvVars->AppendRows(2 - getEnvVarCount() );
@@ -89,6 +93,7 @@ void DIALOG_CONFIG_EQUFILES::Init()
     m_gridEnvVars->AutoSizeColumns();
 
 }
+
 
 void DIALOG_CONFIG_EQUFILES::OnEditEquFile( wxCommandEvent& event )
 {
@@ -141,9 +146,7 @@ void DIALOG_CONFIG_EQUFILES::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-/********************************************************************/
 void DIALOG_CONFIG_EQUFILES::OnButtonMoveUp( wxCommandEvent& event )
-/********************************************************************/
 {
     wxArrayInt selections;
 
@@ -176,9 +179,7 @@ void DIALOG_CONFIG_EQUFILES::OnButtonMoveUp( wxCommandEvent& event )
 }
 
 
-/*********************************************************************/
 void DIALOG_CONFIG_EQUFILES::OnButtonMoveDown( wxCommandEvent& event )
-/*********************************************************************/
 {
     wxArrayInt selections;
     m_ListEquiv->GetSelections( selections );
@@ -195,7 +196,7 @@ void DIALOG_CONFIG_EQUFILES::OnButtonMoveDown( wxCommandEvent& event )
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         int jj = selections[ii];
-        std::swap( libnames[jj],  libnames[jj+1]);
+        std::swap( libnames[jj],  libnames[jj+1] );
     }
 
     m_ListEquiv->Set( libnames );
@@ -204,7 +205,7 @@ void DIALOG_CONFIG_EQUFILES::OnButtonMoveDown( wxCommandEvent& event )
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
         int jj = selections[ii];
-        m_ListEquiv->SetSelection(jj+1);
+        m_ListEquiv->SetSelection( jj+1 );
     }
 
     m_ListChanged = true;
@@ -223,7 +224,7 @@ void DIALOG_CONFIG_EQUFILES::OnRemoveFiles( wxCommandEvent& event )
 
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
-        m_ListEquiv->Delete(selections[ii] );
+        m_ListEquiv->Delete( selections[ii] );
         m_ListChanged = true;
     }
 }
@@ -268,7 +269,7 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
 
                 if( fn.MakeRelativeTo( libpath ) )
                 {
-                    equFilename.Printf( wxT("${%s}%c%s"),
+                    equFilename.Printf( wxT( "${%s}%c%s" ),
                                         GetChars( m_gridEnvVars->GetCellValue( wxGridCellCoords( row, 0 ) ) ),
                                         fn.GetPathSeparator(),
                                         GetChars( fn.GetFullPath() ) );
@@ -284,7 +285,7 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
         if( list->FindString( equFilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
             m_ListChanged = true;
-            equFilename.Replace( wxT("\\"), wxT("/") );     // Use unix separators only.
+            equFilename.Replace( wxT( "\\" ), wxT( "/" ) );     // Use unix separators only.
             list->Append( equFilename );
         }
         else
