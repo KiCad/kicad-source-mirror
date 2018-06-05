@@ -490,19 +490,15 @@ wxString PCB_BASE_FRAME::SelectFootprint( EDA_DRAW_FRAME* aWindow,
 
         if( dlg.ShowModal() == wxID_OK )
         {
-            fpname = dlg.GetTextSelection();
-
-            fpname = dlg.GetTextSelection( 1 ) + wxT( ":" ) + fpname;
+            if( !dlg.GetTextSelection( 0 ).IsEmpty() )
+                fpname = dlg.GetTextSelection( 1 ) + wxT( ":" ) + dlg.GetTextSelection( 0 );
 
             SkipNextLeftButtonReleaseEvent();
         }
-        else
-            fpname.Empty();
     }
     else
     {
         DisplayError( aWindow, _( "No footprint found." ) );
-        fpname.Empty();
     }
 
     if( fpname != wxEmptyString )
