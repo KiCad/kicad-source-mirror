@@ -555,6 +555,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent&
     LIB_PART*      component = m_Parent->GetCurPart();
     int ii = m_FootprintFilterListBox->GetSelection();
 
+    if( ii == wxNOT_FOUND )
+    {
+        return;
+    }
+
     m_FootprintFilterListBox->Delete( ii );
 
     if( !component || ( m_FootprintFilterListBox->GetCount() == 0 ) )
