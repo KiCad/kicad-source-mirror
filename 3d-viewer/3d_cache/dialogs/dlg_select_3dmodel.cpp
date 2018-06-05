@@ -79,18 +79,16 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 
 
     m_FileTree->ShowHidden( false );
-    m_FileTree->SetMinSize( wxSize( 300,100 ) );
+    m_FileTree->SetMinSize( wxSize( 300, 400 ) );
     m_FileTree->SetLabel( wxT( "3D_MODEL_SELECTOR" ) );
 
     bSizer2->Add( m_FileTree, 1, wxEXPAND | wxALL, 5 );
-    bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
+    bSizer1->Add( bSizer2, 3, wxEXPAND, 5 );
 
-    m_modelViewer = new C3D_MODEL_VIEWER( this,
-                                          COGL_ATT_LIST::GetAttributesList( true ),
-                                          m_cache );
-    m_modelViewer->SetMinSize( wxSize( 512, 384 ) );
+    m_modelViewer = new C3D_MODEL_VIEWER( this, COGL_ATT_LIST::GetAttributesList( true ), m_cache );
+    m_modelViewer->SetMinSize( wxSize( 500, 400 ) );
 
-    bSizer1->Add( m_modelViewer, 0, wxCENTER, 5 );
+    bSizer1->Add( m_modelViewer, 5, wxEXPAND | wxALL | wxCENTER, 5 );
 
     // create the filter list
     if( NULL != m_cache )
