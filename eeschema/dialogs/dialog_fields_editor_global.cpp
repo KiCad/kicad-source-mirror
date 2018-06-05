@@ -93,6 +93,7 @@ protected:
 
     SCH_EDIT_FRAME*       m_frame;
     SCH_REFERENCE_LIST    m_componentRefs;
+    bool                  m_edited;
     std::vector<wxString> m_fieldNames;
     int                   m_sortColumn;
     bool                  m_sortAscending;
@@ -116,6 +117,7 @@ public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aComponentList ) :
             m_frame( aFrame ),
             m_componentRefs( aComponentList ),
+            m_edited( false ),
             m_sortAscending( false )
     {
         m_componentRefs.SplitReferences();
@@ -237,6 +239,8 @@ public:
 
         for( const auto& ref : rowGroup.m_Refs )
             m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = aValue;
+
+        m_edited = true;
     }
 
 
@@ -513,6 +517,13 @@ public:
                     destField->SetText( srcValue );
             }
         }
+
+        m_edited = false;
+    }
+
+    bool IsEdited()
+    {
+        return m_edited;
     }
 };
 
@@ -845,5 +856,37 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnSaveAndContinue( wxCommandEvent& aEvent )
     {
         wxCommandEvent dummyEvent;
         m_parent->OnSaveProject( dummyEvent );
+    }
+}
+
+
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnCancel( wxCommandEvent& event )
+{
+    Close();
+}
+
+
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
+{
+    // Commit any pending in-place edits and close the editor
+    m_grid->DisableCellEditControl();
+
+    if( m_dataModel->IsEdited() )
+    {
+        switch( DisplayExitDialog( this, wxEmptyString ) )
+        {
+        case wxID_CANCEL:
+            event.Veto();
+            break;
+
+        case wxID_YES:
+            if( TransferDataFromWindow() )
+                event.Skip();
+            break;
+
+        case wxID_NO:
+            event.Skip();
+            break;
+        }
     }
 }

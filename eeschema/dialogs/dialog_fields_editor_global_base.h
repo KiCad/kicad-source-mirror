@@ -55,6 +55,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnGroupComponentsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupComponents( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColumnItemToggled( wxDataViewEvent& event ) { event.Skip(); }
@@ -64,7 +65,6 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOK( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

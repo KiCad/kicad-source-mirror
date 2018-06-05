@@ -61,7 +61,7 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnClose</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -890,7 +890,7 @@
                                 <event name="OnContextHelpButtonClick"></event>
                                 <event name="OnHelpButtonClick"></event>
                                 <event name="OnNoButtonClick"></event>
-                                <event name="OnOKButtonClick">OnOK</event>
+                                <event name="OnOKButtonClick"></event>
                                 <event name="OnSaveButtonClick"></event>
                                 <event name="OnYesButtonClick"></event>
                             </object>

@@ -64,6 +64,8 @@ private:
     void OnTableItemContextMenu( wxGridEvent& event ) override;
     void OnSizeFieldList( wxSizeEvent& event ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
+    void OnCancel( wxCommandEvent& event ) override;
+    void OnClose( wxCloseEvent& event ) override;
 };
 
 #endif /* DIALOG_FIELDS_EDITOR_GLOBAL_H */
