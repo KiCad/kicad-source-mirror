@@ -382,9 +382,10 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
         m_tuners.push_back( tuner );
         m_tunePanel->Layout();
     }
-    catch( ... )
+    catch( const KI_PARAM_ERROR& e )
     {
         // Sorry, no bonus
+        DisplayError( nullptr, e.What() );
     }
 }
 

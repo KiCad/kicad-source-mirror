@@ -36,6 +36,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPO
     const wxString compName = aComponent->GetField( REFERENCE )->GetText();
     m_name->SetLabel( compName );
     m_value = SPICE_VALUE( aComponent->GetField( VALUE )->GetText() );
+
     m_changed = false;
     m_spiceName = aFrame->GetExporter()->GetSpiceDevice( compName ).Lower();
 
@@ -157,7 +158,7 @@ void TUNER_SLIDER::onMaxTextEnter( wxCommandEvent& event )
         SPICE_VALUE newMax( m_maxText->GetValue() );
         SetMax( newMax );
     }
-    catch( std::exception& )
+    catch( const KI_PARAM_ERROR& )
     {
         // Restore the previous value
         m_maxText->SetValue( m_max.ToOrigString() );
@@ -173,7 +174,7 @@ void TUNER_SLIDER::onValueTextEnter( wxCommandEvent& event )
         SetValue( newCur );
         m_changed = true;
     }
-    catch( std::exception& )
+    catch( const KI_PARAM_ERROR& )
     {
         // Restore the previous value
         m_valueText->SetValue( m_value.ToOrigString() );
@@ -188,7 +189,7 @@ void TUNER_SLIDER::onMinTextEnter( wxCommandEvent& event )
         SPICE_VALUE newMin( m_minText->GetValue() );
         SetMin( newMin );
     }
-    catch( std::exception& )
+    catch( const KI_PARAM_ERROR& )
     {
         // Restore the previous value
         m_minText->SetValue( m_min.ToOrigString() );
