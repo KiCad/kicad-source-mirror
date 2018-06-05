@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-03 16:28+0800\n"
+"PO-Revision-Date: 2018-06-06 00:13+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -5731,9 +5731,8 @@ msgid "De&lete"
 msgstr "删除(&L)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:379
-#, fuzzy
 msgid "Field Name Templates"
-msgstr "系统模板"
+msgstr "字段名称模板"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:138
 msgid "Schematic Editor Options"
@@ -6285,11 +6284,11 @@ msgstr "重新格式化无源符号值 e.g. 1M -> 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:404
 msgid "Simulator command:"
-msgstr "模拟器命令:"
+msgstr "仿真器命令:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:417
 msgid "&Run Simulator"
-msgstr "运行模拟器(&R)"
+msgstr "运行仿真器(&R)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:457
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
@@ -6859,15 +6858,15 @@ msgstr "替换所有 (&A)"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:99
 msgid "You need to enable at least one source"
-msgstr ""
+msgstr "你需要启用至少一个源"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:109
 msgid "You need to select DC source (sweep 1)"
-msgstr ""
+msgstr "你需要选择直流源(扫描1)"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:139
 msgid "You need to select DC source (sweep 2)"
-msgstr ""
+msgstr "你需要选择直流源(扫描2)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:273
@@ -7444,7 +7443,7 @@ msgstr "源"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:673
 msgid "Disable symbol for simulation"
-msgstr "禁用符号模拟"
+msgstr "禁用符号仿真"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:679
 msgid "Alternate node sequence:"
@@ -9697,7 +9696,7 @@ msgstr "分配PCB封装到原理图符号"
 
 #: eeschema/menubar.cpp:625
 msgid "Simula&tor"
-msgstr "模拟器(&T)"
+msgstr "仿真器(&T)"
 
 #: eeschema/menubar.cpp:625
 msgid "Simulate circuit"
@@ -10545,9 +10544,9 @@ msgid "Unable to read file \"%s\""
 msgstr "无法读取文件\" %s\""
 
 #: eeschema/sch_eagle_plugin.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find %s in the imported library"
-msgstr "无法打开库文件"
+msgstr "在导入的库中找不到 %s"
 
 #: eeschema/sch_edit_frame.cpp:177 pcbnew/class_zone.cpp:1085
 msgid "Not Found"
@@ -11014,7 +11013,7 @@ msgstr "添加 电源端口"
 
 #: eeschema/schedit.cpp:614
 msgid "Add a simulator probe"
-msgstr "添加模拟器探针"
+msgstr "添加仿真器探针"
 
 #: eeschema/schedit.cpp:619
 msgid "Select a value to be tuned"
@@ -11151,9 +11150,9 @@ msgid "You need to select the simulation settings first."
 msgstr "你需要先选择仿真设置。"
 
 #: eeschema/sim/sim_plot_frame.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Plot%u"
-msgstr "绘图"
+msgstr "绘制%u"
 
 #: eeschema/sim/sim_plot_frame.cpp:569 eeschema/sim/sim_plot_frame.cpp:1167
 msgid "Signal"
@@ -11291,53 +11290,47 @@ msgstr "光标"
 
 #: eeschema/sim/sim_plot_frame_base.h:109
 msgid "Spice Simulator"
-msgstr "Spice模拟器"
+msgstr "Spice仿真器"
 
 #: eeschema/sim/sim_plot_panel.cpp:380 eeschema/sim/sim_plot_panel.cpp:393
-#, fuzzy
 msgid "Frequency"
-msgstr "频率："
+msgstr "频率"
 
 #: eeschema/sim/sim_plot_panel.cpp:381
 msgid "Gain"
-msgstr ""
+msgstr "增益"
 
 #: eeschema/sim/sim_plot_panel.cpp:382
 msgid "Phase"
-msgstr ""
+msgstr "相位"
 
 #: eeschema/sim/sim_plot_panel.cpp:387
-#, fuzzy
 msgid "Voltage (sweeped)"
-msgstr "压降："
+msgstr "电压(扫描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:388
 msgid "Voltage (measured)"
-msgstr ""
+msgstr "电压(测量)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
 msgid "noise [(V or A)^2/Hz]"
-msgstr ""
+msgstr "噪音 [(V 或 A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:398
-#, fuzzy
 msgid "Time"
-msgstr "时间："
+msgstr "时间"
 
 #: eeschema/sim/spice_value.cpp:40
-#, fuzzy
 msgid "Spice value cannot be empty"
-msgstr "%s 字段不能为空."
+msgstr "Spice值不能为空"
 
 #: eeschema/sim/spice_value.cpp:45
-#, fuzzy
 msgid "Invalid Spice value string"
-msgstr "\"%s\"不是有效的Spice 值"
+msgstr "无效的Spice值字符串"
 
 #: eeschema/sim/spice_value.cpp:78
-#, fuzzy
 msgid "Invalid unit prefix"
-msgstr "指定的封装无效"
+msgstr "无效的单元前缀"
 
 #: eeschema/sim/spice_value.cpp:251
 msgid "Please, fill required fields"
