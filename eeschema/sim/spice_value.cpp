@@ -76,7 +76,7 @@ SPICE_VALUE::SPICE_VALUE( const wxString& aString )
             case 't': m_prefix = PFX_TERA; break;
 
             default:
-                throw std::invalid_argument( _( "Invalid unit prefix" ) );
+                throw KI_PARAM_ERROR( _( "Invalid unit prefix" ) );
         }
     }
 
