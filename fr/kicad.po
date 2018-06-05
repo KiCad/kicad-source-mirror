@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-03 11:09+0200\n"
+"POT-Creation-Date: 2018-06-05 16:03+0200\n"
 "PO-Revision-Date: 2018-06-03 11:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -3079,7 +3079,7 @@ msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la table globale des "
 "librairie d'empreintes"
 
-#: common/richio.cpp:167
+#: common/richio.cpp:167 tools/io_benchmark/stdstream_line_reader.cpp:76
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
 msgstr "Ne peut pas ouvrir le fichier \"%s\" en lecture"
@@ -3773,15 +3773,15 @@ msgstr ""
 msgid "Project file: \"%s\""
 msgstr "Fichier de projet: \"%s\""
 
-#: cvpcb/dialogs/dialog_config_equfiles.cpp:99
+#: cvpcb/dialogs/dialog_config_equfiles.cpp:104
 msgid "No editor defined in KiCad. Please choose it."
 msgstr "Pas d'éditeur défini dans Kicad. Veuillez en choisir un."
 
-#: cvpcb/dialogs/dialog_config_equfiles.cpp:248
+#: cvpcb/dialogs/dialog_config_equfiles.cpp:249
 msgid "Footprint Association File"
 msgstr "Fichiers Association d'Empreintes"
 
-#: cvpcb/dialogs/dialog_config_equfiles.cpp:293
+#: cvpcb/dialogs/dialog_config_equfiles.cpp:294
 #, c-format
 msgid "File \"%s\" already exists in list"
 msgstr "Le fichier \"%s\" est déjà dans la liste"
@@ -3801,8 +3801,8 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:226
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:210
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:705
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:718
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:706
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:719
 #: eeschema/dialogs/dialog_rescue_each.cpp:117 eeschema/lib_field.cpp:447
 #: eeschema/lib_field.cpp:630 eeschema/sch_component.cpp:1425
 #: eeschema/sch_component.cpp:1464 eeschema/template_fieldnames.cpp:48
@@ -4282,7 +4282,7 @@ msgstr ""
 "La librairie de composant \"%s\" n'a pu être chargée.\n"
 "Erreur: %s"
 
-#: eeschema/cmp_tree_model.cpp:125 eeschema/lib_draw_item.cpp:70
+#: eeschema/cmp_tree_model.cpp:126 eeschema/lib_draw_item.cpp:70
 #: eeschema/libedit.cpp:685 eeschema/onrightclick.cpp:490
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:37
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:48
@@ -5232,7 +5232,7 @@ msgstr "Visibilité:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:190
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:531
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:532
 msgid "Show"
 msgstr "Visible"
 
@@ -5926,7 +5926,7 @@ msgstr "Numérotation requise!"
 msgid "Pin %s on %s is connected to both %s and %s"
 msgstr "Pin %s de %s est  connectée à la fois à %s et %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/drc.cpp:486
+#: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/drc.cpp:524
 msgid "Finished"
 msgstr "Fini"
 
@@ -6011,18 +6011,18 @@ msgstr "Initialiser aux Valeurs par Défaut"
 msgid "Electrical Rules Checker"
 msgstr "Contrôle des Règles Electriques"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:530
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:531
 #: eeschema/lib_field.cpp:627 eeschema/lib_field.h:105
 #: eeschema/template_fieldnames.cpp:51
 msgid "Field"
 msgstr "Champ"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:532
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:533
 msgid "Group By"
 msgstr "Grouper Par"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:704
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:717
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:705
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:718
 #: eeschema/dialogs/dialog_rescue_each.cpp:113 eeschema/lib_field.cpp:440
 #: eeschema/sch_component.cpp:1421 eeschema/sch_component.cpp:1461
 #: eeschema/template_fieldnames.cpp:47
@@ -6032,8 +6032,8 @@ msgstr "Grouper Par"
 msgid "Reference"
 msgstr "Référence"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:706
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:719
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:707
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:720
 #: eeschema/lib_field.cpp:454 eeschema/sch_component.cpp:1450
 #: eeschema/template_fieldnames.cpp:49 pcbnew/class_edge_mod.cpp:249
 #: pcbnew/class_module.cpp:636 pcbnew/class_pad.cpp:713
@@ -6042,7 +6042,7 @@ msgstr "Référence"
 msgid "Footprint"
 msgstr "Empreinte"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:720
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:721
 #: eeschema/lib_field.cpp:461 eeschema/libedit.cpp:702
 #: eeschema/template_fieldnames.cpp:50
 msgid "Datasheet"
@@ -11423,7 +11423,7 @@ msgstr "Caractéristiques"
 msgid "Welcome!"
 msgstr "Bienvenue !"
 
-#: eeschema/sim/sim_plot_frame.cpp:293 eeschema/sim/sim_plot_frame.cpp:1029
+#: eeschema/sim/sim_plot_frame.cpp:293 eeschema/sim/sim_plot_frame.cpp:1030
 msgid "There were errors during netlist export, aborted."
 msgstr "Il y a eu des erreurs lors de l'exportation de netlist, abandon."
 
@@ -11436,7 +11436,7 @@ msgstr "Vous devez sélectionner les paramètres de simulation en premier."
 msgid "Plot%u"
 msgstr "Tracé%u"
 
-#: eeschema/sim/sim_plot_frame.cpp:569 eeschema/sim/sim_plot_frame.cpp:1166
+#: eeschema/sim/sim_plot_frame.cpp:569 eeschema/sim/sim_plot_frame.cpp:1167
 msgid "Signal"
 msgstr "Signal"
 
@@ -11467,23 +11467,23 @@ msgstr "Sauver Tracé comme Fichier Image"
 msgid "Save Plot Data"
 msgstr "Sauver Données de Tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1063
+#: eeschema/sim/sim_plot_frame.cpp:1064
 msgid "You need to run simulation first."
 msgstr "Vous devez exécuter la simulation en premier."
 
-#: eeschema/sim/sim_plot_frame.cpp:1295
+#: eeschema/sim/sim_plot_frame.cpp:1296
 msgid "Hide Signal"
 msgstr "Masquer le Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1296
+#: eeschema/sim/sim_plot_frame.cpp:1297
 msgid "Erase the signal from plot screen"
 msgstr "Supprimer le signal de l’écran de tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1302
+#: eeschema/sim/sim_plot_frame.cpp:1303
 msgid "Hide Cursor"
 msgstr "Masquer le Curseur"
 
-#: eeschema/sim/sim_plot_frame.cpp:1305
+#: eeschema/sim/sim_plot_frame.cpp:1306
 msgid "Show Cursor"
 msgstr "Afficher le Curseur"
 
@@ -12696,29 +12696,29 @@ msgstr "&Activer Acceleration"
 msgid "&No Thanks"
 msgstr "&Non, Merci"
 
-#: gerbview/gerbview_frame.cpp:659
+#: gerbview/gerbview_frame.cpp:656
 msgid "D Codes"
 msgstr "D Codes"
 
-#: gerbview/gerbview_frame.cpp:768
+#: gerbview/gerbview_frame.cpp:765
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Couche de dessin %d non utilisée"
 
-#: gerbview/gerbview_frame.cpp:780
+#: gerbview/gerbview_frame.cpp:777
 msgid "GerbView"
 msgstr "GerbView"
 
-#: gerbview/gerbview_frame.cpp:782
+#: gerbview/gerbview_frame.cpp:779
 msgid " (with X2 attributes)"
 msgstr " (avec attributs X2)"
 
-#: gerbview/gerbview_frame.cpp:790
+#: gerbview/gerbview_frame.cpp:787
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Nom Image: \"%s\"  Nom Layer:  \"%s\""
 
-#: gerbview/gerbview_frame.cpp:804
+#: gerbview/gerbview_frame.cpp:801
 msgid "X2 attr"
 msgstr "attr X2"
 
@@ -13379,17 +13379,17 @@ msgstr "Mesurer une distance"
 msgid "Do not show again"
 msgstr "Ne pas montrer de nouveau"
 
-#: include/drc_item.h:173
+#: include/drc_item.h:174
 #, c-format
 msgid "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>"
 msgstr "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>"
 
-#: include/drc_item.h:186
+#: include/drc_item.h:187
 #, c-format
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 
-#: include/drc_item.h:194
+#: include/drc_item.h:195
 #, c-format
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
@@ -13566,13 +13566,13 @@ msgstr ""
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema a échoué pour charger:\n"
 
-#: kicad/import_project.cpp:136 kicad/import_project.cpp:169
+#: kicad/import_project.cpp:136 kicad/import_project.cpp:170
 #: kicad/mainframe.cpp:317 kicad/mainframe.cpp:364 kicad/mainframe.cpp:389
 #: kicad/mainframe.cpp:436
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
-#: kicad/import_project.cpp:169 kicad/mainframe.cpp:389
+#: kicad/import_project.cpp:170 kicad/mainframe.cpp:389
 msgid "Pcbnew failed to load:\n"
 msgstr "Le chargement du fichier Pcbnew a échoué :\n"
 
@@ -15896,7 +15896,7 @@ msgstr ""
 msgid "Block Operation"
 msgstr "Opération sur Bloc"
 
-#: pcbnew/board_netlist_updater.cpp:125 pcbnew/class_board.cpp:2472
+#: pcbnew/board_netlist_updater.cpp:125 pcbnew/class_board.cpp:2482
 #, c-format
 msgid "Adding new symbol \"%s:%s\" footprint \"%s\".\n"
 msgstr "Ajout du nouveau symbole \"%s:%s\" empreinte \"%s\".\n"
@@ -15913,7 +15913,7 @@ msgstr ""
 "Impossible d'ajouter le composant \"%s\" car l'empreinte \"%s\" est "
 "manquante.\n"
 
-#: pcbnew/board_netlist_updater.cpp:159 pcbnew/class_board.cpp:2481
+#: pcbnew/board_netlist_updater.cpp:159 pcbnew/class_board.cpp:2491
 #, c-format
 msgid "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
@@ -15925,7 +15925,7 @@ msgstr ""
 msgid "Change symbol %s footprint from %s to %s.\n"
 msgstr "Changer empreinte de composant %s de %s en %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:193 pcbnew/class_board.cpp:2514
+#: pcbnew/board_netlist_updater.cpp:193 pcbnew/class_board.cpp:2524
 #, c-format
 msgid "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Remplace symbole \"%s:%s\" empreinte \"%s\" par \"%s\".\n"
@@ -15937,7 +15937,7 @@ msgstr ""
 "Impossible de changer le composant \"%s\" car l'empreinte \"%s\" est "
 "manquante.\n"
 
-#: pcbnew/board_netlist_updater.cpp:230 pcbnew/class_board.cpp:2525
+#: pcbnew/board_netlist_updater.cpp:230 pcbnew/class_board.cpp:2535
 #, c-format
 msgid "Cannot replace symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
@@ -16024,7 +16024,7 @@ msgstr "L'empreinte %s est verrouillée, ne fait pas la suppression.\n"
 msgid "Remove footprint %s."
 msgstr "Suppression empreinte %s."
 
-#: pcbnew/board_netlist_updater.cpp:562 pcbnew/class_board.cpp:2706
+#: pcbnew/board_netlist_updater.cpp:562 pcbnew/class_board.cpp:2716
 #, c-format
 msgid "Removing unused footprint \"%s:%s\".\n"
 msgstr "Suppression empreinte inutilisée \"%s:%s\".\n"
@@ -16034,7 +16034,7 @@ msgstr "Suppression empreinte inutilisée \"%s:%s\".\n"
 msgid "Remove single pad net %s."
 msgstr "Suppression net à pad unique \"%s\"."
 
-#: pcbnew/board_netlist_updater.cpp:635 pcbnew/class_board.cpp:2772
+#: pcbnew/board_netlist_updater.cpp:635 pcbnew/class_board.cpp:2782
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n"
 msgstr "Suppression net à pad unique \"%s\" sur \"%s\" pad \"%s\"\n"
@@ -16113,78 +16113,78 @@ msgstr "Fournisseur et réf"
 msgid "This is the default net class."
 msgstr "Ceci est la Netclass par défaut."
 
-#: pcbnew/class_board.cpp:1122 pcbnew/class_module.cpp:600
+#: pcbnew/class_board.cpp:1132 pcbnew/class_module.cpp:600
 #: pcbnew/netinfo_item.cpp:120 pcbnew/pcb_draw_panel_gal.cpp:334
 #: pcbnew/tools/pad_tool.cpp:79
 msgid "Pads"
 msgstr "Pads"
 
-#: pcbnew/class_board.cpp:1125
+#: pcbnew/class_board.cpp:1135
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/netinfo_item.cpp:140 pcbnew/pcb_draw_panel_gal.cpp:337
 msgid "Vias"
 msgstr "Vias"
 
-#: pcbnew/class_board.cpp:1128 pcbnew/pcb_draw_panel_gal.cpp:340
+#: pcbnew/class_board.cpp:1138 pcbnew/pcb_draw_panel_gal.cpp:340
 msgid "Track Segments"
 msgstr "Segments de Piste"
 
-#: pcbnew/class_board.cpp:1131 pcbnew/pcb_draw_panel_gal.cpp:343
+#: pcbnew/class_board.cpp:1141 pcbnew/pcb_draw_panel_gal.cpp:343
 msgid "Nodes"
 msgstr "Nœuds"
 
-#: pcbnew/class_board.cpp:1134
+#: pcbnew/class_board.cpp:1144
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:59
 #: pcbnew/pcb_draw_panel_gal.cpp:346
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:1137 pcbnew/pcb_draw_panel_gal.cpp:349
+#: pcbnew/class_board.cpp:1147 pcbnew/pcb_draw_panel_gal.cpp:349
 msgid "Unrouted"
 msgstr "Non Routé"
 
-#: pcbnew/class_board.cpp:2454
+#: pcbnew/class_board.cpp:2464
 #, c-format
 msgid "Checking netlist symbol footprint \"%s:%s:%s\".\n"
 msgstr "Vérification du composant de la netliste \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2578
+#: pcbnew/class_board.cpp:2588
 #, c-format
 msgid "Changing footprint \"%s:%s\" reference to \"%s\".\n"
 msgstr "Change référence empreinte \"%s:%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2594
+#: pcbnew/class_board.cpp:2604
 #, c-format
 msgid "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Changement valeur empreinte \"%s:%s\" de \"%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2611
+#: pcbnew/class_board.cpp:2621
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Change le chemin des empreintes \"%s:%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2635
+#: pcbnew/class_board.cpp:2645
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Suppression netname composant \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2654
+#: pcbnew/class_board.cpp:2664
 #, c-format
 msgid ""
 "Changing footprint \"%s:%s\" pad \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Changement empreinte \"%s:%s\" pin \"%s\"  net \"%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2811
+#: pcbnew/class_board.cpp:2821
 #, c-format
 msgid "Component \"%s\" pad \"%s\" not found in footprint \"%s\"\n"
 msgstr "Composant \"%s\" pad \"%s\" non trouvé dans l'empreinte \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2848
+#: pcbnew/class_board.cpp:2858
 #, c-format
 msgid "Updating copper zone (net name \"%s\") to net name \"%s\"."
 msgstr "Mise à jour zone cuivre (nom de net \"%s\") en nom de net \"%s\"."
 
-#: pcbnew/class_board.cpp:2854
+#: pcbnew/class_board.cpp:2864
 #, c-format
 msgid "Copper zone (net name \"%s\") has no pads connected."
 msgstr "Zone cuivre (nom de net \"%s\") n'a pas de pad connecté."
@@ -22804,108 +22804,108 @@ msgstr ""
 msgid "Modified dimensions properties"
 msgstr "Modifie les propriétés d'une cote"
 
-#: pcbnew/drc.cpp:378
+#: pcbnew/drc.cpp:416
 msgid "Aborting\n"
 msgstr "Arrêt\n"
 
-#: pcbnew/drc.cpp:391
+#: pcbnew/drc.cpp:429
 msgid "Pad clearances...\n"
 msgstr "Isolations pads...\n"
 
-#: pcbnew/drc.cpp:401
+#: pcbnew/drc.cpp:439
 msgid "Track clearances...\n"
 msgstr "Isolations pistes...\n"
 
-#: pcbnew/drc.cpp:413
+#: pcbnew/drc.cpp:451
 msgid "Refilling all zones...\n"
 msgstr "Remplissage de toutes les zones...\n"
 
-#: pcbnew/drc.cpp:420
+#: pcbnew/drc.cpp:458
 msgid "Checking zone fills...\n"
 msgstr "Vérification du remplissage de zones...\n"
 
-#: pcbnew/drc.cpp:428
+#: pcbnew/drc.cpp:466
 msgid "Zone to zone clearances...\n"
 msgstr "Isolations zone à zone...\n"
 
-#: pcbnew/drc.cpp:439
+#: pcbnew/drc.cpp:477
 msgid "Unconnected pads...\n"
 msgstr "Pads non connectés...\n"
 
-#: pcbnew/drc.cpp:451
+#: pcbnew/drc.cpp:489
 msgid "Keepout areas ...\n"
 msgstr "Zone interdites ...\n"
 
-#: pcbnew/drc.cpp:461
+#: pcbnew/drc.cpp:499
 msgid "Test texts...\n"
 msgstr "Test textes...\n"
 
-#: pcbnew/drc.cpp:472
+#: pcbnew/drc.cpp:510
 msgid "Courtyard areas...\n"
 msgstr "Zone d'occupation ...\n"
 
-#: pcbnew/drc.cpp:526
+#: pcbnew/drc.cpp:564
 #, c-format
 msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" a une isolation:%s qui est moins que la valeur globale:%s"
 
-#: pcbnew/drc.cpp:540
+#: pcbnew/drc.cpp:578
 #, c-format
 msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: '\"%s\" a une largeur de piste: %s plus petite que la valeur "
 "globale:%s"
 
-#: pcbnew/drc.cpp:553
+#: pcbnew/drc.cpp:591
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" a un diamètre de via: %s qui est plus petit que la valeur "
 "globale: %s"
 
-#: pcbnew/drc.cpp:566
+#: pcbnew/drc.cpp:604
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" a un perçage de via: %s qui est plus petit que la valeur "
 "globale: %s"
 
-#: pcbnew/drc.cpp:579
+#: pcbnew/drc.cpp:617
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" a un diamètre de microvia: %s qui est plus petit que la "
 "valeur globale: %s"
 
-#: pcbnew/drc.cpp:592
+#: pcbnew/drc.cpp:630
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" a un perçage de microvia: %s qui est plus petit que la "
 "valeur globale: %s"
 
-#: pcbnew/drc.cpp:690
+#: pcbnew/drc.cpp:728
 msgid "Track clearances"
 msgstr "Isolations pistes"
 
-#: pcbnew/drc.cpp:1176
+#: pcbnew/drc.cpp:1214
 #, c-format
 msgid "footprint \"%s\" has malformed courtyard"
 msgstr "l'empreinte \"%s\" a une zone d'occupation  incorrectement définie"
 
-#: pcbnew/drc.cpp:1193
+#: pcbnew/drc.cpp:1231
 #, c-format
 msgid "footprint \"%s\" has no courtyard defined"
 msgstr "l'empreinte \"%s\" n’a aucune zone d'occupation  définie"
 
-#: pcbnew/drc.cpp:1232
+#: pcbnew/drc.cpp:1270
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on front (top) layer"
 msgstr ""
 "Les empreintes \"%s\" et \"%s\" se chevauchent sur couche composants (dessus)"
 
-#: pcbnew/drc.cpp:1269
+#: pcbnew/drc.cpp:1307
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on back (bottom) layer"
 msgstr ""
@@ -23225,19 +23225,19 @@ msgstr "Effacement global sur couche cuivre non autorisé!"
 msgid "Delete everything on layer %s?"
 msgstr "Tout effacer sur la couche %s?"
 
-#: pcbnew/editrack.cpp:805
+#: pcbnew/editrack.cpp:809
 msgid "Track Len"
 msgstr "Long. Piste"
 
-#: pcbnew/editrack.cpp:809
+#: pcbnew/editrack.cpp:813
 msgid "Full Len"
 msgstr "Long. Totale"
 
-#: pcbnew/editrack.cpp:811
+#: pcbnew/editrack.cpp:815
 msgid "Pad to die"
 msgstr "Pad à chip"
 
-#: pcbnew/editrack.cpp:816
+#: pcbnew/editrack.cpp:820
 msgid "Segs Count"
 msgstr "Nb Segms"
 
@@ -28296,7 +28296,7 @@ msgid "Warning: The new zone fails DRC"
 msgstr "Attention : La nouvelle zone échoue au contrôle DRC"
 
 #: pcbnew/zones_by_polygon.cpp:379 pcbnew/zones_by_polygon.cpp:438
-#: pcbnew/zones_by_polygon.cpp:827
+#: pcbnew/zones_by_polygon.cpp:831
 msgid "Area: DRC outline error"
 msgstr "Zone: Erreur DRC sur contour"
 
@@ -28305,23 +28305,23 @@ msgid "Error: a keepout area is allowed only on copper layers"
 msgstr ""
 "Erreur: une zone interdite est autorisée seulement sur une couche cuivre"
 
-#: pcbnew/zones_by_polygon.cpp:700
+#: pcbnew/zones_by_polygon.cpp:701
 msgid "DRC error: this start point is inside or too close another area"
 msgstr ""
 "Erreur DRC: ce point de départ est à l'intérieur d'une autre zone ou trop "
 "proche"
 
-#: pcbnew/zones_by_polygon.cpp:765
+#: pcbnew/zones_by_polygon.cpp:769
 msgid "DRC error: closing this area creates a DRC error with another area"
 msgstr ""
 "Erreur DRC: la fermeture de cette zone crée une erreur DRC avec une autre "
 "zone"
 
-#: pcbnew/zones_by_polygon.cpp:923 pcbnew/zones_by_polygon.cpp:987
+#: pcbnew/zones_by_polygon.cpp:927 pcbnew/zones_by_polygon.cpp:991
 msgid "Modify zone properties"
 msgstr "Modifier les propriétés de la zone"
 
-#: pcbnew/zones_by_polygon.cpp:978
+#: pcbnew/zones_by_polygon.cpp:982
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Remplissage %d  Zones"

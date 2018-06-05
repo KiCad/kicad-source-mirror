@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-05 15:38+0300\n"
+"POT-Creation-Date: 2018-06-05 16:03+0200\n"
 "PO-Revision-Date: 2018-06-05 15:45+0300\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -11315,31 +11315,31 @@ msgstr "Для начала вам необходимо выбрать наст�
 msgid "Plot%u"
 msgstr "График%u"
 
-#: eeschema/sim/sim_plot_frame.cpp:570 eeschema/sim/sim_plot_frame.cpp:1167
+#: eeschema/sim/sim_plot_frame.cpp:569 eeschema/sim/sim_plot_frame.cpp:1167
 msgid "Signal"
 msgstr "Сигнал"
 
-#: eeschema/sim/sim_plot_frame.cpp:816
+#: eeschema/sim/sim_plot_frame.cpp:815
 msgid "Open simulation workbook"
 msgstr "Открыть работу симуляции"
 
-#: eeschema/sim/sim_plot_frame.cpp:825
+#: eeschema/sim/sim_plot_frame.cpp:824
 msgid "There was an error while opening the workbook file"
 msgstr "Произошла ошибка при открытии файла работы"
 
-#: eeschema/sim/sim_plot_frame.cpp:834
+#: eeschema/sim/sim_plot_frame.cpp:833
 msgid "Save Simulation Workbook"
 msgstr "Сохранить работу симуляции"
 
-#: eeschema/sim/sim_plot_frame.cpp:843
+#: eeschema/sim/sim_plot_frame.cpp:842
 msgid "There was an error while saving the workbook file"
 msgstr "Произошла ошибка при сохранении файла работы"
 
-#: eeschema/sim/sim_plot_frame.cpp:852
+#: eeschema/sim/sim_plot_frame.cpp:851
 msgid "Save Plot as Image"
 msgstr "Сохранить график как изображение"
 
-#: eeschema/sim/sim_plot_frame.cpp:869
+#: eeschema/sim/sim_plot_frame.cpp:868
 msgid "Save Plot Data"
 msgstr "Сохранить данные графика"
 
@@ -11482,23 +11482,23 @@ msgstr "шум [(U или I)^2/F]"
 msgid "Time"
 msgstr "Время"
 
-#: eeschema/sim/spice_value.cpp:41
+#: eeschema/sim/spice_value.cpp:40
 msgid "Spice value cannot be empty"
 msgstr "Значение Spice-модели не может быть пустым"
 
-#: eeschema/sim/spice_value.cpp:46
+#: eeschema/sim/spice_value.cpp:45
 msgid "Invalid Spice value string"
 msgstr "Неверное значение Spice-модели"
 
-#: eeschema/sim/spice_value.cpp:79
+#: eeschema/sim/spice_value.cpp:78
 msgid "Invalid unit prefix"
 msgstr "Неверный множитель единиц измерения"
 
-#: eeschema/sim/spice_value.cpp:252
+#: eeschema/sim/spice_value.cpp:251
 msgid "Please, fill required fields"
 msgstr "Пожалуйста заполните требуемые поля"
 
-#: eeschema/sim/spice_value.cpp:271
+#: eeschema/sim/spice_value.cpp:270
 #, c-format
 msgid "\"%s\" is not a valid Spice value"
 msgstr "\"%s\" это неверное Spice значение"
@@ -23452,11 +23452,11 @@ msgstr "Не удалось удалить ОБОЗНАЧЕНИЕ!"
 msgid "Cannot delete VALUE!"
 msgstr "Не удалось удалить ЗНАЧЕНИЕ!"
 
-#: pcbnew/footprint_info_impl.cpp:136
+#: pcbnew/footprint_info_impl.cpp:135
 msgid "Fetching Footprint Libraries"
 msgstr "Просмотр библиотек посадочных мест"
 
-#: pcbnew/footprint_info_impl.cpp:157
+#: pcbnew/footprint_info_impl.cpp:156
 msgid "Loading Footprints"
 msgstr "Загрузка посад.мест"
 
