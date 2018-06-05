@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
  */
 
 /**
- * @file pcbnew/loadcmp.cpp
+ * @file load_select_footprint.cpp
  * @brief Footprints selection and loading functions.
  */
 
@@ -143,7 +143,15 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
     viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 
     if( viewer )
+    {
         viewer->Destroy();
+        // Destroy() does not immediately delete the viewer, if some events are pending.
+        // (for this reason delete operator cannot be used blindly with "top level" windows)
+        // so gives a slice of time to delete the viewer frame.
+        // This is especially important in OpenGL mode to avoid recreating context before
+        // the old one is deleted
+        wxSafeYield();
+    }
 
     SetFocus();
 
