@@ -246,6 +246,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // We only want the symbol name, not the full LIB_ID.
             xlibsource->AddAttribute( "part", comp->GetLibId().GetLibItemName() );
 
+            xlibsource->AddAttribute( "description", comp->GetAliasDescription() );
+
             XNODE* xsheetpath;
 
             xcomp->AddChild( xsheetpath = node( "sheetpath" ) );

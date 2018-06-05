@@ -408,10 +408,7 @@ class comp():
         return self.element.get("tstamp")
 
     def getDescription(self):
-        if not self.libpart:
-            return ""
-
-        return self.libpart.getDescription()
+        return self.element.get("libsource", "description")
 
 
 class netlist():
