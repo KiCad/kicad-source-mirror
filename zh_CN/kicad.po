@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-06 00:13+0800\n"
+"PO-Revision-Date: 2018-06-06 00:39+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -21164,7 +21164,7 @@ msgstr "移动矢量："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1042
 msgid "Scaling factor:"
-msgstr "比例英子："
+msgstr "比例因子："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1049
 msgid "1.0"
