@@ -590,7 +590,7 @@ public:
         {
             return m_layers.at( aLayer ).target == TARGET_CACHED;
         }
-        catch( std::out_of_range )
+        catch( const std::out_of_range& )
         {
             return false;
         }

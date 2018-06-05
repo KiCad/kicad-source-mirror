@@ -165,7 +165,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             {
                 pcbframe = Kiway.Player( FRAME_PCB, true );
             }
-            catch( IO_ERROR err )
+            catch( const IO_ERROR& err )
             {
                 wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.What(), _( "KiCad Error" ),
                         wxOK | wxICON_ERROR, this );

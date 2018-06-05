@@ -207,7 +207,7 @@ private:
             {
                 new_layer = aReorderMap.at( orig_layer );
             }
-            catch( std::out_of_range ) {}
+            catch( const std::out_of_range& ) {}
 
             m_groups[i].first = new_layer;
         }
@@ -665,7 +665,7 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
         {
             new_idx = aReorderMap.at( orig_idx );
         }
-        catch( std::out_of_range )
+        catch( const std::out_of_range& )
         {
             new_idx = orig_idx;
         }
