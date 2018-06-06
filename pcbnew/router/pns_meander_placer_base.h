@@ -64,7 +64,7 @@ public:
      * Returns a string describing the status and length of the
      * tuned traces.
      */
-    virtual const wxString TuningInfo() const = 0;
+    virtual const wxString TuningInfo( EDA_UNITS_T aUnits ) const = 0;
 
     /**
      * Function TuningStatus()

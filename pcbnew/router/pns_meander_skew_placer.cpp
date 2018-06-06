@@ -144,7 +144,7 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 }
 
 
-const wxString MEANDER_SKEW_PLACER::TuningInfo() const
+const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS_T aUnits ) const
 {
     wxString status;
 
@@ -163,9 +163,9 @@ const wxString MEANDER_SKEW_PLACER::TuningInfo() const
         return _( "?" );
     }
 
-    status += ::MessageTextFromValue( g_UserUnit, m_lastLength - m_coupledLength, false );
+    status += ::MessageTextFromValue( aUnits, m_lastLength - m_coupledLength, false );
     status += "/";
-    status += ::MessageTextFromValue( g_UserUnit, m_settings.m_targetSkew, false );
+    status += ::MessageTextFromValue( aUnits, m_settings.m_targetSkew, false );
 
     return status;
 }

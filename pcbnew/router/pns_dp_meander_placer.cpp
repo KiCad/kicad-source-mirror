@@ -358,7 +358,7 @@ int DP_MEANDER_PLACER::CurrentLayer() const
 }
 
 
-const wxString DP_MEANDER_PLACER::TuningInfo() const
+const wxString DP_MEANDER_PLACER::TuningInfo( EDA_UNITS_T aUnits ) const
 {
     wxString status;
 
@@ -377,11 +377,11 @@ const wxString DP_MEANDER_PLACER::TuningInfo() const
         return _( "?" );
     }
 
-    status += ::MessageTextFromValue( g_UserUnit, m_lastLength, false );
+    status += ::MessageTextFromValue( aUnits, m_lastLength, false );
     status += "/";
-    status += ::MessageTextFromValue( g_UserUnit, m_settings.m_targetLength, false );
+    status += ::MessageTextFromValue( aUnits, m_settings.m_targetLength, false );
     status += " (gap: ";
-    status += ::MessageTextFromValue( g_UserUnit, m_originPair.Gap(), false );
+    status += ::MessageTextFromValue( aUnits, m_originPair.Gap(), false );
     status += ")";
 
     return status;

@@ -80,7 +80,7 @@ public:
     int CurrentLayer() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
-    virtual const wxString TuningInfo() const override;
+    virtual const wxString TuningInfo( EDA_UNITS_T aUnits ) const override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningStatus()
     virtual TUNING_STATUS TuningStatus() const override;

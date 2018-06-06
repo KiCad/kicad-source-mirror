@@ -233,7 +233,7 @@ int MEANDER_PLACER::CurrentLayer() const
 }
 
 
-const wxString MEANDER_PLACER::TuningInfo() const
+const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS_T aUnits ) const
 {
     wxString status;
 
@@ -252,9 +252,9 @@ const wxString MEANDER_PLACER::TuningInfo() const
         return _( "?" );
     }
 
-    status += ::MessageTextFromValue( g_UserUnit, m_lastLength, false );
+    status += ::MessageTextFromValue( aUnits, m_lastLength, false );
     status += "/";
-    status += ::MessageTextFromValue( g_UserUnit, m_settings.m_targetLength, false );
+    status += ::MessageTextFromValue( aUnits, m_settings.m_targetLength, false );
 
     return status;
 }

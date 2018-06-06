@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "draw_frame.h"
 #include "pns_tune_status_popup.h"
 #include "pns_router.h"
 #include "pns_meander_placer.h"
@@ -37,7 +38,7 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
     if( !placer )
         return;
 
-    SetText( placer->TuningInfo() );
+    SetText( placer->TuningInfo( m_frame->GetUserUnits() ) );
 
     switch( placer->TuningStatus() )
     {
