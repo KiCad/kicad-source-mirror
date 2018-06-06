@@ -38,15 +38,14 @@
 #include <macros.h>
 #include <base_units.h>
 #include <board_commit.h>
-#include <widgets/text_ctrl_eval.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
 #include <class_dimension.h>
 
 #include <pcbnew.h>
-#include <dialog_dimension_editor_base.h>
 #include <pcb_layer_box_selector.h>
+#include <dialogs/dialog_text_properties.h>
 
 /* Local functions */
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
@@ -72,168 +71,6 @@ static int status_dimension; /* Used in dimension creation:
  * |            |
  *
  */
-
-
-/*********************************/
-/* class DIALOG_DIMENSION_EDITOR */
-/*********************************/
-
-class DIALOG_DIMENSION_EDITOR : public DIALOG_DIMENSION_EDITOR_BASE
-{
-private:
-
-    PCB_EDIT_FRAME* m_parent;
-    wxDC*           m_DC;
-    DIMENSION*      m_currentDimension;
-
-public:
-
-    // Constructor and destructor
-    DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent, DIMENSION* aDimension, wxDC* aDC );
-    ~DIALOG_DIMENSION_EDITOR()
-    {
-    }
-
-
-private:
-    virtual void OnOKClick( wxCommandEvent& event ) override;
-};
-
-
-DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
-                                                  DIMENSION* aDimension, wxDC* aDC ) :
-    DIALOG_DIMENSION_EDITOR_BASE( aParent )
-{
-    SetFocus();
-
-    m_parent = aParent;
-    m_DC = aDC;
-
-    m_currentDimension = aDimension;
-
-    if( aDimension->Text().IsMirrored() )
-        m_rbMirror->SetSelection( 1 );
-    else
-        m_rbMirror->SetSelection( 0 );
-
-    m_Name->SetValue( aDimension->Text().GetText() );
-
-    // Enter size value in dialog
-    PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->Text().GetTextWidth() );
-    AddUnitSymbol( *m_staticTextSizeX );
-    PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->Text().GetTextHeight() );
-    AddUnitSymbol( *m_staticTextSizeY );
-
-    // Enter lines thickness value in dialog
-    PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->GetWidth() );
-    AddUnitSymbol( *m_staticTextWidth );
-
-    // Enter position value in dialog
-    PutValueInLocalUnits( *m_textCtrlPosX, aDimension->Text().GetTextPos().x );
-    AddUnitSymbol( *m_staticTextPosX );
-    PutValueInLocalUnits( *m_textCtrlPosY, aDimension->Text().GetTextPos().y );
-    AddUnitSymbol( *m_staticTextPosY );
-
-    // Configure the layers list selector
-    if( !m_parent->GetBoard()->IsLayerEnabled( aDimension->GetLayer() ) )
-        // Should not happens, because one cannot select a board item on a
-        // not activated layer, but ...
-        m_SelLayerBox->ShowNonActivatedLayers( true );
-
-    m_SelLayerBox->SetLayersHotkeys( false );
-    m_SelLayerBox->SetNotAllowedLayerSet( LSET::AllCuMask().set( Edge_Cuts ) );
-    m_SelLayerBox->SetBoardFrame( m_parent );
-    m_SelLayerBox->Resync();
-
-    if( m_SelLayerBox->SetLayerSelection( aDimension->GetLayer() ) < 0 )
-    {
-        wxMessageBox( _( "This item has an illegal layer id.\n"
-                         "Now, forced on the drawings layer. Please, fix it" ) );
-        m_SelLayerBox->SetLayerSelection( Dwgs_User );
-    }
-
-    m_sdbSizerBtsOK->SetDefault();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
-}
-
-
-void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
-{
-    BOARD_COMMIT commit( m_parent );
-
-    PCB_LAYER_ID newlayer = ToLAYER_ID( m_SelLayerBox->GetLayerSelection() );
-
-    if( !m_parent->GetBoard()->IsLayerEnabled( newlayer ) )
-    {
-        wxMessageBox( _( "The layer currently selected is not enabled for this board\n"
-                         "You cannot use it" ) );
-        return;
-    }
-
-#ifndef USE_WX_OVERLAY
-    if( m_DC )     // Delete old text.
-    {
-        m_currentDimension->Draw( m_parent->GetCanvas(), m_DC, GR_XOR );
-    }
-#endif
-
-    commit.Modify( m_currentDimension );
-
-    if( m_Name->GetValue() != wxEmptyString )
-    {
-        m_currentDimension->SetText( m_Name->GetValue() );
-    }
-
-    wxString msg;
-
-    // Get new size value:
-    msg = m_TxtSizeXCtrl->GetValue();
-    m_currentDimension->Text().SetTextWidth( ValueFromString( g_UserUnit, msg ) );
-    msg = m_TxtSizeYCtrl->GetValue();
-    m_currentDimension->Text().SetTextHeight( ValueFromString( g_UserUnit, msg ) );
-
-    // Get new position value:
-    // It will be copied later in dimension, because
-    msg = m_textCtrlPosX->GetValue();
-    wxPoint pos;
-    pos.x = ValueFromString( g_UserUnit, msg );
-    msg = m_textCtrlPosY->GetValue();
-    pos.y = ValueFromString( g_UserUnit, msg );
-    m_currentDimension->Text().SetTextPos( pos );
-
-    // Get new line thickness value:
-    msg = m_TxtWidthCtrl->GetValue();
-    int width = ValueFromString( g_UserUnit, msg );
-    int maxthickness = Clamp_Text_PenSize( width, m_currentDimension->Text().GetTextSize() );
-
-    if( width > maxthickness )
-    {
-        DisplayError( NULL,
-                      _( "The text thickness is too large for the text size.  "
-                         "It will be clamped" ) );
-        width = maxthickness;
-    }
-
-    m_currentDimension->SetWidth( width );
-    m_currentDimension->Text().SetThickness( width );
-    m_currentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
-    m_currentDimension->SetLayer( newlayer );
-
-#ifndef USE_WX_OVERLAY
-    if( m_DC )     // Display new text
-    {
-        m_currentDimension->Draw( m_parent->GetCanvas(), m_DC, GR_OR );
-    }
-#else
-    m_parent->Refresh();
-#endif
-
-    commit.Push( _( "Modified dimensions properties" ) );
-    event.Skip();   // ends returning wxID_OK (default behavior)
-}
-
 
 static void AbortBuildDimension( EDA_DRAW_PANEL* Panel, wxDC* aDC )
 {
@@ -356,7 +193,7 @@ void PCB_EDIT_FRAME::ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* a
     if( aDimension == NULL )
         return;
 
-    DIALOG_DIMENSION_EDITOR dlg( this, aDimension, aDC );
+    DIALOG_TEXT_PROPERTIES dlg( this, aDimension, aDC );
     dlg.ShowModal();
 }
 

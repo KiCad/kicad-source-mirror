@@ -79,9 +79,7 @@ TEXTE_MODULE* FOOTPRINT_EDIT_FRAME::CreateTextModule( MODULE* aModule, wxDC* aDC
     if( LSET::AllTechMask().test( GetActiveLayer() ) )    // i.e. a possible layer for a text
         text->SetLayer( GetActiveLayer() );
 
-    InstallTextModOptionsFrame( text, NULL );
-
-    m_canvas->MoveCursorToCrossHair();
+    InstallTextOptionsFrame( text, NULL );
 
     if( text->GetText().IsEmpty() )
     {

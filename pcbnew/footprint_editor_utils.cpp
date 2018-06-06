@@ -675,8 +675,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
-        m_canvas->MoveCursorToCrossHair();
+        InstallTextOptionsFrame( GetScreen()->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:

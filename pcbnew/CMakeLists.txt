@@ -61,17 +61,14 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_copper_zones_base.cpp
     dialogs/dialog_create_array.cpp
     dialogs/dialog_create_array_base.cpp
+    dialogs/dialog_drc.cpp
     dialogs/dialog_design_rules.cpp
     dialogs/dialog_design_rules_base.cpp
-    dialogs/dialog_dimension_editor_base.cpp
-    dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp
     dialogs/dialog_edit_footprint_for_fp_editor.cpp
     dialogs/dialog_edit_footprint_for_fp_editor_base.cpp
-    dialogs/dialog_edit_footprint_text.cpp
-    dialogs/dialog_edit_footprint_text_base.cpp
     dialogs/dialog_enum_pads.cpp
     dialogs/dialog_enum_pads_base.cpp
     dialogs/dialog_exchange_footprints.cpp
@@ -125,8 +122,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pad_basicshapes_properties.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
-    dialogs/dialog_pcb_text_properties.cpp
-    dialogs/dialog_pcb_text_properties_base.cpp
     dialogs/dialog_plot.cpp
     dialogs/dialog_plot_base.cpp
     dialogs/dialog_pns_diff_pair_dimensions.cpp
@@ -148,6 +143,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_target_properties_base.cpp
+    dialogs/dialog_text_properties.cpp
+    dialogs/dialog_text_properties_base.cpp
     dialogs/dialog_track_via_properties.cpp
     dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp

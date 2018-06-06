@@ -218,7 +218,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
         textePcb->SetTextPos( GetCrossHairPosition() );
         textePcb->SetThickness( GetBoard()->GetDesignSettings().m_PcbTextWidth );
 
-        InstallTextPCBOptionsFrame( textePcb, aDC );
+        InstallTextOptionsFrame( textePcb, aDC );
 
         if( textePcb->GetText().IsEmpty() )
         {

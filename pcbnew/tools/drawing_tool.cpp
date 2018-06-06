@@ -32,7 +32,6 @@
 #include <id.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
-#include <dialog_edit_footprint_text.h>
 #include <import_dxf/dialog_dxf_import.h>
 
 #include <view/view_group.h>
@@ -49,7 +48,7 @@
 #include <painter.h>
 #include <status_popup.h>
 #include "grid_helper.h"
-
+#include <dialogs/dialog_text_properties.h>
 #include <preview_items/arc_assistant.h>
 
 #include <class_board.h>
@@ -389,7 +388,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textMod->SetThickness( dsnSettings.m_ModuleTextWidth );
                     textMod->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                    DIALOG_EDIT_FPTEXT textDialog( m_frame, m_frame, textMod, NULL );
+                    DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod, NULL );
                     bool placing;
 
                     RunMainStack([&]() {
@@ -419,7 +418,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textPcb->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
                     RunMainStack([&]() {
-                        getEditFrame<PCB_EDIT_FRAME>()->InstallTextPCBOptionsFrame( textPcb, NULL );
+                        m_frame->InstallTextOptionsFrame( textPcb, NULL );
                     } );
 
                     if( textPcb->GetText().IsEmpty() )

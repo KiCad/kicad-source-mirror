@@ -395,7 +395,7 @@ public:
     void ResetModuleTextSizes( const wxString & aFilter, bool aRef,
                                bool aValue, bool aOthers );
 
-    void InstallPadOptionsFrame( D_PAD*         pad );
+    void InstallPadOptionsFrame( D_PAD* pad );
     void InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC );
 
     void AddPad( MODULE* Module, bool draw );

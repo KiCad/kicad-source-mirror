@@ -49,7 +49,6 @@
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 
-#include <dialog_edit_footprint_text.h>
 #include <fp_lib_table.h>
 
 #define LibFootprintTextShownColumnsKey   wxT( "LibFootprintTextShownColumns" )

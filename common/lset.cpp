@@ -785,9 +785,7 @@ LSET LSET::BackMask()
 
 LSET LSET::ForbiddenTextLayers()
 {
-    static const LSET saved = AllCuMask().set( Edge_Cuts ).set( Margin )
-                                         .set( F_Paste ).set( B_Paste )
-                                         .set( F_Mask ).set( B_Mask );
+    static const LSET saved( 6, Edge_Cuts, Margin, F_Paste, B_Paste, F_Mask, B_Mask );
     return saved;
 }
 

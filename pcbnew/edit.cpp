@@ -980,8 +980,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( GetCurItem() ), &dc );
-        m_canvas->MoveCursorToCrossHair();
+        InstallTextOptionsFrame( GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_RESET_TEXT_SIZE:
@@ -1060,8 +1059,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
-        InstallTextPCBOptionsFrame( (TEXTE_PCB*) GetCurItem(), &dc );
-        m_canvas->MoveCursorToCrossHair();
+        InstallTextOptionsFrame( GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:

@@ -44,7 +44,6 @@
 #include <filename_resolver.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
-#include <dialog_edit_footprint_text.h>
 #include <bitmaps.h>
 #include <3d_viewer.h>
 

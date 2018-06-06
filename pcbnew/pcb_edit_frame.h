@@ -1095,7 +1095,6 @@ public:
     void Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aErase = true );
     void Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC );
 
     // Graphic Segments type DRAWSEGMENT
     void Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );

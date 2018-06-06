@@ -585,7 +585,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_TEXT_T:
-        InstallTextPCBOptionsFrame( static_cast<TEXTE_PCB*>( aItem ), aDC );
+        InstallTextOptionsFrame( aItem, aDC );
         break;
 
     case PCB_PAD_T:
@@ -605,7 +605,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_TEXT_T:
-        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( aItem ), aDC );
+        InstallTextOptionsFrame( aItem, aDC );
         break;
 
     case PCB_LINE_T:

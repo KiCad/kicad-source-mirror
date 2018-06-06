@@ -543,8 +543,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_TEXT_T:
-        InstallTextModOptionsFrame( static_cast<TEXTE_MODULE*>( aItem ), aDC );
-        m_canvas->MoveCursorToCrossHair();
+        InstallTextOptionsFrame( aItem, aDC );
         break;
 
     case PCB_MODULE_EDGE_T :

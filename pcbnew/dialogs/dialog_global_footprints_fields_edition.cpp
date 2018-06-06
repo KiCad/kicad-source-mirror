@@ -35,7 +35,7 @@
 #include <kicad_string.h>
 #include <macros.h>
 #include <board_commit.h>
-
+#include <widgets/unit_binder.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 
@@ -43,7 +43,6 @@
 #include <class_module.h>
 #include <class_text_mod.h>
 #include <dialog_global_footprints_fields_edition_base.h>
-
 
 // The dialog to set options for global fields edition:
 // optionas are:
@@ -53,6 +52,11 @@ class DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION : public DIALOG_GLOBAL_FOOTPRINTS_
 {
     PCB_EDIT_FRAME* m_parent;
     BOARD_DESIGN_SETTINGS* m_brdSettings;
+
+    UNIT_BINDER m_textWidth;
+    UNIT_BINDER m_textHeight;
+    UNIT_BINDER m_textThickness;
+
     // Static variable to remember options, withing a session:
     static bool m_refSelection;
     static bool m_valueSelection;
@@ -61,8 +65,11 @@ class DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION : public DIALOG_GLOBAL_FOOTPRINTS_
 
 
 public:
-    DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION( PCB_EDIT_FRAME* parent )
-        : DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE( parent )
+    DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION( PCB_EDIT_FRAME* parent ) :
+        DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION_BASE( parent ),
+        m_textWidth( parent, m_staticText3, m_SizeX_Value, m_SizeXunit, true, 0 ),
+        m_textHeight( parent, m_staticText6, m_SizeY_Value, m_SizeYunit, true, 0 ),
+        m_textThickness( parent, m_staticText9, m_ThicknessValue, m_ThicknessUnit, true, 0 )
     {
         m_parent = parent;
         initDialog();
@@ -89,15 +96,9 @@ void DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::initDialog()
     m_ValueOpt->SetValue(m_valueSelection),
     m_OtherFields->SetValue(m_othersSelection);
     m_ModuleFilter->SetValue(m_filterString);
-    m_SizeXunit->SetLabel( GetAbbreviatedUnitsLabel() );
-    m_SizeYunit->SetLabel( GetAbbreviatedUnitsLabel() );
-    m_ThicknessUnit->SetLabel( GetAbbreviatedUnitsLabel() );
-    m_SizeX_Value->SetValue(
-        StringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.x ) );
-    m_SizeY_Value->SetValue(
-        StringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.y ) );
-    m_ThicknessValue->SetValue(
-        StringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextWidth) );
+    m_textWidth.SetValue( m_brdSettings->m_ModuleTextSize.x );
+    m_textHeight.SetValue( m_brdSettings->m_ModuleTextSize.y );
+    m_textThickness.SetValue( m_brdSettings->m_ModuleTextWidth );
 
     Layout();
     GetSizer()->SetSizeHints( this );
@@ -112,9 +113,9 @@ bool DIALOG_GLOBAL_FOOTPRINTS_FIELDS_EDITION::TransferDataFromWindow()
     m_othersSelection = m_OtherFields->GetValue();
     m_filterString = m_ModuleFilter->GetValue();
 
-    m_brdSettings->m_ModuleTextSize.x = ValueFromTextCtrl( *m_SizeX_Value );
-    m_brdSettings->m_ModuleTextSize.y = ValueFromTextCtrl( *m_SizeY_Value );
-    m_brdSettings->m_ModuleTextWidth = ValueFromTextCtrl( *m_ThicknessValue );
+    m_brdSettings->m_ModuleTextSize.x = m_textWidth.GetValue();
+    m_brdSettings->m_ModuleTextSize.y = m_textHeight.GetValue();
+    m_brdSettings->m_ModuleTextWidth = m_textThickness.GetValue();
 
     // clip m_ModuleTextWidth to the 1/4 of min size, to keep it always readable
     int max_thickness = std::min( m_brdSettings->m_ModuleTextSize.x,
