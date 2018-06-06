@@ -76,6 +76,9 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         vsplitter ? static_cast<wxWindow *>( vsplitter ) : static_cast<wxWindow *>( this ),
         wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
+    //Avoid the splitter window being assigned as the Parent to additional windows
+    m_splitter_tree_canvas->SetExtraStyle( wxWS_EX_TRANSIENT );
+
     auto details = aShowFootprints ? nullptr : new wxHtmlWindow(
         vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 
