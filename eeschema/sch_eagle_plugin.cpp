@@ -1262,6 +1262,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             wxString symbolName = edeviceset.name + edevice.name;
             symbolName.Replace( "*", "" );
             wxASSERT( !symbolName.IsEmpty() );
+            LIB_ALIAS::ValidateName( symbolName );
 
             if( edevice.package )
                 aEagleLibrary->package[symbolName] = edevice.package.Get();
