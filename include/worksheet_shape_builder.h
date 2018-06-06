@@ -361,7 +361,7 @@ public:
      */
     virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 
-    const wxPoint GetPosition() { return m_pos; }
+    const wxPoint GetPosition() const { return m_pos; }
 };
 
 /*

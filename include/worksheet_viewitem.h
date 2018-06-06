@@ -39,6 +39,7 @@ class WS_DRAW_ITEM_LINE;
 class WS_DRAW_ITEM_RECT;
 class WS_DRAW_ITEM_POLYGON;
 class WS_DRAW_ITEM_TEXT;
+class WS_DRAW_ITEM_BITMAP;
 
 namespace KIGFX
 {
@@ -163,6 +164,7 @@ protected:
     void draw( const WS_DRAW_ITEM_RECT* aItem, GAL* aGal ) const;
     void draw( const WS_DRAW_ITEM_POLYGON* aItem, GAL* aGal ) const;
     void draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const;
+    void draw( const WS_DRAW_ITEM_BITMAP* aItem, GAL* aGal ) const;
 
     /// Draws a border that determines the page size.
     void drawBorder( GAL* aGal ) const;

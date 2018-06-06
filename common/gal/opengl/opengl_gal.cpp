@@ -32,6 +32,7 @@
 #include <gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
 #include <text_utils.h>
+#include <bitmap_base.h>
 
 #include <macros.h>
 
@@ -896,6 +897,46 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
     }
 
     DrawPolyline( pointList );
+}
+
+
+void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
+{
+    int ppi = aBitmap.GetPPI();
+    double worldIU_per_mm = 1/(worldUnitLength/2.54)/1000;
+    double pix_size_iu =  worldIU_per_mm * ( 25.4 / ppi );
+
+    Save();
+
+    // Set the pixel scaling factor:
+    currentManager->Scale( pix_size_iu, pix_size_iu, 0 );
+    // The position of the bitmap is the bitmap center.
+    // move the draw origin to the top left bitmap corner:
+    currentManager->Translate( -aBitmap.GetSizePixels().x/2, -aBitmap.GetSizePixels().y/2, 0 );
+
+    isFillEnabled = true;
+    isStrokeEnabled = false;
+
+    // The pixel buffer of the initial bitmap:
+    auto bm_pix_buffer = (( BITMAP_BASE&)aBitmap).GetImageData();
+
+    for( int row = 0; row < aBitmap.GetSizePixels().y; row++ )
+    {
+        VECTOR2D pos( 0, row );
+
+        for( int col = 0; col < aBitmap.GetSizePixels().x; col++ )
+        {
+            pos.x = col;
+            SetFillColor( COLOR4D( bm_pix_buffer->GetRed( col, row )/255.0,
+                                   bm_pix_buffer->GetGreen( col, row )/255.0,
+                                   bm_pix_buffer->GetBlue( col, row )/255.0,
+                                   1.0 ) );
+            VECTOR2D end = pos + 1.0;   // Size of the rectangle = 1 pixel
+            DrawRectangle( pos, end );
+        }
+    }
+
+    Restore();
 }
 
 

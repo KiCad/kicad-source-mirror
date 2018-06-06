@@ -41,6 +41,7 @@
 
 class SHAPE_LINE_CHAIN;
 class SHAPE_POLY_SET;
+class BITMAP_BASE;
 
 namespace KIGFX
 {
@@ -178,6 +179,11 @@ public:
      */
     virtual void DrawCurve( const VECTOR2D& startPoint,    const VECTOR2D& controlPointA,
                             const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) {};
+
+    /**
+     * @brief Draw a bitmap image.
+     */
+    virtual void DrawBitmap( const BITMAP_BASE& aBitmap ) {};
 
     // --------------
     // Screen methods
