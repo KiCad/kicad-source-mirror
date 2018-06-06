@@ -85,6 +85,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
         if( !aDetails )
         {
             auto html_sz = ConvertDialogToPixels( wxPoint( 80, 80 ) );
+
             m_details_ctrl = new wxHtmlWindow(
                     this, wxID_ANY, wxDefaultPosition, wxSize( html_sz.x, html_sz.y ),
                     wxHW_SCROLLBAR_AUTO );
@@ -95,6 +96,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
         {
             m_details_ctrl = aDetails;
         }
+
         m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &COMPONENT_TREE::onDetailsLink, this );
     }
 
@@ -120,6 +122,12 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 
     Layout();
     sizer->Fit( this );
+
+#ifdef __WXGTK__
+    // Scrollbars must be always enabled to prevent an infinite event loop
+    // more details: http://trac.wxwidgets.org/ticket/18141
+    m_details_ctrl->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+#endif /* __WXGTK__ */
 }
 
 
