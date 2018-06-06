@@ -126,7 +126,8 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 #ifdef __WXGTK__
     // Scrollbars must be always enabled to prevent an infinite event loop
     // more details: http://trac.wxwidgets.org/ticket/18141
-    m_details_ctrl->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+    if( m_details_ctrl )
+        m_details_ctrl->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
 #endif /* __WXGTK__ */
 }
 
