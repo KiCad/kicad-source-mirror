@@ -149,6 +149,9 @@ public:
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
                             const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) override;
 
+    /// @copydoc GAL::DrawBitmap()
+    virtual void DrawBitmap( const BITMAP_BASE& aBitmap ) override;
+
     /// @copydoc GAL::BitmapText()
     virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
                              double aRotationAngle ) override;

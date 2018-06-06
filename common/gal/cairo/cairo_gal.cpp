@@ -33,6 +33,7 @@
 #include <gal/cairo/cairo_compositor.h>
 #include <gal/definitions.h>
 #include <geometry/shape_poly_set.h>
+#include <bitmap_base.h>
 
 #include <limits>
 
@@ -344,6 +345,61 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
 
     flushPath();
     isElementAdded = true;
+}
+
+
+void CAIRO_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
+{
+    int ppi = aBitmap.GetPPI();
+    double worldIU_per_mm = 1/(worldUnitLength/2.54)/1000;
+    double pix_size_iu =  worldIU_per_mm * ( 25.4 / ppi );
+    int w = aBitmap.GetSizePixels().x;
+    int h = aBitmap.GetSizePixels().y;
+
+    cairo_save( currentContext );
+
+    // Set the pixel scaling factor:
+    cairo_scale( currentContext, pix_size_iu, pix_size_iu );
+    // The position of the bitmap is the bitmap center.
+    // move the draw origin to the top left bitmap corner:
+    cairo_translate( currentContext, -w/2, -h/2 );
+
+    cairo_new_path( currentContext );
+    cairo_surface_t *image;
+    image = cairo_image_surface_create( CAIRO_FORMAT_RGB24, w, h );
+    cairo_surface_flush( image );
+
+    unsigned char* pix_buffer = cairo_image_surface_get_data( image );
+    // The pixel buffer of the initial bitmap:
+    auto bm_pix_buffer = (( BITMAP_BASE&)aBitmap).GetImageData();
+
+    // Copy the source bitmap to the cairo bitmap buffer.
+    // In cairo bitmap buffer, a RGB24 bitmap is a RGB pixel packed into a uint_32
+    // 24 low bits only are used.
+    for( int row = 0; row < h; row++ )
+    {
+        for( int col = 0; col < w; col++ )
+        {
+            // Build the RGB24 pixel:
+            uint32_t pixel = bm_pix_buffer->GetRed( col, row ) << 16;
+            pixel += bm_pix_buffer->GetGreen( col, row ) << 8;
+            pixel += bm_pix_buffer->GetBlue( col, row );
+
+            // Write the pixel to the cairo image buffer:
+            uint32_t* pix_ptr = (uint32_t*) pix_buffer;
+            *pix_ptr = pixel;
+            pix_buffer += 4;
+        }
+    }
+
+    cairo_surface_mark_dirty( image );
+    cairo_set_source_surface( currentContext, image, 0, 0 );
+    cairo_paint( currentContext );
+    cairo_surface_destroy( image );
+
+    isElementAdded = true;
+
+    cairo_restore( currentContext );
 }
 
 
