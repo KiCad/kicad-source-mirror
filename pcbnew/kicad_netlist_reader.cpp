@@ -335,9 +335,14 @@ void KICAD_NETLIST_PARSER::parseComponent()
                     name = FROM_UTF8( CurText() );
                     NeedRIGHT();
                 }
+                else if( token == T_description )
+                {
+                    NeedSYMBOLorNUMBER();
+                    NeedRIGHT();
+                }
                 else
                 {
-                    Expecting( "part or lib" );
+                    Expecting( "part, lib or description" );
                 }
             }
             break;
