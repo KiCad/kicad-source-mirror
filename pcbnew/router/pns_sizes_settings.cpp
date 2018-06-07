@@ -124,6 +124,13 @@ void SIZES_SETTINGS::Init( BOARD* aBoard, ITEM* aStartItem, int aNet )
         m_viaDrill = bds.GetCurrentViaDrill();
     }
 
+    // Set the differential pair width/gap using netclass if selected
+    if( ( bds.UseNetClassTrack() && netClass != NULL ) )
+    {
+        m_diffPairWidth = netClass->GetDiffPairWidth();
+        m_diffPairGap = netClass->GetDiffPairGap();
+    }
+
     m_layerPairs.clear();
 }
 
