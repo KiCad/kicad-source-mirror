@@ -50,7 +50,7 @@ BOARD*  LoadBoard( wxString& aFileName );
 bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
 
 /**
- * Update the board display after modifying it bu a python script
+ * Update the board display after modifying it by a python script
  * (note: it is automatically called by action plugins, after running the plugin,
  * so call this function is usually not needed inside action plugins
  *

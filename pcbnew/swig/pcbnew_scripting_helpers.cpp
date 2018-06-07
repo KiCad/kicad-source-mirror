@@ -110,9 +110,11 @@ void Refresh()
 
         if( s_PcbEditFrame->IsGalCanvasActive() )
         {
-            auto panel = static_cast<PCB_DRAW_PANEL_GAL*>( s_PcbEditFrame->GetGalCanvas() );
-            panel->DisplayBoard(board);
-            s_PcbEditFrame->GetGalCanvas()->Refresh();
+            auto gal_canvas = static_cast<PCB_DRAW_PANEL_GAL*>( s_PcbEditFrame->GetGalCanvas() );
+
+            // Reinit everything: this is the easy way to do that
+            s_PcbEditFrame->UseGalCanvas( true );
+            gal_canvas->Refresh();
         }
         else
             // first argument is erase background, second is a wxRect that

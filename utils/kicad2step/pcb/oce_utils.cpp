@@ -82,7 +82,7 @@
 // nominal offset from the board
 #define BOARD_OFFSET (0.05 )
 // min. length**2 below which 2 points are considered coincident
-#define MIN_LENGTH2 (0.0001)
+#define MIN_LENGTH2 (0.0001)    // = 0.01*0.01
 
 static void getEndPoints( const KICADCURVE& aCurve, double& spx0, double& spy0,
     double& epx0, double& epy0 )
