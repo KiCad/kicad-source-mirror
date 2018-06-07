@@ -61,7 +61,7 @@ bool   IsSelectedInDialog( enum PRMS_ID aPrmId );
 /* Constructor creates a transmission line instance. */
 TRANSLINE::TRANSLINE()
 {
-    murC = 1.0;
+    m_murC = 1.0;
     m_name = (const char*) 0;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
@@ -122,7 +122,7 @@ double TRANSLINE::getProperty( enum PRMS_ID aPrmId )
 double TRANSLINE::skin_depth()
 {
     double depth;
-    depth = 1.0 / sqrt( M_PI * m_freq * murC * MU0 * m_sigma );
+    depth = 1.0 / sqrt( M_PI * m_freq * m_murC * MU0 * m_sigma );
     return depth;
 }
 

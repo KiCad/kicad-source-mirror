@@ -76,7 +76,7 @@ protected:
     double er;          /* dielectric constant */
     double tand;        /* Dielectric Loss Tangent */
     double m_sigma;     // Conductivity of the metal
-    double murC;        /* magnetic permeability of conductor */
+    double m_murC;        /* magnetic permeability of conductor */
     double m_skindepth; // Skin depth
 
     double skin_depth();

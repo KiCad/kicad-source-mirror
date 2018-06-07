@@ -467,7 +467,7 @@ void MICROSTRIP::get_microstrip_sub()
     ht    = getProperty( H_T_PRM );
     t     = getProperty( T_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
-    murC  = getProperty( MURC_PRM );
+    m_murC  = getProperty( MURC_PRM );
     tand  = getProperty( TAND_PRM );
     rough = getProperty( ROUGH_PRM );
 }

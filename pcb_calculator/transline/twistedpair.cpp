@@ -58,7 +58,7 @@ void TWISTEDPAIR::getProperties()
     len  = getProperty( PHYS_LEN_PRM );
 
     er     = getProperty( EPSILONR_PRM );
-    murC   = getProperty( MURC_PRM );
+    m_murC   = getProperty( MURC_PRM );
     tand   = getProperty( TAND_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     twists = getProperty( TWISTEDPAIR_TWIST_PRM );

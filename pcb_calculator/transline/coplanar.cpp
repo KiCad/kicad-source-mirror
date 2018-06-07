@@ -69,7 +69,7 @@ void COPLANAR::getProperties()
     t   = getProperty( T_PRM );
 
     er    = getProperty( EPSILONR_PRM );
-    murC  = getProperty( MURC_PRM );
+    m_murC  = getProperty( MURC_PRM );
     tand  = getProperty( TAND_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     Z0    = getProperty( Z0_PRM );

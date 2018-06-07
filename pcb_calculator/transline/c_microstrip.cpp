@@ -163,7 +163,7 @@ void C_MICROSTRIP::compute_single_line()
     //aux_ms->t = t;
     aux_ms->ht   = 1e12;    /* arbitrarily high */
     aux_ms->m_freq = m_freq;
-    aux_ms->murC = murC;
+    aux_ms->m_murC = m_murC;
     aux_ms->microstrip_Z0();
     aux_ms->dispersion();
 }
@@ -836,7 +836,7 @@ void C_MICROSTRIP::calc()
 void C_MICROSTRIP::get_c_microstrip_sub()
 {
     er    = getProperty( EPSILONR_PRM );
-    murC  = getProperty( MURC_PRM );
+    m_murC  = getProperty( MURC_PRM );
     h     = getProperty( H_PRM );
     ht    = getProperty( H_T_PRM );
     t     = getProperty( T_PRM );

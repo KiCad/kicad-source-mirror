@@ -93,7 +93,7 @@ double RECTWAVEGUIDE::alphac()
     double ac;
     short  m, n, mmax, nmax;
 
-    Rs   = sqrt( M_PI * m_freq * murC * MU0 / m_sigma );
+    Rs   = sqrt( M_PI * m_freq * m_murC * MU0 / m_sigma );
     ac   = 0.0;
     mmax = (int) floor( m_freq / fc( 1, 0 ) );
     nmax = mmax;
@@ -189,7 +189,7 @@ void RECTWAVEGUIDE::get_rectwaveguide_sub()
 {
     er    = getProperty( EPSILONR_PRM );
     mur   = getProperty( MUR_PRM );
-    murC  = getProperty( MURC_PRM );
+    m_murC  = getProperty( MURC_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     tand  = getProperty( TAND_PRM );
     tanm  = getProperty( TANM_PRM );
