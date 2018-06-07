@@ -4,7 +4,7 @@
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2002 Claudio Girardi <claudio.girardi@ieee.org>
  * Copyright (C) 2005, 2006 Stefan Jahn <stefan@lkcc.org>
- * Modified for Kicad: 2015 Jean-Pierre Charras <jp.charras at wanadoo.fr>
+ * Modified for Kicad: 2018 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -324,14 +324,14 @@ double MICROSTRIP::conductor_losses()
     double K, R_s, Q_c, alpha_c;
 
     e_r_eff_0 = er_eff_0;
-    delta     = skindepth;
+    delta     = m_skindepth;
 
     if( m_freq > 0.0 )
     {
         /* current distribution factor */
         K = exp( -1.2 * pow( Z0_h_1 / ZF0, 0.7 ) );
         /* skin resistance */
-        R_s = 1.0 / (sigma * delta);
+        R_s = 1.0 / (m_sigma * delta);
 
         /* correction for surface roughness */
         R_s *= 1.0 + ( (2.0 / M_PI) * atan( 1.40 * pow( (rough / delta), 2.0 ) ) );
@@ -374,7 +374,7 @@ double MICROSTRIP::dielectric_losses()
  */
 void MICROSTRIP::attenuation()
 {
-    skindepth = skin_depth();
+    m_skindepth = skin_depth();
 
     atten_cond = conductor_losses() * l;
     atten_dielectric = dielectric_losses() * l;
@@ -466,7 +466,7 @@ void MICROSTRIP::get_microstrip_sub()
     h     = getProperty( H_PRM );
     ht    = getProperty( H_T_PRM );
     t     = getProperty( T_PRM );
-    sigma = 1.0 / getProperty( RHO_PRM );
+    m_sigma = 1.0 / getProperty( RHO_PRM );
     murC  = getProperty( MURC_PRM );
     tand  = getProperty( TAND_PRM );
     rough = getProperty( ROUGH_PRM );
@@ -514,7 +514,7 @@ void MICROSTRIP::show_results()
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
-    setResult( 3, skindepth/UNIT_MICRON, "µm" );
+    setResult( 3, m_skindepth/UNIT_MICRON, "µm" );
 }
 
 

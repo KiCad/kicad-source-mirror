@@ -497,14 +497,14 @@ void C_MICROSTRIP::conductor_losses()
     e_r_eff_o_0 = er_eff_o_0;
     Z0_h_e = Z0_e_0 * sqrt( e_r_eff_e_0 );  /* homogeneous stripline impedance */
     Z0_h_o = Z0_o_0 * sqrt( e_r_eff_o_0 );  /* homogeneous stripline impedance */
-    delta  = skindepth;
+    delta  = m_skindepth;
 
     if( m_freq > 0.0 )
     {
         /* current distribution factor (same for the two modes) */
         K = exp( -1.2 * pow( (Z0_h_e + Z0_h_o) / (2.0 * ZF0), 0.7 ) );
         /* skin resistance */
-        R_s = 1.0 / (sigma * delta);
+        R_s = 1.0 / (m_sigma * delta);
         /* correction for surface roughness */
         R_s *= 1.0 + ( (2.0 / M_PI) * atan( 1.40 * pow( (rough / delta), 2.0 ) ) );
 
@@ -561,7 +561,7 @@ void C_MICROSTRIP::dielectric_losses()
  */
 void C_MICROSTRIP::attenuation()
 {
-    skindepth = skin_depth();
+    m_skindepth = skin_depth();
     conductor_losses();
     dielectric_losses();
 }
@@ -840,7 +840,7 @@ void C_MICROSTRIP::get_c_microstrip_sub()
     h     = getProperty( H_PRM );
     ht    = getProperty( H_T_PRM );
     t     = getProperty( T_PRM );
-    sigma = 1.0/getProperty( RHO_PRM );
+    m_sigma = 1.0/getProperty( RHO_PRM );
     tand  = getProperty( TAND_PRM );
     rough = getProperty( ROUGH_PRM );
 }
@@ -897,7 +897,7 @@ void C_MICROSTRIP::show_results()
     setResult( 4, atten_dielectric_e, "dB" );
     setResult( 5, atten_dielectric_o, "dB" );
 
-    setResult( 6, skindepth / UNIT_MICRON, "µm" );
+    setResult( 6, m_skindepth / UNIT_MICRON, "µm" );
 }
 
 

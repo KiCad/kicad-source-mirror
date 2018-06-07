@@ -71,7 +71,7 @@ void COPLANAR::getProperties()
     er    = getProperty( EPSILONR_PRM );
     murC  = getProperty( MURC_PRM );
     tand  = getProperty( TAND_PRM );
-    sigma = 1.0 / getProperty( RHO_PRM );
+    m_sigma = 1.0 / getProperty( RHO_PRM );
     Z0    = getProperty( Z0_PRM );
     ang_l = getProperty( ANG_L_PRM );
 }
@@ -80,7 +80,7 @@ void COPLANAR::getProperties()
 // -------------------------------------------------------------------
 void COPLANAR::calc()
 {
-    skindepth = skin_depth();
+    m_skindepth = skin_depth();
 
     // other local variables (quasi-static constants)
     double k1, kk1, kpk1, k2, k3, q1, q2, q3 = 0, qz, er0 = 0;
@@ -175,7 +175,7 @@ void COPLANAR::calc()
     // for now, the loss are limited to strip losses (no radiation
     // losses yet) losses in neper/length
     atten_cond = 20.0 / log( 10.0 ) * len
-                 * ac_factor * sr_er0 * sqrt( M_PI * MU0 * m_freq / sigma );
+                 * ac_factor * sr_er0 * sqrt( M_PI * MU0 * m_freq / m_sigma );
     atten_dielectric = 20.0 / log( 10.0 ) * len
                        * ad_factor * m_freq * (sr_er_f * sr_er_f - 1) / sr_er_f;
 
@@ -196,7 +196,7 @@ void COPLANAR::show_results()
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
-    setResult( 3, skindepth / UNIT_MICRON, "µm" );
+    setResult( 3, m_skindepth / UNIT_MICRON, "µm" );
 }
 
 

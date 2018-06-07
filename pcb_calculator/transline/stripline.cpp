@@ -62,7 +62,7 @@ void STRIPLINE::getProperties()
     er    = getProperty( EPSILONR_PRM );
     murC  = getProperty( MURC_PRM );
     tand  = getProperty( TAND_PRM );
-    sigma = 1.0 / getProperty( RHO_PRM );
+    m_sigma = 1.0 / getProperty( RHO_PRM );
     Z0    = getProperty( Z0_PRM );
     ang_l = getProperty( ANG_L_PRM );
 }
@@ -75,7 +75,7 @@ double STRIPLINE::lineImpedance( double height, double& ac )
     double ZL;
     double hmt = height - t;
 
-    ac = sqrt( m_freq / sigma / 17.2 );
+    ac = sqrt( m_freq / m_sigma / 17.2 );
     if( w / hmt >= 0.35 )
     {
         ZL = w +
@@ -110,7 +110,7 @@ double STRIPLINE::lineImpedance( double height, double& ac )
 // -------------------------------------------------------------------
 void STRIPLINE::calc()
 {
-    skindepth = skin_depth();
+    m_skindepth = skin_depth();
 
     er_eff = er; // no dispersion
 
@@ -135,7 +135,7 @@ void STRIPLINE::show_results()
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
-    setResult( 3, skindepth / UNIT_MICRON, "µm" );
+    setResult( 3, m_skindepth / UNIT_MICRON, "µm" );
 }
 
 

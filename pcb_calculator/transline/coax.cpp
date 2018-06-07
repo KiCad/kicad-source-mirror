@@ -65,7 +65,7 @@ void COAX::get_coax_sub()
     mur   = getProperty( MUR_PRM );
     murC  = getProperty( MURC_PRM );
     tand  = getProperty( TAND_PRM );
-    sigma = 1.0 / getProperty( RHO_PRM );
+    m_sigma = 1.0 / getProperty( RHO_PRM );
 }
 
 
@@ -116,7 +116,7 @@ double COAX::alphac_coax()
 {
     double ac, Rs;
 
-    Rs = sqrt( M_PI * m_freq * murC * MU0 / sigma );
+    Rs = sqrt( M_PI * m_freq * murC * MU0 / m_sigma );
     ac = sqrt( er ) * ( ( (1 / din) + (1 / dout) ) / log( dout / din ) ) * (Rs / ZF0);
     ac = ac * 20.0 / log( 10.0 );
     return ac;

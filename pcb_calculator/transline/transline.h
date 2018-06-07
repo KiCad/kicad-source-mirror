@@ -2,7 +2,7 @@
  * transline.h - base for a transmission line class definition
  *
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
- * Modifications 2011 for Kicad: Jean-Pierre Charras
+ * Modifications 2018 for Kicad: Jean-Pierre Charras
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,9 +75,9 @@ protected:
     double m_freq;      // Frequency of operation
     double er;          /* dielectric constant */
     double tand;        /* Dielectric Loss Tangent */
-    double sigma;       /* Conductivity of the metal */
+    double m_sigma;     // Conductivity of the metal
     double murC;        /* magnetic permeability of conductor */
-    double skindepth;   /* Skin depth */
+    double m_skindepth; // Skin depth
 
     double skin_depth();
     void   ellipke( double, double&, double& );

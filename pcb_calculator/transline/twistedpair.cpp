@@ -60,7 +60,7 @@ void TWISTEDPAIR::getProperties()
     er     = getProperty( EPSILONR_PRM );
     murC   = getProperty( MURC_PRM );
     tand   = getProperty( TAND_PRM );
-    sigma  = 1.0 / getProperty( RHO_PRM );
+    m_sigma = 1.0 / getProperty( RHO_PRM );
     twists = getProperty( TWISTEDPAIR_TWIST_PRM );
     er_env = getProperty( TWISTEDPAIR_EPSILONR_ENV_PRM );
     Z0     = getProperty( Z0_PRM );
@@ -71,14 +71,14 @@ void TWISTEDPAIR::getProperties()
 // -------------------------------------------------------------------
 void TWISTEDPAIR::calc()
 {
-    skindepth = skin_depth();
+    m_skindepth = skin_depth();
 
     double tw = atan( twists * M_PI * dout ); // pitch angle
     er_eff = er_env + (0.25 + 0.0007 * tw * tw) * (er - er_env);
 
     Z0 = ZF0 / M_PI / sqrt( er_eff ) * acosh( dout / din );
 
-    atten_cond = 10.0 / log( 10.0 ) * len / skindepth / sigma / M_PI / Z0 / (din - skindepth);
+    atten_cond = 10.0 / log( 10.0 ) * len / m_skindepth / m_sigma / M_PI / Z0 / (din - m_skindepth);
 
     atten_dielectric = 20.0 / log( 10.0 ) * len * M_PI / C0* m_freq * sqrt( er_eff ) * tand;
 
@@ -96,7 +96,7 @@ void TWISTEDPAIR::show_results()
     setResult( 1, atten_cond, "dB" );
     setResult( 2, atten_dielectric, "dB" );
 
-    setResult( 3, skindepth / UNIT_MICRON, "µm" );
+    setResult( 3, m_skindepth / UNIT_MICRON, "µm" );
 }
 
 
