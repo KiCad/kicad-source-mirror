@@ -72,12 +72,13 @@ public: TRANSLINE();
     virtual void analyze() { };
 
 protected:
-    double f;           /* Frequency of operation */
+    double m_freq;      // Frequency of operation
     double er;          /* dielectric constant */
     double tand;        /* Dielectric Loss Tangent */
     double sigma;       /* Conductivity of the metal */
     double murC;        /* magnetic permeability of conductor */
     double skindepth;   /* Skin depth */
+
     double skin_depth();
     void   ellipke( double, double&, double& );
     double ellipk( double );

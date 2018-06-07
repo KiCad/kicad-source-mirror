@@ -57,7 +57,7 @@ double RECTWAVEGUIDE::kval_square()
 {
     double kval;
 
-    kval = 2.0* M_PI* f* sqrt( mur* er ) / C0;
+    kval = 2.0* M_PI * m_freq * sqrt( mur * er ) / C0;
 
     return kval * kval;
 }
@@ -93,33 +93,33 @@ double RECTWAVEGUIDE::alphac()
     double ac;
     short  m, n, mmax, nmax;
 
-    Rs   = sqrt( M_PI * f * murC * MU0 / sigma );
+    Rs   = sqrt( M_PI * m_freq * murC * MU0 / sigma );
     ac   = 0.0;
-    mmax = (int) floor( f / fc( 1, 0 ) );
+    mmax = (int) floor( m_freq / fc( 1, 0 ) );
     nmax = mmax;
 
     /* below from Ramo, Whinnery & Van Duzer */
 
     /* TE(m,n) modes */
-    for( n = 0; n<= nmax; n++ )
+    for( n = 0; n <= nmax; n++ )
     {
         for( m = 1; m <= mmax; m++ )
         {
             f_c = fc( m, n );
-            if( f > f_c )
+            if( m_freq > f_c )
             {
                 switch( n )
                 {
                 case 0:
-                    ac += ( Rs / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / f), 2.0 ) ) ) ) *
-                          ( 1.0 + ( (2 * b / a) * pow( (f_c / f), 2.0 ) ) );
+                    ac += ( Rs / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / m_freq), 2.0 ) ) ) ) *
+                          ( 1.0 + ( (2 * b / a) * pow( (f_c / m_freq), 2.0 ) ) );
                     break;
 
                 default:
-                    ac += ( (2. * Rs) / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / f), 2.0 ) ) ) ) *
-                          ( ( ( 1. + (b / a) ) * pow( (f_c / f), 2.0 ) ) +
+                    ac += ( (2. * Rs) / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / m_freq), 2.0 ) ) ) ) *
+                          ( ( ( 1. + (b / a) ) * pow( (f_c / m_freq), 2.0 ) ) +
                            ( ( 1. -
-                              pow( (f_c / f),
+                              pow( (f_c / m_freq),
                                   2.0 ) ) *
                             ( ( (b / a) * ( ( (b / a) * pow( m, 2. ) ) + pow( n, 2. ) ) ) /
                     ( pow( (b * m / a),
@@ -131,14 +131,14 @@ double RECTWAVEGUIDE::alphac()
     }
 
     /* TM(m,n) modes */
-    for( n = 1; n<= nmax; n++ )
+    for( n = 1; n <= nmax; n++ )
     {
         for( m = 1; m<= mmax; m++ )
         {
             f_c = fc( m, n );
-            if( f > f_c )
+            if( m_freq > f_c )
             {
-                ac += ( (2. * Rs) / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / f), 2.0 ) ) ) ) *
+                ac += ( (2. * Rs) / ( b * ZF0 * sqrt( 1.0 - pow( (f_c / m_freq), 2.0 ) ) ) ) *
                       ( ( ( pow( m, 2.0 ) * pow( (b / a), 3.0 ) ) + pow( n, 2. ) ) /
                        ( ( pow( (m * b / a), 2. ) ) + pow( n, 2.0 ) ) );
             }
@@ -203,7 +203,7 @@ void RECTWAVEGUIDE::get_rectwaveguide_sub()
  */
 void RECTWAVEGUIDE::get_rectwaveguide_comp()
 {
-    f = getProperty( FREQUENCY_PRM );
+    m_freq = getProperty( FREQUENCY_PRM );
 }
 
 
@@ -256,14 +256,14 @@ void RECTWAVEGUIDE::analyze()
         /* propagating modes */
 
         // Z0 definition using fictive voltages and currents
-        Z0 = 2.0* ZF0* sqrt( mur / er ) * (b / a) / sqrt( 1.0 - pow( (fc( 1, 0 ) / f), 2.0 ) );
+        Z0 = 2.0* ZF0* sqrt( mur / er ) * (b / a) / sqrt( 1.0 - pow( (fc( 1, 0 ) / m_freq), 2.0 ) );
 
         /* calculate electrical angle */
         lambda_g   = 2.0 * M_PI / sqrt( k_square - kc_square( 1, 0 ) );
         ang_l      = 2.0 * M_PI * l / lambda_g; /* in radians */
         atten_cond = alphac() * l;
         atten_dielectric = alphad() * l;
-        er_eff = ( 1.0 - pow( fc( 1, 0 ) / f, 2.0 ) );
+        er_eff = ( 1.0 - pow( fc( 1, 0 ) / m_freq, 2.0 ) );
     }
     else
     {
@@ -305,13 +305,13 @@ void RECTWAVEGUIDE::synthesize()
     if( isSelected( PHYS_S_PRM ) )
     {
         /* solve for b */
-        b = Z0 * a * sqrt( 1.0 - pow( fc( 1, 0 ) / f, 2.0 ) ) / ( 2.0 * ZF0 * sqrt( mur / er ) );
+        b = Z0 * a * sqrt( 1.0 - pow( fc( 1, 0 ) / m_freq, 2.0 ) ) / ( 2.0 * ZF0 * sqrt( mur / er ) );
         setProperty( PHYS_S_PRM, b );
     }
     else if( isSelected( PHYS_WIDTH_PRM ) )
     {
         /* solve for a */
-        a = sqrt( pow( 2.0 * ZF0 * b / Z0, 2.0 ) + pow( C0 / (2.0 * f), 2.0 ) );
+        a = sqrt( pow( 2.0 * ZF0 * b / Z0, 2.0 ) + pow( C0 / (2.0 * m_freq), 2.0 ) );
         setProperty( PHYS_WIDTH_PRM, a );
     }
 
@@ -329,7 +329,7 @@ void RECTWAVEGUIDE::synthesize()
         lambda_g   = 2.0 * M_PI / beta;
         atten_cond = alphac() * l;
         atten_dielectric = alphad() * l;
-        er_eff = ( 1.0 - pow( (fc( 1, 0 ) / f), 2.0 ) );
+        er_eff = ( 1.0 - pow( (fc( 1, 0 ) / m_freq), 2.0 ) );
     }
     else
     {
@@ -360,18 +360,18 @@ void RECTWAVEGUIDE::show_results()
     setResult( 3, atten_dielectric, "dB" );
 
     // show possible TE modes (H modes)
-    if( f < fc( 1, 0 ) )
+    if( m_freq < fc( 1, 0 ) )
         strcpy( text, "none" );
     else
     {
         strcpy( text, "" );
-        for( m = 0; m<= max; m++ )
+        for( m = 0; m <= max; m++ )
         {
-            for( n = 0; n<= max; n++ )
+            for( n = 0; n <= max; n++ )
             {
                 if( (m == 0) && (n == 0) )
                     continue;
-                if( f >= ( fc( m, n ) ) )
+                if( m_freq >= ( fc( m, n ) ) )
                 {
                     sprintf( txt, "H(%d,%d) ", m, n );
                     if( (strlen( text ) + strlen( txt ) + 5) < MAXSTRLEN )
@@ -388,7 +388,7 @@ void RECTWAVEGUIDE::show_results()
     setResult( 4, text );
 
     // show possible TM modes (E modes)
-    if( f < fc( 1, 1 ) )
+    if( m_freq < fc( 1, 1 ) )
         strcpy( text, "none" );
     else
     {
@@ -397,7 +397,7 @@ void RECTWAVEGUIDE::show_results()
         {
             for( n = 1; n<= max; n++ )
             {
-                if( f >= fc( m, n ) )
+                if( m_freq >= fc( m, n ) )
                 {
                     sprintf( txt, "E(%d,%d) ", m, n );
                     if( (strlen( text ) + strlen( txt ) + 5) < MAXSTRLEN )

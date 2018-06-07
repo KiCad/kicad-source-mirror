@@ -61,7 +61,7 @@ GROUNDEDCOPLANAR::GROUNDEDCOPLANAR() : COPLANAR()
 // -------------------------------------------------------------------
 void COPLANAR::getProperties()
 {
-    f   = getProperty( FREQUENCY_PRM );
+    m_freq = getProperty( FREQUENCY_PRM );
     w   = getProperty( PHYS_WIDTH_PRM );
     s   = getProperty( PHYS_S_PRM );
     len = getProperty( PHYS_LEN_PRM );
@@ -170,16 +170,16 @@ void COPLANAR::calc()
     double sr_er_f = sr_er0;
 
     // add the dispersive effects to er0
-    sr_er_f += (sr_er - sr_er0) / ( 1 + G * pow( f / fte, -1.8 ) );
+    sr_er_f += (sr_er - sr_er0) / ( 1 + G * pow( m_freq / fte, -1.8 ) );
 
     // for now, the loss are limited to strip losses (no radiation
     // losses yet) losses in neper/length
     atten_cond = 20.0 / log( 10.0 ) * len
-                 * ac_factor * sr_er0 * sqrt( M_PI * MU0 * f / sigma );
+                 * ac_factor * sr_er0 * sqrt( M_PI * MU0 * m_freq / sigma );
     atten_dielectric = 20.0 / log( 10.0 ) * len
-                       * ad_factor * f * (sr_er_f * sr_er_f - 1) / sr_er_f;
+                       * ad_factor * m_freq * (sr_er_f * sr_er_f - 1) / sr_er_f;
 
-    ang_l = 2.0 * M_PI * len * sr_er_f * f / C0; /* in radians */
+    ang_l = 2.0 * M_PI * len * sr_er_f * m_freq / C0; /* in radians */
 
     er_eff = sr_er_f * sr_er_f;
     Z0     = zl_factor / sr_er_f;
@@ -225,14 +225,36 @@ void COPLANAR::synthesize()
 
     /* required value of Z0 */
     Z0_dest = Z0;
+    double ang_l_tmp  = getProperty( ANG_L_PRM );
+
+    // compute inital coplanar parameters. This function modify Z0 and ang_l
+    // (set to NaN in some cases)
+    calc();
+
+    if( std::isnan( Z0 ) )     // cannot be synthesized with current parameters
+    {
+        Z0 = Z0_dest;
+        ang_l= ang_l_tmp;
+
+        if( isSelected( PHYS_WIDTH_PRM ) )
+        {
+            setProperty( PHYS_WIDTH_PRM, NAN );
+        }
+        else
+        {
+            setProperty( PHYS_S_PRM, NAN );
+        }
+
+        setProperty( PHYS_LEN_PRM, NAN );
+
+        /* print results in the subwindow */
+        show_results();
+        return;
+    }
 
     /* Newton's method */
     iteration = 0;
-
-    /* compute coplanar parameters */
-    calc();
     Z0_current = Z0;
-
     error = fabs( Z0_dest - Z0_current );
 
     while( error > MAX_ERROR )
@@ -270,6 +292,7 @@ void COPLANAR::synthesize()
         calc();
         Z0_current = Z0;
         error = fabs( Z0_dest - Z0_current );
+
         if( iteration > 100 )
             break;
     }
@@ -278,7 +301,7 @@ void COPLANAR::synthesize()
     setProperty( PHYS_S_PRM, s );
     /* calculate physical length */
     ang_l = getProperty( ANG_L_PRM );
-    len   = C0 / f / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
+    len   = C0 / m_freq / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
     setProperty( PHYS_LEN_PRM, len );
 
     /* compute coplanar parameters */

@@ -52,7 +52,7 @@ STRIPLINE::STRIPLINE() : TRANSLINE()
 // -------------------------------------------------------------------
 void STRIPLINE::getProperties()
 {
-    f   = getProperty( FREQUENCY_PRM );
+    m_freq = getProperty( FREQUENCY_PRM );
     w   = getProperty( PHYS_WIDTH_PRM );
     len = getProperty( PHYS_LEN_PRM );
     h   = getProperty( H_PRM);
@@ -75,7 +75,7 @@ double STRIPLINE::lineImpedance( double height, double& ac )
     double ZL;
     double hmt = height - t;
 
-    ac = sqrt( f / sigma / 17.2 );
+    ac = sqrt( m_freq / sigma / 17.2 );
     if( w / hmt >= 0.35 )
     {
         ZL = w +
@@ -119,9 +119,9 @@ void STRIPLINE::calc()
          ( 1.0 / lineImpedance( 2.0 * a + t, ac1 ) + 1.0 / lineImpedance( 2.0 * (h - a) - t, ac2 ) );
 
     atten_cond = len * 0.5 * (ac1 + ac2);
-    atten_dielectric = 20.0 / log( 10.0 ) * len * (M_PI / C0) * f * sqrt( er ) * tand;
+    atten_dielectric = 20.0 / log( 10.0 ) * len * (M_PI / C0) * m_freq * sqrt( er ) * tand;
 
-    ang_l = 2.0* M_PI* len* sqrt( er ) * f / C0; // in radians
+    ang_l = 2.0* M_PI* len* sqrt( er ) * m_freq / C0; // in radians
 }
 
 
@@ -199,7 +199,7 @@ void STRIPLINE::synthesize()
     setProperty( PHYS_WIDTH_PRM, w );
     /* calculate physical length */
     ang_l = getProperty( ANG_L_PRM );
-    len   = C0 / f / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
+    len   = C0 / m_freq / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
     setProperty( PHYS_LEN_PRM, len );
 
     /* compute parameters */

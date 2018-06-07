@@ -300,7 +300,7 @@ void MICROSTRIP::dispersion()
     u = w / h;
 
     /* normalized frequency [GHz * mm] */
-    f_n = f * h / 1e06;
+    f_n = m_freq * h / 1e06;
 
     P = e_r_dispersion( u, e_r, f_n );
     /* effective dielectric constant corrected for dispersion */
@@ -326,7 +326,7 @@ double MICROSTRIP::conductor_losses()
     e_r_eff_0 = er_eff_0;
     delta     = skindepth;
 
-    if( f > 0.0 )
+    if( m_freq > 0.0 )
     {
         /* current distribution factor */
         K = exp( -1.2 * pow( Z0_h_1 / ZF0, 0.7 ) );
@@ -336,8 +336,8 @@ double MICROSTRIP::conductor_losses()
         /* correction for surface roughness */
         R_s *= 1.0 + ( (2.0 / M_PI) * atan( 1.40 * pow( (rough / delta), 2.0 ) ) );
         /* strip inductive quality factor */
-        Q_c     = (M_PI * Z0_h_1 * w * f) / (R_s * C0 * K);
-        alpha_c = ( 20.0 * M_PI / log( 10.0 ) ) * f * sqrt( e_r_eff_0 ) / (C0 * Q_c);
+        Q_c     = (M_PI * Z0_h_1 * w * m_freq) / (R_s * C0 * K);
+        alpha_c = ( 20.0 * M_PI / log( 10.0 ) ) * m_freq * sqrt( e_r_eff_0 ) / (C0 * Q_c);
     }
     else
     {
@@ -363,7 +363,7 @@ double MICROSTRIP::dielectric_losses()
     alpha_d =
         ( 20.0 * M_PI /
          log( 10.0 ) ) *
-        (f / C0) * ( e_r / sqrt( e_r_eff_0 ) ) * ( (e_r_eff_0 - 1.0) / (e_r - 1.0) ) * tand;
+        (m_freq / C0) * ( e_r / sqrt( e_r_eff_0 ) ) * ( (e_r_eff_0 - 1.0) / (e_r - 1.0) ) * tand;
 
     return alpha_d;
 }
@@ -434,7 +434,7 @@ void MICROSTRIP::line_angle()
     /* velocity */
     v = C0 / sqrt( e_r_eff * mur_eff );
     /* wavelength */
-    lambda_g = v / f;
+    lambda_g = v / m_freq;
     /* electrical angles */
     ang_l = 2.0 * M_PI * l / lambda_g;  /* in radians */
 }
@@ -479,7 +479,7 @@ void MICROSTRIP::get_microstrip_sub()
  */
 void MICROSTRIP::get_microstrip_comp()
 {
-    f = getProperty( FREQUENCY_PRM );
+    m_freq = getProperty( FREQUENCY_PRM );
 }
 
 
@@ -610,7 +610,7 @@ void MICROSTRIP::synthesize()
     setProperty( PHYS_WIDTH_PRM, w );
     /* calculate physical length */
     ang_l = getProperty( ANG_L_PRM );
-    l     = C0 / f / sqrt( er_eff * mur_eff ) * ang_l / 2.0 / M_PI; /* in m */
+    l = C0 / m_freq / sqrt( er_eff * mur_eff ) * ang_l / 2.0 / M_PI; /* in m */
     setProperty( PHYS_LEN_PRM, l );
 
     /* compute microstrip parameters */

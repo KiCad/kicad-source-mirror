@@ -65,7 +65,7 @@ TRANSLINE::TRANSLINE()
     m_name = (const char*) 0;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
-    f = 0.0;            // Frequency of operation
+    m_freq = 0.0;       // Frequency of operation
     er = 0.0;           // dielectric constant
     tand = 0.0;         // Dielectric Loss Tangent
     sigma = 0.0;        // Conductivity of the metal
@@ -122,7 +122,7 @@ double TRANSLINE::getProperty( enum PRMS_ID aPrmId )
 double TRANSLINE::skin_depth()
 {
     double depth;
-    depth = 1.0 / sqrt( M_PI * f * murC * MU0 * sigma );
+    depth = 1.0 / sqrt( M_PI * m_freq * murC * MU0 * sigma );
     return depth;
 }
 

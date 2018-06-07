@@ -52,7 +52,7 @@ TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
 // -------------------------------------------------------------------
 void TWISTEDPAIR::getProperties()
 {
-    f    = getProperty( FREQUENCY_PRM );
+    m_freq = getProperty( FREQUENCY_PRM );
     din  = getProperty( PHYS_DIAM_IN_PRM );
     dout = getProperty( PHYS_DIAM_OUT_PRM );
     len  = getProperty( PHYS_LEN_PRM );
@@ -80,9 +80,9 @@ void TWISTEDPAIR::calc()
 
     atten_cond = 10.0 / log( 10.0 ) * len / skindepth / sigma / M_PI / Z0 / (din - skindepth);
 
-    atten_dielectric = 20.0 / log( 10.0 ) * len * M_PI / C0* f* sqrt( er_eff ) * tand;
+    atten_dielectric = 20.0 / log( 10.0 ) * len * M_PI / C0* m_freq * sqrt( er_eff ) * tand;
 
-    ang_l = 2.0* M_PI* len* sqrt( er_eff ) * f / C0; // in radians
+    ang_l = 2.0* M_PI* len* sqrt( er_eff ) * m_freq / C0; // in radians
 }
 
 
@@ -174,7 +174,7 @@ void TWISTEDPAIR::synthesize()
     setProperty( PHYS_DIAM_OUT_PRM, dout );
     /* calculate physical length */
     ang_l = getProperty( ANG_L_PRM );
-    len   = C0 / f / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
+    len   = C0 / m_freq / sqrt( er_eff ) * ang_l / 2.0 / M_PI; /* in m */
     setProperty( PHYS_LEN_PRM, len );
 
     /* compute parameters */

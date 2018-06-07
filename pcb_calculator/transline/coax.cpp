@@ -75,7 +75,7 @@ void COAX::get_coax_sub()
  */
 void COAX::get_coax_comp()
 {
-    f = getProperty( FREQUENCY_PRM );
+    m_freq = getProperty( FREQUENCY_PRM );
 }
 
 
@@ -106,7 +106,7 @@ double COAX::alphad_coax()
 {
     double ad;
 
-    ad = (M_PI / C0) * f * sqrt( er ) * tand;
+    ad = (M_PI / C0) * m_freq * sqrt( er ) * tand;
     ad = ad * 20.0 / log( 10.0 );
     return ad;
 }
@@ -116,7 +116,7 @@ double COAX::alphac_coax()
 {
     double ac, Rs;
 
-    Rs = sqrt( M_PI * f * murC * MU0 / sigma );
+    Rs = sqrt( M_PI * m_freq * murC * MU0 / sigma );
     ac = sqrt( er ) * ( ( (1 / din) + (1 / dout) ) / log( dout / din ) ) * (Rs / ZF0);
     ac = ac * 20.0 / log( 10.0 );
     return ac;
@@ -144,7 +144,7 @@ void COAX::analyze()
         Z0 = ( ZF0 / 2 / M_PI / sqrt( er ) ) * log( dout / din );
     }
 
-    lambda_g = ( C0 / (f) ) / sqrt( er * mur );
+    lambda_g = ( C0 / (m_freq) ) / sqrt( er * mur );
     /* calculate electrical angle */
     ang_l = (2.0 * M_PI * l) / lambda_g; /* in radians */
 
@@ -187,7 +187,7 @@ void COAX::synthesize()
         setProperty( PHYS_DIAM_OUT_PRM, dout );
     }
 
-    lambda_g = ( C0 / (f) ) / sqrt( er * mur );
+    lambda_g = ( C0 / (m_freq) ) / sqrt( er * mur );
     /* calculate physical length */
     l = (lambda_g * ang_l) / (2.0 * M_PI); /* in m */
     setProperty( PHYS_LEN_PRM, l );
@@ -213,14 +213,14 @@ void COAX::show_results()
 
     n  = 1;
     fc = C0 / (M_PI * (dout + din) / (double) n);
-    if( fc > f )
+    if( fc > m_freq )
         strcpy( text, "none" );
     else
     {
         strcpy( text, "H(1,1) " );
         m  = 2;
         fc = C0 / ( 2 * (dout - din) / (double) (m - 1) );
-        while( (fc <= f) && (m<10) )
+        while( (fc <= m_freq) && ( m < 10 ) )
         {
             sprintf( txt, "H(n,%d) ", m );
             strcat( text, txt );
@@ -232,12 +232,12 @@ void COAX::show_results()
 
     m  = 1;
     fc = C0 / (2 * (dout - din) / (double) m);
-    if( fc > f )
+    if( fc > m_freq )
         strcpy( text, "none" );
     else
     {
         strcpy( text, "" );
-        while( (fc <= f) && (m<10) )
+        while( (fc <= m_freq) && ( m < 10 ) )
         {
             sprintf( txt, "E(n,%d) ", m );
             strcat( text, txt );
