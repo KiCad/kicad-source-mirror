@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-06 00:39+0800\n"
+"PO-Revision-Date: 2018-06-07 11:22+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -4652,7 +4652,7 @@ msgstr "定义为电源符号"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:99
 msgid "Check this option when the symbol is a power symbol"
-msgstr "勾选此项, 元件将做为电源符号"
+msgstr "勾选此选项, 元件将作为电源符号"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:103
 msgid "All units are not interchangeable"
@@ -4940,7 +4940,7 @@ msgstr "X轴镜像"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:56
 msgid "Mirror around Y axis"
-msgstr "Y 轴镜像"
+msgstr "Y轴镜像"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:58
 msgid "Aspect:"
@@ -6019,7 +6019,7 @@ msgstr "共享："
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:63
 msgid "Common to all &units in component"
-msgstr "适用于所有单元(&U)"
+msgstr "元件中所有单元共用(&U)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:75
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:86
@@ -18732,7 +18732,7 @@ msgstr "Excellon钻孔文件选项:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Mirror Y axis"
-msgstr "Y 轴镜像"
+msgstr "Y轴镜像"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid ""
