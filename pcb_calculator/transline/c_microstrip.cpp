@@ -38,7 +38,7 @@
 
 C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE()
 {
-    m_name = "Coupled_MicroStrip";
+    m_Name = "Coupled_MicroStrip";
     aux_ms = NULL;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
@@ -544,11 +544,11 @@ void C_MICROSTRIP::dielectric_losses()
     alpha_d_e =
         ( 20.0 * M_PI /
          log( 10.0 ) ) *
-        (m_freq / C0) * ( e_r / sqrt( e_r_eff_e_0 ) ) * ( (e_r_eff_e_0 - 1.0) / (e_r - 1.0) ) * tand;
+        (m_freq / C0) * ( e_r / sqrt( e_r_eff_e_0 ) ) * ( (e_r_eff_e_0 - 1.0) / (e_r - 1.0) ) * m_tand;
     alpha_d_o =
         ( 20.0 * M_PI /
          log( 10.0 ) ) *
-        (m_freq / C0) * ( e_r / sqrt( e_r_eff_o_0 ) ) * ( (e_r_eff_o_0 - 1.0) / (e_r - 1.0) ) * tand;
+        (m_freq / C0) * ( e_r / sqrt( e_r_eff_o_0 ) ) * ( (e_r_eff_o_0 - 1.0) / (e_r - 1.0) ) * m_tand;
 
     atten_dielectric_e = alpha_d_e * l;
     atten_dielectric_o = alpha_d_o * l;
@@ -841,7 +841,7 @@ void C_MICROSTRIP::get_c_microstrip_sub()
     ht    = getProperty( H_T_PRM );
     t     = getProperty( T_PRM );
     m_sigma = 1.0/getProperty( RHO_PRM );
-    tand  = getProperty( TAND_PRM );
+    m_tand  = getProperty( TAND_PRM );
     rough = getProperty( ROUGH_PRM );
 }
 

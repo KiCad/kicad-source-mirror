@@ -33,7 +33,7 @@
 
 TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
 {
-    m_name = "TwistedPair";
+    m_Name = "TwistedPair";
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
     din = 0.0;                 // Inner diameter of conductor
@@ -59,7 +59,7 @@ void TWISTEDPAIR::getProperties()
 
     er     = getProperty( EPSILONR_PRM );
     m_murC   = getProperty( MURC_PRM );
-    tand   = getProperty( TAND_PRM );
+    m_tand   = getProperty( TAND_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     twists = getProperty( TWISTEDPAIR_TWIST_PRM );
     er_env = getProperty( TWISTEDPAIR_EPSILONR_ENV_PRM );
@@ -80,7 +80,7 @@ void TWISTEDPAIR::calc()
 
     atten_cond = 10.0 / log( 10.0 ) * len / m_skindepth / m_sigma / M_PI / Z0 / (din - m_skindepth);
 
-    atten_dielectric = 20.0 / log( 10.0 ) * len * M_PI / C0* m_freq * sqrt( er_eff ) * tand;
+    atten_dielectric = 20.0 / log( 10.0 ) * len * M_PI / C0* m_freq * sqrt( er_eff ) * m_tand;
 
     ang_l = 2.0* M_PI* len* sqrt( er_eff ) * m_freq / C0; // in radians
 }

@@ -2,7 +2,7 @@
  * stripline.cpp - stripline class definition
  *
  * Copyright (C) 2011 Michael Margraf <michael.margraf@alumni.tu-berlin.de>
- * Modifications 2011 for Kicad: Jean-Pierre Charras
+ * Modifications 2018 for Kicad: Jean-Pierre Charras
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 STRIPLINE::STRIPLINE() : TRANSLINE()
 {
-    m_name = "StripLine";
+    m_Name = "StripLine";
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
     h = 0.0;                    // height of substrate
@@ -61,7 +61,7 @@ void STRIPLINE::getProperties()
 
     er    = getProperty( EPSILONR_PRM );
     m_murC  = getProperty( MURC_PRM );
-    tand  = getProperty( TAND_PRM );
+    m_tand  = getProperty( TAND_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     Z0    = getProperty( Z0_PRM );
     ang_l = getProperty( ANG_L_PRM );
@@ -119,7 +119,7 @@ void STRIPLINE::calc()
          ( 1.0 / lineImpedance( 2.0 * a + t, ac1 ) + 1.0 / lineImpedance( 2.0 * (h - a) - t, ac2 ) );
 
     atten_cond = len * 0.5 * (ac1 + ac2);
-    atten_dielectric = 20.0 / log( 10.0 ) * len * (M_PI / C0) * m_freq * sqrt( er ) * tand;
+    atten_dielectric = 20.0 / log( 10.0 ) * len * (M_PI / C0) * m_freq * sqrt( er ) * m_tand;
 
     ang_l = 2.0* M_PI* len* sqrt( er ) * m_freq / C0; // in radians
 }

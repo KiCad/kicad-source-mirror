@@ -61,7 +61,7 @@ class TRANSLINE
 public: TRANSLINE();
     virtual ~TRANSLINE();
 
-    const char *m_name;
+    const char *m_Name;
     void   setProperty( enum PRMS_ID aPrmId, double aValue);
     double getProperty( enum PRMS_ID aPrmId );
     void   setResult( int, double, const char* );
@@ -74,9 +74,9 @@ public: TRANSLINE();
 protected:
     double m_freq;      // Frequency of operation
     double er;          /* dielectric constant */
-    double tand;        /* Dielectric Loss Tangent */
+    double m_tand;      // Dielectric Loss Tangent
     double m_sigma;     // Conductivity of the metal
-    double m_murC;        /* magnetic permeability of conductor */
+    double m_murC;      // magnetic permeability of conductor
     double m_skindepth; // Skin depth
 
     double skin_depth();

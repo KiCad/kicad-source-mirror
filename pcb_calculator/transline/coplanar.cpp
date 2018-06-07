@@ -34,7 +34,7 @@
 
 COPLANAR::COPLANAR() : TRANSLINE()
 {
-    m_name = "CoPlanar";
+    m_Name = "CoPlanar";
     backMetal = false;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
@@ -53,7 +53,7 @@ COPLANAR::COPLANAR() : TRANSLINE()
 
 GROUNDEDCOPLANAR::GROUNDEDCOPLANAR() : COPLANAR()
 {
-    m_name = "GrCoPlanar";
+    m_Name = "GrCoPlanar";
     backMetal = true;
 }
 
@@ -70,7 +70,7 @@ void COPLANAR::getProperties()
 
     er    = getProperty( EPSILONR_PRM );
     m_murC  = getProperty( MURC_PRM );
-    tand  = getProperty( TAND_PRM );
+    m_tand  = getProperty( TAND_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     Z0    = getProperty( Z0_PRM );
     ang_l = getProperty( ANG_L_PRM );
@@ -163,7 +163,7 @@ void COPLANAR::calc()
         ac = ( M_PI + log( n * a ) ) / a + ( M_PI + log( n * b ) ) / b;
     }
     double ac_factor = ac / ( 4 * ZF0 * kk1 * kpk1 * (1 - k1 * k1) );
-    double ad_factor = ( er / (er - 1) ) * tand * M_PI / C0;
+    double ad_factor = ( er / (er - 1) ) * m_tand * M_PI / C0;
 
 
     // ....................................................

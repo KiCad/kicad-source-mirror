@@ -40,7 +40,7 @@
 
 MICROSTRIP::MICROSTRIP() : TRANSLINE()
 {
-    m_name = "MicroStrip";
+    m_Name = "MicroStrip";
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
     h = 0.0;                    // height of substrate
@@ -363,7 +363,7 @@ double MICROSTRIP::dielectric_losses()
     alpha_d =
         ( 20.0 * M_PI /
          log( 10.0 ) ) *
-        (m_freq / C0) * ( e_r / sqrt( e_r_eff_0 ) ) * ( (e_r_eff_0 - 1.0) / (e_r - 1.0) ) * tand;
+        (m_freq / C0) * ( e_r / sqrt( e_r_eff_0 ) ) * ( (e_r_eff_0 - 1.0) / (e_r - 1.0) ) * m_tand;
 
     return alpha_d;
 }
@@ -468,7 +468,7 @@ void MICROSTRIP::get_microstrip_sub()
     t     = getProperty( T_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     m_murC  = getProperty( MURC_PRM );
-    tand  = getProperty( TAND_PRM );
+    m_tand  = getProperty( TAND_PRM );
     rough = getProperty( ROUGH_PRM );
 }
 

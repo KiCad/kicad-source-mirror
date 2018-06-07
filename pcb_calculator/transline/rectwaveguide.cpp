@@ -31,7 +31,7 @@
 
 RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
 {
-    m_name = "RectWaveGuide";
+    m_Name = "RectWaveGuide";
 
     // Initialize these here variables mainly to avoid warnings from a static analyzer
     mur = 0.0;                  // magnetic permeability of substrate
@@ -174,7 +174,7 @@ double RECTWAVEGUIDE::alphad()
     k_square = kval_square();
     beta     = sqrt( k_square - kc_square( 1, 0 ) );
 
-    ad = (k_square * tand) / (2.0 * beta);
+    ad = (k_square * m_tand) / (2.0 * beta);
     ad = ad * 20.0 * log10( exp( 1. ) ); /* convert from Np/m to db/m */
     return ad;
 }
@@ -191,7 +191,7 @@ void RECTWAVEGUIDE::get_rectwaveguide_sub()
     mur   = getProperty( MUR_PRM );
     m_murC  = getProperty( MURC_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
-    tand  = getProperty( TAND_PRM );
+    m_tand  = getProperty( TAND_PRM );
     tanm  = getProperty( TANM_PRM );
 }
 

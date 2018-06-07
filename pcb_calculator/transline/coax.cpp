@@ -40,7 +40,7 @@
 
 COAX::COAX() : TRANSLINE()
 {
-    m_name = "Coax";
+    m_Name = "Coax";
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
     mur = 0.0;              // magnetic permeability of substrate
@@ -64,7 +64,7 @@ void COAX::get_coax_sub()
     er    = getProperty( EPSILONR_PRM );
     mur   = getProperty( MUR_PRM );
     m_murC  = getProperty( MURC_PRM );
-    tand  = getProperty( TAND_PRM );
+    m_tand  = getProperty( TAND_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
 }
 
@@ -106,7 +106,7 @@ double COAX::alphad_coax()
 {
     double ad;
 
-    ad = (M_PI / C0) * m_freq * sqrt( er ) * tand;
+    ad = (M_PI / C0) * m_freq * sqrt( er ) * m_tand;
     ad = ad * 20.0 / log( 10.0 );
     return ad;
 }

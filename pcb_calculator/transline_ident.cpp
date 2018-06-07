@@ -446,7 +446,7 @@ TRANSLINE_IDENT::~TRANSLINE_IDENT()
 
 void TRANSLINE_IDENT::ReadConfig( wxConfigBase* aConfig )
 {
-    wxString text = wxString::FromUTF8( m_TLine->m_name );
+    wxString text = wxString::FromUTF8( m_TLine->m_Name );
     aConfig->SetPath( text );
     for( unsigned ii = 0; ii < m_prms_List.size(); ii++ )
         m_prms_List[ii]->ReadConfig( aConfig );
@@ -457,7 +457,7 @@ void TRANSLINE_IDENT::ReadConfig( wxConfigBase* aConfig )
 
 void TRANSLINE_IDENT::WriteConfig( wxConfigBase* aConfig )
 {
-    wxString text = wxString::FromUTF8( m_TLine->m_name );
+    wxString text = wxString::FromUTF8( m_TLine->m_Name );
     aConfig->SetPath( text );
     for( unsigned ii = 0; ii < m_prms_List.size(); ii++ )
         m_prms_List[ii]->WriteConfig( aConfig );
