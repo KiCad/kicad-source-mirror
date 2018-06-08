@@ -109,6 +109,9 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             const VECTOR2I source( sourceNode->Pos() );
             const VECTOR2I target( targetNode->Pos() );
 
+            if( !sourceNode->Valid() || !targetNode->Valid() )
+                continue;
+
             bool enable =  !sourceNode->GetNoLine() && !targetNode->GetNoLine();
             bool show = sourceNode->Parent()->GetLocalRatsnestVisible() || targetNode->Parent()->GetLocalRatsnestVisible();
 
