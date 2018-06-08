@@ -731,7 +731,7 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
     bool ok = true;
 
     // Try to unannotate this reference
-    while( !text.IsEmpty() && ( text.Last() == '?' || isdigit( text.Last() ) ) )
+    while( !text.IsEmpty() && ( text.Last() == '?' || std::isdigit( text.Last().GetValue() ) ) )
         text.RemoveLast();
 
     if( text.IsEmpty() )
@@ -794,7 +794,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
     if( IsReferenceStringValid( prefix ) )
     {
-        while( prefix.Last() == '?' || isdigit( prefix.Last() ) )
+        while( prefix.Last() == '?' || std::isdigit( prefix.Last().GetValue() ) )
             prefix.RemoveLast();
     }
     else
