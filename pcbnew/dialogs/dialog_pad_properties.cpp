@@ -1964,7 +1964,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
     };
 
     int type = wxGetSingleChoiceIndex( wxEmptyString, _( "Select shape type:" ),
-                    DIM( shapelist ), shapelist, 0 );
+                    DIM( shapelist ), shapelist, 0, this );
 
     STROKE_T listtype[] =
     {
