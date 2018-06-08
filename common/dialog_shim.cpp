@@ -603,6 +603,8 @@ int DIALOG_SHIM::ShowQuasiModal()
 
     event_loop.Run();
 
+    m_qmodal_showing = false;
+
     return GetReturnCode();
 }
 
@@ -621,8 +623,6 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
         wxFAIL_MSG( wxT( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal wasn't called" ) );
         return;
     }
-
-    m_qmodal_showing = false;
 
     if( m_qmodal_loop )
     {

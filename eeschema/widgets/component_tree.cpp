@@ -182,6 +182,15 @@ void COMPONENT_TREE::Regenerate()
 }
 
 
+void COMPONENT_TREE::SetFocus()
+{
+    if( m_query_ctrl )
+        m_query_ctrl->SetFocus();
+    else
+        m_tree_ctrl->SetFocus();
+}
+
+
 void COMPONENT_TREE::toggleExpand( const wxDataViewItem& aTreeId )
 {
     if( !aTreeId.IsOk() )

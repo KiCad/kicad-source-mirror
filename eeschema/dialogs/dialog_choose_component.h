@@ -148,8 +148,8 @@ protected:
     wxPanel* ConstructRightPanel( wxWindow* aParent );
 
     void OnInitDialog( wxInitDialogEvent& aEvent );
+    void OnActivate( wxActivateEvent& event );
     void OnCloseTimer( wxTimerEvent& aEvent );
-    void OnIdle( wxIdleEvent& aEvent );
 
     void OnSchViewDClick( wxMouseEvent& aEvent );
     void OnSchViewPaint( wxPaintEvent& aEvent );
@@ -207,7 +207,6 @@ protected:
     int                         m_deMorganConvert;
     bool                        m_allow_field_edits;
     bool                        m_show_footprints;
-    bool                        m_load_footprints;
     bool                        m_external_browser_requested;
     wxString                    m_fp_override;
 

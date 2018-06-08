@@ -20,19 +20,10 @@
 #include <dialog_shim.h>
 #include <kiway.h>
 #include <kiway_player.h>
-#include <make_unique.h>
 #include <project.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
 
-#include <functional>
-#include <wx/combo.h>
-#include <wx/gauge.h>
-#include <wx/odcombo.h>
-#include <wx/simplebook.h>
-#include <wx/sizer.h>
-#include <wx/timer.h>
-#include <wx/utils.h>
 #include <wx/wupdlock.h>
 #include <widgets/progress_reporter.h>
 
@@ -44,16 +35,6 @@ enum
     POS_DEFAULT,
     POS_OTHER,
     POS_SEPARATOR
-};
-
-
-/**
- * Page numbers in the wxSimplebook
- */
-enum
-{
-    PAGE_PROGRESS,
-    PAGE_SELECT
 };
 
 
@@ -73,22 +54,15 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
 {
     m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
-    m_book = new wxSimplebook( this, wxID_ANY );
-    m_progress_ctrl = new GAUGE_PROGRESS_REPORTER( m_book, 2 );
-    m_fp_sel_ctrl = new FOOTPRINT_CHOICE( m_book, wxID_ANY );
-
-    m_book->SetEffect( wxSHOW_EFFECT_BLEND );
-    m_book->AddPage( m_progress_ctrl, "", true );
-    m_book->AddPage( m_fp_sel_ctrl, "", false );
-    m_sizer->Add( m_book, 1, wxEXPAND | wxALL, 5 );
+    m_fp_sel_ctrl = new FOOTPRINT_CHOICE( this, wxID_ANY );
+    m_sizer->Add( m_fp_sel_ctrl, 1, wxEXPAND | wxALL, 5 );
 
     SetSizer( m_sizer );
     Layout();
     m_sizer->Fit( this );
 
     m_fp_sel_ctrl->Bind( wxEVT_COMBOBOX, &FOOTPRINT_SELECT_WIDGET::OnComboBox, this );
-    m_fp_sel_ctrl->Bind(
-            EVT_INTERACTIVE_CHOICE, &FOOTPRINT_SELECT_WIDGET::OnComboInteractive, this );
+    m_fp_sel_ctrl->Bind( EVT_INTERACTIVE_CHOICE, &FOOTPRINT_SELECT_WIDGET::OnComboInteractive, this );
 }
 
 
@@ -101,7 +75,8 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
         auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
         m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
 
-        m_fp_list->ReadFootprintFiles( fp_lib_table, nullptr, m_progress_ctrl );
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+        m_fp_list->ReadFootprintFiles( fp_lib_table, nullptr, &progressReporter );
         FootprintsLoaded();
     }
     catch( ... )
@@ -115,7 +90,6 @@ void FOOTPRINT_SELECT_WIDGET::FootprintsLoaded()
 {
     m_fp_filter.SetList( *m_fp_list );
 
-    m_book->SetSelection( PAGE_SELECT );
     m_finished_loading = true;
 
     if( m_update )

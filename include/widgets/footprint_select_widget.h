@@ -29,12 +29,7 @@
 class KIWAY;
 class PROJECT;
 class FOOTPRINT_CHOICE;
-class GAUGE_PROGRESS_REPORTER;
-class wxMenu;
-class wxTimer;
-class wxTimerEvent;
 class wxWindow;
-class wxSimplebook;
 
 /**
  * This event is fired when a footprint is selected. The string data of the
@@ -130,10 +125,8 @@ public:
 
 private:
     KIWAY*                   m_kiway;
-    GAUGE_PROGRESS_REPORTER* m_progress_ctrl;
     FOOTPRINT_CHOICE*        m_fp_sel_ctrl;
     wxSizer*                 m_sizer;
-    wxSimplebook*            m_book;
 
     bool                     m_update;
     bool                     m_finished_loading;

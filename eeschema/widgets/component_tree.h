@@ -106,6 +106,8 @@ public:
      */
     void Regenerate();
 
+    void SetFocus() override;
+
 protected:
     /**
      * Expands or collapses a node, switching it to the opposite state.
