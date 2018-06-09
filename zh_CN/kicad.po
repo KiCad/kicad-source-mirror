@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-07 11:22+0800\n"
+"PO-Revision-Date: 2018-06-09 14:59+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -3033,7 +3033,7 @@ msgstr "取消当前工具"
 #: pagelayout_editor/hotkeys.cpp:80 pagelayout_editor/menubar.cpp:125
 #: pcbnew/hotkeys.cpp:186 pcbnew/hotkeys.cpp:188
 msgid "Zoom In"
-msgstr "缩放: "
+msgstr "放大"
 
 #: common/tool/actions.cpp:20 common/widgets/mathplot.cpp:1768
 #: common/zoom.cpp:277 eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
@@ -5773,7 +5773,7 @@ msgstr "ERC 文件"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:30
 msgid "ERC Report:"
-msgstr "Erc 报告:"
+msgstr "ERC报告："
 
 #: eeschema/dialogs/dialog_erc_base.cpp:35
 msgid "Total:"
@@ -5843,7 +5843,7 @@ msgstr "恢复到默认"
 
 #: eeschema/dialogs/dialog_erc_base.h:86 eeschema/menubar_libedit.cpp:236
 msgid "Electrical Rules Checker"
-msgstr "设计规则检查 (ERC)"
+msgstr "电气规则检查 (ERC)"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:531
 #: eeschema/lib_field.cpp:627 eeschema/lib_field.h:105
@@ -6024,7 +6024,7 @@ msgstr "元件中所有单元共用(&U)"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:75
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:86
 msgid "Common to all body &styles (DeMorgan)"
-msgstr "适用于所有主体样式(DeMorgan)(&S)"
+msgstr "所有主体风格(德摩根)共用 (&S)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:84
 msgid "Fill Style:"
@@ -6575,7 +6575,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:120
 msgid "Plot Current Page"
-msgstr "绘图当前页"
+msgstr "绘制当前页"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:124
 msgid "Plot All Pages"
@@ -9554,7 +9554,7 @@ msgstr "打印原理图页"
 
 #: eeschema/menubar.cpp:461 pcbnew/menubar_pcb_editor.cpp:936
 msgid "P&lot..."
-msgstr "绘图(&L)..."
+msgstr "绘制(&L)..."
 
 #: eeschema/menubar.cpp:462
 msgid "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format"
@@ -9616,11 +9616,11 @@ msgstr "将符号字段设置为原始库值"
 
 #: eeschema/menubar.cpp:534
 msgid "Electrical Rules &Checker"
-msgstr "设计规则检查(&C)"
+msgstr "电气规则检查(&C)"
 
 #: eeschema/menubar.cpp:535 eeschema/tool_sch.cpp:159
 msgid "Perform electrical rules check"
-msgstr "执行设计规则检查"
+msgstr "执行电气规则检查"
 
 #: eeschema/menubar.cpp:544 pcbnew/menubar_pcb_editor.cpp:418
 msgid "Update PCB from Schematic..."
