@@ -169,8 +169,6 @@ void COMPONENT_TREE::Regenerate()
     // Store the state
     if( !m_filtering )
         m_unfilteredState = getState();
-    else
-        current = getState();
 
     wxString filter = m_query_ctrl->GetValue();
     m_adapter->UpdateSearchString( filter );
@@ -178,7 +176,8 @@ void COMPONENT_TREE::Regenerate()
     postPreselectEvent();
 
     // Restore the state
-    setState( m_filtering ? current : m_unfilteredState );
+    if( !m_filtering )
+        setState( m_unfilteredState );
 }
 
 

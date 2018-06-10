@@ -193,7 +193,20 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 #endif
     }
 
-    ShowResults() || ShowPreselect() || ShowSingleLibrary();
+    CMP_TREE_NODE* bestMatch = ShowResults();
+
+    if( !bestMatch )
+        bestMatch = ShowPreselect();
+
+    if( !bestMatch )
+        bestMatch = ShowSingleLibrary();
+
+    if( bestMatch )
+    {
+        auto item = wxDataViewItem( bestMatch );
+        m_widget->Select( item );
+        m_widget->EnsureVisible( item );
+    }
 }
 
 
@@ -442,47 +455,51 @@ int CMP_TREE_MODEL_ADAPTER_BASE::WidthFor( wxString const& aHeading, int aCol )
 }
 
 
-bool CMP_TREE_MODEL_ADAPTER_BASE::FindAndExpand(
-        CMP_TREE_NODE& aNode,
-        std::function<bool( CMP_TREE_NODE const* )> aFunc )
+void CMP_TREE_MODEL_ADAPTER_BASE::FindAndExpand( CMP_TREE_NODE& aNode,
+                                                 std::function<bool( CMP_TREE_NODE const* )> aFunc,
+                                                 CMP_TREE_NODE** aHighScore )
 {
     for( auto& node: aNode.Children )
     {
         if( aFunc( &*node ) )
         {
-            auto item = wxDataViewItem(
-                    const_cast<void*>( static_cast<void const*>( &*node ) ) );
+            auto item = wxDataViewItem( &*node );
             m_widget->ExpandAncestors( item );
-            m_widget->EnsureVisible( item );
-            m_widget->Select( item );
-            return true;
+
+            if( !(*aHighScore) || node->Score > (*aHighScore)->Score )
+                (*aHighScore) = &*node;
         }
-        else if( FindAndExpand( *node, aFunc ) )
+        else
         {
-            return true;
+            FindAndExpand( *node, aFunc, aHighScore );
         }
     }
-
-    return false;
 }
 
 
-bool CMP_TREE_MODEL_ADAPTER_BASE::ShowResults()
+CMP_TREE_NODE* CMP_TREE_MODEL_ADAPTER_BASE::ShowResults()
 {
-    return FindAndExpand( m_tree,
-            []( CMP_TREE_NODE const* n )
-            {
-                return n->Type == CMP_TREE_NODE::TYPE::LIBID && n->Score > 1;
-            } );
+    CMP_TREE_NODE* highScore = nullptr;
+
+    FindAndExpand( m_tree,
+                   []( CMP_TREE_NODE const* n )
+                   {
+                       return n->Type == CMP_TREE_NODE::TYPE::LIBID && n->Score > 1;
+                   },
+                   &highScore );
+
+    return highScore;
 }
 
 
-bool CMP_TREE_MODEL_ADAPTER_BASE::ShowPreselect()
+CMP_TREE_NODE* CMP_TREE_MODEL_ADAPTER_BASE::ShowPreselect()
 {
+    CMP_TREE_NODE* highScore = nullptr;
+
     if( !m_preselect_lib_id.IsValid() )
-        return false;
+        return highScore;
 
-    return FindAndExpand( m_tree,
+    FindAndExpand( m_tree,
             [&]( CMP_TREE_NODE const* n )
             {
                 if( n->Type == CMP_TREE_NODE::LIBID && ( n->Children.empty() || !m_preselect_unit ) )
@@ -491,16 +508,24 @@ bool CMP_TREE_MODEL_ADAPTER_BASE::ShowPreselect()
                     return m_preselect_lib_id == n->Parent->LibId && m_preselect_unit == n->Unit;
                 else
                     return false;
-            } );
+            },
+            &highScore );
+
+    return highScore;
 }
 
 
-bool CMP_TREE_MODEL_ADAPTER_BASE::ShowSingleLibrary()
+CMP_TREE_NODE* CMP_TREE_MODEL_ADAPTER_BASE::ShowSingleLibrary()
 {
-    return FindAndExpand( m_tree,
-            []( CMP_TREE_NODE const* n )
-            {
-                return n->Type == CMP_TREE_NODE::TYPE::LIBID &&
-                       n->Parent->Parent->Children.size() == 1;
-            } );
+    CMP_TREE_NODE* highScore = nullptr;
+
+    FindAndExpand( m_tree,
+                   []( CMP_TREE_NODE const* n )
+                   {
+                       return n->Type == CMP_TREE_NODE::TYPE::LIBID &&
+                              n->Parent->Parent->Children.size() == 1;
+                   },
+                   &highScore );
+
+    return highScore;
 }

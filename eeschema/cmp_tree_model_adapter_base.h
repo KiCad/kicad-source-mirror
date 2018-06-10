@@ -389,27 +389,26 @@ private:
     /**
      * Find any results worth highlighting and expand them, according to given
      * criteria (f(CMP_TREE_NODE const*) -> bool)
-     *
-     * @return whether a node was expanded
+     * The highest-scoring node is written to aHighScore
      */
-    bool FindAndExpand(
-            CMP_TREE_NODE& aNode,
-            std::function<bool( CMP_TREE_NODE const* )> aFunc );
+    void FindAndExpand( CMP_TREE_NODE& aNode,
+                        std::function<bool( CMP_TREE_NODE const* )> aFunc,
+                        CMP_TREE_NODE** aHighScore );
 
     /**
-     * Find and expand successful search results
+     * Find and expand successful search results.  Return the best match (if any).
      */
-    bool ShowResults();
+    CMP_TREE_NODE* ShowResults();
 
     /**
-     * Find and expand preselected node
+     * Find and expand preselected node.  Return the best match (if any).
      */
-    bool ShowPreselect();
+    CMP_TREE_NODE* ShowPreselect();
 
     /**
-     * Find and expand a library if there is only one
+     * Find and expand a library if there is only one.  Return the best match (if any).
      */
-    bool ShowSingleLibrary();
+    CMP_TREE_NODE* ShowSingleLibrary();
 };
 
 #endif // _CMP_TREE_MODEL_ADAPTER_BASE_H
