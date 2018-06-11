@@ -730,9 +730,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case  ID_POPUP_MODEDIT_EDIT_BODY_ITEM :
-        m_canvas->MoveCursorToCrossHair();
-        InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        m_canvas->Refresh();
+        InstallGraphicItemPropertiesDialog( GetScreen()->GetCurItem(), nullptr );
         break;
 
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:

@@ -609,7 +609,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_LINE_T:
-        InstallGraphicItemPropertiesDialog( static_cast<DRAWSEGMENT*>( aItem ), aDC );
+        InstallGraphicItemPropertiesDialog( aItem, aDC );
         break;
 
     case PCB_ZONE_AREA_T:

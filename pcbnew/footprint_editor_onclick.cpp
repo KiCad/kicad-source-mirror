@@ -548,9 +548,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_EDGE_T :
-        m_canvas->MoveCursorToCrossHair();
-        InstallFootprintBodyItemPropertiesDlg( static_cast<EDGE_MODULE*>( aItem ) );
-        m_canvas->Refresh();
+        InstallGraphicItemPropertiesDialog( aItem, nullptr );
         break;
 
     default:

@@ -392,13 +392,6 @@ public:
     void Place_EdgeMod( EDGE_MODULE* drawitem );
 
     /**
-     * Function InstallFootprintBodyItemPropertiesDlg
-     * Install a dialog to edit a graphic item of a footprint body.
-     * @param aItem = a pointer to the graphic item to edit
-     */
-    void InstallFootprintBodyItemPropertiesDlg( EDGE_MODULE* aItem );
-
-    /**
      * Function DlgGlobalChange_PadSettings
      * changes pad characteristics for the given footprint
      * or all footprints which look like the given footprint.

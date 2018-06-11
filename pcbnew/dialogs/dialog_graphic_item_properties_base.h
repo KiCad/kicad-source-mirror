@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__
@@ -11,9 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
-class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -24,8 +22,8 @@ class TEXT_CTRL_EVAL;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/bmpcbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,28 +39,24 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxFlexGridSizer* m_fgUpperLeftGridSizer;
-		wxStaticText* m_StartPointXLabel;
-		TEXT_CTRL_EVAL* m_Center_StartXCtrl;
-		wxStaticText* m_StartPointXUnit;
-		wxStaticText* m_StartPointYLabel;
-		TEXT_CTRL_EVAL* m_Center_StartYCtrl;
-		wxStaticText* m_StartPointYUnit;
-		wxStaticText* m_EndPointXLabel;
-		TEXT_CTRL_EVAL* m_EndX_Radius_Ctrl;
-		wxStaticText* m_EndPointXUnit;
-		wxStaticText* m_EndPointYLabel;
-		TEXT_CTRL_EVAL* m_EndY_Ctrl;
-		wxStaticText* m_EndPointYUnit;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_AngleText;
-		TEXT_CTRL_EVAL* m_AngleCtrl;
-		wxStaticText* m_AngleUnit;
-		wxStaticText* m_ThicknessLabel;
-		TEXT_CTRL_EVAL* m_ThicknessCtrl;
-		wxStaticText* m_ThicknessTextUnit;
-		wxStaticText* m_DefaultThicknessLabel;
-		TEXT_CTRL_EVAL* m_DefaultThicknessCtrl;
-		wxStaticText* m_DefaulThicknessTextUnit;
+		wxStaticText* m_startXLabel;
+		wxTextCtrl* m_startXCtrl;
+		wxStaticText* m_startXUnits;
+		wxStaticText* m_startYLabel;
+		wxTextCtrl* m_startYCtrl;
+		wxStaticText* m_startYUnits;
+		wxStaticText* m_endXLabel;
+		wxTextCtrl* m_endXCtrl;
+		wxStaticText* m_endXUnits;
+		wxStaticText* m_endYLabel;
+		wxTextCtrl* m_endYCtrl;
+		wxStaticText* m_endYUnits;
+		wxStaticText* m_angleLabel;
+		wxTextCtrl* m_angleCtrl;
+		wxStaticText* m_angleUnits;
+		wxStaticText* m_thicknessLabel;
+		wxTextCtrl* m_thicknessCtrl;
+		wxStaticText* m_thicknessUnits;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxStaticLine* m_staticline1;

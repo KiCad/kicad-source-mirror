@@ -151,9 +151,7 @@ void DIALOG_SVG_PRINT::initDialog()
     m_printMirrorOpt->SetValue( m_printMirror );
     m_rbFileOpt->SetSelection( m_oneFileOnly ? 1 : 0 );
 
-    AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
-
-    m_DialogDefaultPenSize->SetValue( StringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
+    m_DialogDefaultPenSize->SetValue( StringFromValue( g_UserUnit, g_DrawDefaultLineThickness, true ) );
 
     LSEQ seq = m_board->GetEnabledLayers().UIOrder();
 

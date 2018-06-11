@@ -1100,7 +1100,6 @@ public:
     // Graphic Segments type DRAWSEGMENT
     void Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
     void Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
-    void InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
 
     // Footprint edition (see also PCB_BASE_FRAME)
     void InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC );

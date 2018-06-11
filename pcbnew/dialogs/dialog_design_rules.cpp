@@ -571,7 +571,7 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
 
         if( !msg.IsEmpty() )
         {
-            value = ValueFromString( g_UserUnit, msg );
+            value = ValueFromString( GetUserUnits(), msg );
             via_dim.m_Drill = value;
         }
 
@@ -949,11 +949,11 @@ void DIALOG_DESIGN_RULES::setNetClass( const wxString& aNetName, const wxString&
 bool DIALOG_DESIGN_RULES::validateData()
 {
     wxString msg;
-    int      minViaDia = ValueFromTextCtrl( *m_SetViasMinSizeCtrl );
-    int      minViaDrill = ValueFromTextCtrl( *m_SetViasMinDrillCtrl );
-    int      minUViaDia = ValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
-    int      minUViaDrill = ValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
-    int      minTrackWidth = ValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
+    int      minViaDia = m_viaMinDiameter.GetValue();
+    int      minViaDrill = m_viaMinDrill.GetValue();
+    int      minUViaDia = m_microViaMinDiameter.GetValue();
+    int      minUViaDrill = m_microViaMinDrill.GetValue();
+    int      minTrackWidth = m_trackMinWidth.GetValue();
 
     // Test net class parameters.
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )
