@@ -73,7 +73,9 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     mouseListener( aMouseListener ), paintListener( aPaintListener ), currentManager( nullptr ),
     cachedManager( nullptr ), nonCachedManager( nullptr ), overlayManager( nullptr ), mainBuffer( 0 ), overlayBuffer( 0 )
 {
-#if wxCHECK_VERSION( 3, 0, 3 )
+// IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
+// starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)
+#if wxCHECK_VERSION( 3, 0, 3 ) and !wxCHECK_VERSION( 3, 1, 0 )
     const int attr[] = { WX_GL_MAJOR_VERSION, 2, WX_GL_MINOR_VERSION, 1, 0 };
 
     if( !IsDisplaySupported( attr ) )
@@ -83,12 +85,19 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     if( glMainContext == NULL )
     {
         glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
+
+        if( !glMainContext )
+            throw std::runtime_error( "Could not create the main OpenGL context" );
+
         glPrivContext = glMainContext;
         shader = new SHADER();
     }
     else
     {
         glPrivContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this, glMainContext );
+
+        if( !glPrivContext )
+            throw std::runtime_error( "Could not create a private OpenGL context" );
     }
 
     ++instanceCounter;
