@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-09 14:59+0800\n"
+"PO-Revision-Date: 2018-06-11 12:47+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -808,7 +808,7 @@ msgstr "电路板颜色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:283
 msgid "Show 3D &Axis"
-msgstr "显示三维坐标(&A)"
+msgstr "显示3D轴线(&A)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:291
 msgid "3D Grid"
@@ -916,7 +916,7 @@ msgstr "重新载入"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:61
 msgid "Copy 3D image to clipboard"
-msgstr "复制三维图像复制到剪贴板"
+msgstr "复制3D图像到剪贴板"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
@@ -956,7 +956,7 @@ msgstr "缩放3D模型至适合大小"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:131
 msgid "Enable/Disable orthographic projection"
-msgstr "开启/禁用 透视"
+msgstr "开启/禁用正投影"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:25
 msgid "Render options:"
@@ -1033,7 +1033,7 @@ msgstr "显示ECO层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:88
 msgid "3D Display Options"
-msgstr "三维显示设置"
+msgstr "3D显示选项"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:345
 msgid "Background Color, Bottom"
@@ -1151,7 +1151,7 @@ msgstr "切换表面贴装的3D模型"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:55
 msgid "Toggle 3D models with type Virtual"
-msgstr "切换三维虚拟模型"
+msgstr "切换3D虚拟模型"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:57
 msgid "Viewer 3D"
@@ -1853,7 +1853,7 @@ msgstr ""
 msgid ""
 "<b>KISYS3DMOD</b> is the base path of system footprint 3D shapes (.3Dshapes "
 "folders)."
-msgstr "<b>KISYS3DMOD</b>是KiCad封装3D外形的基本路径 (.3Dshapes 文件夹)."
+msgstr "<b>KISYS3DMOD</b>是KiCad封装3D模型的基本路径 (.3Dshapes 文件夹)."
 
 #: common/dialogs/dialog_env_var_config.cpp:310
 msgid ""
@@ -2661,7 +2661,7 @@ msgstr "封装载入错误:"
 msgid ""
 "Duplicate library nickname \"%s\" found in footprint library table file line "
 "%d"
-msgstr "找到重复的库昵称 \"%s\" 在封装库表文件行 %d 中"
+msgstr "找到重复的库别名 \"%s\" 在封装库表文件行 %d 中"
 
 #: common/fp_lib_table.cpp:283
 #, c-format
@@ -2843,7 +2843,7 @@ msgstr "默认"
 
 #: common/pgm_base.cpp:129
 msgid "French"
-msgstr "法文"
+msgstr "法语"
 
 #: common/pgm_base.cpp:137
 msgid "Finnish"
@@ -2851,43 +2851,43 @@ msgstr "芬兰"
 
 #: common/pgm_base.cpp:145
 msgid "Spanish"
-msgstr "西班牙"
+msgstr "西班牙语"
 
 #: common/pgm_base.cpp:153
 msgid "Portuguese"
-msgstr "葡萄牙"
+msgstr "葡萄牙语"
 
 #: common/pgm_base.cpp:161
 msgid "Italian"
-msgstr "意大利"
+msgstr "意大利语"
 
 #: common/pgm_base.cpp:169
 msgid "German"
-msgstr "德国"
+msgstr "德语"
 
 #: common/pgm_base.cpp:177
 msgid "Greek"
-msgstr "希腊"
+msgstr "希腊语"
 
 #: common/pgm_base.cpp:185
 msgid "Slovenian"
-msgstr "斯洛文尼亚"
+msgstr "斯洛文尼亚语"
 
 #: common/pgm_base.cpp:193
 msgid "Slovak"
-msgstr "斯洛伐克"
+msgstr "斯洛伐克语"
 
 #: common/pgm_base.cpp:201
 msgid "Hungarian"
-msgstr "匈牙利"
+msgstr "匈牙利语"
 
 #: common/pgm_base.cpp:209
 msgid "Polish"
-msgstr "波兰"
+msgstr "波兰语"
 
 #: common/pgm_base.cpp:217
 msgid "Czech"
-msgstr "捷克"
+msgstr "捷克语"
 
 #: common/pgm_base.cpp:225
 msgid "Russian"
@@ -2895,7 +2895,7 @@ msgstr "俄语"
 
 #: common/pgm_base.cpp:233
 msgid "Korean"
-msgstr "韩国"
+msgstr "韩语"
 
 #: common/pgm_base.cpp:241
 msgid "Chinese simplified"
@@ -2903,7 +2903,7 @@ msgstr "简体中文"
 
 #: common/pgm_base.cpp:249
 msgid "Catalan"
-msgstr "加泰罗尼亚"
+msgstr "加泰罗尼亚语"
 
 #: common/pgm_base.cpp:257
 msgid "Dutch"
@@ -2911,15 +2911,15 @@ msgstr "荷兰语"
 
 #: common/pgm_base.cpp:265
 msgid "Japanese"
-msgstr "日本"
+msgstr "日语"
 
 #: common/pgm_base.cpp:273
 msgid "Bulgarian"
-msgstr "保加利亚"
+msgstr "保加利亚语"
 
 #: common/pgm_base.cpp:281
 msgid "Lithuanian"
-msgstr "立陶宛"
+msgstr "立陶宛语"
 
 #: common/pgm_base.cpp:359
 msgid "No default editor found, you must choose it"
@@ -3866,7 +3866,7 @@ msgstr "缩放封装至适合大小(Home)"
 
 #: cvpcb/display_footprints_frame.cpp:243
 msgid "3D Display (Alt+3)"
-msgstr "三维显示 (Alt+3)"
+msgstr "3D显示 (Alt+3)"
 
 #: cvpcb/display_footprints_frame.cpp:255
 msgid "Show texts in filled mode"
@@ -7468,7 +7468,7 @@ msgstr "别名没有冒号"
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:403
 #, c-format
 msgid "Duplicate Nickname: \"%s\" in rows %d and %d"
-msgstr "复制昵称：\"%s\" 在行 %d 和 %d 中"
+msgstr "复制别名：\"%s\" 在行 %d 和 %d 中"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:333
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:418
@@ -7484,13 +7484,13 @@ msgstr "选择库"
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:383
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:656
 msgid "Warning: Duplicate Nickname"
-msgstr "警告：重复的昵称"
+msgstr "警告：重复的别名"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:384
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:657
 #, c-format
 msgid "A library nicknamed \"%s\" already exists."
-msgstr "库昵称 \"%s\"已经存在。"
+msgstr "库别名 \"%s\"已经存在。"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:385
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:658
@@ -11360,7 +11360,7 @@ msgstr "保存符号文件 '%s' 发生错误。"
 #, c-format
 msgid ""
 "Duplicate library nickname \"%s\" found in symbol library table file line %d"
-msgstr "找到重复的库昵称 \"%s\" 在符号库表文件行 %d 中"
+msgstr "找到重复的库别名 \"%s\" 在符号库表文件行 %d 中"
 
 #: eeschema/symbol_lib_table.cpp:297
 #, c-format
@@ -13123,7 +13123,7 @@ msgstr ""
 
 #: kicad/commandframe.cpp:103
 msgid "Calculator tools"
-msgstr "计量工具"
+msgstr "计算器工具"
 
 #: kicad/commandframe.cpp:107
 msgid "Worksheet layout editor"
@@ -15943,7 +15943,7 @@ msgstr "属性"
 
 #: pcbnew/class_module.cpp:639
 msgid "No 3D shape"
-msgstr "没有3D样式"
+msgstr "没有3D模型"
 
 #: pcbnew/class_module.cpp:645
 msgid "3D-Shape"
@@ -17916,17 +17916,17 @@ msgstr "注意：阻焊和助焊值仅适用于铜层上的焊盘。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:333
 msgid "3D Shape Name:"
-msgstr "3D外形名称:"
+msgstr "3D模型名称:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:353
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:298
 msgid "Add 3D Shape"
-msgstr "添加3D外形"
+msgstr "添加3D模型"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:356
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:301
 msgid "Remove 3D Shape"
-msgstr "移除3D外形"
+msgstr "移除3D模型"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:359
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:304
@@ -17936,7 +17936,7 @@ msgstr "修改文件名称"
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:383
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:328
 msgid "3D Settings"
-msgstr "3D 设置"
+msgstr "3D设置"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.h:137
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.h:121
@@ -17992,7 +17992,7 @@ msgstr "封装库中的名称:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:87
 msgid "Library nickname:"
-msgstr "库昵称："
+msgstr "库别名："
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:111
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:31
@@ -18001,7 +18001,7 @@ msgstr "锁定"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:278
 msgid "3D Shape Names:"
-msgstr "3D 外形名称:"
+msgstr "3D模型名称:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_text.cpp:204
 msgid ""
@@ -22163,7 +22163,7 @@ msgstr "用户中止"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:25
 msgid "Welcome to the 3D shape Libraries downloader Wizard!"
-msgstr "欢迎使用3D图形库下载向导！"
+msgstr "欢迎使用3D模型库下载向导！"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:35
 msgid "Please select the URL for the 3D libraries to download"
@@ -22175,7 +22175,7 @@ msgstr "https://github.com/KiCad/packages3d"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:56
 msgid "3D shape local folder:"
-msgstr "3D 外形本地文件夹："
+msgstr "3D模型本地文件夹："
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:72
 msgid "Default 3D Path"
@@ -22211,7 +22211,7 @@ msgstr "本地库文件夹:"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:174
 msgid "3D shape libraries to be downloaded:"
-msgstr "下载3D形状库："
+msgstr "下载3D模型库："
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:194
 msgid "Libraries"
@@ -22219,7 +22219,7 @@ msgstr "库"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.h:82
 msgid "Add 3D Shape Libraries Wizard"
-msgstr "3D图形库添加向导"
+msgstr "3D模型库添加向导"
 
 #: pcbnew/dimension.cpp:150
 msgid ""
@@ -23243,7 +23243,7 @@ msgstr "参数"
 #: pcbnew/footprint_wizard_frame.cpp:632
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
-msgstr "模型浏览: 三维查看 [%s]"
+msgstr "模型浏览: 3D查看器 [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:655
 msgid "Select wizard script to run"
@@ -24455,7 +24455,7 @@ msgstr "编辑全局和项目足迹库列表"
 
 #: pcbnew/menubar_pcb_editor.cpp:336
 msgid "Add &3D Shapes Libraries Wizard..."
-msgstr "3D图形库添加向导(&3)..."
+msgstr "3D模型库添加向导(&3)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:337
 msgid "Download 3D shape libraries from GitHub"
