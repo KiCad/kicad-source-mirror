@@ -1,4 +1,4 @@
-# Try to find OCE / OCC
+# Try to find OCC
 # Once done this will define
 #
 # OCC_FOUND          - system has OCC - OpenCASCADE
@@ -28,7 +28,6 @@
 
 # Set the needed libraries
 set( OCC_LIBS
-    PTKernel
     TKBinL
     TKBin
     TKBinTObj
@@ -51,18 +50,11 @@ set( OCC_LIBS
     TKMath
     TKMesh
     TKMeshVS
-    TKNIS
     TKOffset
     TKOpenGl
-    TKPCAF
-    TKPLCAF
     TKPrim
-    TKPShape
     TKService
-    TKShapeSchema
     TKShHealing
-    TKStdLSchema
-    TKStdSchema
     TKSTEP209
     TKSTEPAttr
     TKSTEPBase
@@ -71,9 +63,7 @@ set( OCC_LIBS
     TKTObj
     TKTopAlgo
     TKV3d
-    TKVoxel
     TKVRML
-    TKXCAFSchema
     TKXCAF
     TKXDEIGES
     TKXDESTEP
@@ -85,76 +75,9 @@ set( OCC_LIBS
     TKXSBase
 )
 
-set( OCE_LIBS TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
-
-# First try to find OpenCASCADE Community Edition
-if(NOT DEFINED OCE_INCLUDE_DIR)
-  # Check for OSX needs to come first because UNIX evaluates to true on OSX
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    if(DEFINED HOMEBREW_PREFIX)
-      find_package(OCE 0.16 QUIET COMPONENTS ${OCE_LIBS}
-        HINTS
-          ${OCC_LIBRARY_DIR}
-          ${HOMEBREW_PREFIX}/Cellar/oce/*
-      )
-    elseif(DEFINED MACPORTS_PREFIX)
-      find_package(OCE 0.16 QUIET COMPONENTS ${OCE_LIBS}
-        HINTS
-          ${OCC_LIBRARY_DIR}
-          ${MACPORTS_PREFIX}/Library/Frameworks
-      )
-    endif()
-  else()
-    find_package(OCE 0.16 QUIET COMPONENTS ${OCE_LIBS}
-      HINTS
-        ${OCC_LIBRARY_DIR}
-        /usr
-        /usr/local
-        /opt
-        /opt/oce
-      PATH_SUFFIXES lib
-    )
-  endif()
-endif()
-
-if(OCE_FOUND AND NOT KICAD_USE_OCC)
-  set(OCC_TYPE "OpenCASCADE Community Edition")
-  set(OCC_INCLUDE_DIR ${OCE_INCLUDE_DIRS})
-  FIND_LIBRARY(OCC_LIBRARY TKernel
-    HINTS
-    ${OCC_LIBRARY_DIR}
-    /usr
-    /usr/local
-    /opt
-    /opt/oce
-    PATH_SUFFIXES lib
-  )
-else(OCE_FOUND AND NOT KICAD_USE_OCC) #look for OpenCASCADE
-  set(OCC_TYPE "OpenCASCADE Standard Edition")
-  if(WIN32)
-    if(CYGWIN OR MINGW)
-      FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
-        /usr/include/opencascade
-        /usr/local/include/opencascade
-        /opt/opencascade/include
-        /opt/opencascade/inc
-      )
-      FIND_LIBRARY(OCC_LIBRARY TKernel
-        HINTS
-        ${OCC_LIBRARY_DIR}
-        /usr/lib
-        /usr/local/lib
-        /opt/opencascade/lib
-      )
-    else(CYGWIN OR MINGW)
-      FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
-        "[HKEY_LOCAL_MACHINE\\SOFTWARE\\SIM\\OCC\\2;Installation Path]/include"
-      )
-      FIND_LIBRARY(OCC_LIBRARY TKernel
-        "[HKEY_LOCAL_MACHINE\\SOFTWARE\\SIM\\OCC\\2;Installation Path]/lib"
-      )
-    endif(CYGWIN OR MINGW)
-  else(WIN32)
+set(OCC_TYPE "OpenCASCADE Standard Edition")
+if(WIN32)
+  if(CYGWIN OR MINGW)
     FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
       /usr/include/opencascade
       /usr/local/include/opencascade
@@ -164,14 +87,36 @@ else(OCE_FOUND AND NOT KICAD_USE_OCC) #look for OpenCASCADE
     FIND_LIBRARY(OCC_LIBRARY TKernel
       HINTS
       ${OCC_LIBRARY_DIR}
-      /usr
-      /usr/local
-      /opt/opencascade
-      /opt/opencascade/lin64/gcc
-      PATH_SUFFIXES lib
+      /usr/lib
+      /usr/local/lib
+      /opt/opencascade/lib
     )
-  endif(WIN32)
-endif(OCE_FOUND AND NOT KICAD_USE_OCC)
+  else(CYGWIN OR MINGW)
+    FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
+      "[HKEY_LOCAL_MACHINE\\SOFTWARE\\SIM\\OCC\\2;Installation Path]/include"
+    )
+    FIND_LIBRARY(OCC_LIBRARY TKernel
+      "[HKEY_LOCAL_MACHINE\\SOFTWARE\\SIM\\OCC\\2;Installation Path]/lib"
+    )
+  endif(CYGWIN OR MINGW)
+else(WIN32)
+  FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
+    /usr/include/opencascade
+    /usr/local/include/opencascade
+    /opt/opencascade/include
+    /opt/opencascade/inc
+  )
+  FIND_LIBRARY(OCC_LIBRARY TKernel
+    HINTS
+    ${OCC_LIBRARY_DIR}
+    /usr
+    /usr/local
+    /opt/opencascade
+    /opt/opencascade/lin64/gcc
+    PATH_SUFFIXES lib
+  )
+endif(WIN32)
+
 
 if(OCC_LIBRARY)
   GET_FILENAME_COMPONENT(OCC_LIBRARY_DIR ${OCC_LIBRARY} PATH)
