@@ -159,7 +159,7 @@ private:
 
         const auto& selection = getToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
 
-        bool connItem = ( S_C::OnlyType( PCB_VIA_T ) || S_C::OnlyType( PCB_TRACE_T ) )( selection );
+        bool connItem = S_C::OnlyTypes( GENERAL_COLLECTOR::Tracks )( selection );
         bool sheetSelEnabled = ( S_C::OnlyType( PCB_MODULE_T ) )( selection );
 
         Enable( getMenuId( PCB_ACTIONS::selectNet ), connItem );
