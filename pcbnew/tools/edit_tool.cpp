@@ -693,7 +693,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     for( auto item : selection )
     {
-        m_commit->Modify( item );
+        if( !item->IsNew() )
+            m_commit->Modify( item );
+
         static_cast<BOARD_ITEM*>( item )->Rotate( selection.GetReferencePoint(), rotateAngle );
     }
 
@@ -769,7 +771,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_MODULE_EDGE_T:
         case PCB_MODULE_TEXT_T:
         case PCB_PAD_T:
-            m_commit->Modify( item );
+            // Only create undo entry for items on the board
+            if( !item->IsNew() )
+                m_commit->Modify( item );
+
             break;
         default:
             continue;
@@ -833,7 +838,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     for( auto item : selection )
     {
-        m_commit->Modify( item );
+        if( !item->IsNew() )
+            m_commit->Modify( item );
+
         static_cast<BOARD_ITEM*>( item )->Flip( modPoint );
     }
 
@@ -923,7 +930,9 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
         for( auto item : selection )
         {
-            m_commit->Modify( item );
+            if( !item->IsNew() )
+                m_commit->Modify( item );
+
             static_cast<BOARD_ITEM*>( item )->Move( finalMoveVector );
             static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, params.rotation );
 
