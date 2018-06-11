@@ -867,4 +867,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
             break;
         }
     }
+    else
+    {
+        event.Skip();
+    }
 }
