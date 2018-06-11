@@ -53,6 +53,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
     EVT_MENU( ID_TO_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
+    EVT_MENU( ID_BROWSE_IN_FILE_EXPLORER, KICAD_MANAGER_FRAME::OnBrowseInFileExplorer )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, KICAD_MANAGER_FRAME::OnConfigurePaths )
     EVT_MENU( ID_EDIT_SYMBOL_LIBRARY_TABLE, KICAD_MANAGER_FRAME::OnEditSymLibTable )
     EVT_MENU( ID_EDIT_FOOTPRINT_LIBRARY_TABLE, KICAD_MANAGER_FRAME::OnEditFpLibTable )
@@ -318,6 +319,13 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "&Open Local File..." ),
                  _( "Edit local file" ),
                  KiBitmap( browse_files_xpm ) );
+
+    // Browse in file explorer
+    AddMenuItem( browseMenu,
+                ID_BROWSE_IN_FILE_EXPLORER,
+                _( "&Browse Project Files..." ),
+                _( "Open project directory in file explorer" ),
+                KiBitmap( open_project_xpm ) );
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;

@@ -117,6 +117,7 @@ enum id_kicad_frm {
 
     ID_TO_TEXT_EDITOR,
     ID_BROWSE_AN_SELECT_FILE,
+    ID_BROWSE_IN_FILE_EXPLORER,
     ID_SAVE_AND_ZIP_FILES,
     ID_READ_ZIP_ARCHIVE,
     ID_INIT_WATCHED_PATHS,
@@ -178,6 +179,7 @@ public:
     void OnPreferences( wxCommandEvent& aEvent );
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );
+    void OnBrowseInFileExplorer( wxCommandEvent& event );
     void OnShowHotkeys( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
