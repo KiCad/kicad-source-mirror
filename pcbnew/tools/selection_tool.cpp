@@ -54,6 +54,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <router/router_tool.h>
 #include <connectivity_data.h>
+#include <footprint_viewer_frame.h>
 #include "tool_event_utils.h"
 
 #include "selection_tool.h"
@@ -206,6 +207,15 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 bool SELECTION_TOOL::Init()
 {
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+
+    if( frame && ( frame->IsType( FRAME_PCB_MODULE_VIEWER )
+                   || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL ) ) )
+    {
+        m_menu.AddStandardSubMenus( *frame );
+        return true;
+    }
+
     auto selectMenu = std::make_shared<SELECT_MENU>();
     selectMenu->SetTool( this );
     m_menu.AddSubMenu( selectMenu );
@@ -214,8 +224,6 @@ bool SELECTION_TOOL::Init()
 
     menu.AddMenu( selectMenu.get(), false, SELECTION_CONDITIONS::NotEmpty );
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
-
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
 
     if( frame )
     {
