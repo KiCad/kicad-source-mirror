@@ -41,7 +41,7 @@
 #include <invoke_pcb_dialog.h>
 #include <pcb_layer_widget.h>
 #include <board_commit.h>
-
+#include <view/view.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
@@ -382,6 +382,14 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
         {
             SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules );
+
+            m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+
+            if( IsGalCanvasActive() && GetGalCanvas() )
+                GetGalCanvas()->ForceRefresh();
+            else
+                GetCanvas()->Refresh();
+
             GetScreen()->ClrModify();
         }
         break;

@@ -701,6 +701,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
 
     wxString libraryName = aModule->GetFPID().GetLibNickname();
     wxString footprintName = aModule->GetFPID().GetLibItemName();
+    bool updateValue = ( aModule->GetValue() == footprintName );
 
     if( libraryName.IsEmpty() )
         libraryName = activeLibrary;
@@ -775,6 +776,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
     }
 
     aModule->SetFPID( LIB_ID( libraryName, footprintName ) );
+
+    if( updateValue )
+        aModule->SetValue( footprintName );
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
