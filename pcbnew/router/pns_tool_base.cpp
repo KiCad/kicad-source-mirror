@@ -101,6 +101,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     m_iface->SetBoard( board() );
     m_iface->SetView( getView() );
     m_iface->SetHostTool( this );
+    m_iface->SetDisplayOptions( (PCB_DISPLAY_OPTIONS*) frame()->GetDisplayOptions() );
 
     m_router = new ROUTER;
     m_router->SetInterface( m_iface );
