@@ -304,6 +304,8 @@ public:
 
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
+    const BOX2I ViewBBox() const override;
+
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 #if defined (DEBUG)

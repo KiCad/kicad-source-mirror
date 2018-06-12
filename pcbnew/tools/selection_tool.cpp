@@ -624,7 +624,9 @@ bool SELECTION_TOOL::selectMultiple()
 
                 if( windowSelection )
                 {
-                    if( selectionBox.Contains( item->ViewBBox() ) )
+                    BOX2I bbox( item->GetBoundingBox() );
+
+                    if( selectionBox.Contains( bbox ) )
                     {
                         if( m_subtractive )
                             unselect( item );
