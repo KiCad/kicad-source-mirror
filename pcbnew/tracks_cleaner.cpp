@@ -152,7 +152,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     // Old model has to be refreshed, GAL normally does not keep updating it
     Compile_Ratsnest( NULL, false );
 
-    wxBusyCursor( dummy );
+    wxBusyCursor dummy;
     BOARD_COMMIT commit( this );
     TRACKS_CLEANER cleaner( GetBoard(), commit );
 
