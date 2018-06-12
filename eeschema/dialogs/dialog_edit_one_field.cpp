@@ -150,7 +150,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
 void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
 {
     // pick a footprint using the footprint picker.
-    wxString fpid;
+    wxString fpid = m_TextValue->GetValue();
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 

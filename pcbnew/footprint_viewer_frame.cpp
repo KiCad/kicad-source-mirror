@@ -233,11 +233,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     }
 
     drawPanel->DisplayBoard( m_Pcb );
-    updateView();
 
     m_auimgr.SetManagedWindow( this );
 
-    wxSize minsize(100,-1);     // Min size of list boxes
+    wxSize minsize( 100, -1 );     // Min size of list boxes
 
     // Main toolbar is initially docked at the top of the main window and dockable on any side.
     // The close button is disable because the footprint viewer has no main menu to re-enable it.
@@ -303,6 +302,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
     UseGalCanvas( switchToGalCanvas );
+    updateView();
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
