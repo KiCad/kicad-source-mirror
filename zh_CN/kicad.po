@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-11 12:47+0800\n"
+"PO-Revision-Date: 2018-06-12 19:11+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -111,7 +111,7 @@ msgstr "向上移动别名"
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:274
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:281
 msgid "Move alias down"
-msgstr "向下移动别名向下"
+msgstr "向下移动别名"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:370
 msgid ""
@@ -419,7 +419,7 @@ msgstr "简化孔轮廓"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:940
 msgid "Build Tech layers"
-msgstr "建立技术层"
+msgstr "建立工艺层"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1170
 msgid "Build BVH for holes and vias"
@@ -697,7 +697,7 @@ msgstr "使用基于漫反射颜色材料的CAD的色彩风格。"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:194
 msgid "OpenGL Options"
-msgstr "OpenGL 设置"
+msgstr "OpenGL选项"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:197
 msgid "Show Copper Thickness"
@@ -4358,7 +4358,7 @@ msgstr "重置，但保持多单元器件的顺序"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:125
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
 msgid "Options:"
-msgstr "设置:"
+msgstr "选项:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Numbering:"
@@ -4667,7 +4667,7 @@ msgstr "创建多个单元元件时，勾选这个选项，所有单位都不能
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_erc_base.cpp:154 include/lib_table_grid.h:195
 msgid "Options"
-msgstr "设置"
+msgstr "选项"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/selpart.cpp:71
@@ -5736,7 +5736,7 @@ msgstr "字段名称模板"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:138
 msgid "Schematic Editor Options"
-msgstr "原理图编辑设置"
+msgstr "原理图编辑选项"
 
 #: eeschema/dialogs/dialog_erc.cpp:232
 msgid "Marker not found"
@@ -6618,7 +6618,7 @@ msgstr "打印图纸 %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print options:"
-msgstr "打印设置:"
+msgstr "打印选项:"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print sheet &reference and title block"
@@ -12381,7 +12381,7 @@ msgstr ""
 "KiCad可以使用你的显卡给你一个更流畅和更快的体验。此选项在默认情况下是关闭的，"
 "因为它与部分计算机不兼容。\n"
 "\n"
-"你愿意尝试启用图形加速码？\n"
+"你愿意尝试启用图形加速吗？\n"
 "\n"
 "如果你希望稍后选择，请在首选项菜单中选择现代工具箱。"
 
@@ -12513,15 +12513,15 @@ msgstr "切换到传统工具箱"
 #: gerbview/hotkeys.cpp:95 pcbnew/hotkeys.cpp:151
 msgid ""
 "Switch to Modern Toolset with hardware-accelerated graphics (recommended)"
-msgstr "使用硬件加速图形切换到现代工具箱(推荐)"
+msgstr "切换到具有硬件图形加速的现代工具箱(推荐)"
 
 #: gerbview/hotkeys.cpp:101 pcbnew/hotkeys.cpp:157
 msgid "Switch to Modern Toolset with software graphics (fall-back)"
-msgstr "使用软件图形切换到现代工具箱 (回退)"
+msgstr "切换到具有软件绘图的现代工具箱 (回退)"
 
 #: gerbview/hotkeys.cpp:108 pcbnew/hotkeys.cpp:283
 msgid "Measure Distance (Modern Toolset only)"
-msgstr "测量距离（仅适用于现代工具箱）"
+msgstr "测量距离(仅适用于现代工具箱)"
 
 #: gerbview/hotkeys.cpp:131
 msgid "Gerbview Hotkeys"
@@ -12736,7 +12736,7 @@ msgstr "在透明模式下显示图层"
 
 #: gerbview/menubar.cpp:292
 msgid "&Options"
-msgstr "设置(&O)"
+msgstr "选项&O)"
 
 #: gerbview/menubar.cpp:293
 msgid "Set options to draw items"
@@ -12760,11 +12760,11 @@ msgstr "现代工具箱 (加速&A)"
 #: gerbview/menubar.cpp:318 pcbnew/menubar_footprint_editor.cpp:463
 #: pcbnew/menubar_pcb_editor.cpp:225
 msgid "Use Modern Toolset with hardware-accelerated graphics (recommended)"
-msgstr "使用带有硬件加速绘图的现代工具箱(推荐）"
+msgstr "使用带有硬件图形加速的现代工具箱(推荐）"
 
 #: gerbview/menubar.cpp:321 pcbnew/menubar_pcb_editor.cpp:228
 msgid "Modern Toolset (Fallba&ck)"
-msgstr "现代工具箱 (后退 &C)"
+msgstr "现代工具箱 (回退&C)"
 
 #: gerbview/menubar.cpp:324 pcbnew/menubar_footprint_editor.cpp:469
 #: pcbnew/menubar_pcb_editor.cpp:231
@@ -18340,7 +18340,7 @@ msgstr "简洁 PCB (没有铜箔或丝印)"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:70
 msgid "VRML Export Options"
-msgstr "VRML导出设置"
+msgstr "VRML导出选项"
 
 #: pcbnew/dialogs/dialog_find.cpp:132
 #, c-format
@@ -18418,7 +18418,7 @@ msgstr "从这个库列表中移除一个PCB库"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:156
 msgid "Options Editor"
-msgstr "编辑器设置"
+msgstr "编辑器选项"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:157
 msgid "Zoom into the options table for current row"
@@ -18441,7 +18441,7 @@ msgstr "库 \"%s\" 的选项"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
-msgstr "插件设置:"
+msgstr "插件选项:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:39
 msgid "Option"
@@ -18473,7 +18473,7 @@ msgstr "设置选项："
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:94
 msgid "Options supported by current plugin"
-msgstr "插件设置"
+msgstr "当前插件支持的选项"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:98
 msgid "<< Append Selected Option"
@@ -20269,7 +20269,7 @@ msgstr "磁性焊盘："
 
 #: pcbnew/dialogs/dialog_modedit_options_base.h:83
 msgid "Footprint Editor Options"
-msgstr "封装编辑器设置"
+msgstr "封装编辑器选项"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:235
 msgid "Distance:"
@@ -23479,7 +23479,7 @@ msgstr "添加新布线"
 
 #: pcbnew/hotkeys.cpp:100
 msgid "Route Differential Pair (Modern Toolset only)"
-msgstr "差分对布线（仅适用于现代工具箱）"
+msgstr "差分对布线(仅适用于现代工具箱)"
 
 #: pcbnew/hotkeys.cpp:102
 msgid "Tune Single Track (Modern Toolset only)"
@@ -23487,7 +23487,7 @@ msgstr "调整单轨布线(仅适用于现代工具箱）"
 
 #: pcbnew/hotkeys.cpp:104
 msgid "Tune Differential Pair Length (Modern Toolset only)"
-msgstr "调整差分对长度(仅限于现代工具箱)"
+msgstr "调整差分对长度(仅适用于现代工具箱)"
 
 #: pcbnew/hotkeys.cpp:106
 msgid "Tune Differential Pair Skew (Modern Toolset only)"
@@ -23495,7 +23495,7 @@ msgstr "调整差分对偏斜（仅适用于现代工具箱）"
 
 #: pcbnew/hotkeys.cpp:108
 msgid "Length Tuning Settings (Modern Toolset only)"
-msgstr "长度调整设置(仅限于现代工具箱)"
+msgstr "长度调整设置(仅适用于现代工具箱)"
 
 #: pcbnew/hotkeys.cpp:111
 msgid "Add Through Via"
@@ -24321,7 +24321,7 @@ msgstr "图形加速，网格和光标设置。"
 
 #: pcbnew/menubar_footprint_editor.cpp:466
 msgid "Modern Toolset (&Fallback)"
-msgstr "现代工具箱 (后退&F)"
+msgstr "现代工具箱 (回退&F)"
 
 #: pcbnew/menubar_footprint_editor.cpp:486
 msgid "Open the Pcbnew Manual"
