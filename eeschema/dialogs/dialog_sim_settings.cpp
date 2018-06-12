@@ -130,6 +130,15 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                 DisplayError( this, e.what() );
                 return false;
             }
+            catch( const KI_PARAM_ERROR& e )
+            {
+                DisplayError( this, e.What() );
+                return false;
+            }
+            catch( ... )
+            {
+                return false;
+            }
         }
 
         if( m_dcEnable2->IsChecked() )
@@ -143,6 +152,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
             /// @todo for some reason it does not trigger the assigned SPICE_VALIDATOR,
             // hence try..catch below
             if( !m_dcStart2->Validate() || !m_dcStop2->Validate() || !m_dcIncr2->Validate() )
+                return false;
+
+            if( m_dcStart2->IsEmpty() || m_dcStop2->IsEmpty() || m_dcIncr2->IsEmpty() )
                 return false;
 
             try
@@ -160,6 +172,16 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                 DisplayError( this, e.what() );
                 return false;
             }
+            catch( const KI_PARAM_ERROR& e )
+            {
+                DisplayError( this, e.What() );
+                return false;
+            }
+            catch( ... )
+            {
+                return false;
+            }
+
         }
 
         m_simCommand = simCmd;
