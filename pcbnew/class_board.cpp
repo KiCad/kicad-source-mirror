@@ -416,6 +416,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
 
         if( !pad )
             pad = GetPad( aPosition, layer_set );
+
         if( pad )
             distanceToPadCenter = GetLineLength( aPosition, pad->GetCenter() );
 
@@ -431,7 +432,6 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
         if( via )
         {
             layer_set = via->GetLayerSet();
-
             aList->push_back( via );
         }
 
@@ -492,6 +492,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
             {
                 if( GetPad( aPosition, layer_set ) != pad )
                     return;
+
                 if( GetLineLength( aPosition, pad->GetCenter() ) > distanceToPadCenter )
                     return;
             }
@@ -1809,29 +1810,6 @@ TRACK* BOARD::GetVisibleTrack( TRACK* aStartingTrace, const wxPoint& aPosition,
 
     return NULL;
 }
-
-
-#if defined(DEBUG) && 0
-static void dump_tracks( const char* aName, const TRACKS& aList )
-{
-    printf( "%s: count=%zd\n", aName, aList.size() );
-
-    for( unsigned i = 0; i < aList.size();  ++i )
-    {
-        TRACK*  seg = aList[i];
-        ::VIA*  via = dynamic_cast< ::VIA* >( seg );
-
-        if( via )
-            printf( " via[%u]: (%d, %d)\n", i, via->GetStart().x, via->GetStart().y );
-        else
-            printf( " seg[%u]: (%d, %d) (%d, %d)\n", i,
-                    seg->GetStart().x, seg->GetStart().y,
-                    seg->GetEnd().x,   seg->GetEnd().y );
-    }
-}
-#endif
-
-
 
 
 TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,

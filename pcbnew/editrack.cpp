@@ -469,26 +469,21 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     {
         int    netcode    = g_FirstTrackSegment->GetNetCode();
         TRACK* firstTrack = g_FirstTrackSegment;
-        int    newCount   = g_CurrentTrackList.GetCount();
+        int    newCount   = 0;
 
         // Put entire new current segment list in BOARD, and prepare undo command
         TRACK* track;
         TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( GetBoard() );
 
-        while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
+        while( ( track = g_CurrentTrackList.PopFront() ) != nullptr )
         {
             ITEM_PICKER picker( track, UR_NEW );
             s_ItemsListPicker.PushItem( picker );
             GetBoard()->m_Track.Insert( track, insertBeforeMe );
             GetBoard()->GetConnectivity()->Add( track );
-        }
-
-        int i = 0;
-
-        for( track = firstTrack; track && i < newCount; ++i, track = track->Next() )
-        {
             track->ClearFlags();
             track->SetState( BUSY, false );
+            newCount++;
         }
 
         // delete the old track, if it exists and is redundant

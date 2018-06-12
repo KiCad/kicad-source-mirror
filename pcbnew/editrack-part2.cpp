@@ -249,15 +249,14 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     TRACK*  StartTrack, * EndTrack;
     TRACK*  pt_segm;
     TRACK*  pt_del;
-    int     ii, jj, nb_segm, nbconnect;
+    int     nb_segm, nbconnect;
     wxPoint start;
     wxPoint end;
     LSET startmasklayer, endmasklayer;
-
     int     netcode = aNewTrack->GetNetCode();
 
-    /* Reconstruct the complete track (the new track has to start on a segment of track).
-     */
+    // Reconstruct the complete track (the new track has to start on a segment of track).
+    // Note: aNewTrackSegmentsCount conatins the number of new track segments
     ListSetState( aNewTrack, aNewTrackSegmentsCount, BUSY, false );
 
     /* If the new track begins with a via, complete the track segment using
@@ -267,28 +266,30 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     if( aNewTrack->Type() == PCB_VIA_T && ( aNewTrackSegmentsCount > 1 ) )
         aNewTrack = aNewTrack->Next();
 
-    aNewTrack = GetBoard()->MarkTrace( aNewTrack, &aNewTrackSegmentsCount, NULL, NULL, true );
-    wxASSERT( aNewTrack );
+    // When MarkTrace try to find the entire track, if the starting segment
+    // is fully inside a pad, MarkTrace does not find correctly the full trace,
+    // because the entire track is the set of segments between 2 nodes
+    // (pads or point connecting more than 2 items)
+    // so use an other (better) starting segment in this case
+    TRACK* track_segment = aNewTrack;
 
-#if 0 && defined(DEBUG)
-    TRACK* EndNewTrack;      // The last segment of the list chained to the track
-
-    EndNewTrack = aNewTrack;
-
-    for( ii = 1;  ii < aNewTrackSegmentsCount; ii++ )
+    for( int ii = 0; ii < aNewTrackSegmentsCount; ii++ )
     {
-        wxASSERT( EndNewTrack->GetState( -1 ) != 0 );
-        D( printf( "track %p is newly part of net %d\n", EndNewTrack, netcode ); )
-        EndNewTrack = EndNewTrack->Next();
+        D_PAD* pad_st = m_Pcb->GetPad( aNewTrack->GetStart() );
+        D_PAD* pad_end = m_Pcb->GetPad( aNewTrack->GetEnd() );
+
+        if( pad_st && pad_st == pad_end )
+            track_segment = aNewTrack->Next();
+        else
+            break;
     }
 
-    wxASSERT( EndNewTrack->GetState( -1 ) != 0 );
-    D( printf( "track %p is newly part of net %d\n", EndNewTrack, netcode ); )
-
-    for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
-        track->Show( 0, std::cout );
-
-#endif
+    // Mark the full trace containing track_segment, and recalculate the
+    // beginning of the trace, and the number of segments, as the new trace
+    // can contain also already existing track segments
+    aNewTrack = GetBoard()->MarkTrace( track_segment, &aNewTrackSegmentsCount,
+                                       nullptr, nullptr, true );
+    wxASSERT( aNewTrack );
 
     TRACK* bufStart = m_Pcb->m_Track->GetStartNetCode( netcode ); // Beginning of tracks of the net
     TRACK* bufEnd = bufStart->GetEndNetCode( netcode );           // End of tracks of the net
@@ -296,7 +297,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     // Flags for cleaning the net.
     for( pt_del = bufStart;  pt_del;  pt_del = pt_del->Next() )
     {
-//        D( std::cout<<"track "<<pt_del<<" turning off BUSY | IN_EDIT | IS_LINKED"<<std::endl; )
+        // printf( "track %p turning off BUSY | IN_EDIT | IS_LINKED\n", pt_del );
         pt_del->SetState( BUSY | IN_EDIT | IS_LINKED, false );
 
         if( pt_del == bufEnd )  // Last segment reached
@@ -425,10 +426,10 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         /* Test if the marked track is redundant, i.e. if one of marked segments
          * is connected to the starting point of the new track.
          */
-        ii = 0;
+
         pt_segm = pt_del;
 
-        for( ; pt_segm && (ii < nb_segm); pt_segm = pt_segm->Next(), ii++ )
+        for( int ii = 0; pt_segm && (ii < nb_segm); pt_segm = pt_segm->Next(), ii++ )
         {
             if( pt_segm->GetState( BUSY ) == 0 )
                 break;
@@ -440,7 +441,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
 
                 DrawTraces( m_canvas, aDC, pt_del, nb_segm, GR_XOR | GR_HIGHLIGHT );
 
-                for( jj = 0; jj < nb_segm; jj++, pt_del = NextS )
+                for( int jj = 0; jj < nb_segm; jj++, pt_del = NextS )
                 {
                     NextS = pt_del->Next();
 
