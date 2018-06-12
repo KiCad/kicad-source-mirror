@@ -8,10 +8,10 @@ Usage:
 
   extract-docstrings.py input_py_wrapper.py input_xml_dir output_directory
 
-input_py_wrapper.py is a swig generated file, with/without docstrings, 
+input_py_wrapper.py is a swig generated file, with/without docstrings,
                     so we can get to know which classes are inspected by swig
-                    
-input_xml_dir is your doxygen generated XML directory 
+
+input_xml_dir is your doxygen generated XML directory
 
 output_directory is the directory where output will be written
 
@@ -45,14 +45,14 @@ def my_open_write(dest):
         return open(dest, 'w')
 
 
-class Doxy2SWIG:    
+class Doxy2SWIG:
     """Converts Doxygen generated XML files into a file containing
     docstrings that can be used by SWIG-1.3.x that have support for
     feature("docstring").  Once the data is parsed it is stored in
     self.pieces.
 
-    """    
-    
+    """
+
     def __init__(self, src):
         """Initialize the instance given a source object (file or
         filename).
@@ -78,14 +78,14 @@ class Doxy2SWIG:
                         'reimplementedby', 'derivedcompoundref',
                         'basecompoundref')
         #self.generics = []
-        
+
     def generate(self):
         """Parses the file set in the initialization.  The resulting
         data is stored in `self.pieces`.
 
         """
         self.parse(self.xmldoc)
-    
+
     def parse(self, node):
         """Parse a given node.  This function in turn calls the
         `parse_<nodeType>` functions which handle the respective
@@ -114,7 +114,7 @@ class Doxy2SWIG:
         `do_<tagName>` handers for different elements.  If no handler
         is available the `generic_parse` method is called.  All
         tagNames specified in `self.ignores` are simply ignored.
-        
+
         """
         name = node.tagName
         ignores = self.ignores
@@ -164,7 +164,7 @@ class Doxy2SWIG:
         if pad:
             npiece = len(self.pieces)
             if pad == 2:
-                self.add_text('\n')                
+                self.add_text('\n')
         for n in node.childNodes:
             self.parse(n)
         if pad:
@@ -242,7 +242,7 @@ class Doxy2SWIG:
         tmp = node.parentNode.parentNode.parentNode
         compdef = tmp.getElementsByTagName('compounddef')[0]
         cdef_kind = compdef.attributes['kind'].value
-        
+
         if prot == 'public':
             first = self.get_specific_nodes(node, ('definition', 'name'))
             name = first['name'].firstChild.data
@@ -252,7 +252,7 @@ class Doxy2SWIG:
             defn = first['definition'].firstChild.data
             self.add_text('\n')
             self.add_text('%feature("docstring") ')
-            
+
             anc = node.parentNode.parentNode
             if cdef_kind in ('file', 'namespace'):
                 ns_node = anc.getElementsByTagName('innernamespace')
@@ -260,7 +260,7 @@ class Doxy2SWIG:
                     ns_node = anc.getElementsByTagName('compoundname')
                 if ns_node:
                     ns = ns_node[0].firstChild.data
-                    self.add_text(' %s::%s "\n%s'%(ns, name, defn))   
+                    self.add_text(' %s::%s "\n%s'%(ns, name, defn))
                 else:
                     self.add_text(' %s "\n%s'%(name, defn))
             elif cdef_kind in ('class', 'struct'):
@@ -274,7 +274,7 @@ class Doxy2SWIG:
                 if n not in first.values():
                     self.parse(n)
             self.add_text(['";', '\n'])
-        
+
     def do_definition(self, node):
         data = node.firstChild.data
         self.add_text('%s "\n%s'%(data, data))
@@ -332,7 +332,7 @@ class Doxy2SWIG:
         """Cleans the list of strings given as `pieces`.  It replaces
         multiple newlines by a maximum of 2 and returns a new list.
         It also wraps the paragraphs nicely.
-        
+
         """
         ret = []
         count = 0
@@ -367,7 +367,7 @@ class Doxy2SWIG:
 def get_python_classes(input_py):
     with open(input_py) as f:
         data = f.read()
-        classes_supers = re.findall(r'class[ ]+([\w_]+)(\([\w_, ]+\))?:',data)  
+        classes_supers = re.findall(r'class[ ]+([\w_]+)(\([\w_, ]+\))?:',data)
         classes = (classname for classname,superclass in classes_supers)
         return classes
     return []
@@ -383,7 +383,7 @@ def main(input_py, input_xml, output_dir):
 
             class_file = "%s/class%s.xml"%(input_xml,classname.replace("_","__"))
             swig_file = "%s/%s.i"%(output_dir,classname.lower())
-            
+
             if os.path.isfile(class_file):
                 print "processing:",class_file," ->",swig_file
                 p = Doxy2SWIG(class_file)
@@ -392,7 +392,7 @@ def main(input_py, input_xml, output_dir):
                 f_index.write('%%include "%s.i"\n'% classname.lower())
             #else:
             #    print "ignoring class %s, as %s does not exist" %(classname,class_file)
-    
+
 
 
 
