@@ -154,9 +154,6 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
             if( !m_dcStart2->Validate() || !m_dcStop2->Validate() || !m_dcIncr2->Validate() )
                 return false;
 
-            if( m_dcStart2->IsEmpty() || m_dcStop2->IsEmpty() || m_dcIncr2->IsEmpty() )
-                return false;
-
             try
             {
                 wxString dcSource = m_exporter->GetSpiceDevice( m_dcSource2->GetValue() );
