@@ -1598,9 +1598,11 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::moveExact()
 {
-    MOVE_PARAMETERS params;
+    wxPoint         translation;
+    double          rotation;
+    ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
 
-    DIALOG_MOVE_EXACT dialog( this, params );
+    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
@@ -1616,43 +1618,23 @@ void PCB_EDIT_FRAME::moveExact()
             // Could be moved or rotated
             SaveCopyInUndoList( itemToSave, UR_CHANGED );
 
-            // begin with the default anchor
-            wxPoint anchorPoint = item->GetPosition();
+            item->Move( translation );
 
-            if( item->Type() == PCB_MODULE_T )
+            switch( rotationAnchor )
             {
-                // cast to module to allow access to the pads
-                MODULE* mod = static_cast<MODULE*>( item );
-
-                switch( params.anchor )
-                {
-                case ANCHOR_TOP_LEFT_PAD:
-                    if( mod->GetTopLeftPad()->GetAttribute() == PAD_ATTRIB_SMD )
-                    {
-                        anchorPoint = mod->GetTopLeftPad()->GetBoundingBox().GetPosition();
-                    }
-                    else
-                    {
-                        anchorPoint = mod->GetTopLeftPad()->GetPosition();
-                    }
-                    break;
-                case ANCHOR_CENTER_FOOTPRINT:
-                    anchorPoint = mod->GetFootprintRect().GetCenter();
-                    break;
-                case ANCHOR_FROM_LIBRARY:
-                    ; // nothing to do
-                }
+            case ROTATE_AROUND_ITEM_ANCHOR:
+                item->Rotate( item->GetPosition(), rotation );
+                break;
+            case ROTATE_AROUND_USER_ORIGIN:
+                item->Rotate( GetScreen()->m_O_Curseur, rotation );
+                break;
+            case ROTATE_AROUND_AUX_ORIGIN:
+                item->Rotate( GetAuxOrigin(), rotation );
+                break;
+            default:
+                wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
             }
 
-            if( params.origin == RELATIVE_TO_CURRENT_POSITION )
-            {
-                anchorPoint = wxPoint( 0, 0 );
-            }
-
-            wxPoint finalMoveVector = params.translation - anchorPoint;
-
-            item->Move( finalMoveVector );
-            item->Rotate( item->GetPosition(), params.rotation );
             m_canvas->Refresh();
         }
     }

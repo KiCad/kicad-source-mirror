@@ -26,54 +26,38 @@
 #define __DIALOG_MOVE_EXACT__
 
 #include <vector>
-// Include the wxFormBuider header base:
+#include <widgets/unit_binder.h>
+
 #include <dialog_move_exact_base.h>
 
-enum MOVE_EXACT_ORIGIN
+
+enum ROTATION_ANCHOR
 {
-    RELATIVE_TO_CURRENT_POSITION,
-    RELATIVE_TO_USER_ORIGIN,
-    RELATIVE_TO_GRID_ORIGIN,
-    RELATIVE_TO_DRILL_PLACE_ORIGIN,
-    RELATIVE_TO_SHEET_ORIGIN
-};
-
-
-enum MOVE_EXACT_ANCHOR
-{
-    ANCHOR_TOP_LEFT_PAD,
-    ANCHOR_CENTER_FOOTPRINT,
-    ANCHOR_FROM_LIBRARY
-};
-
-
-struct MOVE_PARAMETERS
-{
-    wxPoint             translation     = wxPoint( 0,0 );
-    double              rotation        = 0;
-    MOVE_EXACT_ORIGIN   origin          = RELATIVE_TO_CURRENT_POSITION;
-    MOVE_EXACT_ANCHOR   anchor          = ANCHOR_FROM_LIBRARY;
-    bool                allowOverride   = true;
-    bool                editingFootprint = false;
+    ROTATE_AROUND_ITEM_ANCHOR,
+    ROTATE_AROUND_SEL_CENTER,
+    ROTATE_AROUND_USER_ORIGIN,
+    ROTATE_AROUND_AUX_ORIGIN
 };
 
 
 class DIALOG_MOVE_EXACT : public DIALOG_MOVE_EXACT_BASE
 {
 private:
+    wxPoint&          m_translation;
+    double&           m_rotation;
+    ROTATION_ANCHOR&  m_rotationAnchor;
 
-    PCB_BASE_FRAME*     m_parent;
-    wxPoint&            m_translation;
-    double&             m_rotation;
-    MOVE_EXACT_ORIGIN&  m_origin;
-    MOVE_EXACT_ANCHOR&  m_anchor;
-    bool&               m_allowOverride;
-    bool&               m_editingFootprint;
+    UNIT_BINDER       m_moveX;
+    UNIT_BINDER       m_moveY;
+    UNIT_BINDER       m_rotate;
+
+    std::vector<ROTATION_ANCHOR> m_menuIDs;
 
 public:
     // Constructor and destructor
-    DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, MOVE_PARAMETERS &aParams );
-    ~DIALOG_MOVE_EXACT();
+    DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, wxPoint& aTranslate,
+                      double& aRotate, ROTATION_ANCHOR& aAnchor );
+    ~DIALOG_MOVE_EXACT() { };
 
 private:
 
@@ -84,9 +68,6 @@ private:
 
     void OnPolarChanged( wxCommandEvent& event ) override;
     void OnClear( wxCommandEvent& event ) override;
-
-    void OnOriginChanged( wxCommandEvent& event ) override;
-    void OnOverrideChanged( wxCommandEvent& event ) override;
 
     // Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;
@@ -107,30 +88,28 @@ private:
      */
     bool GetTranslationInIU ( wxPoint& val, bool polar );
 
-    // Update texts (comments) after changing the coordinates type (polar/cartesian)
-    void updateDlgTexts( bool aPolar );
+    void buildRotationAnchorMenu();
+
+    // Update controls and their labels after changing the coordinates type (polar/cartesian)
+    void updateDialogControls( bool aPolar );
 
     /**
      * Persistent dialog options
      */
     struct MOVE_EXACT_OPTIONS
     {
-        bool                polarCoords;
-        double              entry1;
-        double              entry2;
-        double              entryRotation;
-        MOVE_EXACT_ORIGIN   origin;
-        MOVE_EXACT_ANCHOR   anchor;
-        bool                overrideAnchor;
+        bool   polarCoords;
+        double entry1;
+        double entry2;
+        double entryRotation;
+        size_t entryAnchorSelection;
 
         MOVE_EXACT_OPTIONS():
             polarCoords( false ),
             entry1( 0 ),
             entry2( 0 ),
             entryRotation( 0 ),
-            origin( RELATIVE_TO_CURRENT_POSITION ),
-            anchor( ANCHOR_FROM_LIBRARY ),
-            overrideAnchor( false )
+            entryAnchorSelection( 0 )
         {
         }
     };

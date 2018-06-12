@@ -29,6 +29,7 @@
 #include <dialogs/dialog_position_relative_base.h>
 
 #include <tool/tool_manager.h>
+#include <widgets/unit_binder.h>
 #include "tools/position_relative_tool.h"
 
 class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE
@@ -36,17 +37,19 @@ class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE
 private:
 
     TOOL_MANAGER* m_toolMgr;
-    wxPoint&    m_translation;
-    double&     m_rotation;
-    wxPoint&    m_anchor_position;
+    wxPoint&      m_translation;
+    wxPoint&      m_anchor_position;
+
+    UNIT_BINDER   m_xOffset;
+    UNIT_BINDER   m_yOffset;
 
 public:
     // Constructor and destructor
-    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, TOOL_MANAGER* toolMgr, wxPoint& translation,
-            double& rotation, wxPoint& anchorposition );
-    ~DIALOG_POSITION_RELATIVE();
+    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, TOOL_MANAGER* toolMgr,
+                              wxPoint& translation, wxPoint& anchorposition );
+    ~DIALOG_POSITION_RELATIVE() { };
 
-    void UpdateAnchor( const wxPoint& aPosition );
+    void UpdateAnchor( BOARD_ITEM* aItem );
 
 private:
 
@@ -55,11 +58,11 @@ private:
      */
     void OnTextFocusLost( wxFocusEvent& event ) override;
 
-    void    OnPolarChanged( wxCommandEvent& event ) override;
-    void    OnClear( wxCommandEvent& event ) override;
+    void OnPolarChanged( wxCommandEvent& event ) override;
+    void OnClear( wxCommandEvent& event ) override;
 
-    void    OnSelectItemClick( wxCommandEvent& event ) override;
-    void    OnOkClick( wxCommandEvent& event ) override;
+    void OnSelectItemClick( wxCommandEvent& event ) override;
+    void OnOkClick( wxCommandEvent& event ) override;
 
     /**
      * Convert a given Cartesian point into a polar representation.
@@ -77,8 +80,8 @@ private:
      */
     bool GetTranslationInIU( wxPoint& val, bool polar );
 
-    // Update texts (comments) after changing the coordinates type (polar/cartesian)
-    void updateDlgTexts( bool aPolar );
+    // Update controls and their labels after changing the coordinates type (polar/cartesian)
+    void updateDialogControls( bool aPolar );
 
     /**
      * Persistent dialog options
@@ -88,13 +91,11 @@ private:
         bool polarCoords;
         double  entry1;
         double  entry2;
-        double  entryRotation;
 
         POSITION_RELATIVE_OPTIONS() :
             polarCoords( false ),
             entry1( 0 ),
-            entry2( 0 ),
-            entryRotation( 0 )
+            entry2( 0 )
         {
         }
     };

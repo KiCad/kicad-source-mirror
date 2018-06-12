@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,54 +22,36 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <base_units.h>
-#include <macros.h>
-#include <widgets/text_ctrl_eval.h>
-
-#include <footprint_edit_frame.h>
+#include "tools/pcb_actions.h"
 
 #include "dialog_position_relative.h"
-#include "tools/pcb_actions.h"
 
 // initialise statics
 DIALOG_POSITION_RELATIVE::POSITION_RELATIVE_OPTIONS DIALOG_POSITION_RELATIVE::m_options;
 
 
 DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, TOOL_MANAGER* toolMgr,
-        wxPoint& translation, double& rotation, wxPoint& anchorPosition ) :
+                                                    wxPoint& translation, wxPoint& anchorPosition ) :
     DIALOG_POSITION_RELATIVE_BASE( aParent ),
     m_toolMgr( toolMgr ),
     m_translation( translation ),
-    m_rotation( rotation ),
-    m_anchor_position( anchorPosition )
+    m_anchor_position( anchorPosition ),
+    m_xOffset( aParent, m_xLabel, m_xEntry, m_xUnit ),
+    m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit )
 {
-    // set the unit labels
-    m_xUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-
     // tabbing goes through the entries in sequence
     m_yEntry->MoveAfterInTabOrder( m_xEntry );
-    m_rotEntry->MoveAfterInTabOrder( m_yEntry );
 
     // and set up the entries according to the saved options
     m_polarCoords->SetValue( m_options.polarCoords );
-    m_xEntry->SetValue( wxString::FromDouble( m_options.entry1 ) );
-    m_yEntry->SetValue( wxString::FromDouble( m_options.entry2 ) );
-    m_rotEntry->SetValue( wxString::FromDouble( m_options.entryRotation ) );
-    updateDlgTexts( m_polarCoords->IsChecked() );
+    updateDialogControls( m_polarCoords->IsChecked() );
 
-    PutValueInLocalUnits( *m_anchor_x, m_anchor_position.x );
-    PutValueInLocalUnits( *m_anchor_y, m_anchor_position.y );
+    m_xOffset.SetValue( m_options.entry1 );
+    m_yOffset.SetValue( m_options.entry2 );
 
     m_stdButtonsOK->SetDefault();
 
-    GetSizer()->SetSizeHints( this );
-    Layout();
-}
-
-
-DIALOG_POSITION_RELATIVE::~DIALOG_POSITION_RELATIVE()
-{
+    FinishDialogSettings();
 }
 
 
@@ -82,21 +64,21 @@ void DIALOG_POSITION_RELATIVE::ToPolarDeg( double x, double y, double& r, double
 }
 
 
-bool DIALOG_POSITION_RELATIVE::GetTranslationInIU( wxPoint& val, bool polar )
+bool DIALOG_POSITION_RELATIVE::GetTranslationInIU ( wxPoint& val, bool polar )
 {
     if( polar )
     {
-        const int r = ValueFromTextCtrl( *m_xEntry );
-        const double q = DoubleValueFromString( DEGREES, m_yEntry->GetValue() );
+        const int r = m_xOffset.GetValue();
+        const double q = m_yOffset.GetValue();
 
-        val.x   = r * cos( DEG2RAD( q / 10.0 ) );
-        val.y   = r * sin( DEG2RAD( q / 10.0 ) );
+        val.x = r * cos( DEG2RAD( q / 10.0 ) );
+        val.y = r * sin( DEG2RAD( q / 10.0 ) );
     }
     else
     {
         // direct read
-        val.x   = ValueFromTextCtrl( *m_xEntry );
-        val.y   = ValueFromTextCtrl( *m_yEntry );
+        val.x = m_xOffset.GetValue();
+        val.y = m_yOffset.GetValue();
     }
 
     // no validation to do here, but in future, you could return false here
@@ -107,12 +89,13 @@ bool DIALOG_POSITION_RELATIVE::GetTranslationInIU( wxPoint& val, bool polar )
 void DIALOG_POSITION_RELATIVE::OnPolarChanged( wxCommandEvent& event )
 {
     bool newPolar = m_polarCoords->IsChecked();
-
-    updateDlgTexts( newPolar );
     wxPoint val;
 
     // get the value as previously stored
     GetTranslationInIU( val, !newPolar );
+
+    // now switch the controls to the new representations
+    updateDialogControls( newPolar );
 
     if( newPolar )
     {
@@ -120,8 +103,8 @@ void DIALOG_POSITION_RELATIVE::OnPolarChanged( wxCommandEvent& event )
         double r, q;
         ToPolarDeg( val.x, val.y, r, q );
 
-        PutValueInLocalUnits( *m_xEntry, KiROUND( r / 10.0 ) * 10 );
-        m_yEntry->SetValue( wxString::FromDouble( q ) );
+        m_xOffset.SetValue( KiROUND( r / 10.0) * 10 );
+        m_yOffset.SetValue( q * 10 );
     }
     else
     {
@@ -129,29 +112,26 @@ void DIALOG_POSITION_RELATIVE::OnPolarChanged( wxCommandEvent& event )
         // note - round off the last decimal place (10nm) to prevent
         // (some) rounding causing errors when round-tripping
         // you can never eliminate entirely, however
-        PutValueInLocalUnits( *m_xEntry, KiROUND( val.x / 10.0 ) * 10 );
-        PutValueInLocalUnits( *m_yEntry, KiROUND( val.y / 10.0 ) * 10 );
+        m_xOffset.SetValue( KiROUND( val.x / 10.0 ) * 10 );
+        m_yOffset.SetValue( KiROUND( val.y / 10.0 ) * 10 );
     }
 
-    Layout();
 }
 
 
-void DIALOG_POSITION_RELATIVE::updateDlgTexts( bool aPolar )
+void DIALOG_POSITION_RELATIVE::updateDialogControls( bool aPolar )
 {
     if( aPolar )
     {
-        m_xLabel->SetLabelText( _( "Distance from anchor:" ) );     // Polar radius
-        m_yLabel->SetLabelText( _( "Angle:" ) );        // Polar theta or angle
-
-        m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( DEGREES ) );
+        m_xOffset.SetLabel( _( "Distance:" ) );     // Polar radius
+        m_yOffset.SetLabel( _( "Angle:" ) );        // Polar theta or angle
+        m_yOffset.SetUnits( DEGREES );
     }
     else
     {
-        m_xLabel->SetLabelText( _( "Position from anchor X:" ) );
-        m_yLabel->SetLabelText( _( "Position from anchor Y:" ) );
-
-        m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+        m_xOffset.SetLabel( _( "Offset X:" ) );
+        m_yOffset.SetLabel( _( "Offset Y:" ) );
+        m_yOffset.SetUnits( GetUserUnits() );
     }
 }
 
@@ -159,23 +139,15 @@ void DIALOG_POSITION_RELATIVE::updateDlgTexts( bool aPolar )
 void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
 {
     wxObject* obj = event.GetEventObject();
-    wxTextCtrl* entry = NULL;
 
     if( obj == m_clearX )
     {
-        entry = m_xEntry;
+        m_xOffset.SetValue( 0 );
     }
     else if( obj == m_clearY )
     {
-        entry = m_yEntry;
+        m_yOffset.SetValue( 0 );
     }
-    else if( obj == m_clearRot )
-    {
-        entry = m_rotEntry;
-    }
-
-    if( entry )
-        entry->SetValue( "0" );
 }
 
 
@@ -186,22 +158,29 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
 
+    m_referenceInfo->SetLabel( _( "Reference item: <click item on canvas to select>" ) );
     m_toolMgr->RunAction( PCB_ACTIONS::selectpositionRelativeItem, true );
 }
 
 
-void DIALOG_POSITION_RELATIVE::UpdateAnchor( const wxPoint& aPosition )
+void DIALOG_POSITION_RELATIVE::UpdateAnchor( BOARD_ITEM* aItem )
 {
-    m_anchor_position = aPosition;
-    PutValueInLocalUnits( *m_anchor_x, aPosition.x );
-    PutValueInLocalUnits( *m_anchor_y, aPosition.y );
+    wxString reference = _( "<none selected>" );
+
+    if( aItem )
+    {
+        m_anchor_position = aItem->GetPosition();
+        reference = aItem->GetSelectMenuText( GetUserUnits() );
+    }
+
+    m_referenceInfo->SetLabel( _( "Reference item: " ) + reference );
+
+    Raise();    // required at least on OSX
 }
 
 
 void DIALOG_POSITION_RELATIVE::OnOkClick( wxCommandEvent& event )
 {
-    m_rotation = DoubleValueFromString( DEGREES, m_rotEntry->GetValue() );
-
     // for the output, we only deliver a Cartesian vector
     bool ok = GetTranslationInIU( m_translation, m_polarCoords->IsChecked() );
 
@@ -209,13 +188,12 @@ void DIALOG_POSITION_RELATIVE::OnOkClick( wxCommandEvent& event )
     {
         // save the settings
         m_options.polarCoords = m_polarCoords->GetValue();
-        m_options.entry1    = DoubleValueFromString( UNSCALED_UNITS, m_xEntry->GetValue() );
-        m_options.entry2    = DoubleValueFromString( UNSCALED_UNITS, m_yEntry->GetValue() );
-        m_options.entryRotation = DoubleValueFromString( UNSCALED_UNITS, m_rotEntry->GetValue() );
+        m_options.entry1      = m_xOffset.GetValue();
+        m_options.entry2      = m_yOffset.GetValue();
         POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
         wxASSERT( posrelTool );
 
-        posrelTool->RelativeItemSelectionMove( m_anchor_position, m_translation, m_rotation );
+        posrelTool->RelativeItemSelectionMove( m_anchor_position, m_translation, 0.0 );
 
         event.Skip();
     }

@@ -845,11 +845,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::moveExact()
 {
-    MOVE_PARAMETERS params;
-    params.allowOverride = false;
-    params.editingFootprint = true;
+    wxPoint         translation;
+    double          rotation;
+    ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
 
-    DIALOG_MOVE_EXACT dialog( this, params );
+    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
@@ -858,17 +858,22 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
 
         BOARD_ITEM* item = GetScreen()->GetCurItem();
 
-        wxPoint anchorPoint = item->GetPosition();
+        item->Move( translation );
 
-        if( params.origin == RELATIVE_TO_CURRENT_POSITION )
+        switch( rotationAnchor )
         {
-            anchorPoint = wxPoint( 0, 0 );
+        case ROTATE_AROUND_ITEM_ANCHOR:
+            item->Rotate( item->GetPosition(), rotation );
+            break;
+        case ROTATE_AROUND_USER_ORIGIN:
+            item->Rotate( GetScreen()->m_O_Curseur, rotation );
+            break;
+        default:
+            wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
         }
 
-        wxPoint finalMoveVector = params.translation - anchorPoint;
 
-        item->Move( finalMoveVector );
-        item->Rotate( item->GetPosition(), params.rotation );
+        item->Rotate( item->GetPosition(), rotation );
         m_canvas->Refresh();
     }
 
@@ -898,15 +903,25 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
     case ID_MODEDIT_MODULE_MOVE_EXACT:
     {
-        MOVE_PARAMETERS params;
+        wxPoint         translation;
+        double          rotation;
+        ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
 
-        DIALOG_MOVE_EXACT dialog( this, params );
-        int ret = dialog.ShowModal();
+        DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
 
-        if( ret == wxID_OK )
+        if( dialog.ShowModal() == wxID_OK )
         {
-            MoveMarkedItemsExactly( module, wxPoint( 0, 0 ),
-                    params.translation, params.rotation, true );
+            switch( rotationAnchor )
+            {
+            case ROTATE_AROUND_ITEM_ANCHOR:
+                MoveMarkedItemsExactly( module, module->GetPosition() + translation, translation, rotation, true );
+                break;
+            case ROTATE_AROUND_USER_ORIGIN:
+                MoveMarkedItemsExactly( module, GetScreen()->m_O_Curseur, translation, rotation, true );
+                break;
+            default:
+                wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
+            }
         }
 
         break;

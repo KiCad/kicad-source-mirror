@@ -105,16 +105,13 @@ private:
     ///> Last anchor item selected by Position Relative To function.
     BOARD_ITEM* m_anchor_item;
 
-    ///> Translation for position relative function.
+    ///> Translation for Position Relative To  function.
     wxPoint m_position_relative_translation;
 
-    ///> Anchor position for positive relative function.
+    ///> Anchor position for Position Relative To  function.
     wxPoint m_anchor_position;
 
-    ///> Rotation  for positive relative function.
-    double m_position_relative_rotation;
-
-    ///> Selected that will be moved by Position relative function.
+    ///> Selection that will be moved by Position Relative To  function.
     SELECTION m_position_relative_selection;
 };
 

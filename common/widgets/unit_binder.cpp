@@ -237,6 +237,12 @@ bool UNIT_BINDER::IsIndeterminate() const
 }
 
 
+void UNIT_BINDER::SetLabel( const wxString& aLabel )
+{
+    m_label->SetLabel( aLabel );
+}
+
+
 void UNIT_BINDER::Enable( bool aEnable )
 {
     m_label->Enable( aEnable );

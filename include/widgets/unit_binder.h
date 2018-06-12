@@ -97,6 +97,8 @@ public:
      */
     virtual bool Validate( bool setFocusOnError = false );
 
+    void SetLabel( const wxString& aLabel );
+
     /**
      * Function Enable
      * Enables/diasables the label, widget and units label.

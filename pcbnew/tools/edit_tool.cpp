@@ -185,80 +185,6 @@ TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard"
         _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
 
-static wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params )
-{
-    wxPoint anchorPoint;
-
-    if( params.origin == RELATIVE_TO_CURRENT_POSITION )
-    {
-        return wxPoint( 0, 0 );
-    }
-
-    // set default anchor
-    VECTOR2I rp = selection.GetCenter();
-    anchorPoint = wxPoint( rp.x, rp.y );
-
-    // If the anchor is not ANCHOR_FROM_LIBRARY then the user applied an override.
-    // Also run through this block if only one item is slected because it may be a module,
-    // in which case we want something different than the center of the selection
-    if( ( params.anchor != ANCHOR_FROM_LIBRARY ) || ( selection.GetSize() == 1 ) )
-    {
-        BOARD_ITEM* topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftModule() );
-
-        // no module found if the GetTopLeftModule() returns null
-        if( topLeftItem != nullptr )
-        {
-            if( topLeftItem->Type() == PCB_MODULE_T )
-            {
-                // Cast to module to allow access to the pads
-                MODULE* mod = static_cast<MODULE*>( topLeftItem );
-
-                switch( params.anchor )
-                {
-                case ANCHOR_FROM_LIBRARY:
-                    anchorPoint = mod->GetPosition();
-                    break;
-
-                case ANCHOR_TOP_LEFT_PAD:
-                    topLeftItem = mod->GetTopLeftPad();
-                    break;
-
-                case ANCHOR_CENTER_FOOTPRINT:
-                    anchorPoint = mod->GetFootprintRect().GetCenter();
-                    break;
-                }
-            }
-
-            if( topLeftItem->Type() == PCB_PAD_T )
-            {
-                if( static_cast<D_PAD*>( topLeftItem )->GetAttribute() == PAD_ATTRIB_SMD )
-                {
-                    // Use the top left corner of SMD pads as an anchor instead of the center
-                    anchorPoint = topLeftItem->GetBoundingBox().GetPosition();
-                }
-                else
-                {
-                    anchorPoint = topLeftItem->GetPosition();
-                }
-            }
-        }
-        else // no module found in the selection
-        {
-            // in a selection of non-modules
-            if( params.anchor == ANCHOR_TOP_LEFT_PAD )
-            {
-                // approach the top left pad override for non-modules by using the position of
-                // the topleft item as an anchor
-                topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftItem() );
-                anchorPoint = topLeftItem->GetPosition();
-            }
-        }
-    }
-
-    return anchorPoint;
-}
-
-
 void filterItems( GENERAL_COLLECTOR& aCollector, bool sanitizePads, bool ensureEditable )
 {
     // Iterate from the back so we don't have to worry about removals.
@@ -340,6 +266,7 @@ bool EDIT_TOOL::Init()
 
     m_defaultSelectionFilter = SanitizePadsEnsureEditableFilter;
 
+    // Allow pad editing in Footprint Editor
     if( editFrame->IsType( FRAME_PCB_MODULE_EDITOR ) )
         m_defaultSelectionFilter = EnsureEditableFilter;
 
@@ -930,7 +857,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->Router() && routerTool->Router()->RoutingInProgress() )
         return 0;
 
-    // get a copy instead of reference (as we're going to clear the selectio before removing items)
+    // get a copy instead of reference (as we're going to clear the selection before removing items)
     auto selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
 
     if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
@@ -974,32 +901,46 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         return 0;
 
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    wxPoint         translation;
+    double          rotation;
+    ROTATION_ANCHOR rotationAnchor = selection.Size() > 1 ? ROTATE_AROUND_SEL_CENTER
+                                                          : ROTATE_AROUND_ITEM_ANCHOR;
 
-    MOVE_PARAMETERS params;
-    params.editingFootprint = m_editModules;
-
-    DIALOG_MOVE_EXACT dialog( editFrame, params );
+    DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation, rotationAnchor );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
     {
         VECTOR2I rp = selection.GetCenter();
-        wxPoint rotPoint( rp.x, rp.y );
-
-        wxPoint anchorPoint = getAnchorPoint( selection, params );
-
-        wxPoint finalMoveVector = params.translation - anchorPoint;
+        wxPoint selCenter( rp.x, rp.y );
 
         // Make sure the rotation is from the right reference point
-        rotPoint += finalMoveVector;
+        selCenter += translation;
 
-        for( auto item : selection )
+        for( auto selItem : selection )
         {
+            BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selItem );
+
             if( !item->IsNew() )
                 m_commit->Modify( item );
 
-            static_cast<BOARD_ITEM*>( item )->Move( finalMoveVector );
-            static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, params.rotation );
+            item->Move( translation );
+
+            switch( rotationAnchor )
+            {
+            case ROTATE_AROUND_ITEM_ANCHOR:
+                item->Rotate( item->GetPosition(), rotation );
+                break;
+            case ROTATE_AROUND_SEL_CENTER:
+                item->Rotate( selCenter, rotation );
+                break;
+            case ROTATE_AROUND_USER_ORIGIN:
+                item->Rotate( editFrame->GetScreen()->m_O_Curseur, rotation );
+                break;
+            case ROTATE_AROUND_AUX_ORIGIN:
+                item->Rotate( editFrame->GetAuxOrigin(), rotation );
+                break;
+            }
 
             if( !m_dragging )
                 getView()->Update( item );

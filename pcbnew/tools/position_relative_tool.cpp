@@ -53,10 +53,11 @@ TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem(
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
-    PCB_TOOL( "pcbnew.PositionRelative" ), m_position_relative_dialog( NULL ),
-    m_selectionTool( NULL ), m_anchor_item( NULL )
+    PCB_TOOL( "pcbnew.PositionRelative" ),
+    m_position_relative_dialog( NULL ),
+    m_selectionTool( NULL ),
+    m_anchor_item( NULL )
 {
-    m_position_relative_rotation = 0.0;
 }
 
 
@@ -93,18 +94,15 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-
     m_position_relative_selection = selection;
 
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-    m_position_relative_rotation = 0;
 
     if( !m_position_relative_dialog )
         m_position_relative_dialog = new DIALOG_POSITION_RELATIVE( editFrame,
-                m_toolMgr,
-                m_position_relative_translation,
-                m_position_relative_rotation,
-                m_anchor_position );
+                                                                   m_toolMgr,
+                                                                   m_position_relative_translation,
+                                                                   m_anchor_position );
 
     m_position_relative_dialog->Show( true );
 
@@ -121,7 +119,7 @@ static bool selectPRitem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    const SELECTION& selection = selectionTool->RequestSelection( SanitizePadsFilter );
+    const SELECTION& selection = selectionTool->RequestSelection( EnsureEditableFilter );
 
     if( selection.Empty() )
         return true;
@@ -179,7 +177,7 @@ void POSITION_RELATIVE_TOOL::UpdateAnchor( BOARD_ITEM* aItem )
     m_anchor_item = aItem;
 
     if( m_position_relative_dialog )
-        m_position_relative_dialog->UpdateAnchor( aItem->GetPosition() );
+        m_position_relative_dialog->UpdateAnchor( aItem );
 }
 
 
