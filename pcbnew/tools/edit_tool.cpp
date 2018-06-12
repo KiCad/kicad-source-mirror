@@ -1154,6 +1154,9 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
+    if( EditingModules() && !frame()->GetModel())
+        return 0;
+
     auto& view = *getView();
     auto& controls = *getViewControls();
     int   toolID = EditingModules() ? ID_MODEDIT_MEASUREMENT_TOOL : ID_PCB_MEASUREMENT_TOOL;
