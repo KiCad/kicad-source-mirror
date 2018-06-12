@@ -174,7 +174,7 @@ public:
 
     std::vector<SCH_REFERENCE> GetRowReferences( int aRow )
     {
-        wxCHECK( aRow < m_rows.size(), std::vector<SCH_REFERENCE>() );
+        wxCHECK( aRow < (int)m_rows.size(), std::vector<SCH_REFERENCE>() );
         return m_rows[ aRow ].m_Refs;
     }
 
