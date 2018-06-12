@@ -493,23 +493,7 @@ EDA_RECT MODULE::GetFootprintRect() const
 
 const EDA_RECT MODULE::GetBoundingBox() const
 {
-    EDA_RECT area = GetFootprintRect();
-
-    // Calculate extended area including text fields
-    area.Merge( m_Reference->GetBoundingBox() );
-    area.Merge( m_Value->GetBoundingBox() );
-
-    // Add the Clearance shape size: (shape around the pads when the
-    // clearance is shown.  Not optimized, but the draw cost is small
-    // (perhaps smaller than optimization).
-    BOARD* board = GetBoard();
-    if( board )
-    {
-        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
-        area.Inflate( biggest_clearance );
-    }
-
-    return area;
+    return GetFootprintRect();
 }
 
 
@@ -1016,9 +1000,24 @@ unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I MODULE::ViewBBox() const
 {
-    EDA_RECT fpRect = GetFootprintRect();
+    EDA_RECT area = GetFootprintRect();
 
-    return BOX2I( VECTOR2I( fpRect.GetOrigin() ), VECTOR2I( fpRect.GetSize() ) );
+    // Calculate extended area including text fields
+    area.Merge( m_Reference->GetBoundingBox() );
+    area.Merge( m_Value->GetBoundingBox() );
+
+    // Add the Clearance shape size: (shape around the pads when the
+    // clearance is shown.  Not optimized, but the draw cost is small
+    // (perhaps smaller than optimization).
+    BOARD* board = GetBoard();
+    if( board )
+    {
+        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        area.Inflate( biggest_clearance );
+    }
+
+
+    return BOX2I( area );
 }
 
 
