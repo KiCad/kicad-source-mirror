@@ -208,7 +208,8 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     if( pt_segm == NULL )
         return;
 
-    TRACK* trackList = GetBoard()->MarkTrace( pt_segm, &segments_to_delete_count,
+    TRACK* trackList = GetBoard()->MarkTrace( GetBoard()->m_Track, pt_segm,
+                                              &segments_to_delete_count,
                                               NULL, NULL, true );
 
     if( segments_to_delete_count == 0 )

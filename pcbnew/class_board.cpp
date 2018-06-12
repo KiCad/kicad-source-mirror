@@ -388,32 +388,32 @@ TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint&
 }
 
 
-void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACKS* aList )
+void BOARD::chainMarkedSegments( TRACK* aTrackList, wxPoint aPosition,
+                                 const LSET& aLayerSet, TRACKS* aList )
 {
     LSET    layer_set = aLayerSet;
 
-    if( !m_Track )      // no tracks at all in board
+    if( !aTrackList )      // no tracks at all in board
         return;
 
     D_PAD*  pad = NULL;
-    double  distanceToPadCenter;
+    double  distanceToPadCenter = std::numeric_limits<double>::max();
 
     /* Set the BUSY flag of all connected segments, first search starting at
      * aPosition.  The search ends when a pad is found (end of a track), a
      * segment end has more than one other segment end connected, or when no
      * connected item found.
      *
-     * Vias are a special case because they must look for segments connected
+     * Vias are a special case because they can connect segments
      * on other layers and they change the layer mask.  They can be a track
-     * end or not.  They will be analyzer later and vias on terminal points
+     * end or not.  They will be analyzed later, and vias on terminal points
      * of the track will be considered as part of this track if they do not
-     * connect segments of a other track together and will be considered as
+     * connect segments on a other track together and will be considered as
      * part of a other track when removing the via, the segments of that other
      * track are disconnected.
      */
     for( ; ; )
     {
-
         if( !pad )
             pad = GetPad( aPosition, layer_set );
 
@@ -427,7 +427,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
          * is found we do not know at this time the number of connected items
          * and we do not know if this via is on the track or finish the track
          */
-        TRACK* via = m_Track->GetVia( NULL, aPosition, layer_set );
+        TRACK* via = aTrackList->GetVia( NULL, aPosition, layer_set );
 
         if( via )
         {
@@ -443,7 +443,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
          *  if > 1 segment:
          *      then end of "track" (because more than 2 segments are connected at aPosition)
          */
-        TRACK*  segment = m_Track;
+        TRACK*  segment = aTrackList;
 
         while( ( segment = ::GetTrack( segment, NULL, aPosition, layer_set ) ) != NULL )
         {
@@ -1812,7 +1812,7 @@ TRACK* BOARD::GetVisibleTrack( TRACK* aStartingTrace, const wxPoint& aPosition,
 }
 
 
-TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
+TRACK* BOARD::MarkTrace( TRACK* aTrackList, TRACK*  aTrace, int* aCount,
                          double* aTraceLength, double* aPadToDieLength,
                          bool    aReorder )
 {
@@ -1829,7 +1829,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
     // Ensure the flag BUSY of all tracks of the board is cleared
     // because we use it to mark segments of the track
-    for( TRACK* track = m_Track; track; track = track->Next() )
+    for( TRACK* track = aTrackList; track; track = track->Next() )
         track->SetState( BUSY, false );
 
     // Set flags of the initial track segment
@@ -1847,7 +1847,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
      */
     if( aTrace->Type() == PCB_VIA_T )
     {
-        TRACK* segm1 = ::GetTrack( m_Track, NULL, aTrace->GetStart(), layer_set );
+        TRACK* segm1 = ::GetTrack( aTrackList, NULL, aTrace->GetStart(), layer_set );
         TRACK* segm2 = NULL;
         TRACK* segm3 = NULL;
 
@@ -1875,13 +1875,13 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
         if( segm1 ) // search for other segments connected to the initial segment start point
         {
             layer_set = segm1->GetLayerSet();
-            chainMarkedSegments( aTrace->GetStart(), layer_set, &trackList );
+            chainMarkedSegments( aTrackList, aTrace->GetStart(), layer_set, &trackList );
         }
 
         if( segm2 ) // search for other segments connected to the initial segment end point
         {
             layer_set = segm2->GetLayerSet();
-            chainMarkedSegments( aTrace->GetStart(), layer_set, &trackList );
+            chainMarkedSegments( aTrackList, aTrace->GetStart(), layer_set, &trackList );
         }
     }
     else    // mark the chain using both ends of the initial segment
@@ -1889,8 +1889,8 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
         TRACKS  from_start;
         TRACKS  from_end;
 
-        chainMarkedSegments( aTrace->GetStart(), layer_set, &from_start );
-        chainMarkedSegments( aTrace->GetEnd(),   layer_set, &from_end );
+        chainMarkedSegments( aTrackList, aTrace->GetStart(), layer_set, &from_start );
+        chainMarkedSegments( aTrackList, aTrace->GetEnd(),   layer_set, &from_end );
 
         // combine into one trackList:
         trackList.insert( trackList.end(), from_start.begin(), from_start.end() );
@@ -1916,7 +1916,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
         layer_set = via->GetLayerSet();
 
-        TRACK* track = ::GetTrack( m_Track, NULL, via->GetStart(), layer_set );
+        TRACK* track = ::GetTrack( aTrackList, NULL, via->GetStart(), layer_set );
 
         // GetTrace does not consider tracks flagged BUSY.
         // So if no connected track found, this via is on the current track
@@ -1959,7 +1959,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     int     busy_count = 0;
     TRACK*  firstTrack;
 
-    for( firstTrack = m_Track; firstTrack; firstTrack = firstTrack->Next() )
+    for( firstTrack = aTrackList; firstTrack; firstTrack = firstTrack->Next() )
     {
         // Search for the first flagged BUSY segments
         if( firstTrack->GetState( BUSY ) )

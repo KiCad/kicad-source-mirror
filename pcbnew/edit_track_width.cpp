@@ -211,7 +211,8 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
     if( aTrackSegment == NULL )
         return;
 
-    pt_track = GetBoard()->MarkTrace( aTrackSegment, &nb_segm, NULL, NULL, true );
+    pt_track = GetBoard()->MarkTrace( GetBoard()->m_Track, aTrackSegment, &nb_segm,
+                                      NULL, NULL, true );
 
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = false;

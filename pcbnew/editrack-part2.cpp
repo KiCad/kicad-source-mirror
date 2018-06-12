@@ -287,7 +287,8 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     // Mark the full trace containing track_segment, and recalculate the
     // beginning of the trace, and the number of segments, as the new trace
     // can contain also already existing track segments
-    aNewTrack = GetBoard()->MarkTrace( track_segment, &aNewTrackSegmentsCount,
+    aNewTrack = GetBoard()->MarkTrace( GetBoard()->m_Track, track_segment,
+                                       &aNewTrackSegmentsCount,
                                        nullptr, nullptr, true );
     wxASSERT( aNewTrack );
 
@@ -421,7 +422,8 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         if( pt_del )
             pt_del->SetState( IS_LINKED, false );
 
-        pt_del = GetBoard()->MarkTrace( pt_del, &nb_segm, NULL, NULL, true );
+        pt_del = GetBoard()->MarkTrace( GetBoard()->m_Track, pt_del, &nb_segm,
+                                        NULL, NULL, true );
 
         /* Test if the marked track is redundant, i.e. if one of marked segments
          * is connected to the starting point of the new track.

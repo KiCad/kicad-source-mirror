@@ -948,7 +948,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 void SELECTION_TOOL::selectAllItemsConnectedToTrack( TRACK& aSourceTrack )
 {
     int segmentCount;
-    TRACK* trackList = board()->MarkTrace( &aSourceTrack, &segmentCount,
+    TRACK* trackList = board()->MarkTrace( board()->m_Track, &aSourceTrack, &segmentCount,
                                            nullptr, nullptr, true );
 
     for( int i = 0; i < segmentCount; ++i )

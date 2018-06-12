@@ -1082,7 +1082,15 @@ void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         double trackLen = 0;
         double lenPadToDie = 0;
-        board->MarkTrace( this, NULL, &trackLen, &lenPadToDie, false );
+
+        // Find the beginning of the track buffer containing this, because it is not
+        // always the track list on board, but can be a "private" list
+        TRACK* track_buffer_start = this;
+
+        while( track_buffer_start->Back() )
+            track_buffer_start = track_buffer_start->Back();
+
+        board->MarkTrace( track_buffer_start, this, NULL, &trackLen, &lenPadToDie, false );
         msg = ::LengthDoubleToString( trackLen );
         aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKCYAN ) );
 
