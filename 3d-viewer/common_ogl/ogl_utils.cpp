@@ -50,6 +50,9 @@ void OGL_GetScreenshot( wxImage &aDstImage )
     // Alphabuffer was causing some transparency problems on some systems (Windows)
     // unsigned char* alphabuffer = (unsigned char*) malloc( viewport.x * viewport.y );
 
+    // Call glFinish before screenshot to ensure everything is fully drawn.
+    glFinish();
+
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
 
@@ -130,7 +133,7 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
 
     glBindTexture( GL_TEXTURE_2D, 0 );
 
-    glFinish();
+    glFlush();
 
     free( rgbaBuffer );
 

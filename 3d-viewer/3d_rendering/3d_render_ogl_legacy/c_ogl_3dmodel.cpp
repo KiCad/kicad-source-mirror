@@ -218,7 +218,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
                     glDisableClientState( GL_NORMAL_ARRAY );
                     glDisableClientState( GL_VERTEX_ARRAY );
 
-                    glFinish();
+                    glFlush();
 
                     delete [] pColorRGBA;
                 }
@@ -319,7 +319,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
         for( unsigned int mesh_i = 0; mesh_i < a3DModel.m_MeshesSize; ++mesh_i )
             m_model_bbox.Union( m_meshs_bbox[mesh_i] );
 
-        glFinish();
+        glFlush();
     }
 }
 
