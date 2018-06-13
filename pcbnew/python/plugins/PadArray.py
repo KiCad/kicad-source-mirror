@@ -24,7 +24,7 @@ from __future__ import division
 import math
 import pcbnew
 
-class PadMaker:
+class PadMaker(object):
     """!
     Useful construction functions for common types of pads, providing
     sensible defaults for common pads.
@@ -106,7 +106,7 @@ class PadMaker:
         return pad
 
 
-class PadArray:
+class PadArray(object):
     """!
     A class to assist in creating repetitive grids of pads
 
@@ -118,9 +118,16 @@ class PadArray:
     types.
     """
 
-    def __init__(self):
+    def __init__(self, pad):
+        """!
+        @param pad: the prototypical pad
+        """
         self.firstPadNum = 1
         self.pinNames = None
+
+        # this pad is more of a "context", we will use it as a source of
+        # pad data, but not actually add it
+        self.pad = pad
         self.firstPad = None
 
     def SetPinNames(self, pinNames):
@@ -205,11 +212,8 @@ class PadGridArray(PadArray):
         @param py: pitch in y-direction
         @param centre: array centre point
         """
-        PadArray.__init__(self)
+        super(PadGridArray, self).__init__(pad)
 
-        # this pad is more of a "context", we will use it as a source of
-        # pad data, but not actually add it
-        self.pad = pad
         self.nx = int(nx)
         self.ny = int(ny)
         self.px = px
@@ -298,10 +302,8 @@ class PadZGridArray(PadArray):
         @param pad_pitch: distance between pads in a line
         @param centre: array centre point
         """
-        PadArray.__init__(self)
-        # this pad is more of a "context", we will use it as a source of
-        # pad data, but not actually add it
-        self.pad = pad
+        super(PadZGridArray, self).__init__(pad)
+
         self.pad_count = int(pad_count)
         self.line_count = int(line_count)
         self.line_pitch = line_pitch
@@ -358,9 +360,9 @@ class PadLineArray(PadGridArray):
         """
 
         if isVertical:
-            PadGridArray.__init__(self, pad, 1, n, 0, pitch, centre)
+            super(PadLineArray, self).__init__(pad, 1, n, 0, pitch, centre)
         else:
-            PadGridArray.__init__(self, pad, n, 1, pitch, 0, centre)
+            super(PadLineArray, self).__init__(pad, n, 1, pitch, 0, centre)
 
 
 class PadCircleArray(PadArray):
@@ -381,10 +383,8 @@ class PadCircleArray(PadArray):
         @param padRotationOffset: rotation of first pad
         """
 
-        PadArray.__init__(self)
-        # this pad is more of a "context", we will use it as a source of
-        # pad data, but not actually add it
-        self.pad = pad
+        super(PadCircleArray, self).__init__(pad)
+
         self.n = int(n)
         self.r = r
         self.angle_offset = angle_offset
@@ -434,8 +434,8 @@ class PadCustomArray(PadArray):
         @param pad: the prototypical pad
         @param array: the position data array
         """
-        PadArray.__init__(self)
-        self.pad = pad
+        super(PadCustomArray, self).__init__(pad)
+
         self.array = array
 
     def NamingFunction(self, n):
