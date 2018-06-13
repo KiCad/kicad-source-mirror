@@ -42,10 +42,8 @@ class PadStaggeredZGridArray(PA.PadArray):
         @param aCentre      Center position
 
         """
-        PA.PadArray.__init__(self)
-        # this pad is more of a "context", we will use it as a source of
-        # pad data, but not actually add it
-        self.pad = aPad
+        super(PadStaggeredZGridArray, self).__init__(aPad)
+
         self.padCount = int(aPadCount)
         self.lineCount = int(aLineCount)
         self.linePitch = aLinePitch
