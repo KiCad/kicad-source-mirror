@@ -127,13 +127,12 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
 bool InvokeLayerSetup( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
 
 /**
- * Function InvokeSVGPrint
- * shows the SVG print dialog
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * Function InvokeExportSVG
+ * shows the Export SVG dialog
+ * @param aCaller is the PCB_BASE_FRAME which is invoking the dialog.
  * @param aBoard is the currently edited board.
- * @param aSettings is the current pcb plot parameters.
  * @return bool - true if user pressed OK (did not abort), else false.
  */
-bool InvokeSVGPrint( wxTopLevelWindow* aCaller, BOARD* aBoard, PCB_PLOT_PARAMS* aSettings );
+bool InvokeExportSVG( PCB_BASE_FRAME* aCaller, BOARD* aBoard );
 
 #endif  // INVOKE_A_DIALOG_H_

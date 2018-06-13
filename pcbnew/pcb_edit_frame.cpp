@@ -198,7 +198,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( wxID_UNDO, PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList )
     EVT_TOOL( wxID_REDO, PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList )
     EVT_TOOL( wxID_PRINT, PCB_EDIT_FRAME::ToPrinter )
-    EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::SVG_Print )
+    EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::ExportSVG )
     EVT_TOOL( ID_GEN_PLOT, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_FIND_ITEMS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_GET_NETLIST, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -1070,24 +1070,9 @@ void PCB_EDIT_FRAME::OnModify( )
 }
 
 
-void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ExportSVG( wxCommandEvent& event )
 {
-    PCB_PLOT_PARAMS  plot_prms = GetPlotSettings();
-
-    // we don't want dialogs knowing about complex wxFrame functions so
-    // pass everything the dialog needs without reference to *this frame's class.
-    if( InvokeSVGPrint( this, GetBoard(), &plot_prms ) )
-    {
-        if( !plot_prms.IsSameAs( GetPlotSettings(), false ) )
-        {
-            // First, mark board as modified only for parameters saved in file
-            if( !plot_prms.IsSameAs( GetPlotSettings(), true ) )
-                OnModify();
-
-            // Now, save any change, for the session
-            SetPlotSettings( plot_prms );
-        }
-    }
+    InvokeExportSVG( this, GetBoard() );
 }
 
 

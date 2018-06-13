@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_SVG_PRINT_BASE_H__
-#define __DIALOG_SVG_PRINT_BASE_H__
+#ifndef __DIALOG_EXPORT_SVG_BASE_H__
+#define __DIALOG_EXPORT_SVG_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -21,6 +21,10 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checklst.h>
@@ -33,48 +37,43 @@ class WX_HTML_REPORT_PANEL;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SVG_PRINT_base
+/// Class DIALOG_EXPORT_SVG_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
+class DIALOG_EXPORT_SVG_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
-		enum
-		{
-			wxID_PRINT_BOARD = 1000
-		};
-		
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
-		wxButton* m_browseButton;
+		wxBitmapButton* m_browseButton;
 		wxStaticText* m_staticTextCopperLayers;
 		wxCheckListBox* m_CopperLayersList;
 		wxStaticText* m_staticTextTechLayers;
 		wxCheckListBox* m_TechnicalLayersList;
-		wxStaticText* m_TextPenWidth;
-		wxTextCtrl* m_DialogDefaultPenSize;
+		wxStaticText* m_penWidthLabel;
+		wxTextCtrl* m_penWidthCtrl;
+		wxStaticText* m_penWidthUnits;
 		wxRadioBox* m_ModeColorOption;
 		wxRadioBox* m_rbSvgPageSizeOpt;
 		wxCheckBox* m_PrintBoardEdgesCtrl;
 		wxCheckBox* m_printMirrorOpt;
 		wxRadioBox* m_rbFileOpt;
-		wxButton* m_buttonCreateFile;
-		wxButton* m_buttonQuit;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlot( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_SVG_PRINT_base();
+		DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_EXPORT_SVG_BASE();
 	
 };
 
-#endif //__DIALOG_SVG_PRINT_BASE_H__
+#endif //__DIALOG_EXPORT_SVG_BASE_H__

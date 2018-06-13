@@ -20,50 +20,35 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerPlotFmt;
-	bSizerPlotFmt = new wxBoxSizer( wxVERTICAL );
-	
 	m_staticTextPlotFmt = new wxStaticText( this, wxID_ANY, _("Plot format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPlotFmt->Wrap( -1 );
-	bSizerPlotFmt->Add( m_staticTextPlotFmt, 0, wxTOP, 5 );
+	bupperSizer->Add( m_staticTextPlotFmt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("HPGL"), _("PDF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
-	bSizerPlotFmt->Add( m_plotFormatOpt, 0, wxTOP, 6 );
+	bupperSizer->Add( m_plotFormatOpt, 0, wxALL, 6 );
 	
 	
-	bupperSizer->Add( bSizerPlotFmt, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
-	
-	wxBoxSizer* bSizerOutDir;
-	bSizerOutDir = new wxBoxSizer( wxVERTICAL );
+	bupperSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
-	bSizerOutDir->Add( m_staticTextDir, 0, wxEXPAND|wxTOP, 5 );
-	
-	wxBoxSizer* bSizer29;
-	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
+	bupperSizer->Add( m_staticTextDir, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	
-	bSizer29->Add( m_outputDirectoryName, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bupperSizer->Add( m_outputDirectoryName, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_browseButton->SetMinSize( wxSize( 29,29 ) );
 	
-	bSizer29->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bupperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	bSizerOutDir->Add( bSizer29, 1, wxEXPAND, 5 );
-	
-	
-	bupperSizer->Add( bSizerOutDir, 1, wxLEFT|wxRIGHT, 5 );
-	
-	
-	m_MainSizer->Add( bupperSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_MainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -84,267 +69,238 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
 	
-	wxBoxSizer* bSizer192;
-	bSizer192 = new wxBoxSizer( wxHORIZONTAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxBoxSizer* bSizerPlotItems;
-	bSizerPlotItems = new wxBoxSizer( wxVERTICAL );
+	m_plotSheetRef = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotSheetRef->SetMinSize( wxSize( 280,-1 ) );
 	
-	m_plotSheetRef = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot sheet reference on all layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPlotItems->Add( m_plotSheetRef, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	gbSizer1->Add( m_plotSheetRef, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_plotModuleValueOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotModuleValueOpt->SetValue(true); 
-	bSizerPlotItems->Add( m_plotModuleValueOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	gbSizer1->Add( m_plotModuleValueOpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_plotModuleRefOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_PRINT_REF, _("Plot footprint references"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotModuleRefOpt->SetValue(true); 
-	bSizerPlotItems->Add( m_plotModuleRefOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	gbSizer1->Add( m_plotModuleRefOpt, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_plotInvisibleText = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Force plotting of invisible values/references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotInvisibleText = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Force plotting of invisible values / refs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotInvisibleText->SetToolTip( _("Force plot invisible values and/or references") );
 	
-	bSizerPlotItems->Add( m_plotInvisibleText, 0, wxALL, 2 );
-	
-	m_plotNoViaOnMaskOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Do not tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias") );
-	
-	bSizerPlotItems->Add( m_plotNoViaOnMaskOpt, 0, wxALL, 2 );
+	gbSizer1->Add( m_plotInvisibleText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_excludeEdgeLayerOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Exclude PCB edge layer from other layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_excludeEdgeLayerOpt->SetToolTip( _("Do not plot the contents of the PCB edge layer on any other layers.") );
 	
-	bSizerPlotItems->Add( m_excludeEdgeLayerOpt, 0, wxALL, 2 );
+	gbSizer1->Add( m_excludeEdgeLayerOpt, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_excludePadsFromSilkscreen = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Exclude pads from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_excludePadsFromSilkscreen->SetToolTip( _("Do not plot pads on silkscreen layers, even when they are assigned to them.\nUncheck this if you wish to create assembly drawings from silkscreen layers.") );
 	
-	bSizerPlotItems->Add( m_excludePadsFromSilkscreen, 0, wxALL, 2 );
+	gbSizer1->Add( m_excludePadsFromSilkscreen, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_plotMirrorOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPlotItems->Add( m_plotMirrorOpt, 0, wxALL, 2 );
+	m_plotNoViaOnMaskOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Do not tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias") );
 	
-	m_plotPSNegativeOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Negative plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPlotItems->Add( m_plotPSNegativeOpt, 0, wxALL, 2 );
+	gbSizer1->Add( m_plotNoViaOnMaskOpt, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_useAuxOriginCheckBox = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Use auxiliary axis as origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in plot files") );
 	
-	bSizerPlotItems->Add( m_useAuxOriginCheckBox, 0, wxALL, 2 );
+	gbSizer1->Add( m_useAuxOriginCheckBox, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_zoneFillCheck = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Check zone fills before plotting"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPlotItems->Add( m_zoneFillCheck, 0, wxALL, 2 );
-	
-	
-	bSizer192->Add( bSizerPlotItems, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxVERTICAL );
-	
-	m_staticText11 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	bSizer14->Add( m_staticText11, 0, wxRIGHT|wxLEFT, 5 );
+	drillMarksLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	drillMarksLabel->Wrap( -1 );
+	gbSizer1->Add( drillMarksLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
 	wxString m_drillShapeOptChoices[] = { _("None"), _("Small"), _("Actual size") };
 	int m_drillShapeOptNChoices = sizeof( m_drillShapeOptChoices ) / sizeof( wxString );
 	m_drillShapeOpt = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_drillShapeOptNChoices, m_drillShapeOptChoices, 0 );
 	m_drillShapeOpt->SetSelection( 0 );
-	bSizer14->Add( m_drillShapeOpt, 0, wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_drillShapeOpt, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 5 );
 	
-	m_staticText12 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Scaling:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	bSizer14->Add( m_staticText12, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	scalingLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Scaling:"), wxDefaultPosition, wxDefaultSize, 0 );
+	scalingLabel->Wrap( -1 );
+	gbSizer1->Add( scalingLabel, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
 	wxString m_scaleOptChoices[] = { _("Auto"), _("1:1"), _("3:2"), _("2:1"), _("3:1") };
 	int m_scaleOptNChoices = sizeof( m_scaleOptChoices ) / sizeof( wxString );
 	m_scaleOpt = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_scaleOptNChoices, m_scaleOptChoices, 0 );
 	m_scaleOpt->SetSelection( 1 );
-	bSizer14->Add( m_scaleOpt, 0, wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_scaleOpt, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 5 );
 	
-	m_staticText13 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText13->Wrap( -1 );
-	bSizer14->Add( m_staticText13, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	plotModeLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	plotModeLabel->Wrap( -1 );
+	gbSizer1->Add( plotModeLabel, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
 	wxString m_plotModeOptChoices[] = { _("Filled"), _("Sketch") };
 	int m_plotModeOptNChoices = sizeof( m_plotModeOptChoices ) / sizeof( wxString );
 	m_plotModeOpt = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotModeOptNChoices, m_plotModeOptChoices, 0 );
 	m_plotModeOpt->SetSelection( 0 );
-	bSizer14->Add( m_plotModeOpt, 0, wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_plotModeOpt, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 5 );
 	
-	m_textDefaultPenSize = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textDefaultPenSize->Wrap( -1 );
-	m_textDefaultPenSize->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
+	m_lineWidthLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel->Wrap( -1 );
+	m_lineWidthLabel->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
-	bSizer14->Add( m_textDefaultPenSize, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_lineWidthLabel, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
-	m_linesWidth = new wxTextCtrl( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_linesWidth->SetToolTip( _("Line width for, e.g., sheet references.") );
+	m_lineWidthCtrl = new wxTextCtrl( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthCtrl->SetToolTip( _("Line width for, e.g., sheet references.") );
+	m_lineWidthCtrl->SetMinSize( wxSize( 120,-1 ) );
 	
-	bSizer14->Add( m_linesWidth, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	gbSizer1->Add( m_lineWidthCtrl, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
 	
+	m_lineWidthUnits = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthUnits->Wrap( -1 );
+	gbSizer1->Add( m_lineWidthUnits, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	bSizer192->Add( bSizer14, 1, wxRIGHT|wxLEFT, 3 );
+	m_plotMirrorOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_plotMirrorOpt, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
+	m_plotPSNegativeOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Negative plot"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_plotPSNegativeOpt, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
-	sbOptionsSizer->Add( bSizer192, 0, wxEXPAND, 5 );
-	
-	
-	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 3 );
-	
-	wxStaticBoxSizer* sbSizerSoldMaskLayerOpt;
-	sbSizerSoldMaskLayerOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Solder Mask Settings") ), wxVERTICAL );
-	
-	wxFlexGridSizer* fgSizerSoldMaskOpts;
-	fgSizerSoldMaskOpts = new wxFlexGridSizer( 2, 2, 0, 0 );
-	fgSizerSoldMaskOpts->SetFlexibleDirection( wxBOTH );
-	fgSizerSoldMaskOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_SolderMaskMarginLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderMaskMarginLabel->Wrap( -1 );
-	m_SolderMaskMarginLabel->SetToolTip( _("Margin between pads and solder mask") );
-	
-	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-	
-	m_SolderMaskMarginCurrValue = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("val"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderMaskMarginCurrValue->Wrap( -1 );
-	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginCurrValue, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-	
-	m_solderMaskMinWidthLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_solderMaskMinWidthLabel->Wrap( -1 );
-	m_solderMaskMinWidthLabel->SetToolTip( _("Minimum distance between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting") );
-	
-	fgSizerSoldMaskOpts->Add( m_solderMaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_SolderMaskMinWidthCurrValue = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("val"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderMaskMinWidthCurrValue->Wrap( -1 );
-	fgSizerSoldMaskOpts->Add( m_SolderMaskMinWidthCurrValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_zoneFillCheck = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Check zone fills before plotting"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
 	
-	sbSizerSoldMaskLayerOpt->Add( fgSizerSoldMaskOpts, 1, wxEXPAND, 5 );
+	gbSizer1->AddGrowableCol( 0 );
+	gbSizer1->AddGrowableCol( 2 );
+	
+	sbOptionsSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_PlotOptionsSizer->Add( sbSizerSoldMaskLayerOpt, 1, wxEXPAND|wxALL, 3 );
+	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerGbrOpt;
-	bSizerGbrOpt = new wxBoxSizer( wxVERTICAL );
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 3, 0 );
+	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_useGerberExtensions = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use Protel filename extensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberExtensions->SetToolTip( _("Use Protel Gerber extensions (.GBL, .GTL, etc...)\nNo longer recommended. The official extension is .gbr") );
+	m_useGerberExtensions->SetMinSize( wxSize( 280,-1 ) );
 	
-	bSizerGbrOpt->Add( m_useGerberExtensions, 0, wxALL, 2 );
-	
-	m_useGerberX2Attributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include extended (X2) attributes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberX2Attributes->SetToolTip( _("Include extended attributes (X2 Gerber files format) in the Gerber file.\nMainly File Format attributes.") );
-	
-	bSizerGbrOpt->Add( m_useGerberX2Attributes, 0, wxALL, 2 );
-	
-	m_useGerberNetAttributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include advanced X2 features"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberNetAttributes->SetToolTip( _("Only available in X2 Gerber files format.\nInclude netlist metadata and aperture attributes.") );
-	
-	bSizerGbrOpt->Add( m_useGerberNetAttributes, 0, wxALL, 2 );
+	gbSizer2->Add( m_useGerberExtensions, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_generateGerberJobFile = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate Gerber job file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_generateGerberJobFile->SetToolTip( _("Generate a Gerber job file that contains info about the board,\nand the list of generated Gerber plot files") );
 	
-	bSizerGbrOpt->Add( m_generateGerberJobFile, 0, wxALL, 2 );
+	gbSizer2->Add( m_generateGerberJobFile, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_subtractMaskFromSilk = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 	
-	bSizerGbrOpt->Add( m_subtractMaskFromSilk, 0, wxALL, 2 );
+	gbSizer2->Add( m_subtractMaskFromSilk, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	
+	coordFormatLabel = new wxStaticText( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Coordinate format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	coordFormatLabel->Wrap( -1 );
+	gbSizer2->Add( coordFormatLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	
+	wxString m_coordFormatCtrlChoices[] = { _("4.5, unit mm"), _("4.6, unit mm") };
+	int m_coordFormatCtrlNChoices = sizeof( m_coordFormatCtrlChoices ) / sizeof( wxString );
+	m_coordFormatCtrl = new wxChoice( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_coordFormatCtrlNChoices, m_coordFormatCtrlChoices, 0 );
+	m_coordFormatCtrl->SetSelection( 0 );
+	gbSizer2->Add( m_coordFormatCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_useGerberX2Attributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include extended (X2) attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberX2Attributes->SetToolTip( _("Include extended attributes (X2 Gerber files format) in the Gerber file.\nMainly File Format attributes.") );
+	
+	gbSizer2->Add( m_useGerberX2Attributes, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	
+	m_useGerberNetAttributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include advanced X2 features"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberNetAttributes->SetToolTip( _("Only available in X2 Gerber files format.\nInclude netlist metadata and aperture attributes.") );
+	
+	gbSizer2->Add( m_useGerberNetAttributes, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
 	
 	
-	m_GerberOptionsSizer->Add( bSizerGbrOpt, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->AddGrowableCol( 2 );
 	
-	wxString m_rbGerberFormatChoices[] = { _("4.5, unit mm"), _("4.6, unit mm") };
-	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
-	m_rbGerberFormat = new wxRadioBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Coordinate Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbGerberFormat->SetSelection( 0 );
-	m_rbGerberFormat->SetToolTip( _("Resolution of coordinates in Gerber files.\nUse the higher value if possible.") );
-	
-	m_GerberOptionsSizer->Add( m_rbGerberFormat, 0, wxALIGN_LEFT|wxALIGN_TOP|wxALL, 5 );
+	m_GerberOptionsSizer->Add( gbSizer2, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 3 );
+	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	m_HPGLOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
+	m_HPGLOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerHPGL_options;
-	bSizerHPGL_options = new wxBoxSizer( wxVERTICAL );
+	m_hpglPenLabel = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hpglPenLabel->Wrap( -1 );
+	m_HPGLOptionsSizer->Add( m_hpglPenLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_textPenSize = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPenSize->Wrap( -1 );
-	bSizerHPGL_options->Add( m_textPenSize, 0, wxRIGHT|wxLEFT, 5 );
+	m_hpglPenCtrl = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_HPGLOptionsSizer->Add( m_hpglPenCtrl, 5, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_HPGLPenSizeOpt = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerHPGL_options->Add( m_HPGLPenSizeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	
-	m_HPGLOptionsSizer->Add( bSizerHPGL_options, 1, wxEXPAND, 5 );
+	m_hpglPenUnits = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hpglPenUnits->Wrap( -1 );
+	m_HPGLOptionsSizer->Add( m_hpglPenUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	m_PlotOptionsSizer->Add( m_HPGLOptionsSizer, 0, wxALL|wxEXPAND, 3 );
+	m_HPGLOptionsSizer->Add( 0, 0, 11, wxEXPAND, 5 );
+	
+	
+	m_PlotOptionsSizer->Add( m_HPGLOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_PSOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Postscript Options") ), wxVERTICAL );
 	
-	wxBoxSizer* bSizer17;
-	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 6, 3, 0 );
+	fgSizer2->AddGrowableCol( 1 );
+	fgSizer2->AddGrowableCol( 4 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxBoxSizer* bSizer18;
-	bSizer18 = new wxBoxSizer( wxVERTICAL );
+	fgSizer2->SetMinSize( wxSize( 60,-1 ) ); 
+	m_fineAdjustXLabel = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("X scale factor:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fineAdjustXLabel->Wrap( -1 );
+	fgSizer2->Add( m_fineAdjustXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_staticText7 = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("X scale:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	bSizer18->Add( m_staticText7, 0, wxRIGHT|wxLEFT, 5 );
+	m_fineAdjustXCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fineAdjustXCtrl->SetToolTip( _("Set global X scale adjust for exact scale postscript output.") );
 	
-	m_fineAdjustXscaleOpt = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fineAdjustXscaleOpt->SetToolTip( _("Set global X scale adjust for exact scale postscript output.") );
-	
-	bSizer18->Add( m_fineAdjustXscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	
-	bSizer17->Add( bSizer18, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer19;
-	bSizer19 = new wxBoxSizer( wxVERTICAL );
-	
-	m_staticText8 = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Y scale:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	bSizer19->Add( m_staticText8, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_fineAdjustYscaleOpt = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fineAdjustYscaleOpt->SetToolTip( _("Set global Y scale adjust for exact scale postscript output.") );
-	
-	bSizer19->Add( m_fineAdjustYscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_fineAdjustXCtrl, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	
-	bSizer17->Add( bSizer19, 1, wxEXPAND, 5 );
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer191;
-	bSizer191 = new wxBoxSizer( wxVERTICAL );
+	m_fineAdjustYLabel = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Y scale factor:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fineAdjustYLabel->Wrap( -1 );
+	fgSizer2->Add( m_fineAdjustYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
-	m_textPSFineAdjustWidth = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Width correction:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPSFineAdjustWidth->Wrap( -1 );
-	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxRIGHT|wxLEFT, 5 );
+	m_fineAdjustYCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fineAdjustYCtrl->SetToolTip( _("Set global Y scale adjust for exact scale postscript output.") );
 	
-	m_PSFineAdjustWidthOpt = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PSFineAdjustWidthOpt->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
-	
-	bSizer191->Add( m_PSFineAdjustWidthOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_fineAdjustYCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 30 );
 	
 	
-	bSizer17->Add( bSizer191, 1, wxEXPAND, 5 );
+	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	
+	m_widthAdjustLabel = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Track width correction:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthAdjustLabel->Wrap( -1 );
+	fgSizer2->Add( m_widthAdjustLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	
+	m_widthAdjustCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
+	
+	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	
+	m_widthAdjustUnits = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthAdjustUnits->Wrap( -1 );
+	fgSizer2->Add( m_widthAdjustUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	m_PSOptionsSizer->Add( bSizer17, 1, wxEXPAND, 5 );
+	m_PSOptionsSizer->Add( fgSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_forcePSA4OutputOpt = new wxCheckBox( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Force A4 output"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxALL, 2 );
+	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 3 );
+	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
 	
@@ -352,15 +308,15 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotModeOpt->SetValue(true); 
 	m_DXF_plotModeOpt->SetToolTip( _("DXF only:\nCheck to plot all layers in polygon mode.\nUncheck to plot in sketch mode layers that don't support polygons (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\nand plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)") );
 	
-	m_SizerDXF_options->Add( m_DXF_plotModeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 2 );
+	m_SizerDXF_options->Add( m_DXF_plotModeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use Pcbnew font to plot texts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use Pcbnew stroke font\nUncheck to plot oneline ASCII texts as editable text (using DXF font)") );
 	
-	m_SizerDXF_options->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 2 );
+	m_SizerDXF_options->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
 	
 	
-	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxALL, 3 );
+	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 5 );
@@ -429,7 +385,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnClose ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PLOT_BASE::OnInitDialog ) );
 	this->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ) );
 	m_plotFormatOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::SetPlotFormat ), NULL, this );
@@ -440,7 +395,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotModeOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
 	m_buttonDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
-	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 	this->Connect( m_menuItem1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );
 	this->Connect( m_menuItem2->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );
@@ -452,7 +406,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnClose ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PLOT_BASE::OnInitDialog ) );
 	this->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ) );
 	m_plotFormatOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::SetPlotFormat ), NULL, this );
@@ -463,7 +416,6 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_DXF_plotModeOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
 	m_buttonDRC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
-	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 	this->Disconnect( ID_LAYER_FAB, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );
 	this->Disconnect( ID_SELECT_COPPER_LAYERS, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ) );

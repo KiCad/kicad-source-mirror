@@ -81,14 +81,18 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_ModeColorOption->SetSelection( 0 );
 	gbSizer1->Add( m_ModeColorOption, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
-	m_defaultLineWidthTitle = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Default line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_defaultLineWidthTitle->Wrap( -1 );
-	gbSizer1->Add( m_defaultLineWidthTitle, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_lineWidthLabel = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel->Wrap( -1 );
+	gbSizer1->Add( m_lineWidthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_DefaultLineSizeCtrl = new wxTextCtrl( sbOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_DefaultLineSizeCtrl->SetToolTip( _("Selection of the default pen thickness used to draw items, when their thickness is set to 0.") );
+	m_lineWidthCtrl = new wxTextCtrl( sbOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthCtrl->SetToolTip( _("Selection of the default pen thickness used to draw items, when their thickness is set to 0.") );
 	
-	gbSizer1->Add( m_DefaultLineSizeCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_lineWidthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 5 );
+	
+	m_lineWidthUnits = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthUnits->Wrap( -1 );
+	gbSizer1->Add( m_lineWidthUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 	
 	
 	gbSizer1->AddGrowableCol( 1 );
@@ -115,12 +119,16 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_plotOriginOpt->SetSelection( 0 );
 	gbSizer2->Add( m_plotOriginOpt, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_penHPGLWidthTitle = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_penHPGLWidthTitle->Wrap( -1 );
-	gbSizer2->Add( m_penHPGLWidthTitle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	m_penWidthLabel = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_penWidthLabel->Wrap( -1 );
+	gbSizer2->Add( m_penWidthLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
-	m_penHPGLWidthCtrl = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_penHPGLWidthCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_penWidthCtrl = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_penWidthCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 5 );
+	
+	m_penWidthUnits = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_penWidthUnits->Wrap( -1 );
+	gbSizer2->Add( m_penWidthUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	gbSizer2->AddGrowableCol( 1 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,6 +24,9 @@
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/textctrl.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,10 +43,8 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		enum
 		{
 			wxID_FRAME_SEL = 1000,
-			wxID_PRINT_MODE,
 			wxID_PAGE_MODE,
-			wxID_PRINT_OPTIONS,
-			wxID_PRINT_ALL
+			wxID_PRINT_OPTIONS
 		};
 		
 		wxStaticText* m_staticText4;
@@ -56,26 +57,28 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_FineAdjustXscaleOpt;
 		wxStaticText* m_FineAdjustYscaleTitle;
 		wxTextCtrl* m_FineAdjustYscaleOpt;
-		wxStaticText* m_TextPenWidth;
-		wxTextCtrl* m_DialogPenWidth;
+		wxStaticText* m_penWidthLabel;
+		wxTextCtrl* m_penWidthCtrl;
+		wxStaticText* m_penWidthUnits;
+		wxStaticText* m_drillMarksLabel;
+		wxChoice* m_drillMarksChoice;
+		wxStaticText* m_outputModeLabel;
+		wxChoice* m_outputMode;
 		wxCheckBox* m_Print_Sheet_Ref;
 		wxCheckBox* m_Print_Mirror;
-		wxRadioBox* m_Drill_Shape_Opt;
-		wxRadioBox* m_ModeColorOption;
 		wxRadioBox* m_PagesOption;
+		wxStaticLine* m_staticline1;
 		wxButton* m_buttonOption;
-		wxButton* m_buttonPreview;
-		wxButton* m_buttonPrint;
-		wxButton* m_buttonQuit;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnScaleSelectionClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

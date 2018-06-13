@@ -317,7 +317,7 @@ public:
      * Function SVG_Print
      * shows the print SVG file dialog.
      */
-    void SVG_Print( wxCommandEvent& event );
+    void ExportSVG( wxCommandEvent& event );
 
     // User interface update command event handlers.
     void OnUpdateSave( wxUpdateUIEvent& aEvent );

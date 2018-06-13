@@ -34,7 +34,7 @@
 #include <sch_edit_frame.h>
 #include <dialog_plot_schematic_base.h>
 #include <reporter.h>
-
+#include <widgets/unit_binder.h>
 
 enum PageFormatReq {
     PAGE_SIZE_AUTO,
@@ -54,6 +54,9 @@ private:
                                             // use default size or force A or A4 size
     int             m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
     double          m_HPGLPenSize;          // for HPGL format only: pen size
+
+    UNIT_BINDER     m_defaultLineWidth;
+    UNIT_BINDER     m_penWidth;
 
 public:
     // / Constructors

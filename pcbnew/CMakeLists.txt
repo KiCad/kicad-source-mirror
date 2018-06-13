@@ -51,8 +51,6 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
-    dialogs/dialog_SVG_print.cpp
-    dialogs/dialog_SVG_print_base.cpp
     dialogs/dialog_block_options.cpp
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options.cpp
@@ -77,6 +75,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_export_idf_base.cpp
     dialogs/dialog_export_step.cpp
     dialogs/dialog_export_step_base.cpp
+    dialogs/dialog_export_svg.cpp
+    dialogs/dialog_export_svg_base.cpp
     dialogs/dialog_export_vrml.cpp
     dialogs/dialog_export_vrml_base.cpp
     dialogs/dialog_find.cpp

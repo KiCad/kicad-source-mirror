@@ -21,17 +21,17 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/choice.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/checklst.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
-#include <wx/radiobox.h>
+#include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/menu.h>
 #include <wx/dialog.h>
@@ -71,42 +71,42 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotModuleValueOpt;
 		wxCheckBox* m_plotModuleRefOpt;
 		wxCheckBox* m_plotInvisibleText;
-		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxCheckBox* m_excludePadsFromSilkscreen;
+		wxCheckBox* m_plotNoViaOnMaskOpt;
+		wxCheckBox* m_useAuxOriginCheckBox;
+		wxStaticText* drillMarksLabel;
+		wxChoice* m_drillShapeOpt;
+		wxStaticText* scalingLabel;
+		wxChoice* m_scaleOpt;
+		wxStaticText* plotModeLabel;
+		wxChoice* m_plotModeOpt;
+		wxStaticText* m_lineWidthLabel;
+		wxTextCtrl* m_lineWidthCtrl;
+		wxStaticText* m_lineWidthUnits;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
-		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_zoneFillCheck;
-		wxStaticText* m_staticText11;
-		wxChoice* m_drillShapeOpt;
-		wxStaticText* m_staticText12;
-		wxChoice* m_scaleOpt;
-		wxStaticText* m_staticText13;
-		wxChoice* m_plotModeOpt;
-		wxStaticText* m_textDefaultPenSize;
-		wxTextCtrl* m_linesWidth;
-		wxStaticText* m_SolderMaskMarginLabel;
-		wxStaticText* m_SolderMaskMarginCurrValue;
-		wxStaticText* m_solderMaskMinWidthLabel;
-		wxStaticText* m_SolderMaskMinWidthCurrValue;
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
-		wxCheckBox* m_useGerberX2Attributes;
-		wxCheckBox* m_useGerberNetAttributes;
 		wxCheckBox* m_generateGerberJobFile;
 		wxCheckBox* m_subtractMaskFromSilk;
-		wxRadioBox* m_rbGerberFormat;
+		wxStaticText* coordFormatLabel;
+		wxChoice* m_coordFormatCtrl;
+		wxCheckBox* m_useGerberX2Attributes;
+		wxCheckBox* m_useGerberNetAttributes;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;
-		wxStaticText* m_textPenSize;
-		wxTextCtrl* m_HPGLPenSizeOpt;
+		wxStaticText* m_hpglPenLabel;
+		wxTextCtrl* m_hpglPenCtrl;
+		wxStaticText* m_hpglPenUnits;
 		wxStaticBoxSizer* m_PSOptionsSizer;
-		wxStaticText* m_staticText7;
-		wxTextCtrl* m_fineAdjustXscaleOpt;
-		wxStaticText* m_staticText8;
-		wxTextCtrl* m_fineAdjustYscaleOpt;
-		wxStaticText* m_textPSFineAdjustWidth;
-		wxTextCtrl* m_PSFineAdjustWidthOpt;
+		wxStaticText* m_fineAdjustXLabel;
+		wxTextCtrl* m_fineAdjustXCtrl;
+		wxStaticText* m_fineAdjustYLabel;
+		wxTextCtrl* m_fineAdjustYCtrl;
+		wxStaticText* m_widthAdjustLabel;
+		wxTextCtrl* m_widthAdjustCtrl;
+		wxStaticText* m_widthAdjustUnits;
 		wxCheckBox* m_forcePSA4OutputOpt;
 		wxStaticBoxSizer* m_SizerDXF_options;
 		wxCheckBox* m_DXF_plotModeOpt;
@@ -121,7 +121,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxMenu* m_popMenu;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
@@ -131,7 +130,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPopUpLayers( wxCommandEvent& event ) { event.Skip(); }
 		

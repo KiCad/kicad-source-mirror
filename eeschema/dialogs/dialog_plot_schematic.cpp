@@ -32,10 +32,9 @@
 #include <kiface_i.h>
 #include <bitmaps.h>
 #include <worksheet.h>
-#include <base_units.h>
 #include <sch_sheet.h>
 #include <dialog_plot_schematic.h>
-#include <wx_html_report_panel.h>
+
 
 // Keys for configuration
 #define PLOT_FORMAT_KEY wxT( "PlotFormat" )
@@ -44,7 +43,6 @@
 #define PLOT_HPGL_ORIGIN_KEY wxT( "PlotHPGLOrg" )
 #define PLOT_HPGL_PAPERSIZE_KEY wxT( "PlotHPGLPaperSize" )
 #define PLOT_HPGL_PEN_SIZE_KEY wxT( "PlotHPGLPenSize" )
-
 
 
 // static members (static to remember last state):
@@ -64,7 +62,9 @@ void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
 
 
 DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
-    DIALOG_PLOT_SCHEMATIC_BASE( parent )
+    DIALOG_PLOT_SCHEMATIC_BASE( parent ),
+    m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
+    m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
     m_parent = parent;
     m_configChanged = false;
@@ -125,11 +125,10 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
     // Set the default line width (pen width which should be used for
     // items that do not have a pen size defined (like frame ref)
-    int defaultLineSize = GetDefaultLineThickness();
-    m_DefaultLineSizeCtrl->SetValue( StringFromValue( m_units, defaultLineSize, true, true ) );
+    m_defaultLineWidth.SetValue( GetDefaultLineThickness() );
 
     // Initialize HPGL specific widgets
-    m_penHPGLWidthCtrl->SetValue( StringFromValue( m_units, m_HPGLPenSize, true, true ) );
+    m_penWidth.SetValue( m_HPGLPenSize );
 
     // Plot directory
     wxString path = m_parent->GetPlotDirectoryName();
@@ -154,9 +153,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
-    {
         return;
-    }
 
     wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
 
@@ -238,19 +235,19 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
     m_paperSizeOption->Set( paperSizes );
     m_paperSizeOption->SetSelection( selection );
 
-    bool enable = fmt == PLOT_FORMAT_POST || fmt == PLOT_FORMAT_PDF || fmt == PLOT_FORMAT_SVG;
-    m_defaultLineWidthTitle->Enable( enable );
-    m_DefaultLineSizeCtrl->Enable( enable );
+    m_defaultLineWidth.Enable( fmt == PLOT_FORMAT_POST || fmt == PLOT_FORMAT_PDF
+                               || fmt == PLOT_FORMAT_SVG );
 
     m_plotOriginTitle->Enable( fmt == PLOT_FORMAT_HPGL );
     m_plotOriginOpt->Enable( fmt == PLOT_FORMAT_HPGL );
-    m_penHPGLWidthTitle->Enable( fmt == PLOT_FORMAT_HPGL );
-    m_penHPGLWidthCtrl->Enable( fmt == PLOT_FORMAT_HPGL );
+    m_penWidth.Enable( fmt == PLOT_FORMAT_HPGL );
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
 {
+    m_HPGLPenSize = m_penWidth.GetValue();
+
     m_config->Write( PLOT_MODECOLOR_KEY, getModeColor() );
     m_config->Write( PLOT_FRAME_REFERENCE_KEY, getPlotFrameRef() );
     m_config->Write( PLOT_FORMAT_KEY, (long) GetPlotFileFormat() );
@@ -260,8 +257,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     // HPGL Pen Size is stored in mm in config
     m_config->Write( PLOT_HPGL_PEN_SIZE_KEY, m_HPGLPenSize/IU_PER_MM );
 
-    int thickness = ValueFromString( GetUserUnits(), m_DefaultLineSizeCtrl->GetValue(), true );
-    SetDefaultLineThickness( thickness );
+    SetDefaultLineThickness( m_defaultLineWidth.GetValue() );
 
     // Plot directory
     wxString path = m_outputDirectoryName->GetValue();
@@ -314,9 +310,8 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirecto
 
     if( !EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter ) )
     {
-        wxString msg;
-        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
-                    GetChars( outputDir.GetPath() ) );
+        wxString msg = wxString::Format( _( "Could not write plot files to folder \"%s\"." ),
+                                         outputDir.GetPath() );
         aReporter->Report( msg, REPORTER::RPT_ERROR );
     }
 
