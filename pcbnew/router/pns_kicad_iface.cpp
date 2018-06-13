@@ -1128,7 +1128,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 void PNS_KICAD_IFACE::Commit()
 {
     EraseView();
-    m_commit->Push( wxT( "Added a track" ) );
+    m_commit->Push( _( "Added a track" ) );
     m_commit.reset( new BOARD_COMMIT( m_tool ) );
 }
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -49,7 +50,7 @@ class DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Footprint Assignment Conflicts"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Assignment Conflicts"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE();
 	
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,7 +16,7 @@ DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE::DIALOG_FP_CONFLICT_ASSIGNMENT_SELEC
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, wxT("Footprint assignments from schematic netlist and symbol footprint association file (.cmp) are conflicting.\n\nPlease choose the assignment."), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Footprint assignments from schematic netlist and symbol footprint association file (.cmp) are conflicting.\n\nPlease choose the assignment."), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextInfo->Wrap( -1 );
 	bSizerMain->Add( m_staticTextInfo, 0, wxALL|wxEXPAND, 5 );
 	

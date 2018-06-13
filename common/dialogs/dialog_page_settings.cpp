@@ -529,7 +529,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( !retSuccess )
     {
-        wxASSERT_MSG( false, wxT( "the translation for paper size must preserve original spellings" ) );
+        wxASSERT_MSG( false, _( "the translation for paper size must preserve original spellings" ) );
         m_pageInfo.SetType( PAGE_INFO::A4 );
     }
 

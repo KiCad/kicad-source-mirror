@@ -14,7 +14,8 @@
         <property name="file">fp_conflict_assignment_selector_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="internationalize">0</property>
+        <property name="indent_with_spaces"></property>
+        <property name="internationalize">1</property>
         <property name="name">fp_conflict_assignment_selector</property>
         <property name="namespace"></property>
         <property name="path">.</property>
