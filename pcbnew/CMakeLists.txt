@@ -533,7 +533,10 @@ if( DOXYGEN_FOUND )
         # Create doxygen-python html
         add_custom_target( doxygen-python
             ${CMAKE_COMMAND} -E remove_directory doxygen-python
-            COMMAND ${CMAKE_COMMAND} -E env PYTHON_SOURCES_TO_DOC=${DOXYGEN_PYTHON_SOURCES_STR} ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
+            COMMAND ${CMAKE_COMMAND} -E env
+                PYTHON_SOURCES_TO_DOC=${DOXYGEN_PYTHON_SOURCES_STR}
+                CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+                ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS Doxyfile_python
             DEPENDS xml-to-docstrings
