@@ -25,14 +25,27 @@ import math
 import pcbnew
 
 class PadMaker:
-    """
-    Useful construction functions for common types of pads
+    """!
+    Useful construction functions for common types of pads, providing
+    sensible defaults for common pads.
     """
 
     def __init__(self, module):
+        """!
+        @param module: the module the pads will be part of
+        """
         self.module = module
 
-    def THPad(self, Vsize, Hsize, drill, shape=pcbnew.PAD_SHAPE_OVAL, rot_degree = 0):
+    def THPad(self, Vsize, Hsize, drill, shape=pcbnew.PAD_SHAPE_OVAL,
+              rot_degree = 0):
+        """!
+        A basic through-hole pad of the given size and shape
+        @param Vsize: the vertical size of the pad
+        @param Hsize: the horizontal size of the pad
+        @param drill: the drill diameter
+        @param shape: the shape of the pad
+        @param rot_degree: the pad rotation, in degrees
+        """
         pad = pcbnew.D_PAD(self.module)
         pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
@@ -44,10 +57,20 @@ class PadMaker:
         return pad
 
     def THRoundPad(self, size, drill):
+        """!
+        A round though-hole pad. A shortcut for THPad()
+        @param size: pad diameter
+        @param drill: drill diameter
+        """
         pad = self.THPad(size, size, drill, shape=pcbnew.PAD_SHAPE_CIRCLE)
         return pad
 
     def NPTHRoundPad(self, drill):
+        """!
+        A round non-plated though hole (NPTH)
+
+        @param drill: the drill diameter (equals the NPTH diameter)
+        """
         pad = pcbnew.D_PAD(self.module)
         pad.SetSize(pcbnew.wxSize(drill, drill))
         pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
@@ -57,6 +80,14 @@ class PadMaker:
         return pad
 
     def SMDPad(self, Vsize, Hsize, shape=pcbnew.PAD_SHAPE_RECT, rot_degree=0):
+        """
+        Create a surface-mount pad of the given size and shape
+        @param Vsize: the vertical size of the pad
+        @param Hsize: the horizontal size of the pad
+        @param drill: the drill diameter
+        @param shape: the shape of the pad
+        @param rot_degree: the pad rotation, in degrees
+        """
         pad = pcbnew.D_PAD(self.module)
         pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
@@ -67,11 +98,25 @@ class PadMaker:
         return pad
 
     def SMTRoundPad(self, size):
+        """!
+        A round surface-mount pad. A shortcut for SMDPad()
+        @param size: pad diameter
+        """
         pad = self.SMDPad(size, size, shape=pcbnew.PAD_SHAPE_CIRCLE)
         return pad
 
 
 class PadArray:
+    """!
+    A class to assist in creating repetitive grids of pads
+
+    Generally, PadArrays have an internal prototypical pad, and copy this
+    for each pad in the array. They can also have a special pad for the
+    first pad, and a custom function to name the pad.
+
+    Generally, PadArray is used as a base class for more specific array
+    types.
+    """
 
     def __init__(self):
         self.firstPadNum = 1
@@ -79,21 +124,43 @@ class PadArray:
         self.firstPad = None
 
     def SetPinNames(self, pinNames):
-        """
-        Set a name for all the pins
+        """!
+        Set a name for all the pins. If given, this overrides the
+        naming function.
+
+        @param pinNames: the name to use for all pins
         """
         self.pinNames = pinNames
 
     def SetFirstPadType(self, firstPad):
+        """!
+        If the array has a different first pad, this is the pad that
+        is used
+        @param firstPad: the prototypical first pad
+        """
         self.firstPad = firstPad
 
     def SetFirstPadInArray(self, fpNum):
+        """!
+        Set the numbering for the first pad in the array
+        @param fpNum: the number for the first pad
+        """
         self.firstPadNum = fpNum
 
     def AddPad(self, pad):
+        """!
+        Add a pad to the array, under the same moodule as the main
+        prototype pad
+        @param pad: pad to add
+        """
         self.pad.GetParent().Add(pad)
 
     def GetPad(self, is_first_pad, pos):
+        """!
+        Get a pad in the array with the given position
+        @param is_first_pad: use the special first pad if there is one
+        @param pos: the pad position
+        """
         if (self.firstPad and is_first_pad):
             pad = self.firstPad
         else:
@@ -107,6 +174,10 @@ class PadArray:
         return pad
 
     def GetName(self, *args, **kwargs):
+        """!
+        Get the pad name from the naming function, or the pre-set
+        pinNames parameter (set with SetPinNames)
+        """
 
         if self.pinNames is None:
             return self.NamingFunction(*args, **kwargs)
@@ -114,16 +185,28 @@ class PadArray:
         return self.pinNames
 
     def NamingFunction(self, *args, **kwargs):
-        """
+        """!
         Implement this as needed for each array type
         """
         raise NotImplementedError;
 
 
 class PadGridArray(PadArray):
+    """!
+    A basic grid of pads
+    """
 
     def __init__(self, pad, nx, ny, px, py, centre=pcbnew.wxPoint(0, 0)):
+        """!
+        @param pad: the prototypical pad of the array
+        @param nx: number of pads in x-direction
+        @param ny: number of pads in y-direction
+        @param px: pitch in x-direction
+        @param py: pitch in y-direction
+        @param centre: array centre point
+        """
         PadArray.__init__(self)
+
         # this pad is more of a "context", we will use it as a source of
         # pad data, but not actually add it
         self.pad = pad
@@ -133,12 +216,18 @@ class PadGridArray(PadArray):
         self.py = py
         self.centre = centre
 
-    # handy utility function 1 - A, 2 - B, 26 - AA, etc
-    # aIndex = 0 for 0 - A
-    # alphabet = set of allowable chars if not A-Z,
-    #            eg ABCDEFGHJKLMNPRTUVWY for BGA
     def AlphaNameFromNumber(self, n, aIndex=1,
                             alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"):
+        """!
+        Utility function to generate an alphabetical name:
+
+        eg. 1 - A, 2 - B, 26 - AA, etc
+
+        @param aIndex: index of 'A': 0 for 0 - A
+        @param n: the pad index
+        @param alphabet: set of allowable chars if not A-Z,
+            e.g. ABCDEFGHJKLMNPRTUVWY for BGA
+        """
 
         div, mod = divmod(n - aIndex, len(alphabet))
         alpha = alphabet[mod]
@@ -148,12 +237,22 @@ class PadGridArray(PadArray):
 
         return alpha
 
-    # right to left, top to bottom
     def NamingFunction(self, x, y):
+        """!
+        Implementation of the naming function: right to left, top-to-bottom
+
+        @param x: the pad x index
+        @param y: the pad y index
+        """
         return self.firstPadNum + (self.nx * y + x)
 
     #relocate the pad and add it as many times as we need
     def AddPadsToModule(self, dc):
+        """!
+        Create the pads and add them to the module in the correct positions
+
+        @param dc: the drawing context
+        """
 
         pin1posX = self.centre.x - self.px * (self.nx - 1) / 2
         pin1posY = self.centre.y - self.py * (self.ny - 1) / 2
@@ -168,17 +267,37 @@ class PadGridArray(PadArray):
                 pad.SetName(self.GetName(x,y))
                 self.AddPad(pad)
 
+
 class EPADGridArray(PadGridArray):
+    """!
+    A pad grid array with a fixed name, used for things like thermal
+    pads and via grids.
+    """
 
-  def NamingFunction(self, nx, ny):
-    return self.firstPadNum
-
+    def NamingFunction(self, nx, ny):
+        """!
+        Simply return the firstPadNum
+        @param nx: not used
+        @param ny: not used
+        """
+        return self.firstPadNum
 
 
 class PadZGridArray(PadArray):
+    """!
+    A staggered pin array
+    """
 
     def __init__(self, pad, pad_count, line_count, line_pitch,
                  pad_pitch, centre=pcbnew.wxPoint(0, 0)):
+        """!
+        @param pad: the prototypical pad
+        @param pad_count: total pad count
+        @param line_count: number of staggered lines
+        @param line_pitch: distance between lines
+        @param pad_pitch: distance between pads in a line
+        @param centre: array centre point
+        """
         PadArray.__init__(self)
         # this pad is more of a "context", we will use it as a source of
         # pad data, but not actually add it
@@ -189,13 +308,18 @@ class PadZGridArray(PadArray):
         self.pad_pitch = pad_pitch
         self.centre = centre
 
-
-    # right to left, top to bottom
     def NamingFunction(self, pad_pos):
+        """!
+        Naming just increased with pad index in array
+        """
         return self.firstPadNum + pad_pos
 
-    #relocate the pad and add it as many times as we need
     def AddPadsToModule(self, dc):
+        """!
+        Create the pads and add them to the module in the correct positions
+
+        @param dc: the drawing context
+        """
 
         pin1posX = self.centre.x - self.pad_pitch * (self.pad_count - 1) / 2
         pin1posY = self.centre.y + self.line_pitch * (self.line_count - 1) / 2
@@ -215,20 +339,48 @@ class PadZGridArray(PadArray):
             if line >= self.line_count:
                 line = 0
 
+
 class PadLineArray(PadGridArray):
+    """!
+    Shortcut cases for a single-row grid array. Can be used for
+    constructing sections of larger footprints.
+    """
 
     def __init__(self, pad, n, pitch, isVertical,
                  centre=pcbnew.wxPoint(0, 0)):
+        """!
+        @param pad: the prototypical pad
+        @param n: number of pads in array
+        @param pitch: distance between pad centres
+        @param isVertical: horizontal or vertical array (can also use the
+        drawing contexts transforms for more control)
+        @param centre: array centre
+        """
 
         if isVertical:
             PadGridArray.__init__(self, pad, 1, n, 0, pitch, centre)
         else:
             PadGridArray.__init__(self, pad, n, 1, pitch, 0, centre)
 
+
 class PadCircleArray(PadArray):
+    """!
+    Circular pad array
+    """
 
     def __init__(self, pad, n, r, angle_offset=0, centre=pcbnew.wxPoint(0, 0),
-                 clockwise=True, padRotationEnable=False, padRotationOffset =0):
+                 clockwise=True, padRotationEnable=False, padRotationOffset=0):
+        """!
+        @param pad: the prototypical pad
+        @param n: number of pads in array
+        @param r: the circle radius
+        @param angle_offset: angle of the first pad
+        @param centre: array centre point
+        @param clockwise: array increases in a clockwise direction
+        @param padRotationEnable: also rotate pads when placing
+        @param padRotationOffset: rotation of first pad
+        """
+
         PadArray.__init__(self)
         # this pad is more of a "context", we will use it as a source of
         # pad data, but not actually add it
@@ -241,12 +393,19 @@ class PadCircleArray(PadArray):
         self.padRotationEnable = padRotationEnable
         self.padRotationOffset = padRotationOffset
 
-    # around the circle, CW or CCW according to the flag
     def NamingFunction(self, n):
+        """!
+        Naming around the circle, CW or CCW according to the clockwise flag
+        """
         return str(self.firstPadNum + n)
 
-    #relocate the pad and add it as many times as we need
     def AddPadsToModule(self, dc):
+        """!
+        Create the pads and add them to the module in the correct positions
+
+        @param dc: the drawing context
+        """
+
         for pin in range(0, self.n):
             angle = self.angle_offset + (360 / self.n) * pin
 
@@ -264,21 +423,34 @@ class PadCircleArray(PadArray):
             pad.SetName(self.GetName(pin))
             self.AddPad(pad)
 
+
 class PadCustomArray(PadArray):
-    """
+    """!
     Layout pads according to a custom array of [x,y] data
     """
 
     def __init__(self, pad, array):
+        """!
+        @param pad: the prototypical pad
+        @param array: the position data array
+        """
         PadArray.__init__(self)
         self.pad = pad
         self.array = array
 
     def NamingFunction(self, n):
+        """!
+        Simple increment along the given array
+        @param n: the pad index in the array
+        """
         return str(self.firstPadNum + n)
 
-    #relocate the pad and add it as many times as we need
     def AddPadsToModule(self, dc):
+        """!
+        Create the pads and add them to the module in the correct positions
+
+        @param dc: the drawing context
+        """
 
         for i in range(len(self.array)):
             pos = dc.TransformPoint(self.array[i][0], self.array[i][1])
