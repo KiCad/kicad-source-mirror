@@ -271,7 +271,7 @@ static EDA_HOTKEY HkSelectConnection( _HKI( "Select Trivial Connection" ), HK_SE
 
 static EDA_HOTKEY HkSelectCopper( _HKI( "Select Copper Connection" ), HK_SEL_COPPER_CONNECTION, 'I' );
 
-static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, 'E' );
+static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, 'E' + GR_KB_SHIFTCTRL );
 
 static EDA_HOTKEY HkCustomTrackWidth( _HKI( "Custom Track/Via Size" ), HK_CUSTOM_TRACK_WIDTH, 'Q' );
 
