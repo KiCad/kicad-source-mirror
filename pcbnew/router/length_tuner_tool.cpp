@@ -224,6 +224,8 @@ void LENGTH_TUNER_TOOL::performTuning()
     }
 
     m_router->StopRouting();
+    controls()->SetAutoPan( false );
+    controls()->ForceCursorPosition( false );
     highlightNet( false );
 }
 
