@@ -518,7 +518,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
     #ifdef __WXMAC__
-        strK2S += "Contents/MacOS/";
+    if (strK2S.find( _("pcbnew.app") ) != wxNOT_FOUND )
+    {
+        // On macOS, we have standalone applications inside the main bundle, so we handle that here:
+        strK2S += "../../";
+    }
+    strK2S += "Contents/MacOS/";
     #endif
     wxFileName appK2S( strK2S, "kicad2step" );
 
