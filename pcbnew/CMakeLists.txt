@@ -521,14 +521,23 @@ if( DOXYGEN_FOUND )
             DEPENDS doxygen-python-xml
             )
 
-        # create doxygen-python html
+        # The sources to give to the Python Doxygen target
+        set( DOXYGEN_PYTHON_SOURCES
+            ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/python/plugins/FootprintWizardBase.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/python/plugins/PadArray.py )
+
+        # The Doxyfile expects a space-separated list in the env var
+        string(REPLACE ";" " " DOXYGEN_PYTHON_SOURCES_STR "${DOXYGEN_PYTHON_SOURCES}")
+
+        # Create doxygen-python html
         add_custom_target( doxygen-python
             ${CMAKE_COMMAND} -E remove_directory doxygen-python
-            COMMAND PYTHON_SOURCES_TO_DOC=${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
+            COMMAND ${CMAKE_COMMAND} -E env PYTHON_SOURCES_TO_DOC=${DOXYGEN_PYTHON_SOURCES_STR} ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS Doxyfile_python
             DEPENDS xml-to-docstrings
-            DEPENDS pcbnew.py
+            DEPENDS ${DOXYGEN_PYTHON_SOURCES}
             COMMENT "building doxygen docs into directory doxygen-python/html"
             )
     endif()
