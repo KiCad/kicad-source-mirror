@@ -49,7 +49,7 @@
 #include <menus_helpers.h>
 
 
-static wxMenu* Append_Track_Width_List( BOARD* aBoard );
+static wxMenu* Append_Track_Width_List( BOARD* aBoard, EDA_UNITS_T aUnits );
 
 
 bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
@@ -360,7 +360,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK,
                          msg, KiBitmap( add_tracks_xpm ) );
 
-            AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
+            AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard(), GetUserUnits() ),
                          ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
                          KiBitmap( width_track_xpm ) );
 
@@ -410,7 +410,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             msg = AddHotkeyName( _( "Begin Track" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_NEW_TRACK );
             AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK, msg, KiBitmap( add_tracks_xpm ) );
 
-            AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
+            AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard(), GetUserUnits() ),
                          ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
                          KiBitmap( width_track_xpm ) );
 
@@ -579,7 +579,8 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     }
 
     // Allows switching to another track/via size when routing
-    AddMenuItem( PopMenu, Append_Track_Width_List( GetBoard() ), ID_POPUP_PCB_SELECT_WIDTH,
+    AddMenuItem( PopMenu, Append_Track_Width_List( GetBoard(), GetUserUnits() ),
+                 ID_POPUP_PCB_SELECT_WIDTH,
                  _( "Select Track Width" ), KiBitmap( width_track_xpm ) );
 
     // Delete control:
@@ -988,11 +989,11 @@ void PCB_EDIT_FRAME::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPo
  * creates a wxMenu * which shows the last used track widths and via diameters
  * @return a pointer to the menu
  */
-static wxMenu* Append_Track_Width_List( BOARD* aBoard )
+static wxMenu* Append_Track_Width_List( BOARD* aBoard, EDA_UNITS_T aUnits )
 {
-    wxString msg;
-    wxMenu*  trackwidth_menu;
-    wxString value;
+    wxString               msg;
+    wxMenu*                trackwidth_menu;
+    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     trackwidth_menu = new wxMenu;
 
@@ -1000,20 +1001,18 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
                              _( "Use the track width when starting on a track, otherwise the current track width" ),
                              true );
 
-    if( aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
+    if( bds.m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
 
-    if(  aBoard->GetDesignSettings().GetViaSizeIndex() != 0
-      || aBoard->GetDesignSettings().GetTrackWidthIndex() != 0
-      || aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
+    if( bds.GetViaSizeIndex() != 0 || bds.GetTrackWidthIndex() != 0 || bds.m_UseConnectedTrackWidth )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
                                  _( "Use Netclass Values" ),
                                  _( "Use track and via sizes from their Netclass values" ),
                                  true );
 
-    for( unsigned ii = 0; ii < aBoard->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+    for( unsigned ii = 0; ii < bds.m_TrackWidthList.size(); ii++ )
     {
-        value = StringFromValue( g_UserUnit, aBoard->GetDesignSettings().m_TrackWidthList[ii], true );
+        wxString value = StringFromValue( aUnits, bds.m_TrackWidthList[ii], true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
         if( ii == 0 )
@@ -1024,16 +1023,12 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     trackwidth_menu->AppendSeparator();
 
-    for( unsigned ii = 0; ii < aBoard->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 0; ii < bds.m_ViasDimensionsList.size(); ii++ )
     {
-        value = StringFromValue( g_UserUnit,
-                                 aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Diameter,
-                                 true );
-        wxString drill = StringFromValue( g_UserUnit,
-                                          aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Drill,
-                                          true );
+        wxString value = StringFromValue( aUnits, bds.m_ViasDimensionsList[ii].m_Diameter, true );
+        wxString drill = StringFromValue( aUnits, bds.m_ViasDimensionsList[ii].m_Drill, true );
 
-        if( aBoard->GetDesignSettings().m_ViasDimensionsList[ii].m_Drill <= 0 )
+        if( bds.m_ViasDimensionsList[ii].m_Drill <= 0 )
         {
             msg.Printf( _( "Via %s" ), GetChars( value ) );
         }

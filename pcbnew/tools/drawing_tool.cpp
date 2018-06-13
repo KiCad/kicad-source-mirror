@@ -584,7 +584,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 dimension->Text().SetThickness( width );
                 dimension->SetWidth( width );
-                dimension->AdjustDimensionDetails();
+                dimension->AdjustDimensionDetails( m_frame->GetUserUnits() );
 
                 preview.Add( dimension );
                 frame()->SetMsgPanel( dimension );

@@ -180,11 +180,12 @@ int ValueFromTextCtrl( const wxTextCtrl& aTextCtr );
 /**
  * Returns the units symbol.
  *
- * @param aUnits - Units type, default is current units setting.
+ * @param aUnits - Units requested.
  * @param aFormatString - A formatting string to embed the units symbol into.  Note:
  *                        the format string must contain the %s format specifier.
  * @return The formatted units symbol.
  */
+// TODO: remove default value for aUnits
 wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
                            const wxString& aFormatString = " (%s):" );
 
@@ -194,12 +195,14 @@ wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
  * The strings returned are full text name and not abbreviations or symbolic
  * representations of the units.  Use ReturnUnitSymbol() for that.
  *
- * @param aUnits - The units text to return.
+ * @param aUnits - The units requested.
  * @return The human readable units string.
  */
 wxString GetUnitsLabel( EDA_UNITS_T aUnits, bool aUseMils = false );
+// TODO: remove default value for aUnits
 wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit, bool aUseMils = false );
 
+// TODO: remove (units should either be in textControl or handled by UNIT_BINDER)
 void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 #endif   // _BASE_UNITS_H_

@@ -283,7 +283,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
         aDimension->Text().SetThickness( width );
         aDimension->SetWidth( width );
-        aDimension->AdjustDimensionDetails();
+        aDimension->AdjustDimensionDetails( GetUserUnits() );
         aDimension->Draw( m_canvas, aDC, GR_XOR );
 
         m_canvas->SetMouseCapture( BuildDimension, AbortBuildDimension );
@@ -335,7 +335,7 @@ static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     {
         Dimension->m_featureLineDO = pos;
         Dimension->m_crossBarF  = Dimension->m_featureLineDO;
-        Dimension->AdjustDimensionDetails( );
+        Dimension->AdjustDimensionDetails();
     }
     else
     {

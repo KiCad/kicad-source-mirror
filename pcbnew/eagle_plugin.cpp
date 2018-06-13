@@ -772,7 +772,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 else
                     dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
 
-                dimension->AdjustDimensionDetails();
+                dimension->AdjustDimensionDetails( MILLIMETRES );
             }
         }
 

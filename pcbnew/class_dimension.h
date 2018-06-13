@@ -173,9 +173,9 @@ public:
     /**
      * Function AdjustDimensionDetails
      * Calculate coordinates of segments used to draw the dimension.
-     * @param aDoNotChangeText (bool) if false, the dimension text is initialized
+     * @param aUnits the units for the dimension text, or UNSCALED_UNITS to leave unchanged
      */
-    void            AdjustDimensionDetails( bool aDoNotChangeText = false );
+    void            AdjustDimensionDetails( EDA_UNITS_T aUnits = UNSCALED_UNITS );
 
     void            SetText( const wxString& NewText );
     const wxString  GetText() const;

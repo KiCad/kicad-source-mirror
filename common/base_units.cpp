@@ -121,6 +121,12 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils )
  * could truncate the actual value
  */
 
+// JEY TODO: retire this in favour of MessageTextFromValue()....
+wxString CoordinateToString( int aValue, bool aUseMils )
+{
+    return MessageTextFromValue( g_UserUnit, aValue, aUseMils );
+}
+
 
 // A lower-precision (for readability) version of StringFromValue()
 wxString MessageTextFromValue( EDA_UNITS_T aUnits, int aValue, bool aUseMils )
@@ -383,6 +389,16 @@ int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMi
     return KiROUND( value );
 }
 
+
+// JEY TODO: remove
+int ValueFromString( const wxString& aTextValue )
+{
+    int      value;
+
+    value = ValueFromString( g_UserUnit, aTextValue);
+
+    return value;
+}
 
 // JEY TODO: remove; use a UNIT_BINDER instead
 int ValueFromTextCtrl( const wxTextCtrl& aTextCtr )

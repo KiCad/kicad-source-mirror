@@ -206,7 +206,7 @@ void DIMENSION::UpdateHeight()
 }
 
 
-void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
+void DIMENSION::AdjustDimensionDetails( EDA_UNITS_T aUnits )
 {
     const int   arrowz = Mils2iu( 50 );             // size of arrows
     int         ii;
@@ -215,6 +215,9 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     int         arrow_dw_X  = 0, arrow_dw_Y = 0;    // coordinates of arrow line '\'
     int         hx, hy;                             // dimension line interval
     double      angle, angle_f;
+
+    if( aUnits != UNSCALED_UNITS )
+        m_Unit = aUnits;
 
     // Init layer :
     m_Text.SetLayer( GetLayer() );
@@ -313,11 +316,8 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 
     m_Text.SetTextAngle( newAngle );
 
-    if( !aDoNotChangeText )
-    {
-        m_Value = measure;
-        SetText( MessageTextFromValue( g_UserUnit, m_Value ) );
-    }
+    m_Value = measure;
+    SetText( MessageTextFromValue( m_Unit, m_Value ) );
 }
 
 

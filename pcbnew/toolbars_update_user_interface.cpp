@@ -247,7 +247,7 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars( wxEvent& aEvent )
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, false );
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, false );
 
-    if( g_UserUnit == INCHES )
+    if( GetUserUnits() == INCHES )
     {
         menuBar->FindItem( ID_TB_OPTIONS_SELECT_UNIT_INCH )->Check( true );
         m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, true );
