@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-12 19:11+0800\n"
+"PO-Revision-Date: 2018-06-13 17:45+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -494,7 +494,7 @@ msgstr "载入3D模型"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:963
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "刷新时间 %.3f s"
+msgstr "重新载入时间 %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:954
 #, c-format
@@ -796,7 +796,7 @@ msgstr "阻焊颜色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:274
 msgid "Solder Paste Color..."
-msgstr "助焊层颜色..."
+msgstr "锡膏颜色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:277
 msgid "Copper/Surface Finish Color..."
@@ -912,7 +912,7 @@ msgstr "显示关于KiCad对话框"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
-msgstr "重新载入"
+msgstr "重新载入电路板"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:61
 msgid "Copy 3D image to clipboard"
@@ -964,7 +964,7 @@ msgstr "渲染选项："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:42
 msgid "Realistic mode"
-msgstr "平滑显示"
+msgstr "逼真模式"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
 msgid "Show board body"
@@ -972,7 +972,7 @@ msgstr "显示电路板"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:60
 msgid "Show copper thickness"
-msgstr "铜箔厚度"
+msgstr "显示铜箔厚度"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:69
 msgid "Show model bounding boxes"
@@ -1005,23 +1005,23 @@ msgstr "电路板层："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:165
 msgid "Show silkscreen layers"
-msgstr "丝印层"
+msgstr "显示丝印层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:174
 msgid "Show solder mask layers"
-msgstr "阻焊层"
+msgstr "显示阻焊层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:183
 msgid "Show solder paste layers"
-msgstr "助焊层"
+msgstr "显示锡膏层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:192
 msgid "Show adhesive layers"
-msgstr "粘合层"
+msgstr "显示粘合层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:201
 msgid "User layers (not shown in realistic mode):"
-msgstr "用户层（在真实模式中不显示）"
+msgstr "用户层（在逼真模式中不显示）"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:218
 msgid "Show comments and drawings layers"
@@ -2847,7 +2847,7 @@ msgstr "法语"
 
 #: common/pgm_base.cpp:137
 msgid "Finnish"
-msgstr "芬兰"
+msgstr "芬兰语"
 
 #: common/pgm_base.cpp:145
 msgid "Spanish"
@@ -5626,7 +5626,7 @@ msgstr "显示"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:157
 msgid "&Measurement units:"
-msgstr "测量单位 (&M):"
+msgstr "测量单位(&M):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:98
@@ -20223,7 +20223,7 @@ msgstr "新建封装的默认值"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:117
 msgid "&Reference:"
-msgstr "参考编号（&R）"
+msgstr "参考编号(&R)"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:122
 msgid ""
@@ -22101,7 +22101,7 @@ msgstr "使用网络类尺寸"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:108
 msgid "Track & Via Properties"
-msgstr "布线 & 过孔属性"
+msgstr "布线与过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:27
 msgid "Track width:"
@@ -24333,7 +24333,7 @@ msgstr "设置(&S)"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Ro&ute"
-msgstr "布线 (&U)"
+msgstr "布线(&U)"
 
 #: pcbnew/menubar_pcb_editor.cpp:163
 msgid "&Layers Setup..."
@@ -24670,7 +24670,7 @@ msgstr "草图布线(&T)"
 #: pcbnew/menubar_pcb_editor.cpp:708 pcbnew/tool_pcb_editor.cpp:401
 #: pcbnew/toolbars_update_user_interface.cpp:163
 msgid "Show tracks in outline mode"
-msgstr "布线显示线框模式"
+msgstr "在轮廓模式下显示布线"
 
 #: pcbnew/menubar_pcb_editor.cpp:712
 msgid "Sketch &Graphic Items"
@@ -26098,7 +26098,7 @@ msgstr "无法在禁止区或板框内开始布线。"
 
 #: pcbnew/router/pns_tool_base.cpp:66
 msgid "Routing Options..."
-msgstr "布线设置..."
+msgstr "布线选项..."
 
 #: pcbnew/router/pns_tool_base.cpp:67
 msgid "Shows a dialog containing router options."
@@ -26728,7 +26728,7 @@ msgstr "过孔显示填充模式"
 
 #: pcbnew/toolbars_update_user_interface.cpp:164
 msgid "Show tracks in fill mode"
-msgstr "布线显示填充模式"
+msgstr "在填充模式下显示布线"
 
 #: pcbnew/toolbars_update_user_interface.cpp:174
 msgid "Normal contrast display mode"
