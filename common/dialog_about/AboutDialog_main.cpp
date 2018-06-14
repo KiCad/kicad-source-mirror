@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2010-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2010-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,7 +221,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( "Lorenzo Marcantonio" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Mattila" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Russell Oliver" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Chris Pavlina" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Alexis Lockwood" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Miguel Angel Ajo Pelayo" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jacobo Aragunde Perez" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Simon Richter" ) );

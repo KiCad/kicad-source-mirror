@@ -34,7 +34,7 @@ Andrew Zonenberg <azonenberg[at]drawersteak-dot-com>
 Cirilo Bernardo <cirilo_bernardo[at]yahoo-dot-com>
 Adam Wolf <adamwolf[at]feelslikeburning-dot-com>
 Bernhard Stegmaier <stegmaier[at]sw-systems-dot-de>
-Chris Pavlina <pavlina.chris[at]gmail-dot-com>
+Alexis Lockwood <alexlockwood[at]fastmail-dot-com>
 Simon Richter <Simon.Richter[at]hogyros-dot-de>
 Mario Luzeiro <mrluzeiro[at]ua-dot-pt>
 Mateusz Skowroński <skowri[at]gmail-dot-com>
