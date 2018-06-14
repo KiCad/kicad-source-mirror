@@ -466,9 +466,9 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
     {
         setCurFootprintName( name );
 
-        SetCurItem( NULL );
-
-        // Delete the current footprint
+        // Delete the current footprint (MUST reset tools first)
+        GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        SetCurItem( nullptr );
         GetBoard()->m_Modules.DeleteAll();
 
         LIB_ID id;
