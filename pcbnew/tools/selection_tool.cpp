@@ -1613,7 +1613,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             return false;
 
         float viewArea = getView()->GetViewport().GetArea();
-        float modArea = aItem->ViewBBox().GetArea();
+        float modArea = aItem->GetBoundingBox().GetArea();
 
         // Do not select modules that are larger the view area
         // (most likely footprints representing shield connectors)
