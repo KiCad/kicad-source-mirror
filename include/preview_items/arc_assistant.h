@@ -39,7 +39,7 @@ class ARC_ASSISTANT : public EDA_ITEM
 {
 public:
 
-    ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager );
+    ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS_T aUnits );
 
     const BOX2I ViewBBox() const override;
 
@@ -52,7 +52,6 @@ public:
     void Show( int x, std::ostream& st ) const override
     {
     }
-
 #endif
 
     /**
@@ -67,6 +66,7 @@ public:
 private:
 
     const ARC_GEOM_MANAGER& m_constructMan;
+    EDA_UNITS_T             m_units;
 };
 }       // PREVIEW
 }       // KIGFX

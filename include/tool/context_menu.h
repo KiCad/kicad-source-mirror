@@ -149,7 +149,7 @@ protected:
     virtual CONTEXT_MENU* create() const;
 
     ///> Returns an instance of TOOL_MANAGER class.
-    TOOL_MANAGER* getToolManager();
+    TOOL_MANAGER* getToolManager() const;
 
     ///> Returns the corresponding wxMenuItem identifier for a TOOL_ACTION object.
     static inline int getMenuId( const TOOL_ACTION& aAction )

@@ -28,14 +28,10 @@
 #include <pcb_edit_frame.h>
 #include <pcbplot.h>
 #include <gerber_jobfile_writer.h>
-#include <base_units.h>
-#include <macros.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <bitmaps.h>
-
 #include <class_board.h>
-#include <wx/ffile.h>
 #include <dialog_plot.h>
 #include <wx_html_report_panel.h>
 #include <drc.h>

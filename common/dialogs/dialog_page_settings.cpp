@@ -92,7 +92,11 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent  ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
-    m_initialized( false )
+    m_initialized( false ),
+    m_customSizeX( parent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false,
+                   MIN_PAGE_SIZE * IU_PER_MILS, MAX_PAGE_SIZE * IU_PER_MILS ),
+    m_customSizeY( parent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false,
+                   MIN_PAGE_SIZE * IU_PER_MILS, MAX_PAGE_SIZE * IU_PER_MILS )
 {
     m_parent   = parent;
     m_screen   = m_parent->GetScreen();
@@ -122,8 +126,6 @@ DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 void DIALOG_PAGES_SETTINGS::initDialog()
 {
     wxString    msg;
-    double      customSizeX;
-    double      customSizeY;
 
     // initialize page format choice box and page format list.
     // The first shows translated strings, the second contains not translated strings
@@ -160,41 +162,15 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     wxCommandEvent dummy;
     OnPaperSizeChoice( dummy );
 
-    if( m_customFmt)    // The custom value is defined by the page size
+    if( m_customFmt )
     {
-        customSizeX = m_pageInfo.GetWidthMils();
-        customSizeY = m_pageInfo.GetHeightMils();
+        m_customSizeX.SetValue( m_pageInfo.GetWidthMils() * IU_PER_MILS );
+        m_customSizeY.SetValue( m_pageInfo.GetHeightMils() * IU_PER_MILS );
     }
-    else    // The custom value is set to a default value, or the last defined value
+    else
     {
-        customSizeX = m_pageInfo.GetCustomWidthMils();
-        customSizeY = m_pageInfo.GetCustomHeightMils();
-    }
-
-    switch( g_UserUnit )
-    {
-    case MILLIMETRES:
-        customSizeX *= 25.4e-3;
-        customSizeY *= 25.4e-3;
-
-        msg.Printf( wxT( "%.2f" ), customSizeX );
-        m_TextUserSizeX->SetValue( msg );
-
-        msg.Printf( wxT( "%.2f" ), customSizeY );
-        m_TextUserSizeY->SetValue( msg );
-        break;
-
-    default:
-    case INCHES:
-        customSizeX /= 1000.0;
-        customSizeY /= 1000.0;
-
-        msg.Printf( wxT( "%.3f" ), customSizeX );
-        m_TextUserSizeX->SetValue( msg );
-
-        msg.Printf( wxT( "%.3f" ), customSizeY );
-        m_TextUserSizeY->SetValue( msg );
-        break;
+        m_customSizeX.SetValue( m_pageInfo.GetCustomWidthMils() * IU_PER_MILS );
+        m_customSizeY.SetValue( m_pageInfo.GetCustomHeightMils() * IU_PER_MILS );
     }
 
     m_TextRevision->SetValue( m_tb.GetRevision() );
@@ -255,8 +231,8 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
     if( paperType.Contains( PAGE_INFO::Custom ) )
     {
         m_orientationComboBox->Enable( false );
-        m_TextUserSizeX->Enable( true );
-        m_TextUserSizeY->Enable( true );
+        m_customSizeX.Enable( true );
+        m_customSizeY.Enable( true );
         m_customFmt = true;
     }
     else
@@ -272,8 +248,8 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
             m_orientationComboBox->Enable( false );
         }
 #endif
-        m_TextUserSizeX->Enable( false );
-        m_TextUserSizeY->Enable( false );
+        m_customSizeX.Enable( false );
+        m_customSizeY.Enable( false );
         m_customFmt = false;
     }
 
@@ -284,7 +260,7 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
 
 void DIALOG_PAGES_SETTINGS::OnUserPageSizeXTextUpdated( wxCommandEvent& event )
 {
-    if( m_initialized && m_TextUserSizeX->IsModified() )
+    if( m_initialized )
     {
         GetPageLayoutInfoFromDialog();
         UpdatePageLayoutExample();
@@ -294,7 +270,7 @@ void DIALOG_PAGES_SETTINGS::OnUserPageSizeXTextUpdated( wxCommandEvent& event )
 
 void DIALOG_PAGES_SETTINGS::OnUserPageSizeYTextUpdated( wxCommandEvent& event )
 {
-    if( m_initialized && m_TextUserSizeY->IsModified() )
+    if( m_initialized )
     {
         GetPageLayoutInfoFromDialog();
         UpdatePageLayoutExample();
@@ -423,20 +399,15 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( fileName != BASE_SCREEN::m_PageLayoutDescrFileName )
     {
-        wxString fullFileName =
-                    WORKSHEET_LAYOUT::MakeFullFileName( fileName, m_projectPath );
+        wxString fullFileName = WORKSHEET_LAYOUT::MakeFullFileName( fileName, m_projectPath );
 
-        if( !fullFileName.IsEmpty() )
+        if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
         {
-
-            if( !wxFileExists( fullFileName ) )
-            {
-                wxString msg;
-                msg.Printf( _("Page layout description file \"%s\" not found. Abort"),
-                            GetChars( fullFileName ) );
-                wxMessageBox( msg );
-                return false;
-            }
+            wxString msg;
+            msg.Printf( _( "Page layout description file \"%s\" not found." ),
+                        GetChars( fullFileName ) );
+            wxMessageBox( msg );
+            return false;
         }
 
         BASE_SCREEN::m_PageLayoutDescrFileName = fileName;
@@ -445,11 +416,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
         m_localPrjConfigChanged = true;
     }
 
-    int idx = m_paperSizeComboBox->GetSelection();
-
-    if( idx < 0 )
-        idx = 0;
-
+    int idx = std::max( m_paperSizeComboBox->GetSelection(), 0 );
     const wxString paperType = m_pageFmt[idx];
 
     if( paperType.Contains( PAGE_INFO::Custom ) )
@@ -460,26 +427,8 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
         if( retSuccess )
         {
-            if( m_layout_size.x < MIN_PAGE_SIZE || m_layout_size.y < MIN_PAGE_SIZE ||
-                m_layout_size.x > MAX_PAGE_SIZE || m_layout_size.y > MAX_PAGE_SIZE )
-            {
-                wxString msg = wxString::Format( _( "Selected custom paper size\n"
-                                                    "is out of the permissible limits\n"
-                                                    "%.1f - %.1f %s!\nSelect another custom "
-                                                    "paper size?" ),
-                        g_UserUnit == INCHES ? MIN_PAGE_SIZE / 1000. : MIN_PAGE_SIZE * 25.4 / 1000,
-                        g_UserUnit == INCHES ? MAX_PAGE_SIZE / 1000. : MAX_PAGE_SIZE * 25.4 / 1000,
-                        g_UserUnit == INCHES ? _( "inches" ) : _( "mm" ) );
-
-                if( wxMessageBox( msg, _( "Warning!" ),
-                                  wxYES_NO | wxICON_EXCLAMATION, this ) == wxYES )
-                {
-                    return false;
-                }
-
-                m_layout_size.x = Clamp( MIN_PAGE_SIZE, m_layout_size.x, MAX_PAGE_SIZE );
-                m_layout_size.y = Clamp( MIN_PAGE_SIZE, m_layout_size.y, MAX_PAGE_SIZE );
-            }
+            if( !m_customSizeX.Validate( true ) || !m_customSizeY.Validate( true ) )
+                return false;
 
             PAGE_INFO::SetCustomWidthMils( m_layout_size.x );
             PAGE_INFO::SetCustomHeightMils( m_layout_size.y );
@@ -702,11 +651,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
 void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 {
-    int idx = m_paperSizeComboBox->GetSelection();
-
-    if( idx < 0 )
-        idx = 0;
-
+    int idx = std::max( m_paperSizeComboBox->GetSelection(), 0 );
     const wxString paperType = m_pageFmt[idx];
 
     // here we assume translators will keep original paper size spellings
@@ -772,28 +717,8 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
 void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 {
-    double      customSizeX;
-    double      customSizeY;
-    wxString    msg;
-
-    msg = m_TextUserSizeX->GetValue();
-    msg.ToDouble( &customSizeX );
-
-    msg = m_TextUserSizeY->GetValue();
-    msg.ToDouble( &customSizeY );
-
-    switch( g_UserUnit )
-    {
-    case MILLIMETRES:
-        customSizeX *= 1000. / 25.4;
-        customSizeY *= 1000. / 25.4;
-        break;
-
-    default:
-    case INCHES:
-        customSizeX *= 1000.;
-        customSizeY *= 1000.;
-    }
+    double customSizeX = (double) m_customSizeX.GetValue() / IU_PER_MILS;
+    double customSizeY = (double) m_customSizeY.GetValue() / IU_PER_MILS;
 
     // Prepare to painless double -> int conversion.
     customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );

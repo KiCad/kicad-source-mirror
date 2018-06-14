@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,8 +21,8 @@
 #include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/valtext.h>
+#include <wx/sizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -51,13 +51,14 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextOrient;
 		wxChoice* m_orientationComboBox;
 		wxStaticText* m_staticTextCustSize;
-		wxStaticText* m_staticTextHeight;
-		wxTextCtrl* m_TextUserSizeY;
-		wxStaticText* m_staticTextWidth;
-		wxTextCtrl* m_TextUserSizeX;
+		wxStaticText* m_userSizeYLabel;
+		wxTextCtrl* m_userSizeYCtrl;
+		wxStaticText* m_userSizeYUnits;
+		wxStaticText* m_userSizeXLabel;
+		wxTextCtrl* m_userSizeXCtrl;
+		wxStaticText* m_userSizeXUnits;
 		wxStaticText* m_staticTextPreview;
 		wxStaticBitmap* m_PageLayoutExampleBitmap;
-		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTexttbprm;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_TextSheetCount;

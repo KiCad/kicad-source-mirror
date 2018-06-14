@@ -124,8 +124,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( PL_EDITOR_FRAME_NAME, PlEditorHokeysDescr );
 
-    g_UserUnit = MILLIMETRES;
-
     return true;
 }
 
@@ -149,8 +147,6 @@ bool MYFACE::OnKifaceStart( PGM_BASE* aProgram )
         if( !IsOK( NULL, _( "pl_editor is already running. Continue?" ) ) )
             return false;
     }
-
-    g_UserUnit = MILLIMETRES;
 
     // read current setup and reopen last directory if no filename to open in
     // command line

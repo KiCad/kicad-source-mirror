@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -88,7 +88,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_entryCentreY;
 		wxStaticText* m_unitLabelCentreY;
 		wxStaticText* m_labelCircRadius;
-		wxStaticText* m_labelCircRadiusValue;
+		wxStaticText* m_valueCircRadius;
+		wxStaticText* m_unitLabelCircRadius;
 		wxStaticText* m_labelCircAngle;
 		TEXT_CTRL_EVAL* m_entryCircAngle;
 		wxStaticText* m_unitLabelCircAngle;

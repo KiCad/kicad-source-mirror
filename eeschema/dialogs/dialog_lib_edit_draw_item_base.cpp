@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,101 +19,37 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	wxBoxSizer* dlgBorderSizer;
 	dlgBorderSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("General:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	m_staticText1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	
-	dlgBorderSizer->Add( m_staticText1, 0, wxALIGN_LEFT, 3 );
-	
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_widthLabel = new wxStaticText( this, wxID_ANY, _("Line Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthLabel->Wrap( -1 );
+	bSizer3->Add( m_widthLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	bSizer3->Add( 12, 0, 0, wxEXPAND, 3 );
+	m_widthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_widthCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_staticWidth = new wxStaticText( this, wxID_ANY, _("&Width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticWidth->Wrap( -1 );
-	bSizer3->Add( m_staticWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
-	
-	
-	bSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
-	
-	m_textWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_textWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
-	
-	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticWidthUnits->Wrap( -1 );
-	bSizer3->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_widthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthUnits->Wrap( -1 );
+	bSizer3->Add( m_widthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
 	
 	
-	dlgBorderSizer->Add( bSizer3, 0, wxALL|wxEXPAND, 0 );
-	
-	m_staticTextSharing = new wxStaticText( this, ID_M_STATICTEXTSHARING, _("Sharing:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextSharing->Wrap( -1 );
-	m_staticTextSharing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	
-	dlgBorderSizer->Add( m_staticTextSharing, 0, wxTOP|wxBOTTOM, 5 );
-	
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bSizer4->Add( 12, 0, 0, wxEXPAND, 3 );
+	dlgBorderSizer->Add( bSizer3, 0, wxEXPAND|wxBOTTOM, 10 );
 	
 	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all &units in component"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_checkApplyToAllUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
-	
-	
-	dlgBorderSizer->Add( bSizer4, 0, wxALL|wxEXPAND, 0 );
-	
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bSizer5->Add( 12, 0, 0, wxEXPAND, 3 );
+	dlgBorderSizer->Add( m_checkApplyToAllUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	dlgBorderSizer->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
-	dlgBorderSizer->Add( bSizer5, 0, wxEXPAND, 3 );
+	dlgBorderSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
 	
-	
-	dlgBorderSizer->Add( 0, 0, 0, wxALL|wxEXPAND, 10 );
-	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Fill Style:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	
-	dlgBorderSizer->Add( m_staticText4, 0, wxALIGN_LEFT|wxBOTTOM, 3 );
-	
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bSizer6->Add( 12, 0, 0, wxEXPAND, 3 );
-	
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxVERTICAL );
-	
-	m_radioFillNone = new wxRadioButton( this, wxID_ANY, _("Do &not fill"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_radioFillNone->SetValue( true ); 
-	bSizer7->Add( m_radioFillNone, 0, wxALL, 3 );
-	
-	m_radioFillForeground = new wxRadioButton( this, wxID_ANY, _("Fill &foreground"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_radioFillForeground, 0, wxALL, 3 );
-	
-	m_radioFillBackground = new wxRadioButton( this, wxID_ANY, _("Fill &background"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_radioFillBackground, 0, wxALL, 3 );
-	
-	
-	bSizer6->Add( bSizer7, 0, wxEXPAND, 0 );
-	
-	
-	dlgBorderSizer->Add( bSizer6, 1, wxALL|wxEXPAND, 0 );
-	
-	
-	dlgBorderSizer->Add( 0, 0, 0, wxALL|wxEXPAND, 10 );
+	wxString m_fillCtrlChoices[] = { _("Do not fill"), _("Fill foreground"), _("Fill background") };
+	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
+	m_fillCtrl = new wxRadioBox( this, wxID_ANY, _("Fill Style"), wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_fillCtrl->SetSelection( 0 );
+	dlgBorderSizer->Add( m_fillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -125,7 +61,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	dlgBorderSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 0 );
 	
 	
-	mainSizer->Add( dlgBorderSizer, 1, wxALL|wxEXPAND, 12 );
+	mainSizer->Add( dlgBorderSizer, 1, wxALL|wxEXPAND, 10 );
 	
 	
 	this->SetSizer( mainSizer );

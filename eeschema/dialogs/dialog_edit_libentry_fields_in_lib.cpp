@@ -123,7 +123,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT
 
     m_parent   = aParent;
     m_libEntry = aLibEntry;
-    m_fields = new FIELDS_GRID_TABLE<LIB_FIELD>( true, g_UserUnit, m_libEntry );
+    m_fields = new FIELDS_GRID_TABLE<LIB_FIELD>( true, GetUserUnits(), m_libEntry );
 
     m_delayedFocusRow = REFERENCE;
     m_delayedFocusColumn = FDC_VALUE;

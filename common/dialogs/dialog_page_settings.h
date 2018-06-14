@@ -24,6 +24,8 @@
 #ifndef _DIALOG_PAGES_SETTINGS_H_
 #define _DIALOG_PAGES_SETTINGS_H_
 
+#include <widgets/unit_binder.h>
+
 #include <dialog_page_settings_base.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
@@ -48,6 +50,8 @@ private:
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
     WORKSHEET_LAYOUT *m_pagelayout;     // the alternate and temporary page layout shown by the dialog
                                         // when the initial one is replaced by a new one
+    UNIT_BINDER     m_customSizeX;
+    UNIT_BINDER     m_customSizeY;
 
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );

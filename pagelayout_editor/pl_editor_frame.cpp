@@ -56,6 +56,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
             wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
+    m_UserUnits = MILLIMETRES;
     m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
                                 // obviously depends on the monitor,
@@ -438,14 +439,14 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     // Display absolute coordinates:
     wxPoint coord = GetCrossHairPosition() - originCoord;
-    double dXpos = To_User_Unit( g_UserUnit, coord.x*Xsign );
-    double dYpos = To_User_Unit( g_UserUnit, coord.y*Ysign );
+    double dXpos = To_User_Unit( GetUserUnits(), coord.x*Xsign );
+    double dYpos = To_User_Unit( GetUserUnits(), coord.y*Ysign );
 
     wxString pagesizeformatter = _( "Page size: width %.4g height %.4g" );
     wxString absformatter = wxT( "X %.4g  Y %.4g" );
     wxString locformatter = wxT( "dx %.4g  dy %.4g" );
 
-    switch( g_UserUnit )
+    switch( GetUserUnits() )
     {
     case INCHES:        // Should not be used in page layout editor
         SetStatusText( _("inches"), 5 );
@@ -480,8 +481,8 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display relative coordinates:
     int dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
     int dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UserUnit, dx * Xsign );
-    dYpos = To_User_Unit( g_UserUnit, dy * Ysign );
+    dXpos = To_User_Unit( GetUserUnits(), dx * Xsign );
+    dYpos = To_User_Unit( GetUserUnits(), dy * Ysign );
     line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( line, 3 );
 

@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_target_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_TARGET_PROPERTIES_BASE::DIALOG_TARGET_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -25,27 +25,27 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextSize = new wxStaticText( this, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextSize->Wrap( -1 );
-	fgSizer->Add( m_staticTextSize, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_sizeLabel = new wxStaticText( this, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizeLabel->Wrap( -1 );
+	fgSizer->Add( m_sizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_TargetSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer->Add( m_TargetSizeCtrl, 0, wxALL|wxEXPAND, 5 );
+	m_sizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer->Add( m_sizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextSizeUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextSizeUnits->Wrap( -1 );
-	fgSizer->Add( m_staticTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_sizeUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizeUnits->Wrap( -1 );
+	fgSizer->Add( m_sizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_staticTextThickness = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextThickness->Wrap( -1 );
-	fgSizer->Add( m_staticTextThickness, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_thicknessLabel->Wrap( -1 );
+	fgSizer->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_TargetThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer->Add( m_TargetThicknessCtrl, 0, wxEXPAND|wxALL, 5 );
+	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer->Add( m_thicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextThicknessUnits->Wrap( -1 );
-	fgSizer->Add( m_staticTextThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_thicknessUnits->Wrap( -1 );
+	fgSizer->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
 	m_staticTextShape = new wxStaticText( this, wxID_ANY, _("Shape:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextShape->Wrap( -1 );
@@ -64,10 +64,10 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	bSizerUpper->Add( fgSizer, 1, wxEXPAND, 5 );
 	
 	
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpper, 1, wxALL|wxEXPAND, 5 );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( m_staticline, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_sdbSizerButts = new wxStdDialogButtonSizer();
 	m_sdbSizerButtsOK = new wxButton( this, wxID_OK );
@@ -76,7 +76,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	m_sdbSizerButts->AddButton( m_sdbSizerButtsCancel );
 	m_sdbSizerButts->Realize();
 	
-	bSizerMain->Add( m_sdbSizerButts, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerMain->Add( m_sdbSizerButts, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -84,16 +84,8 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
-	
-	// Connect Events
-	m_sdbSizerButtsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TARGET_PROPERTIES_DIALOG_EDITOR_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerButtsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TARGET_PROPERTIES_DIALOG_EDITOR_BASE::OnOkClick ), NULL, this );
 }
 
-TARGET_PROPERTIES_DIALOG_EDITOR_BASE::~TARGET_PROPERTIES_DIALOG_EDITOR_BASE()
+DIALOG_TARGET_PROPERTIES_BASE::~DIALOG_TARGET_PROPERTIES_BASE()
 {
-	// Disconnect Events
-	m_sdbSizerButtsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TARGET_PROPERTIES_DIALOG_EDITOR_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerButtsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TARGET_PROPERTIES_DIALOG_EDITOR_BASE::OnOkClick ), NULL, this );
-	
 }

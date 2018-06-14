@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,30 +23,44 @@
  */
 
 #include <cassert>
+#include <sch_edit_frame.h>
+#include <sch_line.h>
 #include <widgets/color4Dpickerdlg.h>
 #include <dialog_edit_line_style.h>
 
 const int BUTT_COLOR_MINSIZE_X = 32;
 const int BUTT_COLOR_MINSIZE_Y = 20;
 
-DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( wxWindow* parent ) :
-    DIALOG_EDIT_LINE_STYLE_BASE( parent )
+DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, SCH_LINE* aLine ) :
+    DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
+    m_frame( aParent ),
+    m_line( aLine ),
+    m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true, 0 )
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
-    m_lineStyle->SetSelection( 0 );
-    m_lineWidth->SetFocus();
-
-    m_defaultStyle = 0;
 
     wxBitmap bitmap( std::max( m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X ),
                      std::max( m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y ) );
     m_colorButton->SetBitmap( bitmap );
+
+    SetInitialFocus( m_lineWidth );
 
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
+
+
+bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
+{
+    m_width.SetValue( m_line->GetPenSize() );
+    setColor( m_line->GetLineColor() );
+    m_lineStyle->SetSelection( m_line->GetLineStyle() );
+
+    return true;
+}
+
 
 void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
 {
@@ -59,7 +73,7 @@ void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
     if( newColor == COLOR4D::UNSPECIFIED || m_selectedColor == newColor )
         return;
 
-    SetColor( newColor, true );
+    setColor( newColor );
 
 }
 
@@ -87,37 +101,29 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 
 void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
-    SetStyle( m_defaultStyle );
-    SetWidth( m_defaultWidth );
-    SetColor( m_defaultColor, true );
+    m_width.SetValue( m_line->GetDefaultWidth() );
+    setColor( m_line->GetDefaultColor() );
+    m_lineStyle->SetSelection( m_line->GetDefaultStyle() );
     Refresh();
 }
 
 
-void DIALOG_EDIT_LINE_STYLE::SetColor( const COLOR4D& aColor, bool aRefresh )
+void DIALOG_EDIT_LINE_STYLE::setColor( const COLOR4D& aColor )
 {
     m_selectedColor = aColor;
-
-    if( aRefresh )
-        updateColorButton( m_selectedColor );
+    updateColorButton( m_selectedColor );
 }
 
 
-void DIALOG_EDIT_LINE_STYLE::SetDefaultColor( const COLOR4D& aColor )
+bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
 {
-    m_defaultColor = aColor;
-}
+    m_frame->SaveCopyInUndoList( m_line, UR_CHANGED );
 
+    m_line->SetLineWidth( m_width.GetValue() );
+    m_line->SetLineStyle( m_lineStyle->GetSelection() );
+    m_line->SetLineColor( m_selectedColor );
 
-void DIALOG_EDIT_LINE_STYLE::SetStyle( const int aStyle )
-{
-    wxASSERT( aStyle >= 0 && aStyle < 4 );
+    m_frame->OnModify();
 
-    m_lineStyle->SetSelection( aStyle );
-}
-
-
-int DIALOG_EDIT_LINE_STYLE::GetStyle()
-{
-    return m_lineStyle->GetSelection();
+    return true;
 }

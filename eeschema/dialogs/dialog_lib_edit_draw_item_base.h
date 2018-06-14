@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,7 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/radiobut.h>
+#include <wx/radiobox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -35,22 +35,12 @@ class DIALOG_LIB_EDIT_DRAW_ITEM_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		enum
-		{
-			ID_M_STATICTEXTSHARING = 1000
-		};
-		
-		wxStaticText* m_staticText1;
-		wxStaticText* m_staticWidth;
-		wxTextCtrl* m_textWidth;
-		wxStaticText* m_staticWidthUnits;
-		wxStaticText* m_staticTextSharing;
+		wxStaticText* m_widthLabel;
+		wxTextCtrl* m_widthCtrl;
+		wxStaticText* m_widthUnits;
 		wxCheckBox* m_checkApplyToAllUnits;
 		wxCheckBox* m_checkApplyToAllConversions;
-		wxStaticText* m_staticText4;
-		wxRadioButton* m_radioFillNone;
-		wxRadioButton* m_radioFillForeground;
-		wxRadioButton* m_radioFillBackground;
+		wxRadioBox* m_fillCtrl;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

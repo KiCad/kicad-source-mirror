@@ -856,7 +856,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
         ro = hypot( dx, dy );
         wxString formatter;
-        switch( g_UserUnit )
+        switch( GetUserUnits() )
         {
         case INCHES:
             formatter = wxT( "r %.6f  theta %.1f" );
@@ -875,19 +875,19 @@ void PCB_BASE_FRAME::UpdateStatusBar()
             break;
         }
 
-        line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
+        line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
 
         SetStatusText( line, 3 );
     }
 
     // Display absolute coordinates:
-    dXpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().x );
-    dYpos = To_User_Unit( g_UserUnit, GetCrossHairPosition().y );
+    dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
+    dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
 
     // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
 
-    switch( g_UserUnit )
+    switch( GetUserUnits() )
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
@@ -917,8 +917,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         // Display relative coordinates:
         dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
         dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
-        dXpos = To_User_Unit( g_UserUnit, dx );
-        dYpos = To_User_Unit( g_UserUnit, dy );
+        dXpos = To_User_Unit( GetUserUnits(), dx );
+        dYpos = To_User_Unit( GetUserUnits(), dy );
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
@@ -979,7 +979,7 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( baseCfgName + UserGridSizeXEntry, To_User_Unit( m_UserUnits, m_UserGridSize.x ) );
     aCfg->Write( baseCfgName + UserGridSizeYEntry, To_User_Unit( m_UserUnits, m_UserGridSize.y ) );
-    aCfg->Write( baseCfgName + UserGridUnitsEntry, ( long )g_UserUnit );
+    aCfg->Write( baseCfgName + UserGridUnitsEntry, ( long )m_UserUnits );
     aCfg->Write( baseCfgName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
     aCfg->Write( baseCfgName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
     aCfg->Write( baseCfgName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
@@ -1020,7 +1020,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
-    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {

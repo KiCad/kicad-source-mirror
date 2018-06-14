@@ -32,6 +32,7 @@
 #include <pcb_base_frame.h>
 
 #include <boost/bimap.hpp>
+#include <widgets/unit_binder.h>
 
 class CONFIG_SAVE_RESTORE_WINDOW
 {
@@ -182,7 +183,7 @@ public:
     };
 
     // NOTE: do not change order relative to charSetDescriptions
-    enum ARRAY_NUMBERING_TYPE_T
+    enum NUMBERING_TYPE_T
     {
         NUMBERING_NUMERIC = 0,      ///< Arabic numerals: 0,1,2,3,4,5,6,7,8,9,10,11...
         NUMBERING_HEX,
@@ -245,7 +246,7 @@ public:
         }
 
     protected:
-        static wxString getCoordinateNumber( int n, ARRAY_NUMBERING_TYPE_T type );
+        static wxString getCoordinateNumber( int n, NUMBERING_TYPE_T type );
 
         // allow the dialog to set directly
         friend class DIALOG_CREATE_ARRAY;
@@ -282,7 +283,7 @@ public:
         bool    m_stagger_rows;
         bool    m_2dArrayNumbering;
         int     m_numberingOffsetX, m_numberingOffsetY;
-        ARRAY_NUMBERING_TYPE_T m_priAxisNumType, m_secAxisNumType;
+        NUMBERING_TYPE_T m_priAxisNumType, m_secAxisNumType;
 
         void        TransformItem( int n, BOARD_ITEM* item, const wxPoint& rotPoint ) const override;
         int         GetArraySize() const override;
@@ -307,7 +308,7 @@ private:
         double m_angle;
         wxPoint m_centre;
         bool m_rotateItems;
-        ARRAY_NUMBERING_TYPE_T m_numberingType;
+        NUMBERING_TYPE_T m_numberingType;
         long m_numberingOffset;
 
         void        TransformItem( int n, BOARD_ITEM* item, const wxPoint& rotPoint ) const override;
@@ -337,6 +338,11 @@ private:
      * We retain ownership of this
      */
     ARRAY_OPTIONS* m_settings;
+
+    UNIT_BINDER    m_hSpacing, m_vSpacing;
+    UNIT_BINDER    m_hOffset, m_vOffset;
+    UNIT_BINDER    m_hCentre, m_vCentre;
+    UNIT_BINDER    m_circRadius;
 
     /*
      * The position of the original item(s), used for finding radius, etc

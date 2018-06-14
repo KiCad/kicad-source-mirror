@@ -24,11 +24,8 @@
 
 #include <pcb_edit_frame.h>
 #include <base_units.h>
-#include <macros.h>
 #include <boost/algorithm/string/join.hpp>
 #include <widgets/text_ctrl_eval.h>
-
-#include <class_drawpanel.h>
 #include <class_board.h>
 #include <class_module.h>
 
@@ -39,19 +36,25 @@
 DIALOG_CREATE_ARRAY::CREATE_ARRAY_DIALOG_ENTRIES DIALOG_CREATE_ARRAY::m_options;
 
 
-DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
-                                          bool enableNumbering,
+DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNumbering,
                                           wxPoint aOrigPos ) :
     DIALOG_CREATE_ARRAY_BASE( aParent ),
     CONFIG_SAVE_RESTORE_WINDOW( m_options.m_optionsSet ),
     m_settings( NULL ),
+    m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx, true ),
+    m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy, true ),
+    m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX, true ),
+    m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY, true ),
+    m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX, true ),
+    m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY, true ),
+    m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius, true ),
     m_originalItemPosition( aOrigPos ),
     m_numberingEnabled(enableNumbering)
 {
     // Set up numbering scheme drop downs
     //
     // character set
-    // NOTE: do not change the order of this relative to the ARRAY_NUMBERING_TYPE_T enum
+    // NOTE: do not change the order of this relative to the NUMBERING_TYPE_T enum
     const wxString charSetDescriptions[] =
     {
         _( "Numerals (0,1,2,...,9,10)" ),
@@ -97,18 +100,6 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
 
     RestoreConfigToControls();
 
-    // Load units into labels
-    {
-        const wxString lengthUnit = GetAbbreviatedUnitsLabel( g_UserUnit );
-
-        m_unitLabelCentreX->SetLabelText( lengthUnit );
-        m_unitLabelCentreY->SetLabelText( lengthUnit );
-        m_unitLabelDx->SetLabelText( lengthUnit );
-        m_unitLabelDy->SetLabelText( lengthUnit );
-        m_unitLabelOffsetX->SetLabelText( lengthUnit );
-        m_unitLabelOffsetY->SetLabelText( lengthUnit );
-    }
-
     // Run the callbacks once to process the dialog contents
     setControlEnablement();
     calculateCircularArrayProperties();
@@ -133,8 +124,7 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 }
 
 
-static const wxString& alphabetFromNumberingScheme(
-        DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T type )
+static const wxString& alphabetFromNumberingScheme( DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T type )
 {
     static const wxString alphaNumeric = "0123456789";
     static const wxString alphaHex = "0123456789ABCDEF";
@@ -144,20 +134,11 @@ static const wxString& alphabetFromNumberingScheme(
     switch( type )
     {
     default:
-    case DIALOG_CREATE_ARRAY::NUMBERING_NUMERIC:
-        break;
-
-    case DIALOG_CREATE_ARRAY::NUMBERING_HEX:
-        return alphaHex;
-
-    case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_NO_IOSQXZ:
-        return alphaNoIOSQXZ;
-
-    case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_FULL:
-        return alphaFull;
+    case DIALOG_CREATE_ARRAY::NUMBERING_NUMERIC:         return alphaNumeric;
+    case DIALOG_CREATE_ARRAY::NUMBERING_HEX:             return alphaHex;
+    case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_NO_IOSQXZ: return alphaNoIOSQXZ;
+    case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_FULL:      return alphaFull;
     }
-
-    return alphaNumeric;
 }
 
 
@@ -165,16 +146,15 @@ static const wxString& alphabetFromNumberingScheme(
  * @return False for schemes like 0,1...9,10
  *         True for schemes like A,B..Z,AA (where the tens column starts with char 0)
  */
-static bool schemeNonUnitColsStartAt0( DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T type )
+static bool schemeNonUnitColsStartAt0( DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T type )
 {
     return type == DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_FULL
            || type == DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_NO_IOSQXZ;
 }
 
 
-static bool getNumberingOffset( const wxString& str,
-        DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T type,
-        int& offsetToFill )
+static bool getNumberingOffset( const wxString& str, DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T type,
+                                int& offsetToFill )
 {
     const wxString& alphabet = alphabetFromNumberingScheme( type );
 
@@ -215,9 +195,8 @@ static bool getNumberingOffset( const wxString& str,
  */
 static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
                                             const wxChoice& typeEntry,
-                                            DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T& type,
-                                            int& offset,
-                                            wxArrayString& errors )
+                                            DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T& type,
+                                            int& offset, wxArrayString& errors )
 {
     const int typeVal = typeEntry.GetSelection();
     // mind undefined casts to enums (should not be able to happen)
@@ -225,7 +204,7 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
 
     if( ok )
     {
-        type = (DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T) typeVal;
+        type = (DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T) typeVal;
     }
     else
     {
@@ -263,10 +242,8 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
  * @param errors a list of errors to add any error to
  * @return valid
  */
-static bool validateLongEntry( const wxTextEntry& entry,
-                        long& dest,
-                        const wxString& description,
-                        wxArrayString& errors )
+static bool validateLongEntry( const wxTextEntry& entry, long& dest, const wxString& description,
+                               wxArrayString& errors )
 {
     bool ok = true;
 
@@ -284,10 +261,8 @@ static bool validateLongEntry( const wxTextEntry& entry,
 
 bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 {
-    ARRAY_OPTIONS* newSettings = NULL;
-
-    wxArrayString errorStrs;
-
+    ARRAY_OPTIONS*  newSettings = NULL;
+    wxArrayString   errors;
     const wxWindow* page = m_gridTypeNotebook->GetCurrentPage();
 
     if( page == m_gridPanel )
@@ -296,20 +271,16 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         bool ok = true;
 
         // ints
-        ok = ok && validateLongEntry(*m_entryNx, newGrid->m_nx, _("horizontal count"),
-                          errorStrs);
-        ok = ok && validateLongEntry(*m_entryNy, newGrid->m_ny, _("vertical count"),
-                          errorStrs);
+        ok = ok && validateLongEntry(*m_entryNx, newGrid->m_nx, _("horizontal count"), errors);
+        ok = ok && validateLongEntry(*m_entryNy, newGrid->m_ny, _("vertical count"), errors);
 
+        newGrid->m_delta.x = m_hSpacing.GetValue();
+        newGrid->m_delta.y = m_vSpacing.GetValue();
 
-        newGrid->m_delta.x = DoubleValueFromString( g_UserUnit, m_entryDx->GetValue() );
-        newGrid->m_delta.y = DoubleValueFromString( g_UserUnit, m_entryDy->GetValue() );
+        newGrid->m_offset.x = m_hOffset.GetValue();
+        newGrid->m_offset.y = m_vOffset.GetValue();
 
-        newGrid->m_offset.x = DoubleValueFromString( g_UserUnit, m_entryOffsetX->GetValue() );
-        newGrid->m_offset.y = DoubleValueFromString( g_UserUnit, m_entryOffsetY->GetValue() );
-
-        ok = ok && validateLongEntry(*m_entryStagger, newGrid->m_stagger, _("stagger"),
-                          errorStrs);
+        ok = ok && validateLongEntry(*m_entryStagger, newGrid->m_stagger, _("stagger"), errors);
 
         newGrid->m_stagger_rows = m_radioBoxGridStaggerType->GetSelection() == 0;
 
@@ -323,16 +294,16 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
             newGrid->m_2dArrayNumbering = m_radioBoxGridNumberingScheme->GetSelection() != 0;
 
             bool numOk = validateNumberingTypeAndOffset(
-                    *m_entryGridPriNumberingOffset, *m_choicePriAxisNumbering,
-                    newGrid->m_priAxisNumType, newGrid->m_numberingOffsetX,
-                    errorStrs );
+                                    *m_entryGridPriNumberingOffset, *m_choicePriAxisNumbering,
+                                    newGrid->m_priAxisNumType, newGrid->m_numberingOffsetX,
+                                    errors );
 
             if( newGrid->m_2dArrayNumbering )
             {
                 numOk = validateNumberingTypeAndOffset(
-                        *m_entryGridSecNumberingOffset, *m_choiceSecAxisNumbering,
-                        newGrid->m_secAxisNumType, newGrid->m_numberingOffsetY,
-                        errorStrs ) && numOk;
+                                    *m_entryGridSecNumberingOffset, *m_choiceSecAxisNumbering,
+                                    newGrid->m_secAxisNumType, newGrid->m_numberingOffsetY,
+                                    errors ) && numOk;
             }
 
             ok = ok && numOk;
@@ -351,16 +322,13 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         ARRAY_CIRCULAR_OPTIONS* newCirc = new ARRAY_CIRCULAR_OPTIONS();
         bool ok = true;
 
-        newCirc->m_centre.x = DoubleValueFromString( g_UserUnit, m_entryCentreX->GetValue() );
-        newCirc->m_centre.y = DoubleValueFromString( g_UserUnit, m_entryCentreY->GetValue() );
-
+        newCirc->m_centre.x = m_hCentre.GetValue();
+        newCirc->m_centre.y = m_vCentre.GetValue();
         newCirc->m_angle = DoubleValueFromString( DEGREES, m_entryCircAngle->GetValue() );
 
-        ok = ok && validateLongEntry(*m_entryCircCount, newCirc->m_nPts,
-                                     _("point count"), errorStrs);
+        ok = ok && validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
-
         newCirc->m_shouldNumber = m_numberingEnabled;
 
         if ( m_numberingEnabled )
@@ -368,9 +336,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
             newCirc->m_numberingStartIsSpecified = m_rbCircStartNumberingOpt->GetSelection() == 1;
             newCirc->m_numberingType = NUMBERING_NUMERIC;
 
-            ok = ok && validateLongEntry(*m_entryCircNumberingStart,
-                                         newCirc->m_numberingOffset,
-                                         _("numbering start"), errorStrs);
+            ok = ok && validateLongEntry(*m_entryCircNumberingStart, newCirc->m_numberingOffset,
+                                         _("numbering start"), errors);
         }
 
         // Only use settings if all values are good
@@ -395,10 +362,10 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
     {
         wxString errorStr;
 
-        if( errorStrs.IsEmpty() )
+        if( errors.IsEmpty() )
             errorStr = _("Bad parameters");
         else
-            errorStr = boost::algorithm::join( errorStrs, "\n" );
+            errorStr = boost::algorithm::join( errors, "\n" );
 
         wxMessageBox( errorStr );
         return false;
@@ -453,23 +420,20 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 
 void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
 {
-    wxPoint centre;
-
-    centre.x = DoubleValueFromString( g_UserUnit, m_entryCentreX->GetValue() );
-    centre.y = DoubleValueFromString( g_UserUnit, m_entryCentreY->GetValue() );
+    wxPoint centre( m_hCentre.GetValue(), m_vCentre.GetValue() );
 
     // Find the radius, etc of the circle
     centre -= m_originalItemPosition;
 
     const double radius = VECTOR2I(centre.x, centre.y).EuclideanNorm();
-    m_labelCircRadiusValue->SetLabelText( StringFromValue( g_UserUnit, int(radius), true ) );
+    m_circRadius.SetValue( int( radius ) );
 }
 
 
 // ARRAY OPTION implementation functions --------------------------------------
 
 wxString DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::getCoordinateNumber( int n,
-        ARRAY_NUMBERING_TYPE_T type )
+        NUMBERING_TYPE_T type )
 {
     wxString itemNum;
     const wxString& alphabet = alphabetFromNumberingScheme( type );

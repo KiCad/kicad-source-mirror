@@ -41,7 +41,7 @@
 
 #include <pcbnew.h>
 #include <dialog_target_properties_base.h>
-
+#include <widgets/unit_binder.h>
 
 // Routines Locales
 static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC );
@@ -59,73 +59,68 @@ static PCB_TARGET s_TargetCopy( NULL ); /* Used to store "old" values of the
                                          * cancel operations)
                                          */
 
-/*****************************************/
-/* class TARGET_PROPERTIES_DIALOG_EDITOR */
-/*****************************************/
+/**********************************/
+/* class DIALOG_TARGET_PROPERTIES */
+/**********************************/
 
-class TARGET_PROPERTIES_DIALOG_EDITOR : public TARGET_PROPERTIES_DIALOG_EDITOR_BASE
+class DIALOG_TARGET_PROPERTIES : public DIALOG_TARGET_PROPERTIES_BASE
 {
 private:
     PCB_EDIT_FRAME*   m_Parent;
     wxDC*             m_DC;
     PCB_TARGET*       m_Target;
 
+    UNIT_BINDER       m_Size;
+    UNIT_BINDER       m_Thickness;
+
 public:
-    TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME* parent, PCB_TARGET* Mire, wxDC* DC );
-    ~TARGET_PROPERTIES_DIALOG_EDITOR() { }
+    DIALOG_TARGET_PROPERTIES( PCB_EDIT_FRAME* aParent, PCB_TARGET* aTarget, wxDC* aDC );
+    ~DIALOG_TARGET_PROPERTIES() { }
 
 private:
-    void OnOkClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 };
 
 
 void PCB_EDIT_FRAME::ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC )
 {
-    TARGET_PROPERTIES_DIALOG_EDITOR* frame =
-        new TARGET_PROPERTIES_DIALOG_EDITOR( this, aTarget, DC );
+    DIALOG_TARGET_PROPERTIES dialog( this, aTarget, DC );
 
-    frame->ShowModal();
-    frame->Destroy();
+    dialog.ShowModal();
 }
 
 
-TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME* parent,
-                                                                  PCB_TARGET* aTarget, wxDC* DC ) :
-    TARGET_PROPERTIES_DIALOG_EDITOR_BASE( parent )
+DIALOG_TARGET_PROPERTIES::DIALOG_TARGET_PROPERTIES( PCB_EDIT_FRAME* aParent, PCB_TARGET* aTarget,
+                                                    wxDC* aDC ) :
+    DIALOG_TARGET_PROPERTIES_BASE( aParent ),
+    m_Parent( aParent ),
+    m_DC( aDC ),
+    m_Target( aTarget ),
+    m_Size( aParent, m_sizeLabel, m_sizeCtrl, m_sizeUnits, true, 0 ),
+    m_Thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true, 0 )
 {
-    m_Parent = parent;
-    m_DC     = DC;
-    m_Target = aTarget;
+    m_sdbSizerButtsOK->SetDefault();
 
-    // Size:
-    m_staticTextSizeUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TargetSizeCtrl->SetValue( StringFromValue( g_UserUnit, m_Target->GetSize() ) );
-
-    // Thickness:
-    m_staticTextThicknessUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_TargetThicknessCtrl->SetValue( StringFromValue( g_UserUnit, m_Target->GetWidth() ) );
-
-    // Shape
-    m_TargetShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
-
-    // OK button on return key.
-    SetDefaultItem( m_sdbSizerButtsOK );
+    SetInitialFocus( m_sizeCtrl );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
 
 
-void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& event )
+bool DIALOG_TARGET_PROPERTIES::TransferDataToWindow()
 {
-    EndModal( -1 );
+    m_Size.SetValue( m_Target->GetSize() );
+    m_Thickness.SetValue( m_Target->GetWidth() );
+
+    m_TargetShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
+
+    return true;
 }
 
 
-/* Updates the different parameters for the component being edited
- */
-void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
+bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
 {
     BOARD_COMMIT commit( m_Parent );
     commit.Modify( m_Target );
@@ -138,14 +133,10 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 
     if( m_Target->GetFlags() != 0 )         // other edition in progress (MOVE, NEW ..)
         m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
-                                            // undo/redo/abort proper operation
+    // undo/redo/abort proper operation
 
-    int tmp = ValueFromString( g_UserUnit, m_TargetThicknessCtrl->GetValue() );
-    m_Target->SetWidth( tmp );
-
-    MireDefaultSize = ValueFromString( g_UserUnit, m_TargetSizeCtrl->GetValue() );
-    m_Target->SetSize( MireDefaultSize );
-
+    m_Target->SetWidth( m_Thickness.GetValue() );
+    m_Target->SetSize( m_Size.GetValue() );
     m_Target->SetShape( m_TargetShape->GetSelection() ? 1 : 0 );
 
     if( m_DC )
@@ -154,7 +145,7 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
     if( pushCommit )
         commit.Push( _( "Modified alignment target" ) );
 
-    EndModal( 1 );
+    return true;
 }
 
 

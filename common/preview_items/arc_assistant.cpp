@@ -33,9 +33,10 @@
 
 using namespace KIGFX::PREVIEW;
 
-ARC_ASSISTANT::ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager ) :
+ARC_ASSISTANT::ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS_T aUnits ) :
     EDA_ITEM( NOT_USED ),
-    m_constructMan( aManager )
+    m_constructMan( aManager ),
+    m_units( aUnits )
 {
 }
 
@@ -49,8 +50,8 @@ const BOX2I ARC_ASSISTANT::ViewBBox() const
         return tmp;
 
     // just enclose the whle circular area
-    auto    origin  = m_constructMan.GetOrigin();
-    auto    radius  = m_constructMan.GetRadius();
+    auto     origin  = m_constructMan.GetOrigin();
+    auto     radius  = m_constructMan.GetRadius();
     VECTOR2D rVec( radius, radius );
 
     tmp.SetOrigin( origin + rVec );
@@ -172,7 +173,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         double degs = getNormDeciDegFromRad( initAngle );
 
-        cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), g_UserUnit ) );
+        cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
         cursorStrings.push_back( DimensionLabel( "θ", degs, DEGREES ) );
     }
     else
@@ -197,8 +198,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // FIXME: spaces choke OpenGL lp:1668455
     for( auto& str : cursorStrings )
     {
-        str.erase( std::remove( str.begin(), str.end(), ' ' ),
-                str.end() );
+        str.erase( std::remove( str.begin(), str.end(), ' ' ), str.end() );
     }
 
     // place the text next to cursor, on opposite side from radius

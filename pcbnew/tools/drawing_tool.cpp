@@ -1179,7 +1179,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
 
     // Arc drawing assistant overlay
-    KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager );
+    KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager, m_frame->GetUserUnits() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;

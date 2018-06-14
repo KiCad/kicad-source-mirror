@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -213,9 +213,13 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_labelCircRadius->Wrap( -1 );
 	gbSizer2->Add( m_labelCircRadius, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_labelCircRadiusValue = new wxStaticText( m_circularPanel, wxID_ANY, _("0 mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelCircRadiusValue->Wrap( -1 );
-	gbSizer2->Add( m_labelCircRadiusValue, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_valueCircRadius = new wxStaticText( m_circularPanel, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_valueCircRadius->Wrap( -1 );
+	gbSizer2->Add( m_valueCircRadius, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	m_unitLabelCircRadius = new wxStaticText( m_circularPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCircRadius->Wrap( -1 );
+	gbSizer2->Add( m_unitLabelCircRadius, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	m_labelCircAngle = new wxStaticText( m_circularPanel, wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircAngle->Wrap( -1 );

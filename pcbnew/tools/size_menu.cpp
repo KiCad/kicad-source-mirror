@@ -21,7 +21,9 @@
 
 #include "size_menu.h"
 
+#include <tool/tool_manager.h>
 #include <class_board.h>
+#include <pcb_base_frame.h>
 #include <pcbnew_id.h>
 #include <bitmaps.h>
 
@@ -124,7 +126,9 @@ void TRACK_VIA_SIZE_MENU::update()
 
 wxString TRACK_VIA_SIZE_MENU::getTrackDescription( unsigned int aIndex ) const
 {
-    wxString desc;
+    wxString    desc;
+    auto        frame = dynamic_cast<PCB_BASE_FRAME*>( getToolManager()->GetEditFrame() );
+    EDA_UNITS_T userUnits = frame->GetUserUnits();
 
     if( m_vias )        // == if( m_tracks && m_vias )
         desc = _( "Track ");
@@ -132,7 +136,7 @@ wxString TRACK_VIA_SIZE_MENU::getTrackDescription( unsigned int aIndex ) const
     if( aIndex == 0 )
         desc << _( "net class width" );
     else
-        desc << StringFromValue( g_UserUnit, m_designSettings->m_TrackWidthList[aIndex], true );
+        desc << StringFromValue( userUnits, m_designSettings->m_TrackWidthList[aIndex], true );
 
     return desc;
 }
@@ -140,7 +144,10 @@ wxString TRACK_VIA_SIZE_MENU::getTrackDescription( unsigned int aIndex ) const
 
 wxString TRACK_VIA_SIZE_MENU::getViaDescription( unsigned int aIndex ) const
 {
-    wxString desc;
+    wxString      desc;
+    auto          frame = dynamic_cast<PCB_BASE_FRAME*>( getToolManager()->GetEditFrame() );
+    EDA_UNITS_T   userUnits = frame->GetUserUnits();
+    VIA_DIMENSION viaDimension = m_designSettings->m_ViasDimensionsList[ aIndex ];
 
     if( m_tracks )      // == if( m_tracks && m_vias )
         desc = _( "Via " );
@@ -151,18 +158,12 @@ wxString TRACK_VIA_SIZE_MENU::getViaDescription( unsigned int aIndex ) const
     }
     else
     {
-        desc << StringFromValue( g_UserUnit,
-                m_designSettings->m_ViasDimensionsList[aIndex].m_Diameter, true );
+        desc << StringFromValue( userUnits, viaDimension.m_Diameter, true );
 
         if( m_designSettings->m_ViasDimensionsList[aIndex].m_Drill <= 0 )
-        {
             desc << _( ", drill: default" );
-        }
         else
-        {
-            desc << _( ", drill: " ) << StringFromValue( g_UserUnit,
-                    m_designSettings->m_ViasDimensionsList[aIndex].m_Drill, true );
-        }
+            desc << _( ", drill: " ) << StringFromValue( userUnits, viaDimension.m_Drill, true );
     }
 
     return desc;

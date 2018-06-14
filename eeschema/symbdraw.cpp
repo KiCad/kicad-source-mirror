@@ -57,35 +57,13 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     if( DrawItem == NULL )
         return;
 
-    LIB_PART*      symbol = DrawItem->GetParent();
-
-    DIALOG_LIB_EDIT_DRAW_ITEM dialog( this, DrawItem->GetTypeName() );
-
-    dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
-
-    wxString val = StringFromValue( g_UserUnit, DrawItem->GetWidth() );
-    dialog.SetWidth( val );
-    dialog.SetApplyToAllUnits( DrawItem->GetUnit() == 0 );
-    dialog.EnableApplyToAllUnits( symbol && symbol->GetUnitCount() > 1 );
-    dialog.SetApplyToAllConversions( DrawItem->GetConvert() == 0 );
-    bool enblConvOptStyle = symbol && symbol->HasConversion();
-    // if a symbol contains no graphic items, symbol->HasConversion() returns false.
-    // but when creating a new symbol, with DeMorgan option set, the ApplyToAllConversions
-    // must be enabled even if symbol->HasConversion() returns false in order to be able
-    // to create graphic items shared by all body styles
-    if( GetShowDeMorgan() )
-        enblConvOptStyle = true;
-
-    dialog.EnableApplyToAllConversions( enblConvOptStyle );
-    dialog.SetFillStyle( DrawItem->GetFillMode() );
-    dialog.EnableFillStyle( DrawItem->IsFillable() );
+    DIALOG_LIB_EDIT_DRAW_ITEM dialog( this, DrawItem );
 
     if( dialog.ShowModal() == wxID_CANCEL )
         return;
 
     // Init default values (used to create a new draw item)
-    val = dialog.GetWidth();
-    m_drawLineWidth = ValueFromString( g_UserUnit, val );
+    m_drawLineWidth       = dialog.GetWidth();
     m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_drawSpecificUnit    = !dialog.GetApplyToAllUnits();
 

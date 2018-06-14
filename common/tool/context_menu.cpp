@@ -275,7 +275,7 @@ CONTEXT_MENU* CONTEXT_MENU::create() const
 }
 
 
-TOOL_MANAGER* CONTEXT_MENU::getToolManager()
+TOOL_MANAGER* CONTEXT_MENU::getToolManager() const
 {
     wxASSERT( m_tool );
     return m_tool ? m_tool->GetManager() : nullptr;

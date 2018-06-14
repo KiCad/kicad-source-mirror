@@ -238,7 +238,7 @@ int GERBVIEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
     // TODO: Refactor to share with pcbnew
     wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
 
-    if( g_UserUnit == INCHES )
+    if( m_frame->GetUserUnits() == INCHES )
         evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_MM );
     else
         evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );

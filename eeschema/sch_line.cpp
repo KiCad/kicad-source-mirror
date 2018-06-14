@@ -789,42 +789,13 @@ int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
     if( aLine->GetLayer() != LAYER_NOTES )
         return wxID_CANCEL;
 
-    DIALOG_EDIT_LINE_STYLE dlg( this );
-    wxString units = GetAbbreviatedUnitsLabel( g_UserUnit );
-    int old_style = aLine->GetLineStyle();
-    int old_width = aLine->GetPenSize();
-    COLOR4D old_color = aLine->GetLineColor();
+    DIALOG_EDIT_LINE_STYLE dlg( this, aLine );
 
-    dlg.SetDefaultStyle( aLine->GetDefaultStyle() );
-    dlg.SetDefaultWidth( StringFromValue( g_UserUnit, aLine->GetDefaultWidth(), false ) );
-    dlg.SetDefaultColor( aLine->GetDefaultColor() );
-
-    dlg.SetWidth( StringFromValue( g_UserUnit, old_width, false ) );
-    dlg.SetStyle( old_style );
-    dlg.SetLineWidthUnits( units );
-    dlg.SetColor( old_color, true );
-
-    dlg.Layout();
-    dlg.Fit();
-    dlg.SetMinSize( dlg.GetSize() );
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxID_CANCEL;
 
-    int new_width = std::max( 1, ValueFromString( m_UserUnits, dlg.GetWidth() ) );
-    int new_style = dlg.GetStyle();
-    COLOR4D new_color = dlg.GetColor();
-
-    if( new_width != old_width || new_style != old_style || new_color != old_color )
-    {
-        SaveCopyInUndoList( (SCH_ITEM*) aLine, UR_CHANGED );
-        aLine->SetLineWidth( new_width );
-        aLine->SetLineStyle( new_style );
-        aLine->SetLineColor( new_color );
-
-        OnModify();
-        if( aRedraw )
-            m_canvas->Refresh();
-    }
+    if( aRedraw )
+        m_canvas->Refresh();
 
     return wxID_OK;
 }
