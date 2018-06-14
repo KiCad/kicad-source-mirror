@@ -157,9 +157,9 @@ static EDA_HOTKEY HkAddDimension( _HKI( "Add Dimension" ), HK_ADD_DIMENSION, 'H'
 static EDA_HOTKEY HkAddFilledZone( _HKI( "Add Filled Zone" ), HK_ADD_ZONE, 'Z' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddFreeVia( _HKI( "Add Vias" ), HK_ADD_FREE_VIA, 'V' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddKeepout( _HKI( "Add Keepout Area" ), HK_ADD_KEEPOUT, 'K' + GR_KB_SHIFTCTRL );
-static EDA_HOTKEY HkAddZoneCutout( _HKI( "Add a Zone Cutout" ), HK_ADD_CUTOUT, 'C' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddZoneCutout( _HKI( "Add a Zone Cutout" ), HK_ADD_CUTOUT, 'C' );
 static EDA_HOTKEY HkAddSimilarZone( _HKI( "Add a Similar Zone" ), HK_ADD_SIMILAR_ZONE, '.' + GR_KB_SHIFTCTRL );
-static EDA_HOTKEY HkAddDXF( _HKI( "Place DXF" ), HK_ADD_DXF, 'D' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddDXF( _HKI( "Place DXF" ), HK_ADD_DXF, 'F' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddAnchor( _HKI( "Place the Footprint Anchor" ), HK_ADD_ANCHOR, 'N' + GR_KB_SHIFTCTRL );
 
 static EDA_HOTKEY HkIncreaseLineWidth( _HKI( "Increase Line Width" ), HK_INC_LINE_WIDTH, '+' + GR_KB_CTRL );
@@ -271,7 +271,7 @@ static EDA_HOTKEY HkSelectConnection( _HKI( "Select Trivial Connection" ), HK_SE
 
 static EDA_HOTKEY HkSelectCopper( _HKI( "Select Copper Connection" ), HK_SEL_COPPER_CONNECTION, 'I' );
 
-static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, 'E' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, ',' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkCustomTrackWidth( _HKI( "Custom Track/Via Size" ), HK_CUSTOM_TRACK_WIDTH, 'Q' );
 

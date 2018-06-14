@@ -83,7 +83,7 @@ TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         _( "Draw Arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
-        AS_GLOBAL,  TOOL_ACTION::LegacyHotKey( HK_ADD_LINE ),
+        AS_GLOBAL,  TOOL_ACTION::LegacyHotKey( HK_ADD_TEXT ),
         _( "Add Text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
