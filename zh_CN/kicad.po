@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-13 17:45+0800\n"
+"PO-Revision-Date: 2018-06-15 13:40+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -1073,7 +1073,7 @@ msgstr "电路板颜色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1171
 msgid "Solder Paste Color"
-msgstr "助焊层颜色"
+msgstr "层颜色"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:34 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:68 kicad/menubar.cpp:161
@@ -12222,11 +12222,11 @@ msgstr "顶层丝印层 (*.GTO)|*.GTO;*.gto|"
 
 #: gerbview/files.cpp:176
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "底层助焊层 (*.GBP)|*.GBP;*.gbp|"
+msgstr "底层锡膏 (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:177
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "顶层助焊层 (*.GTP)|*.GTP;*.gtp|"
+msgstr "顶层锡膏 (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:178
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
@@ -13521,7 +13521,7 @@ msgstr "编辑页面布局"
 
 #: kicad/menubar.cpp:432
 msgid "Pl editor - Worksheet layout editor"
-msgstr "Pl 编辑器 - 图框编辑器"
+msgstr "Pl 编辑器 - 工作表布局编辑器"
 
 #: kicad/menubar.cpp:440
 msgid "KiCad &Manual"
@@ -14165,7 +14165,7 @@ msgstr "没有选中的文件"
 #: pagelayout_editor/pl_editor_frame.cpp:444
 #, c-format
 msgid "Page size: width %.4g height %.4g"
-msgstr "页面尺寸: 宽 %.4g 高t %.4g"
+msgstr "页面尺寸: 宽 %.4g 高 %.4g"
 
 #: pagelayout_editor/pl_editor_frame.cpp:489
 #, c-format
@@ -14217,16 +14217,16 @@ msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
 msgstr ""
-"标题块的显示与实际显示在应用程序一样\n"
-"文本格式被替换全部文字"
+"标题栏的显示与实际显示在应用程序一样\n"
+"文本格式被完整的文本所取代"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid ""
 "Show title block in edit mode: texts are shown as is:\n"
 "texts with format are displayed with no change"
 msgstr ""
-"编辑模式显示标题栏：文本显示为：\n"
-"通用格式符号显示，实际显示的内容不会改变"
+"在编辑模式下显示标题栏：文本显示为：\n"
+"文本格式显示不变"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:117
 msgid "Left Top paper corner"
@@ -15096,8 +15096,8 @@ msgid ""
 "will be calculated. The width for the other trace to also handle this "
 "current will then be calculated."
 msgstr ""
-"如果指定了一个布线宽度, 则计算它可以通过的最大电流。然后, 再计算另一个布线通"
-"过此电流的最小线宽。"
+"如果指定了外层（或内层）布线宽度, 则计算它可以通过的最大电流。然后, 再计算内"
+"层（或外层）布线通过此电流的最小线宽。"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:455
 msgid "The controlling value is shown in bold."
@@ -17408,7 +17408,7 @@ msgstr "显示焊盘无网络连接指示"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
 msgid "Clearance Outlines:"
-msgstr "间距概要："
+msgstr "间隙概要："
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:182
@@ -17422,7 +17422,7 @@ msgstr "新布线"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
 msgid "New track with via area"
-msgstr "在过孔区域新布线"
+msgstr "过孔区域的新布线"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
 msgid "New and edited tracks with via area"
@@ -17824,7 +17824,7 @@ msgstr "正间隙指的是比焊盘大的区域（通常为阻焊）"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:188
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste)."
-msgstr "负间隙指的是比焊盘小的区域（通常为助焊）"
+msgstr "负间隙指的是比焊盘小的区域（通常为锡膏）"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:253
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:197
@@ -17866,7 +17866,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:81
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:457
 msgid "Solder paste clearance:"
-msgstr "助焊间隙:"
+msgstr "锡膏间隙:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:283
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:227
@@ -17878,16 +17878,18 @@ msgid ""
 "ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
-"这是该焊盘的助焊和焊盘的局部间距值设置\n"
-"该值可以由一个焊盘局部值所取代。\n"
-"最终的间距值是该值的总和，间距比值负值意味着更小的掩模尺寸更大的焊盘尺寸"
+"这是焊盘和焊膏之间的局部间隙\n"
+"对于这个封装。\n"
+"该值可以被一个焊盘局部值代替。\n"
+"最终间隙值是此值与间隙值比率的总和\n"
+"负值表示比焊盘尺寸更小的阻焊尺寸"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:294
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:238
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:94
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
 msgid "Solder paste ratio clearance:"
-msgstr "助焊间隙比例:"
+msgstr "锡膏间隙比例:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:296
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:240
@@ -17900,7 +17902,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"这是在每个焊盘与助焊这个封装之间的局部间隙百分比。\n"
+"这是在每个焊盘与这个封装之间的局部间隙百分比。\n"
 "10的值表示间隙值是焊盘尺寸的百分之十\n"
 "这个值可以由一个焊盘局部值所取代。\n"
 "最终的间隙值是这个值之和的间隙值\n"
@@ -17912,7 +17914,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:514
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-msgstr "注意：阻焊和助焊值仅适用于铜层上的焊盘。"
+msgstr "注意：阻焊和锡膏值仅适用于铜层上的焊盘。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:333
 msgid "3D Shape Name:"
@@ -19683,11 +19685,11 @@ msgstr "电路板上, 非铜层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:199
 msgid "SoldP_Front_later"
-msgstr "顶层助焊"
+msgstr "顶层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:210
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "开启/关闭 顶层助焊层"
+msgstr "开启/关闭 顶层层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:224
 msgid "SilkS_Front_later"
@@ -20040,11 +20042,11 @@ msgstr "开启/关闭 底层丝印层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1482
 msgid "SoldP_Back_later"
-msgstr "底层助焊"
+msgstr "底层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1493
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "开启/关闭 底层助焊层"
+msgstr "如果你想在电路板底层使用锡膏层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1507
 msgid "Adhes_Back_later"
@@ -20172,7 +20174,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value "
 "ratio"
 msgstr ""
-"这是该焊盘的助焊和焊盘的局部间距值设置\n"
+"这是该焊盘的和焊盘的局部间距值设置\n"
 "该值可以由一个焊盘局部值所取代。\n"
 "最终的间距值是该值的总和，间距比值负值意味着更小的掩模尺寸更大的焊盘尺寸"
 
@@ -20728,7 +20730,7 @@ msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
 msgstr ""
-"错误: 焊盘连接不是在助焊层\n"
+"错误: 焊盘连接不是在锡膏层\n"
 "使用 SMD 焊盘替代"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1214
@@ -20966,11 +20968,11 @@ msgstr "粘胶底层"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:358
 msgid "Front solder paste"
-msgstr "顶层助焊"
+msgstr "顶层锡膏"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:361
 msgid "Back solder paste"
-msgstr "底层助焊"
+msgstr "底层锡膏"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:367
 msgid "Back silk screen"
@@ -21005,7 +21007,7 @@ msgstr "正间隙指的是比焊盘大的区域（通常为阻焊间隙）"
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr "负间隙指的是比焊盘小的区域（通常为助焊间隙）"
+msgstr "负间隙指的是比焊盘小的区域（通常为锡膏间隙）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:423
 msgid "Clearances"
@@ -21039,7 +21041,7 @@ msgid ""
 "ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
-"这是该焊盘和助焊之间的局部间隙.\n"
+"这是该焊盘和之间的局部间隙.\n"
 "如果为0的封装值或使用全局值.\n"
 "最终间隙值是该值的总和\n"
 "负值意味着掩模尺寸更小比焊盘尺寸"
@@ -21053,7 +21055,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"这是根据该焊盘和助焊的局部间隙百分比。\n"
+"这是根据该焊盘和的局部间隙百分比。\n"
 "10的值表示间隙值是焊盘尺寸的百分之十\n"
 "如果为0该封装值或者全局值将在网络类使用.\n"
 "最终间隙的值是该值和间隙值的总和。\n"
@@ -23376,7 +23378,7 @@ msgstr " \"%s\" 无法转换为整数"
 #: pcbnew/gpcb_plugin.cpp:248 pcbnew/gpcb_plugin.cpp:926
 #, c-format
 msgid "footprint library path \"%s\" does not exist"
-msgstr "封装库路径 '%s' 不存在"
+msgstr "封装库路径 \"%s\" 不存在"
 
 #: pcbnew/gpcb_plugin.cpp:304 pcbnew/kicad_plugin.cpp:329
 #, c-format
@@ -23785,7 +23787,7 @@ msgstr "无法重命名临时文件 '%s' 到封装库文件 '%s'"
 #: pcbnew/kicad_plugin.cpp:266
 #, c-format
 msgid "Footprint library path \"%s\" does not exist"
-msgstr "封装库路径 '%s' 不存在"
+msgstr "封装库路径 \"%s\" 不存在"
 
 #: pcbnew/kicad_plugin.cpp:1294 pcbnew/legacy_plugin.cpp:96
 #, c-format
@@ -25702,11 +25704,11 @@ msgstr "底层粘胶"
 
 #: pcbnew/pcb_layer_widget.cpp:539
 msgid "Solder paste on board's front"
-msgstr "顶层助焊"
+msgstr "顶层锡膏"
 
 #: pcbnew/pcb_layer_widget.cpp:540
 msgid "Solder paste on board's back"
-msgstr "底层助焊"
+msgstr "底层锡膏"
 
 #: pcbnew/pcb_layer_widget.cpp:541
 msgid "Silkscreen on board's front"
