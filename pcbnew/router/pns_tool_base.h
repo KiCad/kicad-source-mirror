@@ -44,8 +44,6 @@ namespace PNS {
 class APIEXPORT TOOL_BASE : public PCB_TOOL
 {
 public:
-    static TOOL_ACTION ACT_RouterOptions;
-
     TOOL_BASE( const std::string& aToolName );
     virtual ~TOOL_BASE();
 
