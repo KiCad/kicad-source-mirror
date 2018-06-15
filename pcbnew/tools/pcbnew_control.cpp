@@ -407,7 +407,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutlines ) )
         opts->m_DisplayZonesMode = 2;
     else
-        assert( false );
+        wxFAIL;
 
     view()->UpdateDisplayOptions( opts );
 
@@ -470,7 +470,7 @@ int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
     else
         ++layer;
 
-    assert( IsCopperLayer( layer ) );
+    wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
 
     return 0;
@@ -494,7 +494,7 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
     else
         --layer;
 
-    assert( IsCopperLayer( layer ) );
+    wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
 
     return 0;
@@ -617,7 +617,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
             else if( type == PCB_ACTIONS::CURSOR_DBL_CLICK )
                 action = TA_MOUSE_DBLCLICK;
             else
-                assert( false );
+                wxFAIL;
 
             TOOL_EVENT evt( TC_MOUSE, action, BUT_LEFT | modifiers );
             evt.SetMousePosition( getViewControls()->GetCursorPosition() );
@@ -662,7 +662,7 @@ int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
             break;
 
         default:
-            assert( false );
+            wxFAIL;
             break;
     }
 
@@ -727,7 +727,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         Activate();
 
         PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
-        assert( picker );
+        wxCHECK( picker, 0 );
 
         // TODO it will not check the toolbar button in module editor, as it uses a different ID..
         m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
@@ -794,7 +794,7 @@ int PCBNEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
     SELECTION_TOOL* selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
-    assert( selectionTool );
+    wxCHECK( selectionTool, false );
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
@@ -816,7 +816,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     Activate();
 
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    assert( picker );
+    wxCHECK( picker, 0 );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_DELETE_TOOL : ID_PCB_DELETE_ITEM_BUTT,
             wxCURSOR_BULLSEYE, _( "Delete item" ) );
