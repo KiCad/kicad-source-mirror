@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-15 13:40+0800\n"
+"PO-Revision-Date: 2018-06-15 13:54+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -1073,7 +1073,7 @@ msgstr "电路板颜色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1171
 msgid "Solder Paste Color"
-msgstr "层颜色"
+msgstr "锡膏颜色"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:34 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:68 kicad/menubar.cpp:161
@@ -19685,11 +19685,11 @@ msgstr "电路板上, 非铜层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:199
 msgid "SoldP_Front_later"
-msgstr "顶层"
+msgstr "顶层助焊"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:210
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "开启/关闭 顶层层"
+msgstr "如果你想在电路板顶层使用锡膏层"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:224
 msgid "SilkS_Front_later"
