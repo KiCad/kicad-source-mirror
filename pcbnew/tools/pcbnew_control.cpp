@@ -818,8 +818,8 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
 
-    // TODO it will not check the toolbar button in the module editor, as it uses a different ID..
-    m_frame->SetToolID( ID_PCB_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+    m_frame->SetToolID( m_editModules ? ID_MODEDIT_DELETE_TOOL : ID_PCB_DELETE_ITEM_BUTT,
+            wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetSnapping( false );
     picker->SetClickHandler( std::bind( deleteItem, m_toolMgr, _1 ) );
     picker->Activate();
