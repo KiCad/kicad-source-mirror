@@ -292,11 +292,10 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Interactive Router Settings..." ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ROUTING_OPTIONS );
-    AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS, text,
+    AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
+                 _( "&Interactive Router Settings..." ),
                  _( "Configure interactive router" ),
-                 KiBitmap( add_tracks_xpm ) ); // fixme: icon
+                 KiBitmap( tools_xpm ) );
 }
 
 
