@@ -72,10 +72,10 @@ public:
         m_auxItemWeakRef  = nullptr;
     }
 
-    DRC_ITEM( int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+    DRC_ITEM( EDA_UNITS_T aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
               EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
     {
-        SetData( aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
+        SetData( aUnits, aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
     }
 
 
@@ -88,11 +88,11 @@ public:
      * @param aMainPos = position the first item and therefore of this issue
      * @param bAuxiliaryPos = position the second item
      */
-    void SetData( int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+    void SetData( EDA_UNITS_T aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
                   EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
     {
         m_ErrorCode         = aErrorCode;
-        m_MainText          = aMainItem->GetSelectMenuText( g_UserUnit );
+        m_MainText          = aMainItem->GetSelectMenuText( aUnits );
         m_AuxiliaryText     = wxEmptyString;
         m_MainPosition      = aMainPos;
         m_AuxiliaryPosition = bAuxiliaryPos;
@@ -101,7 +101,7 @@ public:
         m_parent            = nullptr;
 
         if( m_hasSecondItem )
-            m_AuxiliaryText = bAuxiliaryItem->GetSelectMenuText( g_UserUnit );
+            m_AuxiliaryText = bAuxiliaryItem->GetSelectMenuText( aUnits );
 
         // Weak references (void*).  One must search the BOARD_ITEMS or SCH_ITEMS for a match.
         m_mainItemWeakRef   = aMainItem;
@@ -174,7 +174,7 @@ public:
      * wxWidget's wxHtmlListBox class.
      * @return wxString - the html text.
      */
-    wxString ShowHtml() const;
+    wxString ShowHtml( EDA_UNITS_T aUnits ) const;
 
     /**
      * Function ShowReport
@@ -182,7 +182,7 @@ public:
      * to disk in a report.
      * @return wxString - the simple multi-line report text.
      */
-    wxString ShowReport() const;
+    wxString ShowReport( EDA_UNITS_T aUnits ) const;
 
     /**
      * Function GetErrorCode

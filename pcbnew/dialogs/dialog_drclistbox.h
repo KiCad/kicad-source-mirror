@@ -70,7 +70,7 @@ public:
 
     //-----<Interface DRC_ITEM_LIST>---------------------------------------
 
-    void            DeleteAllItems() override
+    void DeleteAllItems() override
     {
         m_board->DeleteMARKERs();
     }
@@ -188,6 +188,7 @@ public:
 class DRCLISTBOX : public wxHtmlListBox
 {
 private:
+    EDA_UNITS_T    m_units;
     DRC_ITEM_LIST* m_list;     ///< wxHtmlListBox does not own the list, I do
 
 public:
@@ -213,10 +214,11 @@ public:
      * @param aList The DRC_ITEM_LIST* containing the DRC_ITEMs which will be
      *  displayed in the wxHtmlListBox
      */
-    void SetList( DRC_ITEM_LIST* aList )
+    void SetList( EDA_UNITS_T aUnits, DRC_ITEM_LIST* aList )
     {
         delete m_list;
 
+        m_units = aUnits;
         m_list = aList;
         SetItemCount( aList->GetCount() );
         Refresh();
@@ -254,7 +256,7 @@ public:
 
                 return wxString::Format( wxT( "<font color='%s'>%s</font>" ),
                                          color.GetAsString( wxC2S_HTML_SYNTAX ),
-                                         item->ShowHtml() );
+                                         item->ShowHtml( m_units ) );
             }
         }
         return wxString();

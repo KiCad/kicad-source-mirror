@@ -54,7 +54,7 @@ public:
      * @param bItem The second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
+    MARKER_PCB( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
                 BOARD_ITEM* aItem, const wxPoint& aPos,
                 BOARD_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
 

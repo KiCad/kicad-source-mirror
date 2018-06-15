@@ -214,6 +214,7 @@ private:
     PCB_EDIT_FRAME*     m_pcbEditorFrame;   ///< The pcb frame editor which owns the board
     BOARD*              m_pcb;
     DIALOG_DRC_CONTROL* m_drcDialog;
+    EDA_UNITS_T         m_units;
 
     DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
 

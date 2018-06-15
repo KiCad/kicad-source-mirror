@@ -90,9 +90,9 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* bItem, int aErrorCode, M
         posA = aTrack->GetPosition();
 
     if( fillMe )
-        fillMe->SetData( aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
+        fillMe->SetData( m_units, aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
     else
-        fillMe = new MARKER_PCB( aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
+        fillMe = new MARKER_PCB( m_units, aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
 
     return fillMe;
 }
@@ -122,9 +122,9 @@ MARKER_PCB* DRC::fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MAR
     }
 
     if( fillMe )
-        fillMe->SetData( aErrorCode, posA, aPad, posA, aItem, posB );
+        fillMe->SetData( m_units, aErrorCode, posA, aPad, posA, aItem, posB );
     else
-        fillMe = new MARKER_PCB( aErrorCode, posA, aPad, posA, aItem, posB );
+        fillMe = new MARKER_PCB( m_units, aErrorCode, posA, aPad, posA, aItem, posB );
 
     return fillMe;
 }
@@ -141,9 +141,9 @@ MARKER_PCB* DRC::fillMarker( const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM*
                              int aErrorCode, MARKER_PCB* fillMe )
 {
     if( fillMe )
-        fillMe->SetData( aErrorCode, aPos, aItem, aPos, bItem, aPos );
+        fillMe->SetData( m_units, aErrorCode, aPos, aItem, aPos, bItem, aPos );
     else
-        fillMe = new MARKER_PCB( aErrorCode, aPos, aItem, aPos, bItem, aPos );
+        fillMe = new MARKER_PCB( m_units, aErrorCode, aPos, aItem, aPos, bItem, aPos );
 
     return fillMe;
 }

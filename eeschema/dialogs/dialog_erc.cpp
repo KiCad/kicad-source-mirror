@@ -409,7 +409,7 @@ void DIALOG_ERC::DisplayERC_MarkersList()
         }
     }
 
-    m_MarkersList->DisplayList();
+    m_MarkersList->DisplayList( GetUserUnits() );
 }
 
 
@@ -637,7 +637,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
-        if( WriteDiagnosticERC( dlg.GetPath() ) )
+        if( WriteDiagnosticERC( GetUserUnits(), dlg.GetPath() ) )
             ExecuteFile( this, Pgm().GetEditorName(), QuoteFullPath( fn ) );
     }
 }

@@ -631,6 +631,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
         return false;
 
     int count;
+    EDA_UNITS_T units = GetUserUnits();
 
     fprintf( fp, "** Drc report for %s **\n",
              TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );
@@ -644,14 +645,14 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
     fprintf( fp, "\n** Found %d DRC errors **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, "%s", TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport()) );
+        fprintf( fp, "%s", TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport( units ) ) );
 
     count = m_UnconnectedListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport() ) );
+        fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport( units ) ) );
 
     fprintf( fp, "\n** End of Report **\n" );
 

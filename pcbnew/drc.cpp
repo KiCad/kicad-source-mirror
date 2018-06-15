@@ -131,6 +131,7 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_pcbEditorFrame = aPcbWindow;
     m_pcb = aPcbWindow->GetBoard();
     m_drcDialog  = NULL;
+    m_units = aPcbWindow->GetUserUnits();
 
     // establish initial values for everything:
     m_drcInLegacyRoutingMode = false;
@@ -205,6 +206,7 @@ int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACK* aList )
 int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
 {
     BOARD* board = m_pcbEditorFrame->GetBoard();
+    EDA_UNITS_T units = m_pcbEditorFrame->GetUserUnits();
     BOARD_COMMIT commit( m_pcbEditorFrame );
     int nerrors = 0;
 
@@ -272,8 +274,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                     if( aCreateMarkers )
                     {
                         wxPoint pt( currentVertex.x, currentVertex.y );
-                        MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
-                                                             pt, zoneRef, pt, zoneToTest, pt );
+                        auto marker = new MARKER_PCB( units, COPPERAREA_INSIDE_COPPERAREA,
+                                                      pt, zoneRef, pt, zoneToTest, pt );
                         commit.Add( marker );
                     }
 
@@ -292,8 +294,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                     if( aCreateMarkers )
                     {
                         wxPoint pt( currentVertex.x, currentVertex.y );
-                        MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
-                                                             pt, zoneToTest, pt, zoneRef, pt );
+                        auto marker = new MARKER_PCB( units, COPPERAREA_INSIDE_COPPERAREA,
+                                                      pt, zoneToTest, pt, zoneRef, pt );
                         commit.Add( marker );
                     }
 
@@ -338,8 +340,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                         // COPPERAREA_COPPERAREA error : intersect or too close
                         if( aCreateMarkers )
                         {
-                            MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_CLOSE_TO_COPPERAREA,
-                                                                 pt, zoneRef, pt, zoneToTest, pt );
+                            auto marker = new MARKER_PCB( units, COPPERAREA_CLOSE_TO_COPPERAREA,
+                                                          pt, zoneRef, pt, zoneToTest, pt );
                             commit.Add( marker );
                         }
 
@@ -547,8 +549,10 @@ void DRC::updatePointers()
 
     if( m_drcDialog )  // Use diag list boxes only in DRC dialog
     {
-        m_drcDialog->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
-        m_drcDialog->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
+        m_drcDialog->m_ClearanceListBox->SetList(
+                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_MARKERS( m_pcb ) );
+        m_drcDialog->m_UnconnectedListBox->SetList(
+                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_UNCONNECTED( &m_unconnected ) );
 
         m_drcDialog->UpdateDisplayedCounts();
     }
@@ -561,7 +565,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
-#define FmtVal( x ) GetChars( StringFromValue( g_UserUnit, x ) )
+#define FmtVal( x ) GetChars( StringFromValue( m_pcbEditorFrame->GetUserUnits(), x ) )
 
 #if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )
@@ -777,7 +781,8 @@ void DRC::testDrilledHoles()
             if( KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) )
                     <  checkHole.m_drillRadius + refHole.m_drillRadius + holeToHoleMin )
             {
-                addMarkerToPcb( new MARKER_PCB( DRCE_DRILLED_HOLES_TOO_CLOSE, refHole.m_location,
+                addMarkerToPcb( new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(),
+                                                DRCE_DRILLED_HOLES_TOO_CLOSE, refHole.m_location,
                                                 refHole.m_owner, refHole.m_location,
                                                 checkHole.m_owner, checkHole.m_location ) );
             }
@@ -862,12 +867,12 @@ void DRC::testUnconnected()
         auto src = edge.GetSourcePos();
         auto dst = edge.GetTargetPos();
 
-        DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS,
-                                          edge.GetSourceNode()->Parent(),
-                                          wxPoint( src.x, src.y ),
-                                          edge.GetTargetNode()->Parent(),
-                                          wxPoint( dst.x, dst.y ) );
-        m_unconnected.push_back( uncItem );
+        m_unconnected.emplace_back( new DRC_ITEM( m_pcbEditorFrame->GetUserUnits(),
+                                                  DRCE_UNCONNECTED_ITEMS,
+                                                  edge.GetSourceNode()->Parent(),
+                                                  wxPoint( src.x, src.y ),
+                                                  edge.GetTargetNode()->Parent(),
+                                                  wxPoint( dst.x, dst.y ) ) );
 
     }
 }
@@ -1013,8 +1018,7 @@ void DRC::testTexts()
                     if( dist < min_dist )
                     {
                         addMarkerToPcb( fillMarker( track, text,
-                                                    DRCE_TRACK_INSIDE_TEXT,
-                                                    m_currentMarker ) );
+                                                    DRCE_TRACK_INSIDE_TEXT, m_currentMarker ) );
                         m_currentMarker = nullptr;
                         break;
                     }

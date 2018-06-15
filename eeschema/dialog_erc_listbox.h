@@ -68,7 +68,7 @@ public:
      * Function DisplayList();
      * Build the Html marker list and show it
      */
-    void DisplayList()
+    void DisplayList( EDA_UNITS_T aUnits )
     {
         wxString htmlpage;
         wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
@@ -82,7 +82,7 @@ public:
         for( unsigned ii = 0; ii < m_MarkerListReferences.size(); ii++ )
         {
             href.Printf( wxT( "href='%d'" ), ii );
-            marker_text = m_MarkerListReferences[ii]->GetReporter().ShowHtml();
+            marker_text = m_MarkerListReferences[ii]->GetReporter().ShowHtml( aUnits );
             marker_text.Replace( wxT( "href=''"), href );
             htmlpage += marker_text;
         }

@@ -47,18 +47,18 @@
 
 MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_MARKER_T ),
-    MARKER_BASE(), m_item( NULL )
+    MARKER_BASE(), m_item( nullptr )
 {
     m_Color = WHITE;
     m_ScalingFactor = SCALING_FACTOR;
 }
 
 
-MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
+MARKER_PCB::MARKER_PCB( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
                         BOARD_ITEM* aItem, const wxPoint& aPos,
                         BOARD_ITEM* bItem, const wxPoint& bPos ) :
-    BOARD_ITEM( NULL, PCB_MARKER_T ),  // parent set during BOARD::Add()
-    MARKER_BASE( aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos ), m_item( NULL )
+    BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
+    MARKER_BASE( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos ), m_item( nullptr )
 {
     m_Color = WHITE;
     m_ScalingFactor = SCALING_FACTOR;
@@ -68,8 +68,8 @@ MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
 MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
                         const wxString& aText, const wxPoint& aPos,
                         const wxString& bText, const wxPoint& bPos ) :
-    BOARD_ITEM( NULL, PCB_MARKER_T ),  // parent set during BOARD::Add()
-    MARKER_BASE( aErrorCode, aMarkerPos, aText, aPos, bText, bPos ), m_item( NULL )
+    BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
+    MARKER_BASE( aErrorCode, aMarkerPos, aText, aPos, bText, bPos ), m_item( nullptr )
 {
     m_Color = WHITE;
     m_ScalingFactor = SCALING_FACTOR;
@@ -95,30 +95,20 @@ bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 void MARKER_PCB::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
-    const DRC_ITEM& rpt = m_drc;
+    wxString errorTxt, txtA, txtB;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Marker" ), DARKCYAN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Type" ), _( "Marker" ), DARKCYAN ) );
 
-    wxString errorTxt;
+    errorTxt.Printf( _( "ErrType (%d)- %s:" ), m_drc.GetErrorCode(), m_drc.GetErrorText() );
 
-    errorTxt.Printf( _( "ErrType (%d)- %s:" ),
-            rpt.GetErrorCode(),
-            GetChars( rpt.GetErrorText() ) );
+    aList.emplace_back( MSG_PANEL_ITEM( errorTxt, wxEmptyString, RED ) );
 
-    aList.push_back( MSG_PANEL_ITEM( errorTxt, wxEmptyString, RED ) );
+    txtA.Printf( wxT( "%s: %s" ), DRC_ITEM::ShowCoord( aUnits, m_drc.GetPointA() ), m_drc.GetTextA() );
 
-    wxString txtA = wxString::Format( wxT( "%s: %s" ),
-                                      DRC_ITEM::ShowCoord( aUnits, rpt.GetPointA() ),
-                                      rpt.GetTextA() );
-    wxString txtB;
-    if( rpt.HasSecondItem() )
-    {
-        txtB = wxString::Format( wxT( "%s: %s" ),
-                                 DRC_ITEM::ShowCoord( aUnits, rpt.GetPointB() ),
-                                 rpt.GetTextB() );
-    }
+    if( m_drc.HasSecondItem() )
+        txtB.Printf( wxT( "%s: %s" ), DRC_ITEM::ShowCoord( aUnits, m_drc.GetPointB() ), m_drc.GetTextB() );
 
-    aList.push_back( MSG_PANEL_ITEM( txtA, txtB, DARKBROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( txtA, txtB, DARKBROWN ) );
 }
 
 

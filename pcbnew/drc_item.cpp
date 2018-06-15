@@ -155,7 +155,7 @@ wxString DRC_ITEM::ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos )
 }
 
 
-wxString DRC_ITEM::ShowHtml() const
+wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
 {
     wxString mainText = m_MainText;
     // a wxHtmlWindows does not like < and > in the text to display
@@ -185,31 +185,31 @@ wxString DRC_ITEM::ShowHtml() const
         // to add color if you want:
         return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s: %s" ),
                                  errText,
-                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 ShowCoord( aUnits, m_MainPosition ),
                                  mainText,
-                                 ShowCoord( g_UserUnit, m_AuxiliaryPosition ),
+                                 ShowCoord( aUnits, m_AuxiliaryPosition ),
                                  auxText );
     }
     else
     {
         return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s: %s" ),
                                  errText,
-                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 ShowCoord( aUnits, m_MainPosition ),
                                  mainText );
     }
 }
 
 
-wxString DRC_ITEM::ShowReport() const
+wxString DRC_ITEM::ShowReport( EDA_UNITS_T aUnits ) const
 {
     if( m_hasSecondItem )
     {
         return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
                                  m_ErrorCode,
                                  GetErrorText(),
-                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 ShowCoord( aUnits, m_MainPosition ),
                                  m_MainText,
-                                 ShowCoord( g_UserUnit, m_AuxiliaryPosition ),
+                                 ShowCoord( aUnits, m_AuxiliaryPosition ),
                                  m_AuxiliaryText );
     }
     else
@@ -217,7 +217,7 @@ wxString DRC_ITEM::ShowReport() const
         return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
                                  m_ErrorCode,
                                  GetErrorText(),
-                                 ShowCoord( g_UserUnit, m_MainPosition ),
+                                 ShowCoord( aUnits, m_MainPosition ),
                                  m_MainText );
     }
 }
