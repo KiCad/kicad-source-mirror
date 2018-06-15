@@ -873,17 +873,23 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
 
             if( editModules )
             {
-                auto mod = static_cast<MODULE*>( clipItem );
+                auto oldModule = static_cast<MODULE*>( clipItem );
+                auto newModule = board()->m_Modules.GetFirst();
 
-                for( auto pad : mod->Pads() )
+                for( D_PAD* pad = oldModule->PadsList(), *next = nullptr; pad; pad = next )
                 {
-                    pad->SetParent( board()->m_Modules.GetFirst() );
+                    next = pad->Next();
+                    oldModule->Remove( pad );
+                    pad->SetParent( newModule );
                     items.push_back( pad );
                 }
 
-                for( auto item : mod->GraphicalItems() )
+                for( BOARD_ITEM* item = oldModule->GraphicalItemsList(), *next = nullptr;
+                        item; item = next )
                 {
-                    item->SetParent( board()->m_Modules.GetFirst() );
+                    next = item->Next();
+                    oldModule->Remove( item );
+                    item->SetParent( newModule );
                     items.push_back( item );
                 }
             }
