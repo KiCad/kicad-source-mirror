@@ -116,7 +116,8 @@ public:
     /// \param a_min Min of bounding rect
     /// \param a_max Max of bounding rect
     /// \param a_dataId Positive Id of data.  Maybe zero, but negative numbers not allowed.
-    void Remove( const ELEMTYPE     a_min[NUMDIMS],
+    /// \return  1 if record not found, 0 if success.
+    bool Remove( const ELEMTYPE     a_min[NUMDIMS],
                  const ELEMTYPE     a_max[NUMDIMS],
                  const DATATYPE&    a_dataId );
 
@@ -666,7 +667,7 @@ void RTREE_QUAL::Insert( const ELEMTYPE     a_min[NUMDIMS],
 
 
 RTREE_TEMPLATE
-void RTREE_QUAL::Remove( const ELEMTYPE     a_min[NUMDIMS],
+bool RTREE_QUAL::Remove( const ELEMTYPE     a_min[NUMDIMS],
                          const ELEMTYPE     a_max[NUMDIMS],
                          const DATATYPE&    a_dataId )
 {
@@ -687,7 +688,7 @@ void RTREE_QUAL::Remove( const ELEMTYPE     a_min[NUMDIMS],
         rect.m_max[axis]    = a_max[axis];
     }
 
-    RemoveRect( &rect, a_dataId, &m_root );
+    return RemoveRect( &rect, a_dataId, &m_root );
 }
 
 

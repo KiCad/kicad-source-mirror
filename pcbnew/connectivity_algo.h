@@ -284,6 +284,7 @@ private:
     ///> valid flag, used to identify garbage items (we use lazy removal)
     bool m_valid;
 
+protected:
     ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
     bool m_dirty;
 
@@ -560,9 +561,12 @@ public:
         return m_cachedPoly->ContainsPoint( p, zone->GetMinThickness() );
     }
 
-    const BOX2I& BBox() const
+    const BOX2I& BBox()
     {
-        return m_cachedPoly->BBox();
+        if( m_dirty )
+            m_bbox = m_cachedPoly->BBox();
+
+        return m_bbox;
     }
 
     virtual int             AnchorCount() const override;

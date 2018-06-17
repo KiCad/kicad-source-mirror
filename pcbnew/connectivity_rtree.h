@@ -69,11 +69,23 @@ public:
      */
     void Remove( T aItem )
     {
+
+        // First, attempt to remove the item using its given BBox
         const BOX2I&    bbox    = aItem->BBox();
         const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
         const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
 
-        m_tree->Remove( mmin, mmax, aItem );
+        // If we are not successful ( 1 == not found ), then we expand
+        // the search to the full tree
+        if( m_tree->Remove( mmin, mmax, aItem ) )
+        {
+            // N.B. We must search the whole tree for the pointer to remove
+            // because the item may have been moved before we have the chance to
+            // delete it from the tree
+            const int       mmin2[2] = { INT_MIN, INT_MIN };
+            const int       mmax2[2] = { INT_MAX, INT_MAX };
+            m_tree->Remove( mmin2, mmax2, aItem );
+        }
     }
 
     /**
