@@ -71,8 +71,6 @@ public:
 
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const override;
     virtual int Clearance( int aNetCode ) const override;
-    virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 ) override;
-    virtual void UseDpGap( bool aUseDpGap ) override { m_useDpGap = aUseDpGap; }
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
@@ -82,6 +80,7 @@ private:
     struct CLEARANCE_ENT
     {
         int coupledNet;
+        int dpClearance;
         int clearance;
     };
 
@@ -94,10 +93,6 @@ private:
     std::vector<CLEARANCE_ENT> m_netClearanceCache;
     std::unordered_map<const D_PAD*, int> m_localClearanceCache;
     int m_defaultClearance;
-    bool m_overrideEnabled;
-    int m_overrideNetA, m_overrideNetB;
-    int m_overrideClearance;
-    bool m_useDpGap;
 };
 
 
@@ -126,9 +121,11 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
 
         int clearance = nc->GetClearance();
         ent.clearance = clearance;
+        ent.dpClearance = nc->GetDiffPairGap();
         m_netClearanceCache[i] = ent;
 
-        wxLogTrace( "PNS", "Add net %u netclass %s clearance %d", i, netClassName.mb_str(), clearance );
+        wxLogTrace( "PNS", "Add net %u netclass %s clearance %d Diff Pair clearance %d",
+                i, netClassName.mb_str(), clearance, ent.dpClearance );
     }
 
     // Build clearance cache for pads
@@ -148,8 +145,6 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
         }
     }
 
-    m_overrideEnabled = false;
-
     auto defaultRule = m_board->GetDesignSettings().m_NetClasses.Find ("Default");
 
     if( defaultRule )
@@ -160,11 +155,6 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     {
         m_defaultClearance = Millimeter2iu(0.254);
     }
-
-    m_overrideNetA = 0;
-    m_overrideNetB = 0;
-    m_overrideClearance = 0;
-    m_useDpGap = false;
 }
 
 
@@ -196,17 +186,14 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     int net_b = aB->Net();
     int cl_b = ( net_b >= 0 ? m_netClearanceCache[net_b].clearance : m_defaultClearance );
 
-    bool linesOnly = aA->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::LINE_T )
-                  && aB->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::LINE_T );
-
+    // Clearance in differential pairs can only happen when there is a specific net
     if( net_a >= 0 && net_b >= 0 && m_netClearanceCache[net_a].coupledNet == net_b )
     {
-        if( linesOnly )
-            cl_a = cl_b = m_router->Sizes().DiffPairGap() - 2 * PNS_HULL_MARGIN;
-        else
-            cl_a = cl_b = m_router->Sizes().DiffPairViaGap() - 2 * PNS_HULL_MARGIN;
+        cl_a = m_netClearanceCache[net_a].dpClearance;
+        cl_b = m_netClearanceCache[net_b].dpClearance;
     }
 
+    // Pad clearance is 0 if the ITEM* is not a pad
     int pad_a = localPadClearance( aA );
     int pad_b = localPadClearance( aB );
 
@@ -226,16 +213,6 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
         return m_netClearanceCache[aNetCode].clearance;
 
     return m_defaultClearance;
-}
-
-
-// fixme: ugly hack to make the optimizer respect gap width for currently routed differential pair.
-void PNS_PCBNEW_RULE_RESOLVER::OverrideClearance( bool aEnable, int aNetA, int aNetB , int aClearance )
-{
-    m_overrideEnabled = aEnable;
-    m_overrideNetA = aNetA;
-    m_overrideNetB = aNetB;
-    m_overrideClearance = aClearance;
 }
 
 

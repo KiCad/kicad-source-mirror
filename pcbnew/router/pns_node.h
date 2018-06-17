@@ -60,8 +60,6 @@ public:
 
     virtual int Clearance( const ITEM* aA, const ITEM* aB ) const = 0;
     virtual int Clearance( int aNetCode ) const = 0;
-    virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 ) = 0;
-    virtual void UseDpGap( bool aUseDpGap ) = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( ITEM* aItem, int& aNetP, int& aNetN ) = 0;

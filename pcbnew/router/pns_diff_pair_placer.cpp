@@ -164,9 +164,6 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent,
     WALKAROUND walkaround( aNode, Router() );
     WALKAROUND::WALKAROUND_STATUS wf1;
 
-    Router()->GetRuleResolver()->OverrideClearance( true,
-            aCurrent->NetP(), aCurrent->NetN(), aCurrent->Gap() );
-
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
 
@@ -233,7 +230,6 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent,
         return false;
 
     aWalk.SetShape( cur.CP(), cur.CN() );
-    Router()->GetRuleResolver()->OverrideClearance( false );
 
     return true;
 }
