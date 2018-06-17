@@ -134,15 +134,6 @@ wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol = f
                           bool aUseMils = false );
 
 /**
- * Function PutValueInLocalUnits
- * converts \a aValue from internal units to user units and append the units notation
- * (mm or ")then inserts the string an \a aTextCtrl.
- *
- * This function is used in dialog boxes for entering values depending on selected units.
- */
-void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
-
-/**
  * Return in internal units the value "val" given in a real unit
  * such as "in", "mm" or "deg"
  */
@@ -172,24 +163,6 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue,
 int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils = false );
 
 /**
- * Convert the number Value in a string according to the internal units
- *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
- */
-int ValueFromTextCtrl( const wxTextCtrl& aTextCtr );
-
-/**
- * Returns the units symbol.
- *
- * @param aUnits - Units requested.
- * @param aFormatString - A formatting string to embed the units symbol into.  Note:
- *                        the format string must contain the %s format specifier.
- * @return The formatted units symbol.
- */
-// TODO: remove default value for aUnits
-wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
-                           const wxString& aFormatString = " (%s):" );
-
-/**
  * Get a human readable units string.
  *
  * The strings returned are full text name and not abbreviations or symbolic
@@ -199,10 +172,7 @@ wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
  * @return The human readable units string.
  */
 wxString GetUnitsLabel( EDA_UNITS_T aUnits, bool aUseMils = false );
-// TODO: remove default value for aUnits
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit, bool aUseMils = false );
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils = false );
 
-// TODO: remove (units should either be in textControl or handled by UNIT_BINDER)
-void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 #endif   // _BASE_UNITS_H_

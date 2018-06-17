@@ -28,7 +28,7 @@ TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const
         wxString& aValue, const wxPoint& aPos, const wxSize& aSize, long aStyle,
         const wxValidator& aValidator, const wxString& aName )
     : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator, aName ),
-      m_eval( g_UserUnit )
+      m_eval( UNSCALED_UNITS )
 {
     Connect( wxEVT_SET_FOCUS,
             wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusGet ), NULL, this );

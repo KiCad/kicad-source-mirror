@@ -56,7 +56,6 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 {
     m_frame->SetUserUnits( m_choiceUnits->GetSelection() == 0 ? INCHES : MILLIMETRES );
-    g_UserUnit = m_frame->GetUserUnits();   // JEY TODO: double-up while in transition...
 
     int textSize = ValueFromString( INCHES, m_textSizeCtrl->GetValue(), true );
 

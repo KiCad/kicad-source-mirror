@@ -73,7 +73,6 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     displ_opts->m_DisplayPolarCood = m_PolarDisplay->GetSelection() != 0;
 
     m_Frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
-    g_UserUnit = m_Frame->GetUserUnits();   // JEY TODO: double-up while in transition...
 
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 

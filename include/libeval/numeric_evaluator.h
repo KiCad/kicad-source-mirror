@@ -55,8 +55,7 @@ as key. This can be used to restore the input string of a text entry field.
 
 Unit conversion
 The evaluator uses a default unit and constants can be specified with a unit.
-As long as no units are used the default unit is not relevant. The default
-unit is taken from the global (Kicad) variable g_UserUnit.
+As long as no units are used the default unit is not relevant.
 Supported units are millimeters (mm), Mil (mil) and inch (")
 
   eval.process("1\"");

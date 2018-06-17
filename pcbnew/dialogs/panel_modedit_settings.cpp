@@ -62,7 +62,6 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
     displ_opts->m_DisplayPolarCood = m_PolarDisplay->GetSelection() != 0;
 
     m_frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
-    g_UserUnit = m_frame->GetUserUnits();   // JEY TODO: double-up while in transition...
 
     // Editing options
     m_frame->Settings().m_use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();

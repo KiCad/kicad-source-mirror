@@ -370,13 +370,11 @@ void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 {
     if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && m_UserUnits != MILLIMETRES )
     {
-        g_UserUnit = MILLIMETRES;   // JEY TODO: double-up while in transition...
         m_UserUnits = MILLIMETRES;
         unitsChangeRefresh();
     }
     else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && m_UserUnits != INCHES )
     {
-        g_UserUnit = INCHES;   // JEY TODO: double-up while in transition...
         m_UserUnits = INCHES;
         unitsChangeRefresh();
     }
@@ -790,8 +788,6 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
         SetUserUnits( unitsTmp );
     else
         SetUserUnits( MILLIMETRES );
-
-    g_UserUnit = GetUserUnits();  // JEY TODO: double-up while in transition
 
     // Read show/hide grid entry
     bool btmp;

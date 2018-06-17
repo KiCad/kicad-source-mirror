@@ -163,8 +163,6 @@ enum EDA_UNITS_T {
 };
 
 
-extern EDA_UNITS_T  g_UserUnit;     ///< display units
-
 /// Draw color for moving objects.
 extern KIGFX::COLOR4D  g_GhostColor;
 

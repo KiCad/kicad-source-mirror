@@ -262,7 +262,7 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     eda_pattern_match.cpp
-    eda_graphic_text_ctrl.cpp
+    eda_size_ctrl.cpp
     env_paths.cpp
     exceptions.cpp
     executable_names.cpp

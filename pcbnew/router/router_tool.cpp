@@ -216,9 +216,11 @@ protected:
 
     void update() override
     {
-        const BOARD_DESIGN_SETTINGS &bds = m_frame.GetBoard()->GetDesignSettings();
-        bool useIndex = !bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize();
-        wxString msg;
+        EDA_UNITS_T            units = m_frame.GetUserUnits();
+        BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
+        bool                   useIndex = !bds.m_UseConnectedTrackWidth &&
+                                          !bds.UseCustomTrackViaSize();
+        wxString               msg;
 
         Clear();
 
@@ -246,7 +248,7 @@ protected:
             if( i == 0 )
                 msg = _( "Track netclass width" );
             else
-                msg = _( "Track " ) + MessageTextFromValue( g_UserUnit, width, true );
+                msg = _( "Track " ) + MessageTextFromValue( units, width, true );
 
             int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -263,10 +265,10 @@ protected:
                 msg = _( "Via netclass values" );
             else
             {
-                msg = _( "Via " ) + MessageTextFromValue( g_UserUnit, via.m_Diameter, true );
+                msg = _( "Via " ) + MessageTextFromValue( units, via.m_Diameter, true );
 
                 if( via.m_Drill > 0 )
-                    msg << _(", drill " ) << MessageTextFromValue( g_UserUnit, via.m_Drill, true );
+                    msg << _(", drill " ) << MessageTextFromValue( units, via.m_Drill, true );
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;

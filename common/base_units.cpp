@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -120,13 +120,6 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils )
  * but not in dialogs, because 4 digits only
  * could truncate the actual value
  */
-
-// JEY TODO: retire this in favour of MessageTextFromValue()....
-wxString CoordinateToString( int aValue, bool aUseMils )
-{
-    return MessageTextFromValue( g_UserUnit, aValue, aUseMils );
-}
-
 
 // A lower-precision (for readability) version of StringFromValue()
 wxString MessageTextFromValue( EDA_UNITS_T aUnits, int aValue, bool aUseMils )
@@ -282,15 +275,6 @@ wxString StringFromValue( EDA_UNITS_T aUnits, int aValue, bool aAddUnitSymbol, b
 }
 
 
-// JEY TODO: remove
-void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue )
-{
-    wxString msg = StringFromValue( g_UserUnit, aValue );
-
-    aTextCtr.SetValue( msg );
-}
-
-
 double From_User_Unit( EDA_UNITS_T aUnits, double aValue, bool aUseMils )
 {
     switch( aUnits )
@@ -390,31 +374,6 @@ int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMi
 }
 
 
-// JEY TODO: remove
-int ValueFromString( const wxString& aTextValue )
-{
-    int      value;
-
-    value = ValueFromString( g_UserUnit, aTextValue);
-
-    return value;
-}
-
-// JEY TODO: remove; use a UNIT_BINDER instead
-int ValueFromTextCtrl( const wxTextCtrl& aTextCtr )
-{
-    int value;
-    wxString msg = aTextCtr.GetValue();
-    NUMERIC_EVALUATOR eval( g_UserUnit );
-
-    if( eval.Process( msg ) )
-        msg = eval.Result();
-
-    value = ValueFromString( g_UserUnit, msg );
-
-    return value;
-}
-
 /**
  * Function AngleToStringDegrees
  * is a helper to convert the \a double \a aAngle (in internal unit)
@@ -428,38 +387,6 @@ wxString AngleToStringDegrees( double aAngle )
     StripTrailingZeros( text, 1 );
 
     return text;
-}
-
-
-wxString ReturnUnitSymbol( EDA_UNITS_T aUnit, const wxString& formatString )
-{
-    wxString tmp;
-    wxString label;
-
-    switch( aUnit )
-    {
-    case INCHES:
-        tmp = _( "\"" );
-        break;
-
-    case MILLIMETRES:
-        tmp = _( "mm" );
-        break;
-
-    case UNSCALED_UNITS:
-        break;
-
-    case DEGREES:
-        wxASSERT( false );
-        break;
-    }
-
-    if( formatString.IsEmpty() )
-        return tmp;
-
-    label.Printf( formatString, GetChars( tmp ) );
-
-    return label;
 }
 
 
@@ -512,12 +439,3 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils )
     }
 }
 
-
-void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
-{
-    wxString msg = Stext.GetLabel();
-
-    msg += ReturnUnitSymbol( aUnit );
-
-    Stext.SetLabel( msg );
-}

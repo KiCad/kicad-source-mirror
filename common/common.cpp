@@ -54,7 +54,6 @@ using KIGFX::COLOR4D;
  *       application class.
  */
 
-EDA_UNITS_T    g_UserUnit;
 COLOR4D        g_GhostColor;
 
 
