@@ -1269,7 +1269,7 @@ F 3 "" H 1250 3600 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L pic_programmer_schlib:CONN_1 P101
+L pic_programmer_schlib:MOUTING_HOLE P101
 U 1 1 54020BEA
 P 6400 6800
 F 0 "P101" H 6480 6800 40  0000 L CNN
@@ -1280,7 +1280,7 @@ F 3 "" H 6400 6800 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L pic_programmer_schlib:CONN_1 P102
+L pic_programmer_schlib:MOUTING_HOLE P102
 U 1 1 54020DA9
 P 6400 6950
 F 0 "P102" H 6480 6950 40  0000 L CNN
@@ -1291,7 +1291,7 @@ F 3 "" H 6400 6950 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L pic_programmer_schlib:CONN_1 P103
+L pic_programmer_schlib:MOUTING_HOLE P103
 U 1 1 54020DC2
 P 6400 7100
 F 0 "P103" H 6480 7100 40  0000 L CNN
@@ -1302,7 +1302,7 @@ F 3 "" H 6400 7100 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L pic_programmer_schlib:CONN_1 P104
+L pic_programmer_schlib:MOUTING_HOLE P104
 U 1 1 54020DE3
 P 6400 7250
 F 0 "P104" H 6480 7250 40  0000 L CNN
@@ -1313,7 +1313,7 @@ F 3 "" H 6400 7250 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L pic_programmer_schlib:CONN_1 P105
+L pic_programmer_schlib:MOUTING_HOLE P105
 U 1 1 54020E5D
 P 6400 7400
 F 0 "P105" H 6480 7400 40  0000 L CNN
@@ -1324,7 +1324,7 @@ F 3 "" H 6400 7400 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L pic_programmer_schlib:CONN_1 P106
+L pic_programmer_schlib:MOUTING_HOLE P106
 U 1 1 54020E76
 P 6400 7550
 F 0 "P106" H 6480 7550 40  0000 L CNN
@@ -1345,12 +1345,6 @@ Wire Notes Line
 	5850 7750 5850 6700
 Text Notes 6050 7700 0    40   Italic 0
 Mounting holes
-NoConn ~ 6250 6800
-NoConn ~ 6250 6950
-NoConn ~ 6250 7100
-NoConn ~ 6250 7250
-NoConn ~ 6250 7400
-NoConn ~ 6250 7550
 Wire Wire Line
 	3850 2700 3850 2750
 Wire Wire Line

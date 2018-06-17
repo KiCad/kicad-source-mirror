@@ -93,20 +93,6 @@ X ~ 2 0 -150 110 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:CONN_1
-#
-DEF ~pic_programmer_schlib:CONN_1 P 0 30 N N 1 F N
-F0 "P" 80 0 40 H V L CNN
-F1 "pic_programmer_schlib:CONN_1" 0 55 30 H I C CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
-DRAW
-C 0 0 31 0 1 0 N
-P 2 0 1 0 -30 0 -50 0 N
-X 1 1 -150 0 100 R 60 60 1 1 P
-ENDDRAW
-ENDDEF
-#
 # pic_programmer_schlib:CONN_2
 #
 DEF pic_programmer_schlib:CONN_2 P 0 40 Y N 1 F N
@@ -336,6 +322,21 @@ X Vin 5 0 700 300 D 60 60 1 1 W
 X GND_S 6 -150 -700 300 U 60 60 1 1 I
 X GND 7 -300 -700 300 U 60 60 1 1 I
 X Vsw 8 1000 250 300 L 60 60 1 1 I
+ENDDRAW
+ENDDEF
+#
+# pic_programmer_schlib:MOUTING_HOLE
+#
+DEF ~pic_programmer_schlib:MOUTING_HOLE P 0 30 N N 1 F N
+F0 "P" 80 0 40 H V L CNN
+F1 "pic_programmer_schlib:MOUTING_HOLE" 0 55 30 H I C CNN
+F2 "" 0 0 60 H V C CNN
+F3 "" 0 0 60 H V C CNN
+$FPLIST
+ *Hole*
+$ENDFPLIST
+DRAW
+C 0 0 31 0 1 0 N
 ENDDRAW
 ENDDEF
 #
