@@ -283,6 +283,10 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
             convertOblong2Segment( hole_descr.m_Hole_Size,
                                    hole_descr.m_Hole_Orient, start, end );
             int width = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
+
+            if ( width == 0 )
+                continue;
+
             plotter.ThickSegment( start+hole_pos, end+hole_pos,
                                   width, FILLED, &gbr_metadata );
             #endif
