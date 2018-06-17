@@ -1196,7 +1196,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     {
     case PAD_ATTRIB_HOLE_NOT_PLATED:   // Not plated, but through hole, a hole is expected
     case PAD_ATTRIB_STANDARD :         // Pad through hole, a hole is also expected
-        if( m_dummyPad->GetDrillSize().x <= 0 )
+        if( m_dummyPad->GetDrillSize().x <= 0 ||
+            ( m_dummyPad->GetDrillSize().y <= 0 && m_dummyPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
             error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
         break;
 
