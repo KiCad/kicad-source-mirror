@@ -47,6 +47,9 @@ public:
         return m_layer;
     }
 
+    ///> Returns human-readable description of the curve.
+    std::string Describe() const;
+
     CURVE_TYPE m_form;  // form of curve: line, arc, circle
     LAYERS     m_layer; // layer of the glyph
     DOUBLET    m_start; // start point of line or center for arc and circle

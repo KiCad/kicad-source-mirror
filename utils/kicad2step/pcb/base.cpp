@@ -31,6 +31,20 @@
 static const char bad_position[] = "* corrupt module in PCB file; invalid position";
 
 
+std::ostream& operator<<( std::ostream& aStream, const DOUBLET& aDoublet )
+{
+    aStream << aDoublet.x << "," << aDoublet.y;
+    return aStream;
+}
+
+
+std::ostream& operator<<( std::ostream& aStream, const TRIPLET& aTriplet )
+{
+    aStream << aTriplet.x << "," << aTriplet.y << "," << aTriplet.z;
+    return aStream;
+}
+
+
 bool Get2DPositionAndRotation( SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation )
 {
     // form: (at X Y {rot})

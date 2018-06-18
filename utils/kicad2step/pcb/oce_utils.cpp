@@ -68,6 +68,8 @@
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Builder.hxx>
 
+#include <Standard_Failure.hxx>
+
 #include <gp_Ax2.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
@@ -256,7 +258,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 #ifdef __WXDEBUG__
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
 #endif /* __WXDEBUG */
-            ostr << "  * rejected a zero-length line\n";
+            ostr << "  * rejected a zero-length " << aCurve->Describe() << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
         }
@@ -275,7 +277,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 #ifdef __WXDEBUG__
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
 #endif /* __WXDEBUG */
-            ostr << "  * rejected a zero-radius arc or circle\n";
+            ostr << "  * rejected a zero-radius " << aCurve->Describe() << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
         }
@@ -315,7 +317,8 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 #ifdef __WXDEBUG__
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
 #endif /* __WXDEBUG */
-                ostr << "  * rejected an arc with equivalent end points\n";
+                ostr << "  * rejected an arc with equivalent end points, "
+                    << aCurve->Describe() << "\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
                 return false;
             }
@@ -748,6 +751,10 @@ bool PCBMODEL::CreatePCB()
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
 #endif /* __WXDEBUG */
             ostr << "  * could not close outline (dropping outline data with " << oln.m_curves.size() << " segments)\n";
+
+            for( const auto& c : oln.m_curves )
+                ostr << "    + " << c.Describe() << "\n";
+
             wxLogMessage( "%s", ostr.str().c_str() );
             oln.Clear();
 
@@ -1392,13 +1399,28 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
 
     for( auto i : m_curves )
     {
-        if( !addEdge( &wire, i, lastPoint ) )
+        bool success = false;
+
+        try
+        {
+            success = addEdge( &wire, i, lastPoint );
+        }
+        catch( const Standard_Failure& e )
+        {
+#ifdef __WXDEBUG__
+            wxLogMessage( "Exception caught: %s", e.GetMessageString() );
+#endif /* __WXDEBUG */
+            success = false;
+        }
+
+        if( !success )
         {
             std::ostringstream ostr;
 #ifdef __WXDEBUG__
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
 #endif /* __WXDEBUG */
-            ostr << "  * failed to add an edge\n";
+            ostr << "  * failed to add an edge: " << i.Describe() << "\n";
+            ostr << "  * last valid outline point: " << lastPoint << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
         }
@@ -1437,7 +1459,6 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
             break;
 
         case CURVE_ARC:
-            do
             {
                 gp_Circ arc( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
                     gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius );
@@ -1449,8 +1470,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
                     edge = BRepBuilderAPI_MakeEdge( arc, ea, sa );
                 else
                     edge = BRepBuilderAPI_MakeEdge( arc, sa, ea );
-
-            } while( 0 );
+            }
             break;
 
         case CURVE_CIRCLE:
@@ -1459,7 +1479,6 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
             break;
 
         default:
-            do
             {
                 std::ostringstream ostr;
 #ifdef __WXDEBUG__
@@ -1469,7 +1488,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
                 wxLogMessage( "%s", ostr.str().c_str() );
 
                 return false;
-            } while( 0 );
+            }
     }
 
     if( edge.IsNull() )

@@ -134,3 +134,28 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 
     return true;
 }
+
+
+std::string KICADCURVE::Describe() const
+{
+    std::ostringstream desc;
+
+    switch( m_form )
+    {
+        case CURVE_LINE:
+            desc << "line start: " << m_start << " end: " << m_end;
+            break;
+        case CURVE_ARC:
+            desc << "arc center: " << m_start << " radius: " << m_radius
+                 << " angle: " << 180.0 * m_angle / M_PI;
+            break;
+        case CURVE_CIRCLE:
+            desc << "circle center: " << m_start << " radius: " << m_radius;
+            break;
+        default:
+            desc << "<invalid curve type>";
+            break;
+    }
+
+    return desc.str();
+}
