@@ -325,11 +325,11 @@ X Vsw 8 1000 250 300 L 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:MOUTING_HOLE
+# pic_programmer_schlib:MOUNTING_HOLE
 #
-DEF ~pic_programmer_schlib:MOUTING_HOLE P 0 30 N N 1 F N
+DEF ~pic_programmer_schlib:MOUNTING_HOLE P 0 30 N N 1 F N
 F0 "P" 80 0 40 H V L CNN
-F1 "pic_programmer_schlib:MOUTING_HOLE" 0 55 30 H I C CNN
+F1 "pic_programmer_schlib:MOUNTING_HOLE" 0 55 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
