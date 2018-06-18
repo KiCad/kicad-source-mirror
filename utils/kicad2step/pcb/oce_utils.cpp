@@ -1460,6 +1460,33 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
 
         case CURVE_ARC:
             {
+                // Arcs are particularly tricky to be used in contiguous outlines.
+                // If an arc is not precisely aligned with the previous segment end point
+                // (aLastPoint != aCurve.m_end), then it might be impossible to request an arc
+                // passing through aLastPoint and the other arc end. To fix this, a small segment
+                // is added, joining aLastPoint and aCurve.m_end, but only if the distance
+                // is small.
+                double dx = aLastPoint.x - aCurve.m_end.x;
+                double dy = aLastPoint.y - aCurve.m_end.y;
+                double distance = dx * dx + dy * dy;
+
+                if( distance > 0 && distance < MIN_LENGTH2 )
+                {
+                    std::ostringstream ostr;
+
+#ifdef __WXDEBUG__
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+#endif /* __WXDEBUG */
+                    ostr << "  * added an auxiliary segment from "
+                         << aLastPoint << " to " << aCurve.m_end << "\n";
+                    wxLogMessage( "%s", ostr.str().c_str() );
+
+                    edge = BRepBuilderAPI_MakeEdge( gp_Pnt( aLastPoint.x, aLastPoint.y, 0.0 ),
+                        gp_Pnt( aCurve.m_end.x, aCurve.m_end.y, 0.0 ) );
+                    aWire->Add( edge );
+                    aLastPoint = aCurve.m_end;
+                }
+
                 gp_Circ arc( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
                     gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius );
 
