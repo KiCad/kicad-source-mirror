@@ -249,17 +249,19 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     double yOrg = 0.0;
 
     wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
-    #ifdef __WXMAC__
+
+#ifdef __WXMAC__
     // On macOS, we have standalone applications inside the main bundle, so we handle that here:
-        if( appK2S.GetPath().find( _("/Contents/Applications/pcbnew.app/Contents/MacOS") ) != wxNOT_FOUND )
+        if( appK2S.GetPath().find( "/Contents/Applications/pcbnew.app/Contents/MacOS" ) != wxNOT_FOUND )
         {
-            appK2S.AppendDir( _(".."));
-            appK2S.AppendDir( _(".."));
-            appK2S.AppendDir( _(".."));
-            appK2S.AppendDir( _(".."));
-            appK2S.AppendDir( _("MacOS"));
+            appK2S.AppendDir( ".." );
+            appK2S.AppendDir( ".." );
+            appK2S.AppendDir( ".." );
+            appK2S.AppendDir( ".." );
+         e   appK2S.AppendDir( "MacOS" );
         }
-    #endif
+#endif
+
     appK2S.SetName( "kicad2step" );
 
     wxString cmdK2S = "\"";
