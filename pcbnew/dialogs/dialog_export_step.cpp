@@ -258,7 +258,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             appK2S.AppendDir( ".." );
             appK2S.AppendDir( ".." );
             appK2S.AppendDir( ".." );
-         e   appK2S.AppendDir( "MacOS" );
+            appK2S.AppendDir( "MacOS" );
         }
 #endif
 
