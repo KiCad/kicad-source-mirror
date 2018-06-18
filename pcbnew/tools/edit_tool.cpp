@@ -416,11 +416,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
-        bool matchingAction = evt->IsAction( &PCB_ACTIONS::editActivate )
-        || evt->IsAction( &PCB_ACTIONS::move );
-
-        if( matchingAction
-            || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
+            evt->IsAction( &PCB_ACTIONS::move ) ||
+            evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             if( selection.Empty() )
                 break;
@@ -433,7 +431,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 controls->ForceCursorPosition( true, m_cursor );
 
                 VECTOR2I movement( m_cursor - prevPos );
-                selection.SetReferencePoint(m_cursor);
+                selection.SetReferencePoint( m_cursor );
 
                 totalMovement += movement;
                 prevPos = m_cursor;
@@ -441,6 +439,10 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Drag items to the current cursor position
                 for( auto item : selection )
                 {
+                    // Don't double move footprint pads, fields, etc.
+                    if( item->GetParent() && item->GetParent()->IsSelected() )
+                        continue;
+
                     static_cast<BOARD_ITEM*>( item )->Move( movement );
                 }
 
@@ -463,7 +465,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     // Save items, so changes can be undone
                     for( auto item : selection )
+                    {
+                        // Don't double move footprint pads, fields, etc.
+                        if( item->GetParent() && item->GetParent()->IsSelected() )
+                            continue;
+
                         m_commit->Modify( item );
+                    }
 
                     m_cursor = controls->GetCursorPosition();
 
@@ -476,7 +484,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         // Drag items to the current cursor position
                         for( auto item : selection )
+                        {
+                            // Don't double move footprint pads, fields, etc.
+                            if( item->GetParent() && item->GetParent()->IsSelected() )
+                                continue;
+
                             static_cast<BOARD_ITEM*>( item )->Move( delta );
+                        }
 
                         selection.SetReferencePoint( m_cursor );
                     }
