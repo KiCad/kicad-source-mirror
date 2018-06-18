@@ -175,12 +175,12 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
+ * @param aTolerance is the max distance between points that is still accepted as connected (internal units)
  * @param aErrorText is a wxString to return error message.
  */
-bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
-                              SHAPE_POLY_SET& aPolygons, wxString* aErrorText )
+bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
+        wxString* aErrorText, unsigned int aTolerance )
 {
-
     if( aSegList.size() == 0 )
         return true;
 
@@ -189,7 +189,6 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     // Make a working copy of aSegList, because the list is modified during calculations
     std::vector< DRAWSEGMENT* > segList = aSegList;
 
-    unsigned    prox;           // a proximity BIU metric, not an accurate distance
     DRAWSEGMENT* graphic;
     wxPoint prevPt;
 
@@ -279,11 +278,6 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     // The first DRAWSEGMENT is in 'graphic', ok to remove it from 'items'
     segList.erase( segList.begin() + xmini );
 
-    // Set maximum proximity threshold for point to point nearness metric for
-    // board perimeter only, not interior keepouts yet.
-    prox = Millimeter2iu( 0.01 );   // should be enough to fix rounding issues
-                                    // is arc start and end point calculations
-
     // Output the Edge.Cuts perimeter as circle or polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
@@ -337,9 +331,9 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                     double  radius  = graphic->GetRadius();
                     int     steps   = GetArcToSegmentCount( radius, ARC_LOW_DEF, angle / 10.0 );
 
-                    if( !close_enough( prevPt, pstart, prox ) )
+                    if( !close_enough( prevPt, pstart, aTolerance ) )
                     {
-                        wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
+                        wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aTolerance ) );
 
                         angle = -angle;
                         std::swap( pstart, pend );
@@ -374,14 +368,14 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
 
             // Get next closest segment.
 
-            graphic = findPoint( prevPt, segList, prox );
+            graphic = findPoint( prevPt, segList, aTolerance );
 
             // If there are no more close segments, check if the board
             // outline polygon can be closed.
 
             if( !graphic )
             {
-                if( close_enough( startPt, prevPt, prox ) )
+                if( close_enough( startPt, prevPt, aTolerance ) )
                 {
                     // Close the polygon back to start point
                     // aPolygons.Append( startPt ); // not needed
@@ -406,11 +400,6 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
             }
         }
     }
-
-    // Output the interior Edge.Cuts graphics as keepouts, using same nearness
-    // metric as the board edge as otherwise we have trouble completing complex
-    // polygons.
-    prox = Millimeter2iu( 0.05 );
 
     while( segList.size() )
     {
@@ -488,9 +477,9 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                         int     radius  = graphic->GetRadius();
                         int     steps = GetArcToSegmentCount( radius, ARC_LOW_DEF, angle / 10.0 );
 
-                        if( !close_enough( prevPt, pstart, prox ) )
+                        if( !close_enough( prevPt, pstart, aTolerance ) )
                         {
-                            wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
+                            wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aTolerance ) );
 
                             angle = -angle;
                             std::swap( pstart, pend );
@@ -526,14 +515,14 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
 
                 // Get next closest segment.
 
-                graphic = findPoint( prevPt, segList, prox );
+                graphic = findPoint( prevPt, segList, aTolerance );
 
                 // If there are no more close segments, check if polygon
                 // can be closed.
 
                 if( !graphic )
                 {
-                    if( close_enough( startPt, prevPt, prox ) )
+                    if( close_enough( startPt, prevPt, aTolerance ) )
                     {
                         // Close the polygon back to start point
                         // aPolygons.Append( startPt, -1, hole );   // not needed
@@ -570,9 +559,8 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
  * Any closed outline inside the main outline is a hole
  * All contours should be closed, i.e. valid closed polygon vertices
  */
-bool BuildBoardPolygonOutlines( BOARD* aBoard,
-                                SHAPE_POLY_SET& aOutlines,
-                                wxString* aErrorText )
+bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
+        wxString* aErrorText, unsigned int aTolerance )
 {
     PCB_TYPE_COLLECTOR  items;
 
@@ -590,7 +578,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
             segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText );
+    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance );
 
     if( !success || !aOutlines.OutlineCount() )
     {

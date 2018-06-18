@@ -2897,15 +2897,13 @@ BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
  * All contours should be closed, i.e. are valid vertices for a closed polygon
  * return true if success, false if a contour is not valid
  */
-extern bool BuildBoardPolygonOutlines( BOARD* aBoard,
-                                SHAPE_POLY_SET& aOutlines,
-                                wxString* aErrorText );
+extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
+                                wxString* aErrorText, unsigned int aTolerance );
 
 
-bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                     wxString* aErrorText )
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText )
 {
-    bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText );
+    bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText, Millimeter2iu( 0.05 ) );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
