@@ -465,6 +465,7 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,
     &HkMoveItemExact,
     &HkRotateItem,
+    &HkSwitchTrackPosture,
 
     // Edit/Duplicate
     &HkEditBoardItem,
