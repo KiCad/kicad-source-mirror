@@ -60,6 +60,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxButton* m_stdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onModeChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFreeAngleModeChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

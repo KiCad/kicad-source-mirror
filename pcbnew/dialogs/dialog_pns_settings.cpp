@@ -29,9 +29,6 @@
 DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings ) :
     DIALOG_PNS_SETTINGS_BASE( aParent ), m_settings( aSettings )
 {
-    // "Figure out what's best" is not available yet
-    m_mode->Enable( PNS::RM_Smart, false );
-
     // Add tool tip to the mode radio box, one by option
     // (cannot be made with wxFormBuilder for each item )
     m_mode->SetItemToolTip( 0, _( "DRC violation: highlight obstacles" ) );
@@ -50,6 +47,10 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
     m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
+
+    // Don't show options that are not implemented
+    m_suggestEnding->Hide();
+    m_shoveVias->Hide();
 
     SetDefaultItem( m_stdButtonsOK );
     GetSizer()->Fit( this );
@@ -73,4 +74,16 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
 
     aEvent.Skip();      // ends returning wxID_OK (default behavior)
+}
+
+
+void DIALOG_PNS_SETTINGS::onModeChange( wxCommandEvent& aEvent )
+{
+    if( m_mode->GetSelection() == PNS::RM_MarkObstacles )
+        m_freeAngleMode->Enable();
+    else
+    {
+        m_freeAngleMode->SetValue( false );
+        m_freeAngleMode->Enable( false );
+    }
 }

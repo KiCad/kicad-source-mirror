@@ -16,7 +16,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_modeChoices[] = { _("Highlight collisions"), _("Shove"), _("Walk around"), _("Figure out what's best") };
+	wxString m_modeChoices[] = { _("Highlight collisions"), _("Shove"), _("Walk around") };
 	int m_modeNChoices = sizeof( m_modeChoices ) / sizeof( wxString );
 	m_mode = new wxRadioBox( this, wxID_ANY, _("Mode:"), wxDefaultPosition, wxDefaultSize, m_modeNChoices, m_modeChoices, 1, wxRA_SPECIFY_COLS );
 	m_mode->SetSelection( 0 );
@@ -149,6 +149,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bMainSizer->Fit( this );
 	
 	// Connect Events
+	m_mode->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::onModeChange ), NULL, this );
 	m_freeAngleMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::onFreeAngleModeChange ), NULL, this );
 	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnOkClick ), NULL, this );
 }
@@ -156,6 +157,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 DIALOG_PNS_SETTINGS_BASE::~DIALOG_PNS_SETTINGS_BASE()
 {
 	// Disconnect Events
+	m_mode->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::onModeChange ), NULL, this );
 	m_freeAngleMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::onFreeAngleModeChange ), NULL, this );
 	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_SETTINGS_BASE::OnOkClick ), NULL, this );
 	
