@@ -34,6 +34,8 @@ class GRID_MENU : public CONTEXT_MENU
 public:
     GRID_MENU( EDA_DRAW_FRAME* aParent );
 
+    CONTEXT_MENU* Clone() const override;
+
 private:
     CONTEXT_MENU* create() const override
     {

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,13 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
         GRID_TYPE& grid = screen->GetGrid( i );
         Append( grid.m_CmdId, gridsList[i], wxEmptyString, wxITEM_CHECK );
     }
+}
+
+
+CONTEXT_MENU* GRID_MENU::Clone() const
+{
+    // Just return a fresh menu.  This keeps the units up-to-date.
+    return create();
 }
 
 
