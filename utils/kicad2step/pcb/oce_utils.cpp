@@ -75,16 +75,16 @@
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 
-#define USER_PREC (1e-4)
-#define USER_ANGLE_PREC (1e-6)
+static constexpr double USER_PREC = 1e-4;
+static constexpr double USER_ANGLE_PREC = 1e-6;
 // minimum PCB thickness in mm (2 microns assumes a very thin polyimide film)
-#define THICKNESS_MIN (0.002)
+static constexpr double THICKNESS_MIN = 0.002;
 // default PCB thickness in mm
-#define THICKNESS_DEFAULT (1.6)
+static constexpr double THICKNESS_DEFAULT = 1.6;
 // nominal offset from the board
-#define BOARD_OFFSET (0.05 )
+static constexpr double BOARD_OFFSET = 0.05;
 // min. length**2 below which 2 points are considered coincident
-#define MIN_LENGTH2 (0.0001)    // = 0.01*0.01
+static constexpr double MIN_LENGTH2 = 0.0001;    // = 0.01*0.01
 
 static void getEndPoints( const KICADCURVE& aCurve, double& spx0, double& spy0,
     double& epx0, double& epy0 )
