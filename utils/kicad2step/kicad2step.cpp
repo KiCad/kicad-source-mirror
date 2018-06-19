@@ -54,6 +54,7 @@ private:
     wxString m_outputFile;
     double   m_xOrigin;
     double   m_yOrigin;
+    double   m_minDistance;
 };
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
@@ -78,6 +79,9 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
         { wxCMD_LINE_SWITCH, NULL, "no-virtual",
             _( "exclude 3D models for components with 'virtual' attribute" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_OPTION, NULL, "min-distance",
+            _( "Minimum distance between points to treat them as separate ones (default 0.01 mm)" ).mb_str(),
+            wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
         { wxCMD_LINE_NONE }
@@ -98,6 +102,7 @@ bool KICAD2MCAD::OnInit()
     m_includeVirtual = true;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
+    m_minDistance = MIN_DISTANCE;
 
     if( !wxAppConsole::OnInit() )
         return false;
@@ -181,6 +186,28 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
             }
         }
     }
+
+
+    if( parser.Found( "min-distance", &tstr ) )
+    {
+        std::istringstream istr;
+        istr.str( std::string( tstr.ToUTF8() ) );
+        istr >> m_minDistance;
+
+        if( istr.fail() )
+        {
+            parser.Usage();
+            return false;
+        }
+
+        if( !istr.eof() )
+        {
+            std::string tunit;
+            istr >> tunit;
+
+            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
+            {
+                m_minDistance *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {
@@ -243,6 +270,7 @@ int KICAD2MCAD::OnRun()
     KICADPCB pcb;
 
     pcb.SetOrigin( m_xOrigin, m_yOrigin );
+    pcb.SetMinDistance( m_minDistance );
 
     if( pcb.ReadFile( m_filename ) )
     {

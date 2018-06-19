@@ -87,12 +87,11 @@ KICADPCB::KICADPCB()
     m_resolver.Set3DConfigDir( cfgdir.GetPath() );
     m_thickness = 1.6;
     m_pcb = NULL;
+    m_minDistance = MIN_DISTANCE;
     m_useGridOrigin = false;
     m_useDrillOrigin = false;
     m_hasGridOrigin = false;
     m_hasDrillOrigin = false;
-
-    return;
 }
 
 
@@ -477,6 +476,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
 
     m_pcb = new PCBMODEL();
     m_pcb->SetPCBThickness( m_thickness );
+    m_pcb->SetMinDistance( m_minDistance );
 
     for( auto i : m_curves )
     {

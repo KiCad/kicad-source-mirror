@@ -84,7 +84,7 @@ static constexpr double THICKNESS_DEFAULT = 1.6;
 // nominal offset from the board
 static constexpr double BOARD_OFFSET = 0.05;
 // min. length**2 below which 2 points are considered coincident
-static constexpr double MIN_LENGTH2 = 0.0001;    // = 0.01*0.01
+static constexpr double MIN_LENGTH2 = MIN_DISTANCE * MIN_DISTANCE;
 
 static void getEndPoints( const KICADCURVE& aCurve, double& spx0, double& spy0,
     double& epx0, double& epy0 )
@@ -226,6 +226,7 @@ PCBMODEL::PCBMODEL()
     m_precision = USER_PREC;
     m_angleprec = USER_ANGLE_PREC;
     m_thickness = THICKNESS_DEFAULT;
+    m_minDistance2 = MIN_LENGTH2;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_mincurve = m_curves.end();
     BRepBuilderAPI::Precision( 1.0e-6 );
@@ -252,7 +253,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         double dy = aCurve->m_end.y - aCurve->m_start.y;
         double distance = dx * dx + dy * dy;
 
-        if( distance < MIN_LENGTH2 )
+        if( distance < m_minDistance2 )
         {
             std::ostringstream ostr;
 #ifdef __WXDEBUG__
@@ -271,7 +272,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         double dy = aCurve->m_end.y - aCurve->m_start.y;
         double rad = dx * dx + dy * dy;
 
-        if( rad < MIN_LENGTH2 )
+        if( rad < m_minDistance2 )
         {
             std::ostringstream ostr;
 #ifdef __WXDEBUG__
@@ -311,7 +312,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             dy = aCurve->m_ep.y - aCurve->m_end.y;
             rad = dx * dx + dy * dy;
 
-            if( rad < MIN_LENGTH2 )
+            if( rad < m_minDistance2 )
             {
                 std::ostringstream ostr;
 #ifdef __WXDEBUG__
@@ -528,6 +529,7 @@ bool PCBMODEL::AddPadHole( KICADPAD* aPad )
     p3.y += aPad->m_position.y;
 
     OUTLINE oln;
+    oln.SetMinSqDistance( m_minDistance2 );
     KICADCURVE crv0, crv1, crv2, crv3;
 
     // crv0 = arc
@@ -679,6 +681,7 @@ bool PCBMODEL::CreatePCB()
     m_hasPCB = true;    // whether or not operations fail we note that CreatePCB has been invoked
     TopoDS_Shape board;
     OUTLINE oln;    // loop to assemble (represents PCB outline and cutouts)
+    oln.SetMinSqDistance( m_minDistance2 );
     oln.AddSegment( *m_mincurve );
     m_curves.erase( m_mincurve );
 
@@ -1279,6 +1282,7 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
 OUTLINE::OUTLINE()
 {
     m_closed = false;
+    m_minDistance2 = MIN_LENGTH2;
     return;
 }
 
@@ -1330,7 +1334,7 @@ bool OUTLINE::AddSegment( const KICADCURVE& aCurve )
     dx = epx1 - spx0;
     dy = epy1 - spy0;
 
-    if( dx * dx + dy * dy < MIN_LENGTH2 )
+    if( dx * dx + dy * dy < m_minDistance2 )
     {
         m_curves.push_front( aCurve );
         m_closed = testClosed( m_curves.front(), m_curves.back() );
@@ -1341,7 +1345,7 @@ bool OUTLINE::AddSegment( const KICADCURVE& aCurve )
         dx = spx1 - spx0;
         dy = spy1 - spy0;
 
-        if( dx * dx + dy * dy < MIN_LENGTH2 )
+        if( dx * dx + dy * dy < m_minDistance2 )
         {
             KICADCURVE curve = aCurve;
             reverseCurve( curve );
@@ -1356,7 +1360,7 @@ bool OUTLINE::AddSegment( const KICADCURVE& aCurve )
     dx = spx1 - epx0;
     dy = spy1 - epy0;
 
-    if( dx * dx + dy * dy < MIN_LENGTH2 )
+    if( dx * dx + dy * dy < m_minDistance2 )
     {
         m_curves.push_back( aCurve );
         m_closed = testClosed( m_curves.front(), m_curves.back() );
@@ -1367,7 +1371,7 @@ bool OUTLINE::AddSegment( const KICADCURVE& aCurve )
         dx = epx1 - epx0;
         dy = epy1 - epy0;
 
-        if( dx * dx + dy * dy < MIN_LENGTH2 )
+        if( dx * dx + dy * dy < m_minDistance2 )
         {
             KICADCURVE curve = aCurve;
             reverseCurve( curve );
@@ -1470,7 +1474,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
                 double dy = aLastPoint.y - aCurve.m_end.y;
                 double distance = dx * dx + dy * dy;
 
-                if( distance > 0 && distance < MIN_LENGTH2 )
+                if( distance > 0 && distance < m_minDistance2 )
                 {
                     std::ostringstream ostr;
 
@@ -1551,7 +1555,7 @@ bool OUTLINE::testClosed( KICADCURVE& aFrontCurve, KICADCURVE& aBackCurve )
     double dy = epy1 - spy0;
     double r = dx * dx + dy * dy;
 
-    if( r < MIN_LENGTH2 )
+    if( r < m_minDistance2 )
         return true;
 
     return false;

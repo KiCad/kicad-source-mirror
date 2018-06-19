@@ -62,6 +62,8 @@ private:
     // set to TRUE if the origin was actually parsed
     bool        m_hasGridOrigin;
     bool        m_hasDrillOrigin;
+    // minimum distance between points to treat them as separate entities (mm)
+    double      m_minDistance;
     // the names of layers in use, and the internal layer ID
     std::map<std::string, int> m_layersNames;
 
@@ -97,6 +99,11 @@ public:
     void UseDrillOrigin( bool aUseOrigin )
     {
         m_useDrillOrigin = aUseOrigin;
+    }
+
+    void SetMinDistance( double aDistance )
+    {
+        m_minDistance = aDistance;
     }
 
     bool ReadFile( const wxString& aFileName );

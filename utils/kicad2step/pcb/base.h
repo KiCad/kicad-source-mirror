@@ -30,6 +30,9 @@
 #ifndef KICADBASE_H
 #define KICADBASE_H
 
+///> Minimum distance between points to treat them as separate ones (mm)
+static constexpr double MIN_DISTANCE = 0.01;
+
 namespace SEXPR
 {
     class SEXPR;
