@@ -1052,9 +1052,10 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 }
 
 
-static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
+static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECTOR2D& aPosition )
 {
     auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
+    auto modules = aBoard->Modules();
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::FootprintFilter );
@@ -1062,7 +1063,18 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
     const SELECTION& selection = selectionTool->GetSelection();
 
     if( selection.Empty() )
+    {
+        // Clear the previous local ratsnest if we click off all items
+        for( auto mod : modules )
+        {
+            for( auto pad : mod->Pads() )
+            {
+                pad->SetLocalRatsnestVisible( false );
+            }
+        }
+
         return true;
+    }
 
     for( auto item : selection )
     {
@@ -1070,7 +1082,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
         {
             for( auto pad : static_cast<MODULE *> (item)->Pads() )
             {
-                pad->SetLocalRatsnestVisible( true );
+                pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
             }
         }
     }
@@ -1084,10 +1096,12 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
     Activate();
 
     auto picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    assert( picker );
+    auto board = getModel<BOARD>();
+    wxASSERT( picker );
+    wxASSERT( board );
 
     m_frame->SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT, wxCURSOR_PENCIL, _( "Pick Components for Local Ratsnest" ) );
-    picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, _1 ) );
+    picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board, _1 ) );
     picker->SetSnapping( false );
     picker->Activate();
     Wait();

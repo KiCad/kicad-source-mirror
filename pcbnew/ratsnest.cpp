@@ -257,9 +257,21 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 
         for( auto pad : mod->Pads() )
         {
-            pad->SetLocalRatsnestVisible( true );
+            pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
         }
-
-        m_canvas->Refresh();
     }
+    else
+    {
+        auto modules = GetBoard()->Modules();
+
+        for( auto mod : modules )
+        {
+            for( auto pad : mod->Pads() )
+            {
+                pad->SetLocalRatsnestVisible( false );
+            }
+        }
+    }
+
+    m_canvas->Refresh();
 }
