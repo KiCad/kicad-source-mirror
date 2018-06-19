@@ -76,7 +76,7 @@ public:
      * result is violating design rules - in such case, the track is only committed
      * if Settings.CanViolateDRC() is on.
      */
-    virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem ) = 0;
+    virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish = false ) = 0;
 
     /**
      * Function ToggleVia()

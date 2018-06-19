@@ -133,7 +133,7 @@ public:
     bool RoutingInProgress() const;
     bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer );
     void Move( const VECTOR2I& aP, ITEM* aItem );
-    bool FixRoute( const VECTOR2I& aP, ITEM* aItem );
+    bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
     void StopRouting();

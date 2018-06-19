@@ -188,7 +188,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, int aTargetLeng
 }
 
 
-bool MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
+bool MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
     if( !m_currentNode )
         return false;

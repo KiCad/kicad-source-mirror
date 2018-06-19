@@ -300,7 +300,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 }
 
 
-bool DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
+bool DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
     LINE lP( m_originPair.PLine(), m_finalShapeP );
     LINE lN( m_originPair.NLine(), m_finalShapeN );

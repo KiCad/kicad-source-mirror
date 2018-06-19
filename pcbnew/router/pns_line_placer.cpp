@@ -951,7 +951,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 }
 
 
-bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
+bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
     bool realEnd = false;
     int lastV;
@@ -1007,6 +1007,9 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
         p_pre_last = l.CPoint( -2 );
 
     if( aEndItem && m_currentNet >= 0 && m_currentNet == aEndItem->Net() )
+        realEnd = true;
+
+    if( aForceFinish )
         realEnd = true;
 
     if( realEnd || m_placingVia )

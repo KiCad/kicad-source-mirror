@@ -728,10 +728,12 @@ void ROUTER_TOOL::performRouting()
         {
             updateEndItem( *evt );
             bool needLayerSwitch = m_router->IsPlacingVia();
+            bool forceFinish = evt->Modifier( MD_SHIFT );
 
-            if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
+
+            if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
                 break;
-
+            
             if( needLayerSwitch )
                 switchLayerOnViaPlacement();
 

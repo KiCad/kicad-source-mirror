@@ -361,14 +361,14 @@ void ROUTER::CommitRouting( NODE* aNode )
 }
 
 
-bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
+bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
     bool rv = false;
 
     switch( m_state )
     {
     case ROUTE_TRACK:
-        rv = m_placer->FixRoute( aP, aEndItem );
+        rv = m_placer->FixRoute( aP, aEndItem, aForceFinish );
         break;
 
     case DRAG_SEGMENT:

@@ -78,7 +78,7 @@ public:
      * result is violating design rules - in such case, the track is only committed
      * if Settings.CanViolateDRC() is on.
      */
-    bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem ) override;
+    bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish = false ) override;
 
     const LINE Trace() const;
 
