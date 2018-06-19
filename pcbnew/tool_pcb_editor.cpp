@@ -44,6 +44,7 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <pcb_layer_box_selector.h>
+#include <view/view.h>
 
 #include <wx/wupdlock.h>
 #include <memory>
@@ -769,6 +770,14 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         SetElementVisibility( LAYER_RATSNEST, state );
         OnModify();
         Compile_Ratsnest( NULL, true );
+
+        if( IsGalCanvasActive() )
+        {
+            // keep the ratsnest layer enabled in view, so it shows up when an item is dragged
+            auto view = GetGalCanvas()->GetView();
+            view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+            view->SetLayerVisible( LAYER_RATSNEST, true );
+        }
 
         m_canvas->Refresh();
         break;
