@@ -990,6 +990,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     // Full drawing or "page" rectangle in internal units
     DBOX    pageRectIU( wxPoint( 0, 0 ), wxSize( GetPageSizeIU().x, GetPageSizeIU().y ) );
 
+    // Remark: if something is modified here, perhaps EDA_DRAW_FRAME::RedrawScreen2()
+    // will need changes accordint to the way the center is computed
     // Account for scrollbars
     wxSize  scrollbarSizeDU = m_canvas->GetSize() - m_canvas->GetClientSize();
     wxSize  scrollbarSizeIU = scrollbarSizeDU * (1 / scale);

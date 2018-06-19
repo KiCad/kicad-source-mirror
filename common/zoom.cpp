@@ -64,8 +64,12 @@ void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
     if( IsGalCanvasActive() )
         return;
 
-    // relative screen position to center before zoom
-    wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2;
+    // Account for scrollbars (see EDA_DRAW_FRAME::AdjustScrollBars that takes
+    // in account scroolbars area to adjust scroll bars)
+    wxSize scrollbarSize = m_canvas->GetSize() - m_canvas->GetClientSize();
+    wxSize sizeAdjusted = m_canvas->GetClientSize() - scrollbarSize;
+
+    wxPoint dPos = posBefore - sizeAdjusted / 2;
 
     // screen position of crosshair after zoom
     wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() );
