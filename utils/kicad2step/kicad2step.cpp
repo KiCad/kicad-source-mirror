@@ -54,7 +54,6 @@ private:
     wxString m_outputFile;
     double   m_xOrigin;
     double   m_yOrigin;
-    bool     m_inch;
 };
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
@@ -97,7 +96,6 @@ bool KICAD2MCAD::OnInit()
     m_useGridOrigin = false;
     m_useDrillOrigin = false;
     m_includeVirtual = true;
-    m_inch = false;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
 
@@ -173,7 +171,16 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
 
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                m_inch = true;
+                m_xOrigin *= 25.4;
+                m_yOrigin *= 25.4;
+            }
+            else if( tunit.compare( "mm" ) )
+            {
+                parser.Usage();
+                return false;
+            }
+        }
+    }
             }
             else if( tunit.compare( "mm" ) )
             {
@@ -235,10 +242,7 @@ int KICAD2MCAD::OnRun()
 
     KICADPCB pcb;
 
-    if( m_inch )
-        pcb.SetOrigin( m_xOrigin * 25.4, m_yOrigin * 25.4 );
-    else
-        pcb.SetOrigin( m_xOrigin, m_yOrigin );
+    pcb.SetOrigin( m_xOrigin, m_yOrigin );
 
     if( pcb.ReadFile( m_filename ) )
     {
