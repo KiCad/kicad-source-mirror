@@ -72,4 +72,7 @@
 #define KIFACE_SUFFIX                   "@KIFACE_SUFFIX@"
 #define KIFACE_PREFIX                   "@KIFACE_PREFIX@"
 
+/// Allows scripts install directory to be referenced by the program code.
+#define PYTHON_DEST                     "@PYTHON_DEST@"
+
 #endif  // CONFIG_H_

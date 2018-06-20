@@ -263,10 +263,10 @@ static bool scriptingSetup()
     wxSetEnv( "PYTHONPATH", pypath );
 
 #else
-    // Linux-specific setup
     wxString pypath;
 
-    pypath = Pgm().GetExecutablePath() + wxT( "../lib/python2.7/dist-packages" );
+    // PYTHON_DEST is the scripts install dir as determined by the build system.
+    pypath = Pgm().GetExecutablePath() + wxT( "../" PYTHON_DEST );
 
     if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) ) )
         pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
