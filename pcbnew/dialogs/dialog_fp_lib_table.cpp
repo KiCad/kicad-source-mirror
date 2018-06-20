@@ -353,7 +353,7 @@ private:
                     // button.
                     model.DeleteRows( r, 1 );
                 }
-            else if( ( illegalCh = LIB_ID::FindIllegalChar( nick, LIB_ID::ID_PCB ) ) )
+                else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_PCB ) ) )
                 {
                     wxString msg = wxString::Format(
                         _( "Illegal character \"%c\" found in Nickname: \"%s\" in row %d" ),

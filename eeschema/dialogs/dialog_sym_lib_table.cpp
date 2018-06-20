@@ -268,7 +268,7 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
                 // button.
                 model.DeleteRows( r, 1 );
             }
-            else if( ( illegalCh = LIB_ID::FindIllegalChar( nick, LIB_ID::ID_SCH ) ) )
+            else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_SCH ) ) )
             {
                 wxString msg = wxString::Format(
                     _( "Illegal character \"%c\" found in Nickname: \"%s\" in row %d" ),
