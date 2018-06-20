@@ -54,12 +54,13 @@ const BOX2I ORIGIN_VIEWITEM::ViewBBox() const
 {
     BOX2I bbox;
 
-    if( m_drawAtZero )
-        bbox.SetOrigin( VECTOR2I( -m_size / 2, -m_size / 2 ) );
-    else
-        bbox.SetOrigin( VECTOR2I( m_position.x, m_position.y ) - VECTOR2I( m_size / 2, m_size / 2 ) );
-
-    bbox.SetSize( VECTOR2I( m_size, m_size ) );
+    // The origin item doesn't have a fixed size.  It is constant on the screen but
+    // changes the effective BBox size based on the zoom level.
+    // But we can't simply set it to the maximum size as this causes a splitting degeneracy
+    // when compiling for Debian i386.  By modestly adjusting the bbox, we avoid the degeneracy
+    // while keeping the origin visible at all zoom levels
+    bbox.SetSize( VECTOR2I( INT_MAX - 2, INT_MAX - 2 ) );
+    bbox.SetOrigin( VECTOR2I( INT_MIN / 2 + 1,  INT_MIN / 2 + 1 ) );
 
     return bbox;
 }
