@@ -14,6 +14,7 @@
         <property name="file">dialog_global_edit_tracks_and_vias_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_global_edit_tracks_and_vias_base</property>
         <property name="namespace"></property>
@@ -135,6 +136,7 @@
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Current Settings:</property>
+                                <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -262,6 +264,7 @@
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="label">Current Net:</property>
+                                                        <property name="markup">0</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -433,6 +436,7 @@
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="label">Current NetClass:</property>
+                                                        <property name="markup">0</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -516,6 +520,7 @@
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="label">unknown</property>
+                                                        <property name="markup">0</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -850,6 +855,7 @@
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="label">Global Edition Option:</property>
+                                <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -1453,6 +1459,16 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
+                    </object>
+                </object>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">1</property>
+                    <object class="spacer" expanded="1">
+                        <property name="height">0</property>
+                        <property name="permission">protected</property>
+                        <property name="width">0</property>
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">

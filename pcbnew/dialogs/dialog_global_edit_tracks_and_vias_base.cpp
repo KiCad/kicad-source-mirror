@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Apr 20 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,6 +21,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Current Settings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
+	
 	m_staticText12->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerCurrSettings->Add( m_staticText12, 0, wxALL, 5 );
@@ -42,6 +43,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_CurrentNetText = new wxStaticText( this, wxID_ANY, _("Current Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetText->Wrap( -1 );
+	
 	fgSizeNetInfo->Add( m_CurrentNetText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxArrayString m_choiceNetNameChoices;
@@ -51,10 +53,12 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_CurrentNetclassText = new wxStaticText( this, wxID_ANY, _("Current NetClass:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetclassText->Wrap( -1 );
+	
 	fgSizeNetInfo->Add( m_CurrentNetclassText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_CurrentNetclassName = new wxStaticText( this, wxID_ANY, _("unknown"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetclassName->Wrap( -1 );
+	
 	m_CurrentNetclassName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	fgSizeNetInfo->Add( m_CurrentNetclassName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -117,6 +121,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_staticText11 = new wxStaticText( this, wxID_ANY, _("Global Edition Option:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
+	
 	m_staticText11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bLowerSizer->Add( m_staticText11, 0, wxRIGHT|wxLEFT, 5 );
@@ -157,6 +162,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
+	
+	bMainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
