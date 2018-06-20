@@ -142,7 +142,7 @@ public:
     /**
      * Creates a deep, recursive copy of this CONTEXT_MENU.
      */
-    virtual CONTEXT_MENU* Clone() const;
+    CONTEXT_MENU* Clone() const;
 
 protected:
     ///> Returns an instance of this class. It has to be overridden in inheriting classes.

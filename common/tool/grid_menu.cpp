@@ -51,13 +51,6 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 }
 
 
-CONTEXT_MENU* GRID_MENU::Clone() const
-{
-    // Just return a fresh menu.  This keeps the units up-to-date.
-    return create();
-}
-
-
 OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( ACTIONS::gridPreset.MakeEvent() );
@@ -70,9 +63,17 @@ OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 
 void GRID_MENU::update()
 {
-    for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
-        Check( ID_POPUP_GRID_SELECT + 1 + i, false );
+    BASE_SCREEN*  screen = m_parent->GetScreen();
+    int           currentId = screen->GetGridCmdId();
+    wxArrayString gridsList;
 
-    // Check the current grid size
-    Check( m_parent->GetScreen()->GetGridCmdId(), true );
+    screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
+
+    for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
+    {
+        int menuId = ID_POPUP_GRID_SELECT + 1 + i;
+
+        SetLabel( menuId, gridsList[i] );      // Refresh label in case units have changed
+        Check( menuId, menuId == currentId );  // Refresh checkmark
+    }
 }
