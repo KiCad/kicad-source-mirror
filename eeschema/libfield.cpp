@@ -65,7 +65,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         return;
 
     newFieldValue = dlg.GetText();
-    LIB_ALIAS::ValidateName( newFieldValue );
+    LIB_ID::FixIllegalChars( newFieldValue, LIB_ID::ID_SCH );
     wxString oldFieldValue = aField->GetFullText( m_unit );
     bool renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
 

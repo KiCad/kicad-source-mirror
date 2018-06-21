@@ -371,14 +371,17 @@ bool LIB_ID::HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
 }
 
 
-UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
+UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool aLib )
 {
     UTF8 fixedName;
 
     for( UTF8::uni_iter chIt = aLibItemName.ubegin(); chIt < aLibItemName.uend(); ++chIt )
     {
         auto ch = *chIt;
-        fixedName += isLegalChar( ch, aType ) ? ch : '_';
+        if( aLib )
+            fixedName += isLegalLibNicknameChar( ch, aType ) ? ch : '_';
+        else
+            fixedName += isLegalChar( ch, aType ) ? ch : '_';
     }
 
     return fixedName;
@@ -386,15 +389,17 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
 
 
 ///> Set of characters not accepted library entry names.
-#define BASE_ILLEGAL_CHARS '\t', '\n', '\r', ':', '/', '\\'
-const unsigned schIllegalChars[] = { BASE_ILLEGAL_CHARS, ' ' };
-const unsigned pcbIllegalChars[] = { BASE_ILLEGAL_CHARS, 0 };
+#define BASE_ILLEGAL_CHARS '\t', '\n', '\r', '/', '\\'
+const unsigned schIllegalChars[] = { BASE_ILLEGAL_CHARS, ':', ' ' };
+const unsigned schAliasIllegalChars[] = { BASE_ILLEGAL_CHARS, 0, 0 };
+const unsigned pcbIllegalChars[] = { BASE_ILLEGAL_CHARS, ':', 0 };
 #define ILL_CHAR_SIZE (sizeof(schIllegalChars) / sizeof(int))
 
 bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
 {
     const unsigned (&illegalChars)[ILL_CHAR_SIZE] =
-        aType == ID_SCH ? schIllegalChars : pcbIllegalChars;
+        aType == ID_SCH ? schIllegalChars :
+        aType == ID_ALIAS ? schAliasIllegalChars : pcbIllegalChars;
 
     for( const unsigned ch : illegalChars )
     {

@@ -69,7 +69,7 @@ public:
     LIB_ID( const wxString& aId );
 
     ///> Types of library identifiers
-    enum LIB_ID_TYPE { ID_SCH, ID_PCB };
+    enum LIB_ID_TYPE { ID_SCH, ID_ALIAS, ID_PCB };
 
     /**
      * This LIB_ID ctor is a special version which ignores the parsing due to symbol
@@ -218,9 +218,10 @@ public:
      *
      * @param aLibItemName is the #LIB_ID item name to replace illegal characters.
      * @param aType is the library identifier type
+     * @param aLib True if we are checking library names, false if we are checking item names
      * @return the corrected version of \a aLibItemName.
      */
-    static UTF8 FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType );
+    static UTF8 FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool aLib = false );
 
     /**
      * Looks for characters that are illegal in library nicknames.

@@ -218,11 +218,6 @@ public:
     bool RevertLibrary( const wxString& aLibrary );
 
     /**
-     * Replaces all characters considered illegal in library/part names with underscores.
-     */
-    static wxString ValidateName( const wxString& aName );
-
-    /**
      * Returns a library name that is not currently in use.
      * Used for generating names for new libraries.
      */

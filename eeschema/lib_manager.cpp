@@ -569,15 +569,6 @@ bool LIB_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) 
     return symTable()->HasLibrary( aLibrary, aCheckEnabled );
 }
 
-
-wxString LIB_MANAGER::ValidateName( const wxString& aName )
-{
-    wxString name( aName );
-    name.Replace( " ", "_" );
-    return name;
-}
-
-
 wxString LIB_MANAGER::GetUniqueLibraryName() const
 {
     wxString name = "New_Library";

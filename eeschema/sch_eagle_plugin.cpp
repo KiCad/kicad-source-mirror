@@ -37,6 +37,7 @@
 #include <class_library.h>
 #include <class_libentry.h>
 #include <lib_draw_item.h>
+#include <lib_id.h>
 #include <sch_component.h>
 #include <sch_sheet_path.h>
 #include <lib_arc.h>
@@ -134,8 +135,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
             m_libName = "noname";
 
         m_libName += "-eagle-import";
-        // use ID_SCH as it is more restrictive
-        m_libName = LIB_ID::FixIllegalChars( m_libName, LIB_ID::ID_SCH );
+        m_libName = LIB_ID::FixIllegalChars( m_libName, LIB_ID::ID_SCH, true );
     }
 
     return m_libName;
@@ -1064,21 +1064,19 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     wxString gatename = epart->deviceset + epart->device + einstance.gate;
     wxString symbolname = wxString( epart->deviceset + epart->device );
     symbolname.Replace( "*", "" );
-    LIB_ALIAS::ValidateName( symbolname );
+    wxString kisymbolname = LIB_ID::FixIllegalChars( symbolname, LIB_ID::ID_SCH );
 
     int unit = m_eagleLibs[libraryname].GateUnit[gatename];
 
     wxString package;
     EAGLE_LIBRARY* elib = &m_eagleLibs[libraryname];
 
-    auto p = elib->package.find( symbolname );
+    auto p = elib->package.find( kisymbolname );
 
     if( p != elib->package.end() )
     {
         package = p->second;
     }
-
-    wxString kisymbolname = LIB_ID::FixIllegalChars( symbolname, LIB_ID::ID_SCH );
 
     LIB_ALIAS* alias = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
                                          m_properties.get() );
@@ -1138,7 +1136,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     if( epart->value )
         component->GetField( VALUE )->SetText( *epart->value );
     else
-        component->GetField( VALUE )->SetText( symbolname );
+        component->GetField( VALUE )->SetText( kisymbolname );
 
     // Set the visibility of fields.
     component->GetField( REFERENCE )->SetVisible( part->GetField( REFERENCE )->IsVisible() );
@@ -1262,7 +1260,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             wxString symbolName = edeviceset.name + edevice.name;
             symbolName.Replace( "*", "" );
             wxASSERT( !symbolName.IsEmpty() );
-            LIB_ALIAS::ValidateName( symbolName );
+            symbolName = LIB_ID::FixIllegalChars( symbolName, LIB_ID::ID_SCH );
 
             if( edevice.package )
                 aEagleLibrary->package[symbolName] = edevice.package.Get();

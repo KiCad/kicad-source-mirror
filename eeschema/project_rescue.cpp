@@ -94,6 +94,7 @@ static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
 static LIB_PART* find_component( const wxString& aName, PART_LIBS* aLibs, bool aCached )
 {
     LIB_PART *part = NULL;
+    wxString new_name = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
 
     for( PART_LIB& each_lib : *aLibs )
     {
@@ -103,7 +104,7 @@ static LIB_PART* find_component( const wxString& aName, PART_LIBS* aLibs, bool a
         if( !aCached && each_lib.IsCache() )
             continue;
 
-        part = each_lib.FindPart( aName );
+        part = each_lib.FindPart( new_name );
 
         if( part )
             break;
