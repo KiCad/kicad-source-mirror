@@ -305,8 +305,6 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
 void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 {
-    std::mutex cnListLock;
-
 #ifdef CONNECTIVITY_DEBUG
     printf("Search start\n");
 #endif
@@ -353,7 +351,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
             auto item = m_itemList[i];
             if( item->Dirty() )
             {
-                CN_VISITOR visitor( item, &cnListLock );
+                CN_VISITOR visitor( item, &m_listLock );
                 m_itemList.FindNearby( item, visitor );
 
                 if( aIncludeZones )
@@ -383,7 +381,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 
             if( zoneItem->Dirty() )
             {
-                CN_VISITOR visitor( item, &cnListLock );
+                CN_VISITOR visitor( item, &m_listLock );
                 m_itemList.FindNearby( item, visitor );
                 m_zoneList.FindNearby( item, visitor );
             }

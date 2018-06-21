@@ -679,6 +679,7 @@ public:
         std::list<CN_ITEM*> m_items;
     };
 
+    std::mutex m_listLock;
     CN_LIST m_itemList;
     CN_ZONE_LIST m_zoneList;
 
