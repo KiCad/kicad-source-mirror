@@ -345,8 +345,12 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 
     if( m_itemList.IsDirty() )
     {
-        for( auto item : m_itemList )
+        #ifdef USE_OPENMP
+            #pragma omp parallel for schedule(dynamic)
+        #endif
+        for( int i = 0; i < m_itemList.Size(); i++ )
         {
+            auto item = m_itemList[i];
             if( item->Dirty() )
             {
                 CN_VISITOR visitor( item, &cnListLock );
@@ -370,44 +374,25 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
         }
 
         #ifdef USE_OPENMP
-            // launch at least two threads, one to compute, second to update UI
-            #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
+            #pragma omp parallel for schedule(dynamic)
         #endif
+        for(int i = 0; i < m_zoneList.Size(); i++ )
         {
-            #ifdef USE_OPENMP
-                #pragma omp master
-                if (m_progressReporter)
-                {
-                    m_progressReporter->KeepRefreshing( true );
-                }
-            #endif
+            auto item = m_zoneList[i];
+            auto zoneItem = static_cast<CN_ZONE *> (item);
 
-            #ifdef USE_OPENMP
-                #pragma omp for schedule(dynamic)
-            #endif
-            for(int i = 0; i < m_zoneList.Size(); i++ )
+            if( zoneItem->Dirty() )
             {
-                auto item = m_zoneList[i];
-                auto zoneItem = static_cast<CN_ZONE *> (item);
-
-                if( zoneItem->Dirty() )
-                {
-                    CN_VISITOR visitor( item, &cnListLock );
-                    m_itemList.FindNearby( item, visitor );
-                    m_zoneList.FindNearby( item, visitor );
-                }
-
-                if (m_progressReporter)
-                {
-                    m_progressReporter->AdvanceProgress();
-                }
+                CN_VISITOR visitor( item, &cnListLock );
+                m_itemList.FindNearby( item, visitor );
+                m_zoneList.FindNearby( item, visitor );
             }
         }
 
         m_zoneList.ClearDirtyFlags();
+        m_itemList.ClearDirtyFlags();
     }
 
-    m_itemList.ClearDirtyFlags();
 
 #ifdef CONNECTIVITY_DEBUG
     printf("Search end\n");
