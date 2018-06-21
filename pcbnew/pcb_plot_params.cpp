@@ -220,8 +220,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_drillMarks );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_scaleselection ),
                        m_scaleSelection );
-    aFormatter->Print( aNestLevel+1, "(%s %s)", getTokenName( T_outputdirectory ),
-                       aFormatter->Quotew( m_outputDirectory ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(%s \"%s\")", getTokenName( T_outputdirectory ),
+                       (const char*) m_outputDirectory.utf8_str() );
     aFormatter->Print( 0, ")\n" );
 }
 
@@ -518,7 +518,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_outputdirectory:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();   // a dir name can be like a number
             aPcbPlotParams->m_outputDirectory = FROM_UTF8( CurText() );
             break;
 
