@@ -60,7 +60,7 @@ public:
 
     void SetMaximum()
     {
-        m_Pos.x  = m_Pos.y = coord_limits::min() / 2 + coord_limits::epsilon();
+        m_Pos.x  = m_Pos.y = coord_limits::lowest() / 2 + coord_limits::epsilon();
         m_Size.x = m_Size.y = coord_limits::max() - coord_limits::epsilon();
     }
 
