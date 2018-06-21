@@ -668,7 +668,6 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
 
 void CN_CONNECTIVITY_ALGO::PropagateNets()
 {
-    //searchConnections( false );
     m_connClusters = SearchClusters( CSM_PROPAGATE );
     propagateConnections();
 }
