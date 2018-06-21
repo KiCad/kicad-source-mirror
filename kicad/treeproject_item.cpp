@@ -164,18 +164,21 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 }
 
 
-void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
+void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 {
     wxString        sep = wxFileName().GetPathSeparator();
     wxString        fullFileName = GetFileName();
     wxTreeItemId    id = GetId();
 
-    KICAD_MANAGER_FRAME* frame = prjframe->m_Parent;
+    KICAD_MANAGER_FRAME* frame = aTreePrjFrame->m_Parent;
     wxASSERT( frame );
 
     switch( GetType() )
     {
     case TREE_PROJECT:
+        // Select a new project if this is not the current project:
+        if( id != aTreePrjFrame->m_TreeProject->GetRootItem() )
+            frame->LoadProject( fullFileName );
         break;
 
     case TREE_DIRECTORY:

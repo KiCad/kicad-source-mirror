@@ -140,6 +140,12 @@ private:
      */
     void                            OnCreateNewDirectory( wxCommandEvent& event );
 
+    /**
+     * Switch to a other project selected from the tree project
+     * (by selecting an other .pro file inside the current project folder)
+     */
+    void OnSwitchToSelectedProject( wxCommandEvent& event );
+
     void                            ClearFilters()
     {
         m_filters.clear();

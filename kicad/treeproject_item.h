@@ -74,7 +74,7 @@ public:
 
     bool Rename( const wxString& name, bool check = true );
     bool Delete( bool check = true );
-    void Activate( TREE_PROJECT_FRAME* prjframe );
+    void Activate( TREE_PROJECT_FRAME* aTreePrjFrame );
     void SetState( int state );
 
 

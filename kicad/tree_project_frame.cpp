@@ -117,6 +117,7 @@ BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
     EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnExpand )
     EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
     EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor )
+    EVT_MENU( ID_PROJECT_SWITCH_TO_OTHER, TREE_PROJECT_FRAME::OnSwitchToSelectedProject )
     EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
     EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
     EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
@@ -173,6 +174,19 @@ void TREE_PROJECT_FRAME::RemoveFilter( const wxString& filter )
             return;
         }
     }
+}
+
+
+void TREE_PROJECT_FRAME::OnSwitchToSelectedProject( wxCommandEvent& event )
+{
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
+
+    if( !tree_data )
+        return;
+
+    wxString prj_filename = tree_data->GetFileName();
+
+    m_Parent->LoadProject( prj_filename );
 }
 
 
@@ -678,6 +692,16 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
     switch( tree_id )
     {
         case TREE_PROJECT:
+            // Add a swith to an other project option only if the selected item
+            // is not the root item (current project)
+            if( curr_item != m_TreeProject->GetRootItem() )
+            {
+                AddMenuItem( &popupMenu, ID_PROJECT_SWITCH_TO_OTHER,
+                             _( "&Switch to this Project" ),
+                             _( "Close all editors, and switch to the selected project" ),
+                             KiBitmap( open_project_xpm ) );
+                popupMenu.AppendSeparator();
+            }
             AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
                          _( "New D&irectory..." ),
                          _( "Create a New Directory" ),
@@ -777,12 +801,12 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 
 void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
 {
-    TREEPROJECT_ITEM*   tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* selected_item = GetSelectedData();
 
-    if( !tree_data )
+    if( !selected_item )
         return;
 
-    tree_data->Activate( this );
+    selected_item->Activate( this );
 }
 
 
