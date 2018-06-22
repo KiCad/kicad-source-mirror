@@ -326,7 +326,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
             if( !last_had_overbar )
             {
-                overbar_start_x += overbar_italic_comp;
+                if( m_gal->IsFontItalic() )
+                    overbar_start_x += overbar_italic_comp;
+
                 last_had_overbar = true;
             }
 
