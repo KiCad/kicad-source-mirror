@@ -156,7 +156,7 @@ public:
      * Swap data between aItem and aImage.
      * aItem and aImage should have the same type
      * Used in undo redo command to swap values between an item and its copy
-     * Only values like layer, size .. which are modified by edition are swapped,
+     * Only values like layer, size .. which are modified by editing are swapped,
      * not the pointers like
      * Pnext and Pback because aItem is not changed in the linked list
      * @param aImage = the item image which contains data to swap

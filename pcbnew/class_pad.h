@@ -123,8 +123,7 @@ public:
     void ExportTo( DRAWSEGMENT* aTarget );
 
     /** Export the PAD_CS_PRIMITIVE parameters to a EDGE_MODULE
-     * useful to convert a primitive shape to a EDGE_MODULE shape for edition
-     * in footprint editor
+     * useful to convert a primitive shape to a EDGE_MODULE shape for editing in footprint editor
      * @param aTarget is the EDGE_MODULE to initialize
      */
     void ExportTo( EDGE_MODULE* aTarget );

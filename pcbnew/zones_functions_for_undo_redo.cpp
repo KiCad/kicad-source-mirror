@@ -28,18 +28,17 @@
 
 
 /* These functions are relative to undo redo function, when zones are involved.
- * When a zone outline is modified (or created) this zone, or others zones on the same layer
- * and with the same netcode can change or can be deleted
- * This is due to the fact overlapping zones are merged
- * Also, when a zone outline is modified by adding a cutout area,
- * this zone can be converted to more than one area, if the outline is break to 2 or more outlines
- * and therefore new zones are created
  *
- * Due to the complexity of potential changes, and the fact there are only few zones
- * in a board, and a zone has only few segments outlines, the more easy way to
- * undo redo changes is to make a copy of all zones that can be changed
- * and see after zone edition or creation what zones that are really modified,
- * and ones they are modified (changes, deletion or addition)
+ * When a zone outline is modified (or created) this zone, or others zones on the same layer
+ * and with the same netcode can change or can be deleted due to the fact overlapping zones are
+ * merged.  Also, when a zone outline is modified by adding a cutout area, this zone can be
+ * converted to more than one area, if the outline is break to 2 or more outlines and therefore
+ * new zones are created
+ *
+ * Due to the complexity of potential changes, and the fact there are only few zones in a board,
+ * and a zone has only few segments outlines, the more easy way to undo redo changes is to make
+ * a copy of all zones that can be changed and see after zone editing or creation what zones that
+ * are really modified, and ones they are modified (changes, deletion or addition)
  */
 
 #include <fctsys.h>
@@ -127,7 +126,7 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
  * creates a copy of zones having a given netcode on a given layer,
  * and fill a pick list with pickers to handle these copies
  * the UndoRedo status is set to UR_CHANGED for all items in list
- * Later, UpdateCopyOfZonesList will change and update these pickers after a zone edition
+ * Later, UpdateCopyOfZonesList will change and update these pickers after a zone editing
  * @param aPickList = the pick list
  * @param aPcb = the Board
  * @param aNetCode = the reference netcode. if aNetCode < 0 all netcodes are used
@@ -165,10 +164,9 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
 
 /**
  * Function UpdateCopyOfZonesList
- * check a pick list to remove zones identical to their copies
- * and set the type of operation in picker (UR_DELETED, UR_CHANGED)
- * if an item is deleted, the initial values are retrievered,
- * because they can have changed in edition
+ * Check a pick list to remove zones identical to their copies and set the type of operation in
+ * picker (UR_DELETED, UR_CHANGED).  If an item is deleted, the initial values are retrievered,
+ * because they can have changed during editing.
  * @param aPickList = the main pick list
  * @param aAuxiliaryList = the list of deleted or added (new created) items after calculations
  * @param aPcb = the Board

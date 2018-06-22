@@ -83,7 +83,7 @@ void PL_EDITOR_FRAME::SaveCopyInUndoList()
 }
 
 
-/* Redo the last edition:
+/* Redo the last edit:
  * - Place the current edited layout in undo list
  * - Get previous version of the current edited layput
  */
@@ -115,7 +115,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList( wxCommandEvent& event )
 }
 
 
-/* Undo the last edition:
+/* Undo the last edit:
  * - Place the current layout in Redo list
  * - Get previous version of the current edited layout
  */

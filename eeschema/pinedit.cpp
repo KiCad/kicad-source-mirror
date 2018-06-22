@@ -433,7 +433,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin )
     int      ii;
     LIB_PIN* newPin;
 
-    // if "synchronize pins edition" option is off, do not create any similar pin for other
+    // if "synchronize pins editing" option is off, do not create any similar pin for other
     // units and/or shapes: each unit is edited regardless other units or body
     if( !SynchronizePins() )
         return;
@@ -443,7 +443,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin )
 
     // When units are interchangeable, all units are expected to have similar pins
     // at the same position
-    // to facilitate pin edition, create pins for all other units for the current body style
+    // to facilitate pin editing, create pins for all other units for the current body style
     // at the same position as aPin
 
     for( ii = 1; ii <= aPin->GetParent()->GetUnitCount(); ii++ )

@@ -913,7 +913,7 @@ public:
     /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
-     * Must be called after a Design Rules edition, or after reading a netlist (or editing
+     * Must be called after a Design Rules edit, or after reading a netlist (or editing
      * the list of nets)  Also this function removes the non existing nets in netclasses
      * and add net nets in default netclass (this happens after reading a netlist)
      */
@@ -1262,7 +1262,7 @@ public:
      *                   integrated circuits from the pads connected to this track to the
      *                   die (if any) (can be NULL).
      * @param aReorder true for reorder the interesting segments (useful for
-     *                 track edition/deletion) in this case the flag BUSY is
+     *                 track editing/deleting) in this case the flag BUSY is
      *                 set (the user is responsible of flag clearing). False
      *                 for no reorder : useful when we want just calculate the
      *                 track length in this case, flags are reset

@@ -1278,7 +1278,7 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
     /* retvalue =
      *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_ABORT if abort,
      *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_EXCHANGE_FP if exchange module,
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edition
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edit
      *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_MODEDIT for a goto editor command
      */
 

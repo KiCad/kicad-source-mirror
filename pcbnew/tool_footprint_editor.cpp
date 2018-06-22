@@ -102,7 +102,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ),
-                            _( "Undo last edition" ) );
+                            _( "Undo last edit" ) );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ),
                             _( "Redo last undo command" ) );
 

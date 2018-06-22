@@ -84,8 +84,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         AddMenusForBlock( PopMenu, this );
         PopMenu->AppendSeparator();
 
-        // If we have a block containing only one main element
-        // we append its edition submenu
+        // If we have a block containing only one main element we append its edit submenu
         if( item != NULL )
         {
             switch( item->Type() )

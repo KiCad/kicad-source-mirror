@@ -263,12 +263,11 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
 
     // Ensure the current alias name is valid if a part is loaded
-    // Sometimes it is not valid. This is the case
-    // when a part value (the part lib name), or the alias list was modified
-    // during a previous session and the modifications not saved in lib.
-    // Reopen libedit in a new session gives a non valid m_aliasName
-    // because the curr part is reloaded from the library (and this is the unmodified part)
-    // and the old alias name (from the previous edition) can be invalid
+    // Sometimes it is not valid. This is the case when a part value (the part lib name), or
+    // the alias list was modified during a previous session and the modifications not saved
+    // in lib.  Reopen libedit in a new session gives a non valid m_aliasName because the curr
+    // part is reloaded from the library (and this is the unmodified part) and the old alias
+    // name (from the previous session) can be invalid
     LIB_PART* part = GetCurPart();
 
     if( part == NULL )
@@ -1450,8 +1449,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
 
         part->RemoveDrawItem( (LIB_ITEM*) pin, m_canvas, aDC );
 
-        // when pin edition is synchronized, all pins of the same body style
-        // are removed:
+        // when pin editing is synchronized, all pins of the same body style are removed:
         if( SynchronizePins() )
         {
             int curr_convert = pin->GetConvert();

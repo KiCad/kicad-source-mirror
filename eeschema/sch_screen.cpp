@@ -709,7 +709,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
             // Clear the modified component flag set by component->ClearAnnotation
             // because we do not use it here and we should not leave this flag set,
-            // when an edition is finished:
+            // when an editing is finished:
             component->ClearFlags();
         }
     }

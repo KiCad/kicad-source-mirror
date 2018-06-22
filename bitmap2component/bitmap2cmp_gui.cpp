@@ -125,7 +125,7 @@ private:
     // called when texts controls which handle the image resolution
     // lose the focus, to ensure the right values are displayed
     // because the m_imageDPI are clipped to acceptable values, and
-    // the text displayed could be differ during text edition
+    // the text displayed could be differ during text editing
     // We are using ChangeValue here to avoid generating a wxEVT_TEXT event.
     void UpdateDPITextValueX( wxMouseEvent& event )
     {

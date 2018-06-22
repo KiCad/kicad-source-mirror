@@ -228,7 +228,7 @@ void PCB_EDIT_FRAME::Files_io_from_id( int id )
 {
     wxString   msg;
 
-    // If an edition is in progress, stop it.
+    // If an edit is in progress, stop it.
     // For something else than save, get rid of current tool.
     if( id == ID_SAVE_BOARD )
         m_canvas->EndMouseCapture( -1, m_canvas->GetDefaultCursor() );

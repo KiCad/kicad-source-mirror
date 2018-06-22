@@ -606,8 +606,8 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         // Fall through
     case HK_EDIT:
-        // Edit schematic item. Do not allow sheet edition when mowing
-        // Because a sheet edition can be complex.
+        // Edit schematic item. Do not allow sheet editing when mowing because sheet editing
+        // can be complex.
         if( itemInEdit && screen->GetCurItem()->Type() == SCH_SHEET_T )
                 break;
 

@@ -106,7 +106,7 @@ public:
 
     bool IsParentFlipped() const;
 
-    /// Mirror text position in footprint edition
+    /// Mirror text position in footprint editing
     /// the text itself is not mirrored, and the layer not modified,
     /// only position is mirrored.
     /// (use Flip to change layer to its paired and mirror the text in fp editor).

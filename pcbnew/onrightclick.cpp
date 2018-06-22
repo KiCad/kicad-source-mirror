@@ -517,7 +517,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                      _( "Place Node" ), KiBitmap( checked_ok_xpm ) );
         return;
     }
-    else // Edition in progress
+    else // Edit in progress
     {
         if( flags & IS_NEW )
         {

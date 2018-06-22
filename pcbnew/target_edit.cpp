@@ -53,11 +53,8 @@ static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel,
 // Local variables :
 static int        MireDefaultSize = Millimeter2iu( 5 );
 
-static PCB_TARGET s_TargetCopy( NULL ); /* Used to store "old" values of the
-                                         * current item parameters before
-                                         * edition (used in undo/redo or
-                                         * cancel operations)
-                                         */
+static PCB_TARGET s_TargetCopy( NULL ); // Used to store "old" values of the current item
+                                        // parameters before editing for undo/redo/cancel
 
 /**********************************/
 /* class DIALOG_TARGET_PROPERTIES */
@@ -131,7 +128,7 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
     // Save old item in undo list, if is is not currently edited (will be later if so)
     bool pushCommit = ( m_Target->GetFlags() == 0 );
 
-    if( m_Target->GetFlags() != 0 )         // other edition in progress (MOVE, NEW ..)
+    if( m_Target->GetFlags() != 0 )         // other edit in progress (MOVE, NEW ..)
         m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
     // undo/redo/abort proper operation
 

@@ -266,7 +266,7 @@ public:
 
     /**
      * Function SetSelected
-     * Toggles on/off the selected flag (used in edition functions
+     * Toggles on/off the selected flag (used in editing functions)
      * @param aState = the flag value
      */
     void SetSelected( bool aState )

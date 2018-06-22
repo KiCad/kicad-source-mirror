@@ -45,10 +45,8 @@ static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aP
 static void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
-static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); /* copy of the edited text
-                                                    * (used to undo/redo/abort
-                                                    * a complex edition command
-                                                    */
+static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); // copy of the edited text used to
+                                                   // undo/redo/abort a complex edit command
 
 
 /*

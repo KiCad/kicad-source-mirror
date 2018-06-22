@@ -279,7 +279,6 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     return true;
 }
 
-// Add menu items for pin edition
 void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 {
     bool selected    = Pin->IsSelected();

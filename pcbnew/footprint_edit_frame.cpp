@@ -64,6 +64,7 @@
 #include <dialogs/panel_modedit_display_options.h>
 #include <dialog_configure_paths.h>
 
+#include <tools/position_relative_tool.h>
 #include "tools/selection_tool.h"
 #include "tools/edit_tool.h"
 #include "tools/drawing_tool.h"

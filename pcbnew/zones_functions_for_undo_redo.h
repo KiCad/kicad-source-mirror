@@ -28,19 +28,18 @@
 
 
 /* These functions are relative to undo redo function, when zones are involved.
- * When a zone outline is modified (or created) this zone, or others zones on the same layer
- * and with the same netcode can change or can be deleted
- * This is due to the fact overlapping zones are merged
- * Also, when a zone outline is modified by adding a cutout area,
- * this zone can be converted to more than one area, if the outline is break to 2 or more outlines
- * and therefore new zones are created
  *
- * Due to the complexity of potential changes, and the fact there are only few zones
- * in a board, and a zone has only few segments outlines, the more easy way to
- * undo redo changes is to make a copy of all zones that can be changed
- * and see after zone edition or creation what zones that are really modified,
- * and ones they are modified (changes, deletion or addition)
-*/
+ * When a zone outline is modified (or created) this zone, or others zones on the same layer
+ * and with the same netcode can change or can be deleted due to the fact overlapping zones are
+ * merged.  Also, when a zone outline is modified by adding a cutout area, this zone can be
+ * converted to more than one area, if the outline is break to 2 or more outlines and therefore
+ * new zones are created
+ *
+ * Due to the complexity of potential changes, and the fact there are only few zones in a board,
+ * and a zone has only few segments outlines, the more easy way to undo redo changes is to make
+ * a copy of all zones that can be changed and see after zone editing or creation what zones that
+ * are really modified, and ones they are modified (changes, deletion or addition)
+ */
 
 #ifndef ZONES_FUNCTIONS_TO_UNDO_REDO_H
 #define ZONES_FUNCTIONS_TO_UNDO_REDO_H

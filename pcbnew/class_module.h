@@ -741,7 +741,7 @@ private:
     timestamp_t m_LastEditTime;
     int m_arflag;           ///< Use to trace ratsnest and auto routing.
     double m_Surface;       ///< Bounding box area
-    timestamp_t m_Link;     ///< Temporary logical link used in edition
+    timestamp_t m_Link;     ///< Temporary logical link used during editing
     int m_CntRot90;         ///< Horizontal automatic placement cost ( 0..10 ).
     int m_CntRot180;        ///< Vertical automatic placement cost ( 0..10 ).
 

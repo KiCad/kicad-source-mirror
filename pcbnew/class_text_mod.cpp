@@ -121,7 +121,7 @@ bool TEXTE_MODULE::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccu
 
 void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    // Used in footprint edition
+    // Used in footprint editing
     // Note also in module editor, m_Pos0 = m_Pos
 
     wxPoint pt = GetTextPos();

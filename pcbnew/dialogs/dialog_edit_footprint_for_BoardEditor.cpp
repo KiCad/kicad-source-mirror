@@ -657,7 +657,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
 
     m_footprint->CalculateBoundingBox();
 
-    // This is a simple edition, we must create an undo entry
+    // This is a simple edit, we must create an undo entry
     if( m_footprint->GetFlags() == 0 )
         commit.Push( _( "Modify module properties" ) );
 

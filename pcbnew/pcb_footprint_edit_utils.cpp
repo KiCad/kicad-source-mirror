@@ -294,7 +294,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     OnModify();
 
-    if( !Module->IsMoving() ) /* This is a simple flip, no other edition in progress */
+    if( !Module->IsMoving() )        // This is a simple flip, no other edit in progress
     {
 
         if( DC )
@@ -439,10 +439,9 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
 
     OnModify();
 
-    if( !module->IsMoving() ) /* This is a simple rotation, no other
-                                           * edition in progress */
+    if( !module->IsMoving() )         // This is a simple rotation, no other edit in progress
     {
-        if( DC )                          // Erase footprint to screen
+        if( DC )                      // Erase footprint to screen
         {
             module->SetFlags( DO_NOT_DRAW );
             m_canvas->RefreshDrawingRect( module->GetBoundingBox() );

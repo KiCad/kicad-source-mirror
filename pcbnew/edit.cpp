@@ -300,7 +300,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_DRC_CONTROL:
-        // Shows the DRC dialog in non modal mode, to allows board edition
+        // Shows the DRC dialog in non modal mode, to allows board editing
         // with the DRC dialog opened and showing errors.
         m_drc->ShowDRCDialog();
         break;

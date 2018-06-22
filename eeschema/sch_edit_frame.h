@@ -1314,7 +1314,7 @@ private:
     void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
 
     /**
-     *  Redo the last edition.
+     *  Redo the last edit.
      *
      *  - Save the current schematic in Undo list
      *  - Get an old version of the schematic from Redo list
@@ -1324,7 +1324,7 @@ private:
     void GetSchematicFromRedoList( wxCommandEvent& event );
 
     /**
-     * Perform an undo the last edition.
+     * Perform an undo the last edit.
      *
      *  - Save the current schematic in Redo list
      *  - Get an old version of the schematic from Undo list

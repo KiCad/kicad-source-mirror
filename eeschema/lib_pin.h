@@ -349,7 +349,7 @@ public:
      * @param aEnable = true marks all common pins for editing mode.  False
      *                clears the editing mode.
      * @param aEditPinByPin == true enables the edit pin by pin mode.
-     * aEditPinByPin == false enables the pin edition coupling between pins at the same location
+     * aEditPinByPin == false enables the pin edit coupling between pins at the same location
      * if aEnable == false, aEditPinByPin is not used
      */
     void EnableEditMode( bool aEnable, bool aEditPinByPin = false );
@@ -464,7 +464,7 @@ public:
 
     /**
      * move this and all linked pins to the new position
-     * used in pin edition.
+     * used in pin editing.
      * use SetPinPosition to set the position of this only
      * @param aPosition is the new position of this and linked pins
      */

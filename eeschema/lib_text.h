@@ -43,7 +43,7 @@
  */
 class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
 {
-    wxString m_savedText;         ///< Temporary storage for the string when edition.
+    wxString m_savedText;         ///< Temporary storage for the string when editing.
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
     bool m_updateText;            ///< Flag to indicate text change occurred while editing.
 

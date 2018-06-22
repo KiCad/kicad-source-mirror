@@ -206,7 +206,7 @@ public:
     bool       m_TextItalic[ LAYER_CLASS_COUNT ];
     bool       m_TextUpright[ LAYER_CLASS_COUNT ];
 
-    // Variables used in footprint edition (default value in item/footprint creation)
+    // Variables used in footprint editing (default value in item/footprint creation)
 
     wxString   m_RefDefaultText;            ///< Default ref text on fp creation
                                             // if empty, use footprint name as default

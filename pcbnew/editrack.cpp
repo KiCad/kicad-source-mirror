@@ -51,7 +51,7 @@ static void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList );
 static void EnsureEndTrackOnPad( D_PAD* Pad );
 
 // A PICKED_ITEMS_LIST to store tracks  which are modified/added/deleted
-// during a track edition:
+// during a track editing:
 static PICKED_ITEMS_LIST s_ItemsListPicker;
 
 

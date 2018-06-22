@@ -103,7 +103,7 @@
 
 /* Used if undo / redo command:
  * swap data between Item and its copy, pointed by its picked item link member
- * swapped data is data modified by edition, so not all values are swapped
+ * swapped data is data modified by editing, so not all values are swapped
  */
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
