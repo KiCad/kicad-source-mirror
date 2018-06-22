@@ -551,10 +551,10 @@ public:
       * Function SetFilledPolysList
       * sets the list of filled polygons.
       */
-     void SetRawPolysList( SHAPE_POLY_SET& aPolysList )
-     {
-         m_RawPolysList = aPolysList;
-     }
+    void SetRawPolysList( SHAPE_POLY_SET& aPolysList )
+    {
+        m_RawPolysList = aPolysList;
+    }
 
 
     /**

@@ -944,10 +944,10 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
-        wxPoint a ( m_FillSegmList[ic].A );
+        wxPoint a( m_FillSegmList[ic].A );
         RotatePoint( &a, centre, angle );
         m_FillSegmList[ic].A = a;
-        wxPoint b ( m_FillSegmList[ic].B );
+        wxPoint b( m_FillSegmList[ic].B );
         RotatePoint( &b, centre, angle );
         m_FillSegmList[ic].B = a;
     }
@@ -989,7 +989,7 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
         MIRROR( m_FillSegmList[ic].A.y, mirror_ref.y );
-        MIRROR( m_FillSegmList[ic].B.y,   mirror_ref.y );
+        MIRROR( m_FillSegmList[ic].B.y, mirror_ref.y );
     }
 }
 
@@ -1303,6 +1303,7 @@ BITMAP_DEF ZONE_CONTAINER::GetMenuImage() const
     return add_zone_xpm;
 }
 
+
 void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_ZONE_AREA_T );
@@ -1310,10 +1311,12 @@ void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
     std::swap( *((ZONE_CONTAINER*) this), *((ZONE_CONTAINER*) aImage) );
 }
 
+
 void ZONE_CONTAINER::CacheTriangulation()
 {
     m_FilledPolysList.CacheTriangulation();
 }
+
 
 bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
 {

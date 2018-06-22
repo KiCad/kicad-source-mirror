@@ -609,7 +609,6 @@ class SHAPE_POLY_SET : public SHAPE
             return m_triangulatedPolys[aIndex].get();
         }
 
-
         const SHAPE_LINE_CHAIN& COutline( int aIndex ) const
         {
             return m_polys[aIndex][0];

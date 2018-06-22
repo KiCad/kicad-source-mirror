@@ -1863,16 +1863,14 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
 }
 
 
-
-
 class SHAPE_POLY_SET::TRIANGULATION_CONTEXT
 {
 public:
 
     TRIANGULATION_CONTEXT( TRIANGULATED_POLYGON* aResultPoly ) :
-        m_triPoly( aResultPoly )
-        {
-        }
+    m_triPoly( aResultPoly )
+    {
+    }
 
     void AddOutline( const SHAPE_LINE_CHAIN& outl, bool aIsHole = false )
     {
@@ -1887,9 +1885,7 @@ public:
         if ( aIsHole )
             m_cdt->AddHole( m_points );
         else
-        {
             m_cdt.reset( new p2t::CDT( m_points ) );
-        }
     }
 
     void Triangulate()
@@ -2014,6 +2010,7 @@ void SHAPE_POLY_SET::triangulateSingle( const POLYGON& aPoly,
 
     aResult.AllocateVertices( totalVertexCount( aPoly ) );
     ctx.AddOutline( aPoly[0], false );
+
     for( unsigned i = 1; i < aPoly.size(); i++ )
     {
         ctx.AddOutline( aPoly[i], true ); // add holes

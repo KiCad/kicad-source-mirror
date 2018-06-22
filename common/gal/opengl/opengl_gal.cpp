@@ -797,13 +797,13 @@ void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
     drawPolygon( points.get(), aListSize );
 }
 
+
 void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
 {
     currentManager->Shader( SHADER_NONE );
     currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
-
-    if ( isFillEnabled )
+    if( isFillEnabled )
     {
         for( int j = 0; j < aPolySet.OutlineCount(); ++j )
         {
