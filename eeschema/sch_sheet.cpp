@@ -389,15 +389,16 @@ int SCH_SHEET::GetPenSize() const
 wxPoint SCH_SHEET::GetSheetNamePosition()
 {
     wxPoint pos = m_pos;
+    int      margin = KiROUND( GetPenSize() / 2.0 + 4 + m_sheetNameSize * 0.3 );
 
     if( IsVerticalOrientation() )
     {
-        pos.x -= 8;
+        pos.x -= margin;
         pos.y += m_size.y;
     }
     else
     {
-        pos.y -= 8;
+        pos.y -= margin;
     }
 
     return pos;
@@ -407,7 +408,7 @@ wxPoint SCH_SHEET::GetSheetNamePosition()
 wxPoint SCH_SHEET::GetFileNamePosition()
 {
     wxPoint  pos = m_pos;
-    int      margin = GetPenSize() + 4;
+    int      margin = KiROUND( GetPenSize() / 2.0 + 4 + m_fileNameSize * 0.4 );
 
     if( IsVerticalOrientation() )
     {
