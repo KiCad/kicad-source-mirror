@@ -433,6 +433,8 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     wxPoint  pos_sheetname,pos_filename;
     wxPoint  pos = m_pos + aOffset;
     int      lineWidth = GetPenSize();
+    int      textWidth;
+    wxSize   textSize;
     EDA_RECT* clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
     if( aColor != COLOR4D::UNSPECIFIED )
@@ -460,10 +462,12 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         txtcolor = GetLayerColor( LAYER_SHEETNAME );
 
     Text = wxT( "Sheet: " ) + m_name;
+    textSize = wxSize( m_sheetNameSize, m_sheetNameSize );
+    textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
     DrawGraphicText( clipbox, aDC, pos_sheetname,
                      txtcolor, Text, name_orientation,
-                     wxSize( m_sheetNameSize, m_sheetNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, lineWidth,
+                     textSize,
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, textWidth,
                      false, false );
 
     /* Draw text : FileName */
@@ -473,10 +477,12 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         txtcolor = GetLayerColor( LAYER_SHEETFILENAME );
 
     Text = wxT( "File: " ) + m_fileName;
+    textSize = wxSize( m_fileNameSize, m_fileNameSize );
+    textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
     DrawGraphicText( clipbox, aDC, pos_filename,
                      txtcolor, Text, name_orientation,
-                     wxSize( m_fileNameSize, m_fileNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, lineWidth,
+                     textSize,
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, textWidth,
                      false, false );
 
     /* Draw text : SheetLabel */
