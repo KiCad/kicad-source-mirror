@@ -548,6 +548,9 @@ class SHAPE_POLY_SET : public SHAPE
          */
         bool IsSelfIntersecting();
 
+        ///> Returns the number of triangulated polygons
+        unsigned int TriangulatedPolyCount() const { return m_triangulatedPolys.size(); }
+
         ///> Returns the number of outlines in the set
         int OutlineCount() const { return m_polys.size(); }
 

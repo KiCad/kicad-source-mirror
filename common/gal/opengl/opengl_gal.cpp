@@ -805,7 +805,7 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
 
     if( isFillEnabled )
     {
-        for( int j = 0; j < aPolySet.OutlineCount(); ++j )
+        for( unsigned int j = 0; j < aPolySet.TriangulatedPolyCount(); ++j )
         {
             auto triPoly = aPolySet.TriangulatedPolygon( j );
 
