@@ -163,6 +163,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         wxString newMsg;
         wxString noUndoMsg;
 
+        // Changing the filename of a sheet can modify the full hierarchy structure
+        // and can be not always undoable.
+        // So prepare messages for user notifications:
         replaceMsg.Printf( _( "Change \"%s\" link from \"%s\" to \"%s\"?" ),
                 dlg.GetSheetName(), aSheet->GetFileName(), fileName.GetFullName() );
         newMsg.Printf( _( "Create new file \"%s\" with contents of \"%s\"?" ),
@@ -174,9 +177,15 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         // filenames are case sensitive.
         // But many users create schematic under both Unix and Windows
         // **
-        // N.B. aSheet->GetFileName() will return a relative path
-        //      aSheet->GetScreen()->GetFileName() returns a full path
-        if( newFilename.CmpNoCase( aSheet->GetScreen()->GetFileName() ) != 0 )
+        // N.B. 1: aSheet->GetFileName() will return a relative path
+        //         aSheet->GetScreen()->GetFileName() returns a full path
+        //
+        // N.B. 2: newFilename uses the unix notation for separator.
+        //         so we must use it also to compare the old filename to the new filename
+        wxString oldFilename = aSheet->GetScreen()->GetFileName();
+        oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
+        if( newFilename.CmpNoCase( oldFilename ) != 0 )
         {
             // Sheet file name changes cannot be undone.
             isUndoable = false;
