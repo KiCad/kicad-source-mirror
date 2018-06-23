@@ -159,7 +159,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             _( "Perform electrical rules check" ) );
 
     m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiScaledBitmap( cvpcb_xpm, this ),
-                            _( "Run CvPcb to associate footprints to symbols" ) );
+                            _( "Assign PCB footprints to schematic symbols" ) );
 
     m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiScaledBitmap( netlist_xpm, this ),
                             _( "Generate netlist" ) );
