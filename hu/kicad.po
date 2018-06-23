@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-20 17:40+0200\n"
+"PO-Revision-Date: 2018-06-24 01:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -163,7 +163,7 @@ msgstr "Alias"
 #: pcbnew/footprint_libraries_utils.cpp:713
 #: pcbnew/footprint_libraries_utils.cpp:899
 msgid "Description"
-msgstr "Tulajdonságok"
+msgstr "Leírás"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:107
 msgid "Add Alias"
@@ -578,7 +578,7 @@ msgstr "&Méretre igazítás"
 #: gerbview/menubar.cpp:210 pcbnew/menubar_footprint_editor.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:625 pcbnew/tool_footprint_viewer.cpp:159
 msgid "&Redraw"
-msgstr "Képernyő újrarajzolás"
+msgstr "Újra rajzol"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:94 3d-viewer/3d_viewer/3d_toolbar.cpp:92
 msgid "Rotate X Clockwise"
@@ -846,7 +846,7 @@ msgstr "Nyáktervező felhasználói kézikönyv megnyitása"
 #: pagelayout_editor/menubar.cpp:207 pcbnew/menubar_footprint_editor.cpp:490
 #: pcbnew/menubar_pcb_editor.cpp:472 pcbnew/tool_footprint_viewer.cpp:180
 msgid "&Getting Started in KiCad"
-msgstr "Első lépések a KiCad-ben"
+msgstr "Első lépések a KiCad-ben..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:328 cvpcb/menubar.cpp:98
 #: eeschema/menubar.cpp:643 kicad/menubar.cpp:446
@@ -858,7 +858,7 @@ msgstr "Az \"Első lépések a KiCAD -ban\" útmutató kezdőknek megnyitása"
 #: eeschema/menubar_libedit.cpp:333 gerbview/menubar.cpp:368
 #: pcbnew/menubar_footprint_editor.cpp:494 pcbnew/menubar_pcb_editor.cpp:476
 msgid "&List Hotkeys..."
-msgstr "Gyorsbillentyűk Listája..."
+msgstr "Gyorsbillentyűk listája"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:334 eeschema/menubar_libedit.cpp:337
 #: gerbview/menubar.cpp:371 kicad/menubar.cpp:452
@@ -872,7 +872,7 @@ msgstr "Gyorsbillentyűk és a hozzájuk tartozó parancsok megjelenítése"
 #: pagelayout_editor/menubar.cpp:218 pcbnew/menubar_footprint_editor.cpp:503
 #: pcbnew/menubar_pcb_editor.cpp:485
 msgid "Get &Involved"
-msgstr "Részese lenni"
+msgstr "KiCad-hez csatlakozás"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:341 eeschema/menubar.cpp:656
 #: eeschema/menubar_libedit.cpp:343 eeschema/tool_viewlib.cpp:217
@@ -888,7 +888,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:228 pcbnew/menubar_footprint_editor.cpp:510
 #: pcbnew/menubar_pcb_editor.cpp:492
 msgid "&About KiCad"
-msgstr "A Kicad-ről"
+msgstr "A KiCad-ről"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:348 pcbnew/menubar_pcb_editor.cpp:493
 msgid "Display KiCad About dialog"
@@ -936,7 +936,7 @@ msgstr "Nézet újrarajzolás"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:87
 msgid "Zoom to fit 3D model"
-msgstr "Nyagítása a 3d modellhez"
+msgstr "Nagyítása a 3d modellhez"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:131
 msgid "Enable/Disable orthographic projection"
@@ -1237,7 +1237,7 @@ msgstr "Kép betöltése"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:124 eeschema/lib_edit_frame.cpp:1253
 msgid "Export"
-msgstr "Export"
+msgstr "Exportolás"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:125
 msgid ""
@@ -1995,7 +1995,7 @@ msgstr "Visszaállítás"
 
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:33
 msgid "Defaults"
-msgstr "Defauts"
+msgstr "Alapértékek"
 
 #: common/dialogs/dialog_hotkeys_editor_base.h:53
 msgid "Hotkeys Editor"
@@ -2296,7 +2296,7 @@ msgstr "Papír elrendezés fájl"
 
 #: common/dialogs/dialog_page_settings_base.h:119
 msgid "Page Settings"
-msgstr "Oldalbeállítások"
+msgstr "Lap beállítások"
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 msgid "MyLabel"
@@ -2720,7 +2720,7 @@ msgstr "A gyorsbillentyűk listájának szerkesztése"
 
 #: common/hotkeys_basic.cpp:827 eeschema/menubar.cpp:708
 msgid "E&xport Hotkeys..."
-msgstr "Gyorsbillentyű beállítások mentése..."
+msgstr "Gyorsbillentyű beállítások mentése"
 
 #: common/hotkeys_basic.cpp:828 eeschema/menubar.cpp:709
 msgid "Export current hotkeys into configuration file"
@@ -2728,7 +2728,7 @@ msgstr "Az aktuális gyorsbillentyűk konfigurációs fájlba exportálása"
 
 #: common/hotkeys_basic.cpp:833 eeschema/menubar.cpp:714
 msgid "&Import Hotkeys..."
-msgstr "Gyorsbillentyű beállítások betöltése..."
+msgstr "Gyorsbillentyű beállítások betöltése"
 
 #: common/hotkeys_basic.cpp:834 eeschema/menubar.cpp:715
 msgid "Load existing hotkey configuration file"
@@ -3033,7 +3033,7 @@ msgstr "Nagyítás képernyőméretre"
 #: pagelayout_editor/menubar.cpp:134 pcbnew/hotkeys.cpp:198
 #: pcbnew/menubar_footprint_editor.cpp:231 pcbnew/menubar_pcb_editor.cpp:621
 msgid "Zoom to Selection"
-msgstr "Nagyítás a kijelöléshez"
+msgstr "Kijelölésre nagyítás"
 
 #: common/tool/common_tools.cpp:39
 msgid "Toggle Always Show Cursor"
@@ -3077,31 +3077,31 @@ msgstr "Egyéb..."
 
 #: common/widgets/gal_options_panel.cpp:75
 msgid " (not supported in Legacy Toolset)"
-msgstr ""
+msgstr "(a Legacy Toolset nem támogatja)"
 
 #: common/widgets/gal_options_panel.cpp:83
 msgid "Accelerated Graphics:"
-msgstr ""
+msgstr "Grafika gyorsítás élsimítás:"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "No Antialiasing"
-msgstr ""
+msgstr "Nincs  élsimítás"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Subpixel Antialiasing (High Quality)"
-msgstr ""
+msgstr "Szubpixeles élsimítás (Magas minőség)"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Subpixel Antialiasing (Ultra Quality)"
-msgstr ""
+msgstr "Szubpixeles élsimítás (Ultra minőség)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid "Supersampling (2x)"
-msgstr ""
+msgstr "SSAA élsimítás (2x)"
 
 #: common/widgets/gal_options_panel.cpp:90
 msgid "Supersampling (4x)"
-msgstr ""
+msgstr "SSAA élsimítás (4x)"
 
 #: common/widgets/gal_options_panel.cpp:107
 msgid "Grid Options"
@@ -3109,7 +3109,7 @@ msgstr "Rács beállítások"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Dots"
-msgstr "Pontok"
+msgstr "Pöttyök"
 
 #: common/widgets/gal_options_panel.cpp:111
 #: pcbnew/autorouter/auto_place_footprints.cpp:476
@@ -3122,7 +3122,7 @@ msgstr "Kis kereszt"
 
 #: common/widgets/gal_options_panel.cpp:116
 msgid "Grid style:"
-msgstr "Rács stílus:"
+msgstr "Rács stílusa:"
 
 #: common/widgets/gal_options_panel.cpp:128
 msgid "Grid thickness:"
@@ -3147,7 +3147,7 @@ msgstr "Kicsi célkereszt"
 
 #: common/widgets/gal_options_panel.cpp:197
 msgid "Full window crosshair"
-msgstr "Teljes képernyős célkereszt megjelenítése / elrejtése"
+msgstr "Teljes képernyős célkereszt"
 
 #: common/widgets/gal_options_panel.cpp:200
 msgid "Cursor shape:"
@@ -3159,7 +3159,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:214
 msgid "Always display crosshairs"
-msgstr ""
+msgstr "Mindig mutassa a célkeresztet"
 
 #: common/widgets/gal_options_panel.cpp:219
 msgid "Always display crosshairs (not in Legacy)"
@@ -3699,7 +3699,7 @@ msgstr "Rajz beállítások:"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
 msgid "Graphic items sketch mode"
-msgstr "Grafikus elemek megjelenítése vázlat módban"
+msgstr "Elemek megjelenítése vázlat módban"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:28
 msgid "Texts sketch mode"
@@ -3875,7 +3875,7 @@ msgstr "Kapcsolási rajz mentés\tCtrl+S"
 
 #: cvpcb/menubar.cpp:67
 msgid "Configure &Paths..."
-msgstr "&Útvonalak konfigurálása"
+msgstr "Útvonalak konfigurálása..."
 
 #: cvpcb/menubar.cpp:68 eeschema/menubar.cpp:674 eeschema/menubar_libedit.cpp:292
 #: kicad/menubar.cpp:338 pcbnew/menubar_footprint_editor.cpp:435
@@ -4612,7 +4612,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_erc_base.cpp:154 include/lib_table_grid.h:195
 msgid "Options"
-msgstr "Beállítás:"
+msgstr "Beállítások"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/selpart.cpp:71
@@ -5466,7 +5466,7 @@ msgstr "Rácsméret:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:57
 msgid "&Bus thickness:"
-msgstr "Busz vastagság:"
+msgstr "Busz vonal vastagság:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:68
 msgid "&Line thickness:"
@@ -5651,7 +5651,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:305
 msgid "Controls"
-msgstr ""
+msgstr "Irányítás"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:319
 msgid "User defined field names for schematic components. "
@@ -6458,6 +6458,8 @@ msgid ""
 "Selection of the default pen thickness used to draw items, when their thickness "
 "is set to 0."
 msgstr ""
+"Az alapértelmezett tollvastagság kiválasztása elemek készítéséhez, ha "
+"vastagságuk 0-ra van állítva."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
@@ -6498,7 +6500,7 @@ msgstr "Keret és címblokk megjelenítése"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:108
 msgid "Print the frame references."
-msgstr ""
+msgstr "Lapkeret nyomtatása."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:120
 msgid "Plot Current Page"
@@ -6510,7 +6512,7 @@ msgstr "Összes lap létrehozása"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
-msgstr ""
+msgstr "Kapcsolási rajz exportálás beállításai"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:249
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
@@ -6527,7 +6529,7 @@ msgstr "Nyomtatási kép hiba!"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:301
 msgid "Print Schematic"
-msgstr "Kapcsolási rajz nyomtatása"
+msgstr "Nyomtatás"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:310
 msgid "An error occurred attempting to print the schematic."
@@ -7429,7 +7431,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:20
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
 msgid "Libraries by Scope"
-msgstr ""
+msgstr "Alkatrésztokozások"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:32
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:85
@@ -8085,11 +8087,11 @@ msgstr ""
 
 #: eeschema/help_common_strings.h:40
 msgid "Undo last command"
-msgstr "Utolsó művelet visszavonása"
+msgstr "Visszavonás"
 
 #: eeschema/help_common_strings.h:41
 msgid "Redo last command"
-msgstr "Utolsó művelet megismétlése"
+msgstr "Újra"
 
 #: eeschema/help_common_strings.h:45
 msgid "Zoom to fit schematic page"
@@ -8097,7 +8099,7 @@ msgstr "Nagyítás, hogy illeszkedjen a kapcsolási rajz oldalhoz"
 
 #: eeschema/help_common_strings.h:46
 msgid "Redraw schematic view"
-msgstr "Kapcsolási rajz nézet újrarajzolása"
+msgstr "Újra rajzolás"
 
 #: eeschema/help_common_strings.h:48 eeschema/lib_edit_frame.cpp:1265
 #: eeschema/schedit.cpp:609 pcbnew/edit.cpp:1576
@@ -8181,11 +8183,11 @@ msgstr "Hierarchikus láb hozzáadása a laphoz"
 
 #: eeschema/help_common_strings.h:73
 msgid "Place graphic lines or polygons"
-msgstr "Grafikus vonal / sokszög hozzáadása"
+msgstr "Vonal / sokszög hozzáadása"
 
 #: eeschema/help_common_strings.h:74
 msgid "Place text"
-msgstr "Grafikus szöveg hozzáadása"
+msgstr "Azöveg hozzáadása"
 
 #: eeschema/help_common_strings.h:76
 msgid "Annotate schematic symbols"
@@ -8331,11 +8333,11 @@ msgstr "Vezeték-busz csatlakozó"
 
 #: eeschema/hotkeys.cpp:151
 msgid "Add Graphic PolyLine"
-msgstr "Grafikus sokszög hozzáadása"
+msgstr "Sokszög hozzáadása"
 
 #: eeschema/hotkeys.cpp:153
 msgid "Add Graphic Text"
-msgstr "Grafikus szöveg hozzáadása"
+msgstr "Szöveg hozzáadása"
 
 #: eeschema/hotkeys.cpp:159
 msgid "Orient Normal Component"
@@ -8825,7 +8827,7 @@ msgstr "Négyszög"
 #: eeschema/lib_text.cpp:363 eeschema/sch_text.cpp:500
 #, c-format
 msgid "Graphic Text %s"
-msgstr "Grafikus szöveg %s"
+msgstr "Szöveg %s"
 
 #: eeschema/lib_text.h:70
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
@@ -9177,12 +9179,12 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:236 pcbnew/menubar_footprint_editor.cpp:519
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "&Place"
-msgstr "Hozzáadás"
+msgstr "Rajzolás"
 
 #: eeschema/menubar.cpp:118 pcbnew/menubar_footprint_editor.cpp:520
 #: pcbnew/menubar_pcb_editor.cpp:144
 msgid "&Inspect"
-msgstr ""
+msgstr "Ellenőrzések"
 
 #: eeschema/menubar.cpp:119 kicad/menubar.cpp:475
 #: pcbnew/menubar_footprint_editor.cpp:521 pcbnew/menubar_pcb_editor.cpp:145
@@ -9193,7 +9195,7 @@ msgstr "Eszközök"
 #: pagelayout_editor/menubar.cpp:237 pcbnew/menubar_footprint_editor.cpp:522
 #: pcbnew/menubar_pcb_editor.cpp:146
 msgid "P&references"
-msgstr "Tulajdonságok"
+msgstr "Opciók"
 
 #: eeschema/menubar.cpp:134
 msgid "Library &Browser"
@@ -9225,12 +9227,12 @@ msgstr "Rács megjelenítése"
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_footprint_editor.cpp:256 pcbnew/menubar_pcb_editor.cpp:646
 msgid "&Imperial"
-msgstr ""
+msgstr "Angolszász"
 
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_footprint_editor.cpp:256 pcbnew/menubar_pcb_editor.cpp:646
 msgid "Use imperial units"
-msgstr ""
+msgstr "Használjon angolszász mértékegységet"
 
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_footprint_editor.cpp:260 pcbnew/menubar_pcb_editor.cpp:650
@@ -9240,7 +9242,7 @@ msgstr "Metrikus"
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_footprint_editor.cpp:260 pcbnew/menubar_pcb_editor.cpp:650
 msgid "Use metric units"
-msgstr "Használjon metrikus mértékegységek"
+msgstr "Használjon metrikus mértékegységet"
 
 #: eeschema/menubar.cpp:205 gerbview/menubar.cpp:235
 #: pcbnew/menubar_footprint_editor.cpp:264 pcbnew/menubar_pcb_editor.cpp:654
@@ -9322,11 +9324,11 @@ msgstr ""
 
 #: eeschema/menubar.cpp:326
 msgid "Graphic Pol&yline"
-msgstr "Grafikus vonal"
+msgstr "Vonal"
 
 #: eeschema/menubar.cpp:332
 msgid "&Graphic Text"
-msgstr "Grafikus szöveg"
+msgstr "Szöveg"
 
 #: eeschema/menubar.cpp:339
 msgid "&Image"
@@ -9352,7 +9354,7 @@ msgstr "Meglévő kapcsolási rajz megnyitása"
 #: eeschema/menubar.cpp:376 kicad/menubar.cpp:246 pagelayout_editor/menubar.cpp:77
 #: pcbnew/menubar_pcb_editor.cpp:803
 msgid "Open &Recent"
-msgstr "Projekt megnyitása előzményekből"
+msgstr "Legutóbbi projektek"
 
 #: eeschema/menubar.cpp:377
 msgid "Open recently opened schematic"
@@ -9442,7 +9444,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:95 pcbnew/menubar_footprint_editor.cpp:132
 #: pcbnew/menubar_pcb_editor.cpp:930
 msgid "&Print..."
-msgstr "Nyomtatás..."
+msgstr "Nyomtatás"
 
 #: eeschema/menubar.cpp:458
 msgid "Print schematic sheet"
@@ -9465,12 +9467,12 @@ msgstr "Kapcsolási rajz szerkesztő bezárása"
 #: eeschema/menubar.cpp:478 eeschema/menubar_libedit.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:158 pcbnew/menubar_pcb_editor.cpp:503
 msgid "&Undo"
-msgstr "Utolsó müvelet visszavonása"
+msgstr "Visszavonás"
 
 #: eeschema/menubar.cpp:483 eeschema/menubar_libedit.cpp:130
 #: pcbnew/menubar_footprint_editor.cpp:164 pcbnew/menubar_pcb_editor.cpp:506
 msgid "&Redo"
-msgstr "Utolsó művelet megismétlése"
+msgstr "Újra"
 
 #: eeschema/menubar.cpp:489 pcbnew/menubar_pcb_editor.cpp:513
 msgid "&Cut"
@@ -9498,7 +9500,7 @@ msgstr "Törlés"
 
 #: eeschema/menubar.cpp:512 pcbnew/menubar_pcb_editor.cpp:535
 msgid "&Find..."
-msgstr "Keresés..."
+msgstr "Keresés"
 
 #: eeschema/menubar.cpp:516
 msgid "Find and Re&place..."
@@ -9522,7 +9524,7 @@ msgstr "Elektromos szabályellenőrző indítása"
 
 #: eeschema/menubar.cpp:544 pcbnew/menubar_pcb_editor.cpp:418
 msgid "Update PCB from Schematic..."
-msgstr "Nyákterv frissítése kapcsolási rajzból..."
+msgstr "Nyákterv frissítése a kapcsolási rajzból"
 
 #: eeschema/menubar.cpp:549
 msgid "Updates PCB design with current schematic (forward annotation)."
@@ -9616,11 +9618,11 @@ msgstr ""
 #: eeschema/menubar.cpp:673 eeschema/menubar_libedit.cpp:291 kicad/menubar.cpp:337
 #: pcbnew/menubar_footprint_editor.cpp:434 pcbnew/menubar_pcb_editor.cpp:325
 msgid "Configure Pa&ths..."
-msgstr "Útvonalak konfigurálása"
+msgstr "Útvonalak konfigurálása..."
 
 #: eeschema/menubar.cpp:680 eeschema/menubar_libedit.cpp:298
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "Alkatrész rajzjel könyvtárak kezelése..."
 
 #: eeschema/menubar.cpp:681
 msgid "Edit the global and project symbol library lists"
@@ -9636,7 +9638,7 @@ msgstr "Kapcsolási rajz szerkesztő beállításai"
 
 #: eeschema/menubar.cpp:729 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Save Project File..."
-msgstr "Projekt fájl mentése..."
+msgstr "Projekt fájl mentése"
 
 #: eeschema/menubar.cpp:730 pcbnew/menubar_pcb_editor.cpp:246
 msgid "Save project preferences into a project file"
@@ -9644,7 +9646,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:735 pcbnew/menubar_pcb_editor.cpp:250
 msgid "Load P&roject File..."
-msgstr "Projekt betöltése.."
+msgstr "Projekt fájl betöltése"
 
 #: eeschema/menubar.cpp:736 pcbnew/menubar_pcb_editor.cpp:251
 msgid "Load project preferences from a project file"
@@ -9710,11 +9712,11 @@ msgstr "Rajzjelkönyvtár szerkesztő kilépés"
 
 #: eeschema/menubar_libedit.cpp:126
 msgid "Undo last edit"
-msgstr "Utolsó művelet visszavonása"
+msgstr "Visszavonás"
 
 #: eeschema/menubar_libedit.cpp:134 pcbnew/help_common_strings.h:16
 msgid "Redo the last undo command"
-msgstr "Utolsó művelet megismétlése"
+msgstr "Újra"
 
 #: eeschema/menubar_libedit.cpp:163 eeschema/tool_lib.cpp:184
 #: eeschema/tool_viewlib.cpp:81 eeschema/tool_viewlib.cpp:189
@@ -9791,7 +9793,7 @@ msgstr "Alkatrészláb"
 
 #: eeschema/menubar_libedit.cpp:253
 msgid "Graphic &Text"
-msgstr "Grafikus szöveg"
+msgstr "Szöveg"
 
 #: eeschema/menubar_libedit.cpp:260
 msgid "&Rectangle"
@@ -9805,7 +9807,7 @@ msgstr "Kör"
 #: eeschema/menubar_libedit.cpp:274 pcbnew/menubar_footprint_editor.cpp:366
 #: pcbnew/menubar_pcb_editor.cpp:368
 msgid "&Arc"
-msgstr "Grafikus körív"
+msgstr "Körív"
 
 #: eeschema/menubar_libedit.cpp:281
 msgid "&Line or Polygon"
@@ -10721,7 +10723,7 @@ msgstr ""
 
 #: eeschema/sch_text.cpp:614
 msgid "Graphic Text"
-msgstr "Grafikus szöveg"
+msgstr "Szöveg"
 
 #: eeschema/sch_text.cpp:618 eeschema/widgets/widget_eeschema_color_config.cpp:61
 msgid "Label"
@@ -11363,7 +11365,7 @@ msgstr "Oldalbeállítás szerkesztése"
 
 #: eeschema/tool_sch.cpp:80
 msgid "Print schematic"
-msgstr "Kapcsolási rajz nyomtatása"
+msgstr "Nyomtatás"
 
 #: eeschema/tool_sch.cpp:83
 msgid "Plot schematic"
@@ -11732,7 +11734,7 @@ msgstr "Réz rétegek:"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:25
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:30
 msgid "Graphic layers:"
-msgstr "Grafikus rétegek:"
+msgstr "Rétegek:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
@@ -11832,7 +11834,7 @@ msgstr "Tükrözés:"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:36
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:129
 msgid "Print Mode:"
-msgstr "Színformátum:"
+msgstr "Rajzolási mód:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:87
 msgid ""
@@ -12201,7 +12203,7 @@ msgstr "Nincs tulajdonsága"
 
 #: gerbview/gerber_draw_item.cpp:707
 msgid "Graphic Layer"
-msgstr "Grafikus réteg:"
+msgstr "réteg:"
 
 #: gerbview/gerber_draw_item.cpp:714 pcbnew/class_module.cpp:613
 msgid "Rotation"
@@ -12249,7 +12251,7 @@ msgstr "Kép neve:"
 
 #: gerbview/gerber_file_image.cpp:346
 msgid "Graphic layer"
-msgstr "Grafikus réteg:"
+msgstr "réteg:"
 
 #: gerbview/gerber_file_image.cpp:350
 msgid "Img Rot."
@@ -12270,7 +12272,7 @@ msgstr "Kép igazítás:"
 #: gerbview/gerber_file_image_list.cpp:191
 #, c-format
 msgid "Graphic layer %d"
-msgstr "Grafikus réteg %d"
+msgstr "réteg %d"
 
 #: gerbview/gerbview_frame.cpp:212 pcbnew/pcb_edit_frame.cpp:468
 msgid ""
@@ -12326,7 +12328,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:315 pcbnew/layer_widget.cpp:497
 #: pcbnew/pcb_layer_widget.cpp:384
 msgid "Layers"
-msgstr "Fóliák"
+msgstr "Rétegek"
 
 #: gerbview/gerbview_layer_widget.cpp:96 pcbnew/layer_widget.cpp:517
 #: pcbnew/pcb_layer_widget.cpp:385
@@ -12984,15 +12986,15 @@ msgstr "Ez a fájl már meg van nyitva."
 #: include/lib_table_grid.h:190 pcbnew/footprint_libraries_utils.cpp:712
 #: pcbnew/footprint_libraries_utils.cpp:898
 msgid "Nickname"
-msgstr "Könyvtár név:"
+msgstr "Alkatrész könyvtár név"
 
 #: include/lib_table_grid.h:191
 msgid "Library Path"
-msgstr "Könyvtár útvonal"
+msgstr "Mappa útvonal"
 
 #: include/lib_table_grid.h:194
 msgid "Plugin Type"
-msgstr "Kiadó:"
+msgstr "Kiadó"
 
 #: include/lib_table_grid.h:197
 msgid "Active"
@@ -13012,7 +13014,7 @@ msgstr "Nyákterv szerkesztő"
 
 #: kicad/commandframe.cpp:87
 msgid "Footprint library editor"
-msgstr "Alkatrész könyvtár szerkesztő"
+msgstr "Alkatrésztok könyvtár szerkesztő"
 
 #: kicad/commandframe.cpp:94
 msgid "Gerber viewer"
@@ -13238,7 +13240,7 @@ msgstr "Projekt mentése"
 
 #: kicad/menubar.cpp:182
 msgid "Kicad Manager Hotkeys"
-msgstr "KiCAD menedzser gyorsbillentyűk"
+msgstr "KiCad gyorsbillentyűk"
 
 #: kicad/menubar.cpp:219
 msgid "&Project..."
@@ -13267,7 +13269,7 @@ msgstr "Új projekt létrehozása"
 
 #: kicad/menubar.cpp:235
 msgid "&Open Project..."
-msgstr "Projekt megnyitása..."
+msgstr "Projekt megnyitása"
 
 #: kicad/menubar.cpp:237
 msgid "Open an existing project"
@@ -13283,7 +13285,7 @@ msgstr "Aktuális projekt mentése"
 
 #: kicad/menubar.cpp:263
 msgid "EAGLE CAD..."
-msgstr "EAGLE CAD..."
+msgstr "EAGLE CAD"
 
 #: kicad/menubar.cpp:264
 msgid "Import EAGLE CAD XML schematic and board"
@@ -13299,7 +13301,7 @@ msgstr "Projektfájlok importálása más szoftverekből"
 
 #: kicad/menubar.cpp:280
 msgid "&Archive Project..."
-msgstr "&Projekt arhiválása..."
+msgstr "&Projekt arhiválása"
 
 #: kicad/menubar.cpp:281
 msgid "Archive all needed project files into zip archive"
@@ -13307,7 +13309,7 @@ msgstr "Backup az összes projektfájlt egy tömörített zip fájlba "
 
 #: kicad/menubar.cpp:287
 msgid "&Unarchive Project..."
-msgstr "Projektarhivum kibontása..."
+msgstr "Archivált projekt kibontása"
 
 #: kicad/menubar.cpp:288 kicad/menubar.cpp:538
 msgid "Unarchive project files from zip archive"
@@ -13335,7 +13337,7 @@ msgstr "Alapértelmezett szövegszerkesztő indítása"
 
 #: kicad/menubar.cpp:327
 msgid "&Open Local File..."
-msgstr "Helyi szövegfájl megnyitása..."
+msgstr "Szövegfájl..."
 
 #: kicad/menubar.cpp:328
 msgid "Edit local file"
@@ -13435,7 +13437,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:440
 msgid "KiCad &Manual"
-msgstr "&KiCad kézikönyv"
+msgstr "Általános"
 
 #: kicad/menubar.cpp:441
 msgid "Open KiCad user manual"
@@ -13443,7 +13445,7 @@ msgstr "KiCAD felhasználói kézikönyv megnyitása"
 
 #: kicad/menubar.cpp:451 pagelayout_editor/menubar.cpp:211
 msgid "&List Hotkeys"
-msgstr "&Gyorsbillentyűk Listája"
+msgstr "Gyorsbillentyűk listája"
 
 #: kicad/menubar.cpp:476
 msgid "&Browse"
@@ -14819,7 +14821,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1125
 #: pcbnew/pcb_layer_widget.cpp:70
 msgid "Values"
-msgstr "Eredmény:"
+msgstr "Értékek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1133
 msgid "R1"
@@ -15626,7 +15628,7 @@ msgstr "Ez az alapértelmezett vezetékosztály"
 #: pcbnew/netinfo_item.cpp:120 pcbnew/pcb_draw_panel_gal.cpp:334
 #: pcbnew/tools/pad_tool.cpp:79
 msgid "Pads"
-msgstr "Forrpont:"
+msgstr "Forrpontok"
 
 #: pcbnew/class_board.cpp:1135 pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/netinfo_item.cpp:140 pcbnew/pcb_draw_panel_gal.cpp:337
@@ -15635,7 +15637,7 @@ msgstr "Átvezetőfuratok"
 
 #: pcbnew/class_board.cpp:1138 pcbnew/pcb_draw_panel_gal.cpp:340
 msgid "Track Segments"
-msgstr "Vezetősáv szegmens"
+msgstr "Vezetősáv szegmensek:"
 
 #: pcbnew/class_board.cpp:1141 pcbnew/pcb_draw_panel_gal.cpp:343
 msgid "Nodes"
@@ -15839,7 +15841,7 @@ msgstr "Vezetéknév:"
 #: pcbnew/class_pad.cpp:736 pcbnew/class_track.cpp:1298
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:305
 msgid "Drill"
-msgstr "Furat:"
+msgstr "Furat"
 
 #: pcbnew/class_pad.cpp:744
 msgid "Drill X / Y"
@@ -17361,11 +17363,11 @@ msgstr "Adja meg a pici forrpont átmérőhöz minimálisan elfogadható érték
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:108
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "Töltse újra az összes zónát a DRC végrehajtása előtt"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:111
 msgid "Report all errors for tracks (slower)"
-msgstr ""
+msgstr "A vezetősávok összes hibájának jelentése (lassabb)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:112
 msgid ""
@@ -18014,7 +18016,7 @@ msgstr "%s jelenlegi alkatrész (%s)"
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 #, c-format
 msgid "%s footprint with reference:"
-msgstr ""
+msgstr "%s alkatrésztok referenciával:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:36
 #, c-format
@@ -18024,12 +18026,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:39
 #, c-format
 msgid "%s footprints with value:"
-msgstr ""
+msgstr "%s alkatrésztok értékel:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:45
 #, c-format
 msgid "%s footprints with identifier:"
-msgstr ""
+msgstr "%s alkatrésztok azonosítóval:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:77
 msgid "New footprint identifier:"
@@ -18037,7 +18039,7 @@ msgstr "Új alkatrésztok azonosító:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:113
 msgid "Export Footprint Associations"
-msgstr "Alkatrész társítási fájl exportolása"
+msgstr "Alkatrész társítási fájl exportálás"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
 msgid "Apply"
@@ -18888,7 +18890,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:95
 msgid "General Settings"
-msgstr "Általános beállítások"
+msgstr "Általános beállítások..."
 
 #: pcbnew/dialogs/dialog_get_footprint_base.cpp:32
 msgid "History list:"
@@ -18942,7 +18944,7 @@ msgstr "Panel körvonalai"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 msgid "Drawings"
-msgstr "Grafikus rajzok"
+msgstr "Rajzok"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 msgid "Footprints"
@@ -19295,7 +19297,7 @@ msgstr "Alapértelmezett vastagság:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:80
 msgid "Graphic Item Properties"
-msgstr "Grafikus elem tulajdonságai"
+msgstr "Elem tulajdonságai"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_fp_editor.cpp:226
 msgid ""
@@ -19321,7 +19323,7 @@ msgstr "Grafika tulajdonságok:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:27
 msgid "Graphic segment width:"
-msgstr "Grafikus szegmens szélesség:"
+msgstr "Szegmens szélesség:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:34
 msgid "Board edge width:"
@@ -19539,7 +19541,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:145
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1578
 msgid "Off-board, testing"
-msgstr ""
+msgstr "Panelen kívüli, tesztelés"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:149
 msgid "Fab_Front_later"
@@ -19552,7 +19554,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:170
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1553
 msgid "Off-board, manufacturing"
-msgstr ""
+msgstr "Panelen kívüli, gyártói"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:174
 msgid "Adhes_Front_later"
@@ -19571,7 +19573,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1503
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1528
 msgid "On-board, non-copper"
-msgstr "On-board, nem réz"
+msgstr "Panelen, nem réz"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:199
 msgid "SoldP_Front_later"
@@ -20097,7 +20099,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:36
 msgid "&Graphic line width:"
-msgstr "Grafikus vonal szélesség:"
+msgstr "Vonal szélesség:"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:47
 msgid "&Text line width:"
@@ -20359,7 +20361,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Tracks Joining Multiple Nets:"
-msgstr ""
+msgstr "Vezetősávok csatlakozása többszörösen vezetékhez:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:59
 msgid ""
@@ -21843,7 +21845,7 @@ msgstr "Vezeték névszűrő:"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:32
 msgid "Show zero pad nets"
-msgstr ""
+msgstr "Forrponttal nem rendelkező vezetékek megjelenítése"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:55
 msgid "Number of pads"
@@ -21892,7 +21894,7 @@ msgstr "A rács kezdőpontjának alaphelyzetbe állítása"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:66
 msgid "User Defined Grid:"
-msgstr "Egyénileg definiált rács:"
+msgstr "Egyéni rács méret:"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:103
 msgid "Fast Switching:"
@@ -22042,7 +22044,7 @@ msgstr "A nyáktervre alkalmazott változások:"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:26
 msgid "Match footprints by:"
-msgstr ""
+msgstr "Egyezés alkatrész szerint:"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:58
 msgid "Update PCB"
@@ -22536,19 +22538,19 @@ msgstr "Rács kezdőpont igazítása"
 #: pcbnew/menubar_pcb_editor.cpp:376 pcbnew/tool_footprint_editor.cpp:169
 #: pcbnew/tools/drawing_tool.cpp:230
 msgid "Add graphic line"
-msgstr "Grafikus vonal hozzáadása"
+msgstr "Vonal hozzáadása"
 
 #: pcbnew/edit.cpp:1556 pcbnew/menubar_footprint_editor.cpp:366
 #: pcbnew/menubar_pcb_editor.cpp:368 pcbnew/tool_footprint_editor.cpp:175
 #: pcbnew/tool_pcb_editor.cpp:477 pcbnew/tools/drawing_tool.cpp:293
 msgid "Add graphic arc"
-msgstr "Grafikus körív hozzáadása"
+msgstr "Körív hozzáadása"
 
 #: pcbnew/edit.cpp:1560 pcbnew/menubar_footprint_editor.cpp:371
 #: pcbnew/menubar_pcb_editor.cpp:371 pcbnew/tool_footprint_editor.cpp:172
 #: pcbnew/tool_pcb_editor.cpp:474 pcbnew/tools/drawing_tool.cpp:264
 msgid "Add graphic circle"
-msgstr "Grafikus kör hozzáadása"
+msgstr "Kör hozzáadása"
 
 #: pcbnew/edit.cpp:1572 pcbnew/menubar_pcb_editor.cpp:387
 #: pcbnew/tool_pcb_editor.cpp:487 pcbnew/tools/drawing_tool.cpp:482
@@ -23349,7 +23351,7 @@ msgstr "\"%s\" alkatrészkönyvtár nem törölhető."
 
 #: pcbnew/help_common_strings.h:15 pcbnew/tool_footprint_editor.cpp:105
 msgid "Undo last edition"
-msgstr "Utolsó művelet visszavonása"
+msgstr "Visszavonás"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -23367,7 +23369,9 @@ msgstr "Képernyő frissítése"
 msgid ""
 "Show/hide microwave toolbar\n"
 "(Experimental feature)"
-msgstr "Mikrohullámú eszköztár elrejtése"
+msgstr ""
+"Mikrohullámú eszköztár megjelenítése / elrejtése\n"
+"(Kísérleti funkció)"
 
 #: pcbnew/hotkeys.cpp:72
 msgid "Switch to Copper (B.Cu) layer"
@@ -23660,7 +23664,7 @@ msgstr "Alapértelmezett vonal szélesség:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:163
 msgid "Graphic layer:"
-msgstr "Grafikus réteg:"
+msgstr "réteg:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:77
 msgid "Import DXF File"
@@ -24041,7 +24045,7 @@ msgstr "Alkatrész szerkesztő bezárása..."
 
 #: pcbnew/menubar_footprint_editor.cpp:160
 msgid "Undo last action"
-msgstr "Utolsó művelet visszavonása"
+msgstr "Visszavonás"
 
 #: pcbnew/menubar_footprint_editor.cpp:166
 msgid "Redo last action"
@@ -24084,7 +24088,7 @@ msgstr "A felhasználói egyedi rácsméretek beállításai"
 #: pcbnew/menubar_footprint_editor.cpp:270 pcbnew/menubar_footprint_editor.cpp:275
 #: pcbnew/menubar_pcb_editor.cpp:661 pcbnew/menubar_pcb_editor.cpp:666
 msgid "Full Window Crosshair"
-msgstr "Teljes ablakos célkereszt"
+msgstr "Teljes ablakos célkereszt megjelenítése"
 
 #: pcbnew/menubar_footprint_editor.cpp:286 pcbnew/menubar_pcb_editor.cpp:698
 msgid "Sketch &Pads"
@@ -24169,7 +24173,7 @@ msgstr "Szöveg"
 
 #: pcbnew/menubar_footprint_editor.cpp:361
 msgid "Add graphic text"
-msgstr "Grafikus szöveg hozzáadása"
+msgstr "Szöveg hozzáadása"
 
 #: pcbnew/menubar_footprint_editor.cpp:376 pcbnew/menubar_pcb_editor.cpp:375
 msgid "&Line"
@@ -24183,7 +24187,7 @@ msgstr "Sokszög"
 #: pcbnew/tool_footprint_editor.cpp:178 pcbnew/tool_pcb_editor.cpp:480
 #: pcbnew/tools/drawing_tool.cpp:679
 msgid "Add graphic polygon"
-msgstr "Grafikus sokszög/vonal hozzáadása"
+msgstr "Sokszög/vonal hozzáadása"
 
 #: pcbnew/menubar_footprint_editor.cpp:388
 msgid "A&nchor"
@@ -24231,7 +24235,7 @@ msgstr ""
 
 #: pcbnew/menubar_footprint_editor.cpp:439 pcbnew/menubar_pcb_editor.cpp:330
 msgid "Manage Footprint Li&braries..."
-msgstr ""
+msgstr "Alkatrésztok könyvtárak kezelése..."
 
 #: pcbnew/menubar_footprint_editor.cpp:439
 msgid "Configure footprint library table"
@@ -24307,7 +24311,7 @@ msgstr "Globális hézag beállítása párhuzamos vezetősávok közt."
 
 #: pcbnew/menubar_pcb_editor.cpp:206
 msgid "&General Settings"
-msgstr "Általános beállítások"
+msgstr "Általános beállítások..."
 
 #: pcbnew/menubar_pcb_editor.cpp:206
 msgid "Select general options for Pcbnew"
@@ -24336,7 +24340,7 @@ msgstr "Több vezetősáv interaktív nyomvonaltervezése"
 
 #: pcbnew/menubar_pcb_editor.cpp:275
 msgid "&Tune Track Length"
-msgstr "Egy vezetősáv hosszának finom állítása"
+msgstr "Egy vezetősáv hosszának hangolása"
 
 #: pcbnew/menubar_pcb_editor.cpp:276
 msgid "Tune length of single track"
@@ -24485,7 +24489,7 @@ msgstr "Python szkript konzol megjelenítése / elrejtése"
 
 #: pcbnew/menubar_pcb_editor.cpp:448
 msgid "&External Plugins..."
-msgstr "Külső bővítmények..."
+msgstr "Külső bővítmények"
 
 #: pcbnew/menubar_pcb_editor.cpp:449
 msgid "Execute or reload python action plugins"
@@ -24505,7 +24509,7 @@ msgstr "Gyorsbillentyűk és a hozzájuk tartozó parancsok megjelenítése"
 
 #: pcbnew/menubar_pcb_editor.cpp:540 pcbnew/onrightclick.cpp:610
 msgid "Edit All Tracks and Vias..."
-msgstr "Globális vezetősávok és forrpontok szerkesztése"
+msgstr "Globális vezetősávok és forrpontok szerkesztése..."
 
 #: pcbnew/menubar_pcb_editor.cpp:543
 msgid "Set Footp&rint Field Sizes..."
@@ -24533,7 +24537,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:559
 msgid "&Global Deletions..."
-msgstr "Globális törlés"
+msgstr "Globális törlések..."
 
 #: pcbnew/menubar_pcb_editor.cpp:560
 msgid "Delete tracks, footprints and graphic items from board"
@@ -24542,7 +24546,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:564
 msgid "&Cleanup Tracks and Vias..."
-msgstr "Vezetősávok és átvezetőforrpontok tisztítása"
+msgstr "Vezetősávok és átvezetőforrpontok tisztítás..."
 
 #: pcbnew/menubar_pcb_editor.cpp:565
 msgid "Clean stubs, vias, delete break points or unconnected tracks"
@@ -24613,11 +24617,11 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:712
 msgid "Show graphic items in outline mode"
-msgstr "Grafikus elemek megjelenítése vázlat módban"
+msgstr "Elemek megjelenítése vázlat módban"
 
 #: pcbnew/menubar_pcb_editor.cpp:757
 msgid "Flip &Board View"
-msgstr ""
+msgstr "Lapozott nézet (tükrözött)"
 
 #: pcbnew/menubar_pcb_editor.cpp:758
 msgid "Flip (mirror) the board view"
@@ -24791,7 +24795,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:959
 msgid "Arc&hive Footprints"
-msgstr "Alkatrészek tokozása arhiválása"
+msgstr "Alkatrész tokozások archiválása..."
 
 #: pcbnew/menubar_pcb_editor.cpp:960
 msgid "Archive or add all footprints in library file"
@@ -25467,7 +25471,7 @@ msgstr "Alkatrész referenciák megjelenítése"
 
 #: pcbnew/pcb_layer_widget.cpp:72
 msgid "Footprint Text Front"
-msgstr "Alkatrész felső szövegek"
+msgstr "Felső alkatrész nevek"
 
 #: pcbnew/pcb_layer_widget.cpp:72
 msgid "Show footprint text on board's front"
@@ -25475,7 +25479,7 @@ msgstr "Felső szövegek megjelenítése"
 
 #: pcbnew/pcb_layer_widget.cpp:73
 msgid "Footprint Text Back"
-msgstr "Alkatrész alsó szövegek"
+msgstr "Alsó alkatrész  nevek"
 
 #: pcbnew/pcb_layer_widget.cpp:73
 msgid "Show footprint text on board's back"
@@ -26445,7 +26449,7 @@ msgstr "Alkatrész exportálása"
 
 #: pcbnew/tool_footprint_editor.cpp:107
 msgid "Redo last undo command"
-msgstr "Utolsó művelet megismétlése"
+msgstr "Újra"
 
 #: pcbnew/tool_footprint_editor.cpp:112
 msgid "Footprint properties"
@@ -26549,7 +26553,7 @@ msgstr "Nyákterv mentése"
 
 #: pcbnew/tool_pcb_editor.cpp:256
 msgid "Page settings for paper size and texts"
-msgstr "Oldalbeállítás"
+msgstr "Lap beállítások"
 
 #: pcbnew/tool_pcb_editor.cpp:261
 msgid "Open footprint editor"
@@ -27434,7 +27438,7 @@ msgstr "Zóna hozzáadása"
 
 #: pcbnew/tools/zone_create_helper.cpp:184
 msgid "Add a graphical polygon"
-msgstr "Grafikus sokszög hozzáadása"
+msgstr "Sokszög hozzáadása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:47
 msgid "Fill"
