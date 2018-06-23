@@ -241,6 +241,11 @@ struct APP_KICAD : public wxApp
     {
         program.OnPgmExit();
 
+#if defined(__FreeBSD__)
+        /* Avoid wxLog crashing when used in destructors. */
+        wxLog::EnableLogging( false );
+#endif
+
         return wxApp::OnExit();
     }
 
