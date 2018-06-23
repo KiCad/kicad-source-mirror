@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,6 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	
 	m_textControlSizer = new wxFlexGridSizer( 2, 2, 3, 3 );
 	m_textControlSizer->AddGrowableCol( 1 );
-	m_textControlSizer->AddGrowableRow( 0 );
 	m_textControlSizer->SetFlexibleDirection( wxBOTH );
 	m_textControlSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	

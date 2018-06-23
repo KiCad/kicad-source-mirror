@@ -174,6 +174,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     {
         m_textLabel = m_textLabelMultiLine;
         m_textLabelSingleLine->Show( false );
+        m_textControlSizer->AddGrowableRow( 0 );
         multiLine = true;
     }
     else
