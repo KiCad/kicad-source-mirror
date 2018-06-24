@@ -400,10 +400,12 @@ bool DP_GATEWAYS::checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b )
 
 void DP_GATEWAYS::FilterByOrientation ( int aAngleMask, DIRECTION_45 aRefOrientation )
 {
-    std::remove_if( m_gateways.begin(), m_gateways.end(), [aAngleMask, aRefOrientation]( const DP_GATEWAY& dp) {
-        DIRECTION_45 orient( dp.AnchorP() - dp.AnchorN() );
-        return !( orient.Angle( aRefOrientation ) & aAngleMask );
-    } );
+    m_gateways.erase(
+        std::remove_if( m_gateways.begin(), m_gateways.end(), [aAngleMask, aRefOrientation]( const DP_GATEWAY& dp) {
+            DIRECTION_45 orient( dp.AnchorP() - dp.AnchorN() );
+            return !( orient.Angle( aRefOrientation ) & aAngleMask );
+        } ), m_gateways.end()
+    );
 }
 
 static VECTOR2I makeGapVector( VECTOR2I dir, int length )
