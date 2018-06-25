@@ -824,7 +824,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 {
                     aText++;
                     dcode->m_Drill.x = KiROUND( ReadDouble( aText ) * conv_scale );
-                    dcode->m_Drill.y = dcode->m_Drill.x =
+                    dcode->m_Drill.y = dcode->m_Drill.x;
                     dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 

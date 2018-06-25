@@ -407,12 +407,10 @@ void D_CODE::ConvertShapeToPolygon()
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
 
-        if( m_Rotation )                   // vertical oval, rotate polygon.
+        if( m_Rotation )    // rotate polygonal shape:
         {
-            int angle = KiROUND( m_Rotation * 10 );
-
-            for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
-                it->Rotate( -angle );
+            double angle = m_Rotation * M_PI / 180;
+            m_Polygon.Rotate( angle, VECTOR2I( 0, 0 ) );
         }
 
         break;
