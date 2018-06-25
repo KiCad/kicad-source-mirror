@@ -236,7 +236,8 @@ public:
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 private:
-
+    
+    int countRelevantItems( const std::vector<BOARD_ITEM*>& aItems );
     void    updateRatsnest();
     void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
