@@ -920,6 +920,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new MODULE_EDITOR_TOOLS );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
 
     m_toolManager->GetTool<PAD_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );

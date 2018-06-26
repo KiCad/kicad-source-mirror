@@ -86,7 +86,14 @@ bool POSITION_RELATIVE_TOOL::Init()
 
 int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection( SanitizePadsEnsureEditableFilter );
+    PCB_BASE_FRAME*         editFrame = getEditFrame<PCB_BASE_FRAME>();
+    CLIENT_SELECTION_FILTER filter = SanitizePadsEnsureEditableFilter;
+
+    // Allow pad editing in Footprint Editor
+    if( editFrame->IsType( FRAME_PCB_MODULE_EDITOR ) )
+        filter = EnsureEditableFilter;
+
+    const auto& selection = m_selectionTool->RequestSelection( filter );
 
     if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
@@ -95,8 +102,6 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
         return 0;
 
     m_position_relative_selection = selection;
-
-    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     if( !m_position_relative_dialog )
         m_position_relative_dialog = new DIALOG_POSITION_RELATIVE( editFrame,
