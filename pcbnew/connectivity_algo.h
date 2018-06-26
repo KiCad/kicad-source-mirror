@@ -692,7 +692,7 @@ public:
     std::vector<bool> m_dirtyNets;
     PROGRESS_REPORTER* m_progressReporter = nullptr;
 
-    void    searchConnections( bool aIncludeZones = false );
+    void    searchConnections();
 
     void    update();
     void    propagateConnections();
@@ -768,6 +768,13 @@ public:
 
     void    PropagateNets();
     void    FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands );
+
+    /**
+     * Finds the copper islands that are not connected to a net.  These are added to
+     * the m_islands vector.
+     * N.B. This must be called after aZones has been refreshed.
+     * @param: aZones The set of zones to search for islands
+     */
     void    FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
 
     bool    CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );

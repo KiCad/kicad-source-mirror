@@ -303,7 +303,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 }
 
 
-void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
+void CN_CONNECTIVITY_ALGO::searchConnections()
 {
 #ifdef CONNECTIVITY_DEBUG
     printf("Search start\n");
@@ -341,43 +341,50 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
     PROF_COUNTER search_basic( "search-basic" );
 #endif
 
-    if( m_itemList.IsDirty() )
+    if( m_progressReporter )
     {
-        #ifdef USE_OPENMP
-            #pragma omp parallel for schedule(dynamic)
-        #endif
-        for( int i = 0; i < m_itemList.Size(); i++ )
-        {
-            auto item = m_itemList[i];
-            if( item->Dirty() )
-            {
-                CN_VISITOR visitor( item, &m_listLock );
-                m_itemList.FindNearby( item, visitor );
-
-                if( aIncludeZones )
-                    m_zoneList.FindNearby( item, visitor );
-            }
-        }
+        m_progressReporter->SetMaxProgress(
+                m_zoneList.Size() + ( m_itemList.IsDirty() ? m_itemList.Size() : 0 ) );
     }
 
-#ifdef PROFILE
-    search_basic.Show();
+#ifdef USE_OPENMP
+    #pragma omp parallel shared( m_itemList ) num_threads( std::max( omp_get_num_procs(), 2 ) )
+    {
+        if( omp_get_thread_num() == 0 && m_progressReporter )
+            m_progressReporter->KeepRefreshing( true );
 #endif
 
-    if( aIncludeZones )
-    {
-        if( m_progressReporter )
+        if( m_itemList.IsDirty() )
         {
-            m_progressReporter->SetMaxProgress( m_zoneList.Size() );
+#ifdef USE_OPENMP
+            #pragma omp parallel for
+#endif
+            for( int i = 0; i < m_itemList.Size(); i++ )
+            {
+                auto item = m_itemList[i];
+                if( item->Dirty() )
+                {
+                    CN_VISITOR visitor( item, &m_listLock );
+                    m_itemList.FindNearby( item, visitor );
+                    m_zoneList.FindNearby( item, visitor );
+                }
+
+                if( m_progressReporter )
+                    m_progressReporter->AdvanceProgress();
+            }
         }
 
-        #ifdef USE_OPENMP
-            #pragma omp parallel for schedule(dynamic)
-        #endif
-        for(int i = 0; i < m_zoneList.Size(); i++ )
+#ifdef PROFILE
+        search_basic.Show();
+#endif
+
+#ifdef USE_OPENMP
+        #pragma omp for
+#endif
+        for( int i = 0; i < m_zoneList.Size(); i++ )
         {
             auto item = m_zoneList[i];
-            auto zoneItem = static_cast<CN_ZONE *> (item);
+            auto zoneItem = static_cast<CN_ZONE *>( item );
 
             if( zoneItem->Dirty() )
             {
@@ -385,12 +392,17 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
                 m_itemList.FindNearby( item, visitor );
                 m_zoneList.FindNearby( item, visitor );
             }
+
+            if( m_progressReporter )
+                m_progressReporter->AdvanceProgress();
         }
 
-        m_zoneList.ClearDirtyFlags();
-        m_itemList.ClearDirtyFlags();
+#ifdef USE_OPENMP
     }
+#endif
 
+    m_zoneList.ClearDirtyFlags();
+    m_itemList.ClearDirtyFlags();
 
 #ifdef CONNECTIVITY_DEBUG
     printf("Search end\n");
@@ -465,7 +477,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     CLUSTERS clusters;
 
     if( isDirty() )
-        searchConnections( includeZones );
+        searchConnections();
 
     auto addToSearchList = [&head, withinAnyNet, aSingleNet, aTypes] ( CN_ITEM *aItem )
     {
@@ -703,12 +715,12 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )
 {
     for ( auto& z : aZones )
-    {
-        if( z.m_zone->GetFilledPolysList().IsEmpty() )
-            continue;
-
         Remove( z.m_zone );
-        Add( z.m_zone );
+
+    for ( auto& z : aZones )
+    {
+        if( !z.m_zone->GetFilledPolysList().IsEmpty() )
+            Add( z.m_zone );
     }
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
