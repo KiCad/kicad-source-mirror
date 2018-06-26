@@ -522,7 +522,7 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     // Update field values
     AddMenuItem( aParentMenu, ID_UPDATE_FIELDS,
-                 _( "Update Field Values..." ),
+                 _( "Update Fields from Library..." ),
                  _( "Sets symbol fields to original library values" ),
                  KiBitmap( update_fields_xpm ) );
 }

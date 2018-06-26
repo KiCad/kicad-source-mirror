@@ -148,6 +148,8 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
     if( libPart == nullptr )    // the symbol is not found in lib: cannot update fields
         return;
 
+    LIB_ALIAS* alias = m_frame->GetLibAlias( aComponent->GetLibId() );
+
     aComponent->GetFields( oldFields, false );
 
     for( auto compField : oldFields )
@@ -181,10 +183,20 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
             field = &newFields.back();
         }
 
+        wxString fieldValue = libField->GetText();
+
+        if( alias )
+        {
+            if( partField == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) )
+                fieldValue = alias->GetName();
+            else if( partField == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) )
+                fieldValue = alias->GetDocFileName();
+        }
+
         // If the library field is empty an update would clear an existing entry.
         // Check if this is the desired behavior.
         if( !libField->GetText().empty() || m_resetEmpty->IsChecked() )
-           field->SetText( libField->GetText() );
+           field->SetText( fieldValue );
 
         if( m_resetVisibility->IsChecked() )
             field->SetVisible( libField->IsVisible() );
