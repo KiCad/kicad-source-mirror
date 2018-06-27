@@ -20,6 +20,7 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
+#include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/button.h>
@@ -43,12 +44,13 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		};
 		
 		wxFlexGridSizer* m_textControlSizer;
-		wxStaticText* m_staticText1;
-		wxTextCtrl* m_textLabelSingleLine;
-		wxTextCtrl* m_textLabelMultiLine;
-		wxStaticText* m_SizeTitle;
-		wxTextCtrl* m_TextSizeCtrl;
-		wxStaticText* m_staticSizeUnits;
+		wxStaticText* m_Label;
+		wxTextCtrl* m_valueSingleLine;
+		wxTextCtrl* m_valueMultiLine;
+		wxComboBox* m_valueCombo;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
 		wxRadioBox* m_TextOrient;
 		wxRadioBox* m_TextStyle;
 		wxRadioBox* m_TextShape;
@@ -62,6 +64,7 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		wxString m_labelText; 
+		wxString m_comboText; 
 		
 		DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LABEL_EDITOR_BASE();

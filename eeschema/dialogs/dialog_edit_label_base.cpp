@@ -18,47 +18,51 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	
 	m_textControlSizer = new wxFlexGridSizer( 2, 2, 3, 3 );
 	m_textControlSizer->AddGrowableCol( 1 );
-	m_textControlSizer->AddGrowableRow( 0 );
 	m_textControlSizer->SetFlexibleDirection( wxBOTH );
 	m_textControlSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Text:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	m_staticText1->SetToolTip( _("Enter the text to be used within the schematic") );
+	m_Label = new wxStaticText( this, wxID_ANY, _("Label:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Label->Wrap( -1 );
+	m_Label->SetToolTip( _("Enter the text to be used within the schematic") );
 	
-	m_textControlSizer->Add( m_staticText1, 0, wxALIGN_TOP|wxRIGHT|wxTOP, 3 );
+	m_textControlSizer->Add( m_Label, 0, wxALIGN_TOP|wxRIGHT|wxTOP, 3 );
 	
 	wxBoxSizer* bSizeText;
 	bSizeText = new wxBoxSizer( wxVERTICAL );
 	
-	m_textLabelSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_RICH );
-	m_textLabelSingleLine->SetMinSize( wxSize( 360,-1 ) );
+	m_valueSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_RICH );
+	m_valueSingleLine->SetMinSize( wxSize( 360,-1 ) );
 	
-	m_textLabelSingleLine->SetValidator( wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, &m_labelText ) );
+	m_valueSingleLine->SetValidator( wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, &m_labelText ) );
 	
-	bSizeText->Add( m_textLabelSingleLine, 0, wxBOTTOM|wxEXPAND|wxLEFT, 3 );
+	bSizeText->Add( m_valueSingleLine, 0, wxBOTTOM|wxEXPAND|wxLEFT, 3 );
 	
-	m_textLabelMultiLine = new wxTextCtrl( this, wxID_VALUEMULTI, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	m_textLabelMultiLine->SetMinSize( wxSize( 480,72 ) );
+	m_valueMultiLine = new wxTextCtrl( this, wxID_VALUEMULTI, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_valueMultiLine->SetMinSize( wxSize( 480,72 ) );
 	
-	bSizeText->Add( m_textLabelMultiLine, 1, wxBOTTOM|wxEXPAND|wxLEFT, 3 );
+	bSizeText->Add( m_valueMultiLine, 1, wxBOTTOM|wxEXPAND|wxLEFT, 3 );
+	
+	m_valueCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER ); 
+	m_valueCombo->SetValidator( wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, &m_comboText ) );
+	
+	bSizeText->Add( m_valueCombo, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 	
 	
 	m_textControlSizer->Add( bSizeText, 1, wxEXPAND, 3 );
 	
-	m_SizeTitle = new wxStaticText( this, wxID_ANY, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizeTitle->Wrap( -1 );
-	m_textControlSizer->Add( m_SizeTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeLabel->Wrap( -1 );
+	m_textControlSizer->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 	
 	wxBoxSizer* bSizeCtrlSizer;
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeCtrlSizer->Add( m_TextSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxTOP, 3 );
+	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxTOP, 3 );
 	
-	m_staticSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticSizeUnits->Wrap( -1 );
-	bSizeCtrlSizer->Add( m_staticSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 2 );
+	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeUnits->Wrap( -1 );
+	bSizeCtrlSizer->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 2 );
 	
 	
 	m_textControlSizer->Add( bSizeCtrlSizer, 1, wxEXPAND, 3 );
@@ -105,12 +109,14 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_textLabelSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
+	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
+	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
 }
 
 DIALOG_LABEL_EDITOR_BASE::~DIALOG_LABEL_EDITOR_BASE()
 {
 	// Disconnect Events
-	m_textLabelSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
+	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
+	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
 	
 }

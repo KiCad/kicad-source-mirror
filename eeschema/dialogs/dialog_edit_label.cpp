@@ -56,12 +56,9 @@ public:
 
     void SetTitle( const wxString& aTitle ) override
     {
-        // This class is shared for numerous tasks: a couple of
-        // single line labels and multi-line text fields.
-        // Often the desired size of the multi-line text field editor
-        // is larger than is needed for the single line label.
-        // Therefore the session retained sizes of these dialogs needs
-        // to be class independent, make them title dependent.
+        // This class is shared for numerous tasks: a couple of single line labels and
+        // multi-line text fields.  Since the desired size of the multi-line text field editor
+        // is often larger, we retain separate sizes based on the dialog titles.
         switch( m_CurrentText->Type() )
         {
         case SCH_GLOBAL_LABEL_T:
@@ -87,15 +84,12 @@ private:
 
     SCH_EDIT_FRAME* m_Parent;
     SCH_TEXT*       m_CurrentText;
-    wxTextCtrl*     m_activeTextCtrl;
+    wxWindow*       m_activeTextCtrl;
+    wxTextEntry*    m_activeTextEntry;
     UNIT_BINDER     m_textSize;
 };
 
 
-
-/* Edit the properties of the text (Label, Global label, graphic text).. )
- *  pointed by "aTextStruct"
- */
 void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
 {
     if( aTextItem == NULL )
@@ -114,7 +108,7 @@ const int maxSize = (int)( 250 * IU_PER_MM );
 
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
-    m_textSize( aParent, m_SizeTitle, m_TextSizeCtrl, m_staticSizeUnits, false, minSize, maxSize )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeLabel, false, minSize, maxSize )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -134,24 +128,40 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
         break;
 
     case SCH_SHEET_PIN_T:
-        SetTitle( _( "Hierarchical Sheet Pin Properties." ) );
+        SetTitle( _( "Hierarchical Sheet Pin Properties" ) );
         break;
 
     default:
+        m_Label->SetLabel( _( "Text:" ) );
         SetTitle( _( "Text Properties" ) );
         break;
     }
 
     if( m_CurrentText->IsMultilineAllowed() )
     {
-        m_activeTextCtrl = m_textLabelMultiLine;
-        m_textLabelSingleLine->Show( false );
+        m_activeTextCtrl = m_valueMultiLine;
+        m_activeTextEntry = m_valueMultiLine;
+
         m_textControlSizer->AddGrowableRow( 0 );
+
+        m_valueSingleLine->Show( false );
+        m_valueCombo->Show( false );
+    }
+    else if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T || m_CurrentText->Type() == SCH_LABEL_T )
+    {
+        m_activeTextCtrl = m_valueCombo;
+        m_activeTextEntry = m_valueCombo;
+
+        m_valueSingleLine->Show( false );
+        m_valueMultiLine->Show( false );
     }
     else
     {
-        m_activeTextCtrl = m_textLabelSingleLine;
-        m_textLabelMultiLine->Show( false );
+        m_activeTextCtrl = m_valueSingleLine;
+        m_activeTextEntry = m_valueSingleLine;
+
+        m_valueCombo->Show( false );
+        m_valueMultiLine->Show( false );
     }
 
     SetInitialFocus( m_activeTextCtrl );
@@ -167,9 +177,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    m_textLabelMultiLine->Connect( wxEVT_CHAR_HOOK,
-                                   wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ),
-                                   NULL, this );
+    m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -178,9 +186,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
 DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 {
-    m_textLabelMultiLine->Disconnect( wxEVT_CHAR_HOOK,
-                                      wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ),
-                                      NULL, this );
+    m_valueMultiLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
 }
 
 
@@ -210,7 +216,22 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_activeTextCtrl->SetValue( m_CurrentText->GetText() );
+    m_activeTextEntry->SetValue( m_CurrentText->GetText() );
+
+    if( m_valueCombo->IsShown() )
+    {
+        // Load the combobox with the existing labels of the same type
+        wxArrayString  existingLabels;
+        SCH_SCREENS    allScreens;
+
+        for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
+            for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+                if( item->Type() == m_CurrentText->Type() )
+                    existingLabels.push_back( static_cast<SCH_TEXT*>( item )->GetText() );
+
+        existingLabels.Sort();
+        m_valueCombo->Append( existingLabels );
+    }
 
     // Set text options:
     int orientation = mapOrientation( m_CurrentText->Type(), m_CurrentText->GetLabelSpinStyle() );
@@ -285,7 +306,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
 
-    text = m_activeTextCtrl->GetValue();
+    text = m_activeTextEntry->GetValue();
 
     if( !text.IsEmpty() )
         m_CurrentText->SetText( text );
@@ -301,7 +322,6 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     if( m_TextShape )
-        /// @todo move cast to widget
         m_CurrentText->SetShape( static_cast<PINSHEETLABEL_SHAPE>( m_TextShape->GetSelection() ) );
 
     int style = m_TextStyle->GetSelection();
