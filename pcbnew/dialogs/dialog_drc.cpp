@@ -229,6 +229,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     DelDRCMarkers();
 
     wxBeginBusyCursor();
+    wxWindowDisabler disabler;
 
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
