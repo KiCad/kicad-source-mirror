@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -34,7 +36,8 @@
 #include <wx/button.h>
 
 DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent )
-    : DIALOG_SHIM( aParent, wxID_ANY, _( "Export to GenCAD settings" ) )
+    : DIALOG_SHIM( aParent, wxID_ANY, _( "Export to GenCAD settings" ), wxDefaultPosition,
+                   wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     // Obtain a potential filename for the exported file
     wxFileName fn = aParent->GetBoard()->GetFileName();
@@ -48,23 +51,23 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     wxBoxSizer* m_fileSizer = new wxBoxSizer( wxHORIZONTAL );
 
     m_filePath = new wxTextCtrl( this, wxID_ANY, fn.GetFullPath() );
-    m_fileSizer->Add( m_filePath, 1, wxALL, 5 );
+    m_fileSizer->Add( m_filePath, 1, wxEXPAND | wxRIGHT, 5 );
 
     wxButton* m_browseBtn = new wxButton( this, wxID_ANY, _( "Browse" ) );
     m_browseBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler( DIALOG_GENCAD_EXPORT_OPTIONS::onBrowse ), NULL, this );
-    m_fileSizer->Add( m_browseBtn, 0, wxALL, 5 );
+    m_fileSizer->Add( m_browseBtn, 0 );
 
-    m_mainSizer->Add( m_fileSizer, 0, wxEXPAND, 5 );
+    m_mainSizer->Add( m_fileSizer, 0, wxEXPAND | wxALL, 5 );
 
 
-    m_optsSizer = new wxGridSizer( 0, 1, 0, 0 );
+    m_optsSizer = new wxGridSizer( 0, 1, 3, 3 );
     createOptCheckboxes();
-    m_mainSizer->Add( m_optsSizer, 1, wxEXPAND, 5 );
+    m_mainSizer->Add( m_optsSizer, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
 
     wxSizer* stdButtons = CreateSeparatedButtonSizer( wxOK | wxCANCEL );
-    m_mainSizer->Add( stdButtons, 0, wxEXPAND, 5 );
+    m_mainSizer->Add( stdButtons, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     SetSizer( m_mainSizer );
     Layout();
@@ -139,7 +142,7 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
     {
         wxCheckBox* chkbox = new wxCheckBox( this, wxID_ANY, option.second );
         m_options[option.first] = chkbox;
-        m_optsSizer->Add( chkbox, 0, wxALL, 5 );
+        m_optsSizer->Add( chkbox );
     }
 }
 
