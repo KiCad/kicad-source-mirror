@@ -141,7 +141,10 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
     auto entryIt = m_changedItems.find( parent );
 
     if( entryIt != m_changedItems.end() )
+    {
+        free( aCopy );
         return *this; // item has been already modified once
+    }
 
     makeEntry( parent, CHT_MODIFY | aExtraFlags, aCopy );
 
