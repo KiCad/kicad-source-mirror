@@ -473,7 +473,15 @@ bool PGM_BASE::InitPgm()
     m_local_env_vars[ envVarName ] = envVarItem;
 
     wxFileName baseSharePath;
+#if defined( __WXMSW__ )
+    // Make the paths relative to the executable dir as KiCad might be installed anywhere
+    // It follows the Windows installer paths scheme, where binaries are installed in
+    // PATH/bin and extra files in PATH/share/kicad
+    baseSharePath.AssignDir( m_bin_dir + "\\.." );
+    baseSharePath.Normalize();
+#else
     baseSharePath.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
+#endif
 
 #if !defined( __WXMAC__ )
     baseSharePath.AppendDir( wxT( "share" ) );
