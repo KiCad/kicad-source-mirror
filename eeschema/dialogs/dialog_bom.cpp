@@ -34,11 +34,9 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
-#include <wx/dynarray.h>
-
+#include <wx/ffile.h>
 #include <netlist.h>
 #include <netlist_exporter_generic.h>
-#include <sch_sheet.h>
 #include <invoke_sch_dialog.h>
 #include <dialog_helpers.h>
 #include <dialog_bom_base.h>
@@ -77,33 +75,29 @@ WX_DEFINE_OBJARRAY( BOM_PLUGIN_ARRAY )
 /**
  * Class BOM_CFG_READER_PARSER
  * holds data and functions pertinent to parsing a S-expression file
- * for a WORKSHEET_LAYOUT.
  */
-class BOM_CFG_READER_PARSER : public DIALOG_BOM_CFG_LEXER
+class BOM_CFG_PARSER : public DIALOG_BOM_CFG_LEXER
 {
     BOM_PLUGIN_ARRAY* m_pluginsList;
 
 public:
-    BOM_CFG_READER_PARSER( BOM_PLUGIN_ARRAY* aPlugins,
-                           const char* aData, const wxString& aSource );
+    BOM_CFG_PARSER( BOM_PLUGIN_ARRAY* aPlugins, const char* aData, const wxString& aSource );
     void Parse();
 
 private:
     void parsePlugin();
 };
 
-// PCB_PLOT_PARAMS_PARSER
 
-BOM_CFG_READER_PARSER::BOM_CFG_READER_PARSER(  BOM_PLUGIN_ARRAY* aPlugins,
-                                              const char* aLine,
-                                              const wxString& aSource ) :
+BOM_CFG_PARSER::BOM_CFG_PARSER( BOM_PLUGIN_ARRAY* aPlugins, const char* aLine,
+                                const wxString& aSource ) :
     DIALOG_BOM_CFG_LEXER( aLine, aSource )
 {
     m_pluginsList = aPlugins;
 }
 
 
-void BOM_CFG_READER_PARSER::Parse()
+void BOM_CFG_PARSER::Parse()
 {
     T token;
 
@@ -131,7 +125,7 @@ void BOM_CFG_READER_PARSER::Parse()
     }
 }
 
-void BOM_CFG_READER_PARSER::parsePlugin()
+void BOM_CFG_PARSER::parsePlugin()
 {
     BOM_PLUGIN plugin;
 
@@ -171,6 +165,7 @@ void BOM_CFG_READER_PARSER::parsePlugin()
         m_pluginsList->Add( plugin );
 }
 
+
 // The main dialog frame to run scripts to build bom
 class DIALOG_BOM : public DIALOG_BOM_BASE
 {
@@ -178,16 +173,15 @@ private:
     SCH_EDIT_FRAME*   m_parent;
     BOM_PLUGIN_ARRAY  m_plugins;
     wxConfigBase*     m_config;         // to store the "plugins"
+    bool              m_initialized;
 
 public:
-    // Constructor and destructor
     DIALOG_BOM( SCH_EDIT_FRAME* parent );
     ~DIALOG_BOM();
 
 private:
     void OnPluginSelected( wxCommandEvent& event ) override;
     void OnRunPlugin( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
     void OnHelp( wxCommandEvent& event ) override;
     void OnAddPlugin( wxCommandEvent& event ) override;
     void OnRemovePlugin( wxCommandEvent& event ) override;
@@ -195,29 +189,22 @@ private:
     void OnCommandLineEdited( wxCommandEvent& event ) override;
     void OnNameEdited( wxCommandEvent& event ) override;
     void OnShowConsoleChanged( wxCommandEvent& event ) override;
+    void OnIdle( wxIdleEvent& event ) override;
 
     void pluginInit();
     void installPluginsList();
 
-    /**
-     * @return the Plugin filename from a command line
-     * @param aCommand = the command line
-     */
     wxString getPluginFileName( const wxString& aCommand );
 
-    /**
-     * display (when exists) the text found between the keyword "@package"
-     * (compatible with doxygen comments)
-     * and the end of comment block (""" in python", --> in xml)
+    /*
+     * Display the text found between the keyword @package (compatible with doxygen comments)
+     * and the end of comment block (""" in python, --> in xml)
      */
     void displayPluginInfo( FILE * aFile, const wxString& aFilename );
 
-    /**
-     * Browse plugin files, and set m_CommandStringCtrl field
-     * @return a command line ro run the plugin
-     */
     wxString choosePlugin();
 };
+
 
 // Create and show DIALOG_BOM.
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller )
@@ -226,16 +213,30 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller )
     return dlg.ShowModal();
 }
 
+
 DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     DIALOG_BOM_BASE( parent )
 {
     m_parent = parent;
     m_config = Kiface().KifaceSettings();
+    m_initialized = false;
+
+    m_buttonAddPlugin->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_buttonDelPlugin->SetBitmap( KiBitmap( trash_xpm ) );
+    m_buttonEdit->SetBitmap( KiBitmap( small_edit_xpm ) );
+
     installPluginsList();
 
 #ifndef __WINDOWS__
     m_checkBoxShowConsole->Show( false );
 #endif
+
+    m_sdbSizer1OK->SetLabel( _( "Generate" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizer1->Layout();
+
+    SetInitialFocus( m_lbPlugins );
+    m_sdbSizer1OK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -244,8 +245,7 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 DIALOG_BOM::~DIALOG_BOM()
 {
     // Save the plugin descriptions in config.
-    // the config stores only one string.
-    // plugins are saved inside a S expr:
+    // The config stores only one string, so we save the plugins inside a S-expr:
     // ( plugins
     //    ( plugin "plugin name 1" (cmd "command line 1") )
     //    ( plugin "plugin name 2" (cmd "command line 2") (opts "option1") (opts "option2") )
@@ -281,9 +281,7 @@ DIALOG_BOM::~DIALOG_BOM()
 
 }
 
-/* Read the initialized plugins in config and fill the list
- * of names
- */
+// Read the initialized plugins in config and fill the list of names
 void DIALOG_BOM::installPluginsList()
 {
     wxString list, active_plugin_name;
@@ -292,8 +290,7 @@ void DIALOG_BOM::installPluginsList()
 
     if( !list.IsEmpty() )
     {
-        BOM_CFG_READER_PARSER cfg_parser( &m_plugins, TO_UTF8( list ),
-                                          wxT( "plugins" ) );
+        BOM_CFG_PARSER cfg_parser( &m_plugins, TO_UTF8( list ), wxT( "plugins" ) );
         try
         {
             cfg_parser.Parse();
@@ -316,12 +313,13 @@ void DIALOG_BOM::installPluginsList()
     pluginInit();
 }
 
+
 void DIALOG_BOM::OnPluginSelected( wxCommandEvent& event )
 {
     pluginInit();
 }
 
-#include <wx/ffile.h>
+
 void DIALOG_BOM::pluginInit()
 {
     int ii = m_lbPlugins->GetSelection();
@@ -350,11 +348,9 @@ void DIALOG_BOM::pluginInit()
 
     FILE* pluginFile = wxFopen( pluginName, "rt" );
 
-    if( pluginFile == NULL )
+    if( !pluginFile )
     {
-        wxString msg;
-        msg.Printf( _( "Failed to open file \"%s\"" ), GetChars( pluginName ) );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "Failed to open file \"%s\"." ), pluginName ) );
         return;
     }
 
@@ -366,9 +362,8 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
 {
     m_Messages->Clear();
 
-    // display (when exists) the text found between the keyword "@package"
-    // (compatible with doxygen comments)
-    // and the end of comment block (""" in python", --> in xml)
+    // Display the text found between the keyword @package (compatible with doxygen comments)
+    // and the end of comment block (""" in python, --> in xml)
 
     wxString data;
     wxFFile fdata( aFile );        // dtor will close the file
@@ -377,18 +372,19 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
         return;
 
     wxString header( wxT( "@package" ) );
-    wxString endsection( wxT( "-->" ) );        // For xml
+    wxString endsection;
 
     wxFileName fn( aFilename );
 
-    if( fn.GetExt().IsSameAs( wxT("py"), false ) )
+    if( fn.GetExt().IsSameAs( wxT( "py" ), false ) )
         endsection = wxT( "\"\"\"" );
-    else if( !fn.GetExt().IsSameAs( wxT("xsl"), false ) )
-        // If this is not a python file, we know nothing about file
-        // and the info cannot be found
+    else if( fn.GetExt().IsSameAs( wxT( "xsl" ), false ) )
+        endsection = wxT( "-->" );
+    else
+        // If this is not a python or xsl file, then we don't know how to find the info
         return;
 
-    // Extract substring between @package and """
+    // Extract substring between @package and endsection
     int strstart = data.Find( header );
 
     if( strstart == wxNOT_FOUND )
@@ -405,22 +401,19 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
             strstart++;
 
     m_Messages->SetValue( data.SubString( strstart, strend-1 ) );
+    m_Messages->SetSelection( 0, 0 );
 }
 
-/**
- * Function RunPlugin
- * run the plugin command line
- */
+
+// run the plugin command line
 void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
 {
-    wxFileName  fn;
-
     // Calculate the xml netlist filename
-    fn = g_RootSheet->GetScreen()->GetFileName();
+    wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
 
     fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
-
     fn.ClearExt();
+
     wxString fullfilename = fn.GetFullPath();
     m_parent->ClearMsgPanel();
 
@@ -439,16 +432,6 @@ void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
 }
 
 
-void DIALOG_BOM::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
-/**
- * Function OnRemovePlugin
- * Remove a plugin from the list
- */
 void DIALOG_BOM::OnRemovePlugin( wxCommandEvent& event )
 {
     int ii = m_lbPlugins->GetSelection();
@@ -461,19 +444,13 @@ void DIALOG_BOM::OnRemovePlugin( wxCommandEvent& event )
     m_plugins.RemoveAt( ii );
 
     // Select the next item, if exists
-    if( (int)m_lbPlugins->GetCount() >= ii )
-        ii =  m_lbPlugins->GetCount() - 1;
-
-    if( ii >= 0 )
-        m_lbPlugins->SetSelection( ii );
+    if( m_lbPlugins->GetCount() )
+        m_lbPlugins->SetSelection( std::min( ii, (int) m_lbPlugins->GetCount() - 1 ) );
 
     pluginInit();
 }
 
-/**
- * Function OnAddPlugin
- * Add a new panel for a new netlist plugin
- */
+
 void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 {
     wxString cmdLine = choosePlugin();
@@ -484,10 +461,7 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 
     // Creates a new plugin entry
     wxFileName fn( getPluginFileName( cmdLine ) );
-
-    wxString defaultName = fn.GetName();
-    wxString name = wxGetTextFromUser( _("Plugin name in plugin list") ,
-                                       _("Plugin name"), defaultName );
+    wxString name = wxGetTextFromUser( _("Plugin nickname:" ), _("Add Plugin"), fn.GetName(), this );
 
     if( name.IsEmpty() )
         return;
@@ -497,7 +471,7 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
     {
         if( name == m_plugins.Item( ii ).Name )
         {
-            wxMessageBox( _("This name already exists. Abort") );
+            wxMessageBox( wxString::Format( _("Nickname \"%s\" already in use."), name ) );
             return;
         }
     }
@@ -506,7 +480,6 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
     newPlugin.Name = name;
     newPlugin.Command = wxEmptyString;
     m_plugins.Add( newPlugin );
-    m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
     m_lbPlugins->Append( name );
     m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
     m_textCtrlCommand->SetValue( cmdLine );
@@ -639,22 +612,23 @@ wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
 
 void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
 {
-    wxString    pluginName = getPluginFileName( m_textCtrlCommand->GetValue() );
+    wxString pluginName = getPluginFileName( m_textCtrlCommand->GetValue() );
 
     if( pluginName.Length() <= 2 )      // if name != ""
     {
-        wxMessageBox( _("Plugin file name not found. Cannot edit plugin file") );
+        wxMessageBox( _("Plugin file name not found.") );
         return;
     }
 
     AddDelimiterString( pluginName );
-    wxString    editorname = Pgm().GetEditorName();
+    wxString editorname = Pgm().GetEditorName();
 
     if( !editorname.IsEmpty() )
         ExecuteFile( this, editorname, pluginName );
     else
-        wxMessageBox( _("No text editor selected in KiCad. Please choose it") );
+        wxMessageBox( _( "No text editor selected in KiCad.  Please choose one." ) );
 }
+
 
 void DIALOG_BOM::OnHelp( wxCommandEvent& event )
 {
@@ -666,6 +640,7 @@ void DIALOG_BOM::OnHelp( wxCommandEvent& event )
     help_Dlg.ShowModal();
 }
 
+
 void DIALOG_BOM::OnCommandLineEdited( wxCommandEvent& event )
 {
     int ii = m_lbPlugins->GetSelection();
@@ -675,6 +650,7 @@ void DIALOG_BOM::OnCommandLineEdited( wxCommandEvent& event )
 
     m_plugins.Item( ii ).Command = m_textCtrlCommand->GetValue();
 }
+
 
 void DIALOG_BOM::OnNameEdited( wxCommandEvent& event )
 {
@@ -705,4 +681,16 @@ void DIALOG_BOM::OnShowConsoleChanged( wxCommandEvent& event )
         m_plugins.Item( ii ).Options.Remove( wxT( "show_console" ) );
     }
 #endif
+}
+
+
+void DIALOG_BOM::OnIdle( wxIdleEvent& event )
+{
+    // On some platforms we initialize wxTextCtrls to all-selected, but we don't want that
+    // for the messages text box.
+    if( !m_initialized )
+    {
+        m_Messages->SetSelection( 0, 0 );
+        m_initialized = true;
+    }
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,19 +8,6 @@
 #include "dialog_bom_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
-
-BEGIN_EVENT_TABLE( DIALOG_BOM_BASE, DIALOG_SHIM )
-	EVT_LISTBOX( wxID_ANY, DIALOG_BOM_BASE::_wxFB_OnPluginSelected )
-	EVT_TEXT( IN_NAMELINE, DIALOG_BOM_BASE::_wxFB_OnNameEdited )
-	EVT_BUTTON( ID_CREATE_BOM, DIALOG_BOM_BASE::_wxFB_OnRunPlugin )
-	EVT_BUTTON( wxID_CANCEL, DIALOG_BOM_BASE::_wxFB_OnCancelClick )
-	EVT_BUTTON( ID_HELP, DIALOG_BOM_BASE::_wxFB_OnHelp )
-	EVT_BUTTON( ID_ADD_PLUGIN, DIALOG_BOM_BASE::_wxFB_OnAddPlugin )
-	EVT_BUTTON( ID_REMOVEL_PLUGIN, DIALOG_BOM_BASE::_wxFB_OnRemovePlugin )
-	EVT_BUTTON( wxID_ANY, DIALOG_BOM_BASE::_wxFB_OnEditPlugin )
-	EVT_TEXT( ID_CMDLINE, DIALOG_BOM_BASE::_wxFB_OnCommandLineEdited )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_BOM_BASE::_wxFB_OnShowConsoleChanged )
-END_EVENT_TABLE()
 
 DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
@@ -35,53 +22,59 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextPluginTitle = new wxStaticText( this, wxID_ANY, _("Plugins:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPluginTitle = new wxStaticText( this, wxID_ANY, _("BOM plugins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPluginTitle->Wrap( -1 );
-	bLeftSizer->Add( m_staticTextPluginTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( m_staticTextPluginTitle, 0, wxTOP, 5 );
 	
 	m_lbPlugins = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	bLeftSizer->Add( m_lbPlugins, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_lbPlugins->SetMinSize( wxSize( 250,-1 ) );
 	
-	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextName->Wrap( -1 );
-	bLeftSizer->Add( m_staticTextName, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_textCtrlName = new wxTextCtrl( this, IN_NAMELINE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_textCtrlName, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( m_lbPlugins, 1, wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonNetlist = new wxButton( this, ID_CREATE_BOM, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonNetlist->SetDefault(); 
-	bRightSizer->Add( m_buttonNetlist, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bNameSizer;
+	bNameSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonCancel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Plugin nickname:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextName->Wrap( -1 );
+	bNameSizer->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_buttonHelp = new wxButton( this, ID_HELP, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonHelp, 0, wxALL|wxEXPAND, 5 );
-	
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightSizer->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
-	
-	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonAddPlugin, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_buttonDelPlugin = new wxButton( this, ID_REMOVEL_PLUGIN, _("Remove Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonDelPlugin, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_buttonEdit = new wxButton( this, wxID_ANY, _("Edit Plugin File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonEdit, 0, wxALL|wxEXPAND, 5 );
+	m_textCtrlName = new wxTextCtrl( this, IN_NAMELINE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bNameSizer->Add( m_textCtrlName, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	
-	bUpperSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bRightSizer->Add( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT, 6 );
+	
+	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_Messages->SetMinSize( wxSize( 300,200 ) );
+	
+	bRightSizer->Add( m_Messages, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( bUpperSizer, 2, wxEXPAND, 5 );
+	bUpperSizer->Add( bRightSizer, 2, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 10 );
+	
+	
+	bMainSizer->Add( bUpperSizer, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bPluginButtons;
+	bPluginButtons = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_buttonAddPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bPluginButtons->Add( m_buttonAddPlugin, 0, wxLEFT, 5 );
+	
+	m_buttonDelPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bPluginButtons->Add( m_buttonDelPlugin, 0, wxRIGHT, 5 );
+	
+	m_buttonEdit = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	bPluginButtons->Add( m_buttonEdit, 0, wxRIGHT|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( bPluginButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	wxBoxSizer* bbottomSizer;
 	bbottomSizer = new wxBoxSizer( wxVERTICAL );
@@ -99,17 +92,24 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_checkBoxShowConsole->SetValue(true); 
 	m_checkBoxShowConsole->SetToolTip( _("By default, command line runs with hidden console window and output is redirected to \"Plugin info\" field.\nSet this option to show the window of the running command.") );
 	
-	bbottomSizer->Add( m_checkBoxShowConsole, 0, wxALL, 5 );
+	bbottomSizer->Add( m_checkBoxShowConsole, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( bbottomSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bbottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Plugin Information:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo->Wrap( -1 );
-	bMainSizer->Add( m_staticTextInfo, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	bMainSizer->Add( m_Messages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1Help = new wxButton( this, wxID_HELP );
+	m_sdbSizer1->AddButton( m_sdbSizer1Help );
+	m_sdbSizer1->Realize();
+	
+	bMainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
@@ -117,6 +117,18 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
+	
+	// Connect Events
+	this->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_BOM_BASE::OnIdle ) );
+	m_lbPlugins->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_BOM_BASE::OnPluginSelected ), NULL, this );
+	m_textCtrlName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BOM_BASE::OnNameEdited ), NULL, this );
+	m_buttonAddPlugin->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnAddPlugin ), NULL, this );
+	m_buttonDelPlugin->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRemovePlugin ), NULL, this );
+	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnEditPlugin ), NULL, this );
+	m_textCtrlCommand->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BOM_BASE::OnCommandLineEdited ), NULL, this );
+	m_checkBoxShowConsole->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnShowConsoleChanged ), NULL, this );
+	m_sdbSizer1Help->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnHelp ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRunPlugin ), NULL, this );
 }
 
 DIALOG_BOM_BASE::~DIALOG_BOM_BASE()

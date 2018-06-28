@@ -101,6 +101,7 @@ set( BMAPS_SMALL
     pintype_noconnect
     refresh
     small_down
+    small_edit
     small_plus
     small_up
     trash
