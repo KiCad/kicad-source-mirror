@@ -29,19 +29,228 @@
 
 
 #include <fctsys.h>
-#include <dialog_edit_components_libid_base.h>
 #include <sch_edit_frame.h>
 #include <class_drawpanel.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
 #include <pgm_base.h>
 #include <symbol_lib_table.h>
+#include <widgets/wx_grid.h>
 
-#include <wx/choicdlg.h>
+#include <dialog_edit_components_libid_base.h>
+#include <wx/tokenzr.h>
 
 #define COL_REFS 0
 #define COL_CURR_LIBID 1
 #define COL_NEW_LIBID 2
+
+// a re-implementation of wxGridCellAutoWrapStringRenderer to allow workaround to autorowsize bug
+class GRIDCELL_AUTOWRAP_STRINGRENDERER : public wxGridCellAutoWrapStringRenderer
+{
+public:
+    int GetHeight( wxDC& aDC, wxGrid* aGrid, int aRow, int aCol );
+
+    wxGridCellRenderer *Clone() const override
+    { return new GRIDCELL_AUTOWRAP_STRINGRENDERER; }
+
+private:
+    // HELPER ROUTINES UNCHANGED FROM wxWidgets IMPLEMENTATION
+
+    wxArrayString GetTextLines( wxGrid& grid,
+                                wxDC& dc,
+                                const wxGridCellAttr& attr,
+                                const wxRect& rect,
+                                int row, int col);
+
+    // Helper methods of GetTextLines()
+
+    // Break a single logical line of text into several physical lines, all of
+    // which are added to the lines array. The lines are broken at maxWidth and
+    // the dc is used for measuring text extent only.
+    void BreakLine(wxDC& dc,
+                   const wxString& logicalLine,
+                   wxCoord maxWidth,
+                   wxArrayString& lines);
+
+    // Break a word, which is supposed to be wider than maxWidth, into several
+    // lines, which are added to lines array and the last, incomplete, of which
+    // is returned in line output parameter.
+    //
+    // Returns the width of the last line.
+    wxCoord BreakWord(wxDC& dc,
+                      const wxString& word,
+                      wxCoord maxWidth,
+                      wxArrayString& lines,
+                      wxString& line);
+};
+
+
+// PRIVATE METHOD UNCHANGED FROM wxWidgets IMPLEMENTATION
+wxArrayString
+GRIDCELL_AUTOWRAP_STRINGRENDERER::GetTextLines(wxGrid& grid,
+                                               wxDC& dc,
+                                               const wxGridCellAttr& attr,
+                                               const wxRect& rect,
+                                               int row, int col)
+{
+    dc.SetFont(attr.GetFont());
+    const wxCoord maxWidth = rect.GetWidth();
+
+    // Transform logical lines into physical ones, wrapping the longer ones.
+    const wxArrayString
+            logicalLines = wxSplit(grid.GetCellValue(row, col), '\n', '\0');
+
+    // Trying to do anything if the column is hidden anyhow doesn't make sense
+    // and we run into problems in BreakLine() in this case.
+    if ( maxWidth <= 0 )
+        return logicalLines;
+
+    wxArrayString physicalLines;
+    for ( wxArrayString::const_iterator it = logicalLines.begin();
+          it != logicalLines.end();
+          ++it )
+    {
+        const wxString& line = *it;
+
+        if ( dc.GetTextExtent(line).x > maxWidth )
+        {
+            // Line does not fit, break it up.
+            BreakLine(dc, line, maxWidth, physicalLines);
+        }
+        else // The entire line fits as is
+        {
+            physicalLines.push_back(line);
+        }
+    }
+
+    return physicalLines;
+}
+
+
+// PRIVATE METHOD UNCHANGED FROM wxWidgets IMPLEMENTATION
+void
+GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakLine(wxDC& dc,
+                                            const wxString& logicalLine,
+                                            wxCoord maxWidth,
+                                            wxArrayString& lines)
+{
+    wxCoord lineWidth = 0;
+    wxString line;
+
+    // For each word
+    wxStringTokenizer wordTokenizer(logicalLine, wxS(" \t"), wxTOKEN_RET_DELIMS);
+    while ( wordTokenizer.HasMoreTokens() )
+    {
+        const wxString word = wordTokenizer.GetNextToken();
+        const wxCoord wordWidth = dc.GetTextExtent(word).x;
+        if ( lineWidth + wordWidth < maxWidth )
+        {
+            // Word fits, just add it to this line.
+            line += word;
+            lineWidth += wordWidth;
+        }
+        else
+        {
+            // Word does not fit, check whether the word is itself wider that
+            // available width
+            if ( wordWidth < maxWidth )
+            {
+                // Word can fit in a new line, put it at the beginning
+                // of the new line.
+                lines.push_back(line);
+                line = word;
+                lineWidth = wordWidth;
+            }
+            else // Word cannot fit in available width at all.
+            {
+                if ( !line.empty() )
+                {
+                    lines.push_back(line);
+                    line.clear();
+                    lineWidth = 0;
+                }
+
+                // Break it up in several lines.
+                lineWidth = BreakWord(dc, word, maxWidth, lines, line);
+            }
+        }
+    }
+
+    if ( !line.empty() )
+        lines.push_back(line);
+}
+
+
+// PRIVATE METHOD UNCHANGED FROM wxWidgets IMPLEMENTATION
+wxCoord
+GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
+                                            const wxString& word,
+                                            wxCoord maxWidth,
+                                            wxArrayString& lines,
+                                            wxString& line)
+{
+    wxArrayInt widths;
+    dc.GetPartialTextExtents(word, widths);
+
+    // TODO: Use binary search to find the first element > maxWidth.
+    const unsigned count = widths.size();
+    unsigned n;
+    for ( n = 0; n < count; n++ )
+    {
+        if ( widths[n] > maxWidth )
+            break;
+    }
+
+    if ( n == 0 )
+    {
+        // This is a degenerate case: the first character of the word is
+        // already wider than the available space, so we just can't show it
+        // completely and have to put the first character in this line.
+        n = 1;
+    }
+
+    lines.push_back(word.substr(0, n));
+
+    // Check if the remainder of the string fits in one line.
+    //
+    // Unfortunately we can't use the existing partial text extents as the
+    // extent of the remainder may be different when it's rendered in a
+    // separate line instead of as part of the same one, so we have to
+    // recompute it.
+    const wxString rest = word.substr(n);
+    const wxCoord restWidth = dc.GetTextExtent(rest).x;
+    if ( restWidth <= maxWidth )
+    {
+        line = rest;
+        return restWidth;
+    }
+
+    // Break the rest of the word into lines.
+    //
+    // TODO: Perhaps avoid recursion? The code is simpler like this but using a
+    // loop in this function would probably be more efficient.
+    return BreakWord(dc, rest, maxWidth, lines, line);
+}
+
+
+#define GRID_CELL_MARGIN   3
+
+int GRIDCELL_AUTOWRAP_STRINGRENDERER::GetHeight( wxDC& aDC, wxGrid* aGrid, int aRow, int aCol )
+{
+    wxGridCellAttr* attr = aGrid->GetOrCreateCellAttr( aRow, aCol );
+    wxRect rect;
+
+    aDC.SetFont( attr->GetFont() );
+    rect.SetWidth( aGrid->GetColSize( aCol ) - ( 2 * GRID_CELL_MARGIN ) );
+
+    const size_t numLines = GetTextLines( *aGrid, aDC, *attr, rect, aRow, aCol ).size();
+    const int textHeight = numLines *aDC.GetCharHeight();
+
+    attr->DecRef();
+
+    return textHeight + ( 2 * GRID_CELL_MARGIN );
+}
+
 
 // a helper class to handle components to edit
 class CMP_CANDIDATE
@@ -89,6 +298,7 @@ class DIALOG_EDIT_COMPONENTS_LIBID : public DIALOG_EDIT_COMPONENTS_LIBID_BASE
 {
 public:
     DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aParent );
+    ~DIALOG_EDIT_COMPONENTS_LIBID() override;
 
     bool IsSchematicModified() { return m_isModified; }
 
@@ -99,17 +309,17 @@ private:
 
     std::vector<CMP_CANDIDATE> m_components;
 
+    GRIDCELL_AUTOWRAP_STRINGRENDERER* m_autoWrapRenderer;
+
     void initDlg();
 
     /**
      * Add a new row (new entry) in m_grid.
-     * @param aRowId is the row index
      * @param aMarkRow = true to use bold/italic font in column COL_CURR_LIBID
      * @param aReferences is the value of cell( aRowId, COL_REFS)
      * @param aStrLibId is the value of cell( aRowId, COL_CURR_LIBID)
      */
-    void AddRowToGrid( int aRowId, bool aMarkRow,
-                       const wxString& aReferences, const wxString& aStrLibId );
+    void AddRowToGrid( bool aMarkRow, const wxString& aReferences, const wxString& aStrLibId );
 
     /// returns true if all new lib id are valid
     bool validateLibIds();
@@ -139,8 +349,6 @@ private:
         event.Skip();
     }
 
-	void onButtonBrowseLibraries( wxCommandEvent& event ) override;
-
     // Undo all changes, and clear the list of new lib_ids
 	void onUndoChangesButton( wxCommandEvent& event ) override;
 
@@ -153,14 +361,12 @@ private:
         m_buttonUndo->Enable( m_isModified );
     }
 
-	void updateUIBrowseButton( wxUpdateUIEvent& event ) override
-    {
-        wxArrayInt rows = m_grid->GetSelectedRows();
-        m_buttonBrowseLibs->Enable( rows.GetCount() == 1 );
-    }
-
     // Automatically called when click on OK button
     bool TransferDataFromWindow() override;
+
+    void AdjustGridColumns( int aWidth );
+
+    void OnSizeGrid( wxSizeEvent& event ) override;
 };
 
 
@@ -168,22 +374,21 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
     :DIALOG_EDIT_COMPONENTS_LIBID_BASE( aParent )
 {
     m_parent = aParent;
+    m_autoWrapRenderer = new GRIDCELL_AUTOWRAP_STRINGRENDERER;
+
     initDlg();
 
-    // Gives a min size to display m_grid, now it is populated:
-    int minwidth = 30   // a margin
-                   + m_grid->GetRowLabelSize() + m_grid->GetColSize( COL_REFS )
-                   + m_grid->GetColSize( COL_CURR_LIBID ) + m_grid->GetColSize( COL_NEW_LIBID );
-
-    SetMinClientSize( wxSize( minwidth, VertPixelsFromDU( 250 ) ) );
-
-    SetSizeInDU( 500, 400 );
-    Center();
+    FinishDialogSettings();
 }
 
 
-// A sort compare function to sort components list by LIB_ID
-// inside the group of same LIB_ID, sort by reference
+DIALOG_EDIT_COMPONENTS_LIBID::~DIALOG_EDIT_COMPONENTS_LIBID()
+{
+    m_autoWrapRenderer->DecRef();
+}
+
+
+// A sort compare function to sort components list by LIB_ID and then reference
 static bool sort_by_libid( const CMP_CANDIDATE& cmp1, const CMP_CANDIDATE& cmp2 )
 {
     if( cmp1.m_Component->GetLibId() == cmp2.m_Component->GetLibId() )
@@ -195,6 +400,9 @@ static bool sort_by_libid( const CMP_CANDIDATE& cmp1, const CMP_CANDIDATE& cmp2 
 
 void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 {
+    // Clear the FormBuilder rows
+    m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
+
     m_isModified = false;
 
     // Build the component list:
@@ -276,7 +484,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         if( last_str_libid != str_libid )
         {
             // Add last group to grid
-            AddRowToGrid( row, mark_cell, refs, last_str_libid );
+            AddRowToGrid( mark_cell, refs, last_str_libid );
 
             // prepare next entry
             mark_cell = cmp->m_IsOrphan;
@@ -286,26 +494,14 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         }
 
         if( !refs.IsEmpty() )
-            refs += " ";
+            refs += wxT( ", " );
 
         refs += cmp->GetSchematicReference();
         cmp->m_Row = row;
     }
 
     // Add last component group:
-    AddRowToGrid( row, mark_cell, refs, last_str_libid );
-
-    m_grid->AutoSizeColumn( COL_CURR_LIBID );
-    // ensure the column title is correctly displayed
-    // (the min size is already fixed by AutoSizeColumn() )
-    m_grid->AutoSizeColLabelSize( COL_CURR_LIBID );
-
-    // Gives a similar width to COL_NEW_LIBID because it can contains similar strings
-    if( m_grid->GetColSize( COL_CURR_LIBID ) > m_grid->GetColSize( COL_NEW_LIBID ) )
-        m_grid->SetColSize( COL_NEW_LIBID, m_grid->GetColSize( COL_CURR_LIBID ) );
-    // ensure the column title is correctly displayed
-    m_grid->SetColMinimalWidth( COL_NEW_LIBID, m_grid->GetColSize( COL_NEW_LIBID ) );
-    m_grid->AutoSizeColLabelSize( COL_NEW_LIBID );
+    AddRowToGrid( mark_cell, refs, last_str_libid );
 
     // Allows only the selection by row
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -315,16 +511,15 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 }
 
 
-void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( int aRowId, bool aMarkRow,
-                    const wxString& aReferences, const wxString& aStrLibId )
+void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& aReferences,
+                                                 const wxString& aStrLibId )
 {
+    int row = m_grid->GetNumberRows();
+
     if( aMarkRow )      // a orphan component exists, set m_AsOrphanCmp as true
-        m_OrphansRowIndexes.push_back( aRowId );
+        m_OrphansRowIndexes.push_back( row );
 
-    int row = aRowId;
-
-    if( m_grid->GetNumberRows() <= row )
-        m_grid->AppendRows();
+    m_grid->AppendRows( 1 );
 
     m_grid->SetCellValue( row, COL_REFS, aReferences );
     m_grid->SetReadOnly( row, COL_REFS );
@@ -340,13 +535,20 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( int aRowId, bool aMarkRow,
         m_grid->SetCellFont( row, COL_CURR_LIBID, font );
     }
 
-    m_grid->SetCellRenderer( row, COL_REFS, new wxGridCellAutoWrapStringRenderer);
-    m_grid->AutoSizeRow( row, false );
+    m_grid->SetCellRenderer( row, COL_REFS, m_autoWrapRenderer->Clone() );
+
+    // wxWidgets' AutoRowHeight fails when used with wxGridCellAutoWrapStringRenderer
+    // (fixed in 2014, but didn't get in to wxWidgets 3.0.2)
+    wxClientDC dc( this );
+    m_grid->SetRowSize( row, m_autoWrapRenderer->GetHeight( dc, m_grid, row, COL_REFS ) );
 }
 
 
 bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
 {
+    // Commit any pending edits
+    m_grid->DisableCellEditControl();
+
     int row_max = m_grid->GetNumberRows() - 1;
 
     for( int row = 0; row <= row_max; row++ )
@@ -363,8 +565,16 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
         if( !id.IsValid() )
         {
             wxString msg;
-            msg.Printf( _( "Symbol library identifier \"%s\" is not valid at row %d!" ), new_libid, row+1 );
+            msg.Printf( _( "Symbol library identifier \"%s\" is not valid." ), new_libid );
             wxMessageBox( msg );
+
+            m_grid->SetFocus();
+            m_grid->MakeCellVisible( row, COL_NEW_LIBID );
+            m_grid->SetGridCursor( row, COL_NEW_LIBID );
+
+            m_grid->EnableCellEditControl( true );
+            m_grid->ShowCellEditControl();
+
             return false;
         }
     }
@@ -402,17 +612,6 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onCellBrowseLib( wxGridEvent& event )
 
     setLibIdByBrowser( row );
 
-}
-
-
-void DIALOG_EDIT_COMPONENTS_LIBID::onButtonBrowseLibraries( wxCommandEvent& event )
-{
-    wxArrayInt rows = m_grid->GetSelectedRows();
-
-    if( rows.GetCount() != 1 )  // Should not occur, because the button is disabled
-        return;
-
-    setLibIdByBrowser( rows[0] );
 }
 
 
@@ -608,6 +807,31 @@ void DIALOG_EDIT_COMPONENTS_LIBID::revertChanges()
         schematic.UpdateSymbolLinks( true );
         m_parent->GetCanvas()->Refresh();
     }
+}
+
+
+void DIALOG_EDIT_COMPONENTS_LIBID::AdjustGridColumns( int aWidth )
+{
+    // Account for scroll bars
+    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+
+    m_grid->SetColSize( 0, aWidth / 3 );
+    m_grid->SetColSize( 1, aWidth / 3 );
+    m_grid->SetColSize( 2, aWidth - m_grid->GetColSize( 0 ) - m_grid->GetColSize( 1 ) );
+}
+
+
+void DIALOG_EDIT_COMPONENTS_LIBID::OnSizeGrid( wxSizeEvent& event )
+{
+    AdjustGridColumns( event.GetSize().GetX() );
+
+    wxClientDC dc( this );
+
+    // wxWidgets' AutoRowHeight fails when used with wxGridCellAutoWrapStringRenderer
+    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+        m_grid->SetRowSize( row, m_autoWrapRenderer->GetHeight( dc, m_grid, row, COL_REFS ) );
+
+    event.Skip();
 }
 
 
