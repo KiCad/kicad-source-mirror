@@ -348,7 +348,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     }
 
 #ifdef USE_OPENMP
-    #pragma omp parallel shared( m_itemList ) num_threads( std::max( omp_get_num_procs(), 2 ) )
+    #pragma omp parallel num_threads( std::max( omp_get_num_procs(), 2 ) )
     {
         if( omp_get_thread_num() == 0 && m_progressReporter )
             m_progressReporter->KeepRefreshing( true );
