@@ -199,10 +199,10 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
 
             if( part || aForceIncludeOrphanComponents )
             {
-                SCH_REFERENCE reference( component, part, *this );
+                SCH_REFERENCE schReference( component, part, *this );
 
-                reference.SetSheetNumber( m_pageNumber );
-                aReferences.AddItem( reference );
+                schReference.SetSheetNumber( m_pageNumber );
+                aReferences.AddItem( schReference );
             }
         }
     }
@@ -229,15 +229,15 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP& aRefL
 
         if( part && part->GetUnitCount() > 1 )
         {
-            SCH_REFERENCE reference = SCH_REFERENCE( component, part, *this );
-            reference.SetSheetNumber( m_pageNumber );
-            wxString reference_str = reference.GetRef();
+            SCH_REFERENCE schReference = SCH_REFERENCE( component, part, *this );
+            schReference.SetSheetNumber( m_pageNumber );
+            wxString reference_str = schReference.GetRef();
 
             // Never lock unassigned references
             if( reference_str[reference_str.Len() - 1] == '?' )
                 continue;
 
-            aRefList[reference_str].AddItem( reference );
+            aRefList[reference_str].AddItem( schReference );
         }
     }
 }
@@ -536,8 +536,8 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 
             if( part )
             {
-                SCH_REFERENCE reference( component, part, spath );
-                references.AddItem( reference );
+                SCH_REFERENCE schReference( component, part, spath );
+                references.AddItem( schReference );
             }
         }
     }
