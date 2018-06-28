@@ -379,7 +379,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 #endif
 
 #ifdef USE_OPENMP
-        #pragma omp for
+        #pragma omp parallel for
 #endif
         for( int i = 0; i < m_zoneList.Size(); i++ )
         {
