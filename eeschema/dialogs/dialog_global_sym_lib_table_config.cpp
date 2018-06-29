@@ -43,6 +43,9 @@ DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow
     m_defaultFileFound = wxFileName::FileExists( fileName );
     m_filePicker1->SetFileName( wxFileName( fileName ) );
 
+    if( !m_defaultFileFound )
+        m_customRb->SetValue( true );
+
     wxButton* okButton = (wxButton *) FindWindowById( wxID_OK );
 
     if( okButton )
