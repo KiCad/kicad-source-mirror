@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.0.0-rc2-151-g11ab8f6dc)")
+(kicad_pcb (version 20171130) (host pcbnew "(5.0.0-rc2-221-gd3deaf5ff)")
 
   (general
     (thickness 1.6)
@@ -1850,7 +1850,7 @@
     )
   )
 
-  (module 1pin (layer top_copper) (tedit 200000) (tstamp 442A9359)
+  (module 1pin locked (layer top_copper) (tedit 200000) (tstamp 442A9359)
     (at 158.75 44.45)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
@@ -1864,7 +1864,7 @@
     (pad 1 thru_hole circle (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module 1pin (layer top_copper) (tedit 200000) (tstamp 442A9352)
+  (module 1pin locked (layer top_copper) (tedit 200000) (tstamp 442A9352)
     (at 158.75 135.89)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
@@ -1878,7 +1878,7 @@
     (pad 1 thru_hole circle (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module 1pin (layer top_copper) (tedit 200000) (tstamp 442A9347)
+  (module 1pin locked (layer top_copper) (tedit 200000) (tstamp 442A9347)
     (at 77.47 135.89)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
@@ -1892,7 +1892,7 @@
     (pad 1 thru_hole circle (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module 1pin (layer top_copper) (tedit 200000) (tstamp 442A9340)
+  (module 1pin locked (layer top_copper) (tedit 200000) (tstamp 442A9340)
     (at 77.47 44.45)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
@@ -1906,7 +1906,7 @@
     (pad 1 thru_hole circle (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module 1pin (layer top_copper) (tedit 200000) (tstamp 442A9339)
+  (module 1pin locked (layer top_copper) (tedit 200000) (tstamp 442A9339)
     (at 229.87 135.89)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)
@@ -1920,7 +1920,7 @@
     (pad 1 thru_hole circle (at 0 0) (size 4.064 4.064) (drill 3.048) (layers *.Cu *.Mask F.SilkS))
   )
 
-  (module 1pin (layer top_copper) (tedit 200000) (tstamp 442A932C)
+  (module 1pin locked (layer top_copper) (tedit 200000) (tstamp 442A932C)
     (at 229.87 44.45)
     (descr "module 1 pin (ou trou mecanique de percage)")
     (tags DEV)

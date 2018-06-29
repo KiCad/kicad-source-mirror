@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# +12V
+# schematic_libspice:+12V
 #
-DEF +12V #PWR 0 0 Y Y 1 F P
+DEF schematic_libspice:+12V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "+12V" 0 140 50 H V C CNN
+F1 "schematic_libspice:+12V" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -16,11 +16,11 @@ X +12V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# 0
+# schematic_libspice:0
 #
-DEF 0 #GND 0 0 Y Y 1 F P
+DEF schematic_libspice:0 #GND 0 0 Y Y 1 F P
 F0 "#GND" 0 -100 50 H I C CNN
-F1 "0" 0 -70 50 H V C CNN
+F1 "schematic_libspice:0" 0 -70 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 DRAW
@@ -29,11 +29,11 @@ X 0 1 0 0 0 R 40 40 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# CAP
+# schematic_libspice:C
 #
-DEF CAP C 0 10 Y Y 1 F N
+DEF schematic_libspice:C C 0 10 Y Y 1 F N
 F0 "C" 100 150 50 V V C CNN
-F1 "CAP" 100 -150 50 V V C CNN
+F1 "schematic_libspice:C" 100 -150 50 V V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 ALIAS C
@@ -45,11 +45,26 @@ X ~ 2 0 -250 200 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# INDUCTOR
+# schematic_libspice:CAP
 #
-DEF INDUCTOR L 0 0 N Y 1 F N
+DEF schematic_libspice:CAP C 0 10 Y Y 1 F N
+F0 "C" 100 150 50 V V C CNN
+F1 "schematic_libspice:CAP" 100 -150 50 V V C CNN
+F2 "" 0 0 50 H V C CNN
+F3 "" 0 0 50 H V C CNN
+DRAW
+P 2 0 1 0 -150 -50 150 -50 N
+P 2 0 1 0 -150 50 150 50 N
+X ~ 1 0 250 200 D 40 40 1 1 P
+X ~ 2 0 -250 200 U 40 40 1 1 P
+ENDDRAW
+ENDDEF
+#
+# schematic_libspice:INDUCTOR
+#
+DEF schematic_libspice:INDUCTOR L 0 0 N Y 1 F N
 F0 "L" 0 100 50 H V C CNN
-F1 "INDUCTOR" 0 -50 50 H V C CNN
+F1 "schematic_libspice:INDUCTOR" 0 -50 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 DRAW
@@ -62,11 +77,11 @@ X 2 2 250 0 50 L 30 30 1 1 I
 ENDDRAW
 ENDDEF
 #
-# PWR_FLAG
+# schematic_libspice:PWR_FLAG
 #
-DEF PWR_FLAG #FLG 0 0 N N 1 F P
+DEF schematic_libspice:PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 75 50 H I C CNN
-F1 "PWR_FLAG" 0 150 40 H V C CNN
+F1 "schematic_libspice:PWR_FLAG" 0 150 40 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -75,11 +90,11 @@ X pwr 1 0 0 0 U 50 50 0 0 w
 ENDDRAW
 ENDDEF
 #
-# QNPN
+# schematic_libspice:QNPN
 #
-DEF QNPN Q 0 0 Y Y 1 F N
+DEF schematic_libspice:QNPN Q 0 0 Y Y 1 F N
 F0 "Q" -100 300 50 H V C CNN
-F1 "QNPN" -100 200 50 H V C CNN
+F1 "schematic_libspice:QNPN" -100 200 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 DRAW
@@ -93,11 +108,11 @@ X E 3 150 -350 200 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# R
+# schematic_libspice:R
 #
-DEF R R 0 0 N Y 1 F N
+DEF schematic_libspice:R R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "R" 0 0 50 V V C CNN
+F1 "schematic_libspice:R" 0 0 50 V V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 DRAW
@@ -107,11 +122,11 @@ X ~ 2 0 -250 100 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# VSOURCE
+# schematic_libspice:VSOURCE
 #
-DEF VSOURCE V 0 40 Y Y 1 F N
+DEF schematic_libspice:VSOURCE V 0 40 Y Y 1 F N
 F0 "V" 0 -100 50 H V C CNN
-F1 "VSOURCE" 0 100 50 H V C CNN
+F1 "schematic_libspice:VSOURCE" 0 100 50 H V C CNN
 F2 "" 0 0 50 H V C CNN
 F3 "" 0 0 50 H V C CNN
 DRAW

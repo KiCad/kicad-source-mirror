@@ -25,18 +25,18 @@ Wire Notes Line
 Wire Notes Line
 	3900 6200 1100 6200
 Wire Wire Line
-	4400 2800 5300 2800
+	4400 2800 5100 2800
 Connection ~ 9200 1800
 Wire Wire Line
 	9200 1800 8700 1800
 Wire Wire Line
 	7800 1800 8200 1800
 Wire Wire Line
-	7800 1450 7800 1800
+	7800 1450 7800 1500
 Wire Wire Line
-	7800 1500 8250 1500
+	7800 1500 8050 1500
 Wire Wire Line
-	9200 1050 9200 2100
+	9200 1050 9200 1500
 Wire Wire Line
 	9400 2950 9550 2950
 Connection ~ 7050 2450
@@ -47,7 +47,7 @@ Wire Wire Line
 Wire Wire Line
 	3900 2800 3850 2800
 Wire Wire Line
-	6100 2450 7250 2450
+	6100 2450 7050 2450
 Wire Wire Line
 	6100 2450 6100 2300
 Wire Wire Line
@@ -57,11 +57,11 @@ Connection ~ 6700 2800
 Wire Wire Line
 	6550 2800 6700 2800
 Wire Wire Line
-	6700 2300 6700 3300
+	6700 2300 6700 2800
 Wire Wire Line
-	5100 2300 5100 3300
+	5100 2300 5100 2800
 Wire Wire Line
-	7700 2100 9250 2100
+	7700 2100 9200 2100
 Text Notes 1150 6500 0    60   ~ 0
 .model Q2N2222 npn (bf=200)\n.ac dec 100 10 1Meg\n
 Text Notes 1100 6200 0    60   ~ 0
@@ -157,12 +157,12 @@ $EndComp
 $Comp
 L schematic_libspice:+12V #+12V01
 U 1 1 32E8B84A
-P 7800 900
-F 0 "#+12V01" H 7800 1100 40  0001 C CNN
-F 1 "+12V" H 7800 1050 40  0000 C CNN
-F 2 "" H 7800 900 60  0001 C CNN
-F 3 "" H 7800 900 60  0001 C CNN
-	1    7800 900 
+P 7800 850
+F 0 "#+12V01" H 7800 1050 40  0001 C CNN
+F 1 "+12V" H 7800 1000 40  0000 C CNN
+F 2 "" H 7800 850 60  0001 C CNN
+F 3 "" H 7800 850 60  0001 C CNN
+	1    7800 850 
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -457,7 +457,7 @@ Wire Wire Line
 Wire Wire Line
 	9550 3500 9550 3450
 Wire Wire Line
-	7700 2800 7700 3000
+	7700 2800 7700 2900
 Wire Wire Line
 	8500 2900 8750 2900
 Connection ~ 7700 2900
@@ -472,7 +472,7 @@ Wire Wire Line
 Wire Wire Line
 	7800 900  7800 950 
 Wire Wire Line
-	5750 3200 6100 3200
+	5750 3200 5950 3200
 Text GLabel 9250 2100 2    60   Output ~ 0
 VOUT
 Connection ~ 9200 2100
@@ -503,14 +503,14 @@ $EndComp
 Wire Wire Line
 	8850 2800 8750 2800
 Wire Wire Line
-	8750 2800 8750 3050
+	8750 2800 8750 2900
 Wire Wire Line
 	8750 3050 8850 3050
 Connection ~ 8750 2900
 Wire Wire Line
 	9350 2800 9400 2800
 Wire Wire Line
-	9400 2800 9400 3050
+	9400 2800 9400 2950
 Wire Wire Line
 	9400 3050 9350 3050
 Connection ~ 9400 2950
@@ -578,4 +578,34 @@ F 3 "" H 8250 2900 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8000 2900 7700 2900
+Wire Wire Line
+	9200 1800 9200 2100
+Wire Wire Line
+	7050 2450 7250 2450
+Wire Wire Line
+	5100 2800 5300 2800
+Wire Wire Line
+	5100 2800 5100 3300
+Wire Wire Line
+	6700 2800 6700 3300
+Wire Wire Line
+	7800 1500 7800 1800
+Wire Wire Line
+	5950 3200 6100 3200
+Wire Wire Line
+	7700 2900 7700 3000
+Wire Wire Line
+	9200 2100 9250 2100
+Wire Wire Line
+	8750 2900 8750 3050
+Wire Wire Line
+	9400 2950 9400 3050
+Wire Wire Line
+	9200 1500 9200 1800
+Wire Wire Line
+	8050 1500 8250 1500
+Connection ~ 6100 2450
+Wire Wire Line
+	7800 850  7800 900 
+Connection ~ 7800 900 
 $EndSCHEMATC
