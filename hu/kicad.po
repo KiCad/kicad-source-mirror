@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-24 01:34+0200\n"
+"PO-Revision-Date: 2018-06-30 00:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -72,8 +72,9 @@ msgid "All Files (*.*)|*.*"
 msgstr "Minden fájl (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:133
+#, fuzzy
 msgid "[BUG] No valid resolver; data will not be updated"
-msgstr ""
+msgstr "[BUG] Nincs érvényes resolver; az adatok nem frissülnek"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:134
 msgid "Update 3D search path list"
@@ -152,7 +153,7 @@ msgstr "Környezeti változók konfigurálása"
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
 #: eeschema/libedit.cpp:680 eeschema/viewlibs.cpp:242
 msgid "Alias"
-msgstr "Alias"
+msgstr "Megnevezés"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:84
 #: common/dialog_about/AboutDialog_main.cpp:114
@@ -1247,7 +1248,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Eeschema (.lib file)"
-msgstr "Kapcsolási rajz szerkesztő könyvtár *.lib fájl"
+msgstr "Kapcsolási rajz tervező könyvtár *.lib fájl"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Pcbnew (.kicad_mod file)"
@@ -1430,7 +1431,7 @@ msgstr "Blokk beillesztése"
 #: pcbnew/footprint_editor_utils.cpp:933 pcbnew/tool_footprint_editor.cpp:133
 #: pcbnew/tool_pcb_editor.cpp:294
 msgid "Zoom to selection"
-msgstr "Nagyítás a kiválasztása"
+msgstr "Kijelölésre nagyítás"
 
 #: common/block_commande.cpp:101
 msgid "Block Rotate"
@@ -4439,7 +4440,7 @@ msgstr "Alkatrész Könyvtár tulajdonságai"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:83
 #, c-format
 msgid "Properties for %s (alias of %s)"
-msgstr ""
+msgstr "%s (valamint a  %s) rajzjel tulajdonságai"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:87
 #, c-format
@@ -4449,7 +4450,7 @@ msgstr "Megnevezés lista %s"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:91
 #, c-format
 msgid "Properties for %s"
-msgstr "\"%s\" rajzjel tulajdonságok"
+msgstr "%s rajzjel tulajdonságai"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:164
 #, c-format
@@ -5678,7 +5679,7 @@ msgstr "Mezőnév sablonok"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:138
 msgid "Schematic Editor Options"
-msgstr "Kapcsolási rajz szerkesztő beállítások"
+msgstr "Kapcsolási rajz tervező beállítások"
 
 #: eeschema/dialogs/dialog_erc.cpp:232
 msgid "Marker not found"
@@ -6185,11 +6186,11 @@ msgstr "50"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:176
 msgid "Show pin &electrical type"
-msgstr ""
+msgstr "Láb elektromos típusa megjelenítése"
 
 #: eeschema/dialogs/dialog_libedit_options_base.h:93
 msgid "Library Editor Options"
-msgstr "Alkatrész szerkesztő beállítások"
+msgstr "Rajzjel szerkesztő beállítások"
 
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Default format"
@@ -8187,7 +8188,7 @@ msgstr "Vonal / sokszög hozzáadása"
 
 #: eeschema/help_common_strings.h:74
 msgid "Place text"
-msgstr "Azöveg hozzáadása"
+msgstr "Szöveg hozzáadása"
 
 #: eeschema/help_common_strings.h:76
 msgid "Annotate schematic symbols"
@@ -8492,7 +8493,7 @@ msgstr "Közös "
 
 #: eeschema/hotkeys.cpp:349
 msgid "Schematic Editor"
-msgstr "Kapcsolási rajz szerkesztő"
+msgstr "Kapcsolási rajz tervező"
 
 #: eeschema/hotkeys.cpp:350 eeschema/lib_edit_frame.cpp:207
 msgid "Library Editor"
@@ -8672,7 +8673,7 @@ msgstr "Nem sikerült menteni a dokumentumot a fájlba"
 
 #: eeschema/lib_export.cpp:60 eeschema/symbedit.cpp:64
 msgid "Import Symbol"
-msgstr "Szimbólum importálása"
+msgstr "Rajzjel importálása"
 
 #: eeschema/lib_export.cpp:80 eeschema/symbedit.cpp:90
 #, c-format
@@ -9426,7 +9427,7 @@ msgstr "Kapcsolási rajz másolása a vágólapra"
 #: eeschema/menubar.cpp:444 pcbnew/menubar_footprint_editor.cpp:123
 #: pcbnew/menubar_pcb_editor.cpp:887
 msgid "E&xport"
-msgstr "E&xport"
+msgstr "Exportolás"
 
 #: eeschema/menubar.cpp:445 pcbnew/menubar_footprint_editor.cpp:124
 msgid "Export files"
@@ -9462,7 +9463,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:468
 msgid "Close Eeschema"
-msgstr "Kapcsolási rajz szerkesztő bezárása"
+msgstr "Kapcsolási rajz tervező bezárása"
 
 #: eeschema/menubar.cpp:478 eeschema/menubar_libedit.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:158 pcbnew/menubar_pcb_editor.cpp:503
@@ -9609,7 +9610,7 @@ msgstr "Kapcsolásrajz szerkesztő kézikönyv"
 
 #: eeschema/menubar.cpp:637
 msgid "Open Eeschema Manual"
-msgstr "Kapcsolási rajz szerkesztő kézikönyv megnyitása"
+msgstr "Kapcsolási rajz tervező kézikönyv megnyitása"
 
 #: eeschema/menubar.cpp:650 pcbnew/menubar_footprint_editor.cpp:497
 msgid "Displays current hotkeys table and corresponding commands"
@@ -9634,7 +9635,7 @@ msgstr "Általános Beállítások"
 
 #: eeschema/menubar.cpp:691
 msgid "Edit Eeschema preferences"
-msgstr "Kapcsolási rajz szerkesztő beállításai"
+msgstr "Kapcsolási rajz tervező beállításai"
 
 #: eeschema/menubar.cpp:729 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Save Project File..."
@@ -9655,7 +9656,7 @@ msgstr ""
 #: eeschema/menubar_libedit.cpp:60 eeschema/widgets/cmp_tree_pane.cpp:52
 #: eeschema/widgets/cmp_tree_pane.cpp:93
 msgid "&New Library..."
-msgstr "Új könyvtár..."
+msgstr "Új könyvtár"
 
 #: eeschema/menubar_libedit.cpp:61
 msgid "Creates an empty library"
@@ -9664,7 +9665,7 @@ msgstr "Egy üres rajzjelkönyvtár létrehozása"
 #: eeschema/menubar_libedit.cpp:66 eeschema/widgets/cmp_tree_pane.cpp:54
 #: eeschema/widgets/cmp_tree_pane.cpp:95
 msgid "&Add Library..."
-msgstr "Rajzjelkönyvtár hozzáadása..."
+msgstr "Rajzjelkönyvtár hozzáadása"
 
 #: eeschema/menubar_libedit.cpp:67
 msgid "Adds a previously created library"
@@ -9676,7 +9677,7 @@ msgstr "Az aktuális könyvtár mentése"
 
 #: eeschema/menubar_libedit.cpp:82 eeschema/widgets/cmp_tree_pane.cpp:58
 msgid "Save Library As..."
-msgstr "A könyvtár mentés másként..."
+msgstr "Rajzjel könyvtár mentése másként"
 
 #: eeschema/menubar_libedit.cpp:83
 msgid "Save the current library to a new file"
@@ -9688,7 +9689,7 @@ msgstr "Az összes könyvtár változások mentése"
 
 #: eeschema/menubar_libedit.cpp:96
 msgid "Export Current View as &PNG..."
-msgstr "Aktuális nézet exportálása PNG-ként..."
+msgstr "Aktuális nézet exportálása PNG-ként"
 
 #: eeschema/menubar_libedit.cpp:97
 msgid "Create a PNG file from the current view"
@@ -9725,11 +9726,11 @@ msgstr "Nagyítás a alkatrészhez"
 
 #: eeschema/menubar_libedit.cpp:179
 msgid "&Search Tree"
-msgstr ""
+msgstr "Rajzjel kereső megjelenítése / elrejtése"
 
 #: eeschema/menubar_libedit.cpp:180
 msgid "Toggles the search tree visibility"
-msgstr ""
+msgstr "Rajzjel kereső megjelenítése"
 
 #: eeschema/menubar_libedit.cpp:188
 msgid "&New Symbol..."
@@ -9745,7 +9746,7 @@ msgstr "Az aktuális alkatrész mentése a könyvtárba"
 
 #: eeschema/menubar_libedit.cpp:202 eeschema/widgets/cmp_tree_pane.cpp:66
 msgid "&Import Symbol..."
-msgstr "Alkatrész importálása..."
+msgstr "Rajzjel importálása"
 
 #: eeschema/menubar_libedit.cpp:203
 msgid "Import a symbol to the current library"
@@ -9753,7 +9754,7 @@ msgstr "Alkatrész importálása az aktuális könyvtárhoz"
 
 #: eeschema/menubar_libedit.cpp:208
 msgid "&Export Symbol..."
-msgstr "Rajzjel exportálása..."
+msgstr "Rajzjel exportálása"
 
 #: eeschema/menubar_libedit.cpp:209
 msgid "Export the current symbol"
@@ -9761,31 +9762,31 @@ msgstr "Exportálja az aktuális rajzjelt"
 
 #: eeschema/menubar_libedit.cpp:216
 msgid "&Properties..."
-msgstr "Beállítások..."
+msgstr "Rajzjel tulajdonságai..."
 
 #: eeschema/menubar_libedit.cpp:217 eeschema/tool_lib.cpp:161
 msgid "Edit symbol properties"
-msgstr "Rajzjel tulajdonságok szerkesztése"
+msgstr "Rajzjel tulajdonságai..."
 
 #: eeschema/menubar_libedit.cpp:222
 msgid "&Fields..."
-msgstr "Szövegmezők..."
+msgstr "Rajzjel szövegmezők..."
 
 #: eeschema/menubar_libedit.cpp:223 eeschema/tool_lib.cpp:165
 msgid "Edit field properties"
-msgstr "Szövegmező tulajdonságok szerkesztése"
+msgstr "Rajzjel szövegmező tulajdonságai..."
 
 #: eeschema/menubar_libedit.cpp:230
 msgid "Pi&n Table..."
-msgstr "Rajzjel láb táblázat..."
+msgstr "Rajzjel lábkiosztás táblázat..."
 
 #: eeschema/menubar_libedit.cpp:231 eeschema/tool_lib.cpp:234
 msgid "Show pin table"
-msgstr "Rajzjel láb táblázat megjelenítése"
+msgstr "Rajzjel lábkiosztás táblázat megjelenítése"
 
 #: eeschema/menubar_libedit.cpp:237 eeschema/tool_lib.cpp:170
 msgid "Check duplicate and off grid pins"
-msgstr ""
+msgstr "Ellenőrizze a duplikált és rácson kívüli lábakat"
 
 #: eeschema/menubar_libedit.cpp:246
 msgid "&Pin"
@@ -9827,7 +9828,7 @@ msgstr "Rajzjelszerkesztő beállítások"
 
 #: eeschema/menubar_libedit.cpp:324
 msgid "Open the Eeschema Manual"
-msgstr "Kapcsolási rajz szerkesztő kézikönyv megnyitása"
+msgstr "Kapcsolási rajz tervező kézikönyv megnyitása"
 
 #: eeschema/menubar_libedit.cpp:330 eeschema/tool_viewlib.cpp:211
 #: pcbnew/menubar_footprint_editor.cpp:491 pcbnew/tool_footprint_viewer.cpp:181
@@ -11280,7 +11281,7 @@ msgstr "Rajzjel horgony mozgatás"
 
 #: eeschema/tool_lib.cpp:89
 msgid "Import existing drawings"
-msgstr "Szimbólumrajz importálása fájlból"
+msgstr "Rajzjel importálása fájlból"
 
 #: eeschema/tool_lib.cpp:93
 msgid "Export current drawing"
@@ -11292,7 +11293,7 @@ msgstr "Új könyvtár létrehozása"
 
 #: eeschema/tool_lib.cpp:120
 msgid "Add an existing library"
-msgstr "Meglévő könyvtárat hozzáadása"
+msgstr "Meglévő könyvtár hozzáadása"
 
 #: eeschema/tool_lib.cpp:124
 msgid "Save all libraries"
@@ -11341,11 +11342,11 @@ msgstr "Rács elrejtése"
 
 #: eeschema/tool_lib.cpp:274
 msgid "Show pins electrical type"
-msgstr ""
+msgstr "Láb elektromos típusa megjelenítése"
 
 #: eeschema/tool_lib.cpp:278
 msgid "Toggles the search tree"
-msgstr ""
+msgstr "Rajzjel kereső megjelenítése / elrejtése"
 
 #: eeschema/tool_sch.cpp:61
 msgid "New schematic"
@@ -11451,15 +11452,15 @@ msgstr "Kapcsolási rajzjel böngésző bezárása"
 
 #: eeschema/tool_viewlib.cpp:197
 msgid "&Show Pin Electrical Type"
-msgstr ""
+msgstr "Láb elektromos típusa megjelenítése"
 
 #: eeschema/tool_viewlib.cpp:206
 msgid "Open Eeschema manual"
-msgstr "Kapcsolási rajz szerkesztő kézikönyv megnyitása"
+msgstr "Kapcsolási rajz tervező kézikönyv megnyitása"
 
 #: eeschema/tool_viewlib.cpp:222
 msgid "&About Eeschema"
-msgstr "&Kapcsolási rajz szerkesztő névjegy"
+msgstr "Kapcsolási rajz tervező névjegy"
 
 #: eeschema/tool_viewlib.cpp:223
 msgid "About Eeschema schematic designer"
@@ -13002,7 +13003,7 @@ msgstr "Aktív"
 
 #: kicad/commandframe.cpp:72
 msgid "Schematic layout editor"
-msgstr "Kapcsolási rajz szerkesztő"
+msgstr "Kapcsolási rajz tervező"
 
 #: kicad/commandframe.cpp:76
 msgid "Symbol library editor"
@@ -13010,7 +13011,7 @@ msgstr "Alkatrész rajzjel szerkesztő"
 
 #: kicad/commandframe.cpp:83
 msgid "PCB layout editor"
-msgstr "Nyákterv szerkesztő"
+msgstr "Nyáktervező"
 
 #: kicad/commandframe.cpp:87
 msgid "Footprint library editor"
@@ -13025,10 +13026,12 @@ msgid ""
 "Import bitmap\n"
 "Convert bitmap images to schematic or PCB elements"
 msgstr ""
+"Képfájl importálása\n"
+"Kép konvertálása kapcsolási rajz vagy nyák elemeknek"
 
 #: kicad/commandframe.cpp:103
 msgid "Calculator tools"
-msgstr ""
+msgstr "Elektronikai méretező kalkulátor"
 
 #: kicad/commandframe.cpp:107
 msgid "Worksheet layout editor"
@@ -13200,7 +13203,7 @@ msgstr "Projektfa frissítése"
 
 #: kicad/menubar.cpp:146
 msgid "Run Eeschema"
-msgstr "Kapcsolási rajz szerkesztő indítása"
+msgstr "Kapcsolási rajz tervező indítása"
 
 #: kicad/menubar.cpp:147
 msgid "Run LibEdit"
@@ -14597,15 +14600,18 @@ msgid ""
 "elevation)"
 msgstr ""
 "*  B1 - Belső vezetősávok\n"
-"*  B2 - Külső vezetősávok, bevonat nélkül, 3050 m tengerszint feletti \n"
+"*  B2 - Külső vezetősávok, bevonat nélkül, 3050 m tengerszint feletti "
 "magasságig.\n"
-"*  B3 - Külső vezetősávok, bevonat nélkül, 3050 m tengerszint feletti\n"
-"magasságon túl.\n"
-"*  B4 - Külső vezetősávok, állandó polimer bevonattal, minden magasságig.\n"
-"*  A5 - Külső vezetősávok, konform bevonattal, minden magasságig.\n"
-"*  A6 - External Component lead/termination, uncoated.(2319)\n"
-"*  A7 - External Component lead termination, with conformal coating (any\n"
-"elevation)."
+"*  B3 - Külső vezetősávok, bevonat nélkül, 3050 m tengerszint feletti magasság "
+"felett.\n"
+"*  B4 - Külső vezetősávok, állandó lötstop polimer bevonattal, bármely "
+"tengerszint feletti magasságon.\n"
+"*  A5 - Külső, teljesen bevont vezetősávok, bármely tengerszint feletti "
+"magasságon.\n"
+"*  A6 - Külső rétegeken elhelyezkedő alkatrészek nem bevonatolt lábai, "
+"kivezetései, 3050m tengerszint feletti magasságig.\n"
+"*  A7 - Külső rétegeken elhelyezkedő alkatrészek bevonatolt lábai, kivezetései, "
+"bármely tengerszint feletti magasságig."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:614
 msgid "Electrical Spacing"
@@ -14671,7 +14677,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:669
 #: pcb_calculator/transline_ident.cpp:150
 msgid "Rho:"
-msgstr ""
+msgstr "Rho - a huzalanyag fajlagos vezetése (ohm*m):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:671
 msgid "Specific resistance in ohms * meters"
@@ -15340,7 +15346,7 @@ msgstr "Vezetékhossz"
 
 #: pcbnew/append_board_to_current.cpp:93
 msgid "Error loading board in AppendBoardFile"
-msgstr ""
+msgstr "Hiba a hozzáfűzött nyákterv betöltésekor."
 
 #: pcbnew/array_creator.cpp:113
 msgid "Create an array"
@@ -16334,7 +16340,7 @@ msgstr "Kiválasztott elemek mutatása mozgatás közben"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:22
 msgid "Delete &track segments connecting different nets"
-msgstr ""
+msgstr "Vezetősávok különböző vezetékekhez csatlakozásai törlése"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:23
 msgid ""
@@ -16360,11 +16366,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:37
 msgid "Delete &dangling tracks"
-msgstr ""
+msgstr "Lógó vezetősávok törlése"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:38
 msgid "delete tracks having at least one dangling end"
-msgstr ""
+msgstr "Törölje azokat a vezetősávokat, amelyeknek legalább egy lógó vége van"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
@@ -16373,12 +16379,12 @@ msgstr "Tisztítási beállítások"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:394
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
-msgstr ""
+msgstr "Szigetelési távolságnak, kisebbnek kell lennie mint %f\" / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:406
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
-msgstr ""
+msgstr "A minimális szélességnek nagyobbnak kell lennie, mint %f\" / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:446
 msgid "Thermal relief spoke must be greater than the minimum width."
@@ -16646,7 +16652,7 @@ msgstr "Angol ABC, mind a 26 karakter"
 #: pcbnew/dialogs/dialog_create_array.cpp:233
 #, c-format
 msgid "Unrecognized numbering scheme: %d"
-msgstr ""
+msgstr "Nem ismert számozási séma: %d"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:247
 #, c-format
@@ -16909,6 +16915,8 @@ msgstr ""
 msgid ""
 " - <b>Via Diameter</b> (%f %s) &lt; <b>Minimum Via Diameter</b> (%f %s)<br>"
 msgstr ""
+" - <b>Átvezetőforrpont átmérő</b> (%f %s) &lt; <b>Minimális átvezetőforrpont "
+"átmérő</b> (%f %s)<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1065
 #, c-format
@@ -16926,6 +16934,8 @@ msgid ""
 " - <b>MicroVia Diameter</b> (%f %s) &lt; <b>MicroVia Min Diameter</b> (%f "
 "%s)<br>"
 msgstr ""
+" - <b>Pici átvezetőforrpont átmérő</b> (%f %s) &lt; <b>Minimális pici "
+"átvezetőforrpont átmérő</b> (%f %s)<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1099
 #, c-format
@@ -16941,7 +16951,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_design_rules.cpp:1117
 #, c-format
 msgid "Netclass: <b>%s</b><br>"
-msgstr ""
+msgstr "Vezetékosztály: <b>%s</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1137
 #, c-format
@@ -24546,7 +24556,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:564
 msgid "&Cleanup Tracks and Vias..."
-msgstr "Vezetősávok és átvezetőforrpontok tisztítás..."
+msgstr "Vezetősávok és átvezetőforrpontok tisztázása..."
 
 #: pcbnew/menubar_pcb_editor.cpp:565
 msgid "Clean stubs, vias, delete break points or unconnected tracks"
@@ -24839,7 +24849,7 @@ msgstr "Aktuális panel exportálása \"IDFv3\" fájlba"
 
 #: pcbnew/menubar_pcb_editor.cpp:990
 msgid "S&TEP..."
-msgstr "STEP..."
+msgstr "STEP fájlba..."
 
 #: pcbnew/menubar_pcb_editor.cpp:990
 msgid "STEP export"
@@ -24847,7 +24857,7 @@ msgstr "STEP exportálása"
 
 #: pcbnew/menubar_pcb_editor.cpp:994
 msgid "&SVG..."
-msgstr "SVG..."
+msgstr "SVG fájlba..."
 
 #: pcbnew/menubar_pcb_editor.cpp:995
 msgid "Export board file in Scalable Vector Graphics format"
@@ -26668,16 +26678,16 @@ msgstr "Átvezetőfurat: %.1f mill -- %.2f mm * "
 #: pcbnew/tool_pcb_editor.cpp:707
 #, c-format
 msgid "%.2f mm (%.1f mils)"
-msgstr ""
+msgstr "%.2f mm (%.1f mils)"
 
 #: pcbnew/tool_pcb_editor.cpp:710
 #, c-format
 msgid "%.1f mils (%.2f mm)"
-msgstr ""
+msgstr "%.1f mils (%.2f mm)"
 
 #: pcbnew/tool_pcb_editor.cpp:735
 msgid "+/- to switch"
-msgstr ""
+msgstr "+/- váltani"
 
 #: pcbnew/toolbars_update_user_interface.cpp:132
 msgid ""
@@ -27213,7 +27223,7 @@ msgstr "A kijelölt elem igazítása alsó élhez"
 
 #: pcbnew/tools/placement_tool.cpp:52
 msgid "Align to Left"
-msgstr ""
+msgstr "Igazítása balra"
 
 #: pcbnew/tools/placement_tool.cpp:53
 msgid "Aligns selected items to the left edge"
@@ -27221,7 +27231,7 @@ msgstr "A kijelölt elem igazítása bal élhez"
 
 #: pcbnew/tools/placement_tool.cpp:57
 msgid "Align to Right"
-msgstr ""
+msgstr "Igazítása jobbra"
 
 #: pcbnew/tools/placement_tool.cpp:58
 msgid "Aligns selected items to the right edge"
@@ -27229,7 +27239,7 @@ msgstr "A kijelölt elem igazítása jobb élhez"
 
 #: pcbnew/tools/placement_tool.cpp:62
 msgid "Align to Middle"
-msgstr ""
+msgstr "Igazítása közepére"
 
 #: pcbnew/tools/placement_tool.cpp:63
 msgid "Aligns selected items to the vertical center"
@@ -27237,7 +27247,7 @@ msgstr "A kijelölt elem igazítása függőlegesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:67
 msgid "Align to Center"
-msgstr ""
+msgstr "Igazítása központtól"
 
 #: pcbnew/tools/placement_tool.cpp:68
 msgid "Aligns selected items to the horizontal center"
@@ -27277,19 +27287,19 @@ msgstr ""
 
 #: pcbnew/tools/placement_tool.cpp:381
 msgid "Align to left"
-msgstr ""
+msgstr "Igazítása balra"
 
 #: pcbnew/tools/placement_tool.cpp:436
 msgid "Align to right"
-msgstr ""
+msgstr "Igazítása jobbra"
 
 #: pcbnew/tools/placement_tool.cpp:477
 msgid "Align to middle"
-msgstr ""
+msgstr "Igazítása közepére"
 
 #: pcbnew/tools/placement_tool.cpp:518
 msgid "Align to center"
-msgstr ""
+msgstr "Igazítása központtól"
 
 #: pcbnew/tools/placement_tool.cpp:569
 msgid "Distribute horizontally"
