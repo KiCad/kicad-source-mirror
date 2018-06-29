@@ -95,6 +95,16 @@ static int parseEagle( const wxString& aDistance )
 }
 
 
+// In Eagle one can specify DRC rules where min value > max value,
+// in such case the max value has the priority
+template<typename T>
+static T eagleClamp( T aMin, T aValue, T aMax )
+{
+    T ret = std::max( aMin, aValue );
+    return std::min( aMax, ret );
+}
+
+
 /// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
 /// using a separator.
 static wxString makeKey( const wxString& aFirst, const wxString& aSecond )
@@ -1484,7 +1494,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     {
         double drillz  = pad->GetDrillSize().x;
         double annulus = drillz * m_rules->rvPadTop;   // copper annulus, eagle "restring"
-        annulus = Clamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
+        annulus = eagleClamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
         int diameter = KiROUND( drillz + 2 * annulus );
         pad->SetSize( wxSize( KiROUND( diameter ), KiROUND( diameter ) ) );
     }
@@ -1845,7 +1855,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     int minPadSize = std::min( padSize.x, padSize.y );
 
     // Rounded rectangle pads
-    int roundRadius = Clamp( m_rules->srMinRoundness * 2,
+    int roundRadius = eagleClamp( m_rules->srMinRoundness * 2,
             (int)( minPadSize * m_rules->srRoundness ), m_rules->srMaxRoundness * 2 );
 
     if( e.roundness || roundRadius > 0 )
@@ -1865,7 +1875,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
         pad->SetOrientation( e.rot->degrees * 10 );
     }
 
-    pad->SetLocalSolderPasteMargin( Clamp( m_rules->mlMinCreamFrame,
+    pad->SetLocalSolderPasteMargin( -eagleClamp( m_rules->mlMinCreamFrame,
                 (int) ( m_rules->mvCreamFrame * minPadSize ),
                 m_rules->mlMaxCreamFrame ) );
 
@@ -1894,7 +1904,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
 
     if( !aEaglePad.stop || !*aEaglePad.stop )     // enabled by default
     {
-        aPad->SetLocalSolderMaskMargin( Clamp( m_rules->mlMinStopFrame,
+        aPad->SetLocalSolderMaskMargin( eagleClamp( m_rules->mlMinStopFrame,
                     (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
                     m_rules->mlMaxStopFrame ) );
     }
@@ -2057,7 +2067,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     else
                     {
                         double annulus = drillz * m_rules->rvViaOuter;  // eagle "restring"
-                        annulus = Clamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
+                        annulus = eagleClamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
                         kidiam = KiROUND( drillz + 2 * annulus );
                         via->SetWidth( kidiam );
                     }
@@ -2068,7 +2078,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( !v.diam || via->GetWidth() <= via->GetDrill() )
                     {
-                        double annulus = Clamp( m_rules->rlMinViaOuter,
+                        double annulus = eagleClamp( m_rules->rlMinViaOuter,
                                 (double)( via->GetWidth() / 2 - via->GetDrill() ), m_rules->rlMaxViaOuter );
                         via->SetWidth( drillz + 2 * annulus );
                     }
