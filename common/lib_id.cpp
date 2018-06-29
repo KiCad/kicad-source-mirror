@@ -388,30 +388,29 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool 
 }
 
 
-///> Set of characters not accepted library entry names.
-#define BASE_ILLEGAL_CHARS '\t', '\n', '\r', '/', '\\'
-const unsigned schIllegalChars[] = { BASE_ILLEGAL_CHARS, ':', ' ' };
-const unsigned schAliasIllegalChars[] = { BASE_ILLEGAL_CHARS, 0, 0 };
-const unsigned pcbIllegalChars[] = { BASE_ILLEGAL_CHARS, ':', 0 };
-#define ILL_CHAR_SIZE (sizeof(schIllegalChars) / sizeof(int))
-
 bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
 {
-    const unsigned (&illegalChars)[ILL_CHAR_SIZE] =
-        aType == ID_SCH ? schIllegalChars :
-        aType == ID_ALIAS ? schAliasIllegalChars : pcbIllegalChars;
+    bool const colon_allowed = ( aType == ID_ALIAS );
+    bool const space_allowed = ( aType != ID_SCH );
 
-    for( const unsigned ch : illegalChars )
-    {
-        if( ch == aUniChar )
-            return false;
-    }
-
-    // Test for "printable" code (aUniChar is a unicode (32 bits) char, not a ASCII value )
     if( aUniChar < ' ' )
         return false;
 
-    return true;
+    switch( aUniChar )
+    {
+    case '/':
+    case '\\':
+        return false;
+
+    case ':':
+        return colon_allowed;
+
+    case ' ':
+        return space_allowed;
+
+    default:
+        return true;
+    }
 }
 
 
@@ -427,28 +426,25 @@ unsigned LIB_ID::FindIllegalLibNicknameChar( const UTF8& aNickname, LIB_ID_TYPE 
 }
 
 
-///> Set of characters not accepted library nicknames which is different for item names.
-#define BASE_ILLEGAL_LIB_NICKNAME_CHARS '\t', '\n', '\r', ':', '\\'
-const unsigned schIllegalLibNicknameChars[] = { BASE_ILLEGAL_LIB_NICKNAME_CHARS, ' ' };
-const unsigned pcbIllegalLibNicknameChars[] = { BASE_ILLEGAL_LIB_NICKNAME_CHARS, 0 };
-#define ILL_LIB_NICKNAME_CHAR_SIZE ( sizeof( schIllegalLibNicknameChars ) / sizeof( unsigned ) )
-
 bool LIB_ID::isLegalLibNicknameChar( unsigned aUniChar, LIB_ID_TYPE aType )
 {
-    const unsigned (&illegalChars)[ILL_LIB_NICKNAME_CHAR_SIZE] =
-        aType == ID_SCH ? schIllegalLibNicknameChars : pcbIllegalLibNicknameChars;
+    bool const space_allowed = ( aType != ID_SCH );
 
-    for( const unsigned ch : illegalChars )
-    {
-        if( ch == aUniChar )
-            return false;
-    }
-
-    // Test for "printable" code (aUniChar is a unicode (32 bits) char, not a ASCII value )
     if( aUniChar < ' ' )
         return false;
 
-    return true;
+    switch( aUniChar )
+    {
+    case '\\':
+    case ':':
+        return false;
+
+    case ' ':
+        return space_allowed;
+
+    default:
+        return true;
+    }
 }
 
 
