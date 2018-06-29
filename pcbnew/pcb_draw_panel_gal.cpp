@@ -374,8 +374,6 @@ void PCB_DRAW_PANEL_GAL::OnShow()
         static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
     }
-
-    m_view->RecacheAllItems();
 }
 
 
