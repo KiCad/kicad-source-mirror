@@ -641,18 +641,15 @@ int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* a
 
 int ReadHotkeyConfig( const wxString& aAppname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    // For Eeschema and Pcbnew frames, we try twice.
-    // The first time, we try to read the new combined file.  If it doesn't exist,
-    // we fall back to reading the old, frame-based file
+    // For Eeschema and Pcbnew frames, we read the new combined file.
+    // For other kifaces, we read the frame-based file
     if( aAppname == LIB_EDIT_FRAME_NAME || aAppname == SCH_EDIT_FRAME_NAME )
     {
-        if( ReadHotkeyConfigFile( EESCHEMA_HOTKEY_NAME, aDescList ) )
-            return 1;
+        return ReadHotkeyConfigFile( EESCHEMA_HOTKEY_NAME, aDescList );
     }
     else if( aAppname == PCB_EDIT_FRAME_NAME || aAppname == FOOTPRINT_EDIT_FRAME_NAME )
     {
-        if( ReadHotkeyConfigFile( PCBNEW_HOTKEY_NAME, aDescList ) )
-            return 1;
+        return ReadHotkeyConfigFile( PCBNEW_HOTKEY_NAME, aDescList );
     }
 
     return ReadHotkeyConfigFile( aAppname, aDescList );
