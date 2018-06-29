@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,7 +275,10 @@ void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
 
 const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 {
-    FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( findRow( aNickname ) );
+    // Do not optimize this code.  Is done this way specifically to fix a runtime
+    // error with clang 4.0.1.
+    LIB_TABLE_ROW* ltrow = findRow( aNickname );
+    FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( ltrow );
 
     if( !row )
     {
