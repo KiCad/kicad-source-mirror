@@ -8,7 +8,6 @@ install( DIRECTORY
     kit-dev-coldfire-xilinx_5213
     microwave
     pic_programmer
-    pspice
     python_scripts_examples
     simulation
     "sonde xilinx"
