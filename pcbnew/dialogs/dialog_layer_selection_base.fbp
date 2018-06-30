@@ -14,7 +14,6 @@
         <property name="file">dialog_layer_selection_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_layer_selection_base</property>
         <property name="namespace"></property>
@@ -95,7 +94,7 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
+                    <property name="border">10</property>
                     <property name="flag">wxEXPAND|wxALL</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
@@ -134,7 +133,7 @@
                                 <property name="col_label_values"></property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">3</property>
-                                <property name="column_sizes"></property>
+                                <property name="column_sizes">24,20,72</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>
@@ -151,7 +150,7 @@
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="grid_line_color"></property>
-                                <property name="grid_lines">1</property>
+                                <property name="grid_lines">0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">ID_LEFT_LIST</property>
@@ -165,7 +164,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,100</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_leftGridLayers</property>
                                 <property name="pane_border">1</property>
@@ -277,7 +276,7 @@
                                 <property name="col_label_values"></property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">3</property>
-                                <property name="column_sizes"></property>
+                                <property name="column_sizes">24,20,72</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>
@@ -294,7 +293,7 @@
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="grid_line_color"></property>
-                                <property name="grid_lines">1</property>
+                                <property name="grid_lines">0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">ID_RIGHT_LIST</property>
@@ -414,7 +413,7 @@
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
-            <property name="title">Select Copper Layer Pair:</property>
+            <property name="title">Select Copper Layer Pair</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -462,8 +461,8 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
-                    <property name="proportion">1</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizerUpper</property>
@@ -471,8 +470,8 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerLeft</property>
@@ -563,8 +562,8 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
-                                    <property name="proportion">1</property>
+                                    <property name="flag">wxALL|wxALIGN_CENTER_HORIZONTAL</property>
+                                    <property name="proportion">0</property>
                                     <object class="wxGrid" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -584,7 +583,7 @@
                                         <property name="cell_font"></property>
                                         <property name="cell_horiz_alignment">wxALIGN_LEFT</property>
                                         <property name="cell_text"></property>
-                                        <property name="cell_vert_alignment">wxALIGN_TOP</property>
+                                        <property name="cell_vert_alignment">wxALIGN_CENTRE</property>
                                         <property name="center_pane">0</property>
                                         <property name="close_button">1</property>
                                         <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
@@ -592,7 +591,7 @@
                                         <property name="col_label_values"></property>
                                         <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                         <property name="cols">3</property>
-                                        <property name="column_sizes"></property>
+                                        <property name="column_sizes">24,20,72</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="default_pane">0</property>
@@ -609,7 +608,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="grid_line_color"></property>
-                                        <property name="grid_lines">1</property>
+                                        <property name="grid_lines">0</property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">ID_LEFT_LIST</property>
@@ -617,7 +616,7 @@
                                         <property name="label_font"></property>
                                         <property name="label_text"></property>
                                         <property name="margin_height">3</property>
-                                        <property name="margin_width">0</property>
+                                        <property name="margin_width">3</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -708,8 +707,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerRight</property>
@@ -800,8 +799,8 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
-                                    <property name="proportion">1</property>
+                                    <property name="flag">wxALL|wxALIGN_CENTER_HORIZONTAL</property>
+                                    <property name="proportion">0</property>
                                     <object class="wxGrid" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -821,7 +820,7 @@
                                         <property name="cell_font"></property>
                                         <property name="cell_horiz_alignment">wxALIGN_LEFT</property>
                                         <property name="cell_text"></property>
-                                        <property name="cell_vert_alignment">wxALIGN_TOP</property>
+                                        <property name="cell_vert_alignment">wxALIGN_CENTRE</property>
                                         <property name="center_pane">0</property>
                                         <property name="close_button">1</property>
                                         <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
@@ -829,7 +828,7 @@
                                         <property name="col_label_values"></property>
                                         <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                         <property name="cols">3</property>
-                                        <property name="column_sizes"></property>
+                                        <property name="column_sizes">24,20,72</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="default_pane">0</property>
@@ -846,7 +845,7 @@
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="grid_line_color"></property>
-                                        <property name="grid_lines">1</property>
+                                        <property name="grid_lines">0</property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">ID_RIGHT_LIST</property>
@@ -854,13 +853,13 @@
                                         <property name="label_font"></property>
                                         <property name="label_text"></property>
                                         <property name="margin_height">3</property>
-                                        <property name="margin_width">0</property>
+                                        <property name="margin_width">3</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">-1,100</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_rightGridLayers</property>
                                         <property name="pane_border">1</property>
@@ -1043,11 +1042,11 @@
                         <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick">OnCancelClick</event>
+                        <event name="OnCancelButtonClick"></event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">OnOKClick</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>
