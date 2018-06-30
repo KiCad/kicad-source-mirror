@@ -1523,6 +1523,9 @@ public:
      */
     void CommonSettingsChanged() override;
 
+    void ShowChangedLanguage() override;
+
+
     ///> Probe cursor, used by circuit simulator
     const static wxCursor CURSOR_PROBE;
 

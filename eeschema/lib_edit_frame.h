@@ -720,6 +720,8 @@ public:
      */
     void CommonSettingsChanged() override;
 
+    void ShowChangedLanguage() override;
+
 private:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;

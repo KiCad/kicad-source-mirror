@@ -1788,3 +1788,19 @@ void LIB_EDIT_FRAME::CommonSettingsChanged()
     Layout();
     SendSizeEvent();
 }
+
+
+void LIB_EDIT_FRAME::ShowChangedLanguage()
+{
+    // call my base class
+    SCH_BASE_FRAME::ShowChangedLanguage();
+
+    // tooltips in toolbars
+    ReCreateHToolbar();
+    ReCreateVToolbar();
+    ReCreateOptToolbar();
+
+    // status bar
+    UpdateMsgPanel();
+}
+
