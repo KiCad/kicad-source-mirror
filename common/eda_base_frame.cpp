@@ -252,8 +252,11 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 
 void EDA_BASE_FRAME::ShowChangedLanguage()
 {
-    ReCreateMenuBar();
-    GetMenuBar()->Refresh();
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 
@@ -263,9 +266,12 @@ void EDA_BASE_FRAME::CommonSettingsChanged()
     Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
     SetAutoSaveInterval( autosaveInterval );
 
-    // For icons in menus & icon scaling
-    ReCreateMenuBar();
-    GetMenuBar()->Refresh();
+    if( GetMenuBar() )
+    {
+        // For icons in menus & icon scaling
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 

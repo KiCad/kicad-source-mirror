@@ -121,14 +121,9 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
 
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-
-    if( cfg )
-    {
-        cfg->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
-        cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
-        cfg->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
-    }
+    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
+    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
+    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
 
     m_requestAutoPan = false;
     m_enableBlockCommands = false;

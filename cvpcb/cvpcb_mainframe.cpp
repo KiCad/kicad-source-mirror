@@ -836,7 +836,7 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
 
     if( !fpframe )
     {
-        fpframe = new DISPLAY_FOOTPRINTS_FRAME( &Kiway(), this );
+        fpframe = (DISPLAY_FOOTPRINTS_FRAME*) Kiway().Player( FRAME_CVPCB_DISPLAY, true, this );
         fpframe->Show( true );
     }
     else

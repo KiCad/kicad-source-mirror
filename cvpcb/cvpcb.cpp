@@ -36,6 +36,7 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
+#include <display_footprints_frame.h>
 #include <cvpcb_id.h>
 
 #include <build_version.h>
@@ -65,11 +66,10 @@ static struct IFACE : public KIFACE_I
         switch( aClassId )
         {
         case FRAME_CVPCB:
-            {
-                CVPCB_MAINFRAME* frame = new CVPCB_MAINFRAME( aKiway, aParent );
-                return frame;
-            }
-            break;
+            return new CVPCB_MAINFRAME( aKiway, aParent );
+
+        case FRAME_CVPCB_DISPLAY:
+            return new DISPLAY_FOOTPRINTS_FRAME( aKiway, aParent );
 
         default:
             ;
