@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-13 08:25+0200\n"
-"PO-Revision-Date: 2018-06-13 08:34+0200\n"
+"PO-Revision-Date: 2018-07-01 18:52+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -9977,7 +9977,7 @@ msgstr "Modifica i campi del &simbolo..."
 
 #: eeschema/menubar.cpp:587
 msgid "Edit Symbol Library References..."
-msgstr "Modifica i riferimenti di libreria del simbolo..."
+msgstr "Modifica i riferimenti librerie di simboli..."
 
 #: eeschema/menubar.cpp:588
 msgid "Edit links between schematic symbols and library symbols"
@@ -28334,140 +28334,3 @@ msgstr "Ri-riempi %d zone"
 #: pcbnew/zones_by_polygon_fill_functions.cpp:120
 msgid "Checking Zones"
 msgstr "Controllo zone"
-
-#~ msgid "Track Len"
-#~ msgstr "Lung. pista"
-
-#~ msgid "Full Len"
-#~ msgstr "Lung. intera"
-
-#~ msgid "Pad to die"
-#~ msgstr "Piazzola a corpo"
-
-#~ msgid "Default Value"
-#~ msgstr "Valore predefinito"
-
-#~ msgid "Default Fields"
-#~ msgstr "Campi predefiniti"
-
-#~ msgid "&Add Footprint Libraries Wizard..."
-#~ msgstr "&Assistente aggiunta librerie di impronte..."
-
-#~ msgid "Add footprint libraries using wizard"
-#~ msgstr "Aggiungi librerie di impronte con l'assistente"
-
-#~ msgid "&FreeRoute"
-#~ msgstr "&FreeRoute"
-
-#~ msgid "Fast access to the FreeROUTE external advanced router"
-#~ msgstr "Accesso veloce allo sbroglio basato su Web FreeRoute"
-
-#~ msgid "Loading incomplete; cancelled by user."
-#~ msgstr "Caricamento incompleto; interrotto dall'utente."
-
-#~ msgid "Add &Footprint Libraries Wizard..."
-#~ msgstr "Assistente a&ggiunta librerie di impronte..."
-
-#~ msgid "Add footprint libraries with wizard"
-#~ msgstr "Aggiungi librerie di impronte con l'assistente"
-
-#~ msgid "Center X"
-#~ msgstr "Centra X"
-
-#~ msgid "Center Y"
-#~ msgstr "Centra Y"
-
-#~ msgid "Point X"
-#~ msgstr "Punto X"
-
-#~ msgid "Point Y"
-#~ msgstr "Punto Y"
-
-#~ msgid "Start Point X"
-#~ msgstr "Punto iniziale X"
-
-#~ msgid "Start Point Y"
-#~ msgstr "Punto iniziale Y"
-
-#~ msgid "Error list"
-#~ msgstr "Elenco errori"
-
-#~ msgid ""
-#~ "Welcome to the Add Footprint Libraries Wizard!\n"
-#~ "\n"
-#~ "Please select the source for the libraries to add:"
-#~ msgstr ""
-#~ "Benvenuti all'assistente inserimento librerie di impronte!\n"
-#~ "\n"
-#~ "Selezionare la sorgente di librerie da aggiungere:"
-
-#~ msgid "Files on my computer"
-#~ msgstr "File sul proprio computer"
-
-#~ msgid "Github repository"
-#~ msgstr "Repository Github"
-
-#~ msgid "https://github.com/KiCad"
-#~ msgstr "https://github.com/KiCad"
-
-#~ msgid "Save a local copy to:"
-#~ msgstr "Salva una copia locale su:"
-
-#~ msgid "Select files or folders to add:"
-#~ msgstr "Seleziona i file o le cartelle da aggiungere:"
-
-#~ msgid "Review and confirm the changes to the libraries:"
-#~ msgstr "Revisiona e conferma i cambiamenti alle librerie:"
-
-#~ msgid "Format"
-#~ msgstr "Formato"
-
-#~ msgid "Where do you wish the new libraries to be added:"
-#~ msgstr "Dove si desidera aggiungere le nuove librerie:"
-
-#~ msgid "To global library configuration (visible by all projects)"
-#~ msgstr "Alla configurazione librerie globale (visibile da tutti i progetti)"
-
-#~ msgid "To the current project only"
-#~ msgstr "Solo al progetto corrente"
-
-#~ msgid "UNKNOWN"
-#~ msgstr "Sconosciuta"
-
-#~ msgid "Downloading libraries"
-#~ msgstr "Scaricamento librerie"
-
-#~ msgid ""
-#~ "Error:\n"
-#~ "\"%s\"\n"
-#~ "while downloading library:\n"
-#~ "\"%s\""
-#~ msgstr ""
-#~ "Errore:\n"
-#~ "\"%s\"\n"
-#~ "durante lo scaricamento della libreria:\n"
-#~ "\"%s\""
-
-#~ msgid "Please wait..."
-#~ msgstr "Attendere..."
-
-#~ msgid "Validating libraries"
-#~ msgstr "Validazione librerie"
-
-#~ msgid "NOT CHECKED"
-#~ msgstr "Non controllata"
-
-#~ msgid "INVALID"
-#~ msgstr "Non valida"
-
-#~ msgid "Validating libraries %d/%d"
-#~ msgstr "Validazione librerie %d/%d"
-
-#~ msgid "The arc angle must be greater than zero."
-#~ msgstr "L'angolo dell'arco deve essere maggiore di zero."
-
-#~ msgid "Append with Wizard"
-#~ msgstr "Accoda con l'assistente"
-
-#~ msgid "Add Footprint Libraries Wizard"
-#~ msgstr "Assistente aggiunta librerie di impronte"
