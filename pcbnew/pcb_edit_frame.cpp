@@ -828,6 +828,7 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( ShowMicrowaveEntry, &m_show_microwave_tools );
     aCfg->Read( ShowLayerManagerEntry, &m_show_layer_manager_tools );
+
     aCfg->Read( ShowPageLimitsEntry, &m_showPageLimits );
 }
 

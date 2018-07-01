@@ -178,6 +178,16 @@ public:
         return m_worksheetLineWidth;
     }
 
+    inline bool GetShowPageLimits() const
+    {
+        return m_showPageLimits;
+    }
+
+    inline void SetShowPageLimits( bool aDraw )
+    {
+        m_showPageLimits = aDraw;
+    }
+
     /**
      * Function GetBackgroundColor
      * Returns current background color settings.
@@ -258,6 +268,8 @@ protected:
     float   m_layerOpacity;         ///< Determines opacity of all layers
     float   m_outlineWidth;         ///< Line width used when drawing outlines
     float   m_worksheetLineWidth;   ///< Line width used when drawing worksheet
+
+    bool    m_showPageLimits;
 
     COLOR4D m_backgroundColor;      ///< The background color
 };

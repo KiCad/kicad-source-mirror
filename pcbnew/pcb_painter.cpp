@@ -123,7 +123,8 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 }
 
 
-void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOptions )
+void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOptions,
+                                              bool aShowPageLimits )
 {
     if( aOptions == NULL )
         return;
@@ -206,6 +207,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
 
     if( aOptions->m_DisplayPadIsol )
         m_clearance |= CL_PADS;
+
+    m_showPageLimits = aShowPageLimits;
 }
 
 

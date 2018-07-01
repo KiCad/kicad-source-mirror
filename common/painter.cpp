@@ -41,6 +41,7 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_highlightNetcode      = -1;
     m_outlineWidth          = 1;
     m_worksheetLineWidth    = 100000;
+    m_showPageLimits        = false;
 }
 
 

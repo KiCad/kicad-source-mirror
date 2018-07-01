@@ -96,7 +96,7 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->LoadDisplayOptions( displ_opts );
+    settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 

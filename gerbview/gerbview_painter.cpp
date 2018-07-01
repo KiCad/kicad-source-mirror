@@ -88,6 +88,7 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS* aO
     m_showCodes         = aOptions->m_DisplayDCodes;
     m_diffMode          = aOptions->m_DiffMode;
     m_hiContrastEnabled = aOptions->m_HighContrastMode;
+    m_showPageLimits    = aOptions->m_DisplayPageLimits;
 
     update();
 }

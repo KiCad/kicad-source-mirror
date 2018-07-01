@@ -1146,7 +1146,7 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         auto painter = static_cast<KIGFX::PCB_PAINTER*>( galCanvas->GetView()->GetPainter() );
         auto settings = painter->GetSettings();
         auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-        settings->LoadDisplayOptions( displ_opts );
+        settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
 
         galCanvas->GetView()->RecacheAllItems();
         galCanvas->SetEventDispatcher( m_toolDispatcher );

@@ -105,6 +105,6 @@ void PCB_VIEW::UpdateDisplayOptions( PCB_DISPLAY_OPTIONS* aOptions )
     auto    painter     = static_cast<KIGFX::PCB_PAINTER*>( GetPainter() );
     auto    settings    = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
 
-    settings->LoadDisplayOptions( aOptions );
+    settings->LoadDisplayOptions( aOptions, settings->GetShowPageLimits() );
 }
 }

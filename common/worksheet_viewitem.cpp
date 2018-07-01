@@ -126,7 +126,8 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
     }
 
     // Draw gray line that outlines the sheet size
-    drawBorder( gal );
+    if( settings->GetShowPageLimits() )
+        drawBorder( gal );
 }
 
 

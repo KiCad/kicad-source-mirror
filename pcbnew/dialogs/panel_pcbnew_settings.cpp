@@ -30,7 +30,8 @@
 #include <class_board.h>
 #include <panel_pcbnew_settings.h>
 #include <widgets/stepped_slider.h>
-
+#include <pcb_view.h>
+#include <pcb_painter.h>
 
 PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
         PANEL_PCBNEW_SETTINGS_BASE( aWindow ),
@@ -90,6 +91,12 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     m_Frame->Settings().m_dragSelects = m_dragSelects->GetValue();
 
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
+
+    // Apply changes to the GAL
+    KIGFX::VIEW* view = m_Frame->GetGalCanvas()->GetView();
+    KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->LoadDisplayOptions( displ_opts, m_Frame->ShowPageLimits() );
 
     return true;
 }
