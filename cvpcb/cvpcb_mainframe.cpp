@@ -530,6 +530,8 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, component,
                                        m_currentSearchPattern, m_filteringOptions);
 
+    m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
+
     refreshAfterComponentSearch (component);
 }
 
@@ -556,7 +558,7 @@ void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
     {
         wxString module = FROM_UTF8( component->GetFPID().Format().c_str() );
 
-        bool found = false;
+        m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
 
         for( int ii = 0; ii < m_footprintListBox->GetCount(); ii++ )
         {
@@ -569,23 +571,12 @@ void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
             if( module.Cmp( footprintName ) == 0 )
             {
                 m_footprintListBox->SetSelection( ii, true );
-                found = true;
                 break;
             }
         }
 
-        if( !found )
-        {
-            int ii = m_footprintListBox->GetSelection();
-
-            if ( ii >= 0 )
-                m_footprintListBox->SetSelection( ii, false );
-
-            if( GetFootprintViewerFrame() )
-            {
-                CreateScreenCmp();
-            }
-        }
+        if( GetFootprintViewerFrame() )
+            CreateScreenCmp();
     }
 
     SendMessageToEESCHEMA();
