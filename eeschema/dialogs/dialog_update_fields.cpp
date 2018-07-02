@@ -135,6 +135,10 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
     SCH_FIELDS newFields;
 
     PART_SPTR libPart = aComponent->GetPartRef().lock();
+
+    if( libPart == nullptr )    // the symbol is not found in lib: cannot update fields
+        return;
+
     aComponent->GetFields( oldFields, false );
 
     for( auto compField : oldFields )
