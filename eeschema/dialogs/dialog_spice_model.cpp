@@ -31,6 +31,7 @@
 #include <project.h>
 
 #include <wx/tokenzr.h>
+#include <wx/wupdlock.h>
 
 // Helper function to shorten conditions
 static bool empty( const wxTextCtrl* aCtrl )
@@ -604,12 +605,20 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     }
 
     // Display the library contents
-    m_libraryContents->LoadFile( filePath.GetFullPath() );
+    wxWindowUpdateLocker updateLock( this );
+    m_libraryContents->Clear();
+    wxTextFile file;
+    file.Open( filePath.GetFullPath() );
+    int line_nr = 0;
 
     // Process the file, looking for components
-    for( int line_nr = 0; line_nr < m_libraryContents->GetNumberOfLines(); ++line_nr )
+    while( !file.Eof() )
     {
-        wxStringTokenizer tokenizer( m_libraryContents->GetLineText( line_nr ) );
+        const wxString& line = line_nr == 0 ? file.GetFirstLine() : file.GetNextLine();
+        m_libraryContents->AppendText( line );
+        m_libraryContents->AppendText( "\n" );
+
+        wxStringTokenizer tokenizer( line );
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -650,6 +659,8 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
                 in_subckt = false;
             }
         }
+
+        ++line_nr;
     }
 
     wxArrayString models;
