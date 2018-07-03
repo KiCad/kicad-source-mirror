@@ -384,11 +384,12 @@ bool DIFF_PAIR_PLACER::SetLayer( int aLayer )
     {
         m_currentLayer = aLayer;
         return true;
-    } else if( m_chainedPlacement )
+    }
+    else if( m_chainedPlacement || !m_prevPair )
+    {
         return false;
-    else if( !m_prevPair )
-        return false;
-    else if( m_prevPair->PrimP() || ( m_prevPair->PrimP()->OfKind( ITEM::VIA_T ) &&
+    }
+    else if( !m_prevPair->PrimP() || ( m_prevPair->PrimP()->OfKind( ITEM::VIA_T ) &&
                 m_prevPair->PrimP()->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
