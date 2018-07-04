@@ -475,12 +475,12 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Edit Text && &Graphic Properties..." ), KiBitmap( reset_text_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_EXCHANGE_FOOTPRINTS,
-                 _( "Change Footprints..." ),
+                 _( "Change &Footprints..." ),
                  _( "Assign different footprints from the library" ),
                  KiBitmap( exchange_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_SWAP_LAYERS,
-                 _( "&Move and Swap Layers..." ),
+                 _( "&Swap Layers..." ),
                  _( "Move tracks or drawings from a layer to another layer" ),
                  KiBitmap( swap_layer_xpm ) );
 

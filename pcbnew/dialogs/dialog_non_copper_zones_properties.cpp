@@ -140,9 +140,9 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     // Get the layer selection for this zone
     int layer = -1;
-    for( unsigned int ii = 0; ii < (int) m_layers->GetItemCount(); ++ii )
+    for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
     {
-        if( m_layers->GetToggleValue( ii, 0 ) )
+        if( m_layers->GetToggleValue( (unsigned) ii, 0 ) )
         {
             layer = ii;
             break;

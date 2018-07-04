@@ -137,6 +137,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_select_pretty_lib_base.cpp
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
+    dialogs/dialog_swap_layers.cpp
+    dialogs/dialog_swap_layers_base.cpp
     dialogs/dialog_target_properties_base.cpp
     dialogs/dialog_text_properties.cpp
     dialogs/dialog_text_properties_base.cpp
@@ -281,7 +283,6 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra_export.cpp
     specctra_import_export/specctra_import.cpp
     specctra_import_export/specctra_keywords.cpp
-    swap_layers.cpp
     target_edit.cpp
     text_mod_grid_table.cpp
     tool_footprint_editor.cpp
