@@ -75,6 +75,8 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Micro Via: not allowed" ) );
     case DRCE_BURIED_VIA_NOT_ALLOWED:
         return wxString( _( "Buried Via: not allowed" ) );
+    case DRCE_DISABLED_LAYER_ITEM:
+        return wxString( _( "Item on a disabled layer" ) );
     case COPPERAREA_INSIDE_COPPERAREA:
         return wxString( _( "Copper area inside copper area" ) );
     case COPPERAREA_CLOSE_TO_COPPERAREA:

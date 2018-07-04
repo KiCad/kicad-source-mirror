@@ -90,6 +90,7 @@
                                                     ///< (not convertible to a closed polygon with holes)
 #define DRCE_MICRO_VIA_NOT_ALLOWED             47   ///< micro vias are not allowed
 #define DRCE_BURIED_VIA_NOT_ALLOWED            48   ///< buried vias are not allowed
+#define DRCE_DISABLED_LAYER_ITEM               49   ///< item on a disabled layer
 
 
 class EDA_DRAW_PANEL;
@@ -309,6 +310,9 @@ private:
     void testKeepoutAreas();
 
     void testTexts();
+
+    ///> Tests for items placed on disabled layers (causing false connections).
+    void testDisabledLayers();
 
     //-----<single "item" tests>-----------------------------------------
 

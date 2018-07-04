@@ -514,6 +514,15 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         doFootprintOverlappingDrc();
     }
 
+    // Check if there are items on disabled layers
+    testDisabledLayers();
+
+    if( aMessages )
+    {
+        aMessages->AppendText( _( "Items on disabled layers...\n" ) );
+        aMessages->Refresh();
+    }
+
     // update the m_drcDialog listboxes
     updatePointers();
 
@@ -1010,6 +1019,44 @@ void DRC::testTexts()
                 }
             }
         }
+    }
+}
+
+
+void DRC::testDisabledLayers()
+{
+    BOARD* board = m_pcbEditorFrame->GetBoard();
+    wxCHECK( board, /*void*/ );
+    LSET disabledLayers = board->GetEnabledLayers().flip();
+
+    auto createMarker = [&]( BOARD_ITEM* aItem )
+    {
+        wxString msg;
+        msg.Printf( _( "\"%s\" is on a disabled layer" ), aItem->GetSelectMenuText() );
+        m_currentMarker = fillMarker( aItem->GetPosition(), DRCE_DISABLED_LAYER_ITEM,
+                msg, m_currentMarker );
+        addMarkerToPcb( m_currentMarker );
+        m_currentMarker = nullptr;
+    };
+
+    for( auto track : board->Tracks() )
+    {
+        if( disabledLayers.test( track->GetLayer() ) )
+            createMarker( track );
+    }
+
+    for( auto module : board->Modules() )
+    {
+        module->RunOnChildren( [&]( BOARD_ITEM* aItem ) {
+            if( disabledLayers.test( aItem->GetLayer() ) )
+                createMarker( aItem );
+        } );
+    }
+
+    for( auto zone : board->Zones() )
+    {
+        if( disabledLayers.test( zone->GetLayer() ) )
+            createMarker( zone );
     }
 }
 
