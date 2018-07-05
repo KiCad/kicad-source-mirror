@@ -385,7 +385,7 @@ public:
      * Options are set by the opened dialog.
      * @param aPad is the pattern. The given footprint is the parent of this pad
      */
-    void DlgGlobalChange_PadSettings( D_PAD* aPad );
+    void PushPadProperties( D_PAD* aPad );
 
     /**
      * Function DeleteModuleFromCurrentLibrary

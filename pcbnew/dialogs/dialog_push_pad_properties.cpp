@@ -22,64 +22,58 @@
  */
 
 
-#include <dialog_global_pads_edition.h>
+#include <dialog_push_pad_properties.h>
 
 #include <class_pad.h>
 #include <pcb_edit_frame.h>
 
 
-DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
-    DIALOG_GLOBAL_PADS_EDITION_BASE( aParent )
-{
-    m_parent     = aParent;
-    m_currentPad = aPad;
+// Class DIALOG_PUSH_PAD_PROPERTIES static variables
+bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter  = true;
+bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter  = true;
+bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter = true;
 
+
+DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent ) :
+    DIALOG_PUSH_PAD_PROPERTIES_BASE( aParent ),
+    m_parent( aParent )
+{
     // Pad filter selection.
     m_Pad_Shape_Filter_CB->SetValue( m_Pad_Shape_Filter );
     m_Pad_Layer_Filter_CB->SetValue( m_Pad_Layer_Filter );
     m_Pad_Orient_Filter_CB->SetValue( m_Pad_Orient_Filter );
 
-    SetFocus();
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Change Pads on Current Footprint" ) );
 
-    GetSizer()->Fit( this );
-    Centre();
-}
+    if( aParent->IsType( FRAME_PCB_MODULE_EDITOR ) )
+        m_sdbSizer1Apply->Show( false );
+    else
+        m_sdbSizer1Apply->SetLabel( _( "Change Pads on Identical Footprints" ) );
 
+    m_sdbSizer1->Layout();
 
-// Class DIALOG_GLOBAL_PADS_EDITION static variables
-bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter  = true;
-bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter  = true;
-bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter = true;
+    m_sdbSizer1OK->SetDefault();
 
-
-void DIALOG_GLOBAL_PADS_EDITION::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( -1 );
-}
-
-
-/* Calls the Pad editor.
- */
-void DIALOG_GLOBAL_PADS_EDITION::InstallPadEditor( wxCommandEvent& event )
-{
-    m_parent->InstallPadOptionsFrame( m_currentPad );
+    FinishDialogSettings();
 }
 
 
 /* Update the parameters for the component being edited.
  */
-void DIALOG_GLOBAL_PADS_EDITION::PadPropertiesAccept( wxCommandEvent& event )
+void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 {
     int returncode = 0;
 
     switch( event.GetId() )
     {
-    case ID_CHANGE_ID_MODULES:
+    case wxID_APPLY:
         returncode = 1;
 
     // Fall through
 
-    case ID_CHANGE_CURRENT_MODULE:
+    case wxID_OK:
         m_Pad_Shape_Filter  = m_Pad_Shape_Filter_CB->GetValue();
         m_Pad_Layer_Filter  = m_Pad_Layer_Filter_CB->GetValue();
         m_Pad_Orient_Filter = m_Pad_Orient_Filter_CB->GetValue();

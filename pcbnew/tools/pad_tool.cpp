@@ -35,10 +35,7 @@
 #include <class_module.h>
 #include <board_commit.h>
 
-#include <dialogs/dialog_global_pads_edition.h>
-
-#include <utility>
-
+#include <dialogs/dialog_push_pad_properties.h>
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "pcb_selection_conditions.h"
@@ -48,19 +45,19 @@
 TOOL_ACTION PCB_ACTIONS::copyPadSettings(
         "pcbnew.PadTool.CopyPadSettings",
         AS_GLOBAL, 0,
-        _( "Copy Pad Properties" ), _( "Copy current pad's properties to the default pad properties" ),
+        _( "Copy Pad Properties" ), _( "Copy current pad's properties" ),
         copy_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::applyPadSettings(
         "pcbnew.PadTool.ApplyPadSettings",
         AS_GLOBAL, 0,
-        _( "Apply Pad Properties" ), _( "Copy the default pad properties to the current pad" ),
+        _( "Paste Pad Properties" ), _( "Replace the current pad's properties with those copied earlier" ),
         apply_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::pushPadSettings(
         "pcbnew.PadTool.PushPadSettings",
         AS_GLOBAL, 0,
-        _( "Push Pad Properties..." ), _( "Copy the current pad settings to other pads" ),
+        _( "Push Pad Properties..." ), _( "Copy the current pad's properties to other pads" ),
         push_pad_settings_xpm );
 
 
@@ -70,8 +67,7 @@ public:
 
     using SHOW_FUNCTOR = std::function<bool()>;
 
-    PAD_CONTEXT_MENU( bool aEditingFootprint,
-                      SHOW_FUNCTOR aHaveGlobalPadSetting ):
+    PAD_CONTEXT_MENU( bool aEditingFootprint, SHOW_FUNCTOR aHaveGlobalPadSetting ):
         m_editingFootprint( aEditingFootprint ),
         m_haveGlobalPadSettings( std::move( aHaveGlobalPadSetting ) )
     {
@@ -82,12 +78,10 @@ public:
         Add( PCB_ACTIONS::applyPadSettings );
         Add( PCB_ACTIONS::pushPadSettings );
 
-
         // show modedit-specific items
         if( m_editingFootprint )
         {
             AppendSeparator();
-
             Add( PCB_ACTIONS::enumeratePads );
         }
     }
@@ -148,9 +142,9 @@ private:
 
 
 PAD_TOOL::PAD_TOOL() :
-        PCB_TOOL( "pcbnew.PadTool" ), m_padCopied( false )
-{
-}
+        PCB_TOOL( "pcbnew.PadTool" ),
+        m_padCopied( false )
+{}
 
 
 PAD_TOOL::~PAD_TOOL()
@@ -173,7 +167,7 @@ bool PAD_TOOL::haveFootprints()
 bool PAD_TOOL::Init()
 {
     auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>( EditingModules(),
-            [this]() { return m_padCopied; } );
+                                                           [this]() { return m_padCopied; } );
     contextMenu->SetTool( this );
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -208,30 +202,26 @@ bool PAD_TOOL::Init()
 }
 
 
-int PAD_TOOL::applyPadSettings( const TOOL_EVENT& aEvent )
+int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 {
     auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
-
     auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
     const D_PAD& masterPad = frame.GetDesignSettings().m_Pad_Master;
 
     BOARD_COMMIT commit( &frame );
 
-    // for every selected pad, copy global settings
+    // for every selected pad, paste global settings
     for( auto item : selection )
     {
         if( item->Type() == PCB_PAD_T )
         {
             commit.Modify( item );
-
-            D_PAD& destPad = static_cast<D_PAD&>( *item );
-            destPad.ImportSettingsFromMaster( masterPad );
+            static_cast<D_PAD&>( *item ).ImportSettingsFromMaster( masterPad );
         }
     }
 
-    commit.Push( _( "Apply Pad Properties" ) );
+    commit.Push( _( "Paste Pad Properties" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();
@@ -266,23 +256,13 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 }
 
 
-static void globalChangePadSettings( BOARD& board,
-                                     const D_PAD& aSrcPad,
-                                     BOARD_COMMIT& commit,
-                                     bool aSameFootprints,
-                                     bool aPadShapeFilter,
-                                     bool aPadOrientFilter,
-                                     bool aPadLayerFilter )
+static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMIT& commit,
+                                 bool aSameFootprints,
+                                 bool aPadShapeFilter,
+                                 bool aPadOrientFilter,
+                                 bool aPadLayerFilter )
 {
     const MODULE* moduleRef = aSrcPad.GetParent();
-
-    // If there is no module, we can't make the comparisons to see which
-    // pads to apply the source pad settings to
-    if( moduleRef == nullptr )
-    {
-        wxLogDebug( "globalChangePadSettings() Error: NULL module" );
-        return;
-    }
 
     double pad_orient = aSrcPad.GetOrientation() - moduleRef->GetOrientation();
 
@@ -296,7 +276,6 @@ static void globalChangePadSettings( BOARD& board,
 
         for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
         {
-            // Filters changes prohibited.
             if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )
                 continue;
 
@@ -322,69 +301,39 @@ static void globalChangePadSettings( BOARD& board,
 
 int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 {
-    auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
+    auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
+    auto&       frame = *getEditFrame<PCB_EDIT_FRAME>();
+    D_PAD*      srcPad;
 
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
-    // not const - can be changed in the dialog
-    D_PAD* srcPad = nullptr;
-
-    // If nothing selected, use the master pad setting,
-    // otherwise, if one pad selected, use the selected pad
-    if( selection.Size() == 0 )
-    {
-        srcPad = &frame.GetDesignSettings().m_Pad_Master;
-    }
-    else if( selection.Size() == 1 )
-    {
-        if( selection[0]->Type() == PCB_PAD_T )
-        {
-            srcPad = static_cast<D_PAD*>( selection[0] );
-        }
-    }
+    if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
+        srcPad = static_cast<D_PAD*>( selection[0] );
     else
-    {
-        // multiple selected what to do?
-        // maybe master->selection? same as apply multiple?
-    }
-
-    // no valid selection, nothing to do
-    if( !srcPad )
-    {
         return 0;
-    }
 
     MODULE* module = srcPad->GetParent();
 
-    if( module != nullptr )
-    {
-        frame.SetMsgPanel( module );
-    }
-
-    int dialogRet;
-    {
-        DIALOG_GLOBAL_PADS_EDITION dlg( &frame, srcPad );
-        dialogRet = dlg.ShowModal();
-    }
-
-    // cancel
-    if( dialogRet == -1 )
-    {
+    if( !module )
         return 0;
-    }
+
+    frame.SetMsgPanel( module );
+
+    DIALOG_PUSH_PAD_PROPERTIES dlg( &frame );
+    int dialogRet = dlg.ShowModal();
+
+    if( dialogRet == wxID_CANCEL )
+        return 0;
 
     const bool edit_Same_Modules = (dialogRet == 1);
 
     BOARD_COMMIT commit( &frame );
 
-    globalChangePadSettings( *getModel<BOARD>(), *srcPad, commit,
-                              edit_Same_Modules,
-                              DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter,
-                              DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter,
-                              DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter );
+    doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
+                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter,
+                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter,
+                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter );
 
-    commit.Push( _( "Apply Pad Properties" ) );
+    commit.Push( _( "Paste Pad Properties" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();
@@ -395,7 +344,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
 void PAD_TOOL::setTransitions()
 {
-    Go( &PAD_TOOL::applyPadSettings, PCB_ACTIONS::applyPadSettings.MakeEvent() );
+    Go( &PAD_TOOL::pastePadProperties, PCB_ACTIONS::applyPadSettings.MakeEvent() );
     Go( &PAD_TOOL::copyPadSettings,  PCB_ACTIONS::copyPadSettings.MakeEvent() );
     Go( &PAD_TOOL::pushPadSettings,  PCB_ACTIONS::pushPadSettings.MakeEvent() );
 }

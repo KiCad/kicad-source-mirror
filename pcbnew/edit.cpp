@@ -946,7 +946,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         m_canvas->MoveCursorToCrossHair();
-        DlgGlobalChange_PadSettings( (D_PAD*) GetCurItem(), true );
+        PushPadProperties((D_PAD*) GetCurItem() );
         break;
 
     case ID_POPUP_PCB_COPY_PAD_SETTINGS:

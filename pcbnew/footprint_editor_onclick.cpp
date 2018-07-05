@@ -319,7 +319,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             AddMenuItem( PopMenu, ID_POPUP_PCB_COPY_PAD_SETTINGS,
                          _( "Copy Pad Properties" ), KiBitmap( copy_pad_settings_xpm ) );
             AddMenuItem( PopMenu, ID_POPUP_PCB_APPLY_PAD_SETTINGS,
-                         _( "Apply Pad Properties" ), KiBitmap( apply_pad_settings_xpm ) );
+                         _( "Paste Pad Properties" ), KiBitmap( apply_pad_settings_xpm ) );
             msg = AddHotkeyName( _("Delete Pad" ), g_Module_Editor_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_PAD, msg, KiBitmap( delete_pad_xpm ) );
 

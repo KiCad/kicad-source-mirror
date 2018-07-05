@@ -406,31 +406,27 @@ public:
      */
     void StartMovePad( D_PAD* aPad, wxDC* aDC, bool aDragConnectedTracks );
 
-    void RotatePad( D_PAD* Pad, wxDC* DC );
     void PlacePad( D_PAD* Pad, wxDC* DC );
     void Export_Pad_Settings( D_PAD* aPad );
     void Import_Pad_Settings( D_PAD* aPad, bool aDraw );
 
     /**
-     * Function GlobalChange_PadSettings
-     * Function to change pad caracteristics for the given footprint
-     * or all footprints which look like the given footprint
+     * Function DoPushPadProperties
+     * Function to change pad settings for the given footprint or all identical footprints
      * @param aPad is the pattern. The given footprint is the parent of this pad
      * @param aSameFootprints: if true, make changes on all identical footprints
      * @param aPadShapeFilter: if true, make changes only on pads having the same shape as aPad
      * @param aPadOrientFilter: if true, make changes only on pads having the same orientation as aPad
      * @param aPadLayerFilter: if true, make changes only on pads having the same layers as aPad
-     * @param aRedraw: if true: redraws the footprint
      * @param aSaveForUndo: if true: create an entry in the Undo/Redo list
      *        (usually: true in Schematic editor, false in Module editor)
      */
-    void GlobalChange_PadSettings( D_PAD* aPad,
-                                   bool   aSameFootprints,
-                                   bool   aPadShapeFilter,
-                                   bool   aPadOrientFilter,
-                                   bool   aPadLayerFilter,
-                                   bool   aRedraw,
-                                   bool   aSaveForUndo );
+    void DoPushPadProperties( D_PAD* aPad,
+                              bool aSameFootprints,
+                              bool aPadShapeFilter,
+                              bool aPadOrientFilter,
+                              bool aPadLayerFilter,
+                              bool aSaveForUndo );
 
     /**
      * Function SelectFootprint

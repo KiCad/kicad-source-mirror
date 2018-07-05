@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GLOBAL_PADS_EDITION_BASE_H__
-#define __DIALOG_GLOBAL_PADS_EDITION_BASE_H__
+#ifndef __DIALOG_PUSH_PAD_PROPERTIES_BASE_H__
+#define __DIALOG_PUSH_PAD_PROPERTIES_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -25,14 +25,11 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_CHANGE_GET_PAD_SETTINGS 1000
-#define ID_CHANGE_CURRENT_MODULE 1001
-#define ID_CHANGE_ID_MODULES 1002
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GLOBAL_PADS_EDITION_BASE
+/// Class DIALOG_PUSH_PAD_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GLOBAL_PADS_EDITION_BASE : public DIALOG_SHIM
+class DIALOG_PUSH_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -40,22 +37,20 @@ class DIALOG_GLOBAL_PADS_EDITION_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Pad_Shape_Filter_CB;
 		wxCheckBox* m_Pad_Layer_Filter_CB;
 		wxCheckBox* m_Pad_Orient_Filter_CB;
-		wxButton* m_buttonPadEditor;
-		wxButton* m_buttonChangeModule;
-		wxButton* m_buttonCancel;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void InstallPadEditor( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadPropertiesAccept( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		wxButton* m_buttonIdModules;
 		
-		DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Push Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_GLOBAL_PADS_EDITION_BASE();
+		DIALOG_PUSH_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Push Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PUSH_PAD_PROPERTIES_BASE();
 	
 };
 
-#endif //__DIALOG_GLOBAL_PADS_EDITION_BASE_H__
+#endif //__DIALOG_PUSH_PAD_PROPERTIES_BASE_H__

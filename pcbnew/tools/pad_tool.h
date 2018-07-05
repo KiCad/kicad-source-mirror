@@ -54,7 +54,7 @@ private:
     bool haveFootprints();
 
     ///> Apply pad settings from board design settings to a pad
-    int applyPadSettings( const TOOL_EVENT& aEvent );
+    int pastePadProperties( const TOOL_EVENT& aEvent );
 
     ///> Copy pad settings from a pad to the board design settings
     int copyPadSettings( const TOOL_EVENT& aEvent );

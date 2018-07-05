@@ -99,8 +99,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
-    dialogs/dialog_global_pads_edition.cpp
-    dialogs/dialog_global_pads_edition_base.cpp
+    dialogs/dialog_push_pad_properties.cpp
+    dialogs/dialog_push_pad_properties_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
     dialogs/dialog_graphic_item_properties_base.cpp
     dialogs/dialog_import_settings.cpp
@@ -242,7 +242,6 @@ set( PCBNEW_CLASS_SRCS
     footprint_edit_frame.cpp
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
-    globaleditpad.cpp
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
     highlight.cpp
@@ -263,7 +262,7 @@ set( PCBNEW_CLASS_SRCS
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
-    pad_edition_functions.cpp
+    pad_edit_functions.cpp
     pcb_base_edit_frame.cpp
     pcb_footprint_edit_utils.cpp
     pcb_layer_box_selector.cpp

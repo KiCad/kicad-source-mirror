@@ -24,19 +24,18 @@
 #ifndef __DIALOG_GLOBAL_PADS_EDITION_H
 #define __DIALOG_GLOBAL_PADS_EDITION_H
 
-#include <dialog_global_pads_edition_base.h>
+#include <dialog_push_pad_properties_base.h>
 
 class D_PAD;
 class PCB_BASE_FRAME;
 /************************************/
-/* class DIALOG_GLOBAL_PADS_EDITION */
+/* class DIALOG_PUSH_PAD_PROPERTIES */
 /************************************/
 
-class DIALOG_GLOBAL_PADS_EDITION : public DIALOG_GLOBAL_PADS_EDITION_BASE
+class DIALOG_PUSH_PAD_PROPERTIES : public DIALOG_PUSH_PAD_PROPERTIES_BASE
 {
 private:
     PCB_BASE_FRAME* m_parent;
-    D_PAD*    m_currentPad;
 
 public:
     static bool m_Pad_Shape_Filter;
@@ -44,12 +43,10 @@ public:
     static bool m_Pad_Orient_Filter;
 
 public:
-    DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* aParent, D_PAD* aPad );
+    DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent );
 
 private:
-    void InstallPadEditor( wxCommandEvent& event ) override;
     void PadPropertiesAccept( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
 };
 
 

@@ -1094,14 +1094,13 @@ public:
     void StartMoveModule( MODULE* aModule, wxDC* aDC, bool aDragConnectedTracks );
 
     /**
-     * Function DlgGlobalChange_PadSettings
+     * Function PushPadProperties
      * Function to change pad caracteristics for the given footprint
      * or all footprints which look like the given footprint
      * Options are set by the opened dialog.
      * @param aPad is the pattern. The given footprint is the parent of this pad
-     * @param aRedraw: if true: redraws the footprint
      */
-    void DlgGlobalChange_PadSettings( D_PAD* aPad, bool aRedraw );
+    void PushPadProperties( D_PAD* aPad );
 
     /**
      * Function Delete Module

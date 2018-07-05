@@ -1433,6 +1433,16 @@ void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
         ;
     }
 
+    // copy also local settings:
+    SetLocalClearance( aMasterPad.GetLocalClearance() );
+    SetLocalSolderMaskMargin( aMasterPad.GetLocalSolderMaskMargin() );
+    SetLocalSolderPasteMargin( aMasterPad.GetLocalSolderPasteMargin() );
+    SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
+
+    SetZoneConnection( aMasterPad.GetZoneConnection() );
+    SetThermalWidth( aMasterPad.GetThermalWidth() );
+    SetThermalGap( aMasterPad.GetThermalGap() );
+
     // Add or remove custom pad shapes:
     SetPrimitives( aMasterPad.GetPrimitives() );
     SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
