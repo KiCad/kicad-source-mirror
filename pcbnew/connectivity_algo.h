@@ -288,6 +288,9 @@ protected:
     ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
     bool m_dirty;
 
+    ///> layer range over which the item exists
+    LAYER_RANGE m_layers;
+
     ///> bounding box for the item
     BOX2I m_bbox;
 
@@ -302,6 +305,7 @@ public:
         m_valid = true;
         m_dirty = true;
         m_anchors.reserve( 2 );
+        m_layers = LAYER_RANGE( 0, PCB_LAYER_ID_COUNT );
     }
 
     virtual ~CN_ITEM() {};
@@ -336,7 +340,58 @@ public:
         return m_dirty;
     }
 
-    const BOX2I BBox()
+    /**
+     * Function SetLayers()
+     *
+     * Sets the layers spanned by the item to aLayers.
+     */
+    void SetLayers( const LAYER_RANGE& aLayers )
+    {
+        m_layers = aLayers;
+    }
+
+    /**
+     * Function SetLayer()
+     *
+     * Sets the layers spanned by the item to a single layer aLayer.
+     */
+    void SetLayer( int aLayer )
+    {
+        m_layers = LAYER_RANGE( aLayer, aLayer );
+    }
+
+    /**
+     * Function Layers()
+     *
+     * Returns the contiguous set of layers spanned by the item.
+     */
+    const LAYER_RANGE& Layers() const
+    {
+        return m_layers;
+    }
+
+    /**
+     * Function Layer()
+     *
+     * Returns the item's layer, for single-layered items only.
+     */
+    virtual int Layer() const
+    {
+        return Layers().Start();
+    }
+
+    /**
+     * Function LayersOverlap()
+     *
+     * Returns true if the set of layers spanned by aOther overlaps our
+     * layers.
+     */
+    bool LayersOverlap( const CN_ITEM* aOther ) const
+    {
+        return Layers().Overlaps( aOther->Layers() );
+    }
+
+    const BOX2I& BBox()
     {
         if( m_dirty )
         {
@@ -498,8 +553,31 @@ public:
 
     CN_ITEM* Add( D_PAD* pad )
     {
-        auto item = new CN_ITEM( pad, false, 2 );
+        auto item = new CN_ITEM( pad, false, 1 );
         item->AddAnchor( pad->ShapePos() );
+        item->SetLayers( LAYER_RANGE( 0, PCB_LAYER_ID_COUNT ) );
+
+        switch( pad->GetAttribute() )
+        {
+        case PAD_ATTRIB_SMD:
+        case PAD_ATTRIB_HOLE_NOT_PLATED:
+        case PAD_ATTRIB_CONN:
+        {
+            LSET lmsk = pad->GetLayerSet();
+
+            for( int i = 0; i <= MAX_CU_LAYERS; i++ )
+            {
+                if( lmsk[i] )
+                {
+                    item->SetLayer( i );
+                    break;
+                }
+            }
+        }
+        default:
+            break;
+        }
+
         addItemtoTree( item );
         m_items.push_back( item );
         SetDirty();
@@ -512,6 +590,7 @@ public:
         m_items.push_back( item );
         item->AddAnchor( track->GetStart() );
         item->AddAnchor( track->GetEnd() );
+        item->SetLayer( track->GetLayer() );
         addItemtoTree( item );
         SetDirty();
         return item;
@@ -519,10 +598,11 @@ public:
 
     CN_ITEM* Add( VIA* via )
     {
-        auto item = new CN_ITEM( via, true );
+        auto item = new CN_ITEM( via, true, 1 );
 
         m_items.push_back( item );
         item->AddAnchor( via->GetStart() );
+        item->SetLayers( LAYER_RANGE( 0, PCB_LAYER_ID_COUNT ) );
         addItemtoTree( item );
         SetDirty();
         return item;
@@ -599,6 +679,7 @@ public:
                 zitem->AddAnchor( outline.CPoint( k ) );
 
             m_items.push_back( zitem );
+            zitem->SetLayer( zone->GetLayer() );
             addItemtoTree( zitem );
             rv.push_back( zitem );
             SetDirty();
@@ -606,33 +687,12 @@ public:
 
         return rv;
     }
-
-    template <class T>
-    void FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly = false );
 };
-
-
-template <class T>
-void CN_ZONE_LIST::FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly )
-{
-    for( auto item : m_items )
-    {
-        auto zone = static_cast<CN_ZONE*>( item );
-
-        if( aBBox.Intersects( zone->BBox() ) )
-        {
-            if( !aDirtyOnly || zone->Dirty() )
-            {
-                aFunc( zone );
-            }
-        }
-    }
-}
 
 template <class T>
 void CN_LIST::FindNearby( CN_ITEM *aItem, T aFunc )
 {
-    m_index.Query( aItem->BBox(), aFunc );
+    m_index.Query( aItem->BBox(), aItem->Layers(), aFunc );
 }
 
 class CN_CONNECTIVITY_ALGO
