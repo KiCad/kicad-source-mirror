@@ -54,3 +54,7 @@ target_link_libraries(qa_geometry
 )
 
 add_dependencies( qa_geometry pcbnew )
+
+add_test( NAME geometry
+    COMMAND qa_geometry --run_test=!ChamferFillet/Fillet
+)

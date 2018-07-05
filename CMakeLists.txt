@@ -912,6 +912,7 @@ if( UNIX AND NOT APPLE )
 endif()
 
 #include( CTest )
+enable_testing()
 
 if( UNIX AND NOT APPLE )
 
