@@ -372,7 +372,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     if( !viewData )
         return;
 
-    wxASSERT( viewData->m_view == this );
+    wxCHECK( viewData->m_view == this, /*void*/ );
     auto item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
 
     if( item != m_allItems->end() )
@@ -404,8 +404,8 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
 void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
 {
-    wxASSERT( (unsigned) aLayerId < m_layers.size() );
-    wxASSERT( (unsigned) aRequiredId < m_layers.size() );
+    wxCHECK( (unsigned) aLayerId < m_layers.size(), /*void*/ );
+    wxCHECK( (unsigned) aRequiredId < m_layers.size(), /*void*/ );
 
     if( aRequired )
         m_layers[aLayerId].requiredLayers.insert( aRequiredId );
@@ -538,7 +538,7 @@ void VIEW::SetViewport( const BOX2D& aViewport )
 {
     VECTOR2D ssize = ToWorld( m_gal->GetScreenPixelSize(), false );
 
-    wxASSERT( ssize.x > 0 && ssize.y > 0 );
+    wxCHECK( ssize.x > 0 && ssize.y > 0, /*void*/ );
 
     VECTOR2D centre = aViewport.Centre();
     VECTOR2D vsize  = aViewport.GetSize();
@@ -953,7 +953,7 @@ struct VIEW::drawItem
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        wxASSERT( aItem->viewPrivData() );
+        wxCHECK( aItem->viewPrivData(), false );
 
         // Conditions that have to be fulfilled for an item to be drawn
         bool drawCondition = aItem->viewPrivData()->isRenderable() &&
@@ -1255,8 +1255,8 @@ void VIEW::sortLayers()
 void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 {
     auto viewData = aItem->viewPrivData();
-    wxASSERT( (unsigned) aLayer < m_layers.size() );
-    wxASSERT( IsCached( aLayer ) );
+    wxCHECK( (unsigned) aLayer < m_layers.size(), /*void*/ );
+    wxCHECK( IsCached( aLayer ), /*void*/ );
 
     if( !viewData )
         return;
@@ -1274,8 +1274,8 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 {
     auto viewData = aItem->viewPrivData();
-    wxASSERT( (unsigned) aLayer < m_layers.size() );
-    wxASSERT( IsCached( aLayer ) );
+    wxCHECK( (unsigned) aLayer < m_layers.size(), /*void*/ );
+    wxCHECK( IsCached( aLayer ), /*void*/ );
 
     if( !viewData )
         return;
@@ -1362,7 +1362,7 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
 
 bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 {
-    wxASSERT( (unsigned) aLayerId < m_layers.size() );
+    wxCHECK( (unsigned) aLayerId < m_layers.size(), false );
 
     std::set<int>::const_iterator it, it_end;
 
