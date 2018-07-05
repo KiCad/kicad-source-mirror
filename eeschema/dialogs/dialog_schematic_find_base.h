@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,6 +23,7 @@
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,6 +57,8 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 		wxButton* m_buttonReplace;
 		wxButton* m_buttonReplaceAll;
 		wxButton* m_buttonCancel;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_statusLine;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }

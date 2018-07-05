@@ -438,12 +438,7 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
     wxString                msg;
     SCH_SHEET_LIST          schematic( g_RootSheet );
     SCH_FIND_COLLECTOR_DATA data;
-    SCH_FIND_REPLACE_DATA   searchCriteria;
     bool                    warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
-
-    searchCriteria.SetFlags( aEvent.GetFlags() );
-    searchCriteria.SetFindString( aEvent.GetFindString() );
-    searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
     if( m_foundItems.GetItem( data ) != NULL )
     {
@@ -494,5 +489,6 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
         msg.Printf( _( "No item found matching %s." ), GetChars( aEvent.GetFindString() ) );
     }
 
+    *m_findReplaceStatus = msg;
     SetStatusText( msg );
 }

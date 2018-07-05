@@ -498,14 +498,18 @@ wxString SCH_FIND_COLLECTOR::GetText( EDA_UNITS_T aUnits )
 
     if( data.GetParent() )
     {
-        return wxString::Format( _( "Child item %s of parent item %s found in sheet %s" ),
+        return wxString::Format( _( "Match %i of %i: %s of %s in sheet %s" ),
+                                 m_foundIndex + 1,
+                                 GetCount(),
                                  foundItem->GetSelectMenuText( aUnits ),
                                  data.GetParent()->GetSelectMenuText( aUnits ),
                                  data.GetSheetPath() );
     }
     else
     {
-        return wxString::Format( _( "Item %s found in sheet %s" ),
+        return wxString::Format( _( "Match %i of %i: %s in sheet %s" ),
+                                 m_foundIndex + 1,
+                                 GetCount(),
                                  foundItem->GetSelectMenuText( aUnits ),
                                  data.GetSheetPath() );
     }

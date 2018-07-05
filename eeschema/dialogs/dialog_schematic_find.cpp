@@ -34,13 +34,13 @@ DEFINE_EVENT_TYPE( EVT_COMMAND_FIND_DRC_MARKER )
 DEFINE_EVENT_TYPE( EVT_COMMAND_FIND_COMPONENT_IN_LIB )
 
 
-DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
+DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData, wxString* aStatus,
                                   const wxPoint& aPosition, const wxSize& aSize, int aStyle ) :
     DIALOG_SCH_FIND_BASE( aParent, wxID_ANY, _( "Find" ), aPosition, aSize,
-                          wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle )
+                          wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
+    m_findReplaceData( aData ),
+    m_status( aStatus )
 {
-    SetData( aData );
-
     wxASSERT_MSG( m_findReplaceData, wxT( "can't create find dialog without data" ) );
 
     if( aStyle & wxFR_REPLACEDIALOG )
@@ -71,8 +71,10 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     m_checkWrap->SetValue( flags & FR_SEARCH_WRAP );
     m_checkCurrentSheetOnly->SetValue( flags & FR_CURRENT_SHEET_ONLY );
 
+    m_statusLine->SetLabel( wxEmptyString );
     m_buttonFind->SetDefault();
-    m_comboFind->SetFocus();
+    SetInitialFocus( m_comboFind );
+
     SetPosition( aPosition );
 
     // Adjust the height of the dialog to prevent controls from being hidden when
@@ -263,6 +265,8 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
 
     if( event.GetFlags() != flags )
         m_findReplaceData->SetFlags( event.GetFlags() );
+
+    m_statusLine->SetLabel( *m_status );
 }
 
 

@@ -369,6 +369,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_hotkeysDescrList = g_Schematic_Hokeys_Descr;
     m_dlgFindReplace = NULL;
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
+    m_findReplaceStatus = new wxString( wxEmptyString );
     m_undoItem = NULL;
     m_hasAutoSave = true;
 
@@ -462,11 +463,13 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     delete m_undoItem;
     delete g_RootSheet;
     delete m_findReplaceData;
+    delete m_findReplaceStatus;
 
     m_CurrentSheet = NULL;
     m_undoItem = NULL;
     g_RootSheet = NULL;
     m_findReplaceData = NULL;
+    m_findReplaceStatus = NULL;
 }
 
 
@@ -974,8 +977,8 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
     if( aEvent.GetId() == wxID_REPLACE )
         style = wxFR_REPLACEDIALOG;
 
-    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, position, m_findDialogSize,
-                                            style );
+    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, m_findReplaceStatus,
+                                            position, m_findDialogSize, style );
 
     m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
     m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );

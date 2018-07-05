@@ -124,6 +124,7 @@ private:
     PARAM_CFG_ARRAY         m_configSettings;
     wxPageSetupDialogData   m_pageSetupData;
     wxFindReplaceData*      m_findReplaceData;
+    wxString*               m_findReplaceStatus;
     wxPoint                 m_previewPosition;
     wxSize                  m_previewSize;
     wxPoint                 m_printDialogPosition;
