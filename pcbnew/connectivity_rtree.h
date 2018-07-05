@@ -25,6 +25,7 @@
 #define PCBNEW_CONNECTIVITY_RTREE_H_
 
 #include <math/box2.h>
+#include <router/pns_layerset.h>
 
 #include <geometry/rtree.h>
 
@@ -41,7 +42,7 @@ public:
 
     CN_RTREE()
     {
-        this->m_tree = new RTree<T, int, 2, float>();
+        this->m_tree = new RTree<T, int, 3, double>();
     }
 
     ~CN_RTREE()
@@ -55,9 +56,11 @@ public:
      */
     void Insert( T aItem )
     {
-        const BOX2I&    bbox    = aItem->BBox();
-        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+        const BOX2I&        bbox    = aItem->BBox();
+        const LAYER_RANGE   layers  = aItem->Layers();
+
+        const int           mmin[3] = { layers.Start(), bbox.GetX(), bbox.GetY() };
+        const int           mmax[3] = { layers.End(), bbox.GetRight(), bbox.GetBottom() };
 
         m_tree->Insert( mmin, mmax, aItem );
     }
@@ -71,9 +74,10 @@ public:
     {
 
         // First, attempt to remove the item using its given BBox
-        const BOX2I&    bbox    = aItem->BBox();
-        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+        const BOX2I&        bbox    = aItem->BBox();
+        const LAYER_RANGE   layers  = aItem->Layers();
+        const int           mmin[3] = { layers.Start(), bbox.GetX(), bbox.GetY() };
+        const int           mmax[3] = { layers.End(), bbox.GetRight(), bbox.GetBottom() };
 
         // If we are not successful ( 1 == not found ), then we expand
         // the search to the full tree
@@ -82,8 +86,8 @@ public:
             // N.B. We must search the whole tree for the pointer to remove
             // because the item may have been moved before we have the chance to
             // delete it from the tree
-            const int       mmin2[2] = { INT_MIN, INT_MIN };
-            const int       mmax2[2] = { INT_MAX, INT_MAX };
+            const int       mmin2[3] = { INT_MIN, INT_MIN, INT_MIN };
+            const int       mmax2[3] = { INT_MAX, INT_MAX, INT_MAX };
             m_tree->Remove( mmin2, mmax2, aItem );
         }
     }
@@ -103,17 +107,17 @@ public:
      * with aBounds.
      */
     template <class Visitor>
-    void Query( const BOX2I& aBounds, Visitor& aVisitor )
+    void Query( const BOX2I& aBounds, const LAYER_RANGE& aRange, Visitor& aVisitor )
     {
-        const int   mmin[2] = { aBounds.GetX(), aBounds.GetY() };
-        const int   mmax[2] = { aBounds.GetRight(), aBounds.GetBottom() };
+        const int   mmin[3] = { aRange.Start(), aBounds.GetX(), aBounds.GetY() };
+        const int   mmax[3] = { aRange.End(), aBounds.GetRight(), aBounds.GetBottom() };
 
         m_tree->Search( mmin, mmax, aVisitor );
     }
 
 private:
 
-    RTree<T, int, 2, float>* m_tree;
+    RTree<T, int, 3, double>* m_tree;
 };
 
 
