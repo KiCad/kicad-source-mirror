@@ -295,7 +295,8 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_reverseDrawOrder( false )
 {
     m_boundary.SetMaximum();
-    m_allItems.reserve( 32768 );
+    m_allItems.reset( new std::vector<VIEW_ITEM*> );
+    m_allItems->reserve( 32768 );
 
     // Redraw everything at the beginning
     MarkDirty();
@@ -306,13 +307,13 @@ VIEW::VIEW( bool aIsDynamic ) :
     // silkscreen, pads, vias, etc.
     for( int i = 0; i < VIEW_MAX_LAYERS; i++ )
         AddLayer( i );
+
+    sortLayers();
 }
 
 
 VIEW::~VIEW()
 {
-    for( LAYER_MAP::value_type& l : m_layers )
-        delete l.second.items;
 }
 
 
@@ -321,15 +322,13 @@ void VIEW::AddLayer( int aLayer, bool aDisplayOnly )
     if( m_layers.find( aLayer ) == m_layers.end() )
     {
         m_layers[aLayer]                = VIEW_LAYER();
+        m_layers[aLayer].items.reset( new VIEW_RTREE() );
         m_layers[aLayer].id             = aLayer;
-        m_layers[aLayer].items          = new VIEW_RTREE();
         m_layers[aLayer].renderingOrder = aLayer;
         m_layers[aLayer].visible        = true;
         m_layers[aLayer].displayOnly    = aDisplayOnly;
         m_layers[aLayer].target         = TARGET_CACHED;
     }
-
-    sortLayers();
 }
 
 
@@ -349,7 +348,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     aItem->ViewGetLayers( layers, layers_count );
     aItem->viewPrivData()->saveLayers( layers, layers_count );
 
-    m_allItems.push_back( aItem );
+    m_allItems->push_back( aItem );
 
     for( int i = 0; i < layers_count; ++i )
     {
@@ -374,11 +373,11 @@ void VIEW::Remove( VIEW_ITEM* aItem )
         return;
 
     wxASSERT( viewData->m_view == this );
-    auto item = std::find( m_allItems.begin(), m_allItems.end(), aItem );
+    auto item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
 
-    if( item != m_allItems.end() )
+    if( item != m_allItems->end() )
     {
-        m_allItems.erase( item );
+        m_allItems->erase( item );
         viewData->clearUpdateFlags();
     }
 
@@ -694,7 +693,7 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 {
     LAYER_MAP new_map;
 
-    for( auto it : m_layers )
+    for( const auto& it : m_layers )
     {
         int orig_idx = it.first;
         VIEW_LAYER layer = it.second;
@@ -715,7 +714,7 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 
     m_layers = new_map;
 
-    for( VIEW_ITEM* item : m_allItems )
+    for( VIEW_ITEM* item : *m_allItems )
     {
         auto viewData = item->viewPrivData();
 
@@ -788,7 +787,7 @@ void VIEW::UpdateAllLayersColor()
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        for( VIEW_ITEM* item : m_allItems )
+        for( VIEW_ITEM* item : *m_allItems )
         {
             auto viewData = item->viewPrivData();
 
@@ -919,7 +918,7 @@ void VIEW::UpdateAllLayersOrder()
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        for( VIEW_ITEM* item : m_allItems )
+        for( VIEW_ITEM* item : *m_allItems )
         {
             auto viewData = item->viewPrivData();
 
@@ -1099,7 +1098,7 @@ void VIEW::Clear()
 {
     BOX2I r;
     r.SetMaximum();
-    m_allItems.clear();
+    m_allItems->clear();
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
         i->second.items->RemoveAll();
@@ -1404,7 +1403,7 @@ void VIEW::UpdateItems()
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        for( VIEW_ITEM* item : m_allItems )
+        for( VIEW_ITEM* item : *m_allItems )
         {
             auto viewData = item->viewPrivData();
 
@@ -1423,7 +1422,7 @@ void VIEW::UpdateItems()
 
 void VIEW::UpdateAllItems( int aUpdateFlags )
 {
-    for( VIEW_ITEM* item : m_allItems )
+    for( VIEW_ITEM* item : *m_allItems )
     {
         auto viewData = item->viewPrivData();
 
@@ -1438,7 +1437,7 @@ void VIEW::UpdateAllItems( int aUpdateFlags )
 void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
                                         std::function<bool( VIEW_ITEM* )> aCondition )
 {
-    for( VIEW_ITEM* item : m_allItems )
+    for( VIEW_ITEM* item : *m_allItems )
     {
         if( aCondition( item ) )
         {
@@ -1487,6 +1486,16 @@ const BOX2I VIEW::CalculateExtents()
     }
 
     return v.extents;
+}
+
+
+std::unique_ptr<VIEW> VIEW::DataReference() const
+{
+    auto ret = std::make_unique<VIEW>();
+    ret->m_allItems = m_allItems;
+    ret->m_layers = m_layers;
+    ret->sortLayers();
+    return ret;
 }
 
 

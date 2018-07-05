@@ -140,7 +140,7 @@ void SCH_VIEW::ShowPreview( bool aShow  )
 
 void SCH_VIEW::ClearHiddenFlags()
 {
-    for( auto item : m_allItems )
+    for( auto item : *m_allItems )
         Hide ( item, false );
 }
 
