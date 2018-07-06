@@ -53,9 +53,9 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
     if( aField->GetId() == VALUE )
-        caption = _( "Component Name" );
+        caption = _( "Edit Component Name" );
     else
-        caption.Printf( _( "Edit Field %s" ), GetChars( aField->GetName() ) );
+        caption.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
 
     DIALOG_LIB_EDIT_ONE_FIELD dlg( this, caption, aField );
 

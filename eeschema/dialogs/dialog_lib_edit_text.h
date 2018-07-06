@@ -38,6 +38,9 @@ class DIALOG_LIB_EDIT_TEXT : public DIALOG_LIB_EDIT_TEXT_BASE
 private:
     LIB_EDIT_FRAME* m_parent;
     LIB_TEXT*       m_graphicText;
+
+    UNIT_BINDER     m_posX;
+    UNIT_BINDER     m_posY;
     UNIT_BINDER     m_textSize;
 
 public:

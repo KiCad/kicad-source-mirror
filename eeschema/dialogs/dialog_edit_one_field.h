@@ -77,13 +77,18 @@ protected:
      */
     void OnTextValueSelectButtonClick( wxCommandEvent& aEvent ) override;
 
+    UNIT_BINDER m_posX;
+    UNIT_BINDER m_posY;
     UNIT_BINDER m_textSize;
+
     int         m_fieldId;
     bool        m_isPower;
     wxString    m_text;
-    int         m_style;
+    bool        m_isItalic;
+    bool        m_isBold;
+    wxPoint     m_position;
     int         m_size;
-    bool        m_orientation;
+    bool        m_isVertical;
     int         m_verticalJustification;
     int         m_horizontalJustification;
     bool        m_isVisible;
