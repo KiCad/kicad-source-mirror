@@ -30,13 +30,10 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include <algorithm>
+#include <functional>
+
 #define ASSERT assert    // RTree uses ASSERT( condition )
-#ifndef rMin
-  #define rMin std::min
-#endif    // rMin
-#ifndef rMax
-  #define rMax std::max
-#endif    // rMax
 
 //
 // RTree.h
@@ -124,13 +121,11 @@ public:
     /// Find all within search rectangle
     /// \param a_min Min of search bounding rect
     /// \param a_max Max of search bounding rect
-    /// \param a_resultCallback Callback function to return result.  Callback should return 'true' to continue searching
-    /// \param a_context User context to pass as parameter to a_resultCallback
+    /// \param a_callback Callback function to return result.  Callback should return 'true' to continue searching
     /// \return Returns the number of entries found
     int Search( const ELEMTYPE a_min[NUMDIMS],
                 const ELEMTYPE a_max[NUMDIMS],
-                bool a_resultCallback( DATATYPE a_data, void* a_context ),
-                void* a_context );
+                std::function<bool (const DATATYPE&)> a_callback ) const;
 
     template <class VISITOR>
     int Search( const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], VISITOR& a_visitor )
@@ -465,14 +460,13 @@ protected:
                                    ListNode**       a_listNode );
     ListNode*       AllocListNode();
     void            FreeListNode( ListNode* a_listNode );
-    bool            Overlap( Rect* a_rectA, Rect* a_rectB );
+    bool            Overlap( Rect* a_rectA, Rect* a_rectB ) const;
     void            ReInsert( Node* a_node, ListNode** a_listNode );
     ELEMTYPE        MinDist( const ELEMTYPE a_point[NUMDIMS], Rect* a_rect );
     void            InsertNNListSorted( std::vector<NNNode*>* nodeList, NNNode* newNode );
 
-    bool Search( Node * a_node, Rect * a_rect, int& a_foundCount, bool a_resultCallback(
-                     DATATYPE a_data,
-                     void* a_context ), void* a_context );
+    bool Search( Node * a_node, Rect * a_rect, int& a_foundCount,
+                 std::function<bool (const DATATYPE&)> a_callback ) const;
 
     template <class VISITOR>
     bool Search( Node* a_node, Rect* a_rect, VISITOR& a_visitor, int& a_foundCount )
@@ -695,8 +689,7 @@ bool RTREE_QUAL::Remove( const ELEMTYPE     a_min[NUMDIMS],
 RTREE_TEMPLATE
 int RTREE_QUAL::Search( const ELEMTYPE a_min[NUMDIMS],
                         const ELEMTYPE a_max[NUMDIMS],
-                        bool a_resultCallback( DATATYPE a_data, void* a_context ),
-                        void* a_context )
+                        std::function<bool (const DATATYPE&)> a_callback ) const
 {
 #ifdef _DEBUG
 
@@ -718,7 +711,7 @@ int RTREE_QUAL::Search( const ELEMTYPE a_min[NUMDIMS],
     // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
 
     int foundCount = 0;
-    Search( m_root, &rect, foundCount, a_resultCallback, a_context );
+    Search( m_root, &rect, foundCount, a_callback );
     return foundCount;
 }
 
@@ -1325,8 +1318,8 @@ typename RTREE_QUAL::Rect RTREE_QUAL::CombineRect( Rect* a_rectA, Rect* a_rectB 
 
     for( int index = 0; index < NUMDIMS; ++index )
     {
-        newRect.m_min[index]    = rMin( a_rectA->m_min[index], a_rectB->m_min[index] );
-        newRect.m_max[index]    = rMax( a_rectA->m_max[index], a_rectB->m_max[index] );
+        newRect.m_min[index]    = std::min( a_rectA->m_min[index], a_rectB->m_min[index] );
+        newRect.m_max[index]    = std::max( a_rectA->m_max[index], a_rectB->m_max[index] );
     }
 
     return newRect;
@@ -1774,7 +1767,7 @@ bool RTREE_QUAL::RemoveRectRec( Rect*           a_rect,
 
 // Decide whether two rectangles overlap.
 RTREE_TEMPLATE
-bool RTREE_QUAL::Overlap( Rect* a_rectA, Rect* a_rectB )
+bool RTREE_QUAL::Overlap( Rect* a_rectA, Rect* a_rectB ) const
 {
     ASSERT( a_rectA && a_rectB );
 
@@ -1807,9 +1800,8 @@ void RTREE_QUAL::ReInsert( Node* a_node, ListNode** a_listNode )
 
 // Search in an index tree or subtree for all data retangles that overlap the argument rectangle.
 RTREE_TEMPLATE
-bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount, bool a_resultCallback(
-                             DATATYPE   a_data,
-                             void*      a_context ), void* a_context )
+bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount,
+        std::function<bool (const DATATYPE&)> a_callback ) const
 {
     ASSERT( a_node );
     ASSERT( a_node->m_level >= 0 );
@@ -1821,8 +1813,7 @@ bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount, bool a_r
         {
             if( Overlap( a_rect, &a_node->m_branch[index].m_rect ) )
             {
-                if( !Search( a_node->m_branch[index].m_child, a_rect, a_foundCount,
-                             a_resultCallback, a_context ) )
+                if( !Search( a_node->m_branch[index].m_child, a_rect, a_foundCount, a_callback ) )
                 {
                     return false; // Don't continue searching
                 }
@@ -1836,16 +1827,11 @@ bool RTREE_QUAL::Search( Node* a_node, Rect* a_rect, int& a_foundCount, bool a_r
             if( Overlap( a_rect, &a_node->m_branch[index].m_rect ) )
             {
                 DATATYPE& id = a_node->m_branch[index].m_data;
+                ++a_foundCount;
 
-                // NOTE: There are different ways to return results.  Here's where to modify
-                if( &a_resultCallback )
+                if( a_callback && !a_callback( id ) )
                 {
-                    ++a_foundCount;
-
-                    if( !a_resultCallback( id, a_context ) )
-                    {
-                        return false; // Don't continue searching
-                    }
+                    return false; // Don't continue searching
                 }
             }
         }
