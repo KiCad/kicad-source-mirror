@@ -145,6 +145,7 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
     Py_Initialize();
+    PySys_SetArgv(Pgm().App().argc, Pgm().App().argv);
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
