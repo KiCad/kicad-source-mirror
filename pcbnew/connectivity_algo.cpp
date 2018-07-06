@@ -195,7 +195,7 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     {
         m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
         m_itemMap.erase ( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
-        m_zoneList.SetDirty( true );
+        m_itemList.SetDirty( true );
         break;
     }
 
@@ -205,7 +205,6 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
 
     // Once we delete an item, it may connect between lists, so mark both as potentially invalid
     m_itemList.SetHasInvalid( true );
-    m_zoneList.SetHasInvalid( true );
 
     return true;
 }
@@ -292,7 +291,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
         m_itemMap[zone] = ITEM_MAP_ENTRY();
 
-        for( auto zitem : m_zoneList.Add( zone ) )
+        for( auto zitem : m_itemList.Add( zone ) )
             m_itemMap[zone].Link(zitem);
 
         break;
@@ -319,7 +318,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     garbage.reserve( 1024 );
 
     m_itemList.RemoveInvalidItems( garbage );
-    m_zoneList.RemoveInvalidItems( garbage );
 
     for( auto item : garbage )
         delete item;
@@ -332,8 +330,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     if( m_progressReporter )
     {
-        m_progressReporter->SetMaxProgress(
-                m_zoneList.Size() + ( m_itemList.IsDirty() ? m_itemList.Size() : 0 ) );
+        m_progressReporter->SetMaxProgress( m_itemList.IsDirty() ? m_itemList.Size() : 0 );
     }
 
 #ifdef USE_OPENMP
@@ -355,7 +352,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                 {
                     CN_VISITOR visitor( item, &m_listLock );
                     m_itemList.FindNearby( item, visitor );
-                    m_zoneList.FindNearby( item, visitor );
                 }
 
                 if( m_progressReporter )
@@ -368,29 +364,9 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 #endif
 
 #ifdef USE_OPENMP
-        #pragma omp parallel for
-#endif
-        for( int i = 0; i < m_zoneList.Size(); i++ )
-        {
-            auto item = m_zoneList[i];
-            auto zoneItem = static_cast<CN_ZONE *>( item );
-
-            if( zoneItem->Dirty() )
-            {
-                CN_VISITOR visitor( item, &m_listLock );
-                m_itemList.FindNearby( item, visitor );
-                m_zoneList.FindNearby( item, visitor );
-            }
-
-            if( m_progressReporter )
-                m_progressReporter->AdvanceProgress();
-        }
-
-#ifdef USE_OPENMP
     }
 #endif
 
-    m_zoneList.ClearDirtyFlags();
     m_itemList.ClearDirtyFlags();
 
 #ifdef CONNECTIVITY_DEBUG
@@ -405,11 +381,13 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 void CN_ITEM::RemoveInvalidRefs()
 {
-    auto lastConn = std::remove_if(m_connected.begin(), m_connected.end(), [] ( CN_ITEM * item) {
-        return !item->Valid();
-    } );
-
-    m_connected.resize( lastConn - m_connected.begin() );
+    for( auto it = m_connected.begin(); it != m_connected.end(); )
+    {
+        if( !(*it)->Valid() )
+            it = m_connected.erase( it );
+        else
+            ++it;
+    }
 }
 
 
@@ -444,21 +422,25 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 
 bool CN_CONNECTIVITY_ALGO::isDirty() const
 {
-    return m_itemList.IsDirty() || m_zoneList.IsDirty();
+    return m_itemList.IsDirty();
 }
 
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_MODULE_T, EOT };
-    return SearchClusters( aMode, types, -1 );
+    constexpr KICAD_T no_zones[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_MODULE_T, EOT };
+
+    if( aMode == CSM_PROPAGATE )
+        return SearchClusters( aMode, no_zones, -1 );
+    else
+        return SearchClusters( aMode, types, -1 );
 }
 
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode,
         const KICAD_T aTypes[], int aSingleNet )
 {
-    bool includeZones = ( aMode != CSM_PROPAGATE );
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
 
     std::deque<CN_ITEM*> Q;
@@ -503,12 +485,6 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     };
 
     std::for_each( m_itemList.begin(), m_itemList.end(), addToSearchList );
-
-    if( includeZones )
-    {
-        std::for_each( m_zoneList.begin(), m_zoneList.end(), addToSearchList );
-    }
-
 
     while( head )
     {
@@ -835,6 +811,12 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
     if( !( parentA->GetLayerSet() & parentB->GetLayerSet() ).any() )
         return true;
 
+    // If both m_item and aCandidate are marked dirty, they will both be searched
+    // Since we are reciprocal in our connection, we arbitrarily pick one of the connections
+    // to conduct the expensive search
+    if( aCandidate->Dirty() && aCandidate < m_item )
+        return true;
+
     // We should handle zone-zone connection separately
     if ( ( parentA->Type() == PCB_ZONE_AREA_T || parentA->Type() == PCB_ZONE_T ) &&
          ( parentB->Type() == PCB_ZONE_AREA_T || parentB->Type() == PCB_ZONE_T ) )
@@ -968,18 +950,13 @@ void CN_CONNECTIVITY_ALGO::Clear()
     m_connClusters.clear();
     m_itemMap.clear();
     m_itemList.Clear();
-    m_zoneList.Clear();
 
 }
 
 
 void CN_CONNECTIVITY_ALGO::ForEachItem( const std::function<void( CN_ITEM& )>& aFunc )
 {
-
     for( auto item : m_itemList )
-        aFunc( *item );
-
-    for( auto item : m_zoneList )
         aFunc( *item );
 }
 
