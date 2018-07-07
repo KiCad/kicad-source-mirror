@@ -55,7 +55,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	
 	bSizer71->Add( m_rbFormat, 1, wxALL, 5 );
 	
-	wxString m_radioBoxUnitsChoices[] = { _("Inches"), _("mm") };
+	wxString m_radioBoxUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_radioBoxUnitsNChoices = sizeof( m_radioBoxUnitsChoices ) / sizeof( wxString );
 	m_radioBoxUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_radioBoxUnitsNChoices, m_radioBoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxUnits->SetSelection( 0 );
@@ -63,21 +63,13 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	
 	bSizer71->Add( m_radioBoxUnits, 1, wxALL, 5 );
 	
-	wxString m_radioBoxFilesCountChoices[] = { _("One file per side"), _("Single file for board") };
+	wxString m_radioBoxFilesCountChoices[] = { _("Separate files for front and back"), _("Single file for board") };
 	int m_radioBoxFilesCountNChoices = sizeof( m_radioBoxFilesCountChoices ) / sizeof( wxString );
 	m_radioBoxFilesCount = new wxRadioBox( this, wxID_ANY, _("Files"), wxDefaultPosition, wxDefaultSize, m_radioBoxFilesCountNChoices, m_radioBoxFilesCountChoices, 1, wxRA_SPECIFY_COLS );
-	m_radioBoxFilesCount->SetSelection( 1 );
+	m_radioBoxFilesCount->SetSelection( 0 );
 	m_radioBoxFilesCount->SetToolTip( _("Creates 2 files: one for each board side or\nCreates only one file containing all footprints to place\n") );
 	
 	bSizer71->Add( m_radioBoxFilesCount, 2, wxALL, 5 );
-	
-	wxString m_radioBoxForceSmdChoices[] = { _("Footprints with INSERT attribute set"), _("All SMD footprints") };
-	int m_radioBoxForceSmdNChoices = sizeof( m_radioBoxForceSmdChoices ) / sizeof( wxString );
-	m_radioBoxForceSmd = new wxRadioBox( this, wxID_ANY, _("Include"), wxDefaultPosition, wxDefaultSize, m_radioBoxForceSmdNChoices, m_radioBoxForceSmdChoices, 1, wxRA_SPECIFY_COLS );
-	m_radioBoxForceSmd->SetSelection( 0 );
-	m_radioBoxForceSmd->SetToolTip( _("Only footprints with option INSERT are listed in placement file.\nThis option can force this option for all footprints having only SMD pads.\nWarning: this options will modify the board.") );
-	
-	bSizer71->Add( m_radioBoxForceSmd, 3, wxALL, 5 );
 	
 	
 	m_MainSizer->Add( bSizer71, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -85,13 +77,16 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
+	m_forceSMDOpt = new wxCheckBox( this, wxID_ANY, _("Include footprints with SMD pads even if not marked Surface Mount"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_forceSMDOpt, 0, wxALL, 5 );
+	
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_messagesPanel->SetMinSize( wxSize( 300,150 ) );
 	
 	bSizer7->Add( m_messagesPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	m_MainSizer->Add( bSizer7, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( bSizer7, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

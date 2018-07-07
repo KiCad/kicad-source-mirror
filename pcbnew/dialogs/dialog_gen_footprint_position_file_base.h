@@ -28,6 +28,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -48,7 +49,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbFormat;
 		wxRadioBox* m_radioBoxUnits;
 		wxRadioBox* m_radioBoxFilesCount;
-		wxRadioBox* m_radioBoxForceSmd;
+		wxCheckBox* m_forceSMDOpt;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

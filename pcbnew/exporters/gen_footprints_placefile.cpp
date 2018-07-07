@@ -89,8 +89,8 @@ public:
 
 
 /**
- * The dialog to create footprint position files,
- * and choose options (one or 2 files, units and force all SMD footprints in list)
+ * The dialog to create footprint position files and choose options (one or 2 files, units
+ * and force all SMD footprints in list)
  */
 class DIALOG_GEN_FOOTPRINT_POSITION : public DIALOG_GEN_FOOTPRINT_POSITION_BASE
 {
@@ -149,7 +149,7 @@ private:
 
     bool ForceAllSmd()
     {
-        return m_radioBoxForceSmd->GetSelection() == 1;
+        return m_forceSMDOpt->GetValue();
     }
 };
 
