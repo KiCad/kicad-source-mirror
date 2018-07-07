@@ -96,6 +96,12 @@ public:
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
 
+    void SetBezier0_C1( const wxPoint& aPoint ) { m_Bezier0_C1 = aPoint; }
+    const wxPoint& GetBezier0_C1() const        { return m_Bezier0_C1; }
+
+    void SetBezier0_C2( const wxPoint& aPoint ) { m_Bezier0_C2 = aPoint; }
+    const wxPoint& GetBezier0_C2() const        { return m_Bezier0_C2; }
+
     /**
      * Set relative coordinates from draw coordinates.
      * Call in only when the geometry ov the footprint is modified
@@ -134,8 +140,10 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-    wxPoint m_Start0;       // Start point or center, relative to module origin, orient 0.
-    wxPoint m_End0;         // End point, relative to module origin, orient 0.
+    wxPoint m_Start0;       ///< Start point or center, relative to module origin, orient 0.
+    wxPoint m_End0;         ///< End point, relative to module origin, orient 0.
+    wxPoint m_Bezier0_C1;   ///< Bezier Control Point 1, relative to module origin, orient 0.
+    wxPoint m_Bezier0_C2;   ///< Bezier Control Point 2, relative to module origin, orient 0.
 };
 
 #endif    // CLASS_EDGE_MOD_H_

@@ -1,32 +1,33 @@
 /****************************************************************************
-**
-** This file comes from the LibreCAD project, a 2D CAD program
-**
-** Copyright (C) 2011 Rallaz, rallazz@gmail.com
-** Copyright (C) 2010 R. van Twisk (librecad@rvt.dds.nl)
-**
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License as published by the Free Software
-** Foundation either version 2 of the License, or (at your option)
-**  any later version.
-**
-** This program is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
-**
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-**
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 **********************************************************************/
 
 
-#ifndef FILTERDXFRW_H
-#define FILTERDXFRW_H
+#ifndef DXF2BRD_ITEMS_H
+#define DXF2BRD_ITEMS_H
 
-#include "drw_interface.h"
+#include "dl_dxf.h"
+#include "dl_creationadapter.h"
 #include "wx/wx.h"
 #include <list>
 
@@ -34,12 +35,81 @@ class BOARD;
 class BOARD_ITEM;
 
 /**
- * This format filter class can import and export DXF files.
- * It depends on the dxflib library.
- *
- * @author Rallaz
+ * A helper class to store a spline control point (in X,Y plane only)
  */
-class DXF2BRD_CONVERTER : public DRW_Interface
+struct SPLINE_CTRL_POINT
+{
+    double m_x;
+    double m_y;
+    double m_weight;
+
+    SPLINE_CTRL_POINT( double a_x, double a_y, double a_weight )
+                    : m_x( a_x ), m_y( a_y ), m_weight( a_weight )
+    {}
+};
+
+/**
+ * A helper class to parse a DXF entity (polyline and spline)
+ */
+class DXF2BRD_ENTITY_DATA
+{
+public:
+    int m_EntityType;           // the DXF type of entity
+    int m_EntityParseStatus;    // Inside a entity: status od parsing:
+                                // 0 = no entity
+                                // 1 = first item of entity
+                                // 2 = entity in progress
+    int m_EntityFlag;           // a info flag to parse entities
+
+    wxRealPoint m_LastCoordinate;   // the last vertex coordinate read (unit = mm)
+    wxRealPoint m_PolylineStart;    // The first point of the polyline entity, when reading a polyline (unit = mm)
+    double m_BulgeVertex;       // the last vertex bulge value read
+
+    // for spline parsing: parameters
+    unsigned int m_SplineDegree;
+    unsigned int m_SplineKnotsCount;
+    unsigned int m_SplineControlCount;
+    unsigned int m_SplineFitCount;
+    double m_SplineTangentStartX;   // tangeant dir X for the start point
+    double m_SplineTangentStartY;   // tangeant dir Y for the start point
+    double m_SplineTangentEndX;     // tangeant dir X for the end point
+    double m_SplineTangentEndY;     // tangeant dir Y for the end point
+
+    // for spline parsing: buffers to store control points, fit points and knot
+    std::vector<double> m_SplineKnotsList;          // knots list, code 40
+    // control points list coordinates, code 10, 20 & 30 (only X and Y cood and Weight)
+    std::vector<SPLINE_CTRL_POINT> m_SplineControlPointList;
+    // fit points list, code 11, 21 & 31 (only X and Y cood)
+    std::vector<wxRealPoint> m_SplineFitPointList;
+
+    DXF2BRD_ENTITY_DATA() { Clear(); };
+
+    // Reset the entity parameters
+    void Clear()
+    {
+        m_EntityType = DL_UNKNOWN;
+        m_EntityParseStatus = 0;
+        m_EntityFlag = 0;
+        m_SplineDegree = 1;
+        m_SplineKnotsCount = 0;
+        m_SplineControlCount = 0;
+        m_SplineFitCount = 0;
+        m_SplineTangentStartX = 0.0;
+        m_SplineTangentStartY = 0.0;
+        m_SplineTangentEndX = 0.0;
+        m_SplineTangentEndY = 0.0;
+        m_SplineKnotsList.clear();
+        m_SplineControlPointList.clear();
+        m_SplineFitPointList.clear();
+    }
+};
+
+
+/**
+ * This class import DXF ASCII files and convert basic entities to board entities.
+ * It depends on the dxflib library.
+ */
+class DXF2BRD_CONVERTER : public DL_CreationAdapter
 {
 private:
     std::list<BOARD_ITEM*> m_newItemsList;  // The list of new items added to the board
@@ -52,6 +122,10 @@ private:
     std::string m_codePage;     // The code page, not used here
     bool m_importAsfootprintGraphicItems;  // Use module items instead of board items when true.
                                 // true when the items are imported in the footprint editor
+    std::string m_messages;     // messages generated during dxf file parsing.
+                                // Each message ends by '\n'
+    DXF2BRD_ENTITY_DATA m_curr_entity;  // the current entity parameters when parsing a DXF entity
+
 
 public:
     DXF2BRD_CONVERTER();
@@ -115,7 +189,15 @@ public:
         return m_newItemsList;
     }
 
+    /**
+     * @return the list of messages in one string. Each message ends by '\n'
+     */
+    std::string& GetMessages() { return m_messages; }
+
 private:
+    // report message to keep trace of not supported dxf entities:
+    void reportMsg( const char* aMessage );
+
     // coordinate conversions from dxf to internal units
     int mapX( double aDxfCoordX );
     int mapY( double aDxfCoordY );
@@ -124,59 +206,88 @@ private:
     // or m_defaultThickness
     int mapWidth( double aDxfWidth );
 
-    // Functions to aid in the creation of a LWPolyline
+    // Functions to aid in the creation of a Polyline
     void insertLine( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd, int aWidth );
     void insertArc( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd,
                     double aBulge, int aWidth );
+    // Add a dxf spline (stored in m_curr_entity) to the board, after conversion to segments
+    void insertSpline( int aWidth );
 
-    // Methods from DRW_CreationInterface:
-    // They are "call back" fonctions, called when the corresponding object
-    // is read in dxf file
-    // Depending of the application, they can do something or not
-    virtual void addHeader( const DRW_Header* aData ) override;
-    virtual void addLType( const DRW_LType& aData ) override {}
-    virtual void addLayer( const DRW_Layer& aData ) override;
-    virtual void addDimStyle( const DRW_Dimstyle& aData ) override {}
-    virtual void addBlock( const DRW_Block& aData ) override {}
-    virtual void endBlock() override {}
-    virtual void addPoint( const DRW_Point& aData ) override {}
-    virtual void addLine( const DRW_Line& aData) override;
-    virtual void addRay( const DRW_Ray& aData ) override {}
-    virtual void addXline( const DRW_Xline& aData ) override {}
-    virtual void addCircle( const DRW_Circle& aData ) override;
-    virtual void addArc( const DRW_Arc& aData ) override;
-    virtual void addEllipse( const DRW_Ellipse& aData ) override {}
-    virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
-    virtual void addText( const DRW_Text& aData ) override;
-    virtual void addPolyline( const DRW_Polyline& aData ) override;
-    virtual void addSpline( const DRW_Spline* aData ) override {}
-    virtual void addKnot( const DRW_Entity&) override {}
-    virtual void addInsert( const DRW_Insert& aData ) override {}
-    virtual void addTrace( const DRW_Trace& aData ) override {}
-    virtual void addSolid( const DRW_Solid& aData ) override {}
-    virtual void addMText( const DRW_MText& aData) override;
-    virtual void addDimAlign( const DRW_DimAligned* aData ) override {}
-    virtual void addDimLinear( const DRW_DimLinear* aData ) override {}
-    virtual void addDimRadial( const DRW_DimRadial* aData ) override {}
-    virtual void addDimDiametric( const DRW_DimDiametric* aData ) override {}
-    virtual void addDimAngular( const DRW_DimAngular* aData ) override {}
-    virtual void addDimAngular3P( const DRW_DimAngular3p* aData ) override {}
-    virtual void addDimOrdinate( const DRW_DimOrdinate* aData ) override {}
-    virtual void addLeader( const DRW_Leader* aData ) override {}
-    virtual void addHatch( const DRW_Hatch* aData ) override {}
-    virtual void addImage( const DRW_Image* aData ) override {}
-    virtual void linkImage( const DRW_ImageDef* aData ) override {}
+    // Methods from DL_CreationAdapter:
+    // They are something like"call back" fonctions,
+    // called when the corresponding object is read in dxf file
 
-    virtual void add3dFace( const DRW_3Dface& aData ) override {}
-    virtual void addComment( const char*) override {}
+    /**
+     * Called for every string variable in the DXF file (e.g. "$ACADVER").
+     */
+    virtual void setVariableString( const std::string& key, const std::string& value,
+            int code ) override;
 
-    virtual void addVport( const DRW_Vport& aData ) override {}
+    /**
+     * Called for every int variable in the DXF file (e.g. "$ACADMAINTVER").
+     */
+    virtual void setVariableInt( const std::string& key, int value, int code ) override;
 
-    virtual void addTextStyle( const DRW_Textstyle& aData ) override;
+    /**
+     * Called for every double variable in the DXF file (e.g. "$DIMEXO").
+     */
+    virtual void setVariableDouble( const std::string& key, double value, int code ) override {}
 
-    virtual void addViewport( const DRW_Viewport& aData ) override {}
+    virtual void addLayer( const DL_LayerData& aData ) override;
+    virtual void addLine( const DL_LineData& aData) override;
+    virtual void addCircle( const DL_CircleData& aData ) override;
+    virtual void addArc( const DL_ArcData& aData ) override;
+    //virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
+    virtual void addText( const DL_TextData& aData ) override;
+    virtual void addPolyline( const DL_PolylineData& aData ) override;
 
-    virtual void setBlock( const int aHandle ) override {}
+    /** Called for every polyline vertex */
+    virtual void addVertex( const DL_VertexData& aData ) override;
+    virtual void addMText( const DL_MTextData& aData) override;
+    virtual void addTextStyle( const DL_StyleData& aData ) override;
+
+    virtual void endEntity() override;
+
+    /** Called for every spline */
+    virtual void addSpline( const DL_SplineData& aData ) override;
+
+    /** Called for every spline control point */
+    virtual void addControlPoint( const DL_ControlPointData& aData ) override;
+
+    /** Called for every spline fit point */
+    virtual void addFitPoint( const DL_FitPointData& aData ) override;
+
+    /** Called for every spline knot value */
+    virtual void addKnot( const DL_KnotData& aData ) override;
+
+    // Not yet handled DXF entities:
+    virtual void addDimAlign( const DL_DimensionData&,
+            const DL_DimAlignedData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addDimLinear( const DL_DimensionData&,
+            const DL_DimLinearData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addDimRadial( const DL_DimensionData&,
+            const DL_DimRadialData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addDimDiametric( const DL_DimensionData&,
+            const DL_DimDiametricData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addDimAngular( const DL_DimensionData&,
+            const DL_DimAngularData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addDimAngular3P( const DL_DimensionData&,
+            const DL_DimAngular3PData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addDimOrdinate( const DL_DimensionData&,
+            const DL_DimOrdinateData& ) override { reportMsg( "DL_Dimension not managed" ); }
+    virtual void addLeader( const DL_LeaderData& ) override { reportMsg( "DL_Leader not managed" ); }
+    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override { reportMsg( "DL_LeaderVertex not managed" ); }
+
+    virtual void addHatch( const DL_HatchData& ) override { reportMsg( "DL_Hatch not managed" ); }
+
+    virtual void addTrace( const DL_TraceData& ) override { reportMsg( "DL_Trace not managed" ); }
+    virtual void add3dFace( const DL_3dFaceData& ) override { reportMsg( "DL_3dFace not managed" ); }
+    virtual void addSolid( const DL_SolidData& ) override { reportMsg( "DL_Solid not managed" ); }
+
+    virtual void addImage( const DL_ImageData& ) override { reportMsg( "DL_ImageDa not managed" ); }
+    virtual void linkImage( const DL_ImageDefData& ) override { reportMsg( "DL_ImageDef not managed" ); }
+    virtual void addHatchLoop( const DL_HatchLoopData& ) override { reportMsg( "DL_HatchLoop not managed" ); }
+    virtual void addHatchEdge( const DL_HatchEdgeData& ) override { reportMsg( "DL_HatchEdge not managed" ); }
 
     /**
      * Converts a native unicode string into a DXF encoded string.
@@ -193,23 +304,8 @@ private:
      */
     static wxString toNativeString( const wxString& aData );
 
-    // These functions are not used in Kicad.
-    // But because they are virtual pure in DRW_Interface, they should be defined
-    virtual void writeTextstyles() override {}
-    virtual void writeVports() override {}
-    virtual void writeHeader( DRW_Header& aData ) override {}
-    virtual void writeEntities() override {}
-    virtual void writeLTypes() override {}
-    virtual void writeLayers() override {}
-    virtual void writeBlockRecords() override {}
-    virtual void writeBlocks() override {}
-    virtual void writeDimstyles() override {}
-
     void writeLine();
     void writeMtext();
-
-    virtual void addAppId( const DRW_AppId& data ) override {}
-    virtual void writeAppId() override {}
 };
 
-#endif  // FILTERDXFRW_H
+#endif  // DXF2BRD_ITEMS_H

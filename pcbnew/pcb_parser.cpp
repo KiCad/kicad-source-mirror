@@ -2209,8 +2209,8 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
             Expecting( T_pts );
 
         segment->SetStart0( parseXY() );
-        segment->SetBezControl1( parseXY() );
-        segment->SetBezControl2( parseXY() );
+        segment->SetBezier0_C1( parseXY() );
+        segment->SetBezier0_C2( parseXY() );
         segment->SetEnd0( parseXY() );
         NeedRIGHT();
         break;

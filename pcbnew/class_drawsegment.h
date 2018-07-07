@@ -194,6 +194,16 @@ public:
         m_BezierPoints = aPoints;
     }
 
+    /** Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
+     * by a list of segments
+     * Has meaning only for S_CURVE DRAW_SEGMENT shape
+     * @param aMinSegLen is the min length of segments approximating the shape.
+     * the last segment can be shorter
+     * This param avoid having too many very short segment in list.
+     * a good value is m_Width/2 to m_Width
+     */
+    void RebuildBezierToSegmentsPointsList( int aMinSegLen );
+
     void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,

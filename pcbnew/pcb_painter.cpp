@@ -961,7 +961,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         std::copy( points.begin(), points.end(), std::back_inserter( pointsList ) );
         pointsList.push_back( points[0] );
 
-        m_gal->SetLineWidth( aSegment->GetWidth() );
+        m_gal->SetLineWidth( thickness );
         m_gal->SetIsFill( true );
         m_gal->SetIsStroke( true );
         m_gal->DrawPolygon( pointsList );
@@ -971,6 +971,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
     }
 
     case S_CURVE:
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( thickness );
         m_gal->DrawCurve( VECTOR2D( aSegment->GetStart() ),
                           VECTOR2D( aSegment->GetBezControl1() ),
                           VECTOR2D( aSegment->GetBezControl2() ),

@@ -300,7 +300,15 @@ bool DIALOG_DXF_IMPORT::TransferDataFromWindow()
     // Read dxf file:
     m_dxfImporter.ImportDxfFile( m_dxfFilename );
 
-   return true;
+    // Get messages:
+    std::string& messages = m_dxfImporter.GetMessages();
+
+    if( messages.empty() )
+        return true;
+
+    // Show messages (list of net handled dxf items
+    wxMessageBox( messages.c_str(), _( "Not Handled DXF Items" ) );
+    return true;
 }
 
 

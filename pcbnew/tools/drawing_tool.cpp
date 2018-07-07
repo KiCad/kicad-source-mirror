@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -761,6 +761,15 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     m_controls->SetSnapping( true );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
+
+    // Now move the new items to the current cursor position:
+    cursorPos = m_controls->GetCursorPosition();
+    delta = cursorPos - firstItem->GetPosition();
+
+    for( auto item : preview )
+        static_cast<BOARD_ITEM*>( item )->Move( wxPoint( delta.x, delta.y ) );
+
+    m_view->Update( &preview );
 
     Activate();
 

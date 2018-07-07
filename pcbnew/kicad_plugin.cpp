@@ -984,8 +984,8 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
     case S_CURVE:   // Bezier curve
         m_out->Print( aNestLevel, "(fp_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                       FMT_IU( aModuleDrawing->GetStart0() ).c_str(),
-                      FMT_IU( aModuleDrawing->GetBezControl1() ).c_str(),
-                      FMT_IU( aModuleDrawing->GetBezControl2() ).c_str(),
+                      FMT_IU( aModuleDrawing->GetBezier0_C1() ).c_str(),
+                      FMT_IU( aModuleDrawing->GetBezier0_C2() ).c_str(),
                       FMT_IU( aModuleDrawing->GetEnd0() ).c_str() );
         break;
 

@@ -101,8 +101,7 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
     wxPoint delta;
     delta = aPanel->GetParent()->GetCrossHairPosition() - s_LastPosition;
 
-    segment->SetStart( segment->GetStart() + delta );
-    segment->SetEnd(   segment->GetEnd()   + delta );
+    segment->Move( delta );
 
     s_LastPosition = aPanel->GetParent()->GetCrossHairPosition();
 

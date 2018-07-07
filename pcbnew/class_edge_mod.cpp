@@ -75,14 +75,19 @@ void EDGE_MODULE::SetLocalCoord()
     {
         m_Start0 = m_Start;
         m_End0 = m_End;
+        m_Bezier0_C1 = m_BezierC1;
+        m_Bezier0_C2 = m_BezierC2;
         return;
     }
 
     m_Start0 = m_Start - module->GetPosition();
     m_End0 = m_End - module->GetPosition();
+    m_Bezier0_C1 = m_BezierC1 - module->GetPosition();
+    m_Bezier0_C2 = m_BezierC2 - module->GetPosition();
     double angle = module->GetOrientation();
     RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
     RotatePoint( &m_End0.x, &m_End0.y, -angle );
+    RotatePoint( &m_Bezier0_C1.x, &m_Bezier0_C1.y, -angle );
 }
 
 
@@ -92,15 +97,23 @@ void EDGE_MODULE::SetDrawCoord()
 
     m_Start = m_Start0;
     m_End   = m_End0;
+    m_BezierC1 = m_Bezier0_C1;
+    m_BezierC2 = m_Bezier0_C2;
 
     if( module )
     {
         RotatePoint( &m_Start.x, &m_Start.y, module->GetOrientation() );
-        RotatePoint( &m_End.x,   &m_End.y,   module->GetOrientation() );
+        RotatePoint( &m_End.x, &m_End.y, module->GetOrientation() );
+        RotatePoint( &m_BezierC1.x, &m_BezierC1.y, module->GetOrientation() );
+        RotatePoint( &m_BezierC2.x, &m_BezierC2.y, module->GetOrientation() );
 
         m_Start += module->GetPosition();
         m_End   += module->GetPosition();
+        m_BezierC1   += module->GetPosition();
+        m_BezierC2   += module->GetPosition();
     }
+
+    RebuildBezierToSegmentsPointsList( m_Width );
 }
 
 
@@ -225,6 +238,28 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         }
         break;
 
+    case S_CURVE:
+        {
+            RebuildBezierToSegmentsPointsList( m_Width );
+
+            wxPoint& startp = m_BezierPoints[0];
+
+            for( unsigned int i = 1; i < m_BezierPoints.size(); i++ )
+            {
+                wxPoint& endp = m_BezierPoints[i];
+
+                if( filled )
+                    GRFilledSegment( panel->GetClipBox(), DC,
+                                     startp-offset, endp-offset, m_Width, color );
+                else
+                    GRCSegm( panel->GetClipBox(), DC,
+                             startp-offset, endp-offset, m_Width, color );
+
+                startp = m_BezierPoints[i];
+            }
+        }
+        break;
+
     default:
         break;
     }
@@ -290,6 +325,7 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
         //Fall through
     default:
     case S_SEGMENT:
+    case S_CURVE:
         pt = GetStart();
         MIRROR( pt.y, aCentre.y );
         SetStart( pt );
@@ -298,8 +334,14 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
         MIRROR( pt.y, aCentre.y );
         SetEnd( pt );
 
+        MIRROR( m_BezierC1.y, aCentre.y );
+        MIRROR( m_BezierC2.y, aCentre.y );
+
         MIRROR( m_Start0.y, 0 );
         MIRROR( m_End0.y, 0 );
+        MIRROR( m_Bezier0_C1.y, 0 );
+        MIRROR( m_Bezier0_C2.y, 0 );
+        RebuildBezierToSegmentsPointsList( m_Width );
         break;
 
     case S_POLYGON:
@@ -336,18 +378,32 @@ void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
         SetAngle( -GetAngle() );
         //Fall through
     default:
+    case S_CURVE:
     case S_SEGMENT:
         if( aMirrorAroundXAxis )
         {
             MIRROR( m_Start0.y, aCentre.y );
             MIRROR( m_End0.y, aCentre.y );
+            MIRROR( m_Bezier0_C1.y, aCentre.y );
+            MIRROR( m_Bezier0_C2.y, aCentre.y );
         }
         else
         {
             MIRROR( m_Start0.x, aCentre.x );
             MIRROR( m_End0.x, aCentre.x );
+            MIRROR( m_Bezier0_C1.x, aCentre.x );
+            MIRROR( m_Bezier0_C2.x, aCentre.x );
         }
-            break;
+
+        for( unsigned ii = 0; ii < m_BezierPoints.size(); ii++ )
+        {
+            if( aMirrorAroundXAxis )
+                MIRROR( m_BezierPoints[ii].y, aCentre.y );
+            else
+                MIRROR( m_BezierPoints[ii].x, aCentre.x );
+        }
+
+        break;
 
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
@@ -383,6 +439,8 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
     // This is a footprint shape modification.
     m_Start0 += aMoveVector;
     m_End0   += aMoveVector;
+    m_Bezier0_C1   += aMoveVector;
+    m_Bezier0_C2   += aMoveVector;
 
     switch( GetShape() )
     {

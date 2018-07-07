@@ -533,10 +533,11 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         case PCB_MODULE_EDGE_T:
         {
             EDGE_MODULE* em = (EDGE_MODULE*) item;
-            em->SetStart( em->GetStart() + offset );
-            em->SetEnd( em->GetEnd() + offset );
+            em->Move( offset );
             em->SetStart0( em->GetStart0() + offset );
             em->SetEnd0( em->GetEnd0() + offset );
+            em->SetBezier0_C1( em->GetBezier0_C1() + offset );
+            em->SetBezier0_C2( em->GetBezier0_C2() + offset );
         }
         break;
 

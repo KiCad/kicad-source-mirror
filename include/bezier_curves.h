@@ -30,18 +30,22 @@
 
 /**
  * Bezier curves to polygon converter.
+ * Only quadratic and cubic Bezier curves are handled
  */
 class BEZIER_POLY
 {
 public:
+    /** cubic Bezier curve */
     BEZIER_POLY( int x1, int y1, int x2, int y2, int x3, int y3 )
     {
         m_ctrlPts.emplace_back( x1, y1 );
         m_ctrlPts.emplace_back( x2, y2 );
         m_ctrlPts.emplace_back( x3, y3 );
         m_output = nullptr;
+        m_minSegLen = 0;
     }
 
+    /** Quadratic and cubic Bezier curve */
     BEZIER_POLY( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4 )
     {
         m_ctrlPts.emplace_back( x1, y1 );
@@ -49,21 +53,28 @@ public:
         m_ctrlPts.emplace_back( x3, y3 );
         m_ctrlPts.emplace_back( x4, y4 );
         m_output = nullptr;
+        m_minSegLen = 0;
     }
 
     BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
         : m_ctrlPts( aControlPoints )
     {
         m_output = nullptr;
+        m_minSegLen = 0;
     }
 
     /**
      * Converts Bezier curve to a polygon.
      * @param aOutput will be used as an output vector storing polygon points.
+     * @param aMinSegLen is the min dist between 2 successve points.
+     * It can be used to reduce the number of points.
+     * (the last point is always generated)
      */
-    void GetPoly( std::vector<wxPoint>& aOutput );
+    void GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen = 0 );
 
 private:
+    int m_minSegLen;
+
     ///> Control points
     std::vector<wxPoint> m_ctrlPts;
 
@@ -72,7 +83,11 @@ private:
 
     void addSegment( const wxPoint& aSegment )
     {
-        if( m_output->back() != aSegment )
+        int seglen = std::abs( m_output->back().x - aSegment.x )
+                     + std::abs( m_output->back().y - aSegment.y );
+
+        // m_minSegLen is always > 0, so never store a 0 len segment
+        if( seglen >= m_minSegLen )
             m_output->push_back( aSegment );
     }
 

@@ -42,7 +42,7 @@ include_directories(
     ../polygon
     ../common/dialogs
     ./exporters
-    ../lib_dxf
+    ../dxflib_qcad
     ./import_dxf
     ../utils/idftools
     ${GLM_INCLUDE_DIR}

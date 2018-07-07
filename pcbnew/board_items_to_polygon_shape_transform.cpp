@@ -33,6 +33,7 @@
 #include <vector>
 
 #include <fctsys.h>
+#include <bezier_curves.h>
 #include <base_units.h>     // for IU_PER_MM
 #include <draw_graphic_text.h>
 #include <pcbnew.h>
@@ -602,7 +603,19 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         }
         break;
 
-    case S_CURVE:       // Bezier curve (TODO: not yet in use)
+    case S_CURVE:       // Bezier curve
+        {
+            std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
+            BEZIER_POLY converter( ctrlPoints );
+            std::vector< wxPoint> poly;
+            converter.GetPoly( poly, m_Width );
+
+            for( unsigned ii = 1; ii < poly.size(); ii++ )
+            {
+                TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
+                        poly[ii-1], poly[ii], aCircleToSegmentsCount, linewidth );
+            }
+        }
         break;
 
     default:

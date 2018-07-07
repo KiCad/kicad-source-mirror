@@ -79,11 +79,7 @@ void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* aEdge )
     if( aEdge == NULL )
         return;
 
-    aEdge->SetStart( aEdge->GetStart() - MoveVector );
-    aEdge->SetEnd(   aEdge->GetEnd()   - MoveVector );
-
-    aEdge->SetStart0( aEdge->GetStart0() - MoveVector );
-    aEdge->SetEnd0(   aEdge->GetEnd0()   - MoveVector );
+    aEdge->Move( -MoveVector );
 
     aEdge->ClearFlags();
     m_canvas->SetMouseCapture( NULL, NULL );

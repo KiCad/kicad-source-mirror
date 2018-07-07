@@ -91,6 +91,18 @@ void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
             (*iter) += VECTOR2I( aMoveVector );
         }
         break;
+
+    case S_CURVE:
+        m_BezierC1 += aMoveVector;
+        m_BezierC2 += aMoveVector;
+
+        for( unsigned int ii = 0; ii < m_BezierPoints.size(); ii++ )
+        {
+            m_BezierPoints[ii] += aMoveVector;
+        }
+
+        break;
+
     default:
         break;
     }
@@ -119,6 +131,8 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
     case S_CURVE:
         RotatePoint( &m_Start, aRotCentre, aAngle);
         RotatePoint( &m_End, aRotCentre, aAngle);
+        RotatePoint( &m_BezierC1, aRotCentre, aAngle);
+        RotatePoint( &m_BezierC2, aRotCentre, aAngle);
 
         for( unsigned int ii = 0; ii < m_BezierPoints.size(); ii++ )
         {
@@ -145,20 +159,50 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     case S_ARC:
         m_Angle = -m_Angle;
         break;
+
     case S_POLYGON:
         for( auto iter = m_Poly.Iterate(); iter; iter++ )
         {
             iter->y  = aCentre.y - (iter->y - aCentre.y);
         }
         break;
+
+    case S_CURVE:
+        {
+            m_BezierC1.y  = aCentre.y - (m_BezierC1.y - aCentre.y);
+            m_BezierC2.y  = aCentre.y - (m_BezierC2.y - aCentre.y);
+
+            // Rebuild the poly points shape
+            std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
+            BEZIER_POLY converter( ctrlPoints );
+            converter.GetPoly( m_BezierPoints, m_Width );
+        }
+        break;
+
     default:
         break;
     }
 
     // DRAWSEGMENT items are not allowed on copper layers, so
-    // copper layers count is not taken in accoun in Flip transform
+    // copper layers count is not taken in account in Flip transform
     SetLayer( FlipLayer( GetLayer() ) );
 }
+
+
+void DRAWSEGMENT::RebuildBezierToSegmentsPointsList( int aMinSegLen )
+{
+    // Has meaning only for S_CURVE DRAW_SEGMENT shape
+    if( m_Shape != S_CURVE )
+    {
+        m_BezierPoints.clear();
+        return;
+    }
+    // Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
+    std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
+    BEZIER_POLY converter( ctrlPoints );
+    converter.GetPoly( m_BezierPoints, aMinSegLen );
+}
+
 
 const wxPoint DRAWSEGMENT::GetCenter() const
 {
@@ -340,29 +384,24 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     case S_CURVE:
         {
-            std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
-            BEZIER_POLY converter( ctrlPoints );
-            converter.GetPoly( m_BezierPoints );
-        }
+            RebuildBezierToSegmentsPointsList( m_Width );
 
-        for( unsigned int i=1; i < m_BezierPoints.size(); i++ )
-        {
-            if( filled )
+            wxPoint& startp = m_BezierPoints[0];
+
+            for( unsigned int i = 1; i < m_BezierPoints.size(); i++ )
             {
-                GRFillCSegm( panel->GetClipBox(), DC,
-                             m_BezierPoints[i].x, m_BezierPoints[i].y,
-                             m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
-                             m_Width, color );
-            }
-            else
-            {
-                GRCSegm( panel->GetClipBox(), DC,
-                         m_BezierPoints[i].x, m_BezierPoints[i].y,
-                         m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
-                         m_Width, color );
+                wxPoint& endp = m_BezierPoints[i];
+
+                if( filled )
+                    GRFilledSegment( panel->GetClipBox(), DC,
+                                     startp+aOffset, endp+aOffset, m_Width, color );
+                else
+                    GRCSegm( panel->GetClipBox(), DC,
+                             startp+aOffset, endp+aOffset, m_Width, color );
+
+                startp = m_BezierPoints[i];
             }
         }
-
         break;
 
     case S_POLYGON:
@@ -518,6 +557,15 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         bbox.SetEnd( p_end );
         break;
 	}
+
+    case S_CURVE:
+        // Rebuild the poly points shape
+        ((DRAWSEGMENT*)this)->RebuildBezierToSegmentsPointsList( m_Width );
+
+        for( unsigned ii = 0; ii < m_BezierPoints.size(); ++ii )
+            bbox.Merge( m_BezierPoints[ii] );
+        break;
+
     default:
         break;
     }
@@ -578,6 +626,8 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
         break;
 
     case S_CURVE:
+        ((DRAWSEGMENT*)this)->RebuildBezierToSegmentsPointsList( m_Width );
+
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
             if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
@@ -711,6 +761,35 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         break;
 
     case S_CURVE:     // not yet handled
+        if( aContained )
+        {
+            return arect.Contains( bb );
+        }
+        else
+        {
+            // Fast test: if aRect is outside the polygon bounding box,
+            // rectangles cannot intersect
+            if( !arect.Intersects( bb ) )
+                return false;
+
+            // Account for the width of the line
+            arect.Inflate( GetWidth() / 2 );
+            unsigned count = m_BezierPoints.size();
+
+            for( unsigned ii = 1; ii < count; ii++ )
+            {
+                wxPoint vertex = m_BezierPoints[ii-1];
+                wxPoint vertexNext = m_BezierPoints[ii];
+
+                // Test if the point is within aRect
+                if( arect.Contains( ( wxPoint ) vertex ) )
+                    return true;
+
+                // Test if this edge intersects aRect
+                if( arect.Intersects( vertex, vertexNext ) )
+                    return true;
+            }
+        }
         break;
 
 
