@@ -229,8 +229,10 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     {
         m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
         m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
-        m_panelShowPadGal->GetViewControls()->
-                EnableMousewheelPan( m_parent->GetCanvas()->GetEnableMousewheelPan() );
+        m_panelShowPadGal->SetStealsFocus( false );
+
+        bool mousewheelPan = m_parent->GetCanvas()->GetEnableMousewheelPan();
+        m_panelShowPadGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
 
         m_panelShowPadGal->Show();
         m_panelShowPad->Hide();
@@ -238,13 +240,12 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
         KIGFX::VIEW* view = m_panelShowPadGal->GetView();
 
         // fix the pad render mode (filled/not filled)
-        KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-        bool filled = !m_cbShowPadOutline->IsChecked();
-        settings->SetSketchMode( LAYER_PADS_TH, !filled );
-        settings->SetSketchMode( LAYER_PAD_FR, !filled );
-        settings->SetSketchMode( LAYER_PAD_BK, !filled );
-        settings->SetSketchModeGraphicItems( !filled );
+        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        bool sketchMode = m_cbShowPadOutline->IsChecked();
+        settings->SetSketchMode( LAYER_PADS_TH, sketchMode );
+        settings->SetSketchMode( LAYER_PAD_FR, sketchMode );
+        settings->SetSketchMode( LAYER_PAD_BK, sketchMode );
+        settings->SetSketchModeGraphicItems( sketchMode );
 
         // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
         double gridsize = 0.001 * IU_PER_MM;

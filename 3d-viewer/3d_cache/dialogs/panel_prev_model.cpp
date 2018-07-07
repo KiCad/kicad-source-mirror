@@ -66,15 +66,11 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
                                        aFrame->Prj().Get3DCacheManager() );
 
     m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
-
-    m_previewPane->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( PANEL_PREV_3D::onEnterPreviewCanvas ), nullptr, this );
 }
 
 
 PANEL_PREV_3D::~PANEL_PREV_3D()
 {
-    m_previewPane->Disconnect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( PANEL_PREV_3D::onEnterPreviewCanvas ), nullptr, this );
-
     delete m_settings3Dviewer;
     delete m_dummyBoard;
     delete m_previewPane;

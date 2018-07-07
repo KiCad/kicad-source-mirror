@@ -136,11 +136,6 @@ private:
     wxString formatRotationValue( double aValue );
     wxString formatOffsetValue( double aValue );
 
-	void onEnterPreviewCanvas( wxMouseEvent& event )
-    {
-        m_previewPane->SetFocus();
-    }
-
 	void View3DISO( wxCommandEvent& event ) override
     {
         m_settings3Dviewer->CameraGet().ToggleProjection();
