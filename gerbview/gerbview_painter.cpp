@@ -33,7 +33,7 @@ using namespace KIGFX;
 
 GERBVIEW_RENDER_SETTINGS::GERBVIEW_RENDER_SETTINGS()
 {
-    m_backgroundColor = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
+    m_backgroundColor = COLOR4D::BLACK;
 
     m_spotFill          = true;
     m_lineFill          = true;
@@ -72,6 +72,8 @@ void GERBVIEW_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS*
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetLayerColor( i );
 
+    SetBackgroundColor( aSettings->GetItemColor( LAYER_PCB_BACKGROUND ) );
+
     update();
 }
 
@@ -89,6 +91,7 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS* aO
     m_diffMode          = aOptions->m_DiffMode;
     m_hiContrastEnabled = aOptions->m_HighContrastMode;
     m_showPageLimits    = aOptions->m_DisplayPageLimits;
+    m_backgroundColor   = aOptions->m_BgDrawColor;
 
     update();
 }
@@ -102,9 +105,6 @@ const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int a
     // All DCODE layers stored under a single color setting
     if( IsDCodeLayer( aLayer ) )
         return m_layerColors[ LAYER_DCODES ];
-
-    if( aLayer == LAYER_WORKSHEET )
-        return m_layerColors[ LAYER_WORKSHEET ];
 
     if( item )
     {

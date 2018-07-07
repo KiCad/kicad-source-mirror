@@ -216,8 +216,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                               "If you'd like to choose later, select Modern Toolset "
                               "(Accelerated) in the Preferences menu." );
 
-            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ),
-                                 wxYES_NO );
+            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ), wxYES_NO );
 
             dlg.SetYesNoLabels( _( "&Enable Acceleration" ), _( "&No Thanks" ) );
 
@@ -385,17 +384,13 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     // was: wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
-    PAGE_INFO pageInfo( wxT( "GERBER" ) );
-
     aCfg->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
 
-    if( m_showBorderAndTitleBlock )
-    {
-        wxString pageType;
-        aCfg->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
-        pageInfo.SetType( pageType );
-    }
+    PAGE_INFO pageInfo( wxT( "GERBER" ) );
+    wxString pageType;
 
+    aCfg->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
+    pageInfo.SetType( pageType );
     SetPageSettings( pageInfo );
 
     bool tmp;
@@ -434,8 +429,7 @@ void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
     aCfg->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
     aCfg->Write( cfgShowDCodes, IsElementVisible( LAYER_DCODES ) );
-    aCfg->Write( cfgShowNegativeObjects,
-                 IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
+    aCfg->Write( cfgShowNegativeObjects, IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
 
     // Save the drill file history list.
     // Because we have  more than one file history, we must save this one
@@ -463,7 +457,6 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
     ReCreateAuxiliaryToolbar();
 
     wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
-
     wxSize          bestz = m_LayersManager->GetBestSize();
     bestz.x += 5;   // gives a little margin
 
@@ -480,12 +473,11 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
 }
 
 
-void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
-                                           bool aNewState )
+void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 {
     bool dcodes_changed = false;
 
-    switch( aItemIdVisible )
+    switch( aLayerID )
     {
     case LAYER_DCODES:
         dcodes_changed = m_DisplayOptions.m_DisplayDCodes != aNewState;
@@ -498,8 +490,8 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
 
         auto view = GetGalCanvas()->GetView();
 
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                                           []( KIGFX::VIEW_ITEM* aItem ) {
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
+        {
             auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
 
             // GetLayerPolarity() returns true for negative items
@@ -508,12 +500,16 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
         break;
     }
 
+    case LAYER_WORKSHEET:
+        m_showBorderAndTitleBlock = aNewState;
+        break;
+
     case LAYER_GERBVIEW_GRID:
         SetGridVisibility( aNewState );
         break;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aItemIdVisible );
+        wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aLayerID );
     }
 
     if( dcodes_changed )
@@ -524,13 +520,12 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
         {
             int layer = GERBER_DRAW_LAYER( i );
             int dcode_layer = GERBER_DCODE_LAYER( layer );
-            view->SetLayerVisible( dcode_layer,
-                                   aNewState && view->IsLayerVisible( layer ) );
+            view->SetLayerVisible( dcode_layer, aNewState && view->IsLayerVisible( layer ) );
         }
     }
 
     applyDisplaySettingsToGAL();
-    m_LayersManager->SetRenderState( aItemIdVisible, aNewState );
+    m_LayersManager->SetRenderState( aLayerID, aNewState );
 }
 
 
@@ -538,7 +533,7 @@ void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
 {
     auto view = GetGalCanvas()->GetView();
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
-    auto settings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( painter->GetSettings() );
+    KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
     settings->LoadDisplayOptions( &m_DisplayOptions );
 
     settings->ImportLegacyColors( m_colorsSettings );
@@ -785,17 +780,19 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         // Display Image Name and Layer Name (from the current gerber data):
         wxString status;
         status.Printf( _( "Image name: \"%s\"  Layer name: \"%s\"" ),
-                GetChars( gerber->m_ImageName ),
-                GetChars( gerber->GetLayerParams().m_LayerName ) );
+                       gerber->m_ImageName,
+                       gerber->GetLayerParams().m_LayerName );
         SetStatusText( status, 0 );
 
         // Display data format like fmt in X3.4Y3.4 no LZ or fmt mm X2.3 Y3.5 no TZ in main toolbar
         wxString info;
         info.Printf( wxT( "fmt: %s X%d.%d Y%d.%d no %cZ" ),
-                gerber->m_GerbMetric ? wxT( "mm" ) : wxT( "in" ),
-                gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
-                gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
-                gerber->m_NoTrailingZeros ? 'T' : 'L' );
+                     gerber->m_GerbMetric ? wxT( "mm" ) : wxT( "in" ),
+                     gerber->m_FmtLen.x - gerber->m_FmtScale.x,
+                     gerber->m_FmtScale.x,
+                     gerber->m_FmtLen.y - gerber->m_FmtScale.y,
+                     gerber->m_FmtScale.y,
+                     gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
         if( gerber->m_IsX2_file )
             info << wxT(" ") << _( "X2 attr" );
@@ -808,24 +805,27 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 }
 
 
-bool GERBVIEW_FRAME::IsElementVisible( GERBVIEW_LAYER_ID aItemIdVisible ) const
+bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
 {
-    switch( aItemIdVisible )
+    switch( aLayerID )
     {
     case LAYER_DCODES:
         return m_DisplayOptions.m_DisplayDCodes;
-        break;
 
     case LAYER_NEGATIVE_OBJECTS:
         return m_DisplayOptions.m_DisplayNegativeObjects;
-        break;
 
     case LAYER_GERBVIEW_GRID:
         return IsGridVisible();
-        break;
+
+    case LAYER_WORKSHEET:
+        return m_showBorderAndTitleBlock;
+
+    case LAYER_PCB_BACKGROUND:
+        return true;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ), aItemIdVisible );
+        wxLogDebug( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ), aLayerID );
     }
 
     return true;
@@ -880,15 +880,17 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 }
 
 
-COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible )
+COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
 {
     COLOR4D color = COLOR4D::UNSPECIFIED;
 
-    switch( aItemIdVisible )
+    switch( aLayerID )
     {
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
-        color = m_colorsSettings->GetItemColor( aItemIdVisible );
+    case LAYER_WORKSHEET:
+    case LAYER_PCB_BACKGROUND:
+        color = m_colorsSettings->GetItemColor( aLayerID );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -896,8 +898,7 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible
         break;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d" ),
-                    (int)aItemIdVisible );
+        wxLogDebug( wxT( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d" ), aLayerID );
     }
 
     return color;
@@ -911,24 +912,28 @@ void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
-void GERBVIEW_FRAME::SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible,
-                                             COLOR4D aColor )
+void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
 {
-    switch( aItemIdVisible )
+    switch( aLayerID )
     {
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
-        m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
+    case LAYER_WORKSHEET:
+        m_colorsSettings->SetItemColor( aLayerID, aColor );
         break;
 
     case LAYER_GERBVIEW_GRID:
         SetGridColor( aColor );
-        m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
+        m_colorsSettings->SetItemColor( aLayerID, aColor );
+        break;
+
+    case LAYER_PCB_BACKGROUND:
+        SetDrawBgColor( aColor );
+        m_colorsSettings->SetItemColor( aLayerID, aColor );
         break;
 
     default:
-        wxLogDebug( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ),
-                    (int) aItemIdVisible );
+        wxLogDebug( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ), aLayerID );
     }
 }
 
@@ -991,12 +996,11 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
     if( IsGalCanvasActive() )
     {
-        GERBVIEW_DRAW_PANEL_GAL* drawPanel =
-                static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetGalCanvas() );
+        auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetGalCanvas() );
 
         // Prepare worksheet template
-        KIGFX::WORKSHEET_VIEWITEM* worksheet;
-        worksheet = new KIGFX::WORKSHEET_VIEWITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
+        auto worksheet =
+                new KIGFX::WORKSHEET_VIEWITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
 
         if( screen != NULL )
         {
@@ -1076,9 +1080,7 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
 void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 {
     if( IsGalCanvasActive() )
-    {
         GetGalCanvas()->GetGAL()->SetGridColor( aColor );
-    }
 
     m_gridColor = aColor;
 }
@@ -1105,7 +1107,6 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     double dXpos;
     double dYpos;
     wxString line;
-    wxString locformatter;
 
     if( m_DisplayOptions.m_DisplayPolarCood )  // display relative polar coordinates
     {
@@ -1121,21 +1122,10 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         wxString formatter;
         switch( GetUserUnits() )
         {
-        case INCHES:
-            formatter = wxT( "r %.6f  theta %.1f" );
-            break;
-
-        case MILLIMETRES:
-            formatter = wxT( "r %.5f  theta %.1f" );
-            break;
-
-        case UNSCALED_UNITS:
-            formatter = wxT( "r %f  theta %f" );
-            break;
-
-        case DEGREES:
-            wxASSERT( false );
-            break;
+        case INCHES:         formatter = wxT( "r %.6f  theta %.1f" ); break;
+        case MILLIMETRES:    formatter = wxT( "r %.5f  theta %.1f" ); break;
+        case UNSCALED_UNITS: formatter = wxT( "r %f  theta %f" );     break;
+        case DEGREES:        wxASSERT( false );                       break;
         }
 
         line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
@@ -1148,22 +1138,23 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
 
     wxString absformatter;
+    wxString relformatter;
 
     switch( GetUserUnits() )
     {
     case INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
+        relformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
         break;
 
     case MILLIMETRES:
         absformatter = wxT( "X %.5f  Y %.5f" );
-        locformatter = wxT( "dx %.5f  dy %.5f  dist %.3f" );
+        relformatter = wxT( "dx %.5f  dy %.5f  dist %.3f" );
         break;
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  dist %f" );
+        relformatter = wxT( "dx %f  dy %f  dist %f" );
         break;
 
     case DEGREES:
@@ -1183,7 +1174,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dYpos = To_User_Unit( GetUserUnits(), dy );
 
         // We already decided the formatter above
-        line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
+        line.Printf( relformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
         SetStatusText( line, 3 );
     }
 }

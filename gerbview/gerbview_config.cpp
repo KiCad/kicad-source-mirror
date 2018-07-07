@@ -75,25 +75,24 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
 
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "DrawModeOption" ),
                                                    &m_displayMode, 2, 0, 2 ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
-                                                        wxT( "DCodeColorEx" ),
-                                                        &g_ColorsSettings.m_LayersColors[
-                                                            LAYER_DCODES],
-                                                        WHITE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
-                                                        wxT( "NegativeObjectsColorEx" ),
-                                                        &g_ColorsSettings.m_LayersColors[
-                                                            LAYER_NEGATIVE_OBJECTS],
-                                                        DARKGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
-                                                        wxT( "GridColorEx" ),
-                                                        &g_ColorsSettings.m_LayersColors[
-                                                            LAYER_GERBVIEW_GRID],
-                                                        DARKGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true,
-                                                    wxT( "DisplayPolarCoordinates" ),
-                                                    &m_DisplayOptions.m_DisplayPolarCood,
-                                                    false ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR(
+            true, wxT( "DCodeColorEx" ),
+            &g_ColorsSettings.m_LayersColors[LAYER_DCODES], WHITE ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR(
+            true, wxT( "NegativeObjectsColorEx" ),
+            &g_ColorsSettings.m_LayersColors[LAYER_NEGATIVE_OBJECTS], DARKGRAY ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR(
+            true, wxT( "GridColorEx" ),
+            &g_ColorsSettings.m_LayersColors[LAYER_GERBVIEW_GRID], DARKGRAY ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR(
+            true, wxT( "WorksheetColorEx" ),
+            &g_ColorsSettings.m_LayersColors[ LAYER_WORKSHEET], DARKRED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR(
+            true, wxT( "BackgroundColorEx" ),
+            &g_ColorsSettings.m_LayersColors[LAYER_PCB_BACKGROUND], BLACK ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL(
+            true, wxT( "DisplayPolarCoordinates" ),
+            &m_DisplayOptions.m_DisplayPolarCood, false ) );
 
     // Default colors for layers 0 to 31
     static const COLOR4D color_default[] = {

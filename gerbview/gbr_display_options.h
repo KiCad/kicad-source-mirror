@@ -66,8 +66,8 @@ public:
         m_DisplayPageLimits = false;
         m_IsPrinting = false;
         m_DisplayNegativeObjects = false;
-        m_ForceBlackAndWhite    = false;
-        m_NegativeDrawColor     = COLOR4D( DARKGRAY );
+        m_ForceBlackAndWhite = false;
+        m_NegativeDrawColor = COLOR4D( DARKGRAY );
         m_BgDrawColor = COLOR4D::BLACK;
         m_DiffMode = false;
         m_HighContrastMode = false;
