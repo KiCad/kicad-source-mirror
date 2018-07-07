@@ -699,8 +699,10 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
     for( auto fieldName : userFieldNames )
         AddField( fieldName, true, false );
 
+    // Add any templateFieldNames which aren't already present in the userFieldNames
     for( auto templateFieldName : m_parent->GetTemplateFieldNames() )
-        AddField( templateFieldName.m_Name, false, false );
+        if( userFieldNames.count( templateFieldName.m_Name ) == 0 )
+            AddField( templateFieldName.m_Name, false, false );
 }
 
 
