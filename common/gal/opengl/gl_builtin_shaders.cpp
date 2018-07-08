@@ -1484,8 +1484,8 @@ float4 SMAABlendingWeightCalculationPS(float2 texcoord,
         coords.z = SMAASearchXRight(SMAATexturePass2D(edgesTex), SMAATexturePass2D(searchTex), offset[0].zw, offset[2].y);
         d.y = coords.z;
 
-        // We want the distances to be in pixel units (doing this here allow to
-        // better interleave arithmetic and memory accesses):
+        // We want the distances to be in pixel units (doing this here allow one
+        // to better interleave arithmetic and memory accesses):
         d = abs(round(mad(SMAA_RT_METRICS.zz, d, -pixcoord.xx)));
 
         // SMAAArea below needs a sqrt, as the areas texture is compressed
