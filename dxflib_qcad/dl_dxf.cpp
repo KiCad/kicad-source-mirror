@@ -66,6 +66,17 @@ DL_Dxf::DL_Dxf()
     leaderVertices = NULL;
     maxLeaderVertices = 0;
     leaderVertexIndex = 0;
+
+    // Aux members, initialized here to avoid warnings in analysers
+    firstHatchLoop = true;
+    xRecordValues = false;
+    groupCode = 0;
+    currentObjectType = 0;
+    settingValue[0] = 0;
+    firstCall = true;
+    libVersion = 0;
+    appDictionaryHandle = 0;
+    styleHandleStd = 0;
 }
 
 

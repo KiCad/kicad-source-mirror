@@ -574,17 +574,17 @@ struct DXFLIB_EXPORT DL_SplineData
      * Constructor.
      * Parameters: see member variables.
      */
-    DL_SplineData( int adegree,
-            int anKnots,
-            int anControl,
-            int anFit,
-            int aflags ) :
-        degree( adegree ),
-        nKnots( anKnots ),
-        nControl( anControl ),
-        nFit( anFit ),
-        flags( aflags )
+    DL_SplineData( int adegree, int anKnots, int anControl, int anFit, int aflags ) :
+        degree( adegree ), nKnots( anKnots ), nControl( anControl ),
+        nFit( anFit ), flags( aflags )
     {
+        // Aux members, initialized here to avoid warnings in analyers
+        tangentStartX = 0.0;
+        tangentStartY = 0.0;
+        tangentStartZ = 0.0;
+        tangentEndX = 0.0;
+        tangentEndY = 0.0;
+        tangentEndZ = 0.0;
     }
 
     /*! Degree of the spline curve. */
@@ -1736,6 +1736,17 @@ struct DXFLIB_EXPORT DL_HatchEdgeData
      */
     DL_HatchEdgeData() : defined( false ), x1( 0.0 ), y1( 0.0 ), x2( 0.0 ), y2( 0.0 )
     {
+        // Other members, initialized here to avoid warnings in analysers
+        type = 0;
+        cx = cy = radius = 0.0;
+        angle1 = angle2 = 0.0;
+        mx = my = ratio = 0.0;
+        ccw = false;
+        degree = 0;
+        rational = false;
+        periodic = false;
+        nKnots = nControl = nFit = 0;
+        startTangentX = startTangentY = endTangentX = endTangentY = 0.0;
     }
 
     /**
@@ -1743,13 +1754,19 @@ struct DXFLIB_EXPORT DL_HatchEdgeData
      * Parameters: see member variables.
      */
     DL_HatchEdgeData( double ax1, double ay1, double ax2, double ay2 ) :
-        defined( true ),
-        type( 1 ),
-        x1( ax1 ),
-        y1( ay1 ),
-        x2( ax2 ),
-        y2( ay2 )
+        defined( true ), type( 1 ),
+        x1( ax1 ), y1( ay1 ), x2( ax2 ), y2( ay2 )
     {
+        // Other members, initialized here to avoid warnings in analysers
+        cx = cy = radius = 0.0;
+        angle1 = angle2 = 0.0;
+        mx = my = ratio = 0.0;
+        ccw = false;
+        degree = 0;
+        rational = false;
+        periodic = false;
+        nKnots = nControl = nFit = 0;
+        startTangentX = startTangentY = endTangentX = endTangentY = 0.0;
     }
 
     /**
@@ -1757,77 +1774,66 @@ struct DXFLIB_EXPORT DL_HatchEdgeData
      * Parameters: see member variables.
      */
     DL_HatchEdgeData( double acx, double acy,
-            double aradius,
-            double aangle1, double aangle2,
-            bool accw ) :
-        defined( true ),
-        type( 2 ),
-        cx( acx ),
-        cy( acy ),
-        radius( aradius ),
-        angle1( aangle1 ),
-        angle2( aangle2 ),
-        ccw( accw )
+            double aradius, double aangle1, double aangle2, bool accw ) :
+        defined( true ), type( 2 ),
+        cx( acx ), cy( acy ), radius( aradius ), angle1( aangle1 ),
+        angle2( aangle2 ), ccw( accw )
     {
+        // Other members, initialized here to avoid warnings in analysers
+        x1 = y1 = x2 = y2 = 0.0;
+        mx = my = ratio = 0.0;
+        degree = 0;
+        rational = false;
+        periodic = false;
+        nKnots = nControl = nFit = 0;
+        startTangentX = startTangentY = endTangentX = endTangentY = 0.0;
     }
 
     /**
      * Constructor for an ellipse arc edge.
      * Parameters: see member variables.
      */
-    DL_HatchEdgeData( double acx, double acy,
-            double amx, double amy,
-            double aratio,
-            double aangle1, double aangle2,
-            bool accw ) :
-        defined( true ),
-        type( 3 ),
-        cx( acx ),
-        cy( acy ),
-        angle1( aangle1 ),
-        angle2( aangle2 ),
-        ccw( accw ),
-        mx( amx ),
-        my( amy ),
-        ratio( aratio )
+    DL_HatchEdgeData( double acx, double acy, double amx, double amy,
+            double aratio, double aangle1, double aangle2, bool accw ) :
+        defined( true ), type( 3 ), cx( acx ), cy( acy ),
+        angle1( aangle1 ), angle2( aangle2 ), ccw( accw ),
+        mx( amx ), my( amy ), ratio( aratio )
     {
+        // OAther members, initialized here to avoid warnings in analysers
+        x1 = y1 = x2 = y2 = 0.0;
+        radius = 0.0;
+        degree = 0;
+        rational = false;
+        periodic = false;
+        nKnots = nControl = nFit = 0;
+        startTangentX = startTangentY = endTangentX = endTangentY = 0.0;
     }
 
     /**
      * Constructor for a spline edge.
      * Parameters: see member variables.
      */
-    DL_HatchEdgeData( unsigned int adegree,
-            bool arational,
-            bool a_periodic,
-            unsigned int anKnots,
-            unsigned int anControl,
-            unsigned int anFit,
+    DL_HatchEdgeData( unsigned int adegree, bool arational, bool a_periodic,
+            unsigned int anKnots, unsigned int anControl, unsigned int anFit,
             const std::vector<double>& aknots,
             const std::vector<std::vector<double> >& acontrolPoints,
             const std::vector<std::vector<double> >& afitPoints,
             const std::vector<double>& aweights,
-            double astartTangentX,
-            double astartTangentY,
-            double aendTangentX,
-            double aendTangentY ) :
-        defined( true ),
-        type( 4 ),
-        degree( adegree ),
-        rational( arational ),
-        periodic( a_periodic ),
-        nKnots( anKnots ),
-        nControl( anControl ),
-        nFit( anFit ),
-        controlPoints( acontrolPoints ),
-        knots( aknots ),
-        weights( aweights ),
-        fitPoints( afitPoints ),
-        startTangentX( astartTangentX ),
-        startTangentY( astartTangentY ),
-        endTangentX( aendTangentX ),
-        endTangentY( aendTangentY )
+            double astartTangentX, double astartTangentY,
+            double aendTangentX, double aendTangentY ) :
+        defined( true ), type( 4 ), degree( adegree ),
+        rational( arational ), periodic( a_periodic ), nKnots( anKnots ),
+        nControl( anControl ), nFit( anFit ), controlPoints( acontrolPoints ),
+        knots( aknots ), weights( aweights ), fitPoints( afitPoints ),
+        startTangentX( astartTangentX ), startTangentY( astartTangentY ),
+        endTangentX( aendTangentX ), endTangentY( aendTangentY )
     {
+        // Ather members, initialized here to avoid warnings in analysers
+        x1 = y1 = x2 = y2 = 0.0;
+        cx = cy = radius = 0.0;
+        angle1 = angle2 = 0.0;
+        mx = my = ratio = 0.0;
+        ccw = false;
     }
 
     /**
