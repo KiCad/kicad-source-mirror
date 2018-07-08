@@ -96,8 +96,8 @@ public:
      * Adds a context menu as a submenu. The difference between this function and wxMenu::AppendSubMenu()
      * is the capability to handle icons.
      * @param aMenu is the submenu to be added.
-     * @param aExpand allows to add all entries from the menu as individual entries rather than
-     *                add everything as a submenu.
+     * @param aExpand allows one to add all entries from the menu as individual
+     *                entries rather than add everything as a submenu.
      */
     std::list<wxMenuItem*> Add( CONTEXT_MENU* aMenu, bool aExpand = false );
 

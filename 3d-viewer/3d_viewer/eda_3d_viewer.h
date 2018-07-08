@@ -65,7 +65,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     /**
      * Request reloading the 3D view. However the request will be executed
      * only when the 3D canvas is refreshed.
-     * It allows to prepare changes and request for 3D rebuild only when all
+     * It allows one to prepare changes and request for 3D rebuild only when all
      * changes are committed.
      * This is made because the 3D rebuild can take a long time, and this rebuild
      * cannot always made after each change, for calculation time reason.

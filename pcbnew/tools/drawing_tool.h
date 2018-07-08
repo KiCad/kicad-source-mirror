@@ -114,8 +114,8 @@ public:
 
     /**
      * Function PlaceText()
-     * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in editor.
+     * Displays a dialog that allows one to input text and its settings and then
+     * lets the user decide where to place the text in editor.
      */
     int PlaceText( const TOOL_EVENT& aEvent );
 

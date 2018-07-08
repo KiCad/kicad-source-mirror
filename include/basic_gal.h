@@ -38,7 +38,7 @@ class PLOTTER;
  * class BASIC_GAL is a minimal GAL implementation to draw, plot and convert
  * stroke texts to a set of segments for DRC tests, and to calculate text sizes.
  *
- * Currently it allows to use GAL and STROKE_FONT methods in legacy draw mode
+ * Currently it allows one to use GAL and STROKE_FONT methods in legacy draw mode
  * (using wxDC functions) in plot functions only for texts.
  * It is used also to calculate the text bounding boxes
  *

@@ -36,8 +36,8 @@ class TOOL_ACTION;
 /**
  * Class ACTION_MANAGER
  *
- * Takes care of TOOL_ACTION objects. Registers them and allows to run them using associated
- * hot keys, names or ids.
+ * Takes care of TOOL_ACTION objects. Registers them and allows one to run them
+ * using associated hot keys, names or ids.
  */
 class ACTION_MANAGER
 {

@@ -100,7 +100,7 @@ enum TOOL_ACTIONS
     // This event is sent *after* undo/redo command is performed.
     TA_UNDO_REDO_POST       = 0x40000,
 
-    // Tool action (allows to control tools).
+    // Tool action (allows one to control tools).
     TA_ACTION               = 0x80000,
 
     // Tool activation event.

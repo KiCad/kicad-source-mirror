@@ -294,7 +294,7 @@ public:
     /**
      * Function Translate
      * Translates net number according to the map prepared by Update() function. It
-     * allows to have items stored with consecutive net codes.
+     * allows one to have items stored with consecutive net codes.
      * @param aNetCode is an old net code.
      * @return Net code that follows the mapping.
      */

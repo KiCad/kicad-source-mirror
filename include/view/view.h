@@ -720,8 +720,8 @@ private:
      *
      * @param aItem is the item to be drawn.
      * @param aLayer is the layer which should be drawn.
-     * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
-     * for cached items.
+     * @param aImmediate dictates the way of drawing - it allows one to force
+     * immediate drawing mode for cached items.
      */
     void draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate = false );
 
@@ -730,8 +730,8 @@ private:
      * Draws an item on all layers that the item uses.
      *
      * @param aItem is the item to be drawn.
-     * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
-     * for cached items.
+     * @param aImmediate dictates the way of drawing - it allows one to force
+     * immediate drawing mode for cached items.
      */
     void draw( VIEW_ITEM* aItem, bool aImmediate = false );
 
@@ -740,8 +740,8 @@ private:
      * Draws a group of items on all layers that those items use.
      *
      * @param aGroup is the group to be drawn.
-     * @param aImmediate dictates the way of drawing - it allows to force immediate drawing mode
-     * for cached items.
+     * @param aImmediate dictates the way of drawing - it allows one to force
+     * immediate drawing mode for cached items.
      */
     void draw( VIEW_GROUP* aGroup, bool aImmediate = false );
 

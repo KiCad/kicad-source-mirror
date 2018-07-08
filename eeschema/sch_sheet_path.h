@@ -71,7 +71,7 @@
  *      corresponding references and sheet path
  *
  * The class SCH_SHEET_PATH handles paths used to access a sheet.  The class
- * SCH_SHEET_LIST allows to handle the full (or partial) list of sheets and
+ * SCH_SHEET_LIST allows one to handle the full (or partial) list of sheets and
  * their paths in a complex hierarchy.  The class EDA_ScreenList allows one
  * to handle the list of SCH_SCREEN. It is useful to clear or save data,
  * but is not suitable to handle the full complex hierarchy possibilities

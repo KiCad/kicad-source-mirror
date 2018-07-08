@@ -206,7 +206,7 @@ public:
      * Function GetConnectedItems()
      * Returns a list of items connected to a source item aItem.
      * @param aItem is the reference item to find other connected items.
-     * @param aTypes allows to filter by item types.
+     * @param aTypes allows one to filter by item types.
      */
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
             const KICAD_T aTypes[] ) const;
@@ -215,7 +215,7 @@ public:
      * Function GetNetItems()
      * Returns the list of items that belong to a certain net.
      * @param aNetCode is the net code.
-     * @param aTypes allows to filter by item types.
+     * @param aTypes allows one to filter by item types.
      */
     const std::vector<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
             const KICAD_T aTypes[] ) const;

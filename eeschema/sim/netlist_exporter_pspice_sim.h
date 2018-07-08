@@ -32,7 +32,7 @@
 
 #include "sim_types.h"
 
-/// Special netlist exporter flavor that allows to override simulation commands
+/// Special netlist exporter flavor that allows one to override simulation commands
 class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
 {
 public:

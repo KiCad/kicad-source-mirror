@@ -435,7 +435,7 @@ public:
     }
 
     /**
-     * calling this function allows to define the beginning of a group
+     * calling this function allows one to define the beginning of a group
      * of drawing items, for instance in SVG  or Gerber format.
      * (example: group all segments of a letter or a text)
      * @param aData can define any parameter
@@ -444,8 +444,8 @@ public:
     virtual void StartBlock( void* aData ) {}
 
     /**
-     * calling this function allows to define the end of a group of drawing items
-     * for instance in SVG  or Gerber format.
+     * calling this function allows one to define the end of a group of drawing
+     * items for instance in SVG  or Gerber format.
      * the group is started by StartBlock()
      * @param aData can define any parameter
      * for most of plotters: do nothing
@@ -1137,15 +1137,15 @@ public:
     void UseX2NetAttributes( bool aEnable ) { m_useNetAttributes = aEnable; }
 
     /**
-     * calling this function allows to define the beginning of a group
+     * calling this function allows one to define the beginning of a group
      * of drawing items (used in X2 format with netlist attributes)
      * @param aData can define any parameter
      */
     virtual void StartBlock( void* aData ) override;
 
     /**
-     * calling this function allows to define the end of a group of drawing items
-     * the group is started by StartBlock()
+     * calling this function allows one to define the end of a group of drawing
+     * items the group is started by StartBlock()
      * (used in X2 format with netlist attributes)
      * @param aData can define any parameter
      */

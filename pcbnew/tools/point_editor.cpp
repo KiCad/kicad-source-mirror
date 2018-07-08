@@ -863,8 +863,8 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     // Check if there are enough vertices so one can be removed without
     // degenerating the polygon.
-    // The first condition allows to remove all corners from holes (when there
-    // are only 2 vertices left, a hole is removed).
+    // The first condition allows one to remove all corners from holes (when
+    // there are only 2 vertices left, a hole is removed).
     if( vertexIdx.m_contour == 0 && polyset.Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
         return false;
 

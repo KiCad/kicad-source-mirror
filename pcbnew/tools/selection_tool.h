@@ -146,7 +146,7 @@ private:
     /**
      * Function selectPoint()
      * Selects an item pointed by the parameter aWhere. If there is more than one item at that
-     * place, there is a menu displayed that allows to choose the item.
+     * place, there is a menu displayed that allows one to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
      * @param aOnDrag indicates whether a drag operation is being performed.
@@ -172,7 +172,8 @@ private:
 
     /**
      * Function selectMultiple()
-     * Handles drawing a selection box that allows to select many items at the same time.
+     * Handles drawing a selection box that allows one to select many items at
+     * the same time.
      *
      * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
@@ -242,8 +243,8 @@ private:
 
     /**
      * Function disambiguationMenu()
-     * Handles the menu that allows to select one of many items in case there is more than one
-     * item at the selected point (@see selectCursor()).
+     * Handles the menu that allows one to select one of many items in case
+     * there is more than one item at the selected point (@see selectCursor()).
      *
      * @param aItems contains list of items that are displayed to the user.
      */

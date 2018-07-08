@@ -519,7 +519,7 @@ const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
  *      - DX10.1:   D3D10_STANDARD_MULTISAMPLE_PATTERN or
  *      - DX11:     D3D11_STANDARD_MULTISAMPLE_PATTERN
  *
- *    This allows to ensure that the subsample order matches the table in
+ *    This allows one to ensure that the subsample order matches the table in
  *    @SUBSAMPLE_INDICES.
  *
  *    (*) In the case of DX10, we refer the reader to:
@@ -620,8 +620,8 @@ const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
  * performance.
  *
  * Range: [0, 0.5]
- *   0.1 is a reasonable value, and allows to catch most visible edges.
- *   0.05 is a rather overkill value, that allows to catch 'em all.
+ *   0.1 is a reasonable value, and allows one to catch most visible edges.
+ *   0.05 is a rather overkill value, that allows one to catch 'em all.
  *
  *   If temporal supersampling is used, 0.2 could be a reasonable value, as low
  *   contrast edges are properly filtered by just 2x.
@@ -686,7 +686,7 @@ const char smaa_base_shader_p2[] = R"SHADER_SOURCE(
  * If there is an neighbor edge that has SMAA_LOCAL_CONTRAST_FACTOR times
  * bigger contrast than current edge, current edge will be discarded.
  *
- * This allows to eliminate spurious crossing edges, and is based on the fact
+ * This allows one to eliminate spurious crossing edges, and is based on the fact
  * that, if there is too much contrast in a direction, that will hide
  * perceptually contrast in the other neighbors.
  */
@@ -695,7 +695,7 @@ const char smaa_base_shader_p2[] = R"SHADER_SOURCE(
 #endif
 
 /**
- * Predicated thresholding allows to better preserve texture details and to
+ * Predicated thresholding allows one to better preserve texture details and to
  * improve performance, by decreasing the number of detected edges using an
  * additional buffer like the light accumulation buffer, object ids or even the
  * depth buffer (the depth buffer usage may be limited to indoor or short range
@@ -742,7 +742,7 @@ const char smaa_base_shader_p2[] = R"SHADER_SOURCE(
 #endif
 
 /**
- * Temporal reprojection allows to remove ghosting artifacts when using
+ * Temporal reprojection allows one to remove ghosting artifacts when using
  * temporal supersampling. We use the CryEngine 3 method which also introduces
  * velocity weighting. This feature is of extreme importance for totally
  * removing ghosting. More information here:
@@ -757,8 +757,8 @@ const char smaa_base_shader_p2[] = R"SHADER_SOURCE(
 #endif
 
 /**
- * SMAA_REPROJECTION_WEIGHT_SCALE controls the velocity weighting. It allows to
- * remove ghosting trails behind the moving object, which are not removed by
+ * SMAA_REPROJECTION_WEIGHT_SCALE controls the velocity weighting. It allows one
+ * to remove ghosting trails behind the moving object, which are not removed by
  * just using reprojection. Using low values will exhibit ghosting, while using
  * high values will disable temporal supersampling under motion.
  *
@@ -1158,7 +1158,7 @@ float4 SMAADecodeDiagBilinearAccess(float4 e) {
 }
 
 /**
- * These functions allows to perform diagonal pattern searches.
+ * These functions allows one to perform diagonal pattern searches.
  */
 float2 SMAASearchDiag1(SMAATexture2D(edgesTex), float2 texcoord, float2 dir, out float2 e) {
     float4 coord = float4(texcoord, -1.0, 1.0);
@@ -1290,7 +1290,7 @@ float2 SMAACalculateDiagWeights(SMAATexture2D(edgesTex), SMAATexture2D(areaTex),
 // Horizontal/Vertical Search Functions
 
 /**
- * This allows to determine how much length should we add in the last step
+ * This allows one to determine how much length should we add in the last step
  * of the searches. It takes the bilinearly interpolated edge (see
  * @PSEUDO_GATHER4), and adds 0, 1 or 2, depending on which edges and
  * crossing edges are active.
@@ -1322,8 +1322,8 @@ float SMAASearchXLeft(SMAATexture2D(edgesTex), SMAATexture2D(searchTex), float2 
      * @PSEUDO_GATHER4
      * This texcoord has been offset by (-0.25, -0.125) in the vertex shader to
      * sample between edge, thus fetching four edges in a row.
-     * Sampling with different offsets in each direction allows to disambiguate
-     * which edges are active from the four fetched ones.
+     * Sampling with different offsets in each direction allows one to
+     * disambiguate which edges are active from the four fetched ones.
      */
     float2 e = float2(0.0, 1.0);
     while (texcoord.x > end &&

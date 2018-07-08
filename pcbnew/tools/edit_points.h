@@ -182,9 +182,9 @@ private:
 /**
  * Class EDIT_LINE
  *
- * Represents a line connecting two EDIT_POINTs. That allows to move them both by dragging the
- * EDIT_POINT in the middle. As it uses references to EDIT_POINTs, all coordinates are
- * automatically synchronized.
+ * Represents a line connecting two EDIT_POINTs. That allows one to move them
+ * both by dragging the EDIT_POINT in the middle. As it uses references to
+ * EDIT_POINTs, all coordinates are automatically synchronized.
  */
 class EDIT_LINE : public EDIT_POINT
 {
