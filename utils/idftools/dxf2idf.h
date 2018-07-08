@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,20 +26,31 @@
 #define DXF2IDF_H
 
 #include <string>
-#include <drw_interface.h>
+#include "dl_dxf.h"
+#include "dl_creationadapter.h"
 #include <idf_common.h>
 
-class DXF2IDF : public DRW_Interface
+class DXF2IDF : public DL_CreationAdapter
 {
 private:
     std::list< IDF_SEGMENT* > lines;    // Unsorted list of graphical segments
     double m_scale;                     // scaling factor to mm
+    int m_entityType;                   // the DXF type of entity
+    int m_entityParseStatus;            // Inside a entity: status od parsing:
+                                        // 0 = no entity
+                                        // 1 = first item of entity
+                                        // 2 = entity in progress
+    int m_entity_flags;                 // state of flags read from last entity
+    IDF_POINT m_lastCoordinate;         // the last vertex coordinate read (unit = mm)
+    IDF_POINT m_polylineStart;          // The first point of the polyline entity, when reading a polyline (unit = mm)
+    double m_bulgeVertex;               // the last vertex bulge value read
 
     void insertLine( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd );
     void insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd, double aBulge );
 
 public:
-    DXF2IDF() : m_scale( 1.0 ) {};
+    DXF2IDF() : m_scale( 1.0 ), m_entityType( 0 ), m_entityParseStatus( 0 ),
+                m_entity_flags( 0 ), m_bulgeVertex( 0.0 ) {};
     ~DXF2IDF();
 
     bool ReadDxf( const std::string& aFile );
@@ -46,58 +58,30 @@ public:
 
 private:
     // DRW_Interface implemented callback functions
-    virtual void addHeader( const DRW_Header* data ) override;
-    virtual void addLine(const DRW_Line& data) override;
-    virtual void addArc(const DRW_Arc& data ) override;
-    virtual void addCircle(const DRW_Circle& data ) override;
-    virtual void addLWPolyline(const DRW_LWPolyline& data ) override;
-    virtual void addPolyline(const DRW_Polyline& data ) override;
+    virtual void addLine( const DL_LineData& aData ) override;
+    virtual void addArc( const DL_ArcData& aData ) override;
+    virtual void addCircle( const DL_CircleData& aData ) override;
+    virtual void addPolyline( const DL_PolylineData& aData ) override;
+    /** Called for every polyline vertex */
+    virtual void addVertex( const DL_VertexData& aData ) override;
 
-    // DRW_Interface callbacks unsupported by DXF2IDF
-    virtual void addLType( const DRW_LType& data ) override {}
-    virtual void addLayer( const DRW_Layer& data ) override {}
-    virtual void addDimStyle( const DRW_Dimstyle& data ) override {}
-    virtual void addVport(const DRW_Vport& data) override {}
-    virtual void addTextStyle(const DRW_Textstyle& data) override {}
-    virtual void addBlock(const DRW_Block& data ) override {}
-    virtual void setBlock(const int handle) override {}
-    virtual void endBlock() override {}
-    virtual void addPoint(const DRW_Point& data ) override {}
-    virtual void addRay(const DRW_Ray& data ) override {}
-    virtual void addXline(const DRW_Xline& data ) override {}
-    virtual void addEllipse(const DRW_Ellipse& data ) override {}
-    virtual void addSpline(const DRW_Spline* data ) override {}
-    virtual void addKnot(const DRW_Entity&) override {}
-    virtual void addInsert(const DRW_Insert& data ) override {}
-    virtual void addTrace(const DRW_Trace& data ) override {}
-    virtual void add3dFace(const DRW_3Dface& data ) override {}
-    virtual void addSolid(const DRW_Solid& data ) override {}
-    virtual void addMText(const DRW_MText& data) override {}
-    virtual void addText(const DRW_Text& data ) override {}
-    virtual void addDimAlign(const DRW_DimAligned *data ) override {}
-    virtual void addDimLinear(const DRW_DimLinear *data ) override {}
-    virtual void addDimRadial(const DRW_DimRadial *data ) override {}
-    virtual void addDimDiametric(const DRW_DimDiametric *data ) override {}
-    virtual void addDimAngular(const DRW_DimAngular *data ) override {}
-    virtual void addDimAngular3P(const DRW_DimAngular3p *data ) override {}
-    virtual void addDimOrdinate(const DRW_DimOrdinate *data ) override {}
-    virtual void addLeader(const DRW_Leader *data ) override {}
-    virtual void addHatch(const DRW_Hatch* data ) override {}
-    virtual void addViewport(const DRW_Viewport& data) override {}
-    virtual void addImage(const DRW_Image* data ) override {}
-    virtual void linkImage(const DRW_ImageDef* data ) override {}
-    virtual void addComment(const char*) override {}
-    virtual void writeHeader(DRW_Header& data) override {}
-    virtual void writeBlocks() override {}
-    virtual void writeBlockRecords() override {}
-    virtual void writeEntities() override {}
-    virtual void writeLTypes() override {}
-    virtual void writeLayers() override {}
-    virtual void writeTextstyles() override {}
-    virtual void writeVports() override {}
-    virtual void writeDimstyles() override {}
-    virtual void addAppId( const DRW_AppId& data ) override {}
-    virtual void writeAppId() override {}
+    /**
+     * Called for every string variable in the DXF file (e.g. "$ACADVER").
+     */
+    virtual void setVariableString( const std::string& key, const std::string& value,
+            int code ) override {};
+
+    /**
+     * Called for every int variable in the DXF file (e.g. "$ACADMAINTVER").
+     */
+    virtual void setVariableInt( const std::string& key, int value, int code ) override;
+
+    /**
+     * Called for every double variable in the DXF file (e.g. "$DIMEXO").
+     */
+    virtual void setVariableDouble( const std::string& key, double value, int code ) override {}
+
+    virtual void endEntity() override;
 };
 
 #endif  // DXF2IDF_H

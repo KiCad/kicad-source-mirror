@@ -282,7 +282,7 @@ void DXF2BRD_CONVERTER::addCircle( const DL_CircleData& aData )
 /*
  * Import Arc entities.
  */
-void DXF2BRD_CONVERTER::addArc( const DL_ArcData& data )
+void DXF2BRD_CONVERTER::addArc( const DL_ArcData& aData )
 {
     DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                         static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) : new DRAWSEGMENT;
@@ -291,18 +291,18 @@ void DXF2BRD_CONVERTER::addArc( const DL_ArcData& data )
     segm->SetShape( S_ARC );
 
     // Init arc centre:
-    wxPoint center( mapX( data.cx ), mapY( data.cy ) );
+    wxPoint center( mapX( aData.cx ), mapY( aData.cy ) );
     segm->SetCenter( center );
 
     // Init arc start point
-    double  arcStartx   = data.radius;
+    double  arcStartx   = aData.radius;
     double  arcStarty   = 0;
-    double  startangle = data.angle1;
-    double  endangle = data.angle2;
+    double  startangle = aData.angle1;
+    double  endangle = aData.angle2;
 
     RotatePoint( &arcStartx, &arcStarty, -RAD2DECIDEG( startangle ) );
-    wxPoint arcStart( mapX( arcStartx + data.cx ),
-                      mapY( arcStarty + data.cy ) );
+    wxPoint arcStart( mapX( arcStartx + aData.cx ),
+                      mapY( arcStarty + aData.cy ) );
     segm->SetArcStart( arcStart );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
