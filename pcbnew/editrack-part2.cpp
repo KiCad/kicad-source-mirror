@@ -270,7 +270,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     // is fully inside a pad, MarkTrace does not find correctly the full trace,
     // because the entire track is the set of segments between 2 nodes
     // (pads or point connecting more than 2 items)
-    // so use an other (better) starting segment in this case
+    // so use another (better) starting segment in this case
     TRACK* track_segment = aNewTrack;
 
     for( int ii = 0; ii < aNewTrackSegmentsCount; ii++ )

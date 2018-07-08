@@ -145,7 +145,7 @@ bool PCB_BASE_FRAME::Update3DView( const wxString* aTitle )
     if( draw3DFrame == NULL )
         return false;
 
-    // Ensure the viewer was created by me, and not by an other editor:
+    // Ensure the viewer was created by me, and not by another editor:
     PCB_BASE_FRAME* owner = draw3DFrame->Parent();
 
     // if I am not the owner, do not use the current viewer instance
@@ -434,7 +434,7 @@ bool PCB_BASE_FRAME::CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner )
 {
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
-    // Ensure the viewer was created by me, and not by an other editor:
+    // Ensure the viewer was created by me, and not by another editor:
     PCB_BASE_FRAME* owner = draw3DFrame ? draw3DFrame->Parent() : nullptr;
 
     // if I am not the owner, do not use the current viewer instance

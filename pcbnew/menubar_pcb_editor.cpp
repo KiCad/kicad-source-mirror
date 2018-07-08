@@ -556,7 +556,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_SWAP_LAYERS,
                  _( "&Move and Swap Layers..." ),
-                 _( "Move tracks or drawings from a layer to an other layer" ),
+                 _( "Move tracks or drawings from a layer to another layer" ),
                  KiBitmap( swap_layer_xpm ) );
 
     aParentMenu->AppendSeparator();
