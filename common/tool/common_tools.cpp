@@ -37,7 +37,7 @@
 static TOOL_ACTION ACT_toggleCursor( "common.Control.toggleCursor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
         _( "Toggle Always Show Cursor" ),
-        _( "Toogle display of the cursor, even when not in an interactive tool" ) );
+        _( "Toggle display of the cursor, even when not in an interactive tool" ) );
 
 
 COMMON_TOOLS::COMMON_TOOLS() :
