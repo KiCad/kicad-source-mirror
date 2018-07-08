@@ -122,16 +122,16 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 
     if( aComponent->GetModule() != NULL )
     {
-        msg.Printf( _( "Adding new symbol \"%s:%s\" footprint \"%s\".\n" ),
+        msg.Printf( _( "Add symbol %s, footprint: %s." ),
+                    GetChars( aComponent->GetReference() ),
+                    GetChars( aComponent->GetFPID().Format() ) );
+        m_reporter->Report( msg, REPORTER::RPT_ACTION );
+
+        msg.Printf( _( "Adding new symbol \"%s:%s\" footprint \"%s\"." ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
                     GetChars( aComponent->GetFPID().Format() ) );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
-
-        msg.Printf( _( "Add symbol %s, footprint: %s.\n" ),
-                    GetChars( aComponent->GetReference() ),
-                    GetChars( aComponent->GetFPID().Format() ) );
-        m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
 
         if( !m_isDryRun )
@@ -150,18 +150,15 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     }
     else
     {
-        msg.Printf( _( "Cannot add symbol %s due to missing footprint %s.\n" ),
+        msg.Printf( _( "Cannot add symbol %s due to missing footprint %s." ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
 
-        msg.Printf( _( "Cannot add new symbol \"%s:%s\" due to missing "
-                       "footprint \"%s\".\n" ),
+        msg.Printf( _( "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\"." ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
                     GetChars( aComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
         ++m_errorCount;
     }
@@ -183,20 +180,17 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
 
     if( aNewComponent->GetModule() != NULL )
     {
-        msg.Printf( _( "Change symbol %s footprint from %s to %s.\n"),
+        msg.Printf( _( "Change symbol %s footprint from %s to %s."),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetFPID().Format() ),
                     GetChars( aNewComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        msg.Printf( _( "Replacing symbol \"%s:%s\" footprint \"%s\" with "
-                       "\"%s\".\n" ),
+        msg.Printf( _( "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\"." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aPcbComponent->GetFPID().Format() ),
                     GetChars( aNewComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if( !m_isDryRun )
@@ -220,19 +214,15 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
     }
     else
     {
-        msg.Printf( _( "Cannot change symbol %s footprint due to missing "
-                       "footprint %s.\n" ),
+        msg.Printf( _( "Cannot change symbol %s footprint due to missing footprint %s." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aNewComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
 
-        msg.Printf( _( "Cannot replace symbol \"%s:%s\" due to missing "
-                       "footprint \"%s\".\n" ),
+        msg.Printf( _( "Cannot replace symbol \"%s:%s\" due to missing footprint \"%s\"." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aNewComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         ++m_errorCount;
@@ -256,17 +246,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     // Test for reference designator field change.
     if( aPcbComponent->GetReference() != aNewComponent->GetReference() )
     {
-        msg.Printf( _( "Change symbol %s reference to %s.\n" ),
+        msg.Printf( _( "Change symbol %s reference to %s." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aNewComponent->GetReference() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        msg.Printf( _( "Changing symbol \"%s:%s\" reference to \"%s\".\n" ),
+        msg.Printf( _( "Changing symbol \"%s:%s\" reference to \"%s\"." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aNewComponent->GetReference() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if ( !m_isDryRun )
@@ -279,20 +267,18 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     // Test for value field change.
     if( aPcbComponent->GetValue() != aNewComponent->GetValue() )
     {
-        msg.Printf( _( "Change symbol %s value from %s to %s.\n" ),
+        msg.Printf( _( "Change symbol %s value from %s to %s." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetValue() ),
                     GetChars( aNewComponent->GetValue() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        msg.Printf( _( "Changing symbol \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
+        msg.Printf( _( "Changing symbol \"%s:%s\" value from \"%s\" to \"%s\"." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aPcbComponent->GetValue() ),
                     GetChars( aNewComponent->GetValue() ) );
-
-        m_reporter->Report( msg, REPORTER::RPT_ACTION );
+        m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if( !m_isDryRun )
         {
@@ -304,11 +290,10 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     // Test for time stamp change.
     if( aPcbComponent->GetPath() != aNewComponent->GetTimeStamp() )
     {
-        msg.Printf( _( "Changing symbol path \"%s:%s\" to \"%s\".\n" ),
+        msg.Printf( _( "Changing symbol path \"%s:%s\" to \"%s\"." ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aNewComponent->GetTimeStamp() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if( !m_isDryRun )
@@ -344,12 +329,12 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
         {
             if( !pad->GetNetname().IsEmpty() )
             {
-                msg.Printf( _( "Disconnect symbol %s pin %s.\n" ),
+                msg.Printf( _( "Disconnect symbol %s pin %s." ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetName() ) );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                msg.Printf( _( "Clearing symbol \"%s:%s\" pin \"%s\" net name.\n" ),
+                msg.Printf( _( "Clearing symbol \"%s:%s\" pin \"%s\" net name." ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( aPcbComponent->GetPath() ),
                             GetChars( pad->GetName() ) );
@@ -395,23 +380,22 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
                 if( !pad->GetNetname().IsEmpty() )
                 {
-                    msg.Printf( _( "Reconnect symbol %s pin %s from net %s to net %s.\n"),
+                    msg.Printf( _( "Reconnect symbol %s pin %s from net %s to net %s."),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetName() ),
                             GetChars( pad->GetNetname() ),
                             GetChars( netName ) );
-
-                } else {
-                    msg.Printf( _( "Connect symbol %s pin %s to net %s.\n"),
+                }
+                else
+                {
+                    msg.Printf( _( "Connect symbol %s pin %s to net %s."),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetName() ),
                             GetChars( netName ) );
                 }
-
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                msg.Printf( _( "Changing symbol \"%s:%s\" pin \"%s\" net name from "
-                               "\"%s\" to \"%s\".\n" ),
+                msg.Printf( _( "Changing symbol \"%s:%s\" pin \"%s\" net from \"%s\" to \"%s\"." ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( aPcbComponent->GetPath() ),
                             GetChars( pad->GetName() ),
@@ -494,7 +478,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 
             if( !updatedNetname.IsEmpty() )
             {
-                msg.Printf( _( "Reconnect copper zone from net \"%s\" to net \"%s\"." ),
+                msg.Printf( _( "Reconnect copper zone from net %s to net %s." ),
                             zone->GetNetname(), updatedNetname );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
@@ -518,7 +502,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             }
             else
             {
-                msg.Printf( _( "Copper zone (net \"%s\") has no pads connected." ),
+                msg.Printf( _( "Copper zone (net %s) has no pads connected." ),
                             zone->GetNetname() );
                 m_reporter->Report( msg, REPORTER::RPT_WARNING );
                 ++m_warningCount;
@@ -549,17 +533,17 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
         {
             if( module->IsLocked() )
             {
-                msg.Printf( _( "Footprint %s is locked, skipping removal.\n" ),
+                msg.Printf( _( "Footprint %s is locked, skipping removal." ),
                             GetChars( module->GetReference() ) );
                 m_reporter->Report( msg, REPORTER::RPT_WARNING );
                 continue;
             }
 
-            msg.Printf( _( "Remove footprint %s." ),
+            msg.Printf( _( "Remove unused footprint %s." ),
                         GetChars( module->GetReference() ) );
             m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-            msg.Printf( _( "Removing unused footprint \"%s:%s\".\n" ),
+            msg.Printf( _( "Removing unused footprint \"%s:%s\"." ),
                         GetChars( module->GetReference() ),
                         GetChars( module->GetPath() ) );
             m_reporter->Report( msg, REPORTER::RPT_INFO );
@@ -632,11 +616,11 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                                 GetChars( getNetname( previouspad ) ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                    msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n" ),
+                    msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad \"%s\"." ),
                                 GetChars( getNetname( previouspad ) ),
                                 GetChars( previouspad->GetParent()->GetReference() ),
                                 GetChars( previouspad->GetName() ) );
-                    m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                    m_reporter->Report( msg, REPORTER::RPT_INFO );
 
                     if( !m_isDryRun )
                         previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
@@ -697,7 +681,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
                 continue;   // OK, pad found
 
             // not found: bad footprint, report error
-            msg.Printf( _( "Component %s pad %s not found in footprint %s\n" ),
+            msg.Printf( _( "Component %s pad %s not found in footprint %s." ),
                         GetChars( component->GetReference() ),
                         GetChars( padname ),
                         GetChars( footprint->GetFPID().Format() ) );
@@ -728,7 +712,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         COMPONENT* component = aNetlist.GetComponent( i );
         MODULE* footprint = NULL;
 
-        msg.Printf( _( "Processing component \"%s:%s:%s\".\n" ),
+        msg.Printf( _( "Processing component \"%s:%s:%s\"." ),
                     GetChars( component->GetReference() ),
                     GetChars( component->GetTimeStamp() ),
                     GetChars( component->GetFPID().Format() ) );

@@ -48,8 +48,8 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		wxStaticBitmap* m_errorsBadge;
 		wxCheckBox* m_checkBoxShowWarnings;
 		wxStaticBitmap* m_warningsBadge;
-		wxCheckBox* m_checkBoxShowInfos;
 		wxCheckBox* m_checkBoxShowActions;
+		wxCheckBox* m_checkBoxShowInfos;
 		wxButton* m_btnSaveReportToFile;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -57,8 +57,8 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowErrors( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowWarnings( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowInfos( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowActions( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckBoxShowInfos( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnSaveToFile( wxCommandEvent& event ) { event.Skip(); }
 		
 	
