@@ -26,7 +26,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK)
 
-add_executable(qa_geometry
+add_executable( qa_shape_poly_set_refactor
     test_module.cpp
     test_chamfer_fillet.cpp
     test_collision.cpp
@@ -42,7 +42,7 @@ include_directories(
     ${Boost_INCLUDE_DIR}
 )
 
-target_link_libraries(qa_geometry
+target_link_libraries( qa_shape_poly_set_refactor
     polygon
     common
     polygon
@@ -53,8 +53,8 @@ target_link_libraries(qa_geometry
     ${wxWidgets_LIBRARIES}
 )
 
-add_dependencies( qa_geometry pcbnew )
+add_dependencies( qa_shape_poly_set_refactor pcbnew )
 
-add_test( NAME geometry
-    COMMAND qa_geometry --run_test=!ChamferFillet/Fillet
+add_test( NAME shape_poly_set_refactor
+    COMMAND qa_shape_poly_set_refactor --run_test=!ChamferFillet/Fillet
 )
