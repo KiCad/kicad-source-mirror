@@ -821,6 +821,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
     }
     break;
 
+    case S_CURVE:
     case S_POLYGON:
     {
         const int segcountforcircle = 16;
@@ -842,9 +843,6 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
                                                  m_biuTo3Dunits, *aDrawSegment );
     }
     break;
-
-    case S_CURVE:       // Bezier curve (not yet in use in KiCad)
-        break;
 
     default:
         break;

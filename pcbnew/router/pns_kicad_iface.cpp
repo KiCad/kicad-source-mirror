@@ -151,7 +151,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     {
         m_defaultClearance = defaultRule->GetClearance();
     }
-    else 
+    else
     {
         m_defaultClearance = Millimeter2iu(0.254);
     }
@@ -890,6 +890,22 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 
             break;
         }
+
+        case S_CURVE:
+            {
+                aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
+                wxPoint start_pt = aItem->GetBezierPoints()[0];
+
+                for( unsigned int jj = 1; jj < aItem->GetBezierPoints().size(); jj++ )
+                {
+                    wxPoint end_pt = aItem->GetBezierPoints()[jj];
+                    SHAPE_SEGMENT *seg = new SHAPE_SEGMENT(
+                        VECTOR2I( start_pt ), VECTOR2I( end_pt ), aItem->GetWidth() );
+                    segs.push_back( seg );
+                    start_pt = end_pt;
+                }
+            }
+            break;
 
         default:
             break;

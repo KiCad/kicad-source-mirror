@@ -264,6 +264,23 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             }
             break;
 
+        case S_CURVE:
+            {
+                graphic->RebuildBezierToSegmentsPointsList( graphic->GetWidth() );
+
+                for( unsigned int jj = 0; jj < graphic->GetBezierPoints().size(); jj++ )
+                {
+                    wxPoint pt = graphic->GetBezierPoints()[jj];
+
+                    if( pt.x < xmin.x )
+                    {
+                        xmin  = pt;
+                        xmini = i;
+                    }
+                }
+            }
+            break;
+
         default:
             break;
         }
@@ -295,7 +312,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         aPolygons.Append( prevPt );
 
         // Do not append the other end point yet of this 'graphic', this first
-        // 'graphic' might be an arc.
+        // 'graphic' might be an arc or a curve.
 
         for(;;)
         {
@@ -348,6 +365,43 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                         RotatePoint( &nextPt, pcenter, rotation );
 
                         aPolygons.Append( nextPt );
+                    }
+
+                    prevPt = nextPt;
+                }
+                break;
+
+            case S_CURVE:
+                // We do not support Bezier curves in polygons, so approximate
+                // with a series of short lines and put those
+                // line segments into the !same! PATH.
+                {
+                    wxPoint  nextPt;
+                    bool reverse = false;
+
+                    // Use the end point furthest away from
+                    // prevPt as we assume the other end to be ON prevPt or
+                    // very close to it.
+
+                    if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                        nextPt = graphic->GetEnd();
+                    else
+                    {
+                        nextPt = graphic->GetStart();
+                        reverse = true;
+                    }
+
+                    if( reverse )
+                    {
+                        for( int jj = graphic->GetBezierPoints().size()-1;
+                                jj >= 0; jj-- )
+                            aPolygons.Append( graphic->GetBezierPoints()[jj] );
+                    }
+                    else
+                    {
+                        for( unsigned int jj = 0;
+                             jj < graphic->GetBezierPoints().size(); jj++ )
+                            aPolygons.Append( graphic->GetBezierPoints()[jj] );
                     }
 
                     prevPt = nextPt;
@@ -495,6 +549,42 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                             RotatePoint( &nextPt, pcenter, rotation );
 
                             aPolygons.Append( nextPt, -1, hole );
+                        }
+
+                        prevPt = nextPt;
+                    }
+
+                case S_CURVE:
+                    // We do not support Bezier curves in polygons, so approximate
+                    // with a series of short lines and put those
+                    // line segments into the !same! PATH.
+                    {
+                        wxPoint  nextPt;
+                        bool reverse = false;
+
+                        // Use the end point furthest away from
+                        // prevPt as we assume the other end to be ON prevPt or
+                        // very close to it.
+
+                        if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                            nextPt = graphic->GetEnd();
+                        else
+                        {
+                            nextPt = graphic->GetStart();
+                            reverse = true;
+                        }
+
+                        if( reverse )
+                        {
+                            for( int jj = graphic->GetBezierPoints().size()-1;
+                                    jj >= 0; jj-- )
+                                aPolygons.Append( graphic->GetBezierPoints()[jj], -1, hole );
+                        }
+                        else
+                        {
+                            for( unsigned int jj = 0;
+                                 jj < graphic->GetBezierPoints().size(); jj++ )
+                                aPolygons.Append( graphic->GetBezierPoints()[jj], -1, hole );
                         }
 
                         prevPt = nextPt;
