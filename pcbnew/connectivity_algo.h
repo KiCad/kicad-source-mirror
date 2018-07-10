@@ -555,7 +555,7 @@ public:
     {
         auto item = new CN_ITEM( pad, false, 1 );
         item->AddAnchor( pad->ShapePos() );
-        item->SetLayers( LAYER_RANGE( 0, PCB_LAYER_ID_COUNT ) );
+        item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
 
         switch( pad->GetAttribute() )
         {
@@ -573,6 +573,7 @@ public:
                     break;
                 }
             }
+            break;
         }
         default:
             break;
@@ -602,7 +603,7 @@ public:
 
         m_items.push_back( item );
         item->AddAnchor( via->GetStart() );
-        item->SetLayers( LAYER_RANGE( 0, PCB_LAYER_ID_COUNT ) );
+        item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
         addItemtoTree( item );
         SetDirty();
         return item;
