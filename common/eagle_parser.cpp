@@ -886,6 +886,41 @@ EPART::EPART( wxXmlNode* aPart )
     device = parseRequiredAttribute<wxString>( aPart, "device" );
     technology = parseOptionalAttribute<wxString>( aPart, "technology" );
     value = parseOptionalAttribute<wxString>( aPart, "value" );
+
+    for( auto child = aPart->GetChildren(); child; child = child->GetNext() )
+    {
+
+        if( child->GetName() == "attribute" )
+        {
+            std::string aname, avalue;
+            for( auto x = child->GetAttributes(); x; x = x->GetNext() )
+            {
+
+                if( x->GetName() == "name" )
+                    aname = x->GetValue();
+                else if( x->GetName() == "value" )
+                    avalue = x->GetValue();
+            }
+
+            if( aname.size() && avalue.size() )
+                attribute[aname] = avalue;
+        }
+        else if( child->GetName() == "variant" )
+        {
+            std::string aname, avalue;
+            for( auto x = child->GetAttributes(); x; x = x->GetNext() )
+            {
+
+                if( x->GetName() == "name" )
+                    aname = x->GetValue();
+                else if( x->GetName() == "value" )
+                    avalue = x->GetValue();
+            }
+
+            if( aname.size() && avalue.size() )
+                variant[aname] = avalue;
+        }
+    }
 }
 
 

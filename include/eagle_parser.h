@@ -913,6 +913,8 @@ struct EPART
     wxString device;
     opt_wxString technology;
     opt_wxString value;
+    std::map<std::string,std::string> attribute;
+    std::map<std::string,std::string> variant;
 
     EPART( wxXmlNode* aPart );
 };
