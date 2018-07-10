@@ -359,19 +359,15 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
             wxString extendedMsg = _( "Overwriting files:" ) + "\n";
 
             for( const auto& file : overwrittenFiles )
-            {
                 extendedMsg += "\n" + file.GetFullName();
-            }
 
-            wxMessageDialog owDlg( this,
-                                   _( "Are you sure you want to overwrite files in "
-                                      "the destination folder?" ),
-                                   _( "Warning!" ),
-                                   wxYES_NO | wxICON_QUESTION | wxCENTER );
-            owDlg.SetExtendedMessage( extendedMsg );
-            owDlg.SetYesNoLabels( _( "Overwrite" ), _( "Do Not Overwrite" ) );
+            KIDIALOG msgDlg( this, _( "Similar files already exist in the destination folder." ),
+                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            msgDlg.SetExtendedMessage( extendedMsg );
+            msgDlg.SetOKLabel( _( "Overwrite" ) );
+            msgDlg.DoNotShowCheckbox();
 
-            if( owDlg.ShowModal() == wxID_NO )
+            if( msgDlg.ShowModal() == wxID_CANCEL )
                 return;
         }
     }

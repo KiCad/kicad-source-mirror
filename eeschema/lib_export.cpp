@@ -152,9 +152,12 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
         if( old_part )
         {
-            msg.Printf( _( "Symbol \"%s\" already exists. Overwrite it?" ), part->GetName() );
+            msg.Printf( _( "Symbol \"%s\" already exists." ), part->GetName() );
+            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            errorDlg.SetOKLabel( _( "Overwrite" ) );
+            errorDlg.DoNotShowCheckbox();
 
-            if( !IsOK( this, msg ) )
+            if( errorDlg.ShowModal() == wxID_CANCEL )
                 return;
         }
     }

@@ -185,17 +185,19 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     if( aCheck )
     {
-        bool cancel = !outOfDate || !IsOK( nullptr, _( "Zone fills are out-of-date. Re-fill?" ) );
+        bool refill = false;
 
-        if( m_progressReporter )
+        if( outOfDate )
         {
-            // Sigh.  Patch another case of "fall behind" dialogs on Mac.
-            if( m_progressReporter->GetParent() )
-                m_progressReporter->GetParent()->Raise();
-            m_progressReporter->Raise();
+            KIDIALOG dlg( m_progressReporter, _( "Zone fills are out-of-date. Refill?" ),
+                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
+            dlg.DoNotShowCheckbox();
+
+            refill = ( dlg.ShowModal() == wxID_OK );
         }
 
-        if( cancel )
+        if( !refill )
         {
             if( m_commit )
                 m_commit->Revert();

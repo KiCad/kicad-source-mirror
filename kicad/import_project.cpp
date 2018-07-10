@@ -98,7 +98,10 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
                           "create projects in their own clean directory.\n\nDo you "
                           "want to create a new empty directory for the project?" );
 
-        if( IsOK( this, msg ) )
+        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
+        dlg.DoNotShowCheckbox();
+
+        if( dlg.ShowModal() == wxID_YES )
         {
             // Append a new directory with the same name of the project file
             // and try to create it

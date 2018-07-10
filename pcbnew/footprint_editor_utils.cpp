@@ -298,7 +298,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
             {
-                if( !IsOK( this, _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
+                KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
+                              _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+                dlg.SetOKLabel( _( "Discard Changes" ) );
+                dlg.DoNotShowCheckbox();
+
+                if( dlg.ShowModal() == wxID_CANCEL )
                     break;
             }
 
@@ -524,7 +529,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
         {
-            if( !IsOK( this, _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
+            KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
+                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKLabel( _( "Discard Changes" ) );
+            dlg.DoNotShowCheckbox();
+
+            if( dlg.ShowModal() == wxID_CANCEL )
                 break;
         }
 

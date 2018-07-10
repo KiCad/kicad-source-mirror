@@ -997,7 +997,12 @@ void ROUTER_TOOL::performDragging( int aMode )
 
     if( m_startItem && m_startItem->IsLocked() )
     {
-        if( !IsOK( frame(), _( "The item is locked. Do you want to continue?" ) ) )
+        KIDIALOG dlg( frame(), _( "The selected item is locked." ), _( "Confirmation" ),
+                      wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKLabel( _( "Drag Anyway" ) );
+        dlg.DoNotShowCheckbox();
+
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
     }
 
@@ -1146,8 +1151,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( m_startItem && m_startItem->IsLocked() )
     {
-        if( !IsOK( frame(), _( "The item is locked. Do you want to continue?" ) ) )
-            return false;
+        KIDIALOG dlg( frame(), _( "The selected item is locked." ), _( "Confirmation" ),
+                      wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKLabel( _( "Drag Anyway" ) );
+        dlg.DoNotShowCheckbox();
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return 0;
     }
 
     VECTOR2I p0 = controls()->GetCursorPosition();

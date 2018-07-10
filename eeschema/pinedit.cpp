@@ -205,10 +205,14 @@ void LIB_EDIT_FRAME::PlacePin()
         {
             m_canvas->SetIgnoreMouseEvents( true );
             wxString msg;
-            msg.Printf( _( "This position is already occupied by another pin, in unit %d.\n"
-                           "Continue?" ), pin->GetUnit() );
+            msg.Printf( _( "This position is already occupied by another pin, in unit %d." ),
+                        pin->GetUnit() );
 
-            bool status = IsOK( this, msg );
+            KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKLabel( _( "Create Pin Anyway" ) );
+            dlg.DoNotShowCheckbox();
+
+            bool status = dlg.ShowModal() == wxID_OK;
 
             m_canvas->MoveCursorToCrossHair();
             m_canvas->SetIgnoreMouseEvents( false );

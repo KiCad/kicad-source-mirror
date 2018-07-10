@@ -215,9 +215,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( IsCopperLayer( layer ) )
     {
         // An graphic item is put on a copper layer.
-        // This is sometimes useful, for instance for microwave applications ans net tees.
-        // Because the DRC does not handle graphic items, it can break boards.
-        // Therefore a confirmation is requested
+        // This is sometimes useful, for instance for microwave applications and net tees.
+        // However, because the DRC does not handle graphic items, it can break boards.
+        // Therefore a confirmation is required.
         if( !IsOK( this, _( "The graphic item will be on a copper layer.\n"
                             "This is very dangerous because DRC does not handle it.\n"
                             "Are you sure?" ) ) )

@@ -58,15 +58,11 @@
 
 // unique, "file local" translations:
 
-#define FMT_OK_OVERWRITE    _( "Library \"%s\" exists, OK to replace ?" )
-#define FMT_CREATE_LIB      _( "Create New Library Folder (the .pretty folder is the library)" )
 #define FMT_OK_DELETE       _( "OK to delete footprint \"%s\" in library \"%s\"" )
 #define FMT_IMPORT_MODULE   _( "Import Footprint" )
 #define FMT_FILE_NOT_FOUND  _( "File \"%s\" not found" )
 #define FMT_NOT_MODULE      _( "Not a footprint file" )
 #define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint \"%s\" from lib path \"%s\"" )
-#define FMT_BAD_PATH        _( "Unable to find or load footprint from path \"%s\"" )
-#define FMT_BAD_PATHS       _( "The footprint library \"%s\" could not be found in any of the search paths." )
 #define FMT_LIB_READ_ONLY   _( "Library \"%s\" is read only, not writable" )
 
 #define FMT_EXPORT_MODULE   _( "Export Footprint" )
@@ -76,7 +72,6 @@
 #define FMT_MOD_DELETED     _( "Footprint \"%s\" deleted from library \"%s\"" )
 #define FMT_MOD_CREATE      _( "New Footprint" )
 
-#define FMT_MOD_EXISTS      _( "Footprint \"%s\" already exists in library \"%s\"" )
 #define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
 #define FMT_SELECT_LIB      _( "Select Library" )
 
@@ -514,9 +509,12 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
             }
             else
             {
-                wxString msg = wxString::Format( FMT_OK_OVERWRITE, GetChars( libPath ) );
+                wxString msg = wxString::Format( _( "Library %s already exists." ), libPath );
+                KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+                dlg.SetOKLabel( _( "Overwrite" ) );
+                dlg.DoNotShowCheckbox();
 
-                if( !IsOK( this, msg ) )
+                if( dlg.ShowModal() == wxID_CANCEL )
                     return wxEmptyString;
 
                 pi->FootprintLibDelete( libPath );

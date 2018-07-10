@@ -92,9 +92,16 @@ void LIB_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
 
 bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId )
 {
-    if( GetScreen()->IsModify()
-        && !IsOK( this, _( "The current symbol is not saved.\n\nDiscard current changes?" ) ) )
-        return false;
+    if( GetScreen()->IsModify() )
+    {
+        KIDIALOG dlg( this, _( "The current symbol contains unsaved changes."  ),
+                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKLabel( _( "Discard Changes" ) );
+        dlg.DoNotShowCheckbox();
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+    }
 
     SelectActiveLibrary( aLibId.GetLibNickname() );
     return LoadComponentFromCurrentLib( aLibId.GetLibItemName() );

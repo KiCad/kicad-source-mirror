@@ -237,11 +237,14 @@ int ALIGN_DISTRIBUTE_TOOL::checkLockedStatus( const SELECTION &selection ) const
 
     if( containsLocked )
     {
-        if( IsOK( getEditFrame< PCB_EDIT_FRAME >(),
-                _( "Selection contains locked items. Do you want to continue?" ) ) )
-        {
+        KIDIALOG dlg( getEditFrame< PCB_EDIT_FRAME >(),
+                      _( "Selection contains locked items. Do you want to continue?" ),
+                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKLabel( _( "Continue" ) );
+        dlg.DoNotShowCheckbox();
+
+        if( dlg.ShowModal() == wxID_OK )
             return SELECTION_LOCK_OVERRIDE;
-        }
         else
             return SELECTION_LOCKED;
     }
