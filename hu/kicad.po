@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 16:03+0200\n"
-"PO-Revision-Date: 2018-06-30 00:31+0200\n"
+"PO-Revision-Date: 2018-07-10 22:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -572,7 +572,7 @@ msgstr "Kicsinyítés"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:84 gerbview/menubar.cpp:203
 #: pcbnew/menubar_pcb_editor.cpp:616
 msgid "Zoom to &Fit"
-msgstr "&Méretre igazítás"
+msgstr "Nagyítás képernyőméretre"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:88 eeschema/menubar.cpp:183
 #: eeschema/menubar_libedit.cpp:171 eeschema/tool_viewlib.cpp:192
@@ -1408,7 +1408,7 @@ msgstr "Elem vonszolása"
 
 #: common/block_commande.cpp:81
 msgid "Block Duplicate"
-msgstr "Blokk másolás"
+msgstr "Blokk egyszeri másolás"
 
 #: common/block_commande.cpp:85
 msgid "Block Delete"
@@ -2673,7 +2673,7 @@ msgstr "A kijelölt cellák törlése az eredeti tartalmat a vágólapra"
 
 #: common/grid_tricks.cpp:177
 msgid "Copy\tCTRL+C"
-msgstr "Másolás\t[CTRL]+[C"
+msgstr "Másolás\t[CTRL]+[C]"
 
 #: common/grid_tricks.cpp:177
 msgid "Copy selected cells to clipboard"
@@ -3439,7 +3439,7 @@ msgstr "Képernyő frissítése"
 
 #: common/zoom.cpp:281 pagelayout_editor/menubar.cpp:131
 msgid "Zoom to Fit"
-msgstr "Nagyítás mérethez"
+msgstr "Nagyítás képernyőméretre"
 
 #: common/zoom.cpp:300
 msgid "Zoom: "
@@ -4342,7 +4342,7 @@ msgstr "Sorszámozás törlése"
 
 #: eeschema/dialogs/dialog_annotate_base.h:80
 msgid "Annotate Schematic"
-msgstr "Szimbólum sorszámozó"
+msgstr "Rajzjel sorszámozó"
 
 #: eeschema/dialogs/dialog_bom.cpp:356
 #, c-format
@@ -4886,7 +4886,7 @@ msgstr "Tükrözés az X tengely körül"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:56
 msgid "Mirror around Y axis"
-msgstr "Tükrözés az X tengely körül"
+msgstr "Tükrözés az Y tengely körül"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:58
 msgid "Aspect:"
@@ -8192,7 +8192,7 @@ msgstr "Szöveg hozzáadása"
 
 #: eeschema/help_common_strings.h:76
 msgid "Annotate schematic symbols"
-msgstr "Szimbólum sorszámozó indítása"
+msgstr "Rajzjel sorszámozó indítása"
 
 #: eeschema/help_common_strings.h:77
 msgid "Create, delete, and edit symbols"
@@ -8786,7 +8786,7 @@ msgstr "Hosszúság"
 #: eeschema/lib_pin.cpp:1731 eeschema/onrightclick.cpp:397
 #: eeschema/onrightclick.cpp:808 eeschema/sch_text.cpp:662
 msgid "Orientation"
-msgstr "Orientáció/Irányzás"
+msgstr "Forgatás"
 
 #: eeschema/lib_pin.cpp:1744 eeschema/lib_pin.cpp:1763
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1148
@@ -9054,7 +9054,7 @@ msgstr "Négyszög él vonszolása"
 #: pcbnew/onrightclick.cpp:758 pcbnew/onrightclick.cpp:851
 #: pcbnew/tools/edit_tool.cpp:129
 msgid "Rotate Clockwise"
-msgstr "Elforgatás jobbra"
+msgstr "Forgatás jobbra"
 
 #: eeschema/libedit_onrightclick.cpp:222
 msgid "Drag Edge Point"
@@ -9139,7 +9139,7 @@ msgstr "Blokk tükrözése függőleges tengelyen"
 #: pcbnew/footprint_editor_onclick.cpp:295 pcbnew/onrightclick.cpp:440
 #: pcbnew/onrightclick.cpp:754 pcbnew/tools/edit_tool.cpp:134
 msgid "Rotate Counterclockwise"
-msgstr "Elforgatás balra"
+msgstr "Forgatás balra"
 
 #: eeschema/libedit_onrightclick.cpp:367 eeschema/onrightclick.cpp:885
 msgid "Delete Block"
@@ -9217,7 +9217,7 @@ msgstr "Lap elhagyása"
 #: eeschema/menubar.cpp:174 eeschema/menubar_libedit.cpp:162
 #: eeschema/tool_viewlib.cpp:188 pcbnew/menubar_footprint_editor.cpp:226
 msgid "&Zoom to Fit"
-msgstr "Méretre igazítás"
+msgstr "Nagyítás képernyőméretre"
 
 #: eeschema/menubar.cpp:191 gerbview/menubar.cpp:217
 #: pagelayout_editor/menubar.cpp:176 pagelayout_editor/pl_editor_config.cpp:67
@@ -9573,7 +9573,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:595
 msgid "&Annotate Schematic..."
-msgstr "Szimbólum sorszámozó..."
+msgstr "Rajzjel sorszámozó..."
 
 #: eeschema/menubar.cpp:600
 msgid "Generate &Netlist File..."
@@ -10006,7 +10006,7 @@ msgstr "Visszaállítás alapértelmezettre"
 #: pcbnew/onrightclick.cpp:491 pcbnew/onrightclick.cpp:789
 #: pcbnew/tools/edit_tool.cpp:112 pcbnew/tools/edit_tool.cpp:116
 msgid "Duplicate"
-msgstr "Másolás"
+msgstr "Egyszeri másolás"
 
 #: eeschema/onrightclick.cpp:414
 msgid "Open Documentation"
@@ -11828,7 +11828,7 @@ msgstr ""
 #: pcbnew/footprint_editor_onclick.cpp:297 pcbnew/tools/edit_tool.cpp:143
 #: pcbnew/tools/edit_tool.cpp:810
 msgid "Mirror"
-msgstr "Tükrözés:"
+msgstr "Tükrözés"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:91
@@ -15787,7 +15787,7 @@ msgstr "Elhelyezkedés:"
 
 #: pcbnew/class_module.cpp:588
 msgid "Back (Flipped)"
-msgstr "Alulról (tükrözve)"
+msgstr "Alul (tükrözve)"
 
 #: pcbnew/class_module.cpp:588
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:63
@@ -25160,7 +25160,7 @@ msgstr "Minden alkatrésztok fixálása"
 #: pcbnew/onrightclick.cpp:961 pcbnew/tools/edit_tool.cpp:139
 #: pcbnew/tools/edit_tool.cpp:841
 msgid "Flip"
-msgstr "Átfordítás"
+msgstr "Átfordítás, a másik oldalra"
 
 #: pcbnew/onrightclick.cpp:466
 msgid "Drag Via"
@@ -26527,7 +26527,7 @@ msgstr "Alkatrészböngésző bezárása"
 
 #: pcbnew/tool_footprint_viewer.cpp:154
 msgid "&Fit on Screen"
-msgstr "Illesztés a képernyőre"
+msgstr "Nagyítás képernyőméretre"
 
 #: pcbnew/tool_footprint_viewer.cpp:166
 msgid "3&D Viewer"
