@@ -273,11 +273,15 @@ int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFi
 
 
 // A helper function to build a full reference string of a SCH_REFERENCE item
-wxString buildFullReference( const SCH_REFERENCE& aItem )
+wxString buildFullReference( const SCH_REFERENCE& aItem, int aUnitNumber = -1 )
 {
     wxString fullref;
     fullref = aItem.GetRef() + aItem.GetRefNumber();
-    fullref << ".." << aItem.GetUnit();
+
+    if( aUnitNumber < 0 )
+        fullref << ".." << aItem.GetUnit();
+    else
+        fullref << ".." << aUnitNumber;
 
     return fullref;
 }
@@ -344,6 +348,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : aLockedUnitMap )
         {
             unsigned n_refs = pair.second.GetCount();
+
             for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
             {
                 SCH_REFERENCE &thisRef = pair.second[thisRefI];
@@ -433,6 +438,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 {
                     // This is the component we're currently annotating. Hold the unit!
                     componentFlatList[ii].m_Unit = thisRef.m_Unit;
+                    // lock this new full reference
+                    inUseRefs.insert( buildFullReference( componentFlatList[ii] ) );
                 }
 
                 if( thisRef.CompareValue( componentFlatList[ii] ) != 0 )
@@ -447,7 +454,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     if( ! thisRef.IsSameInstance( componentFlatList[jj] ) )
                         continue;
 
-                    wxString ref_candidate = buildFullReference( componentFlatList[ii] );
+                    wxString ref_candidate = buildFullReference( componentFlatList[ii], thisRef.m_Unit );
 
                     // propagate the new reference and unit selection to the "old" component,
                     // if this new full reference is not already used (can happens when initial
@@ -465,7 +472,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 }
             }
         }
-
         else
         {
             /* search for others units of this component.
