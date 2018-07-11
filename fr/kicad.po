@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-10 20:12+0200\n"
-"PO-Revision-Date: 2018-07-10 20:15+0200\n"
+"POT-Creation-Date: 2018-07-11 17:48+0200\n"
+"PO-Revision-Date: 2018-07-11 17:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -3186,7 +3186,7 @@ msgid "Toggle Always Show Cursor"
 msgstr "Toujours Afficher le Curseur"
 
 #: common/tool/common_tools.cpp:40
-msgid "Toogle display of the cursor, even when not in an interactive tool"
+msgid "Toggle display of the cursor, even when not in an interactive tool"
 msgstr "Affichage du curseur, même lorsqu'il n’y a pas d'outil interactif"
 
 #: common/tool/grid_menu.cpp:40 common/zoom.cpp:315
@@ -7317,7 +7317,7 @@ msgstr ""
 msgid "Simulation settings"
 msgstr "Paramètres de simulation"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:727
+#: eeschema/dialogs/dialog_spice_model.cpp:738
 msgid "Select library"
 msgstr "Sélection Librairie"
 
@@ -22935,7 +22935,6 @@ msgstr "Isolations pistes"
 
 #: pcbnew/drc.cpp:1035
 #, c-format
-#| msgid "%d is not a valid layer count"
 msgid "\"%s\" is on a disabled layer"
 msgstr "\"%s\" est sur une couche désactivée"
 
@@ -25354,7 +25353,7 @@ msgid "&Move and Swap Layers..."
 msgstr "&Deplacement et Permutation de Couches..."
 
 #: pcbnew/menubar_pcb_editor.cpp:559
-msgid "Move tracks or drawings from a layer to an other layer"
+msgid "Move tracks or drawings from a layer to another layer"
 msgstr ""
 "Déplacement de pistes ou d'éléments graphiques d'une couche sur une autre "
 "couche"
