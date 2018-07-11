@@ -130,7 +130,7 @@ protected:
     long    m_firstRunDialogSetting;
 
     /// Choice box to choose the grid size.
-    wxChoice*       m_gridSelectBox;
+    wxChoice*           m_gridSelectBox;
 
     /// Choice box to choose the zoom value.
     wxChoice*       m_zoomSelectBox;

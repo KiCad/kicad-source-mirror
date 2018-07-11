@@ -117,11 +117,11 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     {
         m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
                                           ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-        m_SelComponentBox->SetToolTip( _("Select a component and highlight items belonging to this component") );
+        m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
         text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp: ") );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_SelComponentBox );
-        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_auxiliaryToolBar->AddSpacer( 5 );
     }
 
     // Creates choice box to display net names and highlight selected:
@@ -129,11 +129,11 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     {
         m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
                                         ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-        m_SelNetnameBox->SetToolTip( _("Select a net name and highlight graphic items belonging to this net") );
+        m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
         text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
-        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_auxiliaryToolBar->AddSpacer( 5 );
     }
 
     // Creates choice box to display aperture attributes and highlight selected:
@@ -141,11 +141,11 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     {
         m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
                                                ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-        m_SelAperAttributesBox->SetToolTip( _("Select an aperture attribute and highlight graphic items having this attribute") );
+        m_SelAperAttributesBox->SetToolTip( _("Highlight items with this aperture attribute") );
         text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
         m_auxiliaryToolBar->AddControl( text );
         m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
-        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_auxiliaryToolBar->AddSpacer( 5 );
     }
 
     if( !m_DCodeSelector )
@@ -158,10 +158,28 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
         m_auxiliaryToolBar->AddControl( m_DCodeSelector );
     }
 
+    if( !m_gridSelectBox )
+    {
+        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+        m_auxiliaryToolBar->AddControl( m_gridSelectBox );
+    }
+
+    if( !m_zoomSelectBox )
+    {
+        KiScaledSeparator( m_auxiliaryToolBar, this );
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+        m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
+    }
+
     updateComponentListSelectBox();
     updateNetnameListSelectBox();
     updateAperAttributesSelectBox();
     updateDCodeSelectBox();
+    updateGridSelectBox();
+    updateZoomSelectBox();
 
     // combobox sizes can have changed: apply new best sizes
     auto item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
@@ -172,6 +190,12 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     item = m_auxiliaryToolBar->FindTool( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
     item->SetMinSize( m_SelAperAttributesBox->GetBestSize() );
+
+    item = m_auxiliaryToolBar->FindTool( ID_ON_GRID_SELECT );
+    item->SetMinSize( m_gridSelectBox->GetBestSize() );
+
+    item = m_auxiliaryToolBar->FindTool( ID_ON_ZOOM_SELECT );
+    item->SetMinSize( m_zoomSelectBox->GetBestSize() );
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->Realize();

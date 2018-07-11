@@ -1202,6 +1202,7 @@ void GERBVIEW_FRAME::unitsChangeRefresh()
 {   // Called on units change (see EDA_DRAW_FRAME)
     EDA_DRAW_FRAME::unitsChangeRefresh();
     updateDCodeSelectBox();
+    updateGridSelectBox();
 }
 
 
@@ -1267,6 +1268,103 @@ void GERBVIEW_FRAME::setupTools()
 
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "gerbview.InteractiveSelection" );
+}
+
+
+void GERBVIEW_FRAME::updateGridSelectBox()
+{
+    UpdateStatusBar();
+    DisplayUnitsMsg();
+
+    if( m_gridSelectBox == NULL )
+        return;
+
+    // Update grid values with the current units setting.
+    m_gridSelectBox->Clear();
+    wxArrayString gridsList;
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
+
+    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
+    {
+        GRID_TYPE& grid = GetScreen()->GetGrid( i );
+        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_CmdId );
+    }
+
+    m_gridSelectBox->SetSelection( icurr );
+}
+
+
+void GERBVIEW_FRAME::updateZoomSelectBox()
+{
+    if( m_zoomSelectBox == NULL )
+        return;
+
+    wxString msg;
+
+    m_zoomSelectBox->Clear();
+    m_zoomSelectBox->Append( _( "Zoom Auto" ) );
+    m_zoomSelectBox->SetSelection( 0 );
+
+    for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
+    {
+        msg = _( "Zoom " );
+
+        double level =  m_zoomLevelCoeff / (double)GetScreen()->m_ZoomList[i];
+        wxString value = wxString::Format( wxT( "%.2f" ), level );
+        msg += value;
+
+        m_zoomSelectBox->Append( msg );
+
+        if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
+            m_zoomSelectBox->SetSelection( i + 1 );
+    }
+}
+
+
+void GERBVIEW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
+{
+    // No need to update the grid select box if it doesn't exist or the grid setting change
+    // was made using the select box.
+    if( m_gridSelectBox == NULL || m_auxiliaryToolBar == NULL )
+        return;
+
+    int select = wxNOT_FOUND;
+
+    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
+    {
+        if( GetScreen()->GetGridCmdId() == GetScreen()->GetGrid( i ).m_CmdId )
+        {
+            select = (int) i;
+            break;
+        }
+    }
+
+    if( select != m_gridSelectBox->GetSelection() )
+        m_gridSelectBox->SetSelection( select );
+}
+
+
+void GERBVIEW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
+{
+    if( m_zoomSelectBox == NULL || m_auxiliaryToolBar == NULL )
+        return;
+
+    int current = 0;    // display Auto if no match found
+
+    // check for a match within 1%
+    double zoom = IsGalCanvasActive() ? GetGalCanvas()->GetLegacyZoom() : GetScreen()->GetZoom();
+
+    for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
+    {
+        if( std::fabs( zoom - GetScreen()->m_ZoomList[i] ) < ( zoom / 100.0 ) )
+        {
+            current = i + 1;
+            break;
+        }
+    }
+
+    if( current != m_zoomSelectBox->GetSelection() )
+        m_zoomSelectBox->SetSelection( current );
 }
 
 

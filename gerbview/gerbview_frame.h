@@ -200,6 +200,8 @@ private:
     void            updateNetnameListSelectBox();
     void            updateAperAttributesSelectBox();
     void            updateDCodeSelectBox();
+    void            updateGridSelectBox();
+    void            updateZoomSelectBox();
     void            unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
 
     // The Tool Framework initalization
@@ -247,6 +249,8 @@ public:
     void OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos ) override;
     bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
     double BestZoom() override;
     void UpdateStatusBar() override;
 
