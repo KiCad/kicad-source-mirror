@@ -321,20 +321,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     for( auto item : garbage )
         delete item;
 
-    #ifdef CONNECTIVITY_DEBUG
-        for( auto item : m_padList )
-            if( all.find( item->Parent() ) == all.end() ) { printf("Failing pad : %p\n", item->Parent() ); assert ( false ); }
-
-        for( auto item : m_viaList )
-            if( all.find( item->Parent() ) == all.end() ) { printf("Failing via : %p\n", item->Parent() ); assert ( false ); }
-
-        for( auto item : m_trackList )
-            if( all.find( item->Parent() ) == all.end() ) { printf("Failing track : %p\n", item->Parent() ); assert ( false ); }
-
-        for( auto item : m_zoneList )
-            if( all.find( item->Parent() ) == all.end() ) { printf("Failing zome : %p\n", item->Parent() ); assert ( false ); }
-    #endif
-
 #ifdef PROFILE
     garbage_collection.Show();
     PROF_COUNTER search_cnt( "search-connections" );
