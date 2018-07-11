@@ -89,7 +89,7 @@ static void swigAddBuiltin()
 
     /* allocate memory for the python module table */
     SwigImportInittab = (struct _inittab*) malloc(
-        sizeof(struct _inittab) * (i + EXTRA_PYTHON_MODULES) );
+        sizeof( struct _inittab ) * ( i + EXTRA_PYTHON_MODULES ) );
 
     /* copy all pre-existing python modules into our newly created table */
     i = 0;
@@ -145,7 +145,7 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
     Py_Initialize();
-    PySys_SetArgv(Pgm().App().argc, Pgm().App().argv);
+    PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
@@ -155,7 +155,7 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     // Make sure that that the correct version of wxPython is loaded. In systems where there
     // are different versions of wxPython installed this can lead to select wrong wxPython
     // version being selected.
-    snprintf( cmd, sizeof(cmd), "import wxversion;  wxversion.select('%s')", WXPYTHON_VERSION );
+    snprintf( cmd, sizeof( cmd ), "import wxversion;  wxversion.select( '%s' )", WXPYTHON_VERSION );
 
     int retv = PyRun_SimpleString( cmd );
 

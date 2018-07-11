@@ -126,7 +126,7 @@ void Refresh()
 
 void WindowZoom( int xl, int yl, int width, int height )
 {
-    EDA_RECT Rect( wxPoint( xl, yl ), wxSize( width, height )) ;
+    EDA_RECT Rect( wxPoint( xl, yl ), wxSize( width, height ) );
 
     if( s_PcbEditFrame )
         s_PcbEditFrame->Window_Zoom( Rect );
