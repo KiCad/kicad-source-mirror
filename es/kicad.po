@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-04 15:23+0200\n"
-"PO-Revision-Date: 2018-07-04 15:23+0200\n"
+"POT-Creation-Date: 2018-07-12 08:01+0200\n"
+"PO-Revision-Date: 2018-07-12 08:05+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3173,8 +3173,8 @@ msgid "Toggle Always Show Cursor"
 msgstr "Activar Mostrar siempre el cursor"
 
 #: common/tool/common_tools.cpp:40
-msgid "Toogle display of the cursor, even when not in an interactive tool"
-msgstr "Mostrar el cursor, incluso fuera del modo interactivo"
+msgid "Toggle display of the cursor, even when not in an interactive tool"
+msgstr "Alternar el cursor, incluso fuera del modo interactivo"
 
 #: common/tool/grid_menu.cpp:40 common/zoom.cpp:315
 #: eeschema/widgets/widget_eeschema_color_config.cpp:93
@@ -4381,40 +4381,40 @@ msgstr "Símbolo"
 msgid "Desc"
 msgstr "Desc"
 
-#: eeschema/component_references_lister.cpp:548
+#: eeschema/component_references_lister.cpp:554
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Elemento sin anotar: %s%s (unidad %d)\n"
 
-#: eeschema/component_references_lister.cpp:555
+#: eeschema/component_references_lister.cpp:561
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Elemento sin anotar: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:576
+#: eeschema/component_references_lister.cpp:582
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
 msgstr ""
 "Error: símbolo %s%s unidad %d y símbolo solo tiene %d unidades definidas\n"
 
-#: eeschema/component_references_lister.cpp:614
-#: eeschema/component_references_lister.cpp:644
+#: eeschema/component_references_lister.cpp:620
+#: eeschema/component_references_lister.cpp:650
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Elemento múltiple %s%s (unidad %d)\n"
 
-#: eeschema/component_references_lister.cpp:621
-#: eeschema/component_references_lister.cpp:651
+#: eeschema/component_references_lister.cpp:627
+#: eeschema/component_references_lister.cpp:657
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Elemento múltiple %s%s\n"
 
-#: eeschema/component_references_lister.cpp:665
+#: eeschema/component_references_lister.cpp:671
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valores diferentes para %s%d%s (%s) y %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:698
+#: eeschema/component_references_lister.cpp:704
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Marca de tiempo (%s) duplicada para %s%d y %s%d"
@@ -5959,7 +5959,7 @@ msgstr "¡Se necesita anotar los componentes!"
 msgid "Pin %s on %s is connected to both %s and %s"
 msgstr "Pin %s en %s está conectado a %s y a %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/drc.cpp:524
+#: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/drc.cpp:533
 msgid "Finished"
 msgstr "Finalizado"
 
@@ -7295,7 +7295,7 @@ msgstr "Añadir ruta completa a directivas de librería .include"
 msgid "Simulation settings"
 msgstr "Ajustes de simulación"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:727
+#: eeschema/dialogs/dialog_spice_model.cpp:738
 msgid "Select library"
 msgstr "Seleccionar librería"
 
@@ -22958,67 +22958,76 @@ msgstr "Comprobar textos...\n"
 msgid "Courtyard areas...\n"
 msgstr "Áreas de huellas...\n"
 
-#: pcbnew/drc.cpp:564
+#: pcbnew/drc.cpp:522
+msgid "Items on disabled layers...\n"
+msgstr "Elementos en capas desactivadas...\n"
+
+#: pcbnew/drc.cpp:573
 #, c-format
 msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: \"%s\" tiene un margen de %s que es menor que el global de %s"
 
-#: pcbnew/drc.cpp:578
+#: pcbnew/drc.cpp:587
 #, c-format
 msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: \"%s\" tiene un ancho de pista de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:591
+#: pcbnew/drc.cpp:600
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: \"%s\" tiene un diámetro de vía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:604
+#: pcbnew/drc.cpp:613
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: \"%s\" tiene un taladro de vía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:617
+#: pcbnew/drc.cpp:626
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: \"%s\" tiene un diámetro de microvía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:630
+#: pcbnew/drc.cpp:639
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: \"%s\" tiene un taladro de microvía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:728
+#: pcbnew/drc.cpp:737
 msgid "Track clearances"
 msgstr "Márgenes de pista"
 
-#: pcbnew/drc.cpp:1214
+#: pcbnew/drc.cpp:1035
+#, c-format
+msgid "\"%s\" is on a disabled layer"
+msgstr "\"%s\" está en una capa desactivada"
+
+#: pcbnew/drc.cpp:1261
 #, c-format
 msgid "footprint \"%s\" has malformed courtyard"
 msgstr "la huella \"%s\" tiene un área mal conformada"
 
-#: pcbnew/drc.cpp:1231
+#: pcbnew/drc.cpp:1278
 #, c-format
 msgid "footprint \"%s\" has no courtyard defined"
 msgstr "la huella \"%s\" no tiene un área definida"
 
-#: pcbnew/drc.cpp:1270
+#: pcbnew/drc.cpp:1317
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on front (top) layer"
 msgstr "las huellas \"%s\" y \"%s\" se solapan en la capa frontal"
 
-#: pcbnew/drc.cpp:1307
+#: pcbnew/drc.cpp:1354
 #, c-format
 msgid "footprints \"%s\" and \"%s\" overlap on back (bottom) layer"
 msgstr "las huellas \"%s\" y \"%s\" se solapan en la capa trasera"
@@ -23080,102 +23089,106 @@ msgid "Buried Via: not allowed"
 msgstr "Vías enterrada: no permitida"
 
 #: pcbnew/drc_item.cpp:79
+msgid "Item on a disabled layer"
+msgstr "Elemento en capa desactivada"
+
+#: pcbnew/drc_item.cpp:81
 msgid "Copper area inside copper area"
 msgstr "Área de cobre dentro de área de cobre"
 
-#: pcbnew/drc_item.cpp:81
+#: pcbnew/drc_item.cpp:83
 msgid "Copper areas intersect or are too close"
 msgstr "Áreas de cobre superpuestas o demasiado cerca"
 
-#: pcbnew/drc_item.cpp:84
+#: pcbnew/drc_item.cpp:86
 msgid "Copper area belongs a net which has no pads. This is strange"
 msgstr "Área de cobre perteneciente a una red sin pads. Es extraño"
 
-#: pcbnew/drc_item.cpp:87
+#: pcbnew/drc_item.cpp:89
 msgid "Hole near pad"
 msgstr "Orificio cerca de pad"
 
-#: pcbnew/drc_item.cpp:89
+#: pcbnew/drc_item.cpp:91
 msgid "Hole near track"
 msgstr "Orificio cerca de pista"
 
-#: pcbnew/drc_item.cpp:91
+#: pcbnew/drc_item.cpp:93
 msgid "Too small track width"
 msgstr "Ancho de pista demasiado pequeño"
 
-#: pcbnew/drc_item.cpp:93
+#: pcbnew/drc_item.cpp:95
 msgid "Too small via size"
 msgstr "Tamaño de vía demasiado pequeño"
 
-#: pcbnew/drc_item.cpp:95
+#: pcbnew/drc_item.cpp:97
 msgid "Too small micro via size"
 msgstr "Tamaño de microvía demasiado pequeño"
 
-#: pcbnew/drc_item.cpp:97
+#: pcbnew/drc_item.cpp:99
 msgid "Too small via drill"
 msgstr "Tamaño de vía demasiado pequeño"
 
-#: pcbnew/drc_item.cpp:99
+#: pcbnew/drc_item.cpp:101
 msgid "Too small micro via drill"
 msgstr "Tamaño de microvía demasiado pequeño"
 
-#: pcbnew/drc_item.cpp:103
+#: pcbnew/drc_item.cpp:105
 msgid "NetClass Track Width &lt; global limit"
 msgstr "Ancho de pista tipo de red &lt; límite global"
 
-#: pcbnew/drc_item.cpp:105
+#: pcbnew/drc_item.cpp:107
 msgid "NetClass Clearance &lt; global limit"
 msgstr "Margen tipo de red &lt; límite global"
 
-#: pcbnew/drc_item.cpp:107
+#: pcbnew/drc_item.cpp:109
 msgid "NetClass Via Dia &lt; global limit"
 msgstr "Diámetro vía tipo de red &lt; límite global"
 
-#: pcbnew/drc_item.cpp:109
+#: pcbnew/drc_item.cpp:111
 msgid "NetClass Via Drill &lt; global limit"
 msgstr "Taladro vía tipo de red &lt; límite global"
 
-#: pcbnew/drc_item.cpp:111
+#: pcbnew/drc_item.cpp:113
 msgid "NetClass uVia Dia &lt; global limit"
 msgstr "Diámetro microvía tipo de red &lt; límite global"
 
-#: pcbnew/drc_item.cpp:113
+#: pcbnew/drc_item.cpp:115
 msgid "NetClass uVia Drill &lt; global limit"
 msgstr "Taladro microvía tipo de red &lt; límite global"
 
-#: pcbnew/drc_item.cpp:116
+#: pcbnew/drc_item.cpp:118
 msgid "Via inside a keepout area"
 msgstr "Vía dentro de área restringida"
 
-#: pcbnew/drc_item.cpp:119
+#: pcbnew/drc_item.cpp:121
 msgid "Track inside a keepout area"
 msgstr "Pista dentro de área restringida"
 
-#: pcbnew/drc_item.cpp:122
+#: pcbnew/drc_item.cpp:124
 msgid "Pad inside a keepout area"
 msgstr "Pad dentro de área restringida"
 
-#: pcbnew/drc_item.cpp:125
+#: pcbnew/drc_item.cpp:127
 msgid "Via inside a text"
 msgstr "Vía sobre texto"
 
-#: pcbnew/drc_item.cpp:128
+#: pcbnew/drc_item.cpp:130
 msgid "Track inside a text"
 msgstr "Pista sobre texto"
 
-#: pcbnew/drc_item.cpp:131
+#: pcbnew/drc_item.cpp:133
 msgid "Pad inside a text"
 msgstr "Pad sobre texto"
 
-#: pcbnew/drc_item.cpp:134
+#: pcbnew/drc_item.cpp:136
 msgid "Courtyards overlap"
 msgstr "Solapamiento de áreas"
 
-#: pcbnew/drc_item.cpp:137
+#: pcbnew/drc_item.cpp:139
 msgid "Footprint has no courtyard defined"
 msgstr "La huella no tiene área definida"
 
-#: pcbnew/drc_item.cpp:140
+#: pcbnew/drc_item.cpp:142
 msgid "Footprint has incorrect courtyard (not a closed shape)"
 msgstr "La huella tiene un área incorrecta (no es una forma cerrada)"
 
@@ -25412,7 +25425,7 @@ msgid "&Move and Swap Layers..."
 msgstr "&Mover e intercambiar capas..."
 
 #: pcbnew/menubar_pcb_editor.cpp:559
-msgid "Move tracks or drawings from a layer to an other layer"
+msgid "Move tracks or drawings from a layer to another layer"
 msgstr "Mover pistas o dibujos de una capa a otra"
 
 #: pcbnew/menubar_pcb_editor.cpp:564
@@ -28537,6 +28550,10 @@ msgstr "PcbNew diseño PCB"
 msgid "PcbNew 3D Viewer"
 msgstr "Pcbnew Visor 3D"
 
+#: resources/linux/appdata/kicad.appdata.xml:49
+msgid "The KiCad Developers"
+msgstr "Los desarrolladores de KiCad"
+
 #: resources/linux/mime/applications/bitmap2component.desktop:5
 msgid "bitmap2component"
 msgstr "bitmap2component"
@@ -28960,9 +28977,6 @@ msgstr ""
 
 #~ msgid "On new graphic item creation:"
 #~ msgstr "Al crear nuevo elemento gráfico:"
-
-#~ msgid "The KiCad Developers"
-#~ msgstr "Los desarrolladores de KiCad"
 
 #~ msgid "Save the current active library"
 #~ msgstr "Guardar la librería activa"
