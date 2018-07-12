@@ -30,6 +30,8 @@
 #ifndef GEOMETRY_UTILS_H
 #define GEOMETRY_UTILS_H
 
+#include <math/vector2d.h>
+
 /**
  * @return the number of segments to approximate a arc by segments
  * with a given max error (this number is >= 1)
@@ -53,6 +55,45 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
  */
 double GetCircletoPolyCorrectionFactor( int aSegCountforCircle );
 
+/**
+ * Snap a vector onto the nearest 0, 45 or 90 degree line.
+ *
+ * The magnitude of the vector is NOT kept, instead the co-ordinates are
+ * set equal (and/or opposite) or to zero as needed. The effect of this is
+ * that if the starting vector is on a square grid, the resulting snapped
+ * vector will still be on the same grid.
+
+ * @param a vector to be snapped
+ * @return the snapped vector
+ */
+template<typename T>
+VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec )
+{
+    auto newVec = aVec;
+    const VECTOR2<T> absVec { std::abs( aVec.x ), std::abs( aVec.y ) };
+
+    if ( absVec.x > absVec.y * 2 )
+    {
+        // snap along x-axis
+        newVec.y = 0;
+    }
+    else if ( absVec.y > absVec.x * 2 )
+    {
+        // snap onto y-axis
+        newVec.x = 0;
+    }
+    else if ( absVec.x > absVec.y )
+    {
+        // snap away from x-axis towards 45
+        newVec.y = std::copysign( aVec.x, aVec.y );
+    } else
+    {
+        // snap away from y-axis towards 45
+        newVec.x = std::copysign( aVec.y, aVec.x );
+    }
+
+    return newVec;
+}
 
 #endif  // #ifndef GEOMETRY_UTILS_H
 

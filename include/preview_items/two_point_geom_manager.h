@@ -25,7 +25,7 @@
 #define PREVIEW_ITEMS_TWO_POINT_GEOMETRY_MANAGER_H
 
 #include <math/vector2d.h>
-#include <common.h>
+#include <geometry/geometry_utils.h>
 
 namespace KIGFX
 {
@@ -63,11 +63,7 @@ public:
     {
         if( m_angleSnap )
         {
-            const auto vec = aEnd - m_origin;
-            const auto len = vec.EuclideanNorm();
-            const auto angle = KiROUND( vec.Angle() / M_PI_4 ) * M_PI_4;
-
-            m_end = m_origin + VECTOR2I( len, 0 ).Rotate( angle );
+            m_end = GetVectorSnapped45( aEnd - m_origin ) + m_origin;
         }
         else
         {

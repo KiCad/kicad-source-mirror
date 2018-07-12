@@ -40,6 +40,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <geometry/direction45.h>
+#include <geometry/geometry_utils.h>
 #include <ratsnest_data.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>
@@ -478,12 +479,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
 void DRAWING_TOOL::constrainDimension( DIMENSION* dimension )
 {
-    VECTOR2I lineVector( dimension->GetEnd() - dimension->GetOrigin() );
-    double angle = lineVector.Angle();
-    double newAngle = KiROUND( angle / M_PI_4 ) * M_PI_4;
-    VECTOR2I newLineVector = lineVector.Rotate( newAngle - angle );
+    const VECTOR2I lineVector{ dimension->GetEnd() - dimension->GetOrigin() };
 
-    dimension->SetEnd( dimension->GetOrigin() + static_cast<wxPoint>( newLineVector ) );
+    dimension->SetEnd( wxPoint(
+        VECTOR2I( dimension->GetOrigin() ) + GetVectorSnapped45( lineVector ) ) );
 }
 
 
