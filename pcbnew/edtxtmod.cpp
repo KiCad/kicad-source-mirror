@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,8 @@ TEXTE_MODULE* FOOTPRINT_EDIT_FRAME::CreateTextModule( MODULE* aModule, wxDC* aDC
     text->SetFlags( IS_NEW );
 
     GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
-            std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
+            std::min( GetDesignSettings().m_ModuleTextSize.x,
+                      GetDesignSettings().m_ModuleTextSize.y ), true );
     text->SetTextSize( GetDesignSettings().m_ModuleTextSize );
     text->SetThickness( GetDesignSettings().m_ModuleTextWidth );
     text->SetPosition( GetCrossHairPosition() );
@@ -103,8 +104,6 @@ TEXTE_MODULE* FOOTPRINT_EDIT_FRAME::CreateTextModule( MODULE* aModule, wxDC* aDC
 }
 
 
-/* Rotate text 90 degrees.
- */
 void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text == NULL )
@@ -133,29 +132,29 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-/*
- * Deletes text in module (if not the reference or value)
- */
-void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
+void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* aText )
 {
-    MODULE* Module;
+    MODULE* module;
 
-    if( Text == NULL )
+    if( aText == NULL )
         return;
 
-    Module = static_cast<MODULE*>( Text->GetParent() );
+    module = static_cast<MODULE*>( aText->GetParent() );
 
-    if( Text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+    if( aText->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
     {
-        m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
-        Text->DeleteStructure();
+        if( module && module->GetFlags() == 0 && aText->GetFlags() == 0 && IsType( FRAME_PCB ) )
+            SaveCopyInUndoList( module, UR_CHANGED );
+
+        m_canvas->RefreshDrawingRect( aText->GetBoundingBox() );
+        aText->DeleteStructure();
         OnModify();
-        Module->SetLastEditTime();
+        module->SetLastEditTime();
     }
 }
 
 
-/*
+/**
  * Abort text move in progress.
  *
  * If a text is selected, its initial coordinates are regenerated.
@@ -194,8 +193,6 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-/* Start a text move.
- */
 void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text == NULL )
@@ -222,8 +219,6 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-/* Place the text a the cursor position when the left mouse button is clicked.
- */
 void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text != NULL )
@@ -298,6 +293,7 @@ static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // Redraw text
     Text->Draw( aPanel, aDC, GR_XOR, MoveVector );
 }
+
 
 void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
 {
