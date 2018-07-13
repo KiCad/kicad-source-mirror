@@ -42,8 +42,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
-
-#include "poly2tri/poly2tri.h"
+#include <geometry/polygon_triangulation.h>
 
 using namespace ClipperLib;
 
@@ -1862,164 +1861,6 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     return *this;
 }
 
-
-class SHAPE_POLY_SET::TRIANGULATION_CONTEXT
-{
-public:
-
-    TRIANGULATION_CONTEXT( TRIANGULATED_POLYGON* aResultPoly ) :
-    m_triPoly( aResultPoly )
-    {
-    }
-
-    void AddOutline( const SHAPE_LINE_CHAIN& outl, bool aIsHole = false )
-    {
-        m_points.reserve( outl.PointCount() );
-        m_points.clear();
-
-        for( int i = 0; i < outl.PointCount(); i++ )
-        {
-            m_points.push_back( addPoint( outl.CPoint( i ) ) );
-        }
-
-        if ( aIsHole )
-            m_cdt->AddHole( m_points );
-        else
-            m_cdt.reset( new p2t::CDT( m_points ) );
-    }
-
-    void Triangulate()
-    {
-        m_cdt->Triangulate();
-
-        m_triPoly->AllocateTriangles( m_cdt->GetTriangles().size() );
-
-        int i = 0;
-
-        for( auto tri : m_cdt->GetTriangles() )
-        {
-            TRIANGULATED_POLYGON::TRI t;
-
-            t.a = tri->GetPoint( 0 )->id;
-            t.b = tri->GetPoint( 1 )->id;
-            t.c = tri->GetPoint( 2 )->id;
-
-            m_triPoly->SetTriangle(i, t);
-            i++;
-        }
-
-        for( auto p : m_uniquePoints )
-            delete p;
-    }
-
-private:
-
-    class comparePoints
-    {
-    public:
-        bool operator()( p2t::Point* a, p2t::Point* b ) const
-        {
-        if (a->x < b->x)
-            return true;
-
-        if( a->x == b->x )
-            return ( a->y > b->y );
-
-        return false;
-        }
-    };
-
-
-    p2t::Point* addPoint( const VECTOR2I& aP )
-    {
-        p2t::Point check( aP.x, aP.y );
-        auto it = m_uniquePoints.find( &check );
-
-        if( it != m_uniquePoints.end() )
-        {
-            return *it;
-        }
-        else
-        {
-            auto lastId = m_triPoly->GetVertexCount();
-            auto p = new p2t::Point( aP.x, aP.y, lastId );
-            m_triPoly->AddVertex( aP );
-            m_uniquePoints.insert ( p );
-            return p;
-        }
-    }
-
-    typedef std::set<p2t::Point*, comparePoints>  P2T_SET;
-    typedef std::vector<p2t::Point*>    P2T_VEC;
-
-    P2T_VEC m_points;
-    P2T_SET m_uniquePoints;
-    TRIANGULATED_POLYGON *m_triPoly;
-    std::unique_ptr<p2t::CDT> m_cdt;
-};
-
-SHAPE_POLY_SET::TRIANGULATED_POLYGON::~TRIANGULATED_POLYGON()
-{
-    Clear();
-}
-
-
-void SHAPE_POLY_SET::TRIANGULATED_POLYGON::Clear()
-{
-    if( m_vertices )
-        delete[] m_vertices;
-
-    if( m_triangles )
-        delete[] m_triangles;
-}
-
-
-void SHAPE_POLY_SET::TRIANGULATED_POLYGON::AllocateVertices( int aSize )
-{
-    m_vertices = new VECTOR2I[aSize];
-}
-
-
-void SHAPE_POLY_SET::TRIANGULATED_POLYGON::AllocateTriangles( int aSize )
-{
-    m_triangles = new TRI[aSize];
-    m_triangleCount = aSize;
-}
-
-
-static int totalVertexCount( const SHAPE_POLY_SET::POLYGON& aPoly )
-{
-    int cnt = 0;
-
-    for( const auto& outl : aPoly )
-    {
-        cnt += outl.PointCount();
-    }
-
-    return cnt;
-}
-
-
-void SHAPE_POLY_SET::triangulateSingle( const POLYGON& aPoly,
-        SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult )
-{
-    if( aPoly.size() == 0 )
-        return;
-
-    TRIANGULATION_CONTEXT ctx ( &aResult );
-
-    aResult.AllocateVertices( totalVertexCount( aPoly ) );
-    ctx.AddOutline( aPoly[0], false );
-
-    for( unsigned i = 1; i < aPoly.size(); i++ )
-    {
-        ctx.AddOutline( aPoly[i], true ); // add holes
-    }
-
-    ctx.Triangulate();
-}
-
-
 MD5_HASH SHAPE_POLY_SET::GetHash() const
 {
     if( !m_hash.IsValid() )
@@ -2067,22 +1908,17 @@ void SHAPE_POLY_SET::CacheTriangulation()
 
     SHAPE_POLY_SET tmpSet = *this;
 
-    if( !tmpSet.HasHoles() )
-        tmpSet.Unfracture( PM_FAST );
+    if( tmpSet.HasHoles() )
+        tmpSet.Fracture( PM_FAST );
 
     m_triangulatedPolys.clear();
-
-    if( tmpSet.HasTouchingHoles() )
-    {
-        // temporary workaround for overlapping hole vertices that poly2tri doesn't handle
-        m_triangulationValid = false;
-        return;
-    }
 
     for( int i = 0; i < tmpSet.OutlineCount(); i++ )
     {
         m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
-        triangulateSingle( tmpSet.Polygon( i ), *m_triangulatedPolys.back() );
+        PolygonTriangulation tess( *m_triangulatedPolys.back() );
+
+        tess.TesselatePolygon( tmpSet.Polygon( i ).front() );
     }
 
     m_triangulationValid = true;
