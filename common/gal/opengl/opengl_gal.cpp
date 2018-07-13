@@ -907,10 +907,10 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
         {
             auto triPoly = aPolySet.TriangulatedPolygon( j );
 
-            for( int i = 0; i < triPoly->GetTriangleCount(); i++ )
+            for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
             {
                 VECTOR2I a, b, c;
-                triPoly->GetTriangle( i ,a,b,c);
+                triPoly->GetTriangle( i, a, b, c );
                 currentManager->Vertex( a.x, a.y, layerDepth );
                 currentManager->Vertex( b.x, b.y, layerDepth );
                 currentManager->Vertex( c.x, c.y, layerDepth );

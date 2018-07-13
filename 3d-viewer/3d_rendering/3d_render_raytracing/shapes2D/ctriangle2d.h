@@ -68,7 +68,7 @@ public:
 };
 
 
-void Convert_shape_line_polygon_to_triangles(  const SHAPE_POLY_SET &aPolyList,
+void Convert_shape_line_polygon_to_triangles(  SHAPE_POLY_SET &aPolyList,
                                                CGENERICCONTAINER2D &aDstContainer,
                                                float aBiuTo3DunitsScale,
                                                const BOARD_ITEM &aBoardItem );
