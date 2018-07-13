@@ -500,10 +500,6 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
         if( aClearanceValue.x )
             polyList.Inflate( aClearanceValue.x, 32 );
 
-        // This convert the poly in outline and holes
-        polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-        polyList.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
         // Add the PAD polygon
         Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits, *aPad );
 
@@ -823,11 +819,6 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
 
         aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue,
                                                         segcountforcircle, correctionFactor );
-        // This convert the poly in outline and holes
-        // Note: This two sequencial calls are need in order to get
-        // the triangulation function to work properly.
-        polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-        polyList.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
         if( polyList.IsEmpty() ) // Just for caution
             break;
@@ -857,15 +848,6 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
     SHAPE_POLY_SET polyList = SHAPE_POLY_SET(aZoneContainer->GetFilledPolysList());
 
     // This convert the poly in outline and holes
-
-    // Note: This two sequencial calls are need in order to get
-    // the triangulation function to work properly.
-    polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-    polyList.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-    if( polyList.IsEmpty() )
-        return;
-
     Convert_shape_line_polygon_to_triangles( polyList,
                                              *aDstContainer,
                                              m_biuTo3Dunits,

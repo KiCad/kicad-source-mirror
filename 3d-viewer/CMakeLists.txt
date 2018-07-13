@@ -40,11 +40,6 @@ set(3D-VIEWER_SRCS
     ${DIR_DLG}/dlg_select_3dmodel.cpp
     ${DIR_DLG}/panel_prev_3d_base.cpp
     ${DIR_DLG}/panel_prev_model.cpp
-    ../polygon/poly2tri/common/shapes.cc
-    ../polygon/poly2tri/sweep/advancing_front.cc
-    ../polygon/poly2tri/sweep/cdt.cc
-    ../polygon/poly2tri/sweep/sweep.cc
-    ../polygon/poly2tri/sweep/sweep_context.cc
     3d_canvas/cinfo3d_visu.cpp
     3d_canvas/create_layer_items.cpp
     3d_canvas/create_3Dgraphic_brd_items.cpp
@@ -79,7 +74,6 @@ set(3D-VIEWER_SRCS
     ${DIR_RAY_2D}/cring2d.cpp
     ${DIR_RAY_2D}/croundsegment2d.cpp
     ${DIR_RAY_2D}/ctriangle2d.cpp
-    ${DIR_RAY_2D}/edgeshrink.cpp
     ${DIR_RAY_3D}/cbbox.cpp
     ${DIR_RAY_3D}/cbbox_ray.cpp
     ${DIR_RAY_3D}/ccylinder.cpp

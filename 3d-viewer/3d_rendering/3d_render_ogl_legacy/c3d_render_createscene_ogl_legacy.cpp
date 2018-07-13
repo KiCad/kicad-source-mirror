@@ -369,7 +369,8 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
 
     CCONTAINER2D boardContainer;
-    Convert_shape_line_polygon_to_triangles( m_settings.GetBoardPoly(),
+    SHAPE_POLY_SET tmpBoard = m_settings.GetBoardPoly();
+    Convert_shape_line_polygon_to_triangles( tmpBoard,
                                              boardContainer,
                                              m_settings.BiuTo3Dunits(),
                                              (const BOARD_ITEM &)*m_settings.GetBoard() );

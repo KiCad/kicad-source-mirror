@@ -35,9 +35,9 @@
 
 #include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
                             // alse needed on OSX to define __DARWIN__
-
+#include <geometry/polygon_triangulation.h>
 #include "../../../3d_fastmath.h"
-#include <poly2tri/poly2tri.h>
+
 
 
 CTRIANGLE2D::CTRIANGLE2D ( const SFVEC2F &aV1,
@@ -126,172 +126,28 @@ bool CTRIANGLE2D::IsPointInside( const SFVEC2F &aPoint ) const
     const float c = 1.0f - a - b;
 
     return 0.0f <= c && c <= 1.0f;
-/*
-    return 0.0f <= a && a <= 1.0f &&
-           0.0f <= b && b <= 1.0f &&
-           0.0f <= c && c <= 1.0f;*/
 }
 
 
-template <class C> void FreeClear( C & cntr )
-{
-    for( typename C::iterator it = cntr.begin();
-         it != cntr.end();
-         ++it )
-    {
-        delete * it;
-    }
-
-    cntr.clear();
-}
-
-// Note: Please check edgeshrink.cpp in order to learn the EdgeShrink propose
-
-#define APPLY_EDGE_SHRINK
-
-#ifdef APPLY_EDGE_SHRINK
-extern void EdgeShrink( std::vector<SFVEC2I64> &aPath );
-
-#define POLY_SCALE_FACT 256
-#define POLY_SCALE_FACT_INVERSE (1.0 / (double)(POLY_SCALE_FACT))
-#endif
-
-void Convert_shape_line_polygon_to_triangles( const SHAPE_POLY_SET &aPolyList,
+void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
                                               CGENERICCONTAINER2D &aDstContainer,
                                               float aBiuTo3DunitsScale ,
                                               const BOARD_ITEM &aBoardItem )
 {
-    unsigned int nOutlines = aPolyList.OutlineCount();
 
+    aPolyList.CacheTriangulation();
+    const double conver_d = (double)aBiuTo3DunitsScale;
 
-    for( unsigned int idx = 0; idx < nOutlines; ++idx )
+    for( unsigned int i = 0; i < aPolyList.TriangulatedPolyCount(); i++ )
     {
-        const SHAPE_LINE_CHAIN &outlinePath = aPolyList.COutline( idx );
+        auto triPoly = aPolyList.TriangulatedPolygon( i );
 
-        wxASSERT( outlinePath.PointCount() >= 3 );
-
-        std::vector<SFVEC2I64> scaledOutline;
-        scaledOutline.resize( outlinePath.PointCount() );
-
-        // printf("\nidx: %u\n", idx);
-
-        // Apply a scale to the points
-        for( unsigned int i = 0;
-             i < (unsigned int)outlinePath.PointCount();
-             ++i )
+        for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
         {
-            const VECTOR2I& a = outlinePath.CPoint( i );
-
-#ifdef APPLY_EDGE_SHRINK
-            scaledOutline[i] = SFVEC2I64( (glm::int64)a.x * POLY_SCALE_FACT,
-                                          (glm::int64)a.y * POLY_SCALE_FACT );
-#else
-            scaledOutline[i] = SFVEC2I64( (glm::int64)a.x,
-                                          (glm::int64)a.y );
-#endif
-        }
-
-#ifdef APPLY_EDGE_SHRINK
-        // Apply a modification to the points
-        EdgeShrink( scaledOutline );
-#endif
-        // Copy to a array of pointers
-        std::vector<p2t::Point*> polyline;
-        polyline.resize( outlinePath.PointCount() );
-
-        for( unsigned int i = 0;
-             i < (unsigned int)scaledOutline.size();
-             ++i )
-        {
-            const SFVEC2I64 &a = scaledOutline[i];
-
-            //printf("%lu %lu\n", a.x, a.y);
-
-            polyline[i] = new p2t::Point( (double)a.x,
-                                          (double)a.y );
-        }
-
-        // Start creating the structured to be triangulated
-        p2t::CDT* cdt = new p2t::CDT( polyline );
-
-        // Add holes for this outline
-        unsigned int nHoles = aPolyList.HoleCount( idx );
-
-        std::vector< std::vector<p2t::Point*> > polylineHoles;
-
-        polylineHoles.resize( nHoles );
-
-        for( unsigned int idxHole = 0; idxHole < nHoles; ++idxHole )
-        {
-            const SHAPE_LINE_CHAIN &outlineHoles = aPolyList.CHole( idx,
-                                                                    idxHole );
-
-            wxASSERT( outlineHoles.PointCount() >= 3 );
-
-            std::vector<SFVEC2I64> scaledHole;
-            scaledHole.resize( outlineHoles.PointCount() );
-
-            // Apply a scale to the points
-            for( unsigned int i = 0;
-                 i < (unsigned int)outlineHoles.PointCount();
-                 ++i )
-            {
-                const VECTOR2I &h = outlineHoles.CPoint( i );
-#ifdef APPLY_EDGE_SHRINK
-                scaledHole[i] = SFVEC2I64( (glm::int64)h.x * POLY_SCALE_FACT,
-                                           (glm::int64)h.y * POLY_SCALE_FACT );
-#else
-                scaledHole[i] = SFVEC2I64( (glm::int64)h.x,
-                                           (glm::int64)h.y );
-#endif
-            }
-
-#ifdef APPLY_EDGE_SHRINK
-            // Apply a modification to the points
-            EdgeShrink( scaledHole );
-#endif
-
-            // Resize and reserve space
-            polylineHoles[idxHole].resize( outlineHoles.PointCount() );
-
-            for( unsigned int i = 0;
-                 i < (unsigned int)outlineHoles.PointCount();
-                 ++i )
-            {
-                const SFVEC2I64 &h = scaledHole[i];
-
-                polylineHoles[idxHole][i] = new p2t::Point( h.x, h.y );
-            }
-
-            cdt->AddHole( polylineHoles[idxHole] );
-        }
-
-        // Triangulate
-        cdt->Triangulate();
-
-        // Hint: if you find any crashes on the triangulation poly2tri library,
-        // you can use the following site to debug the points and it will mark
-        // the errors in the polygon:
-        // http://r3mi.github.io/poly2tri.js/
-
-
-        // Get and add triangles
-        std::vector<p2t::Triangle*> triangles;
-        triangles = cdt->GetTriangles();
-
-#ifdef APPLY_EDGE_SHRINK
-        const double conver_d = (double)aBiuTo3DunitsScale *
-                                POLY_SCALE_FACT_INVERSE;
-#else
-        const double conver_d = (double)aBiuTo3DunitsScale;
-#endif
-        for( unsigned int i = 0; i < triangles.size(); ++i )
-        {
-            p2t::Triangle& t = *triangles[i];
-
-            p2t::Point& a = *t.GetPoint( 0 );
-            p2t::Point& b = *t.GetPoint( 1 );
-            p2t::Point& c = *t.GetPoint( 2 );
+            VECTOR2I a;
+            VECTOR2I b;
+            VECTOR2I c;
+            triPoly->GetTriangle( i, a, b, c );
 
             aDstContainer.Add( new CTRIANGLE2D( SFVEC2F( a.x * conver_d,
                                                         -a.y * conver_d ),
@@ -302,15 +158,5 @@ void Convert_shape_line_polygon_to_triangles( const SHAPE_POLY_SET &aPolyList,
                                                 aBoardItem ) );
         }
 
-        // Delete created data
-        delete cdt;
-
-        // Free points
-        FreeClear(polyline);
-
-        for( unsigned int idxHole = 0; idxHole < nHoles; ++idxHole )
-        {
-            FreeClear( polylineHoles[idxHole] );
-        }
     }
 }
