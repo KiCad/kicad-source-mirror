@@ -131,7 +131,7 @@ bool PGM_KICAD::OnPgmInit()
     ReadHotkeyConfig( KICAD_MANAGER_FRAME_NAME, kicad_Manager_Hokeys_Descr );
 
     KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
-                                     wxDefaultPosition, wxDefaultSize );
+                                                          wxDefaultPosition, wxSize( 775, -1 ) );
     App().SetTopWindow( frame );
 
     Kiway.SetTop( frame );
