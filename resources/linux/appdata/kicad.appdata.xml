@@ -7,6 +7,7 @@
   <project_license>GPL-2.0+</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <summary>EDA Suite</summary>
+  <summary xml:lang="de">EDA Lösung</summary>
 
   <keywords>
     <keyword>KiCad</keyword>
@@ -18,8 +19,16 @@
   </keywords>
 
   <description>
-    <p>A Cross Platform and Open Source Electronics Design Automation Suite.</p>
-    <p>The programs handle Schematic Capture, and PCB Layout with Gerber output.</p>
+    <p>
+      A Cross Platform and Open Source Electronics Design Automation Suite.
+      The programs handle Schematic Capture, and PCB Layout with Gerber output.
+    </p>
+    <p xml:lang="de">
+      KiCad ist eine Plattform übergreifende freie Software Lösung für
+      Elektronische Design-Automation (EDA). KiCad enthält Programme zum
+      Entwickeln und Bearbeiten von elektronischen Schaltplänen und Leiterplatten
+      als auch zum Export von Leiterplatten, z.B. per Gerber Format.
+    </p>
   </description>
 
   <screenshots>
