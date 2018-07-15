@@ -161,7 +161,7 @@ public:
     wxString GetColLabelValue( int aCol ) override
     {
         if( aCol == QUANTITY_COLUMN )
-            return _T( "Qty" );
+            return _( "Qty" );
         else
             return m_fieldNames[ aCol ];
     }
