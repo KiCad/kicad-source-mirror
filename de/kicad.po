@@ -14883,7 +14883,7 @@ msgstr "Spez. Widerstand:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:305
 msgid "Ohm-meter"
-msgstr "Ohm pro Meter"
+msgstr "Ohm x Meter"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:328
 msgid "External layer traces:"
