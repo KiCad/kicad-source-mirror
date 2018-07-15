@@ -56,7 +56,7 @@ enum
 
 PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aParent,
                                                               PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParent )
+        PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParent->GetTreebook() )
 {
     m_Parent = aParent;
     m_Frame = aFrame;

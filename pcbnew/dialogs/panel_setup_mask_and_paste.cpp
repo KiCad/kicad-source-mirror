@@ -34,7 +34,7 @@
 
 PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
                                                         PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_MASK_AND_PASTE_BASE( aParent ),
+        PANEL_SETUP_MASK_AND_PASTE_BASE( aParent->GetTreebook() ),
         m_maskMargin( aFrame, m_MaskMarginLabel, m_MaskMarginCtrl, m_MaskMarginUnits, true ),
         m_maskMinWidth( aFrame, m_MaskMinWidthLabel, m_MaskMinWidthCtrl, m_MaskMinWidthUnits, true ),
         m_pasteMargin( aFrame, m_PasteMarginLabel, m_PasteMarginCtrl, m_PasteMarginUnits, true )

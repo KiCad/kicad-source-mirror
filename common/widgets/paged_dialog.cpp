@@ -129,18 +129,6 @@ PAGED_DIALOG::~PAGED_DIALOG()
 }
 
 
-void PAGED_DIALOG::AddPage( wxPanel* aPage, const wxString& aTitle )
-{
-    m_treebook->AddPage( aPage, aTitle );
-}
-
-
-void PAGED_DIALOG::AddSubPage( wxPanel* aPage, const wxString& aTitle )
-{
-    m_treebook->AddSubPage( aPage, aTitle );
-}
-
-
 bool PAGED_DIALOG::TransferDataToWindow()
 {
     finishInitialization();

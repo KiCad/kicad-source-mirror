@@ -63,8 +63,10 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 {
-    aParent->AddPage( new PANEL_GERBVIEW_SETTINGS( this, aParent ), _( "Gerbview" ) );
-    aParent->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Gerbview" ) );
+    book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
 }
 
 

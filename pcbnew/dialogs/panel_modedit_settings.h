@@ -23,6 +23,7 @@
 #include <panel_modedit_settings_base.h>
 
 class FOOTPRINT_EDIT_FRAME;
+class PAGED_DIALOG;
 
 
 class PANEL_MODEDIT_SETTINGS : public PANEL_MODEDIT_SETTINGS_BASE
@@ -30,7 +31,7 @@ class PANEL_MODEDIT_SETTINGS : public PANEL_MODEDIT_SETTINGS_BASE
     FOOTPRINT_EDIT_FRAME*   m_frame;
 
 public:
-    PANEL_MODEDIT_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_MODEDIT_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
 
 private:
     bool TransferDataToWindow() override;

@@ -135,7 +135,7 @@ static const LSET presets[] =
 
 
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_LAYERS_BASE( aParent ),
+        PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
         m_Parent( aParent ),
         m_pcbThickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true,
                         Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ) )

@@ -25,15 +25,15 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
-#include <base_units.h>
+#include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>
 
 #include <panel_modedit_settings.h>
 
 
 PANEL_MODEDIT_SETTINGS::PANEL_MODEDIT_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                wxWindow* aWindow) :
-        PANEL_MODEDIT_SETTINGS_BASE( aWindow ),
+                                                PAGED_DIALOG* aParent) :
+        PANEL_MODEDIT_SETTINGS_BASE( aParent->GetTreebook() ),
         m_frame( aFrame )
 {}
 

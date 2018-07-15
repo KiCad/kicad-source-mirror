@@ -29,6 +29,7 @@
 #include <class_draw_panel_gal.h>
 #include <pcb_view.h>
 #include <pcb_painter.h>
+#include <widgets/paged_dialog.h>
 
 #include <widgets/gal_options_panel.h>
 
@@ -44,8 +45,8 @@ static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> 
 
 
 PANEL_PCBNEW_DISPLAY_OPTIONS::PANEL_PCBNEW_DISPLAY_OPTIONS( PCB_EDIT_FRAME* aFrame,
-                                                            wxWindow* aWindow ) :
-    PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( aWindow ),
+                                                            PAGED_DIALOG* aParent ) :
+    PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( aParent->GetTreebook() ),
     m_frame( aFrame )
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();

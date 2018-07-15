@@ -22,8 +22,7 @@
 #define PAGED_DIALOG_H
 
 #include <dialog_shim.h>
-
-class wxTreebook;
+#include <wx/treebook.h>
 
 
 class PAGED_DIALOG : public DIALOG_SHIM
@@ -41,8 +40,7 @@ public:
                   const wxString& aAuxiliaryAction = wxEmptyString );
     ~PAGED_DIALOG() override;
 
-    void AddPage( wxPanel* aPage, const wxString& aTitle );
-    void AddSubPage( wxPanel* aPage, const wxString& aTitle );
+    wxTreebook* GetTreebook() { return m_treebook; }
 
     void SetError( const wxString& aMessage, wxWindow* aPage, wxObject* aCtrl,
                    int aRow = -1, int aCol = -1 );

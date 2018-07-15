@@ -540,11 +540,10 @@ bool EDA_BASE_FRAME::ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CO
                                       const wxString& aHotkeysNickname )
 {
     PAGED_DIALOG dlg( this, _( "Preferences" ) );
+    wxTreebook* book = dlg.GetTreebook();
 
-    dlg.AddPage( new PANEL_COMMON_SETTINGS( &dlg ),
-                 _( "Common" ) );
-    dlg.AddPage( new PANEL_HOTKEYS_EDITOR( this, &dlg, aHotkeys, aShowHotkeys, aHotkeysNickname ),
-                 _( "Hotkeys" ) );
+    book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
+    book->AddPage( new PANEL_HOTKEYS_EDITOR( this, book, aHotkeys, aShowHotkeys, aHotkeysNickname ), _( "Hotkeys" ) );
 
     for( unsigned i = 0; i < KIWAY_PLAYER_COUNT;  ++i )
     {

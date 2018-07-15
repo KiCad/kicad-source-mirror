@@ -25,8 +25,7 @@ class GAL_OPTIONS_PANEL;
 class PANEL_PCBNEW_DISPLAY_OPTIONS : public PANEL_PCBNEW_DISPLAY_OPTIONS_BASE
 {
 public:
-   PANEL_PCBNEW_DISPLAY_OPTIONS( PCB_EDIT_FRAME* aFrame, wxWindow* aWindow );
-   ~PANEL_PCBNEW_DISPLAY_OPTIONS() {};
+   PANEL_PCBNEW_DISPLAY_OPTIONS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
 
    bool TransferDataFromWindow() override;
    bool TransferDataToWindow() override;

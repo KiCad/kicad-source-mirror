@@ -27,15 +27,16 @@
 
 #include "panel_pcbnew_settings_base.h"
 
+class PAGED_DIALOG;
+
+
 class PANEL_PCBNEW_SETTINGS : public PANEL_PCBNEW_SETTINGS_BASE
 {
 private:
     PCB_EDIT_FRAME* m_Frame;
-    BOARD*          m_Board;
 
 public:
-    PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, wxWindow* aWindow );
-    ~PANEL_PCBNEW_SETTINGS() {};
+    PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
 
 protected:
     bool TransferDataToWindow() override;

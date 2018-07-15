@@ -29,20 +29,15 @@
 #include "panel_common_settings.h"
 
 
-PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aParent ) :
+PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent ) :
         PANEL_COMMON_SETTINGS_BASE( aParent ),
-    m_parent( aParent ),
-    m_last_scale( -1 )
+        m_dialog( aDialog ),
+        m_last_scale( -1 )
 {
     m_scaleSlider->SetStep( 25 );
 
     m_textEditorBtn->SetBitmap( KiBitmap( folder_xpm ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( folder_xpm ) );
-}
-
-
-PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
-{
 }
 
 
@@ -113,7 +108,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     Pgm().ForceSystemPdfBrowser( m_defaultPDFViewer->GetValue() );
     Pgm().WritePdfBrowserInfos();
 
-    m_parent->Kiway().CommonSettingsChanged();
+    m_dialog->Kiway().CommonSettingsChanged();
 
     return true;
 }
@@ -166,9 +161,8 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
     Pgm().ReadPdfBrowserInfos();
     wxFileName fn = Pgm().GetPdfBrowserName();
 
-    wxFileDialog dlg( this, _( "Select Preferred PDF Browser" ), fn.GetPath(),
-                      fn.GetFullPath(), wildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( this, _( "Select Preferred PDF Browser" ), fn.GetPath(), fn.GetFullPath(),
+                      wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

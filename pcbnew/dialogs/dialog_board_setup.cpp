@@ -41,12 +41,12 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
 
-    AddPage( m_layers,  _( "Layers" ) );
-    AddSubPage( m_textAndGraphics,  _( "Text & Graphics" ) );
+    m_treebook->AddPage( m_layers,  _( "Layers" ) );
+    m_treebook->AddSubPage( m_textAndGraphics,  _( "Text & Graphics" ) );
 
-    AddPage( m_constraints,  _( "Design Rules" ) );
-    AddSubPage( m_netclasses,  _( "Net Classes" ) );
-    AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
+    m_treebook->AddPage( m_constraints,  _( "Design Rules" ) );
+    m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
+    m_treebook->AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
 
 }
 

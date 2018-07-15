@@ -199,10 +199,12 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 {
-    aParent->AddPage( new PANEL_EESCHEMA_SETTINGS( this, aParent ), _( "Eeschema" ) );
-    aParent->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    aParent->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, aParent ), _( "Colors" ) );
-    aParent->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, aParent ), _( "Field Name Templates" ) );
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Eeschema" ) );
+    book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, book ), _( "Colors" ) );
+    book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ), _( "Field Name Templates" ) );
 }
 
 
@@ -610,7 +612,9 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 {
-    aParent->AddPage( new PANEL_LIBEDIT_SETTINGS( this, aParent ), _( "Symbol Editor" ) );
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Symbol Editor" ) );
 }
 
 

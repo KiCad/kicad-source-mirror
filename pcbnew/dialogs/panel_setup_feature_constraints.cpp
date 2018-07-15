@@ -31,7 +31,7 @@
 
 PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent,
                                                                   PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( aParent ),
+        PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( aParent->GetTreebook() ),
         m_trackMinWidth( aFrame, m_TrackMinWidthTitle, m_TrackMinWidthCtrl, m_TrackMinWidthUnits, true, 0 ),
         m_viaMinSize( aFrame, m_ViaMinTitle, m_SetViasMinSizeCtrl, m_ViaMinUnits, true, 0 ),
         m_viaMinDrill( aFrame, m_ViaMinDrillTitle, m_SetViasMinDrillCtrl, m_ViaMinDrillUnits, true, 0 ),

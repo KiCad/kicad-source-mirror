@@ -148,8 +148,10 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 {
-    aParent->AddPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Pcbnew" ) );
-    aParent->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Pcbnew" ) );
+    book->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
 }
 
 

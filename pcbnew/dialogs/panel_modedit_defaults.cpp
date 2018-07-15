@@ -53,7 +53,7 @@ enum
 
 
 PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent) :
-        PANEL_MODEDIT_DEFAULTS_BASE( aParent ),
+        PANEL_MODEDIT_DEFAULTS_BASE( aParent->GetTreebook() ),
         m_brdSettings( aFrame->GetDesignSettings() ),
         m_frame( aFrame ),
         m_Parent( aParent )

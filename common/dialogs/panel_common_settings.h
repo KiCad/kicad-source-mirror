@@ -33,8 +33,7 @@ class DIALOG_SHIM;
 class PANEL_COMMON_SETTINGS : public PANEL_COMMON_SETTINGS_BASE
 {
 public:
-    PANEL_COMMON_SETTINGS( DIALOG_SHIM* aParent );
-    ~PANEL_COMMON_SETTINGS() override;
+    PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent );
 
 protected:
     bool TransferDataFromWindow() override;
@@ -45,7 +44,7 @@ protected:
     void OnTextEditorClick( wxCommandEvent& event ) override;
     void OnPDFViewerClick( wxCommandEvent& event ) override;
 
-    DIALOG_SHIM*  m_parent;
+    DIALOG_SHIM*  m_dialog;
 
     int           m_last_scale;               ///< saved icon scale when Auto selected
 };

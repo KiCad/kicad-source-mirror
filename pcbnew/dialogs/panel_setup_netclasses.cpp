@@ -53,7 +53,7 @@ enum {
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
                                                 PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel ) :
-    PANEL_SETUP_NETCLASSES_BASE( aParent )
+    PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() )
 {
     m_Parent = aParent;
     m_Frame = aFrame;

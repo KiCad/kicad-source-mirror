@@ -29,19 +29,18 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <panel_pcbnew_settings.h>
-#include <widgets/stepped_slider.h>
+#include <widgets/paged_dialog.h>
 #include <pcb_view.h>
 #include <pcb_painter.h>
 
-PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
-        PANEL_PCBNEW_SETTINGS_BASE( aWindow ),
+PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
+        PANEL_PCBNEW_SETTINGS_BASE( aParent->GetTreebook() ),
         m_Frame( aFrame )
 {}
 
 
 bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 {
-    m_Board = m_Frame->GetBoard();
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Frame->GetDisplayOptions();
 
     /* Set display options */

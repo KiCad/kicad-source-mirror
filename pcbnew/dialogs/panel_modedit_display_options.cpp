@@ -17,17 +17,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <panel_modedit_display_options.h>
-
 #include <class_drawpanel.h>
 #include <footprint_edit_frame.h>
 #include <view/view.h>
 #include <widgets/gal_options_panel.h>
+#include <widgets/paged_dialog.h>
+
+#include <panel_modedit_display_options.h>
 
 
 PANEL_MODEDIT_DISPLAY_OPTIONS::PANEL_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                              wxWindow* aWindow ) :
-    wxPanel( aWindow, wxID_ANY ),
+                                                              PAGED_DIALOG* aParent ) :
+    wxPanel( aParent->GetTreebook(), wxID_ANY ),
     m_frame( aFrame )
 {
     auto mainSizer = new wxBoxSizer( wxHORIZONTAL );
