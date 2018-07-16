@@ -80,7 +80,7 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	bMiddleLeftSizer->Add( bOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND, 5 );
+	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxRIGHT, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -132,10 +132,10 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	bRightSizer->Add( bLegacyOptionsSizer, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	
-	bMargins->Add( bRightSizer, 1, wxEXPAND|wxLEFT, 5 );
+	bMargins->Add( bRightSizer, 1, wxEXPAND|wxRIGHT, 5 );
 	
 	
-	bPanelSizer->Add( bMargins, 1, wxTOP|wxLEFT, 10 );
+	bPanelSizer->Add( bMargins, 1, wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bPanelSizer );

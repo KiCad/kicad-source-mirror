@@ -62,13 +62,13 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	sbClearance->Add( m_OptDisplayPadClearence, 0, wxALL, 10 );
 	
 	
-	bRightSizer->Add( sbClearance, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bRightSizer->Add( sbClearance, 1, wxEXPAND|wxTOP, 5 );
 	
 	
-	bupperSizer->Add( bRightSizer, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bupperSizer->Add( bRightSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bMainSizer->Add( bupperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

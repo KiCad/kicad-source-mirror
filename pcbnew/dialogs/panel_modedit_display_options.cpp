@@ -38,11 +38,11 @@ PANEL_MODEDIT_DISPLAY_OPTIONS::PANEL_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRA
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
 
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
-    mainSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxTOP | wxLEFT, 10 );
+    mainSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxLEFT, 5 );
 
     // a spacer to take up the other half of the width
     auto spacer = new wxPanel( this, wxID_ANY );
-    mainSizer->Add( spacer, 1, wxEXPAND | wxLEFT | wxTOP, 5 );
+    mainSizer->Add( spacer, 1, wxEXPAND | wxLEFT, 5 );
 }
 
 

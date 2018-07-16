@@ -80,7 +80,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     {
         wxStaticBoxSizer* sOpenGLRenderingSizer;
         sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Accelerated Graphics:" ) ), wxVERTICAL );
+                wxID_ANY, _( "Accelerated Graphics" ) ), wxVERTICAL );
 
         wxString m_choiceAntialiasingChoices[] = {
             _( "No Antialiasing" ),
@@ -95,7 +95,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
                 m_choiceAntialiasingNChoices, m_choiceAntialiasingChoices, 0 );
         sOpenGLRenderingSizer->Add( m_choiceAntialiasing, 0, wxALL|wxEXPAND, 5 );
 
-        sLeftSizer->Add( sOpenGLRenderingSizer, 0, wxALL|wxEXPAND, 5 );
+        sLeftSizer->Add( sOpenGLRenderingSizer, 0, wxTOP|wxRIGHT|wxEXPAND, 5 );
     }
 
     /*
@@ -113,7 +113,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         };
         int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
         m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(),
-                wxID_ANY, _( "Grid style:" ),
+                wxID_ANY, _( "Grid Style" ),
                 wxDefaultPosition, wxDefaultSize,
                 m_gridStyleNChoices, m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
         sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
@@ -160,7 +160,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         sGridSettings->Add( sGridSettingsGrid, 1, wxALL|wxEXPAND, 5 );
 
-        sLeftSizer->Add( sGridSettings, 0, wxALL | wxEXPAND, 5 );
+        sLeftSizer->Add( sGridSettings, 0, wxTOP | wxBOTTOM | wxRIGHT | wxEXPAND, 5 );
 
         // bind the spin buttons and text boxes
         m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
@@ -190,19 +190,18 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         auto sCursorSettings = new wxStaticBoxSizer( new wxStaticBox( this,
                 wxID_ANY, cursorDisplayTitle ), wxVERTICAL );
 
-        sLeftSizer->Add( sCursorSettings, 1, wxALL | wxEXPAND, 5 );
+        sLeftSizer->Add( sCursorSettings, 1, wxTOP | wxRIGHT | wxEXPAND, 5 );
 
         wxString m_CursorShapeChoices[] = {
             _( "Small crosshair" ),
             _( "Full window crosshair" )
         };
 
-        wxString cursorShapeTitle = _( "Cursor shape:" );
-
         int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
         m_cursorShape = new wxRadioBox( this, wxID_ANY,
-                 cursorShapeTitle, wxDefaultPosition, wxDefaultSize,
-                 m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
+                                        _( "Cursor shape:" ), wxDefaultPosition, wxDefaultSize,
+                                        m_CursorShapeNChoices, m_CursorShapeChoices, 1,
+                                        wxRA_SPECIFY_COLS );
 
         m_cursorShape->SetSelection( 0 );
         m_cursorShape->SetToolTip( _( "Cursor shape for drawing, placement and movement tools" ) );

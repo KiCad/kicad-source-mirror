@@ -323,7 +323,7 @@ PANEL_EESCHEMA_COLOR_CONFIG::PANEL_EESCHEMA_COLOR_CONFIG( EDA_DRAW_FRAME* aFrame
     SetSizer( sizer );
 
     m_colorConfig = new WIDGET_EESCHEMA_COLOR_CONFIG( this, aFrame );
-    sizer->Add( m_colorConfig, 1, wxEXPAND | wxTOP | wxLEFT, 10 );
+    sizer->Add( m_colorConfig, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
 }
 
 

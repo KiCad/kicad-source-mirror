@@ -18,7 +18,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	sbFeatureRules = new wxBoxSizer( wxVERTICAL );
 	
 	m_OptAllowBlindBuriedVias = new wxCheckBox( this, wxID_ANY, _("Allow blind/buried vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptAllowBlindBuriedVias, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	sbFeatureRules->Add( m_OptAllowBlindBuriedVias, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 5 );
 	
 	m_OptAllowMicroVias = new wxCheckBox( this, wxID_ANY, _("Allow micro vias (uVias)"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbFeatureRules->Add( m_OptAllowMicroVias, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 5 );
@@ -37,10 +37,10 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	sbFeatureRules->Add( m_OptOverlappingCourtyards, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bMainSizer->Add( sbFeatureRules, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 20 );
+	bMainSizer->Add( sbFeatureRules, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 	
 	wxBoxSizer* sbFeatureConstraints;
 	sbFeatureConstraints = new wxBoxSizer( wxVERTICAL );
@@ -149,10 +149,10 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_HoleToHoleUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 	
 	
-	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND, 5 );
+	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxTOP|wxLEFT, 20 );
+	bMainSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

@@ -84,8 +84,8 @@
                 <property name="orient">wxHORIZONTAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">15</property>
-                    <property name="flag">wxEXPAND|wxALL</property>
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -94,7 +94,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxTOP|wxBOTTOM|wxRIGHT</property>
+                            <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxFlexGridSizer" expanded="1">
                                 <property name="cols">3</property>

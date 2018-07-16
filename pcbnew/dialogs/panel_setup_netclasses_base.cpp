@@ -84,7 +84,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	sbSizerUpper->Add( buttonBoxSizer, 0, wxEXPAND|wxALL, 2 );
 	
 	
-	bpanelNetClassesSizer->Add( sbSizerUpper, 4, wxEXPAND|wxTOP|wxLEFT, 15 );
+	bpanelNetClassesSizer->Add( sbSizerUpper, 4, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerLower;
 	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
@@ -124,7 +124,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	sbSizerNetSelectMain->Add( m_membershipGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerLower->Add( sbSizerNetSelectMain, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLower->Add( sbSizerNetSelectMain, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 	
 	wxStaticBoxSizer* sbOtherValuesSizer;
 	sbOtherValuesSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Non-netclass Predefined Values") ), wxHORIZONTAL );
@@ -278,7 +278,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bSizerLower->Add( sbOtherValuesSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	
-	bpanelNetClassesSizer->Add( bSizerLower, 5, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bpanelNetClassesSizer->Add( bSizerLower, 5, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bpanelNetClassesSizer );

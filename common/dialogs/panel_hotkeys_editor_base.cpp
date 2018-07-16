@@ -19,13 +19,13 @@ PANEL_HOTKEYS_EDITOR_BASE::PANEL_HOTKEYS_EDITOR_BASE( wxWindow* parent, wxWindow
 	m_panelHotkeys = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelHotkeys->SetMinSize( wxSize( -1,350 ) );
 	
-	bMargins->Add( m_panelHotkeys, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
+	bMargins->Add( m_panelHotkeys, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 2 );
 	
 	wxBoxSizer* b_buttonsSizer;
 	b_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_resetButton = new wxButton( this, wxID_RESET, _("Reset Hotkeys"), wxDefaultPosition, wxDefaultSize, 0 );
-	b_buttonsSizer->Add( m_resetButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	b_buttonsSizer->Add( m_resetButton, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 	
 	m_defaultButton = new wxButton( this, wxID_ANY, _("Set to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	b_buttonsSizer->Add( m_defaultButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -43,7 +43,7 @@ PANEL_HOTKEYS_EDITOR_BASE::PANEL_HOTKEYS_EDITOR_BASE( wxWindow* parent, wxWindow
 	bMargins->Add( b_buttonsSizer, 0, wxALIGN_RIGHT|wxEXPAND, 5 );
 	
 	
-	m_mainSizer->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_mainSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
 	this->SetSizer( m_mainSizer );

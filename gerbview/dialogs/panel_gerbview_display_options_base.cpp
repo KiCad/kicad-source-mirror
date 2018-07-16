@@ -19,7 +19,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	m_galOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	
-	m_UpperSizer->Add( m_galOptionsSizer, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	m_UpperSizer->Add( m_galOptionsSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -32,7 +32,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	sbSizer1->Add( m_OptDisplayDCodes, 0, wxBOTTOM|wxLEFT, 5 );
 	
 	
-	bRightSizer->Add( sbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bRightSizer->Add( sbSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Drawing Mode") ), wxVERTICAL );
@@ -47,10 +47,10 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	sbSizer2->Add( m_OptDisplayPolygons, 0, wxALL, 5 );
 	
 	
-	bRightSizer->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bRightSizer->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_UpperSizer->Add( bRightSizer, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	m_UpperSizer->Add( bRightSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bDialogSizer->Add( m_UpperSizer, 1, wxEXPAND, 5 );

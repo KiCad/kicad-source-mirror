@@ -1030,7 +1030,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	leftSizer->Add( m_LayersListPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
 	
-	bMainSizer->Add( leftSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 15 );
+	bMainSizer->Add( leftSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

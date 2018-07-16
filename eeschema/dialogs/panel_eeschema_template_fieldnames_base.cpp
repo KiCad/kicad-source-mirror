@@ -47,7 +47,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bMargins->Add( m_grid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( m_grid, 1, wxEXPAND|wxTOP, 2 );
 	
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
@@ -55,18 +55,18 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	m_addFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_addFieldButton->SetMinSize( wxSize( 29,29 ) );
 	
-	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer10->Add( m_addFieldButton, 0, wxTOP, 5 );
 	
 	m_deleteFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_deleteFieldButton->SetMinSize( wxSize( 29,29 ) );
 	
-	bSizer10->Add( m_deleteFieldButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer10->Add( m_deleteFieldButton, 0, wxTOP|wxRIGHT, 5 );
 	
 	
 	bMargins->Add( bSizer10, 0, wxEXPAND, 5 );
 	
 	
-	bPanelSizer->Add( bMargins, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bPanelSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
 	this->SetSizer( bPanelSizer );

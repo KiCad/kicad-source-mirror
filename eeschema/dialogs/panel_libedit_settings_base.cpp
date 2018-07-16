@@ -174,10 +174,10 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( 0, 0, 0, 0, 5 );
 	
 	
-	bLeftColumn->Add( fgSizer, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bLeftColumn->Add( fgSizer, 0, wxALL, 5 );
 	
 	
-	p1mainSizer->Add( bLeftColumn, 1, wxEXPAND|wxALL, 15 );
+	p1mainSizer->Add( bLeftColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( p1mainSizer );

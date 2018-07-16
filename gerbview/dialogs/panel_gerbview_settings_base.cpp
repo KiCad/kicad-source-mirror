@@ -41,10 +41,10 @@ PANEL_GERBVIEW_SETTINGS_BASE::PANEL_GERBVIEW_SETTINGS_BASE( wxWindow* parent, wx
 	bLeftSizer->Add( m_ShowPageLimitsOpt, 0, wxALL, 10 );
 	
 	
-	m_UpperSizer->Add( bLeftSizer, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+	m_UpperSizer->Add( bLeftSizer, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	
-	bDialogSizer->Add( m_UpperSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bDialogSizer->Add( m_UpperSizer, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bDialogSizer );

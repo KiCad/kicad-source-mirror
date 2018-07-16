@@ -77,7 +77,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	gbSizer1->AddGrowableCol( 1 );
 	
-	bLeftSizer->Add( gbSizer1, 1, wxEXPAND|wxALL, 5 );
+	bLeftSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxVERTICAL );
@@ -142,7 +142,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( sbSizer51, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bPanelSizer->Add( bLeftSizer, 0, wxTOP|wxLEFT, 10 );
+	bPanelSizer->Add( bLeftSizer, 0, 0, 5 );
 	
 	
 	this->SetSizer( bPanelSizer );

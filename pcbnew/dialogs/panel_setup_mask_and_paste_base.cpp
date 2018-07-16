@@ -115,7 +115,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer3->Add( m_staticTextInfo2, 0, wxALL, 5 );
 	
 	
-	bMainSizer->Add( bSizer3, 1, wxTOP|wxLEFT, 15 );
+	bMainSizer->Add( bSizer3, 1, wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

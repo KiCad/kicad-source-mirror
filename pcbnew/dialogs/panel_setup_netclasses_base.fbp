@@ -84,8 +84,8 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">15</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                     <property name="proportion">4</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
@@ -439,8 +439,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">10</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                     <property name="proportion">5</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -449,7 +449,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxEXPAND|wxTOP|wxRIGHT</property>
                             <property name="proportion">1</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>

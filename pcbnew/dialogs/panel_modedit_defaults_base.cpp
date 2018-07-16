@@ -21,7 +21,7 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	
 	m_staticText13 = new wxStaticText( this, wxID_ANY, _("Default values for new footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
-	bSizerMargins->Add( m_staticText13, 0, wxTOP|wxLEFT, 10 );
+	bSizerMargins->Add( m_staticText13, 0, wxTOP|wxLEFT, 5 );
 	
 	wxFlexGridSizer* defaultValuesSizer;
 	defaultValuesSizer = new wxFlexGridSizer( 0, 4, 5, 5 );
@@ -92,7 +92,7 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	defaultSizesSizer1->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	defaultSizesSizer1->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT, 5 );
 	
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	
@@ -140,7 +140,7 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	bSizerMargins->Add( defaultSizesSizer1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMain->Add( bSizerMargins, 1, wxTOP|wxLEFT, 10 );
+	bSizerMain->Add( bSizerMargins, 1, wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

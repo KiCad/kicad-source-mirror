@@ -26,7 +26,7 @@ PANEL_MODEDIT_SETTINGS_BASE::PANEL_MODEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_PolarDisplay->SetSelection( 0 );
 	m_PolarDisplay->SetToolTip( _("Set display of relative (dx/dy) coordinates to Cartesian (rectangular) or polar (angle/distance).") );
 	
-	bSizerDisplayOptions->Add( m_PolarDisplay, 0, wxALL|wxEXPAND, 5 );
+	bSizerDisplayOptions->Add( m_PolarDisplay, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	wxString m_UnitsSelectionChoices[] = { _("Inches"), _("Millimeters") };
 	int m_UnitsSelectionNChoices = sizeof( m_UnitsSelectionChoices ) / sizeof( wxString );
@@ -34,7 +34,7 @@ PANEL_MODEDIT_SETTINGS_BASE::PANEL_MODEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_UnitsSelection->SetSelection( 0 );
 	m_UnitsSelection->SetToolTip( _("Set units used to display dimensions and positions.") );
 	
-	bSizerDisplayOptions->Add( m_UnitsSelection, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerDisplayOptions->Add( m_UnitsSelection, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	
 	bSizerColumns->Add( bSizerDisplayOptions, 0, wxEXPAND, 5 );
@@ -59,10 +59,10 @@ PANEL_MODEDIT_SETTINGS_BASE::PANEL_MODEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	sbSizerEditOptions->Add( m_dragSelects, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerColumns->Add( sbSizerEditOptions, 0, wxEXPAND|wxALL, 5 );
+	bSizerColumns->Add( sbSizerEditOptions, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
-	bSizerMain->Add( bSizerColumns, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bSizerMain->Add( bSizerColumns, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

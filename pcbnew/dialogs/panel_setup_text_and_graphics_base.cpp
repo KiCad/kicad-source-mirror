@@ -67,7 +67,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_gridSizer->Add( m_grid, 0, wxBOTTOM|wxLEFT, 20 );
 	
 	
-	mainSizer->Add( m_gridSizer, 0, wxTOP|wxLEFT, 15 );
+	mainSizer->Add( m_gridSizer, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( mainSizer );

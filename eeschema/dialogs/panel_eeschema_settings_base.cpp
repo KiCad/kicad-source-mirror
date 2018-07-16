@@ -86,7 +86,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	
-	bLeftColumn->Add( fgSizer3, 0, wxALL, 5 );
+	bLeftColumn->Add( fgSizer3, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
@@ -110,7 +110,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	bLeftColumn->Add( bSizer9, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bPanelSizer->Add( bLeftColumn, 0, wxALL|wxEXPAND, 10 );
+	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bPanelSizer );
