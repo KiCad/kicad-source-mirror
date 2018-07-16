@@ -59,7 +59,6 @@ static const wxString   cfgShowPageSizeOption( wxT( "PageSizeOpt" ) );
 static const wxString   cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
 static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) );
 static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
-static const wxString   IconScaleEntry = "GvIconScale";
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_GERBER );

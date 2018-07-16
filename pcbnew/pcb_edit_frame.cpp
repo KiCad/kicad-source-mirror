@@ -83,12 +83,9 @@ using namespace std::placeholders;
 /// \ingroup config
 
 static const wxString PlotLineWidthEntry =      "PlotLineWidth_mm";
-static const wxString MagneticPadsEntry =       "PcbMagPadOpt";
-static const wxString MagneticTracksEntry =     "PcbMagTrackOpt";
 static const wxString ShowMicrowaveEntry =      "ShowMicrowaveTools";
 static const wxString ShowLayerManagerEntry =   "ShowLayerManagerTools";
 static const wxString ShowPageLimitsEntry =     "ShowPageLimits";
-static const wxString IconScaleEntry =          "PcbIconScale";
 
 ///@}
 

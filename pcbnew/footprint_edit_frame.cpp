@@ -76,12 +76,6 @@
 #include "tools/pad_tool.h"
 #include "tools/pcb_actions.h"
 
-///@{
-/// \ingroup config
-
-static const wxString IconScaleEntry =          "PcbIconScale";
-
-///@}
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
