@@ -30,7 +30,7 @@ void WX_GRID::SetTable( wxGridTableBase* aTable )
 {
     // wxGrid::SetTable() messes up the column widths from wxFormBuilder so we have to save
     // and restore them.
-    int formBuilderColWidths[ GetNumberCols() ];
+    int* formBuilderColWidths = new int[ GetNumberCols() ];
 
     for( int i = 0; i < GetNumberCols(); ++i )
         formBuilderColWidths[ i ] = GetColSize( i );
@@ -39,6 +39,8 @@ void WX_GRID::SetTable( wxGridTableBase* aTable )
 
     for( int i = 0; i < GetNumberCols(); ++i )
         SetColSize( i, formBuilderColWidths[ i ] );
+
+    delete[] formBuilderColWidths;
 }
 
 
