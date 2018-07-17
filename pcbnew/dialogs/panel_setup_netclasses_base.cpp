@@ -16,6 +16,9 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bpanelNetClassesSizer;
 	bpanelNetClassesSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
+	
 	wxStaticBoxSizer* sbSizerUpper;
 	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Classes") ), wxVERTICAL );
 	
@@ -31,14 +34,14 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	
 	// Columns
 	m_netclassGrid->SetColSize( 0, 120 );
-	m_netclassGrid->SetColSize( 1, 88 );
-	m_netclassGrid->SetColSize( 2, 88 );
-	m_netclassGrid->SetColSize( 3, 88 );
-	m_netclassGrid->SetColSize( 4, 88 );
-	m_netclassGrid->SetColSize( 5, 88 );
-	m_netclassGrid->SetColSize( 6, 88 );
-	m_netclassGrid->SetColSize( 7, 88 );
-	m_netclassGrid->SetColSize( 8, 88 );
+	m_netclassGrid->SetColSize( 1, 85 );
+	m_netclassGrid->SetColSize( 2, 85 );
+	m_netclassGrid->SetColSize( 3, 85 );
+	m_netclassGrid->SetColSize( 4, 85 );
+	m_netclassGrid->SetColSize( 5, 85 );
+	m_netclassGrid->SetColSize( 6, 85 );
+	m_netclassGrid->SetColSize( 7, 85 );
+	m_netclassGrid->SetColSize( 8, 85 );
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( true );
 	m_netclassGrid->SetColLabelSize( 22 );
@@ -65,7 +68,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_netclassGrid->SetToolTip( _("Net Class parameters") );
 	
-	sbSizerUpper->Add( m_netclassGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerUpper->Add( m_netclassGrid, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -78,22 +81,116 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_removeButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	m_removeButton->SetMinSize( wxSize( 29,29 ) );
 	
-	buttonBoxSizer->Add( m_removeButton, 0, wxRIGHT, 10 );
+	buttonBoxSizer->Add( m_removeButton, 0, 0, 10 );
 	
 	
-	sbSizerUpper->Add( buttonBoxSizer, 0, wxEXPAND|wxALL, 2 );
+	sbSizerUpper->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP, 2 );
 	
 	
-	bpanelNetClassesSizer->Add( sbSizerUpper, 4, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( sbSizerUpper, 4, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxBoxSizer* bSizerLower;
-	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticBoxSizer* sbMembership;
+	sbMembership = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Class Memberships") ), wxHORIZONTAL );
 	
-	wxStaticBoxSizer* sbSizerNetSelectMain;
-	sbSizerNetSelectMain = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Class Membership") ), wxVERTICAL );
+	wxBoxSizer* bLeft;
+	bLeft = new wxBoxSizer( wxVERTICAL );
 	
-	m_textNetFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerNetSelectMain->Add( m_textNetFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sbFilters;
+	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Nets") ), wxVERTICAL );
+	
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText6 = new wxStaticText( sbFilters->GetStaticBox(), wxID_ANY, _("Net class filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	m_staticText6->SetMinSize( wxSize( 120,-1 ) );
+	
+	bSizer9->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	
+	wxArrayString m_netClassFilterChoices;
+	m_netClassFilter = new wxChoice( sbFilters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_netClassFilterChoices, 0 );
+	m_netClassFilter->SetSelection( 0 );
+	bSizer9->Add( m_netClassFilter, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	
+	
+	sbFilters->Add( bSizer9, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_filterLabel = new wxStaticText( sbFilters->GetStaticBox(), wxID_ANY, _("Net name filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_filterLabel->Wrap( -1 );
+	m_filterLabel->SetMinSize( wxSize( 120,-1 ) );
+	
+	bSizer10->Add( m_filterLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_netNameFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer10->Add( m_netNameFilter, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	sbFilters->Add( bSizer10, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_showAllButton = new wxButton( sbFilters->GetStaticBox(), wxID_ANY, _("Show All Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer13->Add( m_showAllButton, 1, wxALL, 5 );
+	
+	
+	bSizer13->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_filterNetsButton = new wxButton( sbFilters->GetStaticBox(), wxID_ANY, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer13->Add( m_filterNetsButton, 1, wxALL, 5 );
+	
+	
+	sbFilters->Add( bSizer13, 1, wxEXPAND|wxTOP|wxBOTTOM, 6 );
+	
+	
+	bLeft->Add( sbFilters, 0, wxEXPAND|wxBOTTOM, 5 );
+	
+	wxStaticBoxSizer* sbEdit;
+	sbEdit = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Assign Net Class") ), wxVERTICAL );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_assignLabel = new wxStaticText( sbEdit->GetStaticBox(), wxID_ANY, _("New net class:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_assignLabel->Wrap( -1 );
+	m_assignLabel->SetMinSize( wxSize( 120,-1 ) );
+	
+	bSizer11->Add( m_assignLabel, 0, wxALL, 5 );
+	
+	wxArrayString m_assignNetClassChoices;
+	m_assignNetClass = new wxChoice( sbEdit->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_assignNetClassChoices, 0 );
+	m_assignNetClass->SetSelection( 0 );
+	bSizer11->Add( m_assignNetClass, 1, wxALL, 5 );
+	
+	
+	sbEdit->Add( bSizer11, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_assignAllButton = new wxButton( sbEdit->GetStaticBox(), wxID_ANY, _("Assign To Listed Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_assignAllButton, 1, wxALL, 5 );
+	
+	
+	bSizer12->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_assignSelectedButton = new wxButton( sbEdit->GetStaticBox(), wxID_ANY, _("Assign To Selected Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_assignSelectedButton, 1, wxALL, 5 );
+	
+	
+	sbEdit->Add( bSizer12, 0, wxEXPAND|wxTOP, 6 );
+	
+	
+	bLeft->Add( sbEdit, 1, wxEXPAND|wxTOP, 8 );
+	
+	
+	sbMembership->Add( bLeft, 1, wxEXPAND|wxRIGHT, 5 );
+	
+	wxBoxSizer* bRight;
+	bRight = new wxBoxSizer( wxVERTICAL );
 	
 	m_membershipGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
@@ -121,164 +218,16 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	
 	// Cell Defaults
 	m_membershipGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	sbSizerNetSelectMain->Add( m_membershipGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bRight->Add( m_membershipGrid, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 	
 	
-	bSizerLower->Add( sbSizerNetSelectMain, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
-	
-	wxStaticBoxSizer* sbOtherValuesSizer;
-	sbOtherValuesSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Non-netclass Predefined Values") ), wxHORIZONTAL );
-	
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
-	
-	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Tracks:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText24->Wrap( -1 );
-	bSizer10->Add( m_staticText24, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_trackWidthsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	// Grid
-	m_trackWidthsGrid->CreateGrid( 8, 1 );
-	m_trackWidthsGrid->EnableEditing( true );
-	m_trackWidthsGrid->EnableGridLines( true );
-	m_trackWidthsGrid->EnableDragGridSize( false );
-	m_trackWidthsGrid->SetMargins( 0, 0 );
-	
-	// Columns
-	m_trackWidthsGrid->SetColSize( 0, 78 );
-	m_trackWidthsGrid->EnableDragColMove( false );
-	m_trackWidthsGrid->EnableDragColSize( false );
-	m_trackWidthsGrid->SetColLabelSize( 22 );
-	m_trackWidthsGrid->SetColLabelValue( 0, _("Width") );
-	m_trackWidthsGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	m_trackWidthsGrid->EnableDragRowSize( false );
-	m_trackWidthsGrid->SetRowLabelSize( 0 );
-	m_trackWidthsGrid->SetRowLabelValue( 0, _("Track 1") );
-	m_trackWidthsGrid->SetRowLabelValue( 1, _("Track 2") );
-	m_trackWidthsGrid->SetRowLabelValue( 2, _("Track 3") );
-	m_trackWidthsGrid->SetRowLabelValue( 3, _("Track 4") );
-	m_trackWidthsGrid->SetRowLabelValue( 4, _("Track 5") );
-	m_trackWidthsGrid->SetRowLabelValue( 5, _("Track 6") );
-	m_trackWidthsGrid->SetRowLabelValue( 6, _("Track 7") );
-	m_trackWidthsGrid->SetRowLabelValue( 7, _("Track 8") );
-	m_trackWidthsGrid->SetRowLabelValue( 8, _("Track 9") );
-	m_trackWidthsGrid->SetRowLabelValue( 9, _("Track 10") );
-	m_trackWidthsGrid->SetRowLabelValue( 10, _("Track 11") );
-	m_trackWidthsGrid->SetRowLabelValue( 11, _("Track 12") );
-	m_trackWidthsGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_trackWidthsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer10->Add( m_trackWidthsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbMembership->Add( bRight, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
-	sbOtherValuesSizer->Add( bSizer10, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxVERTICAL );
-	
-	m_staticText25 = new wxStaticText( this, wxID_ANY, _("Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText25->Wrap( -1 );
-	bSizer11->Add( m_staticText25, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_viaSizesGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	// Grid
-	m_viaSizesGrid->CreateGrid( 8, 2 );
-	m_viaSizesGrid->EnableEditing( true );
-	m_viaSizesGrid->EnableGridLines( true );
-	m_viaSizesGrid->EnableDragGridSize( false );
-	m_viaSizesGrid->SetMargins( 0, 0 );
-	
-	// Columns
-	m_viaSizesGrid->SetColSize( 0, 78 );
-	m_viaSizesGrid->SetColSize( 1, 78 );
-	m_viaSizesGrid->EnableDragColMove( false );
-	m_viaSizesGrid->EnableDragColSize( false );
-	m_viaSizesGrid->SetColLabelSize( 22 );
-	m_viaSizesGrid->SetColLabelValue( 0, _("Size") );
-	m_viaSizesGrid->SetColLabelValue( 1, _("Drill") );
-	m_viaSizesGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	m_viaSizesGrid->EnableDragRowSize( false );
-	m_viaSizesGrid->SetRowLabelSize( 0 );
-	m_viaSizesGrid->SetRowLabelValue( 0, _("Via 1") );
-	m_viaSizesGrid->SetRowLabelValue( 1, _("Via 2") );
-	m_viaSizesGrid->SetRowLabelValue( 2, _("Via 3") );
-	m_viaSizesGrid->SetRowLabelValue( 3, _("Via 4") );
-	m_viaSizesGrid->SetRowLabelValue( 4, _("Via 5") );
-	m_viaSizesGrid->SetRowLabelValue( 5, _("Via 6") );
-	m_viaSizesGrid->SetRowLabelValue( 6, _("Via 7") );
-	m_viaSizesGrid->SetRowLabelValue( 7, _("Via 8") );
-	m_viaSizesGrid->SetRowLabelValue( 8, _("Via 9") );
-	m_viaSizesGrid->SetRowLabelValue( 9, _("Via 10") );
-	m_viaSizesGrid->SetRowLabelValue( 10, _("Via 11") );
-	m_viaSizesGrid->SetRowLabelValue( 11, _("Via 12") );
-	m_viaSizesGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_viaSizesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer11->Add( m_viaSizesGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( sbMembership, 5, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	sbOtherValuesSizer->Add( bSizer11, 0, wxEXPAND|wxLEFT, 5 );
-	
-	wxBoxSizer* bSizer12;
-	bSizer12 = new wxBoxSizer( wxVERTICAL );
-	
-	m_staticText26 = new wxStaticText( this, wxID_ANY, _("Differential Pairs:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText26->Wrap( -1 );
-	bSizer12->Add( m_staticText26, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_diffPairsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	// Grid
-	m_diffPairsGrid->CreateGrid( 8, 3 );
-	m_diffPairsGrid->EnableEditing( true );
-	m_diffPairsGrid->EnableGridLines( true );
-	m_diffPairsGrid->EnableDragGridSize( false );
-	m_diffPairsGrid->SetMargins( 0, 0 );
-	
-	// Columns
-	m_diffPairsGrid->SetColSize( 0, 78 );
-	m_diffPairsGrid->SetColSize( 1, 78 );
-	m_diffPairsGrid->SetColSize( 2, 78 );
-	m_diffPairsGrid->EnableDragColMove( false );
-	m_diffPairsGrid->EnableDragColSize( true );
-	m_diffPairsGrid->SetColLabelSize( 22 );
-	m_diffPairsGrid->SetColLabelValue( 0, _("Width") );
-	m_diffPairsGrid->SetColLabelValue( 1, _("Gap") );
-	m_diffPairsGrid->SetColLabelValue( 2, _("Via Gap") );
-	m_diffPairsGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	m_diffPairsGrid->EnableDragRowSize( true );
-	m_diffPairsGrid->SetRowLabelSize( 0 );
-	m_diffPairsGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_diffPairsGrid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK ) );
-	m_diffPairsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer12->Add( m_diffPairsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	
-	sbOtherValuesSizer->Add( bSizer12, 0, wxEXPAND|wxLEFT, 5 );
-	
-	
-	bSizerLower->Add( sbOtherValuesSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
-	
-	
-	bpanelNetClassesSizer->Add( bSizerLower, 5, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bpanelNetClassesSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bpanelNetClassesSizer );
@@ -289,7 +238,10 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeNetclassGrid ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnRemoveNetclassClick ), NULL, this );
-	m_textNetFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnFilterChanged ), NULL, this );
+	m_showAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnShowAll ), NULL, this );
+	m_filterNetsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnApplyFilters ), NULL, this );
+	m_assignAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAssignAll ), NULL, this );
+	m_assignSelectedButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAssignSelected ), NULL, this );
 	m_membershipGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeMembershipGrid ), NULL, this );
 	m_membershipGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnUpdateUI ), NULL, this );
 }
@@ -300,7 +252,10 @@ PANEL_SETUP_NETCLASSES_BASE::~PANEL_SETUP_NETCLASSES_BASE()
 	m_netclassGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeNetclassGrid ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnRemoveNetclassClick ), NULL, this );
-	m_textNetFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnFilterChanged ), NULL, this );
+	m_showAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnShowAll ), NULL, this );
+	m_filterNetsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnApplyFilters ), NULL, this );
+	m_assignAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAssignAll ), NULL, this );
+	m_assignSelectedButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAssignSelected ), NULL, this );
 	m_membershipGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeMembershipGrid ), NULL, this );
 	m_membershipGrid->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnUpdateUI ), NULL, this );
 	

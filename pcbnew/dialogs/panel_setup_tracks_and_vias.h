@@ -22,21 +22,21 @@
  */
 
 
-#ifndef PANEL_SETUP_NETCLASSES_H
-#define PANEL_SETUP_NETCLASSES_H
+#ifndef PANEL_SETUP_TRACKS_AND_VIAS_H
+#define PANEL_SETUP_TRACKS_AND_VIAS_H
 
 #include <class_board.h>
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
 
-#include <panel_setup_netclasses_base.h>
+#include <panel_setup_tracks_and_vias_base.h>
 #include "panel_setup_feature_constraints.h"
 
 class PCB_EDIT_FRAME;
 class BOARD_DESIGN_SETTINGS;
 
 
-class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
+class PANEL_SETUP_TRACKS_AND_VIAS : public PANEL_SETUP_TRACKS_AND_VIAS_BASE
 {
 private:
     PAGED_DIALOG*           m_Parent;
@@ -48,38 +48,11 @@ private:
     // changed but not yet committed.  Fetch them from the constraints panel.
     PANEL_SETUP_FEATURE_CONSTRAINTS* m_ConstraintsPanel;
 
-    int*                    m_originalColWidths;
-    bool                    m_netclassesDirty;      // Indicates the netclass drop-down
-                                                    // menus need rebuilding
-private:
-    void OnAddNetclassClick( wxCommandEvent& event ) override;
-    void OnRemoveNetclassClick( wxCommandEvent& event ) override;
-    void OnSizeNetclassGrid( wxSizeEvent& event ) override;
-    void OnSizeMembershipGrid( wxSizeEvent& event ) override;
-    void OnUpdateUI( wxUpdateUIEvent &event ) override;
-    void OnNetclassGridCellChanging( wxGridEvent& event );
-    void OnShowAll( wxCommandEvent& event ) override { doApplyFilters( true ); }
-    void OnApplyFilters( wxCommandEvent& event ) override { doApplyFilters( false ); }
-    void OnAssignAll( wxCommandEvent& event ) override { doAssignments( true ); }
-    void OnAssignSelected( wxCommandEvent& event ) override { doAssignments( false ); }
-
-    bool validateNetclassName( int aRow, wxString aName, bool focusFirst = true );
     bool validateData();
 
-    void rebuildNetclassDropdowns();
-    int getNetclassValue( int aRow, int aCol );
-
-    void addNet( wxString netName, const wxString& netclass );
-    void doApplyFilters( bool aShowAll );
-    void doAssignments( bool aAssignAll );
-
-    void AdjustNetclassGridColumns( int aWidth );
-    void AdjustMembershipGridColumns( int aWidth );
-
 public:
-    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                            PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel );
-    ~PANEL_SETUP_NETCLASSES( ) override;
+    PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
+                                 PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -87,4 +60,4 @@ public:
     void ImportSettingsFrom( BOARD* aBoard );
 };
 
-#endif //PANEL_SETUP_NETCLASSES_H
+#endif //PANEL_SETUP_TRACKS_AND_VIAS_H

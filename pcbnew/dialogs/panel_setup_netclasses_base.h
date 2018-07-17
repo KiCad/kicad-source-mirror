@@ -26,8 +26,9 @@ class WX_GRID;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/textctrl.h>
 #include <wx/stattext.h>
+#include <wx/choice.h>
+#include <wx/textctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,20 +44,26 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		WX_GRID* m_netclassGrid;
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_removeButton;
-		wxTextCtrl* m_textNetFilter;
+		wxStaticText* m_staticText6;
+		wxChoice* m_netClassFilter;
+		wxStaticText* m_filterLabel;
+		wxTextCtrl* m_netNameFilter;
+		wxButton* m_showAllButton;
+		wxButton* m_filterNetsButton;
+		wxStaticText* m_assignLabel;
+		wxChoice* m_assignNetClass;
+		wxButton* m_assignAllButton;
+		wxButton* m_assignSelectedButton;
 		WX_GRID* m_membershipGrid;
-		wxStaticText* m_staticText24;
-		WX_GRID* m_trackWidthsGrid;
-		wxStaticText* m_staticText25;
-		WX_GRID* m_viaSizesGrid;
-		wxStaticText* m_staticText26;
-		WX_GRID* m_diffPairsGrid;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFilterChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnShowAll( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnApplyFilters( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAssignAll( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAssignSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeMembershipGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		

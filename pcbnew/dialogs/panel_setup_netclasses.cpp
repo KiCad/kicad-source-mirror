@@ -72,16 +72,13 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
     // all our grids for consistency
     m_netclassGrid->SetDefaultRowSize(    m_netclassGrid->GetDefaultRowSize()    + 4 );
     m_membershipGrid->SetDefaultRowSize(  m_membershipGrid->GetDefaultRowSize()  + 4 );
-    m_trackWidthsGrid->SetDefaultRowSize( m_trackWidthsGrid->GetDefaultRowSize() + 4 );
-    m_viaSizesGrid->SetDefaultRowSize(    m_viaSizesGrid->GetDefaultRowSize()    + 4 );
-    m_diffPairsGrid->SetDefaultRowSize(   m_diffPairsGrid->GetDefaultRowSize()   + 4 );
-
-    m_textNetFilter->SetHint( _( "Net filter" ) );
 
     // Set up the net name column of the netclass membership grid to read-only
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly( true );
     m_membershipGrid->SetColAttr( 0, attr );
+
+    m_membershipGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_removeButton->SetBitmap( KiBitmap( trash_xpm ) );
@@ -167,8 +164,6 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
             addNet( *name, netclass->GetName() );
     }
 
-    TransferDimensionListsToWindow();
-
     return true;
 }
 
@@ -181,44 +176,6 @@ void PANEL_SETUP_NETCLASSES::addNet( wxString netName, const wxString& netclass 
 
     m_membershipGrid->SetCellValue( i, 0, netName );
     m_membershipGrid->SetCellValue( i, 1, netclass );
-}
-
-
-void PANEL_SETUP_NETCLASSES::TransferDimensionListsToWindow()
-{
-#define SETCELL( grid, row, col, val ) \
-    grid->SetCellValue( row, col, StringFromValue( m_Frame->GetUserUnits(), val, true, true ) )
-
-    m_trackWidthsGrid->ClearGrid();
-    m_viaSizesGrid->ClearGrid();
-    m_diffPairsGrid->ClearGrid();
-
-    // Skip the first item, which is the current netclass value
-    for( unsigned ii = 1; ii < m_BrdSettings->m_TrackWidthList.size(); ii++ )
-    {
-        SETCELL( m_trackWidthsGrid, ii-1, 0, m_BrdSettings->m_TrackWidthList[ii] );
-    }
-
-    // Skip the first item, which is the current netclass value
-    for( unsigned ii = 1; ii < m_BrdSettings->m_ViasDimensionsList.size(); ii++ )
-    {
-        SETCELL( m_viaSizesGrid, ii-1, 0, m_BrdSettings->m_ViasDimensionsList[ii].m_Diameter );
-
-        if( m_BrdSettings->m_ViasDimensionsList[ii].m_Drill > 0 )
-            SETCELL( m_viaSizesGrid, ii-1, 1, m_BrdSettings->m_ViasDimensionsList[ii].m_Drill );
-    }
-
-    // Skip the first item, which is the current netclass value
-    for( unsigned ii = 1; ii < m_BrdSettings->m_DiffPairDimensionsList.size(); ii++ )
-    {
-        SETCELL( m_diffPairsGrid, ii-1, 0, m_BrdSettings->m_DiffPairDimensionsList[ii].m_Width );
-
-        if( m_BrdSettings->m_DiffPairDimensionsList[ii].m_Gap > 0 )
-            SETCELL( m_diffPairsGrid, ii-1, 1, m_BrdSettings->m_DiffPairDimensionsList[ii].m_Gap );
-
-        if( m_BrdSettings->m_DiffPairDimensionsList[ii].m_ViaGap > 0 )
-            SETCELL( m_diffPairsGrid, ii-1, 2, m_BrdSettings->m_DiffPairDimensionsList[ii].m_ViaGap );
-    }
 }
 
 
@@ -238,6 +195,11 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new wxGridCellChoiceEditor( netclassNames ) );
     m_membershipGrid->SetColAttr( 1, attr );
+
+    m_assignNetClass->Set( netclassNames );
+
+    netclassNames.Insert( wxEmptyString, 0 );
+    m_netClassFilter->Set( netclassNames );
 }
 
 
@@ -260,8 +222,11 @@ static void gridRowToNetclass( EDA_UNITS_T aUnits, wxGrid* grid, int row, const 
 }
 
 
-void PANEL_SETUP_NETCLASSES::CopyNetclassesToBoard()
+bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 {
+    if( !validateData() )
+        return false;
+
     NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
 
     // Remove all netclasses from board. We'll copy new list after
@@ -289,86 +254,6 @@ void PANEL_SETUP_NETCLASSES::CopyNetclassesToBoard()
     }
 
     m_Pcb->SynchronizeNetsAndNetClasses();
-}
-
-
-void PANEL_SETUP_NETCLASSES::CopyDimensionsListsToBoard()
-{
-    wxString                         msg;
-    std::vector<int>                 trackWidths;
-    std::vector<VIA_DIMENSION>       vias;
-    std::vector<DIFF_PAIR_DIMENSION> diffPairs;
-
-    for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
-    {
-        msg = m_trackWidthsGrid->GetCellValue( row, 0 );
-
-        if( !msg.IsEmpty() )
-            trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg, true ) );
-    }
-
-    for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
-    {
-        msg = m_viaSizesGrid->GetCellValue( row, 0 );
-
-        if( !msg.IsEmpty() )
-        {
-            VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg, true );
-
-            msg = m_viaSizesGrid->GetCellValue( row, 1 );
-
-            if( !msg.IsEmpty() )
-                via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg, true );
-
-            vias.push_back( via_dim );
-        }
-    }
-
-    for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
-    {
-        msg = m_diffPairsGrid->GetCellValue( row, 0 );
-
-        if( !msg.IsEmpty() )
-        {
-            DIFF_PAIR_DIMENSION diffPair_dim;
-            diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg, true );
-
-            msg = m_diffPairsGrid->GetCellValue( row, 1 );
-            diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg, true );
-
-            msg = m_diffPairsGrid->GetCellValue( row, 2 );
-
-            if( !msg.IsEmpty() )
-                diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg, true );
-
-            diffPairs.push_back( diffPair_dim );
-        }
-    }
-
-    // Sort lists by increasing value
-    sort( trackWidths.begin(), trackWidths.end() );
-    sort( vias.begin(), vias.end() );
-    sort( diffPairs.begin(), diffPairs.end() );
-
-    trackWidths.insert( trackWidths.begin(), m_BrdSettings->m_TrackWidthList[ 0 ] );
-    m_BrdSettings->m_TrackWidthList = trackWidths;
-
-    vias.insert( vias.begin(), m_BrdSettings->m_ViasDimensionsList[ 0 ] );
-    m_BrdSettings->m_ViasDimensionsList = vias;
-
-    diffPairs.insert( diffPairs.begin(), m_BrdSettings->m_DiffPairDimensionsList[ 0 ] );
-    m_BrdSettings->m_DiffPairDimensionsList = diffPairs;
-}
-
-
-bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
-{
-    if( !validateData() )
-        return false;
-
-    CopyNetclassesToBoard();
-    CopyDimensionsListsToBoard();
     m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
 
     return true;
@@ -511,22 +396,56 @@ void PANEL_SETUP_NETCLASSES::OnSizeMembershipGrid( wxSizeEvent& event )
 }
 
 
-void PANEL_SETUP_NETCLASSES::OnFilterChanged( wxCommandEvent& event )
+void PANEL_SETUP_NETCLASSES::doApplyFilters( bool aShowAll )
 {
-    wxString filter = m_textNetFilter->GetValue().MakeLower();
+    // Commit any pending in-place edits in the membership grid
+    m_membershipGrid->DisableCellEditControl();
 
-    if( filter.IsEmpty() )
-        filter = wxT( "*" );
-    else
-        filter = wxT( "*" ) + filter + wxT( "*" );
+    wxString netClassFilter = m_netClassFilter->GetStringSelection();
+    wxString netFilter = m_netNameFilter->GetValue().MakeLower();
+
+    if( !netFilter.IsEmpty() )
+        netFilter = wxT( "*" ) + netFilter + wxT( "*" );
 
     for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
     {
-        if( m_membershipGrid->GetCellValue( row, 0 ).MakeLower().Matches( filter )
-                || m_membershipGrid->GetCellValue( row, 1 ).MakeLower().Matches( filter ) )
+        wxString net = m_membershipGrid->GetCellValue( row, 0 );
+        wxString netClass = m_membershipGrid->GetCellValue( row, 1 );
+        bool show = true;
+
+        if( !aShowAll )
+        {
+            if( !netFilter.IsEmpty() && !net.MakeLower().Matches( netFilter ) )
+                show = false;
+
+            if( !netClassFilter.IsEmpty() && netClass != netClassFilter )
+                show = false;
+        }
+
+        if( show )
             m_membershipGrid->ShowRow( row );
         else
             m_membershipGrid->HideRow( row );
+    }
+}
+
+
+void PANEL_SETUP_NETCLASSES::doAssignments( bool aAssignAll )
+{
+    // Commit any pending in-place edits in the membership grid
+    m_membershipGrid->DisableCellEditControl();
+
+    wxArrayInt selectedRows = m_membershipGrid->GetSelectedRows();
+
+    for( int row = 0; row < m_membershipGrid->GetNumberRows(); ++row )
+    {
+        if( !m_membershipGrid->IsRowShown( row ) )
+            continue;
+
+        if( !aAssignAll && selectedRows.Index( row ) == wxNOT_FOUND )
+            continue;
+
+        m_membershipGrid->SetCellValue( row, 1, m_assignNetClass->GetStringSelection() );
     }
 }
 
@@ -552,9 +471,6 @@ bool PANEL_SETUP_NETCLASSES::validateData()
     // Commit any pending in-place edits and close editors from grid controls
     m_netclassGrid->DisableCellEditControl();
     m_membershipGrid->DisableCellEditControl();
-    m_trackWidthsGrid->DisableCellEditControl();
-    m_viaSizesGrid->DisableCellEditControl();
-    m_diffPairsGrid->DisableCellEditControl();
 
     wxString msg;
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
@@ -634,65 +550,6 @@ bool PANEL_SETUP_NETCLASSES::validateData()
             msg.Printf( _( "Microvia drill less than minimum microvia drill (%s)." ),
                         StringFromValue( m_Frame->GetUserUnits(), minUViaDrill, true, true ) );
             m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_uVIADRILL );
-            return false;
-        }
-    }
-
-    // Test custom tracks
-    for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
-    {
-        wxString tvalue = m_trackWidthsGrid->GetCellValue( row, 0 );
-
-        if( tvalue.IsEmpty() )
-            continue;
-
-        if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
-        {
-            msg.Printf( _( "Track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
-            m_Parent->SetError( msg, this, m_trackWidthsGrid, row, 0 );
-            return false;
-        }
-    }
-
-    // Test custom vias
-    for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
-    {
-        wxString viaDia = m_viaSizesGrid->GetCellValue( row, 0 );
-
-        if( viaDia.IsEmpty() )
-            continue;
-
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDia ) < minViaDia )
-        {
-            msg.Printf( _( "Via diameter less than minimum via diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDia, true, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 0 );
-            return false;
-        }
-
-        wxString viaDrill = m_viaSizesGrid->GetCellValue( row, 1 );
-
-        if( viaDrill.IsEmpty() )
-        {
-            msg = _( "No via drill defined." );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 1 );
-            return false;
-        }
-
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDrill ) < minViaDrill )
-        {
-            msg.Printf( _( "Via drill less than minimum via drill (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDrill, true, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 1 );
-            return false;
-        }
-
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDrill )
-                >= ValueFromString( m_Frame->GetUserUnits(), viaDia ) )
-        {
-            msg = _( "Via drill larger than via diameter." );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 1 );
             return false;
         }
     }

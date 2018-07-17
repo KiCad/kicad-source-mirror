@@ -292,7 +292,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg">wxSYS_COLOUR_INFOBK</property>
+                                <property name="bg"></property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -380,7 +380,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg">wxSYS_COLOUR_INFOBK</property>
+                                <property name="bg"></property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -457,7 +457,7 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">15</property>
+                    <property name="border">25</property>
                     <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="spacer" expanded="1">
@@ -576,7 +576,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND|wxBOTTOM|wxLEFT</property>
+                                    <property name="flag">wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -612,7 +612,7 @@
                                         <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size"></property>
+                                        <property name="minimum_size">120,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_TrackMinWidthCtrl</property>
                                         <property name="pane_border">1</property>
@@ -863,7 +863,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -1120,7 +1120,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxBOTTOM|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -1407,7 +1407,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -1664,7 +1664,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -1880,7 +1880,7 @@
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
-                                        <property name="bg">wxSYS_COLOUR_INFOBK</property>
+                                        <property name="bg"></property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -1951,7 +1951,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxALL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -1963,7 +1963,7 @@
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
-                                        <property name="bg">wxSYS_COLOUR_INFOBK</property>
+                                        <property name="bg"></property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>

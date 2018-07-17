@@ -22,10 +22,8 @@
 #include <panel_setup_text_and_graphics.h>
 #include <panel_setup_feature_constraints.h>
 #include <panel_setup_netclasses.h>
+#include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
-#include <wildcards_and_files_ext.h>
-#include <confirm.h>
-#include <project.h>
 #include <kiface_i.h>
 #include "dialog_import_settings.h"
 
@@ -39,6 +37,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_textAndGraphics = new PANEL_SETUP_TEXT_AND_GRAPHICS( this, aFrame );
     m_constraints = new PANEL_SETUP_FEATURE_CONSTRAINTS( this, aFrame );
     m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, m_constraints );
+    m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
 
     m_treebook->AddPage( m_layers,  _( "Layers" ) );
@@ -46,8 +45,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     m_treebook->AddPage( m_constraints,  _( "Design Rules" ) );
     m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
+    m_treebook->AddSubPage( m_tracksAndVias, _( "Tracks & Vias" ) );
     m_treebook->AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
-
 }
 
 

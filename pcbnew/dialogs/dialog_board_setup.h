@@ -23,12 +23,12 @@
 
 #include <widgets/paged_dialog.h>
 
-
 class PCB_EDIT_FRAME;
 class PANEL_SETUP_FEATURE_CONSTRAINTS;
 class PANEL_SETUP_LAYERS;
 class PANEL_SETUP_TEXT_AND_GRAPHICS;
 class PANEL_SETUP_NETCLASSES;
+class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
 
 
@@ -46,6 +46,7 @@ protected:
     PANEL_SETUP_LAYERS*              m_layers;
     PANEL_SETUP_TEXT_AND_GRAPHICS*   m_textAndGraphics;
     PANEL_SETUP_NETCLASSES*          m_netclasses;
+    PANEL_SETUP_TRACKS_AND_VIAS*     m_tracksAndVias;
     PANEL_SETUP_MASK_AND_PASTE*      m_maskAndPaste;
 };
 
