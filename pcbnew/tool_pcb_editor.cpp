@@ -242,69 +242,57 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
         m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                           KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
+#define ADD_TOOL( id, xpm, tooltip ) \
+    m_mainToolBar->AddTool( id, wxEmptyString, KiScaledBitmap( xpm, this ), tooltip );
+
     // Set up toolbar
     if( Kiface().IsSingle() )
     {
-        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiScaledBitmap( new_board_xpm, this ),
-                                _( "New board" ) );
-        m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiScaledBitmap( open_brd_file_xpm, this ),
-                                _( "Open existing board" ) );
+        ADD_TOOL( ID_NEW_BOARD, new_board_xpm, _( "New board" ) );
+        ADD_TOOL( ID_LOAD_FILE, open_brd_file_xpm, _( "Open existing board" ) );
     }
 
-    m_mainToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiScaledBitmap( save_xpm, this ),
-                            _( "Save board" ) );
+    ADD_TOOL( ID_SAVE_BOARD, save_xpm, _( "Save board" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
-                            _( "Page settings for paper size and texts" ) );
+    ADD_TOOL( ID_BOARD_SETUP_DIALOG, preference_xpm, _( "Board setup" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString,
-                            KiScaledBitmap( module_editor_xpm, this ),
-                            _( "Open footprint editor" ) );
-
-    m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString,
-                            KiScaledBitmap( modview_icon_xpm, this ),
-                            _( "Open footprint viewer" ) );
+    ADD_TOOL( ID_SHEET_SET, sheetset_xpm, _( "Page settings for paper size and texts" ) );
+    ADD_TOOL( wxID_PRINT, print_button_xpm, _( "Print board" ) );
+    ADD_TOOL( ID_GEN_PLOT, plot_xpm, _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hotkeys_Descr, HK_UNDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ), msg );
+    ADD_TOOL( wxID_UNDO, undo_xpm, msg );
     msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hotkeys_Descr, HK_REDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ), msg );
+    ADD_TOOL( wxID_REDO, redo_xpm, msg );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
-                            _( "Print board" ) );
-    m_mainToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, KiScaledBitmap( plot_xpm, this ),
-                            _( "Plot (HPGL, PostScript, or GERBER format)" ) );
+    msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hotkeys_Descr, HK_FIND_ITEM, IS_COMMENT );
+    ADD_TOOL( ID_FIND_ITEMS, find_xpm, msg );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW,
-                         IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
+    ADD_TOOL( ID_ZOOM_REDRAW, zoom_redraw_xpm, msg );
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
-
+    ADD_TOOL( ID_ZOOM_IN, zoom_in_xpm, msg );
     msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
-
+    ADD_TOOL( ID_ZOOM_OUT, zoom_out_xpm, msg );
     msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
+    ADD_TOOL( ID_ZOOM_PAGE, zoom_fit_in_page_xpm, msg );
 
     m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
                             _( "Zoom to selection" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hotkeys_Descr, HK_FIND_ITEM, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiScaledBitmap( find_xpm, this ), msg );
+    ADD_TOOL( ID_OPEN_MODULE_EDITOR, module_editor_xpm, _( "Open footprint editor" ) );
+    ADD_TOOL( ID_OPEN_MODULE_VIEWER, modview_icon_xpm, _( "Open footprint viewer" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiScaledBitmap( netlist_xpm, this ),
-                            _( "Read netlist" ) );
-    m_mainToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
-                            _( "Perform design rules check" ) );
+    ADD_TOOL( ID_GET_NETLIST, netlist_xpm, _( "Read netlist" ) );
+    ADD_TOOL( ID_UPDATE_PCB_FROM_SCH, import_brd_file_xpm, _( "Update PCB from schematic" ) );
+    ADD_TOOL( ID_DRC_CONTROL, erc_xpm, _( "Perform design rules check" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -317,10 +305,9 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ReCreateLayerBox( false );
     m_mainToolBar->AddControl( m_SelLayerBox );
 
-    PrepareLayerIndicator();    // Initialize the bitmap with current
-                                // active layer colors for the next tool
-    m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
-                            *LayerPairBitmap, SEL_LAYER_HELP );
+    PrepareLayerIndicator();    // Initialize the bitmap with the active layer colors
+    m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString, *LayerPairBitmap,
+                            SEL_LAYER_HELP );
 
     // Access to the scripting console
 #if defined(KICAD_SCRIPTING_WXPYTHON)
@@ -330,13 +317,14 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
         m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
                                 KiScaledBitmap( py_script_xpm, this ),
-                                _( "Show/Hide the Python Scripting console" ),
-                                wxITEM_CHECK );
+                                _( "Show/Hide the Python Scripting console" ), wxITEM_CHECK );
     }
 #endif
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
+
+#undef ADD_TOOL
 }
 
 
