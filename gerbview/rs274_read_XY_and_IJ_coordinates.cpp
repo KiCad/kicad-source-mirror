@@ -69,7 +69,7 @@ int scaletoIU( double aCoord, bool isMetric )
 }
 
 
-wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text )
+wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 {
     wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
@@ -123,12 +123,25 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text )
 
                 if( m_NoTrailingZeros )
                 {
-                    int min_digit =
-                        (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
-                    while( nbdigits < min_digit )
+                    // no trailing zero format, we need to add missing zeros.
+                    int digit_count = (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
+
+                    while( nbdigits < digit_count )
                     {
                         *(text++) = '0';
                         nbdigits++;
+                    }
+
+                    if( aExcellonMode )
+                    {
+                        // Truncate the extra digits if the len is more than expected
+                        // because the conversion to internal units expect exactly
+                        // digit_count digits
+                        while( nbdigits > digit_count )
+                        {
+                            *(text--) = 0;
+                            nbdigits--;
+                        }
                     }
 
                     *text = 0;
