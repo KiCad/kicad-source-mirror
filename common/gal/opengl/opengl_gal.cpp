@@ -1707,8 +1707,10 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         unsigned int c = *chIt;
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
+        // Debug: show not coded char in the atlas
+        wxASSERT_MSG( glyph, wxString::Format( "missing char in font: code 0x%x <%c>", c, c ) );
 
-        if( !glyph ||                  // Not coded in font
+        if( !glyph || // Not coded in font
             c == '-' || c == '_' )     // Strange size of these 2 chars
         {
             glyph = defaultGlyph;
