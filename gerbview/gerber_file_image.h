@@ -308,8 +308,12 @@ public:
     /**
      * Function ReadXYCoord
      * Returns the current coordinate type pointed to by XnnYnn Text (XnnnnYmmmm)
+     * @param aText is a pointer to the text to parse.
+     * @param aExcellonMode = true to parse a Excellon drill file.
+     * it force truncation of a digit string to a max len because the exact coordinate
+     * format is not always known
      */
-    wxPoint ReadXYCoord( char*& Text );
+    wxPoint ReadXYCoord( char*& aText, bool aExcellonMode = false );
 
     /**
      * Returns the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
