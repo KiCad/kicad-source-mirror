@@ -1,4 +1,0 @@
-This library comes from the LibreCAD project, a 2D CAD program.
-see http://sourceforge.net/projects/libdxfrw/
-the latest sources are on:
-https://github.com/LibreCAD/LibreCAD/tree/master/libraries/libdxfrw/src
