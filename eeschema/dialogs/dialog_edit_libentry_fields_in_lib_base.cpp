@@ -21,7 +21,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxBoxSizer* bSizerFieldsSetup;
 	bSizerFieldsSetup = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER );
 	
 	// Grid
 	m_grid->CreateGrid( 4, 11 );
@@ -77,7 +77,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_bpAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpAdd->SetMinSize( wxSize( 29,29 ) );
 	
-	bButtonSize->Add( m_bpAdd, 0, 0, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
 	
 	m_bpDelete = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpDelete->SetMinSize( wxSize( 29,29 ) );
@@ -92,7 +92,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_bpMoveDown = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpMoveDown->SetMinSize( wxSize( 29,29 ) );
 	
-	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
+	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -113,7 +113,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("   Edit Spice Model...   "), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_spiceFieldsButton, 0, wxEXPAND|wxRIGHT|wxLEFT, 25 );
+	bSizerButtons->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	bSizerButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -122,7 +125,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	stdDialogButtonSizer->AddButton( stdDialogButtonSizerCancel );
 	stdDialogButtonSizer->Realize();
 	
-	bSizerButtons->Add( stdDialogButtonSizer, 0, wxEXPAND, 6 );
+	bSizerButtons->Add( stdDialogButtonSizer, 0, wxEXPAND|wxALL, 6 );
 	
 	
 	mainSizer->Add( bSizerButtons, 0, wxEXPAND, 5 );

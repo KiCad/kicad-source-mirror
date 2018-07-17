@@ -179,7 +179,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_statusLine1->Wrap( -1 );
 	m_statusLine1->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizer7->Add( m_statusLine1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 2 );
+	bSizer7->Add( m_statusLine1, 0, wxRIGHT|wxLEFT, 2 );
 	
 	m_statusLine2 = new wxStaticText( this, wxID_ANY, _("Status line 2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_statusLine2->Wrap( -1 );

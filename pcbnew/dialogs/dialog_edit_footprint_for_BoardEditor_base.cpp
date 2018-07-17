@@ -26,7 +26,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxStaticBoxSizer* sbSizerTexts;
 	sbSizerTexts = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, wxEmptyString ), wxVERTICAL );
 	
-	m_itemsGrid = new WX_GRID( sbSizerTexts->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_itemsGrid = new WX_GRID( sbSizerTexts->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxRAISED_BORDER );
 	
 	// Grid
 	m_itemsGrid->CreateGrid( 2, 11 );
@@ -74,7 +74,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	// Cell Defaults
 	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_itemsGrid->SetMinSize( wxSize( 720,140 ) );
+	m_itemsGrid->SetMinSize( wxSize( 724,140 ) );
 	
 	sbSizerTexts->Add( m_itemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
 	
@@ -89,7 +89,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpDelete->SetMinSize( wxSize( 29,29 ) );
 	
-	bButtonSize->Add( m_bpDelete, 0, wxRIGHT, 10 );
+	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -105,8 +105,11 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 	
+	
+	bSizerLeft->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 2, 3, 5, 0 );
+	fgSizerPos = new wxFlexGridSizer( 2, 3, 3, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->AddGrowableRow( 0 );
 	fgSizerPos->AddGrowableRow( 1 );
@@ -115,28 +118,28 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	m_XPosLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_XPosLabel->Wrap( -1 );
-	fgSizerPos->Add( m_XPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerPos->Add( m_XPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModPositionX = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPos->Add( m_ModPositionX, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
+	fgSizerPos->Add( m_ModPositionX, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_XPosUnit = new wxStaticText( m_PanelGeneral, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_XPosUnit->Wrap( -1 );
-	fgSizerPos->Add( m_XPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgSizerPos->Add( m_XPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_YPosLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_YPosLabel->Wrap( -1 );
-	fgSizerPos->Add( m_YPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizerPos->Add( m_YPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModPositionY = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPos->Add( m_ModPositionY, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM, 5 );
+	fgSizerPos->Add( m_ModPositionY, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_YPosUnit = new wxStaticText( m_PanelGeneral, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_YPosUnit->Wrap( -1 );
-	fgSizerPos->Add( m_YPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerPos->Add( m_YPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	bSizerLeft->Add( fgSizerPos, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( fgSizerPos, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerLeft->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
@@ -145,7 +148,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	sbOrientationSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Orientation") ), wxVERTICAL );
 	
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 2, 0 );
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -199,11 +202,11 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bSizerRotOpt;
 	bSizerRotOpt = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText11 = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	m_staticText11->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_allow90Label = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allow90Label->Wrap( -1 );
+	m_allow90Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizerRotOpt->Add( m_staticText11, 0, 0, 5 );
+	bSizerRotOpt->Add( m_allow90Label, 0, 0, 5 );
 	
 	m_CostRot90Ctrl = new wxSlider( sbSizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	bSizerRotOpt->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -214,11 +217,11 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bSizerMoveOpt;
 	bSizerMoveOpt = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText12 = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	m_staticText12->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_allow180Label = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allow180Label->Wrap( -1 );
+	m_allow180Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizerMoveOpt->Add( m_staticText12, 0, wxTOP, 3 );
+	bSizerMoveOpt->Add( m_allow180Label, 0, wxTOP, 3 );
 	
 	m_CostRot180Ctrl = new wxSlider( sbSizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	bSizerMoveOpt->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -248,7 +251,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bButtonsSizer->Add( m_buttonModuleEditor, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	bSizerRight->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRight->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	bSizerRight->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -260,7 +263,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerRight->Add( m_AttributsCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerProperties->Add( bSizerRight, 8, wxEXPAND, 5 );
+	bSizerProperties->Add( bSizerRight, 8, wxEXPAND|wxTOP, 5 );
 	
 	
 	m_PanelPropertiesBoxSizer->Add( bSizerProperties, 0, wxEXPAND, 5 );
@@ -356,11 +359,11 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	sbSizerLocalProperties->Add( fgSizerClearances, 1, wxEXPAND, 5 );
 	
-	m_staticTextInfo2 = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo2->Wrap( -1 );
-	m_staticTextInfo2->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextInfoCopper = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoCopper->Wrap( -1 );
+	m_staticTextInfoCopper->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	sbSizerLocalProperties->Add( m_staticTextInfo2, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
+	sbSizerLocalProperties->Add( m_staticTextInfoCopper, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 	
 	
 	bSizerPanelClearances->Add( sbSizerLocalProperties, 0, wxEXPAND|wxALL, 10 );
@@ -370,7 +373,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	m_staticText16 = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Pad connection to zones:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	sbSizer5->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer5->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
 	wxString m_ZoneConnectionChoiceChoices[] = { _("Use zone setting"), _("Solid"), _("Thermal relief"), _("None") };
 	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
@@ -464,32 +467,32 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	fgSizerSymbolRef->SetFlexibleDirection( wxBOTH );
 	fgSizerSymbolRef->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	symbolLabel = new wxStaticText( this, wxID_ANY, _("Library reference:"), wxDefaultPosition, wxDefaultSize, 0 );
-	symbolLabel->Wrap( -1 );
-	symbolLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_libraryIDLabel->Wrap( -1 );
+	m_libraryIDLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	fgSizerSymbolRef->Add( symbolLabel, 0, wxRIGHT|wxLEFT, 1 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_staticLibraryID = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLibraryID->Wrap( -1 );
 	m_staticLibraryID->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	fgSizerSymbolRef->Add( m_staticLibraryID, 0, wxRIGHT|wxLEFT, 1 );
+	fgSizerSymbolRef->Add( m_staticLibraryID, 0, 0, 5 );
 	
-	sheetPathLabel = new wxStaticText( this, wxID_ANY, _("Schematic sheet:"), wxDefaultPosition, wxDefaultSize, 0 );
-	sheetPathLabel->Wrap( -1 );
-	sheetPathLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_sheetPathLabel = new wxStaticText( this, wxID_ANY, _("Schematic sheet:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sheetPathLabel->Wrap( -1 );
+	m_sheetPathLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	fgSizerSymbolRef->Add( sheetPathLabel, 0, wxTOP|wxRIGHT|wxLEFT, 1 );
+	fgSizerSymbolRef->Add( m_sheetPathLabel, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_staticSheetPath = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticSheetPath->Wrap( -1 );
 	m_staticSheetPath->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	fgSizerSymbolRef->Add( m_staticSheetPath, 0, wxTOP|wxRIGHT|wxLEFT, 1 );
+	fgSizerSymbolRef->Add( m_staticSheetPath, 0, 0, 5 );
 	
 	
-	bSizer16->Add( fgSizerSymbolRef, 1, wxEXPAND|wxRIGHT|wxLEFT, 12 );
+	bSizer16->Add( fgSizerSymbolRef, 1, wxRIGHT|wxLEFT, 10 );
 	
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -498,7 +501,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 	
-	bSizer16->Add( m_sdbSizerStdButtons, 0, wxEXPAND, 5 );
+	bSizer16->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	m_GeneralBoxSizer->Add( bSizer16, 0, wxEXPAND, 5 );

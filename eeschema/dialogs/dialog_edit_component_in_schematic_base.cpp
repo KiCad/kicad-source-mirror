@@ -21,7 +21,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxStaticBoxSizer* sbFields;
 	sbFields = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxVERTICAL );
 	
-	m_grid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER );
 	
 	// Grid
 	m_grid->CreateGrid( 4, 11 );
@@ -77,7 +77,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_bpAdd = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpAdd->SetMinSize( wxSize( 30,30 ) );
 	
-	bButtonSize->Add( m_bpAdd, 0, 0, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
 	
 	m_bpDelete = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpDelete->SetMinSize( wxSize( 30,30 ) );
@@ -92,7 +92,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_bpMoveDown = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpMoveDown->SetMinSize( wxSize( 30,30 ) );
 	
-	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
+	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -208,7 +208,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bSizer101->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("   Edit Spice Model...   "), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer101->Add( m_spiceFieldsButton, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
+	bSizer101->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALL, 5 );
+	
+	
+	bSizer101->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );

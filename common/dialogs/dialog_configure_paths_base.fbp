@@ -168,7 +168,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">600,150</property>
+                                <property name="minimum_size">604,150</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_EnvVars</property>
                                 <property name="pane_border">1</property>
@@ -191,7 +191,7 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style"></property>
+                                <property name="window_style">wxRAISED_BORDER</property>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -353,7 +353,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag"></property>
+                                    <property name="flag">wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -523,7 +523,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">600,150</property>
+                                <property name="minimum_size">604,150</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_SearchPaths</property>
                                 <property name="pane_border">1</property>
@@ -546,7 +546,7 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style"></property>
+                                <property name="window_style">wxRAISED_BORDER</property>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -615,7 +615,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag"></property>
+                                    <property name="flag">wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -894,7 +894,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag"></property>
+                                    <property name="flag">wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="0">
                                         <property name="BottomDockable">1</property>

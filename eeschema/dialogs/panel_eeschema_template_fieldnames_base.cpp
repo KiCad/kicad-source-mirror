@@ -19,7 +19,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER );
 	
 	// Grid
 	m_grid->CreateGrid( 0, 2 );
@@ -55,7 +55,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	m_addFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_addFieldButton->SetMinSize( wxSize( 29,29 ) );
 	
-	bSizer10->Add( m_addFieldButton, 0, wxTOP, 5 );
+	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxRIGHT, 5 );
 	
 	m_deleteFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_deleteFieldButton->SetMinSize( wxSize( 29,29 ) );

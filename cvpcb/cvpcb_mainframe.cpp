@@ -44,6 +44,7 @@
 #include <dialog_configure_paths.h>
 #include <cvpcb.h>
 #include <listboxes.h>
+#include <wx/statline.h>
 #include <invoke_pcb_dialog.h>
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
@@ -174,16 +175,26 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Build the bottom panel, to display 2 status texts and the buttons:
     auto bottomPanel = new wxPanel( this );
     auto panelSizer = new wxBoxSizer( wxVERTICAL );
-    wxFont statusFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    statusFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+
+    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 2, 1, 1, 0 );
+    fgSizerStatus->SetFlexibleDirection( wxBOTH );
+    fgSizerStatus->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     m_statusLine1 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    m_statusLine1->SetFont( statusFont );
-    panelSizer->Add( m_statusLine1, 0, wxTOP, 4 );
+    fgSizerStatus->Add( m_statusLine1, 0, wxTOP, 2 );
 
     m_statusLine2 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
+    fgSizerStatus->Add( m_statusLine2, 0, wxBOTTOM, 4 );
+
+    panelSizer->Add( fgSizerStatus, 1, wxEXPAND|wxLEFT, 3 );
+
+    wxStaticLine* staticline1 = new wxStaticLine( bottomPanel );
+    panelSizer->Add( staticline1, 0, wxEXPAND, 5 );
+
+    wxFont statusFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    statusFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    m_statusLine1->SetFont( statusFont );
     m_statusLine2->SetFont( statusFont );
-    panelSizer->Add( m_statusLine2, 0, 0, 4 );
 
     // Add buttons:
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -191,7 +202,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_saveAndContinue = new wxButton( bottomPanel, wxID_SAVE,
                                       _( "Apply, Save Schematic && Continue" ) );
-    buttonsSizer->Add( m_saveAndContinue, 0, wxALIGN_BOTTOM | wxBOTTOM | wxRIGHT, 10 );
+    buttonsSizer->Add( m_saveAndContinue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
 
     auto sdbSizerOK = new wxButton( bottomPanel, wxID_OK );
     sdbSizer->AddButton( sdbSizerOK );
@@ -200,7 +211,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     sdbSizer->Realize();
 
     buttonsSizer->Add( sdbSizer, 0, 0, 5 );
-    panelSizer->Add( buttonsSizer, 0, wxALIGN_RIGHT, 5 );
+    panelSizer->Add( buttonsSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
 
     bottomPanel->SetSizer( panelSizer );
     bottomPanel->Fit();
@@ -215,6 +226,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Connect Events
     m_saveAndContinue->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ), NULL, this );
     m_footprintListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ), NULL, this );
+    m_compListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnComponentRightClick ), NULL, this );
 }
 
 
@@ -505,6 +517,16 @@ void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
     GetFootprintViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
+}
+
+
+void CVPCB_MAINFRAME::OnComponentRightClick( wxMouseEvent& event )
+{
+    wxMenu menu;
+
+    menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ), _( "Show the assigned footprint in the footprint viewer" ) );
+
+    PopupMenu( &menu );
 }
 
 

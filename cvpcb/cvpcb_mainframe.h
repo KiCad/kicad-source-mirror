@@ -146,6 +146,8 @@ public:
 
     void             DisplayModule( wxCommandEvent& event );
 
+    void             OnComponentRightClick( wxMouseEvent& event );
+
     void             OnFootprintRightClick( wxMouseEvent& event );
 
     /**

@@ -54,24 +54,24 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_specifiedID->SetMinSize( wxSize( 500,22 ) );
 	
-	fgSizer1->Add( m_specifiedID, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	fgSizer1->Add( m_specifiedID, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer1->Add( m_specifiedIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
+	fgSizer1->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	m_upperSizer->Add( fgSizer1, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 0 );
+	m_upperSizer->Add( fgSizer1, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
 	
 	m_upperSizer->AddGrowableCol( 1 );
 	
-	m_mainSizer->Add( m_upperSizer, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_upperSizer, 0, wxEXPAND|wxALL, 10 );
 	
 	m_changeSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticLine* staticline1;
 	staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_changeSizer->Add( staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 2 );
+	m_changeSizer->Add( staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	wxStaticText* newIdLabel;
 	newIdLabel = new wxStaticText( this, wxID_ANY, _("New footprint identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -87,16 +87,16 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_newID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_newID->SetMinSize( wxSize( 500,22 ) );
 	
-	fgSizer2->Add( m_newID, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	fgSizer2->Add( m_newID, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer2->Add( m_newIDBrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0 );
+	fgSizer2->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	m_changeSizer->Add( fgSizer2, 0, wxEXPAND, 0 );
+	m_changeSizer->Add( fgSizer2, 0, 0, 5 );
 	
 	
-	m_mainSizer->Add( m_changeSizer, 0, wxEXPAND|wxALL, 5 );
+	m_mainSizer->Add( m_changeSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxVERTICAL );
 	
@@ -112,16 +112,16 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_updateOptionsSizer->Add( m_resetTextItemEffects, 0, wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	m_mainSizer->Add( m_updateOptionsSizer, 0, wxEXPAND|wxALL, 5 );
+	m_mainSizer->Add( m_updateOptionsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,240 ) );
 	
-	m_mainSizer->Add( m_MessageWindow, 5, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_MessageWindow, 5, wxALL|wxEXPAND, 10 );
 	
 	wxStaticLine* staticline2;
 	staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_mainSizer->Add( staticline2, 0, wxEXPAND|wxALL, 5 );
+	m_mainSizer->Add( staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
@@ -130,7 +130,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	m_mainSizer->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );

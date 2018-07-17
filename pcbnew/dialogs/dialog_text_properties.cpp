@@ -123,6 +123,12 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_OrientCtrl->SetValidator( m_OrientValidator );
     m_OrientValidator.SetWindow( m_OrientCtrl );
 
+    // Set font sizes
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    m_statusLine1->SetFont( infoFont );
+    m_statusLine2->SetFont( infoFont );
+
     m_sdbSizerOK->SetDefault();
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,

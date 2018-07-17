@@ -61,9 +61,9 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
-		wxStaticText* m_staticText11;
+		wxStaticText* m_allow90Label;
 		wxSlider* m_CostRot90Ctrl;
-		wxStaticText* m_staticText12;
+		wxStaticText* m_allow180Label;
 		wxSlider* m_CostRot180Ctrl;
 		wxRadioBox* m_AttributsCtrl;
 		wxPanel* m_PanelClearances;
@@ -82,7 +82,7 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextRatio;
 		TEXT_CTRL_EVAL* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
-		wxStaticText* m_staticTextInfo2;
+		wxStaticText* m_staticTextInfoCopper;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
 		wxPanel* m_Panel3D;

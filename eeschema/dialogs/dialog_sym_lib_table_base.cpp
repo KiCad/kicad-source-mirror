@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -134,19 +134,19 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bSizer51->Add( m_append_button, 0, wxLEFT, 5 );
+	bSizer51->Add( m_append_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_browse_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bSizer51->Add( m_browse_button, 0, wxRIGHT, 5 );
+	bSizer51->Add( m_browse_button, 0, wxRIGHT, 10 );
 	
 	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
 	bSizer51->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bSizer51->Add( m_move_up_button, 0, wxLEFT, 5 );
+	bSizer51->Add( m_move_up_button, 0, wxLEFT, 10 );
 	
 	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bSizer51->Add( m_move_down_button, 0, wxRIGHT, 5 );
+	bSizer51->Add( m_move_down_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_top_sizer->Add( bSizer51, 0, 0, 8 );

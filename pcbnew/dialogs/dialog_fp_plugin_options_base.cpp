@@ -23,7 +23,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_grid_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Plugin Options") ), wxVERTICAL );
 	
 	m_grid_sizer->SetMinSize( wxSize( 400,300 ) ); 
-	m_grid = new wxGrid( m_grid_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_grid = new wxGrid( m_grid_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER|wxVSCROLL );
 	
 	// Grid
 	m_grid->CreateGrid( 1, 2 );
@@ -57,7 +57,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_append_button = new wxBitmapButton( m_grid_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bButtonsSizer->Add( m_append_button, 0, wxLEFT, 5 );
+	bButtonsSizer->Add( m_append_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_delete_button = new wxBitmapButton( m_grid_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
 	bButtonsSizer->Add( m_delete_button, 0, wxRIGHT, 5 );
@@ -82,7 +82,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	
 	m_options_sizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	m_html = new wxHtmlWindow( m_options_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxVSCROLL );
+	m_html = new wxHtmlWindow( m_options_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxRAISED_BORDER|wxVSCROLL );
 	m_html->SetMinSize( wxSize( 280,100 ) );
 	
 	m_options_sizer->Add( m_html, 2, wxALL|wxEXPAND, 5 );

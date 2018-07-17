@@ -93,12 +93,6 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_config->Read( LibFootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
     m_itemsGrid->ShowHideColumns( shownColumns );
 
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_staticTextInfoValNeg->SetFont( infoFont );
-    m_staticTextInfoValPos->SetFont( infoFont );
-    m_staticTextInfo2->SetFont( infoFont );
-
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -114,6 +108,18 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 
     m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
+
+    // Set font sizes
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_allow90Label->SetFont( infoFont );
+    m_allow180Label->SetFont( infoFont );
+
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    m_staticTextInfoValNeg->SetFont( infoFont );
+    m_staticTextInfoValPos->SetFont( infoFont );
+    m_staticTextInfoCopper->SetFont( infoFont );
 
     m_NoteBook->SetSelection( m_page );
 

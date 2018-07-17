@@ -114,11 +114,21 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 
+    // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_allow90Label->SetFont( infoFont );
+    m_allow180Label->SetFont( infoFont );
+
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    m_libraryIDLabel->SetFont( infoFont );
+    m_staticLibraryID->SetFont( infoFont );
+    m_sheetPathLabel->SetFont( infoFont );
+    m_staticSheetPath->SetFont( infoFont );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
-    m_staticTextInfo2->SetFont( infoFont );
+    m_staticTextInfoCopper->SetFont( infoFont );
 
     m_NoteBook->SetSelection( m_page );
 

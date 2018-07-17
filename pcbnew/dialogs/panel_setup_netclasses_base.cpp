@@ -23,7 +23,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Classes") ), wxVERTICAL );
 	
 	sbSizerUpper->SetMinSize( wxSize( -1,220 ) ); 
-	m_netclassGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
+	m_netclassGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxRAISED_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	
 	// Grid
 	m_netclassGrid->CreateGrid( 1, 9 );
@@ -76,7 +76,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_addButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	m_addButton->SetMinSize( wxSize( 29,29 ) );
 	
-	buttonBoxSizer->Add( m_addButton, 0, 0, 5 );
+	buttonBoxSizer->Add( m_addButton, 0, wxRIGHT, 5 );
 	
 	m_removeButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	m_removeButton->SetMinSize( wxSize( 29,29 ) );
@@ -192,7 +192,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bRight;
 	bRight = new wxBoxSizer( wxVERTICAL );
 	
-	m_membershipGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_membershipGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER );
 	
 	// Grid
 	m_membershipGrid->CreateGrid( 0, 2 );

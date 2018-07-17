@@ -59,19 +59,19 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bUpperSizer->Add( bRightSizer, 2, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 10 );
 	
 	
-	bMainSizer->Add( bUpperSizer, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bUpperSizer, 2, wxEXPAND|wxALL, 5 );
 	
 	wxBoxSizer* bPluginButtons;
 	bPluginButtons = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonAddPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bPluginButtons->Add( m_buttonAddPlugin, 0, wxLEFT, 5 );
+	bPluginButtons->Add( m_buttonAddPlugin, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonDelPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bPluginButtons->Add( m_buttonDelPlugin, 0, wxRIGHT, 5 );
+	bPluginButtons->Add( m_buttonDelPlugin, 0, wxRIGHT, 10 );
 	
 	m_buttonEdit = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bPluginButtons->Add( m_buttonEdit, 0, wxRIGHT|wxLEFT, 5 );
+	bPluginButtons->Add( m_buttonEdit, 0, wxRIGHT|wxLEFT, 10 );
 	
 	
 	bMainSizer->Add( bPluginButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -81,7 +81,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_staticTextCmd = new wxStaticText( this, wxID_ANY, _("Command line:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCmd->Wrap( -1 );
-	bbottomSizer->Add( m_staticTextCmd, 0, wxRIGHT|wxLEFT, 5 );
+	bbottomSizer->Add( m_staticTextCmd, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlCommand = new wxTextCtrl( this, ID_CMDLINE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlCommand->SetMinSize( wxSize( 380,-1 ) );

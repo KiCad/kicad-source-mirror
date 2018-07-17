@@ -54,8 +54,6 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 	private:
 		wxBoxSizer* m_GeneralBoxSizer;
 		wxBoxSizer* bSizerLeft;
-		wxStaticText* symbolLabel;
-		wxStaticText* sheetPathLabel;
 	
 	protected:
 		wxNotebook* m_NoteBook;
@@ -77,9 +75,9 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_OrientValueCtrl;
 		wxRadioBox* m_LayerCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
-		wxStaticText* m_staticText11;
+		wxStaticText* m_allow90Label;
 		wxSlider* m_CostRot90Ctrl;
-		wxStaticText* m_staticText12;
+		wxStaticText* m_allow180Label;
 		wxSlider* m_CostRot180Ctrl;
 		wxButton* m_buttonUpdate;
 		wxButton* m_buttonExchange;
@@ -101,7 +99,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextRatio;
 		TEXT_CTRL_EVAL* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
-		wxStaticText* m_staticTextInfo2;
+		wxStaticText* m_staticTextInfoCopper;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
 		wxPanel* m_Panel3D;
@@ -111,7 +109,9 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_buttonRemove;
 		wxButton* m_button8;
 		wxBoxSizer* bLowerSizer3D;
+		wxStaticText* m_libraryIDLabel;
 		wxStaticText* m_staticLibraryID;
+		wxStaticText* m_sheetPathLabel;
 		wxStaticText* m_staticSheetPath;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
