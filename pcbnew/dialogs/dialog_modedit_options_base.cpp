@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 20 2018)
+// C++ code generated with wxFormBuilder (version Jun 27 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -210,16 +210,8 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	this->SetSizer( bSizerMain );
 	this->Layout();
 	bSizerMain->Fit( this );
-	
-	// Connect Events
-	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODEDIT_OPTIONS_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODEDIT_OPTIONS_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_MODEDIT_OPTIONS_BASE::~DIALOG_MODEDIT_OPTIONS_BASE()
 {
-	// Disconnect Events
-	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODEDIT_OPTIONS_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODEDIT_OPTIONS_BASE::OnOkClick ), NULL, this );
-	
 }

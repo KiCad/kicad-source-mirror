@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 20 2018)
+// C++ code generated with wxFormBuilder (version Jun 27 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -72,11 +72,6 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		

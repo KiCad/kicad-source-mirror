@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,11 +44,8 @@ class DIALOG_MODEDIT_OPTIONS : public DIALOG_MODEDIT_OPTIONS_BASE
 public:
     DIALOG_MODEDIT_OPTIONS( FOOTPRINT_EDIT_FRAME* aParent );
 
-private:
-    void OnCancelClick( wxCommandEvent& event ) override { EndModal( wxID_CANCEL ); }
-    void OnOkClick( wxCommandEvent& event ) override;
-
-    void initValues( );
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 };
 
 
@@ -57,27 +54,17 @@ DIALOG_MODEDIT_OPTIONS::DIALOG_MODEDIT_OPTIONS( FOOTPRINT_EDIT_FRAME* aParent ) 
 {
     m_parent = aParent;
     m_brdSettings = m_parent->GetDesignSettings();
-    initValues();
-
     m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
-
     Centre();
 }
 
 
-bool InvokeFPEditorPrefsDlg( FOOTPRINT_EDIT_FRAME* aCaller )
+bool DIALOG_MODEDIT_OPTIONS::TransferDataToWindow()
 {
-    DIALOG_MODEDIT_OPTIONS dlg( aCaller );
+    if( !wxWindow::TransferDataToWindow() )
+        return false;
 
-    int ret = dlg.ShowModal();
-
-    return ret == wxID_OK;
-}
-
-
-void DIALOG_MODEDIT_OPTIONS::initValues()
-{
     EDA_UNITS_T units = g_UserUnit;
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_parent->GetDisplayOptions();
 
@@ -117,11 +104,16 @@ void DIALOG_MODEDIT_OPTIONS::initValues()
     m_Segments_45_Only_Ctrl->SetValue( m_parent->Settings().m_use45DegreeGraphicSegments );
     m_MagneticPads->SetValue( m_parent->Settings().m_magneticPads == CAPTURE_ALWAYS );
     m_dragSelects->SetValue( m_parent->Settings().m_dragSelects );
+
+    return true;
 }
 
 
-void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
+bool DIALOG_MODEDIT_OPTIONS::TransferDataFromWindow()
 {
+    if( !wxWindow::TransferDataFromWindow() )
+        return false;
+
     m_brdSettings.m_ModuleSegmentWidth = ValueFromTextCtrl( *m_OptModuleGrLineWidth );
     m_brdSettings.m_ModuleTextWidth = ValueFromTextCtrl( *m_OptModuleTextWidth );
     m_brdSettings.m_ModuleTextSize.y = ValueFromTextCtrl( *m_OptModuleTextVSize );
@@ -148,6 +140,7 @@ void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
     displ_opts->m_DisplayPolarCood = m_PolarDisplay->GetSelection() != 0;
 
     EDA_UNITS_T units = ( m_UnitsSelection->GetSelection() == 0 ) ? INCHES : MILLIMETRES;
+
     if( units != g_UserUnit )
     {
         g_UserUnit = units;
@@ -159,5 +152,15 @@ void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
     m_parent->Settings().m_magneticPads = m_MagneticPads->GetValue() ? CAPTURE_ALWAYS : NO_EFFECT;
     m_parent->Settings().m_dragSelects = m_dragSelects->GetValue();
 
-    EndModal( wxID_OK );
+    return true;
+}
+
+
+bool InvokeFPEditorPrefsDlg( FOOTPRINT_EDIT_FRAME* aCaller )
+{
+    DIALOG_MODEDIT_OPTIONS dlg( aCaller );
+
+    int ret = dlg.ShowModal();
+
+    return ret == wxID_OK;
 }
