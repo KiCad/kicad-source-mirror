@@ -96,14 +96,12 @@ private:
 
     excellon_state m_State;         // state of excellon file analysis
     bool           m_SlotOn;        // true during an oblong drill definition
-    bool           m_format_known;  // true if number format (2:4, etc) is known
 
 public: EXCELLON_IMAGE( int layer ) :
         GERBER_FILE_IMAGE( layer )
     {
         m_State  = READ_HEADER_STATE;
         m_SlotOn = false;
-        m_format_known = false;
     }
 
 
