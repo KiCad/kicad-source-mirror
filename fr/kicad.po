@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-11 17:48+0200\n"
+"POT-Creation-Date: 2018-07-18 21:11+0200\n"
 "PO-Revision-Date: 2018-07-15 11:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -3103,7 +3103,7 @@ msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la table globale des "
 "librairie d'empreintes"
 
-#: common/richio.cpp:167
+#: common/richio.cpp:167 tools/io_benchmark/stdstream_line_reader.cpp:76
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
 msgstr "Ne peut pas ouvrir le fichier \"%s\" en lecture"

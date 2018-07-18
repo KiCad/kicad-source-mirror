@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-12 06:53+0200\n"
+"POT-Creation-Date: 2018-07-18 21:11+0200\n"
 "PO-Revision-Date: 2018-07-12 11:02+0200\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
@@ -3092,7 +3092,7 @@ msgstr ""
 "Bei dem Versuch die Tabelle mit den Bibliotheken der Footprints des "
 "Projektes zu laden ist ein Fehler aufgetreten."
 
-#: common/richio.cpp:167
+#: common/richio.cpp:167 tools/io_benchmark/stdstream_line_reader.cpp:76
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
 msgstr "Konnte Datei „%s“ nicht zum Lesen öffnen"

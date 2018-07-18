@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-14 01:05+0900\n"
+"POT-Creation-Date: 2018-07-18 21:11+0200\n"
 "PO-Revision-Date: 2018-07-14 01:09+0900\n"
 "Last-Translator: starfort_jp <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kicad@kicad.jp>\n"
@@ -30,7 +30,6 @@ msgid "config directory"
 msgstr "コンフィグ ディレクトリー"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:473
-#: utils/kicad2step/pcb/3d_resolver.cpp:547
 msgid "The given path does not exist"
 msgstr "入力されたパスは存在しません"
 
@@ -39,49 +38,36 @@ msgid "3D model search path"
 msgstr "3D モデルの検索パス"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:502
-#: utils/kicad2step/pcb/3d_resolver.cpp:576
 msgid "Alias: "
 msgstr "エイリアス: "
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:505
-#: utils/kicad2step/pcb/3d_resolver.cpp:579
 msgid "This path: "
 msgstr "このパス: "
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:508
-#: utils/kicad2step/pcb/3d_resolver.cpp:582
 msgid "Existing path: "
 msgstr "存在するパス: "
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:510
-#: utils/kicad2step/pcb/3d_resolver.cpp:584
 msgid "Bad alias (duplicate name)"
 msgstr "不正なエイリアス (名前の重複)"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:635
-#: utils/kicad2step/pcb/3d_resolver.cpp:709
 msgid "3D configuration directory is unknown"
 msgstr "3D設定ディレクトリーが未定義です"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:638
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:663
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:688
-#: utils/kicad2step/pcb/3d_resolver.cpp:712
-#: utils/kicad2step/pcb/3d_resolver.cpp:733
-#: utils/kicad2step/pcb/3d_resolver.cpp:742
-#: utils/kicad2step/pcb/3d_resolver.cpp:764
-#: utils/kicad2step/pcb/3d_resolver.cpp:789
 msgid "Write 3D search path list"
 msgstr "3D 検索パスのリストを書き込み"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:660
-#: utils/kicad2step/pcb/3d_resolver.cpp:741
-#: utils/kicad2step/pcb/3d_resolver.cpp:761
 msgid "Could not open configuration file"
 msgstr "設定ファイルを開くことができません"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
-#: utils/kicad2step/pcb/3d_resolver.cpp:788
 msgid "Problems writing configuration file"
 msgstr "設定ファイルの書き込みで問題"
 
@@ -1360,8 +1346,6 @@ msgstr ""
 "２つの不可視フィールド リファレンスと定数は常にシルク レイヤーへ置かれます。"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:91
-#: resources/linux/mime/applications/bitmap2component.desktop:9
-#: resources/linux/mime/applications/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "ビットマップ - コンポーネント変換"
 
@@ -2890,7 +2874,7 @@ msgstr "LIB_ID 文字列中に不正な文字があります"
 msgid "Illegal character found in logical library name"
 msgstr "論理的なライブラリー名の中に不正な文字があります"
 
-#: common/lib_id.cpp:327 new/sch_lpid.cpp:440
+#: common/lib_id.cpp:327
 msgid "Illegal character found in revision"
 msgstr "リビジョン中に不正な文字があります"
 
@@ -9371,7 +9355,7 @@ msgstr "矩形の端をドラッグ"
 #: eeschema/onrightclick.cpp:524 eeschema/onrightclick.cpp:560
 #: eeschema/onrightclick.cpp:794 pcbnew/footprint_editor_onclick.cpp:354
 #: pcbnew/onrightclick.cpp:758 pcbnew/onrightclick.cpp:851
-#: pcbnew/tools/edit_tool.cpp:129 qa/common/mocks.cpp:317
+#: pcbnew/tools/edit_tool.cpp:129
 msgid "Rotate Clockwise"
 msgstr "右回転"
 
@@ -9457,7 +9441,6 @@ msgstr "垂直 (Y) 軸に沿ってブロックをミラー"
 #: eeschema/onrightclick.cpp:797 eeschema/onrightclick.cpp:925
 #: pcbnew/footprint_editor_onclick.cpp:295 pcbnew/onrightclick.cpp:440
 #: pcbnew/onrightclick.cpp:754 pcbnew/tools/edit_tool.cpp:134
-#: qa/common/mocks.cpp:322
 msgid "Rotate Counterclockwise"
 msgstr "左回転"
 
@@ -12654,7 +12637,6 @@ msgid "Drawing layer %d not in use"
 msgstr "描画レイヤー %d は未使用です"
 
 #: gerbview/gerbview_frame.cpp:777
-#: resources/linux/mime/applications/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -14024,86 +14006,6 @@ msgstr "本当に \"%s\" を削除してもよろしいですか？"
 msgid "Delete File"
 msgstr "ファイルの削除"
 
-#: new/sch_lib.cpp:237
-#, c-format
-msgid "part \"%s\" not found in lib %s"
-msgstr "パーツ \"%s\" はライブラリー %s 中に見つかりませんでした"
-
-#: new/sch_lpid.cpp:208
-msgid "Illegal character found in LPID string"
-msgstr "FPID文字列中に不正な文字があります"
-
-#: new/sch_lpid.cpp:375
-msgid "Illegal character found in logical lib name"
-msgstr "論理的なライブラリー名の中に不正な文字があります"
-
-#: new/sch_lpid.cpp:406
-msgid "Illegal character found in category"
-msgstr "カテゴリに不正な文字があります"
-
-#: new/sch_lpid.cpp:417
-msgid "Illegal character found in base name"
-msgstr "ベース名に不正な文字があります"
-
-#: new/sch_sweet_parser.cpp:338
-msgid "invalid extends LPID"
-msgstr "不正な拡張 LPID"
-
-#: new/sch_sweet_parser.cpp:354
-msgid "'extends' may not have self as any ancestor"
-msgstr "\"extends\" はいかなる先祖も持っていないようです"
-
-#: new/sch_sweet_parser.cpp:364
-msgid "max allowed extends depth exceeded"
-msgstr "深度が超過しています"
-
-#: new/sch_sweet_parser.cpp:392
-msgid "invalid alternates LPID"
-msgstr "不正な代替 LPID"
-
-#: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
-#: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
-#: new/sch_sweet_parser.cpp:821
-msgid "undefined pin"
-msgstr "未定義のピン"
-
-#: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
-#, c-format
-msgid "undefined pin %s"
-msgstr "未定義のピン %s"
-
-#: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
-#, c-format
-msgid "pin %s already in pin_merge group %s"
-msgstr "ピン %s は既にピングループ %s に存在します"
-
-#: new/sch_sweet_parser.cpp:903
-#, c-format
-msgid "no pins with signal %s"
-msgstr "信号 %s のピンがありません"
-
-#: new/sch_sweet_parser.cpp:915
-#, c-format
-msgid "signal pin %s already in pin_merge group %s"
-msgstr "信号ピン %s は既にピングループ %s に存在します"
-
-#: new/sch_sweet_parser.cpp:998
-#, c-format
-msgid "Unable to find property: %s"
-msgstr "プロパティが見つかりませんでした: %s"
-
-#: new/sweet_editor_panel.cpp:31
-msgid "Sweet"
-msgstr "Sweet"
-
-#: new/sweet_editor_panel.cpp:42
-msgid "Visual Part"
-msgstr "可視部分"
-
-#: new/sweet_editor_panel.cpp:59
-msgid "Parsing Errors"
-msgstr "構文エラー"
-
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "Y 始点:"
@@ -15363,8 +15265,6 @@ msgid "Board Classes"
 msgstr "ボード クラス"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:310
-#: resources/linux/mime/applications/pcbcalculator.desktop:9
-#: resources/linux/mime/applications/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -25826,7 +25726,7 @@ msgstr "全てのフットプリントをロック"
 
 #: pcbnew/onrightclick.cpp:439 pcbnew/onrightclick.cpp:759
 #: pcbnew/onrightclick.cpp:961 pcbnew/tools/edit_tool.cpp:139
-#: pcbnew/tools/edit_tool.cpp:862 qa/common/mocks.cpp:273
+#: pcbnew/tools/edit_tool.cpp:862
 msgid "Flip"
 msgstr "裏返す"
 
@@ -27540,15 +27440,15 @@ msgstr "数値を指定して選択中のアイテムを移動"
 msgid "Create array"
 msgstr "配列を作成"
 
-#: pcbnew/tools/edit_tool.cpp:129 qa/common/mocks.cpp:317
+#: pcbnew/tools/edit_tool.cpp:129
 msgid "Rotates selected item(s) clockwise"
 msgstr "選択したアイテムを右回転"
 
-#: pcbnew/tools/edit_tool.cpp:134 qa/common/mocks.cpp:322
+#: pcbnew/tools/edit_tool.cpp:134
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "選択したアイテムを左回転"
 
-#: pcbnew/tools/edit_tool.cpp:139 qa/common/mocks.cpp:273
+#: pcbnew/tools/edit_tool.cpp:139
 msgid "Flips selected item(s)"
 msgstr "選択したアイテムを反転"
 
@@ -27572,11 +27472,11 @@ msgstr "ライブラリーからフットプリントを更新"
 msgid "Assign a different footprint from the library"
 msgstr "ライブラリーから別のフットプリントを割り付け"
 
-#: pcbnew/tools/edit_tool.cpp:167 qa/common/mocks.cpp:278
+#: pcbnew/tools/edit_tool.cpp:167
 msgid "Properties..."
 msgstr "プロパティ..."
 
-#: pcbnew/tools/edit_tool.cpp:167 qa/common/mocks.cpp:278
+#: pcbnew/tools/edit_tool.cpp:167
 msgid "Displays item properties dialog"
 msgstr "プロパティダイアログにアイテムを表示"
 
@@ -27799,9 +27699,7 @@ msgstr "クリップボードから内容を貼り付け"
 msgid "Invalid clipboard contents"
 msgstr "不正なクリップボードのデータ"
 
-#: pcbnew/tools/pcbnew_control.cpp:1089 qa/common/pcb_test_frame.cpp:150
-#: qa/polygon_generator/test_polygon_generator.cpp:50
-#: qa/polygon_triangulation/test_polygon_triangulation.cpp:210
+#: pcbnew/tools/pcbnew_control.cpp:1089
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -28178,249 +28076,252 @@ msgstr "%d ゾーンを再塗り潰し"
 msgid "Checking Zones"
 msgstr "ゾーンをチェック中"
 
-#: plugins/3d/vrml/vrml.cpp:191
-msgid " * [INFO] load failed: input line too long\n"
-msgstr " * [INFO] ロードに失敗しました: 入力行が長すぎます\n"
+#~ msgid "part \"%s\" not found in lib %s"
+#~ msgstr "パーツ \"%s\" はライブラリー %s 中に見つかりませんでした"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:104
-msgid "incompatible plugin (missing function 'GetNExtensions')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'GetNExtensions' が見つかりません)"
+#~ msgid "Illegal character found in LPID string"
+#~ msgstr "FPID文字列中に不正な文字があります"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:117
-msgid "incompatible plugin (missing function 'GetModelExtension')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'GetModelExtension' が見つかりません)"
+#~ msgid "Illegal character found in logical lib name"
+#~ msgstr "論理的なライブラリー名の中に不正な文字があります"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:126
-msgid "missing function 'GetModelExtension'"
-msgstr "ファンクション 'GetModelExtension' が見つかりません"
+#~ msgid "Illegal character found in category"
+#~ msgstr "カテゴリに不正な文字があります"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:138
-msgid "incompatible plugin (missing function 'GetNFilters')"
-msgstr "互換性のないプラグイン (ファンクション 'GetNFilters' が見つかりません)"
+#~ msgid "Illegal character found in base name"
+#~ msgstr "ベース名に不正な文字があります"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:147
-msgid "missing function 'GetNFilters'"
-msgstr "ファンクション 'GetNFilters' が見つかりません"
+#~ msgid "invalid extends LPID"
+#~ msgstr "不正な拡張 LPID"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:159
-msgid "incompatible plugin (missing function 'GetFileFilter')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'GetFileFilter' が見つかりません)"
+#~ msgid "'extends' may not have self as any ancestor"
+#~ msgstr "\"extends\" はいかなる先祖も持っていないようです"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:168
-msgid "missing function 'GetFileFilter'"
-msgstr "ファンクション 'GetFileFilter' が見つかりません"
+#~ msgid "max allowed extends depth exceeded"
+#~ msgstr "深度が超過しています"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:180
-msgid "incompatible plugin (missing function 'CanRender')"
-msgstr "互換性のないプラグイン (ファンクション 'CanRender' が見つかりません)"
+#~ msgid "invalid alternates LPID"
+#~ msgstr "不正な代替 LPID"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:189
-msgid "missing function 'CanRender'"
-msgstr "ファンクション 'CanRender' が見つかりません"
+#~ msgid "undefined pin"
+#~ msgstr "未定義のピン"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:201
-msgid "incompatible plugin (missing function 'Load')"
-msgstr "互換性のないプラグイン (ファンクション 'Load' が見つかりません)"
+#~ msgid "undefined pin %s"
+#~ msgstr "未定義のピン %s"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:209
-msgid "missing function 'Load'"
-msgstr "ファンクション 'Load' が見つかりません"
+#~ msgid "pin %s already in pin_merge group %s"
+#~ msgstr "ピン %s は既にピングループ %s に存在します"
 
-#: plugins/ldr/pluginldr.cpp:92
-msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'GetKicadPluginClass' が見つかりませ"
-"ん)"
+#~ msgid "no pins with signal %s"
+#~ msgstr "信号 %s のピンがありません"
 
-#: plugins/ldr/pluginldr.cpp:105
-msgid "incompatible plugin (missing function 'GetClassVersion')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'GetClassVersion' が見つかりません)"
+#~ msgid "signal pin %s already in pin_merge group %s"
+#~ msgstr "信号ピン %s は既にピングループ %s に存在します"
 
-#: plugins/ldr/pluginldr.cpp:114
-msgid "missing function 'GetClassVersion'"
-msgstr "ファンクション 'GetClassVersion' が見つかりません"
+#~ msgid "Unable to find property: %s"
+#~ msgstr "プロパティが見つかりませんでした: %s"
 
-#: plugins/ldr/pluginldr.cpp:126
-msgid "incompatible plugin (missing function 'CheckClassVersion')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'CheckClassVersion' が見つかりません)"
+#~ msgid "Sweet"
+#~ msgstr "Sweet"
 
-#: plugins/ldr/pluginldr.cpp:135
-msgid "missing function 'CheckClassVersion'"
-msgstr "ファンクション 'CheckClassVersion' が見つかりません"
+#~ msgid "Visual Part"
+#~ msgstr "可視部分"
 
-#: plugins/ldr/pluginldr.cpp:147
-msgid "incompatible plugin (missing function 'GetKicadPluginName')"
-msgstr ""
-"互換性のないプラグイン (ファンクション 'GetKicadPluginName' が見つかりません)"
+#~ msgid "Parsing Errors"
+#~ msgstr "構文エラー"
 
-#: plugins/ldr/pluginldr.cpp:156
-msgid "missing function 'GetKicadPluginName'"
-msgstr "ファンクション 'GetKicadPluginName' が見つかりません"
+#~ msgid " * [INFO] load failed: input line too long\n"
+#~ msgstr " * [INFO] ロードに失敗しました: 入力行が長すぎます\n"
 
-#: plugins/ldr/pluginldr.cpp:168
-msgid "incompatible plugin (missing function 'GetVersion')"
-msgstr "互換性のないプラグイン (ファンクション 'GetVersion' が見つかりません)"
+#~ msgid "incompatible plugin (missing function 'GetNExtensions')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetNExtensions' が見つかりません)"
 
-#: plugins/ldr/pluginldr.cpp:176
-msgid "missing function 'GetVersion'"
-msgstr "ファンクション 'GetVersion' が見つかりません"
+#~ msgid "incompatible plugin (missing function 'GetModelExtension')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetModelExtension' が見つかりませ"
+#~ "ん)"
 
-#: resources/linux/appdata/kicad.appdata.xml:6
-#: resources/linux/mime/applications/kicad.desktop:10
-msgid "KiCad"
-msgstr "KiCad"
+#~ msgid "missing function 'GetModelExtension'"
+#~ msgstr "ファンクション 'GetModelExtension' が見つかりません"
 
-#: resources/linux/appdata/kicad.appdata.xml:9
-#: resources/linux/mime/applications/kicad.desktop:11
-msgid "EDA Suite"
-msgstr "EDA Suite"
+#~ msgid "incompatible plugin (missing function 'GetNFilters')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetNFilters' が見つかりません)"
 
-#: resources/linux/appdata/kicad.appdata.xml:21
-msgid "A Cross Platform and Open Source Electronics Design Automation Suite."
-msgstr "クロス・プラットホームでオープン・ソースな設計自動化支援ツール"
+#~ msgid "missing function 'GetNFilters'"
+#~ msgstr "ファンクション 'GetNFilters' が見つかりません"
 
-#: resources/linux/appdata/kicad.appdata.xml:22
-msgid ""
-"The programs handle Schematic Capture, and PCB Layout with Gerber output."
-msgstr ""
-"このプログラムは、回路図の作成と基板レイアウトのガーバー出力を扱います。"
+#~ msgid "incompatible plugin (missing function 'GetFileFilter')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetFileFilter' が見つかりません)"
 
-#: resources/linux/appdata/kicad.appdata.xml:31
-msgid "Eeschema Schematic Editor"
-msgstr "Eeschema 回路図エディター"
+#~ msgid "missing function 'GetFileFilter'"
+#~ msgstr "ファンクション 'GetFileFilter' が見つかりません"
 
-#: resources/linux/appdata/kicad.appdata.xml:36
-msgid "PcbNew PCB Layout"
-msgstr "PcbNew 基板レイアウト"
+#~ msgid "incompatible plugin (missing function 'CanRender')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'CanRender' が見つかりません)"
 
-#: resources/linux/appdata/kicad.appdata.xml:41
-msgid "PcbNew 3D Viewer"
-msgstr "PcbNew 3D ビューアー"
+#~ msgid "missing function 'CanRender'"
+#~ msgstr "ファンクション 'CanRender' が見つかりません"
 
-#: resources/linux/mime/applications/bitmap2component.desktop:5
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#~ msgid "incompatible plugin (missing function 'Load')"
+#~ msgstr "互換性のないプラグイン (ファンクション 'Load' が見つかりません)"
 
-#: resources/linux/mime/applications/bitmap2component.desktop:12
-msgid "Create a component from a bitmap for use with KiCad"
-msgstr "bitmap から KiCad 用コンポーネントを作成"
+#~ msgid "missing function 'Load'"
+#~ msgstr "ファンクション 'Load' が見つかりません"
 
-#: resources/linux/mime/applications/eeschema.desktop:5
-msgid "eeschema"
-msgstr "eeschema"
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetKicadPluginClass' が見つかりま"
+#~ "せん)"
 
-#: resources/linux/mime/applications/eeschema.desktop:10
-msgid "Eeschema (Standalone)"
-msgstr "Eeschema (スタンドアロン)"
+#~ msgid "incompatible plugin (missing function 'GetClassVersion')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetClassVersion' が見つかりません)"
 
-#: resources/linux/mime/applications/eeschema.desktop:11
-msgid "Electronic schematic capture"
-msgstr "回路図入力"
+#~ msgid "missing function 'GetClassVersion'"
+#~ msgstr "ファンクション 'GetClassVersion' が見つかりません"
 
-#: resources/linux/mime/applications/eeschema.desktop:14
-msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad 回路図設計 (スタンドアロン)"
+#~ msgid "incompatible plugin (missing function 'CheckClassVersion')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'CheckClassVersion' が見つかりませ"
+#~ "ん)"
 
-#: resources/linux/mime/applications/gerbview.desktop:5
-msgid "gerbview"
-msgstr "gerbview"
+#~ msgid "missing function 'CheckClassVersion'"
+#~ msgstr "ファンクション 'CheckClassVersion' が見つかりません"
 
-#: resources/linux/mime/applications/gerbview.desktop:11
-msgid "Gerber File Viewer"
-msgstr "ガーバー ファイル ビューアー"
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginName')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetKicadPluginName' が見つかりませ"
+#~ "ん)"
 
-#: resources/linux/mime/applications/gerbview.desktop:13
-msgid "View Gerber files"
-msgstr "ガーバー ファイルの閲覧"
+#~ msgid "missing function 'GetKicadPluginName'"
+#~ msgstr "ファンクション 'GetKicadPluginName' が見つかりません"
 
-#: resources/linux/mime/applications/kicad.desktop:5
-msgid "kicad"
-msgstr "kicad"
+#~ msgid "incompatible plugin (missing function 'GetVersion')"
+#~ msgstr ""
+#~ "互換性のないプラグイン (ファンクション 'GetVersion' が見つかりません)"
 
-#: resources/linux/mime/applications/kicad.desktop:13
-msgid "Electronic Design Automation suite"
-msgstr "回路設計自動化 (EDA) ツール"
+#~ msgid "missing function 'GetVersion'"
+#~ msgstr "ファンクション 'GetVersion' が見つかりません"
 
-#: resources/linux/mime/applications/pcbcalculator.desktop:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
+#~ msgid "KiCad"
+#~ msgstr "KiCad"
 
-#: resources/linux/mime/applications/pcbcalculator.desktop:11
-msgid "Calculator for various electronics-related computations"
-msgstr "様々な電気関係の計算用ツール"
+#~ msgid "EDA Suite"
+#~ msgstr "EDA Suite"
 
-#: resources/linux/mime/applications/pcbnew.desktop:5
-msgid "pcbnew"
-msgstr "pcbnew"
+#~ msgid ""
+#~ "A Cross Platform and Open Source Electronics Design Automation Suite."
+#~ msgstr "クロス・プラットホームでオープン・ソースな設計自動化支援ツール"
 
-#: resources/linux/mime/applications/pcbnew.desktop:10
-msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew (スタンドアロン)"
+#~ msgid ""
+#~ "The programs handle Schematic Capture, and PCB Layout with Gerber output."
+#~ msgstr ""
+#~ "このプログラムは、回路図の作成と基板レイアウトのガーバー出力を扱います。"
 
-#: resources/linux/mime/applications/pcbnew.desktop:11
-msgid "PCB layout"
-msgstr "プリント基板レイアウト"
+#~ msgid "Eeschema Schematic Editor"
+#~ msgstr "Eeschema 回路図エディター"
 
-#: resources/linux/mime/applications/pcbnew.desktop:13
-msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad プリント基板レイアウト (スタンドアロン)"
+#~ msgid "PcbNew PCB Layout"
+#~ msgstr "PcbNew 基板レイアウト"
 
-#: utils/kicad2step/kicad2step.cpp:62
-msgid "pcb_filename"
-msgstr "pcb_filename"
+#~ msgid "PcbNew 3D Viewer"
+#~ msgstr "PcbNew 3D ビューアー"
 
-#: utils/kicad2step/kicad2step.cpp:64
-msgid "output filename"
-msgstr "出力ファイル名"
+#~ msgid "bitmap2component"
+#~ msgstr "bitmap2component"
 
-#: utils/kicad2step/kicad2step.cpp:67
-msgid "IGES output (default STEP)"
-msgstr "IGES 出力 (デフォルトは STEP)"
+#~ msgid "Create a component from a bitmap for use with KiCad"
+#~ msgstr "bitmap から KiCad 用コンポーネントを作成"
 
-#: utils/kicad2step/kicad2step.cpp:70
-msgid "overwrite output file"
-msgstr "出力ファイルで上書き"
+#~ msgid "eeschema"
+#~ msgstr "eeschema"
 
-#: utils/kicad2step/kicad2step.cpp:72
-msgid "Use Drill Origin for output origin"
-msgstr "出力の原点にドリル原点を使用"
+#~ msgid "Eeschema (Standalone)"
+#~ msgstr "Eeschema (スタンドアロン)"
 
-#: utils/kicad2step/kicad2step.cpp:74
-msgid "Use Grid Origin for output origin"
-msgstr "出力の原点にグリッド原点を使用"
+#~ msgid "Electronic schematic capture"
+#~ msgstr "回路図入力"
 
-#: utils/kicad2step/kicad2step.cpp:77
-msgid ""
-"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
-msgstr ""
-"ユーザー定義の出力原点　例: 1x1in, 1x1inch, 25.4x25.4mm (デフォルトは mm)"
+#~ msgid "KiCad electronic schematic design (standalone)"
+#~ msgstr "KiCad 回路図設計 (スタンドアロン)"
 
-#: utils/kicad2step/kicad2step.cpp:80
-msgid "exclude 3D models for components with 'virtual' attribute"
-msgstr "\"仮想 (virtual)\" 属性を持つコンポーネントの 3D モデルを除く"
+#~ msgid "gerbview"
+#~ msgstr "gerbview"
 
-#: utils/kicad2step/kicad2step.cpp:83
-msgid ""
-"Minimum distance between points to treat them as separate ones (default 0.01 "
-"mm)"
-msgstr "分離した点として扱う最小間隔 (デフォルトは 0.01mm)"
+#~ msgid "Gerber File Viewer"
+#~ msgstr "ガーバー ファイル ビューアー"
 
-#: utils/kicad2step/kicad2step.cpp:85
-msgid "display this message"
-msgstr "このメッセージを表示"
+#~ msgid "View Gerber files"
+#~ msgstr "ガーバー ファイルの閲覧"
 
-#: utils/kicad2step/pcb/3d_resolver.cpp:732
-msgid ""
-"3D search path list is empty;\n"
-"continue to write empty file?"
-msgstr ""
-"3D 検索パス リストが空です;\n"
-"空ファイルを書き込んで続行しますか?"
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "Electronic Design Automation suite"
+#~ msgstr "回路設計自動化 (EDA) ツール"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
+
+#~ msgid "Calculator for various electronics-related computations"
+#~ msgstr "様々な電気関係の計算用ツール"
+
+#~ msgid "pcbnew"
+#~ msgstr "pcbnew"
+
+#~ msgid "Pcbnew (Standalone)"
+#~ msgstr "Pcbnew (スタンドアロン)"
+
+#~ msgid "PCB layout"
+#~ msgstr "プリント基板レイアウト"
+
+#~ msgid "KiCad printed circuit board layout (standalone)"
+#~ msgstr "KiCad プリント基板レイアウト (スタンドアロン)"
+
+#~ msgid "pcb_filename"
+#~ msgstr "pcb_filename"
+
+#~ msgid "output filename"
+#~ msgstr "出力ファイル名"
+
+#~ msgid "IGES output (default STEP)"
+#~ msgstr "IGES 出力 (デフォルトは STEP)"
+
+#~ msgid "overwrite output file"
+#~ msgstr "出力ファイルで上書き"
+
+#~ msgid "Use Drill Origin for output origin"
+#~ msgstr "出力の原点にドリル原点を使用"
+
+#~ msgid "Use Grid Origin for output origin"
+#~ msgstr "出力の原点にグリッド原点を使用"
+
+#~ msgid ""
+#~ "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+#~ msgstr ""
+#~ "ユーザー定義の出力原点　例: 1x1in, 1x1inch, 25.4x25.4mm (デフォルトは mm)"
+
+#~ msgid "exclude 3D models for components with 'virtual' attribute"
+#~ msgstr "\"仮想 (virtual)\" 属性を持つコンポーネントの 3D モデルを除く"
+
+#~ msgid ""
+#~ "Minimum distance between points to treat them as separate ones (default "
+#~ "0.01 mm)"
+#~ msgstr "分離した点として扱う最小間隔 (デフォルトは 0.01mm)"
+
+#~ msgid "display this message"
+#~ msgstr "このメッセージを表示"
+
+#~ msgid ""
+#~ "3D search path list is empty;\n"
+#~ "continue to write empty file?"
+#~ msgstr ""
+#~ "3D 検索パス リストが空です;\n"
+#~ "空ファイルを書き込んで続行しますか?"
 
 #~ msgid "Toogle display of the cursor, even when not in an interactive tool"
 #~ msgstr "インタラクティブ ツール以外でも、カーソルの表示を切り替える"

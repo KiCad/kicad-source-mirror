@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-12 17:53+0200\n"
+"POT-Creation-Date: 2018-07-18 21:11+0200\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -32,37 +32,37 @@ msgstr "The given path does not exist"
 msgid "3D model search path"
 msgstr "3D model search path"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:500
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:502
 msgid "Alias: "
 msgstr "Alias: "
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:503
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:505
 msgid "This path: "
 msgstr "This path: "
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:506
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:508
 msgid "Existing path: "
 msgstr "Existing path: "
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:508
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:510
 msgid "Bad alias (duplicate name)"
 msgstr "Bad alias (duplicate name)"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:631
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:635
 msgid "3D configuration directory is unknown"
 msgstr "3D configuration directory is unknown"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:634
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:659
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:684
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:638
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:663
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:688
 msgid "Write 3D search path list"
 msgstr "Write 3D search path list"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:656
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:660
 msgid "Could not open configuration file"
 msgstr "Could not open configuration file"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:683
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
 msgid "Problems writing configuration file"
 msgstr "Problems writing configuration file"
 
@@ -392,32 +392,32 @@ msgstr "Create layers"
 msgid "Cannot determine the board outline."
 msgstr "Cannot determine the board outline."
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:247
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:248
 msgid "Create tracks and vias"
 msgstr "Create tracks and vias"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:784
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:787
 msgid "Create zones"
 msgstr "Create zones"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:793
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:796
 #, c-format
 msgid "Create zones of layer %s"
 msgstr "Create zones of layer %s"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:860
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:863
 msgid "Simplifying copper layers polygons"
 msgstr "Simplifying copper layers polygons"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:891
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:894
 msgid "Simplify holes contours"
 msgstr "Simplify holes contours"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:937
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:940
 msgid "Build Tech layers"
 msgstr "Build Tech layers"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1167
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1170
 msgid "Build BVH for holes and vias"
 msgstr "Build BVH for holes and vias"
 
@@ -492,7 +492,7 @@ msgstr "Loading 3D models"
 msgid "Reload time %.3f s"
 msgstr "Reload time %.3f s"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:952
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:954
 #, c-format
 msgid "Loading %s"
 msgstr "Loading %s"
@@ -4192,7 +4192,7 @@ msgstr "Failed to open component-footprint link file “%s”"
 msgid "No item to paste."
 msgstr "No item to paste."
 
-#: eeschema/block.cpp:500 eeschema/files-io.cpp:476 eeschema/sheet.cpp:313
+#: eeschema/block.cpp:501 eeschema/files-io.cpp:476 eeschema/sheet.cpp:313
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -4207,7 +4207,7 @@ msgstr ""
 msgid "none"
 msgstr "none"
 
-#: eeschema/class_libentry.cpp:531
+#: eeschema/class_libentry.cpp:536
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
@@ -10636,12 +10636,12 @@ msgstr "Bus to Bus Entry"
 msgid "(Deleted Item)"
 msgstr "(Deleted Item)"
 
-#: eeschema/sch_collectors.cpp:503
+#: eeschema/sch_collectors.cpp:497
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
 msgstr "Child item %s of parent item %s found in sheet %s"
 
-#: eeschema/sch_collectors.cpp:510
+#: eeschema/sch_collectors.cpp:504
 #, c-format
 msgid "Item %s found in sheet %s"
 msgstr "Item %s found in sheet %s"
@@ -16428,13 +16428,13 @@ msgstr "** NO BOARD DEFINED **"
 msgid "Zone Outline %s on %s"
 msgstr "Zone Outline %s on %s"
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:359
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:506
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:360
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:507
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "Unsupported DRAWSEGMENT type %s"
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:387
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:388
 #, c-format
 msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
@@ -16443,7 +16443,7 @@ msgstr ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
 "graphic outline must form a contiguous, closed polygon."
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:534
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:535
 #, c-format
 msgid ""
 "Unable to find the next graphic segment with an endpoint of (%s mm, %s mm).\n"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-12 08:01+0200\n"
+"POT-Creation-Date: 2018-07-18 21:11+0200\n"
 "PO-Revision-Date: 2018-07-12 08:05+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
@@ -30,7 +30,6 @@ msgid "config directory"
 msgstr "carpeta de configuración"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:473
-#: utils/kicad2step/pcb/3d_resolver.cpp:547
 msgid "The given path does not exist"
 msgstr "La ruta especificada no existe"
 
@@ -39,49 +38,36 @@ msgid "3D model search path"
 msgstr "Ruta de búsqueda de modelos 3D"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:502
-#: utils/kicad2step/pcb/3d_resolver.cpp:576
 msgid "Alias: "
 msgstr "Alias: "
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:505
-#: utils/kicad2step/pcb/3d_resolver.cpp:579
 msgid "This path: "
 msgstr "Esta ruta: "
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:508
-#: utils/kicad2step/pcb/3d_resolver.cpp:582
 msgid "Existing path: "
 msgstr "Ruta existente: "
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:510
-#: utils/kicad2step/pcb/3d_resolver.cpp:584
 msgid "Bad alias (duplicate name)"
 msgstr "Alias no válido (nombre duplicado)"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:635
-#: utils/kicad2step/pcb/3d_resolver.cpp:709
 msgid "3D configuration directory is unknown"
 msgstr "La carpeta de configuración 3D es desconocida"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:638
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:663
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:688
-#: utils/kicad2step/pcb/3d_resolver.cpp:712
-#: utils/kicad2step/pcb/3d_resolver.cpp:733
-#: utils/kicad2step/pcb/3d_resolver.cpp:742
-#: utils/kicad2step/pcb/3d_resolver.cpp:764
-#: utils/kicad2step/pcb/3d_resolver.cpp:789
 msgid "Write 3D search path list"
 msgstr "Escribir la lista de rutas de búsqueda 3D"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:660
-#: utils/kicad2step/pcb/3d_resolver.cpp:741
-#: utils/kicad2step/pcb/3d_resolver.cpp:761
 msgid "Could not open configuration file"
 msgstr "No puede abrirse el archivo de configuración"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
-#: utils/kicad2step/pcb/3d_resolver.cpp:788
 msgid "Problems writing configuration file"
 msgstr "Problemas al escribir el archivo de configuración"
 
@@ -1370,8 +1356,6 @@ msgstr ""
 "de serigrafía."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:91
-#: resources/linux/mime/applications/bitmap2component.desktop:9
-#: resources/linux/mime/applications/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "Conversor de Bitmap a Componente"
 
@@ -2911,7 +2895,7 @@ msgstr "Se ha encontrado un carácter ilegal en el texto de LIB_ID"
 msgid "Illegal character found in logical library name"
 msgstr "Se ha encontrado un carácter ilegal en el nombre de la librería lógica"
 
-#: common/lib_id.cpp:327 new/sch_lpid.cpp:440
+#: common/lib_id.cpp:327
 msgid "Illegal character found in revision"
 msgstr "Se ha encontrado un carácter ilegal en la revisión"
 
@@ -9430,7 +9414,7 @@ msgstr "Arrastrar borde del rectángulo"
 #: eeschema/onrightclick.cpp:524 eeschema/onrightclick.cpp:560
 #: eeschema/onrightclick.cpp:794 pcbnew/footprint_editor_onclick.cpp:354
 #: pcbnew/onrightclick.cpp:758 pcbnew/onrightclick.cpp:851
-#: pcbnew/tools/edit_tool.cpp:129 qa/common/mocks.cpp:317
+#: pcbnew/tools/edit_tool.cpp:129
 msgid "Rotate Clockwise"
 msgstr "Girar en sentido horario"
 
@@ -9516,7 +9500,6 @@ msgstr "Voltear bloque en eje vertical (Y)"
 #: eeschema/onrightclick.cpp:797 eeschema/onrightclick.cpp:925
 #: pcbnew/footprint_editor_onclick.cpp:295 pcbnew/onrightclick.cpp:440
 #: pcbnew/onrightclick.cpp:754 pcbnew/tools/edit_tool.cpp:134
-#: qa/common/mocks.cpp:322
 msgid "Rotate Counterclockwise"
 msgstr "Girar en sentido anti horario"
 
@@ -12725,7 +12708,6 @@ msgid "Drawing layer %d not in use"
 msgstr "La capa de dibujo %d no está en uso"
 
 #: gerbview/gerbview_frame.cpp:777
-#: resources/linux/mime/applications/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -14109,86 +14091,6 @@ msgstr "¿Desea realmente eliminar \"%s\"?"
 msgid "Delete File"
 msgstr "Eliminar archivo"
 
-#: new/sch_lib.cpp:237
-#, c-format
-msgid "part \"%s\" not found in lib %s"
-msgstr "no se ha encontrado el componente \"%s\" en la librería %s"
-
-#: new/sch_lpid.cpp:208
-msgid "Illegal character found in LPID string"
-msgstr "Se ha encontrado un carácter ilegal en la cadena LPID"
-
-#: new/sch_lpid.cpp:375
-msgid "Illegal character found in logical lib name"
-msgstr "Se ha encontrado un carácter ilegal en el nombre de la librería"
-
-#: new/sch_lpid.cpp:406
-msgid "Illegal character found in category"
-msgstr "Se ha encontrado un carácter ilegal en la categoría"
-
-#: new/sch_lpid.cpp:417
-msgid "Illegal character found in base name"
-msgstr "Se ha encontrado un carácter ilegal en el nombre"
-
-#: new/sch_sweet_parser.cpp:338
-msgid "invalid extends LPID"
-msgstr "extensiones LPID no válidas"
-
-#: new/sch_sweet_parser.cpp:354
-msgid "'extends' may not have self as any ancestor"
-msgstr "la \"extensiones\" no deben tenerse a si mismas como ancestros"
-
-#: new/sch_sweet_parser.cpp:364
-msgid "max allowed extends depth exceeded"
-msgstr "excedido en número máximo de extensiones"
-
-#: new/sch_sweet_parser.cpp:392
-msgid "invalid alternates LPID"
-msgstr "LPID alternativos no válidos"
-
-#: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
-#: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
-#: new/sch_sweet_parser.cpp:821
-msgid "undefined pin"
-msgstr "pin sin definir"
-
-#: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
-#, c-format
-msgid "undefined pin %s"
-msgstr "pin %s sin definir"
-
-#: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
-#, c-format
-msgid "pin %s already in pin_merge group %s"
-msgstr "el pin %s ya se encuentra en el grupo de pines %s"
-
-#: new/sch_sweet_parser.cpp:903
-#, c-format
-msgid "no pins with signal %s"
-msgstr "no hay pines con la señal %s"
-
-#: new/sch_sweet_parser.cpp:915
-#, c-format
-msgid "signal pin %s already in pin_merge group %s"
-msgstr "el pin %s ya se encuentra en el grupo de pines %s"
-
-#: new/sch_sweet_parser.cpp:998
-#, c-format
-msgid "Unable to find property: %s"
-msgstr "No puede encontrarse la propiedad: %s"
-
-#: new/sweet_editor_panel.cpp:31
-msgid "Sweet"
-msgstr "Dulce"
-
-#: new/sweet_editor_panel.cpp:42
-msgid "Visual Part"
-msgstr "Elemento visual"
-
-#: new/sweet_editor_panel.cpp:59
-msgid "Parsing Errors"
-msgstr "Errores de análisis"
-
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "Inicio Y:"
@@ -15454,8 +15356,6 @@ msgid "Board Classes"
 msgstr "Clases de placas"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:310
-#: resources/linux/mime/applications/pcbcalculator.desktop:9
-#: resources/linux/mime/applications/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "Calculadora de placas"
 
@@ -26040,7 +25940,7 @@ msgstr "Bloquear todas la huellas"
 
 #: pcbnew/onrightclick.cpp:439 pcbnew/onrightclick.cpp:759
 #: pcbnew/onrightclick.cpp:961 pcbnew/tools/edit_tool.cpp:139
-#: pcbnew/tools/edit_tool.cpp:862 qa/common/mocks.cpp:273
+#: pcbnew/tools/edit_tool.cpp:862
 msgid "Flip"
 msgstr "Invertir"
 
@@ -27785,15 +27685,15 @@ msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta"
 msgid "Create array"
 msgstr "Crear matriz"
 
-#: pcbnew/tools/edit_tool.cpp:129 qa/common/mocks.cpp:317
+#: pcbnew/tools/edit_tool.cpp:129
 msgid "Rotates selected item(s) clockwise"
 msgstr "Gira los elementos seleccionados a la derecha"
 
-#: pcbnew/tools/edit_tool.cpp:134 qa/common/mocks.cpp:322
+#: pcbnew/tools/edit_tool.cpp:134
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "Gira los elementos seleccionados a la izquierda"
 
-#: pcbnew/tools/edit_tool.cpp:139 qa/common/mocks.cpp:273
+#: pcbnew/tools/edit_tool.cpp:139
 msgid "Flips selected item(s)"
 msgstr "Voltea los elementos seleccionados."
 
@@ -27817,11 +27717,11 @@ msgstr "Actualizar la huella desde la librería"
 msgid "Assign a different footprint from the library"
 msgstr "Asignar una huella diferente desde la librería"
 
-#: pcbnew/tools/edit_tool.cpp:167 qa/common/mocks.cpp:278
+#: pcbnew/tools/edit_tool.cpp:167
 msgid "Properties..."
 msgstr "Propiedades..."
 
-#: pcbnew/tools/edit_tool.cpp:167 qa/common/mocks.cpp:278
+#: pcbnew/tools/edit_tool.cpp:167
 msgid "Displays item properties dialog"
 msgstr "Diálogo de propiedades de elemento"
 
@@ -28046,9 +27946,7 @@ msgstr "Pegar contenido del portapapeles"
 msgid "Invalid clipboard contents"
 msgstr "Contenido del portapapeles no válido"
 
-#: pcbnew/tools/pcbnew_control.cpp:1089 qa/common/pcb_test_frame.cpp:150
-#: qa/polygon_generator/test_polygon_generator.cpp:50
-#: qa/polygon_triangulation/test_polygon_triangulation.cpp:210
+#: pcbnew/tools/pcbnew_control.cpp:1089
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -28431,251 +28329,252 @@ msgstr "Rellenar las zonas %d"
 msgid "Checking Zones"
 msgstr "Comprobando zonas"
 
-#: plugins/3d/vrml/vrml.cpp:191
-msgid " * [INFO] load failed: input line too long\n"
-msgstr " * [INFO] no puede cargarse: la línea de entrada es demasiado larga\n"
+#~ msgid "part \"%s\" not found in lib %s"
+#~ msgstr "no se ha encontrado el componente \"%s\" en la librería %s"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:104
-msgid "incompatible plugin (missing function 'GetNExtensions')"
-msgstr "plugin incompatible (no se encuentra la función 'GetNExtensions')"
+#~ msgid "Illegal character found in LPID string"
+#~ msgstr "Se ha encontrado un carácter ilegal en la cadena LPID"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:117
-msgid "incompatible plugin (missing function 'GetModelExtension')"
-msgstr "plugin incompatible (no se encuentra la función 'GetModelExtension')"
+#~ msgid "Illegal character found in logical lib name"
+#~ msgstr "Se ha encontrado un carácter ilegal en el nombre de la librería"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:126
-msgid "missing function 'GetModelExtension'"
-msgstr "no se encuentra la función 'GetModelExtension'"
+#~ msgid "Illegal character found in category"
+#~ msgstr "Se ha encontrado un carácter ilegal en la categoría"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:138
-msgid "incompatible plugin (missing function 'GetNFilters')"
-msgstr "plugin incompatible (no se encuentra la función 'GetNFilters')"
+#~ msgid "Illegal character found in base name"
+#~ msgstr "Se ha encontrado un carácter ilegal en el nombre"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:147
-msgid "missing function 'GetNFilters'"
-msgstr "no se encuentra la función 'GetNFilters'"
+#~ msgid "invalid extends LPID"
+#~ msgstr "extensiones LPID no válidas"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:159
-msgid "incompatible plugin (missing function 'GetFileFilter')"
-msgstr "plugin incompatible (no se encuentra la función 'GetFileFilter')"
+#~ msgid "'extends' may not have self as any ancestor"
+#~ msgstr "la \"extensiones\" no deben tenerse a si mismas como ancestros"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:168
-msgid "missing function 'GetFileFilter'"
-msgstr "no se encuentra la función 'GetFileFilter'"
+#~ msgid "max allowed extends depth exceeded"
+#~ msgstr "excedido en número máximo de extensiones"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:180
-msgid "incompatible plugin (missing function 'CanRender')"
-msgstr "plugin incompatible (no se encuentra la función 'CanRender')"
+#~ msgid "invalid alternates LPID"
+#~ msgstr "LPID alternativos no válidos"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:189
-msgid "missing function 'CanRender'"
-msgstr "no se encuentra la función 'CanRender'"
+#~ msgid "undefined pin"
+#~ msgstr "pin sin definir"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:201
-msgid "incompatible plugin (missing function 'Load')"
-msgstr "plugin incompatible (no se encuentra la función 'Load')"
+#~ msgid "undefined pin %s"
+#~ msgstr "pin %s sin definir"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:209
-msgid "missing function 'Load'"
-msgstr "no se encuentra la función 'Load'"
+#~ msgid "pin %s already in pin_merge group %s"
+#~ msgstr "el pin %s ya se encuentra en el grupo de pines %s"
 
-#: plugins/ldr/pluginldr.cpp:92
-msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
-msgstr "plugin incompatible (no se encuentra la función 'GetKicadPluginClass')"
+#~ msgid "no pins with signal %s"
+#~ msgstr "no hay pines con la señal %s"
 
-#: plugins/ldr/pluginldr.cpp:105
-msgid "incompatible plugin (missing function 'GetClassVersion')"
-msgstr "plugin incompatible (no se encuentra la función 'GetClassVersion')"
+#~ msgid "signal pin %s already in pin_merge group %s"
+#~ msgstr "el pin %s ya se encuentra en el grupo de pines %s"
 
-#: plugins/ldr/pluginldr.cpp:114
-msgid "missing function 'GetClassVersion'"
-msgstr "no se encuentra la función 'GetClassVersion'"
+#~ msgid "Unable to find property: %s"
+#~ msgstr "No puede encontrarse la propiedad: %s"
 
-#: plugins/ldr/pluginldr.cpp:126
-msgid "incompatible plugin (missing function 'CheckClassVersion')"
-msgstr "plugin incompatible (no se encuentra la función 'CheckClassVersion')"
+#~ msgid "Sweet"
+#~ msgstr "Dulce"
 
-#: plugins/ldr/pluginldr.cpp:135
-msgid "missing function 'CheckClassVersion'"
-msgstr "no se encuentra la función 'CheckClassVersion'"
+#~ msgid "Visual Part"
+#~ msgstr "Elemento visual"
 
-#: plugins/ldr/pluginldr.cpp:147
-msgid "incompatible plugin (missing function 'GetKicadPluginName')"
-msgstr "plugin incompatible (no se encuentra la función 'GetKicadPluginName')"
+#~ msgid "Parsing Errors"
+#~ msgstr "Errores de análisis"
 
-#: plugins/ldr/pluginldr.cpp:156
-msgid "missing function 'GetKicadPluginName'"
-msgstr "no se encuentra la función 'GetKicadPluginName'"
+#~ msgid " * [INFO] load failed: input line too long\n"
+#~ msgstr ""
+#~ " * [INFO] no puede cargarse: la línea de entrada es demasiado larga\n"
 
-#: plugins/ldr/pluginldr.cpp:168
-msgid "incompatible plugin (missing function 'GetVersion')"
-msgstr "plugin incompatible (no se encuentra la función 'GetVersion')"
+#~ msgid "incompatible plugin (missing function 'GetNExtensions')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'GetNExtensions')"
 
-#: plugins/ldr/pluginldr.cpp:176
-msgid "missing function 'GetVersion'"
-msgstr "no se encuentra la función 'GetVersion'"
+#~ msgid "incompatible plugin (missing function 'GetModelExtension')"
+#~ msgstr ""
+#~ "plugin incompatible (no se encuentra la función 'GetModelExtension')"
 
-#: resources/linux/appdata/kicad.appdata.xml:6
-#: resources/linux/mime/applications/kicad.desktop:10
-msgid "KiCad"
-msgstr "KiCad"
+#~ msgid "missing function 'GetModelExtension'"
+#~ msgstr "no se encuentra la función 'GetModelExtension'"
 
-#: resources/linux/appdata/kicad.appdata.xml:9
-#: resources/linux/mime/applications/kicad.desktop:11
-msgid "EDA Suite"
-msgstr "Suite EDA"
+#~ msgid "incompatible plugin (missing function 'GetNFilters')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'GetNFilters')"
 
-#: resources/linux/appdata/kicad.appdata.xml:21
-msgid "A Cross Platform and Open Source Electronics Design Automation Suite."
-msgstr ""
-"Una suite de Automatización de Diseño Electrónico multi plataforma y de "
-"código abierto."
+#~ msgid "missing function 'GetNFilters'"
+#~ msgstr "no se encuentra la función 'GetNFilters'"
 
-#: resources/linux/appdata/kicad.appdata.xml:22
-msgid ""
-"The programs handle Schematic Capture, and PCB Layout with Gerber output."
-msgstr ""
-"Los programas integran Captura de esquemas y diseño de PCB con salida de "
-"archivos Gerber."
+#~ msgid "incompatible plugin (missing function 'GetFileFilter')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'GetFileFilter')"
 
-#: resources/linux/appdata/kicad.appdata.xml:31
-msgid "Eeschema Schematic Editor"
-msgstr "Eeschema Editor de esquemas"
+#~ msgid "missing function 'GetFileFilter'"
+#~ msgstr "no se encuentra la función 'GetFileFilter'"
 
-#: resources/linux/appdata/kicad.appdata.xml:36
-msgid "PcbNew PCB Layout"
-msgstr "PcbNew diseño PCB"
+#~ msgid "incompatible plugin (missing function 'CanRender')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'CanRender')"
 
-#: resources/linux/appdata/kicad.appdata.xml:41
-msgid "PcbNew 3D Viewer"
-msgstr "Pcbnew Visor 3D"
+#~ msgid "missing function 'CanRender'"
+#~ msgstr "no se encuentra la función 'CanRender'"
 
-#: resources/linux/appdata/kicad.appdata.xml:49
-msgid "The KiCad Developers"
-msgstr "Los desarrolladores de KiCad"
+#~ msgid "incompatible plugin (missing function 'Load')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'Load')"
 
-#: resources/linux/mime/applications/bitmap2component.desktop:5
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#~ msgid "missing function 'Load'"
+#~ msgstr "no se encuentra la función 'Load'"
 
-#: resources/linux/mime/applications/bitmap2component.desktop:12
-msgid "Create a component from a bitmap for use with KiCad"
-msgstr "Crear un componente desde un mapa de bits para utilizarlo con KiCad"
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
+#~ msgstr ""
+#~ "plugin incompatible (no se encuentra la función 'GetKicadPluginClass')"
 
-#: resources/linux/mime/applications/eeschema.desktop:5
-msgid "eeschema"
-msgstr "eeschema"
+#~ msgid "incompatible plugin (missing function 'GetClassVersion')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'GetClassVersion')"
 
-#: resources/linux/mime/applications/eeschema.desktop:10
-msgid "Eeschema (Standalone)"
-msgstr "Eeschema (Independiente)"
+#~ msgid "missing function 'GetClassVersion'"
+#~ msgstr "no se encuentra la función 'GetClassVersion'"
 
-#: resources/linux/mime/applications/eeschema.desktop:11
-msgid "Electronic schematic capture"
-msgstr "Captura de esquemas electrónicos"
+#~ msgid "incompatible plugin (missing function 'CheckClassVersion')"
+#~ msgstr ""
+#~ "plugin incompatible (no se encuentra la función 'CheckClassVersion')"
 
-#: resources/linux/mime/applications/eeschema.desktop:14
-msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad diseño de esquemas electrónicos (independiente)"
+#~ msgid "missing function 'CheckClassVersion'"
+#~ msgstr "no se encuentra la función 'CheckClassVersion'"
 
-#: resources/linux/mime/applications/gerbview.desktop:5
-msgid "gerbview"
-msgstr "gerbview"
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginName')"
+#~ msgstr ""
+#~ "plugin incompatible (no se encuentra la función 'GetKicadPluginName')"
 
-#: resources/linux/mime/applications/gerbview.desktop:11
-msgid "Gerber File Viewer"
-msgstr "Visor de archivos Gerber"
+#~ msgid "missing function 'GetKicadPluginName'"
+#~ msgstr "no se encuentra la función 'GetKicadPluginName'"
 
-#: resources/linux/mime/applications/gerbview.desktop:13
-msgid "View Gerber files"
-msgstr "Ver archivos Gerber"
+#~ msgid "incompatible plugin (missing function 'GetVersion')"
+#~ msgstr "plugin incompatible (no se encuentra la función 'GetVersion')"
 
-#: resources/linux/mime/applications/kicad.desktop:5
-msgid "kicad"
-msgstr "kicad"
+#~ msgid "missing function 'GetVersion'"
+#~ msgstr "no se encuentra la función 'GetVersion'"
 
-#: resources/linux/mime/applications/kicad.desktop:13
-msgid "Electronic Design Automation suite"
-msgstr "Suite de Automatización de Diseño Electrónico"
+#~ msgid "KiCad"
+#~ msgstr "KiCad"
 
-#: resources/linux/mime/applications/pcbcalculator.desktop:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
+#~ msgid "EDA Suite"
+#~ msgstr "Suite EDA"
 
-#: resources/linux/mime/applications/pcbcalculator.desktop:11
-msgid "Calculator for various electronics-related computations"
-msgstr "Calculadora para varios cálculos relacionados con la electrónica"
+#~ msgid ""
+#~ "A Cross Platform and Open Source Electronics Design Automation Suite."
+#~ msgstr ""
+#~ "Una suite de Automatización de Diseño Electrónico multi plataforma y de "
+#~ "código abierto."
 
-#: resources/linux/mime/applications/pcbnew.desktop:5
-msgid "pcbnew"
-msgstr "pcbnew"
+#~ msgid ""
+#~ "The programs handle Schematic Capture, and PCB Layout with Gerber output."
+#~ msgstr ""
+#~ "Los programas integran Captura de esquemas y diseño de PCB con salida de "
+#~ "archivos Gerber."
 
-#: resources/linux/mime/applications/pcbnew.desktop:10
-msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew (Independiente)"
+#~ msgid "Eeschema Schematic Editor"
+#~ msgstr "Eeschema Editor de esquemas"
 
-#: resources/linux/mime/applications/pcbnew.desktop:11
-msgid "PCB layout"
-msgstr "Diseño de PCB"
+#~ msgid "PcbNew PCB Layout"
+#~ msgstr "PcbNew diseño PCB"
 
-#: resources/linux/mime/applications/pcbnew.desktop:13
-msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad diseño de PCB (independiente)"
+#~ msgid "PcbNew 3D Viewer"
+#~ msgstr "Pcbnew Visor 3D"
 
-#: utils/kicad2step/kicad2step.cpp:62
-msgid "pcb_filename"
-msgstr "nombre_pcb"
+#~ msgid "The KiCad Developers"
+#~ msgstr "Los desarrolladores de KiCad"
 
-#: utils/kicad2step/kicad2step.cpp:64
-msgid "output filename"
-msgstr "nombre archivo de salida"
+#~ msgid "bitmap2component"
+#~ msgstr "bitmap2component"
 
-#: utils/kicad2step/kicad2step.cpp:67
-msgid "IGES output (default STEP)"
-msgstr "Salida IGES (STEP por defecto)"
+#~ msgid "Create a component from a bitmap for use with KiCad"
+#~ msgstr "Crear un componente desde un mapa de bits para utilizarlo con KiCad"
 
-#: utils/kicad2step/kicad2step.cpp:70
-msgid "overwrite output file"
-msgstr "sobrescribir archivo de salida"
+#~ msgid "eeschema"
+#~ msgstr "eeschema"
 
-#: utils/kicad2step/kicad2step.cpp:72
-msgid "Use Drill Origin for output origin"
-msgstr "Utilizar origen del taladrado como origen de salida"
+#~ msgid "Eeschema (Standalone)"
+#~ msgstr "Eeschema (Independiente)"
 
-#: utils/kicad2step/kicad2step.cpp:74
-msgid "Use Grid Origin for output origin"
-msgstr "Utilizar origen de cuadrícula como origen de salida"
+#~ msgid "Electronic schematic capture"
+#~ msgstr "Captura de esquemas electrónicos"
 
-#: utils/kicad2step/kicad2step.cpp:77
-msgid ""
-"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
-msgstr ""
-"Origen de salida especificado por el usuario, port ejemplo, 1x1in, 1x1inch, "
-"25.4x25.4mm (por defecto milímetros)"
+#~ msgid "KiCad electronic schematic design (standalone)"
+#~ msgstr "KiCad diseño de esquemas electrónicos (independiente)"
 
-#: utils/kicad2step/kicad2step.cpp:80
-msgid "exclude 3D models for components with 'virtual' attribute"
-msgstr "excluir modelos 3D para componentes con atributo 'virtual'"
+#~ msgid "gerbview"
+#~ msgstr "gerbview"
 
-#: utils/kicad2step/kicad2step.cpp:83
-msgid ""
-"Minimum distance between points to treat them as separate ones (default 0.01 "
-"mm)"
-msgstr ""
-"Distancia mínima entre puntos para considerarlos independientes (por defecto "
-"0,01 mm)"
+#~ msgid "Gerber File Viewer"
+#~ msgstr "Visor de archivos Gerber"
 
-#: utils/kicad2step/kicad2step.cpp:85
-msgid "display this message"
-msgstr "mostrar este mensaje"
+#~ msgid "View Gerber files"
+#~ msgstr "Ver archivos Gerber"
 
-#: utils/kicad2step/pcb/3d_resolver.cpp:732
-msgid ""
-"3D search path list is empty;\n"
-"continue to write empty file?"
-msgstr ""
-"La lista de rutas de búsqueda 3D está vacía;\n"
-"¿desea escribir un archivo vacío?"
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "Electronic Design Automation suite"
+#~ msgstr "Suite de Automatización de Diseño Electrónico"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
+
+#~ msgid "Calculator for various electronics-related computations"
+#~ msgstr "Calculadora para varios cálculos relacionados con la electrónica"
+
+#~ msgid "pcbnew"
+#~ msgstr "pcbnew"
+
+#~ msgid "Pcbnew (Standalone)"
+#~ msgstr "Pcbnew (Independiente)"
+
+#~ msgid "PCB layout"
+#~ msgstr "Diseño de PCB"
+
+#~ msgid "KiCad printed circuit board layout (standalone)"
+#~ msgstr "KiCad diseño de PCB (independiente)"
+
+#~ msgid "pcb_filename"
+#~ msgstr "nombre_pcb"
+
+#~ msgid "output filename"
+#~ msgstr "nombre archivo de salida"
+
+#~ msgid "IGES output (default STEP)"
+#~ msgstr "Salida IGES (STEP por defecto)"
+
+#~ msgid "overwrite output file"
+#~ msgstr "sobrescribir archivo de salida"
+
+#~ msgid "Use Drill Origin for output origin"
+#~ msgstr "Utilizar origen del taladrado como origen de salida"
+
+#~ msgid "Use Grid Origin for output origin"
+#~ msgstr "Utilizar origen de cuadrícula como origen de salida"
+
+#~ msgid ""
+#~ "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+#~ msgstr ""
+#~ "Origen de salida especificado por el usuario, port ejemplo, 1x1in, "
+#~ "1x1inch, 25.4x25.4mm (por defecto milímetros)"
+
+#~ msgid "exclude 3D models for components with 'virtual' attribute"
+#~ msgstr "excluir modelos 3D para componentes con atributo 'virtual'"
+
+#~ msgid ""
+#~ "Minimum distance between points to treat them as separate ones (default "
+#~ "0.01 mm)"
+#~ msgstr ""
+#~ "Distancia mínima entre puntos para considerarlos independientes (por "
+#~ "defecto 0,01 mm)"
+
+#~ msgid "display this message"
+#~ msgstr "mostrar este mensaje"
+
+#~ msgid ""
+#~ "3D search path list is empty;\n"
+#~ "continue to write empty file?"
+#~ msgstr ""
+#~ "La lista de rutas de búsqueda 3D está vacía;\n"
+#~ "¿desea escribir un archivo vacío?"
 
 #~ msgid "Run CvPcb to associate footprints to symbols"
 #~ msgstr "Ejecutar CvPcb para asociar huellas a los símbolos"
