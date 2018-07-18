@@ -116,12 +116,9 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );
-
-    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_libraryIDLabel->SetFont( infoFont );
     m_staticLibraryID->SetFont( infoFont );
     m_sheetPathLabel->SetFont( infoFont );

@@ -153,6 +153,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_techLayersLabel->SetFont( infoFont );
+    m_parentInfoLine1->SetFont( infoFont );
+    m_parentInfoLine2->SetFont( infoFont );
     m_staticTextInfoNegVal->SetFont( infoFont );
     m_staticTextInfoPosValue->SetFont( infoFont );
     m_nonCopperNote->SetFont( infoFont );

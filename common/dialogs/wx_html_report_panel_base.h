@@ -18,13 +18,13 @@
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
+#include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/button.h>
-#include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
 

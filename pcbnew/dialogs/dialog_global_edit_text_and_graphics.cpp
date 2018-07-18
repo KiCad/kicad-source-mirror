@@ -114,6 +114,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     m_LayerCtrl->Resync();
 
     m_grid->SetCellHighlightPenWidth( 0 );
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_grid->SetDefaultCellFont( infoFont );
+
     m_sdbSizerButtonsOK->SetDefault();
 
     FinishDialogSettings();

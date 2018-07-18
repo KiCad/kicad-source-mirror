@@ -21,13 +21,13 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>

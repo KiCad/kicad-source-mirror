@@ -318,12 +318,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_LayersSizer->Add( bSizer11, 0, wxEXPAND, 5 );
 	
-	wxStaticText* m_staticText85;
-	m_staticText85 = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText85->Wrap( -1 );
-	m_staticText85->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_techLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_techLayersLabel->Wrap( -1 );
+	m_techLayersLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	m_LayersSizer->Add( m_staticText85, 0, wxALL, 5 );
+	m_LayersSizer->Add( m_techLayersLabel, 0, wxALL, 5 );
 	
 	m_PadLayerAdhCmp = new wxCheckBox( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Front adhesive"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayersSizer->Add( m_PadLayerAdhCmp, 0, wxLEFT|wxRIGHT, 4 );
@@ -673,7 +672,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_parentInfoLine2->Wrap( -1 );
 	m_parentInfoLine2->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizerDisplayPad->Add( m_parentInfoLine2, 0, wxTOP|wxBOTTOM|wxRIGHT, 3 );
+	bSizerDisplayPad->Add( m_parentInfoLine2, 0, wxRIGHT, 3 );
 	
 	
 	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );

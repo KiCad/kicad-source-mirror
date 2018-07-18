@@ -125,9 +125,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
-    m_statusLine1->SetFont( infoFont );
-    m_statusLine2->SetFont( infoFont );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_statusLine->SetFont( infoFont );
 
     m_sdbSizerOK->SetDefault();
 
@@ -192,7 +191,7 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 
 bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 {
-    wxString      msg1, msg2;
+    wxString      msg;
 
     if( m_SingleLineText->IsShown() )
     {
@@ -211,14 +210,15 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
         if( module )
         {
-            wxString side = module->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" );
-            msg1.Printf( _("Footprint %s (%s),"), module->GetReference(), module->GetValue() );
-            msg2.Printf( _("%s, rotated %.1f deg"), side, module->GetOrientation() / 10.0 );
+            msg.Printf( _("Footprint %s (%s), %s, rotated %.1f deg"),
+                        module->GetReference(),
+                        module->GetValue(),
+                        module->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
+                        module->GetOrientation() / 10.0 );
         }
     }
 
-    m_statusLine1->SetLabel( msg1 );
-    m_statusLine2->SetLabel( msg2 );
+    m_statusLine->SetLabel( msg );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 

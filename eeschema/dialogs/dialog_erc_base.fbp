@@ -14,7 +14,6 @@
         <property name="file">dialog_erc_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_ERC_base</property>
         <property name="namespace"></property>
@@ -1207,7 +1206,7 @@
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Error list:</property>
+                                            <property name="label">Error List:</property>
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
@@ -1709,7 +1708,7 @@
                                         <property name="proportion">0</property>
                                         <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Label to Label Connections:</property>
+                                            <property name="label">Label to Label Connections</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer2</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -1900,7 +1899,7 @@
                                         <property name="proportion">0</property>
                                         <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Pin to Pin Connections:</property>
+                                            <property name="label">Pin to Pin Connections</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer3</property>
                                             <property name="orient">wxVERTICAL</property>

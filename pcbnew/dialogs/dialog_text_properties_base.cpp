@@ -161,34 +161,28 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( fgSizerSetup, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( fgSizerSetup, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
 	bMainSizer->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+	
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
+	
+	m_statusLine = new wxStaticText( this, wxID_ANY, _("Parent footprint description"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_statusLine->Wrap( -1 );
+	m_statusLine->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	
+	bMargins->Add( m_statusLine, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
+	
+	
+	bMainSizer->Add( bMargins, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 12 );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	wxBoxSizer* lowerSizer;
 	lowerSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxVERTICAL );
-	
-	m_statusLine1 = new wxStaticText( this, wxID_ANY, _("Status line 1"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_statusLine1->Wrap( -1 );
-	m_statusLine1->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	
-	bSizer7->Add( m_statusLine1, 0, wxRIGHT|wxLEFT, 2 );
-	
-	m_statusLine2 = new wxStaticText( this, wxID_ANY, _("Status line 2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_statusLine2->Wrap( -1 );
-	m_statusLine2->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	
-	bSizer7->Add( m_statusLine2, 0, wxRIGHT|wxLEFT, 2 );
-	
-	
-	lowerSizer->Add( bSizer7, 0, wxEXPAND|wxTOP|wxLEFT, 8 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

@@ -45,27 +45,24 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("%s footprints with identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedID, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_upperSizer->AddGrowableCol( 1 );
+	
+	m_mainSizer->Add( m_upperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_specifiedID->SetMinSize( wxSize( 500,22 ) );
 	
-	fgSizer1->Add( m_specifiedID, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer4->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer1->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer4->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_upperSizer->Add( fgSizer1, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
-	
-	
-	m_upperSizer->AddGrowableCol( 1 );
-	
-	m_mainSizer->Add( m_upperSizer, 0, wxEXPAND|wxALL, 10 );
+	m_mainSizer->Add( bSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	m_changeSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -78,22 +75,19 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	newIdLabel->Wrap( -1 );
 	m_changeSizer->Add( newIdLabel, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer2->AddGrowableCol( 0 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_newID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_newID->SetMinSize( wxSize( 500,22 ) );
 	
-	fgSizer2->Add( m_newID, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer2->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer3->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_changeSizer->Add( fgSizer2, 0, 0, 5 );
+	m_changeSizer->Add( bSizer3, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
 	m_mainSizer->Add( m_changeSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );

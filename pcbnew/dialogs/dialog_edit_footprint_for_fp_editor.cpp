@@ -111,12 +111,9 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );
-
-    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
     m_staticTextInfoCopper->SetFont( infoFont );

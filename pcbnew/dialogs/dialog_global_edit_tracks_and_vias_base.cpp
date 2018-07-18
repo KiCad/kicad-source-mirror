@@ -110,7 +110,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	bSizerTrackViaPopups->Add( m_viaSizesSelectBox, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_layerBox = new PCB_LAYER_BOX_SELECTOR( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	bSizerTrackViaPopups->Add( m_layerBox, 0, wxRIGHT, 5 );
+	bSizerTrackViaPopups->Add( m_layerBox, 0, wxRIGHT|wxLEFT, 3 );
 	
 	
 	sbAction->Add( bSizerTrackViaPopups, 0, wxEXPAND|wxBOTTOM|wxLEFT, 15 );

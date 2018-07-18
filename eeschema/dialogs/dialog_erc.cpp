@@ -79,6 +79,12 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 {
     m_parent = parent;
     m_lastMarkerFound = NULL;
+
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_textMarkers->SetFont( infoFont );
+    m_titleMessages->SetFont( infoFont );
+
     Init();
 
     // Now all widgets have the size fixed, call FinishDialogSettings

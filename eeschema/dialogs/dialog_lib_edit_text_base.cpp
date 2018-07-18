@@ -34,7 +34,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	bTextValueBoxSizer->Add( m_TextValue, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_PowerComponentValues = new wxStaticText( this, wxID_ANY, _("(Power symbol value text cannot be modified.)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PowerComponentValues = new wxStaticText( this, wxID_ANY, _("(Power symbol value field text cannot be changed.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PowerComponentValues->Wrap( -1 );
 	m_PowerComponentValues->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	

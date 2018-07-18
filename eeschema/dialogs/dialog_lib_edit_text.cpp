@@ -44,6 +44,10 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* a
     m_TextValueSelectButton->Hide();
     m_PowerComponentValues->Show( false );
 
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_PowerComponentValues->SetFont( infoFont );
+
     SetInitialFocus( m_TextValue );
 
     m_sdbSizerButtonsOK->SetDefault();

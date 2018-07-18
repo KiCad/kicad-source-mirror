@@ -106,6 +106,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_layerBox->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_layerBox->Resync();
 
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_netclassGrid->SetDefaultCellFont( infoFont );
     buildNetclassesGrid();
 
     m_netclassGrid->SetCellHighlightPenWidth( 0 );
@@ -172,7 +175,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 #define SET_NETCLASS_VALUE( aRow, aGrid, aCol, aValue ) \
         aGrid->SetCellValue( aRow, aCol, StringFromValue( GetUserUnits(), aValue, true, true ) )
 
-    m_netclassGrid->SetCellValue( 0, GRID_NAME, _( "Netclass" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_NAME, wxEmptyString );
     m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track width" ) );
     m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via size" ) );
     m_netclassGrid->SetCellValue( 0, GRID_VIADRILL, _( "Via drill" ) );

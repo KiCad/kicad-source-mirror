@@ -71,9 +71,8 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_PositionYCtrl;
 		wxStaticText* m_PositionYUnits;
 		wxCheckBox* m_KeepUpright;
+		wxStaticText* m_statusLine;
 		wxStaticLine* m_staticline;
-		wxStaticText* m_statusLine1;
-		wxStaticText* m_statusLine2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

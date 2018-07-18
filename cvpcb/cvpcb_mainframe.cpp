@@ -176,23 +176,23 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     auto bottomPanel = new wxPanel( this );
     auto panelSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 2, 1, 1, 0 );
+    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 2, 1, 0, 0 );
     fgSizerStatus->SetFlexibleDirection( wxBOTH );
     fgSizerStatus->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     m_statusLine1 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    fgSizerStatus->Add( m_statusLine1, 0, wxTOP, 2 );
+    fgSizerStatus->Add( m_statusLine1, 0, 0, 5 );
 
     m_statusLine2 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    fgSizerStatus->Add( m_statusLine2, 0, wxBOTTOM, 4 );
+    fgSizerStatus->Add( m_statusLine2, 0, wxBOTTOM, 3 );
 
-    panelSizer->Add( fgSizerStatus, 1, wxEXPAND|wxLEFT, 3 );
+    panelSizer->Add( fgSizerStatus, 1, wxEXPAND|wxLEFT, 2 );
 
     wxStaticLine* staticline1 = new wxStaticLine( bottomPanel );
     panelSizer->Add( staticline1, 0, wxEXPAND, 5 );
 
     wxFont statusFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    statusFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    statusFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_statusLine1->SetFont( statusFont );
     m_statusLine2->SetFont( statusFont );
 
