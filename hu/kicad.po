@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-07-10 22:20+0200\n"
+"PO-Revision-Date: 2018-07-18 23:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -1189,7 +1189,7 @@ msgstr "Alkatrésztok létrehozása"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:642
 msgid "Error allocating memory for potrace bitmap"
-msgstr ""
+msgstr "Hiba a kép memóriába való lefoglalásában."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
@@ -1360,11 +1360,13 @@ msgstr "Rács: %.2f mill -- %.4f mm"
 msgid ""
 "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
 msgstr ""
+"Rácsméret (% f,% f) nincs a rácslistában, vissza erre rácsméretre (% f,% f)."
 
 #: common/base_screen.cpp:271
 #, c-format
 msgid "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
 msgstr ""
+"Rácsazonosító %d nincs a rácslistában, vissza erre a rácsméretre ( %g, %g )."
 
 #: common/base_units.cpp:162
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:53
@@ -3294,6 +3296,8 @@ msgid ""
 "\"%s\" is already assigned to \"%s\" in section \"%s\". Are you sure you "
 "want to change its assignment?"
 msgstr ""
+"\"%s\" már hozzá van rendelve a \"%s\" -hoz a \"%s\" szakaszban. Biztos "
+"benne, hogy módosítani szeretné kijelölést?"
 
 #: common/widgets/widget_hotkey_list.cpp:489
 msgid "Confirm change"
@@ -3824,9 +3828,8 @@ msgid ""
 msgstr ""
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
-#, fuzzy
 msgid "Footprint Assignment Conflicts"
-msgstr "Alkatrésztok konténer fájl"
+msgstr "Alkatrésztok hozzárendelési konfliktusok"
 
 #: cvpcb/display_footprints_frame.cpp:76
 msgid "Footprint Viewer"
@@ -3988,7 +3991,7 @@ msgstr "A Kicad-ről"
 #: cvpcb/readwrite_dlgs.cpp:103
 #, fuzzy, c-format
 msgid "\"%s\" is not a valid LIB_ID."
-msgstr "A \"%s\" nem érvényes Spice érték"
+msgstr "A \"%s\" nem érvényes LIB_ID."
 
 #: cvpcb/readwrite_dlgs.cpp:207
 msgid ""
@@ -5153,8 +5156,8 @@ msgid ""
 "If your datasheet is an http:// link or a complete file path, then it may "
 "show in your browser by pressing this button."
 msgstr ""
-"Ha az adatlapja egy http:// link vagy egy teljes fájl elérési útja, akkor ez "
-"a gomb megnyomásával megjelenhet a böngészőben."
+"Ha az adatlap,dokumentáció egy http:// link vagy egy teljes fájl elérési "
+"útja, akkor evvel a gomb megnyomásával megnyithatja a böngészőben."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:247
 msgid "Font size:"
@@ -10377,6 +10380,8 @@ msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
 "with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
+"<b>Duplikált láb %s</b> \"%s\" a helye <b>(%.3f, %.3f)</b> konfliktus evvel "
+"a lábbal %s \"%s\" a helye <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:742
 #, c-format
@@ -22480,9 +22485,9 @@ msgid "Track clearances"
 msgstr "Vezetősáv szigetelési távolság"
 
 #: pcbnew/drc.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is on a disabled layer"
-msgstr "%d nem egy érvényes réteg szám"
+msgstr "A \"%s\" letiltott rétegen van"
 
 #: pcbnew/drc.cpp:1261
 #, c-format
@@ -22574,9 +22579,8 @@ msgid "Buried Via: not allowed"
 msgstr "Zsák átvezetőfuratok: nem engedélyezettek"
 
 #: pcbnew/drc_item.cpp:79
-#, fuzzy
 msgid "Item on a disabled layer"
-msgstr "Tartalmazza a láthatatlan rétegeken található elemeket"
+msgstr "Elem egy letiltott rétegen"
 
 #: pcbnew/drc_item.cpp:81
 msgid "Copper area inside copper area"
@@ -24118,8 +24122,9 @@ msgid "cannot overwrite library path \"%s\""
 msgstr ""
 
 #: pcbnew/layer_widget.cpp:130
+#, fuzzy
 msgid "Change Layer Color for "
-msgstr ""
+msgstr "A réteg színének megváltoztatása ennek "
 
 #: pcbnew/layer_widget.cpp:182
 msgid "Change Render Color for "
@@ -24129,6 +24134,7 @@ msgstr ""
 msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr ""
+"Bal egérgombbal kattintson duplán a szín választáshoz, jobb gomb a menü"
 
 #: pcbnew/layer_widget.cpp:342
 msgid "Enable this for visibility"
@@ -24136,7 +24142,7 @@ msgstr "Láthatóság engedélyezése"
 
 #: pcbnew/layer_widget.cpp:408
 msgid "Left double click or middle click for color change"
-msgstr ""
+msgstr "Bal egérgomb vagy középső a szín választás"
 
 #: pcbnew/legacy_netlist_reader.cpp:120
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -24837,7 +24843,7 @@ msgstr "Külső bővítmények"
 
 #: pcbnew/menubar_pcb_editor.cpp:454
 msgid "Execute or reload python action plugins"
-msgstr ""
+msgstr "Futtatása vagy újratöltése a python bővítményt"
 
 #: pcbnew/menubar_pcb_editor.cpp:458
 msgid "&Refresh Plugins"
@@ -27833,691 +27839,3 @@ msgstr "%d zónák kitöltése"
 #: pcbnew/zones_by_polygon_fill_functions.cpp:120
 msgid "Checking Zones"
 msgstr "Modulok ellenőrzése"
-
-#~ msgid "Run CvPcb to associate footprints to symbols"
-#~ msgstr "Alkatrész társító"
-
-#~ msgid "Track Len"
-#~ msgstr "Vezetősáv hossz"
-
-#~ msgid "Full Len"
-#~ msgstr "Teljes hossz"
-
-#~ msgid "Routing Options..."
-#~ msgstr "Nyomvonal-tervezési beállítások"
-
-#~ msgid "Shows a dialog containing router options."
-#~ msgstr "Nyomvonal-tervezési opciók megjelenítése"
-
-#~ msgid "Differential Pair Dimensions..."
-#~ msgstr "Párhuzamos vezetősáv méretek..."
-
-#~ msgid "Sets the width and gap of the currently routed differential pair."
-#~ msgstr "Párhuzamos vezetősáv szélesség és hézag beállítása"
-
-#~ msgid "Default Value"
-#~ msgstr "Alap méretek"
-
-#~ msgid "Default Fields"
-#~ msgstr "Mezők törölése"
-
-#~ msgid "&Add Footprint Libraries Wizard..."
-#~ msgstr "Alkatrészkönyvtár hozzáadás varázsló…"
-
-#~ msgid "Add footprint libraries using wizard"
-#~ msgstr "Alkatrészkönyvtár hozzáadás varázsló használatával"
-
-#~ msgid "UNKNOWN"
-#~ msgstr "ISMERETLEN"
-
-#~ msgid "Downloading libraries"
-#~ msgstr "Könyvtárak letöltése"
-
-#~ msgid ""
-#~ "Error:\n"
-#~ "\"%s\"\n"
-#~ "while downloading library:\n"
-#~ "\"%s\""
-#~ msgstr ""
-#~ "Hiba:\n"
-#~ "“%s”\n"
-#~ "könyvtár letöltése közben:\n"
-#~ "“%s”"
-
-#~ msgid "Please wait..."
-#~ msgstr "Kérem várjon..."
-
-#~ msgid "Validating libraries"
-#~ msgstr "Könyvtárak érvényesítése"
-
-#~ msgid "NOT CHECKED"
-#~ msgstr "NEM ELLENŐRZÖTT"
-
-#~ msgid "INVALID"
-#~ msgstr "ÉRVÉNYTELEN"
-
-#~ msgid "Validating libraries %d/%d"
-#~ msgstr "Könyvtárak %d/%d érvényesítése"
-
-#~ msgid "Append with Wizard"
-#~ msgstr "Hozzáadás varázslóval"
-
-#~ msgid ""
-#~ "Welcome to the Add Footprint Libraries Wizard!\n"
-#~ "\n"
-#~ "Please select the source for the libraries to add:"
-#~ msgstr ""
-#~ "Üdvözöllek az alkatrészkönyvtár hozzáadása varázslóban!\n"
-#~ "\n"
-#~ "Válaszd ki honnan akarsz alkatrészkönyvtárat hozzáadni:"
-
-#~ msgid "Files on my computer"
-#~ msgstr "Alkatrészkönyvtár fájlt a saját számítógépemről."
-
-#~ msgid "Github repository"
-#~ msgstr "Alkatrészkönyvtár fájlt a Github OnLine tárolóból:"
-
-#~ msgid "https://github.com/KiCad"
-#~ msgstr "https://github.com/KiCad"
-
-#~ msgid "Save a local copy to:"
-#~ msgstr "Helyi másolat mentése az alábbi mappába:"
-
-#~ msgid "Select files or folders to add:"
-#~ msgstr "Hozzáadni kívánt fájl vagy mappa kiválasztása:"
-
-#~ msgid "Review and confirm the changes to the libraries:"
-#~ msgstr "Tekintse át és erősítse meg a könyvtárak módosításait:"
-
-#~ msgid "Format"
-#~ msgstr "Fájl formátum:"
-
-#~ msgid "Where do you wish the new libraries to be added:"
-#~ msgstr "Hol kívánja az új könyvtárak hozzáadását:"
-
-#~ msgid "To global library configuration (visible by all projects)"
-#~ msgstr "Globális könyvtár konfiguráció (összes projektben látható)"
-
-#~ msgid "To the current project only"
-#~ msgstr "Csak az aktuális projektbe (más projektekben nem látható)"
-
-#~ msgid "Add &Footprint Libraries Wizard..."
-#~ msgstr "Alkatrészkönyvtár hozzáadás varázsló..."
-
-#~ msgid "Add footprint libraries with wizard"
-#~ msgstr "Alkatrészkönyvtár hozzáadása varázslóval"
-
-#~ msgid "Add Footprint Libraries Wizard"
-#~ msgstr "Alkatrészkönyvtár hozzáadás varázsló"
-
-#~ msgid "&FreeRoute"
-#~ msgstr "FreeRoute ármkörhuzalozó"
-
-#~ msgid "Fast access to the FreeROUTE external advanced router"
-#~ msgstr "FreeRoute ármkörhuzalozó"
-
-#~ msgid "The arc angle must be greater than zero."
-#~ msgstr "A körív szögének nullánál nagyobbnak kell lennie."
-
-#~ msgid "Center X"
-#~ msgstr "Középpont X"
-
-#~ msgid "Center Y"
-#~ msgstr "Középpont Y"
-
-#~ msgid "Point X"
-#~ msgstr "Pont X"
-
-#~ msgid "Point Y"
-#~ msgstr "Pont Y"
-
-#~ msgid "Start Point X"
-#~ msgstr "Kezdőpont X"
-
-#~ msgid "Start Point Y"
-#~ msgstr "Kezdőpont Y"
-
-#~ msgid "Error list"
-#~ msgstr "Hibalista"
-
-#~ msgid "Fit in page"
-#~ msgstr "Kitöltés teljes lapra"
-
-#~ msgid "Rotate X <-"
-#~ msgstr "Balra forgatás X tengelyen"
-
-#~ msgid "Rotate X ->"
-#~ msgstr "Jobbra forgatás X tengelyen"
-
-#~ msgid "Rotate Y <-"
-#~ msgstr "Balra forgatás Y tengelyen"
-
-#~ msgid "Rotate Y ->"
-#~ msgstr "Jobbra forgatás Y tengelyen"
-
-#~ msgid "Rotate Z <-"
-#~ msgstr "Balra forgatás Z tengelyen"
-
-#~ msgid "Rotate Z ->"
-#~ msgstr "Jobbra forgatás Z tengelyen"
-
-#~ msgid "Realistic Mode"
-#~ msgstr "Valósághű megjelenítés"
-
-#~ msgid "Show Board Bod&y"
-#~ msgstr "Paneltest megjelenítése"
-
-#~ msgid "Show Zone &Filling"
-#~ msgstr "Zónák megjelenítése kitöltött módon"
-
-#~ msgid "Through Hole"
-#~ msgstr "Átmenőfurat"
-
-#~ msgid "Show &Layers"
-#~ msgstr "Rétegek megjelenítése"
-
-#~ msgid "Show &Adhesive Layers"
-#~ msgstr "Ragasztó réteg megjelenítése"
-
-#~ msgid "Show &Silkscreen Layers"
-#~ msgstr "Szitanyomat réteg megjelenítése"
-
-#~ msgid "Show Solder &Mask Layers"
-#~ msgstr "Forrasztómaszk réteg megjelenítése"
-
-#~ msgid "Show Solder &Paste Layers"
-#~ msgstr "Forrasztópaszta réteg megjelenítése"
-
-#~ msgid " mils"
-#~ msgstr " mill"
-
-#~ msgid " in"
-#~ msgstr " in"
-
-#~ msgid " mm"
-#~ msgstr " mm"
-
-#~ msgid " \""
-#~ msgstr " \""
-
-#~ msgid " deg"
-#~ msgstr " fok"
-
-#~ msgid ""
-#~ "The program cannot be closed\n"
-#~ "A quasi-modal dialog window is currently open, please close it first."
-#~ msgstr ""
-#~ "A program nem zárható be, mert egy párbeszédpanel meg van nyitva benne.\n"
-#~ "Először a párbeszédpanelt kell bezárnia, aztán kiléphet a programból is."
-#~ "(148)"
-
-#~ msgid "Zoom Select"
-#~ msgstr "Nagyítás kiválasztása"
-
-#~ msgid "Grid Select"
-#~ msgstr "Rács kiválasztása"
-
-#~ msgid "Components: %d, unassigned: %d"
-#~ msgstr ""
-#~ "A kapcsolási rajzban %d szimbólum van, és még %d szimbólumhoz kell "
-#~ "alkatrészt társítani."
-
-#~ msgid "Filter list: "
-#~ msgstr "Szűrőlista: "
-
-#~ msgid "name"
-#~ msgstr "név"
-
-#~ msgid "Close CvPcb"
-#~ msgstr "Alkatrésztársító bezárása"
-
-#~ msgid "&Keep Open On Save"
-#~ msgstr "Mentés után is maradjon megnyitva"
-
-#~ msgid "Prevent CvPcb from exiting after saving netlist file"
-#~ msgstr ""
-#~ "Az alkatrésztársítás mentése után ne zárja be az alkatrésztársító "
-#~ "alkalmazást"
-
-#~ msgid "&About Kicad"
-#~ msgstr "A KiCAD-ről"
-
-#~ msgid "Key Words: "
-#~ msgstr "Kulcsszavak: "
-
-#~ msgid "Paste Block"
-#~ msgstr "Blokk beillesztése"
-
-#~ msgid "Load Schematic"
-#~ msgstr "Kapcsolási rajz betöltése"
-
-#~ msgid "Key Words"
-#~ msgstr "Kulcsszavak"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Do you want to create a sheet with the contents of this file?"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Szeretne létrehozni egy lapot a fájl tartalmával?"
-
-#~ msgid "Changing the sheet file name cannot be undone.  "
-#~ msgstr "A lap név módosítása nem vonható vissza. "
-
-#~ msgid "Mirror horizontally"
-#~ msgstr "Tükrözés vízszintesen"
-
-#~ msgid "Mirror vertically"
-#~ msgstr "Tükrözés függőlegesen"
-
-#~ msgid "Position:"
-#~ msgstr "Pozíció:"
-
-#~ msgid "  Fields"
-#~ msgstr "  Mezők"
-
-#~ msgid "Apply Changes"
-#~ msgstr "Módosítások elfogadása"
-
-#~ msgid "Revert Changes"
-#~ msgstr "Módosítások visszavonása"
-
-#~ msgid "Table:"
-#~ msgstr "Táblázat útvonal:"
-
-#~ msgid "Horizontal Justify"
-#~ msgstr "Vízszintes igazítás:"
-
-#~ msgid "Vertical Justify"
-#~ msgstr "Függőleges igazítás:"
-
-#~ msgid "General Pin Settings"
-#~ msgstr "Alapértelmezett láb beállítások:"
-
-#~ msgid "Illegal reference. A reference must start with a letter"
-#~ msgstr "Hibás referencia. A referenciának betűvel kell kezdődnie."
-
-#~ msgid "Horiz. Justify"
-#~ msgstr "Vízs. igazítás"
-
-#~ msgid "Vert. Justify"
-#~ msgstr "Függ. igazítás"
-
-#~ msgid "Visibility"
-#~ msgstr "Láthatóság:"
-
-#~ msgid "Field Name"
-#~ msgstr "Mező név:"
-
-#~ msgid "Field Value"
-#~ msgstr "Mező érték:"
-
-#~ msgid "DC [V/A]"
-#~ msgstr "DC [V/A]"
-
-#~ msgid "Pulse width [s]"
-#~ msgstr "Impulzus szélesség [s]"
-
-#~ msgid "Frequency [Hz]"
-#~ msgstr "Frekvencia [Hz]"
-
-#~ msgid "Value [V/A]"
-#~ msgstr "Érték [V/A]"
-
-#~ msgid "Keywords"
-#~ msgstr "Kulcsszavak:"
-
-#~ msgid "Enter a name to create a new component based on this one."
-#~ msgstr "Adjon meg egy nevet egy új komponens létrehozásához."
-
-#~ msgid "Enter a new value for the %s field."
-#~ msgstr "Adjon meg egy új értéket a %s mezőhöz."
-
-#~ msgid "Alias of "
-#~ msgstr "Megnevezés "
-
-#~ msgid "Pa&ge Settings..."
-#~ msgstr "Oldalbeállítások..."
-
-#~ msgid "Pri&nt..."
-#~ msgstr "Nyomtatás..."
-
-#~ msgid "&Plot..."
-#~ msgstr "Kapcsolási rajz exportálás választható fájlformátumba..."
-
-#~ msgid "Plot to C&lipboard"
-#~ msgstr "Kapcsolási rajz másolása a vágólapra"
-
-#~ msgid "Library &Editor"
-#~ msgstr "Szimbólum szerkesztő"
-
-#~ msgid "Run CvPcb"
-#~ msgstr "Alkatrész társító indítása"
-
-#~ msgid "&Save Preferences..."
-#~ msgstr "Tulajdonságok mentése..."
-
-#~ msgid "Save application preferences"
-#~ msgstr "Aktuális projekt mentése"
-
-#~ msgid "Load Prefe&rences..."
-#~ msgstr "Program tulajdonságok betöltése"
-
-#~ msgid "Load application preferences"
-#~ msgstr "Load application preferences"
-
-#~ msgid "Input Pin.........."
-#~ msgstr "Bemeneti láb"
-
-#~ msgid "Output Pin........."
-#~ msgstr "Kimeneti láb"
-
-#~ msgid "Bidirectional Pin.."
-#~ msgstr "Kétirányú láb"
-
-#~ msgid "Tri-State Pin......"
-#~ msgstr "Háromállapotú láb"
-
-#~ msgid "Passive Pin........"
-#~ msgstr "Passzív láb"
-
-#~ msgid "Unspecified Pin...."
-#~ msgstr "Meghatározatlan láb"
-
-#~ msgid "Power Input Pin...."
-#~ msgstr "Tápfeszültség bemeneti láb"
-
-#~ msgid "Power Output Pin..."
-#~ msgstr "Tápfeszültség kimeneti láb"
-
-#~ msgid "Open Collector....."
-#~ msgstr "Nyitott kollektoros láb"
-
-#~ msgid "Open Emitter......."
-#~ msgstr "Nyitott emiteres láb"
-
-#~ msgid "No Connection......"
-#~ msgstr "Nem csatlakoztatott láb"
-
-#~ msgid "Fit schematic sheet on screen"
-#~ msgstr "Rajzlap illesztése a képernyőre"
-
-#~ msgid "Open Drill File"
-#~ msgstr "Furat fájl megnyitása"
-
-#~ msgid "X scale adjust"
-#~ msgstr "X tengely igazítása:"
-
-#~ msgid "Y scale adjust"
-#~ msgstr "Y tengely igazítása:"
-
-#~ msgid "Load &Gerber File..."
-#~ msgstr "Új gerber fájl betöltése a kijelölt rétegre..."
-
-#~ msgid "Load &EXCELLON Drill File..."
-#~ msgstr "Új excellon furat fájl betöltése a kijelölt rétegre..."
-
-#~ msgid "Load excellon drill file"
-#~ msgstr ""
-#~ "Új excellon furat fájl betöltése a kijelölt rétegre.\n"
-#~ "Figyelmeztetés: a rétegen lévő adatok elvesznek!"
-
-#~ msgid "Clear &All"
-#~ msgstr "Minden réteg törlése"
-
-#~ msgid "Print gerber"
-#~ msgstr "Gerber rétegek nyomtatása"
-
-#~ msgid "Show spots in sketch mode"
-#~ msgstr "Forrpontok megjelenítése vázlat módban"
-
-#~ msgid "Show polygons in sketch mode"
-#~ msgstr "Sokszögek megjelenítése vázlat módban"
-
-#~ msgid "METRIC command has no parameter"
-#~ msgstr "A METRIKUS parancsnak nincs paramétere"
-
-#~ msgid "INCH command has no parameter"
-#~ msgstr "Az ANGOLSZÁSZ parancsnak nincs paramétere"
-
-#~ msgid "Render"
-#~ msgstr "Leképezés"
-
-#~ msgid "Portable Templates"
-#~ msgstr "Hordozható sablonok"
-
-#~ msgid "Pos X (mm)"
-#~ msgstr "Poz X (mm)"
-
-#~ msgid "Pos Y (mm)"
-#~ msgstr "Poz Y (mm)"
-
-#~ msgid "End X (mm)"
-#~ msgstr "Vég X (mm)"
-
-#~ msgid "End Y (mm)"
-#~ msgstr "Vég Y (mm)"
-
-#~ msgid "Horizontal justification"
-#~ msgstr "Vízszintes igazítás"
-
-#~ msgid "Vertical justification"
-#~ msgstr "Függőleges igazítás"
-
-#~ msgid "Text width (mm)"
-#~ msgstr "Szöveg szélesség (mm):"
-
-#~ msgid "Text height (mm)"
-#~ msgstr "Szöveg magasság (mm):"
-
-#~ msgid "Maximum width (mm)"
-#~ msgstr "Maximális szélesség (mm)"
-
-#~ msgid "Position X (mm)"
-#~ msgstr "Pozíció X (mm)"
-
-#~ msgid "Position Y (mm)"
-#~ msgstr "Pozíció Y (mm)"
-
-#~ msgid "Line Thickness (mm)"
-#~ msgstr "Vonalvastagság (mm)"
-
-#~ msgid "Text Thickness"
-#~ msgstr "Szövegvastagság"
-
-#~ msgid "Left margin (mm)"
-#~ msgstr "Bal margó (mm)"
-
-#~ msgid "Right margin (mm)"
-#~ msgstr "Jobb margó (mm)"
-
-#~ msgid "Top margin (mm)"
-#~ msgstr "Felső margó (mm)"
-
-#~ msgid "Bottom margin (mm)"
-#~ msgstr "Alsó margó (mm)"
-
-#~ msgid "Electrical length"
-#~ msgstr "Elektromos hosszúság"
-
-#~ msgid "Parameters"
-#~ msgstr "Paraméterek:"
-
-#~ msgid "label"
-#~ msgstr "címke"
-
-#~ msgid "Change Cursor Shape"
-#~ msgstr "Teljesképernyős célkereszt megjelenítése / elrejtése"
-
-#~ msgid "Footprint Builder Messages"
-#~ msgstr "Alkatrésztok szerkesztő üzenetek"
-
-#~ msgid " Yes"
-#~ msgstr " Igen"
-
-#~ msgid " No"
-#~ msgstr " Nem"
-
-#~ msgid "Unknown PCB_FILE_T value: %d"
-#~ msgstr "Ismeretlen PCB_FILE_T érték: %d"
-
-#~ msgid "Swap Layers:"
-#~ msgstr "Rétegek cseréje"
-
-#~ msgid "&Polygons"
-#~ msgstr "Sokszögek"
-
-#~ msgid "Automatically Place Footprint"
-#~ msgstr "Alkatrésztok automatikus elhelyezése"
-
-#~ msgid "Automatically Route Footprint"
-#~ msgstr "Alkatrésztok automatikus huzalozása"
-
-#~ msgid "Automatically Place All Footprints"
-#~ msgstr "Minden alkatrész automatikus elhelyezése"
-
-#~ msgid "Automatically Place New Footprints"
-#~ msgstr "Új alkatrész automatikus elhelyezése"
-
-#~ msgid "Automatically Place Next Footprints"
-#~ msgstr "Következő alkatrész automatikus elhelyezése"
-
-#~ msgid "Autoroute"
-#~ msgstr "Automatikus huzalozás"
-
-#~ msgid "Select Layer Pair..."
-#~ msgstr "Rétegpár kiválasztása..."
-
-#~ msgid "Automatically Route All Footprints"
-#~ msgstr "Automatically Route All Footprints"
-
-#~ msgid "Duplicate Zone Onto Layer..."
-#~ msgstr "Zóna másolása másik rétegre..."
-
-#~ msgid "Automatically Route Pad"
-#~ msgstr "Forrpont automatikus huzalozása"
-
-#~ msgid "Automatically Route Net"
-#~ msgstr "Vezeték automatikus huzalozása"
-
-#~ msgid "Footprint Selection"
-#~ msgstr "Alkatrész kiválasztása:"
-
-#~ msgid "Default pen size"
-#~ msgstr "Alapértelmezett vonalvastagság:"
-
-#~ msgid "Text width"
-#~ msgstr "Szöveg szélesség"
-
-#~ msgid "Text height"
-#~ msgstr "Szöveg magasság"
-
-#~ msgid "Text thickness"
-#~ msgstr "Szövegvastagság"
-
-#~ msgid "Properties:"
-#~ msgstr "Tulajdonságok:"
-
-#~ msgid "180, 90, and 45 degrees"
-#~ msgstr "180, 90, és 45°"
-
-#~ msgid "Keepout Options:"
-#~ msgstr "Kizárt terület beállítások:"
-
-#~ msgid "No tracks"
-#~ msgstr "Nincsenek vezetősávok"
-
-#~ msgid "No vias"
-#~ msgstr "Nincsenek forrpontok"
-
-#~ msgid "Approx. Scale"
-#~ msgstr "Méretarány választás:"
-
-#~ msgid "&Delete unconnected tracks"
-#~ msgstr "Nem csatlakoztatott vezetősávok törlése"
-
-#~ msgid "Rotation 90 degree"
-#~ msgstr "Rotation 90 degree"
-
-#~ msgid "Rotation 180 degree"
-#~ msgstr "Elforgatás 180 fokkal"
-
-#~ msgid "Local Clearance Values"
-#~ msgstr "Helyi szigetelési távolság értékek"
-
-#~ msgid "x:"
-#~ msgstr "x:"
-
-#~ msgid "y:"
-#~ msgstr "y:"
-
-#~ msgid "Select Anchor Item"
-#~ msgstr "Select Anchor Item"
-
-#~ msgid "Rotate 90 degrees"
-#~ msgstr "Elforgatás 90 fokkal"
-
-#~ msgid "Rotate 180 degrees"
-#~ msgstr "Elforgatás 180 fokkal"
-
-#~ msgid "Point X:"
-#~ msgstr "Pont X:"
-
-#~ msgid "Point Y:"
-#~ msgstr "Pont Y:"
-
-#~ msgid "Segments / 360 deg:"
-#~ msgstr "Szegmensek / 360 fok:"
-
-#~ msgid "Zone Edge Orientation"
-#~ msgstr "Zóna körvonal orientáció:"
-
-#~ msgid "Outline Appearence"
-#~ msgstr "Körvonal nézete:"
-
-#~ msgid "On new graphic item creation:"
-#~ msgstr "Új grafikus elem létrehozása:"
-
-#~ msgid "&Reference"
-#~ msgstr "Referencia:"
-
-#~ msgid "Mode footprint: manual and automatic movement and placement"
-#~ msgstr "Alkatrész mód: kézi és automata mozgatás és elhelyezés"
-
-#~ msgid "Mode track: autorouting"
-#~ msgstr "Vezetősáv mód: automatikus huzalozás"
-
-#~ msgid "Enable automatic track deletion"
-#~ msgstr "Automatikus vezetősáv törlés engedélyezése"
-
-#~ msgid "Disable auto delete old track"
-#~ msgstr "Régi vezetősávok törlésének tiltása"
-
-#~ msgid "Are you sure you want to delete item?"
-#~ msgstr "Biztosan törli a kijelölt elemeket?"
-
-#~ msgid "Copper zone (net name %s): net has no pads connected."
-#~ msgstr "Réz zóna (vezetéknév %s): a vezeték nem csatlakozik a forrponthoz."
-
-#~ msgid "Fill zones...\n"
-#~ msgstr "Réz zónák kitöltése...\n"
-
-#~ msgid "Test zones...\n"
-#~ msgstr "Kitöltött réz zónák ellenőrzése...\n"
-
-#~ msgid "Text Front"
-#~ msgstr "Felső szövegek"
-
-#~ msgid "Text Back"
-#~ msgstr "Alsó szövegek"
-
-#~ msgid "Load Footprint"
-#~ msgstr "Alkatrésztok betöltése"
-
-#~ msgid "Search for Footprint"
-#~ msgstr "Alkatrész keresése a panelen"
-
-#~ msgid "PCB Library Tables"
-#~ msgstr "Alkatrészkönyvtár táblázat"
