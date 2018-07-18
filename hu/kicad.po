@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-07-18 23:21+0200\n"
+"PO-Revision-Date: 2018-07-18 23:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -1360,7 +1360,7 @@ msgstr "Rács: %.2f mill -- %.4f mm"
 msgid ""
 "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
 msgstr ""
-"Rácsméret (% f,% f) nincs a rácslistában, vissza erre rácsméretre (% f,% f)."
+"Rácsméret ( %f, %f ) nincs a rácslistában, vissza erre rácsméretre ( %f, %f)."
 
 #: common/base_screen.cpp:271
 #, c-format
