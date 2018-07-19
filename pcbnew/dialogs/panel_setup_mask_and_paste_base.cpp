@@ -108,11 +108,11 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	
 	bSizer3->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 	
-	m_staticTextInfo2 = new wxStaticText( this, wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo2->Wrap( -1 );
-	m_staticTextInfo2->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextInfoCopper = new wxStaticText( this, wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoCopper->Wrap( -1 );
+	m_staticTextInfoCopper->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizer3->Add( m_staticTextInfo2, 0, wxALL, 5 );
+	bSizer3->Add( m_staticTextInfoCopper, 0, wxALL, 5 );
 	
 	
 	bMainSizer->Add( bSizer3, 1, wxRIGHT|wxLEFT, 5 );

@@ -945,7 +945,7 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">2</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="1">
@@ -1313,7 +1313,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">2</property>
                                     <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">

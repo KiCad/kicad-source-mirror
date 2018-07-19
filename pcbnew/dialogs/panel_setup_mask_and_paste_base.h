@@ -45,7 +45,7 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxStaticText* m_staticTextRatio;
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
-		wxStaticText* m_staticTextInfo2;
+		wxStaticText* m_staticTextInfoCopper;
 	
 	public:
 		

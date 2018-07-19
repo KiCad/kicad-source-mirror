@@ -67,10 +67,9 @@ PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PA
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    // 6.0 TODO: flag the Others row for now
-    auto attr = new wxGridCellAttr;
-    attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK ) );
-    m_grid->SetRowAttr( 3, attr );
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_staticTextInfo->SetFont( infoFont );
 }
 
 
