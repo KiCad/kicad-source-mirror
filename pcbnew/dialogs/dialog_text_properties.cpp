@@ -295,6 +295,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_edaText->SetThickness( m_thickness.GetValue() );
     m_edaText->SetTextPos( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
 
+    if( m_modText )
+        m_modText->SetLocalCoord();
+
     // Test for acceptable values for thickness and size and clamp if fails
     int maxthickness = Clamp_Text_PenSize( m_edaText->GetThickness(), m_edaText->GetTextSize() );
 
