@@ -57,27 +57,37 @@ public:
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
     wxDialog( aParent, id, title, pos, size, style, name ),
-    KIWAY_HOLDER( 0 ),
+    KIWAY_HOLDER( nullptr ),
+    m_units( MILLIMETRES ),
     m_firstPaintEvent( true ),
     m_initialFocusTarget( nullptr ),
-    m_qmodal_loop( 0 ),
+    m_qmodal_loop( nullptr ),
     m_qmodal_showing( false ),
-    m_qmodal_parent_disabler( 0 )
+    m_qmodal_parent_disabler( nullptr )
 {
-    KIWAY_HOLDER* h = dynamic_cast<KIWAY_HOLDER*>( aParent );
-    while( !h && aParent->GetParent() )
+    KIWAY_HOLDER* kiwayHolder = nullptr;
+
+    if( aParent )
     {
-        aParent = aParent->GetParent();
-        h = dynamic_cast<KIWAY_HOLDER*>( aParent );
+        kiwayHolder = dynamic_cast<KIWAY_HOLDER*>( aParent );
+
+        while( !kiwayHolder && aParent->GetParent() )
+        {
+            aParent = aParent->GetParent();
+            kiwayHolder = dynamic_cast<KIWAY_HOLDER*>( aParent );
+        }
+
+        wxASSERT_MSG( kiwayHolder, "Dialog parent is not a KIWAY_HOLDER" );
     }
 
-    wxASSERT_MSG( h, "Dialog parent is not a KIWAY_HOLDER" );
+    if( kiwayHolder )
+    {
+        // Inherit units from parent
+        m_units = kiwayHolder->GetUserUnits();
 
-    // Inherit units from parent
-    m_units = h->GetUserUnits();
-
-    // Set up the message bus
-    SetKiway( this, &h->Kiway() );
+        // Set up the message bus
+        SetKiway( this, &kiwayHolder->Kiway() );
+    }
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
