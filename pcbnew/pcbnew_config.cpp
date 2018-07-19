@@ -249,21 +249,11 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
                                                        &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
 
-        // layer colors:
-
-
         // Miscellaneous:
-        m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &m_rotationAngle,
-                                                       900, 1, 900 ) );
+        m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ),
+                                                       &m_rotationAngle, 900, 1, 900 ) );
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ),
-                                                       &displ_opts->m_MaxLinksShowed,
-                                                       3, 0, 15 ) );
-
-//FIXMEd
-/*        m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
-                                                        &g_TwoSegmentTrackBuild, true ) );
-        m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" )
-                                                        , &g_Segments_45_Only, true ) );*/
+                                                       &displ_opts->m_MaxLinksShowed, 3, 0, 15 ) );
     }
 
     return m_configParams;

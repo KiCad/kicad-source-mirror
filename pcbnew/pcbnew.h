@@ -86,11 +86,6 @@ extern bool     g_Alternate_Track_Posture;
 extern PCB_LAYER_ID g_Route_Layer_TOP;
 extern PCB_LAYER_ID g_Route_Layer_BOTTOM;
 
-extern bool     g_TwoSegmentTrackBuild;
-
-extern int      g_MagneticPadOption;
-extern int      g_MagneticTrackOption;
-
 extern wxPoint  g_Offset_Module;         // Offset trace when moving footprint.
 
 /// List of segments of the trace currently being drawn.
