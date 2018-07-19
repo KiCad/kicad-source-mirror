@@ -51,7 +51,8 @@ class ZONE_SETTINGS
 {
 public:
     enum {
-        SMOOTHING_NONE,
+        SMOOTHING_UNDEFINED = -1,
+        SMOOTHING_NONE = 0,
         SMOOTHING_CHAMFER,
         SMOOTHING_FILLET,
         SMOOTHING_LAST

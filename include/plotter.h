@@ -48,6 +48,7 @@ class GBR_NETLIST_METADATA;
  * of the radio buttons in the plot panel/windows.
  */
 enum PlotFormat {
+    PLOT_FORMAT_UNDEFINED = -1,
     PLOT_FIRST_FORMAT = 0,
     PLOT_FORMAT_HPGL = PLOT_FIRST_FORMAT,
     PLOT_FORMAT_GERBER,

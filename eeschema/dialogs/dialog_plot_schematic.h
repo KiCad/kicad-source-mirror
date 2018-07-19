@@ -49,10 +49,9 @@ private:
     SCH_EDIT_FRAME* m_parent;
     wxConfigBase*   m_config;
     bool            m_configChanged;        // true if a project config param has changed
-    static int      m_pageSizeSelect;       // Static to keep last option for some format:
-                                            // Static to keep last option:
-                                            // use default size or force A or A4 size
-    int             m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
+    PlotFormat      m_plotFormat;
+    static int      m_pageSizeSelect;       // Static to keep last option for some format
+    static int      m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
     double          m_HPGLPenSize;          // for HPGL format only: pen size
 
     UNIT_BINDER     m_defaultLineWidth;

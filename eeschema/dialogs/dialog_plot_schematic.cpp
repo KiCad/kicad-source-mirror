@@ -47,6 +47,7 @@
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
+int DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = PAGE_SIZE_AUTO;
 
 
 void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
@@ -63,12 +64,13 @@ void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
 
 DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
     DIALOG_PLOT_SCHEMATIC_BASE( parent ),
+    m_parent( parent ),
+    m_plotFormat( PLOT_FORMAT_UNDEFINED ),
     m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
     m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
-    m_parent = parent;
-    m_configChanged = false;
     m_config = Kiface().KifaceSettings();
+    m_configChanged = false;
 
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
@@ -204,43 +206,48 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 {
     PlotFormat fmt = GetPlotFileFormat();
 
-    wxArrayString paperSizes;
-    paperSizes.push_back( _( "Schematic size" ) );
-
-    int selection;
-
-    if( fmt == PLOT_FORMAT_HPGL )
+    if( fmt != m_plotFormat )
     {
-        paperSizes.push_back( _( "A4" ) );
-        paperSizes.push_back( _( "A3" ) );
-        paperSizes.push_back( _( "A2" ) );
-        paperSizes.push_back( _( "A1" ) );
-        paperSizes.push_back( _( "A0" ) );
-        paperSizes.push_back( _( "A" ) );
-        paperSizes.push_back( _( "B" ) );
-        paperSizes.push_back( _( "C" ) );
-        paperSizes.push_back( _( "D" ) );
-        paperSizes.push_back( _( "E" ) );
+        m_plotFormat = fmt;
 
-        selection = m_HPGLPaperSizeSelect;
+        wxArrayString paperSizes;
+        paperSizes.push_back( _( "Schematic size" ) );
+
+        int selection;
+
+        if( fmt == PLOT_FORMAT_HPGL )
+        {
+            paperSizes.push_back( _( "A4" ) );
+            paperSizes.push_back( _( "A3" ) );
+            paperSizes.push_back( _( "A2" ) );
+            paperSizes.push_back( _( "A1" ) );
+            paperSizes.push_back( _( "A0" ) );
+            paperSizes.push_back( _( "A" ) );
+            paperSizes.push_back( _( "B" ) );
+            paperSizes.push_back( _( "C" ) );
+            paperSizes.push_back( _( "D" ) );
+            paperSizes.push_back( _( "E" ) );
+
+            selection = m_HPGLPaperSizeSelect;
+        }
+        else
+        {
+            paperSizes.push_back( _( "A4" ) );
+            paperSizes.push_back( _( "A" ) );
+
+            selection = m_pageSizeSelect;
+        }
+
+        m_paperSizeOption->Set( paperSizes );
+        m_paperSizeOption->SetSelection( selection );
+
+        m_defaultLineWidth.Enable( fmt == PLOT_FORMAT_POST || fmt == PLOT_FORMAT_PDF
+                                   || fmt == PLOT_FORMAT_SVG );
+
+        m_plotOriginTitle->Enable( fmt == PLOT_FORMAT_HPGL );
+        m_plotOriginOpt->Enable( fmt == PLOT_FORMAT_HPGL );
+        m_penWidth.Enable( fmt == PLOT_FORMAT_HPGL );
     }
-    else
-    {
-        paperSizes.push_back( _( "A4" ) );
-        paperSizes.push_back( _( "A" ) );
-
-        selection = m_pageSizeSelect;
-    }
-
-    m_paperSizeOption->Set( paperSizes );
-    m_paperSizeOption->SetSelection( selection );
-
-    m_defaultLineWidth.Enable( fmt == PLOT_FORMAT_POST || fmt == PLOT_FORMAT_PDF
-                               || fmt == PLOT_FORMAT_SVG );
-
-    m_plotOriginTitle->Enable( fmt == PLOT_FORMAT_HPGL );
-    m_plotOriginOpt->Enable( fmt == PLOT_FORMAT_HPGL );
-    m_penWidth.Enable( fmt == PLOT_FORMAT_HPGL );
 }
 
 

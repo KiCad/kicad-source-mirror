@@ -54,6 +54,8 @@ private:
     long            m_NetFiltering;
     static wxString m_netNameShowFilter;    // the filter to show nets (default * "*").
                                             // static to keep this pattern for an entire Pcbnew session
+    int             m_cornerSmoothingType;
+
     UNIT_BINDER     m_cornerRadius;
     UNIT_BINDER     m_clearance;
     UNIT_BINDER     m_minWidth;
@@ -96,6 +98,7 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 
 DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
     DIALOG_COPPER_ZONE_BASE( aParent ),
+    m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true, 0 ),
     m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true, 0, ZONE_CLEARANCE_MAX_VALUE_MIL*IU_PER_MILS ),
     m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true, ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS ),
@@ -183,10 +186,15 @@ void DIALOG_COPPER_ZONE::OnUpdateUI( wxUpdateUIEvent& )
 
     m_bNoNetWarning->Show( m_ListNetNameSelection->GetSelection() == 0 );
 
-    if( m_cornerSmoothingChoice->GetSelection() == ZONE_SETTINGS::SMOOTHING_CHAMFER )
-        m_cornerRadiusLabel->SetLabel( _( "Chamfer distance:" ) );
-    else
-        m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
+    if( m_cornerSmoothingType != m_cornerSmoothingChoice->GetSelection() )
+    {
+        m_cornerSmoothingType = m_cornerSmoothingChoice->GetSelection();
+
+        if( m_cornerSmoothingChoice->GetSelection() == ZONE_SETTINGS::SMOOTHING_CHAMFER )
+            m_cornerRadiusLabel->SetLabel( _( "Chamfer distance:" ) );
+        else
+            m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
+    }
 }
 
 
