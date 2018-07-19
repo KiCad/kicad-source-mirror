@@ -165,7 +165,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
 
     wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString );
     wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );
-    wxDataViewColumn* layerIDColumn = aList->AppendIconTextColumn( wxEmptyString );
+    wxDataViewColumn* layerIDColumn = aList->AppendTextColumn( wxEmptyString );
     layerIDColumn->SetHidden( true );
 
     int minWidth = 0;
@@ -186,7 +186,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
         wxVector<wxVariant> row;
         row.push_back( wxVariant( m_Layers.test( layerID ) ) );
         row.push_back( wxVariant( wxDataViewIconText( layerName, icon ) ) );
-        row.push_back( wxVariant( layerID ) );
+        row.push_back( wxVariant( wxString::Format( "%i", layerID ) ) );
         aList->AppendItem( row );
 
         if( m_CurrentZone_Layer == layerID )
