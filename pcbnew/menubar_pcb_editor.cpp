@@ -258,12 +258,12 @@ void prepareLibraryMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure Pa&ths..." ),
+                 _( "&Configure Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Manage Footprint Li&braries..." ),
+                _( "Manage &Footprint Libraries..." ),
                 _( "Edit the global and project footprint library lists" ),
                 KiBitmap( library_table_xpm ) );
 

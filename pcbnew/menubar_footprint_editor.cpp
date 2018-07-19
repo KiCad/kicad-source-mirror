@@ -422,12 +422,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Path configuration edit dialog.
     AddMenuItem( prefs_menu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure Pa&ths..." ),
+                 _( "&Configure Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
     AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Manage Footprint Li&braries..." ), _( "Configure footprint library table" ),
+                _( "Manage &Footprint Libraries..." ), _( "Configure footprint library table" ),
                 KiBitmap( library_table_xpm ) );
 
     // Settings

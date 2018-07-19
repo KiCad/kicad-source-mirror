@@ -288,14 +288,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Environment varialbes
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure Pa&ths..." ),
+                 _( "&Configure Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
 
     // Library list
     AddMenuItem( preferencesMenu,
                  ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage Symbol Libraries..." ),
+                 _( "Manage &Symbol Libraries..." ),
                  _( "Edit the global and project symbol library tables." ),
                  KiBitmap( library_table_xpm ) );
 
@@ -304,7 +304,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Default values and options
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
-                 _( "Preferences..." ),
+                 _( "&Preferences..." ),
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 

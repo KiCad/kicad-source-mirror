@@ -172,14 +172,15 @@ public:
     void OnRunPageLayoutEditor( wxCommandEvent& event );
 
     void OnConfigurePaths( wxCommandEvent& aEvent );
+    void OnEditSymLibTable( wxCommandEvent& aEvent );
+    void OnEditFpLibTable( wxCommandEvent& aEvent );
     void OnPreferences( wxCommandEvent& aEvent );
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );
+    void OnShowHotkeys( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
     void OnExit( wxCommandEvent& event );
-
-    void Process_Config( wxCommandEvent& event );
 
     void ReCreateMenuBar() override;
     void RecreateBaseHToolbar();

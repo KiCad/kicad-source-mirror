@@ -79,6 +79,15 @@ public:
 
     ~DIALOG_SHIM();
 
+    /**
+     * Sets the window (usually a wxTextCtrl) that should be focused when the dialog is
+     * shown.
+     */
+    void SetInitialFocus( wxWindow* aWindow )
+    {
+        m_initialFocusTarget = aWindow;
+    }
+
     int ShowQuasiModal();      // disable only the parent window, otherwise modal.
 
     void EndQuasiModal( int retCode );  // End quasi-modal mode
@@ -111,15 +120,6 @@ protected:
      * wxInitDialogEvent handler wxDialog
      */
     void FinishDialogSettings();
-
-    /**
-     * Sets the window (usually a wxTextCtrl) that should be focused when the dialog is
-     * shown.
-     */
-    void SetInitialFocus( wxWindow* aWindow )
-    {
-        m_initialFocusTarget = aWindow;
-    }
 
     /**
      * Set the dialog to the given dimensions in "dialog units". These are units equivalent

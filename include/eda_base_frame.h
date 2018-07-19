@@ -87,6 +87,7 @@ class TOOL_MANAGER;
 class TOOL_DISPATCHER;
 class ACTIONS;
 class PAGED_DIALOG;
+class DIALOG_EDIT_LIBRARY_TABLES;
 
 
 enum id_librarytype {
@@ -240,6 +241,13 @@ public:
      * @param aParent a paged dialog into which the preference panels should be installed
      */
     virtual void InstallPreferences( PAGED_DIALOG* aParent ) { }
+
+    /**
+     * Function InstallLibraryTablesPanel
+     * allows a Frame to load its library tables (if any) into a library tables dialog.
+     * @param aDialog a library tables dialog
+     */
+    virtual void InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog ) { }
 
     /**
      * Function LoadSettings

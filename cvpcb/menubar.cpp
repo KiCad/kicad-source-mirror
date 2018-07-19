@@ -64,12 +64,12 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Path configuration edit dialog.
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure &Paths..." ),
+                 _( "&Configure Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( editor_xpm ) );
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Manage Footprint &Libraries..." ), _( "Manage footprint libraries" ),
+                 _( "Manage &Footprint Libraries..." ), _( "Manage footprint libraries" ),
                  KiBitmap( library_table_xpm ) );
 
     preferencesMenu->AppendSeparator();

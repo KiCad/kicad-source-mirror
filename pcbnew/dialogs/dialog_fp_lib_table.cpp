@@ -49,8 +49,10 @@
 #include <lib_table_grid.h>
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>
+#include <pcb_edit_frame.h>
 #include <env_paths.h>
 #include <dialogs/dialog_file_dir_picker.h>
+#include <dialog_edit_library_tables.h>
 
 // Filters for the file picker
 static constexpr int FILTER_COUNT = 4;
@@ -106,6 +108,7 @@ static wxString getFilterString()
  */
 class FP_LIB_TABLE_GRID : public LIB_TABLE_GRID, public FP_LIB_TABLE
 {
+    friend class PANEL_FP_LIB_TABLE;
     friend class FP_GRID_TRICKS;
 
 protected:
@@ -252,14 +255,15 @@ protected:
 };
 
 
-DIALOG_FP_LIB_TABLE::DIALOG_FP_LIB_TABLE( wxWindow* aParent, FP_LIB_TABLE* aGlobal,
-                                          FP_LIB_TABLE* aProject ) :
-    DIALOG_FP_LIB_TABLE_BASE( aParent ),
+PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, FP_LIB_TABLE* aGlobal,
+                                        FP_LIB_TABLE* aProject ) :
+    PANEL_FP_LIB_TABLE_BASE( aParent ),
     m_global( aGlobal ),
-    m_project( aProject )
+    m_project( aProject ),
+    m_parent( aParent )
 {
     // For user info, shows the table filenames:
-    m_PrjTableFilename->SetLabel( Prj().FootprintLibTblName() );
+    m_PrjTableFilename->SetLabel( m_parent->Prj().FootprintLibTblName() );
     m_GblTableFilename->SetLabel( FP_LIB_TABLE::GetGlobalTableFileName() );
 
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
@@ -331,21 +335,10 @@ DIALOG_FP_LIB_TABLE::DIALOG_FP_LIB_TABLE( wxWindow* aParent, FP_LIB_TABLE* aGlob
     // Without that, we do not see what lib will be deleted
     m_global_grid->SetGridCursor( 0, 1 );
     m_project_grid->SetGridCursor( 0, 1 );
-
-    m_sdbSizerOK->SetDefault();
-
-        SetSizeInDU( 450, 380 );
-        Center();
-
-    FinishDialogSettings();
-
-    // On some windows manager (Unity, XFCE), this dialog is not always raised, depending
-    // on how the dialog is run.
-    Raise();
 }
 
 
-DIALOG_FP_LIB_TABLE::~DIALOG_FP_LIB_TABLE()
+PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
 {
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
@@ -354,14 +347,14 @@ DIALOG_FP_LIB_TABLE::~DIALOG_FP_LIB_TABLE()
 }
 
 
-bool DIALOG_FP_LIB_TABLE::Show( bool aShow )
+bool PANEL_FP_LIB_TABLE::Show( bool aShow )
 {
     if( aShow )
     {
         m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
 
         // for ALT+A handling, we want the initial focus to be on the first selected grid.
-        SetInitialFocus( m_cur_grid );
+        m_parent->SetInitialFocus( m_cur_grid );
     }
     else
     {
@@ -369,14 +362,14 @@ bool DIALOG_FP_LIB_TABLE::Show( bool aShow )
         // We must do this on Show( false ) because when the first grid is hidden it
         // gives focus to the next one (which is then hidden), but the result is that
         // we save the wrong grid if we do it after this.
-        m_pageNdx = m_auinotebook->GetSelection();
+        m_pageNdx = (unsigned) std::max( 0, m_auinotebook->GetSelection() );
     }
 
-    return DIALOG_SHIM::Show( aShow );
+    return wxPanel::Show( aShow );
 }
 
 
-bool DIALOG_FP_LIB_TABLE::verifyTables()
+bool PANEL_FP_LIB_TABLE::verifyTables()
 {
     for( int t=0; t<2; ++t )
     {
@@ -398,9 +391,9 @@ bool DIALOG_FP_LIB_TABLE::verifyTables()
             }
         else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_PCB ) ) )
             {
-                wxString msg = wxString::Format(
-                    _( "Illegal character \"%c\" in Nickname: \"%s\"" ),
-                    illegalCh, GetChars( nick ) );
+                wxString msg = wxString::Format( _( "Illegal character '%c' in Nickname: \"%s\"" ),
+                                                 illegalCh,
+                                                 GetChars( nick ) );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( &model != cur_model() )
@@ -438,10 +431,7 @@ bool DIALOG_FP_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    wxString msg = wxString::Format(
-                        _( "Duplicate Nickname: \"%s\" in rows %d and %d" ),
-                        GetChars( nick1 ), r1+1, r2+1
-                        );
+                    wxString msg = wxString::Format( _( "Duplicate Nicknames \"%s\"." ), nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( &model != cur_model() )
@@ -465,13 +455,13 @@ bool DIALOG_FP_LIB_TABLE::verifyTables()
 
 //-----<event handlers>----------------------------------
 
-void DIALOG_FP_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
+void PANEL_FP_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 {
     m_cur_grid = ( m_auinotebook->GetSelection() == 0 ) ? m_global_grid : m_project_grid;
 }
 
 
-void DIALOG_FP_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
+void PANEL_FP_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
     if( m_cur_grid->AppendRows( 1 ) )
     {
@@ -486,7 +476,7 @@ void DIALOG_FP_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
+void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 {
     int curRow = m_cur_grid->GetGridCursorRow();
     int curCol = m_cur_grid->GetGridCursorCol();
@@ -535,7 +525,7 @@ void DIALOG_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
+void PANEL_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
     FP_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
@@ -562,7 +552,7 @@ void DIALOG_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
+void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
     FP_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
@@ -589,13 +579,13 @@ void DIALOG_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
+void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
     if( m_lastBrowseDir.IsEmpty() )
-        m_lastBrowseDir = Prj().GetProjectPath();
+        m_lastBrowseDir = m_parent->Prj().GetProjectPath();
 
     DIALOG_FILE_DIR_PICKER dlg( this, _( "Select Library" ), m_lastBrowseDir,
-            getFilterString(), FD_MULTIPLE );
+                                getFilterString(), FD_MULTIPLE );
 
     auto result = dlg.ShowModal();
 
@@ -608,6 +598,7 @@ void DIALOG_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( m_lastBrowseDir.EndsWith( KiCadFootprintLibPathExtension ) )
         m_lastBrowseDir = m_lastBrowseDir.BeforeLast( wxFileName::GetPathSeparator() );
 
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
     bool skipRemainingDuplicates = false;
     wxArrayString files;
     dlg.GetFilenames( files );
@@ -648,9 +639,12 @@ void DIALOG_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( type ) );
 
             // try to use path normalized to an environmental variable or project path
-            wxString normalizedPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(), &Prj() );
-            m_cur_grid->SetCellValue( last_row, COL_URI,
-                    normalizedPath.IsEmpty() ? fn.GetFullPath() : normalizedPath );
+            wxString path = NormalizePath( filePath, &envVars, &m_parent->Prj() );
+
+            if( path.IsEmpty() )
+                path = fn.GetFullPath();
+
+            m_cur_grid->SetCellValue( last_row, COL_URI, path );
         }
     }
 
@@ -662,7 +656,7 @@ void DIALOG_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
 }
 
-void DIALOG_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
+void PANEL_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 {
     // Account for scroll bars
     aWidth -= ( m_path_subs_grid->GetSize().x - m_path_subs_grid->GetClientSize().x );
@@ -672,7 +666,7 @@ void DIALOG_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 }
 
 
-void DIALOG_FP_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
+void PANEL_FP_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 {
     adjustPathSubsGridColumns( event.GetSize().GetX() );
 
@@ -680,10 +674,8 @@ void DIALOG_FP_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 }
 
 
-void DIALOG_FP_LIB_TABLE::onOKButtonClick( wxCommandEvent& event )
+bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
 {
-    int dialogRet = 0;
-
     // stuff any pending cell editor text into the table.
     m_cur_grid->DisableCellEditControl();
 
@@ -691,7 +683,7 @@ void DIALOG_FP_LIB_TABLE::onOKButtonClick( wxCommandEvent& event )
     {
         if( *global_model() != *m_global )
         {
-            dialogRet |= 1;
+            m_parent->m_GlobalTableChanged = true;
 
             m_global->Clear();
             m_global->rows.transfer( m_global->rows.end(), global_model()->rows.begin(),
@@ -701,22 +693,22 @@ void DIALOG_FP_LIB_TABLE::onOKButtonClick( wxCommandEvent& event )
 
         if( *project_model() != *m_project )
         {
-            dialogRet |= 2;
+            m_parent->m_ProjectTableChanged = true;
 
             m_project->Clear();
             m_project->rows.transfer( m_project->rows.end(), project_model()->rows.begin(),
                                       project_model()->rows.end(), project_model()->rows );
             m_project->reindex();
         }
-
-        EndModal( dialogRet );
     }
+
+    return true;
 }
 
 
 /// Populate the readonly environment variable table with names and values
 /// by examining all the full_uri columns.
-void DIALOG_FP_LIB_TABLE::populateEnvironReadOnlyTable()
+void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 {
     wxRegEx re( ".*?(\\$\\{(.+?)\\})|(\\$\\((.+?)\\)).*?", wxRE_ADVANCED );
     wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
@@ -782,17 +774,26 @@ void DIALOG_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 
 
 
-size_t   DIALOG_FP_LIB_TABLE::m_pageNdx = 0;
+size_t   PANEL_FP_LIB_TABLE::m_pageNdx = 0;
 
-wxString DIALOG_FP_LIB_TABLE::m_lastBrowseDir;
+wxString PANEL_FP_LIB_TABLE::m_lastBrowseDir;
 
 
-int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
-                             FP_LIB_TABLE* aProject )
+int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobalTable,
+                             FP_LIB_TABLE* aProjectTable )
 {
-    DIALOG_FP_LIB_TABLE dlg( aCaller, aGlobal, aProject );
+    DIALOG_EDIT_LIBRARY_TABLES dlg( aCaller, _( "Footprint Libraries" ) );
 
-    int dialogRet = dlg.ShowModal();    // returns value passed to EndModal() above
+    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, aGlobalTable, aProjectTable ) );
 
-    return dialogRet;
+    return dlg.ShowModal();
+}
+
+
+void PCB_EDIT_FRAME::InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog )
+{
+    FP_LIB_TABLE* globalTable = &GFootprintTable;
+    FP_LIB_TABLE* projectTable = Prj().PcbFootprintLibs();
+
+    aDialog->InstallPanel( new PANEL_FP_LIB_TABLE( aDialog, globalTable, projectTable ) );
 }

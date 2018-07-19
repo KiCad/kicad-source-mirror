@@ -17,9 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_FP_LIB_TABLE_H
-#define DIALOG_FP_LIB_TABLE_H
+#ifndef PANEL_FP_LIB_TABLE_H
+#define PANEL_FP_LIB_TABLE_H
 
+#include <dialog_edit_library_tables.h>
 #include "dialog_fp_lib_table_base.h"
 
 class FP_LIB_TABLE;
@@ -29,16 +30,19 @@ class FP_LIB_TABLE_GRID;
 /**
  * Dialog to show and edit symbol library tables.
  */
-class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
+class PANEL_FP_LIB_TABLE : public PANEL_FP_LIB_TABLE_BASE
 {
 
 public:
-    DIALOG_FP_LIB_TABLE( wxWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
-    ~DIALOG_FP_LIB_TABLE() override;
+    PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, FP_LIB_TABLE* aGlobal,
+                        FP_LIB_TABLE* aProject );
+    ~PANEL_FP_LIB_TABLE() override;
 
     bool Show( bool aShow ) override;
 
 private:
+    bool TransferDataFromWindow() override;
+
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
      *
@@ -52,7 +56,6 @@ private:
     void deleteRowHandler( wxCommandEvent& event ) override;
     void moveUpHandler( wxCommandEvent& event ) override;
     void moveDownHandler( wxCommandEvent& event ) override;
-    void onOKButtonClick( wxCommandEvent& event ) override;
     void onSizeGrid( wxSizeEvent& event ) override;
 
     void adjustPathSubsGridColumns( int aWidth );
@@ -80,9 +83,11 @@ private:
         return (FP_LIB_TABLE_GRID*) m_cur_grid->GetTable();
     }
 
+    DIALOG_EDIT_LIBRARY_TABLES* m_parent;
+
     wxGrid*          m_cur_grid;      // changed based on tab choice
     static size_t    m_pageNdx;       // Remember last notebook page selected during a session
     static wxString  m_lastBrowseDir; // Remember last directory browsed during a session
 };
 
-#endif    // DIALOG_FP_LIB_TABLE_H
+#endif    // PANEL_FP_LIB_TABLE_H

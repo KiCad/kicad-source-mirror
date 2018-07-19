@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -28,15 +27,14 @@
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
-#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_FP_LIB_TABLE_BASE
+/// Class PANEL_FP_LIB_TABLE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
+class PANEL_FP_LIB_TABLE_BASE : public wxPanel 
 {
 	private:
 	
@@ -56,25 +54,21 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_move_up_button;
 		wxBitmapButton* m_move_down_button;
 		wxGrid* m_path_subs_grid;
-		wxStdDialogButtonSizer* m_sdbSizer;
-		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
-		virtual void appendRowHandler( wxCommandEvent& event ) = 0;
-		virtual void browseLibrariesHandler( wxCommandEvent& event ) = 0;
-		virtual void deleteRowHandler( wxCommandEvent& event ) = 0;
-		virtual void moveUpHandler( wxCommandEvent& event ) = 0;
-		virtual void moveDownHandler( wxCommandEvent& event ) = 0;
-		virtual void onSizeGrid( wxSizeEvent& event ) = 0;
-		virtual void onOKButtonClick( wxCommandEvent& event ) = 0;
+		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void browseLibrariesHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void moveDownHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 717,600 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
-		~DIALOG_FP_LIB_TABLE_BASE();
+		PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+		~PANEL_FP_LIB_TABLE_BASE();
 	
 };
 

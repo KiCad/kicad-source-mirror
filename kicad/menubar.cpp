@@ -54,6 +54,8 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_TO_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, KICAD_MANAGER_FRAME::OnConfigurePaths )
+    EVT_MENU( ID_EDIT_SYMBOL_LIBRARY_TABLE, KICAD_MANAGER_FRAME::OnEditSymLibTable )
+    EVT_MENU( ID_EDIT_FOOTPRINT_LIBRARY_TABLE, KICAD_MANAGER_FRAME::OnEditFpLibTable )
     EVT_MENU( wxID_PREFERENCES, KICAD_MANAGER_FRAME::OnPreferences )
     EVT_MENU( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
     EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
@@ -71,7 +73,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, KICAD_MANAGER_FRAME::OnFileHistory )
 
     // Show hotkeys
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, KICAD_MANAGER_FRAME::Process_Config )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, KICAD_MANAGER_FRAME::OnShowHotkeys )
 
 
     // Special functions
@@ -323,9 +325,21 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Path configuration edit dialog.
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure Pa&ths..." ),
+                 _( "&Configure Paths..." ),
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( path_xpm ) );
+
+    AddMenuItem( preferencesMenu,
+                 ID_EDIT_SYMBOL_LIBRARY_TABLE,
+                 _( "Manage &Symbol Libraries..." ),
+                 _( "Edit the global and project symbol library tables" ),
+                 KiBitmap( library_table_xpm ) );
+
+    AddMenuItem( preferencesMenu,
+                 ID_EDIT_FOOTPRINT_LIBRARY_TABLE,
+                 _( "Manage &Footprint Libraries..." ),
+                 _( "Configure footprint library table" ),
+                 KiBitmap( library_table_xpm ) );
 
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,

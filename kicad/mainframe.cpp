@@ -39,6 +39,7 @@
 #include <executable_names.h>
 #include <build_version.h>
 #include <dialog_configure_paths.h>
+#include <dialog_edit_library_tables.h>
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 
@@ -548,21 +549,9 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
 }
 
 
-void KICAD_MANAGER_FRAME::Process_Config( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnShowHotkeys( wxCommandEvent& event )
 {
-    int id = event.GetId();
-
-    switch( id )
-    {
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for LibEdit.
-        DisplayHotkeyList( this, m_manager_Hokeys_Descr );
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "KICAD_MANAGER_FRAME::Process_Config error" ) );
-        break;
-    }
+    DisplayHotkeyList( this, m_manager_Hokeys_Descr );
 }
 
 
@@ -570,6 +559,48 @@ void KICAD_MANAGER_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
     DIALOG_CONFIGURE_PATHS dlg( this, nullptr );
     dlg.ShowModal();
+}
+
+
+void KICAD_MANAGER_FRAME::OnEditSymLibTable( wxCommandEvent& aEvent )
+{
+    auto frame = Kiway().Player( FRAME_SCH, false );
+    bool alreadyRunning = frame != nullptr;
+
+    if( !frame )
+        frame = Kiway().Player( FRAME_SCH, true );
+
+    if( frame )
+    {
+        DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Symbol Libraries" ) );
+        frame->InstallLibraryTablesPanel( &dlg );
+
+        dlg.ShowModal();
+
+        if( !alreadyRunning )
+            frame->Destroy();
+    }
+}
+
+
+void KICAD_MANAGER_FRAME::OnEditFpLibTable( wxCommandEvent& aEvent )
+{
+    auto frame = Kiway().Player( FRAME_PCB, false );
+    bool alreadyRunning = frame != nullptr;
+
+    if( !frame )
+        frame = Kiway().Player( FRAME_PCB, true );
+
+    if( frame )
+    {
+        DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Footprint Libraries" ) );
+        frame->InstallLibraryTablesPanel( &dlg );
+
+        dlg.ShowModal();
+
+        if( !alreadyRunning )
+            frame->Destroy();
+    }
 }
 
 

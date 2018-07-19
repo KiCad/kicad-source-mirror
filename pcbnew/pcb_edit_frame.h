@@ -1663,6 +1663,11 @@ public:
     void InstallPreferences( PAGED_DIALOG* aParent ) override;
 
     /**
+     * Allows Pcbnew to install the footprint library tables into the edit libraries dialog.
+     */
+    void InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog ) override;
+
+    /**
      * Called after the preferences dialog is run.
      */
     void CommonSettingsChanged() override;

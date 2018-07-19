@@ -265,7 +265,7 @@ private:
  */
 class LIB_TABLE : public PROJECT::_ELEM
 {
-    friend class DIALOG_FP_LIB_TABLE;
+    friend class PANEL_FP_LIB_TABLE;
     friend class LIB_TABLE_GRID;
 
 public:
