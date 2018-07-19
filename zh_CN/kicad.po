@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-06-15 13:54+0800\n"
+"PO-Revision-Date: 2018-07-20 02:30+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -1193,7 +1193,7 @@ msgstr "创建封装库"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:642
 msgid "Error allocating memory for potrace bitmap"
-msgstr ""
+msgstr "为potrace位图分配内存时出错"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
@@ -1361,12 +1361,12 @@ msgstr "格点: %.2f mils (%.4f mm)"
 #, c-format
 msgid ""
 "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
-msgstr ""
+msgstr "网格尺寸(%f, %f)不在网格列表中，回退到网格尺寸(%f, %f)。"
 
 #: common/base_screen.cpp:271
 #, c-format
 msgid "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
-msgstr ""
+msgstr "网格 ID %d不在网格列表中，回退到网格尺寸(%g, %g)。"
 
 #: common/base_units.cpp:162
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:53
@@ -2207,7 +2207,7 @@ msgstr "警告!"
 
 #: common/dialogs/dialog_page_settings.cpp:532
 msgid "the translation for paper size must preserve original spellings"
-msgstr ""
+msgstr "纸张尺寸的翻译必须保留原始拼写"
 
 #: common/dialogs/dialog_page_settings.cpp:722
 #: common/dialogs/dialog_page_settings_base.cpp:46
@@ -3094,9 +3094,8 @@ msgid "Toggle Always Show Cursor"
 msgstr "始终切换显示游标"
 
 #: common/tool/common_tools.cpp:40
-#, fuzzy
 msgid "Toggle display of the cursor, even when not in an interactive tool"
-msgstr "切换光标的显示，即使不在交互式工具中"
+msgstr "切换光标显示，即使不在交互式工具中"
 
 #: common/tool/grid_menu.cpp:40 common/zoom.cpp:315
 #: eeschema/widgets/widget_eeschema_color_config.cpp:93
@@ -3236,7 +3235,7 @@ msgstr "适应窗口"
 
 #: common/widgets/mathplot.cpp:1766
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "设置绘图视图以显示所有项目"
 
 #: common/widgets/mathplot.cpp:1767
 msgid "Zoom in plot view."
@@ -3821,11 +3820,13 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"从原理图网表和符号封装关联文件(.cmp)的封装分配有冲突\n"
+"\n"
+"请选择分配。"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
-#, fuzzy
 msgid "Footprint Assignment Conflicts"
-msgstr "封装关联文件"
+msgstr "封装分配冲突"
 
 #: cvpcb/display_footprints_frame.cpp:76
 msgid "Footprint Viewer"
@@ -3918,9 +3919,9 @@ msgid "Show outlines in sketch mode"
 msgstr "草图模式显示轮廓"
 
 #: cvpcb/display_footprints_frame.cpp:435
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID \"%s\" is not valid."
-msgstr "无效的封装文件名称 '%s'."
+msgstr "封装ID \"%s\" 无效。"
 
 #: cvpcb/display_footprints_frame.cpp:462
 #, c-format
@@ -3985,9 +3986,9 @@ msgid "About KiCad"
 msgstr "关于KiCad"
 
 #: cvpcb/readwrite_dlgs.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is not a valid LIB_ID."
-msgstr "\"%s\"不是有效的Spice 值"
+msgstr "\"%s\"不是有效的LIB_ID。"
 
 #: cvpcb/readwrite_dlgs.cpp:207
 msgid ""
@@ -4087,12 +4088,12 @@ msgstr "共找到 %d 处重复的时间标记和更换。"
 #: eeschema/annotate.cpp:202
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s"
-msgstr ""
+msgstr "更新%s(单位%s)从%s到%s"
 
 #: eeschema/annotate.cpp:208
 #, c-format
 msgid "Updated %s from %s to %s"
-msgstr ""
+msgstr "更新%s从%s到%s"
 
 #: eeschema/annotate.cpp:216
 #, c-format
@@ -5298,7 +5299,7 @@ msgstr "浏览库"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:99
 msgid "Map Orphans"
-msgstr ""
+msgstr "映射到孤立的元件"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:100
 msgid ""
@@ -5644,7 +5645,7 @@ msgstr "自动"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:121
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:173
 msgid "&Show grid"
-msgstr "显示格点(&S)"
+msgstr "显示网格(&S)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:124
 msgid "&Restrict buses and wires to H and V orientation"
@@ -5716,7 +5717,7 @@ msgstr "允许字段自动对齐放置(&L)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:240
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "自动放置字段对齐到50mil格点(&W)"
+msgstr "自动放置字段对齐到50mil网格(&W)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:250
 msgid "Editing"
@@ -5804,7 +5805,7 @@ msgstr "需要注释！"
 #: eeschema/dialogs/dialog_erc.cpp:593
 #, c-format
 msgid "Pin %s on %s is connected to both %s and %s"
-msgstr ""
+msgstr "%s上引脚%s既连接到%s有连接到%s"
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/drc.cpp:533
 msgid "Finished"
@@ -6612,7 +6613,7 @@ msgstr "绘制边框和标题栏"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:108
 msgid "Print the frame references."
-msgstr ""
+msgstr "打印图框参考。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:120
 msgid "Plot Current Page"
@@ -7829,7 +7830,7 @@ msgstr "在相同元件的另一个单元中分配不同的封装"
 #: eeschema/drc_erc_item.cpp:64
 msgid ""
 "Different net assigned to a shared pin in another unit of the same component"
-msgstr ""
+msgstr "在同一元件的另一个单元中分配给共用引脚的不同网络"
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
 #: pagelayout_editor/pl_editor_frame.cpp:635
@@ -9364,7 +9365,7 @@ msgstr "缩放至适合大小(&Z)"
 #: pagelayout_editor/menubar.cpp:176 pagelayout_editor/pl_editor_config.cpp:67
 #: pcbnew/menubar_footprint_editor.cpp:242 pcbnew/menubar_pcb_editor.cpp:637
 msgid "Show &Grid"
-msgstr "显示格点(&G)"
+msgstr "显示网格(&G)"
 
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_footprint_editor.cpp:256 pcbnew/menubar_pcb_editor.cpp:651
@@ -10374,7 +10375,7 @@ msgid ""
 "It will be not easy to connect in schematic\n"
 "Do you want to continue?"
 msgstr ""
-"此引脚不在 %d 密尔网格上\n"
+"此引脚不在 %d mils 网格上\n"
 "在原理图中连接并不容易\n"
 "你想继续吗？"
 
@@ -12690,12 +12691,12 @@ msgstr "显示极坐标(&P)"
 
 #: gerbview/menubar.cpp:242
 msgid "Sketch F&lashed Items"
-msgstr ""
+msgstr "草图闪烁的项目"
 
 #: gerbview/menubar.cpp:242 gerbview/toolbars_gerber.cpp:257
 #: gerbview/toolbars_gerber.cpp:538
 msgid "Show flashed items in outline mode"
-msgstr ""
+msgstr "以轮廓模式显示闪烁的项目"
 
 #: gerbview/menubar.cpp:246
 msgid "Sketch &Lines"
@@ -12708,7 +12709,7 @@ msgstr "在轮廓模式下显示线"
 
 #: gerbview/menubar.cpp:250
 msgid "Sketch Pol&ygons"
-msgstr "多边形草图(&Y)"
+msgstr "草图多边形(&Y)"
 
 #: gerbview/menubar.cpp:250 gerbview/toolbars_gerber.cpp:265
 #: gerbview/toolbars_gerber.cpp:562
@@ -12729,19 +12730,19 @@ msgstr "显示负片对象(&N)"
 
 #: gerbview/menubar.cpp:258 gerbview/toolbars_gerber.cpp:586
 msgid "Show negative objects in ghost color"
-msgstr "in ghost color显示负片对象"
+msgstr "以鬼影颜色显示负片对象"
 
 #: gerbview/menubar.cpp:264
 msgid "Show in Differential Mode"
-msgstr "以差分模式显示"
+msgstr "以差异模式显示"
 
 #: gerbview/menubar.cpp:264 gerbview/toolbars_gerber.cpp:598
 msgid "Show layers in differential mode"
-msgstr "在差分模式下显示图层"
+msgstr "以差异模式显示图层"
 
 #: gerbview/menubar.cpp:268
 msgid "Show in High Contrast"
-msgstr "显示为高对比度"
+msgstr "以高对比度显示"
 
 #: gerbview/menubar.cpp:268
 msgid "Show in high contrast mode"
@@ -12753,7 +12754,7 @@ msgstr "显示正常模式"
 
 #: gerbview/menubar.cpp:274 gerbview/toolbars_gerber.cpp:597
 msgid "Show layers in normal mode"
-msgstr "在标准模式下显示图层"
+msgstr "以标准模式显示图层"
 
 #: gerbview/menubar.cpp:277
 msgid "Show Stacked Mode"
@@ -12773,7 +12774,7 @@ msgstr "在透明模式下显示图层"
 
 #: gerbview/menubar.cpp:292
 msgid "&Options"
-msgstr "选项&O)"
+msgstr "选项&O"
 
 #: gerbview/menubar.cpp:293
 msgid "Set options to draw items"
@@ -14138,7 +14139,7 @@ msgstr "白色背景(&B)"
 
 #: pagelayout_editor/menubar.cpp:176 pagelayout_editor/pl_editor_config.cpp:66
 msgid "Hide &Grid"
-msgstr "隐藏格点(&G)"
+msgstr "隐藏网格(&G)"
 
 #: pagelayout_editor/menubar.cpp:201
 msgid "Page Layout Editor &Manual"
@@ -15613,7 +15614,7 @@ msgstr "将符号 \"%s\" 的封装从 \"%s\" 更改为 \"%s\"。\n"
 #: pcbnew/board_netlist_updater.cpp:193 pcbnew/class_board.cpp:2502
 #, c-format
 msgid "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
-msgstr ""
+msgstr "用“%s”替换符号“%s:%s”封装“%s”。\n"
 
 #: pcbnew/board_netlist_updater.cpp:223
 #, c-format
@@ -16972,7 +16973,7 @@ msgstr "焊盘编号开始："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Grid Array"
-msgstr "格点阵列"
+msgstr "网格阵列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:190
 msgid "Horizontal center:"
@@ -18965,7 +18966,7 @@ msgstr "旋转角度(&R):"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:166
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
-msgstr ""
+msgstr "设置上下文菜单和热键旋转的增量（以度为单位）。"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:182
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:190
@@ -20655,7 +20656,7 @@ msgstr "多边形：删除多余的拐角"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:346
 msgid "Select a corner before adding a new corner"
-msgstr ""
+msgstr "在添加新拐角前选择一个拐角"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:527
 msgid "Back side (footprint is mirrored)"
@@ -20681,7 +20682,7 @@ msgstr "来自"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:807
 msgid "to "
-msgstr ""
+msgstr "到"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:812
 msgid "center "
@@ -20698,7 +20699,7 @@ msgstr "角度 %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:819
 msgid "ring"
-msgstr ""
+msgstr "环"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:821
 msgid "circle"
@@ -21310,15 +21311,15 @@ msgstr "包含图层："
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Plot sheet reference on all layers"
-msgstr "在所有层上绘图图页参考编号"
+msgstr "在所有层上绘制图页参考编号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot footprint values"
-msgstr "绘图封装值"
+msgstr "绘制封装值"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Plot footprint references"
-msgstr "绘图封装参考编号"
+msgstr "绘制封装参考编号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Force plotting of invisible values/references"
@@ -21386,7 +21387,7 @@ msgstr "实际尺寸"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:152
 msgid "Scaling:"
-msgstr "缩放:"
+msgstr "缩放比例:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "1:1"
@@ -22007,12 +22008,12 @@ msgstr "选择封装库文件夹"
 #: pcbnew/dialogs/dialog_set_grid.cpp:108
 #, c-format
 msgid "Incorrect grid origin (coordinates must be >= %.3f mm and <= %.3f mm)"
-msgstr "错误的格点原点 (坐标必须 >= %.3f mm 和 <= %.3f mm)"
+msgstr "错误的网格原点 (坐标必须 >= %.3f mm 和 <= %.3f mm)"
 
 #: pcbnew/dialogs/dialog_set_grid.cpp:119
 #, c-format
 msgid "Incorrect grid size (size must be >= %.3f mm and <= %.3f mm)"
-msgstr "错误的格点尺寸 (尺寸必须 >= %.3f mm 和 <= %.3f mm)"
+msgstr "错误的网格尺寸 (尺寸必须 >= %.3f mm 和 <= %.3f mm)"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "Grid Origin:"
@@ -22024,7 +22025,7 @@ msgstr "复位网格原点"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:66
 msgid "User Defined Grid:"
-msgstr "使用自定义格点："
+msgstr "使用自定义网格："
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:103
 msgid "Fast Switching:"
@@ -22032,11 +22033,11 @@ msgstr "快速切换："
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:111
 msgid "Grid 1:"
-msgstr "格点 1:"
+msgstr "网格 1:"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:118
 msgid "Grid 2:"
-msgstr "格点 2:"
+msgstr "网格 2:"
 
 #: pcbnew/dialogs/dialog_set_grid_base.h:69
 msgid "Grid Settings"
@@ -22321,9 +22322,8 @@ msgid "Courtyard areas...\n"
 msgstr "封装外框...\n"
 
 #: pcbnew/drc.cpp:522
-#, fuzzy
 msgid "Items on disabled layers...\n"
-msgstr "包括隐藏层上的项"
+msgstr "禁用层上的项目...\n"
 
 #: pcbnew/drc.cpp:573
 #, c-format
@@ -22360,9 +22360,9 @@ msgid "Track clearances"
 msgstr "布线间距"
 
 #: pcbnew/drc.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is on a disabled layer"
-msgstr "%d 不是一个有效的层数"
+msgstr "“%s” 处于禁用层"
 
 #: pcbnew/drc.cpp:1261
 #, c-format
@@ -22441,9 +22441,8 @@ msgid "Buried Via: not allowed"
 msgstr "埋孔:不允许"
 
 #: pcbnew/drc_item.cpp:79
-#, fuzzy
 msgid "Item on a disabled layer"
-msgstr "包括隐藏层上的项"
+msgstr "禁用层上的项目"
 
 #: pcbnew/drc_item.cpp:81
 msgid "Copper area inside copper area"
@@ -22561,6 +22560,8 @@ msgid ""
 "Line on copper layer in package %s (%f mm, %f mm) (%f mm, %f mm).\n"
 "Moving to Dwgs.User layer"
 msgstr ""
+"封装%s上铜层线 (%f mm, %f mm) (%f mm, %f mm).\n"
+"移动到 Dwgs.User 层"
 
 #: pcbnew/eagle_plugin.cpp:1526
 #, c-format
@@ -22568,6 +22569,8 @@ msgid ""
 "Unsupported text on copper layer in package %s.\n"
 "Moving to Dwgs.User layer."
 msgstr ""
+"封装%s上铜层不支持的文本\n"
+"移动到 Dwgs.User 层。"
 
 #: pcbnew/eagle_plugin.cpp:1640
 #, c-format
@@ -22575,6 +22578,8 @@ msgid ""
 "Unsupported rectangle on copper layer in package %s.\n"
 "Moving to Dwgs.User layer."
 msgstr ""
+"封装%s上铜层不支持的矩形\n"
+"移动到 Dwgs.User 层。"
 
 #: pcbnew/eagle_plugin.cpp:1683
 #, c-format
@@ -22582,6 +22587,8 @@ msgid ""
 "Unsupported polygon on copper layer in package %s.\n"
 "Moving to Dwgs.User layer."
 msgstr ""
+"封装%s上铜层不支持的多边形\n"
+"移动到 Dwgs.User 层。"
 
 #: pcbnew/eagle_plugin.cpp:1768
 #, c-format
@@ -22589,11 +22596,13 @@ msgid ""
 "Unsupported circle on copper layer in package %s.\n"
 "Moving to Dwgs.User layer."
 msgstr ""
+"封装%s上铜层不支持的圆\n"
+"移动到 Dwgs.User 层。"
 
 #: pcbnew/eagle_plugin.cpp:2225
 #, c-format
 msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
-msgstr ""
+msgstr "不支持的边框层 \"%s\"(%d)，转换为Dwgs.User 层"
 
 #: pcbnew/edgemod.cpp:214
 msgid ""
@@ -23670,9 +23679,8 @@ msgid "Add a Similar Zone"
 msgstr "添加相似覆铜"
 
 #: pcbnew/hotkeys.cpp:162
-#, fuzzy
 msgid "Place DXF"
-msgstr "放置"
+msgstr "放置DXF"
 
 #: pcbnew/hotkeys.cpp:163 pcbnew/tools/drawing_tool.cpp:121
 msgid "Place the Footprint Anchor"
@@ -23712,19 +23720,19 @@ msgstr "切换上一个布线宽度"
 
 #: pcbnew/hotkeys.cpp:239
 msgid "Switch Grid To Fast Grid1"
-msgstr "切换为快速格点1"
+msgstr "切换为快速网格1"
 
 #: pcbnew/hotkeys.cpp:242
 msgid "Switch Grid To Fast Grid2"
-msgstr "切换为快速格点2"
+msgstr "切换为快速网格2"
 
 #: pcbnew/hotkeys.cpp:245
 msgid "Switch Grid To Next"
-msgstr "切换格点到下一个"
+msgstr "切换网格到下一个"
 
 #: pcbnew/hotkeys.cpp:248
 msgid "Switch Grid To Previous"
-msgstr "切换格点到上一个"
+msgstr "切换网格到上一个"
 
 #: pcbnew/hotkeys.cpp:253
 msgid "Track Display Mode"
@@ -23825,15 +23833,15 @@ msgstr "用户定义位置:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:80
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "DXF原点在PCB格点X坐标上"
+msgstr "DXF原点在PCB网格上，X坐标"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:100
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "DXF原点在PCB格点Y坐标上"
+msgstr "DXF原点在PCB网格上，Y坐标"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:115
 msgid "Select PCB grid units"
-msgstr "选择PCB格点单位"
+msgstr "选择PCB网格单位"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:134
 msgid "Import parameters:"
@@ -24055,7 +24063,7 @@ msgstr "CZONE_CONTAINER \"%s\"的错误 ZAux"
 #: pcbnew/legacy_plugin.cpp:2570
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "CZONE_CONTAINER \"%s\"是坏的 ZSmoothing "
 
 #: pcbnew/legacy_plugin.cpp:2644
 #, c-format
@@ -24710,7 +24718,6 @@ msgid "&Move and Swap Layers..."
 msgstr "移动和交换层(&M)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:559
-#, fuzzy
 msgid "Move tracks or drawings from a layer to another layer"
 msgstr "将布线或绘图从一层移到另一层"
 
@@ -26170,9 +26177,8 @@ msgstr ""
 "请验证它不是自相交多边形。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1108
-#, fuzzy
 msgid "Added a track"
-msgstr "添加 布线"
+msgstr "新增了一条布线"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:53
 msgid "Please select a differential pair trace you want to tune."
@@ -26257,7 +26263,7 @@ msgstr "拖动布线和过孔而不中断连接"
 #: pcbnew/router/router_tool.cpp:123
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr ""
+msgstr "将布线拆分为在光标位置连接的两个段。"
 
 #: pcbnew/router/router_tool.cpp:128
 msgid "Drag (45 degree mode)"
@@ -27464,7 +27470,7 @@ msgstr "通过项搜索文档"
 #: pcbnew/tools/selection_tool.cpp:128
 msgid ""
 "Selects a footprint by reference and places it under the cursor for moving"
-msgstr ""
+msgstr "通过参考编号选择一个封装并将其放置在光标下移动"
 
 #: pcbnew/tools/selection_tool.cpp:133
 msgid "Filter Selection..."
