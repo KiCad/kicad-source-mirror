@@ -67,6 +67,7 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnTextValueSelectButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

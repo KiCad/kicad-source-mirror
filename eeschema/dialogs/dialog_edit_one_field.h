@@ -77,6 +77,13 @@ protected:
      */
     void OnTextValueSelectButtonClick( wxCommandEvent& aEvent ) override;
 
+    /**
+     * Used to select the variant part of some text fields (for instance, the question mark
+     * or number in a reference).
+     * @param event
+     */
+    virtual void OnSetFocusText( wxFocusEvent& event ) override;
+
     UNIT_BINDER m_posX;
     UNIT_BINDER m_posY;
     UNIT_BINDER m_textSize;

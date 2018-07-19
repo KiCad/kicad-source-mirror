@@ -151,10 +151,8 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 }
 
 
-bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
+void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 {
-    m_TextValue->SetValue( m_text );
-
     if( m_fieldId == REFERENCE )
     {
         if( m_text.find_first_of( '?' ) != m_text.npos )
@@ -183,6 +181,12 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
     {
         m_TextValue->SetSelection( -1, -1 );
     }
+}
+
+
+bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
+{
+    m_TextValue->SetValue( m_text );
 
     m_posX.SetValue( m_position.x );
     m_posY.SetValue( m_position.y );
