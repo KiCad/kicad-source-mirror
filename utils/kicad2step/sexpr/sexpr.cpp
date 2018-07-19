@@ -43,7 +43,7 @@ namespace SEXPR
 
         return &static_cast< SEXPR_LIST const * >(this)->m_children;
     }
-    
+
     SEXPR* SEXPR::GetChild( size_t aIndex ) const
     {
         if( m_type != SEXPR_TYPE::SEXPR_TYPE_LIST )
@@ -208,12 +208,12 @@ namespace SEXPR
 
         m_children.clear();
     }
-    
+
     SEXPR_LIST& operator<< ( SEXPR_LIST& list, const ISEXPRABLE& obj )
     {
         SEXPR* sobj = obj.SerializeSEXPR();
         list.AddChild( sobj );
-        
+
         return list;
     }
 
@@ -252,7 +252,7 @@ namespace SEXPR
         list.AddChild( obj );
         return list;
     }
-    
+
     SEXPR_LIST& operator<< ( SEXPR_LIST& list, const _OUT_STRING setting )
     {
         SEXPR *res;
@@ -469,7 +469,7 @@ namespace SEXPR
 					throw std::invalid_argument( "unsupported argument type, this shouldn't have happened" );
 				}
 			}
-			catch( INVALID_TYPE_EXCEPTION )
+			catch( const INVALID_TYPE_EXCEPTION& )
 			{
 				return i;
 			}
