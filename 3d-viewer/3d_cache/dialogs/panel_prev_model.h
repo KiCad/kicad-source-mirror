@@ -73,7 +73,7 @@ class PANEL_PREV_3D: public PANEL_PREV_3D_BASE
 {
 public:
     PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
-                     std::vector<MODULE_3D_SETTINGS> *aParentInfoList );
+                   std::vector<MODULE_3D_SETTINGS> *aParentModelList );
 
     ~PANEL_PREV_3D();
 
@@ -82,10 +82,10 @@ private:
     CINFO3D_VISU*                    m_settings3Dviewer;
 
     BOARD*                           m_dummyBoard;
-    MODULE*                          m_copyModule;
+    MODULE*                          m_dummyModule;
 
-    std::vector<MODULE_3D_SETTINGS>* m_parentInfoList;
-    int                              m_currentSelectedIdx;   /// Index into m_parentInfoList
+    std::vector<MODULE_3D_SETTINGS>* m_parentModelList;
+    int                              m_selected;   /// Index into m_parentInfoList
 
     EDA_UNITS_T                      m_userUnits;
 
@@ -180,16 +180,16 @@ private:
 
 public:
     /**
-     * @brief SetModelDataIdx - Sets the currently selected index in the infolist so that the
-     * scale/rotation/offset controls can be updated.
+     * @brief SetModelDataIdx - Sets the currently selected index in the model list so that
+     * the scale/rotation/offset controls can be updated.
      */
-    void SetModelDataIdx( int idx );
+    void SetSelectedModel( int idx );
 
     /**
      * @brief UpdateModelInfoList - copy shapes from the current shape list which are flagged
      * for preview to the copy of module that is on the preview dummy board
      */
-    void UpdateModelInfoList( bool aRelaodRequired = true );
+    void UpdateDummyModule( bool aRelaodRequired = true );
 };
 
 #endif  // PANEL_PREV_MODEL_H

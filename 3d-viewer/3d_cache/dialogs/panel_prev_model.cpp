@@ -40,7 +40,7 @@
 
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
-                              std::vector<MODULE_3D_SETTINGS> *aParentInfoList ) :
+                              std::vector<MODULE_3D_SETTINGS> *aParentModelList ) :
     PANEL_PREV_3D_BASE( aParent, wxID_ANY )
 {
     m_userUnits = aFrame->GetUserUnits();
@@ -50,10 +50,10 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     // Initialize the color settings to draw the board and the footprint
     m_dummyBoard->SetColorsSettings( &aFrame->Settings().Colors() );
 
-    m_parentInfoList = aParentInfoList;
+    m_parentModelList = aParentModelList;
 
-    m_copyModule = new MODULE( *aModule );
-    m_dummyBoard->Add( m_copyModule );
+    m_dummyModule = new MODULE( *aModule );
+    m_dummyBoard->Add( m_dummyModule );
 
     // Set 3d viewer configuration for preview
     m_settings3Dviewer = new CINFO3D_VISU();
@@ -80,7 +80,7 @@ PANEL_PREV_3D::~PANEL_PREV_3D()
 void PANEL_PREV_3D::initPanel()
 {
     m_dummyBoard = new BOARD();
-    m_currentSelectedIdx = -1;
+    m_selected = -1;
 
     // Set the bitmap of 3D view buttons:
     m_bpvTop->SetBitmap( KiBitmap( axis3d_top_xpm ) );
@@ -155,12 +155,12 @@ wxString PANEL_PREV_3D::formatOffsetValue( double aValue )
 }
 
 
-void PANEL_PREV_3D::SetModelDataIdx( int idx )
+void PANEL_PREV_3D::SetSelectedModel( int idx )
 {
-    if( m_parentInfoList && idx >= 0 && idx < (int) m_parentInfoList->size() )
+    if( m_parentModelList && idx >= 0 && idx < (int) m_parentModelList->size() )
     {
-        m_currentSelectedIdx = idx;
-        const MODULE_3D_SETTINGS& modelInfo = m_parentInfoList->at( idx );
+        m_selected = idx;
+        const MODULE_3D_SETTINGS& modelInfo = m_parentModelList->at( (unsigned) m_selected );
 
         // Use ChangeValue() instead of SetValue().  It's not the user making the change, so we
         // don't want to generate wxEVT_GRID_CELL_CHANGED events.
@@ -179,7 +179,7 @@ void PANEL_PREV_3D::SetModelDataIdx( int idx )
     }
     else
     {
-        m_currentSelectedIdx = -1;
+        m_selected = -1;
 
         xscale->ChangeValue( wxEmptyString );
         yscale->ChangeValue( wxEmptyString );
@@ -198,27 +198,25 @@ void PANEL_PREV_3D::SetModelDataIdx( int idx )
 
 void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 {
-    MODULE_3D_SETTINGS modelInfo;
-
-    modelInfo.m_Scale.x = DoubleValueFromString( UNSCALED_UNITS, xscale->GetValue() );
-    modelInfo.m_Scale.y = DoubleValueFromString( UNSCALED_UNITS, yscale->GetValue() );
-    modelInfo.m_Scale.z = DoubleValueFromString( UNSCALED_UNITS, zscale->GetValue() );
-
-    modelInfo.m_Rotation.x = rotationFromString( xrot->GetValue() );
-    modelInfo.m_Rotation.y = rotationFromString( yrot->GetValue() );
-    modelInfo.m_Rotation.z = rotationFromString( zrot->GetValue() );
-
-    modelInfo.m_Offset.x = DoubleValueFromString( m_userUnits, xoff->GetValue() ) / IU_PER_MM;
-    modelInfo.m_Offset.y = DoubleValueFromString( m_userUnits, yoff->GetValue() ) / IU_PER_MM;
-    modelInfo.m_Offset.z = DoubleValueFromString( m_userUnits, zoff->GetValue() ) / IU_PER_MM;
-
-    if( m_currentSelectedIdx >= 0 )
+    if( m_parentModelList && m_selected >= 0 && m_selected < (int) m_parentModelList->size() )
     {
-        // This will update the parent list with the new data
-        m_parentInfoList->at( m_currentSelectedIdx ) = modelInfo;
+        // Write settings back to the parent
+        MODULE_3D_SETTINGS* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
 
-        // It will update the copy model in the preview board
-        UpdateModelInfoList( false );
+        modelInfo->m_Scale.x = DoubleValueFromString( UNSCALED_UNITS, xscale->GetValue() );
+        modelInfo->m_Scale.y = DoubleValueFromString( UNSCALED_UNITS, yscale->GetValue() );
+        modelInfo->m_Scale.z = DoubleValueFromString( UNSCALED_UNITS, zscale->GetValue() );
+
+        modelInfo->m_Rotation.x = rotationFromString( xrot->GetValue() );
+        modelInfo->m_Rotation.y = rotationFromString( yrot->GetValue() );
+        modelInfo->m_Rotation.z = rotationFromString( zrot->GetValue() );
+
+        modelInfo->m_Offset.x = DoubleValueFromString( m_userUnits, xoff->GetValue() ) / IU_PER_MM;
+        modelInfo->m_Offset.y = DoubleValueFromString( m_userUnits, yoff->GetValue() ) / IU_PER_MM;
+        modelInfo->m_Offset.z = DoubleValueFromString( m_userUnits, zoff->GetValue() ) / IU_PER_MM;
+
+        // Update the dummy module for the preview
+        UpdateDummyModule( false );
     }
 }
 
@@ -363,16 +361,17 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
 }
 
 
-void PANEL_PREV_3D::UpdateModelInfoList( bool aReloadRequired )
+void PANEL_PREV_3D::UpdateDummyModule( bool aReloadRequired )
 {
-    auto moduleModelList  = &m_copyModule->Models();
+    m_dummyModule->Models().clear();
 
-    moduleModelList->clear();
-
-    for( size_t i = 0; i < m_parentInfoList->size(); ++i )
+    for( size_t i = 0; i < m_parentModelList->size(); ++i )
     {
-        if( m_parentInfoList->at( i ).m_Preview )
-            moduleModelList->insert( moduleModelList->end(), m_parentInfoList->at( i ) );
+        if( m_parentModelList->at( i ).m_Preview )
+        {
+            m_dummyModule->Models().insert( m_dummyModule->Models().end(),
+                                            m_parentModelList->at( i ) );
+        }
     }
 
     if( aReloadRequired )

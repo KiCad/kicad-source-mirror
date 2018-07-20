@@ -384,7 +384,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::select3DModel( int aModelIdx )
     if( m_modelsGrid->GetNumberRows() )
         m_modelsGrid->SelectRow( aModelIdx );
 
-    m_PreviewPane->SetModelDataIdx( aModelIdx );
+    m_PreviewPane->SetSelectedModel( aModelIdx );
 }
 
 
@@ -428,7 +428,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
         m_shapes3D_list[ aEvent.GetRow() ].m_Preview = previewValue == wxT( "1" );
     }
 
-    m_PreviewPane->UpdateModelInfoList();
+    m_PreviewPane->UpdateDummyModule();
 }
 
 
@@ -442,7 +442,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnRemove3DModel( wxCommandEvent&  )
         m_modelsGrid->DeleteRows( idx );
 
         select3DModel( idx );       // will clamp idx within bounds
-        m_PreviewPane->UpdateModelInfoList();
+        m_PreviewPane->UpdateDummyModule();
     }
 }
 
@@ -503,7 +503,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 0, filename );
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
-    m_PreviewPane->UpdateModelInfoList();
+    m_PreviewPane->UpdateDummyModule();
 }
 
 
@@ -743,7 +743,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnDeleteField( wxCommandEvent&  )
 void DIALOG_FOOTPRINT_BOARD_EDITOR::Cfg3DPath( wxCommandEvent&  )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
-        m_PreviewPane->UpdateModelInfoList();
+        m_PreviewPane->UpdateDummyModule();
 }
 
 
