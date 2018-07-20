@@ -3455,7 +3455,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">10</property>
-                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="0">
                                 <property name="BottomDockable">1</property>
