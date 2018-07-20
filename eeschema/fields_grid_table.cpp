@@ -31,6 +31,7 @@
 #include <class_library.h>
 #include <template_fieldnames.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/grid_text_button_helpers.h>
 
 #include "eda_doc.h"
 
@@ -43,8 +44,8 @@ enum
 
 
 template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( bool aInLibEdit, EDA_UNITS_T aUserUnits, LIB_PART* aPart ) :
-    m_userUnits( aUserUnits ),
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, bool aInLibEdit, LIB_PART* aPart ) :
+    m_userUnits( aDialog->GetUserUnits() ),
     m_part( aPart ),
     m_inLibEdit( aInLibEdit ),
     m_valueValidator( aInLibEdit, REFERENCE )
@@ -58,6 +59,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( bool aInLibEdit, EDA_UNITS_T aUserUnits
     GRID_CELL_TEXT_EDITOR* textEditor = new GRID_CELL_TEXT_EDITOR();
     textEditor->SetValidator( m_valueValidator );
     m_valueColAttr->SetEditor( textEditor );
+
+    m_footprintAttr = new wxGridCellAttr;
+    m_footprintAttr->SetEditor( new GRID_CELL_FOOTPRINT_EDITOR( aDialog ) );
+
+    m_urlAttr = new wxGridCellAttr;
+    m_urlAttr->SetEditor( new GRID_CELL_URL_EDITOR( aDialog ) );
 
     m_boolColAttr = new wxGridCellAttr;
     m_boolColAttr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -95,6 +102,8 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_readOnlyAttr->DecRef();
     m_boolColAttr->DecRef();
     m_valueColAttr->DecRef();
+    m_footprintAttr->DecRef();
+    m_urlAttr->DecRef();
     m_vAlignColAttr->DecRef();
     m_hAlignColAttr->DecRef();
     m_orientationColAttr->DecRef();
@@ -186,6 +195,16 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         {
             m_readOnlyAttr->IncRef();
             return m_readOnlyAttr;
+        }
+        else if( aRow == FOOTPRINT )
+        {
+            m_footprintAttr->IncRef();
+            return m_footprintAttr;
+        }
+        else if( aRow == DATASHEET )
+        {
+            m_urlAttr->IncRef();
+            return m_urlAttr;
         }
         else
         {
@@ -423,7 +442,7 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( event.GetId() == MYID_SELECT_FOOTPRINT )
     {
         // pick a footprint using the footprint picker.
-        wxString      fpid;
+        wxString      fpid = m_grid->GetCellValue( FOOTPRINT, FDC_VALUE );
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &fpid, m_dlg ) )

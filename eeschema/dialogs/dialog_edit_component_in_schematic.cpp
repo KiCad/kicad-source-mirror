@@ -140,7 +140,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 
     m_cmp = aComponent;
     m_part = GetParent()->GetLibPart( m_cmp->GetLibId(), true );
-    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( false, GetUserUnits(), m_part );
+    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, false, m_part );
 
     m_delayedFocusRow = REFERENCE;
     m_delayedFocusColumn = FDC_VALUE;
@@ -171,7 +171,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_stdDialogButtonSizerOK->SetDefault();
 
     // Configure button logos
-    m_buttonBrowseLibrary->SetBitmap( KiBitmap( library_browse_xpm ) );
+    m_buttonBrowseLibrary->SetBitmap( KiBitmap( small_library_xpm ) );
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );

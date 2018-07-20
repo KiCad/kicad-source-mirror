@@ -102,11 +102,13 @@ set( BMAPS_SMALL
     refresh
     small_down
     small_edit
+    small_library
     small_plus
     small_up
     trash
     tree_nosel
     tree_sel
+    www
     )
 
 

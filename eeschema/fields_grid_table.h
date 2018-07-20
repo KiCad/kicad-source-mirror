@@ -68,7 +68,7 @@ template <class T>
 class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<T>
 {
 public:
-    FIELDS_GRID_TABLE( bool aInLibEdit, EDA_UNITS_T userUnits, LIB_PART* aPart );
+    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, bool aInLibEdit, LIB_PART* aPart );
     ~FIELDS_GRID_TABLE();
 
     int GetNumberRows() override { return (int) this->size(); }
@@ -100,6 +100,8 @@ private:
 
     wxGridCellAttr*       m_readOnlyAttr;
     wxGridCellAttr*       m_valueColAttr;
+    wxGridCellAttr*       m_footprintAttr;
+    wxGridCellAttr*       m_urlAttr;
     wxGridCellAttr*       m_boolColAttr;
     wxGridCellAttr*       m_vAlignColAttr;
     wxGridCellAttr*       m_hAlignColAttr;

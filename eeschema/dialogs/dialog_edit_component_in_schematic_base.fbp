@@ -864,7 +864,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
                                                     <property name="proportion">1</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -996,7 +996,7 @@
                                                         <property name="maximum_size"></property>
                                                         <property name="min_size"></property>
                                                         <property name="minimize_button">0</property>
-                                                        <property name="minimum_size">-1,-1</property>
+                                                        <property name="minimum_size">29,29</property>
                                                         <property name="moveable">1</property>
                                                         <property name="name">m_buttonBrowseLibrary</property>
                                                         <property name="pane_border">1</property>

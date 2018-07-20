@@ -987,7 +987,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">29,29</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_specifiedIDBrowseButton</property>
                                 <property name="pane_border">1</property>
@@ -1355,7 +1355,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size"></property>
+                                        <property name="minimum_size">29,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_newIDBrowseButton</property>
                                         <property name="pane_border">1</property>

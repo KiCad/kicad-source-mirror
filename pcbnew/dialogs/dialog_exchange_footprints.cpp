@@ -82,7 +82,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         else
             SetInitialFocus( m_specifiedRef );
 
-        m_newIDBrowseButton->SetBitmap( KiBitmap( library_browse_xpm ) );
+        m_newIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
     }
 
     if( m_currentModule )
@@ -117,7 +117,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 
     if( m_currentModule )
         m_specifiedID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-    m_specifiedIDBrowseButton->SetBitmap( KiBitmap( library_browse_xpm ) );
+    m_specifiedIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
 
     m_upperSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_upperSizer->RecalcSizes();
