@@ -53,6 +53,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
                                                 wxDC* aDC ) :
     DIALOG_TEXT_PROPERTIES_BASE( aParent ),
     m_Parent( aParent ), m_DC( aDC ), m_item( aItem ),
+    m_edaText( nullptr ), m_modText( nullptr ), m_pcbText( nullptr ),
     m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true, TEXTS_MIN_SIZE ),
     m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true, TEXTS_MIN_SIZE ),
     m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true, 0 ),
