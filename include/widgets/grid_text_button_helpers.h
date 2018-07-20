@@ -24,7 +24,7 @@
 #ifndef GRID_TEXT_BUTTON_HELPERS_H
 #define GRID_TEXT_BUTTON_HELPERS_H
 
-#include <wx/combobox.h>
+#include <wx/combo.h>
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
 
