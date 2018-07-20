@@ -61,6 +61,21 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_NetComboBox->SetBoard( aParent->GetBoard() );
     m_NetComboBox->Enable( true );
 
+    m_TrackLayerCtrl->SetLayersHotkeys( false );
+    m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_TrackLayerCtrl->SetBoardFrame( aParent );
+    m_TrackLayerCtrl->Resync();
+
+    m_ViaStartLayer->SetLayersHotkeys( false );
+    m_ViaStartLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_ViaStartLayer->SetBoardFrame( aParent );
+    m_ViaStartLayer->Resync();
+
+    m_ViaEndLayer->SetLayersHotkeys( false );
+    m_ViaEndLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_ViaEndLayer->SetBoardFrame( aParent );
+    m_ViaEndLayer->Resync();
+
     bool hasLocked = false;
     bool hasUnlocked = false;
 
@@ -217,7 +232,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_ViaDrillCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
         m_ViaTypeChoice->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
 
-        m_ViaDiameterCtrl->SetFocus();
+        SetInitialFocus( m_ViaDiameterCtrl );
 
         m_ViaTypeChoice->Enable();
 
@@ -229,15 +244,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_ViaTypeChoice->SetSelection( 2 );
         else if( viaType == VIA_NOT_DEFINED )
             m_ViaTypeChoice->SetSelection( 3 );
-
-        m_ViaStartLayer->SetLayersHotkeys( false );
-        m_ViaStartLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
-        m_ViaStartLayer->SetBoardFrame( aParent );
-        m_ViaStartLayer->Resync();
-        m_ViaEndLayer->SetLayersHotkeys( false );
-        m_ViaEndLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
-        m_ViaEndLayer->SetBoardFrame( aParent );
-        m_ViaEndLayer->Resync();
 
         m_ViaStartLayer->Enable( viaType != VIA_THROUGH );
         m_ViaEndLayer->Enable( viaType != VIA_THROUGH );
@@ -256,12 +262,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_TrackWidthCtrl->Append( msg );
         }
 
-        m_TrackLayerCtrl->SetLayersHotkeys( false );
-        m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
-        m_TrackLayerCtrl->SetBoardFrame( aParent );
-        m_TrackLayerCtrl->Resync();
-
-        m_TrackWidthCtrl->SetFocus();
+        SetInitialFocus( m_TrackWidthCtrl );
     }
     else
     {
@@ -304,7 +305,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             return false;
         }
 
-        if( m_ViaStartLayer->GetLayerSelection() == m_ViaEndLayer->GetLayerSelection() )
+        if( m_ViaStartLayer->GetLayerSelection() != UNDEFINED_LAYER &&
+            m_ViaStartLayer->GetLayerSelection() == m_ViaEndLayer->GetLayerSelection() )
         {
             DisplayError( GetParent(), _( "Via start layer and end layer cannot be the same" ) );
             return false;
