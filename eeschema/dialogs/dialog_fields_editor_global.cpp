@@ -36,22 +36,69 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <kiface_i.h>
+#include <eda_doc.h>
+#include <widgets/grid_text_button_helpers.h>
 
 #include "dialog_fields_editor_global.h"
+
+
+enum
+{
+    MYID_SELECT_FOOTPRINT = 991,         // must be within GRID_TRICKS' enum range
+    MYID_SHOW_DATASHEET
+};
 
 
 class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_EDITOR_GRID_TRICKS( wxGrid* aGrid, wxDataViewListCtrl* aFieldsCtrl ) :
+    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, wxGrid* aGrid,
+                               wxDataViewListCtrl* aFieldsCtrl ) :
             GRID_TRICKS( aGrid ),
+            m_dlg( aParent ),
             m_fieldsCtrl( aFieldsCtrl )
     {}
 
 protected:
+    void showPopupMenu( wxMenu& menu ) override
+    {
+        if( m_grid->GetGridCursorCol() == FOOTPRINT )
+        {
+            menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
+            menu.AppendSeparator();
+        }
+        else if( m_grid->GetGridCursorCol() == DATASHEET )
+        {
+            menu.Append( MYID_SHOW_DATASHEET,   _( "Show Datasheet" ),      _( "Show datasheet in browser" ) );
+            menu.AppendSeparator();
+        }
+
+        GRID_TRICKS::showPopupMenu( menu );
+    }
+
     void doPopupSelection( wxCommandEvent& event ) override
     {
-        GRID_TRICKS::doPopupSelection( event );
+        if( event.GetId() == MYID_SELECT_FOOTPRINT )
+        {
+            // pick a footprint using the footprint picker.
+            wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT );
+            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_dlg );
+
+            if( frame->ShowModal( &fpid, m_dlg ) )
+                m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT, fpid );
+
+            frame->Destroy();
+        }
+        else if (event.GetId() == MYID_SHOW_DATASHEET )
+        {
+            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(), DATASHEET );
+            datasheet_uri = ResolveUriByEnvVars( datasheet_uri );
+            GetAssociatedDocument( m_dlg, datasheet_uri );
+        }
+        else
+        {
+            GRID_TRICKS::doPopupSelection( event );
+        }
 
         if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE && event.GetId() < GRIDTRICKS_LAST_ID )
         {
@@ -61,6 +108,7 @@ protected:
         }
     }
 
+    DIALOG_SHIM*        m_dlg;
     wxDataViewListCtrl* m_fieldsCtrl;
 };
 
@@ -609,16 +657,26 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     }
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( m_grid, m_fieldsCtrl ) );
+    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl ) );
 
-    // give a bit more room for editing
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 2 );
+    // give a bit more room for comboboxes
+    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     // set reference column attributes
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly();
-    m_grid->SetColAttr( 0, attr );
+    m_grid->SetColAttr( REFERENCE, attr );
     m_grid->SetColMinimalWidth( 0, 100 );
+
+    // set footprint column browse button
+    attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_FOOTPRINT_EDITOR( this ) );
+    m_grid->SetColAttr( FOOTPRINT, attr );
+
+    // set datasheet column viewer button
+    attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
+    m_grid->SetColAttr( DATASHEET, attr );
 
     // set quantities column attributes
     attr = new wxGridCellAttr;
