@@ -76,8 +76,6 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
             aParent = aParent->GetParent();
             kiwayHolder = dynamic_cast<KIWAY_HOLDER*>( aParent );
         }
-
-        wxASSERT_MSG( kiwayHolder, "Dialog parent is not a KIWAY_HOLDER" );
     }
 
     if( kiwayHolder )

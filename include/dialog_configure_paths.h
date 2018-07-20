@@ -47,6 +47,7 @@ public:
 protected:
     // Various button callbacks
     void OnGridCellRightClick( wxGridEvent& event ) override;
+    void OnGridCellChange( wxGridEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
@@ -60,7 +61,6 @@ protected:
 
     void AppendEnvVar( const wxString& aName, const wxString& aPath, bool isExternal );
     void AppendSearchPath( const wxString& aName, const wxString& aPath, const wxString& aDesc );
-    void AdjustGridColumns( int aWidth );
 
     /**
      * Determine if a particular ENV_VAR is protected
@@ -77,6 +77,7 @@ private:
     wxString            m_curdir;
     wxTextValidator     m_aliasValidator;
 
+    bool                m_gridWidthsDirty;
 };
 
 #endif    // _DIALOG_CONFIGURE_PATHS_H_

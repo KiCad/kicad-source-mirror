@@ -195,7 +195,7 @@
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
-                                <event name="OnGridCellChange"></event>
+                                <event name="OnGridCellChange">OnGridCellChange</event>
                                 <event name="OnGridCellLeftClick"></event>
                                 <event name="OnGridCellLeftDClick"></event>
                                 <event name="OnGridCellRightClick"></event>
@@ -550,7 +550,7 @@
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
-                                <event name="OnGridCellChange"></event>
+                                <event name="OnGridCellChange">OnGridCellChange</event>
                                 <event name="OnGridCellLeftClick"></event>
                                 <event name="OnGridCellLeftDClick"></event>
                                 <event name="OnGridCellRightClick">OnGridCellRightClick</event>

@@ -55,7 +55,8 @@ public:
         DIALOG_FP_PLUGIN_OPTIONS_BASE( aParent ),
         m_callers_options( aOptions ),
         m_result( aResult ),
-        m_initial_help( INITIAL_HELP )
+        m_initial_help( INITIAL_HELP ),
+        m_grid_widths_dirty( true )
     {
         SetTitle( wxString::Format( _( "Options for Library \"%s\"" ), aNickname ) );
 
@@ -123,8 +124,6 @@ public:
             delete props;
         }
 
-        adjustGridColumns( m_grid->GetRect().GetWidth() );
-
         return true;
     }
 
@@ -159,6 +158,7 @@ private:
     wxString*       m_result;
     PROPERTIES      m_choices;
     wxString        m_initial_help;
+    bool            m_grid_widths_dirty;
 
     int appendRow()
     {
@@ -195,6 +195,7 @@ private:
                 row = appendRow();
 
             m_grid->SetCellValue( row, 0, option );
+            m_grid_widths_dirty = true;
         }
     }
 
@@ -241,37 +242,40 @@ private:
         int curRow   = m_grid->GetGridCursorRow();
 
         m_grid->DeleteRows( curRow );
+        m_grid_widths_dirty = true;
 
         curRow = std::max( 0, curRow - 1 );
         m_grid->MakeCellVisible( curRow, m_grid->GetGridCursorCol() );
         m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
     }
 
-    void onUpdateUI( wxUpdateUIEvent&  ) override
+    void onGridCellChange( wxGridEvent& aEvent ) override
     {
-        if( !m_grid->IsCellEditControlShown() )
-            adjustGridColumns( m_grid->GetRect().GetWidth() );
-    }
-
-    void onSize( wxSizeEvent& aEvent ) override
-    {
-        adjustGridColumns( aEvent.GetSize().GetX() );
+        m_grid_widths_dirty = true;
 
         aEvent.Skip();
     }
 
-    //-----</event handlers>-----------------------------------------------------
-
-    void adjustGridColumns( int aWidth )
+    void onUpdateUI( wxUpdateUIEvent&  ) override
     {
-        m_grid->Freeze();
+        if( m_grid_widths_dirty && !m_grid->IsCellEditControlShown() )
+        {
+            int width = m_grid->GetClientRect().GetWidth();
 
-        m_grid->AutoSizeColumn( 0 );
-        m_grid->SetColSize( 0, std::max( 120, m_grid->GetColSize( 0 ) ) );
+            m_grid->AutoSizeColumn( 0 );
+            m_grid->SetColSize( 0, std::max( 120, m_grid->GetColSize( 0 ) ) );
 
-        m_grid->SetColSize( 1, aWidth - m_grid->GetColSize( 0 ) );
+            m_grid->SetColSize( 1, width - m_grid->GetColSize( 0 ) );
 
-        m_grid->Thaw();
+            m_grid_widths_dirty = false;
+        }
+    }
+
+    void onSize( wxSizeEvent& aEvent ) override
+    {
+        m_grid_widths_dirty = true;
+
+        aEvent.Skip();
     }
 };
 

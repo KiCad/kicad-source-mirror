@@ -82,8 +82,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_find_base.cpp
     dialogs/dialog_footprint_wizard_list.cpp
     dialogs/dialog_footprint_wizard_list_base.cpp
-    dialogs/dialog_fp_lib_table.cpp
-    dialogs/dialog_fp_lib_table_base.cpp
     dialogs/dialog_fp_plugin_options.cpp
     dialogs/dialog_fp_plugin_options_base.cpp
     dialogs/dialog_gen_footprint_position_file_base.cpp
@@ -148,6 +146,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_track_via_size_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
+    dialogs/panel_fp_lib_table.cpp
+    dialogs/panel_fp_lib_table_base.cpp
     dialogs/panel_modedit_defaults.cpp
     dialogs/panel_modedit_defaults_base.cpp
     dialogs/panel_modedit_display_options.cpp

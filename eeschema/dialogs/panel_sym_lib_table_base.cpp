@@ -5,14 +5,12 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_sym_lib_table_base.h"
+#include "panel_sym_lib_table_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
-	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
@@ -191,47 +189,29 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	
 	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* m_bottom_sizer;
-	m_bottom_sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_sdbSizer = new wxStdDialogButtonSizer();
-	m_sdbSizerOK = new wxButton( this, wxID_OK );
-	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer->AddButton( m_sdbSizerCancel );
-	m_sdbSizer->Realize();
-	
-	m_bottom_sizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
-	
-	
-	bSizer1->Add( m_bottom_sizer, 0, wxEXPAND, 5 );
-	
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
-	bSizer1->Fit( this );
-	
-	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
-	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
-	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
-	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
-	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
-	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
+	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
+	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
+	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
+	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
+	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
+	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SYM_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 }
 
-DIALOG_SYMBOL_LIB_TABLE_BASE::~DIALOG_SYMBOL_LIB_TABLE_BASE()
+PANEL_SYM_LIB_TABLE_BASE::~PANEL_SYM_LIB_TABLE_BASE()
 {
 	// Disconnect Events
-	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
-	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
-	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
-	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
-	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
-	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
+	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
+	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
+	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
+	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
+	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
+	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SYM_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 	
 }

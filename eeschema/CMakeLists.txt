@@ -70,8 +70,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
-    dialogs/dialog_sym_lib_table.cpp
-    dialogs/dialog_sym_lib_table_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
     dialogs/dialog_update_fields.cpp
@@ -84,6 +82,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_eeschema_settings_base.cpp
     dialogs/panel_libedit_settings.cpp
     dialogs/panel_libedit_settings_base.cpp
+    dialogs/panel_sym_lib_table.cpp
+    dialogs/panel_sym_lib_table_base.cpp
     )
 
 set( EESCHEMA_WIDGETS

@@ -209,6 +209,11 @@ public:
     virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
     /**
+     * Allows Eeschema to install the symbol library tables into the edit libraries dialog.
+     */
+    void InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog ) override;
+
+    /**
      * Load symbol from symbol library table.
      *
      * @param aLibId is the symbol library identifier to load.

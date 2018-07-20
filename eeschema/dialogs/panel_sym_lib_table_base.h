@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_FP_LIB_TABLE_BASE_H__
-#define __DIALOG_FP_LIB_TABLE_BASE_H__
+#ifndef __PANEL_SYM_LIB_TABLE_BASE_H__
+#define __PANEL_SYM_LIB_TABLE_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -32,9 +32,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_FP_LIB_TABLE_BASE
+/// Class PANEL_SYM_LIB_TABLE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_FP_LIB_TABLE_BASE : public wxPanel 
+class PANEL_SYM_LIB_TABLE_BASE : public wxPanel 
 {
 	private:
 	
@@ -67,9 +67,9 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
-		~PANEL_FP_LIB_TABLE_BASE();
+		PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+		~PANEL_SYM_LIB_TABLE_BASE();
 	
 };
 
-#endif //__DIALOG_FP_LIB_TABLE_BASE_H__
+#endif //__PANEL_SYM_LIB_TABLE_BASE_H__

@@ -38,7 +38,7 @@
 #include <fctsys.h>
 #include <project.h>
 #include <3d_viewer.h>      // for KISYS3DMOD
-#include <dialog_fp_lib_table.h>
+#include <panel_fp_lib_table.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
 #include <lib_table_lexer.h>
@@ -150,22 +150,26 @@ public:
 class FP_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FP_GRID_TRICKS( wxGrid* aGrid ) : GRID_TRICKS( aGrid )
-    {
-    }
+    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, wxGrid* aGrid ) :
+            GRID_TRICKS( aGrid ),
+            m_dialog( aParent )
+    { }
 
 protected:
+    DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
+
     void optionsEditor( int aRow )
     {
         FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) m_grid->GetTable();
+
         if( tbl->GetNumberRows() > aRow )
         {
             LIB_TABLE_ROW*  row = tbl->at( (size_t) aRow );
             const wxString& options = row->GetOptions();
             wxString        result = options;
 
-            InvokePluginOptionsEditor( wxGetTopLevelParent( m_grid ), row->GetNickName(),
-                                       row->GetType(), options, &result );
+            InvokePluginOptionsEditor( m_dialog, row->GetNickName(), row->GetType(), options,
+                                       &result );
 
             if( options != result )
             {
@@ -228,7 +232,7 @@ protected:
             }
             catch( PARSE_ERROR& pe )
             {
-                DisplayError( NULL, pe.What() );
+                DisplayError( m_dialog, pe.What() );
                 parsed = false;
             }
 
@@ -255,7 +259,8 @@ protected:
 };
 
 
-PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, FP_LIB_TABLE* aGlobal,
+PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
+                                        FP_LIB_TABLE* aGlobal,
                                         FP_LIB_TABLE* aProject ) :
     PANEL_FP_LIB_TABLE_BASE( aParent ),
     m_global( aGlobal ),
@@ -276,8 +281,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, FP_
     m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
 
     // add Cut, Copy, and Paste to wxGrids
-    m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_global_grid ) );
-    m_project_grid->PushEventHandler( new FP_GRID_TRICKS( m_project_grid ) );
+    m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_global_grid ) );
+    m_project_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_project_grid ) );
 
     m_global_grid->AutoSizeColumns( false );
     m_project_grid->AutoSizeColumns( false );
@@ -393,7 +398,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
             {
                 wxString msg = wxString::Format( _( "Illegal character '%c' in Nickname: \"%s\"" ),
                                                  illegalCh,
-                                                 GetChars( nick ) );
+                                                 nick );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( &model != cur_model() )

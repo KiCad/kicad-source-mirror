@@ -21,7 +21,7 @@
 #define PANEL_FP_LIB_TABLE_H
 
 #include <dialog_edit_library_tables.h>
-#include "dialog_fp_lib_table_base.h"
+#include <panel_fp_lib_table_base.h>
 
 class FP_LIB_TABLE;
 class FP_LIB_TABLE_GRID;

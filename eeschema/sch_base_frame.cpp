@@ -34,7 +34,7 @@
 #include <symbol_lib_table.h>
 #include <dialog_configure_paths.h>
 
-#include "dialogs/dialog_sym_lib_table.h"
+#include "dialogs/panel_sym_lib_table.h"
 
 
 
@@ -270,8 +270,10 @@ void SCH_BASE_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 
 void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
-    DIALOG_SYMBOL_LIB_TABLE dlg( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
-                                 Prj().SchSymbolLibTable() );
+    DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Footprint Libraries" ) );
+
+    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
+                                                  Prj().SchSymbolLibTable() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -291,6 +293,15 @@ void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 
     if( viewer )
         viewer->ReCreateListLib();
+}
+
+
+void SCH_BASE_FRAME::InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog )
+{
+    SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+    SYMBOL_LIB_TABLE* projectTable = Prj().SchSymbolLibTable();
+
+    aDialog->InstallPanel( new PANEL_SYM_LIB_TABLE( aDialog, globalTable, projectTable ) );
 }
 
 

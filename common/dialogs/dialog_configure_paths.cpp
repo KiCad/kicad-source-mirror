@@ -49,7 +49,8 @@ enum SEARCH_PATH_GRID_COLUMNS
 DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESOLVER* aResolver ) :
     DIALOG_CONFIGURE_PATHS_BASE( aParent ),
     m_errorGrid( nullptr ),
-    m_resolver( aResolver )
+    m_resolver( aResolver ),
+    m_gridWidthsDirty( true )
 {
     m_btnAddEnvVar->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_btnDeleteEnvVar->SetBitmap( KiBitmap( trash_xpm ) );
@@ -450,28 +451,38 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_CONFIGURE_PATHS::AdjustGridColumns( int aWidth )
+void DIALOG_CONFIGURE_PATHS::OnGridCellChange( wxGridEvent& aEvent )
 {
-    m_EnvVars->AutoSizeColumn( EV_NAME_COL );
-    m_EnvVars->SetColSize( EV_NAME_COL, std::max( m_EnvVars->GetColSize( EV_NAME_COL ), 120 ) );
+    m_gridWidthsDirty = true;
 
-    m_EnvVars->SetColSize( EV_PATH_COL, aWidth - m_EnvVars->GetColSize( EV_NAME_COL ) );
-
-    m_SearchPaths->AutoSizeColumn( SP_ALIAS_COL );
-    m_SearchPaths->SetColSize( SP_ALIAS_COL, std::max( m_SearchPaths->GetColSize( SP_ALIAS_COL ), 120 ) );
-
-    m_SearchPaths->AutoSizeColumn( SP_PATH_COL );
-    m_SearchPaths->SetColSize( SP_PATH_COL, std::max( m_SearchPaths->GetColSize( SP_PATH_COL ), 300 ) );
-
-    m_SearchPaths->SetColSize( SP_DESC_COL, aWidth - ( m_SearchPaths->GetColSize( SP_ALIAS_COL )
-                                                   + m_SearchPaths->GetColSize( SP_PATH_COL ) ) );
+    aEvent.Skip();
 }
 
 
 void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    if( !m_EnvVars->IsCellEditControlShown() && !m_SearchPaths->IsCellEditControlShown() )
-        AdjustGridColumns( m_EnvVars->GetRect().GetWidth() );
+    if( m_gridWidthsDirty && ( !m_EnvVars->IsCellEditControlShown()
+                               && !m_SearchPaths->IsCellEditControlShown() ) )
+    {
+        int width = m_EnvVars->GetClientRect().GetWidth();
+
+        m_EnvVars->AutoSizeColumn( EV_NAME_COL );
+        m_EnvVars->SetColSize( EV_NAME_COL, std::max( m_EnvVars->GetColSize( EV_NAME_COL ), 120 ) );
+
+        m_EnvVars->SetColSize( EV_PATH_COL, width - m_EnvVars->GetColSize( EV_NAME_COL ) );
+
+        width = m_SearchPaths->GetClientRect().GetWidth();
+
+        m_SearchPaths->AutoSizeColumn( SP_ALIAS_COL );
+        m_SearchPaths->SetColSize( SP_ALIAS_COL, std::max( m_SearchPaths->GetColSize( SP_ALIAS_COL ), 120 ) );
+
+        m_SearchPaths->AutoSizeColumn( SP_PATH_COL );
+        m_SearchPaths->SetColSize( SP_PATH_COL, std::max( m_SearchPaths->GetColSize( SP_PATH_COL ), 300 ) );
+
+        m_SearchPaths->SetColSize( SP_DESC_COL, width - ( m_SearchPaths->GetColSize( SP_ALIAS_COL )
+                                                          + m_SearchPaths->GetColSize( SP_PATH_COL ) ) );
+        m_gridWidthsDirty = false;
+    }
 
     // Handle a grid error.  This is delayed to OnUpdateUI so that we can change focus
     // even when the original validation was triggered from a killFocus event (and for
@@ -498,7 +509,7 @@ void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnGridSize( wxSizeEvent& event )
 {
-    AdjustGridColumns( event.GetSize().GetX() );
+    m_gridWidthsDirty = true;
 
     event.Skip();
 }

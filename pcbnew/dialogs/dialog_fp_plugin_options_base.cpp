@@ -110,6 +110,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onGridCellChange ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onSize ), NULL, this );
 	m_grid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onUpdateUI ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
@@ -122,6 +123,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 DIALOG_FP_PLUGIN_OPTIONS_BASE::~DIALOG_FP_PLUGIN_OPTIONS_BASE()
 {
 	// Disconnect Events
+	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onGridCellChange ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onSize ), NULL, this );
 	m_grid->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onUpdateUI ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );

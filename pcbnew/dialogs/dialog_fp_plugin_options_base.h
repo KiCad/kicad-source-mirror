@@ -51,6 +51,7 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onGridCellChange( wxGridEvent& event ) = 0;
 		virtual void onSize( wxSizeEvent& event ) = 0;
 		virtual void onUpdateUI( wxUpdateUIEvent& event ) = 0;
 		virtual void onAppendRow( wxCommandEvent& event ) = 0;

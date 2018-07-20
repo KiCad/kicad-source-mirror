@@ -23,7 +23,7 @@
 
 #include <fctsys.h>
 #include <project.h>
-#include <dialog_sym_lib_table.h>
+#include <panel_sym_lib_table.h>
 #include <lib_id.h>
 #include <symbol_lib_table.h>
 #include <lib_table_lexer.h>
@@ -78,20 +78,21 @@ public:
 class SYMBOL_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    SYMBOL_GRID_TRICKS( wxGrid* aGrid ) :
-        GRID_TRICKS( aGrid )
+    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, wxGrid* aGrid ) :
+        GRID_TRICKS( aGrid ),
+        m_dialog( aParent )
     {
     }
 
 protected:
+    DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
     /// handle specialized clipboard text, with leading "(sym_lib_table" or
     /// spreadsheet formatted text.
     virtual void paste_text( const wxString& cb_text ) override
     {
-        SYMBOL_LIB_TABLE_GRID*       tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
-
-        size_t  ndx = cb_text.find( "(sym_lib_table" );
+        SYMBOL_LIB_TABLE_GRID* tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
+        size_t                 ndx = cb_text.find( "(sym_lib_table" );
 
         if( ndx != std::string::npos )
         {
@@ -109,7 +110,7 @@ protected:
             }
             catch( PARSE_ERROR& pe )
             {
-                DisplayError( NULL, pe.What() );
+                DisplayError( m_dialog, pe.What() );
                 parsed = false;
             }
 
@@ -136,15 +137,16 @@ protected:
 };
 
 
-DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
-                                                  SYMBOL_LIB_TABLE* aGlobal,
-                                                  SYMBOL_LIB_TABLE* aProject ) :
-    DIALOG_SYMBOL_LIB_TABLE_BASE( aParent ),
+PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
+                                          SYMBOL_LIB_TABLE* aGlobal,
+                                          SYMBOL_LIB_TABLE* aProject ) :
+    PANEL_SYM_LIB_TABLE_BASE( aParent ),
     m_global( aGlobal ),
-    m_project( aProject )
+    m_project( aProject ),
+    m_parent( aParent )
 {
     // For user info, shows the table filenames:
-    m_PrjTableFilename->SetLabel( Prj().SymbolLibTableName() );
+    m_PrjTableFilename->SetLabel( m_parent->Prj().SymbolLibTableName() );
     m_GblTableFilename->SetLabel( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
 
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
@@ -157,8 +159,8 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
     m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
 
     // add Cut, Copy, and Paste to wxGrids
-    m_global_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_global_grid ) );
-    m_project_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_project_grid ) );
+    m_global_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_global_grid ) );
+    m_project_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_project_grid ) );
 
     m_global_grid->AutoSizeColumns( false );
     m_project_grid->AutoSizeColumns( false );
@@ -211,21 +213,10 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
     m_browse_button->SetBitmap( KiBitmap( folder_xpm ) );
-
-    m_sdbSizerOK->SetDefault();
-
-    SetSizeInDU( 450, 400 );
-    Center();
-
-    FinishDialogSettings();
-
-    // On some window managers (Unity, XFCE), this dialog is not always raised, depending on
-    // how this dialog is run.
-    Raise();
 }
 
 
-DIALOG_SYMBOL_LIB_TABLE::~DIALOG_SYMBOL_LIB_TABLE()
+PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 {
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
@@ -234,14 +225,14 @@ DIALOG_SYMBOL_LIB_TABLE::~DIALOG_SYMBOL_LIB_TABLE()
 }
 
 
-bool DIALOG_SYMBOL_LIB_TABLE::Show( bool aShow )
+bool PANEL_SYM_LIB_TABLE::Show( bool aShow )
 {
     if( aShow )
     {
         m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
 
         // for ALT+A handling, we want the initial focus to be on the first selected grid.
-        SetInitialFocus( m_cur_grid );
+        m_parent->SetInitialFocus( m_cur_grid );
     }
     else
     {
@@ -249,14 +240,14 @@ bool DIALOG_SYMBOL_LIB_TABLE::Show( bool aShow )
         // We must do this on Show( false ) because when the first grid is hidden it
         // gives focus to the next one (which is then hidden), but the result is that
         // we save the wrong grid if we do it after this.
-        m_pageNdx = m_auinotebook->GetSelection();
+        m_pageNdx = (unsigned) std::max( 0, m_auinotebook->GetSelection() );
     }
 
-    return DIALOG_SHIM::Show( aShow );
+    return wxPanel::Show( aShow );
 }
 
 
-bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
+bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
     for( int t=0; t<2; ++t )
     {
@@ -278,9 +269,9 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
             }
             else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_SCH ) ) )
             {
-                wxString msg = wxString::Format(
-                    _( "Illegal character \"%c\" in Nickname: \"%s\"" ),
-                    illegalCh, GetChars( nick ) );
+                wxString msg = wxString::Format( _( "Illegal character '%c' in Nickname: \"%s\"" ),
+                                                 illegalCh,
+                                                 nick );
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( &model != cur_model() )
@@ -318,10 +309,7 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    wxString msg = wxString::Format(
-                        _( "Duplicate Nickname: \"%s\" in rows %d and %d" ),
-                        GetChars( nick1 ), r1+1, r2+1
-                        );
+                    wxString msg = wxString::Format( _( "Duplicate Nickname: \"%s\"." ), nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( &model != cur_model() )
@@ -344,17 +332,17 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
+void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 {
     m_cur_grid = ( m_auinotebook->GetSelection() == 0 ) ? m_global_grid : m_project_grid;
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
+void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
-    wxFileDialog dlg( this, _( "Select Library" ), Prj().GetProjectPath(),
-            wxEmptyString, SchematicLibraryFileWildcard(),
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+    wxFileDialog dlg( this, _( "Select Library" ), m_parent->Prj().GetProjectPath(),
+                      wxEmptyString, SchematicLibraryFileWildcard(),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     dlg.SetDirectory( m_lastBrowseDir );
 
@@ -365,6 +353,7 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     m_lastBrowseDir = dlg.GetDirectory();
 
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
     bool skipRemainingDuplicates = false;
     wxArrayString files;
     dlg.GetFilenames( files );
@@ -419,9 +408,12 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                     SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
 
             // try to use path normalized to an environmental variable or project path
-            wxString normalizedPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(), &Prj() );
-            m_cur_grid->SetCellValue( last_row, COL_URI,
-                    normalizedPath.IsEmpty() ? fn.GetFullPath() : normalizedPath );
+            wxString path = NormalizePath( filePath, &envVars, &m_parent->Prj() );
+
+            if( path.IsEmpty() )
+                path = fn.GetFullPath();
+
+            m_cur_grid->SetCellValue( last_row, COL_URI, path );
         }
     }
 
@@ -433,7 +425,7 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
+void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
     if( m_cur_grid->AppendRows( 1 ) )
     {
@@ -451,7 +443,7 @@ void DIALOG_SYMBOL_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
+void PANEL_SYM_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 {
     int curRow = m_cur_grid->GetGridCursorRow();
     int curCol = m_cur_grid->GetGridCursorCol();
@@ -501,7 +493,7 @@ void DIALOG_SYMBOL_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
+void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
     SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
@@ -528,7 +520,7 @@ void DIALOG_SYMBOL_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
+void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
     SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
@@ -555,12 +547,12 @@ void DIALOG_SYMBOL_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 }
 
 
-bool DIALOG_SYMBOL_LIB_TABLE::TransferDataFromWindow()
+bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
 {
     // Commit any pending in-place edits and close the editor
     m_cur_grid->DisableCellEditControl();
 
-    if( !wxDialog::TransferDataFromWindow() || !verifyTables() )
+    if( !verifyTables() )
         return false;
 
     if( *global_model() != *m_global )
@@ -583,7 +575,7 @@ bool DIALOG_SYMBOL_LIB_TABLE::TransferDataFromWindow()
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::populateEnvironReadOnlyTable()
+void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
 {
     wxRegEx re( ".*?(\\$\\{(.+?)\\})|(\\$\\((.+?)\\)).*?", wxRE_ADVANCED );
     wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
@@ -644,7 +636,7 @@ void DIALOG_SYMBOL_LIB_TABLE::populateEnvironReadOnlyTable()
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
+void PANEL_SYM_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 {
     // Account for scroll bars
     aWidth -= ( m_path_subs_grid->GetSize().x - m_path_subs_grid->GetClientSize().x );
@@ -654,7 +646,7 @@ void DIALOG_SYMBOL_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 }
 
 
-void DIALOG_SYMBOL_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
+void PANEL_SYM_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 {
     adjustPathSubsGridColumns( event.GetSize().GetX() );
 
@@ -662,22 +654,22 @@ void DIALOG_SYMBOL_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 }
 
 
-SYMBOL_LIB_TABLE_GRID* DIALOG_SYMBOL_LIB_TABLE::global_model() const
+SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::global_model() const
 {
     return (SYMBOL_LIB_TABLE_GRID*) m_global_grid->GetTable();
 }
 
 
-SYMBOL_LIB_TABLE_GRID* DIALOG_SYMBOL_LIB_TABLE::project_model() const
+SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::project_model() const
 {
     return (SYMBOL_LIB_TABLE_GRID*) m_project_grid->GetTable();
 }
 
 
-SYMBOL_LIB_TABLE_GRID* DIALOG_SYMBOL_LIB_TABLE::cur_model() const
+SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::cur_model() const
 {
     return (SYMBOL_LIB_TABLE_GRID*) m_cur_grid->GetTable();
 }
 
 
-size_t DIALOG_SYMBOL_LIB_TABLE::m_pageNdx = 0;
+size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
