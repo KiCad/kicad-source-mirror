@@ -374,7 +374,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 wxASSERT( m_vias );
                 VIA* v = static_cast<VIA*>( item );
 
-                v->SetPosition( wxPoint( m_viaX.GetValue(), m_viaY.GetValue() ) );
+                if( !m_viaX.IsIndeterminate() )
+                    v->SetPosition( wxPoint( m_viaX.GetValue(), v->GetPosition().y ) );
+
+                if( !m_viaY.IsIndeterminate() )
+                    v->SetPosition( wxPoint( v->GetPosition().x, m_viaY.GetValue() ) );
 
                 if( m_ViaTypeChoice->GetSelection() != 3)
                 {
