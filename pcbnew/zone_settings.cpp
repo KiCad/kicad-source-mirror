@@ -172,7 +172,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     wxDataViewColumn* layerIDColumn = aList->AppendTextColumn( wxEmptyString );
     layerIDColumn->SetHidden( true );
 
-    int minWidth = 0;
+    int textWidth = 0;
 
     for( LSEQ layer = layers.UIOrder(); layer; ++layer )
     {
@@ -180,7 +180,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
         wxString     layerName = board->GetLayerName( layerID );
 
         // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
-        minWidth = std::max( minWidth, GetTextSize( layerName, aList ).x );
+        textWidth = std::max( textWidth, GetTextSize( layerName, aList ).x );
 
         COLOR4D layerColor = aFrame->Settings().Colors().GetLayerColor( layerID );
         auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE );
@@ -197,12 +197,19 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
             aList->SetToggleValue( true, (unsigned) aList->GetItemCount() - 1, 0 );
     }
 
-    checkColumn->SetWidth( 25 );
-    layerColumn->SetWidth( minWidth + LAYER_BITMAP_SIZE.x + 25 );
+    int checkColWidth = 22;
+    int layerColWidth = textWidth + LAYER_BITMAP_SIZE.x + 12;
 
     // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
     // for the tree expanders... but you'd be wrong.  Force indent to 0.
     aList->SetIndent( 0 );
+    aList->SetMinClientSize( wxSize( checkColWidth + layerColWidth, aList->GetMinClientSize().y ) );
+
+    checkColumn->SetWidth( checkColWidth );
+    layerColumn->SetWidth( layerColWidth );
+
+    int afterCheckColWidth = checkColumn->GetWidth();
+    int afterLayerColWidth = layerColumn->GetWidth();
 }
 
 

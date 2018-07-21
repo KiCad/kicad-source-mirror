@@ -112,7 +112,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_ptr = aSettings;
     m_settings = *aSettings;
     m_settings.SetupLayersList( m_layers, m_Parent, true );
-    int layersWidth = m_layers->GetColumn( 0 )->GetWidth() + m_layers->GetColumn( 1 )->GetWidth();
 
     m_settingsExported = false;
 
@@ -121,13 +120,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     m_sdbSizerOK->SetDefault();
 
-    GetSizer()->SetSizeHints( this );
-
-    // Must be done after SetSizeHints() else GTK will overwrite it
-    m_layers->SetMinSize( wxSize( layersWidth + 4, m_layers->GetMinSize().y ) );
-
-    // the default position, when calling the first time the dlg
-    Center();
+    FinishDialogSettings();
 }
 
 

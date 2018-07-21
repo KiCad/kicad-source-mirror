@@ -70,17 +70,10 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
     m_zonesettings.SetupLayersList( m_layers, m_parent, true );
-    int layersWidth = m_layers->GetColumn( 0 )->GetWidth() + m_layers->GetColumn( 1 )->GetWidth();
 
     m_sdbSizerButtonsOK->SetDefault();
 
-    GetSizer()->SetSizeHints( this );
-
-    // Must be done after SetSizeHints() else GTK will overwrite it
-    m_layers->SetMinSize( wxSize( layersWidth + 4, m_layers->GetMinSize().y ) );
-
-    // the default position, when calling the first time the dlg
-    Center();
+    FinishDialogSettings();
 }
 
 
