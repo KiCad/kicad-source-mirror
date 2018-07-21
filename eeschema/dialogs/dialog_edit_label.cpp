@@ -221,16 +221,21 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( m_valueCombo->IsShown() )
     {
         // Load the combobox with the existing labels of the same type
-        wxArrayString  existingLabels;
-        SCH_SCREENS    allScreens;
+        std::set<wxString> existingLabels;
+        SCH_SCREENS        allScreens;
 
         for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
             for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
                 if( item->Type() == m_CurrentText->Type() )
-                    existingLabels.push_back( static_cast<SCH_TEXT*>( item )->GetText() );
+                    existingLabels.insert( static_cast<SCH_TEXT*>( item )->GetText() );
 
-        existingLabels.Sort();
-        m_valueCombo->Append( existingLabels );
+        wxArrayString existingLabelArray;
+
+        for( wxString label : existingLabels )
+            existingLabelArray.push_back( label );
+
+        // existingLabelArray.Sort();
+        m_valueCombo->Append( existingLabelArray );
     }
 
     // Set text options:
