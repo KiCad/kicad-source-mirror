@@ -249,7 +249,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Settings to Other Zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExportSetupButton->SetToolTip( _("Export this zone setup (excluding layer and net selection) to all other copper zones.") );
 	
-	bSizerbottom->Add( m_ExportSetupButton, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerbottom->Add( m_ExportSetupButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

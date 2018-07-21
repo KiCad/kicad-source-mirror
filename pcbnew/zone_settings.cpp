@@ -154,7 +154,7 @@ void ZONE_SETTINGS::SetCornerRadius( int aRadius )
 #ifdef __WXOSX_MAC__
 const static wxSize LAYER_BITMAP_SIZE( 28, 28 );  // wxCocoa impl unhappy if this isn't square...
 #else
-const static wxSize LAYER_BITMAP_SIZE( 20, 10 );
+const static wxSize LAYER_BITMAP_SIZE( 24, 18 );
 #endif
 
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
@@ -203,11 +203,6 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
     // for the tree expanders... but you'd be wrong.  Force indent to 0.
     aList->SetIndent( 0 );
-
-    wxSize minSize = wxSize( checkColumn->GetWidth() + layerColumn->GetWidth() + 4,
-                             aList->GetMinSize().GetHeight() );
-    aList->SetSize( minSize );
-    aList->SetMinSize( minSize );
 }
 
 
