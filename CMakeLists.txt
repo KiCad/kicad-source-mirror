@@ -555,7 +555,7 @@ endif()
 # Turn on wxWidgets compatibility mode for some classes
 add_definitions( -DWX_COMPATIBILITY )
 
-# See line 41 of CMakeModules/FindwxWidgets.cmake
+# See line 49 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --static=no )
 
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
@@ -564,7 +564,8 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 include( ${wxWidgets_USE_FILE} )
 
 # Check the toolkit used to build wxWidgets
-execute_process( COMMAND sh -c "${wxWidgets_CONFIG_EXECUTABLE} --query-toolkit"
+execute_process(
+    COMMAND sh -c "${wxWidgets_CONFIG_EXECUTABLE} ${wxWidgets_CONFIG_OPTIONS} --query-toolkit"
     RESULT_VARIABLE wxWidgets_TOOLKIT_RESULT
     OUTPUT_VARIABLE wxWidgets_TOOLKIT_FOUND
     OUTPUT_STRIP_TRAILING_WHITESPACE
