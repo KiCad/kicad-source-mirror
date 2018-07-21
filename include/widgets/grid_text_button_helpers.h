@@ -42,6 +42,7 @@ public:
 
     void SetSize( const wxRect& aRect ) override;
 
+    void StartingKey( wxKeyEvent& event ) override;
     void BeginEdit( int aRow, int aCol, wxGrid* aGrid ) override;
     bool EndEdit( int , int , const wxGrid* , const wxString& , wxString *aNewVal ) override;
     void ApplyEdit( int aRow, int aCol, wxGrid* aGrid ) override;

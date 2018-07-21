@@ -30,12 +30,12 @@
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
-SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsCmplibEditor,
-                                           int aFieldId, wxString* aValue ) :
+
+SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
 {
     m_fieldId = aFieldId;
-    m_isLibEditor = aIsCmplibEditor;
+    m_isLibEditor = aIsLibEditor;
 
     // Fields cannot contain carriage returns, line feeds, or tabs.
     wxString excludes( "\r\n\t" );
@@ -49,7 +49,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsCmplibEditor,
     long style = GetStyle();
 
     // The reference and value fields cannot be empty.
-    if( aFieldId == REFERENCE || aFieldId == VALUE )
+    if( aFieldId == REFERENCE || aFieldId == VALUE || aFieldId == FIELD_NAME )
         style |= wxFILTER_EMPTY;
 
     SetStyle( style );
@@ -82,19 +82,20 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 
     switch( m_fieldId )
     {
-    case REFERENCE: fieldName = _( "reference designator" ); break;
-    case VALUE:     fieldName = _( "value" );                break;
-    case FOOTPRINT: fieldName = _( "footprint" );            break;
-    case DATASHEET: fieldName = _( "data sheet" );           break;
-    default:        fieldName = _( "user defined" );         break;
+    case FIELD_NAME: fieldName = _( "field name" );         break;
+    case REFERENCE:  fieldName = _( "reference field" );    break;
+    case VALUE:      fieldName = _( "value field" );        break;
+    case FOOTPRINT:  fieldName = _( "footprint field" );    break;
+    case DATASHEET:  fieldName = _( "datasheet field" );    break;
+    default:         fieldName = _( "user defined field" ); break;
     };
 
-    wxString errorMsg;
+    wxString msg;
 
     // We can only do some kinds of validation once the input is complete, so
     // check for them here:
     if( HasFlag( wxFILTER_EMPTY ) && val.empty() )
-        errorMsg.Printf( _( "The %s field cannot be empty." ), fieldName );
+        msg.Printf( _( "The %s cannot be empty." ), fieldName );
     else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
         wxArrayString whiteSpace;
@@ -124,15 +125,14 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
         else
             wxCHECK_MSG( false, true, wxT( "Invalid illegal character in field validator." ) );
 
-        errorMsg.Printf( _( "The %s field cannot contain %s characters." ), fieldName, badChars );
+        msg.Printf( _( "The %s cannot contain %s characters." ), fieldName, badChars );
     }
 
-    if ( !errorMsg.empty() )
+    if ( !msg.empty() )
     {
         m_validatorWindow->SetFocus();
 
-        wxMessageBox( errorMsg, _( "Field Validation Error" ),
-                      wxOK | wxICON_EXCLAMATION, aParent );
+        wxMessageBox( msg, _( "Field Validation Error" ), wxOK | wxICON_EXCLAMATION, aParent );
 
         return false;
     }

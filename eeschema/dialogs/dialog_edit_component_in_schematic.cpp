@@ -357,7 +357,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 
     if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
     {
-        DisplayErrorMessage( nullptr, _( "References must start with a letter." ) );
+        DisplayErrorMessage( this, _( "References must start with a letter." ) );
 
         m_delayedFocusColumn = FDC_VALUE;
         m_delayedFocusRow = REFERENCE;
@@ -544,14 +544,17 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event )
 {
-    if( event.GetString().IsEmpty() )
-    {
-        DisplayErrorMessage( this, _( "Field value cannot be empty." ) );
-        event.Veto();
+    wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
+    wxControl* control = editor->GetControl();
 
+    if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
+    {
+        event.Veto();
         m_delayedFocusRow = event.GetRow();
         m_delayedFocusColumn = event.GetCol();
     }
+
+    editor->DecRef();
 }
 
 

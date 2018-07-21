@@ -322,14 +322,17 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnEditSpiceModel( wxCommandEvent& event
 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnGridCellChanging( wxGridEvent& event )
 {
-    if( event.GetCol() == FDC_NAME && event.GetString().IsEmpty() )
-    {
-        DisplayErrorMessage( this, _( "Fields must have a name." ) );
-        event.Veto();
+    wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
+    wxControl* control = editor->GetControl();
 
+    if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
+    {
+        event.Veto();
         m_delayedFocusRow = event.GetRow();
         m_delayedFocusColumn = event.GetCol();
     }
+
+    editor->DecRef();
 }
 
 

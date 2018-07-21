@@ -60,6 +60,54 @@ void GRID_CELL_TEXT_BUTTON::SetSize( const wxRect& aRect )
 }
 
 
+void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
+{
+    // Note: this is a copy of wxGridCellTextEditor's StartingKey()
+
+    // Since this is now happening in the EVT_CHAR event EmulateKeyPress is no
+    // longer an appropriate way to get the character into the text control.
+    // Do it ourselves instead.  We know that if we get this far that we have
+    // a valid character, so not a whole lot of testing needs to be done.
+
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( Combo() );
+    int ch;
+
+    bool isPrintable;
+
+#if wxUSE_UNICODE
+    ch = event.GetUnicodeKey();
+    if ( ch != WXK_NONE )
+        isPrintable = true;
+    else
+#endif // wxUSE_UNICODE
+    {
+        ch = event.GetKeyCode();
+        isPrintable = ch >= WXK_SPACE && ch < WXK_START;
+    }
+
+    switch (ch)
+    {
+    case WXK_DELETE:
+        // Delete the initial character when starting to edit with DELETE.
+        textEntry->Remove(0, 1);
+        break;
+
+    case WXK_BACK:
+        // Delete the last character when starting to edit with BACKSPACE.
+    {
+        const long pos = textEntry->GetLastPosition();
+        textEntry->Remove(pos - 1, pos);
+    }
+        break;
+
+    default:
+        if ( isPrintable )
+            textEntry->WriteText(static_cast<wxChar>(ch));
+        break;
+    }
+}
+
+
 void GRID_CELL_TEXT_BUTTON::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 {
     auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );

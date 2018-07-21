@@ -41,12 +41,12 @@ GRID_CELL_TEXT_EDITOR::GRID_CELL_TEXT_EDITOR() : wxGridCellTextEditor()
 }
 
 
-void GRID_CELL_TEXT_EDITOR::SetValidator(const wxValidator& validator)
+void GRID_CELL_TEXT_EDITOR::SetValidator( const wxValidator& validator )
 {
     // keep our own copy because wxGridCellTextEditor's is annoyingly private
     m_validator.reset( static_cast<wxValidator*>( validator.Clone() ) );
 
-    wxGridCellTextEditor::SetValidator( validator );
+    wxGridCellTextEditor::SetValidator( *m_validator );
 }
 
 
@@ -58,8 +58,11 @@ void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
         m_validator.get()->ProcessEvent( event );
     }
 
-    if( !event.WasProcessed() )
+    if( event.GetSkipped() )
+    {
         wxGridCellTextEditor::StartingKey( event );
+        event.Skip( false );
+    }
 }
 
 

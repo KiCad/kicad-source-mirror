@@ -30,7 +30,6 @@
 #include <sch_component.h>
 #include <grid_tricks.h>
 
-
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
@@ -96,16 +95,18 @@ private:
     LIB_PART*             m_part;
 
     bool                  m_inLibEdit;
-    SCH_FIELD_VALIDATOR   m_valueValidator;
+    SCH_FIELD_VALIDATOR   m_fieldNameValidator;
+    SCH_FIELD_VALIDATOR   m_referenceValidator;
 
     wxGridCellAttr*       m_readOnlyAttr;
-    wxGridCellAttr*       m_valueColAttr;
+    wxGridCellAttr*       m_fieldNameAttr;
+    wxGridCellAttr*       m_referenceAttr;
     wxGridCellAttr*       m_footprintAttr;
     wxGridCellAttr*       m_urlAttr;
-    wxGridCellAttr*       m_boolColAttr;
-    wxGridCellAttr*       m_vAlignColAttr;
-    wxGridCellAttr*       m_hAlignColAttr;
-    wxGridCellAttr*       m_orientationColAttr;
+    wxGridCellAttr*       m_boolAttr;
+    wxGridCellAttr*       m_vAlignAttr;
+    wxGridCellAttr*       m_hAlignAttr;
+    wxGridCellAttr*       m_orientationAttr;
 };
 
 

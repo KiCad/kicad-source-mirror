@@ -48,17 +48,23 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, bool aInLibEdit, 
     m_userUnits( aDialog->GetUserUnits() ),
     m_part( aPart ),
     m_inLibEdit( aInLibEdit ),
-    m_valueValidator( aInLibEdit, REFERENCE )
+    m_fieldNameValidator( aInLibEdit, FIELD_NAME ),
+    m_referenceValidator( aInLibEdit, REFERENCE )
 {
-    // Build the column attributes.
+    // Build the various grid cell attributes.
 
     m_readOnlyAttr = new wxGridCellAttr;
     m_readOnlyAttr->SetReadOnly( true );
 
-    m_valueColAttr = new wxGridCellAttr;
-    GRID_CELL_TEXT_EDITOR* textEditor = new GRID_CELL_TEXT_EDITOR();
-    textEditor->SetValidator( m_valueValidator );
-    m_valueColAttr->SetEditor( textEditor );
+    m_fieldNameAttr = new wxGridCellAttr;
+    GRID_CELL_TEXT_EDITOR* nameEditor = new GRID_CELL_TEXT_EDITOR();
+    nameEditor->SetValidator( m_fieldNameValidator );
+    m_fieldNameAttr->SetEditor( nameEditor );
+
+    m_referenceAttr = new wxGridCellAttr;
+    GRID_CELL_TEXT_EDITOR* referenceEditor = new GRID_CELL_TEXT_EDITOR();
+    referenceEditor->SetValidator( m_referenceValidator );
+    m_referenceAttr->SetEditor( referenceEditor );
 
     m_footprintAttr = new wxGridCellAttr;
     m_footprintAttr->SetEditor( new GRID_CELL_FOOTPRINT_EDITOR( aDialog ) );
@@ -66,33 +72,33 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, bool aInLibEdit, 
     m_urlAttr = new wxGridCellAttr;
     m_urlAttr->SetEditor( new GRID_CELL_URL_EDITOR( aDialog ) );
 
-    m_boolColAttr = new wxGridCellAttr;
-    m_boolColAttr->SetRenderer( new wxGridCellBoolRenderer() );
-    m_boolColAttr->SetEditor( new wxGridCellBoolEditor() );
-    m_boolColAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_boolAttr = new wxGridCellAttr;
+    m_boolAttr->SetRenderer( new wxGridCellBoolRenderer() );
+    m_boolAttr->SetEditor( new wxGridCellBoolEditor() );
+    m_boolAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
 
     wxArrayString vAlignNames;
     vAlignNames.Add( _( "Top" ) );
     vAlignNames.Add( _( "Center" ) );
     vAlignNames.Add( _( "Bottom" ) );
-    m_vAlignColAttr = new wxGridCellAttr;
-    m_vAlignColAttr->SetEditor( new wxGridCellChoiceEditor( vAlignNames ) );
-    m_vAlignColAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_vAlignAttr = new wxGridCellAttr;
+    m_vAlignAttr->SetEditor( new wxGridCellChoiceEditor( vAlignNames ) );
+    m_vAlignAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
 
     wxArrayString hAlignNames;
     hAlignNames.Add( _( "Left" ) );
     hAlignNames.Add(_( "Center" ) );
     hAlignNames.Add(_( "Right" ) );
-    m_hAlignColAttr = new wxGridCellAttr;
-    m_hAlignColAttr->SetEditor( new wxGridCellChoiceEditor( hAlignNames ) );
-    m_hAlignColAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_hAlignAttr = new wxGridCellAttr;
+    m_hAlignAttr->SetEditor( new wxGridCellChoiceEditor( hAlignNames ) );
+    m_hAlignAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
 
     wxArrayString orientationNames;
     orientationNames.Add( _( "Horizontal" ) );
     orientationNames.Add(_( "Vertical" ) );
-    m_orientationColAttr = new wxGridCellAttr;
-    m_orientationColAttr->SetEditor( new wxGridCellChoiceEditor( orientationNames ) );
-    m_orientationColAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_orientationAttr = new wxGridCellAttr;
+    m_orientationAttr->SetEditor( new wxGridCellChoiceEditor( orientationNames ) );
+    m_orientationAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
 }
 
 
@@ -100,13 +106,14 @@ template <class T>
 FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
 {
     m_readOnlyAttr->DecRef();
-    m_boolColAttr->DecRef();
-    m_valueColAttr->DecRef();
+    m_fieldNameAttr->DecRef();
+    m_boolAttr->DecRef();
+    m_referenceAttr->DecRef();
     m_footprintAttr->DecRef();
     m_urlAttr->DecRef();
-    m_vAlignColAttr->DecRef();
-    m_hAlignColAttr->DecRef();
-    m_orientationColAttr->DecRef();
+    m_vAlignAttr->DecRef();
+    m_hAlignAttr->DecRef();
+    m_orientationAttr->DecRef();
 }
 
 
@@ -177,24 +184,35 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
             return m_readOnlyAttr;
         }
         else
-            return nullptr;
+        {
+            m_fieldNameAttr->IncRef();
+            return m_fieldNameAttr;
+        }
 
     case FDC_VALUE:
-        // This field is the lib name and the default value when loading this component in
-        // schematic.  The value is now not editable here (in this dialog) because changing
-        // it is equivalent to create a new component or alias. This is handled in libedit,
-        // not in this dialog.
-        if( m_inLibEdit && aRow == VALUE )
+        if( aRow == REFERENCE )
         {
-            m_readOnlyAttr->IncRef();
-            return m_readOnlyAttr;
+            m_referenceAttr->IncRef();
+            return m_referenceAttr;
         }
-        // For power symbols, the value is not editable, because value and pin
-        // name must be same and can be edited only in library editor
-        else if( m_part && m_part->IsPower() )
+        else if( aRow == VALUE )
         {
-            m_readOnlyAttr->IncRef();
-            return m_readOnlyAttr;
+            if( m_inLibEdit )
+            {
+                // This field is the lib name and the default value when loading this component
+                // in schematic.  The value is now not editable here (in this dialog) because
+                // changing it is equivalent to create a new component or alias. This is handled
+                // in libedit, not in this dialog.
+                m_readOnlyAttr->IncRef();
+                return m_readOnlyAttr;
+            }
+            else if( m_part && m_part->IsPower() )
+            {
+                // For power symbols, the value is not editable, because value and pin name must
+                // be the same and can be edited only in library editor.
+                m_readOnlyAttr->IncRef();
+                return m_readOnlyAttr;
+            }
         }
         else if( aRow == FOOTPRINT )
         {
@@ -206,15 +224,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
             m_urlAttr->IncRef();
             return m_urlAttr;
         }
-        else
-        {
-            // Some fields have different validation semantics.  Make sure the
-            // validator knows what it's validating.
-            m_valueValidator.SetFieldId( aRow );
-
-            m_valueColAttr->IncRef();
-            return m_valueColAttr;
-        }
+        return nullptr;
 
     case FDC_TEXT_SIZE:
     case FDC_POSX:
@@ -222,22 +232,22 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         return nullptr;
 
     case FDC_H_ALIGN:
-        m_hAlignColAttr->IncRef();
-        return m_hAlignColAttr;
+        m_hAlignAttr->IncRef();
+        return m_hAlignAttr;
 
     case FDC_V_ALIGN:
-        m_vAlignColAttr->IncRef();
-        return m_vAlignColAttr;
+        m_vAlignAttr->IncRef();
+        return m_vAlignAttr;
 
     case FDC_ORIENTATION:
-        m_orientationColAttr->IncRef();
-        return m_orientationColAttr;
+        m_orientationAttr->IncRef();
+        return m_orientationAttr;
 
     case FDC_SHOWN:
     case FDC_ITALIC:
     case FDC_BOLD:
-        m_boolColAttr->IncRef();
-        return m_boolColAttr;
+        m_boolAttr->IncRef();
+        return m_boolAttr;
 
     default:
         wxFAIL;
