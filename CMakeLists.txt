@@ -60,7 +60,7 @@ option( USE_WX_OVERLAY
     "Use wxOverlay: Always ON for MAC (default OFF).  Warning, this is experimental" )
 
 option( KICAD_SCRIPTING
-    "Build the Python scripting support inside KiCad binaries (default OFF)."
+    "Build the Python scripting support inside KiCad binaries (default ON)."
     ON )
 
 option( KICAD_SCRIPTING_MODULES
@@ -68,7 +68,7 @@ option( KICAD_SCRIPTING_MODULES
     ON )
 
 option( KICAD_SCRIPTING_WXPYTHON
-    "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
+    "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
     ON )
 
 option( KICAD_SCRIPTING_ACTION_MENU
