@@ -49,7 +49,10 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
 
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
     if( textEntry )
-        textEntry->SetValue( wxT( "0" ) );
+    {
+        // Use ChangeValue() instead of SetValue() so we don't generate events.
+        textEntry->ChangeValue( wxT( "0" ) );
+    }
 
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
 
