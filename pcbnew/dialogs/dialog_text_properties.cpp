@@ -61,8 +61,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
     m_OrientValidator( 1, &m_OrientValue )
 {
-    wxString title, label;
-    bool     multiLine = false;
+    wxString title;
 
     if( m_item->Type() == PCB_DIMENSION_T )
     {
@@ -72,9 +71,12 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_edaText = &dimension->Text();
         m_pcbText = &dimension->Text();
 
-        label = _( "Dimension text:" );
+        SetInitialFocus( m_DimensionText );
+        m_SingleLineSizer->Show( false );
+        m_MultiLineSizer->Show( false );
 
         m_KeepUpright->Show( false );
+        m_statusLine->Show( false );
     }
     else if( m_item->Type() == PCB_MODULE_TEXT_T )
     {
@@ -85,10 +87,14 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         switch( m_modText->GetType() )
         {
-        case TEXTE_MODULE::TEXT_is_REFERENCE: label = _( "Reference:" ); break;
-        case TEXTE_MODULE::TEXT_is_VALUE:     label = _( "Value:" );     break;
-        case TEXTE_MODULE::TEXT_is_DIVERS:    label = _( "Text:" );      break;
+        case TEXTE_MODULE::TEXT_is_REFERENCE: m_TextLabel->SetLabel( _( "Reference:" ) ); break;
+        case TEXTE_MODULE::TEXT_is_VALUE:     m_TextLabel->SetLabel( _( "Value:" ) );     break;
+        case TEXTE_MODULE::TEXT_is_DIVERS:    m_TextLabel->SetLabel( _( "Text:" ) );      break;
         }
+
+        SetInitialFocus( m_SingleLineText );
+        m_MultiLineSizer->Show( false );
+        m_DimensionTextSizer->Show( false );
     }
     else
     {
@@ -96,18 +102,17 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         m_pcbText = (TEXTE_PCB*) aItem;
         m_edaText = static_cast<EDA_TEXT*>( m_pcbText );
-        multiLine = true;
+
+        SetInitialFocus( m_MultiLineText );
+        m_SingleLineSizer->Show( false );
+        m_DimensionTextSizer->Show( false );
 
         m_KeepUpright->Show( false );
+        m_statusLine->Show( false );
     }
 
     SetTitle( title );
     m_hash_key = title;
-
-    m_TextLabel->SetLabel( label );
-    m_SingleLineSizer->Show( !multiLine );
-    m_MultiLineSizer->Show( multiLine );
-    SetInitialFocus( multiLine ? m_MultiLineText : m_SingleLineText );
 
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
@@ -190,24 +195,70 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 }
 
 
+void DIALOG_TEXT_PROPERTIES::OnDimensionTextChange( wxCommandEvent& event )
+{
+    EDA_UNITS_T units = UNSCALED_UNITS;
+    bool useMils;
+
+    FetchUnitsFromString( m_DimensionText->GetValue(), units, useMils );
+
+    if( units != UNSCALED_UNITS )
+        m_DimensionUnitsOpt->SetSelection( units == MILLIMETRES ? 2 : useMils ? 1 : 0 );
+}
+
+
+void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
+{
+    DIMENSION* dimension = (DIMENSION*) m_item;
+    EDA_UNITS_T units;
+    bool useMils;
+
+    // Get default units in case dimension text doesn't contain units.
+    dimension->GetUnits( units, useMils );
+
+    double value = ValueFromString( units, m_DimensionText->GetValue(), useMils );
+
+    switch( event.GetSelection() )
+    {
+    case 0: units = INCHES;      useMils = false; break;
+    case 1: units = INCHES;      useMils = true;  break;
+    case 2: units = MILLIMETRES; useMils = false; break;
+    default: break;
+    }
+
+    m_DimensionText->SetValue( StringFromValue( units, value, true, useMils ) );
+}
+
+
 bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 {
-    wxString      msg;
-
     if( m_SingleLineText->IsShown() )
     {
         m_SingleLineText->SetValue( m_edaText->GetText() );
         m_SingleLineText->SetSelection( -1, -1 );
     }
-    else
+    else if( m_MultiLineText->IsShown() )
     {
         m_MultiLineText->SetValue( m_edaText->GetText() );
         m_MultiLineText->SetSelection( -1, -1 );
     }
+    else if (m_DimensionText->IsShown() )
+    {
+        m_DimensionText->SetValue( m_edaText->GetText() );
+        m_DimensionText->SetSelection( -1, -1 );
+
+        DIMENSION* dimension = (DIMENSION*) m_item;
+        EDA_UNITS_T units;
+        bool useMils;
+        dimension->GetUnits( units, useMils );
+
+        m_DimensionUnitsOpt->SetSelection( units == MILLIMETRES ? 2 : useMils ? 1 : 0 );
+    }
 
     if( m_item->Type() == PCB_MODULE_TEXT_T )
     {
-        MODULE* module = dynamic_cast<MODULE*>( m_modText->GetParent() );
+        MODULE*  module = dynamic_cast<MODULE*>( m_modText->GetParent() );
+        wxString msg;
 
         if( module )
         {
@@ -217,9 +268,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
                         module->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
                         module->GetOrientation() / 10.0 );
         }
-    }
 
-    m_statusLine->SetLabel( msg );
+        m_statusLine->SetLabel( msg );
+    }
+    else
+    {
+        m_statusLine->Show( false );
+    }
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
@@ -285,10 +340,31 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 #endif
 
     // Set the new text content
-    if( m_SingleLineText->IsShown() && !m_SingleLineText->GetValue().IsEmpty() )
-        m_edaText->SetText( m_SingleLineText->GetValue() );
-    else if( m_MultiLineText->IsShown() && !m_MultiLineText->GetValue().IsEmpty() )
-        m_edaText->SetText( m_MultiLineText->GetValue() );
+    if( m_SingleLineText->IsShown() )
+    {
+        if( !m_SingleLineText->GetValue().IsEmpty() )
+            m_edaText->SetText( m_SingleLineText->GetValue() );
+    }
+    else if( m_MultiLineText->IsShown() )
+    {
+        if( !m_MultiLineText->GetValue().IsEmpty() )
+            m_edaText->SetText( m_MultiLineText->GetValue() );
+    }
+    else if( m_DimensionText->IsShown() )
+    {
+        if( !m_DimensionText->GetValue().IsEmpty() )
+            m_edaText->SetText( m_DimensionText->GetValue() );
+
+        DIMENSION* dimension = (DIMENSION*) m_item;
+
+        switch( m_DimensionUnitsOpt->GetSelection() )
+        {
+        case 0: dimension->SetUnits( INCHES, false );      break;
+        case 1: dimension->SetUnits( INCHES, true );       break;
+        case 2: dimension->SetUnits( MILLIMETRES, false ); break;
+        default: break;
+        }
+    }
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
@@ -304,7 +380,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     if( m_edaText->GetThickness() > maxthickness )
     {
-        DisplayError( NULL, _( "The text thickness is too large for the text size.\n"
+        DisplayError( this, _( "The text thickness is too large for the text size.\n"
                                "It will be clamped." ) );
         m_edaText->SetThickness( maxthickness );
     }

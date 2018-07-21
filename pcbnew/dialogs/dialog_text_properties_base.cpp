@@ -46,6 +46,31 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	
 	bMainSizer->Add( m_SingleLineSizer, 0, wxEXPAND|wxALL, 10 );
 	
+	m_DimensionTextSizer = new wxFlexGridSizer( 0, 4, 1, 5 );
+	m_DimensionTextSizer->AddGrowableCol( 1 );
+	m_DimensionTextSizer->SetFlexibleDirection( wxBOTH );
+	m_DimensionTextSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_DimensionTextLabel = new wxStaticText( this, wxID_ANY, _("Dimension text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DimensionTextLabel->Wrap( -1 );
+	m_DimensionTextSizer->Add( m_DimensionTextLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	m_DimensionText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DimensionTextSizer->Add( m_DimensionText, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	
+	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	m_DimensionTextSizer->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	wxString m_DimensionUnitsOptChoices[] = { _("Inches"), _("Mils"), _("Millimeters") };
+	int m_DimensionUnitsOptNChoices = sizeof( m_DimensionUnitsOptChoices ) / sizeof( wxString );
+	m_DimensionUnitsOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DimensionUnitsOptNChoices, m_DimensionUnitsOptChoices, 0 );
+	m_DimensionUnitsOpt->SetSelection( 0 );
+	m_DimensionTextSizer->Add( m_DimensionUnitsOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	
+	
+	bMainSizer->Add( m_DimensionTextSizer, 0, wxEXPAND|wxALL, 10 );
+	
 	wxFlexGridSizer* fgSizerSetup;
 	fgSizerSetup = new wxFlexGridSizer( 0, 5, 4, 0 );
 	fgSizerSetup->AddGrowableCol( 1 );
@@ -206,6 +231,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnInitDlg ) );
 	m_SingleLineText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_DimensionText->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnDimensionTextChange ), NULL, this );
+	m_DimensionUnitsOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnDimensionUnitsChange ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
@@ -220,6 +247,8 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnInitDlg ) );
 	m_SingleLineText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_DimensionText->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnDimensionTextChange ), NULL, this );
+	m_DimensionUnitsOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnDimensionUnitsChange ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );

@@ -64,6 +64,7 @@ class DIMENSION : public BOARD_ITEM
     int         m_Width;        ///< Line width
     int         m_Shape;        ///< Currently always 0.
     EDA_UNITS_T m_Unit;         ///< 0 = inches, 1 = mm
+    bool        m_UseMils;      ///< If inches, use mils.
     int         m_Value;        ///< value of PCB dimensions.
     int         m_Height;       ///< length of feature lines
     TEXTE_PCB   m_Text;
@@ -173,9 +174,20 @@ public:
     /**
      * Function AdjustDimensionDetails
      * Calculate coordinates of segments used to draw the dimension.
-     * @param aUnits the units for the dimension text, or UNSCALED_UNITS to leave unchanged
      */
-    void            AdjustDimensionDetails( EDA_UNITS_T aUnits = UNSCALED_UNITS );
+    void AdjustDimensionDetails();
+
+    void GetUnits( EDA_UNITS_T& aUnits, bool& aUseMils ) const
+    {
+        aUnits = m_Unit;
+        aUseMils = m_UseMils;
+    }
+
+    void SetUnits( EDA_UNITS_T aUnits, bool aUseMils )
+    {
+        m_Unit = aUnits;
+        m_UseMils = aUseMils;
+    }
 
     void            SetText( const wxString& NewText );
     const wxString  GetText() const;

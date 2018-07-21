@@ -581,7 +581,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->Text().SetThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetWidth( boardSettings.GetLineThickness( layer ) );
-                dimension->AdjustDimensionDetails( m_frame->GetUserUnits() );
+                dimension->SetUnits( m_frame->GetUserUnits(), false );
+                dimension->AdjustDimensionDetails();
 
                 preview.Add( dimension );
                 frame()->SetMsgPanel( dimension );

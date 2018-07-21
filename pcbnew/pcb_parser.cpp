@@ -1649,12 +1649,19 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
         case T_gr_text:
         {
             TEXTE_PCB* text = parseTEXTE_PCB();
+
             // This copy  (using the copy constructor) rebuild the text timestamp,
             // that is not what we want.
             dimension->Text() = *text;
             // reinitialises the text time stamp to the right value (the dimension time stamp)
             dimension->Text().SetTimeStamp( dimension->GetTimeStamp() );
             dimension->SetPosition( text->GetTextPos() );
+
+            EDA_UNITS_T units = INCHES;
+            bool useMils = false;
+            FetchUnitsFromString( text->GetText(), units, useMils );
+            dimension->SetUnits( units, useMils );
+
             delete text;
             break;
         }

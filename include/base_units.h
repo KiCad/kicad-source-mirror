@@ -163,15 +163,17 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue,
 int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils = false );
 
 /**
- * Get a human readable units string.
- *
- * The strings returned are full text name and not abbreviations or symbolic
- * representations of the units.  Use ReturnUnitSymbol() for that.
+ * Function FetchUnitsFromString
+ * writes any unit info found in the string to aUnits and aUseMils.
+ */
+void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool& aUseMils );
+
+/**
+ * Get the units string for a given units type.
  *
  * @param aUnits - The units requested.
  * @return The human readable units string.
  */
-wxString GetUnitsLabel( EDA_UNITS_T aUnits, bool aUseMils = false );
 wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils = false );
 
 

@@ -46,7 +46,12 @@
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_DIMENSION_T ),
-    m_Width( Millimeter2iu( 0.2 ) ), m_Unit( INCHES ), m_Value( 0 ), m_Height( 0 ), m_Text( this )
+    m_Width( Millimeter2iu( 0.2 ) ),
+    m_Unit( INCHES ),
+    m_UseMils( false ),
+    m_Value( 0 ),
+    m_Height( 0 ),
+    m_Text( this )
 {
     m_Layer = Dwgs_User;
     m_Shape = 0;
@@ -206,7 +211,7 @@ void DIMENSION::UpdateHeight()
 }
 
 
-void DIMENSION::AdjustDimensionDetails( EDA_UNITS_T aUnits )
+void DIMENSION::AdjustDimensionDetails()
 {
     const int   arrowz = Mils2iu( 50 );             // size of arrows
     int         ii;
@@ -215,9 +220,6 @@ void DIMENSION::AdjustDimensionDetails( EDA_UNITS_T aUnits )
     int         arrow_dw_X  = 0, arrow_dw_Y = 0;    // coordinates of arrow line '\'
     int         hx, hy;                             // dimension line interval
     double      angle, angle_f;
-
-    if( aUnits != UNSCALED_UNITS )
-        m_Unit = aUnits;
 
     // Init layer :
     m_Text.SetLayer( GetLayer() );
@@ -317,7 +319,7 @@ void DIMENSION::AdjustDimensionDetails( EDA_UNITS_T aUnits )
     m_Text.SetTextAngle( newAngle );
 
     m_Value = measure;
-    SetText( MessageTextFromValue( m_Unit, m_Value ) );
+    SetText( MessageTextFromValue( m_Unit, m_Value, m_UseMils ) );
 }
 
 

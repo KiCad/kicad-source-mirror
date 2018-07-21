@@ -115,7 +115,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         aDimension->Text().SetThickness( boardSettings.GetTextThickness( GetActiveLayer() ) );
         aDimension->Text().SetItalic( boardSettings.GetTextItalic( GetActiveLayer() ) );
         aDimension->SetWidth( boardSettings.GetLineThickness( GetActiveLayer() ) );
-        aDimension->AdjustDimensionDetails( GetUserUnits() );
+        aDimension->AdjustDimensionDetails();
         aDimension->Draw( m_canvas, aDC, GR_XOR );
 
         m_canvas->SetMouseCapture( BuildDimension, AbortBuildDimension );

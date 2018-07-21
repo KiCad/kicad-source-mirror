@@ -166,7 +166,7 @@ wxString MessageTextFromValue( EDA_UNITS_T aUnits, double aValue, bool aUseMils 
     text.Printf( format, value );
     text += " ";
 
-    text += GetAbbreviatedUnitsLabel( aUnits );
+    text += GetAbbreviatedUnitsLabel( aUnits, aUseMils );
 
     return text;
 }
@@ -367,6 +367,54 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bo
 }
 
 
+void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool& aUseMils )
+{
+    // Acquire the 'right' decimal point separator
+    const struct lconv* lc = localeconv();
+
+    wxChar      decimal_point = lc->decimal_point[0];
+    wxString    buf( aTextValue.Strip( wxString::both ) );
+
+    // Convert the period in decimal point
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+
+    // Find the end of the numeric part
+    unsigned brk_point = 0;
+
+    while( brk_point < buf.Len() )
+    {
+        wxChar ch = buf[brk_point];
+
+        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
+            break;
+
+        ++brk_point;
+    }
+
+    // Check the unit designator (2 ch significant)
+    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
+
+    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+    {
+        aUnits = INCHES;
+        aUseMils = false;
+    }
+    else if( unit == wxT( "mm" ) )
+    {
+        aUnits = MILLIMETRES;
+    }
+    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) )  // "mils" or "thou"
+    {
+        aUnits = INCHES;
+        aUseMils = true;
+    }
+    else if( unit == wxT( "de" ) || unit == wxT( "ra" ) )  // "deg" or "rad"
+    {
+        aUnits = DEGREES;
+    }
+}
+
+
 int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils )
 {
     double value = DoubleValueFromString( aUnits, aTextValue, aUseMils );
@@ -387,31 +435,6 @@ wxString AngleToStringDegrees( double aAngle )
     StripTrailingZeros( text, 1 );
 
     return text;
-}
-
-
-wxString GetUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils )
-{
-    switch( aUnit )
-    {
-    case INCHES:
-        if( aUseMils )
-            return _( "mils" );
-        else
-            return _( "inches" );
-
-    case MILLIMETRES:
-        return _( "millimeters" );
-
-    case UNSCALED_UNITS:
-        return _( "units" );
-
-    case DEGREES:
-        return _( "degrees" );
-
-    default:
-        return wxT( "??" );
-    }
 }
 
 

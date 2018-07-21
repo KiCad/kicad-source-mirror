@@ -22,9 +22,9 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/choice.h>
 #include <wx/bmpcbox.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/combobox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -46,6 +46,11 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_SingleLineSizer;
 		wxStaticText* m_TextLabel;
 		wxTextCtrl* m_SingleLineText;
+		wxFlexGridSizer* m_DimensionTextSizer;
+		wxStaticText* m_DimensionTextLabel;
+		wxTextCtrl* m_DimensionText;
+		wxStaticText* m_staticText18;
+		wxChoice* m_DimensionUnitsOpt;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxCheckBox* m_Visible;
@@ -80,6 +85,8 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDimensionTextChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDimensionUnitsChange( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

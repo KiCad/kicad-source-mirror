@@ -756,6 +756,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
                 dimension->Text().SetThickness( designSettings.GetTextThickness( layer ) );
                 dimension->SetWidth( designSettings.GetLineThickness( layer ) );
+                dimension->SetUnits( MILLIMETRES, false );
 
                 // check which axis the dimension runs in
                 // because the "height" of the dimension is perpendicular to that axis
@@ -766,7 +767,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 else
                     dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
 
-                dimension->AdjustDimensionDetails( MILLIMETRES );
+                dimension->AdjustDimensionDetails();
             }
         }
 
