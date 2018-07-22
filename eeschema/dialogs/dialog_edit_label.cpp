@@ -108,33 +108,18 @@ const int maxSize = (int)( 250 * IU_PER_MM );
 
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeLabel, false, minSize, maxSize )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false, minSize, maxSize )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
 
     switch( m_CurrentText->Type() )
     {
-    case SCH_GLOBAL_LABEL_T:
-        SetTitle( _( "Global Label Properties" ) );
-        break;
-
-    case SCH_HIERARCHICAL_LABEL_T:
-        SetTitle( _( "Hierarchical Label Properties" ) );
-        break;
-
-    case SCH_LABEL_T:
-        SetTitle( _( "Label Properties" ) );
-        break;
-
-    case SCH_SHEET_PIN_T:
-        SetTitle( _( "Hierarchical Sheet Pin Properties" ) );
-        break;
-
-    default:
-        m_Label->SetLabel( _( "Text:" ) );
-        SetTitle( _( "Text Properties" ) );
-        break;
+    case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
+    case SCH_HIERARCHICAL_LABEL_T: SetTitle( _( "Hierarchical Label Properties" ) );     break;
+    case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
+    case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
+    default:                       SetTitle( _( "Text Properties" ) );                   break;
     }
 
     if( m_CurrentText->IsMultilineAllowed() )
@@ -142,26 +127,26 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
         m_activeTextCtrl = m_valueMultiLine;
         m_activeTextEntry = m_valueMultiLine;
 
-        m_textControlSizer->AddGrowableRow( 0 );
+        m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
+        m_labelCombo->Show( false );       m_valueCombo->Show( false );
 
-        m_valueSingleLine->Show( false );
-        m_valueCombo->Show( false );
+        m_textEntrySizer->AddGrowableRow( 0 );
     }
     else if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T || m_CurrentText->Type() == SCH_LABEL_T )
     {
         m_activeTextCtrl = m_valueCombo;
         m_activeTextEntry = m_valueCombo;
 
-        m_valueSingleLine->Show( false );
-        m_valueMultiLine->Show( false );
+        m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
+        m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
     }
     else
     {
         m_activeTextCtrl = m_valueSingleLine;
         m_activeTextEntry = m_valueSingleLine;
 
-        m_valueCombo->Show( false );
-        m_valueMultiLine->Show( false );
+        m_labelCombo->Show( false );       m_valueCombo->Show( false );
+        m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
     }
 
     SetInitialFocus( m_activeTextCtrl );
@@ -178,6 +163,11 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
     m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
+
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
+    // various versions have different controls so we want to store sizes for each version.
+    m_hash_key = TO_UTF8( GetTitle() );
+
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();

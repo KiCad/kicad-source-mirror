@@ -43,10 +43,12 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 			wxID_SIZE
 		};
 		
-		wxFlexGridSizer* m_textControlSizer;
-		wxStaticText* m_Label;
+		wxFlexGridSizer* m_textEntrySizer;
+		wxStaticText* m_labelSingleLine;
 		wxTextCtrl* m_valueSingleLine;
+		wxStaticText* m_labelMultiLine;
 		wxTextCtrl* m_valueMultiLine;
+		wxStaticText* m_labelCombo;
 		wxComboBox* m_valueCombo;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
