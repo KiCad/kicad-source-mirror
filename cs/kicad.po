@@ -3,14 +3,15 @@
 # Milan Horák <stranger@tiscali.cz>, 2008.
 # Chronos <robie@centrum.cz>, 2011.
 # Roman Ondráček <ondracek.roman@centrum.cz>, 2017.
+# Kryštof Černý <cleverline1mc@gmail.com>, 2018.
 # translation of kicad.po to
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2017-05-21 14:04+0100\n"
-"Last-Translator: Roman Ondráček <ondracek.roman@centrum.cz>\n"
+"PO-Revision-Date: 2018-07-22 10:25+0200\n"
+"Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
 "Language-Team: Čeština <cs@li.org>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +20,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: /home/chronos/www/other/kicad/kicad.bzr\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.0.9\n"
 "X-Poedit-SearchPath-0: /home/chronos/www/other/kicad/kicad.bzr\n"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:529
@@ -46,9 +47,8 @@ msgid "3D model search path"
 msgstr "Uživatelsky definovaná cesta"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:502
-#, fuzzy
 msgid "Alias: "
-msgstr "Alias"
+msgstr "Alias:"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:505
 #, fuzzy
@@ -313,9 +313,8 @@ msgid "Change to isometric perspective"
 msgstr ""
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:228
-#, fuzzy
 msgid "Reload board and 3D models"
-msgstr "Znovu načíst desku"
+msgstr "Znovu načíst desku a 3D modely"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:139
 #: common/base_units.cpp:465 common/dialogs/dialog_page_settings.cpp:472
@@ -536,9 +535,9 @@ msgid "Reload time %.3f s"
 msgstr ""
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:954
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s"
-msgstr "Načítání "
+msgstr "Načítání %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:479
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:177
@@ -589,9 +588,8 @@ msgid "&Edit"
 msgstr "Ú&pravy"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
-#, fuzzy
 msgid "Copy 3D Image"
-msgstr "Kopírovat 3D obrázek do schránky"
+msgstr "Kopírovat 3D obrázek"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:73 eeschema/menubar.cpp:116
 #: eeschema/menubar_libedit.cpp:358 eeschema/tool_viewlib.cpp:229
@@ -8946,16 +8944,14 @@ msgid "Add Junction"
 msgstr "Přidat propojení"
 
 #: eeschema/hotkeys.cpp:139
-#, fuzzy
 msgid "Add Symbol"
-msgstr "  (Symbol napájení)"
+msgstr "Přidat symbol"
 
 #: eeschema/hotkeys.cpp:141
 msgid "Add Power"
 msgstr "Přidat napájení"
 
 #: eeschema/hotkeys.cpp:143
-#, fuzzy
 msgid "Add No Connect Flag"
 msgstr "Přidat příznak \"Nezapojený\""
 
@@ -14264,21 +14260,18 @@ msgid "Run PcbCalculator"
 msgstr "Spustit PcbCalculator"
 
 #: kicad/menubar.cpp:155
-#, fuzzy
 msgid "Run PlEditor"
-msgstr "Editor modulů"
+msgstr "Spustit PlEditor"
 
 #: kicad/menubar.cpp:158
 msgid "New Project"
 msgstr "Nový projekt"
 
 #: kicad/menubar.cpp:159
-#, fuzzy
 msgid "Open Project"
-msgstr "&Otevřít projekt"
+msgstr "Otevřít projekt"
 
 #: kicad/menubar.cpp:160
-#, fuzzy
 msgid "Save Project"
 msgstr "Uložit projekt"
 
@@ -14314,28 +14307,24 @@ msgid "Create new project"
 msgstr "Vytvořit nový projekt"
 
 #: kicad/menubar.cpp:235
-#, fuzzy
 msgid "&Open Project..."
-msgstr "&Otevřít projekt"
+msgstr "&Otevřít projekt..."
 
 #: kicad/menubar.cpp:237
-#, fuzzy
 msgid "Open an existing project"
 msgstr "Otevřít existující projekt"
 
 #: kicad/menubar.cpp:247
-#, fuzzy
 msgid "Open a recent project"
-msgstr "Otevřít nedávný projekt schémat"
+msgstr "Otevřít nedávný projekt"
 
 #: kicad/menubar.cpp:256 kicad/menubar.cpp:525
 msgid "Save current project"
 msgstr "Uložit aktuální projekt"
 
 #: kicad/menubar.cpp:263
-#, fuzzy
 msgid "EAGLE CAD..."
-msgstr "&GenCAD"
+msgstr "EAGLE CAD..."
 
 #: kicad/menubar.cpp:264
 msgid "Import EAGLE CAD XML schematic and board"
@@ -29108,7 +29097,6 @@ msgid "Aligns selected items to the bottom edge"
 msgstr ""
 
 #: pcbnew/tools/placement_tool.cpp:52
-#, fuzzy
 msgid "Align to Left"
 msgstr "Zarovnat vlevo"
 
@@ -29118,7 +29106,6 @@ msgid "Aligns selected items to the left edge"
 msgstr "Kreslit vybrané prvky během přesouvání"
 
 #: pcbnew/tools/placement_tool.cpp:57
-#, fuzzy
 msgid "Align to Right"
 msgstr "Zarovnat vpravo"
 
@@ -29175,22 +29162,18 @@ msgstr ""
 " Chcete pokračovat?"
 
 #: pcbnew/tools/placement_tool.cpp:286
-#, fuzzy
 msgid "Align to top"
 msgstr "Zarovnat nahoru"
 
 #: pcbnew/tools/placement_tool.cpp:326
-#, fuzzy
 msgid "Align to bottom"
 msgstr "Zarovnat dolů"
 
 #: pcbnew/tools/placement_tool.cpp:381
-#, fuzzy
 msgid "Align to left"
 msgstr "Zarovnat vlevo"
 
 #: pcbnew/tools/placement_tool.cpp:436
-#, fuzzy
 msgid "Align to right"
 msgstr "Zarovnat vpravo"
 
@@ -29200,7 +29183,6 @@ msgid "Align to middle"
 msgstr "Zarovnat vlevo"
 
 #: pcbnew/tools/placement_tool.cpp:518
-#, fuzzy
 msgid "Align to center"
 msgstr "Vystředit"
 
@@ -29214,22 +29196,18 @@ msgid "Distribute vertically"
 msgstr ""
 
 #: pcbnew/tools/point_editor.cpp:54
-#, fuzzy
 msgid "Create a corner"
 msgstr "Vytvořit roh"
 
 #: pcbnew/tools/point_editor.cpp:58
-#, fuzzy
 msgid "Remove Corner"
 msgstr "Přemístit roh"
 
 #: pcbnew/tools/point_editor.cpp:58
-#, fuzzy
 msgid "Remove corner"
 msgstr "Přemístit roh"
 
 #: pcbnew/tools/point_editor.cpp:358
-#, fuzzy
 msgid "Drag a corner"
 msgstr "Vytvořit roh"
 
@@ -29308,9 +29286,8 @@ msgid "Selects all modules and tracks in the same schematic sheet"
 msgstr "Uložit všechny listy v projektu schémat"
 
 #: pcbnew/tools/selection_tool.cpp:123
-#, fuzzy
 msgid "Find Item..."
-msgstr "Najít položku"
+msgstr "Najít položku..."
 
 #: pcbnew/tools/selection_tool.cpp:123
 #, fuzzy
@@ -29369,9 +29346,8 @@ msgid "Add a zone cutout"
 msgstr "Přidat nové uživatelské pole"
 
 #: pcbnew/tools/zone_create_helper.cpp:171
-#, fuzzy
 msgid "Add a zone"
-msgstr "Přidat zóny"
+msgstr "Přidat zónu"
 
 #: pcbnew/tools/zone_create_helper.cpp:184
 #, fuzzy
