@@ -31,75 +31,66 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_OptionsBoxSizer;
 	m_OptionsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* m_layerSizer;
-	m_layerSizer = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layer") ), wxVERTICAL );
 	
-	m_staticTextLayers = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextLayers->Wrap( -1 );
-	m_layerSizer->Add( m_staticTextLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_layers = new wxDataViewListCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER|wxSUNKEN_BORDER );
+	m_layers->SetMinSize( wxSize( 80,-1 ) );
 	
-	m_layers = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER|wxSUNKEN_BORDER );
-	m_layerSizer->Add( m_layers, 1, wxEXPAND|wxRIGHT, 5 );
+	sbSizer2->Add( m_layers, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_OptionsBoxSizer->Add( m_layerSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	m_OptionsBoxSizer->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxBoxSizer* bSizerNets;
-	bSizerNets = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net") ), wxHORIZONTAL );
 	
-	m_staticTextNets = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextNets->Wrap( -1 );
-	bSizerNets->Add( m_staticTextNets, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_ListNetNameSelection = new wxListBox( this, ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	bSizerNets->Add( m_ListNetNameSelection, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-	
-	
-	m_OptionsBoxSizer->Add( bSizerNets, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	m_ListNetNameSelection = new wxListBox( sbSizer3->GetStaticBox(), ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	sbSizer3->Add( m_ListNetNameSelection, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bFilteringSizer;
 	bFilteringSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextDisplay = new wxStaticText( this, wxID_ANY, _("Hide nets matching:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDisplay = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Hide nets matching:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDisplay->Wrap( -1 );
-	bFilteringSizer->Add( m_staticTextDisplay, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bFilteringSizer->Add( m_staticTextDisplay, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_DoNotShowNetNameFilter = new wxTextCtrl( this, ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_DoNotShowNetNameFilter = new wxTextCtrl( sbSizer3->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_DoNotShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nNet names matching this pattern are not displayed.") );
 	m_DoNotShowNetNameFilter->SetMinSize( wxSize( 180,-1 ) );
 	
 	bFilteringSizer->Add( m_DoNotShowNetNameFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextVFilter = new wxStaticText( this, wxID_ANY, _("Show nets matching:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextVFilter = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Show nets matching:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextVFilter->Wrap( -1 );
 	bFilteringSizer->Add( m_staticTextVFilter, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_ShowNetNameFilter = new wxTextCtrl( this, ID_TEXTCTRL_NETNAMES_FILTER, _("*"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_ShowNetNameFilter = new wxTextCtrl( sbSizer3->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, _("*"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_ShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nOnly net names matching this pattern are displayed.") );
 	
 	bFilteringSizer->Add( m_ShowNetNameFilter, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_buttonRunFilter = new wxButton( this, wxID_APPLY_FILTERS, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRunFilter = new wxButton( sbSizer3->GetStaticBox(), wxID_APPLY_FILTERS, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
 	bFilteringSizer->Add( m_buttonRunFilter, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bFilteringSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	m_showAllNetsOpt = new wxCheckBox( this, wxID_ANY, _("Show all nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_showAllNetsOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show all nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bFilteringSizer->Add( m_showAllNetsOpt, 0, wxALL, 5 );
 	
 	
 	bFilteringSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
 	
-	m_sortByPadsOpt = new wxCheckBox( this, wxID_ANY, _("Sort nets by pad count"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sortByPadsOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Sort nets by pad count"), wxDefaultPosition, wxDefaultSize, 0 );
 	bFilteringSizer->Add( m_sortByPadsOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_bNoNetWarning = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_bitmapNoNetWarning = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapNoNetWarning = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bNoNetWarning->Add( m_bitmapNoNetWarning, 0, wxTOP|wxBOTTOM|wxLEFT, 8 );
 	
-	m_staticText18 = new wxStaticText( this, wxID_ANY, _("No net will result\nin an unconnected \ncopper island."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("No net will result\nin an unconnected \ncopper island."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
 	m_bNoNetWarning->Add( m_staticText18, 0, wxALL, 5 );
 	
@@ -107,10 +98,13 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	bFilteringSizer->Add( m_bNoNetWarning, 1, wxEXPAND|wxTOP, 20 );
 	
 	
-	m_OptionsBoxSizer->Add( bFilteringSizer, 0, wxEXPAND|wxTOP, 20 );
+	sbSizer3->Add( bFilteringSizer, 0, wxEXPAND, 20 );
 	
 	
-	m_MainBoxSizer->Add( m_OptionsBoxSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	m_OptionsBoxSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_MainBoxSizer->Add( m_OptionsBoxSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* m_ExportableSetupSizer;
 	m_ExportableSetupSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Settings") ), wxHORIZONTAL );
@@ -166,7 +160,10 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	gbSizer1->AddGrowableCol( 1 );
 	
-	m_ExportableSetupSizer->Add( gbSizer1, 1, wxEXPAND|wxRIGHT, 20 );
+	m_ExportableSetupSizer->Add( gbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	
+	m_ExportableSetupSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 0, 0 );
@@ -238,7 +235,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	gbSizer2->AddGrowableCol( 1 );
 	
-	m_ExportableSetupSizer->Add( gbSizer2, 1, wxEXPAND|wxLEFT, 5 );
+	m_ExportableSetupSizer->Add( gbSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_MainBoxSizer->Add( m_ExportableSetupSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );

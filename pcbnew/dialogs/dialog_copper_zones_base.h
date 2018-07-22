@@ -12,15 +12,16 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/dataview.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/dataview.h>
+#include <wx/string.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/listbox.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
@@ -31,7 +32,6 @@
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
-#include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -72,9 +72,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		};
 		
 		wxBoxSizer* m_MainBoxSizer;
-		wxStaticText* m_staticTextLayers;
 		wxDataViewListCtrl* m_layers;
-		wxStaticText* m_staticTextNets;
 		wxListBox* m_ListNetNameSelection;
 		wxStaticText* m_staticTextDisplay;
 		wxTextCtrl* m_DoNotShowNetNameFilter;
