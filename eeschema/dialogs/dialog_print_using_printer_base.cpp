@@ -38,7 +38,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonPageSetup = new wxButton( this, wxID_ANY, _("Page Setup"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPageSetup = new wxButton( this, wxID_ANY, _("Page Setup..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonPageSetup, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
