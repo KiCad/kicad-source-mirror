@@ -109,7 +109,10 @@ void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 // Used only when the DKICAD_SCRIPTING_WXPYTHON option is on
 void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
 {
-    wxMiniFrame * pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
+    if( aEvent.GetEventObject() != m_mainToolBar )
+        return;
+
+    wxMiniFrame* pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
     bool pythonPanelShown = pythonPanelFrame ? pythonPanelFrame->IsShown() : false;
     aEvent.Check( pythonPanelShown );
 }
