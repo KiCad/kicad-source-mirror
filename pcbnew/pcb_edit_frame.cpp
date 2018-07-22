@@ -70,12 +70,11 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
-
-#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
-#include <python_scripting.h>
 #include <gestfich.h>
 #include <executable_names.h>
 
+#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
+#include <python_scripting.h>
 #endif
 
 
