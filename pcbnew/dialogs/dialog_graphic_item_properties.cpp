@@ -54,6 +54,8 @@ private:
     UNIT_BINDER           m_endX, m_endY;
     UNIT_BINDER           m_angle;
     UNIT_BINDER           m_thickness;
+    UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
+    UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
 
     wxFloatingPointValidator<double>    m_AngleValidator;
     double                m_AngleValue;
@@ -87,6 +89,10 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_endY( aParent, m_endYLabel, m_endYCtrl, m_endYUnits ),
     m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
     m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true ),
+    m_bezierCtrl1X( aParent, m_BezierPointC1XLabel, m_BezierC1X_Ctrl, m_BezierPointC1XUnit ),
+    m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
+    m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
+    m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
     m_AngleValidator( 1, &m_AngleValue ),
     m_AngleValue( 0.0 )
 {
@@ -135,6 +141,15 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     if( m_item->GetShape() != S_ARC )
         m_angle.Show( false );
 
+    // Only a Bezeier curve has control points. So do not show these parameters for other shapes
+    if( m_item->GetShape() != S_CURVE )
+    {
+        m_bezierCtrl1X.Show( false );
+        m_bezierCtrl1Y.Show( false );
+        m_bezierCtrl2X.Show( false );
+        m_bezierCtrl2Y.Show( false );
+    }
+
     // Change texts according to the segment shape:
     switch( m_item->GetShape() )
     {
@@ -181,6 +196,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_endX.SetValue( m_item->GetEnd().x );
         m_endY.SetValue( m_item->GetEnd().y );
     }
+
+    // For Bezier curve:
+    m_bezierCtrl1X.SetValue( m_item->GetBezControl1().x );
+    m_bezierCtrl1Y.SetValue( m_item->GetBezControl1().y );
+    m_bezierCtrl2X.SetValue( m_item->GetBezControl2().x );
+    m_bezierCtrl2Y.SetValue( m_item->GetBezControl2().y );
 
     m_thickness.SetValue( m_item->GetWidth() );
 
@@ -245,10 +266,25 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetEndY( m_endY.GetValue() );
     }
 
-    if( m_moduleItem )
+    // For Bezier curve: Set the two control points
+    if( m_item->GetShape() == S_CURVE )
     {
+        m_item->SetBezControl1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
+        m_item->SetBezControl2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
+    }
+
+    if( m_moduleItem )
+    {   // We are editing a footprint.
+        // Init the item coordinates relative to the footprint anchor,
+        // that are coordinate references
         m_moduleItem->SetStart0( m_moduleItem->GetStart() );
         m_moduleItem->SetEnd0( m_moduleItem->GetEnd() );
+
+        if( m_moduleItem->GetShape() == S_CURVE )
+        {
+            m_moduleItem->SetBezier0_C1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
+            m_moduleItem->SetBezier0_C2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
+        }
     }
 
     m_item->SetWidth( m_thickness.GetValue() );
@@ -258,6 +294,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     {
         m_item->SetAngle( m_AngleValue * 10.0 );
     }
+
+    m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
 
     commit.Push( _( "Modify drawing properties" ) );
 

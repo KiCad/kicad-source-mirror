@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2018 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -74,6 +74,14 @@ enum CIRCLE_POINTS
     CIRC_CENTER, CIRC_END
 };
 
+enum BEZIER_CURVE_POINTS
+{
+    BEZIER_CURVE_START,
+    BEZIER_CURVE_CONTROL_POINT1,
+    BEZIER_CURVE_CONTROL_POINT2,
+    BEZIER_CURVE_END
+};
+
 enum DIMENSION_POINTS
 {
     DIM_CROSSBARO,
@@ -86,7 +94,8 @@ class EDIT_POINTS_FACTORY
 {
 private:
 
-    static void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points, const SHAPE_POLY_SET* aOutline, KIGFX::GAL* aGal )
+    static void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
+                                     const SHAPE_POLY_SET* aOutline, KIGFX::GAL* aGal )
     {
 
         int cornersCount = aOutline->TotalVertices();
@@ -168,10 +177,15 @@ public:
                     break;
 
                 case S_POLYGON:
-                {
                     buildForPolyOutline( points, &segment->GetPolyShape(), aGal );
                     break;
-                }
+
+                case S_CURVE:
+                    points->AddPoint( segment->GetStart() );
+                    points->AddPoint( segment->GetBezControl1() );
+                    points->AddPoint( segment->GetBezControl2() );
+                    points->AddPoint( segment->GetEnd() );
+                    break;
 
                 default:        // suppress warnings
                     break;
@@ -490,6 +504,23 @@ void POINT_EDITOR::updateItem() const
             break;
         }
 
+        case S_CURVE:
+            if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
+                segment->SetStart( wxPoint( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition().x,
+                                            m_editPoints->Point( BEZIER_CURVE_START ).GetPosition().y ) );
+            else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ) ) )
+                segment->SetBezControl1( wxPoint( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition().x,
+                                          m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition().y ) );
+            else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ) ) )
+                segment->SetBezControl2( wxPoint( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition().x,
+                                            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition().y ) );
+            else if( isModified( m_editPoints->Point( BEZIER_CURVE_END ) ) )
+                segment->SetEnd( wxPoint( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition().x,
+                                          m_editPoints->Point( BEZIER_CURVE_END ).GetPosition().y ) );
+
+            segment->RebuildBezierToSegmentsPointsList( segment->GetWidth() );
+            break;
+
         default:        // suppress warnings
             break;
         }
@@ -659,6 +690,13 @@ void POINT_EDITOR::updatePoints()
             }
             break;
         }
+
+        case S_CURVE:
+            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( segment->GetStart() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( segment->GetBezControl1() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( segment->GetBezControl2() );
+            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( segment->GetEnd() );
+            break;
 
         default:        // suppress warnings
             break;

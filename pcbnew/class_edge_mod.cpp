@@ -88,6 +88,7 @@ void EDGE_MODULE::SetLocalCoord()
     RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
     RotatePoint( &m_End0.x, &m_End0.y, -angle );
     RotatePoint( &m_Bezier0_C1.x, &m_Bezier0_C1.y, -angle );
+    RotatePoint( &m_Bezier0_C2.x, &m_Bezier0_C2.y, -angle );
 }
 
 
@@ -452,6 +453,8 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
         // footprint position, orientation 0
         for( auto iter = m_Poly.Iterate(); iter; iter++ )
             *iter += VECTOR2I( aMoveVector );
+
+        break;
     }
 
     SetDrawCoord();

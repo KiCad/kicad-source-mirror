@@ -94,7 +94,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_CntRot180 = aModule.m_CntRot180;
     m_LastEditTime = aModule.m_LastEditTime;
     m_Link = aModule.m_Link;
-    m_Path = aModule.m_Path;              //is this correct behavior?
+    m_Path = aModule.m_Path;              // is this correct behavior?
 
     m_LocalClearance = aModule.m_LocalClearance;
     m_LocalSolderMaskMargin = aModule.m_LocalSolderMaskMargin;
@@ -1180,34 +1180,19 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-        {
+            {
             EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
-
-            // Polygonal shape coordinates are specific:
-            // m_Start0 and m_End0 have no meaning. So we have to move corner positions
-            if( edge->GetShape() == S_POLYGON )
-            {
-                for( auto iter = edge->GetPolyShape().Iterate(); iter; iter++ )
-                {
-                    (*iter) += VECTOR2I( moveVector );
-                }
-            }
-            else
-            {
-                edge->m_Start0 += moveVector;
-                edge->m_End0   += moveVector;
-                edge->SetDrawCoord();
+            edge->Move( moveVector );
             }
             break;
-        }
 
         case PCB_MODULE_TEXT_T:
-        {
+            {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
             text->SetPos0( text->GetPos0() + moveVector );
             text->SetDrawCoord();
+            }
             break;
-        }
 
         default:
             break;

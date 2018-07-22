@@ -72,6 +72,7 @@ static void clearModuleItemFlags( BOARD_ITEM* aItem )
     aItem->ClearFlags();
 }
 
+
 bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 {
     MODULE* newModule;
