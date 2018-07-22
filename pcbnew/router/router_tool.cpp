@@ -853,6 +853,11 @@ int ROUTER_TOOL::DpDimensionsDialog( const TOOL_EVENT& aEvent )
     {
         m_router->UpdateSizes( sizes );
         m_savedSizes = sizes;
+
+        BOARD_DESIGN_SETTINGS& bds = frame()->GetBoard()->GetDesignSettings();
+        bds.SetCustomDiffPairWidth( sizes.DiffPairWidth() );
+        bds.SetCustomDiffPairGap( sizes.DiffPairGap() );
+        bds.SetCustomDiffPairViaGap( sizes.DiffPairViaGap() );
     }
 
     return 0;
