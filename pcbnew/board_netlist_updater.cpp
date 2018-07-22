@@ -571,13 +571,9 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 
     std::vector<D_PAD*> padlist = m_board->GetPads();
 
-    if( m_isDryRun )
-    {
-        // During a dry run changes are only stored in the m_padNets cache, so we must sort
-        // the list ourselves.
-        std::sort( padlist.begin(), padlist.end(),
-            [ this ]( D_PAD* a, D_PAD* b ) -> bool { return getNetname( a ) < getNetname( b ); } );
-    }
+    // Sort pads by netlist name
+    std::sort( padlist.begin(), padlist.end(),
+        [ this ]( D_PAD* a, D_PAD* b ) -> bool { return getNetname( a ) < getNetname( b ); } );
 
     for( unsigned kk = 0; kk < padlist.size(); kk++ )
     {
