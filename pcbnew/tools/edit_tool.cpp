@@ -1253,6 +1253,14 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             view.Update( &ruler, KIGFX::GEOMETRY );
         }
 
+        else if( evt->IsAction( &PCB_ACTIONS::switchUnits ) )
+        {
+            ruler.UpdateUserUnits( frame()->GetUserUnits() );
+
+            view.SetVisible( &ruler, true );
+            view.Update( &ruler, KIGFX::GEOMETRY );
+        }
+
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             GetManager()->PassEvent();

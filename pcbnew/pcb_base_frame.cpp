@@ -59,6 +59,7 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tools/pcb_actions.h>
 
 const wxChar PCB_BASE_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 

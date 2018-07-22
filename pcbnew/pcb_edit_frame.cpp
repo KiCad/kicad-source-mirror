@@ -975,7 +975,7 @@ void PCB_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 
 void PCB_EDIT_FRAME::unitsChangeRefresh()
 {
-    PCB_BASE_FRAME::unitsChangeRefresh();    // Update the grid size select box.
+    PCB_BASE_EDIT_FRAME::unitsChangeRefresh();    // Update the grid size select box.
 
     ReCreateAuxiliaryToolbar();
 }

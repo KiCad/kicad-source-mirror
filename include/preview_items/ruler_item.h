@@ -71,10 +71,14 @@ public:
         return wxT( "RULER_ITEM" );
     }
 
-private:
+    void UpdateUserUnits( EDA_UNITS_T aUserUnits )
+    {
+        m_userUnits = aUserUnits;
+    }
 
+private:
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
-    const EDA_UNITS_T                 m_userUnits;
+    EDA_UNITS_T                       m_userUnits;
 };
 
 } // PREVIEW
