@@ -106,6 +106,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxBoxSizer* bSizerMain3D;
 		wxGrid* m_modelsGrid;
 		wxBitmapButton* m_buttonAdd;
+		wxBitmapButton* m_buttonBrowse;
 		wxBitmapButton* m_buttonRemove;
 		wxButton* m_button8;
 		wxBoxSizer* bLowerSizer3D;
@@ -130,6 +131,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		virtual void GotoModuleEditor( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnAdd3DRow( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAdd3DModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemove3DModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Cfg3DPath( wxCommandEvent& event ) { event.Skip(); }

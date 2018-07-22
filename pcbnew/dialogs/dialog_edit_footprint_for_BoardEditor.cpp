@@ -63,7 +63,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_OrientValidator( 1, &m_OrientValue ),
     m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits, false, 0 ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
-    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits )
+    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+    m_inSelect( false )
 {
     m_config = Kiface().KifaceSettings();
 
@@ -152,6 +153,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
     m_buttonAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_buttonBrowse->SetBitmap( KiBitmap( folder_xpm ) );
     m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
     FinishDialogSettings();
@@ -378,19 +380,27 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 
 void DIALOG_FOOTPRINT_BOARD_EDITOR::select3DModel( int aModelIdx )
 {
+    m_inSelect = true;
+
     aModelIdx = std::max( 0, aModelIdx );
     aModelIdx = std::min( aModelIdx, m_modelsGrid->GetNumberRows() - 1 );
 
     if( m_modelsGrid->GetNumberRows() )
+    {
         m_modelsGrid->SelectRow( aModelIdx );
+        m_modelsGrid->SetGridCursor( aModelIdx, 0 );
+    }
 
     m_PreviewPane->SetSelectedModel( aModelIdx );
+
+    m_inSelect = false;
 }
 
 
 void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelSelected( wxGridEvent& aEvent )
 {
-    select3DModel( aEvent.GetRow() );
+    if( !m_inSelect )
+        select3DModel( aEvent.GetRow() );
 }
 
 
@@ -439,7 +449,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnRemove3DModel( wxCommandEvent&  )
     if( idx >= 0 )
     {
         m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
-        m_modelsGrid->DeleteRows( idx );
+        m_modelsGrid->DeleteRows( idx, 1 );
 
         select3DModel( idx );       // will clamp idx within bounds
         m_PreviewPane->UpdateDummyModule();
@@ -504,6 +514,26 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
     m_PreviewPane->UpdateDummyModule();
+}
+
+
+void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DRow( wxCommandEvent&  )
+{
+    MODULE_3D_SETTINGS model;
+
+    model.m_Preview = true;
+    m_shapes3D_list.push_back( model );
+
+    int row = m_modelsGrid->GetNumberRows();
+    m_modelsGrid->AppendRows( 1 );
+    m_modelsGrid->SetCellValue( row, 1, wxT( "1" ) );
+
+    m_modelsGrid->SetFocus();
+    m_modelsGrid->MakeCellVisible( row, 0 );
+    m_modelsGrid->SetGridCursor( row, 0 );
+
+    m_modelsGrid->EnableCellEditControl( true );
+    m_modelsGrid->ShowCellEditControl();
 }
 
 

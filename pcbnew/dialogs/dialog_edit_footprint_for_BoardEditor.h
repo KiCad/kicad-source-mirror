@@ -62,6 +62,8 @@ private:
     int                              m_delayedFocusRow;
     int                              m_delayedFocusColumn;
 
+    bool                             m_inSelect;
+
 public:
     // The dialog can be closed for several reasons.
     enum FP_PRM_EDITOR_RETVALUE
@@ -88,6 +90,7 @@ private:
     void On3DModelCellChanged( wxGridEvent& aEvent ) override;
     void OnRemove3DModel( wxCommandEvent&  ) override;
     void OnAdd3DModel( wxCommandEvent&  ) override;
+    void OnAdd3DRow( wxCommandEvent&  ) override;
     void GotoModuleEditor( wxCommandEvent&  ) override;
     void UpdateModule( wxCommandEvent&  ) override;
     void ExchangeModule( wxCommandEvent&  ) override;

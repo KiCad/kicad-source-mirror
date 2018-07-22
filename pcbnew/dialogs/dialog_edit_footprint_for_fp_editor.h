@@ -57,6 +57,8 @@ private:
     int                              m_delayedFocusRow;
     int                              m_delayedFocusColumn;
 
+    bool                             m_inSelect;
+
 public:
 
     // Constructor and destructor
@@ -74,6 +76,7 @@ private:
     void On3DModelCellChanged( wxGridEvent& aEvent ) override;
     void OnRemove3DModel( wxCommandEvent& event ) override;
     void OnAdd3DModel( wxCommandEvent& event ) override;
+    void OnAdd3DRow( wxCommandEvent& event ) override;
     void Cfg3DPath( wxCommandEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
