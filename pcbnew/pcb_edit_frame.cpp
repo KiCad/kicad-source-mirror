@@ -73,6 +73,8 @@
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
+#include <gestfich.h>
+#include <executable_names.h>
 
 #endif
 
@@ -225,6 +227,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                     PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
     EVT_TOOL( ID_UPDATE_PCB_FROM_SCH, PCB_EDIT_FRAME::OnUpdatePCBFromSch )
+    EVT_TOOL( ID_RUN_EESCHEMA, PCB_EDIT_FRAME::OnRunEeschema )
 
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_ZONES, ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
                     PCB_EDIT_FRAME::OnSelectOptionToolbar )
@@ -1228,6 +1231,71 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
         }
 
         Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "", this );
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnRunEeschema( wxCommandEvent& event )
+{
+    wxString   msg;
+    wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
+
+    if( !schfn.FileExists() )
+    {
+        msg.Printf( _( "Schematic file \"%s\" not found." ), schfn.GetFullPath() );
+        wxMessageBox( msg, _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+        return;
+    }
+
+    if( Kiface().IsSingle() )
+    {
+        wxString filename = wxT( "\"" ) + schfn.GetFullPath( wxPATH_NATIVE ) + wxT( "\"" );
+        ExecuteFile( this, EESCHEMA_EXE, filename );
+    }
+    else
+    {
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, false );
+
+        // Please: note: DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers() calls
+        // Kiway.Player( FRAME_SCH, true )
+        // therefore, the schematic editor is sometimes running, but the schematic project
+        // is not loaded, if the library editor was called, and the dialog field editor was used.
+        // On linux, it happens the first time the schematic editor is launched, if
+        // library editor was running, and the dialog field editor was open
+        // On Windows, it happens always after the library editor was called,
+        // and the dialog field editor was used
+        if( !frame )
+        {
+            try
+            {
+                frame = Kiway().Player( FRAME_SCH, true );
+            }
+            catch( const IO_ERROR& err )
+            {
+                wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
+                              _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+                return;
+            }
+        }
+
+        if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
+                                // but no project loaded.
+        {
+            frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
+            frame->Show( true );
+        }
+
+        // On Windows, Raise() does not bring the window on screen, when iconized or not shown
+        // On linux, Raise() brings the window on screen, but this code works fine
+        if( frame->IsIconized() )
+        {
+            frame->Iconize( false );
+            // If an iconized frame was created by Pcbnew, Iconize( false ) is not enough
+            // to show the frame at its normal size: Maximize should be called.
+            frame->Maximize( false );
+        }
+
+        frame->Raise();
     }
 }
 

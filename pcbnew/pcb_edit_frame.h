@@ -331,6 +331,7 @@ public:
     void OnLayerColorChange( wxCommandEvent& aEvent );
     void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnUpdatePCBFromSch( wxCommandEvent& event );
+    void OnRunEeschema( wxCommandEvent& event );
 
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox );

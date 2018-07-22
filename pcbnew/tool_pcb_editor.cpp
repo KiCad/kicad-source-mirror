@@ -309,6 +309,9 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString, *LayerPairBitmap,
                             SEL_LAYER_HELP );
 
+    KiScaledSeparator( m_mainToolBar, this );
+    ADD_TOOL( ID_RUN_EESCHEMA, eeschema_xpm, _( "Open schematic in Eeschema" ) );
+
     // Access to the scripting console
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     if( IsWxPythonLoaded() )
