@@ -43,11 +43,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
     m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, m_TrackEndXUnit ),
     m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
-    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, false, MIN_SIZE ),
+    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, true, MIN_SIZE ),
     m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, m_ViaXUnit ),
     m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
-    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, false, MIN_SIZE ),
-    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, false, MIN_SIZE ),
+    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, true, MIN_SIZE ),
+    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, true, MIN_SIZE ),
     m_tracks( false ),
     m_vias( false )
 {
@@ -213,8 +213,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString msg = StringFromValue( m_units, viaDimension->m_Diameter, false )
-                + " / " + StringFromValue( m_units, viaDimension->m_Drill, false );
+            wxString msg = StringFromValue( m_units, viaDimension->m_Diameter, false, true )
+                + " / " + StringFromValue( m_units, viaDimension->m_Drill, false, true );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
 
             if( viaSelection == wxNOT_FOUND
@@ -258,7 +258,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = StringFromValue( m_units, width, false );
+            wxString msg = StringFromValue( m_units, width, false, true );
             m_TrackWidthCtrl->Append( msg );
         }
 
