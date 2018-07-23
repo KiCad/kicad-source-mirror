@@ -293,6 +293,13 @@ bool DIALOG_DXF_IMPORT::TransferDataFromWindow()
     // Set coordinates offset for import (offset is given in mm)
     m_dxfImporter.SetOffset( offsetX, offsetY );
     m_layer = m_SelLayerBox->GetLayerSelection();
+
+    if( m_layer < 0 )
+    {
+        wxMessageBox( _( "Please, select a valid layer " ) );
+        return false;
+    }
+
     m_dxfImporter.SetBrdLayer( m_layer );
     m_PCBdefaultLineWidth = getPCBdefaultLineWidthMM();
     m_dxfImporter.SetDefaultLineWidthMM( m_PCBdefaultLineWidth );
