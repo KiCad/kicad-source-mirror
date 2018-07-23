@@ -238,10 +238,10 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
     else
         message = _( "Clear the existing annotation for the current sheet?" );
 
-    message += _( "\n\nThis operation will clear the existing annotation and cannot \nbe undone." );
+    message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
 
     KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-    dlg.SetOKLabel( _( "Clear" ) );
+    dlg.SetOKLabel( _( "Clear Annotation" ) );
     dlg.DoNotShowCheckbox();
 
     if( dlg.ShowModal() == wxID_CANCEL )
