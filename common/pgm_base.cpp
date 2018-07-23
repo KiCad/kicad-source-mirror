@@ -359,7 +359,7 @@ bool PGM_BASE::InitPgm()
     else
     {
         tmpFileName.AppendDir( wxT( "packages3d" ) );
-        envVarItem.SetDefinedExternally( true );
+        envVarItem.SetDefinedExternally( false );
     }
 
     envVarItem.SetValue( tmpFileName.GetFullPath() );
