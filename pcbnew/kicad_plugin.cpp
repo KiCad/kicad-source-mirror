@@ -373,9 +373,21 @@ long long FP_CACHE::GetTimestamp()
 
         for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
-            wxFileName moduleFile = it->second->GetFileName();
-            if( moduleFile.FileExists() )
-                files_timestamp += moduleFile.GetModificationTime().GetValue().GetValue();
+            wxFileName fn = it->second->GetFileName();
+            if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
+            {
+                char buffer[ PATH_MAX + 1 ];
+                ssize_t pathLen = readlink( TO_UTF8( fn.GetFullPath() ), buffer, PATH_MAX );
+
+                if( pathLen > 0 )
+                {
+                    buffer[ pathLen ] = '\0';
+                    fn.Assign( fn.GetPath() + wxT( "/" ) + wxString::FromUTF8( buffer ) );
+                    fn.Normalize();
+                }
+            }
+            if( fn.FileExists() )
+                files_timestamp += fn.GetModificationTime().GetValue().GetValue();
         }
     }
 
@@ -2106,6 +2118,20 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     // Quietly overwrite module and delete module file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
                    KiCadFootprintFileExtension );
+
+    // Write through symlinks, don't replace them
+    if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
+    {
+        char buffer[ PATH_MAX + 1 ];
+        ssize_t pathLen = readlink( TO_UTF8( fn.GetFullPath() ), buffer, PATH_MAX );
+
+        if( pathLen > 0 )
+        {
+            buffer[ pathLen ] = '\0';
+            fn.Assign( fn.GetPath() + wxT( "/" ) + wxString::FromUTF8( buffer ) );
+            fn.Normalize();
+        }
+    }
 
     if( !fn.IsOk() )
     {

@@ -538,6 +538,9 @@ public:
 
     void DeleteSymbol( const wxString& aAliasName );
 
+    // If m_libFileName is a symlink follow it to the real source file
+    wxFileName GetRealFile() const;
+
     wxDateTime GetLibModificationTime();
 
     bool IsFile( const wxString& aFullPathAndFileName ) const;
@@ -2204,13 +2207,37 @@ SCH_LEGACY_PLUGIN_CACHE::~SCH_LEGACY_PLUGIN_CACHE()
 }
 
 
+// If m_libFileName is a symlink follow it to the real source file
+wxFileName SCH_LEGACY_PLUGIN_CACHE::GetRealFile() const
+{
+    wxFileName fn( m_libFileName );
+
+    if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
+    {
+        char buffer[ PATH_MAX + 1 ];
+        ssize_t pathLen = readlink( TO_UTF8( fn.GetFullPath() ), buffer, PATH_MAX );
+
+        if( pathLen > 0 )
+        {
+            buffer[ pathLen ] = '\0';
+            fn.Assign( fn.GetPath() + wxT( "/" ) + wxString::FromUTF8( buffer ) );
+            fn.Normalize();
+        }
+    }
+
+    return fn;
+}
+
+
 wxDateTime SCH_LEGACY_PLUGIN_CACHE::GetLibModificationTime()
 {
+    wxFileName fn = GetRealFile();
+
     // update the writable flag while we have a wxFileName, in a network this
     // is possibly quite dynamic anyway.
-    m_isWritable = m_libFileName.IsFileWritable();
+    m_isWritable = fn.IsFileWritable();
 
-    return m_libFileName.GetModificationTime();
+    return fn.GetModificationTime();
 }
 
 
@@ -2222,8 +2249,10 @@ bool SCH_LEGACY_PLUGIN_CACHE::IsFile( const wxString& aFullPathAndFileName ) con
 
 bool SCH_LEGACY_PLUGIN_CACHE::IsFileChanged() const
 {
-    if( m_fileModTime.IsValid() && m_libFileName.IsOk() && m_libFileName.FileExists() )
-        return m_libFileName.GetModificationTime() != m_fileModTime;
+    wxFileName fn = GetRealFile();
+
+    if( m_fileModTime.IsValid() && fn.IsOk() && fn.FileExists() )
+        return fn.GetModificationTime() != m_fileModTime;
 
     return false;
 }
@@ -3469,7 +3498,10 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
     if( !m_isModified )
         return;
 
-    std::unique_ptr< FILE_OUTPUTFORMATTER > formatter( new FILE_OUTPUTFORMATTER( m_libFileName.GetFullPath() ) );
+    // Write through symlinks, don't replace them
+    wxFileName fn = GetRealFile();
+
+    std::unique_ptr< FILE_OUTPUTFORMATTER > formatter( new FILE_OUTPUTFORMATTER( fn.GetFullPath() ) );
     formatter->Print( 0, "%s %d.%d\n", LIBFILE_IDENT, LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
     formatter->Print( 0, "#encoding utf-8\n");
 
@@ -3484,7 +3516,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
     formatter->Print( 0, "#\n#End Library\n" );
     formatter.reset();
 
-    m_fileModTime = m_libFileName.GetModificationTime();
+    m_fileModTime = fn.GetModificationTime();
     m_isModified = false;
 
     if( aSaveDocFile )
