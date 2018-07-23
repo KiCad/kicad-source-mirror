@@ -38,8 +38,6 @@ public:
                         FP_LIB_TABLE* aProject );
     ~PANEL_FP_LIB_TABLE() override;
 
-    bool Show( bool aShow ) override;
-
 private:
     bool TransferDataFromWindow() override;
 

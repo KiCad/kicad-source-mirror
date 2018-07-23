@@ -39,8 +39,6 @@ public:
                          SYMBOL_LIB_TABLE* aProject );
     virtual ~PANEL_SYM_LIB_TABLE();
 
-    bool Show( bool aShow ) override;
-
 private:
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
