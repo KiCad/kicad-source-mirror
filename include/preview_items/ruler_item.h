@@ -71,9 +71,12 @@ public:
         return wxT( "RULER_ITEM" );
     }
 
-    void UpdateUserUnits( EDA_UNITS_T aUserUnits )
+    void SwitchUnits()
     {
-        m_userUnits = aUserUnits;
+        if( m_userUnits == INCHES )
+            m_userUnits = MILLIMETRES;
+        else
+            m_userUnits = INCHES;
     }
 
 private:

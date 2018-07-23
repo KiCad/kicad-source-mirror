@@ -237,7 +237,8 @@ void EnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 
 EDIT_TOOL::EDIT_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
-    m_dragging( false )
+    m_dragging( false ),
+    m_measureMenu( *this )
 {
 }
 
@@ -317,6 +318,16 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprints, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::exchangeFootprints, singleModuleCondition );
+
+    // Initialize menu for Measurement Tool
+    auto& ctxMenu = m_measureMenu.GetMenu();
+
+    // cancel current toool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    // Finally, add the standard zoom/grid items
+    m_measureMenu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
 
     return true;
 }
@@ -1201,7 +1212,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             break;
         }
@@ -1255,7 +1266,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         else if( evt->IsAction( &PCB_ACTIONS::switchUnits ) )
         {
-            ruler.UpdateUserUnits( frame()->GetUserUnits() );
+            ruler.SwitchUnits();
 
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
@@ -1263,7 +1274,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            GetManager()->PassEvent();
+            m_measureMenu.ShowContextMenu();
         }
     }
 
