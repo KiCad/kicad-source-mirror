@@ -336,11 +336,16 @@ compilation errors about missing files, it is probably because your path is too 
 
 # Building KiCad on macOS # {#build_osx}
 
-Building on macOS is challenging at best.  It typically requires building dependency libraries
-that require patching in order to work correctly.  For more information on the complexities of
-building and packaging KiCad on macOS, see the [macOS bundle build scripts][].
+As of V5, building and packaging for macOS can be done using [kicad-mac-builder][],
+which downloads, patches, builds, and packages for macOS.  It is used to create the official
+releases and nightlies, and it reduces the complexity of setting up a build environment to a command
+or two.  Usage of kicad-mac-builder is detailed at on its website.
 
-In the following set of commands, replace the macOS version number (i.e. 10.9) with the desired
+If you wish to build without kicad-mac-builder, please use the following and its source code
+as reference. Building on macOS requires building dependency libraries that require patching
+in order to work correctly.
+
+In the following set of commands, replace the macOS version number (i.e. 10.11) with the desired
 minimum version.  It may be easiest to build for the same version you are running.
 
 KiCad currently won't work with a stock version of wxWidgets that can be downloaded or
@@ -368,7 +373,7 @@ To perform a wxWidgets build, execute the following commands:
         --with-zlib=builtin \
         --with-expat=builtin \
         --without-liblzma \
-        --with-macosx-version-min=10.9 \
+        --with-macosx-version-min=10.11 \
         --enable-universal-binary=i386,x86_64 \
         CC=clang \
         CXX=clang++
@@ -384,7 +389,7 @@ Now, build a basic KiCad without Python scripting using the following commands:
     cd build/release
     cmake -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 \
           -DwxWidgets_CONFIG_EXECUTABLE=<your wxWidgets build folder>/wx-bin/bin/wx-config \
           -DKICAD_SCRIPTING=OFF \
           -DKICAD_SCRIPTING_MODULES=OFF \
@@ -455,7 +460,7 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [MSYS2 32-bit Installer]: http://repo.msys2.org/distrib/i686/msys2-i686-20161025.exe
 [MSYS2 64-bit Installer]: http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20161025.exe
 [PKGBUILD]: https://github.com/Alexpux/MINGW-packages/blob/master/mingw-w64-kicad-git/PKGBUILD
-[macOS bundle build scripts]:http://bazaar.launchpad.net/~adamwolf/+junk/kicad-mac-packaging/files
+[kicad-mac-builder]:https://github.com/KiCad/kicad-mac-builder
 [KiCad fork of wxWidgets]:https://github.com/KiCad/wxWidgets
 [MinGW]: http://mingw.org/
 [build Boost]: http://www.boost.org/doc/libs/1_59_0/more/getting_started/index.html
