@@ -249,8 +249,6 @@ public:
     /// Greater than operator
     bool operator>( const VECTOR2<T>& aVector ) const;
     bool operator>=( const VECTOR2<T>& aVector ) const;
-
-    friend std::ostream & operator<< <T> ( std::ostream & stream, const VECTOR2<T> &vector );
 };
 
 
