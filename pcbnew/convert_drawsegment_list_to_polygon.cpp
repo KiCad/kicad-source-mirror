@@ -553,6 +553,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
 
                         prevPt = nextPt;
                     }
+                    break;
 
                 case S_CURVE:
                     // We do not support Bezier curves in polygons, so approximate
