@@ -310,6 +310,9 @@ static EDA_HOTKEY HkToggleCursor( _HKI( "Toggle Cursor Display (Modern Toolset o
 static EDA_HOTKEY HkMeasureTool( _HKI( "Measure Distance (Modern Toolset only)" ),
                                  HK_MEASURE_TOOL, 'M' + GR_KB_SHIFTCTRL );
 
+static EDA_HOTKEY HkInsertCorner( _HKI( "Insert Corner (Modern Toolset only)" ),
+                                 HK_INSERT_CORNER, WXK_INSERT );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -383,6 +386,9 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     // Zones
     &HkZoneFillOrRefill,
     &HkZoneRemoveFilled,
+
+    // Point editor (zones and segments)
+    &HkInsertCorner,
 
     // Highlight and display
     &HkSelectConnection,

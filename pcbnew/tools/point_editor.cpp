@@ -50,7 +50,7 @@ using namespace std::placeholders;
 
 // Point editor
 TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, WXK_INSERT,
         _( "Create Corner" ), _( "Create a corner" ), add_corner_xpm );
 
 TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorner",
@@ -850,17 +850,25 @@ void POINT_EDITOR::setTransitions()
 }
 
 
+bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
+{
+    const auto type = aItem.Type();
+
+    // Works only for zones and line segments
+    return type == PCB_ZONE_AREA_T ||
+           ( ( type == PCB_LINE_T || type == PCB_MODULE_EDGE_T ) &&
+               static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_SEGMENT );
+}
+
+
 bool POINT_EDITOR::addCornerCondition( const SELECTION& aSelection )
 {
     if( aSelection.Size() != 1 )
         return false;
 
-    auto item = aSelection.Front();
+    const EDA_ITEM* item = aSelection.Front();
 
-    // Works only for zones and line segments
-    return item->Type() == PCB_ZONE_AREA_T ||
-           ( ( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T ) &&
-               static_cast<DRAWSEGMENT*>( item )->GetShape() == S_SEGMENT );
+    return ( item != nullptr ) && canAddCorner( *item );
 }
 
 
@@ -916,9 +924,17 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
 int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
+    if( !m_editPoints )
+        return 0;
+
     EDA_ITEM* item = m_editPoints->GetParent();
     PCB_BASE_EDIT_FRAME* frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
+
+    // called without an active edited polygon
+    if( !item || !canAddCorner( *item ) )
+        return 0;
+
     BOARD_COMMIT commit( frame );
 
     if( item->Type() == PCB_ZONE_AREA_T )

@@ -133,7 +133,8 @@ enum hotkey_id_commnand {
     HK_DP_DIMENSIONS,
     HK_VIA_SIZE_INC,
     HK_VIA_SIZE_DEC,
-    HK_HIGHLIGHT_NET_SELECTION
+    HK_HIGHLIGHT_NET_SELECTION,
+    HK_INSERT_CORNER
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor
