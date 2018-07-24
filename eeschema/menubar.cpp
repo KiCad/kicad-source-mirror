@@ -405,7 +405,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_APPEND_PROJECT,
-                 _( "App&end Schematic Sheet..." ),
+                 _( "App&end Schematic Sheet Content..." ),
                  _( "Import schematic sheet content from another project to current sheet" ),
                  KiBitmap( add_document_xpm ) );
 
