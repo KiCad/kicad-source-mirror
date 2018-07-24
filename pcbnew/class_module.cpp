@@ -1346,6 +1346,14 @@ wxString MODULE::GetReferencePrefix() const
 }
 
 
+void MODULE::IncrementReference( int aDelta )
+{
+    SetReference( wxString::Format( wxT( "%s%i" ),
+                                    GetReferencePrefix(),
+                                    getTrailingInt( GetReference() ) + aDelta ) );
+}
+
+
 // Calculate the area of aPolySet, after fracturation, because
 // polygons with no hole are expected.
 static double polygonArea( SHAPE_POLY_SET& aPolySet )

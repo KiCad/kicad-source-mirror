@@ -79,8 +79,12 @@ void ARRAY_CREATOR::Invoke()
             }
             else
             {
-                // PCB items keep the same numbering
                 new_item = getBoard()->Duplicate( item );
+
+                // Incrementing the reference number won't always be correct, but leaving
+                // it the same is always incorrect.
+                if( new_item->Type() == PCB_MODULE_T )
+                    static_cast<MODULE*>( new_item )->IncrementReference( ptN );
 
                 // @TODO: we should merge zones. This is a bit tricky, because
                 // the undo command needs saving old area, if it is merged.
