@@ -399,6 +399,7 @@ public:
 
     void SetLayerSet( LSET aLayerMask )         { m_layerMask = aLayerMask; }
     LSET GetLayerSet() const override           { return m_layerMask; }
+    bool IsAperturePad() const                  { return ( m_layerMask & LSET::AllCuMask() ).none(); }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }

@@ -99,12 +99,13 @@ void ARRAY_CREATOR::Invoke()
             // implicit numbering by incrementing the items during creation
             if( new_item && array_opts->NumberingStartIsSpecified() )
             {
-                // Renumber pads. Only new pad number renumbering has meaning,
-                // in the footprint editor.
+                // Renumber non-aperture pads.
                 if( new_item->Type() == PCB_PAD_T )
                 {
-                    const wxString padName = array_opts->GetItemNumber( ptN );
-                    static_cast<D_PAD*>( new_item )->SetName( padName );
+                    D_PAD* pad = static_cast<D_PAD*>( new_item );
+
+                    if( !pad->IsAperturePad() )
+                        pad->SetName( array_opts->GetItemNumber( ptN ) );
                 }
             }
         }
