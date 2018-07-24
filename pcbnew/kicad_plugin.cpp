@@ -374,6 +374,8 @@ long long FP_CACHE::GetTimestamp()
         for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
         {
             wxFileName fn = it->second->GetFileName();
+#ifndef __WINDOWS__
+            // Timestamp the source file, not the symlink
             if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
             {
                 char buffer[ PATH_MAX + 1 ];
@@ -386,6 +388,7 @@ long long FP_CACHE::GetTimestamp()
                     fn.Normalize();
                 }
             }
+#endif
             if( fn.FileExists() )
                 files_timestamp += fn.GetModificationTime().GetValue().GetValue();
         }
@@ -2119,6 +2122,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
                    KiCadFootprintFileExtension );
 
+#ifndef __WINDOWS__
     // Write through symlinks, don't replace them
     if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
     {
@@ -2132,6 +2136,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
             fn.Normalize();
         }
     }
+#endif
 
     if( !fn.IsOk() )
     {

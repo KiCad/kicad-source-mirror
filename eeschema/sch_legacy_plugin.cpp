@@ -2212,6 +2212,7 @@ wxFileName SCH_LEGACY_PLUGIN_CACHE::GetRealFile() const
 {
     wxFileName fn( m_libFileName );
 
+#ifndef __WINDOWS__
     if( fn.Exists( wxFILE_EXISTS_SYMLINK ) )
     {
         char buffer[ PATH_MAX + 1 ];
@@ -2224,6 +2225,7 @@ wxFileName SCH_LEGACY_PLUGIN_CACHE::GetRealFile() const
             fn.Normalize();
         }
     }
+#endif
 
     return fn;
 }
