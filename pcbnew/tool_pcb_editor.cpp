@@ -255,7 +255,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ADD_TOOL( ID_SAVE_BOARD, save_xpm, _( "Save board" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_BOARD_SETUP_DIALOG, preference_xpm, _( "Board setup" ) );
+    ADD_TOOL( ID_BOARD_SETUP_DIALOG, options_board_xpm, _( "Board setup" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     ADD_TOOL( ID_SHEET_SET, sheetset_xpm, _( "Page settings for paper size and texts" ) );

@@ -420,6 +420,7 @@ set( BMAPS_MID
     options_all_tracks
     options_all_vias
     options_arc
+    options_board
     options_circle
     options_generic
     options_module

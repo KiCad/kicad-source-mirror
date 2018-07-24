@@ -855,7 +855,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     AddMenuItem( aParentMenu, ID_BOARD_SETUP_DIALOG,
                  _( "&Board Setup..." ),
                  _( "Edit board setup including layers, design rules and various defaults" ),
-                 KiBitmap( config_xpm ) );
+                 KiBitmap( options_board_xpm ) );
 
     aParentMenu->AppendSeparator();
 
