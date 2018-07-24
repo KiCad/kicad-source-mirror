@@ -53,24 +53,15 @@
 #include <cmp_tree_model_adapter.h>
 
 #include <dialogs/dialog_lib_new_component.h>
-
+#include <dialog_helpers.h>
 
 void LIB_EDIT_FRAME::DisplayLibInfos()
 {
     wxString lib = GetCurLib();
-    wxString title = _( "Symbol Library Editor - " );
+    wxString title = _( "Symbol Library Editor" );
 
-    if( !lib.empty() && Prj().SchSymbolLibTable()->HasLibrary( lib ) )
-    {
-        wxString fileName = Prj().SchSymbolLibTable()->GetFullURI( lib );
-
-        title += lib + " (" + fileName + ")";
-
-        if( wxFileName::FileExists( fileName ) && !wxFileName::IsFileWritable( fileName ) )
-            title += " " + _( "[Read Only]" );
-    }
-    else
-        title += _( "no library selected" );
+    if( GetCurPart() )
+        title += wxT( " - " ) + GetCurPart()->GetLibId().Format();
 
     SetTitle( title );
 }
@@ -374,6 +365,104 @@ void LIB_EDIT_FRAME::OnSavePart( wxCommandEvent& aEvent )
 }
 
 
+void LIB_EDIT_FRAME::OnSavePartAs( wxCommandEvent& aEvent )
+{
+    LIB_ID old_lib_id = getTargetLibId();
+    wxString old_name = old_lib_id.GetLibItemName();
+    wxString old_lib = old_lib_id.GetLibNickname();
+    LIB_PART* part = m_libMgr->GetBufferedPart( old_name, old_lib );
+
+    if( part )
+    {
+        SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+        wxArrayString headers;
+        std::vector< wxArrayString > itemsToDisplay;
+        std::vector< wxString > libNicknames = tbl->GetLogicalLibs();
+
+        headers.Add( _( "Nickname" ) );
+        headers.Add( _( "Description" ) );
+
+        for( const auto& name : libNicknames )
+        {
+            wxArrayString item;
+            item.Add( name );
+            item.Add( tbl->GetDescription( name ) );
+            itemsToDisplay.push_back( item );
+        }
+
+        EDA_LIST_DIALOG dlg( this, _( "Save Symbol As" ), headers, itemsToDisplay, old_lib,
+                             nullptr, nullptr, /* sort */ false, /* show headers */ false );
+        dlg.SetListLabel( _( "Save in library:" ) );
+        dlg.SetOKLabel( _( "Save" ) );
+
+        wxBoxSizer* bNameSizer = new wxBoxSizer( wxHORIZONTAL );
+
+        wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Name:" ),
+                                                wxDefaultPosition, wxDefaultSize, 0 );
+        bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+        wxTextCtrl* nameTextCtrl = new wxTextCtrl( &dlg, wxID_ANY, old_name,
+                                                   wxDefaultPosition, wxDefaultSize, 0 );
+        bNameSizer->Add( nameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+        wxSizer* mainSizer = dlg.GetSizer();
+        mainSizer->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
+
+        // Move nameTextCtrl to the head of the tab-order
+        if( dlg.GetChildren().DeleteObject( nameTextCtrl ) )
+            dlg.GetChildren().Insert( nameTextCtrl );
+
+        dlg.SetInitialFocus( nameTextCtrl );
+
+        dlg.Layout();
+        mainSizer->Fit( &dlg );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;                   // canceled by user
+
+        wxString new_lib = dlg.GetTextSelection();
+
+        if( new_lib.IsEmpty() )
+        {
+            DisplayError( NULL, _( "No library specified.  Symbol could not be saved." ) );
+            return;
+        }
+
+        wxString new_name = nameTextCtrl->GetValue();
+        new_name.Trim( true );
+        new_name.Trim( false );
+        new_name.Replace( " ", "_" );
+
+        if( new_name.IsEmpty() )
+        {
+            DisplayError( NULL, _( "No symbol name specified.  Symbol could not be saved." ) );
+            return;
+        }
+
+        // Test if there is a component with this name already.
+        if( m_libMgr->PartExists( new_name, new_lib ) )
+        {
+            wxString msg = wxString::Format( _( "Symbol \"%s\" already exists in library \"%s\"" ),
+                                             new_name, new_lib );
+            DisplayError( this, msg );
+            return;
+        }
+
+        LIB_PART new_part( *part );
+        new_part.SetName( new_name );
+
+        fixDuplicateAliases( &new_part, new_lib );
+        m_libMgr->UpdatePart( &new_part, new_lib );
+        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
+
+        if( isCurrentPart( old_lib_id ) )
+            loadPart( new_name, new_lib, m_unit );
+
+        m_libMgr->RemovePart( old_name, old_lib );
+    }
+}
+
+
 void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
@@ -393,30 +482,7 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
-{
-    int unit = 0;
-    auto cmpTree = m_treePane->GetCmpTree();
-    LIB_ID partId = cmpTree->GetSelectedLibId( &unit );
-    LIB_PART* part = m_libMgr->GetBufferedPart( partId.GetLibItemName(), partId.GetLibNickname() );
-
-    if( !part )
-        return;
-
-    LIB_ID libId = getTargetLibId();
-    m_copiedPart.reset( new LIB_PART( *part ) );
-
-    if( aEvent.GetId() == ID_LIBEDIT_CUT_PART )
-    {
-        if( isCurrentPart( libId ) )
-            emptyScreen();
-
-        m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
-    }
-}
-
-
-void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnDuplicatePart( wxCommandEvent& aEvent )
 {
     int unit = 0;
     LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
@@ -425,14 +491,7 @@ void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
     if( !m_libMgr->LibraryExists( lib ) )
         return;
 
-    LIB_PART* srcPart = nullptr;
-
-    if( aEvent.GetId() == ID_LIBEDIT_DUPLICATE_PART )
-        srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
-    else if( aEvent.GetId() == ID_LIBEDIT_PASTE_PART )
-        srcPart = m_copiedPart.get();
-    else
-        wxFAIL;
+    LIB_PART* srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
 
     if( !srcPart )
         return;
@@ -456,7 +515,10 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 
         while( m_libMgr->PartExists( newName, aLibrary ) )
         {
-            newName = wxString::Format( "%s_%d", alias->GetName(), sfx );
+            if( sfx == 0 )
+                newName = wxString::Format( "%s_copy", alias->GetName() );
+            else
+                newName = wxString::Format( "%s_copy%d", alias->GetName(), sfx );
             ++sfx;
         }
 

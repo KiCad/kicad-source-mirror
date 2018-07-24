@@ -35,10 +35,9 @@
 
 
 // wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
-// not, in repeatedly creating/destorying a wxDC to do the measurement in).
-// Use default column widths instead.  (Note that these will be scaled down proportionally
-// to fit the available space when the dialog is instantiated.)
-static int DEFAULT_COL_WIDTHS[] = { 400, 200 };
+// not, in repeatedly creating/destroying a wxDC to do the measurement in).
+// Use default column widths instead.
+static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
 
 
 
@@ -48,7 +47,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
                                   const wxString& aSelection,
                                   void( *aCallBackFunction )( wxString&, void* ),
                                   void* aCallBackFunctionData,
-                                  bool aSortList ) :
+                                  bool aSortList, bool aShowHeaders ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
     m_sortList    = aSortList;
@@ -56,14 +55,17 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
     m_cb_data     = aCallBackFunctionData;
     m_itemsListCp = &aItemList;
 
+    m_filterBox->SetHint( _( "Filter" ) );
+
     initDialog( aItemHeaders, aSelection );
+
+    if( !aShowHeaders )
+        m_listBox->SetSingleStyle( wxLC_NO_HEADER, true );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because so many dialogs share this same class, with different numbers of
     // columns, different column names, and column widths.
     m_hash_key = TO_UTF8( aTitle );
-
-    m_filterBox->SetFocus();
 
     m_sdbSizerOK->SetDefault();
 
@@ -109,15 +111,21 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
 }
 
 
-void EDA_LIST_DIALOG::SetFilterLabel( const wxString& aLabel )
+void EDA_LIST_DIALOG::SetFilterHint( const wxString& aHint )
 {
-    m_filterLabel->SetLabel( aLabel );
+    m_filterBox->SetHint( aHint );
 }
 
 
 void EDA_LIST_DIALOG::SetListLabel( const wxString& aLabel )
 {
     m_listLabel->SetLabel( aLabel );
+}
+
+
+void EDA_LIST_DIALOG::SetOKLabel( const wxString& aLabel )
+{
+    m_sdbSizerOK->SetLabel( aLabel );
 }
 
 
@@ -216,12 +224,6 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
 }
 
 
-void EDA_LIST_DIALOG::onCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
 void EDA_LIST_DIALOG::onListItemSelected( wxListEvent& event )
 {
     if( m_cb_func )
@@ -237,18 +239,6 @@ void EDA_LIST_DIALOG::onListItemSelected( wxListEvent& event )
 void EDA_LIST_DIALOG::onListItemActivated( wxListEvent& event )
 {
     EndModal( wxID_OK );
-}
-
-
-void EDA_LIST_DIALOG::onOkClick( wxCommandEvent& event )
-{
-    EndModal( wxID_OK );
-}
-
-
-void EDA_LIST_DIALOG::onClose( wxCloseEvent& event )
-{
-    EndModal( wxID_CANCEL );
 }
 
 

@@ -204,10 +204,6 @@ static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' 
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
-// Load/save files
-static EDA_HOTKEY HkSaveAllLib( _HKI( "Save All Libraries" ), HK_SAVE_ALL_LIBS, 'S' + GR_KB_CTRL,
-                                ID_LIBEDIT_SAVE_ALL_LIBS );
-
 // Autoplace fields
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
                                         ID_AUTOPLACE_FIELDS );
@@ -324,7 +320,6 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
 // List of hotkey descriptors for library editor
 static EDA_HOTKEY* libEdit_Hotkey_List[] =
 {
-    &HkSaveAllLib,
     &HkCreatePin,
     &HkInsertPin,
     &HkMoveLibItem,

@@ -71,7 +71,6 @@ enum hotkey_id_commnand {
     HK_ADD_GRAPHIC_TEXT,
     HK_ADD_GRAPHIC_POLYLINE,
     HK_ADD_NOCONN_FLAG,
-    HK_SAVE_ALL_LIBS,
     HK_LEFT_CLICK,
     HK_LEFT_DCLICK,
     HK_LEAVE_SHEET,

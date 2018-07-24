@@ -38,9 +38,6 @@
 #include "lib_edit_frame.h"
 
 
-/**
- * @brief (Re)Create the menubar for the part editor frame
- */
 void LIB_EDIT_FRAME::ReCreateMenuBar()
 {
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
@@ -54,7 +51,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // Creating/loading libraries
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_NEW_LIBRARY,
                  _( "&New Library..." ),
@@ -63,19 +59,24 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_ADD_LIBRARY,
-                 _( "&Add Library..." ),
+                 _( "Add &Library..." ),
                  _( "Adds a previously created library" ),
                  KiBitmap( add_library_xpm ) );
 
-    // Separator
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_NEW_PART,
+                 _( "New S&ymbol..." ),
+                 _( "Create a new empty symbol" ),
+                 KiBitmap( new_component_xpm ) );
+
     fileMenu->AppendSeparator();
 
-    // Save library variants
+    text = AddHotkeyName( _( "&Save" ), g_Libedit_Hokeys_Descr, HK_SAVE );
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_LIBRARY,
-                 _( "&Save Library" ),
-                 _( "Save the current library" ),
-                 KiBitmap( save_library_xpm ) );
+                 ID_LIBEDIT_SAVE_ALL_LIBS,
+                 text,
+                 _( "Save changes" ),
+                 KiBitmap( save_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_LIBRARY_AS,
@@ -83,31 +84,40 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Save the current library to a new file" ),
                  KiBitmap( save_as_xpm ) );
 
-    text = AddHotkeyName( _( "Save All &Libraries" ), g_Libedit_Hokeys_Descr, HK_SAVE_ALL_LIBS );
-    AddMenuItem( fileMenu, ID_LIBEDIT_SAVE_ALL_LIBS, text, _( "Save all library changes" ),
-                 KiBitmap( save_xpm ) );
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_SAVE_PART_AS,
+                 _( "Save Symbol As..." ),
+                 _( "Saves a copy of the current symbol" ),
+                 KiBitmap( save_part_xpm ) );
 
-    // Separator
     fileMenu->AppendSeparator();
 
-    // Export as png file
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_IMPORT_PART,
+                 _( "&Import Symbol..." ),
+                 _( "Import a symbol to the current library" ),
+                 KiBitmap( import_part_xpm ) );
+
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_EXPORT_PART,
+                 _( "&Export Symbol..." ),
+                 _( "Export the current symbol" ),
+                 KiBitmap( export_part_xpm ) );
+
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
-                 _( "Export Current View as &PNG..." ),
+                 _( "Export PNG..." ),
                  _( "Create a PNG file from the current view" ),
                  KiBitmap( plot_xpm ) );
 
-    // Export as SVG file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_SVG_FILE,
-                 _( "Create S&VG File..." ),
+                 _( "Export SVG..." ),
                  _( "Create a SVG file from the current symbol" ),
                  KiBitmap( plot_svg_xpm ) );
 
-    // Separator
     fileMenu->AppendSeparator();
 
-    // Quit
     AddMenuItem( fileMenu,
                  wxID_EXIT,
                  _( "&Quit" ),
@@ -117,22 +127,47 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Edit menu
     wxMenu* editMenu = new wxMenu;
 
-    // Undo
     text = AddHotkeyName( _( "&Undo" ), g_Libedit_Hokeys_Descr, HK_UNDO );
-
     AddMenuItem( editMenu,
                  wxID_UNDO,
                  text,
                  _( "Undo last edit" ),
                  KiBitmap( undo_xpm ) );
 
-    // Redo
     text = AddHotkeyName( _( "&Redo" ), g_Libedit_Hokeys_Descr, HK_REDO );
     AddMenuItem( editMenu,
                  wxID_REDO,
                  text,
                  _( "Redo the last undo command" ),
                  KiBitmap( redo_xpm ) );
+
+    editMenu->AppendSeparator();
+
+    AddMenuItem( editMenu,
+                 ID_LIBEDIT_GET_FRAME_EDIT_PART,
+                 _( "&Properties..." ),
+                 _( "Edit symbol properties" ),
+                 KiBitmap( part_properties_xpm ) );
+
+    AddMenuItem( editMenu,
+                 ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
+                 _( "&Fields..." ),
+                 _( "Edit field properties" ),
+                 KiBitmap( edit_text_xpm ) );
+
+    editMenu->AppendSeparator();
+
+    AddMenuItem( editMenu,
+                 ID_LIBEDIT_EDIT_PIN_BY_TABLE,
+                 _( "Pin &Table..." ),
+                 _( "Show pin table" ),
+                 KiBitmap( pin_table_xpm ) );
+
+    AddMenuItem( editMenu,
+                 ID_LIBEDIT_CHECK_PART,
+                 _( "Electrical Rules &Checker" ),
+                 _( "Check duplicate and off grid pins" ),
+                 KiBitmap( erc_xpm ) );
 
     // Menu View:
     wxMenu* viewMenu = new wxMenu;
@@ -179,63 +214,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Search Tree" ),
                  _( "Toggles the search tree visibility" ),
                  KiBitmap( search_tree_xpm ) );
-
-    // Menu Part:
-    wxMenu* partMenu = new wxMenu;
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_NEW_PART,
-                 _( "&New Symbol..." ),
-                 _( "Create a new empty symbol" ),
-                 KiBitmap( new_component_xpm ) );
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_SAVE_PART,
-                 _( "&Save Symbol" ),
-                 _( "Saves the current symbol to the library" ),
-                 KiBitmap( save_part_xpm ) );
-
-    partMenu->AppendSeparator();
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_IMPORT_PART,
-                 _( "&Import Symbol..." ),
-                 _( "Import a symbol to the current library" ),
-                 KiBitmap( import_part_xpm ) );
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_EXPORT_PART,
-                 _( "&Export Symbol..." ),
-                 _( "Export the current symbol" ),
-                 KiBitmap( export_part_xpm ) );
-
-    partMenu->AppendSeparator();
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_GET_FRAME_EDIT_PART,
-                 _( "&Properties..." ),
-                 _( "Edit symbol properties" ),
-                 KiBitmap( part_properties_xpm ) );
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
-                 _( "&Fields..." ),
-                 _( "Edit field properties" ),
-                 KiBitmap( edit_text_xpm ) );
-
-    partMenu->AppendSeparator();
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_EDIT_PIN_BY_TABLE,
-                 _( "Pi&n Table..." ),
-                 _( "Show pin table" ),
-                 KiBitmap( pin_table_xpm ) );
-
-    AddMenuItem( partMenu,
-                 ID_LIBEDIT_CHECK_PART,
-                 _( "Electrical Rules Checker" ),
-                 _( "Check duplicate and off grid pins" ),
-                 KiBitmap( erc_xpm ) );
 
     // Menu Place:
     wxMenu* placeMenu = new wxMenu;
@@ -349,7 +327,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( partMenu, _( "&Symbol" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

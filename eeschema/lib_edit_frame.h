@@ -292,6 +292,7 @@ public:
      * the remaining unsaved changes.
      */
     void OnSavePart( wxCommandEvent& aEvent );
+    void OnSavePartAs( wxCommandEvent& aEvent );
 
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
@@ -303,8 +304,7 @@ public:
      */
     void OnRemovePart( wxCommandEvent& aEvent );
 
-    void OnCopyCutPart( wxCommandEvent& aEvent );
-    void OnPasteDuplicatePart( wxCommandEvent& aEvent );
+    void OnDuplicatePart( wxCommandEvent& aEvent );
 
     void OnSelectAlias( wxCommandEvent& event );
     void OnSelectPart( wxCommandEvent& event );
@@ -336,6 +336,7 @@ public:
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdatePartModified( wxUpdateUIEvent& aEvent );
+    void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateLibModified( wxUpdateUIEvent& aEvent );
     void OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
@@ -785,9 +786,6 @@ private:
 
     ///> Clipboard buffer storing LIB_ITEMs
     BLOCK_SELECTOR m_clipboard;
-
-    // Copy/cut/paste buffer to move parts between libraries
-    std::unique_ptr<LIB_PART> m_copiedPart;
 
     DECLARE_EVENT_TABLE()
 };

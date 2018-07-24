@@ -714,40 +714,38 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
     for( unsigned i = 0; i < nicknames.size(); i++ )
     {
         wxArrayString item;
-
         item.Add( nicknames[i] );
         item.Add( tbl->GetDescription( nicknames[i] ) );
-
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, FMT_SAVE_MODULE, headers, itemsToDisplay, libraryName );
-    dlg.SetFilterLabel( _( "Library Filter:" ) );
-    dlg.SetListLabel( _( "Save in Library:" ) );
+    EDA_LIST_DIALOG dlg( this, FMT_SAVE_MODULE, headers, itemsToDisplay, libraryName,
+                         nullptr, nullptr, /* sort */ false, /* show headers */ false );
+    dlg.SetListLabel( _( "Save in library:" ) );
+    dlg.SetOKLabel( _( "Save" ) );
 
-    wxSizer* mainSizer = dlg.GetSizer();
+    wxBoxSizer* bNameSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    wxStaticLine* separator = new wxStaticLine( &dlg, wxID_ANY, wxDefaultPosition,
-                                                wxDefaultSize, wxLI_HORIZONTAL );
-    mainSizer->Prepend( separator, 0, wxEXPAND|wxBOTTOM|wxTOP, 10 );
+    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Name:" ),
+                                            wxDefaultPosition, wxDefaultSize, 0 );
+    bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
     wxTextCtrl* nameTextCtrl = new wxTextCtrl( &dlg, wxID_ANY, footprintName,
                                                wxDefaultPosition, wxDefaultSize, 0 );
-    mainSizer->Prepend( nameTextCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+    bNameSizer->Add( nameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
     nameValidator.SetCharExcludes( MODULE::StringLibNameInvalidChars( false ) );
     nameTextCtrl->SetValidator( nameValidator );
 
-    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Footprint Name:" ),
-                                            wxDefaultPosition, wxDefaultSize, 0 );
-    mainSizer->Prepend( label, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+    wxSizer* mainSizer = dlg.GetSizer();
+    mainSizer->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
 
     // Move nameTextCtrl to the head of the tab-order
     if( dlg.GetChildren().DeleteObject( nameTextCtrl ) )
         dlg.GetChildren().Insert( nameTextCtrl );
 
-    nameTextCtrl->SetFocus();
+    dlg.SetInitialFocus( nameTextCtrl );
 
     dlg.Layout();
     mainSizer->Fit( &dlg );

@@ -64,6 +64,7 @@ public:
      * @param aCallBackFunction = callback function to display comments
      * @param aCallBackFunctionData = a pointer to pass to @a aCallBackFunction
      * @param aSortList = true to sort list items by alphabetic order.
+     * @param aShowHeaders = true if the list should have headers.
      */
     EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                      const wxArrayString& aItemHeaders,
@@ -71,12 +72,13 @@ public:
                      const wxString& aRefText,
                      void (* aCallBackFunction)( wxString& text, void* data ) = NULL,
                      void* aCallBackFunctionData = NULL,
-                     bool aSortList = false );
+                     bool aSortList = false, bool aShowHeaders = true );
 
     // ~EDA_LIST_DIALOG() {}
 
-    void     SetFilterLabel( const wxString& aLabel );
+    void     SetFilterHint( const wxString& aHint );
     void     SetListLabel( const wxString& aLabel );
+    void     SetOKLabel( const wxString& aLabel );
 
     void     Append( const wxArrayString& aItemStr );
     void     InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
@@ -91,9 +93,6 @@ public:
     wxString GetTextSelection( int aColumn = 0 );
 
 private:
-    void     onClose( wxCloseEvent& event ) override;
-    void     onCancelClick( wxCommandEvent& event ) override;
-    void     onOkClick( wxCommandEvent& event ) override;
     void     onListItemSelected( wxListEvent& event ) override;
     void     onListItemActivated( wxListEvent& event ) override;
     void     textChangeInFilterBox(wxCommandEvent& event) override;

@@ -40,7 +40,7 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
     m_tree = new COMPONENT_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
             m_libMgr->GetAdapter(), COMPONENT_TREE::SEARCH );
-    boxSizer->Add( m_tree, 1, wxEXPAND | wxALL, 5 );
+    boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
     Layout();
@@ -65,28 +65,26 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
                  KiBitmap( new_component_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_IMPORT_PART, _( "&Import Symbol..." ),
                  KiBitmap( import_part_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ),
-                 KiBitmap( paste_xpm ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
     AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "&Edit Symbol" ),
                  KiBitmap( edit_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Remove Symbol" ),
-                 KiBitmap( delete_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "E&xport Symbol..." ),
-                 KiBitmap( export_part_xpm ) );
+
+    menuPart->AppendSeparator();
     AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART, _( "&Save Symbol" ),
                  KiBitmap( save_part_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART_AS, _( "Save Symbol As..." ),
+                 KiBitmap( save_part_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Symbol" ),
+                 KiBitmap( duplicate_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Delete Symbol" ),
+                 KiBitmap( delete_xpm ) );
     AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT_PART, _( "Revert Symbol" ),
                  KiBitmap( undo_xpm ) );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut Symbol" ),
-                 KiBitmap( cut_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_COPY_PART, _( "Copy Symbol" ),
-                 KiBitmap( copy_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Symbol" ),
-                 KiBitmap( duplicate_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "E&xport Symbol..." ),
+                 KiBitmap( export_part_xpm ) );
 
     // Menu displayed when nothing is selected
     std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();

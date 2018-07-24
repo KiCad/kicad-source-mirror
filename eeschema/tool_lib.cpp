@@ -116,35 +116,16 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Create a new library" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_ADD_LIBRARY, wxEmptyString,
-                            KiScaledBitmap( add_library_xpm, this ),
+                            KiScaledBitmap( open_library_xpm, this ),
                             _( "Add an existing library" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_ALL_LIBS, wxEmptyString,
-                            KiScaledBitmap( save_library_xpm, this ),
-                            _( "Save all libraries" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString,
                             KiScaledBitmap( new_component_xpm, this ),
                             _( "Create new symbol" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_PART, wxEmptyString,
-                            KiScaledBitmap( save_part_xpm, this ),
-                            _( "Save current symbol" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString,
-                            KiScaledBitmap( import_part_xpm, this ),
-                            _( "Import symbol" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString,
-                            KiScaledBitmap( export_part_xpm, this ),
-                            _( "Export symbol" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiScaledBitmap( paste_xpm, this ),
-                            _( "Paste" ) );
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_ALL_LIBS, wxEmptyString,
+                            KiScaledBitmap( save_xpm, this ),
+                            _( "Save libraries" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -153,21 +134,6 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     msg = AddHotkeyName( HELP_REDO, g_Libedit_Hokeys_Descr, HK_REDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ), msg );
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
-                            KiScaledBitmap( part_properties_xpm, this ),
-                            _( "Edit symbol properties" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
-                            KiScaledBitmap( text_xpm, this ),
-                            _( "Edit field properties" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
-                            _( "Check duplicate and off grid pins" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -191,18 +157,35 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-                            KiScaledBitmap( morgan1_xpm, this ),
-                            _( "Show as \"De Morgan\" normal symbol" ), wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-                            KiScaledBitmap( morgan2_xpm, this ),
-                            _( "Show as \"De Morgan\" convert symbol" ), wxITEM_CHECK );
+    m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
+                            KiScaledBitmap( part_properties_xpm, this ),
+                            _( "Edit symbol properties" ) );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
+                            KiScaledBitmap( text_xpm, this ),
+                            _( "Edit field properties" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString,
                             KiScaledBitmap( datasheet_xpm, this ),
                             _( "Show associated datasheet or document" ) );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString,
+                            KiScaledBitmap( pin_table_xpm, this ),
+                            _( "Show pin table" ) );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
+                            _( "Check duplicate and off grid pins" ) );
+
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
+                            KiScaledBitmap( morgan1_xpm, this ),
+                            _( "Show as \"De Morgan\" normal symbol" ), wxITEM_CHECK );
+    m_mainToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
+                            KiScaledBitmap( morgan2_xpm, this ),
+                            _( "Show as \"De Morgan\" convert symbol" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -222,16 +205,13 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                        0, nullptr, wxCB_READONLY );
     m_mainToolBar->AddControl( m_aliasSelectBox );
 
-    m_mainToolBar->AddSeparator();
     KiScaledSeparator( m_mainToolBar, this );
+
     msg = _( "Synchronized pin edit mode\n"
              "Synchronized pin edit mode propagates to other units all pin changes except pin number modification.\n"
              "Enabled by default for multiunit parts with interchangeable units." );
     m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString,
                             KiScaledBitmap( pin2pin_xpm, this ), msg, wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString,
-                            KiScaledBitmap( pin_table_xpm, this ),
-                            _( "Show pin table" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

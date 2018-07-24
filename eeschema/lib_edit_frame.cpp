@@ -104,12 +104,10 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_IMPORT_PART, LIB_EDIT_FRAME::OnImportPart )
     EVT_TOOL( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnExportPart )
     EVT_TOOL( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnSavePart )
+    EVT_TOOL( ID_LIBEDIT_SAVE_PART_AS, LIB_EDIT_FRAME::OnSavePartAs )
     EVT_TOOL( ID_LIBEDIT_REVERT_PART, LIB_EDIT_FRAME::OnRevertPart )
     EVT_TOOL( ID_LIBEDIT_REMOVE_PART, LIB_EDIT_FRAME::OnRemovePart )
-    EVT_TOOL( ID_LIBEDIT_CUT_PART, LIB_EDIT_FRAME::OnCopyCutPart )
-    EVT_TOOL( ID_LIBEDIT_COPY_PART, LIB_EDIT_FRAME::OnCopyCutPart )
-    EVT_TOOL( ID_LIBEDIT_PASTE_PART, LIB_EDIT_FRAME::OnPasteDuplicatePart )
-    EVT_TOOL( ID_LIBEDIT_DUPLICATE_PART, LIB_EDIT_FRAME::OnPasteDuplicatePart )
+    EVT_TOOL( ID_LIBEDIT_DUPLICATE_PART, LIB_EDIT_FRAME::OnDuplicatePart )
 
     // Main horizontal toolbar.
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
@@ -174,10 +172,10 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Update user interface elements.
     EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT_LIBRARY, LIB_EDIT_FRAME::OnUpdateLibModified )
-    EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_PART_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
-    EVT_UPDATE_UI( ID_LIBEDIT_PASTE_PART, LIB_EDIT_FRAME::OnUpdateClipboardNotEmpty )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
@@ -495,6 +493,14 @@ void LIB_EDIT_FRAME::OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent )
 }
 
 
+void LIB_EDIT_FRAME::OnUpdateHavePart( wxUpdateUIEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+
+    aEvent.Enable( libId.IsValid() );
+}
+
+
 void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
@@ -538,12 +544,6 @@ void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdateLibModified( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_libMgr->IsLibraryModified( getTargetLib() ) );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( !!m_copiedPart );
 }
 
 
@@ -592,7 +592,8 @@ void LIB_EDIT_FRAME::OnUpdateSaveAll( wxUpdateUIEvent& event )
             break;
     }
 
-    event.SetText( modified > 1 ? _( "Save All &Libraries..." ) : _( "Save All &Libraries" ) );
+    event.SetText( AddHotkeyName( modified > 1 ? _( "&Save..." ) : _( "&Save All" ),
+                                  g_Libedit_Hokeys_Descr, HK_SAVE ) );
     event.Enable( modified > 0 );
 }
 
