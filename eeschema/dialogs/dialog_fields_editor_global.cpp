@@ -301,11 +301,16 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             return;             // Can't modify references or quantity
 
+        wxString value( aValue );
+        value.Replace( "\r", "\\r" );
+        value.Replace( "\n", "\\n" );
+        value.Replace( "\t", "\\t" );
+
         DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
         wxString fieldName = m_fieldNames[ aCol ];
 
         for( const auto& ref : rowGroup.m_Refs )
-            m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = aValue;
+            m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = value;
 
         m_edited = true;
     }
