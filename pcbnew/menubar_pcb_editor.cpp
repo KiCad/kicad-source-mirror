@@ -485,6 +485,21 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                  KiBitmap( swap_layer_xpm ) );
 
     aParentMenu->AppendSeparator();
+
+    text = AddHotkeyName( _( "Fill &All Zones" ), g_Board_Editor_Hotkeys_Descr,
+                HK_ZONE_FILL_OR_REFILL );
+    AddMenuItem( aParentMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
+                 text, _( "Fill all zones on the board" ),
+                 KiBitmap( fill_zone_xpm ) );
+
+    text = AddHotkeyName( _( "&Unfill All Zones" ), g_Board_Editor_Hotkeys_Descr,
+                HK_ZONE_REMOVE_FILLED );
+    AddMenuItem( aParentMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
+                 text, _( "Remove fill from all zones on the board" ),
+                 KiBitmap( zone_unfill_xpm ) );
+
+    aParentMenu->AppendSeparator();
+
     AddMenuItem( aParentMenu, ID_PCB_GLOBAL_DELETE,
                  _( "&Global Deletions..." ),
                  _( "Delete tracks, footprints and graphic items from board" ),

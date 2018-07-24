@@ -206,6 +206,12 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_EDIT_PASTE:
         return PCB_ACTIONS::pasteFromClipboard.MakeEvent();
+
+    case ID_POPUP_PCB_FILL_ALL_ZONES:
+        return PCB_ACTIONS::zoneFillAll.MakeEvent();
+
+    case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES:
+        return PCB_ACTIONS::zoneUnfillAll.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
