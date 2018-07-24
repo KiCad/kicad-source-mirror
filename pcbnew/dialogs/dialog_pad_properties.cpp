@@ -83,7 +83,8 @@ static PAD_ATTR_T code_type[] =
     PAD_ATTRIB_STANDARD,
     PAD_ATTRIB_SMD,
     PAD_ATTRIB_CONN,
-    PAD_ATTRIB_HOLE_NOT_PLATED
+    PAD_ATTRIB_HOLE_NOT_PLATED,
+    PAD_ATTRIB_CONN                 // Aperture pad (type CONN with no copper layers)
 };
 
 // Default mask layers setup for pads according to the pad type
@@ -92,7 +93,8 @@ static const LSET std_pad_layers[] =
     D_PAD::StandardMask(),        // PAD_ATTRIB_STANDARD:
     D_PAD::SMDMask(),             // PAD_ATTRIB_SMD:
     D_PAD::ConnSMDMask(),         // PAD_ATTRIB_CONN:
-    D_PAD::UnplatedHoleMask()     // PAD_ATTRIB_HOLE_NOT_PLATED:
+    D_PAD::UnplatedHoleMask(),    // PAD_ATTRIB_HOLE_NOT_PLATED:
+    D_PAD::ApertureMask()
 };
 
 
@@ -683,14 +685,18 @@ void DIALOG_PAD_PROPERTIES::initValues()
     enablePrimitivePage( PAD_SHAPE_CUSTOM == m_dummyPad->GetShape() );
 
     // Type of pad selection
-    m_PadType->SetSelection( 0 );
-
-    for( unsigned ii = 0; ii < DIM( code_type ); ii++ )
+    if( m_dummyPad->GetAttribute() == PAD_ATTRIB_CONN && m_dummyPad->IsAperturePad() )
     {
-        if( code_type[ii] == m_dummyPad->GetAttribute() )
+        m_PadType->SetSelection( 4 );
+    }
+    else
+    {
+        switch( m_dummyPad->GetAttribute() )
         {
-            m_PadType->SetSelection( ii );
-            break;
+        case PAD_ATTRIB_STANDARD:        m_PadType->SetSelection( 0 ); break;
+        case PAD_ATTRIB_SMD:             m_PadType->SetSelection( 1 ); break;
+        case PAD_ATTRIB_CONN:            m_PadType->SetSelection( 2 ); break;
+        case PAD_ATTRIB_HOLE_NOT_PLATED: m_PadType->SetSelection( 3 ); break;
         }
     }
 
@@ -922,28 +928,6 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 {
-    if( m_PadType->GetSelection() == 1 || m_PadType->GetSelection() == 2 )
-    {
-        // pad type = SMD or CONN: no hole allowed
-        m_holeX.Enable( false );
-        m_holeY.Enable( false );
-    }
-    else
-    {
-        switch( m_holeShapeCtrl->GetSelection() )
-        {
-        case 0:     //CIRCLE:
-            m_holeX.Enable( true );
-            m_holeY.Enable( false );
-            break;
-
-        case 1:     //OVAL:
-            m_holeX.Enable( true );
-            m_holeY.Enable( true );
-            break;
-        }
-    }
-
     transferDataToPad( m_dummyPad );
     redraw();
 }
@@ -958,29 +942,88 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
-    unsigned ii = m_PadType->GetSelection();
+    int ii = m_PadType->GetSelection();
 
     if( ii >= DIM( code_type ) ) // catches < 0 also
         ii = 0;
 
+    bool hasHole, hasConnection;
+
+    switch( ii )
+    {
+    default:
+    case 0: /* PTH */      hasHole = true;  hasConnection = true;  break;
+    case 1: /* SMD */      hasHole = false; hasConnection = true;  break;
+    case 2: /* CONN */     hasHole = false; hasConnection = true;  break;
+    case 3: /* NPTH */     hasHole = true;  hasConnection = false; break;
+    case 4: /* Aperture */ hasHole = false; hasConnection = false; break;
+    }
+
     LSET layer_mask = std_pad_layers[ii];
     setPadLayersList( layer_mask );
 
-    // Enable/disable drill dialog items:
-    event.SetId( m_holeShapeCtrl->GetSelection() );
-    OnDrillShapeSelected( event );
+    if( !hasHole )
+    {
+        m_holeX.SetValue( 0 );
+        m_holeY.SetValue( 0 );
+    }
+    else if ( m_holeX.GetValue() == 0 && m_currentPad )
+    {
+        m_holeX.SetValue( m_currentPad->GetDrillSize().x );
+        m_holeY.SetValue( m_currentPad->GetDrillSize().y );
+    }
 
-    m_holeShapeLabel->Enable( ii == 0 || ii == DIM( code_type ) - 1 );
-    m_holeShapeCtrl->Enable( ii == 0 || ii == DIM( code_type ) - 1 );
+    if( !hasConnection )
+    {
+        m_PadNumCtrl->SetValue( wxEmptyString );
+        m_PadNetNameCombo->SetSelectedNet( 0 );
+        m_padToDie.SetValue( 0 );
+    }
+    else if( m_PadNumCtrl->GetValue().IsEmpty() && m_currentPad )
+    {
+        m_PadNumCtrl->SetValue( m_currentPad->GetName() );
+        m_PadNetNameCombo->SetSelectedNet( m_currentPad->GetNetCode() );
+    }
 
-    // Enable/disable Pad name,and pad length die
-    // (disable for NPTH pads (mechanical pads)
-    bool enable = ii != 3;
-    m_PadNumText->Enable( enable );
-    m_PadNumCtrl->Enable( enable );
-    m_PadNameText->Enable( enable );
-    m_PadNetNameCombo->Enable( enable && m_canEditNetName && m_currentPad );
-    m_padToDie.Enable( enable );
+    transferDataToPad( m_dummyPad );
+    redraw();
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    int ii = m_PadType->GetSelection();
+
+    if( ii >= DIM( code_type ) ) // catches < 0 also
+        ii = 0;
+
+    bool hasHole, hasConnection;
+
+    switch( ii )
+    {
+    default:
+    case 0: /* PTH */      hasHole = true;  hasConnection = true;  break;
+    case 1: /* SMD */      hasHole = false; hasConnection = true;  break;
+    case 2: /* CONN */     hasHole = false; hasConnection = true;  break;
+    case 3: /* NPTH */     hasHole = true;  hasConnection = false; break;
+    case 4: /* Aperture */ hasHole = false; hasConnection = false; break;
+    }
+
+    // Enable/disable hole controls
+    m_holeShapeLabel->Enable( hasHole );
+    m_holeShapeCtrl->Enable( hasHole );
+    m_holeX.Enable( hasHole );
+    m_holeY.Enable( hasHole && m_holeShapeCtrl->GetSelection() == 1 );
+
+    // Enable/disable Pad number, net and pad length-to-die
+    m_PadNumText->Enable( hasConnection );
+    m_PadNumCtrl->Enable( hasConnection );
+    m_PadNameText->Enable( hasConnection );
+    m_PadNetNameCombo->Enable( hasConnection && m_canEditNetName && m_currentPad );
+    m_padToDie.Enable( hasConnection );
+
+    // Enable/disable Copper Layers control
+    m_rbCopperLayersSel->Enable( ii != 4 );
 }
 
 

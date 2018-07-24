@@ -123,6 +123,14 @@ LSET D_PAD::UnplatedHoleMask()
     return saved;
 }
 
+
+LSET D_PAD::ApertureMask()
+{
+    static LSET saved = LSET( 1, F_Paste );
+    return saved;
+}
+
+
 bool D_PAD::IsFlipped() const
 {
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )

@@ -122,6 +122,7 @@ private:
     void OnInitDialog( wxInitDialogEvent& event ) override;
     void OnResize( wxSizeEvent& event );
 	void OnCancel( wxCommandEvent& event ) override;
+    virtual void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override
     {

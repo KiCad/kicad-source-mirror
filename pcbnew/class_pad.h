@@ -150,6 +150,7 @@ public:
     static LSET ConnSMDMask();      ///< layer set for a SMD pad on Front layer
                                     ///< used for edge board connectors
     static LSET UnplatedHoleMask(); ///< layer set for a mechanical unplated through hole pad
+    static LSET ApertureMask();     ///< layer set for an aperture pad
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -399,10 +400,13 @@ public:
 
     void SetLayerSet( LSET aLayerMask )         { m_layerMask = aLayerMask; }
     LSET GetLayerSet() const override           { return m_layerMask; }
-    bool IsAperturePad() const                  { return ( m_layerMask & LSET::AllCuMask() ).none(); }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
+
+    // We don't currently have an attribute for APERTURE, and adding one will change the file
+    // format, so for now just infer a copper-less pad to be an APERTURE pad.
+    bool IsAperturePad() const                  { return ( m_layerMask & LSET::AllCuMask() ).none(); }
 
     void SetPadToDieLength( int aLength )       { m_LengthPadToDie = aLength; }
     int GetPadToDieLength() const               { return m_LengthPadToDie; }
