@@ -559,16 +559,18 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         }
     }
 
-    wxString name;
-
     m_enabledLayers = getUILayerMask();
-    m_pcb->SetEnabledLayers( m_enabledLayers );
 
-    /* Ensure enabled layers are also visible
-     * This is mainly to avoid mistakes if some enabled
-     * layers are not visible when exiting this dialog
-     */
-    m_pcb->SetVisibleLayers( m_enabledLayers );
+    if( m_enabledLayers != m_pcb->GetEnabledLayers() )
+    {
+        m_pcb->SetEnabledLayers( m_enabledLayers );
+
+        /* Ensure enabled layers are also visible
+         * This is mainly to avoid mistakes if some enabled
+         * layers are not visible when exiting this dialog
+         */
+        m_pcb->SetVisibleLayers( m_enabledLayers );
+    }
 
     for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
     {
@@ -576,8 +578,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
         if( m_enabledLayers[layer] )
         {
-            name = getLayerName( layer );
-            m_pcb->SetLayerName( layer, name );
+            m_pcb->SetLayerName( layer, getLayerName( layer ) );
             LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
             m_pcb->SetLayerType( layer, t );
         }
