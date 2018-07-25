@@ -72,13 +72,17 @@ void KIDIALOG::ForceShowAgain()
 
 bool KIDIALOG::Show( bool aShow )
 {
-    // Check if this dialog should be shown to the user
-    auto it = doNotShowAgainDlgs.find( m_hash );
+    // We should check the do-not-show-again setting only when the dialog is displayed
+    if( aShow )
+    {
+        // Check if this dialog should be shown to the user
+        auto it = doNotShowAgainDlgs.find( m_hash );
 
-    if( it != doNotShowAgainDlgs.end() )
-        return it->second;
+        if( it != doNotShowAgainDlgs.end() )
+            return it->second;
+    }
 
-    bool ret = wxRichMessageDialog::Show();
+    bool ret = wxRichMessageDialog::Show( aShow );
 
     // Has the user asked not to show the dialog again
     if( IsCheckBoxChecked() )
