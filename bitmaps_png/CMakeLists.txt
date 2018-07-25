@@ -569,6 +569,7 @@ set( BMAPS_MID
     up
     update_fields
     update_module_board
+    update_pcb_from_sch
     use_3D_copper_thickness
     via
     via_buried

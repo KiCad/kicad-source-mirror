@@ -352,7 +352,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  ID_UPDATE_PCB_FROM_SCH,
                  _( "Update PCB from Schematic..." ),
                  _( "Update PCB design with current schematic (forward annotation)" ),
-                 KiBitmap( import_brd_file_xpm ) );
+                 KiBitmap( update_pcb_from_sch_xpm ) );
 
     aParentMenu->AppendSeparator();
 

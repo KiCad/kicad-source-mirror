@@ -547,7 +547,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu,
                  ID_UPDATE_PCB_FROM_SCH,
                  text, _( "Updates PCB design with current schematic (forward annotation)." ),
-                 KiBitmap( import_brd_file_xpm ) );
+                 KiBitmap( update_pcb_from_sch_xpm ) );
 
     // Run Pcbnew
     AddMenuItem( aParentMenu, ID_RUN_PCB, _( "&Open PCB Editor" ),
