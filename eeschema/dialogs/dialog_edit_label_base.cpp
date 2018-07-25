@@ -18,6 +18,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	
 	m_textEntrySizer = new wxFlexGridSizer( 4, 2, 3, 3 );
 	m_textEntrySizer->AddGrowableCol( 1 );
+	m_textEntrySizer->AddGrowableRow( 1 );
 	m_textEntrySizer->SetFlexibleDirection( wxBOTH );
 	m_textEntrySizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
