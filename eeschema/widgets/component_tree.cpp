@@ -73,11 +73,11 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
     }
 
     // Component tree
-    m_tree_ctrl =
-            new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_SINGLE );
+    m_tree_ctrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                      wxDV_SINGLE | wxRAISED_BORDER );
     m_adapter->AttachTo( m_tree_ctrl );
 
-    sizer->Add( m_tree_ctrl, 1, wxLEFT | wxTOP | wxEXPAND, 5 );
+    sizer->Add( m_tree_ctrl, 5, wxLEFT | wxTOP | wxEXPAND, 5 );
 
     // Description panel
     if( aWidgets & DETAILS )
@@ -88,9 +88,9 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 
             m_details_ctrl = new wxHtmlWindow(
                     this, wxID_ANY, wxDefaultPosition, wxSize( html_sz.x, html_sz.y ),
-                    wxHW_SCROLLBAR_AUTO );
+                    wxHW_SCROLLBAR_AUTO | wxRAISED_BORDER );
 
-            sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
+            sizer->Add( m_details_ctrl, 2, wxLEFT | wxTOP | wxBOTTOM | wxEXPAND, 5 );
         }
         else
         {

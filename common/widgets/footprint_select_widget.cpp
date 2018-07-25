@@ -55,7 +55,7 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
     m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_fp_sel_ctrl = new FOOTPRINT_CHOICE( this, wxID_ANY );
-    m_sizer->Add( m_fp_sel_ctrl, 1, wxEXPAND | wxALL, 5 );
+    m_sizer->Add( m_fp_sel_ctrl, 1, wxEXPAND, 5 );
 
     SetSizer( m_sizer );
     Layout();

@@ -189,15 +189,17 @@ protected:
      */
     void RenderPreview( LIB_PART* aComponent, int aUnit );
 
-    wxTimer*        m_dbl_click_timer;
-    wxPanel*        m_sch_view_ctrl;
+    wxTimer*          m_dbl_click_timer;
+    wxPanel*          m_sch_view_ctrl;
     // the wxSplitterWindow that manages the symbol tree and symbol canvas viewer
-    wxSplitterWindow* m_splitter_tree_canvas;
+    wxSplitterWindow* m_hsplitter;
+    wxSplitterWindow* m_vsplitter;
     // the symbol canvas viewer
-    wxPanel*        m_symbol_view_panel;
+    wxPanel*          m_symbol_view_panel;
     // the sash position separation between symbol tree and symbol canvas viewer
     // (remember the sash position during a session)
-    static int      m_tree_canvas_sash_position;
+    static int        m_h_sash_pos;
+    static int        m_v_sash_pos;
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_view_ctrl;

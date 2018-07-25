@@ -46,7 +46,8 @@
 
 
 wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
-int DIALOG_CHOOSE_COMPONENT::m_tree_canvas_sash_position = 0;
+int DIALOG_CHOOSE_COMPONENT::m_h_sash_pos = 0;
+int DIALOG_CHOOSE_COMPONENT::m_v_sash_pos = 0;
 
 std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
 
@@ -62,41 +63,70 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
           m_show_footprints( aShowFootprints ),
-          m_external_browser_requested( false )
+          m_external_browser_requested( false ),
+          m_hsplitter( nullptr ),
+          m_vsplitter( nullptr )
 {
-    auto sizer = new wxBoxSizer( wxVERTICAL );
+    auto          sizer = new wxBoxSizer( wxVERTICAL );
+    wxHtmlWindow* details = nullptr;
 
     // Use a slightly different layout, with a details pane spanning the entire window,
     // if we're not showing footprints.
-    auto vsplitter = aShowFootprints ? nullptr : new wxSplitterWindow(
-        this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    if( aShowFootprints )
+    {
+        m_hsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
-    m_splitter_tree_canvas = new wxSplitterWindow(
-        vsplitter ? static_cast<wxWindow *>( vsplitter ) : static_cast<wxWindow *>( this ),
-        wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
+        //Avoid the splitter window being assigned as the Parent to additional windows
+        m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
-    //Avoid the splitter window being assigned as the Parent to additional windows
-    m_splitter_tree_canvas->SetExtraStyle( wxWS_EX_TRANSIENT );
+        sizer->Add( m_hsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+    }
+    else
+    {
+        m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
-    auto details = aShowFootprints ? nullptr : new wxHtmlWindow(
-        vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+        m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
-    m_tree = new COMPONENT_TREE( m_splitter_tree_canvas, Prj().SchSymbolLibTable(),
-                                 aAdapter, COMPONENT_TREE::WIDGETS::ALL, details );
-    m_symbol_view_panel = ConstructRightPanel( m_splitter_tree_canvas );
-    auto buttons = new wxStdDialogButtonSizer();
+        //Avoid the splitter window being assigned as the Parent to additional windows
+        m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
+
+        auto detailsPanel = new wxPanel( m_vsplitter );
+        auto detailsSizer = new wxBoxSizer( wxVERTICAL );
+        detailsPanel->SetSizer( detailsSizer );
+
+        details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                    wxHW_SCROLLBAR_AUTO | wxRAISED_BORDER );
+        detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+        detailsPanel->Layout();
+        detailsSizer->Fit( detailsPanel );
+
+        m_vsplitter->SetSashGravity( 0.5 );
+        m_vsplitter->SetMinimumPaneSize( 20 );
+        m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
+
+        sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+    }
+
+    m_tree = new COMPONENT_TREE( m_hsplitter, Prj().SchSymbolLibTable(), aAdapter,
+                                 COMPONENT_TREE::WIDGETS::ALL, details );
+
+    m_symbol_view_panel = ConstructRightPanel( m_hsplitter );
+
+    m_hsplitter->SetSashGravity( 0.8 );
+    m_hsplitter->SetMinimumPaneSize( 20 );
+    m_hsplitter->SplitVertically( m_tree,  m_symbol_view_panel );
+
     m_dbl_click_timer = new wxTimer( this );
 
-    if( vsplitter )
-        sizer->Add( vsplitter, 1, wxEXPAND | wxALL, 5 );
-    else
-        sizer->Add( m_splitter_tree_canvas, 1, wxEXPAND | wxALL, 5 );
-
+    auto buttons = new wxStdDialogButtonSizer();
     buttons->AddButton( new wxButton( this, wxID_OK ) );
     buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
     buttons->Realize();
 
-    sizer->Add( buttons, 0, wxEXPAND | wxBOTTOM, 10 );
+    sizer->Add( buttons, 0, wxEXPAND | wxALL, 5 );
     SetSizer( sizer );
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
@@ -113,25 +143,17 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Layout();
 
-    if( m_last_dlg_size == wxSize( -1, -1 ) )
-        SetSizeInDU( 320, 256 );
-    else
-        SetSize( m_last_dlg_size );
-
-    m_splitter_tree_canvas->SetSashGravity( 0.8 );
-    m_splitter_tree_canvas->SetMinimumPaneSize( 20 );
     // We specify the width of the right window (m_symbol_view_panel), because specify
     // the width of the left window does not work as expected when SetSashGravity() is called
-    m_splitter_tree_canvas->SplitVertically( m_tree,  m_symbol_view_panel,
-                               m_tree_canvas_sash_position ? -m_tree_canvas_sash_position
-                                                           : HorizPixelsFromDU( -100 ) );
+    m_hsplitter->SetSashPosition( m_h_sash_pos ? m_h_sash_pos : HorizPixelsFromDU( 240 ) );
 
-    if( vsplitter )
-    {
-        vsplitter->SetSashGravity( 0.5 );
-        vsplitter->SetMinimumPaneSize( 20 );
-        vsplitter->SplitHorizontally( m_splitter_tree_canvas, details, VertPixelsFromDU( -80 ) );
-    }
+    if( m_vsplitter )
+        m_vsplitter->SetSashPosition( m_v_sash_pos ? m_v_sash_pos : VertPixelsFromDU( 170 ) );
+
+    if( m_last_dlg_size == wxSize( -1, -1 ) )
+        SetSizeInDU( 360, 280 );
+    else
+        SetSize( m_last_dlg_size );
 }
 
 
@@ -155,8 +177,10 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     delete m_dbl_click_timer;
 
     m_last_dlg_size = GetSize();
-    m_tree_canvas_sash_position = m_splitter_tree_canvas->GetClientSize().x
-                                  - m_splitter_tree_canvas->GetSashPosition();
+    m_h_sash_pos = m_hsplitter->GetSashPosition();
+
+    if( m_vsplitter )
+        m_v_sash_pos = m_vsplitter->GetSashPosition();
 }
 
 
@@ -166,7 +190,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     m_sch_view_ctrl = new wxPanel( panel, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-            wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL );
+                                   wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL | wxRAISED_BORDER );
     m_sch_view_ctrl->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
@@ -179,16 +203,16 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
         m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
 
 
-        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxTOP | wxBOTTOM | wxRIGHT, 5 );
 
         if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxALL, 5 );
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
-        sizer->Add( m_fp_view_ctrl, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_fp_view_ctrl, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
     }
     else
     {
-        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
     }
 
     panel->SetSizer( sizer );
