@@ -255,6 +255,7 @@ set( BMAPS_MID
     export_step
     export
     fabrication
+    field_properties
     file_footprint
     fill_zone
     find

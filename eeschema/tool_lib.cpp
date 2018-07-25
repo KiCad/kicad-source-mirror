@@ -162,7 +162,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Edit symbol properties" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
-                            KiScaledBitmap( text_xpm, this ),
+                            KiScaledBitmap( field_properties_xpm, this ),
                             _( "Edit field properties" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
