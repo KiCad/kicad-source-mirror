@@ -58,7 +58,13 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
 
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
-    m_value->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( UNIT_BINDER::onTextEnter ), NULL, this );
+
+    // Connext wxEVT_TEXT_ENTER when (and *only when*) m_value has the wxTE_PROCESS_ENTER style
+    // because:
+    // 1 - it is useless
+    // 2 - it generate wxWidgets assert
+    if( m_value->HasFlag( wxTE_PROCESS_ENTER ) )
+        m_value->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( UNIT_BINDER::onTextEnter ), NULL, this );
 }
 
 

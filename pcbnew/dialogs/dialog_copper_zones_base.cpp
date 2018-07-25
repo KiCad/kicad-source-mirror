@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -258,7 +258,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	bSizerbottom->Add( m_sdbSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	
-	m_MainBoxSizer->Add( bSizerbottom, 0, wxALIGN_RIGHT|wxEXPAND|wxLEFT, 5 );
+	m_MainBoxSizer->Add( bSizerbottom, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
 	this->SetSizer( m_MainBoxSizer );
