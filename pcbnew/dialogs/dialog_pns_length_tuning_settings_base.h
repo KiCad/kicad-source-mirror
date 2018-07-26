@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -69,14 +70,10 @@ class DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		
-		DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Trace Length Tuning"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Trace Length Tuning"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 324,547 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE();
 	
 };
