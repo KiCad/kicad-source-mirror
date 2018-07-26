@@ -53,20 +53,21 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_NEW_LIBRARY,
-                 _( "&New Library..." ),
+                 _( "New Library..." ),
                  _( "Creates an empty library" ),
                  KiBitmap( new_library_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_ADD_LIBRARY,
-                 _( "Add &Library..." ),
+                 _( "Add Library..." ),
                  _( "Adds a previously created library" ),
                  KiBitmap( add_library_xpm ) );
 
+    text = AddHotkeyName( _( "&New Symbol..." ), m_hotkeysDescrList, HK_NEW );
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_NEW_PART,
-                 _( "New S&ymbol..." ),
-                 _( "Create a new empty symbol" ),
+                 text,
+                 _( "Create a new symbol" ),
                  KiBitmap( new_component_xpm ) );
 
     fileMenu->AppendSeparator();
@@ -87,7 +88,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_PART_AS,
                  _( "Save Symbol As..." ),
-                 _( "Saves a copy of the current symbol" ),
+                 _( "Save the current symbol to a new name and/or new library" ),
                  KiBitmap( save_part_xpm ) );
 
     fileMenu->AppendSeparator();

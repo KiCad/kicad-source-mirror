@@ -61,7 +61,7 @@ void LIB_EDIT_FRAME::DisplayLibInfos()
     wxString title = _( "Symbol Library Editor" );
 
     if( GetCurPart() )
-        title += wxT( " - " ) + GetCurPart()->GetLibId().Format();
+        title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
 
     SetTitle( title );
 }

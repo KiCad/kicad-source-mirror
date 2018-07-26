@@ -46,26 +46,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     wxString msg;
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_MODEDIT_SELECT_CURRENT_LIB, wxEmptyString,
-                            KiScaledBitmap( open_library_xpm, this ),
-                            _( "Select active library" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString, KiScaledBitmap( save_library_xpm, this ),
-                            _( "Save footprint in active library" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, wxEmptyString,
-                            KiScaledBitmap( new_library_xpm, this ),
-                            _( "Create new library and save current footprint" ) );
-
-    m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString, KiScaledBitmap( modview_icon_xpm, this ),
-                            _( "Open footprint viewer" ) );
-
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
-                            _( "Delete part from active library" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString, KiScaledBitmap( new_footprint_xpm, this ),
+    m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString,
+                            KiScaledBitmap( new_footprint_xpm, this ),
                             _( "New footprint" ) );
 
 #ifdef KICAD_SCRIPTING
@@ -74,31 +57,18 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "New footprint using footprint wizard" ) );
 #endif
 
-
     m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString,
                             KiScaledBitmap( load_module_lib_xpm, this ),
-                            _( "Load footprint from library" ) );
+                            _( "Open a footprint from a library" ) );
+
+    m_mainToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString,
+                            KiScaledBitmap( save_xpm, this ),
+                            _( "Save footprint in existing library" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
-                            KiScaledBitmap( load_module_board_xpm, this ),
-                            _( "Load footprint from current board" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
-                            KiScaledBitmap( update_module_board_xpm, this ),
-                            _( "Update footprint into current board" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
-                            KiScaledBitmap( insert_module_board_xpm, this ),
-                            _( "Insert footprint into current board" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_IMPORT_PART, wxEmptyString, KiScaledBitmap( import_module_xpm, this ),
-                            _( "Import footprint" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_EXPORT_PART, wxEmptyString, KiScaledBitmap( export_module_xpm, this ),
-                            _( "Export footprint" ) );
-
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString,
+                            KiScaledBitmap( print_button_xpm, this ),
+                            _( "Print footprint" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ),
@@ -107,17 +77,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Redo last undo command" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
-                            KiScaledBitmap( module_options_xpm, this ),
-                            _( "Footprint properties" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
-                            _( "Print footprint" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW,
-                         IS_COMMENT );
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
@@ -133,8 +93,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Zoom to selection" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString, KiScaledBitmap( options_pad_xpm, this ),
-                            _( "Pad properties" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
+                            KiScaledBitmap( module_options_xpm, this ),
+                            _( "Footprint properties" ) );
+
+    m_mainToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString,
+                            KiScaledBitmap( options_pad_xpm, this ),
+                            _( "Default pad properties" ) );
+
+    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
+                            KiScaledBitmap( load_module_board_xpm, this ),
+                            _( "Load footprint from current board" ) );
+
+    m_mainToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
+                            KiScaledBitmap( update_module_board_xpm, this ),
+                            _( "Update footprint into current board" ) );
+
+    m_mainToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
+                            KiScaledBitmap( insert_module_board_xpm, this ),
+                            _( "Insert footprint into current board" ) );
 
 #if 0       // Currently there is no check footprint function defined, so do not show this tool
     KiScaledSeparator( m_mainToolBar, this );
@@ -211,7 +189,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                              KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
+                               KiScaledBitmap( grid_xpm, this ),
                                _( "Hide grid" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,

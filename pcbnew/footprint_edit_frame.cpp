@@ -88,11 +88,10 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectGrid )
 
-    EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-
     EVT_TOOL( ID_MODEDIT_SAVE_LIBRARY_AS, FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs )
 
     EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE_AS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_OPEN_MODULE_VIEWER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
     EVT_TOOL( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -100,8 +99,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_IMPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-              FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SHEET_SET, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_GEN_IMPORT_DXF_FILE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PRINT, FOOTPRINT_EDIT_FRAME::ToPrinter )
@@ -172,12 +170,10 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::OnSwitchCanvas )
 
     // UI update events.
-    EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib )
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE_AS, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBRARY_AS, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_MODEDIT_INSERT_MODULE_IN_BOARD,
@@ -214,9 +210,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
-
-    // Show a title (frame title + footprint name):
-    updateTitle();
 
     // Create GAL canvas
     bool boardEditorWasRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
@@ -343,6 +336,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         pcbFrame->Destroy();
 
     m_auimgr.Update();
+    updateTitle();
 
     Raise();            // On some window managers, this is needed
     Show( true );
@@ -519,7 +513,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            if( !SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules ) )
+            if( !SaveFootprint( GetBoard()->m_Modules ) )
             {
                 Event.Veto();
                 return;
@@ -581,14 +575,6 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
     }
 
     aEvent.Check( state );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected( wxUpdateUIEvent& aEvent )
-{
-    bool enable = getLibPath() != wxEmptyString;
-    aEvent.Enable( enable );
-    GetMenuBar()->Enable( ID_MODEDIT_SAVE_LIBRARY_AS, enable );
 }
 
 
@@ -659,14 +645,6 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
-{
-    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
-
-    aEvent.Enable( fptbl && !fptbl->IsEmpty() );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     bool forceRecreateIfNotOwner = true;
@@ -718,41 +696,30 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString nickname = GetCurrentLib();
-    wxString nickname_display = _( "no active library" );
-    bool writable = true;
+    wxString title = _( "Footprint Editor" );
+    MODULE* module = GetBoard()->m_Modules;
 
-    if( !!nickname )
+    if( module )
     {
-        try
+        bool writable = true;
+        const LIB_ID& fpid = module->GetFPID();
+        wxString nickname = fpid.GetLibNickname();
+
+        if( !nickname.IsEmpty() )
         {
-            writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
-
-            nickname_display = nickname;
+            try
+            {
+                writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
+            }
+            catch( const IO_ERROR& )
+            {
+            }
         }
-        catch( const IO_ERROR& )
-        {
-            // user may be bewildered as to why after selecting a library it is not showing up
-            // in the title, we could show an error message, but that should have been done at time
-            // of libary selection UI.
-        }
+
+        title += wxString::Format( wxT( " \u2014 %s %s" ),
+                                   FROM_UTF8( module->GetFPID().Format().c_str() ),
+                                   writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) );
     }
-
-    wxString path_display;
-    if( nickname.size() )
-    {
-        FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
-        const FP_LIB_TABLE_ROW* row = libtable->FindRow( nickname );
-
-        if( row )
-            path_display = L" \u2014 " + row->GetFullURI( true );
-    }
-
-    wxString title;
-    title.Printf( _( "Footprint Editor" ) + wxT( " \u2014 %s%s%s" ),
-                  nickname_display,
-                  writable ? wxString( wxEmptyString ) : _( " [Read Only]" ),
-                  path_display );
 
     SetTitle( title );
 }
@@ -765,6 +732,7 @@ void FOOTPRINT_EDIT_FRAME::updateView()
     dp->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    updateTitle();
 }
 
 

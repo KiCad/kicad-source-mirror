@@ -112,10 +112,6 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
             attr->SetRenderer( new wxGridCellBoolRenderer() );
             attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
-
-            // 6.0 TODO: flag the Italic Text column for now
-            attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK ) );
-
             m_grid->SetAttr( i, COL_TEXT_ITALIC, attr );
         }
     }

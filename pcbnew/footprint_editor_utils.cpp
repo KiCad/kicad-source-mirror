@@ -252,18 +252,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Close( true );
         break;
 
-    case ID_MODEDIT_SELECT_CURRENT_LIB:
-        {
-            wxString library = SelectLibrary( GetCurrentLib() );
-
-            if( library.size() )
-            {
-                Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, library );
-                updateTitle();
-            }
-        }
-        break;
-
     case ID_OPEN_MODULE_VIEWER:
         {
             FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
@@ -291,7 +279,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_DELETE_PART:
-        DeleteModuleFromCurrentLibrary();
+        DeleteModuleFromLibrary();
         break;
 
     case ID_MODEDIT_NEW_MODULE:
@@ -385,7 +373,23 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_SAVE_LIBMODULE:
         if( GetBoard()->m_Modules )
         {
-            SaveFootprintInLibrary( GetCurrentLib(), GetBoard()->m_Modules );
+            SaveFootprint( GetBoard()->m_Modules );
+
+            m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+
+            if( IsGalCanvasActive() && GetGalCanvas() )
+                GetGalCanvas()->ForceRefresh();
+            else
+                GetCanvas()->Refresh();
+
+            GetScreen()->ClrModify();
+        }
+        break;
+
+    case ID_MODEDIT_SAVE_LIBMODULE_AS:
+        if( GetBoard()->m_Modules )
+        {
+            SaveFootprintAs( GetBoard()->m_Modules );
 
             m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
@@ -510,14 +514,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             Export_Module( GetBoard()->m_Modules );
         break;
 
-    case ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART:
-        if( GetBoard()->m_Modules )
-        {
-            // CreateModuleLibrary() only creates a new library, does not save footprint
-            wxString libPath = CreateNewLibrary();
-            if( libPath.size() )
-                SaveCurrentModule( &libPath );
-        }
+    case ID_MODEDIT_CREATE_NEW_LIB:
+        CreateNewLibrary();
         break;
 
     case ID_MODEDIT_SHEET_SET:
@@ -538,7 +536,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
         }
 
-        MODULE* module = LoadModuleFromLibrary( GetCurrentLib() );
+        MODULE* module = LoadModuleFromLibrary( wxEmptyString );
 
         if( !module )
             break;

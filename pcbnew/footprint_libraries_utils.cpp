@@ -533,16 +533,25 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
+bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary()
 {
-    wxString    nickname = GetCurrentLib();
+    LIB_ID   fpid;
+    wxString fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, wxEmptyString, wxEmptyString,
+                                                         wxEmptyString, Prj().PcbFootprintLibs() );
+
+    fpid.Parse( fpid_txt, LIB_ID::ID_PCB );
+
+    if( !fpid.IsValid() )
+        return false;
+
+    wxString nickname = fpid.GetLibNickname();
+    wxString fpname = fpid.GetLibItemName();
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to delete a footprint from a legacy lib
-    wxString    libfullname = Prj().PcbFootprintLibs()->FindRow(nickname)->GetFullURI();
-    IO_MGR::PCB_FILE_T  piType = IO_MGR::GuessPluginTypeFromLibPath( libfullname );
+    wxString libfullname = Prj().PcbFootprintLibs()->FindRow( nickname )->GetFullURI();
 
-    if( piType == IO_MGR::LEGACY )
+    if( IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == IO_MGR::LEGACY )
     {
         DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_DELETE );
         return false;
@@ -554,17 +563,6 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
         DisplayError( this, msg );
         return false;
     }
-
-    LIB_ID   fpid;
-    wxString fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, nickname, wxEmptyString,
-                                                         wxEmptyString, Prj().PcbFootprintLibs() );
-
-    fpid.Parse( fpid_txt, LIB_ID::ID_PCB );
-
-    if( !fpid.IsValid() )
-        return false;
-
-    wxString fpname = fpid.GetLibItemName();
 
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
@@ -678,7 +676,47 @@ public:
 };
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODULE* aModule )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
+{
+    wxString libraryName = aModule->GetFPID().GetLibNickname();
+    wxString footprintName = aModule->GetFPID().GetLibItemName();
+
+    if( libraryName.IsEmpty() || footprintName.IsEmpty() )
+        return SaveFootprintAs( aModule );
+
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
+    // Legacy libraries are readable, but modifying legacy format is not allowed
+    // So prompt the user if he try to add/replace a footprint in a legacy lib
+    wxString libfullname = tbl->FindRow( libraryName )->GetFullURI();
+
+    if( IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == IO_MGR::LEGACY )
+    {
+        DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
+        return false;
+    }
+
+    try
+    {
+        MODULE* m = tbl->FootprintLoad( libraryName, footprintName );
+
+        delete m;
+
+        LIBRARY_NAME_CLEARER temp( aModule );
+
+        // this always overwrites any existing footprint, but should yell on its
+        // own if the library or footprint is not writable.
+        tbl->FootprintSave( libraryName, aModule );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( this, ioe.What() );
+        return false;
+    }
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
 {
     if( aModule == NULL )
         return false;
@@ -687,20 +725,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( wxString activeLibrary, MODUL
 
     SetMsgPanel( aModule );
 
-    // For 6.0 Save should silently save the footprint in its own library.
-    // Save As... should allow a rename and/or reparent to a different library.
-    //
-    // However, for 5.0 we need a more limited intervention.  We'll always display
-    // the dialog, but add a Library selection widget that will default to saving
-    // in the footprint's own library but allow switching to the active library
-    // (or even some other library).
-
     wxString libraryName = aModule->GetFPID().GetLibNickname();
     wxString footprintName = aModule->GetFPID().GetLibItemName();
     bool updateValue = ( aModule->GetValue() == footprintName );
-
-    if( libraryName.IsEmpty() )
-        libraryName = activeLibrary;
 
     wxArrayString              headers;
     std::vector<wxArrayString> itemsToDisplay;

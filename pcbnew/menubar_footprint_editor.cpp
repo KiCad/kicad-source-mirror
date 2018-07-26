@@ -53,18 +53,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // Active library selection
-    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB,
-                 _("Set Acti&ve Library..."),
-                 _( "Select active library" ),
-                 KiBitmap( open_library_xpm ) );
-
-    fileMenu->AppendSeparator();
-
     // New module
     text = AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW );
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
-                 text, _( "Create new footprint" ),
+                 text, _( "Create a new footprint" ),
                  KiBitmap( new_footprint_xpm ) );
 
     text = AddHotkeyName( _( "&Open Footprint..." ), m_hotkeysDescrList, HK_OPEN );
@@ -77,7 +69,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Save module
     text = AddHotkeyName( _( "&Save" ), m_hotkeysDescrList, HK_SAVE );
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
-                 _( "Save footprint" ),
+                 _( "Save changes" ),
+                 KiBitmap( save_xpm ) );
+
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE_AS,
+                 _( "Save Footprint &As..." ),
+                 _( "Save footprint to a new name and/or new library" ),
                  KiBitmap( save_library_xpm ) );
 
     fileMenu->AppendSeparator();
@@ -106,25 +103,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Import files" ),
                  KiBitmap( import_xpm ) );
 
-
-    wxMenu* exportSubMenu = new wxMenu();
-
-    AddMenuItem( exportSubMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
-                 _( "&Active Library..." ),
-                 _( "Export active library" ),
-                 KiBitmap( library_archive_xpm ) );
-
-    AddMenuItem( exportSubMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Footprint..." ),
+    AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
+                 _( "&Export Footprint..." ),
                  _( "Export current footprint to a file" ),
                  KiBitmap( export_module_xpm ) );
-
-    AddMenuItem( fileMenu, exportSubMenu, -1,
-                 _( "E&xport" ),
-                 _( "Export files" ),
-                 KiBitmap( export_xpm ) );
-
-
 
     fileMenu->AppendSeparator();
 
@@ -133,15 +115,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, wxID_PRINT, text,
                  _( "Print current footprint" ),
                  KiBitmap( print_button_xpm ) );
-
-    // Separator
-    fileMenu->AppendSeparator();
-
-    // Properties
-    AddMenuItem( fileMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
-                 _( "P&roperties..." ),
-                 _( "Edit footprint properties" ),
-                 KiBitmap( module_options_xpm ) );
 
     fileMenu->AppendSeparator();
 
@@ -184,10 +157,16 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         editMenu->AppendSeparator();
     }
 
-    // Delete items tool
-    AddMenuItem( editMenu, ID_MODEDIT_DELETE_TOOL,
-                 _( "&Delete" ), _( "Delete items" ),
-                 KiBitmap( delete_xpm ) );
+    // Properties
+    AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
+                 _( "&Footprint Properties..." ),
+                 _( "Edit footprint properties" ),
+                 KiBitmap( module_options_xpm ) );
+
+    AddMenuItem( editMenu, ID_MODEDIT_PAD_SETTINGS,
+                 _( "Default Pad Properties..." ),
+                 _( "Edit default pad properties" ),
+                 KiBitmap( module_options_xpm ) );
 
     //--------- View menu ----------------
     wxMenu* viewMenu = new wxMenu;
@@ -389,6 +368,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     //----- Inspect menu ---------------------
     wxMenu* inspectMenu = new wxMenu;
 
+    AddMenuItem( inspectMenu, ID_OPEN_MODULE_VIEWER,
+                 _( "Footprint Viewer" ),
+                 _( "Open the footprint viewer" ),
+                 KiBitmap( modview_icon_xpm ) );
 
     text = AddHotkeyName( _( "&Measure" ), m_hotkeysDescrList, HK_MEASURE_TOOL );
     AddMenuItem( inspectMenu, ID_MODEDIT_MEASUREMENT_TOOL,
@@ -410,9 +393,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
 
+    AddMenuItem( toolsMenu, ID_MODEDIT_CREATE_NEW_LIB,
+                 _( "New Library..." ),
+                 _( "Create a new library for storing footprints" ),
+                 KiBitmap( library_xpm ) );
+
+    AddMenuItem( toolsMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
+                 _( "Save &Library As..." ),
+                 _( "Save current library to a new name and/or location" ),
+                 KiBitmap( save_library_xpm ) );
+
     AddMenuItem( toolsMenu, ID_MODEDIT_DELETE_PART,
-                 _( "&Delete a Footprint in Active Library" ),
-                 _( "Choose and delete a footprint from the active library" ),
+                 _( "&Delete Footprint from Library..." ),
+                 _( "Choose and delete a footprint from a library" ),
                  KiBitmap( delete_xpm ) );
 
 

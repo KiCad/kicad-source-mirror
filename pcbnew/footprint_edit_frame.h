@@ -182,12 +182,10 @@ public:
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
 
     void OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent );
-    void OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent );
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
     void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
@@ -199,13 +197,13 @@ public:
     void LoadModuleFromBoard( wxCommandEvent& event );
 
     /**
-     * Function SaveFootprintInLibrary
+     * Function SaveFootprint
      * Save in an existing library a given footprint
-     * @param activeLibrary = default library if the footprint has none
      * @param aModule = the given footprint
      * @return : true if OK, false if abort
      */
-    bool SaveFootprintInLibrary( wxString activeLibrary, MODULE* aModule );
+    bool SaveFootprint( MODULE* aModule );
+    bool SaveFootprintAs( MODULE* aModule );
 
     /**
      * Virtual Function OnModify()
@@ -388,10 +386,10 @@ public:
     void PushPadProperties( D_PAD* aPad );
 
     /**
-     * Function DeleteModuleFromCurrentLibrary
+     * Function DeleteModuleFromLibrary
      * prompts user for footprint name, then deletes it from current library.
      */
-    bool DeleteModuleFromCurrentLibrary();
+    bool DeleteModuleFromLibrary();
 
     /**
      * Function IsElementVisible
