@@ -276,7 +276,7 @@ void GPCB_FPL_CACHE::Load()
             MODULE*          footprint = parseMODULE( &reader );
 
             // The footprint name is the file name without the extension.
-            footprint->SetFPID( LIB_ID( fn.GetName() ) );
+            footprint->SetFPID( LIB_ID( wxEmptyString, fn.GetName() ) );
             m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn.GetName() ) );
         }
         catch( const IO_ERROR& ioe )

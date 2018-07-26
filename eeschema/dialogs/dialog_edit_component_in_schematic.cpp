@@ -258,7 +258,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
     wxString msg;
     wxString partname = chipnameTextCtrl->GetValue();
 
-    if( id.Parse( partname ) != -1 || !id.IsValid() )
+    id.Parse( partname, LIB_ID::ID_SCH );
+
+    if( !id.IsValid() )
     {
         msg.Printf( _( "\"%s\" is not a valid library symbol identifier." ), partname );
         DisplayError( this, msg );
@@ -363,7 +365,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
     tmp.Replace( wxT( " " ), wxT( "_" ) );
 
-    id.Parse( tmp );
+    id.Parse( tmp, LIB_ID::ID_SCH );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();

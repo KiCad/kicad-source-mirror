@@ -552,23 +552,21 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 
     if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
-        wxString msg = wxString::Format(
-                _( "Library \"%s\" is read only" ),
-                GetChars( nickname )
-                );
-
+        wxString msg = wxString::Format( _( "Library \"%s\" is read only" ), nickname );
         DisplayError( this, msg );
         return false;
     }
 
-    wxString    fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, nickname,
-                        wxEmptyString, wxEmptyString, Prj().PcbFootprintLibs() );
+    LIB_ID   fpid;
+    wxString fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, nickname, wxEmptyString,
+                                                         wxEmptyString, Prj().PcbFootprintLibs() );
 
-    if( !fpid_txt )
+    fpid.Parse( fpid_txt, LIB_ID::ID_PCB );
+
+    if( !fpid.IsValid() )
         return false;
 
-    LIB_ID      fpid( fpid_txt );
-    wxString    fpname = fpid.GetLibItemName();
+    wxString fpname = fpid.GetLibItemName();
 
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
@@ -673,7 +671,7 @@ public:
     {
         m_module = aModule;
         m_savedFPID = aModule->GetFPID();
-        m_module->SetFPID( LIB_ID( m_savedFPID.GetLibItemName() ) );
+        m_module->SetFPID( LIB_ID( wxEmptyString, m_savedFPID.GetLibItemName() ) );
     }
     ~LIBRARY_NAME_CLEARER()
     {
@@ -859,7 +857,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     module->SetLastEditTime();
 
     // Update its name in lib
-    module->SetFPID( LIB_ID( moduleName ) );
+    module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
 
     wxPoint default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();

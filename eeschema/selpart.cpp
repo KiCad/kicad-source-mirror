@@ -46,7 +46,7 @@ static void DisplayCmpDocAndKeywords( wxString& aSelection, void* aData )
 
     LIB_ID id;
 
-    if( id.Parse( aSelection ) != -1 )
+    if( id.Parse( aSelection, LIB_ID::ID_SCH ) != -1 )
     {
         aSelection = _( "Invalid symbol library identifier!" );
         return;

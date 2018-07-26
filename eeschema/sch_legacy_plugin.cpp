@@ -1428,7 +1428,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             // parsing the symbol name with LIB_ID::Parse() would break symbol library links
             // that contained '/' and ':' characters.
             if( m_version > 3 )
-                libId.Parse( libName );
+                libId.Parse( libName, LIB_ID::ID_SCH, true );
             else
                 libId.SetLibItemName( libName, false );
 

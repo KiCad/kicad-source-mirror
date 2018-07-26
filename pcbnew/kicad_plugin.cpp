@@ -299,7 +299,7 @@ void FP_CACHE::Load()
                 // The footprint name is the file name without the extension.
                 wxString    fpName = fullPath.GetName();
 
-                footprint->SetFPID( LIB_ID( fpName ) );
+                footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fullPath ) );
 
                 m_cache_timestamp += fullPath.GetModificationTime().GetValue().GetValue();

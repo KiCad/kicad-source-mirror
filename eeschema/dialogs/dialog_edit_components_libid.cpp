@@ -358,7 +358,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
 
         // a new lib id is found. validate this new value
         LIB_ID id;
-        id.Parse( new_libid );
+        id.Parse( new_libid, LIB_ID::ID_SCH );
 
         if( !id.IsValid() )
         {
@@ -430,7 +430,8 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
         wxString orphanLibid = m_grid->GetCellValue( m_OrphansRowIndexes[ii], COL_CURR_LIBID );
         int grid_row_idx = m_OrphansRowIndexes[ii]; //row index in m_grid for the current item
 
-        LIB_ID curr_libid( orphanLibid );
+        LIB_ID curr_libid;
+        curr_libid.Parse( orphanLibid, LIB_ID::ID_SCH, true );
         wxString symbName = curr_libid.GetLibItemName();
         // number of full LIB_ID candidates (because we search for a symbol name
         // inside all avaiable libraries, perhaps the same symbol name can be found
@@ -438,7 +439,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
         int libIdCandidateCount = 0;
         candidateSymbNames.Clear();
 
-        // now try to fin a candidate
+        // now try to find a candidate
         for( auto &lib : libs )
         {
             aliasNames.Clear();
@@ -555,7 +556,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
         // a new lib id is found and was already validated.
         // set this new value
         LIB_ID id;
-        id.Parse( new_libid );
+        id.Parse( new_libid, LIB_ID::ID_SCH, true );
 
         for( CMP_CANDIDATE& cmp : m_components )
         {
@@ -592,7 +593,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::revertChanges()
                 continue;
 
             LIB_ID id;
-            id.Parse( cmp.m_InitialLibId );
+            id.Parse( cmp.m_InitialLibId, LIB_ID::ID_SCH, true );
 
             if( cmp.m_Component->GetLibId() != id )
             {

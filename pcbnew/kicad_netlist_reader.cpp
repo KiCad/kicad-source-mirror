@@ -368,7 +368,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
         }
     }
 
-    if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
+    if( !footprint.IsEmpty() && fpid.Parse( footprint, LIB_ID::ID_PCB, true ) >= 0 )
     {
         wxString error;
         error.Printf( _( "invalid footprint ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),

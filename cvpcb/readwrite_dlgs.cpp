@@ -99,9 +99,8 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName, int aIndex )
 
     if( !aFootprintName.IsEmpty() )
     {
-        wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
-                     wxString::Format( _( "\"%s\" is not a valid LIB_ID." ),
-                                       GetChars( aFootprintName ) ) );
+        wxCHECK_RET( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) < 0,
+                     wxString::Format( _( "\"%s\" is not a valid LIB_ID." ), aFootprintName ) );
     }
 
     component->SetFPID( fpid );
