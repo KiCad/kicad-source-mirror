@@ -310,8 +310,7 @@ set( BMAPS_MID
     label2glabel
     label2text
     label
-    lang_catalan
-    lang_chinese
+    lang_ca
     lang_bg
     lang_cs
     lang_def
@@ -332,6 +331,7 @@ set( BMAPS_MID
     lang_sk
     lang_sl
     lang_lt
+    lang_zh
     language
     layers_manager
     leave_sheet
