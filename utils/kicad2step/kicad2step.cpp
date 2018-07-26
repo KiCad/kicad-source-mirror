@@ -296,7 +296,7 @@ int KICAD2MCAD::OnRun()
             if( !res )
                 return -1;
         }
-        catch( Standard_Failure e )
+        catch( const Standard_Failure& e )
         {
             e.Print( std::cerr );
             return -1;
