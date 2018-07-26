@@ -181,6 +181,8 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
     {
         m_TextValue->SetSelection( -1, -1 );
     }
+
+    event.Skip();
 }
 
 
