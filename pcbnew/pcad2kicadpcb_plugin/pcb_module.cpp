@@ -520,7 +520,9 @@ void PCB_MODULE::AddToBoard()
     module->SetTimeStamp( 0 );
     module->SetLastEditTime( 0 );
 
-    module->SetFPID( LIB_ID( m_compRef ) );
+    LIB_ID fpID;
+    fpID.Parse( m_compRef, LIB_ID::ID_PCB, true );
+    module->SetFPID( fpID );
 
     module->SetAttributes( MOD_DEFAULT | MOD_CMS );
 

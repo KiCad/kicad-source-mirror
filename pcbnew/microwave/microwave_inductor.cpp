@@ -345,7 +345,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     MODULE* module = aPcbFrame->CreateNewModule( msg );
     aPcbFrame->AddModuleToBoard( module );
 
-    module->SetFPID( LIB_ID( wxString( "mw_inductor" ) ) );
+    module->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
     module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
     module->ClearFlags();
     module->SetPosition( inductorPattern.m_End );

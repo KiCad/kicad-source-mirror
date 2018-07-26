@@ -187,6 +187,8 @@ void DIALOG_EXCHANGE_FOOTPRINTS::setMatchMode( int aMatchMode )
 
 bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
 {
+    LIB_ID specifiedID;
+
     switch( getMatchMode() )
     {
     case ID_MATCH_FP_ALL:
@@ -203,7 +205,8 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
         else
             return aModule->GetValue() == m_specifiedValue->GetValue();
     case ID_MATCH_FP_ID:
-        return aModule->GetFPID() == m_specifiedID->GetValue();
+        specifiedID.Parse( m_specifiedID->GetValue(), LIB_ID::ID_PCB );
+        return aModule->GetFPID() == specifiedID;
     }
     return false;   // just to quiet compiler warnings....
 }
@@ -325,7 +328,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processCurrentModule()
         if( newFPIDStr.IsEmpty() )
             return false;
 
-        newFPID = LIB_ID( newFPIDStr );
+        newFPID.Parse( newFPIDStr, LIB_ID::ID_PCB, true );
     }
 
     return processModule( m_currentModule, newFPID );
@@ -337,14 +340,19 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
     MODULE*  Module;
     MODULE*  PtBack;
     bool     change = false;
-    wxString newFPID = m_newID->GetValue();
+    LIB_ID   newFPID;
     wxString value;
 
     if( !m_parent->GetBoard()->m_Modules )
         return false;
 
-    if( !m_updateMode && newFPID == wxEmptyString )
-        return false;
+    if( !m_updateMode )
+    {
+        newFPID.Parse( m_newID->GetValue(), LIB_ID::ID_PCB );
+
+        if( !newFPID.IsValid() )
+            return false;
+    }
 
     /* The change is done from the last module because processModule() modifies the last item
      * in the list.

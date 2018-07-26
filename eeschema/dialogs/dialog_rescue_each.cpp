@@ -96,33 +96,32 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
 
     dc.SetFont( font );
 
-    int padding = 30;
     int width = dc.GetTextExtent( header ).GetWidth();
 
     m_ListOfConflicts->AppendToggleColumn( header, wxDATAVIEW_CELL_ACTIVATABLE, width,
                                            wxALIGN_CENTER );
 
     header = _( "Symbol Name" );
-    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    width = dc.GetTextExtent( header ).GetWidth() * 2;
     m_ListOfConflicts->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
 
     header = _( "Action Taken" );
-    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    width = dc.GetTextExtent( header ).GetWidth() * 10;
     m_ListOfConflicts->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
 
     header = _( "Reference" );
-    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    width = dc.GetTextExtent( header ).GetWidth() * 2;
     m_ListOfInstances->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
 
     header = _( "Value" );
-    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    width = dc.GetTextExtent( header ).GetWidth() * 10;
     m_ListOfInstances->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
 
     m_componentViewOld->SetLayoutDirection( wxLayout_LeftToRight );
     m_componentViewNew->SetLayoutDirection( wxLayout_LeftToRight );
 
     Layout();
-    SetSizeInDU( 280, 240 );
+    SetSizeInDU( 480, 240 );
 
     // Make sure the HTML window is large enough. Some fun size juggling and
     // fudge factors here but it does seem to work pretty reliably.
@@ -133,7 +132,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
     m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
     Layout();
     GetSizer()->SetSizeHints( this );
-    SetSizeInDU( 280, 240 );
+    SetSizeInDU( 480, 240 );
     Center();
 }
 

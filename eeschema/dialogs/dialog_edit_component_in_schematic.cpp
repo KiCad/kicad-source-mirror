@@ -301,7 +301,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnBrowseLibrary( wxCommandEvent& event 
     SCH_BASE_FRAME::HISTORY_LIST dummy;
 
     LIB_ID id;
-    id.Parse( m_libraryNameTextCtrl->GetValue() );
+    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH );
 
     auto sel = GetParent()->SelectComponentFromLibrary( nullptr, dummy, true, 0, 0, false, &id );
 
@@ -349,7 +349,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
 bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 {
     wxString msg;
-    wxString tmp;
     LIB_ID   id;
 
     // Commit any pending in-place edits and close the editor
@@ -365,9 +364,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
         return false;
     }
 
-    tmp = m_libraryNameTextCtrl->GetValue();
-    tmp.Replace( wxT( " " ), wxT( "_" ) );
-    id.Parse( tmp );
+    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH );
 
     if( !id.IsValid() )
     {
@@ -438,7 +435,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     STATUS_FLAGS flags = m_cmp->GetFlags();
 
     // Library symbol identifier
-    LIB_ID id( m_libraryNameTextCtrl->GetValue() );
+    LIB_ID id;
+    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true );
     m_cmp->SetLibId( id, Prj().SchSymbolLibTable(), Prj().SchLibs()->GetCacheLibrary() );
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:

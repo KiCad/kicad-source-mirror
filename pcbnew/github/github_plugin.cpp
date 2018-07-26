@@ -232,7 +232,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
             // any name found in the pretty file; any name in the pretty file
             // must be ignored here.  Also, the library nickname is unknown in
             // this context so clear it just in case.
-            ret->SetFPID( aFootprintName );
+            ret->SetFPID( LIB_ID( wxEmptyString, aFootprintName ) );
 
             return ret;
         }

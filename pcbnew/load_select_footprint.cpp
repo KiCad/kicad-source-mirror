@@ -245,9 +245,8 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary, bool aU
 
     LIB_ID fpid;
 
-    wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                 wxString::Format( wxT( "Could not parse LIB_ID string \"%s\"." ),
-                                   GetChars( moduleName ) ) );
+    wxCHECK_MSG( fpid.Parse( moduleName, LIB_ID::ID_PCB ) < 0, NULL,
+                 wxString::Format( wxT( "Could not parse LIB_ID \"%s\"." ), moduleName ) );
 
     try
     {
@@ -275,9 +274,8 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary, bool aU
         }
         else
         {
-            wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                         wxString::Format( wxT( "Could not parse LIB_ID string \"%s\"." ),
-                                           GetChars( moduleName ) ) );
+            wxCHECK_MSG( fpid.Parse( moduleName, LIB_ID::ID_PCB ) < 0, NULL,
+                         wxString::Format( wxT( "Could not parse LIB_ID \"%s\"." ), moduleName ) );
 
             try
             {

@@ -56,17 +56,16 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
     if( aFootprintName.IsEmpty() )
         return NULL;
 
+    LIB_ID fpid;
+
+    wxCHECK_MSG( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) < 0, NULL,
+                 wxString::Format( wxT( "\"%s\" is not a valid LIB_ID." ), aFootprintName ) );
+
+    wxString libNickname = fpid.GetLibNickname();
+    wxString footprintName = fpid.GetLibItemName();
+
     for( auto& fp : m_list )
     {
-        LIB_ID fpid;
-
-        wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
-                wxString::Format(
-                        wxT( "\"%s\" is not a valid LIB_ID." ), GetChars( aFootprintName ) ) );
-
-        wxString libNickname = fpid.GetLibNickname();
-        wxString footprintName = fpid.GetLibItemName();
-
         if( libNickname == fp->GetNickname() && footprintName == fp->GetFootprintName() )
             return &*fp;
     }

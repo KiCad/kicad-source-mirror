@@ -57,15 +57,15 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         bool aShowFootprints )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+          m_hsplitter( nullptr ),
+          m_vsplitter( nullptr ),
           m_fp_sel_ctrl( nullptr ),
           m_fp_view_ctrl( nullptr ),
           m_parent( aParent ),
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
           m_show_footprints( aShowFootprints ),
-          m_external_browser_requested( false ),
-          m_hsplitter( nullptr ),
-          m_vsplitter( nullptr )
+          m_external_browser_requested( false )
 {
     auto          sizer = new wxBoxSizer( wxVERTICAL );
     wxHtmlWindow* details = nullptr;
@@ -325,7 +325,7 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
     {
         LIB_ID lib_id;
 
-        if( lib_id.Parse( aName ) == -1 && lib_id.IsValid() )
+        if( lib_id.Parse( aName, LIB_ID::ID_PCB ) == -1 && lib_id.IsValid() )
         {
             m_fp_view_ctrl->ClearStatus();
             m_fp_view_ctrl->CacheFootprint( lib_id );

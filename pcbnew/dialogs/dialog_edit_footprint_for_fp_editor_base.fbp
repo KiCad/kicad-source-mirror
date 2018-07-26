@@ -302,7 +302,7 @@
                                                     <property name="col_label_values">&quot;Text Items&quot; &quot;Show&quot; &quot;Width&quot; &quot;Height&quot; &quot;Thickness&quot; &quot;Italic&quot; &quot;Layer&quot; &quot;Orientation&quot; &quot;Unconstrained&quot; &quot;X Offset&quot; &quot;Y Offset&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                                     <property name="cols">11</property>
-                                                    <property name="column_sizes">120,48,96,96,96,48,112,80,48,96,96</property>
+                                                    <property name="column_sizes">116,53,96,96,96,53,106,80,48,96,96</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="default_pane">0</property>
@@ -3734,7 +3734,7 @@
                                                     <property name="col_label_values">&quot;3D Model(s)&quot; &quot;Preview&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                                     <property name="cols">2</property>
-                                                    <property name="column_sizes">662,53</property>
+                                                    <property name="column_sizes">650,65</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="default_pane">0</property>

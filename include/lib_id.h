@@ -52,24 +52,14 @@ class LIB_ID
 {
 public:
 
-    LIB_ID() {}
-
-    /**
-     * Takes \a aId string and parses it.
-     *
-     * A typical LIB_ID string consists of a library nickname followed by a library item name.
-     * e.g.: "smt:R_0805", or
-     * e.g.: "mylib:R_0805", or
-     * e.g.: "ttl:7400"
-     *
-     * @param aId is a string to be parsed into the LIB_ID object.
-     */
-    LIB_ID( const UTF8& aId );
-
-    LIB_ID( const wxString& aId );
-
     ///> Types of library identifiers
     enum LIB_ID_TYPE { ID_SCH, ID_ALIAS, ID_PCB };
+
+    LIB_ID() {}
+
+    // NOTE: don't define any constructors which call Parse() on their arguments.  We want it
+    // to be obvious to callers that parsing is involved (and that valid IDs are guaranteed in
+    // the presence of disallowed characters, malformed ids, etc.).
 
     /**
      * This LIB_ID ctor is a special version which ignores the parsing due to symbol
@@ -87,13 +77,19 @@ public:
     /**
      * Parse LIB_ID with the information from @a aId.
      *
+     * A typical LIB_ID string consists of a library nickname followed by a library item name.
+     * e.g.: "smt:R_0805", or
+     * e.g.: "mylib:R_0805", or
+     * e.g.: "ttl:7400"
+     *
      * @param aId is the string to populate the #LIB_ID object.
+     * @param aType indicates the LIB_ID type for type-specific parsing (such as allowed chars).
+     * @param aFix indicates invalid chars should be replaced with '_'.
      *
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
      *               aId at which an error was detected.
      */
-    int Parse( const UTF8& aId );
-
+    int Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix = false );
 
     /**
      * Return the logical library name portion of a LIB_ID.
@@ -209,9 +205,9 @@ public:
      *
      * @param aLibItemName is the #LIB_ID name to test for illegal characters.
      * @param aType is the library identifier type
-     * @return true if \a aLibItemName contain illegal characters otherwise false.
+     * @return offset of first illegal character otherwise -1.
      */
-    static bool HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType );
+    static int HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType );
 
     /**
      * Replace illegal #LIB_ID item name characters with underscores '_'.

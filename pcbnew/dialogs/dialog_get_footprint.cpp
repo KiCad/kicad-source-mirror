@@ -52,7 +52,9 @@ DIALOG_GET_FOOTPRINT::DIALOG_GET_FOOTPRINT( PCB_BASE_FRAME* parent, bool aShowBr
 
     for( size_t ii = 0; ii < s_HistoryList.size(); ++ii )
     {
-        LIB_ID fpid( s_HistoryList[ ii ] );
+        LIB_ID fpid;
+        fpid.Parse( s_HistoryList[ ii ], LIB_ID::ID_PCB );
+
         if( m_frame->CheckFootprint( fpid ) )
             m_historyList->Append( s_HistoryList[ ii ] );
     }

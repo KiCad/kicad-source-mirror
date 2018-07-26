@@ -119,7 +119,7 @@ void LIB_ID::clear()
 }
 
 
-int LIB_ID::Parse( const UTF8& aId )
+int LIB_ID::Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix )
 {
     clear();
 
@@ -127,7 +127,7 @@ int LIB_ID::Parse( const UTF8& aId )
     const char* rev = EndsWithRev( buffer, buffer+aId.length(), '/' );
     size_t      revNdx;
     size_t      partNdx;
-    int         offset;
+    int         offset = -1;
 
     //=====<revision>=========================================
     // in a LIB_ID like discret:R3/rev4
@@ -150,9 +150,7 @@ int LIB_ID::Parse( const UTF8& aId )
         offset = SetLibNickname( aId.substr( 0, partNdx ) );
 
         if( offset > -1 )
-        {
             return offset;
-        }
 
         ++partNdx;  // skip ':'
     }
@@ -165,45 +163,21 @@ int LIB_ID::Parse( const UTF8& aId )
     if( partNdx >= revNdx )
         return partNdx;     // Error: no library item name.
 
+    UTF8 fpname = aId.substr( partNdx, revNdx-partNdx );
+
     // Be sure the item name is valid.
     // Some chars can be found in legacy files converted files from other EDA tools.
-    std::string fpname = aId.substr( partNdx, revNdx-partNdx );
-    ReplaceIllegalFileNameChars( &fpname, '_' );
-    SetLibItemName( UTF8( fpname ) );
+    if( aFix )
+        fpname = FixIllegalChars( fpname, aType, false );
+    else
+        offset = HasIllegalChars( fpname, aType );
+
+    if( offset > -1 )
+        return offset;
+
+    SetLibItemName( fpname );
 
     return -1;
-}
-
-
-LIB_ID::LIB_ID( const UTF8& aId )
-{
-    int offset = Parse( aId );
-
-    if( offset != -1 )
-    {
-        THROW_PARSE_ERROR( _( "Illegal character found in LIB_ID string" ),
-                           wxString::FromUTF8( aId.c_str() ),
-                           aId.c_str(),
-                           0,
-                           offset );
-    }
-}
-
-
-LIB_ID::LIB_ID( const wxString& aId )
-{
-    UTF8 id = aId;
-
-    int offset = Parse( id );
-
-    if( offset != -1 )
-    {
-        THROW_PARSE_ERROR( _( "Illegal character found in LIB_ID string" ),
-                           aId,
-                           id.c_str(),
-                           0,
-                           offset );
-    }
 }
 
 
@@ -359,15 +333,19 @@ int LIB_ID::compare( const LIB_ID& aLibId ) const
 }
 
 
-bool LIB_ID::HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
+int LIB_ID::HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
 {
+    int offset = 0;
+
     for( auto ch : aLibItemName )
     {
         if( !isLegalChar( ch, aType ) )
-            return true;
+            return offset;
+        else
+            ++offset;
     }
 
-    return false;
+    return -1;
 }
 
 
@@ -391,7 +369,8 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool 
 bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
 {
     bool const colon_allowed = ( aType == ID_ALIAS );
-    bool const space_allowed = ( aType != ID_SCH );
+    bool const space_allowed = ( aType == ID_ALIAS || aType == ID_PCB );
+    bool const illegal_filename_chars_allowed = ( aType == ID_SCH || aType == ID_ALIAS );
 
     if( aUniChar < ' ' )
         return false;
@@ -400,7 +379,10 @@ bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
     {
     case '/':
     case '\\':
-        return false;
+    case '<':
+    case '>':
+    case '"':
+        return illegal_filename_chars_allowed;
 
     case ':':
         return colon_allowed;

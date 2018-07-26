@@ -85,7 +85,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
     {
         LIB_ID id;
 
-        if( id.Parse( symbol ) == -1 )
+        if( id.Parse( symbol, LIB_ID::ID_SCH ) == -1 )
             sel.LibId = id;
 
         sel.Unit = viewlibFrame->GetUnit();

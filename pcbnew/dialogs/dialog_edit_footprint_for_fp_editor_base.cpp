@@ -36,13 +36,13 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_itemsGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_itemsGrid->SetColSize( 0, 120 );
-	m_itemsGrid->SetColSize( 1, 48 );
+	m_itemsGrid->SetColSize( 0, 116 );
+	m_itemsGrid->SetColSize( 1, 53 );
 	m_itemsGrid->SetColSize( 2, 96 );
 	m_itemsGrid->SetColSize( 3, 96 );
 	m_itemsGrid->SetColSize( 4, 96 );
-	m_itemsGrid->SetColSize( 5, 48 );
-	m_itemsGrid->SetColSize( 6, 112 );
+	m_itemsGrid->SetColSize( 5, 53 );
+	m_itemsGrid->SetColSize( 6, 106 );
 	m_itemsGrid->SetColSize( 7, 80 );
 	m_itemsGrid->SetColSize( 8, 48 );
 	m_itemsGrid->SetColSize( 9, 96 );
@@ -332,8 +332,8 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_modelsGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_modelsGrid->SetColSize( 0, 662 );
-	m_modelsGrid->SetColSize( 1, 53 );
+	m_modelsGrid->SetColSize( 0, 650 );
+	m_modelsGrid->SetColSize( 1, 65 );
 	m_modelsGrid->EnableDragColMove( false );
 	m_modelsGrid->EnableDragColSize( false );
 	m_modelsGrid->SetColLabelSize( 22 );
