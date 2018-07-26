@@ -358,7 +358,7 @@ bool OpenPDF( const wxString& file )
     }
     else
     {
-        if( wxLaunchDefaultApplication( file ) )
+        if( wxLaunchDefaultApplication( filename ) )
             return true;
 
         // If launching the system default PDF viewer fails, fall through with empty command
