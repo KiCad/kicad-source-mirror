@@ -369,23 +369,14 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bo
 
 void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool& aUseMils )
 {
-    // Acquire the 'right' decimal point separator
-    const struct lconv* lc = localeconv();
-
-    wxChar      decimal_point = lc->decimal_point[0];
-    wxString    buf( aTextValue.Strip( wxString::both ) );
-
-    // Convert the period in decimal point
-    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
-
-    // Find the end of the numeric part
+    wxString buf( aTextValue.Strip( wxString::both ) );
     unsigned brk_point = 0;
 
     while( brk_point < buf.Len() )
     {
-        wxChar ch = buf[brk_point];
+        wxChar c = buf[brk_point];
 
-        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
+        if( !( (c >= '0' && c <='9') || (c == '.') || (c == ',') || (c == '-') || (c == '+') ) )
             break;
 
         ++brk_point;
