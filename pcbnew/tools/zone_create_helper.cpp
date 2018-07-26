@@ -112,32 +112,32 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createZoneFromExisting(
 
 void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINER& aCutout )
 {
-    BOARD_COMMIT commit ( &m_tool );
+    BOARD_COMMIT commit( &m_tool );
     BOARD* board = m_tool.getModel<BOARD>();
     std::vector<ZONE_CONTAINER*> newZones;
-    
-    SHAPE_POLY_SET originalOutline ( *aZone.Outline() );
+
+    SHAPE_POLY_SET originalOutline( *aZone.Outline() );
 
     originalOutline.BooleanSubtract( *aCutout.Outline(), SHAPE_POLY_SET::PM_FAST );
-    
+
     for( int i = 0; i < originalOutline.OutlineCount(); i++ )
     {
         auto newZoneOutline = new SHAPE_POLY_SET;
-        newZoneOutline->AddOutline( originalOutline.Outline(i) );
-        
+        newZoneOutline->AddOutline( originalOutline.Outline( i ) );
+
         auto newZone = new ZONE_CONTAINER( aZone );
         newZone->SetOutline( newZoneOutline );
         newZone->SetLocalFlags( 1 );
-        newZone->Hatch( );
+        newZone->Hatch();
         newZones.push_back( newZone );
         commit.Add( newZone );
     }
 
     commit.Remove( &aZone );
-    commit.Push( _("Add a zone cutout") );
+    commit.Push( _( "Add a zone cutout" ) );
 
     ZONE_FILLER filler( board );
-    filler.Fill( newZones );    
+    filler.Fill( newZones );
 }
 
 
