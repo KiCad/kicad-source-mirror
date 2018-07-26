@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2014  CERN
+ * Copyright (C) 2014-2018 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -43,9 +43,10 @@ class DIALOG_PNS_LENGTH_TUNING_SETTINGS : public DIALOG_PNS_LENGTH_TUNING_SETTIN
 public:
     DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent, PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode );
 
-    virtual void OnOkClick( wxCommandEvent& aEvent ) override;
-
 private:
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
     UNIT_BINDER m_minAmpl;
     UNIT_BINDER m_maxAmpl;
     UNIT_BINDER m_spacing;

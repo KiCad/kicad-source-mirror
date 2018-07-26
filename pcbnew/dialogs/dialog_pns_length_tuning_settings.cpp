@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2014-2015  CERN
+ * Copyright (C) 2014-2018 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -28,6 +28,8 @@
 #include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
 
+// TODO validators
+
 DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent,
                         PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode )
     :
@@ -39,7 +41,21 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
     m_settings( aSettings ),
     m_mode( aMode )
 {
-    if( aMode == PNS::PNS_MODE_TUNE_DIFF_PAIR )
+    m_stdButtonsOK->SetDefault();
+    m_targetLengthText->SetSelection( -1, -1 );
+    m_targetLengthText->SetFocus();
+
+    GetSizer()->SetSizeHints(this);
+    Centre();
+}
+
+
+bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR )
     {
         // TODO: fix diff-pair meandering so we can use non-100% radii
         m_radiusText->SetValue( wxT( "100" ) );
@@ -52,12 +68,10 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
 
     m_minAmpl.SetValue( m_settings.m_minAmplitude );
     m_maxAmpl.SetValue( m_settings.m_maxAmplitude );
-
     m_spacing.SetValue( m_settings.m_spacing );
-
     m_miterStyle->SetSelection( m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND ? 1 : 0 );
 
-    switch( aMode )
+    switch( m_mode )
     {
     case PNS::PNS_MODE_TUNE_SINGLE:
         SetTitle( _( "Single Track Length Tuning" ) );
@@ -75,29 +89,26 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
         SetTitle( _( "Differential Pair Skew Tuning" ) );
         m_legend->SetBitmap( KiBitmap( tune_diff_pair_skew_legend_xpm ) );
         m_targetLengthLabel->SetLabel( _( "Target skew: " ) );
-        m_targetLength.SetValue ( m_settings.m_targetSkew );
+        m_targetLength.SetValue( m_settings.m_targetSkew );
         break;
 
     default:
         break;
     }
 
-    m_stdButtonsOK->SetDefault();
-    m_targetLengthText->SetSelection( -1, -1 );
-    m_targetLengthText->SetFocus();
-
-    GetSizer()->SetSizeHints(this);
-    Centre();
+    return true;
 }
 
 
-void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
+bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
     // fixme: use validators and TransferDataFromWindow
     m_settings.m_minAmplitude = m_minAmpl.GetValue();
     m_settings.m_maxAmplitude = m_maxAmpl.GetValue();
     m_settings.m_spacing = m_spacing.GetValue();
-
     m_settings.m_cornerRadiusPercentage = wxAtoi( m_radiusText->GetValue() );
 
     if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
@@ -111,5 +122,5 @@ void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.m_cornerStyle = m_miterStyle->GetSelection() ?
         PNS::MEANDER_STYLE_ROUND : PNS::MEANDER_STYLE_CHAMFER;
 
-    EndModal( wxID_OK );
+    return true;
 }
