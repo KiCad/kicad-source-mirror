@@ -706,7 +706,10 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
 
-    updateEndItem( aEvent );
+    if( m_router->RoutingInProgress() )
+        updateEndItem( aEvent );
+    else
+        updateStartItem( aEvent );
 
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh
 

@@ -248,7 +248,7 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     return doSnap;
 }
 
-void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent, bool aIgnorePads )
+void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
     int tl = getView()->GetTopLayer();
     VECTOR2I cp = controls()->GetCursorPosition();
