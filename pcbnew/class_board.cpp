@@ -1848,6 +1848,7 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 
 void BOARD::PadDelete( D_PAD* aPad )
 {
+    GetConnectivity()->Remove( aPad );
     aPad->DeleteStructure();
 }
 
