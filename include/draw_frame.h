@@ -181,6 +181,16 @@ protected:
     void CommonSettingsChanged() override;
 
     /**
+     * Function LibraryFileBrowser
+      * @param doOpen if true runs an Open Library browser, otherwise New Library
+      * @param aFilename for New may contain a default name; in both cases return the chosen
+      *                  filename.
+      * @return true for OK; false for Cancel.
+      */
+    bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
+                             const wxString& wildcard, const wxString& ext );
+
+    /**
      * Function GeneralControlKeyMovement
      * Handle the common part of GeneralControl dedicated to global
      * cursor keys (i.e. cursor movement by keyboard)

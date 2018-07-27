@@ -194,15 +194,15 @@ public:
      *
      * @return the selected component
      */
-    COMPONENT_SELECTION SelectComponentFromLibrary(
-            const SCHLIB_FILTER*                aFilter,
-            std::vector<COMPONENT_SELECTION>&   aHistoryList,
-            bool                                aUseLibBrowser,
-            int                                 aUnit,
-            int                                 aConvert,
-            bool                                aShowFootprints,
-            const LIB_ID*                       aHighlight = nullptr,
-            bool                                aAllowFields = true );
+    COMPONENT_SELECTION SelectComponentFromLibTree(
+            const SCHLIB_FILTER* aFilter,
+            std::vector<COMPONENT_SELECTION>& aHistoryList,
+            bool aUseLibBrowser,
+            int aUnit,
+            int aConvert,
+            bool aShowFootprints,
+            const LIB_ID* aHighlight = nullptr,
+            bool aAllowFields = true );
 
     void OnConfigurePaths( wxCommandEvent& aEvent );
 

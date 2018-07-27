@@ -38,7 +38,7 @@
 #include <class_library.h>
 #include <dialog_helpers.h>
 #include <dialog_choose_component.h>
-#include <cmp_tree_model_adapter.h>
+#include <symbol_tree_model_adapter.h>
 #include <symbol_lib_table.h>
 
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
@@ -52,15 +52,15 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
         return;
 
     // Container doing search-as-you-type.
-    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
 
     const auto libNicknames = libs->GetLogicalLibs();
 
-    adapter->AddLibrariesWithProgress( libNicknames, this );
+    adapter->AddLibraries( libNicknames, this );
 
-    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ),
-                        adapter->GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false, false );
+    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, m_convert, false, false, false );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;

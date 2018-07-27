@@ -48,7 +48,7 @@
 #include <symbol_lib_table.h>
 
 #include <dialog_choose_component.h>
-#include <cmp_tree_model_adapter.h>
+#include <symbol_tree_model_adapter.h>
 
 
 SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser(
@@ -98,10 +98,10 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
 }
 
 
-SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
+SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
         const SCHLIB_FILTER*                aFilter,
         std::vector<COMPONENT_SELECTION>&   aHistoryList,
-        bool                                aUseLibBrowser,
+        bool                                aAllowBrowser,
         int                                 aUnit,
         int                                 aConvert,
         bool                                aShowFootprints,
@@ -116,7 +116,8 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
     if( !dialogLock.try_lock() )
         return COMPONENT_SELECTION();
 
-    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
     bool loaded = false;
 
     if( aFilter )
@@ -133,13 +134,13 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         }
 
         if( aFilter->GetFilterPowerParts() )
-            adapter->SetFilter( CMP_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
+            adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
 
     }
 
     if( !aHistoryList.empty() )
     {
-        std::vector< LIB_ALIAS* > history_list;
+        std::vector< LIB_TREE_ITEM* > history_list;
 
         for( auto const& i : aHistoryList )
         {
@@ -149,7 +150,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
                 history_list.push_back( alias );
         }
 
-        adapter->AddAliasList( "-- " + _( "History" ) + " --", _( "Recently used items" ), history_list );
+        adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list );
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
     }
 
@@ -157,18 +158,19 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
     if( !loaded )
     {
-        adapter->AddLibrariesWithProgress( libNicknames, this );
+        adapter->AddLibraries( libNicknames, this );
     }
 
     if( aHighlight && aHighlight->IsValid() )
         adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
 
-    if( adapter->GetFilter() == CMP_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
-        dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), adapter->GetComponentsCount() );
+    if( adapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
+        dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), adapter->GetItemCount() );
     else
-        dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetComponentsCount() );
+        dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields, aShowFootprints );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, aConvert,
+                                 aAllowFields, aShowFootprints, aAllowBrowser );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return COMPONENT_SELECTION();
@@ -214,14 +216,14 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aDC,
                                                const SCHLIB_FILTER*           aFilter,
                                                SCH_BASE_FRAME::HISTORY_LIST&  aHistoryList,
-                                               bool                           aUseLibBrowser )
+                                               bool                           aAllowBrowser )
 {
     wxString msg;
 
     SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
-    auto sel = SelectComponentFromLibrary( aFilter, aHistoryList, aUseLibBrowser, 1, 1,
+    auto sel = SelectComponentFromLibTree( aFilter, aHistoryList, aAllowBrowser, 1, 1,
                                            m_footprintPreview );
 
     if( !sel.LibId.IsValid() )

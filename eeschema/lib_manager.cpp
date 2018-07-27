@@ -38,7 +38,7 @@
 LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
     : m_frame( aFrame ), m_syncHash( 0 )
 {
-    m_adapter = LIB_MANAGER_ADAPTER::Create( this );
+    m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( this );
     m_adapter->ShowUnits( false );
 }
 

@@ -19,10 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cmp_tree_model.h>
+#include <lib_tree_model.h>
 
-#include <class_library.h>
 #include <eda_pattern_match.h>
+#include <lib_tree_item.h>
 #include <make_unique.h>
 #include <utility>
 #include <pgm_base.h>
@@ -50,7 +50,7 @@ static int matchPosScore(int aPosition, int aMaximum)
 }
 
 
-void CMP_TREE_NODE::ResetScore()
+void LIB_TREE_NODE::ResetScore()
 {
     for( auto& child: Children )
         child->ResetScore();
@@ -59,15 +59,15 @@ void CMP_TREE_NODE::ResetScore()
 }
 
 
-void CMP_TREE_NODE::AssignIntrinsicRanks()
+void LIB_TREE_NODE::AssignIntrinsicRanks()
 {
-    std::vector<CMP_TREE_NODE*> sort_buf;
+    std::vector<LIB_TREE_NODE*> sort_buf;
 
     for( auto const& node: Children )
         sort_buf.push_back( &*node );
 
     std::sort( sort_buf.begin(), sort_buf.end(),
-            []( CMP_TREE_NODE* a, CMP_TREE_NODE* b ) -> bool
+            []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
                 { return a->MatchName > b->MatchName; } );
 
     for( int i = 0; i < (int) sort_buf.size(); ++i )
@@ -75,10 +75,10 @@ void CMP_TREE_NODE::AssignIntrinsicRanks()
 }
 
 
-void CMP_TREE_NODE::SortNodes()
+void LIB_TREE_NODE::SortNodes()
 {
     std::sort( Children.begin(), Children.end(),
-            []( std::unique_ptr<CMP_TREE_NODE> const& a, std::unique_ptr<CMP_TREE_NODE> const& b )
+            []( std::unique_ptr<LIB_TREE_NODE> const& a, std::unique_ptr<LIB_TREE_NODE> const& b )
                 { return Compare( *a, *b ) > 0; } );
 
     for( auto& node: Children )
@@ -88,7 +88,7 @@ void CMP_TREE_NODE::SortNodes()
 }
 
 
-int CMP_TREE_NODE::Compare( CMP_TREE_NODE const& aNode1, CMP_TREE_NODE const& aNode2 )
+int LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 )
 {
     if( aNode1.Type != aNode2.Type )
         return 0;
@@ -103,7 +103,7 @@ int CMP_TREE_NODE::Compare( CMP_TREE_NODE const& aNode1, CMP_TREE_NODE const& aN
 }
 
 
-CMP_TREE_NODE::CMP_TREE_NODE()
+LIB_TREE_NODE::LIB_TREE_NODE()
     : Parent( nullptr ),
       Type( INVALID ),
       IntrinsicRank( 0 ),
@@ -114,7 +114,7 @@ CMP_TREE_NODE::CMP_TREE_NODE()
 {}
 
 
-CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
+LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem, int aUnit )
 {
     static void* locale = nullptr;
     static wxString namePrefix;
@@ -133,7 +133,7 @@ CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
     Unit = aUnit;
     LibId = aParent->LibId;
 
-    Name = namePrefix + " " + LIB_PART::SubReference( aUnit, false );
+    Name = namePrefix + " " + aItem->GetUnitReference( aUnit );
     Desc = wxEmptyString;
     MatchName = wxEmptyString;
 
@@ -141,7 +141,7 @@ CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
 }
 
 
-CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias )
+LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aAlias )
 {
     wxASSERT( aParent && aAlias );
 
@@ -151,61 +151,36 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
 }
 
 
-CMP_TREE_NODE_UNIT& CMP_TREE_NODE_LIB_ID::AddUnit( int aUnit )
+LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ID::AddUnit( LIB_TREE_ITEM* aItem, int aUnit )
 {
-    CMP_TREE_NODE_UNIT* unit = new CMP_TREE_NODE_UNIT( this, aUnit );
-    Children.push_back( std::unique_ptr<CMP_TREE_NODE>( unit ) );
+    LIB_TREE_NODE_UNIT* unit = new LIB_TREE_NODE_UNIT( this, aItem, aUnit );
+    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( unit ) );
     return *unit;
 }
 
 
-void CMP_TREE_NODE_LIB_ID::Update( LIB_ALIAS* aAlias )
+void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 {
-    Name        = aAlias->GetName();
-    Desc        = aAlias->GetDescription();
+    IsRoot = aItem->IsRoot();
+    LibId = aItem->GetLibId();
 
-    // Parent node is the library nickname so set the LIB_ID library nickname.
-    IsRoot = aAlias->IsRoot();
+    Name = aItem->GetName();
+    Desc = aItem->GetDescription();
 
-    // Pre-normalized strings for fast case-insensitive matching
-    // Search text spaces out keywords and description to penalize description
-    // matches - earlier matches are worth more.
-    MatchName   = aAlias->GetName().Lower();
-    SearchText  = (aAlias->GetKeyWords() + "        " + Desc);
-
-    // Extract default footprint text
-    LIB_PART* part = aAlias->GetPart();
-
-    wxString footprint;
-
-    if( part )
-    {
-        LibId = part->GetLibId();
-        LibId.SetLibItemName( Name );
-        footprint = part->GetFootprintField().GetText();
-    }
-
-    // If a footprint is defined for the part,
-    // add it to the serach string
-    if( !footprint.IsEmpty() )
-    {
-        SearchText += "        ";
-        SearchText += footprint;
-    }
+    MatchName = aItem->GetName().Lower();
+    SearchText = aItem->GetSearchText();
+    SearchTextNormalized = false;
 
     Children.clear();
 
-    if( part && part->IsMulti() )
-    {
-        for( int u = 1; u <= part->GetUnitCount(); ++u )
-            AddUnit( u );
-    }
+    int unitCount = aItem->GetUnitCount();
 
-    SearchTextNormalized = false;
+    for( int u = 1; u <= unitCount; ++u )
+        AddUnit( aItem, u );
 }
 
 
-void CMP_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
     if( Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
@@ -259,8 +234,8 @@ void CMP_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 }
 
 
-CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent,
-                                      wxString const& aName, wxString const& aDesc )
+LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aName,
+                                      wxString const& aDesc )
 {
     Type = LIB;
     Name = aName;
@@ -271,15 +246,15 @@ CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent,
 }
 
 
-CMP_TREE_NODE_LIB_ID& CMP_TREE_NODE_LIB::AddAlias( LIB_ALIAS* aAlias )
+LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddComp( LIB_TREE_ITEM* aAlias )
 {
-    CMP_TREE_NODE_LIB_ID* alias = new CMP_TREE_NODE_LIB_ID( this, aAlias );
-    Children.push_back( std::unique_ptr<CMP_TREE_NODE>( alias ) );
+    LIB_TREE_NODE_LIB_ID* alias = new LIB_TREE_NODE_LIB_ID( this, aAlias );
+    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( alias ) );
     return *alias;
 }
 
 
-void CMP_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
     Score = 0;
 
@@ -291,21 +266,21 @@ void CMP_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 }
 
 
-CMP_TREE_NODE_ROOT::CMP_TREE_NODE_ROOT()
+LIB_TREE_NODE_ROOT::LIB_TREE_NODE_ROOT()
 {
     Type = ROOT;
 }
 
 
-CMP_TREE_NODE_LIB& CMP_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString const& aDesc )
+LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString const& aDesc )
 {
-    CMP_TREE_NODE_LIB* lib = new CMP_TREE_NODE_LIB( this, aName, aDesc );
-    Children.push_back( std::unique_ptr<CMP_TREE_NODE>( lib ) );
+    LIB_TREE_NODE_LIB* lib = new LIB_TREE_NODE_LIB( this, aName, aDesc );
+    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( lib ) );
     return *lib;
 }
 
 
-void CMP_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
     for( auto& child: Children )
         child->UpdateScore( aMatcher );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,25 +19,23 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CMP_TREE_MODEL_H
-#define _CMP_TREE_MODEL_H
+#ifndef LIB_TREE_MODEL_H
+#define LIB_TREE_MODEL_H
 
 #include <vector>
 #include <memory>
 #include <wx/string.h>
-#include <lib_id.h>
+#include <lib_tree_item.h>
 
 
 class EDA_COMBINED_MATCHER;
-class TREE_NODE;
-class LIB_ALIAS;
 
 
 /**
  * Model class in the component selector Model-View-Adapter (mediated MVC)
  * architecture. The other pieces are in:
  *
- * - Adapter: CMP_TREE_MODEL_ADAPTER in eeschema/cmp_tree_model_adapter.h
+ * - Adapter: LIB_TREE_MODEL_ADAPTER in common/lib_tree_model_adapter.h
  * - View:
  *   - DIALOG_CHOOSE_COMPONENT in eeschema/dialogs/dialog_choose_component.h
  *   - wxDataViewCtrl
@@ -74,15 +72,15 @@ class LIB_ALIAS;
  * - `LibId` - the #LIB_ID this alias or unit is from, or not valid
  * - `Unit` - the unit number, or zero for non-units
  */
-class CMP_TREE_NODE {
+class LIB_TREE_NODE {
 public:
     enum TYPE {
         ROOT, LIB, LIBID, UNIT, INVALID
     };
 
-    typedef std::vector<std::unique_ptr<CMP_TREE_NODE>> PTR_VECTOR;
+    typedef std::vector<std::unique_ptr<LIB_TREE_NODE>> PTR_VECTOR;
 
-    CMP_TREE_NODE*  Parent;     ///< Parent node or null
+    LIB_TREE_NODE*  Parent;     ///< Parent node or null
     PTR_VECTOR      Children;   ///< List of child nodes
     enum TYPE       Type;       ///< Node type
 
@@ -135,17 +133,17 @@ public:
      * Compare two nodes. Returns negative if aNode1 < aNode2, zero if aNode1 ==
      * aNode2, or positive if aNode1 > aNode2.
      */
-    static int Compare( CMP_TREE_NODE const& aNode1, CMP_TREE_NODE const& aNode2 );
+    static int Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 );
 
-    CMP_TREE_NODE();
-    virtual ~CMP_TREE_NODE() {}
+    LIB_TREE_NODE();
+    virtual ~LIB_TREE_NODE() {}
 };
 
 
 /**
  * Node type: unit of component.
  */
-class CMP_TREE_NODE_UNIT: public CMP_TREE_NODE
+class LIB_TREE_NODE_UNIT: public LIB_TREE_NODE
 {
 
 public:
@@ -153,8 +151,8 @@ public:
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    CMP_TREE_NODE_UNIT( CMP_TREE_NODE_UNIT const& _ ) = delete;
-    void operator=( CMP_TREE_NODE_UNIT const& _ ) = delete;
+    LIB_TREE_NODE_UNIT( LIB_TREE_NODE_UNIT const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_UNIT const& _ ) = delete;
 
 
     /**
@@ -164,9 +162,10 @@ public:
      * by LIB_PART::SubReference.
      *
      * @param aParent   parent node, should be a CMP_TREE_NODE_ALIAS
+     * @param aItem     parent item
      * @param aUnit     unit number
      */
-    CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit );
+    LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem, int aUnit );
 
 
     /**
@@ -179,15 +178,15 @@ public:
 /**
  * Node type: #LIB_ID.
  */
-class CMP_TREE_NODE_LIB_ID: public CMP_TREE_NODE
+class LIB_TREE_NODE_LIB_ID: public LIB_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE_LIB_ID const& _ ) = delete;
-    void operator=( CMP_TREE_NODE_LIB_ID const& _ ) = delete;
+    LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE_LIB_ID const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_LIB_ID const& _ ) = delete;
 
 
     /**
@@ -200,14 +199,14 @@ public:
      * The alias must be resolved at the time of use.  Anything else is a bug.
      *
      * @param aParent   parent node, should be a CMP_TREE_NODE_LIB
-     * @param aAlias    LIB_ALIAS to populate the node.
+     * @param aItem     LIB_COMPONENT to populate the node.
      */
-    CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias );
+    LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem );
 
     /**
      * Update the node using data from a LIB_ALIAS object.
      */
-    void Update( LIB_ALIAS* aAlias );
+    void Update( LIB_TREE_ITEM* aItem );
 
     /**
      * Perform the actual search.
@@ -220,22 +219,22 @@ protected:
      *
      * This should not be used directly, as the constructor adds all units.
      */
-    CMP_TREE_NODE_UNIT& AddUnit( int aUnit );
+    LIB_TREE_NODE_UNIT& AddUnit( LIB_TREE_ITEM* aItem, int aUnit );
 };
 
 
 /**
  * Node type: library
  */
-class CMP_TREE_NODE_LIB: public CMP_TREE_NODE
+class LIB_TREE_NODE_LIB: public LIB_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    CMP_TREE_NODE_LIB( CMP_TREE_NODE_LIB const& _ ) = delete;
-    void operator=( CMP_TREE_NODE_LIB const& _ ) = delete;
+    LIB_TREE_NODE_LIB( LIB_TREE_NODE_LIB const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_LIB const& _ ) = delete;
 
 
     /**
@@ -245,14 +244,14 @@ public:
      * @param aName     display name of the library
      * @param aDesc     a description of the library
      */
-    CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aName, wxString const& aDesc );
+    LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aName, wxString const& aDesc );
 
     /**
      * Construct a new alias node, add it to this library, and return it.
      *
-     * @param aAlias    LIB_ALIAS to provide data
+     * @param aAlias    LIB_COMPONENT to provide data
      */
-    CMP_TREE_NODE_LIB_ID& AddAlias( LIB_ALIAS* aAlias );
+    LIB_TREE_NODE_LIB_ID& AddComp( LIB_TREE_ITEM* aAlias );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
 };
@@ -261,28 +260,28 @@ public:
 /**
  * Node type: root
  */
-class CMP_TREE_NODE_ROOT: public CMP_TREE_NODE
+class LIB_TREE_NODE_ROOT: public LIB_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    CMP_TREE_NODE_ROOT( CMP_TREE_NODE_ROOT const& _ ) = delete;
-    void operator=( CMP_TREE_NODE_ROOT const& _ ) = delete;
+    LIB_TREE_NODE_ROOT( LIB_TREE_NODE_ROOT const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_ROOT const& _ ) = delete;
 
     /**
      * Construct the root node. Root nodes have no properties.
      */
-    CMP_TREE_NODE_ROOT();
+    LIB_TREE_NODE_ROOT();
 
     /**
      * Construct an empty library node, add it to the root, and return it.
      */
-    CMP_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
+    LIB_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
 };
 
 
-#endif // _CMP_TREE_MODEL_H
+#endif // LIB_TREE_MODEL_H

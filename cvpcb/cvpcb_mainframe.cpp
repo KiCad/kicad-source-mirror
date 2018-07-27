@@ -753,7 +753,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     if( module )    // can be NULL if no netlist loaded
     {
         msg = wxString::Format( _( "Description: %s;  Key words: %s" ),
-                                module->GetDoc(),
+                                module->GetDescription(),
                                 module->GetKeywords() );
     }
 

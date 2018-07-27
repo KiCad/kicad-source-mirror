@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "cmp_tree_pane.h"
+#include "symbol_tree_pane.h"
 
-#include <component_tree.h>
+#include <widgets/lib_tree.h>
 #include <eeschema_id.h>
 #include <lib_manager.h>
 #include <lib_edit_frame.h>
@@ -32,14 +32,14 @@
 #include <menus_helpers.h>
 
 
-CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
+SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
         : wxPanel( aParent ),
           m_libEditFrame( aParent ), m_tree( nullptr ), m_libMgr( aLibMgr )
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-    m_tree = new COMPONENT_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
-            m_libMgr->GetAdapter(), COMPONENT_TREE::SEARCH );
+    m_tree = new LIB_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
+            m_libMgr->GetAdapter(), LIB_TREE::SEARCH );
     boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
@@ -93,29 +93,29 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
     AddMenuItem( menuNoSelection.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
                  KiBitmap( add_library_xpm ) );
 
-    m_tree->SetMenu( CMP_TREE_NODE::LIBID, std::move( menuPart ) );
-    m_tree->SetMenu( CMP_TREE_NODE::LIB, std::move( menuLibrary ) );
-    m_tree->SetMenu( CMP_TREE_NODE::INVALID, std::move( menuNoSelection ) );
+    m_tree->SetMenu( LIB_TREE_NODE::LIBID, std::move( menuPart ) );
+    m_tree->SetMenu( LIB_TREE_NODE::LIB, std::move( menuLibrary ) );
+    m_tree->SetMenu( LIB_TREE_NODE::INVALID, std::move( menuNoSelection ) );
 
     // Event handlers
-    Bind( COMPONENT_SELECTED, &CMP_TREE_PANE::onComponentSelected, this );
+    Bind( COMPONENT_SELECTED, &SYMBOL_TREE_PANE::onComponentSelected, this );
 }
 
 
-CMP_TREE_PANE::~CMP_TREE_PANE()
+SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 {
     m_tree->Destroy();
 }
 
 
-void CMP_TREE_PANE::Regenerate()
+void SYMBOL_TREE_PANE::Regenerate()
 {
     if( m_tree )
         m_tree->Regenerate();
 }
 
 
-void CMP_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
+void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
     // Repost the event
     wxCommandEvent evt( ID_LIBEDIT_EDIT_PART );

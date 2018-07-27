@@ -45,7 +45,7 @@ class LIB_PART;
 class LIB_ALIAS;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
-class CMP_TREE_PANE;
+class SYMBOL_TREE_PANE;
 class LIB_ID;
 class LIB_MANAGER;
 
@@ -55,13 +55,13 @@ class LIB_MANAGER;
  */
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    LIB_PART*       m_my_part;              ///< a part I own, it is not in any library, but a copy could be.
-    LIB_PART*       m_tempCopyComponent;    ///< temp copy of a part during edit, I own it here.
-    LIB_COLLECTOR   m_collectedItems;       ///< Used for hit testing.
-    wxComboBox*     m_partSelectBox;        ///< a Box to select a part to edit (if any)
-    wxComboBox*     m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
-    CMP_TREE_PANE*  m_treePane;             ///< component search tree widget
-    LIB_MANAGER*    m_libMgr;               ///< manager taking care of temporary modificatoins
+    LIB_PART*          m_my_part;              ///< a part I own, it is not in any library, but a copy could be.
+    LIB_PART*          m_tempCopyComponent;    ///< temp copy of a part during edit, I own it here.
+    LIB_COLLECTOR      m_collectedItems;       ///< Used for hit testing.
+    wxComboBox*        m_partSelectBox;        ///< a Box to select a part to edit (if any)
+    wxComboBox*        m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
+    SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
+    LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
 
     /** Convert of the item currently being drawn. */
     bool m_drawSpecificConvert;
@@ -744,9 +744,6 @@ private:
 
     ///> Creates or adds an existing library to the symbol library table.
     bool addLibraryFile( bool aCreateNew );
-
-    ///> Displays a file browser dialog to select a library file.
-    wxFileName getLibraryFileName( bool aExisting );
 
     ///> Stores the currently modified part in the library manager buffer.
     void storeCurrentPart();

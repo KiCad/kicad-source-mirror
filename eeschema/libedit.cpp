@@ -46,11 +46,11 @@
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <lib_manager.h>
-#include <cmp_tree_pane.h>
-#include <component_tree.h>
+#include <symbol_tree_pane.h>
+#include <widgets/lib_tree.h>
 
 #include <dialog_choose_component.h>
-#include <cmp_tree_model_adapter.h>
+#include <symbol_tree_model_adapter.h>
 
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
@@ -319,7 +319,7 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnEditPart( wxCommandEvent& aEvent )
 {
     int unit = 0;
-    LIB_ID partId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
+    LIB_ID partId = m_treePane->GetLibTree()->GetSelectedLibId( &unit );
     loadPart( partId.GetLibItemName(), partId.GetLibNickname(), unit );
 }
 
@@ -332,13 +332,13 @@ void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
 
     if( partName.IsEmpty() )
     {
-        saveLibrary( getTargetLib(), false );
+        saveLibrary( libName, false );
     }
     else
     {
         // Save Part
-        if( m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() ) )
-            m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+        if( m_libMgr->FlushPart( partName,libName ) )
+            m_libMgr->ClearPartModified( partName, libName );
     }
 
     m_treePane->Refresh();
@@ -352,7 +352,7 @@ void LIB_EDIT_FRAME::OnSaveAs( wxCommandEvent& aEvent )
     const wxString& partName = libId.GetLibItemName();
 
     if( partName.IsEmpty() )
-        saveLibrary( getTargetLib(), true );
+        saveLibrary( libName, true );
     else
         savePartAs();
 
@@ -448,7 +448,7 @@ void LIB_EDIT_FRAME::savePartAs()
 
         fixDuplicateAliases( &new_part, new_lib );
         m_libMgr->UpdatePart( &new_part, new_lib );
-        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
 
         if( isCurrentPart( old_lib_id ) )
             loadPart( new_name, new_lib, m_unit );
@@ -480,7 +480,7 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnDuplicatePart( wxCommandEvent& aEvent )
 {
     int unit = 0;
-    LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
+    LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &unit );
     wxString lib = libId.GetLibNickname();
 
     if( !m_libMgr->LibraryExists( lib ) )
@@ -494,7 +494,7 @@ void LIB_EDIT_FRAME::OnDuplicatePart( wxCommandEvent& aEvent )
     LIB_PART newPart( *srcPart );
     fixDuplicateAliases( &newPart, lib );
     m_libMgr->UpdatePart( &newPart, lib );
-    m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, newPart.GetName() ) );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart.GetName() ) );
 }
 
 
@@ -549,7 +549,7 @@ void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
     {
         libId = m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() );
 
-        m_treePane->GetCmpTree()->SelectLibId( libId );
+        m_treePane->GetLibTree()->SelectLibId( libId );
         m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
     }
 

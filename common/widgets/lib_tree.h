@@ -22,24 +22,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef COMPONENT_TREE_H
-#define COMPONENT_TREE_H
+#ifndef LIB_TREE_H
+#define LIB_TREE_H
 
 #include <wx/panel.h>
-#include <cmp_tree_model_adapter.h>
+#include <lib_tree_model_adapter.h>
 
 class wxDataViewCtrl;
 class wxTextCtrl;
 class wxHtmlWindow;
 class wxHtmlLinkEvent;
 class LIB_ID;
-class SYMBOL_LIB_TABLE;
+class LIB_TABLE;
 
 
 /**
  * Widget displaying a tree of components with optional search text control and description panel.
  */
-class COMPONENT_TREE : public wxPanel
+class LIB_TREE : public wxPanel
 {
 public:
     ///> Flags to select extra widgets
@@ -49,15 +49,14 @@ public:
      * Construct a component tree.
      *
      * @param aParent parent window containing this tree widget
-     * @param aSymLibTable table containing symbols to display
-     * @param aAdapter a CMP_TREE_MODEL_ADAPTER instance to use
+     * @param aLibTable table containing libraries and items to display
+     * @param aAdapter a LIB_TREE_MODEL_ADAPTER instance to use
      * @param aWidgets selection of sub-widgets to include
-     * @param aDetails if not null, a custom wxHtmlWindow to hold symbol details. If null this will
-     *        be created inside the COMPONENT_TREE.
+     * @param aDetails if not null, a custom wxHtmlWindow to hold symbol details. If null this
+     *                 will be created inside the LIB_TREE.
      */
-    COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-                    CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets = ALL,
-                    wxHtmlWindow *aDetails = nullptr );
+    LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
+              WIDGETS aWidgets = ALL, wxHtmlWindow *aDetails = nullptr );
 
     /**
      * For multi-unit components, if the user selects the component itself
@@ -87,7 +86,7 @@ public:
      * @param aType is the node type to have a menu associated.
      * @param aMenu is the associated menu.
      */
-    void SetMenu( CMP_TREE_NODE::TYPE aType, std::unique_ptr<wxMenu> aMenu )
+    void SetMenu( LIB_TREE_NODE::TYPE aType, std::unique_ptr<wxMenu> aMenu )
     {
         m_menus[aType] = std::move( aMenu );
     }
@@ -163,8 +162,8 @@ protected:
     void onPreselect( wxCommandEvent& aEvent );
     void onContextMenu( wxDataViewEvent& aEvent );
 
-    SYMBOL_LIB_TABLE* m_sym_lib_table;
-    CMP_TREE_MODEL_ADAPTER_BASE::PTR m_adapter;
+    LIB_TABLE*      m_lib_table;
+    LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
 
     wxTextCtrl*     m_query_ctrl;
     wxDataViewCtrl* m_tree_ctrl;
@@ -189,4 +188,4 @@ wxDECLARE_EVENT( COMPONENT_PRESELECTED, wxCommandEvent );
 ///> Custom event sent when a component is selected
 wxDECLARE_EVENT( COMPONENT_SELECTED, wxCommandEvent );
 
-#endif /* COMPONENT_TREE_H */
+#endif /* LIB_TREE_H */

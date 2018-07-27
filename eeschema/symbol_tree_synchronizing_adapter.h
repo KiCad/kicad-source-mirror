@@ -22,52 +22,47 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef LIB_MANAGER_ADAPTER_H
-#define LIB_MANAGER_ADAPTER_H
+#ifndef SYMBOL_TREE_SYNCHRONIZING_ADAPTER_H
+#define SYMBOL_TREE_SYNCHRONIZING_ADAPTER_H
 
-#include <cmp_tree_model_adapter_base.h>
+#include <lib_tree_model_adapter.h>
 #include <map>
 
 class LIB_MANAGER;
 
-class LIB_MANAGER_ADAPTER : public CMP_TREE_MODEL_ADAPTER_BASE
+class SYMBOL_TREE_SYNCHRONIZING_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
     static PTR Create( LIB_MANAGER* aLibs );
 
-    void AddLibrary( const wxString& aLibNickname ) override;
-
-    void AddAliasList( const wxString& aNodeName, const wxArrayString& aAliasNameList ) override;
-
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
-    void Sync( bool aForce = false, std::function<void(int, int, const wxString&)> aProgressCallback
-            = [](int, int, const wxString&){} );
+    void Sync( bool aForce = false,
+               std::function<void(int, int, const wxString&)> aProgressCallback = [](int, int, const wxString&){} );
 
     int GetLibrariesCount() const override;
 
 protected:
-    void updateLibrary( CMP_TREE_NODE_LIB& aLibNode );
+    void updateLibrary( LIB_TREE_NODE_LIB& aLibNode );
 
-    CMP_TREE_NODE::PTR_VECTOR::iterator deleteLibrary(
-            CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
+    LIB_TREE_NODE::PTR_VECTOR::iterator deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
 
-    CMP_TREE_NODE* findLibrary( const wxString& aLibNickName );
+    LIB_TREE_NODE* findLibrary( const wxString& aLibNickName );
 
     void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
-            unsigned int aCol ) const override;
+                   unsigned int aCol ) const override;
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
-            wxDataViewItemAttr& aAttr ) const override;
+                  wxDataViewItemAttr& aAttr ) const override;
 
-    LIB_MANAGER_ADAPTER( LIB_MANAGER* aLibMgr );
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_MANAGER* aLibMgr );
 
-    LIB_MANAGER* m_libMgr;
+    LIB_MANAGER*            m_libMgr;
 
     ///> Hashes to decide whether a library needs an update
     std::map<wxString, int> m_libHashes;
 
     ///> LIB_MANAGER hash value returned in the last synchronization
-    int m_lastSyncHash;
+    int                     m_lastSyncHash;
 };
 
-#endif /* LIB_MANAGER_ADAPTER_H */
+#endif /* SYMBOL_TREE_SYNCHRONIZING_ADAPTER_H */

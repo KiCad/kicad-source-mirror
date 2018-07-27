@@ -62,7 +62,7 @@ int LIB_PART::m_subpartIdSeparator = 0;
 int LIB_PART::m_subpartFirstId = 'A';
 
 
-LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ):
+LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ) :
     EDA_ITEM( LIB_ALIAS_T ),
     shared( aRootPart )
 {
@@ -111,6 +111,14 @@ bool LIB_ALIAS::IsRoot() const
 }
 
 
+LIB_ID LIB_ALIAS::GetLibId() const
+{
+    LIB_ID id = shared->GetLibId();
+    id.SetLibItemName( name );
+    return id;
+}
+
+
 PART_LIB* LIB_ALIAS::GetLib()
 {
     return shared->GetLib();
@@ -123,6 +131,34 @@ void LIB_ALIAS::SetName( const wxString& aName )
 }
 
 
+int LIB_ALIAS::GetUnitCount()
+{
+    return shared->GetUnitCount();
+}
+
+
+wxString LIB_ALIAS::GetUnitReference( int aUnit )
+{
+    return LIB_PART::SubReference( aUnit, false );
+}
+
+
+wxString LIB_ALIAS::GetSearchText()
+{
+    wxString text = GetKeyWords() + wxT( "        " ) + GetDescription();
+
+    // If a footprint is defined for the part, add it to the serach string
+    if( shared )
+    {
+        wxString footprint = shared->GetFootprintField().GetText();
+
+        if( !footprint.IsEmpty() )
+            text += wxT( "        " ) + footprint;
+    }
+
+    return text;
+}
+
 
 bool LIB_ALIAS::operator==( const wxChar* aName ) const
 {
@@ -133,12 +169,6 @@ bool LIB_ALIAS::operator==( const wxChar* aName ) const
 bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
 {
     return aItem1.GetName() < aItem2.GetName();
-}
-
-
-int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 )
-{
-    return aItem1->GetName().Cmp( aItem2->GetName() );
 }
 
 

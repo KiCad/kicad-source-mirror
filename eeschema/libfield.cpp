@@ -35,8 +35,8 @@
 #include <dialog_edit_one_field.h>
 
 #include <lib_manager.h>
-#include <widgets/cmp_tree_pane.h>
-#include <component_tree.h>
+#include <widgets/symbol_tree_pane.h>
+#include <widgets/lib_tree.h>
 
 
 void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
@@ -93,7 +93,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         m_libMgr->UpdatePartAfterRename( parent, oldFieldValue, lib );
 
         // Reselect the renamed part
-        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, newFieldValue ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newFieldValue ) );
     }
 
     if( !aField->InEditMode() && !renamed )

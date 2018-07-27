@@ -1375,9 +1375,7 @@ void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
 
-void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos,
-                                       const wxPoint &aEvtPos,
-                                       wxDC* aDC )
+void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC )
 {
     wxPoint newpos = GetCrossHairPosition();
 
@@ -1408,8 +1406,30 @@ void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos,
     }
 }
 
-bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
-                                                bool aSnapToGrid )
+
+bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
+                                         const wxString& wildcard, const wxString& ext )
+{
+    aFilename.SetExt( ext );
+
+    wxFileDialog dlg( this,
+                      doOpen ? _( "Select Library" ) : _( "New Library" ),
+                      Prj().GetProjectPath(),
+                      doOpen ? wxString( wxEmptyString ) : aFilename.GetFullName() ,
+                      wildcard,
+                      doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return false;
+
+    aFilename = dlg.GetPath();
+    aFilename.SetExt( ext );
+
+    return true;
+}
+
+
+bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid )
 {
     bool key_handled = false;
 

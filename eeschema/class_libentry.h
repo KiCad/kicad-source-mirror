@@ -31,7 +31,7 @@
 #define CLASS_LIBENTRY_H
 
 #include <general.h>
-#include <lib_id.h>
+#include <lib_tree_item.h>
 #include <lib_draw_item.h>
 #include <lib_field.h>
 #include <vector>
@@ -70,7 +70,7 @@ enum  LIBRENTRYOPTIONS
  * method to create parts that have the same physical layout with different names
  * such as 74LS00, 74HC00 ... and many op amps.
  */
-class LIB_ALIAS : public EDA_ITEM
+class LIB_ALIAS : public EDA_ITEM, public LIB_TREE_ITEM
 {
     /**
      * Actual LIB_PART referenced by [multiple] aliases.
@@ -111,23 +111,22 @@ public:
 
     const wxString GetLibraryName();
 
-    bool IsRoot() const;
+    bool IsRoot() const override;
+
+    LIB_ID GetLibId() const override;
 
     PART_LIB* GetLib();
 
-    const wxString& GetName() const         { return name; }
+    const wxString& GetName() const override { return name; }
 
     void SetName( const wxString& aName );
-
-    ///> Helper function to replace illegal chars in symbol names
-    static void ValidateName( wxString& aName );
 
     void SetDescription( const wxString& aDescription )
     {
         description = aDescription;
     }
 
-    wxString GetDescription() const { return description; }
+    wxString GetDescription() override { return description; }
 
     void SetKeyWords( const wxString& aKeyWords )
     {
@@ -142,6 +141,12 @@ public:
     }
 
     wxString GetDocFileName() const { return docFileName; }
+
+    wxString GetSearchText() override;
+
+    int GetUnitCount() override;
+
+    wxString GetUnitReference( int aUnit ) override;
 
     /**
      * KEEPCASE sensitive comparison of the part entry name.
@@ -160,8 +165,6 @@ public:
 };
 
 extern bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 );
-
-extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 );
 
 
 struct PART_DRAW_OPTIONS

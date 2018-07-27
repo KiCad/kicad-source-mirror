@@ -31,7 +31,7 @@
 #include <set>
 #include <memory>
 #include <wx/arrstr.h>
-#include <lib_manager_adapter.h>
+#include <symbol_tree_synchronizing_adapter.h>
 #include <sch_screen.h>
 
 class LIB_ALIAS;
@@ -232,7 +232,7 @@ public:
     /**
      * Returns the adapter object that provides the stored data.
      */
-    CMP_TREE_MODEL_ADAPTER_BASE::PTR& GetAdapter() { return m_adapter; }
+    LIB_TREE_MODEL_ADAPTER::PTR& GetAdapter() { return m_adapter; }
 
     /**
      * Returns the currently modified library name.
@@ -448,8 +448,8 @@ private:
     ///> Currently modified library
     wxString m_currentPart;
 
-    LIB_MANAGER_ADAPTER::PTR m_adapter;
-    LIB_MANAGER_ADAPTER* getAdapter() { return static_cast<LIB_MANAGER_ADAPTER*>( m_adapter.get() ); }
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER::PTR m_adapter;
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter() { return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() ); }
 };
 
 #endif /* LIB_MANAGER_H */

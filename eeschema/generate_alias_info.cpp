@@ -45,20 +45,20 @@ static const wxString FieldFormat =
 static const wxString DatasheetLinkFormat = "<a href=\"__HREF__\">__TEXT__</a>";
 
 
-class ALIAS_INFO_GENERATOR
+class FOOTPRINT_INFO_GENERATOR
 {
     wxString m_html;
     SYMBOL_LIB_TABLE* m_sym_lib_table;
     LIB_ID const m_lib_id;
-    LIB_ALIAS* m_alias;
+    LIB_ALIAS* m_module;
     int m_unit;
 
 public:
-    ALIAS_INFO_GENERATOR( SYMBOL_LIB_TABLE* aSymbolLibTable, LIB_ID const& aLibId, int aUnit )
+    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIB_TABLE* aSymbolLibTable, LIB_ID const& aLibId, int aUnit )
         : m_html( DescriptionFormat ),
           m_sym_lib_table( aSymbolLibTable ),
           m_lib_id( aLibId ),
-          m_alias( nullptr ),
+          m_module( nullptr ),
           m_unit( aUnit )
     { }
 
@@ -74,7 +74,7 @@ public:
 
         try
         {
-            m_alias = const_cast< LIB_ALIAS* >( m_sym_lib_table->LoadSymbol( m_lib_id ) );
+            m_module = const_cast< LIB_ALIAS* >( m_sym_lib_table->LoadSymbol( m_lib_id ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -86,7 +86,7 @@ public:
             return;
         }
 
-        if( m_alias )
+        if( m_module )
         {
             SetHtmlName();
             SetHtmlAliasOf();
@@ -107,13 +107,13 @@ public:
 protected:
     void SetHtmlName()
     {
-        m_html.Replace( "__NAME__", EscapedHTML( m_alias->GetName() ) );
+        m_html.Replace( "__NAME__", EscapedHTML( m_module->GetName() ) );
     }
 
 
     void SetHtmlAliasOf()
     {
-        if( m_alias->IsRoot() )
+        if( m_module->IsRoot() )
         {
             m_html.Replace( "__ALIASOF__", wxEmptyString );
         }
@@ -122,7 +122,7 @@ protected:
             wxString root_name = _( "Unknown" );
             wxString root_desc = "";
 
-            LIB_PART* root = m_alias->GetPart();
+            LIB_PART* root = m_module->GetPart();
             LIB_ALIAS* root_alias = root ? root->GetAlias( 0 ) : nullptr;
 
             if( root )
@@ -140,7 +140,7 @@ protected:
 
     void SetHtmlDesc()
     {
-        wxString raw_desc = m_alias->GetDescription();
+        wxString raw_desc = m_module->GetDescription();
 
         m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapedHTML( raw_desc ) ) );
     }
@@ -148,7 +148,7 @@ protected:
 
     void SetHtmlKeywords()
     {
-        wxString keywords = m_alias->GetKeyWords();
+        wxString keywords = m_module->GetKeyWords();
 
         if( keywords.empty() )
             m_html.Replace( "__KEY__", wxEmptyString );
@@ -171,7 +171,7 @@ protected:
         case DATASHEET:
             {
                 if( text.IsEmpty() )
-                    text = m_alias->GetDocFileName();
+                    text = m_module->GetDocFileName();
 
                 wxString datasheetlink = DatasheetLinkFormat;
                 datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
@@ -197,7 +197,7 @@ protected:
     {
         wxString fieldtable;
         LIB_FIELDS fields;
-        m_alias->GetPart()->GetFields( fields );
+        m_module->GetPart()->GetFields( fields );
 
         for( auto const & field: fields )
         {
@@ -211,7 +211,7 @@ protected:
 
 wxString GenerateAliasInfo( SYMBOL_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId, int aUnit )
 {
-    ALIAS_INFO_GENERATOR gen( aSymLibTable, aLibId, aUnit );
+    FOOTPRINT_INFO_GENERATOR gen( aSymLibTable, aLibId, aUnit );
     gen.GenerateHtml();
     return gen.GetHtml();
 }

@@ -303,7 +303,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnBrowseLibrary( wxCommandEvent& event 
     LIB_ID id;
     id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH );
 
-    auto sel = GetParent()->SelectComponentFromLibrary( nullptr, dummy, true, 0, 0, false, &id );
+    auto sel = GetParent()->SelectComponentFromLibTree( nullptr, dummy, true, 0, 0, false, &id );
 
     if( !sel.LibId.IsValid() )
         return;

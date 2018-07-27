@@ -28,8 +28,8 @@
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_manager.h>
-#include <component_tree.h>
-#include <cmp_tree_pane.h>
+#include <widgets/lib_tree.h>
+#include <symbol_tree_pane.h>
 
 
 void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType )
@@ -86,7 +86,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
         m_libMgr->UpdatePartAfterRename( part, oldPart->GetName(), lib );
 
         // Reselect the renamed part
-        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
     }
 
     if( !m_aliasName.IsEmpty() && !part->HasAlias( m_aliasName ) )
@@ -137,7 +137,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
         m_libMgr->UpdatePartAfterRename( part, oldPart->GetName(), lib );
 
         // Reselect the renamed part
-        m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
     }
 
     if( !m_aliasName.IsEmpty() && !part->HasAlias( m_aliasName ) )

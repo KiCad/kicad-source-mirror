@@ -48,8 +48,8 @@
 #include <lib_pin.h>
 
 #include <lib_manager.h>
-#include <widgets/cmp_tree_pane.h>
-#include <widgets/component_tree.h>
+#include <widgets/symbol_tree_pane.h>
+#include <widgets/lib_tree.h>
 #include <symbol_lib_table.h>
 
 #include <kicad_device_context.h>
@@ -245,7 +245,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_libMgr = new LIB_MANAGER( *this );
     SyncLibraries( true );
-    m_treePane = new CMP_TREE_PANE( this, m_libMgr );
+    m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -460,7 +460,7 @@ bool LIB_EDIT_FRAME::IsSearchTreeShown()
 
 void LIB_EDIT_FRAME::ClearSearchTreeSelection()
 {
-    m_treePane->GetCmpTree()->Unselect();
+    m_treePane->GetLibTree()->Unselect();
 }
 
 
@@ -1031,7 +1031,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 
     // select the current component in the tree widget
     if( aPart )
-        m_treePane->GetCmpTree()->SelectLibId( aPart->GetLibId() );
+        m_treePane->GetLibTree()->SelectLibId( aPart->GetLibId() );
 
     wxString partName = aPart ? aPart->GetName() : wxString();
     m_libMgr->SetCurrentPart( partName );
@@ -1457,7 +1457,7 @@ void LIB_EDIT_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     storeCurrentPart();
-    m_treePane->GetCmpTree()->Refresh();
+    m_treePane->GetLibTree()->Refresh();
 }
 
 
@@ -1519,17 +1519,19 @@ void LIB_EDIT_FRAME::refreshSchematic()
 
 bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
 {
-    wxFileName fileName = getLibraryFileName( !aCreateNew );
-    wxString libName = fileName.GetName();
-    bool res = false;
+    wxFileName fn = m_libMgr->GetUniqueLibraryName();
+
+    if( !LibraryFileBrowser( !aCreateNew, fn, SchematicLibraryFileWildcard(), SchematicLibraryFileExtension) )
+        return false;
+
+    wxString libName = fn.GetName();
 
     if( libName.IsEmpty() )
         return false;
 
     if( m_libMgr->LibraryExists( libName ) )
     {
-        DisplayError( this,
-                wxString::Format( _( "Library \"%s\" already exists" ), GetChars( libName ) ) );
+        DisplayError( this, wxString::Format( _( "Library \"%s\" already exists" ), libName ) );
         return false;
     }
 
@@ -1541,46 +1543,25 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
 
     if( aCreateNew )
     {
-        res = m_libMgr->CreateLibrary( fileName.GetFullPath(), libTable );
-
-        if( !res )
+        if( !m_libMgr->CreateLibrary( fn.GetFullPath(), libTable ) )
+        {
             DisplayError( this, _( "Could not create the library file. Check write permission." ) );
+            return false;
+        }
     }
     else
     {
-        res = m_libMgr->AddLibrary( fileName.GetFullPath(), libTable );
-
-        if( !res )
+        if( !m_libMgr->AddLibrary( fn.GetFullPath(), libTable ) )
+        {
             DisplayError( this, _( "Could not open the library file." ) );
+            return false;
+        }
     }
 
     bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
     saveSymbolLibTables( globalTable, !globalTable );
 
-    return res;
-}
-
-
-wxFileName LIB_EDIT_FRAME::getLibraryFileName( bool aExisting )
-{
-    wxFileName fn = m_libMgr->GetUniqueLibraryName();
-    fn.SetExt( SchematicLibraryFileExtension );
-
-    wxFileDialog dlg( this,
-            aExisting ? _( "Select Library" ) : _( "New Library" ),
-            Prj().GetProjectPath(),
-            aExisting ? wxString( wxEmptyString ) : fn.GetFullName() ,
-            SchematicLibraryFileWildcard(),
-            aExisting ? wxFD_OPEN | wxFD_FILE_MUST_EXIST :
-                         wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return wxFileName();
-
-    fn = dlg.GetPath();
-    fn.SetExt( SchematicLibraryFileExtension );
-
-    return fn;
+    return true;
 }
 
 
@@ -1588,9 +1569,9 @@ LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 {
     LIB_ALIAS* alias = nullptr;
 
-    if( m_treePane->GetCmpTree()->IsMenuActive() )
+    if( m_treePane->GetLibTree()->IsMenuActive() )
     {
-        LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId();
+        LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId();
         alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
     }
     else if( LIB_PART* part = GetCurPart() )
@@ -1604,7 +1585,7 @@ LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 
 LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
 {
-    LIB_ID   id = m_treePane->GetCmpTree()->GetSelectedLibId();
+    LIB_ID   id = m_treePane->GetLibTree()->GetSelectedLibId();
     wxString nickname = id.GetLibNickname();
 
     if( nickname.IsEmpty() && GetCurPart() )
@@ -1625,7 +1606,7 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
     LIB_ID selected;
 
     if( m_treePane )
-        selected = m_treePane->GetCmpTree()->GetSelectedLibId();
+        selected = m_treePane->GetLibTree()->GetSelectedLibId();
 
     if( aProgress )
     {
@@ -1652,7 +1633,7 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( !found )
-                m_treePane->GetCmpTree()->Unselect();
+                m_treePane->GetLibTree()->Unselect();
         }
 
         m_treePane->Regenerate();
@@ -1664,7 +1645,7 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( found )
-                m_treePane->GetCmpTree()->SelectLibId( selected );
+                m_treePane->GetLibTree()->SelectLibId( selected );
         }
     }
 }

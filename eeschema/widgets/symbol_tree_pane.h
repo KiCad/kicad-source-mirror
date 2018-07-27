@@ -29,7 +29,7 @@
 #include <wx/dataview.h>
 #include <vector>
 
-class COMPONENT_TREE;
+class LIB_TREE;
 class LIB_EDIT_FRAME;
 class LIB_MANAGER;
 class wxBoxSizer;
@@ -37,13 +37,13 @@ class wxBoxSizer;
 /**
  * Library Editor pane with component tree and symbol library table selector.
  */
-class CMP_TREE_PANE : public wxPanel
+class SYMBOL_TREE_PANE : public wxPanel
 {
 public:
-    CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr );
-    ~CMP_TREE_PANE();
+    SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr );
+    ~SYMBOL_TREE_PANE();
 
-    COMPONENT_TREE* GetCmpTree() const
+    LIB_TREE* GetLibTree() const
     {
         return m_tree;
     }
@@ -55,7 +55,7 @@ protected:
     void onComponentSelected( wxCommandEvent& aEvent );
 
     LIB_EDIT_FRAME* m_libEditFrame;
-    COMPONENT_TREE* m_tree;             ///< component search tree widget
+    LIB_TREE* m_tree;             ///< component search tree widget
     LIB_MANAGER* m_libMgr;
 };
 

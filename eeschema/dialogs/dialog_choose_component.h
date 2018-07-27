@@ -25,7 +25,7 @@
 #define DIALOG_CHOOSE_COMPONENT_H
 
 #include "dialog_shim.h"
-#include <cmp_tree_model_adapter.h>
+#include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
 
 class wxStaticBitmap;
@@ -39,7 +39,7 @@ class wxChoice;
 class wxButton;
 class wxTimer;
 
-class COMPONENT_TREE;
+class LIB_TREE;
 class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;
 class LIB_ALIAS;
@@ -52,14 +52,14 @@ class SCH_BASE_FRAME;
  * View class in a Model-View-Adapter (mediated MVC) architecture. The other
  * pieces are in:
  *
- * - Adapter: CMP_TREE_MODEL_ADAPTER in eeschema/cmp_tree_model_adapter.h
- * - Model: CMP_TREE_NODE and descendants in eeschema/cmp_tree_model.h
+ * - Adapter: CMP_TREE_MODEL_ADAPTER in common/cmp_tree_model_adapter.h
+ * - Model: CMP_TREE_NODE and descendants in common/cmp_tree_model.h
  *
  * Because everything is tied together in the adapter class, see that file
  * for thorough documentation. A simple example usage follows:
  *
  *     // Create the adapter class
- *     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchSymbolLibTable() ) );
+ *     auto adapter( SYMBOL_TREE_MODEL_ADAPTER::Create( Prj().SchSymbolLibTable() ) );
  *
  *     // Perform any configuration of adapter properties here
  *     adapter->SetPreselectNode( "LIB_NICKNAME", "SYMBO_NAME", 2 );
@@ -93,18 +93,19 @@ public:
      *
      * @param aParent   a SCH_BASE_FRAME parent window.
      * @param aTitle    Dialog title.
-     * @param aAdapter  CMP_TREE_MODEL_ADAPTER::PTR. See CMP_TREE_MODEL_ADAPTER
+     * @param aAdapter  SYMBOL_TREE_MODEL_ADAPTER::PTR. See CMP_TREE_MODEL_ADAPTER
      *                  for documentation.
      * @param aDeMorganConvert  preferred deMorgan conversion
      *                          (TODO: should happen in dialog)
-     * @param aAllowFieldEdits  if false, all functions that allow the user to edit
-     *      fields (currently just footprint selection) will not be available.
-     * @param aShowFootprints   if false, all footprint preview and selection features
-     *      are disabled. This forces aAllowFieldEdits false too.
+     * @param aAllowFieldEdits  if false, all functions that allow the user to edit fields
+     *                          (currently just footprint selection) will not be available.
+     * @param aShowFootprints   if false, all footprint preview and selection features are
+     *                          disabled. This forces aAllowFieldEdits false too.
+     * @param aAllowBrowser     show a Select with Browser button
      */
     DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-            CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
-            bool aShowFootprints );
+                             SYMBOL_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert,
+                             bool aAllowFieldEdits, bool aShowFootprints, bool aAllowBrowser );
 
     ~DIALOG_CHOOSE_COMPONENT();
 
@@ -148,14 +149,12 @@ protected:
     wxPanel* ConstructRightPanel( wxWindow* aParent );
 
     void OnInitDialog( wxInitDialogEvent& aEvent );
-    void OnActivate( wxActivateEvent& event );
     void OnCloseTimer( wxTimerEvent& aEvent );
+    void OnUseBrowser( wxCommandEvent& aEvent );
 
-    void OnSchViewDClick( wxMouseEvent& aEvent );
-    void OnSchViewPaint( wxPaintEvent& aEvent );
+    void OnSymbolPreviewPaint( wxPaintEvent& aEvent );
 
     void OnFootprintSelected( wxCommandEvent& aEvent );
-
     void OnComponentPreselected( wxCommandEvent& aEvent );
 
     /**
@@ -189,33 +188,30 @@ protected:
      */
     void RenderPreview( LIB_PART* aComponent, int aUnit );
 
-    wxTimer*          m_dbl_click_timer;
-    wxPanel*          m_sch_view_ctrl;
-    // the wxSplitterWindow that manages the symbol tree and symbol canvas viewer
-    wxSplitterWindow* m_hsplitter;
-    wxSplitterWindow* m_vsplitter;
-    // the symbol canvas viewer
-    wxPanel*          m_symbol_view_panel;
-    // the sash position separation between symbol tree and symbol canvas viewer
-    // (remember the sash position during a session)
-    static int        m_h_sash_pos;
-    static int        m_v_sash_pos;
+    wxTimer*                  m_dbl_click_timer;
+    wxPanel*                  m_symbol_preview;
+    wxButton*                 m_browser_button;
+    wxSplitterWindow*         m_hsplitter;
+    wxSplitterWindow*         m_vsplitter;
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
-    FOOTPRINT_PREVIEW_WIDGET* m_fp_view_ctrl;
-    COMPONENT_TREE*           m_tree;
+    FOOTPRINT_PREVIEW_WIDGET* m_fp_preview;
+    LIB_TREE*           m_tree;
 
-    SCH_BASE_FRAME*             m_parent;
-    int                         m_deMorganConvert;
-    bool                        m_allow_field_edits;
-    bool                        m_show_footprints;
-    bool                        m_external_browser_requested;
-    wxString                    m_fp_override;
+    static int                m_h_sash_pos;     // remember sash positions during a session
+    static int                m_v_sash_pos;
+
+    SCH_BASE_FRAME*           m_parent;
+    int                       m_deMorganConvert;
+    bool                      m_allow_field_edits;
+    bool                      m_show_footprints;
+    bool                      m_external_browser_requested;
+    wxString                  m_fp_override;
 
     std::vector<std::pair<int, wxString>>  m_field_edits;
 
     // Remember the dialog size during a session
-    static wxSize m_last_dlg_size;
+    static wxSize             m_last_dlg_size;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */

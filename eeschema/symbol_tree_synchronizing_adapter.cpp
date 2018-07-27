@@ -22,42 +22,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <lib_manager_adapter.h>
+#include <symbol_tree_synchronizing_adapter.h>
 #include <lib_manager.h>
 #include <symbol_lib_table.h>
 #include <class_libentry.h>
 
 
-CMP_TREE_MODEL_ADAPTER_BASE::PTR LIB_MANAGER_ADAPTER::Create( LIB_MANAGER* aLibMgr )
+LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( LIB_MANAGER* aLibMgr )
 {
-    auto adapter = new LIB_MANAGER_ADAPTER( aLibMgr );
-    auto container = CMP_TREE_MODEL_ADAPTER_BASE::PTR( adapter );
-    return container;
+    return PTR( new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aLibMgr ) );
 }
 
 
-void LIB_MANAGER_ADAPTER::AddLibrary( const wxString& aLibNickname )
+SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_MANAGER* aLibMgr )
+        : m_libMgr( aLibMgr ),
+          m_lastSyncHash( -1 )
 {
 }
 
 
-void LIB_MANAGER_ADAPTER::AddAliasList( const wxString& aNodeName,
-        const wxArrayString& aAliasNameList )
+bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
-    wxASSERT( false );      // TODO
-}
-
-
-bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
-{
-    const CMP_TREE_NODE* node = ToNode( aItem );
-    return node ? node->Type == CMP_TREE_NODE::LIB : true;
+    const LIB_TREE_NODE* node = ToNode( aItem );
+    return node ? node->Type == LIB_TREE_NODE::LIB : true;
 }
 
 
 #define PROGRESS_INTERVAL_MILLIS 66
 
-void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
 {
     wxLongLong nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
 
@@ -87,7 +80,7 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
         }
         else if( m_libMgr->GetLibraryHash( name ) != m_libHashes[name] )
         {
-            updateLibrary( *(CMP_TREE_NODE_LIB*) it->get() );
+            updateLibrary( *(LIB_TREE_NODE_LIB*) it->get() );
         }
 
         ++it;
@@ -115,9 +108,9 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
 }
 
 
-int LIB_MANAGER_ADAPTER::GetLibrariesCount() const
+int SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 {
-    int count = CMP_TREE_MODEL_ADAPTER_BASE::GetLibrariesCount();
+    int count = LIB_TREE_MODEL_ADAPTER::GetLibrariesCount();
 
     for( const auto& libName : m_libMgr->GetLibraryNames() )
     {
@@ -129,7 +122,7 @@ int LIB_MANAGER_ADAPTER::GetLibrariesCount() const
 }
 
 
-void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
 {
     auto hashIt = m_libHashes.find( aLibNode.Name );
 
@@ -137,7 +130,7 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
     {
         // add a new library
         for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
-            aLibNode.AddAlias( alias );
+            aLibNode.AddComp( alias );
     }
     else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.Name ) )
     {
@@ -156,7 +149,7 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
             {
                 // alias exists both in the component tree and the library manager,
                 // update only the node data
-                static_cast<CMP_TREE_NODE_LIB_ID*>( nodeIt->get() )->Update( *aliasIt );
+                static_cast<LIB_TREE_NODE_LIB_ID*>( nodeIt->get() )->Update( *aliasIt );
                 aliases.erase( aliasIt );
                 ++nodeIt;
             }
@@ -169,7 +162,7 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
 
         // now the aliases list contains only new aliases that need to be added to the tree
         for( auto alias : aliases )
-            aLibNode.AddAlias( alias );
+            aLibNode.AddComp( alias );
     }
 
     aLibNode.AssignIntrinsicRanks();
@@ -177,17 +170,17 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
 }
 
 
-CMP_TREE_NODE::PTR_VECTOR::iterator LIB_MANAGER_ADAPTER::deleteLibrary(
-            CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
+LIB_TREE_NODE::PTR_VECTOR::iterator SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary(
+            LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
 {
-    CMP_TREE_NODE* node = aLibNodeIt->get();
+    LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libHashes.erase( node->Name );
     auto it = m_tree.Children.erase( aLibNodeIt );
     return it;
 }
 
 
-CMP_TREE_NODE* LIB_MANAGER_ADAPTER::findLibrary( const wxString& aLibNickName )
+LIB_TREE_NODE* SYMBOL_TREE_SYNCHRONIZING_ADAPTER::findLibrary( const wxString& aLibNickName )
 {
     for( auto& lib : m_tree.Children )
     {
@@ -199,8 +192,8 @@ CMP_TREE_NODE* LIB_MANAGER_ADAPTER::findLibrary( const wxString& aLibNickName )
 }
 
 
-void LIB_MANAGER_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
-                                    unsigned int aCol ) const
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                                                  unsigned int aCol ) const
 {
     if( IsFrozen() )
     {
@@ -217,11 +210,11 @@ void LIB_MANAGER_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& a
         aVariant = node->Name;
 
         // mark modified libs with an asterix
-        if( node->Type == CMP_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->Name ) )
+        if( node->Type == LIB_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->Name ) )
             aVariant = node->Name + " *";
 
         // mark modified parts with an asterix
-        if( node->Type == CMP_TREE_NODE::LIBID
+        if( node->Type == LIB_TREE_NODE::LIBID
                 && m_libMgr->IsPartModified( node->Name, node->Parent->Name ) )
             aVariant = node->Name + " *";
 
@@ -238,8 +231,8 @@ void LIB_MANAGER_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& a
 }
 
 
-bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
-        wxDataViewItemAttr& aAttr ) const
+bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
+                                                 wxDataViewItemAttr& aAttr ) const
 {
     if( IsFrozen() )
         return false;
@@ -253,7 +246,7 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 
     switch( node->Type )
     {
-        case CMP_TREE_NODE::LIB:
+        case LIB_TREE_NODE::LIB:
             // mark modified libs with bold font
             aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
 
@@ -269,7 +262,7 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 #endif
             break;
 
-        case CMP_TREE_NODE::LIBID:
+        case LIB_TREE_NODE::LIBID:
             // mark modified part with bold font
             aAttr.SetBold( m_libMgr->IsPartModified( node->Name, node->Parent->Name ) );
 
@@ -296,7 +289,3 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 }
 
 
-LIB_MANAGER_ADAPTER::LIB_MANAGER_ADAPTER( LIB_MANAGER* aLibMgr )
-    : m_libMgr( aLibMgr ), m_lastSyncHash( -1 )
-{
-}

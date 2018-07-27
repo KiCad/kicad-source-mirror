@@ -87,10 +87,9 @@ set( EESCHEMA_DLGS
     )
 
 set( EESCHEMA_WIDGETS
-    widgets/cmp_tree_pane.cpp
-    widgets/component_tree.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
+    widgets/symbol_tree_pane.cpp
     widgets/widget_eeschema_color_config.cpp
     )
 
@@ -109,9 +108,6 @@ set( EESCHEMA_SRCS
     class_library.cpp
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
-    cmp_tree_model.cpp
-    cmp_tree_model_adapter.cpp
-    cmp_tree_model_adapter_base.cpp
     component_references_lister.cpp
     controle.cpp
     cross-probing.cpp
@@ -140,7 +136,6 @@ set( EESCHEMA_SRCS
     lib_export.cpp
     lib_field.cpp
     lib_manager.cpp
-    lib_manager_adapter.cpp
     lib_pin.cpp
     lib_polyline.cpp
     lib_rectangle.cpp
@@ -201,6 +196,8 @@ set( EESCHEMA_SRCS
     symbdraw.cpp
     symbedit.cpp
     symbol_lib_table.cpp
+    symbol_tree_model_adapter.cpp
+    symbol_tree_synchronizing_adapter.cpp
     template_fieldnames.cpp
     template_fieldnames_keywords.cpp
     tool_lib.cpp

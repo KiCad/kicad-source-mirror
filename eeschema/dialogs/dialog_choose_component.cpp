@@ -40,7 +40,7 @@
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
 #include <symbol_lib_table.h>
-#include <widgets/component_tree.h>
+#include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
 
@@ -53,14 +53,16 @@ std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
 
 
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-        CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
-        bool aShowFootprints )
+                                                  SYMBOL_TREE_MODEL_ADAPTER::PTR& aAdapter,
+                                                  int aDeMorganConvert, bool aAllowFieldEdits,
+                                                  bool aShowFootprints, bool aAllowBrowser )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
-                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+          m_browser_button( nullptr ),
           m_hsplitter( nullptr ),
           m_vsplitter( nullptr ),
           m_fp_sel_ctrl( nullptr ),
-          m_fp_view_ctrl( nullptr ),
+          m_fp_preview( nullptr ),
           m_parent( aParent ),
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
@@ -110,33 +112,43 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
     }
 
-    m_tree = new COMPONENT_TREE( m_hsplitter, Prj().SchSymbolLibTable(), aAdapter,
-                                 COMPONENT_TREE::WIDGETS::ALL, details );
-
-    m_symbol_view_panel = ConstructRightPanel( m_hsplitter );
+    m_tree = new LIB_TREE( m_hsplitter, Prj().SchSymbolLibTable(), aAdapter,
+                                 LIB_TREE::WIDGETS::ALL, details );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
-    m_hsplitter->SplitVertically( m_tree,  m_symbol_view_panel );
+    m_hsplitter->SplitVertically( m_tree,  ConstructRightPanel( m_hsplitter ) );
 
     m_dbl_click_timer = new wxTimer( this );
 
-    auto buttons = new wxStdDialogButtonSizer();
-    buttons->AddButton( new wxButton( this, wxID_OK ) );
-    buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
-    buttons->Realize();
+    auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    sizer->Add( buttons, 0, wxEXPAND | wxALL, 5 );
+    if( aAllowBrowser )
+    {
+        m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
+        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 10 );
+    }
+
+    auto sdbSizer = new wxStdDialogButtonSizer();
+    auto okButton = new wxButton( this, wxID_OK );
+    auto cancelButton = new wxButton( this, wxID_CANCEL );
+    sdbSizer->AddButton( okButton );
+    sdbSizer->AddButton( cancelButton );
+    sdbSizer->Realize();
+
+    buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
+
+    sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
     SetSizer( sizer );
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
-    Bind( wxEVT_ACTIVATE, &DIALOG_CHOOSE_COMPONENT::OnActivate, this );
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
     Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
+    m_symbol_preview->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint, this );
 
-    m_sch_view_ctrl->Bind( wxEVT_LEFT_DCLICK, &DIALOG_CHOOSE_COMPONENT::OnSchViewDClick, this );
-    m_sch_view_ctrl->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSchViewPaint, this );
+    if( m_browser_button )
+        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
 
     if( m_fp_sel_ctrl )
         m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
@@ -154,19 +166,22 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         SetSizeInDU( 360, 280 );
     else
         SetSize( m_last_dlg_size );
+
+    SetInitialFocus( m_tree );
+    okButton->SetDefault();
 }
 
 
 DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 {
     Unbind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
-    Unbind( wxEVT_ACTIVATE, &DIALOG_CHOOSE_COMPONENT::OnActivate, this );
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );
     Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
     Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
+    m_symbol_preview->Unbind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint, this );
 
-    m_sch_view_ctrl->Unbind( wxEVT_LEFT_DCLICK, &DIALOG_CHOOSE_COMPONENT::OnSchViewDClick, this );
-    m_sch_view_ctrl->Unbind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSchViewPaint, this );
+    if( m_browser_button )
+        m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
 
     if( m_fp_sel_ctrl )
         m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
@@ -189,9 +204,9 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto panel = new wxPanel( aParent );
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_sch_view_ctrl = new wxPanel( panel, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
+    m_symbol_preview = new wxPanel( panel, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
                                    wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL | wxRAISED_BORDER );
-    m_sch_view_ctrl->SetLayoutDirection( wxLayout_LeftToRight );
+    m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
     {
@@ -200,19 +215,19 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
         if( m_allow_field_edits )
             m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, fp_list, true );
 
-        m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
+        m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
 
 
-        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxTOP | wxBOTTOM | wxRIGHT, 5 );
+        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxBOTTOM | wxRIGHT, 5 );
 
         if( m_fp_sel_ctrl )
             sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
-        sizer->Add( m_fp_view_ctrl, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
+        sizer->Add( m_fp_preview, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
     }
     else
     {
-        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
+        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
     }
 
     panel->SetSizer( sizer );
@@ -225,10 +240,10 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 
 void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 {
-    if( m_fp_view_ctrl && m_fp_view_ctrl->IsInitialized() )
+    if( m_fp_preview && m_fp_preview->IsInitialized() )
     {
         // This hides the GAL panel and shows the status label
-        m_fp_view_ctrl->SetStatusText( wxEmptyString );
+        m_fp_preview->SetStatusText( wxEmptyString );
     }
 
     if( m_fp_sel_ctrl )
@@ -236,17 +251,16 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnActivate( wxActivateEvent& event )
-{
-    m_tree->SetFocus();
-
-    event.Skip();    // required under wxMAC
-}
-
-
 LIB_ID DIALOG_CHOOSE_COMPONENT::GetSelectedLibId( int* aUnit ) const
 {
     return m_tree->GetSelectedLibId( aUnit );
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::OnUseBrowser( wxCommandEvent& aEvent )
+{
+    m_external_browser_requested = true;
+    EndQuasiModal( wxID_OK );
 }
 
 
@@ -271,16 +285,9 @@ void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnSchViewDClick( wxMouseEvent& aEvent )
-{
-    m_external_browser_requested = true;
-    EndQuasiModal( wxID_OK );
-}
-
-
 void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
 {
-    if( !m_fp_view_ctrl || !m_fp_view_ctrl->IsInitialized() )
+    if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
 
     LIB_ALIAS* alias = nullptr;
@@ -298,10 +305,8 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
                                       ioe.What() ) );
     }
 
-    if( alias == nullptr )
-    {
+    if( !alias )
         return;
-    }
 
     LIB_FIELD* fp_field = alias->GetPart()->GetField( FOOTPRINT );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
@@ -312,14 +317,12 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
 
 void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
 {
-    if( !m_fp_view_ctrl || !m_fp_view_ctrl->IsInitialized() )
-    {
+    if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
-    }
 
     if( aName == wxEmptyString )
     {
-        m_fp_view_ctrl->SetStatusText( _( "No footprint specified" ) );
+        m_fp_preview->SetStatusText( _( "No footprint specified" ) );
     }
     else
     {
@@ -327,13 +330,13 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
 
         if( lib_id.Parse( aName, LIB_ID::ID_PCB ) == -1 && lib_id.IsValid() )
         {
-            m_fp_view_ctrl->ClearStatus();
-            m_fp_view_ctrl->CacheFootprint( lib_id );
-            m_fp_view_ctrl->DisplayFootprint( lib_id );
+            m_fp_preview->ClearStatus();
+            m_fp_preview->CacheFootprint( lib_id );
+            m_fp_preview->DisplayFootprint( lib_id );
         }
         else
         {
-            m_fp_view_ctrl->SetStatusText( _( "Invalid footprint specified" ) );
+            m_fp_preview->SetStatusText( _( "Invalid footprint specified" ) );
         }
     }
 }
@@ -386,7 +389,7 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnSchViewPaint( wxPaintEvent& aEvent )
+void DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint( wxPaintEvent& aEvent )
 {
     int unit = 0;
     LIB_ID id = m_tree->GetSelectedLibId( &unit );
@@ -413,18 +416,13 @@ void DIALOG_CHOOSE_COMPONENT::OnSchViewPaint( wxPaintEvent& aEvent )
                                       ioe.What() ) );
     }
 
-    if( alias == nullptr )
+    if( !alias )
         return;
 
-    LIB_PART*  part = alias ? alias->GetPart() : nullptr;
+    LIB_PART*  part = alias->GetPart();
 
-    // Don't draw if we don't have a part to show
-    // just display a tooltip
     if( !part )
-    {
-        RenderPreview( nullptr, unit );
         return;
-    }
 
     if( alias->IsRoot() )
     {
@@ -465,7 +463,7 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
 
     LIB_ID id = m_tree->GetSelectedLibId( &unit );
 
-    m_sch_view_ctrl->Refresh();
+    m_symbol_preview->Refresh();
 
     if( id.IsValid() )
     {
@@ -474,8 +472,8 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
     }
     else
     {
-        if( m_fp_view_ctrl && m_fp_view_ctrl->IsInitialized() )
-            m_fp_view_ctrl->SetStatusText( wxEmptyString );
+        if( m_fp_preview && m_fp_preview->IsInitialized() )
+            m_fp_preview->SetStatusText( wxEmptyString );
 
         PopulateFootprintSelector( id );
     }
@@ -505,7 +503,7 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentSelected( wxCommandEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
 {
-    wxPaintDC dc( m_sch_view_ctrl );
+    wxPaintDC dc( m_symbol_preview );
 
     const wxSize dc_size = dc.GetSize();
 
@@ -513,12 +511,8 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     if( dc_size.x == 0 || dc_size.y == 0 )
         return;
 
-    if( !aComponent )   // display a tooltip
-    {
-        wxString tooltip = _( "Double-click here to select a symbol from the library browser" );
-        GRDrawWrappedText( dc, tooltip );
+    if( !aComponent )
         return;
-    }
 
     GRResetPenAndBrush( &dc );
 

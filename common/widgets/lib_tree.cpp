@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "component_tree.h"
-#include <generate_alias_info.h>
+#include "lib_tree.h"
 #include <wxdataviewctrl_helpers.h>
 
 #include <wx/artprov.h>
@@ -31,13 +30,13 @@
 #include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
 
-#include <symbol_lib_table.h>
+#include <lib_table_base.h>
 
 
-COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-        CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets, wxHtmlWindow* aDetails )
+LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
+                    WIDGETS aWidgets, wxHtmlWindow* aDetails )
     : wxPanel( aParent ),
-      m_sym_lib_table( aSymLibTable ),
+      m_lib_table( aLibTable ),
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr ),
@@ -45,7 +44,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
       m_filtering( false )
 {
     // create space for context menu pointers, INVALID is the max value
-    m_menus.resize( CMP_TREE_NODE::TYPE::INVALID + 1 );
+    m_menus.resize( LIB_TREE_NODE::TYPE::INVALID + 1 );
 
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -59,17 +58,16 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__
-        search_sizer->Add( new wxStaticBitmap( this, wxID_ANY,
-                                wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) ),
-                0, wxALIGN_CENTER | wxALL, 5 );
+        auto bitmap = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) );
+        search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxALL, 5 );
 #endif
 
         search_sizer->Add( m_query_ctrl, 1, wxLEFT | wxTOP | wxEXPAND, 5 );
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 
-        m_query_ctrl->Bind( wxEVT_TEXT, &COMPONENT_TREE::onQueryText, this );
-        m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &COMPONENT_TREE::onQueryEnter, this );
-        m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &COMPONENT_TREE::onQueryCharHook, this );
+        m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
+        m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &LIB_TREE::onQueryEnter, this );
+        m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
     }
 
     // Component tree
@@ -97,16 +95,16 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
             m_details_ctrl = aDetails;
         }
 
-        m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &COMPONENT_TREE::onDetailsLink, this );
+        m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &LIB_TREE::onDetailsLink, this );
     }
 
     SetSizer( sizer );
 
-    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &COMPONENT_TREE::onTreeActivate, this );
-    m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &COMPONENT_TREE::onTreeSelect, this );
-    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &COMPONENT_TREE::onContextMenu, this );
+    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
+    m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
+    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
 
-    Bind( COMPONENT_PRESELECTED, &COMPONENT_TREE::onPreselect, this );
+    Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
 
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
     // handler will intermittently fire.
@@ -132,7 +130,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 }
 
 
-LIB_ID COMPONENT_TREE::GetSelectedLibId( int* aUnit ) const
+LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
 {
     auto sel = m_tree_ctrl->GetSelection();
 
@@ -150,19 +148,19 @@ LIB_ID COMPONENT_TREE::GetSelectedLibId( int* aUnit ) const
 }
 
 
-void COMPONENT_TREE::SelectLibId( const LIB_ID& aLibId )
+void LIB_TREE::SelectLibId( const LIB_ID& aLibId )
 {
     selectIfValid( m_adapter->FindItem( aLibId ) );
 }
 
 
-void COMPONENT_TREE::Unselect()
+void LIB_TREE::Unselect()
 {
     m_tree_ctrl->UnselectAll();
 }
 
 
-void COMPONENT_TREE::Regenerate()
+void LIB_TREE::Regenerate()
 {
     STATE current;
 
@@ -181,7 +179,7 @@ void COMPONENT_TREE::Regenerate()
 }
 
 
-void COMPONENT_TREE::SetFocus()
+void LIB_TREE::SetFocus()
 {
     if( m_query_ctrl )
         m_query_ctrl->SetFocus();
@@ -190,7 +188,7 @@ void COMPONENT_TREE::SetFocus()
 }
 
 
-void COMPONENT_TREE::toggleExpand( const wxDataViewItem& aTreeId )
+void LIB_TREE::toggleExpand( const wxDataViewItem& aTreeId )
 {
     if( !aTreeId.IsOk() )
         return;
@@ -202,7 +200,7 @@ void COMPONENT_TREE::toggleExpand( const wxDataViewItem& aTreeId )
 }
 
 
-void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
+void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
     {
@@ -213,21 +211,21 @@ void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 }
 
 
-void COMPONENT_TREE::postPreselectEvent()
+void LIB_TREE::postPreselectEvent()
 {
     wxCommandEvent event( COMPONENT_PRESELECTED );
     wxPostEvent( this, event );
 }
 
 
-void COMPONENT_TREE::postSelectEvent()
+void LIB_TREE::postSelectEvent()
 {
     wxCommandEvent event( COMPONENT_SELECTED );
     wxPostEvent( this, event );
 }
 
 
-COMPONENT_TREE::STATE COMPONENT_TREE::getState() const
+LIB_TREE::STATE LIB_TREE::getState() const
 {
     STATE state;
     wxDataViewItemArray items;
@@ -245,7 +243,7 @@ COMPONENT_TREE::STATE COMPONENT_TREE::getState() const
 }
 
 
-void COMPONENT_TREE::setState( const STATE& aState )
+void LIB_TREE::setState( const STATE& aState )
 {
     m_tree_ctrl->Freeze();
 
@@ -261,7 +259,7 @@ void COMPONENT_TREE::setState( const STATE& aState )
 }
 
 
-void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
+void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 {
     Regenerate();
 
@@ -271,17 +269,17 @@ void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 }
 
 
-void COMPONENT_TREE::onQueryEnter( wxCommandEvent& aEvent )
+void LIB_TREE::onQueryEnter( wxCommandEvent& aEvent )
 {
     if( GetSelectedLibId().IsValid() )
         postSelectEvent();
 }
 
 
-void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
+void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 {
     auto const sel = m_tree_ctrl->GetSelection();
-    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : CMP_TREE_NODE::INVALID;
+    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )
     {
@@ -294,7 +292,7 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
         break;
 
     case WXK_RETURN:
-        if( type == CMP_TREE_NODE::LIB )
+        if( type == LIB_TREE_NODE::LIB )
         {
             toggleExpand( sel );
             break;
@@ -308,13 +306,13 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 }
 
 
-void COMPONENT_TREE::onTreeSelect( wxDataViewEvent& aEvent )
+void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
     postPreselectEvent();
 }
 
 
-void COMPONENT_TREE::onTreeActivate( wxDataViewEvent& aEvent )
+void LIB_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 {
     if( !GetSelectedLibId().IsValid() )
     {
@@ -328,14 +326,14 @@ void COMPONENT_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 }
 
 
-void COMPONENT_TREE::onDetailsLink( wxHtmlLinkEvent& aEvent )
+void LIB_TREE::onDetailsLink( wxHtmlLinkEvent& aEvent )
 {
     const wxHtmlLinkInfo& info = aEvent.GetLinkInfo();
     ::wxLaunchDefaultBrowser( info.GetHref() );
 }
 
 
-void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
+void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 {
     if( m_details_ctrl )
     {
@@ -343,7 +341,7 @@ void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
         LIB_ID id = GetSelectedLibId( &unit );
 
         if( id.IsValid() )
-            m_details_ctrl->SetPage( GenerateAliasInfo( m_sym_lib_table, id, unit ) );
+            m_details_ctrl->SetPage( m_adapter->GenerateInfo( id, unit ) );
         else
             m_details_ctrl->SetPage( wxEmptyString );
     }
@@ -352,10 +350,10 @@ void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
 }
 
 
-void COMPONENT_TREE::onContextMenu( wxDataViewEvent& aEvent )
+void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
 {
     auto const sel = m_tree_ctrl->GetSelection();
-    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : CMP_TREE_NODE::INVALID;
+    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
 
     if( m_menus[type] )
     {

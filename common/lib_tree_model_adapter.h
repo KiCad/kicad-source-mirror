@@ -19,12 +19,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CMP_TREE_MODEL_ADAPTER_BASE_H
-#define _CMP_TREE_MODEL_ADAPTER_BASE_H
+#ifndef LIB_TREE_MODEL_ADAPTER_H
+#define LIB_TREE_MODEL_ADAPTER_H
 
 #include <lib_id.h>
 
-#include <cmp_tree_model.h>
+#include <lib_tree_model.h>
 
 #include <wx/hashmap.h>
 #include <wx/dataview.h>
@@ -56,8 +56,8 @@
  *
  * Because this adapter is a wxDataViewModel, it is reference-counted by
  * wxObject. To ensure this interface is used correctly, the constructor
- * is private; CMP_TREE_MODEL_ADAPTER should be created by the static
- * factory method CMP_TREE_MODEL_ADAPTER::Create().
+ * is private; LIB_TREE_MODEL_ADAPTER should be created by the static
+ * factory method LIB_TREE_MODEL_ADAPTER::Create().
  *
  * Quick summary of methods used to drive this class:
  *
@@ -89,20 +89,20 @@
  * - `Compare()` - compare two rows, for sorting
  * - `HasDefaultCompare()` - whether sorted by default
  */
-class CMP_TREE_MODEL_ADAPTER_BASE: public wxDataViewModel
+class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
 {
 public:
 
     /**
      * Reference-counting container for a pointer to CMP_TREE_MODEL_ADAPTER_BASE.
      */
-    typedef wxObjectDataPtr<CMP_TREE_MODEL_ADAPTER_BASE> PTR;
+    typedef wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> PTR;
 
     /**
      * Destructor. Do NOT delete this class manually; it is reference-counted
      * by wxObject.
      */
-    ~CMP_TREE_MODEL_ADAPTER_BASE();
+    ~LIB_TREE_MODEL_ADAPTER();
 
     /**
      * This enum allows a selective filtering of components to list
@@ -143,46 +143,15 @@ public:
     void SetPreselectNode( LIB_ID const& aLibId, int aUnit );
 
     /**
-     * Add all the components and their aliases in this library. To be called
-     * in the setup phase.
-     *
-     * @param aLibNickname reference to a symbol library nickname
-     */
-    virtual void AddLibrary( wxString const& aLibNickname ) = 0;
-
-    /**
-     * Add all the libraries in a SYMBOL_LIB_TABLE to the model,
-     * displaying a progress dialog attached to the parent frame
-     *
-     * @param aNicknames is the list of library nicknames
-     * @param aParent is the parent window to display the progress dialog
-     */
-    void AddLibrariesWithProgress( const std::vector<wxString>& aNicknames,
-            wxWindow* aParent );
-
-    /**
-     * Add the given list of components, by name. To be called in the setup
-     * phase.
-     *
-     * @param aNodeName         the parent node the components will appear under
-     * @param aAliasNameList    list of alias names
-     */
-    virtual void AddAliasList(
-            wxString const&      aNodeName,
-            wxArrayString const& aAliasNameList ) = 0;
-
-    /**
      * Add the given list of components by alias. To be called in the setup
      * phase.
      *
-     * @param aNodeName     the parent node the components will appear under
-     * @param aDesc         the description field of the parent node
-     * @param aAliasList    list of aliases
+     * @param aNodeName    the parent node the components will appear under
+     * @param aDesc        the description field of the parent node
+     * @param aCompList    list of components
      */
-    void AddAliasList(
-            wxString const&                 aNodeName,
-            wxString const&                 aDesc,
-            std::vector<LIB_ALIAS*> const&  aAliasList );
+    void DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
+                       std::vector<LIB_TREE_ITEM*> const& aCompList );
 
     /**
      * Set the search string provided by the user.
@@ -228,12 +197,14 @@ public:
      *
      * @return Type of the selected node, might be INVALID.
      */
-    CMP_TREE_NODE::TYPE GetTypeFor( const wxDataViewItem& aSelection ) const;
+    LIB_TREE_NODE::TYPE GetTypeFor( const wxDataViewItem& aSelection ) const;
+
+    virtual wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) { return wxEmptyString; };
 
     /**
      * Return the number of components loaded in the tree.
      */
-    int GetComponentsCount() const;
+    int GetItemCount() const;
 
     /**
      * Return the number of libraries loaded in the tree.
@@ -256,9 +227,8 @@ public:
      *
      * @return number of children
      */
-    virtual unsigned int GetChildren(
-            wxDataViewItem const&   aItem,
-            wxDataViewItemArray&    aChildren ) const override;
+    unsigned int GetChildren( wxDataViewItem const& aItem,
+                              wxDataViewItemArray& aChildren ) const override;
 
     // Freezing/Thawing.  Used when updating the table model so that we don't try and fetch
     // values during updating.  Primarily a problem on OSX which doesn't pay attention to the
@@ -268,16 +238,16 @@ public:
     bool IsFrozen() const { return m_freeze; }
 
 protected:
-    static wxDataViewItem ToItem( CMP_TREE_NODE const* aNode );
-    static CMP_TREE_NODE const* ToNode( wxDataViewItem aItem );
-    static unsigned int IntoArray( CMP_TREE_NODE const& aNode, wxDataViewItemArray& aChildren );
+    static wxDataViewItem ToItem( LIB_TREE_NODE const* aNode );
+    static LIB_TREE_NODE const* ToNode( wxDataViewItem aItem );
+    static unsigned int IntoArray( LIB_TREE_NODE const& aNode, wxDataViewItemArray& aChildren );
 
-    CMP_TREE_NODE_ROOT m_tree;
+    LIB_TREE_NODE_ROOT m_tree;
 
     /**
      * Constructor
      */
-    CMP_TREE_MODEL_ADAPTER_BASE();
+    LIB_TREE_MODEL_ADAPTER();
 
     /**
      * Check whether a container has columns too
@@ -316,19 +286,17 @@ protected:
      * @param aItem     item whose data will be placed into aVariant
      * @param aCol      column number of the data
      */
-    virtual void GetValue(
-            wxVariant&              aVariant,
-            wxDataViewItem const&   aItem,
-            unsigned int            aCol ) const override;
+    virtual void GetValue( wxVariant&              aVariant,
+                           wxDataViewItem const&   aItem,
+                           unsigned int            aCol ) const override;
 
     /**
      * Set the value of an item. Does nothing - this model doesn't support
      * editing.
      */
-    virtual bool SetValue(
-            wxVariant const&        aVariant,
-            wxDataViewItem const&   aItem,
-            unsigned int            aCol ) override { return false; }
+    virtual bool SetValue( wxVariant const&        aVariant,
+                           wxDataViewItem const&   aItem,
+                           unsigned int            aCol ) override { return false; }
 
     /**
      * Get any formatting for an item.
@@ -338,10 +306,9 @@ protected:
      * @param aAttr     receiver for attributes
      * @return          true iff the item has non-default attributes
      */
-    virtual bool GetAttr(
-            wxDataViewItem const&   aItem,
-            unsigned int            aCol,
-            wxDataViewItemAttr&     aAttr ) const override;
+    virtual bool GetAttr( wxDataViewItem const&   aItem,
+                          unsigned int            aCol,
+                          wxDataViewItemAttr&     aAttr ) const override;
 
 private:
     CMP_FILTER_TYPE     m_filter;
@@ -359,11 +326,6 @@ private:
     static WIDTH_CACHE m_width_cache;
 
     /**
-     * Flag to only show the symbol library table load progress dialog the first time.
-     */
-    static bool        m_show_progress;
-
-    /**
      * Compute the width required for the given column of a node and its
      * children.
      *
@@ -371,45 +333,32 @@ private:
      * @param aCol - column number
      * @param aHeading - heading text, to set the minimum width
      */
-    int ColWidth( CMP_TREE_NODE& aTree, int aCol, wxString const& aHeading );
-
-    /**
-     * Return the width required to display a single row's aCol text.
-     * This is cached for efficiency as it's very slow on some platforms
-     * (*cough* macOS)
-     */
-    int WidthFor( CMP_TREE_NODE& aNode, int aCol );
-
-    /**
-     * Return the width required to display a column's heading. This is
-     * cached by column number for the same reason as the width per cell.
-     */
-    int WidthFor( wxString const& aHeading, int aCol );
+    int ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString const& aHeading );
 
     /**
      * Find any results worth highlighting and expand them, according to given
      * criteria (f(CMP_TREE_NODE const*) -> bool)
      * The highest-scoring node is written to aHighScore
      */
-    void FindAndExpand( CMP_TREE_NODE& aNode,
-                        std::function<bool( CMP_TREE_NODE const* )> aFunc,
-                        CMP_TREE_NODE** aHighScore );
+    void FindAndExpand( LIB_TREE_NODE& aNode,
+                        std::function<bool( LIB_TREE_NODE const* )> aFunc,
+                        LIB_TREE_NODE** aHighScore );
 
     /**
      * Find and expand successful search results.  Return the best match (if any).
      */
-    CMP_TREE_NODE* ShowResults();
+    LIB_TREE_NODE* ShowResults();
 
     /**
      * Find and expand preselected node.  Return the best match (if any).
      */
-    CMP_TREE_NODE* ShowPreselect();
+    LIB_TREE_NODE* ShowPreselect();
 
     /**
      * Find and expand a library if there is only one.  Return the best match (if any).
      */
-    CMP_TREE_NODE* ShowSingleLibrary();
+    LIB_TREE_NODE* ShowSingleLibrary();
 };
 
-#endif // _CMP_TREE_MODEL_ADAPTER_BASE_H
+#endif // LIB_TREE_MODEL_ADAPTER_H
 

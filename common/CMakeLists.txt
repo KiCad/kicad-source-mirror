@@ -185,6 +185,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
     widgets/indicator_icon.cpp
+    widgets/lib_tree.cpp
     widgets/mathplot.cpp
     widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
@@ -290,6 +291,8 @@ set( COMMON_SRCS
     lib_id.cpp
     lib_table_base.cpp
     lib_table_keywords.cpp
+    lib_tree_model.cpp
+    lib_tree_model_adapter.cpp
     lockfile.cpp
     marker_base.cpp
     md5_hash.cpp
