@@ -87,6 +87,14 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     Init();
 
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Run" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizer1->Layout();
+
+    m_sdbSizer1OK->SetDefault();
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
@@ -120,9 +128,6 @@ void DIALOG_ERC::Init()
 
     // Init Panel Matrix
     ReBuildMatrixPanel();
-
-    // Set the run ERC button as the default button.
-    m_buttonERC->SetDefault();
 }
 
 
@@ -160,20 +165,6 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
     m_parent->GetCanvas()->Refresh();
 }
 
-
-
-/* event handler for Close button
-*/
-void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
-{
-    Close();
-}
-
-
-void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
-{
-    Destroy();
-}
 
 
 void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )

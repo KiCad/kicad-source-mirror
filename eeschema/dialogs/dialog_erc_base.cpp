@@ -100,15 +100,20 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_buttondelmarkers = new wxButton( m_PanelERC, ID_ERASE_DRC_MARKERS, _("Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttondelmarkers, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonERC = new wxButton( m_PanelERC, ID_ERC_CMP, _("Run"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonERC->SetDefault(); 
-	bbuttonsSizer->Add( m_buttonERC, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonClose = new wxButton( m_PanelERC, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
+	bbuttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( m_PanelERC, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( m_PanelERC, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	
+	bbuttonsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bercSizer->Add( bbuttonsSizer, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	bercSizer->Add( bbuttonsSizer, 0, wxALIGN_RIGHT|wxEXPAND|wxLEFT, 5 );
 	
 	
 	m_PanelERC->SetSizer( bercSizer );
@@ -125,7 +130,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_cbTestSimilarLabels = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Test similar labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTestSimilarLabels->SetToolTip( _("Similar labels are labels (inside a sheet) which differs only by upper/lower case") );
 	
-	sbSizer2->Add( m_cbTestSimilarLabels, 0, wxALL, 5 );
+	sbSizer2->Add( m_cbTestSimilarLabels, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_cbTestUniqueGlbLabels = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Test single instances of global labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTestUniqueGlbLabels->SetToolTip( _("Global labels are used to connect signals across the full hierarchy.\nThey are expected to be at least two labels with the same name.") );
@@ -141,8 +146,8 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_matrixPanel = new wxPanel( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	sbSizer3->Add( m_matrixPanel, 1, wxEXPAND | wxALL, 5 );
 	
-	m_ResetOptButton = new wxButton( sbSizer3->GetStaticBox(), ID_RESET_MATRIX, _("Initialize to Default"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer3->Add( m_ResetOptButton, 0, wxALIGN_RIGHT|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_ResetOptButton = new wxButton( sbSizer3->GetStaticBox(), ID_RESET_MATRIX, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_ResetOptButton, 0, wxALL, 5 );
 	
 	
 	m_panelMatrixSizer->Add( sbSizer3, 0, wxALL|wxEXPAND, 5 );
@@ -161,24 +166,20 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer1->Fit( this );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ERC_BASE::OnCloseErcDialog ) );
 	m_MarkersList->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_ERC_BASE::OnLeftClickMarkersList ), NULL, this );
 	m_MarkersList->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_ERC_BASE::OnLeftDblClickMarkersList ), NULL, this );
 	m_buttondelmarkers->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnEraseDrcMarkersClick ), NULL, this );
-	m_buttonERC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnErcCmpClick ), NULL, this );
-	m_buttonClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnButtonCloseClick ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnErcCmpClick ), NULL, this );
 	m_ResetOptButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnResetMatrixClick ), NULL, this );
 }
 
 DIALOG_ERC_BASE::~DIALOG_ERC_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ERC_BASE::OnCloseErcDialog ) );
 	m_MarkersList->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_ERC_BASE::OnLeftClickMarkersList ), NULL, this );
 	m_MarkersList->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_ERC_BASE::OnLeftDblClickMarkersList ), NULL, this );
 	m_buttondelmarkers->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnEraseDrcMarkersClick ), NULL, this );
-	m_buttonERC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnErcCmpClick ), NULL, this );
-	m_buttonClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnButtonCloseClick ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnErcCmpClick ), NULL, this );
 	m_ResetOptButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnResetMatrixClick ), NULL, this );
 	
 }
