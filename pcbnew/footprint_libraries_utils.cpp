@@ -713,6 +713,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
         DisplayError( this, ioe.What() );
         return false;
     }
+
+    return true;
 }
 
 

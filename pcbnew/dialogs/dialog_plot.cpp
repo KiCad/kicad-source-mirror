@@ -494,6 +494,9 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 
         OnChangeDXFPlotMode( event );
         break;
+
+    case PLOT_FORMAT_UNDEFINED:
+        break;
     }
 
     /* Update the interlock between scale and frame reference

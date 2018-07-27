@@ -944,7 +944,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
     int ii = m_PadType->GetSelection();
 
-    if( ii >= DIM( code_type ) ) // catches < 0 also
+    if( (unsigned)ii >= DIM( code_type ) ) // catches < 0 also
         ii = 0;
 
     bool hasHole, hasConnection;
@@ -994,7 +994,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     int ii = m_PadType->GetSelection();
 
-    if( ii >= DIM( code_type ) ) // catches < 0 also
+    if( (unsigned)ii >= DIM( code_type ) ) // catches < 0 also
         ii = 0;
 
     bool hasHole, hasConnection;
