@@ -249,7 +249,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             return Unit::Mil;
         }
 
-        if( sizeLeft >= 4 && ch == 't' && cptr[ 1 ] == 'h' && cptr[ 2 ] == 'o' && cptr[ 2 ] == 'u' && !isalnum( cptr[ 3 ] ))
+        if( sizeLeft >= 4 && ch == 't' && cptr[ 1 ] == 'h' && cptr[ 2 ] == 'o' && cptr[ 3 ] == 'u' && !isalnum( cptr[ 4 ] ))
         {
             m_token.pos += 4;
             return Unit::Mil;
