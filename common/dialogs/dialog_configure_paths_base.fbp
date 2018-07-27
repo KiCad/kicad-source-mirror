@@ -301,7 +301,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">29,29</property>
+                                        <property name="minimum_size">30,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_btnAddEnvVar</property>
                                         <property name="pane_border">1</property>
@@ -394,7 +394,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">29,29</property>
+                                        <property name="minimum_size">30,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_btnDeleteEnvVar</property>
                                         <property name="pane_border">1</property>
@@ -656,7 +656,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">29,29</property>
+                                        <property name="minimum_size">30,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_btnAddSearchPath</property>
                                         <property name="pane_border">1</property>
@@ -749,7 +749,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">29,29</property>
+                                        <property name="minimum_size">30,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_btnDeleteSearchPath</property>
                                         <property name="pane_border">1</property>
@@ -842,7 +842,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">29,29</property>
+                                        <property name="minimum_size">30,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_btnMoveUp</property>
                                         <property name="pane_border">1</property>
@@ -935,7 +935,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">29,29</property>
+                                        <property name="minimum_size">30,29</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_btnMoveDown</property>
                                         <property name="pane_border">1</property>

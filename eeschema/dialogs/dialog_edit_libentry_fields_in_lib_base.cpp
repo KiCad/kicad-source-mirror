@@ -75,22 +75,22 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_bpAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpAdd->SetMinSize( wxSize( 29,29 ) );
+	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
 	
 	m_bpDelete = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpDelete->SetMinSize( wxSize( 29,29 ) );
+	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT, 10 );
 	
 	m_bpMoveUp = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpMoveUp->SetMinSize( wxSize( 29,29 ) );
+	m_bpMoveUp->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpMoveUp, 0, wxLEFT, 10 );
 	
 	m_bpMoveDown = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpMoveDown->SetMinSize( wxSize( 29,29 ) );
+	m_bpMoveDown->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT|wxLEFT, 5 );
 	

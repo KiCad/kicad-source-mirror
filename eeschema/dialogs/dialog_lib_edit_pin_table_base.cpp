@@ -70,12 +70,12 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_addButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_addButton->SetMinSize( wxSize( 29,29 ) );
+	m_addButton->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer2->Add( m_addButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_deleteButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_deleteButton->SetMinSize( wxSize( 29,29 ) );
+	m_deleteButton->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer2->Add( m_deleteButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 	
@@ -86,7 +86,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bSizer2->Add( m_cbGroup, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
 	
 	m_refreshButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_refreshButton->SetMinSize( wxSize( 29,29 ) );
+	m_refreshButton->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer2->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 	

@@ -355,16 +355,16 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 29,29 ), wxBU_AUTODRAW );
+	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,29 ), wxBU_AUTODRAW );
 	bSizer3DButtons->Add( m_buttonAdd, 0, wxTOP, 5 );
 	
-	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 29,29 ), wxBU_AUTODRAW );
+	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,29 ), wxBU_AUTODRAW );
 	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALL, 5 );
 	
 	
 	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 29,29 ), wxBU_AUTODRAW );
+	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,29 ), wxBU_AUTODRAW );
 	bSizer3DButtons->Add( m_buttonRemove, 0, wxTOP, 5 );
 	
 	

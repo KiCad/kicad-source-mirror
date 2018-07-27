@@ -55,12 +55,12 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_btnAddEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_btnAddEnvVar->SetMinSize( wxSize( 29,29 ) );
+	m_btnAddEnvVar->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerEnvVarBtns->Add( m_btnAddEnvVar, 0, 0, 5 );
 	
 	m_btnDeleteEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_btnDeleteEnvVar->SetMinSize( wxSize( 29,29 ) );
+	m_btnDeleteEnvVar->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerEnvVarBtns->Add( m_btnDeleteEnvVar, 0, wxLEFT, 5 );
 	
@@ -111,22 +111,22 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	bSizerSearchPathBtns = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_btnAddSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_btnAddSearchPath->SetMinSize( wxSize( 29,29 ) );
+	m_btnAddSearchPath->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnAddSearchPath, 0, wxRIGHT, 5 );
 	
 	m_btnDeleteSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_btnDeleteSearchPath->SetMinSize( wxSize( 29,29 ) );
+	m_btnDeleteSearchPath->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnDeleteSearchPath, 0, wxRIGHT, 10 );
 	
 	m_btnMoveUp = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_btnMoveUp->SetMinSize( wxSize( 29,29 ) );
+	m_btnMoveUp->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnMoveUp, 0, wxLEFT, 10 );
 	
 	m_btnMoveDown = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_btnMoveDown->SetMinSize( wxSize( 29,29 ) );
+	m_btnMoveDown->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnMoveDown, 0, wxLEFT, 5 );
 	

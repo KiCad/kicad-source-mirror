@@ -14,7 +14,6 @@
         <property name="file">dialog_edit_footprint_for_BoardEditor_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_edit_footprint_for_BoardEditor_base</property>
         <property name="namespace"></property>
@@ -415,11 +414,11 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bButtonSize</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -462,13 +461,12 @@
                                                             <property name="hover"></property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Add Field</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">29,29</property>
+                                                            <property name="minimum_size">30,29</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpAdd</property>
                                                             <property name="pane_border">1</property>
@@ -556,13 +554,12 @@
                                                             <property name="hover"></property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Delete Field</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">29,29</property>
+                                                            <property name="minimum_size">30,29</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpDelete</property>
                                                             <property name="pane_border">1</property>
@@ -703,7 +700,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Position X:</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -878,7 +874,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">unit</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -962,7 +957,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Position Y:</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -1137,7 +1131,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">unit</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2027,7 +2020,6 @@
                                                                             <property name="hidden">0</property>
                                                                             <property name="id">wxID_ANY</property>
                                                                             <property name="label">Allow 90 degree rotated placement:</property>
-                                                                            <property name="markup">0</property>
                                                                             <property name="max_size"></property>
                                                                             <property name="maximize_button">0</property>
                                                                             <property name="maximum_size"></property>
@@ -2230,7 +2222,6 @@
                                                                             <property name="hidden">0</property>
                                                                             <property name="id">wxID_ANY</property>
                                                                             <property name="label">Allow 180 degree rotated placement:</property>
-                                                                            <property name="markup">0</property>
                                                                             <property name="max_size"></property>
                                                                             <property name="maximize_button">0</property>
                                                                             <property name="maximum_size"></property>
@@ -2447,7 +2438,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">ID_MODULE_PROPERTIES_UPDATE</property>
                                                                     <property name="label">Update Footprint from Library...</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2536,7 +2526,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">ID_MODULE_PROPERTIES_EXCHANGE</property>
                                                                     <property name="label">Change Footprint...</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2625,7 +2614,6 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">ID_GOTO_MODULE_EDITOR</property>
                                                                     <property name="label">Footprint Editor...</property>
-                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2918,7 +2906,6 @@
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Set values to 0 to use Board Setup values.</property>
-                                                    <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -3002,7 +2989,6 @@
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Positive clearance means area bigger than the pad (usual for mask clearance).</property>
-                                                    <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -3086,7 +3072,6 @@
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Negative clearance means area smaller than the pad (usual for paste clearance).</property>
-                                                    <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -3186,7 +3171,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Pad clearance:</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3361,7 +3345,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">unit</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3445,7 +3428,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Solder mask clearance:</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3620,7 +3602,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">unit</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3704,7 +3685,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Solder paste clearance:</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3879,7 +3859,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">unit</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3963,7 +3942,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Solder paste ratio clearance:</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -4138,7 +4116,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">%</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -4224,7 +4201,6 @@
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Note: solder mask and paste values are used only for pads on copper layers.</property>
-                                                    <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -4323,7 +4299,6 @@
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Pad connection to zones:</property>
-                                                    <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -4753,7 +4728,6 @@
                                                             <property name="hover"></property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Add 3D Model</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -4771,7 +4745,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="selected"></property>
                                                             <property name="show">1</property>
-                                                            <property name="size">29,29</property>
+                                                            <property name="size">30,29</property>
                                                             <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -4847,7 +4821,6 @@
                                                             <property name="hover"></property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Browse</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -4865,7 +4838,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="selected"></property>
                                                             <property name="show">1</property>
-                                                            <property name="size">29,29</property>
+                                                            <property name="size">30,29</property>
                                                             <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -4951,7 +4924,6 @@
                                                             <property name="hover"></property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Remove 3D Model</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -4969,7 +4941,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="selected"></property>
                                                             <property name="show">1</property>
-                                                            <property name="size">29,29</property>
+                                                            <property name="size">30,29</property>
                                                             <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -5051,7 +5023,6 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Configure Paths...</property>
-                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -5150,10 +5121,10 @@
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                 <property name="permission">none</property>
                                 <property name="rows">2</property>
-                                <property name="vgap">0</property>
+                                <property name="vgap">1</property>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                    <property name="border">3</property>
+                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -5184,7 +5155,6 @@
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Library reference:</property>
-                                        <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -5236,8 +5206,8 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag"></property>
+                                    <property name="border">3</property>
+                                    <property name="flag">wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -5268,7 +5238,6 @@
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">MyLabel</property>
-                                        <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -5320,7 +5289,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">3</property>
                                     <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
@@ -5352,7 +5321,6 @@
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Schematic sheet:</property>
-                                        <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -5404,7 +5372,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">3</property>
                                     <property name="flag"></property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
@@ -5436,7 +5404,6 @@
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">MyLabel</property>
-                                        <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>

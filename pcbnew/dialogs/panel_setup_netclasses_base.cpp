@@ -74,12 +74,12 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_addButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
-	m_addButton->SetMinSize( wxSize( 29,29 ) );
+	m_addButton->SetMinSize( wxSize( 30,29 ) );
 	
 	buttonBoxSizer->Add( m_addButton, 0, wxRIGHT, 5 );
 	
 	m_removeButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
-	m_removeButton->SetMinSize( wxSize( 29,29 ) );
+	m_removeButton->SetMinSize( wxSize( 30,29 ) );
 	
 	buttonBoxSizer->Add( m_removeButton, 0, 0, 10 );
 	

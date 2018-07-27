@@ -414,11 +414,11 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bButtonSize</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -466,7 +466,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">29,29</property>
+                                                            <property name="minimum_size">30,29</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpAdd</property>
                                                             <property name="pane_border">1</property>
@@ -559,7 +559,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size">29,29</property>
+                                                            <property name="minimum_size">30,29</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">m_bpDelete</property>
                                                             <property name="pane_border">1</property>
@@ -3910,7 +3910,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="selected"></property>
                                                             <property name="show">1</property>
-                                                            <property name="size">29,29</property>
+                                                            <property name="size">30,29</property>
                                                             <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -4003,7 +4003,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="selected"></property>
                                                             <property name="show">1</property>
-                                                            <property name="size">29,29</property>
+                                                            <property name="size">30,29</property>
                                                             <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
@@ -4106,7 +4106,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="selected"></property>
                                                             <property name="show">1</property>
-                                                            <property name="size">29,29</property>
+                                                            <property name="size">30,29</property>
                                                             <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass">; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>

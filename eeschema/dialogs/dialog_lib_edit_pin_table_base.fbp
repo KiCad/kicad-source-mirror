@@ -288,7 +288,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size">22,22</property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">29,29</property>
+                                <property name="minimum_size">30,29</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_addButton</property>
                                 <property name="pane_border">1</property>
@@ -381,7 +381,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size">-1,-1</property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">29,29</property>
+                                <property name="minimum_size">30,29</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_deleteButton</property>
                                 <property name="pane_border">1</property>
@@ -643,7 +643,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">29,29</property>
+                                <property name="minimum_size">30,29</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_refreshButton</property>
                                 <property name="pane_border">1</property>
