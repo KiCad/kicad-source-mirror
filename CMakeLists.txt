@@ -565,7 +565,8 @@ include( ${wxWidgets_USE_FILE} )
 
 # Check the toolkit used to build wxWidgets
 execute_process(
-    COMMAND sh -c "${wxWidgets_CONFIG_EXECUTABLE} ${wxWidgets_CONFIG_OPTIONS} --query-toolkit"
+    COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}"
+        ${wxWidgets_CONFIG_OPTIONS} --query-toolkit
     RESULT_VARIABLE wxWidgets_TOOLKIT_RESULT
     OUTPUT_VARIABLE wxWidgets_TOOLKIT_FOUND
     OUTPUT_STRIP_TRAILING_WHITESPACE
