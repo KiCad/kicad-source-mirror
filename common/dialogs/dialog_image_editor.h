@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 jean-pierre.charras
+ * Copyright (C) 2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,9 +59,9 @@ private:
     void OnMirrorX_click( wxCommandEvent& event ) override;
     void OnMirrorY_click( wxCommandEvent& event ) override;
     void OnRotateClick( wxCommandEvent& event ) override;
-    void OnOK_Button( wxCommandEvent& aEvent ) override;
-    void OnCancel_Button( wxCommandEvent& aEvent ) override;
     void OnRedrawPanel( wxPaintEvent& event ) override;
+    bool TransferDataFromWindow() override;
+
     bool CheckValues();
 };
 

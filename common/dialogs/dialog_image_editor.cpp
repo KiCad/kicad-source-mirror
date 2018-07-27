@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
+ * Copyright (C) 2018 jean-pierre.charras
  * Copyright (C) 2011-2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -44,13 +44,8 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
     m_textCtrlScale->SetValue( msg );
 
-    GetSizer()->SetSizeHints( this );
-    Layout();
-    Fit();
-    SetMinSize( GetBestSize() );
-
-    Centre();
-    SetFocus();
+    FinishDialogSettings();
+    m_sdbSizerOK->SetDefault();
 }
 
 
@@ -159,18 +154,9 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
 }
 
 
-void DIALOG_IMAGE_EDITOR::OnOK_Button( wxCommandEvent& aEvent )
+bool DIALOG_IMAGE_EDITOR::TransferDataFromWindow()
 {
-    if( CheckValues() )
-        EndModal( wxID_OK );
-
-    return;
-}
-
-
-void DIALOG_IMAGE_EDITOR::OnCancel_Button( wxCommandEvent& aEvent )
-{
-    EndModal( wxID_CANCEL );
+    return CheckValues();
 }
 
 

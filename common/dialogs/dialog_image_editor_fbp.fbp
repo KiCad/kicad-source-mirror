@@ -14,6 +14,7 @@
         <property name="file">dialog_image_editor_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_image_editor</property>
         <property name="namespace"></property>
@@ -46,7 +47,7 @@
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
-            <property name="subclass"></property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h; forward_declare</property>
             <property name="title">Image Editor</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -573,7 +574,7 @@
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
-                                                <property name="default">1</property>
+                                                <property name="default">0</property>
                                                 <property name="default_pane">0</property>
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
@@ -910,7 +911,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_RIGHT</property>
+                    <property name="flag">wxALIGN_RIGHT|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>
@@ -922,14 +923,14 @@
                         <property name="Save">0</property>
                         <property name="Yes">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">m_sdbSizer1</property>
+                        <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick">OnCancel_Button</event>
+                        <event name="OnCancelButtonClick"></event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">OnOK_Button</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>
