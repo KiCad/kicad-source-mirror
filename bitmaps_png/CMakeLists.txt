@@ -186,9 +186,7 @@ set( BMAPS_MID
     component_select_unit
     component_select_alternate_shape
     config
-    copycomponent
     copy
-    copy_library
     copy_pad_settings
     copper_layers_setup
     cursor_shape
@@ -229,7 +227,6 @@ set( BMAPS_MID
     drc
     duplicate
     edges_sketch
-    edit_component
     edit_comp_footprint
     edit_comp_ref
     edit_comp_value
@@ -298,7 +295,6 @@ set( BMAPS_MID
     import3d
     image
     import_brd_file
-    import_cmp_from_lib
     import_document
     import_footprint_names
     import_hierarchical_label
@@ -511,8 +507,6 @@ set( BMAPS_MID
     save_as
     save_gerber
     save_library
-    save_part
-    save_part_in_mem
     save_project
     save_setup
     save

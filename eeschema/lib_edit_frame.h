@@ -246,24 +246,6 @@ public:
     }
 
     /**
-     * The command event handler to save the changes to the current library.
-     *
-     * A backup file of the current library is saved with the .bak extension before the
-     * changes made to the library are saved.
-     */
-    void OnSaveLibrary( wxCommandEvent& event );
-
-    /**
-     * Saves all changes in modified libraries.
-     */
-    void OnSaveAllLibraries( wxCommandEvent& event );
-
-    /**
-     * Reverts unsaved changes in a library.
-     */
-    void OnRevertLibrary( wxCommandEvent& aEvent );
-
-    /**
      * Creates a new part in the selected library.
      */
     void OnCreateNewPart( wxCommandEvent& aEvent );
@@ -288,16 +270,24 @@ public:
     void OnExportPart( wxCommandEvent& event );
 
     /**
-     * Saves a single part in the selected library. The library file is updated without including
-     * the remaining unsaved changes.
+     * Saves the selected part or library.
      */
-    void OnSavePart( wxCommandEvent& aEvent );
-    void OnSavePartAs( wxCommandEvent& aEvent );
+    void OnSave( wxCommandEvent& aEvent );
+
+    /**
+     * Saves the selected part or library to a new name and/or location.
+     */
+    void OnSaveAs( wxCommandEvent& aEvent );
+
+    /**
+     * Saves all modified parts and libraries.
+     */
+    void OnSaveAll( wxCommandEvent& aEvent );
 
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
      */
-    void OnRevertPart( wxCommandEvent& aEvent );
+    void OnRevert( wxCommandEvent& aEvent );
 
     /**
      * Removes a part from the working copy of a library.
@@ -335,15 +325,12 @@ public:
     void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
-    void OnUpdatePartModified( wxUpdateUIEvent& aEvent );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
-    void OnUpdateLibModified( wxUpdateUIEvent& aEvent );
-    void OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent );
+    void OnUpdateSave( wxUpdateUIEvent& aEvent );
+    void OnUpdateSaveAs( wxUpdateUIEvent& aEvent );
+    void OnUpdateRevert( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
-    void OnUpdateSaveLib( wxUpdateUIEvent& event );
-    void OnUpdateSaveLibAs( wxUpdateUIEvent& event );
-    void OnUpdateSaveAll( wxUpdateUIEvent& event );
     void OnUpdateViewDoc( wxUpdateUIEvent& event );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePinTable( wxUpdateUIEvent& event );
@@ -485,6 +472,8 @@ public:
 
 private:
     void loadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
+
+    void savePartAs();
 
     /**
      * Saves the changes to the current library.

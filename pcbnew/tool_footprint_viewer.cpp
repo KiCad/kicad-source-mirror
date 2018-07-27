@@ -50,11 +50,11 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_MODVIEW_SELECT_LIB, wxEmptyString,
-                            KiScaledBitmap( library_xpm, this ),
+                            KiScaledBitmap( open_library_xpm, this ),
                             _( "Select library to browse" ) );
 
     m_mainToolBar->AddTool( ID_MODVIEW_SELECT_PART, wxEmptyString,
-                            KiScaledBitmap( module_xpm, this ),
+                            KiScaledBitmap( load_module_lib_xpm, this ),
                             _( "Select footprint to browse" ) );
 
     KiScaledSeparator( m_mainToolBar, this );

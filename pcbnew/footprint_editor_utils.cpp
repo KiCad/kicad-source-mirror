@@ -279,7 +279,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_DELETE_PART:
-        DeleteModuleFromLibrary();
+        if( DeleteModuleFromLibrary() )
+            Clear_Pcb( false );
         break;
 
     case ID_MODEDIT_NEW_MODULE:

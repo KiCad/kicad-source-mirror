@@ -53,11 +53,11 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
                  KiBitmap( new_library_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
                  KiBitmap( add_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY, _( "&Save Library" ),
-                 KiBitmap( save_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save Library As..." ),
-                 KiBitmap( save_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT_LIBRARY, _( "Revert Library" ),
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE, _( "&Save" ),
+                 KiBitmap( save_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_AS, _( "Save As..." ),
+                 KiBitmap( save_as_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
                  KiBitmap( undo_xpm ) );
 
     menuLibrary->AppendSeparator();
@@ -71,15 +71,15 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
                  KiBitmap( edit_xpm ) );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART, _( "&Save Symbol" ),
-                 KiBitmap( save_part_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART_AS, _( "Save Symbol As..." ),
-                 KiBitmap( save_part_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Symbol" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE, _( "&Save" ),
+                 KiBitmap( save_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_AS, _( "Save As..." ),
+                 KiBitmap( save_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate" ),
                  KiBitmap( duplicate_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Delete Symbol" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Delete" ),
                  KiBitmap( delete_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT_PART, _( "Revert Symbol" ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
                  KiBitmap( undo_xpm ) );
 
     menuPart->AppendSeparator();

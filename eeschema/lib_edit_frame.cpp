@@ -90,22 +90,17 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
     EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
 
-    // Library actions
+    // Actions
     EVT_TOOL( ID_LIBEDIT_NEW_LIBRARY, LIB_EDIT_FRAME::OnCreateNewLibrary )
     EVT_TOOL( ID_LIBEDIT_ADD_LIBRARY, LIB_EDIT_FRAME::OnAddLibrary )
-    EVT_TOOL( ID_LIBEDIT_SAVE_LIBRARY, LIB_EDIT_FRAME::OnSaveLibrary )
-    EVT_MENU( ID_LIBEDIT_SAVE_LIBRARY_AS, LIB_EDIT_FRAME::OnSaveLibrary )
-    EVT_MENU( ID_LIBEDIT_SAVE_ALL_LIBS, LIB_EDIT_FRAME::OnSaveAllLibraries )
-    EVT_TOOL( ID_LIBEDIT_REVERT_LIBRARY, LIB_EDIT_FRAME::OnRevertLibrary )
-
-    // Part actions
+    EVT_TOOL( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnSave )
+    EVT_MENU( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnSaveAs )
+    EVT_MENU( ID_LIBEDIT_SAVE_ALL, LIB_EDIT_FRAME::OnSaveAll )
+    EVT_TOOL( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnRevert )
     EVT_TOOL( ID_LIBEDIT_NEW_PART, LIB_EDIT_FRAME::OnCreateNewPart )
     EVT_TOOL( ID_LIBEDIT_EDIT_PART, LIB_EDIT_FRAME::OnEditPart )
     EVT_TOOL( ID_LIBEDIT_IMPORT_PART, LIB_EDIT_FRAME::OnImportPart )
     EVT_TOOL( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnExportPart )
-    EVT_TOOL( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnSavePart )
-    EVT_TOOL( ID_LIBEDIT_SAVE_PART_AS, LIB_EDIT_FRAME::OnSavePartAs )
-    EVT_TOOL( ID_LIBEDIT_REVERT_PART, LIB_EDIT_FRAME::OnRevertPart )
     EVT_TOOL( ID_LIBEDIT_REMOVE_PART, LIB_EDIT_FRAME::OnRemovePart )
     EVT_TOOL( ID_LIBEDIT_DUPLICATE_PART, LIB_EDIT_FRAME::OnDuplicatePart )
 
@@ -171,19 +166,15 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Update user interface elements.
     EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
-    EVT_UPDATE_UI( ID_LIBEDIT_REVERT_LIBRARY, LIB_EDIT_FRAME::OnUpdateLibModified )
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_PART_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
-    EVT_UPDATE_UI( ID_LIBEDIT_REVERT_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnUpdateSave )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateSaveAs )
+    EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY, LIB_EDIT_FRAME::OnUpdateSaveLib )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY_AS, LIB_EDIT_FRAME::OnUpdateSaveLibAs )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_ALL_LIBS, LIB_EDIT_FRAME::OnUpdateSaveAll )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
@@ -493,11 +484,46 @@ void LIB_EDIT_FRAME::OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateHavePart( wxUpdateUIEvent& aEvent )
+void LIB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+    bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
 
-    aEvent.Enable( libId.IsValid() );
+    if( partName.IsEmpty() )
+        aEvent.Enable( !readOnly && m_libMgr->IsLibraryModified( libName ) );
+    else
+        aEvent.Enable( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateSaveAs( wxUpdateUIEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+
+    aEvent.Enable( !libName.IsEmpty() || !partName.IsEmpty() );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateRevert( wxUpdateUIEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+
+    if( partName.IsEmpty() )
+        aEvent.Enable( !libName.IsEmpty() && m_libMgr->IsLibraryModified( libName ) );
+    else
+        aEvent.Enable( !libName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateHavePart( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( getTargetLibId().IsValid() );
 }
 
 
@@ -512,38 +538,9 @@ void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
-{
-    LIB_ID libId = getTargetLibId();
-    const wxString& partName = libId.GetLibItemName();
-    const wxString& libName = libId.GetLibNickname();
-
-    if( aEvent.GetId() == ID_LIBEDIT_SAVE_PART )
-    {
-        bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
-
-        aEvent.SetText( readOnly ? _( "&Save Symbol [Read Only]" ) : _( "&Save Symbol" ) );
-        aEvent.Enable( !readOnly && !partName.IsEmpty()
-                && m_libMgr->IsPartModified( partName, libName ) );
-    }
-    else if( aEvent.GetId() == ID_LIBEDIT_REVERT_PART )
-    {
-        aEvent.Enable( !partName.IsEmpty() && !libName.IsEmpty()
-                && m_libMgr->IsPartModified( partName, libName ) );
-    }
-    else wxFAIL;
-}
-
-
 void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
     event.Enable( m_clipboard.GetCount() > 0 );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateLibModified( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_libMgr->IsLibraryModified( getTargetLib() ) );
 }
 
 
@@ -558,43 +555,6 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 {
     event.Enable( GetCurPart() && GetScreen() &&
         GetScreen()->GetRedoCommandCount() != 0 && !IsEditingDrawItem() );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateSaveLib( wxUpdateUIEvent& event )
-{
-    wxString lib = getTargetLib();
-    bool readOnly = lib.IsEmpty() || m_libMgr->IsLibraryReadOnly( lib );
-
-    event.SetText( readOnly ? _( "&Save Library [Read Only]" ) : _( "&Save Library" ) );
-    event.Enable( !readOnly && m_libMgr->IsLibraryModified( lib ) );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateSaveLibAs( wxUpdateUIEvent& event )
-{
-    wxString lib = getTargetLib();
-
-    event.Enable( m_libMgr->LibraryExists( lib ) );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateSaveAll( wxUpdateUIEvent& event )
-{
-    int modified = 0;
-
-    for( const auto& lib : m_libMgr->GetLibraryNames() )
-    {
-        if( m_libMgr->IsLibraryModified( lib ) )
-            modified++;
-
-        if( modified > 1 )
-            break;
-    }
-
-    event.SetText( AddHotkeyName( modified > 1 ? _( "&Save..." ) : _( "&Save All" ),
-                                  g_Libedit_Hokeys_Descr, HK_SAVE ) );
-    event.Enable( modified > 0 );
 }
 
 

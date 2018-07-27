@@ -430,7 +430,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                       wxEmptyString,
                                       "https://github.com/KiCad/kicad-symbols/graphs/contributors",
                                       SYMBOL_LIB_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( edit_component_xpm ) ) );
+                                      aInfo.CreateKiBitmap( new_component_xpm ) ) );
 
     #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
     aInfo.AddArtist( new CONTRIBUTOR( "GitHub contributors",

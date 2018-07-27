@@ -111,21 +111,13 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                           KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_LIBRARY, wxEmptyString,
-                            KiScaledBitmap( new_library_xpm, this ),
-                            _( "Create a new library" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_ADD_LIBRARY, wxEmptyString,
-                            KiScaledBitmap( open_library_xpm, this ),
-                            _( "Add an existing library" ) );
-
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString,
                             KiScaledBitmap( new_component_xpm, this ),
                             _( "Create new symbol" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_ALL_LIBS, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_ALL, wxEmptyString,
                             KiScaledBitmap( save_xpm, this ),
-                            _( "Save libraries" ) );
+                            _( "Save all changes" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -163,17 +155,17 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
                             KiScaledBitmap( field_properties_xpm, this ),
-                            _( "Edit field properties" ) );
+                            _( "Edit symbol fields" ) );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString,
+                            KiScaledBitmap( pin_table_xpm, this ),
+                            _( "Show pin table" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString,
                             KiScaledBitmap( datasheet_xpm, this ),
                             _( "Show associated datasheet or document" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString,
-                            KiScaledBitmap( pin_table_xpm, this ),
-                            _( "Show pin table" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
                             _( "Check duplicate and off grid pins" ) );

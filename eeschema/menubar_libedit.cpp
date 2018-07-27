@@ -74,22 +74,29 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     text = AddHotkeyName( _( "&Save" ), g_Libedit_Hokeys_Descr, HK_SAVE );
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_ALL_LIBS,
+                 ID_LIBEDIT_SAVE,
                  text,
                  _( "Save changes" ),
                  KiBitmap( save_xpm ) );
 
+    text = AddHotkeyName( _( "Save &As..." ), g_Libedit_Hokeys_Descr, HK_SAVEAS );
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_LIBRARY_AS,
-                 _( "Save Library As..." ),
-                 _( "Save the current library to a new file" ),
+                 ID_LIBEDIT_SAVE_AS,
+                 text,
+                 _( "Save to a new name and/or location" ),
                  KiBitmap( save_as_xpm ) );
 
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_PART_AS,
-                 _( "Save Symbol As..." ),
-                 _( "Save the current symbol to a new name and/or new library" ),
-                 KiBitmap( save_part_xpm ) );
+                 ID_LIBEDIT_SAVE_ALL,
+                 _( "Save All" ),
+                 _( "Save all library and symbol changes" ),
+                 KiBitmap( save_xpm ) );
+
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_REVERT,
+                 _( "&Revert" ),
+                 _( "Throw away changes" ),
+                 KiBitmap( undo_xpm ) );
 
     fileMenu->AppendSeparator();
 
@@ -154,9 +161,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
                  _( "&Fields..." ),
                  _( "Edit field properties" ),
-                 KiBitmap( edit_text_xpm ) );
-
-    editMenu->AppendSeparator();
+                 KiBitmap( field_properties_xpm ) );
 
     AddMenuItem( editMenu,
                  ID_LIBEDIT_EDIT_PIN_BY_TABLE,
@@ -164,14 +169,16 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Show pin table" ),
                  KiBitmap( pin_table_xpm ) );
 
-    AddMenuItem( editMenu,
-                 ID_LIBEDIT_CHECK_PART,
-                 _( "Electrical Rules &Checker" ),
-                 _( "Check duplicate and off grid pins" ),
-                 KiBitmap( erc_xpm ) );
-
     // Menu View:
     wxMenu* viewMenu = new wxMenu;
+
+    AddMenuItem( viewMenu,
+                 ID_TO_LIBVIEW,
+                 _( "Library Browser" ),
+                 _( "Open the symbol viewer" ),
+                 KiBitmap( library_browse_xpm ) );
+
+    viewMenu->AppendSeparator();
 
     /**
      * Important Note for ZOOM IN and ZOOM OUT commands from menubar:
@@ -261,6 +268,21 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  HELP_ADD_BODYPOLYGON,
                  KiBitmap( add_polygon_xpm ) );
 
+    // Menu Inspect:
+    wxMenu* inspectMenu = new wxMenu;
+
+    AddMenuItem( inspectMenu,
+                 ID_LIBEDIT_VIEW_DOC,
+                 _( "Show Datasheet" ),
+                 _( "Open associated datasheet in web browser" ),
+                 KiBitmap( datasheet_xpm ) );
+
+    AddMenuItem( inspectMenu,
+                 ID_LIBEDIT_CHECK_PART,
+                 _( "Electrical Rules &Checker" ),
+                 _( "Check duplicate and off grid pins" ),
+                 KiBitmap( erc_xpm ) );
+
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
 
@@ -329,6 +351,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 

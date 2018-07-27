@@ -410,32 +410,6 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     DisplayInfoMessage( this, msg );
 }
 
-bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
-{
-    wxString            libPath = aLibPath ? *aLibPath : getLibPath();
-
-    IO_MGR::PCB_FILE_T  piType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
-
-    // Legacy libraries are readable, but writing legacy format is not allowed
-    if( piType == IO_MGR::LEGACY )
-    {
-        DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
-        return false;
-    }
-
-    try
-    {
-        PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
-
-        pi->FootprintSave( libPath, GetBoard()->m_Modules );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
-        return false;
-    }
-    return true;
-}
 
 wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 {
@@ -535,11 +509,12 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 
 bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary()
 {
-    LIB_ID   fpid;
-    wxString fpid_txt = PCB_BASE_FRAME::SelectFootprint( this, wxEmptyString, wxEmptyString,
-                                                         wxEmptyString, Prj().PcbFootprintLibs() );
+    MODULE* module = GetBoard()->m_Modules;
 
-    fpid.Parse( fpid_txt, LIB_ID::ID_PCB );
+    if( !module )
+        return false;
+
+    LIB_ID fpid = module->GetFPID();
 
     if( !fpid.IsValid() )
         return false;

@@ -46,7 +46,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     wxString msg;
 
     // Set up toolbar
-    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString,
                             KiScaledBitmap( new_footprint_xpm, this ),
                             _( "New footprint" ) );

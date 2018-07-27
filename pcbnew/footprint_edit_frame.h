@@ -302,15 +302,6 @@ public:
      */
      MODULE* Import_Module( const wxString& aName = wxT("") );
 
-
-    /**
-     * Function SaveCurrentModule
-     * saves the module which is currently being edited into aLibPath or into the
-     * currently selected library if aLibPath is NULL.
-     * @return bool - true if successfully saved, else false because abort or error.
-     */
-    bool SaveCurrentModule( const wxString* aLibPath = NULL );
-
     /**
      * Function Load_Module_From_BOARD
      * load in Modedit a footprint from the main board

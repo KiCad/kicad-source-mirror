@@ -207,25 +207,17 @@ enum id_eeschema_frm
 
     ID_HOTKEY_HIGHLIGHT,
 
-    /* Library editor main menubar IDs. */
-    ID_LIBEDIT_DIMENSIONS,
-
-    /* Library editor: library edit events */
+    /* Library editor: edit events */
     ID_LIBEDIT_NEW_LIBRARY,
     ID_LIBEDIT_ADD_LIBRARY,
-    ID_LIBEDIT_SAVE_LIBRARY,
-    ID_LIBEDIT_SAVE_LIBRARY_AS,
-    ID_LIBEDIT_SAVE_ALL_LIBS,
-    ID_LIBEDIT_REVERT_LIBRARY,
-
-    /* Library editor: part edit events */
+    ID_LIBEDIT_SAVE,
+    ID_LIBEDIT_SAVE_AS,
+    ID_LIBEDIT_SAVE_ALL,
+    ID_LIBEDIT_REVERT,
     ID_LIBEDIT_NEW_PART,
     ID_LIBEDIT_EDIT_PART,
     ID_LIBEDIT_IMPORT_PART,
     ID_LIBEDIT_EXPORT_PART,
-    ID_LIBEDIT_SAVE_PART,
-    ID_LIBEDIT_SAVE_PART_AS,
-    ID_LIBEDIT_REVERT_PART,
     ID_LIBEDIT_REMOVE_PART,
     ID_LIBEDIT_DUPLICATE_PART,
 

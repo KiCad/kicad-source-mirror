@@ -230,40 +230,10 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-void LIB_EDIT_FRAME::OnSaveLibrary( wxCommandEvent& event )
-{
-    saveLibrary( getTargetLib(), event.GetId() == ID_LIBEDIT_SAVE_LIBRARY_AS );
-    m_treePane->Refresh();
-}
-
-
-void LIB_EDIT_FRAME::OnSaveAllLibraries( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
 {
     saveAllLibraries( false );
     m_treePane->Refresh();
-}
-
-
-void LIB_EDIT_FRAME::OnRevertLibrary( wxCommandEvent& aEvent )
-{
-    wxString libName = getTargetLib();
-    wxString curLib = GetCurLib();
-    bool currentLib = ( libName == curLib || curLib.IsEmpty() );
-
-    // Save the current part name/unit to reload after revert
-    wxString alias = m_aliasName;
-    int unit = m_unit;
-
-    if( !IsOK( this, _( "The revert operation cannot be undone!\n\nRevert changes?" ) ) )
-        return;
-
-    if( currentLib )
-        emptyScreen();
-
-    m_libMgr->RevertLibrary( libName );
-
-    if( currentLib && m_libMgr->PartExists( alias, libName ) )
-        loadPart( alias, libName, unit );
 }
 
 
@@ -354,18 +324,43 @@ void LIB_EDIT_FRAME::OnEditPart( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnSavePart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
 
-    if( m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() ) )
-        m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+    if( partName.IsEmpty() )
+    {
+        saveLibrary( getTargetLib(), false );
+    }
+    else
+    {
+        // Save Part
+        if( m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() ) )
+            m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+    }
 
     m_treePane->Refresh();
 }
 
 
-void LIB_EDIT_FRAME::OnSavePartAs( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnSaveAs( wxCommandEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+
+    if( partName.IsEmpty() )
+        saveLibrary( getTargetLib(), true );
+    else
+        savePartAs();
+
+    m_treePane->Refresh();
+}
+
+
+void LIB_EDIT_FRAME::savePartAs()
 {
     LIB_ID old_lib_id = getTargetLibId();
     wxString old_name = old_lib_id.GetLibItemName();
@@ -530,22 +525,38 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 }
 
 
-void LIB_EDIT_FRAME::OnRevertPart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+
+    if( !IsOK( this, _( "The revert operation cannot be undone!\n\nRevert changes?" ) ) )
+        return;
+
     bool currentPart = isCurrentPart( libId );
+    wxString alias = m_aliasName;
     int unit = m_unit;
 
     if( currentPart )
         emptyScreen();
 
-    libId = m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() );
+    if( partName.IsEmpty() )
+    {
+        m_libMgr->RevertLibrary( libName );
+    }
+    else
+    {
+        libId = m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() );
 
-    m_treePane->GetCmpTree()->SelectLibId( libId );
-    m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+        m_treePane->GetCmpTree()->SelectLibId( libId );
+        m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+    }
 
-    if( currentPart && m_libMgr->PartExists( libId.GetLibItemName(), libId.GetLibNickname() ) )
-        loadPart( libId.GetLibItemName(), libId.GetLibNickname(), unit );
+    if( currentPart && m_libMgr->PartExists( alias, libName ) )
+        loadPart( alias, libName, unit );
+
+    m_treePane->Refresh();
 }
 
 
