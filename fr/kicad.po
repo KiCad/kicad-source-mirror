@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-07-15 11:42+0200\n"
+"PO-Revision-Date: 2018-07-28 12:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -20760,7 +20760,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:126
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:147
 msgid "SilkScreen"
-msgstr "Vernis Épargne"
+msgstr "Sérigraphie"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:126
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:147
