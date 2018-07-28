@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -787,7 +787,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerHelpBitmaps = new wxBoxSizer( wxVERTICAL );
 	
 	m_bmCMicrostripZoddZeven = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxBitmap( microstrip_zodd_zeven_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL, 5 );
 	
 	m_fgSizerZcomment = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_fgSizerZcomment->AddGrowableCol( 0 );
@@ -808,7 +808,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_fgSizerZcomment->Add( m_staticTextZcommon, 0, wxALL, 5 );
 	
 	
-	bSizerHelpBitmaps->Add( m_fgSizerZcomment, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizerHelpBitmaps->Add( m_fgSizerZcomment, 0, wxEXPAND, 5 );
 	
 	
 	bMiddleSizer->Add( bSizerHelpBitmaps, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -1038,7 +1038,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelTransline->SetSizer( bSizeTransline );
 	m_panelTransline->Layout();
 	bSizeTransline->Fit( m_panelTransline );
-	m_Notebook->AddPage( m_panelTransline, _("TransLine"), false );
+	m_Notebook->AddPage( m_panelTransline, _("TransLine"), true );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerAtt;
 	bSizerAtt = new wxBoxSizer( wxHORIZONTAL );
@@ -1192,7 +1192,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelAttenuators->SetSizer( bSizerAtt );
 	m_panelAttenuators->Layout();
 	bSizerAtt->Fit( m_panelAttenuators );
-	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), true );
+	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), false );
 	m_panelColorCode = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelColorCode;
 	bSizerPanelColorCode = new wxBoxSizer( wxHORIZONTAL );

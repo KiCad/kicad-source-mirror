@@ -37,7 +37,9 @@
 #endif
 
 #if defined(_WIN32)
+#ifndef strcasecmp  // on mingw, strcasecmp is defined
 #define strcasecmp( s, t ) stricmp( s, t )
+#endif
 #endif
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,7 @@ PANEL_HOTKEYS_EDITOR_BASE::PANEL_HOTKEYS_EDITOR_BASE( wxWindow* parent, wxWindow
 	b_buttonsSizer->Add( btnExport, 0, wxTOP|wxLEFT, 5 );
 	
 	
-	bMargins->Add( b_buttonsSizer, 0, wxALIGN_RIGHT|wxEXPAND, 5 );
+	bMargins->Add( b_buttonsSizer, 0, wxEXPAND, 5 );
 	
 	
 	m_mainSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
