@@ -71,7 +71,7 @@ wxString DRC_ITEM::GetErrorText() const
 
 wxString DRC_ITEM::ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos )
 {
-    return wxString::Format( _( "@(%s, %s)" ),
+    return wxString::Format( "@(%s, %s)",
                              MessageTextFromValue( aUnits, aPos.x ),
                              MessageTextFromValue( aUnits, aPos.y ) );
 }
@@ -94,7 +94,7 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
     if( m_noCoordinate )
     {
         // omit the coordinate, a NETCLASS has no location
-        return wxString::Format( _( "<p><b>%s</b><br>&nbsp;&nbsp; %s" ), errText, mainText );
+        return wxString::Format( "<p><b>%s</b><br>&nbsp;&nbsp; %s", errText, mainText );
     }
     else if( m_hasSecondItem )
     {
@@ -104,7 +104,7 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        return wxString::Format( _( "<p><b>%s</b><br>&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s<br>&nbsp;&nbsp; %s: %s" ),
+        return wxString::Format( "<p><b>%s</b><br>&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s<br>&nbsp;&nbsp; %s: %s",
                                  errText,
                                  hrefColour.GetAsString( wxC2S_HTML_SYNTAX ),
                                  ShowCoord( aUnits, m_MainPosition ),
@@ -114,7 +114,7 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
     }
     else
     {
-        return wxString::Format( _( "<p><b>%s</b><br>&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s" ),
+        return wxString::Format( "<p><b>%s</b><br>&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s",
                                  errText,
                                  hrefColour.GetAsString( wxC2S_HTML_SYNTAX ),
                                  ShowCoord( aUnits, m_MainPosition ),

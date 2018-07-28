@@ -482,10 +482,10 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
     }
     }
 
-    wxString start = wxString::Format( _( "@(%s, %s)" ),
+    wxString start = wxString::Format( "@(%s, %s)",
                                        MessageTextFromValue( aUnits, GetStart().x ),
                                        MessageTextFromValue( aUnits, GetStart().y ) );
-    wxString end   = wxString::Format( _( "@(%s, %s)" ),
+    wxString end   = wxString::Format( "@(%s, %s)",
                                        MessageTextFromValue( aUnits, GetEnd().x ),
                                        MessageTextFromValue( aUnits, GetEnd().y ) );
 
