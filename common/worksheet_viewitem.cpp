@@ -202,8 +202,8 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
 void WORKSHEET_VIEWITEM::drawBorder( GAL* aGal ) const
 {
     VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
-    VECTOR2D end = VECTOR2D( m_pageInfo->GetWidthMils() * 25400,
-                             m_pageInfo->GetHeightMils() * 25400 );
+    VECTOR2D end = VECTOR2D( m_pageInfo->GetWidthMils() * m_mils2IUscalefactor,
+                             m_pageInfo->GetHeightMils() * m_mils2IUscalefactor );
 
     aGal->SetIsStroke( true );
     // Use a gray color for the border color
