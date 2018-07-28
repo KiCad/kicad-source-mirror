@@ -45,6 +45,13 @@ include( GNUInstallDirs )
 # Path to local CMake modules.
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 
+# On Windows, binaries created by link option -g3 are very large (more than 1Gb for pcbnew,
+# and more than 3Gb for the full kicad suite)
+# This option create binaries using link option -g1 that create much smaller files, but
+# there are less info in debug (but the file names and line numbers are available)
+option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller binaries." OFF )
+
+
 #
 # KiCad build options should be added below.
 #
@@ -274,8 +281,18 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     set( CMAKE_C_FLAGS   "-Wall ${CMAKE_C_FLAGS}" )
     set( CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}" )
 
-    set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
-    set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
+    # Link flags in Debug: -g1 and -ggdb1 or -g1 and -ggdb3 can be used.
+    # Level 1 produces minimal information, enough for making basic backtraces.
+    # This includes descriptions of functions and external variables, and line number tables,
+    # but no information about local variables.
+    # Level 3 includes full information, but binaries are much larger.
+    if( BUILD_SMALL_DEBUG_FILES )
+        set( CMAKE_C_FLAGS_DEBUG   "-g1 -ggdb1 -DDEBUG" )
+        set( CMAKE_CXX_FLAGS_DEBUG "-g1 -ggdb1 -DDEBUG -Wno-deprecated-declarations" )
+    else()
+        set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
+        set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
+    endif()
 
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
