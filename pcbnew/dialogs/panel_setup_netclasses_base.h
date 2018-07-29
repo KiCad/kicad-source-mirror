@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,7 +44,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		WX_GRID* m_netclassGrid;
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_removeButton;
-		wxStaticText* m_staticText6;
+		wxStaticText* m_ncfilterLabel;
 		wxChoice* m_netClassFilter;
 		wxStaticText* m_filterLabel;
 		wxTextCtrl* m_netNameFilter;

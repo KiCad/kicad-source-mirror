@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,10 +18,10 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	sbFeatureRules = new wxBoxSizer( wxVERTICAL );
 	
 	m_OptAllowBlindBuriedVias = new wxCheckBox( this, wxID_ANY, _("Allow blind/buried vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptAllowBlindBuriedVias, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 5 );
+	sbFeatureRules->Add( m_OptAllowBlindBuriedVias, 0, wxRIGHT|wxTOP, 5 );
 	
 	m_OptAllowMicroVias = new wxCheckBox( this, wxID_ANY, _("Allow micro vias (uVias)"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptAllowMicroVias, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 5 );
+	sbFeatureRules->Add( m_OptAllowMicroVias, 0, wxRIGHT|wxTOP, 5 );
 	
 	
 	sbFeatureRules->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );

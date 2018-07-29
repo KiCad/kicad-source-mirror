@@ -14,6 +14,7 @@
         <property name="file">panel_setup_netclasses_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">panel_setup_netclasses_base</property>
         <property name="namespace"></property>
@@ -531,7 +532,7 @@
                                                                 <property name="minimize_button">0</property>
                                                                 <property name="minimum_size">120,-1</property>
                                                                 <property name="moveable">1</property>
-                                                                <property name="name">m_staticText6</property>
+                                                                <property name="name">m_ncfilterLabel</property>
                                                                 <property name="pane_border">1</property>
                                                                 <property name="pane_position"></property>
                                                                 <property name="pane_size"></property>
@@ -758,7 +759,7 @@
                                                         </object>
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
-                                                            <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                             <property name="proportion">1</property>
                                                             <object class="wxTextCtrl" expanded="0">
                                                                 <property name="BottomDockable">1</property>
