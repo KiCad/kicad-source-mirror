@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "sim_plot_frame_base.h"
@@ -139,12 +139,12 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	
 	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_staticText2 = new wxStaticText( m_welcomePanel, wxID_ANY, _("Start the simulation by clicking the Run Simulation button"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	m_staticText2->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+	m_staticTextInfo = new wxStaticText( m_welcomePanel, wxID_ANY, _("Start the simulation by clicking the Run Simulation button"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo->Wrap( -1 );
+	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 	
-	bSizer81->Add( m_staticText2, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
+	bSizer81->Add( m_staticTextInfo, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -269,7 +269,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	
 	this->SetSizer( m_sizerMain );
 	this->Layout();
-	m_sizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

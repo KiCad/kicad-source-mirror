@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __SIM_PLOT_FRAME_BASE_H__
@@ -11,9 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class KIWAY_PLAYER;
-class wxListView;
-
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/bitmap.h>
@@ -67,7 +64,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxAuiNotebook* m_plotNotebook;
 		wxPanel* m_welcomePanel;
 		wxBoxSizer* m_sizer8;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextInfo;
 		wxPanel* m_panelConsole;
 		wxBoxSizer* m_sizerConsole;
 		wxTextCtrl* m_simConsole;
@@ -106,7 +103,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 	
 	public:
 		
-		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
+		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 511,468 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
 		
 		~SIM_PLOT_FRAME_BASE();
 		

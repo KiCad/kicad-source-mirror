@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -444,7 +444,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	m_fixIncludePaths = new wxCheckBox( this, wxID_ANY, _("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fixIncludePaths->SetValue(true); 
-	bSizer1->Add( m_fixIncludePaths, 0, wxALL, 5 );
+	bSizer1->Add( m_fixIncludePaths, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -453,7 +453,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizer1->Add( m_sdbSizer, 0, wxALL|wxEXPAND|wxALIGN_RIGHT, 5 );
+	bSizer1->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bSizer1 );
