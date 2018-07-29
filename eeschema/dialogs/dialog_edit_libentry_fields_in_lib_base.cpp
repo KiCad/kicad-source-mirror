@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -113,7 +113,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("   Edit Spice Model...   "), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerButtons->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizerButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -125,7 +125,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	stdDialogButtonSizer->AddButton( stdDialogButtonSizerCancel );
 	stdDialogButtonSizer->Realize();
 	
-	bSizerButtons->Add( stdDialogButtonSizer, 0, wxEXPAND|wxALL, 6 );
+	bSizerButtons->Add( stdDialogButtonSizer, 0, wxALL|wxALIGN_CENTER_VERTICAL, 6 );
 	
 	
 	mainSizer->Add( bSizerButtons, 0, wxEXPAND, 5 );
