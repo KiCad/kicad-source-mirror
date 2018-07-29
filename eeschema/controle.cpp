@@ -309,7 +309,7 @@ bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
         keyHandled = true;
     }
 
-    // Make sure current-part highlighting doesn't get lost in seleciton highlighting
+    // Make sure current-part highlighting doesn't get lost in selection highlighting
     ClearSearchTreeSelection();
 
     UpdateStatusBar();

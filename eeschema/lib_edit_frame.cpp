@@ -1657,14 +1657,14 @@ SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable()
     libTableNames.Add( _( "Global" ) );
     libTableNames.Add( _( "Project" ) );
 
-    switch( SelectSingleOption( this, _( "Select Symbol Library Table" ),
-                _( "Choose the Library Table to add the library:" ), libTableNames ) )
+    switch( SelectSingleOption( this, _( "Select Library Table" ),
+                                _( "Choose the Library Table to add the library to:" ),
+                                libTableNames ) )
     {
-        case 0: return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-        case 1: return Prj().SchSymbolLibTable();
+    case 0:  return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+    case 1:  return Prj().SchSymbolLibTable();
+    default: return nullptr;
     }
-
-    return nullptr;
 }
 
 

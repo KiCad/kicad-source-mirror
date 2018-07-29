@@ -52,6 +52,9 @@
 #include <pcbnew_id.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
+#include <footprint_tree_pane.h>
+#include <fp_lib_table.h>
+#include <widgets/lib_tree.h>
 #include <collectors.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -279,12 +282,19 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_DELETE_PART:
-        if( DeleteModuleFromLibrary() )
-            Clear_Pcb( false );
+        if( DeleteModuleFromLibrary( LoadFootprint( getTargetLibId() ) ) )
+        {
+            if( getTargetLibId() == GetCurrentLibId() )
+                Clear_Pcb( false );
+
+            syncLibraryTree( true );
+        }
         break;
 
     case ID_MODEDIT_NEW_MODULE:
         {
+            LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();
+
             if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
             {
                 KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
@@ -315,21 +325,39 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                     GetBoard()->m_Modules->ClearFlags();
 
                 Zoom_Automatique( false );
+                GetScreen()->SetModify();
+
+                // If selected from the library tree then go ahead and save it there
+                if( !selected.GetLibNickname().empty() )
+                {
+                    LIB_ID fpid = module->GetFPID();
+                    fpid.SetLibNickname( selected.GetLibNickname() );
+                    module->SetFPID( fpid );
+                    SaveFootprint( module );
+                    GetScreen()->ClrModify();
+                }
             }
 
             updateView();
             m_canvas->Refresh();
+            Update3DView();
 
-            GetScreen()->ClrModify();
+            syncLibraryTree( false );
         }
         break;
 
     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
         {
+            LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();
+
             if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
             {
-                if( !IsOK( this,
-                           _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
+                KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
+                              _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+                dlg.SetOKLabel( _( "Discard Changes" ) );
+                dlg.DoNotShowCheckbox();
+
+                if( dlg.ShowModal() == wxID_CANCEL )
                     break;
             }
 
@@ -359,48 +387,79 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 module->ClearFlags();
 
                 Zoom_Automatique( false );
+                GetScreen()->SetModify();
+
+                // If selected from the library tree then go ahead and save it there
+                if( !selected.GetLibNickname().empty() )
+                {
+                    LIB_ID fpid = module->GetFPID();
+                    fpid.SetLibNickname( selected.GetLibNickname() );
+                    module->SetFPID( fpid );
+                    SaveFootprint( module );
+                    GetScreen()->ClrModify();
+                }
+
                 updateView();
                 m_canvas->Refresh();
-
                 Update3DView();
 
-                GetScreen()->ClrModify();
+                syncLibraryTree( false );
             }
 
             wizard->Destroy();
         }
         break;
 
-    case ID_MODEDIT_SAVE_LIBMODULE:
-        if( GetBoard()->m_Modules )
+    case ID_MODEDIT_SAVE:
+        if( getTargetLibId() == GetCurrentLibId() )
         {
-            SaveFootprint( GetBoard()->m_Modules );
+            if( SaveFootprint( GetBoard()->m_Modules ) )
+            {
+                m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
-            m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+                if( IsGalCanvasActive() && GetGalCanvas() )
+                    GetGalCanvas()->ForceRefresh();
+                else
+                    GetCanvas()->Refresh();
 
-            if( IsGalCanvasActive() && GetGalCanvas() )
-                GetGalCanvas()->ForceRefresh();
-            else
-                GetCanvas()->Refresh();
-
-            GetScreen()->ClrModify();
+                GetScreen()->ClrModify();
+            }
         }
+
+        m_treePane->GetLibTree()->Refresh();
         break;
 
-    case ID_MODEDIT_SAVE_LIBMODULE_AS:
-        if( GetBoard()->m_Modules )
+    case ID_MODEDIT_SAVE_AS:
+        if( getTargetLibId().GetLibItemName().empty() )
         {
-            SaveFootprintAs( GetBoard()->m_Modules );
-
-            m_toolManager->GetView()->Update( GetBoard()->m_Modules );
-
-            if( IsGalCanvasActive() && GetGalCanvas() )
-                GetGalCanvas()->ForceRefresh();
-            else
-                GetCanvas()->Refresh();
-
-            GetScreen()->ClrModify();
+            // Save Library As
+            const wxString& libName = getTargetLibId().GetLibNickname();
+            if( SaveLibraryAs( Prj().PcbFootprintLibs()->FindRow( libName )->GetFullURI() ) )
+                syncLibraryTree( true );
         }
+        else
+        {
+            // Save Footprint As
+            MODULE* footprint = LoadFootprint( getTargetLibId() );
+            if( footprint && SaveFootprintAs( footprint ) )
+            {
+                syncLibraryTree( false );
+
+                if( getTargetLibId() == GetCurrentLibId() )
+                {
+                    m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+
+                    if( IsGalCanvasActive() && GetGalCanvas() )
+                        GetGalCanvas()->ForceRefresh();
+                    else
+                        GetCanvas()->Refresh();
+
+                    GetScreen()->ClrModify();
+                }
+            }
+        }
+
+        m_treePane->GetLibTree()->Refresh();
         break;
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
@@ -511,21 +570,29 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EXPORT_PART:
-        if( GetBoard()->m_Modules )
-            Export_Module( GetBoard()->m_Modules );
+        Export_Module( LoadFootprint( getTargetLibId() ) );
         break;
 
     case ID_MODEDIT_CREATE_NEW_LIB:
-        CreateNewLibrary();
+    {
+        wxFileName fn( CreateNewLibrary() );
+        wxString name = fn.GetName();
+
+        if( !name.IsEmpty() )
+        {
+            LIB_ID newLib( name, wxEmptyString );
+
+            syncLibraryTree( false );
+            m_treePane->GetLibTree()->SelectLibId( newLib );
+        }
+    }
         break;
 
     case ID_MODEDIT_SHEET_SET:
         break;
 
-    case ID_MODEDIT_LOAD_MODULE:
+    case ID_MODEDIT_EDIT_MODULE:
     {
-        wxLogDebug( wxT( "Loading module from library " ) + getLibPath() );
-
         if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
         {
             KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
@@ -537,7 +604,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
         }
 
-        MODULE* module = SelectFootprintFromLibTree( wxEmptyString );
+        LIB_ID partId = m_treePane->GetLibTree()->GetSelectedLibId();
+
+        MODULE* module = LoadFootprint( partId );
 
         if( !module )
             break;
@@ -578,6 +647,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         updateView();
         m_canvas->Refresh();
+        m_treePane->GetLibTree()->Refresh();
     }
         break;
 

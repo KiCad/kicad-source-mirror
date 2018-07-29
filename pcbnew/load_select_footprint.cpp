@@ -213,7 +213,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( const wxString& aLibrary, bo
         adapter->SetPreselectNode( history_list[0]->GetLibId(), 0 );
     }
 
-    adapter->AddLibraries( &GFootprintList );
+    adapter->AddLibraries();
 
     wxString title;
     title.Printf( _( "Choose Footprint (%d items loaded)" ), adapter->GetItemCount() );
@@ -396,13 +396,13 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
+bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 {
-    wxString    curLibPath;
+    wxString    curLibPath = aLibraryPath;
     wxString    dstLibPath = CreateNewLibrary();
 
     if( !dstLibPath )
-        return;             // user aborted in CreateNewLibrary()
+        return false;             // user aborted in CreateNewLibrary()
 
     wxBusyCursor dummy;
     wxString msg;
@@ -415,26 +415,23 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
         PLUGIN::RELEASER cur( IO_MGR::PluginFind( curType ) );
         PLUGIN::RELEASER dst( IO_MGR::PluginFind( dstType ) );
 
-        wxArrayString mods;
+        wxArrayString footprints;
 
-        cur->FootprintEnumerate( mods, curLibPath );
+        cur->FootprintEnumerate( footprints, curLibPath );
 
-        for( unsigned i = 0;  i < mods.size();  ++i )
+        for( unsigned i = 0;  i < footprints.size();  ++i )
         {
-            std::unique_ptr<MODULE> m( cur->LoadEnumeratedFootprint( curLibPath, mods[i] ) );
-            dst->FootprintSave( dstLibPath, m.get() );
+            const MODULE* footprint = cur->LoadEnumeratedFootprint( curLibPath, footprints[i] );
+            dst->FootprintSave( dstLibPath, footprint );
 
-            msg = wxString::Format( _( "Footprint \"%s\" saved" ),
-                                    GetChars( mods[i] ) );
+            msg = wxString::Format( _( "Footprint \"%s\" saved" ), footprints[i] );
             SetStatusText( msg );
-
-            // m is deleted here by unique_ptr.
         }
     }
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
-        return;
+        return false;
     }
 
     msg = wxString::Format(
@@ -444,4 +441,5 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     DisplayInfoMessage( this, msg );
 
     SetStatusText( wxEmptyString );
+    return true;
 }

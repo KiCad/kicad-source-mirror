@@ -43,18 +43,18 @@ public:
      */
     static PTR Create( LIB_TABLE* aLibs );
 
-    void AddLibraries( FOOTPRINT_LIST* aFootprintInfoList );
+    void AddLibraries();
 
     wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) override;
 
 protected:
-
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
     FP_TREE_MODEL_ADAPTER( LIB_TABLE* aLibs );
 
-private:
+    std::vector<LIB_TREE_ITEM*> getFootprints( const wxString& aLibName );
+
     FP_LIB_TABLE*   m_libs;
 };
 

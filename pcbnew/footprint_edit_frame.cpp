@@ -58,6 +58,11 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/zoom_tool.h>
 
+#include <footprint_tree_pane.h>
+#include <widgets/lib_tree.h>
+#include <fp_lib_table.h>
+#include <footprint_info_impl.h>
+
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_modedit_settings.h>
 #include <dialogs/panel_modedit_defaults.h>
@@ -65,6 +70,7 @@
 #include <dialog_configure_paths.h>
 
 #include <tools/position_relative_tool.h>
+#include <widgets/progress_reporter.h>
 #include "tools/selection_tool.h"
 #include "tools/edit_tool.h"
 #include "tools/drawing_tool.h"
@@ -88,10 +94,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectGrid )
 
-    EVT_TOOL( ID_MODEDIT_SAVE_LIBRARY_AS, FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs )
-
-    EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE_AS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SAVE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SAVE_AS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_OPEN_MODULE_VIEWER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
     EVT_TOOL( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -103,7 +107,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_SHEET_SET, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_GEN_IMPORT_DXF_FILE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PRINT, FOOTPRINT_EDIT_FRAME::ToPrinter )
-    EVT_TOOL( ID_MODEDIT_LOAD_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_EDIT_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_CHECK, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_PAD_SETTINGS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
@@ -170,10 +174,10 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::OnSwitchCanvas )
 
     // UI update events.
-    EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE_AS, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBRARY_AS, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted )
+    EVT_UPDATE_UI( ID_MODEDIT_SAVE, FOOTPRINT_EDIT_FRAME::OnUpdateSave )
+    EVT_UPDATE_UI( ID_MODEDIT_SAVE_AS, FOOTPRINT_EDIT_FRAME::OnUpdateSaveAs )
+    EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted )
     EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_MODEDIT_INSERT_MODULE_IN_BOARD,
@@ -186,12 +190,14 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_MEASUREMENT_TOOL,
                          FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
 
+    EVT_UPDATE_UI( ID_MODEDIT_EDIT_MODULE_PROPERTIES, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_PAD_SETTINGS, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+
     // Option toolbar:
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                    FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
 
-    EVT_UPDATE_UI( ID_GEN_IMPORT_DXF_FILE,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_GEN_IMPORT_DXF_FILE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
 END_EVENT_TABLE()
 
@@ -262,6 +268,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    initLibraryTree();
+    m_treePane = new FOOTPRINT_TREE_PANE( this );
+
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
@@ -317,6 +327,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg_pane ).Name( "MsgPanel" ).Bottom().Layer(10) );
 
+    m_auimgr.AddPane( m_treePane, wxAuiPaneInfo().Name( "FootprintTree" ).Left().Row( 1 )
+            .Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
+
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
@@ -360,36 +373,35 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 }
 
 
-const wxString FOOTPRINT_EDIT_FRAME::getLibPath()
+LIB_ID FOOTPRINT_EDIT_FRAME::getTargetLibId() const
 {
-    try
-    {
-        const wxString& nickname = GetCurrentLib();
+    LIB_ID   id = m_treePane->GetLibTree()->GetSelectedLibId();
+    wxString nickname = id.GetLibNickname();
 
-        const FP_LIB_TABLE_ROW* row = Prj().PcbFootprintLibs()->FindRow( nickname );
+    if( nickname.IsEmpty() )
+        return GetCurrentLibId();
 
-        return row->GetFullURI( true );
-    }
-    catch( const IO_ERROR& )
-    {
-        return wxEmptyString;
-    }
+    return id;
 }
 
 
-const wxString FOOTPRINT_EDIT_FRAME::GetCurrentLib() const
+LIB_ID FOOTPRINT_EDIT_FRAME::GetCurrentLibId() const
 {
-    return Prj().GetRString( PROJECT::PCB_LIB_NICKNAME );
+    MODULE* module = GetBoard()->m_Modules;
+
+    if( module )
+        return module->GetFPID();
+    else
+        return LIB_ID();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::retainLastFootprint()
 {
-    MODULE* module = GetBoard()->m_Modules;
+    LIB_ID id = GetCurrentLibId();
 
-    if( module )
+    if( id.IsValid() )
     {
-        LIB_ID id = module->GetFPID();
         Prj().SetRString( PROJECT::PCB_FOOTPRINT_EDITOR_NICKNAME, id.GetLibNickname() );
         Prj().SetRString( PROJECT::PCB_FOOTPRINT_EDITOR_FPNAME, id.GetLibItemName() );
     }
@@ -509,6 +521,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
         switch( ii )
         {
+        default:
         case wxID_NO:
             break;
 
@@ -581,6 +594,28 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
 void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetBoard()->m_Modules != NULL );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( getTargetLibId().IsValid() );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( GetBoard()->m_Modules && GetScreen()->IsModify() );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateSaveAs( wxUpdateUIEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+
+    aEvent.Enable( !libName.IsEmpty() || !partName.IsEmpty() );
 }
 
 
@@ -691,34 +726,36 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
     Update3DView();
+    m_treePane->GetLibTree()->Refresh();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
     wxString title = _( "Footprint Editor" );
-    MODULE* module = GetBoard()->m_Modules;
+    LIB_ID   fpid = GetCurrentLibId();
+    bool     writable = true;
 
-    if( module )
+    if( fpid.IsValid() )
     {
-        bool writable = true;
-        const LIB_ID& fpid = module->GetFPID();
-        wxString nickname = fpid.GetLibNickname();
-
-        if( !nickname.IsEmpty() )
+        try
         {
-            try
-            {
-                writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
-            }
-            catch( const IO_ERROR& )
-            {
-            }
+            writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( fpid.GetLibNickname() );
+        }
+        catch( const IO_ERROR& )
+        {
+            // best efforts...
         }
 
         title += wxString::Format( wxT( " \u2014 %s %s" ),
-                                   FROM_UTF8( module->GetFPID().Format().c_str() ),
+                                   FROM_UTF8( fpid.Format().c_str() ),
                                    writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) );
+    }
+    else if( !fpid.GetLibItemName().empty() )
+    {
+        title += wxString::Format( wxT( " \u2014 %s %s" ),
+                                   FROM_UTF8( fpid.GetLibItemName().c_str() ),
+                                   _( "[Unsaved]" ) );
     }
 
     SetTitle( title );
@@ -733,6 +770,68 @@ void FOOTPRINT_EDIT_FRAME::updateView()
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::initLibraryTree()
+{
+    FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
+
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+    GFootprintList.ReadFootprintFiles( fpTable, NULL, &progressReporter );
+    progressReporter.Show( false );
+
+    if( GFootprintList.GetErrorCount() )
+        GFootprintList.DisplayErrors( this );
+
+    m_adapter = FP_TREE_SYNCHRONIZING_ADAPTER::Create( this, fpTable );
+    auto adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
+
+    adapter->AddLibraries();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::syncLibraryTree( bool aProgress )
+{
+    FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
+    auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
+    LIB_ID        target = getTargetLibId();
+    bool          targetSelected = ( target == m_treePane->GetLibTree()->GetSelectedLibId() );
+
+    // Sync FOOTPRINT_INFO list to the libraries on disk
+    if( aProgress )
+    {
+        WX_PROGRESS_REPORTER progressReporter( this, _( "Updating Footprint Libraries" ), 2 );
+        GFootprintList.ReadFootprintFiles( fpTable, NULL, &progressReporter );
+        progressReporter.Show( false );
+    }
+    else
+    {
+        GFootprintList.ReadFootprintFiles( fpTable, NULL, NULL );
+    }
+
+    // Sync the LIB_TREE to the FOOTPRINT_INFO list
+    adapter->Sync();
+
+    m_treePane->GetLibTree()->Unselect();
+    m_treePane->Regenerate();
+
+    if( target.IsValid() )
+    {
+        if( adapter->FindItem( target ) )
+        {
+            if( targetSelected )
+                m_treePane->GetLibTree()->SelectLibId( target );
+            else
+                m_treePane->GetLibTree()->CenterLibId( target );
+        }
+        else
+        {
+            // Try to focus on parent
+            target.SetLibItemName( wxEmptyString );
+            m_treePane->GetLibTree()->CenterLibId( target );
+        }
+    }
 }
 
 
@@ -796,11 +895,9 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
                 }
                 catch( const IO_ERROR& ioe )
                 {
-                    wxString msg = wxString::Format( _(
-                        "Error occurred saving the global footprint library "
-                        "table:\n\n%s" ),
-                        GetChars( ioe.What().GetData() )
-                        );
+                    wxString msg;
+                    msg.Printf( _( "Error saving the global footprint library table:\n\n%s" ),
+                                ioe.What().GetData() );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
@@ -816,11 +913,9 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
                 }
                 catch( const IO_ERROR& ioe )
                 {
-                    wxString msg = wxString::Format( _(
-                        "Error occurred saving project specific footprint library "
-                        "table:\n\n%s" ),
-                        GetChars( ioe.What() )
-                        );
+                    wxString msg;
+                    msg.Printf( _( "Error saving project specific footprint library table:\n\n%s" ),
+                                ioe.What() );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
             }
@@ -828,8 +923,13 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
             FOOTPRINT_VIEWER_FRAME* viewer;
             viewer = (FOOTPRINT_VIEWER_FRAME*)Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 
-            if( tableChanged && viewer != NULL )
-                viewer->ReCreateLibraryList();
+            if( tableChanged )
+            {
+                if( viewer != NULL )
+                    viewer->ReCreateLibraryList();
+
+                syncLibraryTree( true );
+            }
         }
         break;
 

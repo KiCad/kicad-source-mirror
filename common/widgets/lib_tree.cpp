@@ -154,6 +154,12 @@ void LIB_TREE::SelectLibId( const LIB_ID& aLibId )
 }
 
 
+void LIB_TREE::CenterLibId( const LIB_ID& aLibId )
+{
+    centerIfValid( m_adapter->FindItem( aLibId ) );
+}
+
+
 void LIB_TREE::Unselect()
 {
     m_tree_ctrl->UnselectAll();
@@ -209,6 +215,14 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
         postPreselectEvent();
     }
 }
+
+
+void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
+{
+    if( aTreeId.IsOk() )
+        m_tree_ctrl->EnsureVisible( aTreeId );
+}
+
 
 
 void LIB_TREE::postPreselectEvent()

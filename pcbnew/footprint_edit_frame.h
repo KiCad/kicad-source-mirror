@@ -29,10 +29,13 @@
 #include <pcb_base_edit_frame.h>
 #include <io_mgr.h>
 #include <config_params.h>
+#include <fp_tree_synchronizing_adapter.h>
 
 class PCB_LAYER_WIDGET;
 class FP_LIB_TABLE;
 class EDGE_MODULE;
+class FOOTPRINT_TREE_PANE;
+class LIB_MANAGER;
 
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 
@@ -40,6 +43,9 @@ namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend struct PCB::IFACE;
+
+    FOOTPRINT_TREE_PANE*        m_treePane;
+    LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
 
 public:
 
@@ -132,13 +138,13 @@ public:
     void OnConfigurePaths( wxCommandEvent& aEvent );
 
     /**
-     * Function OnSaveLibraryAs
-     * saves the current library to a new name and/or library type.
+     * Function SaveLibraryAs
+     * saves a library to a new name and/or library type.
      *
      * @note Saving as a new library type requires the plug-in to support saving libraries
      * @see PLUGIN::FootprintSave and PLUGIN::FootprintLibCreate
      */
-    void OnSaveLibraryAs( wxCommandEvent& aEvent );
+    bool SaveLibraryAs( const wxString& aLibraryPath );
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
@@ -183,6 +189,9 @@ public:
 
     void OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
+    void OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent );
+    void OnUpdateSave( wxUpdateUIEvent& aEvent );
+    void OnUpdateSaveAs( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
@@ -195,6 +204,11 @@ public:
      * called from the main toolbar to load a footprint from board mainly to edit it.
      */
     void LoadModuleFromBoard( wxCommandEvent& event );
+
+    /**
+     * Returns the adapter object that provides the stored data.
+     */
+    LIB_TREE_MODEL_ADAPTER::PTR& GetLibTreeAdapter() { return m_adapter; }
 
     /**
      * Function SaveFootprint
@@ -267,8 +281,11 @@ public:
 
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
-    /// Return the current library nickname.
-    const wxString GetCurrentLib() const;
+    /// Return the LIB_ID of the part selected in the footprint or the part being edited.
+    LIB_ID getTargetLibId() const;
+
+    /// Return the LIB_ID of the part being edited.
+    LIB_ID GetCurrentLibId() const;
 
     void RemoveStruct( EDA_ITEM* Item );
 
@@ -378,9 +395,9 @@ public:
 
     /**
      * Function DeleteModuleFromLibrary
-     * prompts user for footprint name, then deletes it from current library.
+     * deletes the given module from its library.
      */
-    bool DeleteModuleFromLibrary();
+    bool DeleteModuleFromLibrary( MODULE* aModule );
 
     /**
      * Function IsElementVisible
@@ -447,6 +464,18 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
+     * Build the footprint library tree. Displays a progress dialog.
+     */
+    void initLibraryTree();
+
+    /**
+     * Synchronize the footprint library tree to the current state of the footprint library
+     * table.
+     * @param aProgress
+     */
+    void syncLibraryTree( bool aProgress );
+
+    /**
      * Allows Modedit to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent ) override;
@@ -485,9 +514,6 @@ protected:
 
     /// Reloads displayed items and sets view.
     void updateView();
-
-    /// The libPath is not publicly visible, grab it from the FP_LIB_TABLE if we must.
-    const wxString getLibPath();
 
     void restoreLastFootprint();
     void retainLastFootprint();

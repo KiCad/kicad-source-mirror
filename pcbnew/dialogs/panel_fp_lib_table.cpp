@@ -774,7 +774,17 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobalTab
 
     dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, aGlobalTable, aProjectTable ) );
 
-    return dlg.ShowModal();
+    int ret = 0;
+
+    if( dlg.ShowModal() != wxID_CANCEL )
+    {
+        if( dlg.m_GlobalTableChanged )
+            ret += 1;
+        if( dlg.m_ProjectTableChanged )
+            ret += 2;
+    }
+
+    return ret;
 }
 
 

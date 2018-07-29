@@ -130,8 +130,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_select_net_from_list.cpp
     dialogs/dialog_select_net_from_list_base.cpp
-    dialogs/dialog_select_pretty_lib.cpp
-    dialogs/dialog_select_pretty_lib_base.cpp
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_swap_layers.cpp
@@ -240,6 +238,7 @@ set( PCBNEW_CLASS_SRCS
     footprint_editor_utils.cpp
     footprint_editor_onclick.cpp
     footprint_editor_options.cpp
+    fp_tree_synchronizing_adapter.cpp
     footprint_edit_frame.cpp
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
@@ -326,6 +325,7 @@ set( PCBNEW_CLASS_SRCS
     tools/zone_filler_tool.cpp
 
     footprint_preview_panel.cpp
+    footprint_tree_pane.cpp
     )
 
 set( PCBNEW_SRCS

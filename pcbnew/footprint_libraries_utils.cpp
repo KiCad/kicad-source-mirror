@@ -53,8 +53,6 @@
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
 
-#include <dialog_select_pretty_lib.h>
-
 
 // unique, "file local" translations:
 
@@ -318,6 +316,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
             return NULL;
     }
 
+    LIB_ID fpid;
+    fpid.SetLibItemName( module->GetFPID().GetLibItemName() );
+    module->SetFPID( fpid );
+
     // Insert footprint in list
     GetBoard()->Add( module );
 
@@ -417,28 +419,33 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
     // because the legacy format cannot handle current features.
     // The footprint library is actually a directory
 
-    // if a library name is not given, prompt user for footprint library name, ending by ".pretty"
-    // Because there are constraints for the directory name to create,
-    // (the name should have the extension ".pretty", and the folder cannot be inside
-    // a footprint library), we do not use the standard wxDirDialog.
-
-
     wxString initialPath = wxPathOnly( Prj().GetProjectFullName() );
-
-    wxString libPath;
+    wxFileName fn;
+    bool saveInGlobalTable = false, saveInProjectTable = false;
 
     if( aLibName.IsEmpty() )
     {
-        DIALOG_SELECT_PRETTY_LIB dlg( this, initialPath );
+        fn = initialPath;
 
-        if( dlg.ShowModal() != wxID_OK )
+        if( !LibraryFileBrowser( false, fn, KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
             return wxEmptyString;
 
-        libPath = dlg.GetFullPrettyLibName();
+        wxArrayString libTableNames;
+        libTableNames.Add( _( "Global" ) );
+        libTableNames.Add( _( "Project" ) );
+
+        switch( SelectSingleOption( this, _( "Select Library Table" ),
+                                    _( "Choose the Library Table to add the library to:" ),
+                                    libTableNames ) )
+        {
+        case 0:  saveInGlobalTable = true;  break;
+        case 1:  saveInProjectTable = true; break;
+        default: return wxEmptyString;
+        }
     }
     else
     {
-        wxFileName fn = aLibName;
+        fn = aLibName;
 
         if( !fn.IsAbsolute() )
         {
@@ -448,13 +455,11 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 
         // Enforce the .pretty extension:
         fn.SetExt( KiCadFootprintLibPathExtension );
-
-        libPath = fn.GetFullPath();
     }
-
 
     // We can save fp libs only using IO_MGR::KICAD_SEXP format (.pretty libraries)
     IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
+    wxString libPath = fn.GetFullPath();
 
     try
     {
@@ -469,15 +474,13 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
             exists   = true;    // no exception was thrown, lib must exist.
         }
         catch( const IO_ERROR& )
-        {
-            // ignore, original values of 'writable' and 'exists' are accurate.
-        }
+        { }
 
         if( exists )
         {
             if( !writable )
             {
-                wxString msg = wxString::Format( FMT_LIB_READ_ONLY, GetChars( libPath ) );
+                wxString msg = wxString::Format( FMT_LIB_READ_ONLY, libPath );
                 DisplayError( this, msg );
                 return wxEmptyString;
             }
@@ -496,6 +499,19 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         }
 
         pi->FootprintLibCreate( libPath );
+
+        if( saveInGlobalTable )
+        {
+            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), libPath, wxT( "KiCad" ), wxEmptyString );
+            GFootprintTable.InsertRow( row );
+            GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
+        }
+        else if( saveInProjectTable )
+        {
+            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), libPath, wxT( "KiCad" ), wxEmptyString );
+            Prj().PcbFootprintLibs()->InsertRow( row );
+            Prj().PcbFootprintLibs()->Save( Prj().FootprintLibTblName() );
+        }
     }
     catch( const IO_ERROR& ioe )
     {
@@ -507,14 +523,12 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary()
+bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( MODULE* aModule )
 {
-    MODULE* module = GetBoard()->m_Modules;
-
-    if( !module )
+    if( !aModule )
         return false;
 
-    LIB_ID fpid = module->GetFPID();
+    LIB_ID fpid = aModule->GetFPID();
 
     if( !fpid.IsValid() )
         return false;

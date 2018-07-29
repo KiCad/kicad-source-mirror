@@ -56,11 +56,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "New footprint using footprint wizard" ) );
 #endif
 
-    m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString,
-                            KiScaledBitmap( load_module_lib_xpm, this ),
-                            _( "Open a footprint from a library" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString,
+    m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
                             KiScaledBitmap( save_xpm, this ),
                             _( "Save footprint in existing library" ) );
 

@@ -53,33 +53,38 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // New module
-    text = AddHotkeyName( _( "&New..." ), m_hotkeysDescrList, HK_NEW );
+    AddMenuItem( fileMenu,
+                 ID_MODEDIT_CREATE_NEW_LIB,
+                 _( "New Library..." ),
+                 _( "Creates an empty library" ),
+                 KiBitmap( new_library_xpm ) );
+/* TODO
+    AddMenuItem( fileMenu,
+                 ID_MODEDIT_ADD_LIBRARY,
+                 _( "Add Library..." ),
+                 _( "Adds a previously created library" ),
+                 KiBitmap( add_library_xpm ) );
+*/
+    text = AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW );
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
                  text, _( "Create a new footprint" ),
                  KiBitmap( new_footprint_xpm ) );
 
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
-                 _( "&Create..." ),
+                 _( "&Create Footprint..." ),
                  _( "Create a new footprint using the footprint wizard" ),
                  KiBitmap( module_wizard_xpm ) );
 
-    text = AddHotkeyName( _( "&Open..." ), m_hotkeysDescrList, HK_OPEN );
-    AddMenuItem( fileMenu, ID_MODEDIT_LOAD_MODULE, text,
-                 _( "Open a footprint from a library" ),
-                 KiBitmap( load_module_lib_xpm ) );
-
     fileMenu->AppendSeparator();
 
-    // Save module
     text = AddHotkeyName( _( "&Save" ), m_hotkeysDescrList, HK_SAVE );
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE, text,
                  _( "Save changes" ),
                  KiBitmap( save_xpm ) );
 
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE_AS,
-                 _( "Save &As..." ),
-                 _( "Save footprint to a new name and/or new library" ),
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_AS,
+                 _( "Save a Copy &As..." ),
+                 _( "Save a copy to a new name and/or location" ),
                  KiBitmap( save_as_xpm ) );
 
     fileMenu->AppendSeparator();

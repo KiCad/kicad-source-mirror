@@ -75,9 +75,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             {
                 try
                 {
-                    FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-
-                    GFootprintTable.Format( &sf, 0 );
+                    GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
                     tableChanged = true;
                 }
                 catch( const IO_ERROR& ioe )

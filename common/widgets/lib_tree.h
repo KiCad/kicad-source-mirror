@@ -70,11 +70,14 @@ public:
     LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
 
     /**
-     * Select a part in the tree widget.
-     *
-     * @param aLibId is the identifier of part to be selected.
+     * Select an item in the tree widget.
      */
     void SelectLibId( const LIB_ID& aLibId );
+
+    /**
+     * Ensure that an item is visible (preferrably centered).
+     */
+    void CenterLibId( const LIB_ID& aLibId );
 
     /**
      * Unselect currently selected item in wxDataViewCtrl
@@ -118,6 +121,8 @@ protected:
      */
     void selectIfValid( const wxDataViewItem& aTreeId );
 
+    void centerIfValid( const wxDataViewItem& aTreeId );
+
     /**
      * Post a wxEVT_DATAVIEW_SELECTION_CHANGED to notify the selection handler
      * that a new part has been preselected.
@@ -157,6 +162,7 @@ protected:
 
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
+    void onUpdateUI( wxUpdateUIEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );

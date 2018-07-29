@@ -273,12 +273,12 @@ void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
     DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Footprint Libraries" ) );
 
     dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
-                                                  Prj().SchSymbolLibTable() ) );
+                                               Prj().SchSymbolLibTable() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    saveSymbolLibTables( true, true );
+    saveSymbolLibTables( dlg.m_GlobalTableChanged, dlg.m_ProjectTableChanged );
 
     LIB_EDIT_FRAME* editor = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
 
