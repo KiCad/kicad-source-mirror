@@ -54,6 +54,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_block_options.cpp
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_board_setup.cpp
+    dialogs/dialog_choose_footprint.cpp
     dialogs/dialog_cleaning_options.cpp
     dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_copper_zones.cpp
@@ -88,8 +89,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_gencad_export_options.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
-    dialogs/dialog_get_footprint.cpp
-    dialogs/dialog_get_footprint_base.cpp
     dialogs/dialog_get_footprint_by_name_base.cpp
     dialogs/dialog_global_deletion.cpp
     dialogs/dialog_global_deletion_base.cpp
@@ -244,6 +243,8 @@ set( PCBNEW_CLASS_SRCS
     footprint_edit_frame.cpp
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
+    fp_tree_model_adapter.cpp
+    generate_footprint_info.cpp
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
     highlight.cpp

@@ -37,6 +37,7 @@
 #include <ki_mutex.h>
 #include <kicad_string.h>
 #include <sync_queue.h>
+#include <lib_tree_item.h>
 
 #include <atomic>
 #include <functional>
@@ -62,7 +63,7 @@ class KIWAY;
  * This is a virtual class; its implementation lives in pcbnew/footprint_info_impl.cpp.
  * To get instances of these classes, see FOOTPRINT_LIST::GetInstance().
  */
-class APIEXPORT FOOTPRINT_INFO
+class APIEXPORT FOOTPRINT_INFO : public LIB_TREE_ITEM
 {
     friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
 
@@ -84,16 +85,31 @@ public:
         return m_nickname;
     }
 
-    const wxString& GetDoc()
+    const wxString& GetName() const override
+    {
+        return m_fpname;
+    }
+
+    LIB_ID GetLibId() const override
+    {
+        return LIB_ID( m_nickname, m_fpname );
+    }
+
+    wxString GetDescription() override
     {
         ensure_loaded();
         return m_doc;
     }
 
-    const wxString& GetKeywords()
+    wxString GetKeywords()
     {
         ensure_loaded();
         return m_keywords;
+    }
+
+    wxString GetSearchText() override
+    {
+        return GetKeywords() + wxT( "        " ) + GetDescription();
     }
 
     unsigned GetPadCount()
@@ -207,11 +223,14 @@ public:
     }
 
     /**
-     * Get info for a module by name.
-     * @param aFootprintName = the footprint name inside the FOOTPRINT_INFO of interest.
-     * @return FOOTPRINT_INF* - the item stored in list if found
+     * Get info for a module by id.
      */
-    FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintName );
+    FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintId );
+
+    /**
+     * Get info for a module by libNickname/footprintName
+     */
+    FOOTPRINT_INFO* GetModuleInfo( const wxString& aLibNickname, const wxString& aFootprintName );
 
     /**
      * Get info for a module by index.
@@ -222,12 +241,6 @@ public:
     {
         return *m_list[aIdx];
     }
-
-    /**
-     * Add aItem to list
-     * @param aItem = item to add
-     */
-    void AddItem( FOOTPRINT_INFO* aItem );
 
     unsigned GetErrorCount() const
     {

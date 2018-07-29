@@ -785,7 +785,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
     wxString curr_nickname = getCurNickname();
     MODULE*  oldmodule = GetBoard()->m_Modules;
-    MODULE*  module = LoadModuleFromLibrary( curr_nickname, false );
+    MODULE*  module = SelectFootprintFromLibTree( curr_nickname, false );
 
     if( module )
     {

@@ -316,7 +316,7 @@ public:
      * @return a pointer to a module if this module is selected or NULL otherwise
      * @param aPcb = the board from modules can be loaded
      */
-    MODULE* SelectFootprint( BOARD* aPcb );
+    MODULE* SelectFootprintFromBoard( BOARD* aPcb );
 
     // functions to edit footprint edges
 

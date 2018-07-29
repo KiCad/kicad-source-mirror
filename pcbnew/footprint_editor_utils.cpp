@@ -537,7 +537,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
         }
 
-        MODULE* module = LoadModuleFromLibrary( wxEmptyString );
+        MODULE* module = SelectFootprintFromLibTree( wxEmptyString );
 
         if( !module )
             break;
