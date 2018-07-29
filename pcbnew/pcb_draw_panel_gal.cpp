@@ -482,6 +482,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_RATSNEST, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_RATSNEST );
 
+    m_view->SetLayerTarget( LAYER_WORKSHEET, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
     m_view->SetLayerDisplayOnly( LAYER_GRID );
     m_view->SetLayerDisplayOnly( LAYER_DRC );
