@@ -24,14 +24,13 @@
 #ifndef GEOM_TEST_UTILS_H
 #define GEOM_TEST_UTILS_H
 
+#include <math.h>
+
 /**
  * @brief Utility functions for testing geometry functions.
  */
 namespace GEOM_TEST
 {
-
-constexpr double PI = atan(1.0) * 4.0;
-constexpr double PI_2 = atan(1.0) * 2.0;
 
 /**
  * @brief Check if a value is within a tolerance of a nominal value
@@ -159,12 +158,12 @@ bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, double aToleran
     auto angle = std::abs( a.Angle() - b.Angle() );
 
     // Normalise: angles of 3*pi/2 are also perpendicular
-    if (angle > PI)
+    if (angle > M_PI)
     {
-        angle -= PI;
+        angle -= M_PI;
     }
 
-    return IsWithin( angle, PI_2, aTolerance );
+    return IsWithin( angle, M_PI / 2.0, aTolerance );
 }
 
 /**

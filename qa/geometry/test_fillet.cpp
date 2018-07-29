@@ -68,8 +68,9 @@ void TestFilletSegmentConstraints( const SEG& aSeg, VECTOR2I aRadCentre,
         ( diffC.EuclideanNorm() )( aRadius )( aError + 1 ) );
 
     // Check 3: Mid-point -> radius centre perpendicular
+    const auto perpendularityMaxError = ( M_PI / 2 ) / 10;
     BOOST_CHECK_PREDICATE( ArePerpendicular<int>,
-        ( diffC )( aSeg.A - aSeg.B )( PI_2 / 10 ) );
+        ( diffC )( aSeg.A - aSeg.B )( perpendularityMaxError ) );
 }
 
 
