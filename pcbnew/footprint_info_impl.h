@@ -44,9 +44,14 @@ public:
         m_num = 0;
         m_pad_count = 0;
         m_unique_pad_count = 0;
-#if !USE_FPI_LAZY
+
         load();
-#endif
+    }
+
+    // A dummy constructor for use as a target in a binary search
+    FOOTPRINT_INFO_IMPL( const wxString& aFootprintName )
+    {
+        m_fpname = aFootprintName;
     }
 
 protected:

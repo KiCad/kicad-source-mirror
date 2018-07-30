@@ -242,7 +242,7 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
     {
         for( auto& fpinfo : m_fp_filter )
         {
-            wxString display_name( fpinfo.GetNickname() + ":" + fpinfo.GetFootprintName() );
+            wxString display_name( fpinfo.GetLibNickname() + ":" + fpinfo.GetFootprintName() );
 
             m_fp_sel_ctrl->Append( display_name, new wxStringClientData( display_name ) );
             ++n_items;

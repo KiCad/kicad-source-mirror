@@ -421,7 +421,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
         for( unsigned i = 0;  i < footprints.size();  ++i )
         {
-            const MODULE* footprint = cur->LoadEnumeratedFootprint( curLibPath, footprints[i] );
+            const MODULE* footprint = cur->GetEnumeratedFootprint( curLibPath, footprints[i] );
             dst->FootprintSave( dstLibPath, footprint );
 
             msg = wxString::Format( _( "Footprint \"%s\" saved" ), footprints[i] );

@@ -95,16 +95,19 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
     // remove the common part from the aliases list
     for( auto nodeIt = aLibNode.Children.begin(); nodeIt != aLibNode.Children.end();  )
     {
-        auto footprintIt = std::find_if( footprints.begin(), footprints.end(),
-                                         [&] ( const LIB_TREE_ITEM* a )
-                                         {
-                                             return a->GetName() == (*nodeIt)->Name;
-                                         } );
+        // Since the list is sorted we can use a binary search to speed up searches within
+        // libraries with lots of footprints.
+        FOOTPRINT_INFO_IMPL dummy( (*nodeIt)->Name );
+        auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
+                                             []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
+                                             {
+                                                 return a->GetName() < b->GetName();
+                                             } );
 
-        if( footprintIt != footprints.end() )
+        if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
         {
-            // alias exists both in the component tree and the library manager,
-            // update only the node data
+            // footprint exists both in the lib tree and the footprint info list; just
+            // update the node data
             static_cast<LIB_TREE_NODE_LIB_ID*>( nodeIt->get() )->Update( *footprintIt );
             footprints.erase( footprintIt );
             ++nodeIt;
@@ -118,7 +121,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
 
     // now the aliases list contains only new aliases that need to be added to the tree
     for( auto footprint : footprints )
-        aLibNode.AddComp( footprint );
+        aLibNode.AddItem( footprint );
 
     aLibNode.AssignIntrinsicRanks();
     m_libMap.insert( aLibNode.Name );

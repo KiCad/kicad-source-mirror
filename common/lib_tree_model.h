@@ -249,9 +249,9 @@ public:
     /**
      * Construct a new alias node, add it to this library, and return it.
      *
-     * @param aAlias    LIB_COMPONENT to provide data
+     * @param aItem    LIB_COMPONENT to provide data
      */
-    LIB_TREE_NODE_LIB_ID& AddComp( LIB_TREE_ITEM* aAlias );
+    LIB_TREE_NODE_LIB_ID& AddItem( LIB_TREE_ITEM* aItem );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
 };

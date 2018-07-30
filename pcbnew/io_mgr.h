@@ -407,13 +407,13 @@ public:
             const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function LoadEnumeratedFootprint
-     * a version of FootprintLoad() for use after FootprintEnumerate() for more
-     * efficient cache management.
+     * Function GetEnumeratedFootprint
+     * a version of FootprintLoad() for use after FootprintEnumerate() for more efficient
+     * cache management.
      */
-    virtual MODULE* LoadEnumeratedFootprint( const wxString& aLibraryPath,
-                                             const wxString& aFootprintName,
-                                             const PROPERTIES* aProperties = NULL );
+    virtual const MODULE* GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                  const wxString& aFootprintName,
+                                                  const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintSave

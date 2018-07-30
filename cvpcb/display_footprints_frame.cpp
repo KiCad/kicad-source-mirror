@@ -496,7 +496,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         GetBoard()->m_Modules.PushBack( module );
 
     if( module_info )
-        SetStatusText( wxString::Format( _( "Lib: %s" ), module_info->GetNickname() ), 0 );
+        SetStatusText( wxString::Format( _( "Lib: %s" ), module_info->GetLibNickname() ), 0 );
     else
         SetStatusText( wxEmptyString, 0 );
 

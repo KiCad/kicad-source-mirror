@@ -250,6 +250,139 @@ wxString GetKicadConfigPath()
 }
 
 
+enum Bracket
+{
+    Bracket_None,
+    Bracket_Normal  = ')',
+    Bracket_Curly   = '}',
+#ifdef  __WINDOWS__
+    Bracket_Windows = '%',    // yeah, Windows people are a bit strange ;-)
+#endif
+    Bracket_Max
+};
+
+
+//
+// Stolen from wxExpandEnvVars and then heavily optimized
+//
+wxString KIwxExpandEnvVars(const wxString& str)
+{
+    size_t strlen = str.length();
+
+    wxString strResult;
+    strResult.Alloc(strlen);
+
+    for ( size_t n = 0; n < strlen; n++ ) {
+        wxUniChar str_n = str[n];
+
+        switch ( str_n.GetValue() ) {
+#ifdef __WINDOWS__
+            case wxT('%'):
+#endif // __WINDOWS__
+        case wxT('$'):
+        {
+            Bracket bracket;
+#ifdef __WINDOWS__
+            if ( str_n == wxT('%') )
+              bracket = Bracket_Windows;
+            else
+#endif // __WINDOWS__
+            if ( n == strlen - 1 ) {
+                bracket = Bracket_None;
+            }
+            else {
+                switch ( str[n + 1].GetValue() ) {
+                case wxT('('):
+                    bracket = Bracket_Normal;
+                    n++;                   // skip the bracket
+                    break;
+
+                case wxT('{'):
+                    bracket = Bracket_Curly;
+                    n++;                   // skip the bracket
+                    break;
+
+                default:
+                    bracket = Bracket_None;
+                }
+            }
+
+            size_t m = n + 1;
+            wxUniChar str_m = str[m];
+
+            while ( m < strlen && (wxIsalnum(str_m) || str_m == wxT('_')) )
+                str_m = str[++m];
+
+            wxString strVarName(str.c_str() + n + 1, m - n - 1);
+
+#ifdef __WXWINCE__
+            const bool expanded = false;
+#else
+            // NB: use wxGetEnv instead of wxGetenv as otherwise variables
+            //     set through wxSetEnv may not be read correctly!
+            bool expanded = false;
+            wxString tmp;
+            if (wxGetEnv(strVarName, &tmp))
+            {
+                strResult += tmp;
+                expanded = true;
+            }
+            else
+#endif
+            {
+                // variable doesn't exist => don't change anything
+#ifdef  __WINDOWS__
+                if ( bracket != Bracket_Windows )
+#endif
+                if ( bracket != Bracket_None )
+                    strResult << str[n - 1];
+                strResult << str_n << strVarName;
+            }
+
+            // check the closing bracket
+            if ( bracket != Bracket_None ) {
+                if ( m == strlen || str_m != (wxChar)bracket ) {
+                    // under MSW it's common to have '%' characters in the registry
+                    // and it's annoying to have warnings about them each time, so
+                    // ignroe them silently if they are not used for env vars
+                    //
+                    // under Unix, OTOH, this warning could be useful for the user to
+                    // understand why isn't the variable expanded as intended
+#ifndef __WINDOWS__
+                    wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %u in '%s'."),
+                                 (char)bracket, (unsigned int) (m + 1), str.c_str());
+#endif // __WINDOWS__
+                }
+                else {
+                    // skip closing bracket unless the variables wasn't expanded
+                    if ( !expanded )
+                        strResult << (wxChar)bracket;
+                    str_m = str[++m];
+                }
+            }
+
+            n = m - 1;  // skip variable name
+        }
+            break;
+
+        case wxT('\\'):
+            // backslash can be used to suppress special meaning of % and $
+            if ( n != strlen - 1 && (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
+                strResult += str[++n];
+
+                break;
+            }
+            //else: fall through
+
+        default:
+            strResult += str_n;
+        }
+    }
+
+    return strResult;
+}
+
+
 #include <ki_mutex.h>
 const wxString ExpandEnvVarSubstitutions( const wxString& aString )
 {
@@ -261,7 +394,7 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString )
 
     // We reserve the right to do this another way, by providing our own member
     // function.
-    return wxExpandEnvVars( aString );
+    return KIwxExpandEnvVars( aString );
 }
 
 

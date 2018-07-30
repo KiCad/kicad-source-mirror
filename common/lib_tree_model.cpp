@@ -141,13 +141,24 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
 }
 
 
-LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aAlias )
+LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
 {
-    wxASSERT( aParent && aAlias );
-
     Type = LIBID;
     Parent = aParent;
-    Update( aAlias );
+
+    LibId = aItem->GetLibId();
+
+    Name = aItem->GetName();
+    Desc = aItem->GetDescription();
+
+    MatchName = aItem->GetName().Lower();
+    SearchText = aItem->GetSearchText();
+    SearchTextNormalized = false;
+
+    IsRoot = aItem->IsRoot();
+
+    for( int u = 1; u <= aItem->GetUnitCount(); ++u )
+        AddUnit( aItem, u );
 }
 
 
@@ -161,21 +172,19 @@ LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ID::AddUnit( LIB_TREE_ITEM* aItem, int aUn
 
 void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 {
-    IsRoot = aItem->IsRoot();
-    LibId = aItem->GetLibId();
+    // Update is called when the names match, so just update the other fields.
 
-    Name = aItem->GetName();
+    LibId.SetLibNickname( aItem->GetLibNickname() );
+
     Desc = aItem->GetDescription();
 
-    MatchName = aItem->GetName().Lower();
     SearchText = aItem->GetSearchText();
     SearchTextNormalized = false;
 
+    IsRoot = aItem->IsRoot();
     Children.clear();
 
-    int unitCount = aItem->GetUnitCount();
-
-    for( int u = 1; u <= unitCount; ++u )
+    for( int u = 1; u <= aItem->GetUnitCount(); ++u )
         AddUnit( aItem, u );
 }
 
@@ -246,11 +255,11 @@ LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aN
 }
 
 
-LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddComp( LIB_TREE_ITEM* aAlias )
+LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 {
-    LIB_TREE_NODE_LIB_ID* alias = new LIB_TREE_NODE_LIB_ID( this, aAlias );
-    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( alias ) );
-    return *alias;
+    LIB_TREE_NODE_LIB_ID* item = new LIB_TREE_NODE_LIB_ID( this, aItem );
+    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( item ) );
+    return *item;
 }
 
 

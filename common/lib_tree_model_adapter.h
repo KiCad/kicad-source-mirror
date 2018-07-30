@@ -148,10 +148,10 @@ public:
      *
      * @param aNodeName    the parent node the components will appear under
      * @param aDesc        the description field of the parent node
-     * @param aCompList    list of components
+     * @param aItemList    list of components
      */
     void DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
-                       std::vector<LIB_TREE_ITEM*> const& aCompList );
+                       std::vector<LIB_TREE_ITEM*> const& aItemList );
 
     /**
      * Set the search string provided by the user.

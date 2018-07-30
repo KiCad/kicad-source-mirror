@@ -59,7 +59,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aLibNickname,
 
     for( auto& fp : m_list )
     {
-        if( aLibNickname == fp->GetNickname() && aFootprintName == fp->GetFootprintName() )
+        if( aLibNickname == fp->GetLibNickname() && aFootprintName == fp->GetFootprintName() )
             return &*fp;
     }
 

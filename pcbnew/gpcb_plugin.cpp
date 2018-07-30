@@ -954,10 +954,10 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
 }
 
 
-MODULE* GPCB_PLUGIN::doLoadFootprint( const wxString& aLibraryPath,
-                                      const wxString& aFootprintName,
-                                      const PROPERTIES* aProperties,
-                                      bool checkModified )
+const MODULE* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
+                                         const wxString& aFootprintName,
+                                         const PROPERTIES* aProperties,
+                                         bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -974,23 +974,23 @@ MODULE* GPCB_PLUGIN::doLoadFootprint( const wxString& aLibraryPath,
         return NULL;
     }
 
-    // copy constructor to clone the already loaded MODULE
-    return new MODULE( *it->second->GetModule() );
+    return it->second->GetModule();
 }
 
 
-MODULE* GPCB_PLUGIN::LoadEnumeratedFootprint( const wxString& aLibraryPath,
-                                              const wxString& aFootprintName,
-                                              const PROPERTIES* aProperties )
+const MODULE* GPCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                   const wxString& aFootprintName,
+                                                   const PROPERTIES* aProperties )
 {
-    return doLoadFootprint( aLibraryPath, aFootprintName, aProperties, false );
+    return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
 
 
 MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                     const PROPERTIES* aProperties )
 {
-    return doLoadFootprint( aLibraryPath, aFootprintName, aProperties, true );
+    const MODULE* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
+    return footprint ? new MODULE( *footprint ) : nullptr;
 }
 
 

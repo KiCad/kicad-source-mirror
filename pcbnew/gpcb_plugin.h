@@ -65,14 +65,15 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              const PROPERTIES* aProperties = NULL) override;
 
-    MODULE* LoadEnumeratedFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL ) override;
+    const MODULE* GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                          const wxString& aFootprintName,
+                                          const PROPERTIES* aProperties = NULL ) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL ) override;
+                           const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = NULL ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
                              const PROPERTIES* aProperties = NULL ) override;
@@ -101,8 +102,8 @@ protected:
 private:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
-    MODULE* doLoadFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties, bool checkModified );
+    const MODULE* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                const PROPERTIES* aProperties, bool checkModified );
 
     void init( const PROPERTIES* aProperties );
 };

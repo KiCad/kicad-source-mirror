@@ -464,18 +464,6 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
-     * Build the footprint library tree. Displays a progress dialog.
-     */
-    void initLibraryTree();
-
-    /**
-     * Synchronize the footprint library tree to the current state of the footprint library
-     * table.
-     * @param aProgress
-     */
-    void syncLibraryTree( bool aProgress );
-
-    /**
      * Allows Modedit to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent ) override;
@@ -505,6 +493,19 @@ protected:
 
     /// List of footprint editor configuration parameters.
     PARAM_CFG_ARRAY   m_configParams;
+
+    /**
+     * Make sure the footprint info list is loaded (with a progress dialog) and then initialize
+     * the footprint library tree.
+     */
+    void initLibraryTree();
+
+    /**
+     * Synchronize the footprint library tree to the current state of the footprint library
+     * table.
+     * @param aProgress
+     */
+    void syncLibraryTree( bool aProgress );
 
     /**
      * Function UpdateTitle

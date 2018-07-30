@@ -109,14 +109,11 @@ public:
         return shared;
     }
 
-    const wxString GetLibraryName();
-
-    bool IsRoot() const override;
+    PART_LIB* GetLib();
 
     LIB_ID GetLibId() const override;
 
-    PART_LIB* GetLib();
-
+    wxString GetLibNickname() const override;
     const wxString& GetName() const override { return name; }
 
     void SetName( const wxString& aName );
@@ -144,8 +141,19 @@ public:
 
     wxString GetSearchText() override;
 
+    /**
+     * For symbols having aliases, IsRoot() indicates the principal item.
+     */
+    bool IsRoot() const override;
+
+    /**
+     * For symbols with units, return the number of units.
+     */
     int GetUnitCount() override;
 
+    /**
+     * For symbols with units, return an identifier for unit x.
+     */
     wxString GetUnitReference( int aUnit ) override;
 
     /**

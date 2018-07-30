@@ -61,7 +61,7 @@ std::vector<LIB_TREE_ITEM*> FP_TREE_MODEL_ADAPTER::getFootprints( const wxString
 
     for( auto& footprint : GFootprintList.GetList() )
     {
-        if( footprint->GetNickname() != aLibName )
+        if( footprint->GetLibNickname() != aLibName )
         {
             if( found )
                 return list;

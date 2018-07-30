@@ -130,7 +130,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
     {
         // add a new library
         for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
-            aLibNode.AddComp( alias );
+            aLibNode.AddItem( alias );
     }
     else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.Name ) )
     {
@@ -162,7 +162,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
 
         // now the aliases list contains only new aliases that need to be added to the tree
         for( auto alias : aliases )
-            aLibNode.AddComp( alias );
+            aLibNode.AddItem( alias );
     }
 
     aLibNode.AssignIntrinsicRanks();

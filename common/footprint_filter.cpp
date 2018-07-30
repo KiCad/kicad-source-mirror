@@ -83,7 +83,7 @@ void FOOTPRINT_FILTER_IT::increment()
             // include the library name in the search string
             // e.g. LibName:FootprintName
             if( filter_pattern.Contains( ":" ) )
-                currname = list->GetItem( m_pos ).GetNickname().Lower() + ":";
+                currname = list->GetItem( m_pos ).GetLibNickname().Lower() + ":";
 
             currname += list->GetItem( m_pos ).GetFootprintName().Lower();
 
@@ -135,7 +135,7 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
         // If the filter contains a ':' character, include the library name in the pattern
         if( each_filter->GetPattern().Contains( ":" ) )
         {
-            name = aItem.GetNickname().Lower() + ":";
+            name = aItem.GetLibNickname().Lower() + ":";
         }
 
         name += aItem.GetFootprintName().Lower();

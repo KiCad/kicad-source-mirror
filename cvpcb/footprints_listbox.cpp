@@ -154,7 +154,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     for( auto& i: filter )
     {
         msg.Printf( "%3d %s:%s", int( newList.GetCount() + 1 ),
-                    GetChars( i.GetNickname() ),
+                    GetChars( i.GetLibNickname() ),
                     GetChars( i.GetFootprintName() ) );
         newList.Add( msg );
     }

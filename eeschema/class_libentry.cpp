@@ -94,7 +94,7 @@ LIB_ALIAS::~LIB_ALIAS()
 }
 
 
-const wxString LIB_ALIAS::GetLibraryName()
+wxString LIB_ALIAS::GetLibNickname() const
 {
     wxASSERT_MSG( shared, wxT( "LIB_ALIAS without a LIB_PART" ) );
 

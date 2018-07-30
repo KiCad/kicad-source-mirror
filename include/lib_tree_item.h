@@ -39,18 +39,19 @@
 class LIB_TREE_ITEM
 {
 public:
-    /**
-     * For items having aliases, IsRoot() indicates the principal item.
-     */
-    virtual bool IsRoot() const { return true; }
-
     virtual LIB_ID GetLibId() const = 0;
 
     virtual const wxString& GetName() const = 0;
+    virtual wxString GetLibNickname() const = 0;
 
     virtual wxString GetDescription() { return wxEmptyString; }
 
     virtual wxString GetSearchText() { return wxEmptyString; }
+
+    /**
+     * For items having aliases, IsRoot() indicates the principal item.
+     */
+    virtual bool IsRoot() const { return true; }
 
     /**
      * For items with units, return the number of units.

@@ -44,9 +44,6 @@
 #include <memory>
 
 
-#define USE_FPI_LAZY 0 // 1:yes lazy,  0:no early
-
-
 class FP_LIB_TABLE;
 class FOOTPRINT_LIST;
 class FOOTPRINT_LIST_IMPL;
@@ -80,7 +77,7 @@ public:
         return m_fpname;
     }
 
-    const wxString& GetNickname() const
+    wxString GetLibNickname() const override
     {
         return m_nickname;
     }

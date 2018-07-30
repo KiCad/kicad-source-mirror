@@ -48,8 +48,9 @@ void FOOTPRINT_INFO_IMPL::load()
 
     wxASSERT( fptable );
 
-    std::unique_ptr<MODULE> footprint( fptable->LoadEnumeratedFootprint( m_nickname, m_fpname ) );
-    if( footprint.get() == NULL ) // Should happen only with malformed/broken libraries
+    const MODULE* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
+
+    if( footprint == NULL ) // Should happen only with malformed/broken libraries
     {
         m_pad_count = 0;
         m_unique_pad_count = 0;
@@ -60,10 +61,9 @@ void FOOTPRINT_INFO_IMPL::load()
         m_unique_pad_count = footprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
         m_keywords = footprint->GetKeywords();
         m_doc = footprint->GetDescription();
-
-        // tell ensure_loaded() I'm loaded.
-        m_loaded = true;
     }
+
+    m_loaded = true;
 }
 
 
@@ -119,7 +119,9 @@ void FOOTPRINT_LIST_IMPL::loader_job()
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
                                               PROGRESS_REPORTER* aProgressReporter )
 {
-    if( m_list_timestamp == aTable->GenerateTimestamp( aNickname ) )
+    long long int generatedTimestamp = aTable->GenerateTimestamp( aNickname );
+
+    if( generatedTimestamp == m_list_timestamp )
         return true;
 
     m_progress_reporter = aProgressReporter;
@@ -162,6 +164,11 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         if( m_progress_reporter )
             m_progress_reporter->AdvancePhase();
     }
+
+    if( m_cancelled )
+        m_list_timestamp = 0;       // God knows what we got before we were cancelled
+    else
+        m_list_timestamp = generatedTimestamp;
 
     return m_errors.empty();
 }
@@ -296,7 +303,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
         if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
             m_cancelled = true;
 
-        wxMilliSleep( 20 );
+        wxMilliSleep( 30 );
     }
 
     for( auto& thr : threads )
@@ -307,14 +314,11 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
     while( queue_parsed.pop( fpi ) )
         m_list.push_back( std::move( fpi ) );
 
-    std::sort( m_list.begin(), m_list.end(),
-            []( std::unique_ptr<FOOTPRINT_INFO> const&     lhs,
-                    std::unique_ptr<FOOTPRINT_INFO> const& rhs ) -> bool { return *lhs < *rhs; } );
-
-    if( m_cancelled )
-        m_list_timestamp = 0;       // God knows what we got before we were cancelled
-    else
-        m_list_timestamp = m_lib_table->GenerateTimestamp( m_library );
+    std::sort( m_list.begin(), m_list.end(), []( std::unique_ptr<FOOTPRINT_INFO> const& lhs,
+                                                 std::unique_ptr<FOOTPRINT_INFO> const& rhs ) -> bool
+                                             {
+                                                 return *lhs < *rhs;
+                                             } );
 
     return m_errors.empty();
 }

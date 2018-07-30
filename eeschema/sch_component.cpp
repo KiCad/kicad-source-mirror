@@ -1409,7 +1409,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
                 aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
 
             if( alias->GetLib() && alias->GetLib()->IsCache() )
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), RED ) );
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibNickname(), RED ) );
             else if( !m_lib_id.GetLibNickname().empty() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),
                                                  BROWN ) );
