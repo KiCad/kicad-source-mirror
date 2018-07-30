@@ -825,12 +825,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         // add shapes with exact size
         module->TransformPadsShapesWithClearanceToPolygon( layer,
-                        initialPolys, 0,
-                        circleToSegmentsCount, correction );
+                        initialPolys, 0, circleToSegmentsCount, correction );
         // add shapes inflated by aMinThickness/2
         module->TransformPadsShapesWithClearanceToPolygon( layer,
-                        areas, inflate,
-                        circleToSegmentsCount, correction );
+                        areas, inflate, circleToSegmentsCount, correction );
     }
 
     // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,

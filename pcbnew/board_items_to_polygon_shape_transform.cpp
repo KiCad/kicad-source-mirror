@@ -771,8 +771,6 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 
 
-
-
 /*
  * Function BuildPadShapePolygon
  * Build the Corner list of the polygonal shape,
@@ -792,7 +790,6 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
-    case PAD_SHAPE_CUSTOM:
     {
         // We are using TransformShapeWithClearanceToPolygon to build the shape.
         // Currently, this method uses only the same inflate value for X and Y dirs.
@@ -818,6 +815,15 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
             aCornerBuffer.Append( corners[ii].x, corners[ii].y );
         }
 
+        break;
+
+    case PAD_SHAPE_CUSTOM:
+        // for a custom shape, that is in fact a polygon (with holes), we can use only a inflate value.
+        // so use ( aInflateValue.x + aInflateValue.y ) / 2 as polygon inflate value.
+        // (different values for aInflateValue.x and aInflateValue.y has no sense for a custom pad)
+        TransformShapeWithClearanceToPolygon( aCornerBuffer,
+                                              ( aInflateValue.x + aInflateValue.y ) / 2,
+                                              aSegmentsPerCircle, aCorrectionFactor );
         break;
     }
 }
