@@ -65,7 +65,7 @@ bool OPENGL_GAL::isBitmapFontLoaded = false;
 SHADER* OPENGL_GAL::shader = NULL;
 
 namespace KIGFX {
-class GL_BITMAP_CACHE 
+class GL_BITMAP_CACHE
 {
 public:
     GL_BITMAP_CACHE()
@@ -73,11 +73,11 @@ public:
     }
 
     ~GL_BITMAP_CACHE();
-       
+
     GLuint RequestBitmap( const BITMAP_BASE* aBitmap );
 
 private:
-    
+
     struct CACHED_BITMAP
     {
         GLuint id;
@@ -85,8 +85,8 @@ private:
     };
 
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
-    
-    std::map<const BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;    
+
+    std::map<const BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
 };
 
 };
@@ -121,21 +121,28 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.w = aBitmap->GetSizePixels().x;
     bmp.h = aBitmap->GetSizePixels().y;
 
+    // There are draw issues (incorrect rendering) with some w values.
+    // It happens when the w value is not a multiple of 4
+    // so we use only a sub image with a modified width
+    bmp.w -= bmp.w % 4;
+
     GLuint textureID;
     glGenTextures(1, &textureID);
 
     uint8_t *buf = new uint8_t [ bmp.w * bmp.h * 3];
     auto imgData = const_cast<BITMAP_BASE*>( aBitmap )->GetImageData();
 
-    for( int y=0; y < bmp.h; y++ )
-        for( int x = 0; x < bmp.w;x++)
+    for( int y = 0; y < bmp.h; y++ )
+    {
+        for( int x = 0; x < bmp.w; x++ )
         {
-            auto *p = buf + ( bmp.w * y + x ) * 3;
+            uint8_t *p = buf + ( bmp.w * y + x ) * 3;
 
             p[0] = imgData->GetRed( x, y );
             p[1] = imgData->GetGreen( x, y );
             p[2] = imgData->GetBlue( x, y );
         }
+    }
 
     glBindTexture( GL_TEXTURE_2D, textureID );
 
@@ -998,7 +1005,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     double w = aBitmap.GetSizePixels().x * pix_size_iu;
     double h = aBitmap.GetSizePixels().y * pix_size_iu;
-    
+
     auto xform = currentManager->GetTransformation();
 
     glm::vec4 v0 = xform * glm::vec4( -w/2, -h/2, 0.0, 0.0 );
@@ -1016,7 +1023,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glEnable(GL_TEXTURE_2D);
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, id );
-    
+
     glBegin( GL_QUADS );
     glColor4f(1.0, 1.0, 1.0, 1.0);
     glTexCoord2f(0.0, 0.0);
@@ -1034,7 +1041,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     SetTarget( oldTarget );
     glBindTexture( GL_TEXTURE_2D, 0 );
-    
+
     glPopMatrix();
 }
 
@@ -1457,7 +1464,7 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 void OPENGL_GAL::ClearCache()
 {
     bitmapCache.reset( new GL_BITMAP_CACHE );
-    
+
     groups.clear();
 
     if( isInitialized )
