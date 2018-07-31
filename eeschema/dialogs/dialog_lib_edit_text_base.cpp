@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -84,7 +84,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	sOptionsSizer->Add( m_CommonUnit, 0, wxALL, 5 );
 	
 	m_CommonConvert = new wxCheckBox( sOptionsSizer->GetStaticBox(), wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
-	sOptionsSizer->Add( m_CommonConvert, 0, wxALIGN_RIGHT|wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	sOptionsSizer->Add( m_CommonConvert, 0, wxBOTTOM|wxLEFT, 5 );
 	
 	m_Invisible = new wxCheckBox( sOptionsSizer->GetStaticBox(), wxID_ANY, _("Invisible"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_Invisible, 0, wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
@@ -123,7 +123,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
 	
-	bMainSizer->Add( m_sdbSizerButtons, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bMainSizer->Add( m_sdbSizerButtons, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

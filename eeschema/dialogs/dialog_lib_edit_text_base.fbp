@@ -947,7 +947,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_RIGHT|wxBOTTOM|wxEXPAND|wxLEFT</property>
+                                            <property name="flag">wxBOTTOM|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
@@ -1399,7 +1399,7 @@
                 </object>
                 <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
-                    <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+                    <property name="flag">wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_RIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="0">
                         <property name="Apply">0</property>

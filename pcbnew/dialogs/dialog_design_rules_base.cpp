@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -276,7 +276,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	m_staticTextInfo = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Specific via diameters and track widths, which can be used to replace default Netclass values on demand,\nfor arbitrary vias or track segments."), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE );
 	m_staticTextInfo->Wrap( -1 );
-	bpanelGlobRulesSizer->Add( m_staticTextInfo, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bpanelGlobRulesSizer->Add( m_staticTextInfo, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxBoxSizer* bDesignRulesLowerSizer;
 	bDesignRulesLowerSizer = new wxBoxSizer( wxHORIZONTAL );

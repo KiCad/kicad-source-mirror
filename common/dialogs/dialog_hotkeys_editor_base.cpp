@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -43,15 +43,14 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	b_buttonsSizer->Add( m_sdbSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	b_buttonsSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	m_mainSizer->Add( b_buttonsSizer, 0, wxALIGN_RIGHT|wxEXPAND, 5 );
+	m_mainSizer->Add( b_buttonsSizer, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );
 	this->Layout();
-	m_mainSizer->Fit( this );
 	
 	// Connect Events
 	m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( HOTKEYS_EDITOR_DIALOG_BASE::ResetClicked ), NULL, this );

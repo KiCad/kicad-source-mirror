@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -159,7 +159,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bButtonsSizer->Add( m_btnClose, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerDldOptions->Add( bButtonsSizer, 0, wxALIGN_RIGHT, 5 );
+	bSizerDldOptions->Add( bButtonsSizer, 0, 0, 5 );
 	
 	
 	bupperSizer->Add( bSizerDldOptions, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );

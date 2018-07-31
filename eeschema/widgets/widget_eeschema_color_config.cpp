@@ -216,8 +216,8 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
     {
         // Add a spacer to improve appearance.
         columnBoxSizer->AddSpacer( 5 );
-        columnBoxSizer->Add( bgColorLabel, 1, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-        columnBoxSizer->Add( selBgColorBtn, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
+        columnBoxSizer->Add( bgColorLabel, 1, wxALL, 5 );
+        columnBoxSizer->Add( selBgColorBtn, 1, wxRIGHT | wxBOTTOM, 5 );
     }
 
     currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ] = bgColor;
