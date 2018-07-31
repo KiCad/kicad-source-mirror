@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,9 +66,9 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetTextItemLayers;
 		wxCheckBox* m_resetTextItemEffects;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Apply;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerApply;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -82,7 +82,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 570,416 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXCHANGE_FOOTPRINTS_BASE();
 	
 };

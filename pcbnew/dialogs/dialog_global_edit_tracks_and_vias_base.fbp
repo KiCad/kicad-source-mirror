@@ -14,6 +14,7 @@
         <property name="file">dialog_global_edit_tracks_and_vias_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_global_edit_tracks_and_vias_base</property>
         <property name="namespace"></property>
@@ -792,8 +793,8 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">3</property>
-                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                    <property name="border">5</property>
+                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapComboBox" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -911,7 +912,7 @@
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM</property>
+                            <property name="flag">wxTOP|wxBOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="wxRadioButton" expanded="1">
                                 <property name="BottomDockable">1</property>

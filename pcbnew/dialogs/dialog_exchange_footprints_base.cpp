@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,7 +30,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_matchSpecifiedRef = new wxRadioButton( this, wxID_ANY, _("%s footprint with reference:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedRef, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 	
-	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_upperSizer->Add( m_specifiedRef, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxTOP|wxEXPAND, 5 );
 	
 	m_matchCurrentValue = new wxRadioButton( this, wxID_ANY, _("%s footprints with matching value (%s)"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -39,7 +39,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_matchSpecifiedValue = new wxRadioButton( this, wxID_ANY, _("%s footprints with value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedValue, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 5 );
 	
-	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_upperSizer->Add( m_specifiedValue, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("%s footprints with identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -53,13 +53,13 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_specifiedID->SetMinSize( wxSize( 500,22 ) );
 	
 	bSizer4->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_specifiedIDBrowseButton->SetMinSize( wxSize( 29,29 ) );
+	m_specifiedIDBrowseButton->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer4->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
 	
@@ -86,7 +86,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer3->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_newIDBrowseButton->SetMinSize( wxSize( 29,29 ) );
+	m_newIDBrowseButton->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer3->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
 	
@@ -121,19 +121,18 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_mainSizer->Add( staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer->AddButton( m_sdbSizerApply );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 	
-	m_mainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	m_mainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );
 	this->Layout();
-	m_mainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::updateMatchModeRadioButtons ) );
@@ -147,9 +146,11 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_specifiedValue->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchValueClicked ), NULL, this );
 	m_specifiedValue->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchValueClicked ), NULL, this );
 	m_matchSpecifiedID->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
+	m_specifiedID->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
+	m_specifiedID->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
 	m_specifiedIDBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_newIDBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
-	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClicked ), NULL, this );
+	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClicked ), NULL, this );
 }
 
 DIALOG_EXCHANGE_FOOTPRINTS_BASE::~DIALOG_EXCHANGE_FOOTPRINTS_BASE()
@@ -166,8 +167,10 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::~DIALOG_EXCHANGE_FOOTPRINTS_BASE()
 	m_specifiedValue->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchValueClicked ), NULL, this );
 	m_specifiedValue->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchValueClicked ), NULL, this );
 	m_matchSpecifiedID->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
+	m_specifiedID->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
+	m_specifiedID->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnMatchIDClicked ), NULL, this );
 	m_specifiedIDBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
 	m_newIDBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::ViewAndSelectFootprint ), NULL, this );
-	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClicked ), NULL, this );
+	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_FOOTPRINTS_BASE::OnApplyClicked ), NULL, this );
 	
 }
