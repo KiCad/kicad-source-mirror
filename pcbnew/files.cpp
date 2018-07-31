@@ -588,9 +588,15 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Select netclass Default as current netclass (it always exists)
     SetCurrentNetClass( NETCLASS::Default );
 
-    // Rebuild list of nets (full ratsnest rebuild)
-    Compile_Ratsnest( NULL, true );
-    GetBoard()->BuildConnectivity();
+    // When GAL is active, the connectivity is rebuilt when the board is loaded
+    // For legacy, we keep these calls to ensure ratsnest
+    // todo: Remove legacy code
+    if( !IsGalCanvasActive() )
+    {
+        // Rebuild list of nets (full ratsnest rebuild)
+        Compile_Ratsnest( NULL, true );
+        GetBoard()->BuildConnectivity();
+    }
 
     onBoardLoaded();
 
