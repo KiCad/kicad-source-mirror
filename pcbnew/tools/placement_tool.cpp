@@ -528,7 +528,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    SELECTION& selection = m_selectionTool->RequestSelection( SanitizePadsEnsureEditableFilter );
+    SELECTION& selection = m_selectionTool->RequestSelection( EnsureEditableFilter );
 
     if( selection.Size() <= 1 )
         return 0;
@@ -614,7 +614,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
 int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
-    SELECTION& selection = m_selectionTool->RequestSelection( SanitizePadsEnsureEditableFilter );
+    SELECTION& selection = m_selectionTool->RequestSelection( EnsureEditableFilter );
 
     if( selection.Size() <= 1 )
         return 0;
