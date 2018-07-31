@@ -117,13 +117,17 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     std::vector<ZONE_CONTAINER*> newZones;
 
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
-
     originalOutline.BooleanSubtract( *aCutout.Outline(), SHAPE_POLY_SET::PM_FAST );
 
     for( int i = 0; i < originalOutline.OutlineCount(); i++ )
     {
         auto newZoneOutline = new SHAPE_POLY_SET;
         newZoneOutline->AddOutline( originalOutline.Outline( i ) );
+
+        for (int j = 0; j < originalOutline.HoleCount(i) ; j++ )
+        {
+            newZoneOutline->AddHole( originalOutline.CHole(i, j), i );
+        }
 
         auto newZone = new ZONE_CONTAINER( aZone );
         newZone->SetOutline( newZoneOutline );
@@ -138,6 +142,11 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
 
     ZONE_FILLER filler( board );
     filler.Fill( newZones );
+
+    auto toolMgr = m_tool.GetManager();
+
+    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    toolMgr->RunAction( PCB_ACTIONS::selectItem, true, newZones[0] );
 }
 
 
