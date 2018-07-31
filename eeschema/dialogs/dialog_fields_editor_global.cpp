@@ -585,8 +585,10 @@ public:
                 if( !destField && !srcValue.IsEmpty() )
                     destField = comp->AddField( SCH_FIELD( wxPoint( 0, 0 ), -1, comp, srcName ) );
 
-                if( destField )
+                if( destField && !srcValue.IsEmpty() )
                     destField->SetText( srcValue );
+                else
+                    comp->RemoveField( srcName );
             }
         }
 

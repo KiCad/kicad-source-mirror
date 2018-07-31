@@ -934,6 +934,19 @@ SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 }
 
 
+void SCH_COMPONENT::RemoveField( const wxString& aFieldName )
+{
+    for( unsigned i = MANDATORY_FIELDS; i < m_Fields.size(); ++i )
+    {
+        if( aFieldName == m_Fields[i].GetName( false ) )
+        {
+            m_Fields.erase( m_Fields.begin() + i );
+            return;
+        }
+    }
+}
+
+
 SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDefaultFields )
 {
     unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;

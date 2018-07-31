@@ -350,6 +350,13 @@ public:
     SCH_FIELD* AddField( const SCH_FIELD& aField );
 
     /**
+     * Removes a user field from the symbol.
+     * @param aFieldName is the user fieldName to remove.  Attempts to remove a mandatory
+     *                   field or a non-existant field are silently ignored.
+     */
+    void RemoveField( const wxString& aFieldName );
+
+    /**
      * Search for a #SCH_FIELD with \a aFieldName
      *
      * @param aFieldName is the name of the field to find.
