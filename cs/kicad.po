@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-07-22 10:25+0200\n"
+"PO-Revision-Date: 2018-07-31 21:46+0200\n"
 "Last-Translator: Kryštof Černý <cleverline1mc@gmail.com>\n"
 "Language-Team: Čeština <cs@li.org>\n"
 "Language: cs_CZ\n"
@@ -121,15 +121,13 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:233
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:240
-#, fuzzy
 msgid "Move alias up"
-msgstr "Posunout nahoru ^"
+msgstr "Posunout alias nahoru"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:274
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:281
-#, fuzzy
 msgid "Move alias down"
-msgstr "Přesunout dolů v"
+msgstr "Přesunout alias dolů"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:370
 msgid ""
@@ -163,14 +161,12 @@ msgstr "Název"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:38
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:83
-#, fuzzy
 msgid "Path"
-msgstr "Typ cesty"
+msgstr "Cesta"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:54
-#, fuzzy
 msgid "Configure Environment Variables"
-msgstr "Knihovny pouzder"
+msgstr "Konfigurovat proměnné prostředí"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
 #: eeschema/libedit.cpp:680 eeschema/viewlibs.cpp:242
@@ -189,14 +185,12 @@ msgid "Description"
 msgstr "Popis"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:107
-#, fuzzy
 msgid "Add Alias"
-msgstr "Přidat čáry"
+msgstr "Přidat alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
-#, fuzzy
 msgid "Remove Alias"
-msgstr "Odebrat"
+msgstr "Odebrat alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
@@ -227,14 +221,13 @@ msgstr "Vybrat 3D model"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:136
 msgid "Paths:"
-msgstr ""
+msgstr "Cesty:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:137
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:362
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:307
-#, fuzzy
 msgid "Configure Paths"
-msgstr "Nastavení"
+msgstr "Nastavit cesty"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:142
 #: common/dialog_about/dialog_about_base.cpp:75
@@ -297,12 +290,11 @@ msgstr "Y:"
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:116
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:172
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:71
-#, fuzzy
 msgid "Rotation (degrees)"
-msgstr "Otočení 90 stupňů"
+msgstr "Otočení (stupně)"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:143
 msgid "Offset"
@@ -310,7 +302,7 @@ msgstr "Posun "
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:214
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Zobrazit izometrickou perspektivou"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:228
 msgid "Reload board and 3D models"
@@ -382,23 +374,21 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Offset (%s)"
-msgstr "Posun X"
+msgstr "Posun (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:641
-#, fuzzy
 msgid "Invalid X scale"
-msgstr "Měřítko X:"
+msgstr "Neplatné měřítko X"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:652
-#, fuzzy
 msgid "Invalid Y scale"
-msgstr "Měřítko Y:"
+msgstr "Neplatné měřítko Y"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:663
 msgid "Invalid Z scale"
-msgstr ""
+msgstr "Neplatné měřítko Z"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:333
 #, fuzzy
@@ -406,9 +396,8 @@ msgid "no such file"
 msgstr " [žádný soubor]"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
-#, fuzzy
 msgid "failed to open file"
-msgstr "Otevření souboru selhalo"
+msgstr "otevření souboru selhalo"
 
 #: 3d-viewer/3d_canvas/cinfo3d_visu.cpp:425
 msgid "Build board body"
@@ -496,12 +485,10 @@ msgid "Back View"
 msgstr "Pohled zezadu"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:661
-#, fuzzy
 msgid "Move Left <-"
 msgstr "Posunout vlevo <-"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:666
-#, fuzzy
 msgid "Move Right ->"
 msgstr "Posunout vpravo ->"
 
@@ -524,9 +511,8 @@ msgid "Load OpenGL: layers"
 msgstr "všechny vrstvy mědi"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:643
-#, fuzzy
 msgid "Loading 3D models"
-msgstr "Načíst &D-kódy"
+msgstr "Načítání 3D modelů"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:667
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:963
@@ -569,11 +555,11 @@ msgstr "&Soubor"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "Exportovat současné zobrazení jako PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:59
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "Exportovat současné zobrazení jako JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:64 eeschema/menubar.cpp:468
 #: kicad/menubar.cpp:297 pcbnew/menubar_footprint_editor.cpp:150
@@ -630,62 +616,52 @@ msgid "&Redraw"
 msgstr "Překreslit"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:94 3d-viewer/3d_viewer/3d_toolbar.cpp:92
-#, fuzzy
 msgid "Rotate X Clockwise"
-msgstr "Otočit po směru hodinových ručiček"
+msgstr "Otočit X po směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:98 3d-viewer/3d_viewer/3d_toolbar.cpp:96
-#, fuzzy
 msgid "Rotate X Counterclockwise"
-msgstr "Otočit proti směru hodinových ručiček"
+msgstr "Otočit X proti směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:104
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:101
-#, fuzzy
 msgid "Rotate Y Clockwise"
-msgstr "Otočit po směru hodinových ručiček"
+msgstr "Otočit Y po směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:108
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:105
-#, fuzzy
 msgid "Rotate Y Counterclockwise"
-msgstr "Otočit proti směru hodinových ručiček"
+msgstr "Otočit Y proti směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:114
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:110
-#, fuzzy
 msgid "Rotate Z Clockwise"
-msgstr "Otočit po směru hodinových ručiček"
+msgstr "Otočit Z po směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:114
-#, fuzzy
 msgid "Rotate Z Counterclockwise"
-msgstr "Otočit proti směru hodinových ručiček"
+msgstr "Otočit Z proti směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:124
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:118
-#, fuzzy
 msgid "Move left"
-msgstr "Posunout vlevo <-"
+msgstr "Posunout vlevo"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:128
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:121
-#, fuzzy
 msgid "Move right"
-msgstr "Posunout vpravo ->"
+msgstr "Posunout vpravo"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:124
-#, fuzzy
 msgid "Move up"
-msgstr "Posunout nahoru ^"
+msgstr "Posunout nahoru"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:136
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:127
-#, fuzzy
 msgid "Move down"
-msgstr "Přesunout dolů v"
+msgstr "Přesunout dolů"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139 cvpcb/menubar.cpp:109
 #: gerbview/menubar.cpp:393 kicad/menubar.cpp:477
@@ -704,9 +680,8 @@ msgid "Display Options"
 msgstr "Nastavení zobrazení"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
-#, fuzzy
 msgid "Render Engine"
-msgstr "Vykreslit"
+msgstr "Vykreslovací engine"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "OpenGL"
@@ -714,12 +689,11 @@ msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
 msgid "Raytracing"
-msgstr ""
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:171
-#, fuzzy
 msgid "Render Options"
-msgstr "Obecná nastavení"
+msgstr "Nastavení vykreslování"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:175
 #, fuzzy
@@ -752,14 +726,12 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:194
-#, fuzzy
 msgid "OpenGL Options"
-msgstr "Možnosti HPGL"
+msgstr "Možnosti OpenGL"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:197
-#, fuzzy
 msgid "Show Copper Thickness"
-msgstr "Zobrazit všechny vrstvy mědi"
+msgstr "Zobrazit tloušťku mědi"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "Shows the copper thickness on copper layers (slower loading)"
@@ -770,14 +742,12 @@ msgid "Show Model Bounding Boxes"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
-#, fuzzy
 msgid "Raytracing Options"
-msgstr "Nastavení stránky"
+msgstr "Nastavení raytracingu"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213
-#, fuzzy
 msgid "Render Shadows"
-msgstr "Vykreslit"
+msgstr "Vykreslit stíny"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:217
 msgid "Procedural Textures"
@@ -806,9 +776,8 @@ msgid "Render materials with refractions properties on final render (slow)"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:232
-#, fuzzy
 msgid "Reflections"
-msgstr "Smazat výběr"
+msgstr "Odrazy"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:233
 msgid "Render materials with reflections properties on final render (slow)"
@@ -816,16 +785,16 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:237
 msgid "Anti-aliasing"
-msgstr ""
+msgstr "Anti-aliasing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:238
+#, fuzzy
 msgid "Render with improved quality on final render (slow)"
-msgstr ""
+msgstr "Vykreslovat s vylepšenou kvalitou na konečném vykreslování (pomalé)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:242
-#, fuzzy
 msgid "Post-processing"
-msgstr "P&ostproces"
+msgstr "Post-processing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:243
 msgid ""
@@ -834,9 +803,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:255
-#, fuzzy
 msgid "Choose Colors"
-msgstr "Barvy Eeschema"
+msgstr "Vyberte barvy"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:259
 #: eeschema/widgets/widget_eeschema_color_config.cpp:210
@@ -870,7 +838,7 @@ msgstr "Pájecí pasta na vrstvě spojů"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:277
 msgid "Copper/Surface Finish Color..."
-msgstr ""
+msgstr "Barva mědi/povrchového dokončení..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:280
 #, fuzzy
@@ -908,9 +876,8 @@ msgid "3D Grid 1 mm"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:314
-#, fuzzy
 msgid "Reset to Default Settings"
-msgstr "Vrátit na výchozí hodnoty knihovny"
+msgstr "Vrátit na výchozí hodnoty"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:319 cvpcb/menubar.cpp:110
 #: eeschema/menubar.cpp:121 eeschema/menubar_libedit.cpp:362
@@ -928,7 +895,6 @@ msgid "Pcbnew &Manual"
 msgstr "Otevřít manuál Pcbnew"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:323 pcbnew/menubar_pcb_editor.cpp:473
-#, fuzzy
 msgid "Open Pcbnew Manual"
 msgstr "Otevřít manuál Pcbnew"
 
@@ -972,9 +938,8 @@ msgstr ""
 #: gerbview/menubar.cpp:380 kicad/menubar.cpp:461
 #: pagelayout_editor/menubar.cpp:219 pcbnew/menubar_footprint_editor.cpp:510
 #: pcbnew/menubar_pcb_editor.cpp:491
-#, fuzzy
 msgid "Contribute to KiCad (opens a web browser)"
-msgstr "Přispět KiCadu"
+msgstr "Přispět KiCadu (otevře webový prohlížeč)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:347 cvpcb/menubar.cpp:103
 #: eeschema/menubar.cpp:662 eeschema/menubar_libedit.cpp:351
@@ -986,14 +951,13 @@ msgstr "&O Kicadu"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:348 pcbnew/menubar_pcb_editor.cpp:498
 msgid "Display KiCad About dialog"
-msgstr ""
+msgstr "Zobrazit dialog O KiCadu"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
 msgstr "Znovu načíst desku"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:61
-#, fuzzy
 msgid "Copy 3D image to clipboard"
 msgstr "Kopírovat 3D obrázek do schránky"
 
@@ -1003,7 +967,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Vykreslit současný pohled raytracingem"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:77 eeschema/help_common_strings.h:43
 #: eeschema/tool_viewlib.cpp:66 gerbview/menubar.cpp:197
@@ -1053,9 +1017,8 @@ msgid "Show board body"
 msgstr "Zobrazit naznačené spoje desky"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:60
-#, fuzzy
 msgid "Show copper thickness"
-msgstr "Tloušťka Cu"
+msgstr "Zobrazit tloušťku mědi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:69
 #, fuzzy
@@ -1065,7 +1028,7 @@ msgstr "Zobrazit vyplněné oblasti v zónách"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:78
 #: pcbnew/menubar_pcb_editor.cpp:689 pcbnew/tool_pcb_editor.cpp:383
 msgid "Show filled areas in zones"
-msgstr "Zobrazit vyplněné oblasti v zónách"
+msgstr "Ukázat vyplněné oblasti v zónách"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:95
 #, fuzzy
@@ -1073,19 +1036,16 @@ msgid "3D model visibility:"
 msgstr "Viditelnost"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:112
-#, fuzzy
 msgid "Show 3D through hole models"
-msgstr "Ukázat průchozí průchodky"
+msgstr "Ukázat průchozí 3D modely"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:121
-#, fuzzy
 msgid "Show 3D SMD models"
-msgstr "Zobrazit 3D modely"
+msgstr "Ukázat SMD 3D modely"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:130
-#, fuzzy
 msgid "Show 3D virtual models"
-msgstr "Zobrazit 3D modely"
+msgstr "Ukázat virtuální 3D modely"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 #, fuzzy
@@ -1103,9 +1063,8 @@ msgid "Show solder mask layers"
 msgstr "Maska na vrstvě spojů"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:183
-#, fuzzy
 msgid "Show solder paste layers"
-msgstr "Pájecí pasta na vrstvě spojů"
+msgstr "Ukázat vrstvy pájecí pasty"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:192
 msgid "Show adhesive layers"
@@ -1336,9 +1295,8 @@ msgstr "Informace o bitmapě:"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:151
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:52
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
-#, fuzzy
 msgid "Size:"
-msgstr "&Velikost:"
+msgstr "Velikost:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1367,7 +1325,7 @@ msgstr "Rozlišení:"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:101
 #: bitmap2component/bitmap2cmp_gui_base.cpp:106
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:111
 msgid "DPI"
@@ -1392,15 +1350,15 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Eeschema (.lib file)"
-msgstr ""
+msgstr "Eeschema (soubor .lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Pcbnew (.kicad_mod file)"
-msgstr ""
+msgstr "Pcbnew (soubor .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "Postscript (soubor .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Logo for title block (.kicad_wks file)"
@@ -1572,9 +1530,8 @@ msgid "Drag item"
 msgstr "Uchopit spoj"
 
 #: common/block_commande.cpp:81
-#, fuzzy
 msgid "Block Duplicate"
-msgstr "Duplikáty"
+msgstr "Duplikát bloku"
 
 #: common/block_commande.cpp:85
 msgid "Block Delete"
@@ -1618,15 +1575,15 @@ msgstr "Černá"
 
 #: common/colors.cpp:40
 msgid "Gray 1"
-msgstr ""
+msgstr "Šedá 1"
 
 #: common/colors.cpp:41
 msgid "Gray 2"
-msgstr ""
+msgstr "Šedá 2"
 
 #: common/colors.cpp:42
 msgid "Gray 3"
-msgstr ""
+msgstr "Šedá 3"
 
 #: common/colors.cpp:43
 msgid "White"
@@ -1634,103 +1591,103 @@ msgstr "Bílá"
 
 #: common/colors.cpp:44
 msgid "L.Yellow"
-msgstr ""
+msgstr "S. žlutá"
 
 #: common/colors.cpp:45
 msgid "Blue 1"
-msgstr ""
+msgstr "Modrá 1"
 
 #: common/colors.cpp:46
 msgid "Green 1"
-msgstr ""
+msgstr "Zelená 1"
 
 #: common/colors.cpp:47
 msgid "Cyan 1"
-msgstr ""
+msgstr "Tyrkysová 1"
 
 #: common/colors.cpp:48
 msgid "Red 1"
-msgstr ""
+msgstr "Červená 1"
 
 #: common/colors.cpp:49
 msgid "Magenta 1"
-msgstr ""
+msgstr "Purpurová 1"
 
 #: common/colors.cpp:50
 msgid "Brown 1"
-msgstr ""
+msgstr "Hnědá 1"
 
 #: common/colors.cpp:51
 msgid "Blue 2"
-msgstr ""
+msgstr "Modrá 2"
 
 #: common/colors.cpp:52
 msgid "Green 2"
-msgstr ""
+msgstr "Zelená 2"
 
 #: common/colors.cpp:53
 msgid "Cyan 2"
-msgstr ""
+msgstr "Tyrkysová 2"
 
 #: common/colors.cpp:54
 msgid "Red 2"
-msgstr ""
+msgstr "Červená 2"
 
 #: common/colors.cpp:55
 msgid "Magenta 2"
-msgstr ""
+msgstr "Purpurová 2"
 
 #: common/colors.cpp:56
 msgid "Brown 2"
-msgstr ""
+msgstr "Hnědá 2"
 
 #: common/colors.cpp:57
 msgid "Blue 3"
-msgstr ""
+msgstr "Modrá 3"
 
 #: common/colors.cpp:58
 msgid "Green 3"
-msgstr ""
+msgstr "Zelená 3"
 
 #: common/colors.cpp:59
 msgid "Cyan 3"
-msgstr ""
+msgstr "Tyrkysová 3"
 
 #: common/colors.cpp:60
 msgid "Red 3"
-msgstr ""
+msgstr "Červená 3"
 
 #: common/colors.cpp:61
 msgid "Magenta 3"
-msgstr ""
+msgstr "Purpurová 3"
 
 #: common/colors.cpp:62
 msgid "Yellow 3"
-msgstr ""
+msgstr "Žlutá 3"
 
 #: common/colors.cpp:63
 msgid "Blue 4"
-msgstr ""
+msgstr "Modrá 4"
 
 #: common/colors.cpp:64
 msgid "Green 4"
-msgstr ""
+msgstr "Zelená 4"
 
 #: common/colors.cpp:65
 msgid "Cyan 4"
-msgstr ""
+msgstr "Tyrkysová 4"
 
 #: common/colors.cpp:66
 msgid "Red 4"
-msgstr ""
+msgstr "Červená 4"
 
 #: common/colors.cpp:67
 msgid "Magenta 4"
-msgstr ""
+msgstr "Purpurová 4"
 
 #: common/colors.cpp:68
 msgid "Yellow 4"
-msgstr ""
+msgstr "Žlutá 4"
 
 #: common/common.cpp:295
 #, c-format
@@ -1753,9 +1710,8 @@ msgid "Message"
 msgstr "Zpráva"
 
 #: common/confirm.cpp:126
-#, fuzzy
 msgid "Question"
-msgstr "Popis"
+msgstr "Otázka"
 
 #: common/confirm.cpp:127 common/confirm.cpp:191 common/pgm_base.cpp:1006
 #: eeschema/symbedit.cpp:105
@@ -1786,9 +1742,8 @@ msgid "Select All"
 msgstr "Vybrat vše"
 
 #: common/confirm.cpp:306
-#, fuzzy
 msgid "Unselect All"
-msgstr "<< Vybrat vše"
+msgstr "Zrušit výběr všeho"
 
 #: common/dialog_about/AboutDialog_main.cpp:118
 #, fuzzy
@@ -1805,7 +1760,7 @@ msgstr "KiCad na webu"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "Oficiální stránka KiCadu - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
 #, fuzzy
@@ -1814,7 +1769,7 @@ msgstr "Projekt na Launchpadu"
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "Oficiální repozitáře knihoven KiCadu - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 #, fuzzy
@@ -1827,7 +1782,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad user's groups and community"
-msgstr ""
+msgstr "Uživatelské skupiny a komunita KiCadu"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 #, fuzzy
@@ -1836,16 +1791,15 @@ msgstr "KiCad na webu"
 
 #: common/dialog_about/AboutDialog_main.cpp:171
 msgid "KiCad user's group - "
-msgstr ""
+msgstr "Uživatelské skupiny KiCadu - "
 
 #: common/dialog_about/AboutDialog_main.cpp:185
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "Kompletní sada KiCad EDA je uvolněna pod"
 
 #: common/dialog_about/AboutDialog_main.cpp:187
-#, fuzzy
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr "GNU General Public License (GPL) verze 2"
+msgstr "GNU General Public License (GPL) verze 3 nebo jakákoliv novější"
 
 #: common/dialog_about/AboutDialog_main.cpp:374
 #, fuzzy
@@ -1854,11 +1808,11 @@ msgstr "Ostatní:"
 
 #: common/dialog_about/AboutDialog_main.cpp:393
 msgid "Icons by"
-msgstr ""
+msgstr "Ikony od"
 
 #: common/dialog_about/AboutDialog_main.cpp:411
 msgid "3D models by"
-msgstr ""
+msgstr "3D modely od"
 
 #: common/dialog_about/AboutDialog_main.cpp:428
 #, fuzzy
@@ -1900,9 +1854,8 @@ msgid "License"
 msgstr "Licence"
 
 #: common/dialog_about/dialog_about.cpp:592
-#, fuzzy
 msgid "Version Info"
-msgstr "Informace o verzích knihoven"
+msgstr "Informace o verzi"
 
 #: common/dialog_about/dialog_about.cpp:604
 msgid "Could not open clipboard to write version information."
@@ -1914,7 +1867,7 @@ msgstr "Chyba schránky"
 
 #: common/dialog_about/dialog_about.cpp:614
 msgid "Copied..."
-msgstr ""
+msgstr "Zkopírováno..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
@@ -1933,19 +1886,16 @@ msgid "Lib Version Info"
 msgstr "Informace o verzích knihoven"
 
 #: common/dialog_about/dialog_about_base.cpp:67
-#, fuzzy
 msgid "Show Version Info"
-msgstr "Kopírovat informace o &Verzi"
+msgstr "Zobrazit informace o verzi"
 
 #: common/dialog_about/dialog_about_base.cpp:70
-#, fuzzy
 msgid "Copy Version Info"
-msgstr "Kopírovat informace o &Verzi"
+msgstr "Kopírovat informace o verzi"
 
 #: common/dialog_about/dialog_about_base.cpp:71
-#, fuzzy
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Kopírovat 3D obrázek do schránky"
+msgstr "Kopírovat informace o verzi KiCadu do schránky"
 
 #: common/dialog_about/dialog_about_base.h:56
 #, fuzzy
@@ -10601,9 +10551,8 @@ msgid "&Pin"
 msgstr "&Vývod"
 
 #: eeschema/menubar_libedit.cpp:253
-#, fuzzy
 msgid "Graphic &Text"
-msgstr "Grafický text"
+msgstr "Grafický &text"
 
 #: eeschema/menubar_libedit.cpp:260
 #, fuzzy
@@ -10612,9 +10561,8 @@ msgstr "Obdélník"
 
 #: eeschema/menubar_libedit.cpp:267 pcbnew/menubar_footprint_editor.cpp:372
 #: pcbnew/menubar_pcb_editor.cpp:378
-#, fuzzy
 msgid "&Circle"
-msgstr "Kružnice"
+msgstr "Kružni&ce"
 
 #: eeschema/menubar_libedit.cpp:274 pcbnew/menubar_footprint_editor.cpp:366
 #: pcbnew/menubar_pcb_editor.cpp:374
@@ -10632,9 +10580,8 @@ msgid "Edit the global and project symbol library tables."
 msgstr ""
 
 #: eeschema/menubar_libedit.cpp:307
-#, fuzzy
 msgid "General &Options..."
-msgstr "Obecná nastavení"
+msgstr "&Obecná nastavení..."
 
 #: eeschema/menubar_libedit.cpp:308
 msgid "Set Symbol Editor default values and options"
@@ -10674,12 +10621,10 @@ msgid "Success"
 msgstr ""
 
 #: eeschema/netlist_generator.cpp:129
-#, fuzzy
 msgid "Info messages:"
-msgstr "Zprávy:"
+msgstr "Informativní zprávy:"
 
 #: eeschema/netlist_generator.cpp:139
-#, fuzzy
 msgid "Error messages:"
 msgstr "Chybové zprávy:"
 
@@ -10696,29 +10641,25 @@ msgid "No Objects"
 msgstr ""
 
 #: eeschema/netlist_generator.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Net count = %d"
-msgstr "počet sítí ="
+msgstr "Počet sítí = %d"
 
 #: eeschema/onrightclick.cpp:100
-#, fuzzy
 msgid "Edit Text..."
-msgstr "Upravit text"
+msgstr "Upravit text..."
 
 #: eeschema/onrightclick.cpp:106
-#, fuzzy
 msgid "Edit Label..."
-msgstr "Upravit označení"
+msgstr "Upravit označení..."
 
 #: eeschema/onrightclick.cpp:112
-#, fuzzy
 msgid "Edit Global Label..."
-msgstr "Upravit globální označení"
+msgstr "Upravit globální označení..."
 
 #: eeschema/onrightclick.cpp:119
-#, fuzzy
 msgid "Edit Hierarchical Label..."
-msgstr "Upravit hierarchické označení"
+msgstr "Upravit hierarchické označení..."
 
 #: eeschema/onrightclick.cpp:126 eeschema/onrightclick.cpp:933
 #, fuzzy
@@ -10781,9 +10722,8 @@ msgid "Edit Reference..."
 msgstr "Odkaz"
 
 #: eeschema/onrightclick.cpp:346 eeschema/onrightclick.cpp:448
-#, fuzzy
 msgid "Edit Value..."
-msgstr "Upravit označení"
+msgstr "Upravit hodnotu..."
 
 #: eeschema/onrightclick.cpp:350
 #, fuzzy
@@ -10791,14 +10731,13 @@ msgid "Edit Footprint Field..."
 msgstr "Přidat filtr pouzder"
 
 #: eeschema/onrightclick.cpp:354
-#, fuzzy
 msgid "Edit Field..."
-msgstr "Upravit pole"
+msgstr "Upravit pole..."
 
 #: eeschema/onrightclick.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Move %s"
-msgstr "Přesunout"
+msgstr "Přesunout %s"
 
 #: eeschema/onrightclick.cpp:378 eeschema/onrightclick.cpp:516
 #: eeschema/onrightclick.cpp:553 eeschema/onrightclick.cpp:589
@@ -10832,23 +10771,20 @@ msgstr "Vrátit na výchozí hodnoty knihovny"
 #: pcbnew/onrightclick.cpp:438 pcbnew/onrightclick.cpp:491
 #: pcbnew/onrightclick.cpp:789 pcbnew/tools/edit_tool.cpp:112
 #: pcbnew/tools/edit_tool.cpp:116
-#, fuzzy
 msgid "Duplicate"
-msgstr "Duplikáty"
+msgstr "Duplikát"
 
 #: eeschema/onrightclick.cpp:414
 msgid "Open Documentation"
 msgstr "Otevřít Dokumentaci"
 
 #: eeschema/onrightclick.cpp:443
-#, fuzzy
 msgid "Edit Properties..."
-msgstr "Vlastnosti vývodu"
+msgstr "Upravit vlastnosti..."
 
 #: eeschema/onrightclick.cpp:458
-#, fuzzy
 msgid "Edit Footprint..."
-msgstr "Tisk pouzdra"
+msgstr "Upravit pouzdro..."
 
 #: eeschema/onrightclick.cpp:495
 msgid "Edit with Library Editor"
@@ -10914,14 +10850,12 @@ msgid "Delete Wire"
 msgstr "Smazat spoj"
 
 #: eeschema/onrightclick.cpp:723 eeschema/onrightclick.cpp:761
-#, fuzzy
 msgid "Add Label..."
-msgstr "Přidat označení"
+msgstr "Přidat označení..."
 
 #: eeschema/onrightclick.cpp:728 eeschema/onrightclick.cpp:766
-#, fuzzy
 msgid "Add Global Label..."
-msgstr "Přidat globální označení"
+msgstr "Přidat globální označení..."
 
 #: eeschema/onrightclick.cpp:748
 msgid "Bus End"
@@ -10940,19 +10874,16 @@ msgid "Enter Sheet"
 msgstr "Vložit list"
 
 #: eeschema/onrightclick.cpp:788
-#, fuzzy
 msgid "Select Items On PCB"
-msgstr "Vybrat položky"
+msgstr "Vybrat položky na DPS"
 
 #: eeschema/onrightclick.cpp:813
-#, fuzzy
 msgid "Place"
-msgstr "U&místit"
+msgstr "Umístit"
 
 #: eeschema/onrightclick.cpp:820
-#, fuzzy
 msgid "Resize"
-msgstr "velikost"
+msgstr "Změnit velikost"
 
 #: eeschema/onrightclick.cpp:823
 msgid "Import Sheet Pins"
@@ -11914,9 +11845,8 @@ msgid "Plot%u"
 msgstr "Kreslit"
 
 #: eeschema/sim/sim_plot_frame.cpp:570 eeschema/sim/sim_plot_frame.cpp:1167
-#, fuzzy
 msgid "Signal"
-msgstr "signál"
+msgstr "Signál"
 
 #: eeschema/sim/sim_plot_frame.cpp:816
 msgid "Open simulation workbook"
@@ -11991,9 +11921,8 @@ msgid "Save as .csv file"
 msgstr "Uložit jako .csv soubor"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:45
-#, fuzzy
 msgid "Exit Simulation"
-msgstr "Spustit simuláto&r"
+msgstr "Opustit simulaci"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:48
 msgid "File"
@@ -18179,9 +18108,8 @@ msgid "Duplicate net class names are not allowed."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:819
-#, fuzzy
 msgid "The default net class cannot be removed"
-msgstr "Nelze odstranit výchozí Síťovou třídu"
+msgstr "Nelze odstranit výchozí síťovou třídu"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1026
 #, c-format
@@ -18400,7 +18328,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:285
-#, fuzzy
 msgid "Custom Via Sizes:"
 msgstr "Vlastní velikosti průchodek:"
 
@@ -18438,26 +18365,25 @@ msgstr "Průchodka 7"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:318
 msgid "Via 8"
-msgstr ""
+msgstr "Průchodka 8"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:319
 msgid "Via 9"
-msgstr ""
+msgstr "Průchodka 9"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:320
 msgid "Via 10"
-msgstr ""
+msgstr "Průchodka 10"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:321
 msgid "Via 11"
-msgstr ""
+msgstr "Průchodka 11"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:322
 msgid "Via 12"
-msgstr ""
+msgstr "Průchodka 12"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:335
-#, fuzzy
 msgid "Custom Track Widths:"
 msgstr "Vlastní šířky spojů:"
 
@@ -18491,23 +18417,23 @@ msgstr "Spoj 7"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:367
 msgid "Track 8"
-msgstr ""
+msgstr "Spoj 8"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:368
 msgid "Track 9"
-msgstr ""
+msgstr "Spoj 9"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:369
 msgid "Track 10"
-msgstr ""
+msgstr "Spoj 10"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:370
 msgid "Track 11"
-msgstr ""
+msgstr "Spoj 11"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:371
 msgid "Track 12"
-msgstr ""
+msgstr "Spoj 12"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:390
 msgid "Global Design Rules"
@@ -18630,9 +18556,9 @@ msgid "Disk File Report Completed"
 msgstr "Soubor hlášení uložen na disk"
 
 #: pcbnew/dialogs/dialog_drc.cpp:255 pcbnew/dialogs/dialog_drc.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create report file \"%s\""
-msgstr "Nelze vytvořit soubor %s"
+msgstr "Nelze vytvořit soubor hlášení \"%s\""
 
 #: pcbnew/dialogs/dialog_drc.cpp:346
 msgid "Save DRC Report File"
@@ -18647,7 +18573,6 @@ msgid "Enter the minimum acceptable value for a track width"
 msgstr "Vložte nejmenší přijatelnou hodnotu pro šířku spoje"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:75
-#, fuzzy
 msgid "Minimum via size:"
 msgstr "Min. velikost průchodky"
 
@@ -18656,7 +18581,6 @@ msgid "Enter the minimum acceptable diameter for a standard via"
 msgstr "Zadejte nejmenší přijatelný průměr pro obyčejnou průchodku"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
-#, fuzzy
 msgid "Minimum uVia size:"
 msgstr "Min. velikost uPrůchodky"
 
@@ -18821,9 +18745,8 @@ msgstr "Neplatný název souboru: "
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:515
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:388
-#, fuzzy
 msgid "Edit 3D file name"
-msgstr "Název souboru listu"
+msgstr "Upravit název 3D souboru"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:613
 msgid "Error: invalid footprint parameter"
@@ -18848,7 +18771,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:777
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:597
-#, fuzzy
 msgid "Modify module properties"
 msgstr "Upravit vlastnosti modulu"
 
@@ -18866,24 +18788,21 @@ msgid "Back"
 msgstr "Zpět"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:65
-#, fuzzy
 msgid "Board Side:"
 msgstr "Velikost desky:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:69
 #: pcbnew/dialogs/dialog_edit_footprint_text_base.cpp:119
 msgid "0.0"
-msgstr ""
+msgstr "0.0"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:69
 #: pcbnew/dialogs/dialog_edit_footprint_text_base.cpp:119
-#, fuzzy
 msgid "+90.0"
 msgstr "+90.0"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:69
 #: pcbnew/dialogs/dialog_edit_footprint_text_base.cpp:119
-#, fuzzy
 msgid "-90.0"
 msgstr "- 90.0"
 
@@ -18900,7 +18819,7 @@ msgstr "Jiný"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:75
 msgid "Rotation (-360 to 360):"
-msgstr ""
+msgstr "Otočení ( od -360 do 360):"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:125
 #, fuzzy
@@ -18914,14 +18833,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:142
-#, fuzzy
 msgid "Update Footprint from Library"
-msgstr "Otevřít modul pouzdra z knihovny"
+msgstr "Aktualizovat pouzdro z knihovny"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:148
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Pouzdro"
+msgstr "Vytvořit pouzdro"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:151
 #: pcbnew/footprint_edit_frame.cpp:766 pcbnew/hotkeys.cpp:498
@@ -18930,9 +18847,8 @@ msgstr "Editor pouzder"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:160
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:105
-#, fuzzy
 msgid "Through hole"
-msgstr "Průchozí průchodka"
+msgstr "Průchozí díra"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:160
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:105
@@ -18976,12 +18892,12 @@ msgstr "Automaticky umístit modul"
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:181
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:126
 msgid "Allow 90 degree rotation:"
-msgstr ""
+msgstr "Dovolit otočení o 90 stupňů:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:194
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:139
 msgid "Allow 180 degree rotation:"
-msgstr ""
+msgstr "Dovolit otočení o 180 stupňů:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:208
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:153
@@ -19096,7 +19012,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:333
-#, fuzzy
 msgid "3D Shape Name:"
 msgstr "Název 3D tvaru"
 
@@ -19112,13 +19027,11 @@ msgstr "Odstranit 3D tvar"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:359
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:304
-#, fuzzy
 msgid "Edit Filename"
-msgstr "Název souboru:"
+msgstr "Přejmenovat"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:383
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:328
-#, fuzzy
 msgid "3D Settings"
 msgstr "Nastavení 3D"
 
@@ -19155,9 +19068,8 @@ msgstr ""
 "umístění)"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:371
-#, fuzzy
 msgid "Filepath:"
-msgstr "Soubor:"
+msgstr "Cesta k souboru:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:371
 #, fuzzy
@@ -19363,15 +19275,14 @@ msgid "Apply"
 msgstr "Použít"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:82
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "%"
+msgstr "%s"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:169
 #: pcbnew/dialogs/dialog_export_vrml.cpp:177
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "Skutečně smazat "
+msgstr "Jste si jist, že chcete přepsat již existující soubor?"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #: pcbnew/exporters/export_d356.cpp:376
@@ -19397,19 +19308,17 @@ msgstr "Reference:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
-msgstr ""
+msgstr "Přizpůsobit automaticky"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
 #: pcbnew/dialogs/dialog_export_step_base.cpp:89
-#, fuzzy
 msgid "X position:"
-msgstr "Poloha"
+msgstr "Poloha X:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:81
 #: pcbnew/dialogs/dialog_export_step_base.cpp:107
-#, fuzzy
 msgid "Y position:"
-msgstr "Poloha"
+msgstr "Poloha Y:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 msgid "Mils"
@@ -19432,14 +19341,14 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Nelze exportovat, opravte a zkuste znovu."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "Součástka \"%s\" již existuje v knihovně \"%s\"."
+msgstr "Soubor '%s' již existuje. Chcete přepsat tento soubor?"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:244
 #, fuzzy
 msgid "STEP Export"
-msgstr "Export"
+msgstr "Exportovat STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:326
 #, fuzzy, c-format
@@ -19477,7 +19386,6 @@ msgstr "Počátek vrtání:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:47
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "Grid origin"
 msgstr "Počátek mřížky"
 
@@ -19497,7 +19405,6 @@ msgid "User defined origin:"
 msgstr "Počátek mřížky X:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:131
-#, fuzzy
 msgid "Other options:"
 msgstr "Ostatní možnosti:"
 
@@ -19526,7 +19433,7 @@ msgstr "metr"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "0.1 Inch"
-msgstr ""
+msgstr "0.1 palce"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:55
@@ -19572,23 +19479,22 @@ msgid "VRML Export Options"
 msgstr "Volby exportu Vrml desky:"
 
 #: pcbnew/dialogs/dialog_find.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" found"
-msgstr "%s nalezeno"
+msgstr "\"%s\" nalezeno"
 
 #: pcbnew/dialogs/dialog_find.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" not found"
-msgstr "%s nenalezeno"
+msgstr "\"%s\" nenalezeno"
 
 #: pcbnew/dialogs/dialog_find.cpp:169
 msgid "Marker found"
 msgstr "Nalezena značka"
 
 #: pcbnew/dialogs/dialog_find.cpp:175
-#, fuzzy
 msgid "No marker found"
-msgstr "Nalezena značka"
+msgstr "Značka nebyla nalezena"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:22
 #, fuzzy
@@ -19763,14 +19669,15 @@ msgid "Export a Specctra DSN file (to FreeRouter)"
 msgstr "Exportovat soubor Specctra (do FreeRouteru)"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:45
-#, fuzzy
 msgid "Export a Specctra Design and Launch FreeRoute"
-msgstr "Exportovat soubor Specctra Design (*.dsn)"
+msgstr "Exportovat soubor Specctra Design a spustit FreeRoute"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:46
 msgid ""
 "FreeRouter can be run only if freeroute.jar is found in Kicad binaries folder"
 msgstr ""
+"FreeRouter může být spuštěn jen v případě, že freeroute.jar je nalezen ve "
+"složce binárek KiCadu"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:50
 msgid "Back Import the Specctra Session (*.ses) File"
@@ -19789,7 +19696,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "CSV"
@@ -19906,22 +19813,21 @@ msgid "** Unable to create %s **\n"
 msgstr "** Nelze vytvořit %s **\n"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Report file %s created\n"
-msgstr "Soubor hlášení \"%s\" vytvořen"
+msgstr "Soubor hlášení \"%s\" vytvořen\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
-#, fuzzy
 msgid "Output Directory:"
 msgstr "Výstupní adresář:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:43
 msgid "Excellon"
-msgstr ""
+msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:43
 msgid "Gerber X2 (experimental)"
-msgstr ""
+msgstr "Gerber X2 (experimentální)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:45
 msgid "File Format:"
@@ -19948,18 +19854,16 @@ msgid "Keep zeros"
 msgstr "Ponechat nuly"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:57
-#, fuzzy
 msgid "Zeros Format:"
-msgstr "Formát nul"
+msgstr "Formát nul:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:59
 msgid "Choose EXCELLON numbers notation"
 msgstr "Zvolte zápis parametrů EXCELLON"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
-#, fuzzy
 msgid "Precision:"
-msgstr "Přesnost"
+msgstr "Přesnost:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:73
 msgid "Precision"
@@ -19967,7 +19871,7 @@ msgstr "Přesnost"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "PostScript"
-msgstr ""
+msgstr "PostScript"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 #: pcbnew/dialogs/dialog_plot_base.cpp:30
@@ -19989,15 +19893,16 @@ msgid "Excellon Drill File Options:"
 msgstr "Možnosti výplně zóny:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:97
-#, fuzzy
 msgid "Mirror Y axis"
-msgstr "Převrátit osu y"
+msgstr "Převrátit osu Y"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid ""
 "Not recommended.\n"
 "Used mostly by users who make the boards themselves."
 msgstr ""
+"Nedoporučeno.\n"
+"Používáno nejvíce uživateli, kteří si dělají desky sami."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:102
 msgid "Minimal header"
@@ -20066,12 +19971,10 @@ msgid "Non-plated pads:"
 msgstr "Neumístěno"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:171
-#, fuzzy
 msgid "Through vias:"
 msgstr "Průchozí průchodky:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:179
-#, fuzzy
 msgid "Micro vias:"
 msgstr "Mikro průchodky:"
 
@@ -20100,17 +20003,16 @@ msgid "Generate Drill Files"
 msgstr "Generovat soubor vrtání"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:31
-#, fuzzy
 msgid "&Auto save (minutes):"
-msgstr "Automatické ukládání (minuty):"
+msgstr "&Automatické ukládání (minuty):"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:36
-#, fuzzy
 msgid ""
 "Delay after the first change to create a backup file of the board on disk. "
 "If set to 0, auto backup is disabled."
 msgstr ""
-"Interval, který uplyne od první změny do vytvoření zálohy desky na disk."
+"Interval, který uplyne od první změny do vytvoření zálohy desky na disk. "
+"Pokud je nastaveno na 0, automatické zálohy jsou zakázány."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:75
 #, fuzzy
@@ -20207,9 +20109,8 @@ msgid "When creating tracks"
 msgstr "Při vytváření spojů"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:184
-#, fuzzy
 msgid "Magnetic Pads:"
-msgstr "Magnetické plošky"
+msgstr "Magnetické plošky:"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:186
 #, fuzzy
@@ -20217,9 +20118,8 @@ msgid "Control capture of the cursor when the mouse enters a pad area."
 msgstr "ovládání zachycení kurzoru když se dostane blízko plošky"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:192
-#, fuzzy
 msgid "Magnetic Tracks:"
-msgstr "Magnetické spoje"
+msgstr "Magnetické spoje:"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:194
 #, fuzzy
@@ -20302,9 +20202,8 @@ msgid "Select by Browser"
 msgstr "Vybrat procházením"
 
 #: pcbnew/dialogs/dialog_get_footprint_base.h:62
-#, fuzzy
 msgid "Choose Footprint"
-msgstr "Pouzdro"
+msgstr "Vybrat pouzdro"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:34
 msgid "Available:"
@@ -20316,9 +20215,8 @@ msgid "Get and Move Footprint"
 msgstr "Vybrat a přesunout pouzdro"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:109
-#, fuzzy
 msgid "Are you sure you want to delete the entire board?"
-msgstr "Skutečně smazat "
+msgstr "Jste si jist, že"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:114
 #, fuzzy
@@ -20732,13 +20630,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_fp_editor.cpp:257
-#, fuzzy
 msgid ""
 "The graphic item will be on a copper layer.\n"
 "This is very dangerous because DRC does not handle it.\n"
 "Are you sure?"
 msgstr ""
-"Grafický prvek bude na vrstvě mědi. To je velmi nebezpečné. Jste si jisti?"
+"Grafický prvek bude na vrstvě mědi. To je velmi nebezpečné. Jste si jist?"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:25
 msgid "Graphics:"
@@ -24058,12 +23955,11 @@ msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
 msgstr ""
 
 #: pcbnew/edgemod.cpp:214
-#, fuzzy
 msgid ""
 "The graphic item will be on a copper layer.\n"
 "This is very dangerous. Are you sure?"
 msgstr ""
-"Grafický prvek bude na vrstvě mědi. To je velmi nebezpečné. Jste si jisti?"
+"Grafický prvek bude na vrstvě mědi. To je velmi nebezpečné. Jste si jist?"
 
 #: pcbnew/edgemod.cpp:255
 msgid "New Width:"
