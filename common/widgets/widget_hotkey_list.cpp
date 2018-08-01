@@ -226,6 +226,52 @@ public:
 };
 
 
+/**
+ * Class HOTKEY_FILTER
+ *
+ * Class to manage logic for filtering hotkeys based on user input
+ */
+class HOTKEY_FILTER
+{
+public:
+    HOTKEY_FILTER( const wxString& aFilterStr )
+    {
+        m_normalised_filter_str = aFilterStr.Upper();
+        m_valid = m_normalised_filter_str.size() > 0;
+    }
+
+
+    /**
+     * Method FilterMatches
+     *
+     * Checks if the filter matches the given hotkey
+     *
+     * @return true on match (or if filter is disabled)
+     */
+    bool FilterMatches( const EDA_HOTKEY& aHotkey ) const
+    {
+        if( !m_valid )
+            return true;
+
+        // Match in the (translated) filter string
+        const auto normedInfo = wxGetTranslation( aHotkey.m_InfoMsg ).Upper();
+        if( normedInfo.Contains( m_normalised_filter_str ) )
+            return true;
+
+        const wxString keyName = KeyNameFromKeyCode( aHotkey.m_KeyCode );
+        if( keyName.Upper().Contains( m_normalised_filter_str ) )
+            return true;
+
+        return false;
+    }
+
+private:
+
+    bool m_valid;
+    wxString m_normalised_filter_str;
+};
+
+
 WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::GetHKClientData( wxTreeListItem aItem )
 {
     if( aItem.IsOk() )
@@ -449,6 +495,12 @@ void WIDGET_HOTKEY_LIST::InstallOnPanel( wxPanel* aPanel )
 }
 
 
+void WIDGET_HOTKEY_LIST::ApplyFilterString( const wxString& aFilterStr )
+{
+    updateShownItems( aFilterStr );
+}
+
+
 void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 {
     Freeze();
@@ -470,12 +522,19 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 }
 
 
-
-
 bool WIDGET_HOTKEY_LIST::TransferDataToControl()
+{
+    updateShownItems( "" );
+    return true;
+}
+
+
+void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
 {
     Freeze();
     DeleteAllItems();
+
+    HOTKEY_FILTER filter( aFilterStr );
 
     for( auto& section: m_hk_store.GetSections() )
     {
@@ -484,8 +543,11 @@ bool WIDGET_HOTKEY_LIST::TransferDataToControl()
 
         for( auto& hotkey: section.m_hotkeys )
         {
-            wxTreeListItem item = AppendItem( parent, wxEmptyString );
-            SetItemData( item, new WIDGET_HOTKEY_CLIENT_DATA( hotkey ) );
+            if( filter.FilterMatches( hotkey.GetCurrentValue() ) )
+            {
+                wxTreeListItem item = AppendItem( parent, wxEmptyString );
+                SetItemData( item, new WIDGET_HOTKEY_CLIENT_DATA( hotkey ) );
+            }
         }
 
         Expand( parent );
@@ -493,8 +555,6 @@ bool WIDGET_HOTKEY_LIST::TransferDataToControl()
 
     UpdateFromClientData();
     Thaw();
-
-    return true;
 }
 
 

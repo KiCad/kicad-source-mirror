@@ -35,6 +35,8 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
         m_nickname( aNickname ),
         m_hotkeyStore( aShowHotkeys )
 {
+    m_filterSearch->SetDescriptiveText( _("Type filter text") );
+
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, m_hotkeyStore );
     m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 }
@@ -78,4 +80,10 @@ void PANEL_HOTKEYS_EDITOR::OnExport( wxCommandEvent& aEvent )
 void PANEL_HOTKEYS_EDITOR::OnImport( wxCommandEvent& aEvent )
 {
     m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
+}
+
+void PANEL_HOTKEYS_EDITOR::OnFilterSearch( wxCommandEvent& aEvent )
+{
+    const auto searchStr = aEvent.GetString();
+    m_hotkeyListCtrl->ApplyFilterString( searchStr );
 }

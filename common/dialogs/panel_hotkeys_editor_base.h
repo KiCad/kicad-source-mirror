@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Jun 18 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,12 +11,13 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <wx/panel.h>
+#include <wx/string.h>
+#include <wx/srchctrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 
@@ -32,6 +33,7 @@ class PANEL_HOTKEYS_EDITOR_BASE : public wxPanel
 	
 	protected:
 		wxBoxSizer* m_mainSizer;
+		wxSearchCtrl* m_filterSearch;
 		wxPanel* m_panelHotkeys;
 		wxButton* m_resetButton;
 		wxButton* m_defaultButton;
@@ -39,6 +41,7 @@ class PANEL_HOTKEYS_EDITOR_BASE : public wxPanel
 		wxButton* btnExport;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnFilterSearch( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ResetClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DefaultsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }

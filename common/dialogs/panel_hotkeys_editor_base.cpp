@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Jun 18 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -15,6 +15,13 @@ PANEL_HOTKEYS_EDITOR_BASE::PANEL_HOTKEYS_EDITOR_BASE( wxWindow* parent, wxWindow
 	
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
+	
+	m_filterSearch = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_filterSearch->ShowSearchButton( false );
+	#endif
+	m_filterSearch->ShowCancelButton( true );
+	bMargins->Add( m_filterSearch, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 	
 	m_panelHotkeys = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelHotkeys->SetMinSize( wxSize( -1,350 ) );
@@ -50,6 +57,7 @@ PANEL_HOTKEYS_EDITOR_BASE::PANEL_HOTKEYS_EDITOR_BASE( wxWindow* parent, wxWindow
 	this->Layout();
 	
 	// Connect Events
+	m_filterSearch->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::OnFilterSearch ), NULL, this );
 	m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::ResetClicked ), NULL, this );
 	m_defaultButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::DefaultsClicked ), NULL, this );
 	btnImport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::OnImport ), NULL, this );
@@ -59,6 +67,7 @@ PANEL_HOTKEYS_EDITOR_BASE::PANEL_HOTKEYS_EDITOR_BASE( wxWindow* parent, wxWindow
 PANEL_HOTKEYS_EDITOR_BASE::~PANEL_HOTKEYS_EDITOR_BASE()
 {
 	// Disconnect Events
+	m_filterSearch->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::OnFilterSearch ), NULL, this );
 	m_resetButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::ResetClicked ), NULL, this );
 	m_defaultButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::DefaultsClicked ), NULL, this );
 	btnImport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_HOTKEYS_EDITOR_BASE::OnImport ), NULL, this );

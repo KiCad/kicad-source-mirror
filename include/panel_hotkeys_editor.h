@@ -72,6 +72,14 @@ private:
 
     void OnExport( wxCommandEvent& aEvent ) override;
     void OnImport( wxCommandEvent& aEvent ) override;
+
+    /**
+     * Function OnFilterSearch
+     * Handle a change in the hoteky filter text
+     *
+     * @param aEvent: the search event, used to get the search query
+     */
+    void OnFilterSearch( wxCommandEvent& aEvent ) override;
 };
 
 

@@ -67,6 +67,15 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
      */
     void UpdateFromClientData();
 
+    /**
+     * Method updateShownItems
+     *
+     * Update the items shown in the widget based on a given filter string.
+     *
+     * @param aFilterStr the string to filter with. Empty means no filter.
+     */
+    void updateShownItems( const wxString& aFilterStr );
+
 protected:
 
     /**
@@ -146,6 +155,15 @@ public:
      * placeholder in the layout.
      */
     void InstallOnPanel( wxPanel* aPanel );
+
+    /**
+     * Method ApplyFilterString
+     * Apply a filter string to the hotkey list, selecting which hotkeys
+     * to show.
+     *
+     * @param aFilterStr the string to filter by
+     */
+    void ApplyFilterString( const wxString& aFilterStr );
 
     /**
      * Set hotkeys in the control to default or original values.
