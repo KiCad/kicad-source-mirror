@@ -221,9 +221,9 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_config = Kiface().KifaceSettings();
     m_initialized = false;
 
-    m_buttonAddPlugin->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_buttonDelPlugin->SetBitmap( KiBitmap( trash_xpm ) );
-    m_buttonEdit->SetBitmap( KiBitmap( small_edit_xpm ) );
+    m_buttonAddPlugin->SetBitmap( KiBitmap( plus_xpm ) );
+    m_buttonDelPlugin->SetBitmap( KiBitmap( delete_xpm ) );
+    m_buttonEdit->SetBitmap( KiBitmap( edit_xpm ) );
 
     installPluginsList();
 

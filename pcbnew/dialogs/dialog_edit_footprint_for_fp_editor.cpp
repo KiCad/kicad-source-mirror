@@ -141,8 +141,9 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
-    m_buttonAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
+    m_button3DShapeAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_button3DShapeBrowse->SetBitmap( KiBitmap( folder_xpm ) );
+    m_button3DShapeRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
     FinishDialogSettings();
 }
