@@ -91,8 +91,7 @@ TOOL_ACTION PCB_ACTIONS::microwaveCreateLine(
 
 
 MICROWAVE_TOOL::MICROWAVE_TOOL() :
-        PCB_TOOL( "pcbnew.MicrowaveTool" ),
-        m_menu( *this )
+        PCB_TOOL( "pcbnew.MicrowaveTool" )
 {
 }
 
@@ -103,24 +102,6 @@ MICROWAVE_TOOL::~MICROWAVE_TOOL()
 
 void MICROWAVE_TOOL::Reset( RESET_REASON aReason )
 {
-}
-
-
-bool MICROWAVE_TOOL::Init()
-{
-    auto activeToolFunctor = [] ( const SELECTION& aSel ) {
-        return true;
-    };
-
-    auto& ctxMenu = m_menu.GetMenu();
-
-    // cancel current goes in main context menu at the top if present
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1000 );
-    ctxMenu.AddSeparator( activeToolFunctor, 1000 );
-
-    m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
-
-    return true;
 }
 
 
@@ -226,7 +207,8 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 
     MICROWAVE_PLACER placer ( info );
 
-    doInteractiveItemPlacement( &placer,  _( "Place microwave feature" ) );
+    doInteractiveItemPlacement( &placer,  _( "Place microwave feature" ),
+                                IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
 
     frame.SetNoToolSelected();
 

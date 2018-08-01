@@ -194,9 +194,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    ///> A context menu for the Measurement Tool
-    TOOL_MENU m_measureMenu;
-
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     bool updateModificationPoint( SELECTION& aSelection );

@@ -77,7 +77,8 @@ public:
         DIMENSION,
         KEEPOUT,
         ZONE,
-        GRAPHIC_POLYGON
+        GRAPHIC_POLYGON,
+        VIA
     };
 
     /**
@@ -279,9 +280,6 @@ private:
 
     /// Stores the current line width for multisegment drawing.
     unsigned int m_lineWidth;
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 
     // How does line width change after one -/+ key press.
     static const unsigned int WIDTH_STEP;

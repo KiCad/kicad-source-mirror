@@ -152,8 +152,7 @@ DRAWING_TOOL::DRAWING_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveDrawing" ),
     m_view( nullptr ), m_controls( nullptr ),
     m_board( nullptr ), m_frame( nullptr ), m_mode( MODE::NONE ),
-    m_lineWidth( 1 ),
-    m_menu( *this )
+    m_lineWidth( 1 )
 {
 }
 
@@ -181,14 +180,15 @@ bool DRAWING_TOOL::Init()
 
     auto& ctxMenu = m_menu.GetMenu();
 
-    // cancel current toool goes in main context menu at the top if present
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1000 );
+    // cancel current tool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1 );
+    ctxMenu.AddSeparator( activeToolFunctor, 1 );
 
     // tool-specific actions
-    ctxMenu.AddItem( closeZoneOutline, zoneActiveFunctor, 1000 );
-    ctxMenu.AddItem( deleteLastPoint, canUndoPoint, 1000 );
+    ctxMenu.AddItem( closeZoneOutline, zoneActiveFunctor, 200 );
+    ctxMenu.AddItem( deleteLastPoint, canUndoPoint, 200 );
 
-    ctxMenu.AddSeparator( activeToolFunctor, 1000 );
+    ctxMenu.AddSeparator( canUndoPoint, 500 );
 
     // Type-specific sub-menus will be added for us by other tools
     // For example, zone fill/unfill is provided by the PCB control tool
@@ -1687,6 +1687,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     };
 
     VIA_PLACER placer( frame() );
+
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::VIA );
 
     frame()->SetToolID( ID_PCB_DRAW_VIA_BUTT, wxCURSOR_PENCIL, _( "Add vias" ) );
 

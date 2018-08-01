@@ -43,9 +43,6 @@ public:
     ///> React to model/view changes
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Basic initalization
-    bool Init() override;
-
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
 
@@ -59,9 +56,6 @@ private:
 
     ///> Draw a microwave inductor interactively
     int drawMicrowaveInductor( const TOOL_EVENT& aEvent );
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 };
 
 

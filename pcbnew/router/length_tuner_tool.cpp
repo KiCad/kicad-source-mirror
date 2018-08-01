@@ -43,6 +43,7 @@
 
 #include "length_tuner_tool.h"
 #include <bitmaps.h>
+#include <tools/tool_event_utils.h>
 
 using namespace KIGFX;
 
@@ -94,10 +95,9 @@ public:
         SetIcon( router_len_tuner_xpm );
         DisplayTitle( true );
 
-        //Add( ACT_StartTuning );
-        //Add( ACT_EndTuning );
+        Add( ACTIONS::cancelInteractive );
 
-        //AppendSeparator();
+        AppendSeparator();
 
         Add( ACT_SpacingIncrease );
         Add( ACT_SpacingDecrease );
@@ -172,7 +172,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || evt->IsActivate() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             break;
         else if( evt->IsMotion() )
         {
@@ -278,7 +278,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || evt->IsActivate() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             break; // Finish
         }
