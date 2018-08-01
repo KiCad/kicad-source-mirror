@@ -86,9 +86,11 @@ protected:
  * @param aMessage = the main message to put in dialog
  * If empty, the standard message will be shown:
  * Save the changes before closing?
+ * @param aApplyToAll = if non-null an "Apply to all" checkbox will be shown and the value
+ *                      written to the bool.
  * @return wxID_YES, wxID_CANCEL, wxID_NO.
  */
-int DisplayExitDialog( wxWindow* aParent, const wxString& aMessage );
+int DisplayExitDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll = nullptr );
 
 
 /**
@@ -166,22 +168,5 @@ int YesNoCancelDialog( wxWindow*       aParent,
  */
 int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
         const wxArrayString& aOptions );
-
-/**
- * Displays a dialog with checkboxes asking the user to select one or more options.
- *
- * @param aParent is the parent window.
- * @param aTitle is the dialog title.
- * @param aMessage is a text label displayed in the first row of the dialog.
- * @param aOptions is a vector of possible options.
- * @param aDefaultState is the default state for the checkboxes.
- * @return Pair containing a boolean value equal to true when the selection has been confirmed and
- *         an integer array containing indices of the selected options.
- */
-std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
-        const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState = false );
-
-std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
-        const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState = false );
 
 #endif /* __INCLUDE__CONFIRM_H__ */

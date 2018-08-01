@@ -738,9 +738,9 @@ private:
 
     /* Returns true when the operation has succeded (all requested libraries have been saved or
      * none was selected and confirmed by OK).
-     * @param aClosing when true, then the list of unsaved libraries is always shown.
+     * @param aRequireConfirmation when true, the user must be asked to confirm.
      */
-    bool saveAllLibraries( bool aClosing );
+    bool saveAllLibraries( bool aRequireConfirmation );
 
     ///> Creates or adds an existing library to the symbol library table.
     bool addLibraryFile( bool aCreateNew );

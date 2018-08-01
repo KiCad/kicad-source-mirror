@@ -164,8 +164,16 @@ public:
         if( !aMessage.IsEmpty() )
             m_TextInfo->SetLabel( aMessage );
 
-        GetSizer()->Fit( this );
-        GetSizer()->SetSizeHints( this );
+        m_ApplyToAllOpt->Show( false );    // Caller must enable this
+
+        m_sdbSizer1OK->SetLabel( _( "Save and Exit" ) );
+        m_sdbSizer1Apply->SetLabel( _( "Discard Changes" ) );
+        m_sdbSizer1OK->SetDefault();
+
+        m_sdbSizer1->Layout();
+        m_buttonSizer->Layout();
+
+        FinishDialogSettings();
     };
 
 private:
@@ -174,11 +182,17 @@ private:
 };
 
 
-int DisplayExitDialog( wxWindow* parent, const wxString& aMessage )
+int DisplayExitDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
 {
     DIALOG_EXIT dlg( parent, aMessage );
 
+    if( aApplyToAll )
+        dlg.m_ApplyToAllOpt->Show( true );
+
     int ret = dlg.ShowModal();
+
+    if( aApplyToAll )
+        *aApplyToAll = dlg.m_ApplyToAllOpt->GetValue();
 
     // Returns wxID_YES, wxID_NO, or wxID_CANCEL
     return ret;
@@ -259,12 +273,12 @@ public:
         else
             m_staticText2->SetLabel( aSecondaryMessage );
 
-        m_buttonSaveAndExit->SetLabel( aYesButtonText.IsEmpty() ? wxGetStockLabel( wxID_YES ) :
-                                       aYesButtonText );
-        m_buttonExitNoSave->SetLabel( aNoButtonText.IsEmpty() ? wxGetStockLabel( wxID_NO ) :
-                                      aNoButtonText );
-        m_buttonCancel->SetLabel( aCancelButtonText.IsEmpty() ? wxGetStockLabel( wxID_CANCEL ) :
-                                  aCancelButtonText );
+        m_sdbSizer1OK->SetLabel( aYesButtonText.IsEmpty() ? wxGetStockLabel( wxID_YES ) :
+                                                            aYesButtonText );
+        m_sdbSizer1Apply->SetLabel( aNoButtonText.IsEmpty() ? wxGetStockLabel( wxID_NO ) :
+                                                              aNoButtonText );
+        m_sdbSizer1Cancel->SetLabel( aCancelButtonText.IsEmpty() ? wxGetStockLabel( wxID_CANCEL ) :
+                                                                   aCancelButtonText );
         GetSizer()->Fit( this );
         GetSizer()->SetSizeHints( this );
     };
@@ -295,85 +309,3 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
     return dlg.GetSelection();
 }
 
-
-class DIALOG_MULTI_OPTIONS : public wxMultiChoiceDialog
-{
-public:
-    DIALOG_MULTI_OPTIONS( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
-            const wxArrayString& aOptions )
-        : wxMultiChoiceDialog( aParent, aMessage, aTitle, aOptions ),
-        m_optionsCount( aOptions.GetCount() )
-    {
-        wxBoxSizer* btnSizer = new wxBoxSizer( wxHORIZONTAL );
-        wxButton* selectAll = new wxButton( this, wxID_ANY, _( "Select All" ) );
-        btnSizer->Add( selectAll, 1, wxEXPAND | wxALL, 5 );
-        wxButton* unselectAll = new wxButton( this, wxID_ANY, _( "Unselect All" ) );
-        btnSizer->Add( unselectAll, 1, wxEXPAND | wxALL, 5 );
-        auto sizer = GetSizer();
-        sizer->Insert( sizer->GetItemCount() - 1, btnSizer, 0, wxEXPAND | wxALL, 0 );
-
-        Layout();
-        sizer->Fit( this );
-        sizer->SetSizeHints( this );
-        Centre( wxBOTH );
-
-        selectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::selectAll, this );
-        unselectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::unselectAll, this );
-    }
-
-    void SetCheckboxes( bool aValue )
-    {
-        wxArrayInt selIdxs;
-
-        if( aValue )        // select all indices
-        {
-            for( int i = 0; i < m_optionsCount; ++i )
-                selIdxs.Add( i );
-        }
-
-        SetSelections( selIdxs );
-    }
-
-protected:
-    ///> Number of displayed options
-    int m_optionsCount;
-
-    void selectAll( wxCommandEvent& aEvent )
-    {
-        SetCheckboxes( true );
-    }
-
-    void unselectAll( wxCommandEvent& aEvent )
-    {
-        SetCheckboxes( false );
-    }
-};
-
-
-std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
-        const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState )
-{
-    DIALOG_MULTI_OPTIONS dlg( aParent, aTitle, aMessage, aOptions );
-    dlg.Layout();
-    dlg.SetCheckboxes( aDefaultState );
-
-    wxArrayInt ret;
-    bool clickedOk = ( dlg.ShowModal() == wxID_OK );
-
-    if( clickedOk )
-        ret = dlg.GetSelections();
-
-    return std::make_pair( clickedOk, ret );
-}
-
-
-std::pair<bool, wxArrayInt> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
-        const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState )
-{
-    wxArrayString array;
-
-    for( const auto& option : aOptions )
-        array.Add( option );
-
-    return SelectMultipleOptions( aParent, aTitle, aMessage, array, aDefaultState );
-}

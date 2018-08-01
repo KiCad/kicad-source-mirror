@@ -674,60 +674,43 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 }
 
 
-bool LIB_EDIT_FRAME::saveAllLibraries( bool aClosing )
+bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 {
-    wxArrayString unsavedLibraries;
-    // There are two stages: first try to save libraries to the original files.
-    // In case of problems, ask the user to save them in a new location.
-    bool firstRun = true;
-    bool allSaved = false;
+    bool doSave = true;
+    int dirtyCount = 0;
+    bool applyToAll = false;
 
-    while( !allSaved )
+    for( const auto& libNickname : m_libMgr->GetLibraryNames() )
     {
-        allSaved = true;
-        unsavedLibraries.Empty();
+        if( m_libMgr->IsLibraryModified( libNickname ) )
+            dirtyCount++;
+    }
 
-        for( const auto& lib : m_libMgr->GetLibraryNames() )
+    for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+    {
+        if( m_libMgr->IsLibraryModified( libNickname ) )
         {
-            if( m_libMgr->IsLibraryModified( lib ) )
-                unsavedLibraries.Add( lib );
+            if( aRequireConfirmation && !applyToAll )
+            {
+                wxString msg = wxString::Format( _( "Save changes to \"%s\" before closing?" ),
+                                                 libNickname );
+
+                switch( DisplayExitDialog( this, msg, dirtyCount > 1 ? &applyToAll : nullptr ) )
+                {
+                case wxID_YES: doSave = true;  break;
+                case wxID_NO:  doSave = false; break;
+                default:
+                case wxID_CANCEL: return false;
+                }
+            }
+
+            if( doSave )
+            {
+                // If saving under existing name fails then do a Save As...
+                if( !saveLibrary( libNickname, false ) )
+                    saveLibrary( libNickname, true );
+            }
         }
-
-        if( unsavedLibraries.IsEmpty() )
-            break;
-
-        wxArrayInt libIdxs;
-
-        // Show a list of unsaved libraries when:
-        // - library editor is closed
-        // - there are multiple libraries modified
-        // - another library is opened
-        // - an error occurred when saving a library
-        if( aClosing || unsavedLibraries.Count() > 1
-                || GetCurLib() != unsavedLibraries[0] || !firstRun )
-        {
-            bool accepted;
-
-            std::tie( accepted, libIdxs ) = SelectMultipleOptions( this, _( "Save Libraries" ),
-                    firstRun ? _( "Select libraries to save" )
-                            : _( "Some libraries could not be saved to their original files.\n\n"
-                                "Do you want to save them to a new file?" ),
-                    unsavedLibraries, true );
-
-            if( !accepted )
-                return false;       // dialog has been cancelled
-        }
-
-        else if( unsavedLibraries.Count() == 1 || GetCurLib() == unsavedLibraries[0] )
-        {
-            // Save just current library, no questions asked
-            libIdxs.push_back( 0 );
-        }
-
-        for( auto libIndex : libIdxs )
-            allSaved &= saveLibrary( unsavedLibraries[libIndex], !firstRun );
-
-        firstRun = false;
     }
 
     return true;
