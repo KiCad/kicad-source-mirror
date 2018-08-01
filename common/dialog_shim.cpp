@@ -255,13 +255,18 @@ static void fixOSXCancelButtonIssue( wxWindow *aWindow )
     // copying the text if a button with wxID_CANCEL is used in a
     // wxStdDialogButtonSizer created by wxFormBuilder: the label is &Cancel, and
     // this accelerator key has priority over the standard copy accelerator.
+    // Note: problem also exists in other languages; for instance cmd+a closes
+    // dialogs in German because the button is &Abbrechen.
     wxButton* button = dynamic_cast<wxButton*>( wxWindow::FindWindowById( wxID_CANCEL, aWindow ) );
 
     if( button )
     {
+        static const wxString placeholder = wxT( "{amp}" );
+
         wxString buttonLabel = button->GetLabel();
-        buttonLabel.Replace( wxT( "&C" ), wxT( "C" ) );
-        buttonLabel.Replace( wxT( "&c" ), wxT( "c" ) );
+        buttonLabel.Replace( wxT( "&&" ), placeholder );
+        buttonLabel.Replace( wxT( "&" ), wxEmptyString );
+        buttonLabel.Replace( placeholder, wxT( "&" ) );
         button->SetLabel( buttonLabel );
     }
 }
