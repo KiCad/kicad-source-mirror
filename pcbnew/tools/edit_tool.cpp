@@ -1281,8 +1281,6 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
-
-            view.SetVisible( &ruler, false );
         }
 
         // move or drag when origin set updates rules
