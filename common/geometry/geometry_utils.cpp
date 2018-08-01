@@ -80,7 +80,5 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
         aSegCountforCircle = 6;
     if( 1 || aSegCountforCircle > 64 )
         return 1.0 / cos( M_PI / aSegCountforCircle );
-
-    return correction_factor[ aSegCountforCircle - 6 ];
 }
 

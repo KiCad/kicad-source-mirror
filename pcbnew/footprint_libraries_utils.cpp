@@ -250,10 +250,10 @@ MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFil
 MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 {
     wxString        lastOpenedPathForLoading = m_mruPath;
-    wxConfigBase*   config = Kiface().KifaceSettings();
+    wxConfigBase*   cfg = Kiface().KifaceSettings();
 
-    if( config )
-        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
+    if( cfg )
+        cfg->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
 
     wxFileName fn;
 
@@ -274,10 +274,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
         return NULL;
     }
 
-    if( config )    // Save file path
+    if( cfg )    // Save file path
     {
         lastOpenedPathForLoading = fn.GetPath();
-        config->Write( EXPORT_IMPORT_LASTPATH_KEY, lastOpenedPathForLoading );
+        cfg->Write( EXPORT_IMPORT_LASTPATH_KEY, lastOpenedPathForLoading );
     }
 
     wxString    moduleName;
@@ -341,7 +341,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 {
     wxFileName      fn;
-    wxConfigBase*   config = Kiface().KifaceSettings();
+    wxConfigBase*   cfg = Kiface().KifaceSettings();
 
     if( !aModule )
         return;
@@ -352,10 +352,10 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 
     fn.SetExt( KiCadFootprintFileExtension );
 
-    if( config )
+    if( cfg )
     {
         wxString    path;
-        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path, m_mruPath );
+        cfg->Read( EXPORT_IMPORT_LASTPATH_KEY, &path, m_mruPath );
         fn.SetPath( path );
     }
 
@@ -367,9 +367,9 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 
     fn = dlg.GetPath();
 
-    if( config )  // Save file path
+    if( cfg )  // Save file path
     {
-        config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
+        cfg->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
     }
 
     try

@@ -211,7 +211,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 #ifdef __WXGTK__
             // The native wxGTK+ impl ignores background colour, so set the text colour instead.
             // This works reasonably well in dark themes, and quite poorly in light ones....
-            if( node->LibId == m_libMgr->GetCurrentLibId() )
+            if( node->LibId == m_frame->GetCurrentLibId() )
             {
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
                 // mark modified part with bold font
