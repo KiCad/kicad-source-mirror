@@ -174,7 +174,7 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 {
     // Update is called when the names match, so just update the other fields.
 
-    LibId.SetLibNickname( aItem->GetLibNickname() );
+    LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
 
     Desc = aItem->GetDescription();
 
