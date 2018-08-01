@@ -444,13 +444,12 @@ public:
                               FP_LIB_TABLE*   aTable );
 
     /**
-     * Function LoadModuleFromLibrary
+     * Function SelectFootprintFromLibTree
      * opens a dialog to select a footprint.
      *
-     * @param aLibrary = the library name to use, or empty string to search all libraries
      * @param aUseFootprintViewer = true to allow selection by the footprint viewer
      */
-    MODULE* SelectFootprintFromLibTree( const wxString& aLibrary, bool aUseFootprintViewer = true );
+    MODULE* SelectFootprintFromLibTree( bool aUseFootprintViewer = true );
 
     /**
      * Adds the given module to the board.

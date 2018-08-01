@@ -147,8 +147,6 @@ private:
      */
     virtual void OnActivate( wxActivateEvent& event ) override;
 
-    void SelectCurrentLibrary( wxCommandEvent& event );
-
     /**
      * Function SelectCurrentFootprint
      * Selects the current footprint name and display it

@@ -100,7 +100,7 @@ public:
                 desc = desc.substr( 0, (unsigned) idx );
                 desc = desc.Trim( true );
 
-                if( desc.Last() == ',' )
+                if( !desc.IsEmpty() && desc.Last() == ',' )
                     desc.RemoveLast( 1 );
             }
 

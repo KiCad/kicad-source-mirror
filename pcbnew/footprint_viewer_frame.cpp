@@ -87,16 +87,10 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Toolbar events
-    EVT_TOOL( ID_MODVIEW_SELECT_LIB,
-              FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary )
-    EVT_TOOL( ID_MODVIEW_SELECT_PART,
-              FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint )
-    EVT_TOOL( ID_MODVIEW_NEXT,
-              FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
-    EVT_TOOL( ID_MODVIEW_PREVIOUS,
-              FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
-    EVT_TOOL( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD,
-              FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint )
+    EVT_TOOL( ID_MODVIEW_SELECT_PART, FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint )
+    EVT_TOOL( ID_MODVIEW_NEXT, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
+    EVT_TOOL( ID_MODVIEW_PREVIOUS, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
+    EVT_TOOL( ID_MODVIEW_EXPORT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint )
     EVT_TOOL( ID_MODVIEW_SHOW_3D_VIEW, FOOTPRINT_VIEWER_FRAME::Show3D_Frame )
 
     // listbox events
@@ -762,65 +756,29 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
-{
-    wxString selection = SelectLibrary( getCurNickname() );
-
-    if( !!selection && selection != getCurNickname() )
-    {
-        setCurNickname( selection );
-
-        UpdateTitle();
-        ReCreateFootprintList();
-
-        int id = m_libList->FindString( getCurNickname() );
-
-        if( id >= 0 )
-            m_libList->SetSelection( id );
-    }
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-    wxString curr_nickname = getCurNickname();
-    MODULE*  oldmodule = GetBoard()->m_Modules;
-    MODULE*  module = SelectFootprintFromLibTree( curr_nickname, false );
+    MODULE* module = SelectFootprintFromLibTree( false );
 
     if( module )
     {
-        // Only one footprint allowed: remove the previous footprint (if exists)
-        if( oldmodule )
+        const LIB_ID& fpid = module->GetFPID();
+
+        setCurNickname( fpid.GetLibNickname() );
+        setCurFootprintName( fpid.GetLibItemName() );
+
+        int index = m_libList->FindString( fpid.GetLibNickname() );
+
+        if( index != wxNOT_FOUND )
         {
-            GetBoard()->Remove( oldmodule );
-            delete oldmodule;
+            m_libList->SetSelection( index, true );
+            m_libList->EnsureVisible( index );
         }
 
-        SetCrossHairPosition( wxPoint( 0, 0 ) );
-        AddModuleToBoard( module );
+        ReCreateFootprintList();
 
-        setCurFootprintName( module->GetFPID().GetLibItemName() );
-
-        wxString nickname = module->GetFPID().GetLibNickname();
-
-        if( !getCurNickname() && nickname.size() )
-        {
-            // Set the listbox
-            int index =  m_libList->FindString( nickname );
-            if( index != wxNOT_FOUND )
-                m_libList->SetSelection( index, true );
-
-            setCurNickname( nickname );
-        }
-
-        module->ClearFlags();
-        SetCurItem( NULL );
-
-        Zoom_Automatique( false );
-        m_canvas->Refresh();
-        Update3D_Frame();
-        m_footprintList->SetStringSelection( getCurFootprintName() );
-   }
+        SelectAndViewFootprint( NEW_PART );
+    }
 }
 
 
@@ -846,14 +804,16 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
     if( selection != wxNOT_FOUND )
     {
         m_footprintList->SetSelection( selection );
-        setCurFootprintName( m_footprintList->GetString( selection ) );
+        m_footprintList->EnsureVisible( selection );
+
+        setCurFootprintName( m_footprintList->GetString( (unsigned) selection ) );
         SetCurItem( NULL );
 
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 
-        MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad(
-                                getCurNickname(), getCurFootprintName() );
+        MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad( getCurNickname(),
+                                                                     getCurFootprintName() );
 
         if( footprint )
             GetBoard()->Add( footprint, ADD_APPEND );

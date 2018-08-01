@@ -45,14 +45,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
         m_mainToolBar->Clear();
     else
         m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT
-                                            | wxAUI_TB_OVERFLOW );
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT  );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_MODVIEW_SELECT_LIB, wxEmptyString,
-                            KiScaledBitmap( open_library_xpm, this ),
-                            _( "Select library to browse" ) );
-
     m_mainToolBar->AddTool( ID_MODVIEW_SELECT_PART, wxEmptyString,
                             KiScaledBitmap( load_module_lib_xpm, this ),
                             _( "Select footprint to browse" ) );
@@ -75,30 +70,26 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Viewer_Hotkeys_Descr,
-                            HK_ZOOM_IN, IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_IN, wxEmptyString,
                             KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Viewer_Hotkeys_Descr,
-                            HK_ZOOM_OUT, IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_OUT, wxEmptyString,
                             KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hotkeys_Descr,
-                            HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_REDRAW, wxEmptyString,
                             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom to fit footprint" ), g_Module_Viewer_Hotkeys_Descr,
-                            HK_ZOOM_AUTO );
+    msg = AddHotkeyName( _( "Zoom to fit" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_AUTO );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
     if( IsModal() )
     {
         KiScaledSeparator( m_mainToolBar, this );
-        m_mainToolBar->AddTool( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD, wxEmptyString,
+        m_mainToolBar->AddTool( ID_MODVIEW_EXPORT_TO_BOARD, wxEmptyString,
                                 KiScaledBitmap( export_footprint_names_xpm, this ),
                                 _( "Insert footprint in board" ) );
     }
@@ -116,7 +107,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 
 
 // Virtual function
-void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
+void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 {
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
@@ -128,11 +119,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
 
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
-
-    // Active library selection
-    AddMenuItem( fileMenu, ID_MODVIEW_SELECT_LIB, _("Set Active Library..."),
-                 _( "Select library to be displayed" ), KiBitmap( open_library_xpm ) );
-    fileMenu->AppendSeparator();
 
     // Close viewer
     AddMenuItem( fileMenu, wxID_EXIT,
@@ -151,8 +137,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_VIEWER_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Viewer_Hotkeys_Descr,
-                          HK_ZOOM_AUTO  );
+    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_VIEWER_ZOOM_PAGE, text, _( "Zoom to fit footprint" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 

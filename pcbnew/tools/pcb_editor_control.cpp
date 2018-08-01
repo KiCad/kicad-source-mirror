@@ -467,7 +467,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             if( !module )
             {
                 // Pick the module to be placed
-                module = m_frame->SelectFootprintFromLibTree( wxEmptyString );
+                module = m_frame->SelectFootprintFromLibTree();
 
                 if( module == NULL )
                     continue;

@@ -368,7 +368,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
         {
             m_canvas->MoveCursorToCrossHair();
-            MODULE* module = SelectFootprintFromLibTree( wxEmptyString, Prj().PcbFootprintLibs());
+            MODULE* module = SelectFootprintFromLibTree();
 
             SetCurItem( (BOARD_ITEM*) module );
 

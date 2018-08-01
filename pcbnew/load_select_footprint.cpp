@@ -183,7 +183,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 }
 
 
-MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( const wxString& aLibrary, bool aAllowBrowser )
+MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( bool aAllowBrowser )
 {
     FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
     wxString        moduleName;
@@ -193,7 +193,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( const wxString& aLibrary, bo
     static wxString lastComponentName;
 
     WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
-    GFootprintList.ReadFootprintFiles( fpTable, aLibrary.length() ? &aLibrary : NULL, &progressReporter );
+    GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
     progressReporter.Show( false );
 
     if( GFootprintList.GetErrorCount() )
@@ -202,16 +202,15 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( const wxString& aLibrary, bo
     auto adapterPtr( FP_TREE_MODEL_ADAPTER::Create( fpTable ) );
     auto adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
 
-    if( !s_ModuleHistoryList.empty() )
-    {
-        std::vector<LIB_TREE_ITEM*> history_list;
+    std::vector<LIB_TREE_ITEM*> historyInfos;
 
-        for( auto const& item : s_ModuleHistoryList )
-            history_list.push_back( GFootprintList.GetModuleInfo( item ) );
+    for( auto const& item : s_ModuleHistoryList )
+        historyInfos.push_back( GFootprintList.GetModuleInfo( item ) );
 
-        adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list );
-        adapter->SetPreselectNode( history_list[0]->GetLibId(), 0 );
-    }
+    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, historyInfos );
+
+    if( !historyInfos.empty() )
+        adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
 
     adapter->AddLibraries();
 
