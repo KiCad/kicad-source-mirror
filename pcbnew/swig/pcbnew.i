@@ -73,6 +73,7 @@ class BASE_SET {};
 #include <exporters/gendrill_file_writer_base.h>
 #include <exporters/gendrill_Excellon_writer.h>
 #include <exporters/gendrill_gerber_writer.h>
+#include <exporters/gerber_jobfile_writer.h>
 
 BOARD *GetBoard(); /* get current editor board */
 %}
@@ -112,6 +113,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <exporters/gendrill_file_writer_base.h>
 %include <exporters/gendrill_Excellon_writer.h>
 %include <exporters/gendrill_gerber_writer.h>
+%include <exporters/gerber_jobfile_writer.h>
 %include <gal/color4d.h>
 %include <id.h>
 
