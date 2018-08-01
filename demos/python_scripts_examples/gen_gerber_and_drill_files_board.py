@@ -21,6 +21,7 @@
 '''
 
 import sys
+import os
 
 from pcbnew import *
 filename=sys.argv[1]
@@ -29,20 +30,25 @@ board = LoadBoard(filename)
 
 plotDir = "plot/"
 
+#prepare the gerber job file
+gen_job_file=True
+
 pctl = PLOT_CONTROLLER(board)
 
 popt = pctl.GetPlotOptions()
 
 popt.SetOutputDirectory(plotDir)
 
-# Set some important plot options:
+# Set some important plot options (see pcb_plot_params.h):
 popt.SetPlotFrameRef(False)     #do not change it
-popt.SetLineWidth(FromMM(0.15)) # default line width to plot items having no line thickiness defined
+popt.SetLineWidth(FromMM(0.35))
 
 popt.SetAutoScale(False)        #do not change it
 popt.SetScale(1)                #do not change it
 popt.SetMirror(False)
 popt.SetUseGerberAttributes(True)
+popt.SetIncludeGerberNetlistInfo(True)
+popt.SetCreateGerberJobFile(gen_job_file)
 popt.SetUseGerberProtelExtensions(False)
 popt.SetExcludeEdgeLayer(False);
 popt.SetScale(1)
@@ -56,6 +62,9 @@ popt.SetDrillMarksType( PCB_PLOT_PARAMS.NO_DRILL_SHAPE );
 # usually sel to True for copper layers
 popt.SetSkipPlotNPTH_Pads( False );
 
+
+#prepare the gerber job file
+jobfile_writer = GERBER_JOBFILE_WRITER( board )
 
 # Once the defaults are set it become pretty easy...
 # I have a Turing-complete programming language here: I'll use it...
@@ -84,6 +93,8 @@ for layer_info in plot_plan:
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
     print 'plot %s' % pctl.GetPlotFileName()
+    if gen_job_file == True:
+        jobfile_writer.AddGbrFile( layer_info[1], os.path.basename(pctl.GetPlotFileName()) );
     if pctl.PlotLayer() == False:
         print "plot error"
 
@@ -129,3 +140,11 @@ drlwriter.CreateDrillandMapFilesSet( pctl.GetPlotDirName(), genDrl, genMap );
 rptfn = pctl.GetPlotDirName() + 'drill_report.rpt'
 print 'report: %s' % rptfn
 drlwriter.GenDrillReportFile( rptfn );
+
+if gen_job_file == True:
+    #job_fn=os.path.splitext(pctl.GetPlotFileName())[0] + '.gbrjob'
+    job_fn=os.path.dirname(pctl.GetPlotFileName()) + '/' + os.path.basename(filename)
+    job_fn=os.path.splitext(job_fn)[0] + '.gbrjob'
+    print 'create job file %s' % job_fn
+    jobfile_writer.CreateJobFile( job_fn )
+
