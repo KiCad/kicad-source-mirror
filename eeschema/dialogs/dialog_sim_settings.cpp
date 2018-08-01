@@ -203,7 +203,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )
             noiseSource += 'v' + noiseSource;
 
-        m_simCommand = wxString::Format( ".noise v(%d%s) v%s %s %s %s %s",
+        m_simCommand = wxString::Format( ".noise v(%d%s) %s %s %s %s %s",
             netMap.at( m_noiseMeas->GetValue() ), ref,
             noiseSource, scaleToString( m_noiseScale->GetSelection() ),
             m_noisePointsNumber->GetValue(),
