@@ -47,10 +47,10 @@ print ""
 print "LIST MODULES:"
 
 for module in pcb.GetModules():
-    print "* Module: %s at %s"%(module.GetReference(),ToUnits(module.GetPosition()))
+    print "* Module: %s at %s"%(module.GetReference(), ToUnits(module.GetPosition()))
 
 print ""
-print "Ratsnest cnt:",len(pcb.GetFullRatsnest())
+print "Nets cnt: ", pcb.GetNetCount()
 print "track w cnt:",len(pcb.GetTrackWidthList())
 print "via s cnt:",len(pcb.GetViasDimensionsList())
 

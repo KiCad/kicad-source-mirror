@@ -7,12 +7,13 @@ size_1_0mm = wxSizeMM(1.0,1.0)
 # create a blank board
 pcb = BOARD()
 
-pcb.m_NetClasses.GetDefault().SetClearance(FromMM(0.1))
+pcb.GetNetClasses().GetDefault().SetClearance(FromMM(0.1))
 
 # create a new module, it's parent is our previously created pcb
 module = MODULE(pcb)
 module.SetReference("M1")   # give it a reference name
-module.Reference().SetPos0(wxPointMM(-10,-10))
+module.Reference().SetPos0(wxPointMM(6,-2))
+module.Reference().SetDrawCoord()
 pcb.Add(module)             # add it to our pcb
 m_pos = wxPointMM(50,50)
 module.SetPosition(m_pos)
@@ -26,7 +27,7 @@ for y in range (0,10):
         pad.SetSize(size_1_0mm)
         pt = wxPointMM(1.27*x,1.27*y)
         pad.SetPos0(pt);
-        #pad.SetPosition(pt)
+        pad.SetDrawCoord()
         pad.SetName(str(n))
         module.Add(pad)
         n+=1
@@ -34,7 +35,6 @@ for y in range (0,10):
 
 # save the PCB to disk
 pcb.Save("my2.kicad_pcb")
-pcb.Save("my2.brd")
 
 pcb = LoadBoard("my2.kicad_pcb")
 
@@ -42,7 +42,7 @@ print map( lambda x: x.GetReference() , list(pcb.GetModules()))
 
 for m in pcb.GetModules():
     for p in m.Pads():
-        print p.GetName(), p.GetPosition(), p.GetOffset()
+        print 'pad ', p.GetName(), p.GetPosition(), p.GetOffset()
 
 
 # pcb.GetDesignSettings()

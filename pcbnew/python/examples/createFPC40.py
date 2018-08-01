@@ -49,7 +49,7 @@ e.SetShape(S_SEGMENT)
 module.Add(e)
 
 # save the footprint to disk
-fpid = LIB_ID("FPC"+str(pads))   #the name in library
+fpid = LIB_ID("", "FPC"+str(pads))   #the curr lin nickname (empty) and the name in library
 module.SetFPID( fpid )
 
 lib_name = "fpc40.pretty"   #lib_path is actually a path, not a file
