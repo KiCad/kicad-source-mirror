@@ -369,10 +369,8 @@ void LIB_TREE_MODEL_ADAPTER::FindAndExpand( LIB_TREE_NODE& aNode,
             if( !(*aHighScore) || node->Score > (*aHighScore)->Score )
                 (*aHighScore) = &*node;
         }
-        else
-        {
-            FindAndExpand( *node, aFunc, aHighScore );
-        }
+
+        FindAndExpand( *node, aFunc, aHighScore );
     }
 }
 
@@ -384,7 +382,7 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
     FindAndExpand( m_tree,
                    []( LIB_TREE_NODE const* n )
                    {
-                       return n->Type == LIB_TREE_NODE::TYPE::LIBID && n->Score > 1;
+                       return /*n->Type == LIB_TREE_NODE::TYPE::LIBID &&*/ n->Score > 1;
                    },
                    &highScore );
 

@@ -267,10 +267,34 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
     Score = 0;
 
-    for( auto& child: Children )
+    // We need to score leaf nodes, which are usually (but not always) children.
+
+    if( Children.size() )
     {
-        child->UpdateScore( aMatcher );
-        Score = std::max( Score, child->Score );
+        for( auto& child: Children )
+        {
+            child->UpdateScore( aMatcher );
+            Score = std::max( Score, child->Score );
+        }
+    }
+    else
+    {
+        // No children; we are a leaf.
+        int found_pos = EDA_PATTERN_NOT_FOUND;
+        int matchers_fired = 0;
+
+        if( aMatcher.GetPattern() == MatchName )
+        {
+            Score += 1000;  // exact match. High score :)
+        }
+        else if( aMatcher.Find( MatchName, matchers_fired, found_pos ) )
+        {
+            // Substring match. The earlier in the string the better.
+            Score += matchPosScore( found_pos, 20 ) + 20;
+        }
+
+        // More matchers = better match
+        Score += 2 * matchers_fired;
     }
 }
 
