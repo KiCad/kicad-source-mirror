@@ -695,7 +695,7 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                 wxString msg = wxString::Format( _( "Save changes to \"%s\" before closing?" ),
                                                  libNickname );
 
-                switch( DisplayExitDialog( this, msg, dirtyCount > 1 ? &applyToAll : nullptr ) )
+                switch( UnsavedChangesDialog( this, msg, dirtyCount > 1 ? &applyToAll : nullptr ) )
                 {
                 case wxID_YES: doSave = true;  break;
                 case wxID_NO:  doSave = false; break;
@@ -706,9 +706,10 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 
             if( doSave )
             {
-                // If saving under existing name fails then do a Save As...
-                if( !saveLibrary( libNickname, false ) )
-                    saveLibrary( libNickname, true );
+                // If saving under existing name fails then do a Save As..., and if that
+                // fails then cancel close action.
+                if( !saveLibrary( libNickname, false ) && !saveLibrary( libNickname, true ) )
+                    return false;
             }
         }
     }

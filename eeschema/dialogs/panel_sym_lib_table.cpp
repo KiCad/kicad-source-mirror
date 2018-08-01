@@ -337,7 +337,10 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     m_lastBrowseDir = dlg.GetDirectory();
 
     const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
-    bool skipRemainingDuplicates = false;
+    bool addDuplicates = false;
+    bool applyToAll = false;
+    wxString warning = _( "Warning: Duplicate Nickname" );
+    wxString msg = _( "A library nicknamed \"%s\" already exists." );
     wxArrayString files;
     dlg.GetFilenames( files );
 
@@ -346,29 +349,21 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         wxString filePath = dlg.GetDirectory() + wxFileName::GetPathSeparator() + file;
         wxFileName fn( filePath );
         wxString nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_SCH );
+        bool doAdd = true;
 
         if( cur_model()->ContainsNickname( nickname ) )
         {
-            if( skipRemainingDuplicates )
-                continue;
-
-            int ret = YesNoCancelDialog( this,
-                    _( "Warning: Duplicate Nickname" ),
-                    wxString::Format( _( "A library nicknamed \"%s\" already exists." ), nickname ),
-                    _( "Skip" ),
-                    _( "Skip All Remaining Duplicates" ),
-                    _( "Add Anyway" ) );
-
-            if( ret == wxID_YES )
-                continue;
-            else if ( ret == wxID_NO )
+            if( !applyToAll )
             {
-                skipRemainingDuplicates = true;
-                continue;
+                int ret = YesOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                                             _( "Skip" ), _( "Add Anyway" ), &applyToAll );
+                addDuplicates = (ret == wxID_CANCEL );
             }
+
+            doAdd = addDuplicates;
         }
 
-        if( m_cur_grid->AppendRows( 1 ) )
+        if( doAdd && m_cur_grid->AppendRows( 1 ) )
         {
             int last_row = m_cur_grid->GetNumberRows() - 1;
 

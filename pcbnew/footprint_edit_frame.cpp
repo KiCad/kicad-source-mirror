@@ -517,9 +517,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() && GetBoard()->m_Modules )
     {
-        int ii = DisplayExitDialog( this, _( "Save changes to footprint before closing?" ) );
-
-        switch( ii )
+        switch( UnsavedChangesDialog( this, _( "Save changes to footprint before closing?" ) ) )
         {
         default:
         case wxID_NO:

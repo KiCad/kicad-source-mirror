@@ -962,10 +962,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     if( TransferDataFromWindow() )
-    {
-        wxCommandEvent dummyEvent;
-        m_parent->OnSaveProject( dummyEvent );
-    }
+        m_parent->SaveProject();
 }
 
 
@@ -982,7 +979,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
 
     if( m_dataModel->IsEdited() )
     {
-        switch( DisplayExitDialog( this, wxEmptyString ) )
+        switch( UnsavedChangesDialog( this, wxEmptyString ) )
         {
         case wxID_CANCEL:
             event.Veto();

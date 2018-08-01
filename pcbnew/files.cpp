@@ -416,35 +416,32 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxString fullFileName( aFileSet[0] );
 
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
-        wxT( "bug in single_top.cpp or project manager." ) );
+    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );
 
     if( !LockFile( fullFileName ) )
     {
-        wxString msg = wxString::Format( _(
-                "PCB file \"%s\" is already open." ),
-                GetChars( fullFileName )
-                );
+        wxString msg = wxString::Format( _( "PCB file \"%s\" is already open." ), fullFileName );
         DisplayError( this, msg );
         return false;
     }
 
     if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
-        int response = YesNoCancelDialog( this, _(
-            "The current board has been modified.  Do you wish to save the changes?" ),
-            wxEmptyString,
-            _( "Save and Load" ),
-            _( "Load Without Saving" )
-            );
+        wxString msg = _( "The current PCB has been modified.  Save changes?" );
 
-        if( response == wxID_CANCEL )
-            return false;
-        else if( response == wxID_YES )
-            SavePcbFile( GetBoard()->GetFileName(), CREATE_BACKUP_FILE );
-        else
+        switch( UnsavedChangesDialog( this, msg ) )
         {
-            // response == wxID_NO, fall thru
+        default:
+        case wxID_CANCEL:
+            return false;
+
+        case wxID_YES:
+            if( !SavePcbFile( GetBoard()->GetFileName(), CREATE_BACKUP_FILE ) )
+                return false;
+            break;
+
+        case wxID_NO:
+            break;
         }
     }
 
@@ -457,10 +454,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
-        wxString ask = wxString::Format( _(
-                "Board \"%s\" does not exist.  Do you wish to create it?" ),
-                GetChars( fullFileName )
-                );
+        wxString ask = wxString::Format( _( "PCB \"%s\" does not exist.  Do you wish to create it?" ),
+                                         fullFileName );
         if( !IsOK( this, ask ) )
             return false;
     }

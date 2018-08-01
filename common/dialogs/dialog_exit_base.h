@@ -21,8 +21,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
@@ -46,16 +46,16 @@ class DIALOG_EXIT_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_buttonSizer;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnExitNoSave( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSaveAndExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDiscard( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSave( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		wxCheckBox* m_ApplyToAllOpt;
+		wxButton* m_DiscardButton;
 		
 		DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXIT_BASE();

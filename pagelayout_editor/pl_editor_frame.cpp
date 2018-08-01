@@ -223,14 +223,11 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         wxString filename = GetCurrFileName();
 
         if( filename.IsEmpty() )
-            msg = _( "Save changes in a new file before closing?" );
+            msg = _( "Save changes before closing?" );
         else
-            msg.Printf( _( "Save the changes in\n\"%s\"\nbefore closing?" ),
-                        GetChars( filename ) );
+            msg.Printf( _( "Save changes to\n\"%s\"\nbefore closing?" ), filename );
 
-        int ii = DisplayExitDialog( this, msg );
-
-        switch( ii )
+        switch( UnsavedChangesDialog( this, msg ) )
         {
         case wxID_CANCEL:
             Event.Veto();
@@ -239,16 +236,17 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         case wxID_NO:
             break;
 
-        case wxID_OK:
         case wxID_YES:
-        {
             if( filename.IsEmpty() )
             {
                 wxFileDialog openFileDialog( this, _( "Save As" ), wxEmptyString, wxEmptyString,
                                              PageLayoutDescrFileWildcard(), wxFD_SAVE );
 
-                if(openFileDialog.ShowModal() == wxID_CANCEL )
+                if( openFileDialog.ShowModal() == wxID_CANCEL )
+                {
+                    Event.Veto();
                     return;
+                }
 
                 filename = openFileDialog.GetPath();
             }
@@ -257,8 +255,10 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
             {
                 msg.Printf( _( "Unable to create \"%s\"" ), GetChars( filename ) );
                 wxMessageBox( msg );
+                Event.Veto();
+                return;
             }
-        }
+
             break;
         }
     }

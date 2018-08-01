@@ -630,16 +630,11 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
-        wxString msg = wxString::Format( _(
-                "Save the changes in\n"
-                "\"%s\"\n"
-                "before closing?" ),
-                GetChars( GetBoard()->GetFileName() )
-                );
+        wxString msg = _( "Save changes to\n\"%s\"\nbefore closing?" );
 
-        int ii = DisplayExitDialog( this, msg );
-        switch( ii )
+        switch( UnsavedChangesDialog( this, wxString::Format( msg, GetBoard()->GetFileName() ) ) )
         {
+        default:
         case wxID_CANCEL:
             Event.Veto();
             return;
@@ -648,8 +643,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            // save the board. if the board has no name,
-            // the ID_SAVE_BOARD_AS will actually made
             Files_io_from_id( ID_SAVE_BOARD );
             break;
         }
@@ -684,11 +677,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // Remove the auto save file on a normal close of Pcbnew.
     if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
     {
-        wxString msg = wxString::Format( _(
-                "The auto save file \"%s\" could not be removed!" ),
-                GetChars( fn.GetFullPath() )
-                );
-
+        wxString msg = wxString::Format( _( "The auto save file \"%s\" could not be removed!" ),
+                                         fn.GetFullPath() );
         wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
@@ -816,12 +806,7 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     double dtmp;
     aCfg->Read( PlotLineWidthEntry, &dtmp, 0.1 ); // stored in mm
-
-    if( dtmp < 0.01 )
-        dtmp = 0.01;
-
-    if( dtmp > 5.0 )
-        dtmp = 5.0;
+    dtmp = std::max( 0.01, std::min( dtmp, 5.0 ) );
 
     g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
 
@@ -1082,20 +1067,13 @@ void PCB_EDIT_FRAME::UpdateTitle()
     wxString fileinfo;
 
     if( fileName.IsOk() && fileName.FileExists() )
-    {
         fileinfo = fileName.IsFileWritable() ? wxString( wxEmptyString ) : _( " [Read Only]" );
-    }
     else
-    {
-        fileinfo = _( " [new file]" );
-    }
+        fileinfo = _( " [Unsaved]" );
 
-    wxString title;
-    title.Printf( _( "Pcbnew" ) + wxT( " \u2014 %s%s" ),
-                  fileName.GetFullPath(),
-                  fileinfo );
-
-    SetTitle( title );
+    SetTitle( wxString::Format( _( "Pcbnew" ) + wxT( " \u2014 %s%s" ),
+                                fileName.GetFullPath(),
+                                fileinfo ) );
 }
 
 

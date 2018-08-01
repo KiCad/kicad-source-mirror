@@ -76,21 +76,16 @@ protected:
 
 
 /**
- * Function DisplayExitDialog
- * displays a dialog with 3 buttons:
- * Save and Exit
- * Cancel
- * Exit without save
+ * Function UnsavedChangesDialog
+ * displays a dialog with Save, Cancel and Discard Changes buttons.
  *
  * @param aParent = the parent window
  * @param aMessage = the main message to put in dialog
- * If empty, the standard message will be shown:
- * Save the changes before closing?
- * @param aApplyToAll = if non-null an "Apply to all" checkbox will be shown and the value
- *                      written to the bool.
+ * @param aApplyToAll = if non-null an "Apply to all" checkbox will be shown and it's value
+ *                      written back to the bool.
  * @return wxID_YES, wxID_CANCEL, wxID_NO.
  */
-int DisplayExitDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll = nullptr );
+int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll = nullptr );
 
 
 /**
@@ -134,26 +129,21 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, const wxStr
 bool IsOK( wxWindow* aParent, const wxString& aMessage );
 
 /**
- * Function YesNoCancelDialog
- * displays a yes/no/cancel dialog with \a aMessage and returns the user response.
+ * Function YesOrCancelDialog
+ * displays a warning dialog with \a aMessage and returns the user response.
  *
  * @param aParent is the parent window.  NULL can be used if the parent is the top level window.
- * @param aPrimaryMessage is the message to display in the top part of the dialog box using
- *                        a bold font.
- * @param aSecondaryMessage is the message to display in the lower part of the dialog box
- *                          using the default system UI font.
- * @param aYesButtonText is the text to display in the yes button when defined.
- * @param aNoButtonText is the text to display in the no button when defiend.
- * @param aCancelButtonText is the text to display in the cancel button when defined.
+ * @param aWarning is the warning to display in the top part of the dialog box using a bold font.
+ * @param aMessage is the message to display in the lower part of the dialog box using the
+ *                 default system UI font.
+ * @param aOKLabel is the text to display in the OK button.
+ * @param aCancelLabel is the text to display in the cancel button.
  *
- * @return wxID_YES, wxID_NO, or wxID_CANCEL depending on the button the user selected.
+ * @return wxID_YES or wxID_CANCEL depending on the button the user selected.
  */
-int YesNoCancelDialog( wxWindow*       aParent,
-                       const wxString& aPrimaryMessage,
-                       const wxString& aSecondaryMessage,
-                       const wxString& aYesButtonText = wxEmptyString,
-                       const wxString& aNoButtonText = wxEmptyString,
-                       const wxString& aCancelButtonText = wxEmptyString );
+int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
+                       const wxString& aOKLabel, const wxString& aCancelLabel,
+                       bool* aApplyToAll = nullptr );
 
 
 

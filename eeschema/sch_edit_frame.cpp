@@ -655,26 +655,24 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( sheetList.IsModified() )
     {
         wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
-        wxString msg = wxString::Format( _(
-                "Save the changes in\n\"%s\"\nbefore closing?"),
-                GetChars( fileName )
-                );
+        wxString msg = _( "Save changes to\n\"%s\"\nbefore closing?" );
 
-        int ii = DisplayExitDialog( this, msg );
-
-        switch( ii )
+        switch( UnsavedChangesDialog( this, wxString::Format( msg, fileName ) ) )
         {
-        case wxID_CANCEL:
-            aEvent.Veto();
-            return;
+        case wxID_YES:
+            if( !SaveProject() )
+            {
+                aEvent.Veto();
+                return;
+            }
+            break;
 
         case wxID_NO:
             break;
 
-        case wxID_YES:
-            wxCommandEvent tmp( ID_SAVE_PROJECT );
-            OnSaveProject( tmp );
-            break;
+        case wxID_CANCEL:
+            aEvent.Veto();
+            return;
         }
     }
 

@@ -271,10 +271,9 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( m_modified )
     {
-        wxString msg = _( "Component to Footprint links modified.\nSave before exit?" );
-        int ii = DisplayExitDialog( this, msg );
+        wxString msg = _( "Symbol to Footprint links have been modified.\nSave before exit?" );
 
-        switch( ii )
+        switch( UnsavedChangesDialog( this, msg ) )
         {
         case wxID_CANCEL:
             Event.Veto();

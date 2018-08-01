@@ -138,8 +138,7 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aPart )
     case SCH_FIELD_T:
     case LIB_FIELD_T:
         if( aPart )
-            return StrPrintf( "$PART: %s",
-                              TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+            return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
         break;
 
     case SCH_COMPONENT_T:
@@ -233,10 +232,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_SCH_PCB_UPDATE_REQUEST:
-    {
         doUpdatePcb( payload );
         break;
-    }
 
     case MAIL_BACKANNOTATE_FOOTPRINTS:
         try
@@ -279,13 +276,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_SCH_SAVE:
-    {
-        wxCommandEvent dummyEvent;
-        OnSaveProject( dummyEvent );
-
-        if( !isAutoSaveRequired() )     // proxy for save completed
+        if( SaveProject() )
             Kiway().ExpressMail( FRAME_CVPCB, MAIL_STATUS, _( "Schematic saved" ).ToStdString() );
-    }
         break;
 
     default:

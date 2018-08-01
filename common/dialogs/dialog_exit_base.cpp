@@ -19,19 +19,13 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerUpper;
 	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerBitmap;
-	bSizerBitmap = new wxBoxSizer( wxVERTICAL );
-	
 	m_bitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmap->Add( m_bitmap, 0, wxALL, 5 );
-	
-	
-	bSizerUpper->Add( bSizerBitmap, 0, 0, 5 );
+	bSizerUpper->Add( m_bitmap, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizerMessages;
 	bSizerMessages = new wxBoxSizer( wxVERTICAL );
 	
-	m_TextInfo = new wxStaticText( this, wxID_ANY, _("Save the changes before closing?"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextInfo = new wxStaticText( this, wxID_ANY, _("Save changes?"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextInfo->Wrap( -1 );
 	m_TextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
@@ -54,18 +48,25 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_buttonSizer->SetMinSize( wxSize( 475,-1 ) ); 
 	m_ApplyToAllOpt = new wxCheckBox( this, wxID_ANY, _("Apply to all"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonSizer->Add( m_ApplyToAllOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
+	m_buttonSizer->Add( m_ApplyToAllOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	
+	
+	m_buttonSizer->Add( 0, 0, 1, wxRIGHT|wxLEFT, 10 );
+	
+	m_DiscardButton = new wxButton( this, wxID_ANY, _("Discard Changes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonSizer->Add( m_DiscardButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	m_buttonSizer->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	m_buttonSizer->Add( m_sdbSizer1, 1, wxEXPAND|wxALL, 5 );
+	m_buttonSizer->Add( m_sdbSizer1, 0, wxALL, 5 );
 	
 	
 	bSizerMain->Add( m_buttonSizer, 0, wxEXPAND|wxLEFT, 10 );
@@ -78,14 +79,14 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnExitNoSave ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnSaveAndExit ), NULL, this );
+	m_DiscardButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnDiscard ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnSave ), NULL, this );
 }
 
 DIALOG_EXIT_BASE::~DIALOG_EXIT_BASE()
 {
 	// Disconnect Events
-	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnExitNoSave ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnSaveAndExit ), NULL, this );
+	m_DiscardButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnDiscard ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnSave ), NULL, this );
 	
 }

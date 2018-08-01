@@ -730,6 +730,7 @@ public:
      * The component library archive name is &ltroot_name&gt-cache.lib
      */
     void OnSaveProject( wxCommandEvent& aEvent );
+    bool SaveProject();
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 

@@ -156,18 +156,20 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 class DIALOG_EXIT: public DIALOG_EXIT_BASE
 {
 public:
-    DIALOG_EXIT( wxWindow *aParent, const wxString& aMessage ) :
+    DIALOG_EXIT( wxWindow *aParent, const wxString& aWarning, const wxString& aMessage,
+                 const wxString& aOKLabel, const wxString& aCancelLabel ) :
         DIALOG_EXIT_BASE( aParent )
     {
         m_bitmap->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+        m_TextInfo->SetLabel( aWarning );
+        m_staticText2->SetLabel( aMessage );
 
-        if( !aMessage.IsEmpty() )
-            m_TextInfo->SetLabel( aMessage );
+        // Caller must eanble these if desired
+        m_ApplyToAllOpt->Show( false );
+        m_DiscardButton->Show( false );
 
-        m_ApplyToAllOpt->Show( false );    // Caller must enable this
-
-        m_sdbSizer1OK->SetLabel( _( "Save and Exit" ) );
-        m_sdbSizer1Apply->SetLabel( _( "Discard Changes" ) );
+        m_sdbSizer1OK->SetLabel( aOKLabel );
+        m_sdbSizer1Cancel->SetLabel( aCancelLabel );
         m_sdbSizer1OK->SetDefault();
 
         m_sdbSizer1->Layout();
@@ -177,14 +179,36 @@ public:
     };
 
 private:
-    void OnSaveAndExit( wxCommandEvent& event ) override { EndModal( wxID_YES ); }
-    void OnExitNoSave( wxCommandEvent& event ) override { EndModal( wxID_NO ); }
+    void OnSave( wxCommandEvent& event ) override { EndModal( wxID_YES ); }
+    void OnDiscard( wxCommandEvent& event ) override { EndModal( wxID_NO ); }
 };
 
 
-int DisplayExitDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
+int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
 {
-    DIALOG_EXIT dlg( parent, aMessage );
+    DIALOG_EXIT dlg( parent, aMessage,
+                     _( "If you don't save, all your changes will be permanently lost." ),
+                     _( "Save" ), _( "Cancel" ) );
+
+    if( aApplyToAll )
+        dlg.m_ApplyToAllOpt->Show( true );
+
+    dlg.m_DiscardButton->Show( true );
+
+    int ret = dlg.ShowModal();
+
+    if( aApplyToAll )
+        *aApplyToAll = dlg.m_ApplyToAllOpt->GetValue();
+
+    // Returns wxID_YES, wxID_NO, or wxID_CANCEL
+    return ret;
+}
+
+
+int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
+                       const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll )
+{
+    DIALOG_EXIT dlg( aParent, aWarning, aMessage, aOKLabel, aCancelLabel );
 
     if( aApplyToAll )
         dlg.m_ApplyToAllOpt->Show( true );
@@ -254,48 +278,6 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
                          wxYES_NO | wxCENTRE | wxICON_QUESTION );
 
     return dlg.ShowModal() == wxID_YES;
-}
-
-
-class DIALOG_YES_NO_CANCEL : public DIALOG_EXIT
-{
-public:
-    DIALOG_YES_NO_CANCEL( wxWindow        *aParent,
-                          const wxString& aPrimaryMessage,
-                          const wxString& aSecondaryMessage = wxEmptyString,
-                          const wxString& aYesButtonText = wxEmptyString,
-                          const wxString& aNoButtonText = wxEmptyString,
-                          const wxString& aCancelButtonText = wxEmptyString ) :
-        DIALOG_EXIT( aParent, aPrimaryMessage )
-    {
-        if( aSecondaryMessage.IsEmpty() )
-            m_staticText2->Hide();
-        else
-            m_staticText2->SetLabel( aSecondaryMessage );
-
-        m_sdbSizer1OK->SetLabel( aYesButtonText.IsEmpty() ? wxGetStockLabel( wxID_YES ) :
-                                                            aYesButtonText );
-        m_sdbSizer1Apply->SetLabel( aNoButtonText.IsEmpty() ? wxGetStockLabel( wxID_NO ) :
-                                                              aNoButtonText );
-        m_sdbSizer1Cancel->SetLabel( aCancelButtonText.IsEmpty() ? wxGetStockLabel( wxID_CANCEL ) :
-                                                                   aCancelButtonText );
-        GetSizer()->Fit( this );
-        GetSizer()->SetSizeHints( this );
-    };
-};
-
-
-int YesNoCancelDialog( wxWindow*       aParent,
-                       const wxString& aPrimaryMessage,
-                       const wxString& aSecondaryMessage,
-                       const wxString& aYesButtonText,
-                       const wxString& aNoButtonText,
-                       const wxString& aCancelButtonText )
-{
-    DIALOG_YES_NO_CANCEL dlg( aParent, aPrimaryMessage, aSecondaryMessage,
-                              aYesButtonText, aNoButtonText, aCancelButtonText );
-
-    return dlg.ShowModal();
 }
 
 
