@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -119,12 +119,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer->Add( sbSizerInfo, 0, wxEXPAND|wxALL, 5 );
 	
 	m_buttonLoad = new wxButton( m_panelRight, wxID_ANY, _("Load Bitmap"), wxDefaultPosition, wxDefaultSize, 0 );
-	brightSizer->Add( m_buttonLoad, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	brightSizer->Add( m_buttonLoad, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonExport = new wxButton( m_panelRight, wxID_ANY, _("Export"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonExport->SetToolTip( _("Create a library file for Eeschema\nThis library contains only one component: logo") );
 	
-	brightSizer->Add( m_buttonExport, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	brightSizer->Add( m_buttonExport, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxString m_radioBoxFormatChoices[] = { _("Eeschema (.lib file)"), _("Pcbnew (.kicad_mod file)"), _("Postscript (.ps file)"), _("Logo for title block (.kicad_wks file)") };
 	int m_radioBoxFormatNChoices = sizeof( m_radioBoxFormatChoices ) / sizeof( wxString );
@@ -142,7 +142,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_sliderThreshold = new wxSlider( sbSizer2->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sliderThreshold->SetToolTip( _("Adjust the level to convert the greyscale picture to a black and white picture.") );
 	
-	sbSizer2->Add( m_sliderThreshold, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer2->Add( m_sliderThreshold, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_checkNegative = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Negative"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer2->Add( m_checkNegative, 0, wxBOTTOM|wxTOP, 10 );
@@ -153,7 +153,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	wxString m_radio_PCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User layer Eco2") };
 	int m_radio_PCBLayerNChoices = sizeof( m_radio_PCBLayerChoices ) / sizeof( wxString );
 	m_radio_PCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline:"), wxDefaultPosition, wxDefaultSize, m_radio_PCBLayerNChoices, m_radio_PCBLayerChoices, 1, wxRA_SPECIFY_COLS );
-	m_radio_PCBLayer->SetSelection( 3 );
+	m_radio_PCBLayer->SetSelection( 0 );
 	m_radio_PCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe 2 invisible fields reference and value are always placed on the silk screen layer.") );
 	
 	brightSizer->Add( m_radio_PCBLayer, 0, wxALL|wxEXPAND, 5 );

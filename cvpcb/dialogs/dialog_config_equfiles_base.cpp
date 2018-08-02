@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jun  5 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,16 +34,16 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	bSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonAddEqu = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_ADD_EQU, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonAddEqu, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButtons->Add( m_buttonAddEqu, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonRemoveEqu = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_REMOVE_EQU, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonRemoveEqu, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButtons->Add( m_buttonRemoveEqu, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonMoveUp = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_UP, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonMoveUp, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButtons->Add( m_buttonMoveUp, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonMoveDown = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_DOWN, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonMoveDown, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButtons->Add( m_buttonMoveDown, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonEdit = new wxButton( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, _("Edit File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonEdit, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
