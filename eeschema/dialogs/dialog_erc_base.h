@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Aug  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,11 +26,11 @@ class ERC_HTML_LISTFRAME;
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/html/htmlwin.h>
-#include <wx/button.h>
-#include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 

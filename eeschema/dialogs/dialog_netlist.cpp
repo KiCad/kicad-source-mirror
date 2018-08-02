@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,8 +263,7 @@ END_EVENT_TABLE()
 NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
                                           const wxString& title,
                                           NETLIST_TYPE_ID id_NetType ) :
-    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize,
-             wxTAB_TRAVERSAL | wxBORDER_SUNKEN )
+    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
 {
     m_IdNetType = id_NetType;
     m_pageNetFmtName = title;

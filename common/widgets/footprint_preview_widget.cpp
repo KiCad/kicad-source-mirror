@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -26,7 +26,7 @@
 
 FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ):
     wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-             wxFULL_REPAINT_ON_RESIZE | wxSUNKEN_BORDER | wxTAB_TRAVERSAL ),
+             wxFULL_REPAINT_ON_RESIZE | wxBORDER_SIMPLE | wxTAB_TRAVERSAL ),
     m_prev_panel( nullptr ),
     m_status_label( nullptr ),
     m_sizer( nullptr )

@@ -82,7 +82,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     // Add the wxTextCtrl showing all messages from KiCad:
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize,
-                                    wxTE_MULTILINE | wxSUNKEN_BORDER | wxTE_READONLY );
+                                    wxTE_MULTILINE | wxTE_READONLY );
 
     RecreateBaseHToolbar();
     ReCreateMenuBar();

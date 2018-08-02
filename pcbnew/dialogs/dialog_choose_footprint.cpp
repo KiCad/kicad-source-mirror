@@ -64,10 +64,10 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     wxHtmlWindow* details = nullptr;
 
     m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                         wxSP_LIVE_UPDATE );
 
     m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                         wxSP_LIVE_UPDATE );
 
     //Avoid the splitter window being assigned as the Parent to additional windows
     m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
@@ -77,7 +77,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     detailsPanel->SetSizer( detailsSizer );
 
     details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                wxHW_SCROLLBAR_AUTO | wxRAISED_BORDER );
+                                wxHW_SCROLLBAR_AUTO );
     detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
     detailsPanel->Layout();
     detailsSizer->Fit( detailsPanel );
@@ -102,7 +102,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     if( aAllowBrowser )
     {
         m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
-        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 10 );
+        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
     }
 
     auto sdbSizer = new wxStdDialogButtonSizer();

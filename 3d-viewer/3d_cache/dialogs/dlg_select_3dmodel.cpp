@@ -75,7 +75,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 
     m_FileTree = new wxGenericDirCtrl( this, ID_FILE_TREE, prevModelSelectDir, wxDefaultPosition,
         wxSize( 300,100 ), wxDIRCTRL_3D_INTERNAL | wxDIRCTRL_EDIT_LABELS
-        | wxDIRCTRL_SELECT_FIRST | wxDIRCTRL_SHOW_FILTERS|wxSUNKEN_BORDER, wxEmptyString, 0 );
+        | wxDIRCTRL_SELECT_FIRST | wxDIRCTRL_SHOW_FILTERS | wxBORDER_SIMPLE, wxEmptyString, 0 );
 
 
     m_FileTree->ShowHidden( false );

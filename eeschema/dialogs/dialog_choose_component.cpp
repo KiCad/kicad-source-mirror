@@ -77,7 +77,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     if( aShowFootprints )
     {
         m_hsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                            wxSP_LIVE_UPDATE );
 
         //Avoid the splitter window being assigned as the Parent to additional windows
         m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
@@ -87,10 +87,10 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     else
     {
         m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                            wxSP_LIVE_UPDATE );
 
         m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                            wxSP_LIVE_UPDATE );
 
         //Avoid the splitter window being assigned as the Parent to additional windows
         m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
@@ -100,7 +100,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         detailsPanel->SetSizer( detailsSizer );
 
         details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                    wxHW_SCROLLBAR_AUTO | wxRAISED_BORDER );
+                                    wxHW_SCROLLBAR_AUTO );
         detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
         detailsPanel->Layout();
         detailsSizer->Fit( detailsPanel );
@@ -113,7 +113,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     }
 
     m_tree = new LIB_TREE( m_hsplitter, Prj().SchSymbolLibTable(), aAdapter,
-                                 LIB_TREE::WIDGETS::ALL, details );
+                           LIB_TREE::WIDGETS::ALL, details );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
@@ -126,7 +126,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     if( aAllowBrowser )
     {
         m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
-        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 10 );
+        buttonsSizer->Add( m_browser_button, 0, wxALL, 5 );
     }
 
     auto sdbSizer = new wxStdDialogButtonSizer();
@@ -148,10 +148,12 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_symbol_preview->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint, this );
 
     if( m_browser_button )
-        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
+        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
+                                &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
 
     if( m_fp_sel_ctrl )
-        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
+                             &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
     Layout();
 
@@ -181,10 +183,12 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     m_symbol_preview->Unbind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint, this );
 
     if( m_browser_button )
-        m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
+        m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
+                                  &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
 
     if( m_fp_sel_ctrl )
-        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED,
+                               &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
     // I am not sure the following two lines are necessary,
     // but they will not hurt anyone
@@ -205,7 +209,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     m_symbol_preview = new wxPanel( panel, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-                                   wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL | wxRAISED_BORDER );
+                                    wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
@@ -221,7 +225,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
         sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxBOTTOM | wxRIGHT, 5 );
 
         if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxRIGHT, 5 );
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxBOTTOM | wxTOP | wxRIGHT, 5 );
 
         sizer->Add( m_fp_preview, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
     }
