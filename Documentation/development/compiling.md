@@ -113,11 +113,15 @@ The [Curl Multi-Protocol File Transfer Library][libcurl] is used to provide secu
 file transfer access for the [GitHub][] plug in.  This library needs to be installed unless
 the GitHub plug build option is disabled.
 
-## OpenCascade Community Edition (OCE) ## {#oce}
+## OpenCascade Library ## {#oce}
 
-The [OpenCascade Community Edition][liboce] is used to provide support for loading and saving
+The [OpenCascade Community Edition (OCE)][liboce] is used to provide support for loading and saving
 3D model file formats such as STEP.  This library needs to be installed unless the OCE build
 option is disabled.
+
+[Open CASCSADE Technology (OCC)][libocc] should also work as an alternative to OCE. Selection of
+library Cascade library can be specified at build time.  See the [STEP/IGES support](#oce_opt)
+section.
 
 ## Ngspice Library ## {#ngspice}
 
@@ -172,8 +176,11 @@ library.  This option is enabled by default.
 
 The KICAD_USE_OCE is used for the 3D viewer plugin to support STEP and IGES 3D models. Build tools
 and plugins related to OpenCascade Community Edition (OCE) are enabled with this option. When
-enabled it requires [OCE][] to be available, and the location of the installed OCE library to be
+enabled it requires [liboce][] to be available, and the location of the installed OCE library to be
 passed via the OCE_DIR flag.  This option is enabled by default.
+
+Alternatively KICAD_USE_OCC can be used instead of OCE. Both options are not supposed to be enabled
+at the same time.
 
 ## Demos and Examples ## {#demo_install_opt}
 
@@ -468,6 +475,6 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [libcurl]: http://curl.haxx.se/libcurl/
 [GLM]: http://glm.g-truc.net/
 [git]: https://git-scm.com/
-[OCE]: https://github.com/tpaviot/oce
 [liboce]: https://github.com/tpaviot/oce
+[libocc]: https://www.opencascade.com/content/overview
 [libngspice]: https://sourceforge.net/projects/ngspice/
