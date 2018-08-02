@@ -68,40 +68,40 @@ static wxString FormatWildcardExt( const wxString& aWildcard )
 }
 
 
-const wxString SchematicSymbolFileExtension( "sym" );
-const wxString SchematicLibraryFileExtension( "lib" );
-const wxString SchematicBackupFileExtension( "bak" );
+const std::string SchematicSymbolFileExtension( "sym" );
+const std::string SchematicLibraryFileExtension( "lib" );
+const std::string SchematicBackupFileExtension( "bak" );
 
-const wxString VrmlFileExtension( "wrl" );
+const std::string VrmlFileExtension( "wrl" );
 
-const wxString ProjectFileExtension( "pro" );
-const wxString SchematicFileExtension( "sch" );
-const wxString NetlistFileExtension( "net" );
-const wxString ComponentFileExtension( "cmp" );
-const wxString GerberFileExtension( "gbr" );
-const wxString GerberJobFileExtension( "gbrjob" );
-const wxString HtmlFileExtension( wxT( "html" ) );
+const std::string ProjectFileExtension( "pro" );
+const std::string SchematicFileExtension( "sch" );
+const std::string NetlistFileExtension( "net" );
+const std::string ComponentFileExtension( "cmp" );
+const std::string GerberFileExtension( "gbr" );
+const std::string GerberJobFileExtension( "gbrjob" );
+const std::string HtmlFileExtension( "html" );
 
-const wxString LegacyPcbFileExtension( "brd" );
-const wxString KiCadPcbFileExtension( "kicad_pcb" );
-const wxString PageLayoutDescrFileExtension( "kicad_wks" );
+const std::string LegacyPcbFileExtension( "brd" );
+const std::string KiCadPcbFileExtension( "kicad_pcb" );
+const std::string PageLayoutDescrFileExtension( "kicad_wks" );
 
-const wxString PdfFileExtension( "pdf" );
-const wxString MacrosFileExtension( "mcr" );
-const wxString DrillFileExtension( "drl" );
-const wxString SVGFileExtension( "svg" );
-const wxString ReportFileExtension( "rpt" );
-const wxString FootprintPlaceFileExtension( "pos" );
-const wxString KiCadLib3DShapesPathExtension( "3dshapes" );  ///< 3D shapes default libpath
+const std::string PdfFileExtension( "pdf" );
+const std::string MacrosFileExtension( "mcr" );
+const std::string DrillFileExtension( "drl" );
+const std::string SVGFileExtension( "svg" );
+const std::string ReportFileExtension( "rpt" );
+const std::string FootprintPlaceFileExtension( "pos" );
+const std::string KiCadLib3DShapesPathExtension( "3dshapes" );  ///< 3D shapes default libpath
 
-const wxString KiCadFootprintLibPathExtension( "pretty" );   ///< KICAD PLUGIN libpath
-const wxString LegacyFootprintLibPathExtension( "mod" );
-const wxString EagleFootprintLibPathExtension( "lbr" );
+const std::string KiCadFootprintLibPathExtension( "pretty" );   ///< KICAD PLUGIN libpath
+const std::string LegacyFootprintLibPathExtension( "mod" );
+const std::string EagleFootprintLibPathExtension( "lbr" );
 
-const wxString KiCadFootprintFileExtension( "kicad_mod" );
-const wxString GedaPcbFootprintLibFileExtension( "fp" );
-const wxString SpecctraDsnFileExtension( "dsn" );
-const wxString IpcD356FileExtension( "d356" );
+const std::string KiCadFootprintFileExtension( "kicad_mod" );
+const std::string GedaPcbFootprintLibFileExtension( "fp" );
+const std::string SpecctraDsnFileExtension( "dsn" );
+const std::string IpcD356FileExtension( "d356" );
 
 
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );

@@ -46,42 +46,44 @@
  * @{
  */
 
-extern const wxString AllFilesWildcard;
+// Do NOT use wxString for these.  wxStrings are not thread-safe, even when const.  (For the
+// curious the UTF8 cacheing strategy puts iterators in a linked list.  Insertion and removal
+// from the linked list is not thread-safe.)
 
-extern const wxString SchematicSymbolFileExtension;
-extern const wxString SchematicLibraryFileExtension;
-extern const wxString SchematicBackupFileExtension;
+extern const std::string SchematicSymbolFileExtension;
+extern const std::string SchematicLibraryFileExtension;
+extern const std::string SchematicBackupFileExtension;
 
-extern const wxString VrmlFileExtension;
-extern const wxString ProjectFileExtension;
-extern const wxString SchematicFileExtension;
-extern const wxString NetlistFileExtension;
-extern const wxString GerberFileExtension;
-extern const wxString GerberJobFileExtension;
-extern const wxString HtmlFileExtension;
+extern const std::string VrmlFileExtension;
+extern const std::string ProjectFileExtension;
+extern const std::string SchematicFileExtension;
+extern const std::string NetlistFileExtension;
+extern const std::string GerberFileExtension;
+extern const std::string GerberJobFileExtension;
+extern const std::string HtmlFileExtension;
 
-extern const wxString LegacyPcbFileExtension;
-extern const wxString KiCadPcbFileExtension;
+extern const std::string LegacyPcbFileExtension;
+extern const std::string KiCadPcbFileExtension;
 #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
-extern const wxString PageLayoutDescrFileExtension;
+extern const std::string PageLayoutDescrFileExtension;
 
-extern const wxString LegacyFootprintLibPathExtension;
-extern const wxString PdfFileExtension;
-extern const wxString MacrosFileExtension;
-extern const wxString ComponentFileExtension;
-extern const wxString DrillFileExtension;
-extern const wxString SVGFileExtension;
-extern const wxString ReportFileExtension;
-extern const wxString FootprintPlaceFileExtension;
-extern const wxString KiCadFootprintFileExtension;
-extern const wxString KiCadFootprintLibPathExtension;
-extern const wxString GedaPcbFootprintLibFileExtension;
-extern const wxString EagleFootprintLibPathExtension;
-extern const wxString ComponentFileExtension;
-extern const wxString PageLayoutDescrFileExtension;
-extern const wxString KiCadLib3DShapesPathExtension;
-extern const wxString SpecctraDsnFileExtension;
-extern const wxString IpcD356FileExtension;
+extern const std::string LegacyFootprintLibPathExtension;
+extern const std::string PdfFileExtension;
+extern const std::string MacrosFileExtension;
+extern const std::string ComponentFileExtension;
+extern const std::string DrillFileExtension;
+extern const std::string SVGFileExtension;
+extern const std::string ReportFileExtension;
+extern const std::string FootprintPlaceFileExtension;
+extern const std::string KiCadFootprintFileExtension;
+extern const std::string KiCadFootprintLibPathExtension;
+extern const std::string GedaPcbFootprintLibFileExtension;
+extern const std::string EagleFootprintLibPathExtension;
+extern const std::string ComponentFileExtension;
+extern const std::string PageLayoutDescrFileExtension;
+extern const std::string KiCadLib3DShapesPathExtension;
+extern const std::string SpecctraDsnFileExtension;
+extern const std::string IpcD356FileExtension;
 
 /**
  * @}
@@ -97,6 +99,8 @@ extern const wxString IpcD356FileExtension;
  *       correct handle the GTK+ file dialog case sensitivity issue.
  * @{
  */
+
+extern const wxString AllFilesWildcard;
 
 extern wxString ComponentFileWildcard();
 extern wxString PageLayoutDescrFileWildcard();
