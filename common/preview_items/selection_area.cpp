@@ -99,8 +99,7 @@ const BOX2I SELECTION_AREA::ViewBBox() const
 void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
-
-    auto rs = static_cast<PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = aView->GetPainter()->GetSettings();
 
     const auto& scheme =  rs->IsBackgroundDark() ? selectionColorScheme[0] : selectionColorScheme[1];
 
