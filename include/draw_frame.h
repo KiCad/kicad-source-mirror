@@ -78,6 +78,8 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
     ///< GAL display options - this is the frame's interface to setting GAL display options
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_galDisplayOptions;
+    bool m_useSingleCanvasPane;
+
 
 protected:
 
@@ -162,7 +164,7 @@ protected:
     /// The current canvas type
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
 
-    void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
+    virtual void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     double bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre );
 
@@ -215,6 +217,8 @@ protected:
 
     ///> Key in KifaceSettings to store the canvas type.
     static const wxChar CANVAS_TYPE_KEY[];
+
+    void createCanvas();
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -371,7 +375,7 @@ public:
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
 
-    EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
+    virtual EDA_DRAW_PANEL* GetCanvas() const { return m_canvas; }
 
     virtual wxString GetScreenDesc() const;
 
@@ -667,24 +671,24 @@ public:
      * @param aCenterPoint The position in logical units to center the scroll bars.
      * @param aWarpPointer Moves the mouse cursor to \a aCenterPoint if true.
      */
-    void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
+    virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     /**
      * Function RedrawScreen2
      * puts the crosshair back to the screen position it had before zooming
      * @param posBefore screen position of the crosshair before zooming
      */
-    void RedrawScreen2( const wxPoint& posBefore );
+    virtual void RedrawScreen2( const wxPoint& posBefore );
 
     /**
      * Function Zoom_Automatique
      * redraws the screen with best zoom level and the best centering
      * that shows all the page or the board
      */
-    void Zoom_Automatique( bool aWarpPointer );
+    virtual void Zoom_Automatique( bool aWarpPointer );
 
     /* Set the zoom level to show the area Rect */
-    void Window_Zoom( EDA_RECT& Rect );
+    virtual void Window_Zoom( EDA_RECT& Rect );
 
     /** Return the zoom level which displays the full page on screen */
     virtual double BestZoom() = 0;
@@ -927,6 +931,12 @@ public:
      * with the current controller state
      */
     virtual void SyncMenusAndToolbars( wxEvent& aEvent ) {};
+
+    bool GetShowAxis() const { return m_showAxis; }
+    bool GetShowGridAxis() const { return m_showGridAxis; }
+    bool GetShowOriginAxis() const { return m_showOriginAxis; }
+
+    virtual const BOX2I GetDocumentExtents() const;
 
     DECLARE_EVENT_TABLE()
 };
