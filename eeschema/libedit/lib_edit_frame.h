@@ -709,6 +709,39 @@ public:
 
     void ShowChangedLanguage() override;
 
+    virtual void SetScreen( BASE_SCREEN* aScreen ) override;
+
+    virtual const BOX2I GetDocumentExtents() const override;
+
+    void RebuildView();
+
+    /**
+     * Checks all draw objects of part to see if they are with block.
+     *
+     * Use this method to mark draw objects as selected during block
+     * functions.
+     *
+     * @param aRect - The bounding rectangle to test in draw items are inside.
+     * @param aUnit - The current unit number to test against.
+     * @param aConvert - Are the draw items being selected a conversion.
+     * @param aSyncPinEdit - Enable pin selection in other units.
+     * @return The number of draw objects found inside the block select
+     *         rectangle.
+     */
+    int BlockSelectItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock, int aUnit, int aConvert, bool aSyncPinEdit );
+
+    /**
+     * Clears all the draw items marked by a block select.
+     */
+    void BlockClearSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+
+    void BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+    void BlockDeleteSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+    void BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+    void BlockMirrorSelectedItemsH( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+    void BlockMirrorSelectedItemsV( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+    void BlockRotateSelectedItems( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
+
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
 private:
