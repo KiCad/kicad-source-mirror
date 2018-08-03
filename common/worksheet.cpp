@@ -34,7 +34,6 @@
 #include <pgm_base.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <base_screen.h>
 #include <draw_frame.h>
 #include <worksheet.h>

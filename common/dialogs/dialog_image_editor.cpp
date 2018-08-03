@@ -179,7 +179,7 @@ void DIALOG_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 
     double scale = 1.0 / m_workingImage->GetScalingFactor();
     dc.SetUserScale( scale, scale );
-    m_workingImage->DrawBitmap( NULL, &dc, wxPoint( 0, 0 ) );
+    m_workingImage->DrawBitmap( &dc, wxPoint( 0, 0 ) );
 }
 
 

@@ -29,7 +29,6 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "macros.h"
-#include "class_drawpanel.h"
 #include "trigo.h"
 #include "common.h"
 #include "richio.h"
@@ -216,7 +215,7 @@ const EDA_RECT BITMAP_BASE::GetBoundingBox() const
 }
 
 
-void BITMAP_BASE::DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos )
+void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
 {
     if( m_bitmap == NULL )
         return;

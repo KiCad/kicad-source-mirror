@@ -36,7 +36,6 @@
 #include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 #include <trigo.h>
 #include <macros.h>
-#include <class_drawpanel.h>
 #include <base_screen.h>
 #include <draw_graphic_text.h>
 

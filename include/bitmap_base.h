@@ -25,6 +25,8 @@
 #ifndef BITMAP_BASE_H
 #define BITMAP_BASE_H
 
+#include <eda_rect.h>
+
 /**
  * @file bitmap_base.h
  *
@@ -155,7 +157,7 @@ public:
      */
     const EDA_RECT GetBoundingBox() const;
 
-    void DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos );
+    void DrawBitmap( wxDC* aDC, const wxPoint& aPos );
 
     /**
      * Function ReadImageFile

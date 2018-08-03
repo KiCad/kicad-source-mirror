@@ -491,7 +491,7 @@ void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoi
     if( parent->m_ImageBitmap  )
     {
         GRSetDrawMode( aDC, ( aDrawMode == UNSPECIFIED_DRAWMODE ) ? GR_COPY : aDrawMode );
-        parent->m_ImageBitmap->DrawBitmap( NULL, aDC, m_pos + aOffset );
+        parent->m_ImageBitmap->DrawBitmap( aDC, m_pos + aOffset );
         GRSetDrawMode( aDC, GR_COPY );
     }
 }
