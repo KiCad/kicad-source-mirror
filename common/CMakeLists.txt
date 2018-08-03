@@ -69,7 +69,24 @@ set( GAL_SRCS
     gal/cairo/cairo_compositor.cpp
     )
 
+set( LEGACY_GAL_SRCS
+    legacy_gal/block.cpp
+    legacy_gal/eda_draw_frame.cpp
+    legacy_gal/other.cpp
+    )
+
+set( LEGACY_WX_SRCS
+    legacy_wx/block.cpp
+    legacy_wx/eda_draw_frame.cpp
+    legacy_wx/eda_draw_panel.cpp
+    legacy_wx/other.cpp
+    )
+
 add_library( gal STATIC ${GAL_SRCS} )
+add_library( legacy_gal STATIC ${LEGACY_GAL_SRCS} )
+add_library( legacy_wx STATIC ${LEGACY_WX_SRCS} )
+
+target_include_directories( legacy_wx PUBLIC ../include/legacy_wx )
 
 target_link_libraries( gal
     ${GLEW_LIBRARIES}
@@ -249,7 +266,6 @@ set( COMMON_SRCS
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
-    block_commande.cpp
     build_version.cpp
     colors_design_settings.cpp
     colors.cpp
@@ -258,11 +274,8 @@ set( COMMON_SRCS
     config_params.cpp
     confirm.cpp
     convert_basic_shapes_to_polygon.cpp
-    copy_to_clipboard.cpp
     dialog_shim.cpp
     displlst.cpp
-    draw_frame.cpp
-    draw_panel.cpp
     draw_graphic_text.cpp
     dsnlexer.cpp
     eagle_parser.cpp
@@ -326,7 +339,6 @@ set( COMMON_SRCS
     worksheet.cpp
     wxdataviewctrl_helpers.cpp
     xnode.cpp
-    zoom.cpp
     )
 
 if( TRUE OR NOT USE_KIWAY_DLLS )
@@ -465,6 +477,11 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     )
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
+
+target_include_directories( pcbcommon PUBLIC
+    ../include/legacy_wx
+)
+
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(

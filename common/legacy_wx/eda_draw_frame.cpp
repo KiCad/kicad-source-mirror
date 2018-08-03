@@ -47,6 +47,16 @@
 #include <lockfile.h>
 #include <trace_helpers.h>
 
+#include <wx/clipbrd.h>
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <id.h>
+#include <base_screen.h>
+#include <confirm.h>
+#include <draw_frame.h>
+
+
 #include <wx/fontdlg.h>
 #include <wx/snglinst.h>
 #include <view/view.h>
@@ -55,6 +65,11 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
+
+#include <menus_helpers.h>
+#include <worksheet_shape_builder.h>
+#include <page_info.h>
+#include <title_block.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -1537,4 +1552,498 @@ bool EDA_DRAW_FRAME::isBusy() const
 
     return ( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
            || ( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK );
+}
+
+void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
+{
+    if( IsGalCanvasActive() )
+        return;
+
+    AdjustScrollBars( aCenterPoint );
+
+    // Move the mouse cursor to the on grid graphic cursor position
+    if( aWarpPointer )
+        m_canvas->MoveCursorToCrossHair();
+
+    m_canvas->Refresh();
+    m_canvas->Update();
+}
+
+
+void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
+{
+    if( IsGalCanvasActive() )
+        return;
+
+    // Account for scrollbars (see EDA_DRAW_FRAME::AdjustScrollBars that takes
+    // in account scroolbars area to adjust scroll bars)
+    wxSize scrollbarSize = m_canvas->GetSize() - m_canvas->GetClientSize();
+    wxSize sizeAdjusted = m_canvas->GetClientSize() - scrollbarSize;
+
+    wxPoint dPos = posBefore - sizeAdjusted / 2;
+
+    // screen position of crosshair after zoom
+    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() );
+    wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
+
+    AdjustScrollBars( newCenter );
+
+    m_canvas->Refresh();
+    m_canvas->Update();
+}
+
+
+// Factor out the calculation portion of the various BestZoom() implementations.
+//
+// Note that like it's forerunners this routine has an intentional side-effect: it
+// sets the scroll centre position.  While I'm not happy about that, it's probably
+// not worth fixing as its days are numbered (GAL canvases use a different method).
+double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre )
+{
+    double bestzoom = std::max( sizeX * scaleFactor / (double) m_canvas->GetClientSize().x,
+                                sizeY * scaleFactor / (double) m_canvas->GetClientSize().y );
+
+    // Take scrollbars into account
+    DSIZE scrollbarSize = m_canvas->GetSize() - m_canvas->GetClientSize();
+    centre.x -= int( bestzoom * scrollbarSize.x / 2.0 );
+    centre.y -= int( bestzoom * scrollbarSize.y / 2.0 );
+
+    SetScrollCenterPosition( centre );
+
+    return bestzoom;
+}
+
+
+void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
+{
+    BASE_SCREEN* screen = GetScreen();
+
+    // Set the best zoom and get center point.
+
+    // BestZoom() can compute an illegal zoom if the client window size
+    // is small, say because frame is not maximized.  So use the clamping form
+    // of SetZoom():
+    double bestzoom = BestZoom();
+    screen->SetScalingFactor( bestzoom );
+
+    if( screen->m_FirstRedraw )
+        SetCrossHairPosition( GetScrollCenterPosition() );
+
+    if( !IsGalCanvasActive() )
+        RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
+    else
+        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+}
+
+
+void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
+{
+    // Compute the best zoom
+    Rect.Normalize();
+
+    wxSize size = m_canvas->GetClientSize();
+
+    // Use ceil to at least show the full rect
+    double scalex    = (double) Rect.GetSize().x / size.x;
+    double bestscale = (double) Rect.GetSize().y / size.y;
+
+    bestscale = std::max( bestscale, scalex );
+
+    GetScreen()->SetScalingFactor( bestscale );
+    RedrawScreen( Rect.Centre(), true );
+}
+
+
+void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
+{
+    if( m_canvas == NULL )
+        return;
+
+    int          id = event.GetId();
+    bool         zoom_at_cursor = false;
+    BASE_SCREEN* screen = GetScreen();
+    wxPoint      center = GetScrollCenterPosition();
+
+    if ( id == ID_KEY_ZOOM_IN )
+    {
+        id = GetCanvas()->GetEnableZoomNoCenter() ?
+             ID_OFFCENTER_ZOOM_IN : ID_POPUP_ZOOM_IN;
+    }
+    else if ( id == ID_KEY_ZOOM_OUT )
+    {
+        id = GetCanvas()->GetEnableZoomNoCenter() ?
+             ID_OFFCENTER_ZOOM_OUT : ID_POPUP_ZOOM_OUT;
+    }
+
+    switch( id )
+    {
+    case ID_OFFCENTER_ZOOM_IN:
+        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
+
+        if( screen->SetPreviousZoom() )
+            RedrawScreen2( center );
+        break;
+
+    case ID_POPUP_ZOOM_IN:
+        zoom_at_cursor = true;
+        center = GetCrossHairPosition();
+
+    // fall thru
+    case ID_VIEWER_ZOOM_IN:
+    case ID_ZOOM_IN:
+        if( screen->SetPreviousZoom() )
+            RedrawScreen( center, zoom_at_cursor );
+        break;
+
+    case ID_OFFCENTER_ZOOM_OUT:
+        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
+
+        if( screen->SetNextZoom() )
+            RedrawScreen2( center );
+        break;
+
+    case ID_POPUP_ZOOM_OUT:
+        zoom_at_cursor = true;
+        center = GetCrossHairPosition();
+
+    // fall thru
+    case ID_VIEWER_ZOOM_OUT:
+    case ID_ZOOM_OUT:
+        if( screen->SetNextZoom() )
+            RedrawScreen( center, zoom_at_cursor );
+        break;
+
+    case ID_VIEWER_ZOOM_REDRAW:
+    case ID_POPUP_ZOOM_REDRAW:
+    case ID_ZOOM_REDRAW:
+        m_canvas->Refresh();
+        break;
+
+    case ID_POPUP_ZOOM_CENTER:
+        center = GetCrossHairPosition();
+        RedrawScreen( center, true );
+        break;
+
+    case ID_POPUP_ZOOM_PAGE:
+    case ID_VIEWER_ZOOM_PAGE:
+    case ID_ZOOM_PAGE:
+        Zoom_Automatique( false );
+        break;
+
+    case ID_POPUP_ZOOM_SELECT:
+        break;
+
+    case ID_POPUP_CANCEL:
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
+    default:
+        SetPresetZoom( id - ID_POPUP_ZOOM_LEVEL_START );
+    }
+
+    UpdateStatusBar();
+}
+
+
+void EDA_DRAW_FRAME::SetNextZoom()
+{
+    GetScreen()->SetNextZoom();
+}
+
+
+void EDA_DRAW_FRAME::SetPrevZoom()
+{
+    GetScreen()->SetPreviousZoom();
+}
+
+
+void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
+{
+    BASE_SCREEN* screen = GetScreen();
+
+    if( aIndex >= (int) screen->m_ZoomList.size() )
+    {
+        wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
+                    __TFILE__, __LINE__, aIndex );
+        return;
+    }
+
+    if( m_zoomSelectBox )
+        m_zoomSelectBox->SetSelection( aIndex );
+
+    if( screen->SetZoom( screen->m_ZoomList[aIndex] ) )
+        RedrawScreen( GetScrollCenterPosition(), true );
+
+    UpdateStatusBar();
+}
+
+
+void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
+{
+    int         maxZoomIds;
+    double      zoom;
+    wxString    msg;
+    BASE_SCREEN* screen = m_canvas->GetScreen();
+
+    msg = AddHotkeyName( _( "Center" ), m_hotkeysDescrList, HK_ZOOM_CENTER );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, KiBitmap( zoom_center_on_screen_xpm ) );
+    msg = AddHotkeyName( _( "Zoom In" ), m_hotkeysDescrList, HK_ZOOM_IN );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_IN, msg, KiBitmap( zoom_in_xpm ) );
+    msg = AddHotkeyName( _( "Zoom Out" ), m_hotkeysDescrList, HK_ZOOM_OUT );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_OUT, msg, KiBitmap( zoom_out_xpm ) );
+    msg = AddHotkeyName( _( "Redraw View" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_REDRAW, msg, KiBitmap( zoom_redraw_xpm ) );
+    msg = AddHotkeyName( _( "Zoom to Fit" ), m_hotkeysDescrList, HK_ZOOM_AUTO );
+    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_PAGE, msg, KiBitmap( zoom_fit_in_page_xpm ) );
+
+
+    wxMenu* zoom_choice = new wxMenu;
+    AddMenuItem( MasterMenu, zoom_choice,
+                 ID_POPUP_ZOOM_SELECT, _( "Zoom" ),
+                 KiBitmap( zoom_selection_xpm ) );
+
+    zoom = screen->GetZoom();
+    maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
+    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.size() ) ?
+                 maxZoomIds : screen->m_ZoomList.size();
+
+    // Populate zoom submenu.
+    for( int i = 0; i < maxZoomIds; i++ )
+    {
+        msg.Printf( wxT( "%.2f" ), m_zoomLevelCoeff / screen->m_ZoomList[i] );
+
+        zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
+                             wxEmptyString, wxITEM_CHECK );
+        if( zoom == screen->m_ZoomList[i] )
+            zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_START + i, true );
+    }
+
+    // Create grid submenu as required.
+    if( screen->GetGridCount() )
+    {
+        wxMenu* gridMenu = new wxMenu;
+        AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
+                     _( "Grid" ), KiBitmap( grid_select_xpm ) );
+
+        wxArrayString gridsList;
+        int icurr = screen->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
+
+        for( unsigned i = 0; i < gridsList.GetCount(); i++ )
+        {
+            GRID_TYPE& grid = screen->GetGrid( i );
+            gridMenu->Append( grid.m_CmdId, gridsList[i], wxEmptyString, wxITEM_CHECK );
+
+            if( (int)i == icurr )
+                gridMenu->Check( grid.m_CmdId, true );
+        }
+    }
+
+    MasterMenu->AppendSeparator();
+    AddMenuItem( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), KiBitmap( cancel_xpm ) );
+}
+
+static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
+
+void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
+{
+    DrawPageOnClipboard( this );
+
+    if( event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
+    {
+        if( GetScreen()->IsBlockActive() )
+            m_canvas->SetCursor( wxCursor( (wxStockCursor) m_canvas->GetDefaultCursor() ) );
+
+        m_canvas->EndMouseCapture();
+    }
+}
+
+
+/* copy the current page or block to the clipboard ,
+ * to export drawings to other applications (word processing ...)
+ * This is not suitable for copy command within Eeschema or Pcbnew
+ */
+bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
+{
+    bool    DrawBlock = false;
+    wxRect  DrawArea;
+    BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
+
+    if( screen->IsBlockActive() )
+    {
+        DrawBlock = true;
+        DrawArea.SetX( screen->m_BlockLocate.GetX() );
+        DrawArea.SetY( screen->m_BlockLocate.GetY() );
+        DrawArea.SetWidth( screen->m_BlockLocate.GetWidth() );
+        DrawArea.SetHeight( screen->m_BlockLocate.GetHeight() );
+    }
+    else
+        DrawArea.SetSize( aFrame->GetPageSizeIU() );
+
+    // Calculate a reasonable dc size, in pixels, and the dc scale to fit
+    // the drawings into the dc size
+    // scale is the ratio resolution (in PPI) / internal units
+    double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
+    double inch2Iu = 1000.0 * (double) screen->MilsToIuScalar();
+    double  scale = ppi / inch2Iu;
+
+    wxSize dcsize = DrawArea.GetSize();
+
+    int maxdim = std::max( dcsize.x, dcsize.y );
+    // the max size in pixels of the bitmap used to byuild the sheet copy
+    const int maxbitmapsize = 3000;
+
+    while( int( maxdim * scale ) > maxbitmapsize )
+    {
+        ppi = ppi / 1.5;
+        scale = ppi / inch2Iu;
+    }
+
+    dcsize.x *= scale;
+    dcsize.y *= scale;
+
+    // Set draw offset, zoom... to values needed to draw in the memory DC
+    // after saving initial values:
+    wxPoint tmp_startvisu = screen->m_StartVisu;
+    double tmpzoom = screen->GetZoom();
+    wxPoint old_org = screen->m_DrawOrg;
+    screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
+    screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
+
+    screen->SetZoom( 1 );   // we use zoom = 1 in draw functions.
+
+    wxMemoryDC dc;
+    wxBitmap image( dcsize );
+    dc.SelectObject( image );
+
+    EDA_RECT tmp = *aFrame->GetCanvas()->GetClipBox();
+    GRResetPenAndBrush( &dc );
+    GRForceBlackPen( false );
+    screen->m_IsPrinting = true;
+    dc.SetUserScale( scale, scale );
+
+    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
+                                     wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
+
+    if( DrawBlock )
+    {
+        dc.SetClippingRegion( DrawArea );
+    }
+
+    dc.Clear();
+    aFrame->GetCanvas()->EraseScreen( &dc );
+    const LSET allLayersMask = LSET().set();
+    aFrame->PrintPage( &dc, allLayersMask, false );
+    screen->m_IsPrinting = false;
+    aFrame->GetCanvas()->SetClipBox( tmp );
+
+    bool    success = true;
+
+    if( wxTheClipboard->Open() )
+    {
+        // This data objects are held by the clipboard,
+        // so do not delete them in the app.
+        wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject( image );
+        wxTheClipboard->SetData( clipbrd_data );
+        wxTheClipboard->Close();
+    }
+    else
+        success = false;
+
+    // Deselect Bitmap from DC in order to delete the MemoryDC safely
+    // without deleting the bitmap
+    dc.SelectObject( wxNullBitmap );
+
+    GRForceBlackPen( false );
+
+    screen->m_StartVisu = tmp_startvisu;
+    screen->m_DrawOrg   = old_org;
+    screen->SetZoom( tmpzoom );
+
+    return success;
+}
+
+
+void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
+                     const PAGE_INFO& aPageInfo,
+                     const wxString &aFullSheetName,
+                     const wxString& aFileName,
+                     TITLE_BLOCK& aTitleBlock,
+                     int aSheetCount, int aSheetNumber,
+                     int aPenWidth, double aScalar,
+                     COLOR4D aColor, COLOR4D aAltColor,
+                     const wxString& aSheetLayer )
+{
+    WS_DRAW_ITEM_LIST drawList;
+
+    drawList.SetPenSize( aPenWidth );
+    drawList.SetMilsToIUfactor( aScalar );
+    drawList.SetSheetNumber( aSheetNumber );
+    drawList.SetSheetCount( aSheetCount );
+    drawList.SetFileName( aFileName );
+    drawList.SetSheetName( aFullSheetName );
+    drawList.SetSheetLayer( aSheetLayer );
+
+    drawList.BuildWorkSheetGraphicList( aPageInfo,
+                               aTitleBlock, aColor, aAltColor );
+
+    // Draw item list
+    drawList.Draw( aClipBox, aDC );
+}
+
+
+void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+                                     double aScalar, const wxString &aFilename,
+                                     const wxString &aSheetLayer )
+{
+    if( !m_showBorderAndTitleBlock )
+        return;
+
+    const PAGE_INFO&  pageInfo = GetPageSettings();
+    wxSize  pageSize = pageInfo.GetSizeMils();
+
+    // if not printing, draw the page limits:
+    if( !aScreen->m_IsPrinting && m_showPageLimits )
+    {
+        GRSetDrawMode( aDC, GR_COPY );
+        GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
+                pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
+                m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
+    }
+
+    TITLE_BLOCK t_block = GetTitleBlock();
+    COLOR4D color = COLOR4D( RED );
+
+    wxPoint origin = aDC->GetDeviceOrigin();
+
+    if( aScreen->m_IsPrinting && origin.y > 0 )
+    {
+        aDC->SetDeviceOrigin( 0, 0 );
+        aDC->SetAxisOrientation( true, false );
+    }
+
+    DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
+                    GetScreenDesc(), aFilename, t_block,
+                    aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
+                    aLineWidth, aScalar, color, color, aSheetLayer );
+
+    if( aScreen->m_IsPrinting && origin.y > 0 )
+    {
+        aDC->SetDeviceOrigin( origin.x, origin.y );
+        aDC->SetAxisOrientation( true, true );
+    }
+}
+
+
+wxString EDA_DRAW_FRAME::GetScreenDesc() const
+{
+    // Virtual function. In basic class, returns
+    // an empty string.
+    return wxEmptyString;
+}
+
+const BOX2I EDA_DRAW_FRAME::GetDocumentExtents() const
+{
+    BOX2I rv;
+    rv.SetMaximum();
+    return rv;
 }

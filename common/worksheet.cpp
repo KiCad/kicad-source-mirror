@@ -42,85 +42,8 @@
 
 #include <worksheet_shape_builder.h>
 
+
 static const wxString productName = wxT( "KiCad E.D.A.  " );
-
-void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
-                     const PAGE_INFO& aPageInfo,
-                     const wxString &aFullSheetName,
-                     const wxString& aFileName,
-                     TITLE_BLOCK& aTitleBlock,
-                     int aSheetCount, int aSheetNumber,
-                     int aPenWidth, double aScalar,
-                     COLOR4D aColor, COLOR4D aAltColor,
-                     const wxString& aSheetLayer )
-{
-    WS_DRAW_ITEM_LIST drawList;
-
-    drawList.SetPenSize( aPenWidth );
-    drawList.SetMilsToIUfactor( aScalar );
-    drawList.SetSheetNumber( aSheetNumber );
-    drawList.SetSheetCount( aSheetCount );
-    drawList.SetFileName( aFileName );
-    drawList.SetSheetName( aFullSheetName );
-    drawList.SetSheetLayer( aSheetLayer );
-
-    drawList.BuildWorkSheetGraphicList( aPageInfo,
-                               aTitleBlock, aColor, aAltColor );
-
-    // Draw item list
-    drawList.Draw( aClipBox, aDC );
-}
-
-
-void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                                     double aScalar, const wxString &aFilename,
-                                     const wxString &aSheetLayer )
-{
-    if( !m_showBorderAndTitleBlock )
-        return;
-
-    const PAGE_INFO&  pageInfo = GetPageSettings();
-    wxSize  pageSize = pageInfo.GetSizeMils();
-
-    // if not printing, draw the page limits:
-    if( !aScreen->m_IsPrinting && m_showPageLimits )
-    {
-        GRSetDrawMode( aDC, GR_COPY );
-        GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
-                pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
-                m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
-    }
-
-    TITLE_BLOCK t_block = GetTitleBlock();
-    COLOR4D color = COLOR4D( RED );
-
-    wxPoint origin = aDC->GetDeviceOrigin();
-
-    if( aScreen->m_IsPrinting && origin.y > 0 )
-    {
-        aDC->SetDeviceOrigin( 0, 0 );
-        aDC->SetAxisOrientation( true, false );
-    }
-
-    DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
-                    GetScreenDesc(), aFilename, t_block,
-                    aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
-                    aLineWidth, aScalar, color, color, aSheetLayer );
-
-    if( aScreen->m_IsPrinting && origin.y > 0 )
-    {
-        aDC->SetDeviceOrigin( origin.x, origin.y );
-        aDC->SetAxisOrientation( true, true );
-    }
-}
-
-
-wxString EDA_DRAW_FRAME::GetScreenDesc() const
-{
-    // Virtual function. In basic class, returns
-    // an empty string.
-    return wxEmptyString;
-}
 
 // returns the full text corresponding to the aTextbase,
 // after replacing format symbols by the corresponding value
