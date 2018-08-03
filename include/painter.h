@@ -231,6 +231,11 @@ public:
         update();       // recompute other shades of the color
     }
 
+    virtual bool IsBackgroundDark() const
+    {
+        return false;
+    }
+
 protected:
     /**
      * Function update
