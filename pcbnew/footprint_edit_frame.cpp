@@ -202,7 +202,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
+                                            EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
                          wxDefaultPosition, wxDefaultSize,
                          KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
@@ -218,11 +219,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcon( icon );
 
     // Create GAL canvas
-    bool boardEditorWasRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
-    PCB_BASE_FRAME* pcbFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(),
-                                                            pcbFrame->GetGalCanvas()->GetBackend() );
+                                                            GetGalDisplayOptions(), aBackend );
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -333,7 +331,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    UseGalCanvas( pcbFrame->IsGalCanvasActive() );
+    UseGalCanvas( aBackend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     if( m_auimgr.GetPane( "m_LayersManagerToolBar" ).IsShown() )
     {
@@ -344,9 +342,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_Layers->SelectLayer( F_SilkS );
         m_Layers->OnLayerSelected();
     }
-
-    if( !boardEditorWasRunning )
-        pcbFrame->Destroy();
 
     m_auimgr.Update();
     updateTitle();

@@ -127,11 +127,26 @@ static struct IFACE : public KIFACE_I
         }
 
         case FRAME_PCB_MODULE_EDITOR:
-            return new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
-
         case FRAME_PCB_MODULE_VIEWER:
         case FRAME_PCB_MODULE_VIEWER_MODAL:
-            return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
+        {
+            EDA_DRAW_PANEL_GAL::GAL_TYPE backend;
+            auto pcbFrame = static_cast<PCB_EDIT_FRAME*>( wxWindow::FindWindowByName( wxT( "Pcbnew"  ) ) );
+
+            if( pcbFrame )
+                backend = pcbFrame->GetGalCanvas()->GetBackend();
+            else
+                backend = EDA_DRAW_FRAME::LoadCanvasTypeSetting();
+
+            switch( aClassId )
+            {
+            case FRAME_PCB_MODULE_EDITOR:
+                return new FOOTPRINT_EDIT_FRAME( aKiway, aParent, backend );
+            case FRAME_PCB_MODULE_VIEWER:
+            case FRAME_PCB_MODULE_VIEWER_MODAL:
+                return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ), backend );
+            }
+        }
 
         case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
             return new FOOTPRINT_WIZARD_FRAME( aKiway, aParent, FRAME_T( aClassId ) );

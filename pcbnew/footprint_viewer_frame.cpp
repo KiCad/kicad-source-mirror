@@ -120,7 +120,9 @@ END_EVENT_TABLE()
 #endif
 
 
-FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType ) :
+FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent,
+                                                FRAME_T aFrameType,
+                                                EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
             aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
@@ -185,22 +187,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ReCreateLibraryList();
     UpdateTitle();
 
-    // See for an existing board editor frame opened
-    // (we need it just to know some settings )
-    // TODO: find a better way to retrieve these settings)
-    bool isBordEditorRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
-    PCB_BASE_FRAME* pcbEditorFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
-
     // Create GAL canvas
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            pcbEditorFrame->GetGalDisplayOptions(),
-                                                            pcbEditorFrame->GetGalCanvas()->GetBackend() );
+                                                            GetGalDisplayOptions(), aBackend );
     SetGalCanvas( drawPanel );
-    bool switchToGalCanvas = pcbEditorFrame->IsGalCanvasActive();
-
-    // delete pcbEditorFrame if it was not yet in use:
-    if( !isBordEditorRunning )
-        pcbEditorFrame->Destroy();
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
@@ -295,7 +285,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 #endif
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    UseGalCanvas( switchToGalCanvas );
+    UseGalCanvas( aBackend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
     updateView();
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame

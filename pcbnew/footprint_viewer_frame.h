@@ -48,7 +48,8 @@ class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
     friend struct PCB::IFACE;       // constructor called from here only
 
 protected:
-    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
+                            EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
 
 public:

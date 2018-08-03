@@ -212,11 +212,6 @@ protected:
     bool isBusy() const;
 
     /**
-     * Returns the canvas type stored in the application settings.
-     */
-    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting() const;
-
-    /**
      * Stores the canvas type in the application settings.
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
@@ -871,6 +866,11 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData = NULL );
+
+    /**
+     * Returns the canvas type stored in the application settings.
+     */
+    static EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting();
 
     /**
      * Function UseGalCanvas

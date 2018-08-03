@@ -257,6 +257,7 @@ void GERBER_LAYER_WIDGET::ReFill()
                         wxEmptyString, visible, true ) );
     }
 
+    UpdateLayouts();
     Thaw();
 }
 

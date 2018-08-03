@@ -610,7 +610,6 @@ void LAYER_WIDGET::AppendLayerRow( const ROW& aRow )
 {
     int nextRow = GetLayerRowCount();
     insertLayerRow( nextRow, aRow );
-    UpdateLayouts();
 }
 
 
@@ -624,7 +623,6 @@ void LAYER_WIDGET::AppendRenderRow( const ROW& aRow )
 {
     int nextRow = GetRenderRowCount();
     insertRenderRow( nextRow, aRow );
-    UpdateLayouts();
 }
 
 

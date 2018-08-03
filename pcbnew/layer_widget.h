@@ -307,6 +307,8 @@ public:
     {
         for( int row=0;  row<aRowCount;  ++row )
             AppendLayerRow( aRowsArray[row] );
+
+        UpdateLayouts();
     }
 
     /**
@@ -331,6 +333,8 @@ public:
     {
         for( int row=0;  row<aRowCount;  ++row )
             AppendRenderRow( aRowsArray[row] );
+
+        UpdateLayouts();
     }
 
     /**

@@ -201,7 +201,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SetActiveLayer( 0, true );
     Zoom_Automatique( false );           // Gives a default zoom value
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = loadCanvasTypeSetting();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
 
     // Nudge user to switch to OpenGL if they are on legacy or Cairo
     if( m_firstRunDialogSetting < 1 )

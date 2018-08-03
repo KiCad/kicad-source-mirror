@@ -487,7 +487,7 @@ public:
 protected:
 
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
-    FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+    FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
     PCB_LAYER_WIDGET* m_Layers;     ///< the layer manager
 

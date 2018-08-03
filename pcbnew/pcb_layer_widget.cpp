@@ -426,6 +426,8 @@ void PCB_LAYER_WIDGET::ReFillRender()
 
         AppendRenderRow( renderRow );
     }
+
+    UpdateLayouts();
 }
 
 
@@ -525,6 +527,8 @@ void PCB_LAYER_WIDGET::ReFill()
                           COLUMN_COLORBM )->SetToolTip( wxEmptyString );
         }
     }
+
+    UpdateLayouts();
 
 
     // technical layers are shown in this order:
