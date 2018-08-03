@@ -78,7 +78,7 @@ public:
      * @param aFootprint an optional FPID string to initialize the viewer with and to
      *                   return a selected footprint through.
      */
-    bool ShowModal( wxString* aFootprint, wxWindow* aResultantFocusWindow ) override;
+    bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
 
 private:
 

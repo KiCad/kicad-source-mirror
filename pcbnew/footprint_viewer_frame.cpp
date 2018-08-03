@@ -611,24 +611,46 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aResultantFocusWindow )
+bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent )
 {
     if( aFootprint && !aFootprint->IsEmpty() )
     {
+        wxString msg;
+        LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
         LIB_ID fpid;
 
         fpid.Parse( *aFootprint, LIB_ID::ID_PCB, true );
 
         if( fpid.IsValid() )
         {
-            setCurNickname( fpid.GetLibNickname() );
-            setCurFootprintName( fpid.GetLibItemName() );
-            ReCreateFootprintList();
+            wxString nickname = fpid.GetLibNickname();
+
+            if( !fpTable->HasLibrary( fpid.GetLibNickname(), false ) )
+            {
+                msg.sprintf( _( "The current configuration does not include a library with the\n"
+                                "nickname \"%s\".  Use Manage Footprint Libraries\n"
+                                "to edit the configuration." ), nickname );
+                DisplayErrorMessage( aParent, _( "Footprint library not found." ), msg );
+            }
+            else if ( !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
+            {
+                msg.sprintf( _( "The library with the nickname \"%s\" is not enabled\n"
+                                "in the current configuration.  Use Manage Footprint Libraries to\n"
+                                "edit the configuration." ), nickname );
+                DisplayErrorMessage( aParent, _( "Footprint library not enabled." ), msg );
+            }
+            else
+            {
+                setCurNickname( nickname );
+                setCurFootprintName( fpid.GetLibItemName() );
+                ReCreateFootprintList();
+            }
+
             SelectAndViewFootprint( NEW_PART );
         }
     }
 
-    return KIWAY_PLAYER::ShowModal( aFootprint, aResultantFocusWindow );
+    return KIWAY_PLAYER::ShowModal( aFootprint, aParent );
 }
 
 
