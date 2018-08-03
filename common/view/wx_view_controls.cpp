@@ -345,8 +345,8 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
     if( type == wxEVT_SCROLLWIN_THUMBTRACK )
     {
-        VECTOR2D center = m_view->GetCenter();
-        const BOX2I& boundary = m_view->GetBoundary();
+        auto center = m_view->GetCenter();
+        const auto& boundary = m_view->GetBoundary();
 
         // Flip scroll direction in flipped view
         const double xstart = ( m_view->IsMirroredX() ?
@@ -609,7 +609,7 @@ wxPoint WX_VIEW_CONTROLS::getMouseScreenPosition() const
 void WX_VIEW_CONTROLS::UpdateScrollbars()
 {
     const BOX2D viewport = m_view->GetViewport();
-    const BOX2I& boundary = m_view->GetBoundary();
+    const BOX2D& boundary = m_view->GetBoundary();
 
     m_scrollScale.x = 2e3 / viewport.GetWidth();    // TODO it does not have to be updated so often
     m_scrollScale.y = 2e3 / viewport.GetHeight();
