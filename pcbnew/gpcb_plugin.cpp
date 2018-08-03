@@ -109,7 +109,6 @@ static inline long parseInt( const wxString& aValue, double aScalar )
 class GPCB_FPL_CACHE_ITEM
 {
     wxFileName         m_file_name; ///< The the full file name and path of the footprint to cache.
-    bool               m_writable;  ///< Writability status of the footprint file.
     std::unique_ptr<MODULE> m_module;
 
 public:
@@ -122,10 +121,9 @@ public:
 
 
 GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
+    m_file_name( aFileName ),
     m_module( aModule )
 {
-    m_file_name = aFileName;
-    m_writable = true;          // temporary init
 }
 
 
@@ -200,27 +198,13 @@ public:
      * parent directory).
      * Timestamps should not be considered ordered.  They either match or they don't.
      */
-    long long GetTimestamp();
+    static long long GetTimestamp( const wxString& aLibPath );
 
     /**
      * Function IsModified
      * Return true if the cache is not up-to-date.
      */
     bool IsModified();
-
-    /**
-     * Function IsPath
-     * checks if \a aPath is the same as the current cache path.
-     *
-     * This tests paths by converting \a aPath using the native separators.  Internally
-     * #FP_CACHE stores the current path using native separators.  This prevents path
-     * miscompares on Windows due to the fact that paths can be stored with / instead of \\
-     * in the footprint library table.
-     *
-     * @param aPath is the library path to test against.
-     * @return true if \a aPath is the same as the cache path.
-     */
-    bool IsPath( const wxString& aPath ) const;
 };
 
 
@@ -235,36 +219,35 @@ GPCB_FPL_CACHE::GPCB_FPL_CACHE( GPCB_PLUGIN* aOwner, const wxString& aLibraryPat
 
 void GPCB_FPL_CACHE::Load()
 {
+    m_cache_dirty = false;
+    m_cache_timestamp = 0;
+
     // Note: like our .pretty footprint libraries, the gpcb footprint libraries are folders,
     // and the footprints are the .fp files inside this folder.
 
-    wxDir dir( m_lib_path.GetPath() );
+    WX_DIR dir( m_lib_path.GetPath() );
 
     if( !dir.IsOpened() )
     {
-        m_cache_timestamp = 0;
-        m_cache_dirty = false;
-
         THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
                                           m_lib_path.GetPath().GetData() ) );
-    }
-    else
-    {
-        m_cache_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
-        m_cache_dirty = false;
     }
 
     wxString fpFileName;
     wxString wildcard = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
 
-    if( !dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
+    // wxFileName construction is egregiously slow.  Construct it once and just swap out
+    // the filename.
+    WX_FILENAME fn( m_lib_path.GetPath(), wxT( "dummy." ) + GedaPcbFootprintLibFileExtension );
+
+    if( !dir.GetFirst( &fpFileName, wildcard ) )
         return;
 
     wxString cacheErrorMsg;
 
     do
     {
-        wxFileName fn( m_lib_path.GetPath(), fpFileName );
+        fn.SetFullName( fpFileName );
 
         // Queue I/O errors so only files that fail to parse don't get loaded.
         try
@@ -313,49 +296,38 @@ void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 }
 
 
-bool GPCB_FPL_CACHE::IsPath( const wxString& aPath ) const
-{
-    // Converts path separators to native path separators
-    wxFileName newPath;
-    newPath.AssignDir( aPath );
-
-    return m_lib_path == newPath;
-}
-
-
 bool GPCB_FPL_CACHE::IsModified()
 {
-    if( m_cache_dirty )
-        return true;
-    else
-        return GetTimestamp() != m_cache_timestamp;
+    m_cache_dirty = m_cache_dirty || GetTimestamp( m_lib_path.GetFullPath() ) != m_cache_timestamp;
+
+    return m_cache_dirty;
 }
 
 
-long long GPCB_FPL_CACHE::GetTimestamp()
+long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    // Avoid expensive GetModificationTime checks if we already know we're dirty
-    if( m_cache_dirty )
-        return wxDateTime::Now().GetValue().GetValue();
-
     long long files_timestamp = 0;
 
-    if( m_lib_path.DirExists() )
-    {
-        files_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
+    // wxFileName construction is egregiously slow.  Construct it once and just swap out
+    // the filename.
+    WX_FILENAME fn( aLibPath, wxT( "dummy." ) + GedaPcbFootprintLibFileExtension );
 
-        for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    WX_DIR dir( aLibPath );
+
+    if( dir.IsOpened() )
+    {
+        wxString fpFileName;
+        wxString wildcard = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
+
+        if( dir.GetFirst( &fpFileName, wildcard ) )
         {
-            wxFileName moduleFile = it->second->GetFileName();
-            if( moduleFile.FileExists() )
-                files_timestamp += moduleFile.GetModificationTime().GetValue().GetValue();
+            do
+            {
+                fn.SetFullName( fpFileName );
+                files_timestamp += fn.GetTimestamp();
+            } while( dir.GetNext( &fpFileName ) );
         }
     }
-
-    // If the new timestamp doesn't match the cache timestamp, then save ourselves the
-    // expensive calls next time
-    if( m_cache_timestamp != files_timestamp )
-        m_cache_dirty = true;
 
     return files_timestamp;
 }
@@ -1092,11 +1064,7 @@ bool GPCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPER
 
 long long GPCB_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
-    // If we have no cache, return a number which won't match any stored timestamps
-    if( !m_cache || !m_cache->IsPath( aLibraryPath ) )
-        return wxDateTime::Now().GetValue().GetValue();
-
-    return m_cache->GetTimestamp();
+    return GPCB_FPL_CACHE::GetTimestamp( aLibraryPath );
 }
 
 

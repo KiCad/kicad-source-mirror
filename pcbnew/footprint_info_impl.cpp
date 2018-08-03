@@ -179,7 +179,6 @@ void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aN
 {
     m_loader = aLoader;
     m_lib_table = aTable;
-    m_library = aNickname;
 
     // Clear data before reading files
     m_count_finished.store( 0 );
@@ -326,7 +325,6 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
 FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
     m_loader( nullptr ),
-    m_library( nullptr ),
     m_count_finished( 0 ),
     m_list_timestamp( 0 ),
     m_progress_reporter( nullptr ),
@@ -338,4 +336,73 @@ FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
 FOOTPRINT_LIST_IMPL::~FOOTPRINT_LIST_IMPL()
 {
     StopWorkers();
+}
+
+
+void FOOTPRINT_LIST_IMPL::WriteCacheToFile( wxTextFile* aCacheFile )
+{
+    if( aCacheFile->Exists() )
+    {
+        aCacheFile->Open();
+        aCacheFile->Clear();
+    }
+    else
+    {
+        aCacheFile->Create();
+    }
+
+    aCacheFile->AddLine( wxString::Format( "%lld", m_list_timestamp ) );
+
+    for( auto& fpinfo : m_list )
+    {
+        aCacheFile->AddLine( fpinfo->GetLibNickname() );
+        aCacheFile->AddLine( fpinfo->GetName() );
+        aCacheFile->AddLine( fpinfo->GetDescription() );
+        aCacheFile->AddLine( fpinfo->GetKeywords() );
+        aCacheFile->AddLine( wxString::Format( "%d", fpinfo->GetOrderNum() ) );
+        aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetPadCount() ) );
+        aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetUniquePadCount() ) );
+    }
+
+    aCacheFile->Write();
+    aCacheFile->Close();
+}
+
+
+void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( wxTextFile* aCacheFile )
+{
+    try
+    {
+        m_list.clear();
+
+        if( aCacheFile->Exists() )
+            aCacheFile->Open();
+        else
+            return;
+
+        aCacheFile->GetFirstLine().ToLongLong( &m_list_timestamp );
+
+        while( aCacheFile->GetCurrentLine() + 6 < aCacheFile->GetLineCount() )
+        {
+            wxString libNickname = aCacheFile->GetNextLine();
+            wxString name = aCacheFile->GetNextLine();
+            wxString description = aCacheFile->GetNextLine();
+            wxString keywords = aCacheFile->GetNextLine();
+            int orderNum = wxAtoi( aCacheFile->GetNextLine() );
+            unsigned int padCount = (unsigned) wxAtoi( aCacheFile->GetNextLine() );
+            unsigned int uniquePadCount = (unsigned) wxAtoi( aCacheFile->GetNextLine() );
+
+            auto* fpinfo = new FOOTPRINT_INFO_IMPL( libNickname, name, description, keywords,
+                                                    orderNum, padCount, uniquePadCount );
+            m_list.emplace_back( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+        }
+    }
+    catch( ... )
+    {
+        // whatever went wrong, invalidate the cache
+        m_list_timestamp = 0;
+    }
+
+    if( aCacheFile->IsOpened() )
+        aCacheFile->Close();
 }

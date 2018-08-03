@@ -381,4 +381,67 @@ namespace std
 }
 
 
+/**
+ * A wrapper around a wxFileName which is much more performant with a (very) limited API.
+ */
+class WX_FILENAME
+{
+public:
+    WX_FILENAME( const wxString& aPath, const wxString& aFilename ) :
+        m_fn( aPath, aFilename ),
+        m_path( aPath ),
+        m_fullName( aFilename )
+    { }
+
+    // Avoid wxFileName's expensive path concatenation.
+    wxString GetFullPath() { return m_path + wxT( '/' ) + m_fullName; }
+
+    wxString GetName() { return m_fn.GetName(); }
+
+    // Avoid wxFileName's expensive calls to wxFileName::SplitPath().
+    void SetFullName( const wxString& aFileNameAndExtension );
+
+    // Avoid multiple calls to stat() on POSIX kernels.
+    long long GetTimestamp();
+
+    operator wxFileName() const { return m_fn; }
+
+private:
+    wxFileName m_fn;
+    wxString   m_path;
+    wxString   m_fullName;
+};
+
+
+#ifdef __WINDOWS__
+#define WX_DIR wxDir
+#else
+// For POSIX kernels we implement our own version which avoids expensive calls to
+// wxFileName::wxFileName().
+class WX_DIR
+{
+public:
+    WX_DIR( const wxString& dir );
+    ~WX_DIR();
+
+    // returns true if the directory was successfully opened
+    bool IsOpened() const;
+
+    bool GetFirst( wxString *filename, const wxString& filespec );
+
+    // get next file in the enumeration started with GetFirst()
+    bool GetNext( wxString *filename ) const;
+
+private:
+    DIR*      m_dir;
+
+    wxString  m_dirpath;
+    wxString  m_filespec;
+
+wxDECLARE_NO_COPY_CLASS( WX_DIR );
+};
+#endif
+
+
+
 #endif  // INCLUDE__COMMON_H_

@@ -37,21 +37,42 @@ public:
     FOOTPRINT_INFO_IMPL( FOOTPRINT_LIST* aOwner, const wxString& aNickname,
                          const wxString& aFootprintName )
     {
-        m_owner = aOwner;
-        m_loaded = false;
         m_nickname = aNickname;
         m_fpname = aFootprintName;
         m_num = 0;
         m_pad_count = 0;
         m_unique_pad_count = 0;
 
+        m_owner = aOwner;
+        m_loaded = false;
         load();
     }
+
+    // A constructor for cached items
+    FOOTPRINT_INFO_IMPL( const wxString& aNickname, const wxString& aFootprintName,
+                         const wxString& aDescription, const wxString& aKeywords,
+                         int aOrderNum, unsigned int aPadCount, unsigned int aUniquePadCount )
+    {
+        m_nickname = aNickname;
+        m_fpname = aFootprintName;
+        m_num = aOrderNum;
+        m_pad_count = aPadCount;
+        m_unique_pad_count = aUniquePadCount;
+        m_doc = aDescription;
+        m_keywords = aKeywords;
+
+        m_owner = nullptr;
+        m_loaded = true;
+    }
+
 
     // A dummy constructor for use as a target in a binary search
     FOOTPRINT_INFO_IMPL( const wxString& aFootprintName )
     {
         m_fpname = aFootprintName;
+
+        m_owner = nullptr;
+        m_loaded = true;
     }
 
 protected:
@@ -62,7 +83,6 @@ protected:
 class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
 {
     FOOTPRINT_ASYNC_LOADER*  m_loader;
-    const wxString*          m_library;
     std::vector<std::thread> m_threads;
     SYNC_QUEUE<wxString>     m_queue_in;
     SYNC_QUEUE<wxString>     m_queue_out;
@@ -95,6 +115,9 @@ protected:
 public:
     FOOTPRINT_LIST_IMPL();
     virtual ~FOOTPRINT_LIST_IMPL();
+
+    void WriteCacheToFile( wxTextFile* aFile ) override;
+    void ReadCacheFromFile( wxTextFile* aFile ) override;
 
     bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;

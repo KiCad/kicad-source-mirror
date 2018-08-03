@@ -37,12 +37,9 @@ class PCB_BASE_EDIT_FRAME : public PCB_BASE_FRAME
 public:
     PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                long aStyle, const wxString& aFrameName ) :
-    PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_rotationAngle( 900 ), m_undoRedoBlocked( false )
-    {}
+                long aStyle, const wxString& aFrameName );
 
-    virtual ~PCB_BASE_EDIT_FRAME() {};
+    virtual ~PCB_BASE_EDIT_FRAME();
 
     /**
      * Function GetModel()

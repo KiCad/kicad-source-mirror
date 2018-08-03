@@ -529,3 +529,123 @@ bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) cons
     return aA.x < aB.x;
 }
 #endif
+
+
+//
+// A cover of wxFileName::SetFullName() which avoids expensive calls to wxFileName::SplitPath().
+//
+void WX_FILENAME::SetFullName( const wxString& aFileNameAndExtension )
+{
+    m_fullName = aFileNameAndExtension;
+
+    size_t dot = m_fullName.find_last_of( wxT( '.' ) );
+    m_fn.SetName( m_fullName.substr( 0, dot ) );
+    m_fn.SetExt( m_fullName.substr( dot + 1 ) );
+}
+
+
+//
+// An alernative to wxFileName::GetModificationTime() which avoids multiple calls to stat() on
+// POSIX kernels.
+//
+long long WX_FILENAME::GetTimestamp()
+{
+#ifdef __WINDOWS__
+    if( m_fn.FileExists() )
+        return m_fn.GetModificationTime().GetValue().GetValue();
+#else
+    // By stat-ing the file ourselves we save wxWidgets from doing it three times:
+    // Exists( wxFILE_EXISTS_SYMLINK ), FileExists(), and finally GetModificationTime()
+    struct stat fn_stat;
+    wxLstat( GetFullPath(), &fn_stat );
+
+    // Timestamp the source file, not the symlink
+    if( S_ISLNK( fn_stat.st_mode ) )    // wxFILE_EXISTS_SYMLINK
+    {
+        char buffer[ PATH_MAX + 1 ];
+        ssize_t pathLen = readlink( TO_UTF8( GetFullPath() ), buffer, PATH_MAX );
+
+        if( pathLen > 0 )
+        {
+            buffer[ pathLen ] = '\0';
+            wxString srcPath = m_path + wxT( '/' ) + wxString::FromUTF8( buffer );
+            wxLstat( srcPath, &fn_stat );
+        }
+    }
+
+    if( S_ISREG( fn_stat.st_mode ) )    // wxFileExists()
+        return fn_stat.st_mtime * 1000;
+#endif
+    return 0;
+}
+
+
+//
+// A version of wxDir which avoids expensive calls to wxFileName::wxFileName().
+//
+WX_DIR::WX_DIR( const wxString& aDirPath ) :
+    m_dirpath( aDirPath )
+{
+    m_dir = NULL;
+
+    // throw away the trailing slashes
+    size_t n = m_dirpath.length();
+
+    while ( n > 0 && m_dirpath[--n] == '/' )
+        ;
+
+    m_dirpath.Truncate(n + 1);
+
+    m_dir = opendir( m_dirpath.fn_str() );
+}
+
+
+bool WX_DIR::IsOpened() const
+{
+    return m_dir != nullptr;
+}
+
+
+WX_DIR::~WX_DIR()
+{
+    if ( m_dir )
+        closedir( m_dir );
+}
+
+
+bool WX_DIR::GetFirst( wxString *filename, const wxString& filespec )
+{
+    m_filespec = filespec;
+
+    rewinddir( m_dir );
+    return GetNext( filename );
+}
+
+
+bool WX_DIR::GetNext(wxString *filename) const
+{
+    dirent *dirEntry = NULL;
+    wxString dirEntryName;
+    bool matches = false;
+
+    while ( !matches )
+    {
+        dirEntry = readdir( m_dir );
+
+        if ( !dirEntry )
+            return false;
+
+#if wxUSE_UNICODE
+        dirEntryName = wxString( dirEntry->d_name, *wxConvFileName );
+#else
+        dirEntryName = dirEntry->d_name;
+#endif
+
+        matches = wxMatchWild( m_filespec, dirEntryName );
+    }
+
+    *filename = dirEntryName;
+
+    return true;
+}
+

@@ -152,7 +152,7 @@ public:
      * parent directory).
      * Timestamps should not be considered ordered.  They either match or they don't.
      */
-    long long GetTimestamp();
+    static long long GetTimestamp( const wxString& aLibPath );
 
     /**
      * Function IsModified
@@ -257,51 +257,49 @@ void FP_CACHE::Save( MODULE* aModule )
 
 void FP_CACHE::Load()
 {
-    wxDir dir( m_lib_raw_path );
+    m_cache_dirty = false;
+    m_cache_timestamp = 0;
+
+    WX_DIR dir( m_lib_raw_path );
 
     if( !dir.IsOpened() )
     {
-        m_cache_timestamp = 0;
-        m_cache_dirty = false;
-
         wxString msg = wxString::Format( _( "Footprint library path \"%s\" does not exist" ),
                                          m_lib_raw_path );
         THROW_IO_ERROR( msg );
-    }
-    else
-    {
-        m_cache_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
-        m_cache_dirty = false;
     }
 
     wxString fpFileName;
     wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
 
-    if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
+    // wxFileName construction is egregiously slow.  Construct it once and just swap out
+    // the filename.
+    WX_FILENAME fn( m_lib_raw_path, wxT( "dummy." ) + KiCadFootprintFileExtension );
+
+    if( dir.GetFirst( &fpFileName, wildcard ) )
     {
         wxString cacheError;
 
         do
         {
-            // prepend the libpath into fullPath
-            wxFileName fullPath( m_lib_raw_path, fpFileName );
+            fn.SetFullName( fpFileName );
 
             // Queue I/O errors so only files that fail to parse don't get loaded.
             try
             {
-                FILE_LINE_READER    reader( fullPath.GetFullPath() );
+                FILE_LINE_READER    reader( fn.GetFullPath() );
 
                 m_owner->m_parser->SetLineReader( &reader );
 
                 MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
                 // The footprint name is the file name without the extension.
-                wxString    fpName = fullPath.GetName();
+                wxString    fpName = fn.GetName();
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
-                m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fullPath ) );
+                m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
 
-                m_cache_timestamp += fullPath.GetModificationTime().GetValue().GetValue();
+                m_cache_timestamp += fn.GetTimestamp();
             }
             catch( const IO_ERROR& ioe )
             {
@@ -345,63 +343,36 @@ bool FP_CACHE::IsPath( const wxString& aPath ) const
 
 bool FP_CACHE::IsModified()
 {
-    if( m_cache_dirty )
-        return true;
-    else
-        return GetTimestamp() != m_cache_timestamp;
+    m_cache_dirty = m_cache_dirty || GetTimestamp( m_lib_path.GetFullPath() ) != m_cache_timestamp;
+
+    return m_cache_dirty;
 }
 
 
-long long FP_CACHE::GetTimestamp()
+long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    // Avoid expensive GetModificationTime checks if we already know we're dirty
-    if( m_cache_dirty )
-        return wxDateTime::Now().GetValue().GetValue();
-
     long long files_timestamp = 0;
 
-    if( m_lib_path.DirExists() )
+    // wxFileName construction is egregiously slow.  Construct it once and just
+    // swap out the filename for each file.
+    WX_FILENAME fn( aLibPath, wxT( "dummy." ) + KiCadFootprintFileExtension );
+
+    WX_DIR dir( aLibPath );
+
+    if( dir.IsOpened() )
     {
-        files_timestamp = m_lib_path.GetModificationTime().GetValue().GetValue();
+        wxString fpFileName;
+        wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
 
-        for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+        if( dir.GetFirst( &fpFileName, wildcard ) )
         {
-            const wxFileName& fn = it->second->GetFileName();
-#ifdef __WINDOWS__
-            if( fn.FileExists() )
-                files_timestamp += fn.GetModificationTime().GetValue().GetValue();
-#else
-            // By stat-ing the file ourselves we save wxWidgets from doing it three times:
-            // fn.Exists( wxFILE_EXISTS_SYMLINK ), fn.FileExists() & fn.GetModificationTime()
-            struct stat fn_stat;
-            wxLstat( fn.GetFullPath(), &fn_stat );
-
-            // Timestamp the source file, not the symlink
-            if( S_ISLNK( fn_stat.st_mode ) )    // wxFILE_EXISTS_SYMLINK
+            do
             {
-                char buffer[ PATH_MAX + 1 ];
-                ssize_t pathLen = readlink( TO_UTF8( fn.GetFullPath() ), buffer, PATH_MAX );
-
-                if( pathLen > 0 )
-                {
-                    buffer[ pathLen ] = '\0';
-                    wxFileName srcFn;
-                    srcFn.Assign( fn.GetPath() + wxT( "/" ) + wxString::FromUTF8( buffer ) );
-                    srcFn.Normalize();
-                    wxLstat( srcFn.GetFullPath(), &fn_stat );
-                }
-            }
-
-            if( S_ISREG( fn_stat.st_mode ) )    // wxFileExists()
-                files_timestamp += fn_stat.st_mtime * 1000;
-#endif
+                fn.SetFullName( fpFileName );
+                files_timestamp += fn.GetTimestamp();
+            } while( dir.GetNext( &fpFileName ) );
         }
     }
-
-    // If the new timestamp doesn't match the cache timestamp, then save ourselves the
-    // expensive calls next time
-    if( m_cache_timestamp != files_timestamp )
-        m_cache_dirty = true;
 
     return files_timestamp;
 }
@@ -2200,11 +2171,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
 long long PCB_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
-    // If we have no cache, return a number which won't match any stored timestamps
-    if( !m_cache || !m_cache->IsPath( aLibraryPath ) )
-        return wxDateTime::Now().GetValue().GetValue();
-
-    return m_cache->GetTimestamp();
+    return FP_CACHE::GetTimestamp( aLibraryPath );
 }
 
 

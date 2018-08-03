@@ -28,6 +28,31 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <class_board.h>
 #include <view/view.h>
+#include "footprint_info_impl.h"
+#include <project.h>
+
+PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
+                                          FRAME_T aFrameType, const wxString& aTitle,
+                                          const wxPoint& aPos, const wxSize& aSize, long aStyle,
+                                          const wxString& aFrameName ) :
+        PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+                        m_rotationAngle( 900 ), m_undoRedoBlocked( false )
+{
+    static bool oneShot = true;
+
+    if( oneShot )
+    {
+        wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
+        GFootprintList.ReadCacheFromFile( &footprintInfoCache );
+        oneShot = false;
+    }
+}
+
+PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
+{
+    wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
+    GFootprintList.WriteCacheToFile( &footprintInfoCache );
+}
 
 
 void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )

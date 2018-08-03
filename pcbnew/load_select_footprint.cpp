@@ -192,7 +192,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( bool aAllowBrowser )
 
     static wxString lastComponentName;
 
-    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 3 );
     GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
     progressReporter.Show( false );
 

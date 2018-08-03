@@ -145,7 +145,7 @@ protected:
     }
 
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
-    virtual void load() = 0;
+    virtual void load() { };
 
     FOOTPRINT_LIST* m_owner; ///< provides access to FP_LIB_TABLE
 
@@ -193,9 +193,6 @@ protected:
     FPILIST m_list;
     ERRLIST m_errors; ///< some can be PARSE_ERRORs also
 
-    MUTEX m_list_lock;
-
-
 public:
     FOOTPRINT_LIST() : m_lib_table( 0 )
     {
@@ -204,6 +201,9 @@ public:
     virtual ~FOOTPRINT_LIST()
     {
     }
+
+    virtual void WriteCacheToFile( wxTextFile* aFile ) { };
+    virtual void ReadCacheFromFile( wxTextFile* aFile ) { };
 
     /**
      * @return the number of items stored in list
