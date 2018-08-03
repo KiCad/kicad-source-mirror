@@ -693,7 +693,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     # Get the correct Python site package install path from the Python interpreter found by
     # FindPythonInterp unless the user specifically defined a custom path.
     if( NOT PYTHON_SITE_PACKAGE_PATH )
-        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import distutils.sysconfig;print\"%s\"%distutils.sysconfig.get_python_lib(plat_specific=0, standard_lib=0, prefix='')"
+        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import distutils.sysconfig;print(\"%s\"%distutils.sysconfig.get_python_lib(plat_specific=0, standard_lib=0, prefix=''))"
             OUTPUT_VARIABLE PYTHON_SITE_PACKAGE_PATH
             OUTPUT_STRIP_TRAILING_WHITESPACE
             )
@@ -724,7 +724,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         # Check to see if the correct version of wxPython is installed based on the version of
         # wxWidgets found.  At least the major an minor version should match.
         set( _wxpy_version "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}" )
-        set( _py_cmd "import wxversion;print wxversion.checkInstalled('${_wxpy_version}')" )
+        set( _py_cmd "import wxversion;print(wxversion.checkInstalled('${_wxpy_version}'))" )
 
         # Add user specified Python site package path.
         if( PYTHON_SITE_PACKAGE_PATH )
