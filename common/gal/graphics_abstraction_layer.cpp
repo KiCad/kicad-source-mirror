@@ -48,6 +48,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetLookAtPoint( VECTOR2D( 0, 0 ) );
     SetZoomFactor( 1.0 );
+    SetRotation( 0.0 );
     SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
     SetScreenDPI( 106 );                                     // Display resolution setting
     SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
@@ -178,18 +179,19 @@ void GAL::ComputeWorldScreenMatrix()
 {
     computeWorldScale();
 
-    worldScreenMatrix.SetIdentity();
-
     MATRIX3x3D translation;
     translation.SetIdentity();
     translation.SetTranslation( 0.5 * VECTOR2D( screenSize ) );
+
+    MATRIX3x3D rotate;
+    rotate.SetIdentity();
+    rotate.SetRotation( rotation );
 
     MATRIX3x3D scale;
     scale.SetIdentity();
     scale.SetScale( VECTOR2D( worldScale, worldScale ) );
 
     MATRIX3x3D flip;
-
     flip.SetIdentity();
     flip.SetScale( VECTOR2D( globalFlipX ? -1.0 : 1.0, globalFlipY ? -1.0 : 1.0 ) );
 
@@ -197,7 +199,7 @@ void GAL::ComputeWorldScreenMatrix()
     lookat.SetIdentity();
     lookat.SetTranslation( -lookAtPoint );
 
-    worldScreenMatrix = translation * flip * scale * lookat * worldScreenMatrix;
+    worldScreenMatrix = translation * rotate * flip * scale * lookat;
     screenWorldMatrix = worldScreenMatrix.Inverse();
 }
 

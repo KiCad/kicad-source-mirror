@@ -506,7 +506,7 @@ public:
     /**
      * @brief Transform the context.
      *
-     * @param aTransformation is the ransformation matrix.
+     * @param aTransformation is the transformation matrix.
      */
     virtual void Transform( const MATRIX3x3D& aTransformation ) {};
 
@@ -693,6 +693,26 @@ public:
     inline double GetZoomFactor() const
     {
         return zoomFactor;
+    }
+
+    /**
+     * @brief Set the rotation angle.
+     *
+     * @param aRotation is the new rotation angle (radians).
+     */
+    void SetRotation( double aRotation )
+    {
+        rotation = aRotation;
+    }
+
+    /**
+     * Get the rotation angle.
+     *
+     * @return The rotation angle (radians).
+     */
+    double GetRotation() const
+    {
+        return rotation;
     }
 
     /**
@@ -1009,6 +1029,7 @@ protected:
     VECTOR2D           lookAtPoint;            ///< Point to be looked at in world space
 
     double             zoomFactor;             ///< The zoom factor
+    double             rotation;               ///< Rotation transformation (radians)
     MATRIX3x3D         worldScreenMatrix;      ///< World transformation
     MATRIX3x3D         screenWorldMatrix;      ///< Screen transformation
     double             worldScale;             ///< The scale factor world->screen
