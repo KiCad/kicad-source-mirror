@@ -174,13 +174,14 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     {
         m_textLabel = m_textLabelMultiLine;
         m_textLabelSingleLine->Show( false );
-        m_textControlSizer->AddGrowableRow( 0 );
+        m_staticTextLabel->Show( false );
         multiLine = true;
     }
     else
     {
         m_textLabel = m_textLabelSingleLine;
         m_textLabelMultiLine->Show( false );
+        m_staticTextText->Show( false );
         wxTextValidator* validator = (wxTextValidator*) m_textLabel->GetValidator();
 
         // Add invalid label characters to this list.

@@ -43,8 +43,9 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		};
 		
 		wxFlexGridSizer* m_textControlSizer;
-		wxStaticText* m_staticText1;
+		wxStaticText* m_staticTextLabel;
 		wxTextCtrl* m_textLabelSingleLine;
+		wxStaticText* m_staticTextText;
 		wxTextCtrl* m_textLabelMultiLine;
 		wxStaticText* m_SizeTitle;
 		wxTextCtrl* m_TextSize;

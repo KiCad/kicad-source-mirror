@@ -16,32 +16,33 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_textControlSizer = new wxFlexGridSizer( 2, 2, 3, 3 );
+	m_textControlSizer = new wxFlexGridSizer( 3, 2, 3, 3 );
 	m_textControlSizer->AddGrowableCol( 1 );
+	m_textControlSizer->AddGrowableRow( 1 );
 	m_textControlSizer->SetFlexibleDirection( wxBOTH );
 	m_textControlSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Text:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	m_staticText1->SetToolTip( _("Enter the text to be used within the schematic") );
+	m_staticTextLabel = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLabel->Wrap( -1 );
+	m_staticTextLabel->SetToolTip( _("Enter the text to be used within the schematic") );
 	
-	m_textControlSizer->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
-	
-	wxBoxSizer* bSizeText;
-	bSizeText = new wxBoxSizer( wxVERTICAL );
+	m_textControlSizer->Add( m_staticTextLabel, 0, wxRIGHT, 3 );
 	
 	m_textLabelSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_RICH );
 	m_textLabelSingleLine->SetValidator( wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, &m_labelText ) );
 	
-	bSizeText->Add( m_textLabelSingleLine, 0, wxEXPAND|wxLEFT, 3 );
+	m_textControlSizer->Add( m_textLabelSingleLine, 0, wxEXPAND|wxLEFT, 3 );
+	
+	m_staticTextText = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextText->Wrap( -1 );
+	m_staticTextText->SetToolTip( _("Enter the text to be used within the schematic") );
+	
+	m_textControlSizer->Add( m_staticTextText, 0, wxRIGHT, 5 );
 	
 	m_textLabelMultiLine = new wxTextCtrl( this, wxID_VALUEMULTI, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	m_textLabelMultiLine->SetMinSize( wxSize( -1,60 ) );
 	
-	bSizeText->Add( m_textLabelMultiLine, 1, wxEXPAND|wxLEFT, 3 );
-	
-	
-	m_textControlSizer->Add( bSizeText, 1, wxEXPAND, 3 );
+	m_textControlSizer->Add( m_textLabelMultiLine, 1, wxEXPAND|wxLEFT, 3 );
 	
 	m_SizeTitle = new wxStaticText( this, wxID_ANY, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeTitle->Wrap( -1 );
