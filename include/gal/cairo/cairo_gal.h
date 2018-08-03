@@ -278,6 +278,8 @@ public:
         paintListener = aPaintListener;
     }
 
+    virtual void EnableDepthTest( bool aEnabled = false ) override;
+
 protected:
     virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 

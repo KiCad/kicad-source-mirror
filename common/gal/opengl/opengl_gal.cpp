@@ -2065,3 +2065,13 @@ static void InitTesselatorCallbacks( GLUtesselator* aTesselator )
     gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG,    ( void (CALLBACK*)() )EdgeCallback );
     gluTessCallback( aTesselator, GLU_TESS_ERROR,        ( void (CALLBACK*)() )ErrorCallback );
 }
+
+void OPENGL_GAL::EnableDepthTest( bool aEnabled )
+{
+    if( aEnabled )
+        glEnable( GL_DEPTH_TEST );
+    else
+    {
+        glDisable( GL_DEPTH_TEST );
+    }
+}

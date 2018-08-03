@@ -988,6 +988,8 @@ public:
         depthStack.pop();
     }
 
+    virtual void EnableDepthTest( bool aEnabled = false ) {};
+
     static const double METRIC_UNIT_LENGTH;
 
 protected:

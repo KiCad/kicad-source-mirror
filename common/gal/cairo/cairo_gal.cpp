@@ -1199,3 +1199,8 @@ unsigned int CAIRO_GAL::getNewGroupNumber()
 
     return groupCounter++;
 }
+
+void CAIRO_GAL::EnableDepthTest( bool aEnabled )
+{
+    
+}
