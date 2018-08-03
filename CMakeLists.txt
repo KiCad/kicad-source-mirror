@@ -74,6 +74,10 @@ option( KICAD_SCRIPTING_MODULES
     "Build native portion of the pcbnew Python module: _pcbnew.{pyd,so} for OS command line use of Python."
     ON )
 
+option( KICAD_SCRIPTING_PYTHON3
+    "Build for Python 3 instead of 2 (default OFF)."
+    OFF )
+
 option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
     ON )
@@ -678,15 +682,20 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     find_package( SWIG 3.0 REQUIRED )
     include( ${SWIG_USE_FILE} )
 
-    # force a python version < 3.0
-    set( PythonInterp_FIND_VERSION 2.6 )
-    set( PythonLibs_FIND_VERSION 2.6 )
+    if( KICAD_SCRIPTING_PYTHON3 )
+        set( PythonInterp_FIND_VERSION 3 )
+        set( PythonLibs_FIND_VERSION 3 )
+    else()
+        # force a python version < 3.0
+        set( PythonInterp_FIND_VERSION 2.6 )
+        set( PythonLibs_FIND_VERSION 2.6 )
+    endif()
 
     find_package( PythonInterp )
 
     check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
 
-    if( NOT PYTHON_VERSION_MAJOR EQUAL 2 )
+    if( NOT KICAD_SCRIPTING_PYTHON3 AND NOT PYTHON_VERSION_MAJOR EQUAL 2 )
         message( FATAL_ERROR "Python 2.x is required." )
     endif()
 
@@ -718,7 +727,11 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     mark_as_advanced( PYTHON_DEST )
     message( STATUS "Python module install path: ${PYTHON_DEST}" )
 
-    find_package( PythonLibs 2.6 )
+    if( KICAD_SCRIPTING_PYTHON3 )
+        find_package( PythonLibs 3.6 )
+    else()
+        find_package( PythonLibs 2.6 )
+    endif()
 
     if( KICAD_SCRIPTING_WXPYTHON )
         # Check to see if the correct version of wxPython is installed based on the version of
