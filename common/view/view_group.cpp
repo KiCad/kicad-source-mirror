@@ -91,10 +91,26 @@ VIEW_ITEM *VIEW_GROUP::GetItem( unsigned int idx ) const
 
 const BOX2I VIEW_GROUP::ViewBBox() const
 {
-    BOX2I maxBox;
+    BOX2I bb;
+    bool first;
 
-    maxBox.SetMaximum();
-    return maxBox;
+    if( !m_groupItems.size() )
+    {
+        bb.SetMaximum();
+    } else {
+        for( auto item : m_groupItems )
+        {
+            if( first )
+            {
+                bb = item->ViewBBox();
+                first = false;
+            } else {
+                bb.Merge( item->ViewBBox() );
+            }
+        }
+    }
+
+    return bb;
 }
 
 
