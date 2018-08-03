@@ -97,12 +97,12 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
     {
         // Since the list is sorted we can use a binary search to speed up searches within
         // libraries with lots of footprints.
-        FOOTPRINT_INFO_IMPL dummy( (*nodeIt)->Name );
+        FOOTPRINT_INFO_IMPL dummy( wxEmptyString, (*nodeIt)->Name );
         auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
-                                             []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
-                                             {
-                                                 return a->GetName() < b->GetName();
-                                             } );
+            []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
+            {
+                return StrNumCmp( a->GetName(), b->GetName(), INT_MAX, true ) < 0;
+            } );
 
         if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
         {

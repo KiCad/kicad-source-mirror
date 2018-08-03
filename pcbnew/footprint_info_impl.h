@@ -67,8 +67,9 @@ public:
 
 
     // A dummy constructor for use as a target in a binary search
-    FOOTPRINT_INFO_IMPL( const wxString& aFootprintName )
+    FOOTPRINT_INFO_IMPL( const wxString& aNickname, const wxString& aFootprintName )
     {
+        m_nickname = aNickname;
         m_fpname = aFootprintName;
 
         m_owner = nullptr;
