@@ -107,7 +107,11 @@ wxString PYTHON_ACTION_PLUGIN::CallRetStrMethod( const char* aMethod, PyObject* 
 
     if( result )
     {
+#if PY_MAJOR_VERSION >= 3
+        const char* str_res = PyBytes_AS_STRING( result );
+#else
         const char* str_res = PyString_AsString( result );
+#endif
         ret = FROM_UTF8( str_res );
         Py_DECREF( result );
     }

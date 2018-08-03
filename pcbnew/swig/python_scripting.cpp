@@ -41,9 +41,15 @@
 
 /* init functions defined by swig */
 
+#if PY_MAJOR_VERSION >= 3
+extern "C" PyObject* init_kicad( void );
+
+extern "C" PyObject* init_pcbnew( void );
+#else
 extern "C" void init_kicad( void );
 
 extern "C" void init_pcbnew( void );
+#endif
 
 #define EXTRA_PYTHON_MODULES 10     // this is the number of python
                                     // modules that we want to add into the list
@@ -67,7 +73,11 @@ bool IsWxPythonLoaded()
 
 /* Add a name + initfuction to our SwigImportInittab */
 
+#if PY_MAJOR_VERSION >= 3
+static void swigAddModule( const char* name, PyObject* (* initfunc)() )
+#else
 static void swigAddModule( const char* name, void (* initfunc)() )
+#endif
 {
     SwigImportInittab[SwigNumModules].name      = (char*) name;
     SwigImportInittab[SwigNumModules].initfunc  = initfunc;
@@ -236,7 +246,11 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
     if( pobj )
     {
         PyObject* str = PyDict_GetItemString(localDict, "result" );
+#if PY_MAJOR_VERSION >= 3
+        const char* str_res = str ? PyBytes_AS_STRING( str ) : 0;
+#else
         const char* str_res = str ? PyString_AsString( str ) : 0;
+#endif
         aNames = FROM_UTF8( str_res );
         Py_DECREF( pobj );
     }
@@ -386,7 +400,13 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
         PyObject* element = PyList_GetItem( aArrayString, n );
 
         if( element )
-            ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
+        {
+#if PY_MAJOR_VERSION >= 3
+        ret.Add( FROM_UTF8( PyBytes_AS_STRING( element ) ), 1 );
+#else
+        ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
+#endif
+        }
     }
 
     return ret;
@@ -406,7 +426,11 @@ wxString PyErrStringWithTraceback()
 
     PyErr_Fetch( &type, &value, &traceback );
 
+#if PY_MAJOR_VERSION >= 3
+    PyObject* tracebackModuleString = PyUnicode_FromString( "traceback" );
+#else
     PyObject* tracebackModuleString = PyString_FromString( "traceback" );
+#endif
     PyObject* tracebackModule = PyImport_Import( tracebackModuleString );
     Py_DECREF( tracebackModuleString );
 
