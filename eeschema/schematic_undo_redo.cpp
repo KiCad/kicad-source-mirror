@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 
 #include <general.h>
@@ -41,7 +41,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
-
+#include <sch_view.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
         // Copy the saved wires, buses, and junctions to the current screen.
         for( unsigned int i = 0;  i < aList->GetCount();  i++ )
-            GetScreen()->Append( (SCH_ITEM*) aList->GetPickedItem( i ) );
+            AddToScreen( (SCH_ITEM*) aList->GetPickedItem( i ) );
 
         aList->ClearItemsList();
 
@@ -316,12 +316,14 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
         case UR_NEW:     /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
-            GetScreen()->Remove( item );
+            RemoveFromScreen( item );
+
+            //schprintf("UndoRemFroMscreen %p %s\n", item, (const char *)item->GetClass().c_str() );
             break;
 
         case UR_DELETED: /* deleted items are put in the draw item list, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
-            GetScreen()->Append( item );
+            AddToScreen( item );
             break;
 
         case UR_MOVED:
@@ -356,8 +358,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             alt_item = (SCH_ITEM*) aList->GetPickedItemLink( ii );
             alt_item->SetNext( NULL );
             alt_item->SetBack( NULL );
-            GetScreen()->Remove( item );
-            GetScreen()->Append( alt_item );
+            RemoveFromScreen( item );
+            AddToScreen( alt_item );
             aList->SetPickedItem( alt_item, ii );
             aList->SetPickedItemLink( item, ii );
             break;
@@ -368,6 +370,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             break;
         }
     }
+
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }
 
 

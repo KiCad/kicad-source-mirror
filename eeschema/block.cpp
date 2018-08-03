@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 
@@ -48,6 +48,10 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <list_operations.h>
+
+#include <preview_items/selection_area.h>
+#include <sch_view.h>
+#include <view/view_group.h>
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                      const wxPoint& aPosition, bool aErase );
@@ -176,7 +180,9 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     }
 
     m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
-    m_canvas->Refresh();
+
+    GetCanvas()->GetView()->ClearPreview();
+    GetCanvas()->GetView()->ClearHiddenFlags();
 }
 
 
@@ -186,6 +192,14 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     bool            zoom_command = false;
     bool            append = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
+
+
+    auto panel =static_cast<SCH_DRAW_PANEL*>(m_canvas);
+    auto view = panel->GetView();
+    auto area = view->GetSelectionArea();
+
+    view->ShowSelectionArea( false );
+    view->ClearHiddenFlags();
 
     if( block->GetCount() )
     {
@@ -374,7 +388,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     if( block->GetCommand() == BLOCK_ABORT )
     {
         GetScreen()->ClearDrawingState();
-        m_canvas->Refresh();
     }
 
     if( ! nextcmd )
@@ -389,6 +402,11 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     if( zoom_command )
         Window_Zoom( GetScreen()->m_BlockLocate );
 
+    view->ShowPreview( false );
+    view->ShowSelectionArea( false );
+    view->ClearHiddenFlags();
+
+
     return nextcmd;
 }
 
@@ -399,41 +417,30 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
+    auto panel =static_cast<SCH_DRAW_PANEL*>(aPanel);
+    auto view = panel->GetView();
+
+    auto preview = view->GetPreview();
+
     BASE_SCREEN*    screen = aPanel->GetScreen();
     BLOCK_SELECTOR* block = &screen->m_BlockLocate;
     SCH_ITEM*       schitem;
 
-    /* Erase old block contents. */
-    if( aErase )
-    {
-        block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
+    block->SetMoveVector( panel->GetParent()->GetCrossHairPosition() - block->GetLastCursorPosition() );
 
-        for( unsigned ii = 0; ii < block->GetCount(); ii++ )
-        {
-            schitem = (SCH_ITEM*) block->GetItem( ii );
-
-            if( schitem->Type() == SCH_COMPONENT_T )
-                ((SCH_COMPONENT*)schitem)->Draw( aPanel, aDC, block->GetMoveVector(),
-                                                 g_XorMode, g_GhostColor, false );
-            else
-                schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
-        }
-    }
-
-    /* Repaint new view. */
-    block->SetMoveVector( aPanel->GetParent()->GetCrossHairPosition() - block->GetLastCursorPosition() );
-    block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
+    preview->Clear();
+    view->SetVisible( preview, true );
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
         schitem = (SCH_ITEM*) block->GetItem( ii );
-
-            if( schitem->Type() == SCH_COMPONENT_T )
-                ((SCH_COMPONENT*)schitem)->Draw( aPanel, aDC, block->GetMoveVector(),
-                                                 g_XorMode, g_GhostColor, false );
-            else
-                schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
+        SCH_ITEM *copy = static_cast<SCH_ITEM*>( schitem->Clone() );
+        copy->Move( block->GetMoveVector() );
+        preview->Add( copy );
+        view->Hide( schitem );
     }
+
+    view->Update( preview );
 }
 
 
@@ -545,8 +552,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         }
 
         SetSchItemParent( item, GetScreen() );
-        item->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        GetScreen()->Append( item );
+        AddToScreen( item );
     }
 
     SaveCopyInUndoList( picklist, UR_NEW );
@@ -567,4 +573,37 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
     OnModify();
 
     return;
+}
+
+void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                 bool aErase )
+{
+    auto panel =static_cast<SCH_DRAW_PANEL*>(aPanel);
+    auto area = panel->GetView()->GetSelectionArea();
+    auto frame = static_cast<EDA_BASE_FRAME*>(aPanel->GetParent());
+
+    BLOCK_SELECTOR* block;
+    bool isLibEdit = frame->IsType( FRAME_SCH_LIB_EDITOR );
+
+    block = &aPanel->GetScreen()->m_BlockLocate;
+    block->SetMoveVector( wxPoint( 0, 0 ) );
+    block->SetLastCursorPosition( aPanel->GetParent()->GetCrossHairPosition( isLibEdit ) );
+    block->SetEnd( aPanel->GetParent()->GetCrossHairPosition() );
+
+    panel->GetView()->ClearPreview();
+    panel->GetView()->ClearHiddenFlags();
+
+    area->SetOrigin( block->GetOrigin() );;
+    area->SetEnd(  block->GetEnd() );
+
+    panel->GetView()->SetVisible( area );
+    panel->GetView()->Hide( area, false );
+    panel->GetView()->Update( area );
+
+    if( block->GetState() == STATE_BLOCK_INIT )
+    {
+        if( block->GetWidth() || block->GetHeight() )
+            // 2nd point exists: the rectangle is not surface anywhere
+            block->SetState( STATE_BLOCK_END );
+    }
 }

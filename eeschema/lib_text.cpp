@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <plotter.h>
 #include <draw_graphic_text.h>
 #include <trigo.h>
@@ -378,7 +378,6 @@ void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         m_initialPos = GetTextPos();
         m_initialCursorPos = aPosition;
-        SetEraseLastDrawItem();
     }
     else
     {
@@ -406,12 +405,13 @@ void LIB_TEXT::EndEdit( const wxPoint& aPosition, bool aAbort )
     m_Flags = 0;
     m_rotate = false;
     m_updateText = false;
-    SetEraseLastDrawItem( false );
 }
 
 
-void LIB_TEXT::calcEdit( const wxPoint& aPosition )
+void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
 {
+    printf("textCalcEdit %d %d\n", aPosition.x, aPosition.y );
+
     if( m_rotate )
     {
         SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
@@ -426,11 +426,13 @@ void LIB_TEXT::calcEdit( const wxPoint& aPosition )
 
     if( m_Flags == IS_NEW )
     {
-        SetEraseLastDrawItem();
         SetTextPos( aPosition );
     }
     else if( m_Flags == IS_MOVED )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
+        printf("%p: move %d %d\n", this, GetPosition().x, GetPosition().y );
     }
+
+    printf("%p: move2 %d %d\n", this, GetPosition().x, GetPosition().y );
 }

@@ -29,7 +29,7 @@
 #include <algorithm>
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
@@ -236,7 +236,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     m_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
-    m_canvas->Refresh( true );
+    SyncView();
 }
 
 

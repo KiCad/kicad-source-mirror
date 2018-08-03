@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <kiway.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
@@ -140,10 +140,10 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
         newItem->SetParent( part );
         part->AddDrawItem( newItem );
+        item.ClearSelected();
     }
 
     part->RemoveDuplicateDrawItems();
-    part->ClearSelectedItems();
 
     OnModify();
     m_canvas->Refresh();

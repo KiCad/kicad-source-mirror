@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <draw_graphic_text.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <kicad_device_context.h>
@@ -119,8 +119,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     }
 
     // Prepare display to move the new item
-    textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-    PrepareMoveItem( (SCH_ITEM*) textItem, aDC );
+    PrepareMoveItem( (SCH_ITEM*) textItem, nullptr );
 
     return textItem;
 }
@@ -217,9 +216,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
      * put in undo list later, at the end of the current command (if not aborted)
      */
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-    m_canvas->CrossHairOff( &dc );   // Erase schematic cursor
-    text->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
+    m_canvas->CrossHairOff();   // Erase schematic cursor
 
     // For an exiting item (i.e. already in list):
     // replace the existing item by the new text in list
@@ -227,16 +224,15 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     {
         if( item == text )
         {
-            screen->Remove( text );
-            screen->Append( newtext );
+            RemoveFromScreen( text );
+            AddToScreen( newtext );
             break;
         }
     }
 
     SetRepeatItem( NULL );
     OnModify();
-    newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    m_canvas->CrossHairOn( &dc );    // redraw schematic cursor
+    m_canvas->CrossHairOn( );    // redraw schematic cursor
 
     // if the old item is the current schematic item, replace it by the new text:
     if( screen->GetCurItem() == text )

@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <msgpanel.h>
 
 #include <general.h>
@@ -52,7 +52,6 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
     m_Fill              = aFillType;
     m_Parent            = (EDA_ITEM*) aComponent;
     m_isFillable        = false;
-    m_eraseLastDrawItem = false;
 }
 
 
@@ -117,6 +116,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                      GR_DRAWMODE aDrawMode, void* aData,
                      const TRANSFORM& aTransform )
 {
+    #if 0
     if( InEditMode() )
     {
         // Temporarily disable filling while the item is being edited.
@@ -136,7 +136,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         }
 #endif
         // Calculate the new attributes at the current cursor position.
-        calcEdit( aOffset );
+        CalcEdit( aOffset );
 
         // Draw the items using the new attributes.
         drawEditGraphics( aPanel->GetClipBox(), aDC, color );
@@ -149,6 +149,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     {
         drawGraphic( aPanel, aDC, aOffset, aColor, aDrawMode, aData, aTransform );
     }
+    #endif
 }
 
 

@@ -28,7 +28,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <general.h>
 #include <kicad_device_context.h>
 #include <sch_edit_frame.h>
@@ -43,7 +43,6 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     if( !curr_item || curr_item->GetFlags() )
         return;
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     switch( curr_item->Type() )
     {
@@ -55,8 +54,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->ClearAnnotation( NULL );
         newitem->SetFlags( IS_NEW );
         // Draw the new part, MoveItem() expects it to be already on screen.
-        newitem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-        PrepareMoveItem( newitem, &dc );
+        PrepareMoveItem( newitem, nullptr );
     }
     break;
 
@@ -68,8 +66,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
         newitem->SetFlags( IS_NEW );
         // Draw the new item, MoveItem() expects it to be already on screen.
-        newitem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-        PrepareMoveItem( newitem, &dc );
+        PrepareMoveItem( newitem, nullptr );
     }
         break;
 

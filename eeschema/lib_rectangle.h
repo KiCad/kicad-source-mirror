@@ -45,7 +45,7 @@ class LIB_RECTANGLE  : public LIB_ITEM
                       COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform ) override;
 
-    void calcEdit( const wxPoint& aPosition ) override;
+    void CalcEdit( const wxPoint& aPosition ) override;
 
 public:
     LIB_RECTANGLE( LIB_PART * aParent );

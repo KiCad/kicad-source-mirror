@@ -44,6 +44,7 @@ class PLOTTER;
 class LIB_ITEM;
 class LIB_PIN;
 class MSG_PANEL_ITEM;
+class EDA_DRAW_PANEL;
 
 
 extern const int fill_tab[];
@@ -92,20 +93,7 @@ class LIB_ITEM : public EDA_ITEM
      */
     virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor ) {}
 
-    /**
-     * Calculates the attributes of an item at \a aPosition when it is being edited.
-     *
-     * This method gets called by the Draw() method when the item is being edited.  This
-     * probably should be a pure virtual method but bezier curves are not yet editable in
-     * the component library editor.  Therefore, the default method does nothing.
-     *
-     * @param aPosition The current mouse position in drawing coordinates.
-     */
-    virtual void calcEdit( const wxPoint& aPosition ) {}
-
-    bool    m_eraseLastDrawItem; ///< Used when editing a new draw item to prevent drawing
-                                 ///< artifacts.
-
+    
     friend class LIB_PART;
 
 protected:
@@ -190,6 +178,18 @@ public:
      * @param aAbort Set to true to abort the current edit in progress.
      */
     virtual void EndEdit( const wxPoint& aPosition, bool aAbort = false ) { m_Flags = 0; }
+
+    /**
+     * Calculates the attributes of an item at \a aPosition when it is being edited.
+     *
+     * This method gets called by the Draw() method when the item is being edited.  This
+     * probably should be a pure virtual method but bezier curves are not yet editable in
+     * the component library editor.  Therefore, the default method does nothing.
+     *
+     * @param aPosition The current mouse position in drawing coordinates.
+     */
+    virtual void CalcEdit( const wxPoint& aPosition ) {}
+
 
     /**
      * Draw an item
@@ -368,8 +368,6 @@ public:
      * @return True if the item is being edited.
      */
     bool InEditMode() const { return ( m_Flags & ( IS_NEW | IS_DRAGGED | IS_MOVED | IS_RESIZED ) ) != 0; }
-
-    void SetEraseLastDrawItem( bool aErase = true ) { m_eraseLastDrawItem = aErase; }
 
     virtual COLOR4D GetDefaultColor();
 

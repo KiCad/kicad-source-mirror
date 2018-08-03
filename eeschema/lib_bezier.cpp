@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <bezier_curves.h>
@@ -103,6 +103,8 @@ bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
 
 void LIB_BEZIER::Move( const wxPoint& aPosition )
 {
+    if ( !m_PolyPoints.size() )
+        return;
     SetOffset( aPosition - m_PolyPoints[0] );
 }
 
@@ -334,4 +336,12 @@ void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITE
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
+}
+
+wxPoint LIB_BEZIER::GetPosition() const
+{
+    if( !m_PolyPoints.size() )
+        return wxPoint(0, 0);
+
+    return m_PolyPoints[0];
 }

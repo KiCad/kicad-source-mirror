@@ -33,7 +33,7 @@
 #include <trace_helpers.h>
 #include <sch_item_struct.h>
 #include <sch_screen.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 
 #include <general.h>

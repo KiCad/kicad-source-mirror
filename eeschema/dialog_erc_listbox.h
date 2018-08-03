@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <sch_marker.h>
 #include <wx/html/htmlwin.h>
 

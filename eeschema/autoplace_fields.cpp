@@ -57,7 +57,7 @@
 #include <sch_component.h>
 #include <sch_line.h>
 #include <lib_pin.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <class_libentry.h>
 #include <eeschema_config.h>
 #include <kiface_i.h>

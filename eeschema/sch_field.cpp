@@ -36,7 +36,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <base_struct.h>
 #include <gr_basic.h>
 #include <draw_graphic_text.h>

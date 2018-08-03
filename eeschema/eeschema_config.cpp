@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
@@ -47,6 +47,8 @@
 #include <dialogs/panel_eeschema_display_options.h>
 #include <widgets/widget_eeschema_color_config.h>
 #include <dialogs/panel_libedit_settings.h>
+#include <sch_view.h>
+#include <sch_painter.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 

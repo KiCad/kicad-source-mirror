@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <common.h>
 #include <plotter.h>
 #include <bitmaps.h>
@@ -224,4 +224,3 @@ BITMAP_DEF SCH_NO_CONNECT::GetMenuImage() const
 {
     return noconn_xpm;
 }
-

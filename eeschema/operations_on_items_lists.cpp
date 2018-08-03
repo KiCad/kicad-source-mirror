@@ -30,7 +30,7 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 
 #include <general.h>
@@ -215,7 +215,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
     {
         aItem->SetFlags( STRUCT_DELETED );
         SaveCopyInUndoList( aItem, UR_DELETED, aAppend );
-        screen->Remove( aItem );
+        RemoveFromScreen( aItem );
 
         std::vector< wxPoint > pts;
         aItem->GetConnectionPoints( pts );
@@ -231,7 +231,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 }
 
 
-void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
+void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                            const wxPoint& aMoveVector )
 {
     SCH_ITEM* newitem;
@@ -286,7 +286,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             }
 
             SetSchItemParent( newitem, screen );
-            screen->Append( newitem );
+            AddToScreen( newitem );
         }
     }
 

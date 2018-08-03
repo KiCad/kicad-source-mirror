@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <eeschema_id.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <menus_helpers.h>
@@ -75,6 +75,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     SCH_ITEM*   item = GetScreen()->GetCurItem();
     bool        blockActive = GetScreen()->IsBlockActive();
     wxString    msg;
+
+    printf("on-rclick cur %p blk %d\n", item, blockActive ? 1 : 0 );
 
     // Do not start a block command on context menu.
     m_canvas->SetCanStartBlock( -1 );
@@ -139,6 +141,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         bool actionCancelled = false;
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins, 0, &actionCancelled );
+
+        printf("Locateandshow %d %d item %p\n", aPosition.x, aPosition.y, item );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
         if( item == NULL && actionCancelled )

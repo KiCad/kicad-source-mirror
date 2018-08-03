@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <class_library.h>
 #include <confirm.h>
 #include <invoke_sch_dialog.h>

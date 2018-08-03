@@ -33,7 +33,7 @@
 #include <base_struct.h>
 #include <draw_graphic_text.h>
 #include <kicad_string.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <base_units.h>
@@ -547,7 +547,6 @@ void LIB_FIELD::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         m_initialPos = GetTextPos();
         m_initialCursorPos = aPosition;
-        SetEraseLastDrawItem();
     }
     else
     {
@@ -575,11 +574,10 @@ void LIB_FIELD::EndEdit( const wxPoint& aPosition, bool aAbort )
     m_Flags = 0;
     m_rotate = false;
     m_updateText = false;
-    SetEraseLastDrawItem( false );
 }
 
 
-void LIB_FIELD::calcEdit( const wxPoint& aPosition )
+void LIB_FIELD::CalcEdit( const wxPoint& aPosition )
 {
     if( m_rotate )
     {

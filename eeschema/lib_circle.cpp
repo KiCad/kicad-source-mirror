@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <base_units.h>
@@ -278,11 +278,6 @@ void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        SetEraseLastDrawItem();
-    }
-    else if( aEditMode == IS_RESIZED )
-    {
-        SetEraseLastDrawItem();
     }
 
     m_Flags = aEditMode;
@@ -303,18 +298,14 @@ void LIB_CIRCLE::EndEdit( const wxPoint& aPosition, bool aAbort )
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_CIRCLE is not being edited." ) );
 
-    SetEraseLastDrawItem( false );
     m_Flags = 0;
 }
 
 
-void LIB_CIRCLE::calcEdit( const wxPoint& aPosition )
+void LIB_CIRCLE::CalcEdit( const wxPoint& aPosition )
 {
     if( m_Flags == IS_NEW || m_Flags == IS_RESIZED )
     {
-        if( m_Flags == IS_NEW )
-            SetEraseLastDrawItem();
-
         m_Radius = KiROUND( GetLineLength( m_Pos, aPosition ) );
     }
     else

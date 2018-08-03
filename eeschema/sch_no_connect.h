@@ -51,6 +51,11 @@ public:
         return wxT( "SCH_NO_CONNECT" );
     }
 
+    wxSize GetSize() const
+    {
+        return m_size;
+    }
+
     int GetPenSize() const override;
 
     void SwapData( SCH_ITEM* aItem ) override;

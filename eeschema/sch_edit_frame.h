@@ -36,6 +36,7 @@
 #include <template_fieldnames.h>
 #include <block_commande.h>
 #include <sch_collectors.h>
+#include <sch_draw_panel.h>
 
 // enum PINSHEETLABEL_SHAPE
 #include <sch_text.h>
@@ -886,9 +887,9 @@ private:
     void OnRescueProject( wxCommandEvent& event );
     void OnRemapSymbols( wxCommandEvent& aEvent );
 
-    // a helper function to run the dialog that allows one to rename the symbol
-    // library Id of groups of components, for instance after a symbol has moved
-    // from a library to another library
+    // a helper function to run the dialog that allows to rename the symbol library Id of
+    // groups of components, for instance after a symbol has moved from a library to
+    // another library
     void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
@@ -1504,6 +1505,8 @@ public:
      */
     void doUpdatePcb( const wxString& aUpdateOptions = "" );
 
+    void SetCurrentSheet( SCH_SHEET_PATH *aSheet );
+
     /**
      * Allows Eeschema to install its preferences panels into the preferences dialog.
      */
@@ -1516,6 +1519,12 @@ public:
 
     void ShowChangedLanguage() override;
 
+    void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
+                               const wxPoint& aMoveVector );
+
+    virtual void SetScreen( BASE_SCREEN* aScreen ) override;
+
+    virtual const BOX2I GetDocumentExtents() const override;
 
     ///> Probe cursor, used by circuit simulator
     const static wxCursor CURSOR_PROBE;

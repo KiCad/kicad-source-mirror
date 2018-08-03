@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <kicad_string.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <plotter.h>
 #include <gr_basic.h>
 #include <sch_screen.h>
@@ -956,7 +956,6 @@ bool LIB_PART::HasConversion() const
     return false;
 }
 
-
 void LIB_PART::ClearStatus()
 {
     for( LIB_ITEM& item : m_drawings )
@@ -964,157 +963,6 @@ void LIB_PART::ClearStatus()
         item.m_Flags = 0;
     }
 }
-
-
-int LIB_PART::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aSyncPinEdit )
-{
-    int itemCount = 0;
-
-    for( LIB_ITEM& item : m_drawings )
-    {
-        item.ClearFlags( SELECTED );
-
-        if( ( item.m_Unit && item.m_Unit != aUnit )
-            || ( item.m_Convert && item.m_Convert != aConvert ) )
-        {
-            if( item.Type() != LIB_PIN_T )
-                continue;
-
-             // Specific rules for pins:
-             // - do not select pins in other units when synchronized pin edit mode is disabled
-             // - do not select pins in other units when units are not interchangeable
-             // - in other cases verify if the pin belongs to the requested unit
-            if( !aSyncPinEdit || m_unitsLocked
-                || ( item.m_Convert && item.m_Convert != aConvert ) )
-                continue;
-        }
-
-        if( item.Inside( aRect ) )
-        {
-            item.SetFlags( SELECTED );
-            itemCount++;
-        }
-    }
-
-    return itemCount;
-}
-
-
-void LIB_PART::MoveSelectedItems( const wxPoint& aOffset )
-{
-    for( LIB_ITEM& item : m_drawings )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.SetOffset( aOffset );
-        item.m_Flags = 0;
-    }
-}
-
-
-void LIB_PART::ClearSelectedItems()
-{
-    for( LIB_ITEM& item : m_drawings )
-    {
-        item.m_Flags = 0;
-    }
-}
-
-
-void LIB_PART::DeleteSelectedItems()
-{
-    LIB_ITEMS_CONTAINER::ITERATOR item = m_drawings.begin();
-
-    // We *do not* remove the 2 mandatory fields: reference and value
-    // so skip them (do not remove) if they are flagged selected.
-    // Skip also not visible items.
-    // But I think fields must not be deleted by a block delete command or other global command
-    // because they are not really graphic items
-    while( item != m_drawings.end() )
-    {
-        if( item->Type() == LIB_FIELD_T )
-        {
-            item->ClearFlags( SELECTED );
-        }
-
-        if( !item->IsSelected() )
-            ++item;
-        else
-            item = m_drawings.erase( item );
-    }
-}
-
-
-void LIB_PART::CopySelectedItems( const wxPoint& aOffset )
-{
-    std::vector< LIB_ITEM* > tmp;
-
-    for( LIB_ITEM& item : m_drawings )
-    {
-        // We *do not* copy fields because they are unique for the whole component
-        // so skip them (do not duplicate) if they are flagged selected.
-        if( item.Type() == LIB_FIELD_T )
-            item.ClearFlags( SELECTED );
-
-        if( !item.IsSelected() )
-            continue;
-
-        item.ClearFlags( SELECTED );
-        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-        newItem->SetFlags( SELECTED );
-
-        // When push_back elements in buffer, a memory reallocation can happen
-        // and will break pointers.
-        // So, push_back later.
-        tmp.push_back( newItem );
-    }
-
-    for( auto item : tmp )
-        m_drawings.push_back( item );
-
-    MoveSelectedItems( aOffset );
-}
-
-
-void LIB_PART::MirrorSelectedItemsH( const wxPoint& aCenter )
-{
-    for( LIB_ITEM& item : m_drawings )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.MirrorHorizontal( aCenter );
-        item.m_Flags = 0;
-    }
-}
-
-
-void LIB_PART::MirrorSelectedItemsV( const wxPoint& aCenter )
-{
-    for( LIB_ITEM& item : m_drawings )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.MirrorVertical( aCenter );
-        item.m_Flags = 0;
-    }
-}
-
-
-void LIB_PART::RotateSelectedItems( const wxPoint& aCenter )
-{
-    for( LIB_ITEM& item : m_drawings )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.Rotate( aCenter );
-        item.m_Flags = 0;
-    }
-}
-
 
 LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
                                     KICAD_T aType, const wxPoint& aPoint )

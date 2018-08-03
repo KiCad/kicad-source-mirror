@@ -29,16 +29,174 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 
 #include <general.h>
 #include <class_library.h>
 #include <lib_edit_frame.h>
 
+#include <preview_items/selection_area.h>
+#include <sch_view.h>
+#include <view/view_group.h>
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase );
+
+
+int LIB_EDIT_FRAME::BlockSelectItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock, int aUnit, int aConvert, bool aSyncPinEdit )
+{
+    int itemCount = 0;
+
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        item.ClearFlags( SELECTED );
+
+        if( ( item.GetUnit() && item.GetUnit() != aUnit )
+            || ( item.GetConvert() && item.GetConvert() != aConvert ) )
+        {
+            if( item.Type() != LIB_PIN_T )
+                continue;
+
+             // Specific rules for pins:
+             // - do not select pins in other units when synchronized pin edit mode is disabled
+             // - do not select pins in other units when units are not interchangeable
+             // - in other cases verify if the pin belongs to the requested unit
+            if( !aSyncPinEdit || aPart->UnitsLocked()
+                || ( item.GetConvert() && item.GetConvert() != aConvert ) )
+                continue;
+        }
+
+        if( item.Inside( *aBlock ) )
+        {
+            auto picker = ITEM_PICKER( &item );
+            aBlock->PushItem( picker );
+            item.SetFlags( SELECTED );
+            itemCount++;
+        }
+    }
+
+    return itemCount;
+}
+
+void LIB_EDIT_FRAME::BlockClearSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        item.ClearFlags();
+    }
+    aBlock->ClearItemsList();
+}
+
+void LIB_EDIT_FRAME::BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        if( !item.IsSelected() )
+            continue;
+
+        item.SetOffset( aOffset );
+        item.ClearFlags();
+    }
+
+    // view update    
+}
+
+void LIB_EDIT_FRAME::BlockDeleteSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    LIB_ITEMS_CONTAINER::ITERATOR item = aPart->GetDrawItems().begin();
+
+    // We *do not* remove the 2 mandatory fields: reference and value
+    // so skip them (do not remove) if they are flagged selected.
+    // Skip also not visible items.
+    // But I think fields must not be deleted by a block delete command or other global command
+    // because they are not really graphic items
+    while( item != aPart->GetDrawItems().end() )
+    {
+        if( item->Type() == LIB_FIELD_T )
+        {
+            item->ClearFlags( SELECTED );
+        }
+
+        if( !item->IsSelected() )
+            ++item;
+        else
+            item = aPart->GetDrawItems().erase( item );
+    }
+
+    // view update
+
+}
+
+
+void LIB_EDIT_FRAME::BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    std::vector< LIB_ITEM* > tmp;
+
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        // We *do not* copy fields because they are unique for the whole component
+        // so skip them (do not duplicate) if they are flagged selected.
+        if( item.Type() == LIB_FIELD_T )
+            item.ClearFlags( SELECTED );
+
+        if( !item.IsSelected() )
+            continue;
+
+        item.ClearFlags( SELECTED );
+        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+        newItem->SetFlags( SELECTED );
+
+        // When push_back elements in buffer, a memory reallocation can happen
+        // and will break pointers.
+        // So, push_back later.
+        tmp.push_back( newItem );
+    }
+
+    for( auto item : tmp )
+        aPart->GetDrawItems().push_back( item );
+
+    BlockMoveSelectedItems( aOffset, aPart, aBlock );
+}
+
+
+void LIB_EDIT_FRAME::BlockMirrorSelectedItemsH( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        if( !item.IsSelected() )
+            continue;
+
+        item.MirrorHorizontal( aCenter );
+        item.ClearFlags();
+    }
+}
+
+
+void LIB_EDIT_FRAME::BlockMirrorSelectedItemsV( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        if( !item.IsSelected() )
+            continue;
+
+        item.MirrorVertical( aCenter );
+        item.ClearFlags();
+    }
+}
+
+
+void LIB_EDIT_FRAME::BlockRotateSelectedItems( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
+{
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    {
+        if( !item.IsSelected() )
+            continue;
+
+        item.Rotate( aCenter );
+        item.ClearFlags();
+    }
+}
 
 
 int LIB_EDIT_FRAME::BlockCommand( EDA_KEY key )
@@ -98,6 +256,19 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
     wxPoint pt;
 
+    auto panel =static_cast<SCH_DRAW_PANEL*>(m_canvas);
+    auto view = panel->GetView();
+    auto area = view->GetSelectionArea();
+
+    auto start = area->GetOrigin();
+    auto end = area->GetEnd();
+
+    block->SetOrigin( wxPoint( start.x, start.y ) );
+    block->SetEnd( wxPoint( end.x, end.y ) );
+
+    view->ShowSelectionArea( false );
+    view->ClearHiddenFlags();
+
     if( block->GetCount() )
     {
         BLOCK_STATE_T state     = block->GetState();
@@ -121,10 +292,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     case BLOCK_DRAG_ITEM:
     case BLOCK_MOVE:        // Move
     case BLOCK_DUPLICATE:   // Duplicate
+
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( *block,
-                                                  m_unit, m_convert,
-                                                  m_syncPinEdit );
+            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+        
         if( ItemCount )
         {
             nextCmd = true;
@@ -150,9 +321,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     case BLOCK_COPY:    // Save a copy of items in the clipboard buffer
     case BLOCK_CUT:
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( *block, m_unit, m_convert,
-                                                  m_syncPinEdit );
-
+            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+        
         if( ItemCount )
         {
             copySelectedItems();
@@ -160,13 +330,13 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
             if( cmd == BLOCK_COPY )
             {
-                GetCurPart()->ClearSelectedItems();
+                BlockClearSelectedItems( GetCurPart(), block );
                 block->ClearItemsList();
             }
             else if( cmd == BLOCK_CUT )
             {
                 SaveCopyInUndoList( GetCurPart() );
-                GetCurPart()->DeleteSelectedItems();
+                BlockDeleteSelectedItems( GetCurPart(), block );
                 OnModify();
             }
         }
@@ -174,15 +344,14 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
     case BLOCK_DELETE:     // Delete
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( *block,
-                                                  m_unit, m_convert,
-                                                  m_syncPinEdit );
+            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+        
         if( ItemCount )
             SaveCopyInUndoList( GetCurPart() );
 
         if( GetCurPart() )
         {
-            GetCurPart()->DeleteSelectedItems();
+            BlockDeleteSelectedItems( GetCurPart(), block );
             OnModify();
         }
         break;
@@ -198,9 +367,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( *block,
-                                                  m_unit, m_convert,
-                                                  m_syncPinEdit );
+            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+        
         if( ItemCount )
             SaveCopyInUndoList( GetCurPart() );
 
@@ -214,11 +382,11 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             int block_cmd = block->GetCommand();
 
             if( block_cmd == BLOCK_MIRROR_Y)
-                GetCurPart()->MirrorSelectedItemsH( pt );
+                BlockMirrorSelectedItemsH( pt, GetCurPart(), block );
             else if( block_cmd == BLOCK_MIRROR_X)
-                GetCurPart()->MirrorSelectedItemsV( pt );
+                BlockMirrorSelectedItemsV( pt, GetCurPart(), block );
             else if( block_cmd == BLOCK_ROTATE )
-                GetCurPart()->RotateSelectedItems( pt );
+                BlockRotateSelectedItems( pt, GetCurPart(), block );
         }
 
         break;
@@ -241,8 +409,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     if( !nextCmd )
     {
         if( block->GetCommand() != BLOCK_SELECT_ITEMS_ONLY &&  GetCurPart() )
-            GetCurPart()->ClearSelectedItems();
-
+            BlockClearSelectedItems( GetCurPart(), block );
+                
         block->SetState( STATE_NO_BLOCK );
         block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );
@@ -250,6 +418,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                                    false );
         m_canvas->Refresh( true );
     }
+
+    view->ShowPreview( false );
+    view->ShowSelectionArea( false );
+    view->ClearHiddenFlags();
 
     return nextCmd;
 }
@@ -282,10 +454,10 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
-        pt.y *= -1;
+        //pt.y *= -1;
 
         if( GetCurPart() )
-            GetCurPart()->MoveSelectedItems( pt );
+            BlockMoveSelectedItems( pt, GetCurPart(), block );
 
         m_canvas->Refresh( true );
         break;
@@ -297,10 +469,10 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
-        pt.y = -pt.y;
+        //pt.y = -pt.y;
 
         if( GetCurPart() )
-            GetCurPart()->CopySelectedItems( pt );
+            BlockCopySelectedItems( pt, GetCurPart(), block );
 
         break;
 
@@ -311,7 +483,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
-        pt.y = -pt.y;
+        //pt.y = -pt.y;
 
         pasteClipboard( pt );
         break;
@@ -324,18 +496,18 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
         pt = block->Centre();
         pt = GetNearestGridPosition( pt );
-        pt.y = -pt.y;
+        //pt.y = -pt.y;
 
         if( GetCurPart() )
         {
             int block_cmd = block->GetCommand();
 
             if( block_cmd == BLOCK_MIRROR_Y)
-                GetCurPart()->MirrorSelectedItemsH( pt );
+                 BlockMirrorSelectedItemsH( pt, GetCurPart(), block );
             else if( block_cmd == BLOCK_MIRROR_X)
-                GetCurPart()->MirrorSelectedItemsV( pt );
+                 BlockMirrorSelectedItemsV( pt, GetCurPart(), block );
             else if( block_cmd == BLOCK_ROTATE )
-                GetCurPart()->RotateSelectedItems( pt );
+                 BlockRotateSelectedItems( pt, GetCurPart(), block );
         }
 
         break;
@@ -354,6 +526,10 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     block->SetCommand( BLOCK_IDLE );
     GetScreen()->SetCurItem( NULL );
     m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
+    
+    GetCanvas()->GetView()->ClearPreview();
+    GetCanvas()->GetView()->ClearHiddenFlags();
+
     m_canvas->Refresh( true );
 }
 
@@ -418,7 +594,7 @@ void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
         part->AddDrawItem( item );
     }
 
-    GetCurPart()->MoveSelectedItems( aOffset );
+    BlockMoveSelectedItems( aOffset, GetCurPart(), &GetScreen()->m_BlockLocate );
     OnModify();
 }
 
@@ -430,6 +606,10 @@ void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
 void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                               bool aErase )
 {
+    auto panel = static_cast<SCH_DRAW_PANEL*>(aPanel);
+    auto view = panel->GetView();
+    auto preview = view->GetPreview();
+
     BASE_SCREEN* screen = aPanel->GetScreen();
     BLOCK_SELECTOR* block = &screen->m_BlockLocate;
 
@@ -443,34 +623,28 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     int unit = parent->GetUnit();
     int convert = parent->GetConvert();
+    auto cp =  parent->GetCrossHairPosition( true );
+    auto lcp = block->GetLastCursorPosition();
 
-    auto opts = PART_DRAW_OPTIONS::Default();
-    opts.draw_mode = g_XorMode;
-    opts.only_selected = true;
-
-    if( aErase )
-    {
-        block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
-        component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
-
-        for( unsigned ii = 0; ii < block->GetCount(); ii++ )
-        {
-            LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
-            libItem->Draw( aPanel, aDC, block->GetMoveVector(), g_GhostColor, g_XorMode, nullptr, opts.transform );
-        }
-    }
-
-    // Repaint new view
-    block->SetMoveVector( parent->GetCrossHairPosition() - block->GetLastCursorPosition() );
-
-    GRSetDrawMode( aDC, g_XorMode );
-    block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
+    printf("cp %d %d\n", cp.x, cp.y);
+    printf("lcp %d %d\n", lcp.x, lcp.y);
+    
+    block->SetMoveVector( cp - lcp );
+    
+    preview->Clear();
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
         LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
-        libItem->Draw( aPanel, aDC, block->GetMoveVector(), g_GhostColor, g_XorMode, nullptr, opts.transform );
+        LIB_ITEM* copy = static_cast<LIB_ITEM*>( libItem->Clone() );
+//        if( copy->Type() != LIB_PIN_T )
+         copy->Move( copy->GetPosition() + block->GetMoveVector() );
+
+        preview->Add( copy );
+        view->Hide( libItem );
     }
 
-    component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
+    view->SetVisible( preview, true );
+    view->Hide( preview, false );
+    view->Update( preview );
 }

@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <id.h>
 #include <bitmaps.h>
@@ -45,6 +45,7 @@
 #include <netlist_object.h>
 #include <sch_sheet_path.h>
 
+#include <view/view.h>
 
 class HIERARCHY_NAVIG_DLG;
 
@@ -307,5 +308,5 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     // mainly when sheet size has changed
     // This second refresh clears artefacts because at this point,
     // all parameters are now updated
-    m_canvas->Refresh();
+    SyncView();
 }

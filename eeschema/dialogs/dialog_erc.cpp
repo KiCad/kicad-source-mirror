@@ -29,7 +29,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pgm_base.h>

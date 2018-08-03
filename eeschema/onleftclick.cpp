@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <kiway.h>
 #include <eeschema_id.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <sim/sim_plot_frame.h>
@@ -50,6 +50,7 @@
 #include <netlist_object.h>
 #include <class_library.h>      // for class SCHLIB_FILTER to filter power parts
 
+#include <sch_view.h>
 
 // TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want
 // to refactor too much right now to not get in the way with other code changes.
@@ -61,6 +62,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     SCH_ITEM*   item = GetScreen()->GetCurItem();
     wxPoint     gridPosition = GetGridPosition( aPosition );
+    printf("mousep %d %d gridp %d %d\n", aPosition.x, aPosition.y, gridPosition.x, gridPosition.y );
+
 
     if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->GetFlags() ) )
     {
@@ -85,6 +88,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_BITMAP_T:
             case SCH_NO_CONNECT_T:
                 addCurrentItemToList();
+                GetCanvas()->GetView()->ClearPreview();
                 return;
 
             case SCH_LINE_T:    // May already be drawing segment.

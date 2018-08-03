@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
@@ -386,7 +386,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     EDA_RECT oldClipBox;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
-    EDA_DRAW_PANEL* panel = m_parent->GetCanvas();
+    auto panel = m_parent->GetCanvas();
 
     wxBusyCursor dummy;
 

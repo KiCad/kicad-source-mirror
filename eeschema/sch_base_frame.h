@@ -29,7 +29,7 @@
 #include <draw_frame.h>
 
 #include <sch_screen.h>
-#include "template_fieldnames.h"
+#include <sch_draw_panel.h>
 
 class PAGE_INFO;
 class TITLE_BLOCK;
@@ -41,7 +41,7 @@ class PART_LIB;
 class SCHLIB_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
-
+class SCH_DRAW_PANEL;
 
 /**
  * Load symbol from symbol library table.
@@ -78,12 +78,10 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
-    TEMPLATES m_templateFieldNames;
-
-    wxPoint   m_repeatStep;          ///< the increment value of the position of an item
-                                     ///< when it is repeated
-    int       m_repeatDeltaLabel;    ///< the increment value of labels like bus members
-                                     ///< when they are repeated
+    wxPoint  m_repeatStep;          ///< the increment value of the position of an item
+                                    ///< when it is repeated
+    int      m_repeatDeltaLabel;    ///< the increment value of labels like bus members
+                                    ///< when they are repeated
 
 
 public:
@@ -95,6 +93,7 @@ public:
 
     virtual ~SCH_BASE_FRAME();
 
+    SCH_DRAW_PANEL *GetCanvas() const override;
     SCH_SCREEN* GetScreen() const override;
 
     /**
@@ -209,26 +208,12 @@ public:
 
     void OnConfigurePaths( wxCommandEvent& aEvent );
 
-    /**
-     * Return a template field names list for read only access.
-     */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames() const
-    {
-        return m_templateFieldNames.GetTemplateFieldNames();
-    }
-
-    /**
-     * Search for \a aName in the the template field name list.
-     *
-     * @param aName A wxString object containing the field name to search for.
-     * @return the template fieldname if found; NULL otherwise.
-     */
-    const TEMPLATE_FIELDNAME* GetTemplateFieldName( const wxString& aName ) const
-    {
-        return m_templateFieldNames.GetFieldName( aName );
-    }
-
     virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
+
+    /**
+     * Allows Eeschema to install the symbol library tables into the edit libraries dialog.
+     */
+    void InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog ) override;
 
     /**
      * Load symbol from symbol library table.
@@ -240,7 +225,7 @@ public:
      * @return The symbol found in the library or NULL if the symbol was not found.
      */
     LIB_ALIAS* GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib = false,
-                            bool aShowError = false );
+                            bool aShowErrorMsg = false );
 
     LIB_PART* GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib = false,
                           bool aShowErrorMsg = false );
@@ -263,6 +248,23 @@ public:
             const SCHLIB_FILTER* aFilter,
             const LIB_ID& aPreselectedLibid,
             int aUnit, int aConvert );
+
+
+    virtual void Zoom_Automatique( bool aWarpPointer ) override;
+
+                                       /* Set the zoom level to show the area Rect */
+    virtual void Window_Zoom( EDA_RECT& Rect ) override;
+
+    virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer ) override;
+
+    virtual void RedrawScreen2( const wxPoint& posBefore ) override;
+
+    void AddToScreen( SCH_ITEM* aItem );
+    void AddToScreen( DLIST<SCH_ITEM>& aItems );
+    void RemoveFromScreen( SCH_ITEM* aItem );
+
+    void SyncView();
+
 
 protected:
 
@@ -319,6 +321,10 @@ protected:
      * @return True when all requested actions succeeded.
      */
     bool saveSymbolLibTables( bool aGlobal, bool aProject );
+
+    virtual bool HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
+                                   int aExplicitCommand = 0 ) override;
+
 };
 
 #endif // SCH_BASE_FRAME_H_

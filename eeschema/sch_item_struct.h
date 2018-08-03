@@ -42,7 +42,7 @@ class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
-
+class EDA_DRAW_PANEL;
 
 enum DANGLING_END_T {
     UNKNOWN = 0,

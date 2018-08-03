@@ -29,7 +29,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <base_units.h>
 #include <msgpanel.h>
@@ -43,6 +43,7 @@
 #include <lib_rectangle.h>
 #include <lib_text.h>
 
+#include <sch_view.h>
 #include <dialogs/dialog_lib_edit_draw_item.h>
 
 
@@ -102,12 +103,13 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     DrawItem->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
     m_canvas->Refresh();
+    RebuildView();
 }
 
 
-static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
 {
-    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) Panel->GetParent();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
     LIB_ITEM* item = parent->GetDrawItem();
 
     if( item == NULL )
@@ -124,7 +126,13 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
         parent->RestoreComponent();
 
     parent->SetDrawItem( NULL );
-    Panel->Refresh();
+
+    auto view = static_cast<SCH_DRAW_PANEL*>(aPanel)->GetView();
+    view->ClearPreview();
+    view->ShowPreview( false );
+    view->ClearHiddenFlags();
+    printf("abort\n");
+    parent->RebuildView();
 }
 
 
@@ -138,6 +146,9 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
     // This is normal when adding new items to the current symbol
     ClearTempCopyComponent();
 
+    auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
+    view->ShowPreview( true );
+    
     switch( GetToolId() )
     {
     case ID_LIBEDIT_BODY_ARC_BUTT:
@@ -227,13 +238,13 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 
     wxPoint pos = GetCrossHairPosition( true );
 
-    if( GetDrawItem()->ContinueEdit( pos ) )
-    {
-        GetDrawItem()->Draw( m_canvas, DC, pos, COLOR4D::UNSPECIFIED, g_XorMode, NULL,
-                          DefaultTransform );
-        return;
-    }
+    auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
+    view->ShowPreview( true );
+    
 
+    if( GetDrawItem()->ContinueEdit( pos ) )
+        return;
+    
     EndDrawGraphicItem( DC );
 }
 
@@ -251,22 +262,21 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     if( item == NULL )
         return;
 
-    item->SetEraseLastDrawItem( aErase );
+    printf("CalcDraw!\n");
 
-    // if item is the reference field, we must add the current unit id
-    if( item->Type() == LIB_FIELD_T )
-    {
-        int         unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
-        wxString    text = ((LIB_FIELD*)item)->GetFullText( unit );
+    auto view = static_cast<SCH_DRAW_PANEL*>(aPanel)->GetView();
 
-        item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ),
-                    COLOR4D::UNSPECIFIED, g_XorMode, &text,
-                    DefaultTransform );
-    }
-    else
-        item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ),
-                    COLOR4D::UNSPECIFIED, g_XorMode, NULL,
-                    DefaultTransform );
+    auto p = aPanel->GetParent()->GetCrossHairPosition( true );
+
+    item->CalcEdit( p );
+    
+    printf("cp: %d %d %d %d\n", item->GetPosition().x, item->GetPosition().y, p.x, p.y );
+    
+    view->ClearPreview();
+
+    auto copy = static_cast<LIB_ITEM*>( item->Clone() );
+    printf("cp: %d %d\n", copy->GetPosition().x, copy->GetPosition().y );
+    view->AddToPreview( copy );
 }
 
 
@@ -276,6 +286,8 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
         return;
 
     SetCursor( wxCURSOR_HAND );
+
+    GetGalCanvas()->GetView()->Hide ( aItem );
 
     TempCopyComponent();
 
@@ -296,6 +308,8 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
     if( aItem == NULL )
         return;
 
+    printf("startmdifyraw\n");
+
     TempCopyComponent();
     aItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
@@ -312,9 +326,16 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( item == NULL )
         return;
 
-    item->SetEraseLastDrawItem( aErase );
-    item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ),
-                COLOR4D::UNSPECIFIED, g_XorMode, NULL, DefaultTransform );
+    auto view = static_cast<SCH_DRAW_PANEL*>(aPanel)->GetView();
+
+    auto cp = aPanel->GetParent()->GetCrossHairPosition( true );
+
+    printf("SymbolDisplayDraw\n");
+
+    item->CalcEdit( cp );
+
+    view->ClearPreview();
+    view->AddToPreview( item, false );
 }
 
 
@@ -351,6 +372,14 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
         OnModify();
 
         m_canvas->SetMouseCapture( NULL, NULL );
-        m_canvas->Refresh();
+        
+        auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
+
+        printf("end: pos %d %d\n", item->GetPosition().x, item->GetPosition().y );
+
+        view->ClearHiddenFlags();
+        view->ClearPreview();
+        RebuildView();
+
     }
 }

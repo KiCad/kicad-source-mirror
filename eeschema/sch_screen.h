@@ -116,6 +116,8 @@ public:
 
     ~SCH_SCREEN();
 
+    DLIST< SCH_ITEM > & GetDrawList() { return m_drawList; }
+
     virtual wxString GetClass() const override
     {
         return wxT( "SCH_SCREEN" );
@@ -163,6 +165,7 @@ public:
         --m_modification_sync;
     }
 
+    virtual bool SetZoom( double iu_per_du ) override;
     /**
      * Copy the contents of \a aScreen into this #SCH_SCREEN object.
      *

@@ -30,7 +30,7 @@
 #include <confirm.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <sch_screen.h>
 #include <msgpanel.h>
 

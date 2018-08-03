@@ -24,7 +24,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <symbol_lib_table.h>
 #include <general.h>

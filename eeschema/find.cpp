@@ -35,7 +35,7 @@
  */
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
@@ -213,11 +213,12 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         }
         else
         {
-            INSTALL_UNBUFFERED_DC( dc, m_canvas );
+            /*INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
             m_canvas->CrossHairOff( &dc );
             SetCrossHairPosition( pos );
-            m_canvas->CrossHairOn( &dc );
+            m_canvas->CrossHairOn( &dc );*/
+            // fixme-gal
         }
     }
 

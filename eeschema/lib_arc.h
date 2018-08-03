@@ -76,7 +76,7 @@ class LIB_ARC : public LIB_ITEM
      *
      * @param aPosition - The current mouse position in drawing coordinates.
      */
-    void calcEdit( const wxPoint& aPosition ) override;
+    void CalcEdit( const wxPoint& aPosition ) override;
 
 
 public:

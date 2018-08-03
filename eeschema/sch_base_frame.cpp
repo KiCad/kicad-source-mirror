@@ -24,8 +24,12 @@
 
 #include <base_units.h>
 #include <kiway.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
+#include <sch_view.h>
+#include <sch_painter.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <confirm.h>
+
 #include <class_library.h>
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
@@ -329,4 +333,223 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
     }
 
     return success;
+}
+
+void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
+{
+    auto galCanvas = GetGalCanvas();
+    auto view = GetGalCanvas()->GetView();
+
+    BOX2I bBox = GetDocumentExtents();
+
+    VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
+    VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
+
+    if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
+    {
+        bBox = galCanvas->GetDefaultViewBBox();
+    }
+
+    VECTOR2D vsize = bBox.GetSize();
+    double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+                                                fabs( vsize.y / screenSize.y ) );
+
+    // Reserve a 10% margin around component bounding box.
+    double margin_scale_factor = 1.1;
+
+    // Leave 20% for library editors & viewers
+    if( IsType( FRAME_PCB_MODULE_VIEWER ) || IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
+            || IsType( FRAME_SCH_VIEWER ) || IsType( FRAME_SCH_VIEWER_MODAL )
+            || IsType( FRAME_SCH_LIB_EDITOR ) || IsType( FRAME_PCB_MODULE_EDITOR ) )
+    {
+        margin_scale_factor = 1.2;
+    }
+
+    view->SetScale( scale / margin_scale_factor );
+    view->SetCenter( bBox.Centre() );
+
+    // Take scrollbars into account
+    VECTOR2D worldScrollbarSize = view->ToWorld( scrollbarSize, false );
+    view->SetCenter( view->GetCenter() + worldScrollbarSize / 2.0 );
+    galCanvas->Refresh();
+}
+
+                               /* Set the zoom level to show the area Rect */
+void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& Rect )
+{
+    auto view = GetGalCanvas()->GetView();
+    BOX2I selectionBox ( Rect.GetPosition(), Rect.GetSize() );
+
+    VECTOR2D screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
+
+    if( selectionBox.GetWidth() == 0 || selectionBox.GetHeight() == 0 )
+        return;
+
+    VECTOR2D vsize = selectionBox.GetSize();
+    double scale;
+    double ratio = std::max( fabs( vsize.x / screenSize.x ),
+                             fabs( vsize.y / screenSize.y ) );
+
+    scale = view->GetScale() / ratio;
+
+    view->SetScale( scale );
+    view->SetCenter( selectionBox.Centre() );
+    GetGalCanvas()->Refresh();
+}
+
+
+void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
+{
+    GetGalCanvas()->Refresh();
+}
+
+
+void SCH_BASE_FRAME::RedrawScreen2( const wxPoint& posBefore )
+{
+    GetGalCanvas()->Refresh();
+}
+
+SCH_DRAW_PANEL *SCH_BASE_FRAME::GetCanvas() const
+{
+    return static_cast<SCH_DRAW_PANEL*>( GetGalCanvas() );
+}
+
+
+bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
+       int aExplicitCommand )
+{
+    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
+
+    if( ( block->GetCommand() != BLOCK_IDLE ) || ( block->GetState() != STATE_NO_BLOCK ) )
+        return false;
+
+    if( aExplicitCommand == 0 )
+        block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
+    else
+        block->SetCommand( (BLOCK_COMMAND_T) aExplicitCommand );
+
+    if( block->GetCommand() == 0 )
+        return false;
+
+    switch( block->GetCommand() )
+    {
+    case BLOCK_IDLE:
+        break;
+
+    case BLOCK_MOVE:                // Move
+    case BLOCK_DRAG:                // Drag (block defined)
+    case BLOCK_DRAG_ITEM:           // Drag from a drag item command
+    case BLOCK_DUPLICATE:           // Duplicate
+    case BLOCK_DUPLICATE_AND_INCREMENT: // Duplicate and increment relevant references
+    case BLOCK_DELETE:              // Delete
+    case BLOCK_COPY:                // Copy
+    case BLOCK_ROTATE:              // Rotate 90 deg
+    case BLOCK_FLIP:                // Flip
+    case BLOCK_ZOOM:                // Window Zoom
+    case BLOCK_MIRROR_X:
+    case BLOCK_MIRROR_Y:            // mirror
+    case BLOCK_PRESELECT_MOVE:      // Move with preselection list
+        block->InitData( m_canvas, aPosition );
+        GetCanvas()->GetView()->ShowSelectionArea();
+        break;
+
+    case BLOCK_PASTE:
+        block->InitData( m_canvas, aPosition );
+        GetCanvas()->GetView()->ShowSelectionArea();
+        block->SetLastCursorPosition( wxPoint( 0, 0 ) );
+        InitBlockPasteInfos();
+
+        if( block->GetCount() == 0 )      // No data to paste
+        {
+            DisplayError( this, wxT( "No block to paste" ), 20 );
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+            m_canvas->SetMouseCaptureCallback( NULL );
+            block->SetState( STATE_NO_BLOCK );
+            block->SetMessageBlock( this );
+            return true;
+        }
+
+        if( !m_canvas->IsMouseCaptured() )
+        {
+            block->ClearItemsList();
+            DisplayError( this,
+                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
+            block->SetState( STATE_NO_BLOCK );
+            block->SetMessageBlock( this );
+            return true;
+        }
+
+        block->SetState( STATE_BLOCK_MOVE );
+        m_canvas->CallMouseCapture( aDC, aPosition, false );
+        break;
+
+    default:
+        {
+            wxString msg;
+            msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
+            block->GetCommand();
+            DisplayError( this, msg );
+        }
+        break;
+    }
+
+    block->SetMessageBlock( this );
+    return true;
+}
+
+void EDA_DRAW_FRAME::createCanvas()
+{
+    KIGFX::GAL_DISPLAY_OPTIONS options;
+
+    m_canvas = new SCH_DRAW_PANEL( this, -1, wxPoint( 0,
+                        0 ), m_FrameSize, options, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+
+
+    m_useSingleCanvasPane = true;
+
+    SetGalCanvas( static_cast<SCH_DRAW_PANEL*> (m_canvas) );
+    UseGalCanvas( true );
+}
+
+
+void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem )
+{
+        GetScreen()->Append( aItem );
+        GetCanvas()->GetView()->Add( aItem );
+}
+
+void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems )
+{
+    std::vector<SCH_ITEM*> tmp;
+        SCH_ITEM* itemList = aItems.begin();
+
+        while( itemList )
+        {
+            itemList->SetList( nullptr );
+            GetCanvas()->GetView()->Add( itemList );
+            itemList = itemList->Next();
+        }
+
+        GetScreen()->Append( aItems );
+
+}
+
+void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem )
+{
+    GetCanvas()->GetView()->Remove( aItem );
+    GetScreen()->Remove( aItem );
+}
+
+void SCH_BASE_FRAME::SyncView()
+{
+    auto screen = GetScreen();
+    auto gal = GetGalCanvas()->GetGAL();
+
+    auto gs = screen->GetGridSize();
+
+    gal->SetGridSize( VECTOR2D( gs.x, gs.y ));
+
+    printf("SyncView: grid %d %d\n", (int)gs.x, (int)gs.y );
+
+    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }

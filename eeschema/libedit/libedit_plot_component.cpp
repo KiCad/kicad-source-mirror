@@ -30,7 +30,7 @@
 
 #include <gr_basic.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <eeschema_id.h>
@@ -119,8 +119,11 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg )
 {
-    wxSize     image_size = m_canvas->GetClientSize();
+    wxSize     image_size;
+    //fixme-gal do it properly
 
+// = m_canvas->GetClientSize();
+#if 0
     wxClientDC dc( m_canvas );
     wxBitmap   bitmap( image_size.x, image_size.y );
     wxMemoryDC memdc;
@@ -139,6 +142,7 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
     }
 
     image.Destroy();
+    #endif
 }
 
 
@@ -210,5 +214,3 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
 
     part->Draw( m_canvas, aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
 }
-
-

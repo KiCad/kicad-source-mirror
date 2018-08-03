@@ -489,6 +489,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    void CalcEdit( const wxPoint& aPosition ) override;
+
 private:
     /**
      * Build the pin basic info to display in message panel.

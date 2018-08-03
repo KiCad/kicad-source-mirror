@@ -36,7 +36,7 @@
 #include <eeschema_id.h>
 #include <pgm_base.h>
 #include <kiway.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <sch_item_struct.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
@@ -535,6 +535,8 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      * their SCH_SCREEN::Draw() draws nothing
      */
     std::vector< SCH_ITEM* > junctions;
+
+    printf("DrawScreen\n");
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
@@ -1603,6 +1605,12 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
     return cnt;
 }
 
+
+bool SCH_SCREEN::SetZoom( double iu_per_du )
+{
+    printf("SetZoom!\n");
+    return true;
+}
 
 
 void SCH_SCREENS::BuildClientSheetPathList()

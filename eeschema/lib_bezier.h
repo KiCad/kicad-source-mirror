@@ -88,7 +88,7 @@ public:
 
     void Move( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const override { return m_PolyPoints[0]; }
+    wxPoint GetPosition() const override; 
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 

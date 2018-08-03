@@ -33,7 +33,7 @@
 #include <pgm_base.h>
 #include <kiway.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <kicad_device_context.h>
@@ -286,7 +286,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
     component->GetMsgPanelInfo( m_UserUnits, items );
 
     SetMsgPanel( items );
-    component->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     component->SetFlags( IS_NEW );
 
     if( m_autoplaceFields )
@@ -313,11 +312,9 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
     if( item->GetFlags() == 0 )
         SetUndoItem( item );
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
     component->SetOrientation( aOrientation );
 
-    m_canvas->CrossHairOn( &dc );
+    m_canvas->CrossHairOn( );
 
     if( item->GetFlags() == 0 )
     {
@@ -340,7 +337,8 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     wxCHECK_RET( item != NULL && item->Type() == SCH_COMPONENT_T,
                  wxT( "Cannot select unit of invalid schematic item." ) );
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+//fixme-gal
+    //INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     m_canvas->MoveCursorToCrossHair();
 
@@ -370,10 +368,10 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     if( !flags )    // No command in progress: save in undo list
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    if( flags )
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-    else
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
+    //if( flags )
+        //component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    //else
+        //component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     /* Update the unit number. */
     component->SetUnitSelection( m_CurrentSheet, unit );

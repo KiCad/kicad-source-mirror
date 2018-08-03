@@ -23,7 +23,7 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
@@ -96,6 +96,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();
+    RebuildView();
 }
 
 
@@ -143,4 +144,5 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();
+    RebuildView();
 }

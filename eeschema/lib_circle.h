@@ -42,7 +42,7 @@ class LIB_CIRCLE : public LIB_ITEM
                       COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform ) override;
 
-    void calcEdit( const wxPoint& aPosition ) override;
+    void CalcEdit( const wxPoint& aPosition ) override;
 
 public:
     LIB_CIRCLE( LIB_PART * aParent );

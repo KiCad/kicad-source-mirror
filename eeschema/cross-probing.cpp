@@ -33,7 +33,7 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 
 #include <sch_edit_frame.h>
 #include <general.h>

@@ -29,7 +29,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <base_units.h>
@@ -525,7 +525,6 @@ void LIB_ARC::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        SetEraseLastDrawItem();
     }
     else
     {
@@ -556,7 +555,6 @@ void LIB_ARC::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
         }
 
         m_editState = 0;
-        SetEraseLastDrawItem();
     }
 
     m_Flags = aEditMode;
@@ -574,7 +572,6 @@ bool LIB_ARC::ContinueEdit( const wxPoint aPosition )
         {
             m_ArcEnd = aPosition;
             m_editState = 2;
-            SetEraseLastDrawItem( false );
             return true;              // Need third position to calculate center point.
         }
     }
@@ -588,14 +585,13 @@ void LIB_ARC::EndEdit( const wxPoint& aPosition, bool aAbort )
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_ARC is not being edited." ) );
 
-    SetEraseLastDrawItem( false );
     m_lastEditState = 0;
     m_editState = 0;
     m_Flags = 0;
 }
 
 
-void LIB_ARC::calcEdit( const wxPoint& aPosition )
+void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 {
     if( m_Flags == IS_RESIZED )
     {
@@ -707,7 +703,6 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
         m_Pos.y = cY;
         CalcRadiusAngles();
 
-        SetEraseLastDrawItem();
     }
     else if( m_Flags == IS_MOVED )
     {

@@ -34,7 +34,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <trigo.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 #include <draw_graphic_text.h>
 #include <plotter.h>
 #include <sch_edit_frame.h>
@@ -2000,3 +2000,17 @@ void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
 }
 
 #endif
+
+void LIB_PIN::CalcEdit( const wxPoint& aPosition )
+{
+    printf("m_Flags %x\n", m_Flags );
+    if( m_Flags == IS_NEW )
+    {
+        SetPosition( aPosition );
+    }
+    else if( m_Flags == IS_MOVED )
+    {
+        printf("MOVEPIN\n");
+        Move( aPosition );
+    }
+}

@@ -27,7 +27,7 @@
 
 #include <fctsys.h>
 #include <draw_frame.h>
-#include <class_drawpanel.h>
+#include <sch_draw_panel.h>
 
 #include <general.h>
 
