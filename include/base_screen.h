@@ -346,7 +346,7 @@ public:
      * @param iu_per_du is the number of internal units (world units) per
      *   device units (pixels typically).
      */
-    bool SetZoom( double iu_per_du );
+    virtual bool SetZoom( double iu_per_du );
 
     bool SetNextZoom();
     bool SetPreviousZoom();
