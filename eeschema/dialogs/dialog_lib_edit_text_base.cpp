@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,7 +53,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
 	m_visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_visible, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer9->Add( m_visible, 0, wxALIGN_LEFT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bPropertiesSizer->Add( bSizer9, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -163,7 +163,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bBottomtBoxSizer->Add( m_CommonUnit, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottomtBoxSizer->Add( m_CommonConvert, 0, wxALIGN_RIGHT|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bBottomtBoxSizer->Add( m_CommonConvert, 0, wxLEFT|wxRIGHT, 5 );
 	
 	
 	bPropertiesSizer->Add( bBottomtBoxSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
