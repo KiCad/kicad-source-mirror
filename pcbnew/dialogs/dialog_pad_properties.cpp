@@ -844,7 +844,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_trapDelta.Enable( false );
         m_trapAxisLabel->Enable( false );
         m_trapAxisCtrl->Enable( false );
-        m_holeY.Enable( false );
+        m_sizeY.Enable( false );
         m_offsetX.Enable( false );
         m_offsetY.Enable( false );
         break;
@@ -853,7 +853,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_trapDelta.Enable( false );
         m_trapAxisLabel->Enable( false );
         m_trapAxisCtrl->Enable( false );
-        m_holeY.Enable( true );
+        m_sizeY.Enable( true );
         m_offsetX.Enable( true );
         m_offsetY.Enable( true );
         break;
@@ -862,7 +862,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_trapDelta.Enable( false );
         m_trapAxisLabel->Enable( false );
         m_trapAxisCtrl->Enable( false );
-        m_holeY.Enable( true );
+        m_sizeY.Enable( true );
         m_offsetX.Enable( true );
         m_offsetY.Enable( true );
         break;
@@ -871,7 +871,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_trapDelta.Enable( true );
         m_trapAxisLabel->Enable( true );
         m_trapAxisCtrl->Enable( true );
-        m_holeY.Enable( true );
+        m_sizeY.Enable( true );
         m_offsetX.Enable( true );
         m_offsetY.Enable( true );
         break;
@@ -880,7 +880,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_trapDelta.Enable( false );
         m_trapAxisLabel->Enable( false );
         m_trapAxisCtrl->Enable( false );
-        m_holeY.Enable( true );
+        m_sizeY.Enable( true );
         m_offsetX.Enable( true );
         m_offsetY.Enable( true );
         // Ensure m_tcCornerSizeRatio contains the right value:
@@ -894,7 +894,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_trapDelta.Enable( false );
         m_trapAxisLabel->Enable( false );
         m_trapAxisCtrl->Enable( false );
-        m_holeY.Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
+        m_sizeY.Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
         m_offsetX.Enable( false );
         m_offsetY.Enable( false );
         break;
