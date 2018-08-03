@@ -35,6 +35,7 @@ endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
+    ../include/legacy_wx
     ./dialogs
     ./autorouter
     ../3d-viewer
@@ -663,6 +664,29 @@ set( PCBNEW_KIFACE_LIBRARIES
     gal
     lib_dxf
     idf3
+    legacy_wx
+    3d-viewer
+    pcbcommon
+    pnsrouter
+    pcad2kicadpcb
+    common
+    polygon
+    bitmaps
+    gal
+    lib_dxf
+    idf3
+    legacy_wx
+    3d-viewer
+    pcbcommon
+    pnsrouter
+    pcad2kicadpcb
+    common
+    polygon
+    bitmaps
+    gal
+    lib_dxf
+    idf3
+    legacy_wx
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

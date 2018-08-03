@@ -7,6 +7,7 @@ add_definitions(-DGERBVIEW)
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
+    ../include/legacy_wx
     ../pcbnew
     dialogs
     ../3d-viewer
@@ -120,6 +121,7 @@ target_link_libraries( gerbview
     common
     bitmaps
     gal
+    legacy_wx
     ${wxWidgets_LIBRARIES}
     )
 
@@ -145,6 +147,17 @@ target_link_libraries( gerbview_kiface
     polygon
     bitmaps
     gal
+    legacy_wx
+    common
+    polygon
+    bitmaps
+    gal
+    legacy_wx
+    common
+    polygon
+    bitmaps
+    gal
+    legacy_wx
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

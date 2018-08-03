@@ -7,6 +7,7 @@ add_definitions(-DPL_EDITOR)
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
+    ../include/legacy_wx
     dialogs
     ../common/dialogs
     ${INC_AFTER}
@@ -82,6 +83,19 @@ target_link_libraries( pl_editor
     common
     bitmaps
     gal
+    legacy_wx
+    common
+    bitmaps
+    gal
+    legacy_wx
+    common
+    bitmaps
+    gal
+    legacy_wx
+    common
+    bitmaps
+    gal
+    legacy_wx
     ${wxWidgets_LIBRARIES}
     )
 
@@ -102,6 +116,17 @@ target_link_libraries( pl_editor_kiface
     polygon
     bitmaps
     gal
+    legacy_wx
+    common
+    polygon
+    bitmaps
+    gal
+    legacy_wx
+    common
+    polygon
+    bitmaps
+    gal
+    legacy_wx
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )
