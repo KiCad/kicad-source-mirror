@@ -42,9 +42,7 @@
 /* init functions defined by swig */
 
 #if PY_MAJOR_VERSION >= 3
-extern "C" PyObject* init_kicad( void );
-
-extern "C" PyObject* init_pcbnew( void );
+extern "C" PyObject* PyInit__pcbnew( void );
 #else
 extern "C" void init_kicad( void );
 
@@ -120,7 +118,11 @@ static void swigAddBuiltin()
 
 static void swigAddModules()
 {
+#if PY_MAJOR_VERSION >= 3
+    swigAddModule( "_pcbnew", PyInit__pcbnew );
+#else
     swigAddModule( "_pcbnew", init_pcbnew );
+#endif
 
     // finally it seems better to include all in just one module
     // but in case we needed to include any other modules,
