@@ -164,10 +164,6 @@ public:
         m_TextInfo->SetLabel( aWarning );
         m_staticText2->SetLabel( aMessage );
 
-        // Caller must eanble these if desired
-        m_ApplyToAllOpt->Show( false );
-        m_DiscardButton->Show( false );
-
         m_sdbSizer1OK->SetLabel( aOKLabel );
         m_sdbSizer1Cancel->SetLabel( aCancelLabel );
         m_sdbSizer1OK->SetDefault();
@@ -190,10 +186,7 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
                      _( "If you don't save, all your changes will be permanently lost." ),
                      _( "Save" ), _( "Cancel" ) );
 
-    if( aApplyToAll )
-        dlg.m_ApplyToAllOpt->Show( true );
-
-    dlg.m_DiscardButton->Show( true );
+    dlg.m_ApplyToAllOpt->Show( aApplyToAll != nullptr );
 
     int ret = dlg.ShowModal();
 
@@ -210,8 +203,8 @@ int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStri
 {
     DIALOG_EXIT dlg( aParent, aWarning, aMessage, aOKLabel, aCancelLabel );
 
-    if( aApplyToAll )
-        dlg.m_ApplyToAllOpt->Show( true );
+    dlg.m_ApplyToAllOpt->Show( aApplyToAll != nullptr );
+    dlg.m_DiscardButton->Show( false );
 
     int ret = dlg.ShowModal();
 
