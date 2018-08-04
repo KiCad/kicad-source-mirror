@@ -50,6 +50,8 @@
 #include <worksheet.h>
 #include <dialog_page_settings.h>
 
+#define MAX_PAGE_EXAMPLE_SIZE 200
+
 
 // List of page formats.
 // they are prefixed by "_HKI" (already in use for hotkeys) instead of "_",
@@ -79,7 +81,29 @@ static const wxString pageFmts[] =
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 {
-    DIALOG_PAGES_SETTINGS dlg( this );
+    FRAME_T smallSizeFrames[] =
+    {
+        FRAME_PCB, FRAME_PCB_MODULE_EDITOR, FRAME_PCB_MODULE_VIEWER,
+        FRAME_PCB_MODULE_VIEWER_MODAL, FRAME_PCB_FOOTPRINT_WIZARD_MODAL,
+        FRAME_PCB_FOOTPRINT_PREVIEW,
+        FRAME_CVPCB_DISPLAY
+    };
+
+    // Fix the max page size: it is MAX_PAGE_SIZE_EDITORS
+    // or MAX_PAGE_SIZE_PCBNEW for Pcbnew draw frames, due to the small internal
+    // units that do not allow too large draw areas
+    wxSize maxPageSize( MAX_PAGE_SIZE_EDITORS_MILS, MAX_PAGE_SIZE_EDITORS_MILS );
+
+    for( unsigned ii = 0; ii < DIM( smallSizeFrames ); ii++ )
+    {
+        if( IsType( smallSizeFrames[ii] ) )
+        {
+            maxPageSize.x = maxPageSize.y = MAX_PAGE_SIZE_PCBNEW_MILS;
+            break;
+        }
+    }
+
+    DIALOG_PAGES_SETTINGS dlg( this, maxPageSize );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -90,18 +114,19 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 }
 
 
-DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent  ) :
+DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMaxUserSizeMils ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
     m_initialized( false ),
     m_customSizeX( parent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false,
-                   MIN_PAGE_SIZE * IU_PER_MILS, MAX_PAGE_SIZE * IU_PER_MILS ),
+                   MIN_PAGE_SIZE * IU_PER_MILS, aMaxUserSizeMils.x * IU_PER_MILS ),
     m_customSizeY( parent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false,
-                   MIN_PAGE_SIZE * IU_PER_MILS, MAX_PAGE_SIZE * IU_PER_MILS )
+                   MIN_PAGE_SIZE * IU_PER_MILS, aMaxUserSizeMils.y * IU_PER_MILS )
 {
     m_parent   = parent;
     m_screen   = m_parent->GetScreen();
     m_projectPath = Prj().GetProjectPath();
     m_page_bitmap = NULL;
+    m_maxPageSizeMils = aMaxUserSizeMils;
     m_tb = m_parent->GetTitleBlock();
     m_customFmt = false;
     m_localPrjConfigChanged = false;
@@ -568,8 +593,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 {
     int lyWidth, lyHeight;
 
-    wxSize clamped_layout_size( Clamp( MIN_PAGE_SIZE, m_layout_size.x, MAX_PAGE_SIZE ),
-                                Clamp( MIN_PAGE_SIZE, m_layout_size.y, MAX_PAGE_SIZE ) );
+    wxSize clamped_layout_size( Clamp( MIN_PAGE_SIZE, m_layout_size.x, m_maxPageSizeMils.x ),
+                                Clamp( MIN_PAGE_SIZE, m_layout_size.y, m_maxPageSizeMils.y ) );
 
     double lyRatio = clamped_layout_size.x < clamped_layout_size.y ?
                         (double) clamped_layout_size.y / clamped_layout_size.x :

@@ -146,7 +146,8 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_SHEET_SET:
         {
-        DIALOG_PAGES_SETTINGS dlg( this );
+        DIALOG_PAGES_SETTINGS dlg( this, wxSize( MAX_PAGE_SIZE_EDITORS_MILS,
+                                                 MAX_PAGE_SIZE_EDITORS_MILS ) );
         dlg.SetWksFileName( GetCurrFileName() );
         dlg.EnableWksFileNamePicker( false );
         dlg.ShowModal();

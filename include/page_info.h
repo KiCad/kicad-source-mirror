@@ -35,6 +35,11 @@
 #include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
 #include <base_units.h>     // for IU_PER_MILS
 
+/// Min and max page sizes for clamping, in mils.
+#define MIN_PAGE_SIZE   4000
+#define MAX_PAGE_SIZE_PCBNEW_MILS 48000
+#define MAX_PAGE_SIZE_EDITORS_MILS 120000
+
 
 /**
  * Class PAGE_INFO
@@ -217,10 +222,6 @@ private:
 
     wxString    m_type;             ///< paper type: A4, A3, etc.
     wxSize      m_size;             ///< mils
-
-/// Min and max page sizes for clamping.
-#define MIN_PAGE_SIZE   4000
-#define MAX_PAGE_SIZE   48000
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 

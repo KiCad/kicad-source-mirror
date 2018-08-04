@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,7 @@
 #define _DIALOG_PAGES_SETTINGS_H_
 
 #include <widgets/unit_binder.h>
-
 #include <dialog_page_settings_base.h>
-
-#define MAX_PAGE_EXAMPLE_SIZE 200
 
 /*!
  * DIALOG_PAGES_SETTINGS class declaration
@@ -45,6 +42,7 @@ private:
     bool            m_localPrjConfigChanged;    /// the page layuout filename was changed
     wxBitmap*       m_page_bitmap;      /// Temporary bitmap for the page layout example.
     wxSize          m_layout_size;      /// Logical page layout size.
+    wxSize          m_maxPageSizeMils;  /// The max page size allowed by the caller frame
     PAGE_INFO       m_pageInfo;         /// Temporary page info.
     bool            m_customFmt;        /// true if the page selection is custom
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
@@ -54,7 +52,7 @@ private:
     UNIT_BINDER     m_customSizeY;
 
 public:
-    DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );
+    DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMaxUserSizeMils );
     ~DIALOG_PAGES_SETTINGS();
 
     const wxString GetWksFileName()
