@@ -328,6 +328,9 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
     DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle ),
     m_options( aOptions )
 {
+    // silence another compiler warning about m_options not being used
+    if( m_options.includeModules )
+        ;
 }
 
 
