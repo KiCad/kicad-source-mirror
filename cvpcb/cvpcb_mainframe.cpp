@@ -151,8 +151,8 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_PANEINFO horiz;
     horiz.HorizontalToolbarPane();
 
-    EDA_PANEINFO info;
-    info.InfoToolbarPane();
+    EDA_PANEINFO layers;
+    layers.LayersToolbarPane();
 
     if( m_mainToolBar )
         m_auimgr.AddPane( m_mainToolBar,
@@ -160,17 +160,20 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( m_compListBox )
         m_auimgr.AddPane( m_compListBox,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_compListBox" ) ).CentrePane() );
+                          wxAuiPaneInfo( layers ).Name( wxT( "m_compListBox" ) )
+                          .Caption( _( "Symbol : Footprint Assignments" ) ).Center() );
 
     if( m_libListBox)
         m_auimgr.AddPane( m_libListBox,
-                          wxAuiPaneInfo( info ).Name( wxT( "m_libListBox" ) ).
-                          Left().BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
+                          wxAuiPaneInfo( layers ).Name( wxT( "m_libListBox" ) )
+                          .Caption( _( "Footprint Libraries" ) )
+                          .Left().BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
 
     if( m_footprintListBox )
         m_auimgr.AddPane( m_footprintListBox,
-                          wxAuiPaneInfo( info ).Name( wxT( "m_footprintListBox" ) ).
-                          Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
+                          wxAuiPaneInfo( layers ).Name( wxT( "m_footprintListBox" ) )
+                          .Caption( _( "Filtered Footprints" ) )
+                          .Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
     // Build the bottom panel, to display 2 status texts and the buttons:
     auto bottomPanel = new wxPanel( this );
