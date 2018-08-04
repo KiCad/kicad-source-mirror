@@ -3195,8 +3195,8 @@ LP_CACHE::LP_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
     m_owner( aOwner ),
     m_lib_path( aLibraryPath ),
     m_writable( true ),
-    m_cache_timestamp( 0 ),
-    m_cache_dirty( true )
+    m_cache_dirty( true ),
+    m_cache_timestamp( 0 )
 {
 }
 

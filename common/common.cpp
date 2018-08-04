@@ -581,6 +581,7 @@ long long WX_FILENAME::GetTimestamp()
     return 0;
 }
 
+#ifndef __WINDOWS__
 
 //
 // A version of wxDir which avoids expensive calls to wxFileName::wxFileName().
@@ -650,4 +651,4 @@ bool WX_DIR::GetNext(wxString *filename) const
 
     return true;
 }
-
+#endif
