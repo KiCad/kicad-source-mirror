@@ -156,6 +156,11 @@ This options is enabled by default.
 The KICAD_SCRIPTING_MODULES option is used to enable building and installing the Python modules
 supplied by KiCad.  This option is enabled by default.
 
+## Python 3 Scripting Support ## {#python3}
+
+The KICAD_SCRIPTING_PYTHON3 option is used to enable building of the Python 3 interface instead
+of Python 2.  This option is disabled by default.
+
 ## wxPython Scripting Support ## {#wxpython_opt}
 
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into

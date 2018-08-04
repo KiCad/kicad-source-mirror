@@ -374,6 +374,10 @@ if( KICAD_SCRIPTING_MODULES )
     add_definitions( -DKICAD_SCRIPTING_MODULES )
 endif()
 
+if( KICAD_SCRIPTING_PYTHON3 )
+    add_definitions( -DKICAD_SCRIPTING_PYTHON3 )
+endif()
+
 if( KICAD_SCRIPTING_WXPYTHON )
     add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
 endif()
