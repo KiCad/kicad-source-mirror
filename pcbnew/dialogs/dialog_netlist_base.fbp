@@ -436,7 +436,7 @@
                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Select how footprints are recognized:&#x0A;by their reference (U1, R3...) (normal setting)&#x0A;or their time stamp (special setting after a full schematic reannotation)</property>
+                                <property name="tooltip">Select whether to update footprint references to match their currently-assigned symbols, or to re-assign footprints to symbols which match their current references.</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
