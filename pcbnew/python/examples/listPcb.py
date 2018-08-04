@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+from __future__ import print_function
+
 import sys
 from pcbnew import *
 
@@ -11,7 +14,7 @@ FromUnits = FromMM
 #ToUnits=ToMils
 #FromUnits=FromMils
 
-print "LISTING VIAS:"
+print("LISTING VIAS:")
 
 for item in pcb.GetTracks():
     if type(item) is VIA:
@@ -19,7 +22,7 @@ for item in pcb.GetTracks():
         pos = item.GetPosition()
         drill = item.GetDrillValue()
         width = item.GetWidth()
-        print " * Via:   %s - %f/%f "%(ToUnits(pos),ToUnits(drill),ToUnits(width))
+        print(" * Via:   %s - %f/%f " % (ToUnits(pos), ToUnits(drill), ToUnits(width)))
 
     elif type(item) is TRACK:
 
@@ -27,40 +30,39 @@ for item in pcb.GetTracks():
         end = item.GetEnd()
         width = item.GetWidth()
 
-        print " * Track: %s to %s, width %f" % (ToUnits(start),ToUnits(end),ToUnits(width))
+        print(" * Track: %s to %s, width %f" % (ToUnits(start), ToUnits(end), ToUnits(width)))
 
     else:
-        print "Unknown type    %s" % type(item)
+        print("Unknown type    %s" % type(item))
 
-print ""
-print "LIST DRAWINGS:"
+print("")
+print("LIST DRAWINGS:")
 
 for item in pcb.GetDrawings():
     if type(item) is TEXTE_PCB:
-        print "* Text:    '%s' at %s"%(item.GetText(), item.GetPosition())
+        print("* Text:    '%s' at %s" % (item.GetText(), item.GetPosition()))
     elif type(item) is DRAWSEGMENT:
-        print "* Drawing: %s"%item.GetShapeStr() # dir(item)
+        print("* Drawing: %s" % item.GetShapeStr())  # dir(item)
     else:
-        print type(item)
+        print(type(item))
 
-print ""
-print "LIST MODULES:"
+print("")
+print("LIST MODULES:")
 
 for module in pcb.GetModules():
-    print "* Module: %s at %s"%(module.GetReference(), ToUnits(module.GetPosition()))
+    print("* Module: %s at %s" % (module.GetReference(), ToUnits(module.GetPosition())))
 
-print ""
-print "Nets cnt: ", pcb.GetNetCount()
-print "track w cnt:",len(pcb.GetTrackWidthList())
-print "via s cnt:",len(pcb.GetViasDimensionsList())
+print("")
+print("Nets cnt: ", pcb.GetNetCount())
+print("track w cnt:", len(pcb.GetTrackWidthList()))
+print("via s cnt:", len(pcb.GetViasDimensionsList()))
 
-print ""
-print "LIST ZONES:", pcb.GetAreaCount()
+print("")
+print("LIST ZONES:", pcb.GetAreaCount())
 
 for idx in range(0, pcb.GetAreaCount()):
     zone=pcb.GetArea(idx)
-    print "zone:", idx, "priority:", zone.GetPriority(), "netname", zone.GetNetname()
+    print("zone:", idx, "priority:", zone.GetPriority(), "netname", zone.GetNetname())
 
-print ""
-print "NetClasses:", pcb.GetNetClasses().GetCount(),
-
+print("")
+print("NetClasses:", pcb.GetNetClasses().GetCount())

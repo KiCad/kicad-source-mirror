@@ -39,7 +39,10 @@
             def __init__(self,aList):
                 self.last = aList   # last item is the start of list
 
-            def next(self):         # get the next item
+            def next(self):         # get the next item, Python 2 way to implement an iterator
+                return self.__next__()
+
+            def __next__(self):     # get the next item
 
                 item = self.last
                 try:

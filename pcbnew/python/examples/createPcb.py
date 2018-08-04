@@ -1,4 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
+
+from __future__ import print_function
+
 from pcbnew import *
 
 size_0_6mm = wxSizeMM(0.6,0.6)
@@ -38,11 +41,11 @@ pcb.Save("my2.kicad_pcb")
 
 pcb = LoadBoard("my2.kicad_pcb")
 
-print map( lambda x: x.GetReference() , list(pcb.GetModules()))
+print(map( lambda x: x.GetReference() , list(pcb.GetModules())))
 
 for m in pcb.GetModules():
     for p in m.Pads():
-        print 'pad ', p.GetName(), p.GetPosition(), p.GetOffset()
+        print('pad ', p.GetName(), p.GetPosition(), p.GetOffset())
 
 
 # pcb.GetDesignSettings()

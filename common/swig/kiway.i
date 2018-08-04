@@ -220,28 +220,28 @@ if os.path.exists(libcef_so):
     %{
 
     def OnPgmInit(self):
-        print "hereA"
+        print("hereA")
 
         if not self.InitPgm():
             return False;
 
-        print "hereB"
+        print("hereB")
 
         try:
             # A KIWAY_PLAYER is a wx.Window
             frame = Kiway.Player( FRAME_SCH, True )
 
-            print "here0"
+            print("here0")
 
         except IOError as e:
-            print 'Player()', e
+            print('Player()', e)
             return None
 
-        print "here1"
+        print("here1")
 
         Kiway.SetTop(frame)
 
-        print "here2"
+        print("here2")
 
         return frame
     %}
