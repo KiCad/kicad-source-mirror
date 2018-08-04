@@ -277,7 +277,7 @@ wxString KIwxExpandEnvVars(const wxString& str)
 
         switch ( str_n.GetValue() ) {
 #ifdef __WINDOWS__
-            case wxT('%'):
+        case wxT('%'):
 #endif // __WINDOWS__
         case wxT('$'):
         {
@@ -294,12 +294,12 @@ wxString KIwxExpandEnvVars(const wxString& str)
                 switch ( str[n + 1].GetValue() ) {
                 case wxT('('):
                     bracket = Bracket_Normal;
-                    n++;                   // skip the bracket
+                    str_n = str[++n];                   // skip the bracket
                     break;
 
                 case wxT('{'):
                     bracket = Bracket_Curly;
-                    n++;                   // skip the bracket
+                    str_n = str[++n];                   // skip the bracket
                     break;
 
                 default:
@@ -362,13 +362,15 @@ wxString KIwxExpandEnvVars(const wxString& str)
             }
 
             n = m - 1;  // skip variable name
+            str_n = str[n];
         }
             break;
 
         case wxT('\\'):
             // backslash can be used to suppress special meaning of % and $
             if ( n != strlen - 1 && (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
-                strResult += str[++n];
+                str_n = str[++n];
+                strResult += str_n;
 
                 break;
             }
