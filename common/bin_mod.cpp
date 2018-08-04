@@ -38,6 +38,9 @@ void BIN_MOD::Init()
     // do an OS specific wxConfig instantiation, using the bin_mod (EXE/DLL/DSO) name.
     m_config = GetNewConfig( wxString::FromUTF8( m_name ) );
 
+    // wxWidgets' implementation of this is *very* expensive, and we don't use them anyway.
+    m_config->SetExpandEnvVars( false );
+
     m_history.Load( *m_config );
 
     // Prepare On Line Help. Use only lower case for help file names, in order to
