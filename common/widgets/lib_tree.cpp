@@ -59,10 +59,10 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__
         auto bitmap = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) );
-        search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxALL, 5 );
+        search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxRIGHT, 5 );
 #endif
 
-        search_sizer->Add( m_query_ctrl, 1, wxLEFT | wxTOP | wxEXPAND, 5 );
+        search_sizer->Add( m_query_ctrl, 1, wxEXPAND, 5 );
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
@@ -70,12 +70,12 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
     }
 
-    // Component tree
+    // Tree control
     m_tree_ctrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                      wxDV_SINGLE );
+                                      wxDV_SINGLE | wxDV_NO_HEADER );
     m_adapter->AttachTo( m_tree_ctrl );
 
-    sizer->Add( m_tree_ctrl, 5, wxLEFT | wxTOP | wxEXPAND, 5 );
+    sizer->Add( m_tree_ctrl, 5, wxEXPAND | wxRIGHT | wxBOTTOM, 1 );
 
     // Description panel
     if( aWidgets & DETAILS )
@@ -110,7 +110,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
     // handler will intermittently fire.
     if( m_query_ctrl )
     {
-        m_query_ctrl->SetHint( _( "Search" ) );
+        m_query_ctrl->SetHint( _( "Filter" ) );
         m_query_ctrl->SetFocus();
         m_query_ctrl->SetValue( wxEmptyString );
     }

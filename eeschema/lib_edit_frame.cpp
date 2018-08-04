@@ -301,8 +301,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom().Layer( 10 ) );
 
-    m_auimgr.AddPane( m_treePane, wxAuiPaneInfo().Name( "ComponentTree" ).Left().Row( 1 )
-            .Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
+    m_auimgr.AddPane( m_treePane,
+                      wxAuiPaneInfo().Name( "ComponentTree" ).Caption( _( "Libraries" ) ).Left()
+                      .Row( 1 ).Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
 
     m_auimgr.Update();
 

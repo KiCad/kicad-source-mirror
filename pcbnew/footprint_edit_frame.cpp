@@ -325,8 +325,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg_pane ).Name( "MsgPanel" ).Bottom().Layer(10) );
 
-    m_auimgr.AddPane( m_treePane, wxAuiPaneInfo().Name( "FootprintTree" ).Left().Row( 1 )
-            .Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
+    m_auimgr.AddPane( m_treePane,
+                      wxAuiPaneInfo().Name( "FootprintTree" ).Caption( _( "Libraries" ) ).Left()
+                      .Row( 1 ).Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
@@ -673,6 +674,53 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
 }
 
 
+void FOOTPRINT_EDIT_FRAME::ReFillLayerWidget()
+{
+    m_Layers->ReFill();
+
+    wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
+
+    wxSize bestz = m_Layers->GetBestSize();
+
+    lyrs.MinSize( bestz );
+    lyrs.BestSize( bestz );
+    lyrs.FloatingSize( bestz );
+
+    if( lyrs.IsDocked() )
+        m_auimgr.Update();
+    else
+        m_Layers->SetSize( bestz );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
+{
+    // call my base class
+    PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
+
+    // update the layer manager
+    m_Layers->Freeze();
+
+    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
+    pane_info.Caption( _( "Visibles" ) );
+    pane_info = m_auimgr.GetPane( m_treePane );
+    pane_info.Caption( _( "Footprint Libraries" ) );
+    m_auimgr.Update();
+
+    m_Layers->SetLayersManagerTabsText();
+    ReFillLayerWidget();
+    m_Layers->ReFillRender();
+
+    // upate the layer widget to match board visibility states.
+    m_Layers->SyncLayerVisibilities();
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
+    m_Layers->SelectLayer( GetActiveLayer() );
+    m_Layers->OnLayerSelected();
+
+    m_Layers->Thaw();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     bool forceRecreateIfNotOwner = true;
@@ -725,7 +773,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title = _( "Footprint Editor" );
+    wxString title = _( "Footprint Library Editor" );
     LIB_ID   fpid = GetCurrentLibId();
     bool     writable = true;
 

@@ -177,8 +177,8 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
 
-    wxString part_head = _( "Symbol" );
-    wxString desc_head = _( "Desc" );
+    wxString part_head = _( "Item" );
+    wxString desc_head = _( "Description" );
 
     m_col_part = aDataViewCtrl->AppendTextColumn( part_head, 0, wxDATAVIEW_CELL_INERT,
                                                   ColWidth( m_tree, 0, part_head ) );

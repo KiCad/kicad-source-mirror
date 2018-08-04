@@ -462,7 +462,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
 
     m_PointSize = pointSize;
 
-    wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
     m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
 
@@ -477,8 +477,8 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
 
     m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
-    wxBoxSizer* bSizer3;
-    bSizer3 = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* layerPanelSizer;
+    layerPanelSizer = new wxBoxSizer( wxVERTICAL );
 
     m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
     m_LayerScrolledWindow->SetScrollRate( 5, 5 );
@@ -489,16 +489,16 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_LayerScrolledWindow->SetSizer( m_LayersFlexGridSizer );
     m_LayerScrolledWindow->Layout();
     m_LayersFlexGridSizer->Fit( m_LayerScrolledWindow );
-    bSizer3->Add( m_LayerScrolledWindow, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 2 );
+    layerPanelSizer->Add( m_LayerScrolledWindow, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 2 );
 
-    m_LayerPanel->SetSizer( bSizer3 );
+    m_LayerPanel->SetSizer( layerPanelSizer );
     m_LayerPanel->Layout();
-    bSizer3->Fit( m_LayerPanel );
+    layerPanelSizer->Fit( m_LayerPanel );
     m_notebook->AddPage( m_LayerPanel, _( "Layers" ), true );
     m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
-    wxBoxSizer* bSizer4;
-    bSizer4 = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* renderPanelSizer;
+    renderPanelSizer = new wxBoxSizer( wxVERTICAL );
 
     m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
     m_RenderScrolledWindow->SetScrollRate( 5, 5 );
@@ -509,16 +509,16 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_RenderScrolledWindow->SetSizer( m_RenderFlexGridSizer );
     m_RenderScrolledWindow->Layout();
     m_RenderFlexGridSizer->Fit( m_RenderScrolledWindow );
-    bSizer4->Add( m_RenderScrolledWindow, 1, wxALL|wxEXPAND, 5 );
+    renderPanelSizer->Add( m_RenderScrolledWindow, 1, wxALL|wxEXPAND, 5 );
 
-    m_RenderingPanel->SetSizer( bSizer4 );
+    m_RenderingPanel->SetSizer( renderPanelSizer );
     m_RenderingPanel->Layout();
-    bSizer4->Fit( m_RenderingPanel );
+    renderPanelSizer->Fit( m_RenderingPanel );
     m_notebook->AddPage( m_RenderingPanel, _( "Items" ), false );
 
-    boxSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
+    mainSizer->Add( m_notebook, 1, wxEXPAND, 5 );
 
-    SetSizer( boxSizer );
+    SetSizer( mainSizer );
 
     m_FocusOwner = aFocusOwner;
 

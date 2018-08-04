@@ -992,7 +992,7 @@ void PCB_EDIT_FRAME::SetVisibleAlls()
 void PCB_EDIT_FRAME::ShowChangedLanguage()
 {
     // call my base class
-    PCB_BASE_FRAME::ShowChangedLanguage();
+    PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
 
     // update the layer manager
     m_Layers->Freeze();
@@ -1003,7 +1003,7 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
 
     m_Layers->SetLayersManagerTabsText();
     ReFillLayerWidget();
-    m_Layers->ReFillRender();
+    // m_Layers->ReFillRender();  // syncRenderStates() does this
 
     // upate the layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
@@ -1092,7 +1092,7 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     // Update the layer manager
     m_Layers->Freeze();
     ReFillLayerWidget();
-    m_Layers->ReFillRender();
+    // m_Layers->ReFillRender();  // syncRenderStates() does this
 
     // upate the layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();

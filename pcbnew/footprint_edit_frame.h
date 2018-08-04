@@ -468,6 +468,13 @@ public:
      */
     void InstallPreferences( PAGED_DIALOG* aParent ) override;
 
+    void ReFillLayerWidget();
+
+    /**
+     * Update visible items after a language change.
+     */
+    void ShowChangedLanguage() override;
+
     /**
      * Called after the preferences dialog is run.
      */
