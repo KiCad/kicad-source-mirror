@@ -76,6 +76,8 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         ii++;
     }
 
+    m_tree.AssignIntrinsicRanks();
+
     if( prg )
     {
         prg->Destroy();
@@ -105,8 +107,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
     if( alias_list.size() > 0 )
     {
         comp_list.assign( alias_list.begin(), alias_list.end() );
-        DoAddLibrary( aLibNickname, m_libs->GetDescription( aLibNickname ), comp_list );
-        m_tree.AssignIntrinsicRanks();
+        DoAddLibrary( aLibNickname, m_libs->GetDescription( aLibNickname ), comp_list, false );
     }
 }
 

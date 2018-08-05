@@ -207,7 +207,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( bool aAllowBrowser )
     for( auto const& item : s_ModuleHistoryList )
         historyInfos.push_back( GFootprintList.GetModuleInfo( item ) );
 
-    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, historyInfos );
+    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, historyInfos, true );
 
     if( !historyInfos.empty() )
         adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );

@@ -534,121 +534,240 @@ bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) cons
 
 
 //
-// A cover of wxFileName::SetFullName() which avoids expensive calls to wxFileName::SplitPath().
+// A wrapper around a wxFileName which avoids expensive calls to wxFileName::SplitPath()
+// and string concatenations by caching the path and filename locally and only resolving
+// the wxFileName when it has to.
 //
+WX_FILENAME::WX_FILENAME( const wxString& aPath, const wxString& aFilename ) :
+        m_fn( aPath, aFilename ),
+        m_path( aPath ),
+        m_fullName( aFilename )
+{ }
+
+
 void WX_FILENAME::SetFullName( const wxString& aFileNameAndExtension )
 {
     m_fullName = aFileNameAndExtension;
+}
 
+
+wxString WX_FILENAME::GetName() const
+{
+    size_t dot = m_fullName.find_last_of( wxT( '.' ) );
+    return m_fullName.substr( 0, dot );
+}
+
+
+wxString WX_FILENAME::GetFullName() const
+{
+    return m_fullName;
+}
+
+
+wxString WX_FILENAME::GetPath() const
+{
+    return m_path;
+}
+
+
+wxString WX_FILENAME::GetFullPath() const
+{
+    return m_path + wxT( '/' ) + m_fullName;
+}
+
+
+// Write locally-cached values to the wxFileName.  MUST be called before using m_fn.
+void WX_FILENAME::resolve()
+{
     size_t dot = m_fullName.find_last_of( wxT( '.' ) );
     m_fn.SetName( m_fullName.substr( 0, dot ) );
     m_fn.SetExt( m_fullName.substr( dot + 1 ) );
 }
 
 
-//
-// An alernative to wxFileName::GetModificationTime() which avoids multiple calls to stat() on
-// POSIX kernels.
-//
 long long WX_FILENAME::GetTimestamp()
 {
-#ifdef __WINDOWS__
+    resolve();
+
     if( m_fn.FileExists() )
         return m_fn.GetModificationTime().GetValue().GetValue();
-#else
-    // By stat-ing the file ourselves we save wxWidgets from doing it three times:
-    // Exists( wxFILE_EXISTS_SYMLINK ), FileExists(), and finally GetModificationTime()
-    struct stat fn_stat;
-    wxLstat( GetFullPath(), &fn_stat );
 
-    // Timestamp the source file, not the symlink
-    if( S_ISLNK( fn_stat.st_mode ) )    // wxFILE_EXISTS_SYMLINK
-    {
-        char buffer[ PATH_MAX + 1 ];
-        ssize_t pathLen = readlink( TO_UTF8( GetFullPath() ), buffer, PATH_MAX );
-
-        if( pathLen > 0 )
-        {
-            buffer[ pathLen ] = '\0';
-            wxString srcPath = m_path + wxT( '/' ) + wxString::FromUTF8( buffer );
-            wxLstat( srcPath, &fn_stat );
-        }
-    }
-
-    if( S_ISREG( fn_stat.st_mode ) )    // wxFileExists()
-        return fn_stat.st_mtime * 1000;
-#endif
     return 0;
 }
 
-#ifndef __WINDOWS__
 
 //
-// A version of wxDir which avoids expensive calls to wxFileName::wxFileName().
+// A copy of wxMatchWild (attributed to <dalewis@cs.Buffalo.EDU>) modified to use
+// POSIX-file-system-encoded inputs.
 //
-WX_DIR::WX_DIR( const wxString& aDirPath ) :
-    m_dirpath( aDirPath )
+bool matchWild( const char* pat, const char* text, bool dot_special )
 {
-    m_dir = NULL;
-
-    // throw away the trailing slashes
-    size_t n = m_dirpath.length();
-
-    while ( n > 0 && m_dirpath[--n] == '/' )
-        ;
-
-    m_dirpath.Truncate(n + 1);
-
-    m_dir = opendir( m_dirpath.fn_str() );
-}
-
-
-bool WX_DIR::IsOpened() const
-{
-    return m_dir != nullptr;
-}
-
-
-WX_DIR::~WX_DIR()
-{
-    if ( m_dir )
-        closedir( m_dir );
-}
-
-
-bool WX_DIR::GetFirst( wxString *filename, const wxString& filespec )
-{
-    m_filespec = filespec;
-
-    rewinddir( m_dir );
-    return GetNext( filename );
-}
-
-
-bool WX_DIR::GetNext(wxString *filename) const
-{
-    dirent *dirEntry = NULL;
-    wxString dirEntryName;
-    bool matches = false;
-
-    while ( !matches )
+    if ( !*text )
     {
-        dirEntry = readdir( m_dir );
-
-        if ( !dirEntry )
-            return false;
-
-#if wxUSE_UNICODE
-        dirEntryName = wxString( dirEntry->d_name, *wxConvFileName );
-#else
-        dirEntryName = dirEntry->d_name;
-#endif
-
-        matches = wxMatchWild( m_filespec, dirEntryName );
+        /* Match if both are empty. */
+        return !*pat;
     }
 
-    *filename = dirEntryName;
+    const char *m = pat,
+    *n = text,
+    *ma = NULL,
+    *na = NULL;
+    int just = 0,
+    acount = 0,
+    count = 0;
 
-    return true;
+    if (dot_special && (*n == '.'))
+    {
+        /* Never match so that hidden Unix files
+         * are never found. */
+        return false;
+    }
+
+    for (;;)
+    {
+        if (*m == '*')
+        {
+            ma = ++m;
+            na = n;
+            just = 1;
+            acount = count;
+        }
+        else if (*m == '?')
+        {
+            m++;
+            if (!*n++)
+                return false;
+        }
+        else
+        {
+            if (*m == '\\')
+            {
+                m++;
+                /* Quoting "nothing" is a bad thing */
+                if (!*m)
+                    return false;
+            }
+            if (!*m)
+            {
+                /*
+                * If we are out of both strings or we just
+                * saw a wildcard, then we can say we have a
+                * match
+                */
+                if (!*n)
+                    return true;
+                if (just)
+                    return true;
+                just = 0;
+                goto not_matched;
+            }
+            /*
+            * We could check for *n == NULL at this point, but
+            * since it's more common to have a character there,
+            * check to see if they match first (m and n) and
+            * then if they don't match, THEN we can check for
+            * the NULL of n
+            */
+            just = 0;
+            if (*m == *n)
+            {
+                m++;
+                count++;
+                n++;
+            }
+            else
+            {
+
+                not_matched:
+
+                /*
+                * If there are no more characters in the
+                * string, but we still need to find another
+                * character (*m != NULL), then it will be
+                * impossible to match it
+                */
+                if (!*n)
+                    return false;
+
+                if (ma)
+                {
+                    m = ma;
+                    n = ++na;
+                    count = acount;
+                }
+                else
+                    return false;
+            }
+        }
+    }
 }
+
+
+long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
+{
+    long long timestamp = 0;
+
+#ifdef __WINDOWS__
+    // wxFileName construction is egregiously slow.  Construct it once and just swap out
+    // the filename thereafter.
+    WX_FILENAME fn( aDirPath, wxT( "dummyName" ) );
+    wxDir       dir( aDirPath );
+    wxString    fullname;
+
+    if( dir.IsOpened() )
+    {
+        if( dir.GetFirst( &fullname, filespec ) )
+        {
+            do
+            {
+                fn.SetFullName( fullname );
+                timestamp += fn.GetTimestamp();
+            }
+            while( dir.GetNext( &fullname ) );
+        }
+    }
+#else
+    // POSIX version.  Save time by not converting between encodings -- do everything on
+    // the file-system side.
+    std::string filespec( aFilespec.fn_str() );
+    std::string dir_path( aDirPath.fn_str() );
+
+    DIR* dir = opendir( dir_path.c_str() );
+
+    if( dir )
+    {
+        for( dirent* dir_entry = readdir( dir ); dir_entry; dir_entry = readdir( dir ) )
+        {
+            if( !matchWild( filespec.c_str(), dir_entry->d_name, true ) )
+                continue;
+
+            std::string entry_path = dir_path + '/' + dir_entry->d_name;
+            struct stat entry_stat;
+
+            wxCRT_Lstat( entry_path.c_str(), &entry_stat );
+
+            // Timestamp the source file, not the symlink
+            if( S_ISLNK( entry_stat.st_mode ) )    // wxFILE_EXISTS_SYMLINK
+            {
+                char buffer[ PATH_MAX + 1 ];
+                ssize_t pathLen = readlink( entry_path.c_str(), buffer, PATH_MAX );
+
+                if( pathLen > 0 )
+                {
+                    buffer[ pathLen ] = '\0';
+                    entry_path = dir_path + buffer;
+
+                    wxCRT_Lstat( entry_path.c_str(), &entry_stat );
+                }
+            }
+
+            if( S_ISREG( entry_stat.st_mode ) )    // wxFileExists()
+                timestamp += entry_stat.st_mtime * 1000;
+        }
+    }
 #endif
+
+    return timestamp;
+}
+
+

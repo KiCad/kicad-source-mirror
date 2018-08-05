@@ -44,7 +44,7 @@ public:
     virtual const wxString& GetName() const = 0;
     virtual wxString GetLibNickname() const = 0;
 
-    virtual wxString GetDescription() { return wxEmptyString; }
+    virtual const wxString& GetDescription() = 0;
 
     virtual wxString GetSearchText() { return wxEmptyString; }
 

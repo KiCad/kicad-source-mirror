@@ -113,7 +113,6 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 {
     m_alwaysShowActiveCopperLayer = false;
     m_fp_editor_mode = aFpEditorMode;
-    ReFillRender();
 
     // Update default tabs labels
     SetLayersManagerTabsText();

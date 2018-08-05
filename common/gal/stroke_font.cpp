@@ -142,15 +142,15 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 
     std::deque<VECTOR2D> boundingPoints;
 
-    boundingPoints.push_back( VECTOR2D( aGLYPHBoundingX.x, 0 ) );
-    boundingPoints.push_back( VECTOR2D( aGLYPHBoundingX.y, 0 ) );
+    boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.x, 0 ) );
+    boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.y, 0 ) );
 
     for( GLYPH::const_iterator pointListIt = aGLYPH.begin(); pointListIt != aGLYPH.end(); ++pointListIt )
     {
         for( std::deque<VECTOR2D>::const_iterator pointIt = pointListIt->begin();
                 pointIt != pointListIt->end(); ++pointIt )
         {
-            boundingPoints.push_back( VECTOR2D( aGLYPHBoundingX.x, pointIt->y ) );
+            boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.x, pointIt->y ) );
         }
     }
 

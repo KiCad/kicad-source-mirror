@@ -49,8 +49,10 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries()
     {
         const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName );
 
-        DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ) );
+        DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), true );
     }
+
+    m_tree.AssignIntrinsicRanks();
 }
 
 

@@ -133,6 +133,8 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
             }
         }
 
+        adapter->AssignIntrinsicRanks();
+
         if( aFilter->GetFilterPowerParts() )
             adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
 
@@ -150,7 +152,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
                 history_list.push_back( alias );
         }
 
-        adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list );
+        adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list, true );
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
     }
 

@@ -145,7 +145,11 @@ wxString LIB_ALIAS::GetUnitReference( int aUnit )
 
 wxString LIB_ALIAS::GetSearchText()
 {
-    wxString text = GetKeyWords() + wxT( "        " ) + GetDescription();
+    // Matches are scored by offset from front of string, so inclusion of this spacer
+    // discounts matches found after it.
+    static const wxString discount( wxT( "        " ) );
+
+    wxString text = GetKeyWords() + discount + GetDescription();
 
     // If a footprint is defined for the part, add it to the serach string
     if( shared )
@@ -153,7 +157,7 @@ wxString LIB_ALIAS::GetSearchText()
         wxString footprint = shared->GetFootprintField().GetText();
 
         if( !footprint.IsEmpty() )
-            text += wxT( "        " ) + footprint;
+            text += discount + footprint;
     }
 
     return text;

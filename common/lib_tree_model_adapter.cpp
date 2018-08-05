@@ -107,15 +107,15 @@ void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( LIB_ID const& aLibId, int aUnit )
 
 
 void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
-                                           std::vector<LIB_TREE_ITEM*> const& aItemList )
+                                           std::vector<LIB_TREE_ITEM*> const& aItemList,
+                                           bool presorted )
 {
     auto& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
     for( auto item: aItemList )
         lib_node.AddItem( item );
 
-    lib_node.AssignIntrinsicRanks();
-    m_tree.AssignIntrinsicRanks();
+    lib_node.AssignIntrinsicRanks( presorted );
 }
 
 

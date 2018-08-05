@@ -98,7 +98,7 @@ public:
     wxString    Desc;        ///< Description to be displayed
     wxString    MatchName;   ///< Normalized name for matching
     wxString    SearchText;  ///< Descriptive text to search
-    bool        SearchTextNormalized;  ///< Support for lazy normalization.
+    bool        Normalized;  ///< Support for lazy normalization.
 
 
     LIB_ID      LibId;       ///< LIB_ID determined by the parent library nickname and alias name.
@@ -122,7 +122,7 @@ public:
      * Store intrinsic ranks on all children of this node. See IntrinsicRank
      * member doc for more information.
      */
-    void AssignIntrinsicRanks();
+    void AssignIntrinsicRanks( bool presorted = false );
 
     /**
      * Sort child nodes quickly and recursively (IntrinsicRanks must have been set).

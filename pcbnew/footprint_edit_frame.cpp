@@ -270,11 +270,18 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
 
-    ReCreateMenuBar();
+    // ReCreateMenuBar();       // UseGalCanvas() will do this for us.
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
+    m_Layers->ReFill();
+    m_Layers->ReFillRender();
+
+    GetScreen()->m_Active_Layer = F_SilkS;
+    m_Layers->SelectLayer( F_SilkS );
+    m_Layers->OnLayerSelected();
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
@@ -333,16 +340,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     setupTools();
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
     UseGalCanvas( aBackend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
-
-    if( m_auimgr.GetPane( "m_LayersManagerToolBar" ).IsShown() )
-    {
-        m_Layers->ReFill();
-        m_Layers->ReFillRender();
-
-        GetScreen()->m_Active_Layer = F_SilkS;
-        m_Layers->SelectLayer( F_SilkS );
-        m_Layers->OnLayerSelected();
-    }
 
     m_auimgr.Update();
     updateTitle();

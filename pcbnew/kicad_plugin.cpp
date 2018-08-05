@@ -85,24 +85,21 @@ void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
  */
 class FP_CACHE_ITEM
 {
-    wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
+    WX_FILENAME             m_filename;
     std::unique_ptr<MODULE> m_module;
 
 public:
-    FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
+    FP_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName );
 
-    const wxString&   GetName() const { return m_file_name.GetDirs().Last(); }
-    const wxFileName& GetFileName() const { return m_file_name; }
-
-    const MODULE*     GetModule() const { return m_module.get(); }
+    const WX_FILENAME& GetFileName() const { return m_filename; }
+    const MODULE*      GetModule()   const { return m_module.get(); }
 };
 
 
-FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
+FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName ) :
+    m_filename( aFileName ),
     m_module( aModule )
-{
-    m_file_name = aFileName;
-}
+{ }
 
 
 typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   MODULE_MAP;
@@ -207,11 +204,11 @@ void FP_CACHE::Save( MODULE* aModule )
         if( aModule && aModule != it->second->GetModule() )
             continue;
 
-        wxFileName fn = it->second->GetFileName();
+        WX_FILENAME fn = it->second->GetFileName();
 
         wxString tempFileName =
 #ifdef USE_TMP_FILE
-        fn.CreateTempFileName( fn.GetPath() );
+        wxFileName::CreateTempFileName( fn.GetPath() );
 #else
         fn.GetFullPath();
 #endif
@@ -244,7 +241,7 @@ void FP_CACHE::Save( MODULE* aModule )
             THROW_IO_ERROR( msg );
         }
 #endif
-        m_cache_timestamp += fn.GetModificationTime().GetValue().GetValue();
+        m_cache_timestamp += fn.GetTimestamp();
     }
 
     m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
@@ -260,7 +257,7 @@ void FP_CACHE::Load()
     m_cache_dirty = false;
     m_cache_timestamp = 0;
 
-    WX_DIR dir( m_lib_raw_path );
+    wxDir dir( m_lib_raw_path );
 
     if( !dir.IsOpened() )
     {
@@ -269,20 +266,20 @@ void FP_CACHE::Load()
         THROW_IO_ERROR( msg );
     }
 
-    wxString fpFileName;
-    wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
+    wxString fullName;
+    wxString fileSpec = wxT( "*." ) + KiCadFootprintFileExtension;
 
     // wxFileName construction is egregiously slow.  Construct it once and just swap out
-    // the filename.
-    WX_FILENAME fn( m_lib_raw_path, wxT( "dummy." ) + KiCadFootprintFileExtension );
+    // the filename thereafter.
+    WX_FILENAME fn( m_lib_raw_path, wxT( "dummyName" ) );
 
-    if( dir.GetFirst( &fpFileName, wildcard ) )
+    if( dir.GetFirst( &fullName, fileSpec ) )
     {
         wxString cacheError;
 
         do
         {
-            fn.SetFullName( fpFileName );
+            fn.SetFullName( fullName );
 
             // Queue I/O errors so only files that fail to parse don't get loaded.
             try
@@ -292,8 +289,6 @@ void FP_CACHE::Load()
                 m_owner->m_parser->SetLineReader( &reader );
 
                 MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
-
-                // The footprint name is the file name without the extension.
                 wxString    fpName = fn.GetName();
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
@@ -308,7 +303,7 @@ void FP_CACHE::Load()
 
                 cacheError += ioe.What();
             }
-        } while( dir.GetNext( &fpFileName ) );
+        } while( dir.GetNext( &fullName ) );
 
         if( !cacheError.IsEmpty() )
             THROW_IO_ERROR( cacheError );
@@ -351,30 +346,9 @@ bool FP_CACHE::IsModified()
 
 long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    long long files_timestamp = 0;
+    wxString fileSpec = wxT( "*." ) + KiCadFootprintFileExtension;
 
-    // wxFileName construction is egregiously slow.  Construct it once and just
-    // swap out the filename for each file.
-    WX_FILENAME fn( aLibPath, wxT( "dummy." ) + KiCadFootprintFileExtension );
-
-    WX_DIR dir( aLibPath );
-
-    if( dir.IsOpened() )
-    {
-        wxString fpFileName;
-        wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
-
-        if( dir.GetFirst( &fpFileName, wildcard ) )
-        {
-            do
-            {
-                fn.SetFullName( fpFileName );
-                files_timestamp += fn.GetTimestamp();
-            } while( dir.GetNext( &fpFileName ) );
-        }
-    }
-
-    return files_timestamp;
+    return TimestampDir( aLibPath, fileSpec );
 }
 
 
@@ -2120,14 +2094,15 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
                                           fn.GetFullPath() ) );
     }
 
+    wxString fullPath = fn.GetFullPath();
+    wxString fullName = fn.GetFullName();
     MODULE_CITER it = mods.find( footprintName );
 
     if( it != mods.end() )
     {
-        wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library file '%s'." ),
-                    fn.GetFullPath().GetData() );
+        wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint file '%s'." ), fullPath );
         mods.erase( footprintName );
-        wxRemoveFile( fn.GetFullPath() );
+        wxRemoveFile( fullPath );
     }
 
     // I need my own copy for the cache
@@ -2142,9 +2117,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     if( module->GetLayer() != F_Cu )
         module->Flip( module->GetPosition() );
 
-    wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expression footprint file: %s." ),
-                fn.GetFullPath().GetData() );
-    mods.insert( footprintName, new FP_CACHE_ITEM( module, fn ) );
+    wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
+    mods.insert( footprintName, new FP_CACHE_ITEM( module, WX_FILENAME( fullPath, fullName ) ) );
     m_cache->Save( module );
 }
 

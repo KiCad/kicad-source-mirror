@@ -383,65 +383,35 @@ namespace std
 
 
 /**
- * A wrapper around a wxFileName which is much more performant with a (very) limited API.
+ * A wrapper around a wxFileName which is much more performant with a subset of the API.
  */
 class WX_FILENAME
 {
 public:
-    WX_FILENAME( const wxString& aPath, const wxString& aFilename ) :
-        m_fn( aPath, aFilename ),
-        m_path( aPath ),
-        m_fullName( aFilename )
-    { }
+    WX_FILENAME( const wxString& aPath, const wxString& aFilename );
 
-    // Avoid wxFileName's expensive path concatenation.
-    wxString GetFullPath() { return m_path + wxT( '/' ) + m_fullName; }
-
-    wxString GetName() { return m_fn.GetName(); }
-
-    // Avoid wxFileName's expensive calls to wxFileName::SplitPath().
     void SetFullName( const wxString& aFileNameAndExtension );
+
+    wxString GetName() const;
+    wxString GetFullName() const;
+    wxString GetPath() const;
+    wxString GetFullPath() const;
 
     // Avoid multiple calls to stat() on POSIX kernels.
     long long GetTimestamp();
 
-    operator wxFileName() const { return m_fn; }
-
 private:
+    // Write cached values to the wrapped wxFileName.  MUST be called before using m_fn.
+    void resolve();
+
     wxFileName m_fn;
     wxString   m_path;
     wxString   m_fullName;
 };
 
 
-#ifdef __WINDOWS__
-#define WX_DIR wxDir
-#else
-// For POSIX kernels we implement our own version which avoids expensive calls to
-// wxFileName::wxFileName().
-class WX_DIR
-{
-public:
-    WX_DIR( const wxString& dir );
-    ~WX_DIR();
+long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
 
-    // returns true if the directory was successfully opened
-    bool IsOpened() const;
-
-    bool GetFirst( wxString *filename, const wxString& filespec );
-
-    // get next file in the enumeration started with GetFirst()
-    bool GetNext( wxString *filename ) const;
-
-private:
-    DIR*      m_dir;
-
-    wxString  m_dirpath;
-    wxString  m_filespec;
-
-wxDECLARE_NO_COPY_CLASS( WX_DIR );
-};
-#endif
 
 
 

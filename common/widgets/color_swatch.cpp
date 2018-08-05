@@ -70,7 +70,8 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
 static std::unique_ptr<wxStaticBitmap> makeColorSwatch( wxWindow* aParent, COLOR4D aColor,
                                                         COLOR4D aBackground, int aID )
 {
-    wxSize size = aParent->ConvertDialogToPixels( SWATCH_SIZE_DU );
+    static wxSize size = aParent->ConvertDialogToPixels( SWATCH_SIZE_DU );
+
     wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, size );
     auto ret = std::make_unique<wxStaticBitmap>( aParent, aID, bitmap );
 

@@ -108,20 +108,19 @@ static inline long parseInt( const wxString& aValue, double aScalar )
  */
 class GPCB_FPL_CACHE_ITEM
 {
-    wxFileName         m_file_name; ///< The the full file name and path of the footprint to cache.
+    WX_FILENAME             m_filename; ///< The the full file name and path of the footprint to cache.
     std::unique_ptr<MODULE> m_module;
 
 public:
-    GPCB_FPL_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
+    GPCB_FPL_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName );
 
-    wxString    GetName() const { return m_file_name.GetDirs().Last(); }
-    wxFileName  GetFileName() const { return m_file_name; }
-    MODULE*     GetModule() const { return m_module.get(); }
+    WX_FILENAME  GetFileName() const { return m_filename; }
+    MODULE*      GetModule()   const { return m_module.get(); }
 };
 
 
-GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
-    m_file_name( aFileName ),
+GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName ) :
+    m_filename( aFileName ),
     m_module( aModule )
 {
 }
@@ -225,7 +224,7 @@ void GPCB_FPL_CACHE::Load()
     // Note: like our .pretty footprint libraries, the gpcb footprint libraries are folders,
     // and the footprints are the .fp files inside this folder.
 
-    WX_DIR dir( m_lib_path.GetPath() );
+    wxDir dir( m_lib_path.GetPath() );
 
     if( !dir.IsOpened() )
     {
@@ -233,21 +232,21 @@ void GPCB_FPL_CACHE::Load()
                                           m_lib_path.GetPath().GetData() ) );
     }
 
-    wxString fpFileName;
-    wxString wildcard = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
+    wxString fullName;
+    wxString fileSpec = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
 
     // wxFileName construction is egregiously slow.  Construct it once and just swap out
-    // the filename.
-    WX_FILENAME fn( m_lib_path.GetPath(), wxT( "dummy." ) + GedaPcbFootprintLibFileExtension );
+    // the filename thereafter.
+    WX_FILENAME fn( m_lib_path.GetPath(), wxT( "dummyName" ) );
 
-    if( !dir.GetFirst( &fpFileName, wildcard ) )
+    if( !dir.GetFirst( &fullName, fileSpec ) )
         return;
 
     wxString cacheErrorMsg;
 
     do
     {
-        fn.SetFullName( fpFileName );
+        fn.SetFullName( fullName );
 
         // Queue I/O errors so only files that fail to parse don't get loaded.
         try
@@ -260,7 +259,7 @@ void GPCB_FPL_CACHE::Load()
 
             // The footprint name is the file name without the extension.
             footprint->SetFPID( LIB_ID( wxEmptyString, fn.GetName() ) );
-            m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn.GetName() ) );
+            m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -269,7 +268,7 @@ void GPCB_FPL_CACHE::Load()
 
             cacheErrorMsg += ioe.What();
         }
-    } while( dir.GetNext( &fpFileName ) );
+    } while( dir.GetNext( &fullName ) );
 
     if( !cacheErrorMsg.IsEmpty() )
         THROW_IO_ERROR( cacheErrorMsg );
@@ -306,30 +305,9 @@ bool GPCB_FPL_CACHE::IsModified()
 
 long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    long long files_timestamp = 0;
+    wxString fileSpec = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
 
-    // wxFileName construction is egregiously slow.  Construct it once and just swap out
-    // the filename.
-    WX_FILENAME fn( aLibPath, wxT( "dummy." ) + GedaPcbFootprintLibFileExtension );
-
-    WX_DIR dir( aLibPath );
-
-    if( dir.IsOpened() )
-    {
-        wxString fpFileName;
-        wxString wildcard = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
-
-        if( dir.GetFirst( &fpFileName, wildcard ) )
-        {
-            do
-            {
-                fn.SetFullName( fpFileName );
-                files_timestamp += fn.GetTimestamp();
-            } while( dir.GetNext( &fpFileName ) );
-        }
-    }
-
-    return files_timestamp;
+    return TimestampDir( aLibPath, fileSpec );
 }
 
 

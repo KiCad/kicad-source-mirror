@@ -69,16 +69,21 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
     }
 
     // Look for new libraries
+    size_t count = m_libMap.size();
+
     for( const auto& libName : m_libs->GetLogicalLibs() )
     {
         if( m_libMap.count( libName ) == 0 )
         {
             const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName );
 
-            DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ) );
+            DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), true );
             m_libMap.insert( libName  );
         }
     }
+
+    if( m_libMap.size() > count )
+        m_tree.AssignIntrinsicRanks();
 }
 
 
@@ -92,7 +97,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
 {
     std::vector<LIB_TREE_ITEM*> footprints = getFootprints( aLibNode.Name );
 
-    // remove the common part from the aliases list
+    // remove the common part from the footprints list
     for( auto nodeIt = aLibNode.Children.begin(); nodeIt != aLibNode.Children.end();  )
     {
         // Since the list is sorted we can use a binary search to speed up searches within
@@ -119,7 +124,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
         }
     }
 
-    // now the aliases list contains only new aliases that need to be added to the tree
+    // now the footprint list contains only new aliases that need to be added to the tree
     for( auto footprint : footprints )
         aLibNode.AddItem( footprint );
 

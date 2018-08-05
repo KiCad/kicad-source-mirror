@@ -92,13 +92,13 @@ public:
         return LIB_ID( m_nickname, m_fpname );
     }
 
-    wxString GetDescription() override
+    const wxString& GetDescription() override
     {
         ensure_loaded();
         return m_doc;
     }
 
-    wxString GetKeywords()
+    const wxString& GetKeywords()
     {
         ensure_loaded();
         return m_keywords;
@@ -106,7 +106,11 @@ public:
 
     wxString GetSearchText() override
     {
-        return GetKeywords() + wxT( "        " ) + GetDescription();
+        // Matches are scored by offset from front of string, so inclusion of this spacer
+        // discounts matches found after it.
+        static const wxString discount( wxT( "        " ) );
+
+        return GetKeywords() + discount + GetDescription();
     }
 
     unsigned GetPadCount()
@@ -154,8 +158,8 @@ protected:
     wxString m_nickname;         ///< library as known in FP_LIB_TABLE
     wxString m_fpname;           ///< Module name.
     int      m_num;              ///< Order number in the display list.
-    int      m_pad_count;        ///< Number of pads
-    int      m_unique_pad_count; ///< Number of unique pads
+    unsigned m_pad_count;        ///< Number of pads
+    unsigned m_unique_pad_count; ///< Number of unique pads
     wxString m_doc;              ///< Footprint description.
     wxString m_keywords;         ///< Footprint keywords.
 };
@@ -313,10 +317,8 @@ class APIEXPORT FOOTPRINT_ASYNC_LOADER
     friend class FOOTPRINT_LIST_IMPL;
 
     FOOTPRINT_LIST*       m_list;
-    std::function<void()> m_completion_cb;
     std::string           m_last_table;
 
-    bool m_started; ///< True if Start() has been called - does not reset
     int  m_total_libs;
 
 public:
@@ -363,21 +365,6 @@ public:
      * Safely stop the current process.
      */
     void Abort();
-
-    /**
-     * Set a callback to receive notice when loading is complete.
-     *
-     * Callback MUST be threadsafe, and must be set before calling Start
-     * if you want to use it (it is safe not to set it at all).
-     */
-    void SetCompletionCallback( std::function<void()> aCallback );
-
-    /**
-     * Return true if the given table is the same as the last table loaded.
-     * Useful for checking if the table has been modified and needs to be
-     * reloaded.
-     */
-    bool IsSameTable( FP_LIB_TABLE* aOther );
 
     /**
      * Default number of worker threads. Determined empirically (by dickelbeck):

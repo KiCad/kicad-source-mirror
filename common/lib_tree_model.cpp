@@ -26,7 +26,7 @@
 #include <make_unique.h>
 #include <utility>
 #include <pgm_base.h>
-
+#include <kicad_string.h>
 
 // Each node gets this lowest score initially, without any matches applied.
 // Matches will then increase this score depending on match quality.  This way,
@@ -59,19 +59,29 @@ void LIB_TREE_NODE::ResetScore()
 }
 
 
-void LIB_TREE_NODE::AssignIntrinsicRanks()
+void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
 {
     std::vector<LIB_TREE_NODE*> sort_buf;
 
-    for( auto const& node: Children )
-        sort_buf.push_back( &*node );
+    if( presorted )
+    {
+        int max = Children.size() - 1;
 
-    std::sort( sort_buf.begin(), sort_buf.end(),
-            []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
-                { return a->MatchName > b->MatchName; } );
+        for( int i = 0; i <= max; ++i )
+            Children[i]->IntrinsicRank = max - i;
+    }
+    else
+    {
+        for( auto const& node: Children )
+            sort_buf.push_back( &*node );
 
-    for( int i = 0; i < (int) sort_buf.size(); ++i )
-        sort_buf[i]->IntrinsicRank = i;
+        std::sort( sort_buf.begin(), sort_buf.end(),
+                []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
+                    { return StrNumCmp( a->Name, b->Name, INT_MAX, true ) > 0; } );
+
+        for( int i = 0; i < (int) sort_buf.size(); ++i )
+            sort_buf[i]->IntrinsicRank = i;
+    }
 }
 
 
@@ -108,7 +118,7 @@ LIB_TREE_NODE::LIB_TREE_NODE()
       Type( INVALID ),
       IntrinsicRank( 0 ),
       Score( kLowestDefaultScore ),
-      SearchTextNormalized( false ),
+      Normalized( false ),
       Unit( 0 ),
       IsRoot( false )
 {}
@@ -146,14 +156,15 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
     Type = LIBID;
     Parent = aParent;
 
-    LibId = aItem->GetLibId();
+    LibId.SetLibNickname( aItem->GetLibNickname() );
+    LibId.SetLibItemName( aItem->GetName () );
 
     Name = aItem->GetName();
     Desc = aItem->GetDescription();
 
-    MatchName = aItem->GetName().Lower();
+    MatchName = aItem->GetName();
     SearchText = aItem->GetSearchText();
-    SearchTextNormalized = false;
+    Normalized = false;
 
     IsRoot = aItem->IsRoot();
 
@@ -182,7 +193,7 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
     Desc = aItem->GetDescription();
 
     SearchText = aItem->GetSearchText();
-    SearchTextNormalized = false;
+    Normalized = false;
 
     IsRoot = aItem->IsRoot();
     Children.clear();
@@ -197,10 +208,11 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
     if( Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
 
-    if( !SearchTextNormalized )
+    if( !Normalized )
     {
+        MatchName = MatchName.Lower();
         SearchText = SearchText.Lower();
-        SearchTextNormalized = true;
+        Normalized = true;
     }
 
     // Keywords and description we only count if the match string is at

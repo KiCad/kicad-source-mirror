@@ -123,21 +123,21 @@ public:
         description = aDescription;
     }
 
-    wxString GetDescription() override { return description; }
+    const wxString& GetDescription() override { return description; }
 
     void SetKeyWords( const wxString& aKeyWords )
     {
         keyWords = aKeyWords;
     }
 
-    wxString GetKeyWords() const { return keyWords; }
+    const wxString& GetKeyWords() const { return keyWords; }
 
     void SetDocFileName( const wxString& aDocFileName )
     {
         docFileName = aDocFileName;
     }
 
-    wxString GetDocFileName() const { return docFileName; }
+    const wxString& GetDocFileName() const { return docFileName; }
 
     wxString GetSearchText() override;
 

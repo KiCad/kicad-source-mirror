@@ -151,7 +151,13 @@ public:
      * @param aItemList    list of components
      */
     void DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
-                       std::vector<LIB_TREE_ITEM*> const& aItemList );
+                       std::vector<LIB_TREE_ITEM*> const& aItemList, bool presorted );
+
+
+    /**
+     * Sort the tree and assign ranks after adding libraries.
+     */
+    void AssignIntrinsicRanks() { m_tree.AssignIntrinsicRanks(); }
 
     /**
      * Set the search string provided by the user.

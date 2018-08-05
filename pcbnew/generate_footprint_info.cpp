@@ -133,9 +133,9 @@ public:
 };
 
 
-wxString GenerateFootprintInfo( FP_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId )
+wxString GenerateFootprintInfo( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId )
 {
-    FOOTPRINT_INFO_GENERATOR gen( aSymLibTable, aLibId );
+    FOOTPRINT_INFO_GENERATOR gen( aFpLibTable, aLibId );
     gen.GenerateHtml();
     return gen.GetHtml();
 }
