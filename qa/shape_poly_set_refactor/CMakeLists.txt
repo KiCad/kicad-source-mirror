@@ -28,7 +28,7 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 add_executable( qa_shape_poly_set_refactor
     test_module.cpp
-    test_chamfer_fillet.cpp
+    test_chamfer.cpp
     test_collision.cpp
     test_iterator.cpp
     test_segment.cpp
@@ -56,5 +56,5 @@ target_link_libraries( qa_shape_poly_set_refactor
 add_dependencies( qa_shape_poly_set_refactor pcbnew )
 
 add_test( NAME shape_poly_set_refactor
-    COMMAND qa_shape_poly_set_refactor --run_test=!ChamferFillet/Fillet
+    COMMAND qa_shape_poly_set_refactor
 )
