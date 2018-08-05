@@ -26,7 +26,7 @@
 
 FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ):
     wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-             wxFULL_REPAINT_ON_RESIZE | wxBORDER_SIMPLE | wxTAB_TRAVERSAL ),
+             wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL ),
     m_prev_panel( nullptr ),
     m_status_label( nullptr ),
     m_sizer( nullptr )

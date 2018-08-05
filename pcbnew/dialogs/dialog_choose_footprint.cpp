@@ -78,7 +78,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
 
     details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxHW_SCROLLBAR_AUTO );
-    detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+    detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
     detailsPanel->Layout();
     detailsSizer->Fit( detailsPanel );
 
@@ -171,7 +171,7 @@ wxPanel* DIALOG_CHOOSE_FOOTPRINT::ConstructRightPanel( wxWindow* aParent )
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
-    sizer->Add( m_preview_ctrl, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
+    sizer->Add( m_preview_ctrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
     panel->SetSizer( sizer );
     panel->Layout();

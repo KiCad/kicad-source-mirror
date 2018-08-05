@@ -101,7 +101,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
         details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                     wxHW_SCROLLBAR_AUTO );
-        detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+        detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
         detailsPanel->Layout();
         detailsSizer->Fit( detailsPanel );
 
@@ -126,7 +126,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     if( aAllowBrowser )
     {
         m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
-        buttonsSizer->Add( m_browser_button, 0, wxALL, 5 );
+        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
     }
 
     auto sdbSizer = new wxStdDialogButtonSizer();
@@ -425,8 +425,12 @@ void DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint( wxPaintEvent& aEvent )
 
     LIB_PART*  part = alias->GetPart();
 
+    // Don't draw if we don't have a part to show, just display a tooltip
     if( !part )
+    {
+        RenderPreview( nullptr, unit );
         return;
+    }
 
     if( alias->IsRoot() )
     {
@@ -515,8 +519,12 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     if( dc_size.x == 0 || dc_size.y == 0 )
         return;
 
-    if( !aComponent )
+    if( !aComponent )   // display a tooltip
+    {
+        wxString tooltip = _( "No symbol selected" );
+        GRDrawWrappedText( dc, tooltip );
         return;
+    }
 
     GRResetPenAndBrush( &dc );
 
