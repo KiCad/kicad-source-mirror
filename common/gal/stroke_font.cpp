@@ -55,12 +55,12 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
-        GLYPH    glyph;
+        GLYPH&   glyph = m_glyphs[j];
         double   glyphStartX = 0.0;
         double   glyphEndX = 0.0;
         VECTOR2D glyphBoundingX;
 
-        std::deque<VECTOR2D> pointList;
+        std::deque<VECTOR2D>* pointList = nullptr;
 
         int i = 0;
 
@@ -84,10 +84,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             else if( ( coordinate[0] == ' ' ) && ( coordinate[1] == 'R' ) )
             {
                 // Raise pen
-                if( pointList.size() > 0 )
-                    glyph.push_back( pointList );
-
-                pointList.clear();
+                pointList = nullptr;
             }
             else
             {
@@ -105,16 +102,18 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
                 // was built. It allows shapes coordinates like W M ... to be >= 0
                 // Only shapes like j y have coordinates < 0
                 point.y = (double) ( coordinate[1] - 'R' + FONT_OFFSET ) * STROKE_FONT_SCALE;
-                pointList.push_back( point );
+
+                if( !pointList )
+                {
+                    glyph.emplace_back( std::deque<VECTOR2D>() );
+                    pointList = &glyph.back();
+                }
+
+                pointList->push_back( point );
             }
 
             i += 2;
         }
-
-        if( pointList.size() > 0 )
-            glyph.push_back( pointList );
-
-        m_glyphs[j] = glyph;
 
         // Compute the bounding box of the glyph
         m_glyphBoundingBoxes[j] = computeBoundingBox( glyph, glyphBoundingX );
