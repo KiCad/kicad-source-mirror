@@ -157,8 +157,11 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
 
     IsRoot = aItem->IsRoot();
 
-    for( int u = 1; u <= aItem->GetUnitCount(); ++u )
-        AddUnit( aItem, u );
+    if( aItem->GetUnitCount() > 1 )
+    {
+        for( int u = 1; u <= aItem->GetUnitCount(); ++u )
+            AddUnit( aItem, u );
+    }
 }
 
 

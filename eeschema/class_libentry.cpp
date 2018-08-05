@@ -101,7 +101,7 @@ wxString LIB_ALIAS::GetLibNickname() const
     if( shared )
         return shared->GetLibraryName();
 
-    return wxString( _( "none" ) );
+    return wxEmptyString;
 }
 
 
@@ -263,7 +263,7 @@ const wxString LIB_PART::GetLibraryName()
     if( m_library )
         return m_library->GetName();
 
-    return wxString( _( "none" ) );
+    return m_libId.GetLibNickname();
 }
 
 
