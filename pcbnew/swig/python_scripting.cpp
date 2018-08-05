@@ -249,7 +249,17 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
     {
         PyObject* str = PyDict_GetItemString(localDict, "result" );
 #if PY_MAJOR_VERSION >= 3
-        const char* str_res = str ? PyBytes_AS_STRING( str ) : 0;
+        const char* str_res = NULL;
+        if(str) {
+            PyObject* temp_bytes = PyUnicode_AsEncodedString( str, "UTF-8", "strict" );
+            if ( temp_bytes != NULL ) {
+                str_res = PyBytes_AS_STRING( temp_bytes );
+                str_res = strdup( str_res );
+                Py_DECREF( temp_bytes );
+            } else {
+                wxLogMessage( "cannot encode unicode python string" );
+            }
+        }
 #else
         const char* str_res = str ? PyString_AsString( str ) : 0;
 #endif
@@ -404,7 +414,16 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
         if( element )
         {
 #if PY_MAJOR_VERSION >= 3
-        ret.Add( FROM_UTF8( PyBytes_AS_STRING( element ) ), 1 );
+        const char* str_res = NULL;
+        PyObject* temp_bytes = PyUnicode_AsEncodedString( element, "UTF-8", "strict" );
+        if ( temp_bytes != NULL ) {
+            str_res = PyBytes_AS_STRING( temp_bytes );
+            str_res = strdup( str_res );
+            Py_DECREF( temp_bytes );
+            ret.Add( FROM_UTF8( str_res ), 1 );
+        } else {
+            wxLogMessage( "cannot encode unicode python string" );
+        }
 #else
         ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
 #endif

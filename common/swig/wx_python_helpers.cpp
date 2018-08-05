@@ -136,7 +136,7 @@ wxString* newWxStringFromPy( PyObject* src )
             return NULL;
     }
 #if PY_MAJOR_VERSION >= 3
-    else if( !PyBytes_Check( src ) )
+    else if( !PyUnicode_Check( src ) )
 #else
     else if( !PyString_Check( src ) )    // if it's not a string, str(obj)
 #endif

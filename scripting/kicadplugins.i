@@ -102,7 +102,7 @@ def LoadOnePlugin(Dirname, ModuleName):
     try:  # If there is an error loading the script, skip it
         mtime = os.path.getmtime(module_filename)
 
-        if KICAD_PLUGINS.has_key(ModuleName):
+        if ModuleName in KICAD_PLUGINS:
             plugin = KICAD_PLUGINS[ModuleName]
 
             if not plugin["modification_time"] == mtime:
