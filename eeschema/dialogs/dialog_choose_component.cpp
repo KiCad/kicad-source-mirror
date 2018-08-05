@@ -519,19 +519,19 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     if( dc_size.x == 0 || dc_size.y == 0 )
         return;
 
-    if( !aComponent )   // display a tooltip
-    {
-        wxString tooltip = _( "No symbol selected" );
-        GRDrawWrappedText( dc, tooltip );
-        return;
-    }
-
     GRResetPenAndBrush( &dc );
 
     COLOR4D bgColor = m_parent->GetDrawBgColor();
 
     dc.SetBackground( wxBrush( bgColor.ToColour() ) );
     dc.Clear();
+
+    if( !aComponent )   // display a tooltip
+    {
+        wxString tooltip = _( "No symbol selected" );
+        GRDrawWrappedText( dc, tooltip );
+        return;
+    }
 
     int unit = aUnit > 0 ? aUnit : 1;
     int convert = m_deMorganConvert > 0 ? m_deMorganConvert : 1;
