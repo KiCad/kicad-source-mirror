@@ -29,7 +29,11 @@
 
 #ifndef PCBNEW_FOOTPRINT_WIZARDS_H
 #define PCBNEW_FOOTPRINT_WIZARDS_H
+
+#undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 #include <Python.h>
+#undef HAVE_CLOCK_GETTIME
+
 #include <vector>
 #include <footprint_wizard.h>
 

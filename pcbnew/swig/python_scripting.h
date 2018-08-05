@@ -33,7 +33,10 @@
     #undef _XOPEN_SOURCE
 #endif
 
+#undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 #include <Python.h>
+#undef HAVE_CLOCK_GETTIME
+
 #ifndef NO_WXPYTHON_EXTENSION_HEADERS
 #ifdef KICAD_SCRIPTING_WXPYTHON
     #include <wx/wxPython/wxPython.h>

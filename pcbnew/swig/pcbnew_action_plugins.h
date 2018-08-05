@@ -28,7 +28,11 @@
 
 #ifndef PCBNEW_ACTION_PLUGINS_H
 #define PCBNEW_ACTION_PLUGINS_H
+
+#undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 #include <Python.h>
+#undef HAVE_CLOCK_GETTIME
+
 #include <vector>
 #include <action_plugin.h>
 
