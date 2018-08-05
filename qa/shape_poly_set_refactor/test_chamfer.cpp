@@ -34,7 +34,7 @@
 /**
  * Declares the ChamferFilletFixture struct as the boost test fixture.
  */
-BOOST_FIXTURE_TEST_SUITE( ChamferFillet, ChamferFilletFixture )
+BOOST_FIXTURE_TEST_SUITE( Chamfer, ChamferFilletFixture )
 
 /**
  * Function lexicographicOrder
@@ -119,41 +119,5 @@ BOOST_AUTO_TEST_CASE( Chamfer )
         }
     }
 }
-
-/**
- * Tests the SHAPE_POLY_SET::FilletPolygon, which has been refactored into
- * SHAPE_POLY_SET from CPolyLine::Fillet.
- * Assuming the code in CPolyLine is right, this test ensures the behaviour of the new
- * refactored code does not change anything.
- */
-BOOST_AUTO_TEST_CASE( Fillet )
-{
-    SHAPE_POLY_SET::POLYGON actual;
-    CPolyLine expected;
-
-    // Test different radius, up to the half of the minimum segment longitude
-    for (int radius = 1; radius < 5; radius++)
-    {
-        // Test different number of segments
-        for (size_t segments = 1; segments < 100; segments++)
-        {
-            // Chamfered polygon to be tested.
-            actual = common.holeyPolySet.FilletPolygon( radius, segments, 0 );
-
-            // Chamfered polygon assumed to be right.
-            expected = *legacyPolyLine.Fillet( radius, segments );
-
-            // Double check that there are no repeated corners in the legacy shape.
-            expected.RemoveNullSegments();
-
-            // Test equality
-            for (size_t contourIdx = 0; contourIdx < actual.size(); contourIdx++)
-            {
-                TestLineChainEqualCPolyLine(actual[contourIdx], expected, contourIdx);
-            }
-        }
-    }
-}
-
 
 BOOST_AUTO_TEST_SUITE_END()
