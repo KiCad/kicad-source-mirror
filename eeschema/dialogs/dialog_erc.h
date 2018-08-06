@@ -58,8 +58,10 @@ private:
     void Init();
 
     // from DIALOG_ERC_BASE:
+    void OnCloseErcDialog( wxCloseEvent& event ) override;
     void OnErcCmpClick( wxCommandEvent& event ) override;
     void OnEraseDrcMarkersClick( wxCommandEvent& event ) override;
+    void OnButtonCloseClick( wxCommandEvent& event ) override;
     void OnResetMatrixClick( wxCommandEvent& event ) override;
 
     // Click on a marker info:

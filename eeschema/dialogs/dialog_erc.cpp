@@ -166,6 +166,18 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 }
 
 
+// This is a modeless dialog so we have to handle these ourselves.
+void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
+{
+    Close();
+}
+
+
+void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
+{
+    Destroy();
+}
+
 
 void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 {
