@@ -665,6 +665,8 @@ bool SELECTION_TOOL::selectMultiple()
         }
     }
 
+    getViewControls()->SetAutoPan( false );
+
     // Stop drawing the selection box
     view->Remove( &area );
     m_multiple = false;         // Multiple selection mode is inactive
