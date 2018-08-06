@@ -81,6 +81,11 @@ wxString* newWxStringFromPy( PyObject* src )
 #endif
     {
         obj = PyObject_Str( src );
+
+#if PY_MAJOR_VERSION >= 3
+        uni_str = obj; // in case of Python 3 our string is already correctly encoded
+#endif
+
         must_unref_obj = true;
 
         if( PyErr_Occurred() )
@@ -101,7 +106,11 @@ wxString* newWxStringFromPy( PyObject* src )
     }
 
     result = new wxString();
+#if PY_MAJOR_VERSION >= 3
+    size_t len = PyUnicode_GET_LENGTH( uni_str );
+#else
     size_t len = PyUnicode_GET_SIZE( uni_str );
+#endif
 
     if( len )
     {
