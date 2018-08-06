@@ -63,6 +63,8 @@ private:
     /// Initialises member variables
     void InitValues();
     void OnClearAnnotationCmpClick( wxCommandEvent& event ) override;
+    void OnCloseClick( wxCommandEvent& event ) override;
+    void OnClose( wxCloseEvent& event ) override;
     void OnApplyClick( wxCommandEvent& event ) override;
 
     // User functions:
@@ -177,6 +179,19 @@ void DIALOG_ANNOTATE::InitValues()
     m_MessageWindow->SetVisibleSeverities( severities );
 
     m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 160 ) );
+}
+
+
+// This is a modeless dialog so we have to handle these ourselves.
+void DIALOG_ANNOTATE::OnCloseClick( wxCommandEvent& event )
+{
+    Close();
+}
+
+
+void DIALOG_ANNOTATE::OnClose( wxCloseEvent& event )
+{
+    Destroy();
 }
 
 

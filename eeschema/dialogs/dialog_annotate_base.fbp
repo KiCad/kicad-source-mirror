@@ -61,7 +61,7 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnClose</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -1373,7 +1373,7 @@
                                 <property name="name">m_sdbSizer1</property>
                                 <property name="permission">protected</property>
                                 <event name="OnApplyButtonClick"></event>
-                                <event name="OnCancelButtonClick"></event>
+                                <event name="OnCancelButtonClick">OnCloseClick</event>
                                 <event name="OnContextHelpButtonClick"></event>
                                 <event name="OnHelpButtonClick"></event>
                                 <event name="OnNoButtonClick"></event>
