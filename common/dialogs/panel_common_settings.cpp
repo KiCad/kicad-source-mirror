@@ -28,7 +28,6 @@
 #include <bitmaps.h>
 #include "panel_common_settings.h"
 
-
 PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent ) :
         PANEL_COMMON_SETTINGS_BASE( aParent ),
         m_dialog( aDialog ),
@@ -51,6 +50,10 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     commonSettings->Read( AUTOSAVE_INTERVAL_KEY, &timevalue );
     msg << timevalue / 60;
     m_SaveTime->SetValue( msg );
+
+    int fileHistorySize;
+    commonSettings->Read( FILE_HISTORY_SIZE, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
+    m_fileHistorySize->SetValue( fileHistorySize );
 
     int scale_fourths;
     commonSettings->Read( ICON_SCALE_KEY, &scale_fourths );
@@ -93,6 +96,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     wxConfigBase* commonSettings = Pgm().CommonSettings();
 
     commonSettings->Write( AUTOSAVE_INTERVAL_KEY, m_SaveTime->GetValue() * 60 );
+
+    commonSettings->Write( FILE_HISTORY_SIZE, m_fileHistorySize->GetValue() );
 
     const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
     commonSettings->Write( ICON_SCALE_KEY, scale_fourths );

@@ -50,6 +50,8 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
+		wxStaticText* m_staticTextFileHistorySize;
+		wxSpinCtrl* m_fileHistorySize;
 		wxTextCtrl* m_textEditorPath;
 		wxBitmapButton* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;

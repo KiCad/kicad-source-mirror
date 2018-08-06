@@ -47,9 +47,12 @@
 #define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
 #define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
 #define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
+#define FILE_HISTORY_SIZE               wxT( "FileHistorySize" )
 
 ///@}
 
+/// The default file history size is 9.
+#define DEFAULT_FILE_HISTORY_SIZE 9
 
 class wxConfigBase;
 class wxSingleInstanceChecker;
