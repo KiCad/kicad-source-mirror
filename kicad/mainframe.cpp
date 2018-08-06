@@ -564,43 +564,15 @@ void KICAD_MANAGER_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 
 void KICAD_MANAGER_FRAME::OnEditSymLibTable( wxCommandEvent& aEvent )
 {
-    auto frame = Kiway().Player( FRAME_SCH, false );
-    bool alreadyRunning = frame != nullptr;
-
-    if( !frame )
-        frame = Kiway().Player( FRAME_SCH, true );
-
-    if( frame )
-    {
-        DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Symbol Libraries" ) );
-        frame->InstallLibraryTablesPanel( &dlg );
-
-        dlg.ShowModal();
-
-        if( !alreadyRunning )
-            frame->Destroy();
-    }
+    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+    kiface->CreateWindow( this, DIALOG_SCH_LIBRARY_TABLE, &Kiway() );
 }
 
 
 void KICAD_MANAGER_FRAME::OnEditFpLibTable( wxCommandEvent& aEvent )
 {
-    auto frame = Kiway().Player( FRAME_PCB, false );
-    bool alreadyRunning = frame != nullptr;
-
-    if( !frame )
-        frame = Kiway().Player( FRAME_PCB, true );
-
-    if( frame )
-    {
-        DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Footprint Libraries" ) );
-        frame->InstallLibraryTablesPanel( &dlg );
-
-        dlg.ShowModal();
-
-        if( !alreadyRunning )
-            frame->Destroy();
-    }
+    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+    kiface->CreateWindow( this, DIALOG_PCB_LIBRARY_TABLE, &Kiway() );
 }
 
 

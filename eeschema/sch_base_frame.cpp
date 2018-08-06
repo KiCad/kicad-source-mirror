@@ -270,56 +270,20 @@ void SCH_BASE_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 
 void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
-    DIALOG_EDIT_LIBRARY_TABLES dlg( this, _( "Footprint Libraries" ) );
-
-    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
-                                               Prj().SchSymbolLibTable() ) );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    saveSymbolLibTables( dlg.m_GlobalTableChanged, dlg.m_ProjectTableChanged );
-
-    LIB_EDIT_FRAME* editor = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
-
-    if( this == editor )
-    {
-        // There may be no parent window so use KIWAY message to refresh the schematic editor
-        // in case any symbols have changed.
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
-    }
-
-    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
-
-    if( viewer )
-        viewer->ReCreateListLib();
+    InvokeSchEditSymbolLibTable( &Kiway(), this );
 }
 
 
-void SCH_BASE_FRAME::InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog )
+LIB_ALIAS* SCH_BASE_FRAME::GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowError )
 {
-    SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-    SYMBOL_LIB_TABLE* projectTable = Prj().SchSymbolLibTable();
-
-    aDialog->InstallPanel( new PANEL_SYM_LIB_TABLE( aDialog, globalTable, projectTable ) );
-}
-
-
-LIB_ALIAS* SCH_BASE_FRAME::GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib,
-                                        bool aShowErrorMsg )
-{
-    // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
-
     PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 
-    return SchGetLibAlias( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
+    return SchGetLibAlias( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowError );
 }
 
 
 LIB_PART* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg )
 {
-    // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
-
     PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 
     return SchGetLibPart( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
@@ -328,22 +292,19 @@ LIB_PART* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib, b
 
 bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
 {
+    wxString msg;
     bool success = true;
 
     if( aGlobal )
     {
         try
         {
-            FILE_OUTPUTFORMATTER sf( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
-
-            SYMBOL_LIB_TABLE::GetGlobalLibTable().Format( &sf, 0 );
+            SYMBOL_LIB_TABLE::GetGlobalLibTable().Save( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
         }
         catch( const IO_ERROR& ioe )
         {
             success = false;
-            wxString msg = wxString::Format( _( "Error occurred saving the global symbol library "
-                                                "table:\n\n%s" ),
-                                            GetChars( ioe.What().GetData() ) );
+            msg.Printf( _( "Error saving global symbol library table:\n\n%s" ), ioe.What() );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
@@ -359,9 +320,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
         catch( const IO_ERROR& ioe )
         {
             success = false;
-            wxString msg = wxString::Format( _( "Error occurred saving project specific "
-                                                "symbol library table:\n\n%s" ),
-                                             GetChars( ioe.What() ) );
+            msg.Printf( _( "Error saving project-specific symbol library table:\n\n%s" ), ioe.What() );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }

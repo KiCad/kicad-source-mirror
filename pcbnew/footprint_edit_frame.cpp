@@ -829,7 +829,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::syncLibraryTree( bool aProgress )
+void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
 {
     FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
@@ -918,57 +918,7 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         break;
 
     case ID_PCB_LIB_TABLE_EDIT:
-        {
-            bool tableChanged = false;
-            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
-
-            if( r & 1 )
-            {
-                try
-                {
-                    FILE_OUTPUTFORMATTER sf( FP_LIB_TABLE::GetGlobalTableFileName() );
-
-                    GFootprintTable.Format( &sf, 0 );
-                    tableChanged = true;
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxString msg;
-                    msg.Printf( _( "Error saving the global footprint library table:\n\n%s" ),
-                                ioe.What().GetData() );
-                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-                }
-            }
-
-            if( r & 2 )
-            {
-                wxString tblName = Prj().FootprintLibTblName();
-
-                try
-                {
-                    Prj().PcbFootprintLibs()->Save( tblName );
-                    tableChanged = true;
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxString msg;
-                    msg.Printf( _( "Error saving project specific footprint library table:\n\n%s" ),
-                                ioe.What() );
-                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-                }
-            }
-
-            FOOTPRINT_VIEWER_FRAME* viewer;
-            viewer = (FOOTPRINT_VIEWER_FRAME*)Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
-
-            if( tableChanged )
-            {
-                if( viewer != NULL )
-                    viewer->ReCreateLibraryList();
-
-                syncLibraryTree( true );
-            }
-        }
+        InvokePcbLibTableEditor( &Kiway(), this );
         break;
 
     case wxID_PREFERENCES:

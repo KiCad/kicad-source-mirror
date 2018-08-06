@@ -287,7 +287,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( getTargetLibId() == GetCurrentLibId() )
                 Clear_Pcb( false );
 
-            syncLibraryTree( true );
+            SyncLibraryTree( true );
         }
         break;
 
@@ -342,7 +342,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->Refresh();
             Update3DView();
 
-            syncLibraryTree( false );
+            SyncLibraryTree( false );
         }
         break;
 
@@ -403,7 +403,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 m_canvas->Refresh();
                 Update3DView();
 
-                syncLibraryTree( false );
+                SyncLibraryTree( false );
             }
 
             wizard->Destroy();
@@ -435,7 +435,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // Save Library As
             const wxString& libName = getTargetLibId().GetLibNickname();
             if( SaveLibraryAs( Prj().PcbFootprintLibs()->FindRow( libName )->GetFullURI() ) )
-                syncLibraryTree( true );
+                SyncLibraryTree( true );
         }
         else
         {
@@ -443,7 +443,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             MODULE* footprint = LoadFootprint( getTargetLibId() );
             if( footprint && SaveFootprintAs( footprint ) )
             {
-                syncLibraryTree( false );
+                SyncLibraryTree( false );
 
                 if( getTargetLibId() == GetCurrentLibId() )
                 {
@@ -582,7 +582,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             LIB_ID newLib( name, wxEmptyString );
 
-            syncLibraryTree( false );
+            SyncLibraryTree( false );
             m_treePane->GetLibTree()->SelectLibId( newLib );
         }
     }

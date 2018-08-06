@@ -63,7 +63,11 @@ enum FRAME_T
     // C++ project manager is not a KIWAY_PLAYER
     KICAD_MAIN_FRAME_T = KIWAY_PLAYER_COUNT,
 
-    FRAME_T_COUNT
+    FRAME_T_COUNT,
+
+    // Library table dialogs are transient and are never returned
+    DIALOG_SCH_LIBRARY_TABLE = FRAME_T_COUNT,
+    DIALOG_PCB_LIBRARY_TABLE
 };
 
     //TEXT_EDITOR_FRAME_T,

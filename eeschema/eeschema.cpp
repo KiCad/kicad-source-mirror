@@ -46,7 +46,8 @@
 #include <transform.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>
-#include "dialogs/dialog_global_sym_lib_table_config.h"
+#include <dialogs/dialog_global_sym_lib_table_config.h>
+#include <dialogs/panel_sym_lib_table.h>
 
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
@@ -112,6 +113,12 @@ static struct IFACE : public KIFACE_I
                 return frame;
             }
             break;
+
+        case DIALOG_SCH_LIBRARY_TABLE:
+            InvokeSchEditSymbolLibTable( aKiway, aParent );
+
+            // Dialog has completed; nothing to return.
+            return nullptr;
 
         default:
             return NULL;

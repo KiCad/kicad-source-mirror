@@ -481,6 +481,13 @@ public:
     void CommonSettingsChanged() override;
 
     /**
+     * Synchronize the footprint library tree to the current state of the footprint library
+     * table.
+     * @param aProgress
+     */
+    void SyncLibraryTree( bool aProgress );
+
+    /**
      * redraws the message panel.
      * If a item is currently selected, displays the item info.
      * If nothing selected, display the current footprint info, or
@@ -506,13 +513,6 @@ protected:
      * the footprint library tree.
      */
     void initLibraryTree();
-
-    /**
-     * Synchronize the footprint library tree to the current state of the footprint library
-     * table.
-     * @param aProgress
-     */
-    void syncLibraryTree( bool aProgress );
 
     /**
      * Function UpdateTitle

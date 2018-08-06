@@ -55,7 +55,7 @@
     "https://github.com/KiCad/kicad-packages3d"
 //    wxT( "https://github.com/KiCad/kicad-library/tree/master/modules/packages3d" )
 
-void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aCaller )
+void Invoke3DShapeLibsDownloaderWizard( wxWindow* aCaller )
 {
     WIZARD_3DSHAPE_LIBS_DOWNLOADER wizard( aCaller );
     wizard.RunWizard( wizard.GetFirstPage() );

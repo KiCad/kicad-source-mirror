@@ -34,8 +34,10 @@ class PANEL_FP_LIB_TABLE : public PANEL_FP_LIB_TABLE_BASE
 {
 
 public:
-    PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, FP_LIB_TABLE* aGlobal,
-                        FP_LIB_TABLE* aProject );
+    PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
+                        FP_LIB_TABLE* aGlobal, const wxString& aGlobalTblPath,
+                        FP_LIB_TABLE* aProject, const wxString& aProjectTblPath,
+                        const wxString& aProjectBasePath );
     ~PANEL_FP_LIB_TABLE() override;
 
 private:
@@ -65,6 +67,7 @@ private:
     // caller's tables are modified only on OK button and successful verification.
     FP_LIB_TABLE*    m_global;
     FP_LIB_TABLE*    m_project;
+    wxString         m_projectBasePath;
 
     FP_LIB_TABLE_GRID* global_model() const
     {

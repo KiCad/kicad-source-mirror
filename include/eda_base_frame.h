@@ -243,13 +243,6 @@ public:
     virtual void InstallPreferences( PAGED_DIALOG* aParent ) { }
 
     /**
-     * Function InstallLibraryTablesPanel
-     * allows a Frame to load its library tables (if any) into a library tables dialog.
-     * @param aDialog a library tables dialog
-     */
-    virtual void InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog ) { }
-
-    /**
      * Function LoadSettings
      * loads common frame parameters from a configuration file.
      *

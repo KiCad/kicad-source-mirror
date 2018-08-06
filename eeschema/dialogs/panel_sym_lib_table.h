@@ -35,8 +35,10 @@ class PANEL_SYM_LIB_TABLE : public PANEL_SYM_LIB_TABLE_BASE
 {
 
 public:
-    PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, SYMBOL_LIB_TABLE* aGlobal,
-                         SYMBOL_LIB_TABLE* aProject );
+    PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
+                         SYMBOL_LIB_TABLE* aGlobal, const wxString& aGlobalTablePath,
+                         SYMBOL_LIB_TABLE* aProject, const wxString& aProjectTablePath,
+                         const wxString& m_projectBasePath );
     virtual ~PANEL_SYM_LIB_TABLE();
 
 private:
@@ -63,8 +65,9 @@ private:
     void populateEnvironReadOnlyTable();
 
     // Caller's tables are modified only on OK button and successful verification.
-    SYMBOL_LIB_TABLE*    m_global;
-    SYMBOL_LIB_TABLE*    m_project;
+    SYMBOL_LIB_TABLE*    m_globalTable;
+    SYMBOL_LIB_TABLE*    m_projectTable;
+    wxString             m_projectBasePath;
 
     SYMBOL_LIB_TABLE_GRID* global_model() const;
 
@@ -78,5 +81,9 @@ private:
     static size_t    m_pageNdx;      ///< Remember the last notebook page selected during a session
     wxString         m_lastBrowseDir; ///< last browsed directory
 };
+
+
+void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent );
+
 
 #endif    // PANEL_SYM_LIB_TABLE_H

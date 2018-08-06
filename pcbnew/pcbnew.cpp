@@ -61,6 +61,7 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <gl_context_mgr.h>
+#include "invoke_pcb_dialog.h"
 
 extern bool IsWxPythonLoaded();
 
@@ -153,6 +154,12 @@ static struct IFACE : public KIFACE_I
 
         case FRAME_PCB_FOOTPRINT_PREVIEW:
             return dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
+
+        case DIALOG_PCB_LIBRARY_TABLE:
+            InvokePcbLibTableEditor( aKiway, aParent );
+
+            // Dialog has completed; nothing to return.
+            return nullptr;
 
         default:
             return nullptr;

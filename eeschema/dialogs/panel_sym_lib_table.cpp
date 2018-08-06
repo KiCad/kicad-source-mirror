@@ -33,7 +33,9 @@
 #include <lib_table_grid.h>
 #include <wildcards_and_files_ext.h>
 #include <env_paths.h>
-
+#include <lib_edit_frame.h>
+#include <viewlib_frame.h>
+#include <kiway.h>
 
 /**
  * Build a wxGridTableBase by wrapping an #SYMBOL_LIB_TABLE object.
@@ -139,15 +141,19 @@ protected:
 
 PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                                           SYMBOL_LIB_TABLE* aGlobal,
-                                          SYMBOL_LIB_TABLE* aProject ) :
+                                          const wxString& aGlobalTablePath,
+                                          SYMBOL_LIB_TABLE* aProject,
+                                          const wxString& aProjectTablePath,
+                                          const wxString& aProjectBasePath ) :
     PANEL_SYM_LIB_TABLE_BASE( aParent ),
-    m_global( aGlobal ),
-    m_project( aProject ),
+    m_globalTable( aGlobal ),
+    m_projectTable( aProject ),
+    m_projectBasePath( aProjectBasePath ),
     m_parent( aParent )
 {
     // For user info, shows the table filenames:
-    m_PrjTableFilename->SetLabel( m_parent->Prj().SymbolLibTableName() );
-    m_GblTableFilename->SetLabel( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
+    m_GblTableFilename->SetLabel( aGlobalTablePath );
+    m_PrjTableFilename->SetLabel( aProjectTablePath );
 
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
@@ -222,6 +228,11 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
 PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 {
+    // When the dialog is closed it will hide the current notebook page first, which will
+    // in turn select the other one.  We then end up saving its index as the "current page".
+    // So flip them back again:
+    m_pageNdx = m_pageNdx == 1 ? 0 : 1;
+
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
@@ -323,11 +334,12 @@ void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
-    wxFileDialog dlg( this, _( "Select Library" ), m_parent->Prj().GetProjectPath(),
+    if( m_lastBrowseDir.IsEmpty() )
+        m_lastBrowseDir = m_projectBasePath;
+
+    wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir,
                       wxEmptyString, SchematicLibraryFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
-
-    dlg.SetDirectory( m_lastBrowseDir );
 
     auto result = dlg.ShowModal();
 
@@ -386,7 +398,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                     SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
 
             // try to use path normalized to an environmental variable or project path
-            wxString path = NormalizePath( filePath, &envVars, &m_parent->Prj() );
+            wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
 
             if( path.IsEmpty() )
                 path = fn.GetFullPath();
@@ -533,20 +545,24 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
     if( !verifyTables() )
         return false;
 
-    if( *global_model() != *m_global )
+    if( *global_model() != *m_globalTable )
     {
-        m_global->Clear();
-        m_global->rows.transfer( m_global->rows.end(), global_model()->rows.begin(),
+        m_parent->m_GlobalTableChanged = true;
+
+        m_globalTable->Clear();
+        m_globalTable->rows.transfer( m_globalTable->rows.end(), global_model()->rows.begin(),
                                  global_model()->rows.end(), global_model()->rows );
-        m_global->reindex();
+        m_globalTable->reindex();
     }
 
-    if( *project_model() != *m_project )
+    if( *project_model() != *m_projectTable )
     {
-        m_project->Clear();
-        m_project->rows.transfer( m_project->rows.end(), project_model()->rows.begin(),
+        m_parent->m_ProjectTableChanged = true;
+
+        m_projectTable->Clear();
+        m_projectTable->rows.transfer( m_projectTable->rows.end(), project_model()->rows.begin(),
                                   project_model()->rows.end(), project_model()->rows );
-        m_project->reindex();
+        m_projectTable->reindex();
     }
 
     return true;
@@ -651,3 +667,62 @@ SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::cur_model() const
 
 
 size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
+
+
+void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
+{
+    SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+    wxString          globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
+    SYMBOL_LIB_TABLE* projectTable = aKiway->Prj().SchSymbolLibTable();
+    wxString          projectPath = aKiway->Prj().GetProjectPath();
+    wxFileName        projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+    wxString          msg;
+
+    DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Symbol Libraries" ) );
+
+    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, globalTable, globalTablePath,
+                                               projectTable, projectTableFn.GetFullPath(),
+                                               aKiway->Prj().GetProjectPath() ) );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( dlg.m_GlobalTableChanged )
+    {
+        try
+        {
+            globalTable->Save( globalTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    if( dlg.m_ProjectTableChanged )
+    {
+
+        try
+        {
+            projectTable->Save( projectTableFn.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    auto editor = (LIB_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
+
+    if( editor )
+        editor->SyncLibraries( true );
+
+    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
+
+    if( viewer )
+        viewer->ReCreateListLib();
+}
+
+

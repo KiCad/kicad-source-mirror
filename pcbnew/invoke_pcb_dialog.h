@@ -43,7 +43,7 @@
 #define INVOKE_A_DIALOG_H_
 
 
-class wxTopLevelWindow;
+class wxWindow;
 class wxPoint;
 class wxSize;
 class wxString;
@@ -59,30 +59,27 @@ class FOOTPRINT_EDIT_FRAME;
 class FP_LIB_TABLE;
 class BOARD;
 class PCB_PLOT_PARAMS;
+class KIWAY;
 
 
 /**
  * Function InvokePcbLibTableEditor
- * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing two lib tables.
+ * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing the global and project
+ * library tables.
  *
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
- * @param aGlobal is the common footprint library table file being edited.
- * @param aProject is the project specific footprint library table file being edited.
- *
- * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
- *  and/or the @a aProject table, respectively.  If set, table was modified.
+ * @param aCaller is the wxWindow which is invoking the dialog.
+ * @return true if either table changed.
  */
-int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
-                             FP_LIB_TABLE* aProject );
+void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller );
 
 /**
  * Function Invoke3DShapeLibsDownloaderWizard
  * Runs the downloader wizard for easy 3D shape libraries download from
  * the official Kicad Github repository of *.3Dshape libraries.
  *
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ * @param aCaller is the wxWindow which is invoking the dialog.
  */
-void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aCaller );
+void Invoke3DShapeLibsDownloaderWizard( wxWindow* aCaller );
 
 
 /**

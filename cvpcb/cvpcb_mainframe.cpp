@@ -455,63 +455,12 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
-    FP_LIB_TABLE* globalTable;
-    bool          tableChanged = false;
-    KIFACE*       kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+    kiface->CreateWindow( this, DIALOG_PCB_LIBRARY_TABLE, &Kiway() );
 
-    if( kiface )
-        globalTable = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_GLOBAL_FOOTPRINT_TABLE );
-    else
-        globalTable = &GFootprintTable; // Shouldn't happen now that Cvpcb is integrated
-
-    int r = InvokePcbLibTableEditor( this, globalTable, Prj().PcbFootprintLibs( Kiway() ) );
-
-    if( r & 1 )
-    {
-        wxString fileName = FP_LIB_TABLE::GetGlobalTableFileName();
-
-        try
-        {
-            globalTable->Save( fileName );
-            tableChanged = true;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg = wxString::Format(
-                    _( "Error occurred saving the global footprint library table:\n\"%s\"\n%s" ),
-                    GetChars( fileName ),
-                    GetChars( ioe.What() )
-                    );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
-    }
-
-    if( r & 2 )
-    {
-        wxString fileName = Prj().FootprintLibTblName();
-
-        try
-        {
-            Prj().PcbFootprintLibs( Kiway() )->Save( fileName );
-            tableChanged = true;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg = wxString::Format(
-                    _( "Error occurred saving the project footprint library table:\n\"%s\"\n%s" ),
-                    GetChars( fileName ),
-                    GetChars( ioe.What() )
-                    );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
-    }
-
-    if( tableChanged )
-    {
-        wxBusyCursor dummy;
-        BuildLIBRARY_LISTBOX();
-        m_FootprintsList->ReadFootprintFiles( Prj().PcbFootprintLibs( Kiway() ) );
-    }
+    wxBusyCursor dummy;
+    BuildLIBRARY_LISTBOX();
+    m_FootprintsList->ReadFootprintFiles( Prj().PcbFootprintLibs( Kiway() ) );
 }
 
 

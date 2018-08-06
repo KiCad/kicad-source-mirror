@@ -61,63 +61,12 @@
 
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
-    int         id = event.GetId();
-    wxFileName  fn;
+    int id = event.GetId();
 
     switch( id )
     {
     case ID_PCB_LIB_TABLE_EDIT:
-        {
-            bool tableChanged = false;
-            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
-
-            if( r & 1 )
-            {
-                try
-                {
-                    GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
-                    tableChanged = true;
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxString msg = wxString::Format( _(
-                        "Error occurred saving the global footprint library "
-                        "table:\n\n%s" ),
-                        GetChars( ioe.What().GetData() )
-                        );
-                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-                }
-            }
-
-            // If no board file is defined, do not save the project specific library table.  It
-            // is kept in memory and created in the path when the new board is saved.
-            if( (r & 2) && !GetBoard()->GetFileName().IsEmpty() )
-            {
-                wxString    tblName   = Prj().FootprintLibTblName();
-
-                try
-                {
-                    Prj().PcbFootprintLibs()->Save( tblName );
-                    tableChanged = true;
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxString msg = wxString::Format( _(
-                        "Error occurred saving project specific footprint library "
-                        "table:\n\n%s" ),
-                        GetChars( ioe.What() )
-                        );
-                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-                }
-            }
-
-            FOOTPRINT_VIEWER_FRAME* viewer;
-
-            if( tableChanged && (viewer = (FOOTPRINT_VIEWER_FRAME*)Kiway().Player( FRAME_PCB_MODULE_VIEWER, false )) != NULL )
-            {
-                viewer->ReCreateLibraryList();
-            }
-        }
+        InvokePcbLibTableEditor( &Kiway(), this );
         break;
 
     case ID_PCB_3DSHAPELIB_WIZARD:
@@ -130,9 +79,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Board_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
         break;
 
-    // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for Pcbnew.
         DisplayHotkeyList( this, g_Board_Editor_Hotkeys_Descr );
         break;
 

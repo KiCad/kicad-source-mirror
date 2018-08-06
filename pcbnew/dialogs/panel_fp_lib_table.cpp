@@ -53,6 +53,9 @@
 #include <env_paths.h>
 #include <dialogs/dialog_file_dir_picker.h>
 #include <dialog_edit_library_tables.h>
+#include <footprint_viewer_frame.h>
+#include <footprint_edit_frame.h>
+#include <kiway.h>
 
 // Filters for the file picker
 static constexpr int FILTER_COUNT = 4;
@@ -260,16 +263,18 @@ protected:
 
 
 PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
-                                        FP_LIB_TABLE* aGlobal,
-                                        FP_LIB_TABLE* aProject ) :
+                                        FP_LIB_TABLE* aGlobal, const wxString& aGlobalTblPath,
+                                        FP_LIB_TABLE* aProject, const wxString& aProjectTblPath,
+                                        const wxString& aProjectBasePath ) :
     PANEL_FP_LIB_TABLE_BASE( aParent ),
     m_global( aGlobal ),
     m_project( aProject ),
+    m_projectBasePath( aProjectBasePath ),
     m_parent( aParent )
 {
     // For user info, shows the table filenames:
-    m_PrjTableFilename->SetLabel( m_parent->Prj().FootprintLibTblName() );
-    m_GblTableFilename->SetLabel( FP_LIB_TABLE::GetGlobalTableFileName() );
+    m_GblTableFilename->SetLabel( aGlobalTblPath );
+    m_PrjTableFilename->SetLabel( aProjectTblPath );
 
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
@@ -349,6 +354,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
 PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
 {
+    // When the dialog is closed it will hide the current notebook page first, which will
+    // in turn select the other one.  We then end up saving its index as the "current page".
+    // So flip them back again:
+    m_pageNdx = m_pageNdx == 1 ? 0 : 1;
+
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
@@ -570,7 +580,7 @@ void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
     if( m_lastBrowseDir.IsEmpty() )
-        m_lastBrowseDir = m_parent->Prj().GetProjectPath();
+        m_lastBrowseDir = m_projectBasePath;
 
     DIALOG_FILE_DIR_PICKER dlg( this, _( "Select Library" ), m_lastBrowseDir,
                                 getFilterString(), FD_MULTIPLE );
@@ -622,7 +632,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( type ) );
 
             // try to use path normalized to an environmental variable or project path
-            wxString path = NormalizePath( filePath, &envVars, &m_parent->Prj() );
+            wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
 
             if( path.IsEmpty() )
                 path = fn.GetFullPath();
@@ -683,9 +693,11 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
                                       project_model()->rows.end(), project_model()->rows );
             m_project->reindex();
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -762,31 +774,57 @@ size_t   PANEL_FP_LIB_TABLE::m_pageNdx = 0;
 wxString PANEL_FP_LIB_TABLE::m_lastBrowseDir;
 
 
-int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobalTable,
-                             FP_LIB_TABLE* aProjectTable )
-{
-    DIALOG_EDIT_LIBRARY_TABLES dlg( aCaller, _( "Footprint Libraries" ) );
-
-    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, aGlobalTable, aProjectTable ) );
-
-    int ret = 0;
-
-    if( dlg.ShowModal() != wxID_CANCEL )
-    {
-        if( dlg.m_GlobalTableChanged )
-            ret += 1;
-        if( dlg.m_ProjectTableChanged )
-            ret += 2;
-    }
-
-    return ret;
-}
-
-
-void PCB_EDIT_FRAME::InstallLibraryTablesPanel( DIALOG_EDIT_LIBRARY_TABLES* aDialog )
+void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 {
     FP_LIB_TABLE* globalTable = &GFootprintTable;
-    FP_LIB_TABLE* projectTable = Prj().PcbFootprintLibs();
+    wxString      globalTablePath = FP_LIB_TABLE::GetGlobalTableFileName();
+    FP_LIB_TABLE* projectTable = aKiway->Prj().PcbFootprintLibs();
+    wxString      projectTablePath = aKiway->Prj().FootprintLibTblName();
+    wxString      msg;
 
-    aDialog->InstallPanel( new PANEL_FP_LIB_TABLE( aDialog, globalTable, projectTable ) );
+    DIALOG_EDIT_LIBRARY_TABLES dlg( aCaller, _( "Footprint Libraries" ) );
+    dlg.SetKiway( &dlg, aKiway );
+
+    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, globalTable, globalTablePath,
+                                              projectTable, projectTablePath,
+                                              aKiway->Prj().GetProjectPath() ) );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( dlg.m_GlobalTableChanged )
+    {
+        try
+        {
+            globalTable->Save( globalTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    if( dlg.m_ProjectTableChanged )
+    {
+        try
+        {
+            projectTable->Save( projectTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    auto editor = (FOOTPRINT_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
+
+    if( editor )
+        editor->SyncLibraryTree( true );
+
+    auto viewer = (FOOTPRINT_VIEWER_FRAME*) aKiway->Player( FRAME_PCB_MODULE_VIEWER, false );
+
+    if( viewer )
+        viewer->ReCreateLibraryList();
 }
