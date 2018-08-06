@@ -55,6 +55,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_clearance = CL_NONE;
     m_sketchBoardGfx = false;
     m_sketchFpGfx = false;
+    m_sketchFpTxtfx = false;
     m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
     // By default everything should be displayed as filled
@@ -133,6 +134,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
     m_padNumbers        = aOptions->m_DisplayPadNum;
     m_sketchBoardGfx    = !aOptions->m_DisplayDrawItemsFill;
     m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
+    m_sketchFpTxtfx     = !aOptions->m_DisplayModTextFill;
 
     // Whether to draw tracks, vias & pads filled or as outlines
     m_sketchMode[LAYER_PADS_TH]      = !aOptions->m_DisplayPadFill;
@@ -1020,10 +1022,14 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     if( shownText.Length() == 0 )
         return;
 
+    bool sketch = m_pcbSettings.m_sketchFpTxtfx;
+
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
     VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
 
-    if( m_pcbSettings.m_sketchMode[aLayer] )
+    // Currently, draw text routines do not know the true outline mode.
+    // so draw the text in "line" mode (no thickness)
+    if( sketch )
     {
         // Outline mode
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
@@ -1041,7 +1047,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians() );
 
     // Draw the umbilical line
-    if( aText->IsSelected() && aText->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
+    if( aText->IsSelected() )
     {
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );

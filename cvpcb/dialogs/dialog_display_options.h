@@ -39,19 +39,18 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS :
     public DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE
 {
 private:
-PCB_BASE_FRAME * m_Parent;
+    DISPLAY_FOOTPRINTS_FRAME * m_Parent;
 
 public:
-    DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( PCB_BASE_FRAME* parent );
+    DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( DISPLAY_FOOTPRINTS_FRAME* parent );
     ~DIALOG_FOOTPRINTS_DISPLAY_OPTIONS();
 
 
 private:
-    void initDialog( );
+    void initDialog();
     void UpdateObjectSettings( void );
     void OnApplyClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
-    void OnOkClick( wxCommandEvent& event ) override;
+    bool TransferDataFromWindow() override;
 };
 
 #endif      // _DIALOG_DISPLAY_OPTIONS_H_

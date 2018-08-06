@@ -568,7 +568,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 
     if( gal )
     {
-    // Apply new display options to the GAL canvas
+        // Apply new display options to the GAL canvas
         auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
         view->UpdateDisplayOptions( displ_opts );
 
@@ -597,6 +597,16 @@ void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     displ_opts->m_DisplayModEdgeFill = !displ_opts->m_DisplayModEdgeFill;
+    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
+
+    if( gal )
+    {
+        // Apply new display options to the GAL canvas
+        auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
+        view->UpdateDisplayOptions( displ_opts );
+        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    }
+
     m_canvas->Refresh();
 }
 
@@ -605,6 +615,16 @@ void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     displ_opts->m_DisplayModTextFill = !displ_opts->m_DisplayModTextFill;
+    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
+
+    if( gal )
+    {
+        // Apply new display options to the GAL canvas
+        auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
+        view->UpdateDisplayOptions( displ_opts );
+        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    }
+
     m_canvas->Refresh();
 }
 
@@ -663,6 +683,12 @@ void PCB_BASE_FRAME::OnUpdateEdgeDrawMode( wxUpdateUIEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     aEvent.Check( !displ_opts->m_DisplayModEdgeFill );
+
+    wxString msgEdgesFill[2] = { _( "Show outlines in filled mode" ),
+                                 _( "Show outlines in sketch mode" ) };
+
+    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
 }
 
 
@@ -670,6 +696,11 @@ void PCB_BASE_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     aEvent.Check( !displ_opts->m_DisplayModTextFill );
+
+    wxString msgTextsFill[2] = { _( "Show texts in filled mode" ),
+                                 _( "Show texts in sketch mode" ) };
+    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
 }
 
 

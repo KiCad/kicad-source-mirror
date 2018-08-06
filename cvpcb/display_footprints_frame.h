@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2007-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,8 @@
 /**
  * @file display_footprints_frame.h
  */
-
+#ifndef DISPLAY_FOOTPRINTS_FRAME_H
+#define DISPLAY_FOOTPRINTS_FRAME_H
 
 #include <pcb_base_frame.h>
 
@@ -56,11 +57,6 @@ public:
     void    ReCreateVToolbar() override;
     void    ReCreateOptToolbar() override;
 
-    void OnSelectOptionToolbar( wxCommandEvent& event );
-
-    void OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent );
-
     /**
      * Function InitDisplay
      * Refresh the full display for this frame:
@@ -68,6 +64,20 @@ public:
      * Must be called after the footprint to display is modifed
      */
     void InitDisplay();
+
+    /**
+     * update the gal canvas (view, colors ...)
+     */
+    void updateView();
+
+    /// Updates the GAL with display settings changes
+    void applyDisplaySettingsToGAL();
+
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    void UseGalCanvas( bool aEnable ) override;
+
+    ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
+    void UpdateMsgPanel() override;
 
     /**
      * Function IsGridVisible() , virtual
@@ -131,3 +141,5 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
+
+#endif   // DISPLAY_FOOTPRINTS_FRAME_H

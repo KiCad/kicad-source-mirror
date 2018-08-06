@@ -153,6 +153,9 @@ protected:
     ///> Flag determining if footprint graphic items should be outlined or stroked
     bool    m_sketchFpGfx;
 
+    ///> Flag determining if footprint text items should be outlined or stroked
+    bool    m_sketchFpTxtfx;
+
     ///> Flag determining if pad numbers should be visible
     bool    m_padNumbers;
 

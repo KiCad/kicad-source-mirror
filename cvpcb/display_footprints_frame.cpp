@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -29,8 +29,10 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
+#include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <macros.h>
 #include <bitmaps.h>
@@ -42,6 +44,7 @@
 #include <io_mgr.h>
 #include <class_module.h>
 #include <class_board.h>
+#include <pcb_painter.h>
 
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
@@ -49,6 +52,12 @@
 #include <listboxes.h>
 
 #include <3d_viewer/eda_3d_viewer.h>
+#include <view/view.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/common_tools.h>
+#include "tools/cvpcb_actions.h"
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
@@ -56,19 +65,16 @@ COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
-    EVT_SIZE( DISPLAY_FOOTPRINTS_FRAME::OnSize )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
 
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-              DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-              DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                   DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                   DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode )
+    /*
+    EVT_TOOL  and EVT_UPDATE_UI for:
+      ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+      ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+      ID_TB_OPTIONS_SHOW_PADS_SKETCH
+      are managed in PCB_BASE_FRAME
+    */
 END_EVENT_TABLE()
 
 
@@ -107,6 +113,13 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
+    // Create GAL canvas
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    //EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            GetGalDisplayOptions(), backend );
+    SetGalCanvas( gal_drawPanel );
+
     m_auimgr.SetManagedWindow( this );
 
     EDA_PANEINFO horiz;
@@ -125,8 +138,13 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
         m_auimgr.AddPane( m_drawToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right() );
 
-    m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DisplayFrame" ) ).CentrePane() );
+    if( m_canvas )
+        m_auimgr.AddPane( m_canvas,
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+
+    if( GetGalCanvas() )
+        m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                          wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
 
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
@@ -136,12 +154,38 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_auimgr.Update();
 
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
+                                   gal_drawPanel->GetViewControls(), this );
+    m_actions = new CVPCB_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->InitTools();
+
+    // Run the control tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "cvpcb.InteractiveSelection" );
+
+    auto& galOpts = GetGalDisplayOptions();
+    galOpts.m_fullscreenCursor = true;
+    galOpts.m_forceDisplayCursor = true;
+    galOpts.m_axesEnabled = true;
+
+    UseGalCanvas( backend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    updateView();
+
+
     Show( true );
 }
 
 
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
+    if( IsGalCanvasActive() )
+        GetGalCanvas()->StopDrawing();
+
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion
 }
@@ -248,31 +292,20 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
+void DISPLAY_FOOTPRINTS_FRAME::UseGalCanvas( bool aEnable )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    wxString msgTextsFill[2] = { _( "Show texts in filled mode" ),
-                                 _( "Show texts in sketch mode" ) };
-
-    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
-
-    aEvent.Check( displ_opts->m_DisplayModTextFill == SKETCH );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
+    PCB_BASE_FRAME::UseGalCanvas( aEnable );
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
+void DISPLAY_FOOTPRINTS_FRAME::applyDisplaySettingsToGAL()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+        auto view = GetGalCanvas()->GetView();
+        auto painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+        KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+        settings->LoadDisplayOptions( &m_DisplayOptions, false );
 
-    wxString msgEdgesFill[2] = { _( "Show outlines in filled mode" ),
-                                 _( "Show outlines in sketch mode" ) };
-
-    int i = displ_opts->m_DisplayModEdgeFill == SKETCH ? 0 : 1;
-
-    aEvent.Check( displ_opts->m_DisplayModEdgeFill == SKETCH );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
+        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
@@ -289,31 +322,6 @@ void DISPLAY_FOOTPRINTS_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 bool DISPLAY_FOOTPRINTS_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     return true;
-}
-
-
-void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
-{
-    int        id = event.GetId();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    switch( id )
-    {
-    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        displ_opts->m_DisplayModTextFill = displ_opts->m_DisplayModTextFill == FILLED ? SKETCH : FILLED;
-        m_canvas->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        displ_opts->m_DisplayModEdgeFill = displ_opts->m_DisplayModEdgeFill == FILLED ? SKETCH : FILLED;
-        m_canvas->Refresh();
-        break;
-
-    default:
-        DisplayError( this,
-                      wxT( "DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar error" ) );
-        break;
-    }
 }
 
 
@@ -500,10 +508,40 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     else
         SetStatusText( wxEmptyString, 0 );
 
+    updateView();
+
     UpdateStatusBar();
     Zoom_Automatique( false );
     GetCanvas()->Refresh();
     Update3DView();
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::updateView()
+{
+    if( IsGalCanvasActive() )
+    {
+        PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+        dp->UseColorScheme( &Settings().Colors() );
+        dp->DisplayBoard( GetBoard() );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+        UpdateMsgPanel();
+    }
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
+{
+    MODULE* footprint = GetBoard()->m_Modules;
+    MSG_PANEL_ITEMS items;
+
+    if( footprint )
+    {
+        footprint->GetMsgPanelInfo( m_UserUnits, items );
+    }
+
+    SetMsgPanel( items );
 }
 
 
@@ -515,14 +553,7 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     m_canvas->DrawBackGround( DC );
     GetBoard()->Draw( m_canvas, DC, GR_COPY );
 
-    MODULE* Module = GetBoard()->m_Modules;
-
-    if ( Module )
-    {
-        MSG_PANEL_ITEMS items;
-        Module->GetMsgPanelInfo( m_UserUnits, items );
-        SetMsgPanel( items );
-    }
+    UpdateMsgPanel();
 
     m_canvas->DrawCrossHair( DC );
 }

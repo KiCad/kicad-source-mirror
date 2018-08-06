@@ -968,7 +968,7 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();
 
-    DBG(printf( "%s: %s\n", __func__, payload.c_str() );)
+    //DBG(printf( "%s: %s\n", __func__, payload.c_str() );)
 
     switch( mail.Command() )
     {

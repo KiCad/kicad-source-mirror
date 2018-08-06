@@ -39,23 +39,21 @@
 
 void DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay( wxCommandEvent& event )
 {
-    DIALOG_FOOTPRINTS_DISPLAY_OPTIONS* OptionWindow =
-        new DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( this );
+    DIALOG_FOOTPRINTS_DISPLAY_OPTIONS OptionWindow( this );
 
-    OptionWindow->ShowModal();
-    OptionWindow->Destroy();
+    OptionWindow.ShowModal();
 }
 
 
-DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( PCB_BASE_FRAME* parent )
+DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( DISPLAY_FOOTPRINTS_FRAME* parent )
     : DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( parent )
 {
     m_Parent = parent;
 
     initDialog();
-    m_sdbSizer1OK->SetDefault();
-    GetSizer()->SetSizeHints( this );
-    Centre();
+    m_sdbSizerOK->SetDefault();
+
+    FinishDialogSettings();;
 }
 
 DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::~DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( )
@@ -103,34 +101,17 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
     m_Parent->GetCanvas()->SetEnableMousewheelPan( m_enableMousewheelPan->GetValue() );
     m_Parent->GetCanvas()->SetEnableAutoPan( m_enableAutoPan->GetValue() );
 
+    m_Parent->applyDisplaySettingsToGAL();
     m_Parent->GetCanvas()->Refresh();
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
- */
-
-void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::OnOkClick( wxCommandEvent& event )
+bool DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     UpdateObjectSettings();
-    EndModal( 1 );
+    return true;
 }
 
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
- */
-
-void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( -1 );
-}
-
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_APPLY
- */
 
 void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::OnApplyClick( wxCommandEvent& event )
 {

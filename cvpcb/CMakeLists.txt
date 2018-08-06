@@ -34,6 +34,7 @@ set( CVPCB_SRCS
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/pcb_general_settings.cpp
     ../pcbnew/drc_item.cpp
+    ../pcbnew/tools/grid_helper.cpp
     auto_associate.cpp
     cfg.cpp
     components_listbox.cpp
@@ -45,6 +46,9 @@ set( CVPCB_SRCS
     menubar.cpp
     readwrite_dlgs.cpp
     tool_cvpcb.cpp
+    tools/cvpcb_actions.cpp
+    tools/cvpcb_control.cpp
+    tools/cvpcb_selection_tool.cpp
     )
 
 
