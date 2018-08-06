@@ -31,7 +31,7 @@
 
 namespace KIGFX
 {
-typedef RTree<VIEW_ITEM*, int, 2, float> VIEW_RTREE_BASE;
+typedef RTree<VIEW_ITEM*, int, 2, double> VIEW_RTREE_BASE;
 
 /**
  * Class VIEW_RTREE -

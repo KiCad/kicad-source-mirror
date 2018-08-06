@@ -110,7 +110,7 @@ class SHAPE_INDEX
         class Iterator
         {
         private:
-            typedef typename RTree<T, int, 2, float>::Iterator RTreeIterator;
+            typedef typename RTree<T, int, 2, double>::Iterator RTreeIterator;
             RTreeIterator iterator;
 
             /**
@@ -119,7 +119,7 @@ class SHAPE_INDEX
              * Setup the internal tree iterator.
              * @param aTree pointer to a RTREE object
              */
-            void Init( RTree<T, int, 2, float>* aTree )
+            void Init( RTree<T, int, 2, double>* aTree )
             {
                 aTree->GetFirst( iterator );
             }
@@ -287,7 +287,7 @@ class SHAPE_INDEX
         Iterator Begin();
 
     private:
-        RTree<T, int, 2, float>* m_tree;
+        RTree<T, int, 2, double>* m_tree;
 };
 
 /*
@@ -297,7 +297,7 @@ class SHAPE_INDEX
 template <class T>
 SHAPE_INDEX<T>::SHAPE_INDEX()
 {
-    this->m_tree = new RTree<T, int, 2, float>();
+    this->m_tree = new RTree<T, int, 2, double>();
 }
 
 template <class T>
@@ -335,8 +335,8 @@ void SHAPE_INDEX<T>::RemoveAll()
 template <class T>
 void SHAPE_INDEX<T>::Reindex()
 {
-    RTree<T, int, 2, float>* newTree;
-    newTree = new RTree<T, int, 2, float>();
+    RTree<T, int, 2, double>* newTree;
+    newTree = new RTree<T, int, 2, double>();
 
     Iterator iter = this->Begin();
 
