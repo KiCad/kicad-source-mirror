@@ -716,7 +716,7 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
 
     if( dir.IsOpened() )
     {
-        if( dir.GetFirst( &fullname, filespec ) )
+        if( dir.GetFirst( &fullname, aFilespec ) )
         {
             do
             {
