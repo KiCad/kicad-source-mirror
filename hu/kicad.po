@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-07-18 23:25+0200\n"
+"PO-Revision-Date: 2018-08-06 15:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -6123,7 +6123,7 @@ msgstr "Láb poz Y:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.h:106
 msgid "Pin Properties"
-msgstr "Szimbólumláb tulajdonságok"
+msgstr "Rajzjel láb tulajdonságai"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1709
 msgid "Number"
@@ -9234,7 +9234,7 @@ msgstr "Blokk másolása"
 
 #: eeschema/libedit_onrightclick.cpp:354 eeschema/onrightclick.cpp:880
 msgid "Duplicate Block"
-msgstr "Blokk másolás"
+msgstr "Blokk egyszeri másolása"
 
 #: eeschema/libedit_onrightclick.cpp:356 eeschema/onrightclick.cpp:890
 msgid "Mirror Block Around Horizontal(X) Axis"
@@ -9341,7 +9341,7 @@ msgstr "Rács megjelenítése"
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_footprint_editor.cpp:256 pcbnew/menubar_pcb_editor.cpp:651
 msgid "&Imperial"
-msgstr "Angolszász"
+msgstr "Angolszász Ctrl+U"
 
 #: eeschema/menubar.cpp:197 gerbview/menubar.cpp:227
 #: pcbnew/menubar_footprint_editor.cpp:256 pcbnew/menubar_pcb_editor.cpp:651
@@ -9351,7 +9351,7 @@ msgstr "Használjon angolszász mértékegységet"
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_footprint_editor.cpp:260 pcbnew/menubar_pcb_editor.cpp:655
 msgid "&Metric"
-msgstr "Metrikus"
+msgstr "Metrikus Ctrl+U"
 
 #: eeschema/menubar.cpp:201 gerbview/menubar.cpp:231
 #: pcbnew/menubar_footprint_editor.cpp:260 pcbnew/menubar_pcb_editor.cpp:655
@@ -10245,7 +10245,7 @@ msgstr "Laplábak tisztítása"
 
 #: eeschema/onrightclick.cpp:866
 msgid "Window Zoom"
-msgstr "Ablak nagyítás"
+msgstr "Nagyítás képernyőméretre"
 
 #: eeschema/onrightclick.cpp:882
 msgid "Drag Block"
@@ -10871,7 +10871,7 @@ msgstr "Vízszintes"
 
 #: eeschema/sch_text.cpp:646
 msgid "Vertical up"
-msgstr "Függőleges fel"
+msgstr "Függőleges felfelé"
 
 #: eeschema/sch_text.cpp:650
 msgid "Horizontal invert"
@@ -10879,7 +10879,7 @@ msgstr ""
 
 #: eeschema/sch_text.cpp:654
 msgid "Vertical down"
-msgstr "Függőleges le"
+msgstr "Függőleges lefelé"
 
 #: eeschema/sch_text.cpp:696 pcbnew/microwave.cpp:475
 msgid "Size"
@@ -11535,7 +11535,7 @@ msgstr "Metrikus mértékegység használata"
 
 #: eeschema/tool_sch.cpp:317
 msgid "HV orientation for wires and bus"
-msgstr ""
+msgstr "VF irány vezetékeknek és buszoknak"
 
 #: eeschema/tool_viewlib.cpp:54
 msgid "Select symbol to browse"
@@ -12776,7 +12776,7 @@ msgstr "Gerber megjelenítő beállítások"
 #: gerbview/menubar.cpp:309 pcbnew/menubar_footprint_editor.cpp:460
 #: pcbnew/menubar_pcb_editor.cpp:216
 msgid "Legacy Tool&set"
-msgstr ""
+msgstr "Örökölt eszközök"
 
 #: gerbview/menubar.cpp:312 pcbnew/menubar_footprint_editor.cpp:463
 #: pcbnew/menubar_pcb_editor.cpp:219
@@ -12786,7 +12786,7 @@ msgstr ""
 #: gerbview/menubar.cpp:315 pcbnew/menubar_footprint_editor.cpp:466
 #: pcbnew/menubar_pcb_editor.cpp:222
 msgid "Modern Toolset (&Accelerated)"
-msgstr ""
+msgstr "Modern eszközök (Gyorsított)"
 
 #: gerbview/menubar.cpp:318 pcbnew/menubar_footprint_editor.cpp:469
 #: pcbnew/menubar_pcb_editor.cpp:225
@@ -12795,7 +12795,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:321 pcbnew/menubar_pcb_editor.cpp:228
 msgid "Modern Toolset (Fallba&ck)"
-msgstr ""
+msgstr "Modern eszközök (Tartalékmegoldás)"
 
 #: gerbview/menubar.cpp:324 pcbnew/menubar_footprint_editor.cpp:475
 #: pcbnew/menubar_pcb_editor.cpp:231
@@ -13262,7 +13262,7 @@ msgstr "Eagle projektfájlok importálása"
 
 #: kicad/import_project.cpp:81
 msgid "KiCad Project Destination"
-msgstr ""
+msgstr "KiCad projekt célállomása"
 
 #: kicad/import_project.cpp:97
 msgid ""
@@ -17754,19 +17754,19 @@ msgstr "3D fájlnév szerkesztése"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:613
 msgid "Error: invalid footprint parameter"
-msgstr ""
+msgstr "Hiba: érvénytelen alkatrésztok paraméter"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:619
 msgid "Error: invalid 3D parameter"
-msgstr ""
+msgstr "Hiba: érvénytelen 3D paraméter"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:639
 msgid "Error: invalid or missing footprint parameter"
-msgstr ""
+msgstr "Hiba: érvénytelen vagy hiányzó alkatrésztok paraméter"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:645
 msgid "Error: invalid or missing 3D parameter"
-msgstr ""
+msgstr "Hiba: érvénytelen vagy hiányzó 3D paraméter"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:654
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:505
@@ -18811,7 +18811,7 @@ msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:43
 msgid "Gerber X2 (experimental)"
-msgstr ""
+msgstr "Gerber X2 (kísérleti)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:45
 msgid "File Format:"
@@ -18896,7 +18896,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:107
 msgid "PTH and NPTH holes in single file"
-msgstr ""
+msgstr "PTH és NPTH furatok egyetlen fájlban"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:108
 msgid ""
@@ -20757,15 +20757,15 @@ msgstr "sarkok száma"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:278
 msgid "Incorrect polygon: less than 3 corners"
-msgstr ""
+msgstr "Helytelen sokszög: kevesebb, mint 3 sarok"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:298
 msgid "Incorrect polygon: too few corners after simplification"
-msgstr ""
+msgstr "Helytelen sokszög: az egyszerűsítés után túl kevés sarok"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:304
 msgid "Incorrect polygon: self intersecting"
-msgstr ""
+msgstr "Helytelen sokszög: önmagával keresztező"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:309
 msgid "Polygon:"
@@ -20773,11 +20773,11 @@ msgstr "Sokszög:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:318
 msgid "Polygon: redundant corners removed"
-msgstr ""
+msgstr "Sokszög: redundáns sarkok eltávolítása"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:346
 msgid "Select a corner before adding a new corner"
-msgstr ""
+msgstr "Új sarok hozzáadása előtt válasszon ki egy sarkot"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:527
 msgid "Back side (footprint is mirrored)"
@@ -23312,7 +23312,7 @@ msgstr "Alkatrész exportálása"
 
 #: pcbnew/footprint_libraries_utils.cpp:73
 msgid "Save Footprint"
-msgstr "Alkatrész mentése."
+msgstr "Alkatrésztok mentése"
 
 #: pcbnew/footprint_libraries_utils.cpp:74
 msgid "Enter footprint name:"
@@ -27781,7 +27781,7 @@ msgstr ""
 
 #: pcbnew/zone_filler.cpp:215
 msgid "Performing polygon fills..."
-msgstr ""
+msgstr "kitöltése"
 
 #: pcbnew/zone_filler.cpp:267
 msgid "Performing segment fills..."
