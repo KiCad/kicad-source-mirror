@@ -525,6 +525,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
+            m_controls->SetAutoPan( false );
+
             if( step != SET_ORIGIN )    // start from the beginning
             {
                 preview.Clear();
@@ -662,6 +664,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     if( step != SET_ORIGIN )
         delete dimension;
+
+    m_controls->SetAutoPan( false );
 
     m_view->Remove( &preview );
     frame()->SetMsgPanel( board() );
