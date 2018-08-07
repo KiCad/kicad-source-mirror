@@ -1658,7 +1658,10 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( m_multiple && !m_editModules )
             return false;
 
-        return view()->IsVisible( aItem ) && board()->IsLayerVisible( aItem->GetLayer() );
+        if( !m_editModules && !view()->IsVisible( aItem ) )
+            return false;
+
+        break;
 
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
