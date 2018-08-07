@@ -2134,20 +2134,20 @@ bool SHAPE_POLY_SET::HasTouchingHoles() const
 
 bool SHAPE_POLY_SET::hasTouchingHoles( const POLYGON& aPoly ) const
 {
-    std::vector< VECTOR2I > pts;
+    std::set< long long > ptHashes;
 
     for( const auto& lc : aPoly )
     {
-        for( int i = 0; i < lc.PointCount(); i++ )
+        for( const VECTOR2I& pt : lc.CPoints() )
         {
-            const auto p = lc.CPoint( i );
+            const long long ptHash = (long long) pt.x << 32 | pt.y;
 
-            if( std::find( pts.begin(), pts.end(), p ) != pts.end() )
+            if( ptHashes.count( ptHash ) > 0 )
             {
                 return true;
             }
 
-            pts.push_back( p );
+            ptHashes.insert( ptHash );
         }
     }
 
