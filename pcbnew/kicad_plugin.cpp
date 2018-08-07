@@ -2118,7 +2118,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
         module->Flip( module->GetPosition() );
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
-    mods.insert( footprintName, new FP_CACHE_ITEM( module, WX_FILENAME( fullPath, fullName ) ) );
+    mods.insert( footprintName, new FP_CACHE_ITEM( module, WX_FILENAME( fn.GetPath(), fullName ) ) );
     m_cache->Save( module );
 }
 
