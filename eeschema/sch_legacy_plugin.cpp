@@ -2472,7 +2472,6 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
                 break;
 
             text = FROM_UTF8( line + 2 );
-            text = text.Trim();
 
             switch( line[0] )
             {
@@ -2761,7 +2760,22 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     if( sscanf( line + 1, "%d", &id ) != 1 || id < 0 )
         SCH_PARSE_ERROR( "invalid field ID", aReader, line + 1 );
 
-    std::unique_ptr< LIB_FIELD > field( new LIB_FIELD( aPart.get(), id ) );
+    LIB_FIELD* field;
+
+    if( (unsigned) id < MANDATORY_FIELDS )
+    {
+        field = aPart->GetField( id );
+
+        // this will fire only if somebody broke a constructor or editor.
+        // MANDATORY_FIELDS are always present in ram resident components, no
+        // exceptions, and they always have their names set, even fixed fields.
+        wxASSERT( field );
+    }
+    else
+    {
+        field = new LIB_FIELD( aPart.get(), id );
+        aPart->AddDrawItem( field );
+    }
 
     // Skip to the first double quote.
     while( *line != '"' && *line != 0 )
@@ -2770,15 +2784,12 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     if( *line == 0 )
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, line );
 
-    wxString text;
-    parseQuotedString( text, aReader, line, &line, true );
+    parseQuotedString( field->m_Text, aReader, line, &line, true );
 
     // Doctor the *.lib file field which has a "~" in blank fields.  New saves will
     // not save like this.
-    if( text.size() == 1 && text[0] == '~' )
-        text.clear();
-
-    field->m_Text = text;
+    if( field->m_Text.size() == 1 && field->m_Text[0] == '~' )
+        field->m_Text.clear();
 
     wxPoint pos;
 
@@ -2824,37 +2835,38 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
         else if( textHJustify == 'R' )
             field->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         else
-            SCH_PARSE_ERROR( "invalid field text horizontal justification parameter",
-                             aReader, line );
+            SCH_PARSE_ERROR( "invalid field text horizontal justification", aReader, line );
 
         wxString attributes;
 
         parseUnquotedString( attributes, aReader, line, &line );
 
-        if( !(attributes.size() == 3 || attributes.size() == 1 ) )
-            SCH_PARSE_ERROR( "invalid field text attributes size",
-                             aReader, line );
+        size_t attrSize = attributes.size();
 
-        if( attributes[0] == 'C' )
-            field->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        else if( attributes[0] == 'B' )
-            field->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        else if( attributes[0] == 'T' )
-            field->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        else
-            SCH_PARSE_ERROR( "invalid field text vertical justification parameter",
-                             aReader, line );
+        if( !(attrSize == 3 || attrSize == 1 ) )
+            SCH_PARSE_ERROR( "invalid field text attributes size", aReader, line );
 
-        if( attributes.size() == 3 )
+        switch( (wxChar) attributes[0] )
         {
-            if( attributes[1] == 'I' )        // Italic
+        case 'C': field->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER ); break;
+        case 'B': field->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
+        case 'T': field->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
+        default:  SCH_PARSE_ERROR( "invalid field text vertical justification", aReader, line );
+        }
+
+        if( attrSize == 3 )
+        {
+            wxChar attr_1 = attributes[1];
+            wxChar attr_2 = attributes[2];
+
+            if( attr_1 == 'I' )        // Italic
                 field->SetItalic( true );
-            else if( attributes[1] != 'N' )   // No italics is default, check for error.
+            else if( attr_1 != 'N' )   // No italics is default, check for error.
                 SCH_PARSE_ERROR( "invalid field text italic parameter", aReader, line );
 
-            if ( attributes[2] == 'B' )       // Bold
+            if ( attr_2 == 'B' )       // Bold
                 field->SetBold( true );
-            else if( attributes[2] != 'N' )   // No bold is default, check for error.
+            else if( attr_2 != 'N' )   // No bold is default, check for error.
                 SCH_PARSE_ERROR( "invalid field text bold parameter", aReader, line );
         }
     }
@@ -2867,30 +2879,14 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
         // Plus assumptions are made in the field editors.
         field->m_name = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
 
-        LIB_FIELD* fixedField = aPart->GetField( field->GetId() );
-
-        // this will fire only if somebody broke a constructor or editor.
-        // MANDATORY_FIELDS are always present in ram resident components, no
-        // exceptions, and they always have their names set, even fixed fields.
-        wxASSERT( fixedField );
-
-        *fixedField = *field;
-
         // Ensure the VALUE field = the part name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
-        if( fixedField->GetId() == VALUE )
-            fixedField->m_Text = aPart->GetName();
+        if( id == VALUE )
+            field->m_Text = aPart->GetName();
     }
     else
     {
-        wxString name;
-
-        parseQuotedString( name, aReader, line, &line, true );  // Optional.
-
-        if( !name.IsEmpty() )
-            field->m_name = name;
-
-        aPart->AddDrawItem( field.release() );    // LIB_FIELD* is now owned by the LIB_PART.
+        parseQuotedString( field->m_name, aReader, line, &line, true );  // Optional.
     }
 }
 
@@ -2959,27 +2955,13 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr< LIB_PART >& aPar
 FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( FILE_LINE_READER& aReader, const char* aLine,
                                                const char** aOutput )
 {
-    FILL_T mode;
-
     switch( parseChar( aReader, aLine, aOutput ) )
     {
-    case 'F':
-        mode = FILLED_SHAPE;
-        break;
-
-    case 'f':
-        mode = FILLED_WITH_BG_BODYCOLOR;
-        break;
-
-    case 'N':
-        mode = NO_FILL;
-        break;
-
-    default:
-        SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
+    case 'F': return FILLED_SHAPE;
+    case 'f': return FILLED_WITH_BG_BODYCOLOR;
+    case 'N': return NO_FILL;
+    default: SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
     }
-
-    return mode;
 }
 
 
@@ -2990,7 +2972,7 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr< LIB_PART >& aPart,
 
     wxCHECK_MSG( strCompare( "A", line, &line ), NULL, "Invalid LIB_ARC definition" );
 
-    std::unique_ptr< LIB_ARC > arc( new LIB_ARC( aPart.get() ) );
+    LIB_ARC* arc = new LIB_ARC( aPart.get() );
 
     wxPoint center;
 
@@ -3045,7 +3027,7 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr< LIB_PART >& aPart,
         arc->SetEnd( arcEnd );
     }
 
-    return arc.release();
+    return arc;
 }
 
 
@@ -3056,7 +3038,7 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr< LIB_PART >& aP
 
     wxCHECK_MSG( strCompare( "C", line, &line ), NULL, "Invalid LIB_CIRCLE definition" );
 
-    std::unique_ptr< LIB_CIRCLE > circle( new LIB_CIRCLE( aPart.get() ) );
+    LIB_CIRCLE* circle = new LIB_CIRCLE( aPart.get() );
 
     wxPoint center;
 
@@ -3072,7 +3054,7 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr< LIB_PART >& aP
     if( *line != 0 )
         circle->SetFillMode( parseFillMode( aReader, line, &line ) );
 
-    return circle.release();
+    return circle;
 }
 
 
@@ -3083,7 +3065,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
 
     wxCHECK_MSG( strCompare( "T", line, &line ), NULL, "Invalid LIB_TEXT definition" );
 
-    std::unique_ptr< LIB_TEXT > text( new LIB_TEXT( aPart.get() ) );
+    LIB_TEXT* text = new LIB_TEXT( aPart.get() );
 
     text->SetTextAngle( (double) parseInt( aReader, line, &line ) );
 
@@ -3134,8 +3116,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
         if( strCompare( "Italic", line, &line ) )
             text->SetItalic( true );
         else if( !strCompare( "Normal", line, &line ) )
-            SCH_PARSE_ERROR( "invalid text stype, expected 'Normal' or 'Italic'",
-                             aReader, line );
+            SCH_PARSE_ERROR( "invalid text stype, expected 'Normal' or 'Italic'", aReader, line );
 
         if( parseInt( aReader, line, &line ) > 0 )
             text->SetBold( true );
@@ -3145,45 +3126,25 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
         {
             switch( parseChar( aReader, line, &line ) )
             {
-            case 'L':
-                text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-                break;
-
-            case 'C':
-                text->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-                break;
-
-            case 'R':
-                text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                break;
-
-            default:
-                SCH_PARSE_ERROR( "invalid horizontal text justication parameter, expected L, C, or R",
-                                 aReader, line );
+            case 'L': text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );   break;
+            case 'C': text->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER ); break;
+            case 'R': text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );  break;
+            default: SCH_PARSE_ERROR( "invalid horizontal text justication; expected L, C, or R",
+                                      aReader, line );
             }
 
             switch( parseChar( aReader, line, &line ) )
             {
-            case 'T':
-                text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                break;
-
-            case 'C':
-                text->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-                break;
-
-            case 'B':
-                text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                break;
-
-            default:
-                SCH_PARSE_ERROR( "invalid vertical text justication parameter, expected T, C, or B",
-                                 aReader, line );
+            case 'T': text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
+            case 'C': text->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER ); break;
+            case 'B': text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
+            default: SCH_PARSE_ERROR( "invalid vertical text justication; expected T, C, or B",
+                                      aReader, line );
             }
         }
     }
 
-    return text.release();
+    return text;
 }
 
 
@@ -3194,7 +3155,7 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr< LIB_PART
 
     wxCHECK_MSG( strCompare( "S", line, &line ), NULL, "Invalid LIB_RECTANGLE definition" );
 
-    std::unique_ptr< LIB_RECTANGLE > rectangle( new LIB_RECTANGLE( aPart.get() ) );
+    LIB_RECTANGLE* rectangle = new LIB_RECTANGLE( aPart.get() );
 
     wxPoint pos;
 
@@ -3215,7 +3176,7 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr< LIB_PART
     if( *line != 0 )
         rectangle->SetFillMode( parseFillMode( aReader, line, &line ) );
 
-    return rectangle.release();
+    return rectangle;
 }
 
 
@@ -3226,25 +3187,12 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
 
     wxCHECK_MSG( strCompare( "X", line, &line ), NULL, "Invalid LIB_PIN definition" );
 
-    std::unique_ptr< LIB_PIN > pin( new LIB_PIN( aPart.get() ) );
+    LIB_PIN* pin = new LIB_PIN( aPart.get() );
 
-    wxString name, number;
+    parseUnquotedString( pin->m_name, aReader, line, &line );
+    parseUnquotedString( pin->m_number, aReader, line, &line );
 
-    parseUnquotedString( name, aReader, line, &line );
-    parseUnquotedString( number, aReader, line, &line );
-
-    // Unlike most of the other LIB_ITEMs, the SetXXX() routines on LIB_PINs are at the UI
-    // level, performing additional pin checking, multi-pin editing, and setting the modified
-    // flag.  So we must set the member fields directly.
-
-    pin->m_name = name;
-    pin->m_number = number;
-
-    wxPoint pos;
-
-    pos.x = parseInt( aReader, line, &line );
-    pos.y = parseInt( aReader, line, &line );
-    pin->m_position = pos;
+    pin->m_position = wxPoint( parseInt( aReader, line, &line ), parseInt( aReader, line, &line ) );
     pin->m_length = parseInt( aReader, line, &line );
     pin->m_orientation = parseChar( aReader, line, &line );
     pin->m_numTextSize = parseInt( aReader, line, &line );
@@ -3261,52 +3209,18 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
 
     switch( type )
     {
-    case 'I':
-        pin->m_type = PIN_INPUT;
-        break;
-
-    case 'O':
-        pin->m_type = PIN_OUTPUT;
-        break;
-
-    case 'B':
-        pin->m_type = PIN_BIDI;
-        break;
-
-    case 'T':
-        pin->m_type = PIN_TRISTATE;
-        break;
-
-    case 'P':
-        pin->m_type = PIN_PASSIVE;
-        break;
-
-    case 'U':
-        pin->m_type = PIN_UNSPECIFIED;
-        break;
-
-    case 'W':
-        pin->m_type = PIN_POWER_IN;
-        break;
-
-    case 'w':
-        pin->m_type = PIN_POWER_OUT;
-        break;
-
-    case 'C':
-        pin->m_type = PIN_OPENCOLLECTOR;
-        break;
-
-    case 'E':
-        pin->m_type = PIN_OPENEMITTER;
-        break;
-
-    case 'N':
-        pin->m_type = PIN_NC;
-        break;
-
-    default:
-        SCH_PARSE_ERROR( "unknown pin type", aReader, line );
+    case 'I': pin->m_type = PIN_INPUT;         break;
+    case 'O': pin->m_type = PIN_OUTPUT;        break;
+    case 'B': pin->m_type = PIN_BIDI;          break;
+    case 'T': pin->m_type = PIN_TRISTATE;      break;
+    case 'P': pin->m_type = PIN_PASSIVE;       break;
+    case 'U': pin->m_type = PIN_UNSPECIFIED;   break;
+    case 'W': pin->m_type = PIN_POWER_IN;      break;
+    case 'w': pin->m_type = PIN_POWER_OUT;     break;
+    case 'C': pin->m_type = PIN_OPENCOLLECTOR; break;
+    case 'E': pin->m_type = PIN_OPENEMITTER;   break;
+    case 'N': pin->m_type = PIN_NC;            break;
+    default: SCH_PARSE_ERROR( "unknown pin type", aReader, line );
     }
 
     if( !attributes.IsEmpty() )       /* Special Symbol defined */
@@ -3327,86 +3241,34 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
         {
             switch( attributes[--j].GetValue() )
             {
-            case '~':
-                break;
-
-            case 'N':
-                pin->m_attributes |= PIN_INVISIBLE;
-                break;
-
-            case 'I':
-                flags |= INVERTED;
-                break;
-
-            case 'C':
-                flags |= CLOCK;
-                break;
-
-            case 'L':
-                flags |= LOWLEVEL_IN;
-                break;
-
-            case 'V':
-                flags |= LOWLEVEL_OUT;
-                break;
-
-            case 'F':
-                flags |= FALLING_EDGE;
-                break;
-
-            case 'X':
-                flags |= NONLOGIC;
-                break;
-
-            default:
-                SCH_PARSE_ERROR( "unknown pin attribute", aReader, line );
+            case '~': break;
+            case 'N': pin->m_attributes |= PIN_INVISIBLE; break;
+            case 'I': flags |= INVERTED;     break;
+            case 'C': flags |= CLOCK;        break;
+            case 'L': flags |= LOWLEVEL_IN;  break;
+            case 'V': flags |= LOWLEVEL_OUT; break;
+            case 'F': flags |= FALLING_EDGE; break;
+            case 'X': flags |= NONLOGIC;     break;
+            default: SCH_PARSE_ERROR( "unknown pin attribute", aReader, line );
             }
         }
 
         switch( flags )
         {
-        case 0:
-            pin->m_shape = PINSHAPE_LINE;
-            break;
-
-        case INVERTED:
-            pin->m_shape = PINSHAPE_INVERTED;
-            break;
-
-        case CLOCK:
-            pin->m_shape = PINSHAPE_CLOCK;
-            break;
-
-        case INVERTED | CLOCK:
-            pin->m_shape = PINSHAPE_INVERTED_CLOCK;
-            break;
-
-        case LOWLEVEL_IN:
-            pin->m_shape = PINSHAPE_INPUT_LOW;
-            break;
-
-        case LOWLEVEL_IN | CLOCK:
-            pin->m_shape = PINSHAPE_CLOCK_LOW;
-            break;
-
-        case LOWLEVEL_OUT:
-            pin->m_shape = PINSHAPE_OUTPUT_LOW;
-            break;
-
-        case FALLING_EDGE:
-            pin->m_shape = PINSHAPE_FALLING_EDGE_CLOCK;
-            break;
-
-        case NONLOGIC:
-            pin->m_shape = PINSHAPE_NONLOGIC;
-            break;
-
-        default:
-            SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
+        case 0:                   pin->m_shape = PINSHAPE_LINE;               break;
+        case INVERTED:            pin->m_shape = PINSHAPE_INVERTED;           break;
+        case CLOCK:               pin->m_shape = PINSHAPE_CLOCK;              break;
+        case INVERTED | CLOCK:    pin->m_shape = PINSHAPE_INVERTED_CLOCK;     break;
+        case LOWLEVEL_IN:         pin->m_shape = PINSHAPE_INPUT_LOW;          break;
+        case LOWLEVEL_IN | CLOCK: pin->m_shape = PINSHAPE_CLOCK_LOW;          break;
+        case LOWLEVEL_OUT:        pin->m_shape = PINSHAPE_OUTPUT_LOW;         break;
+        case FALLING_EDGE:        pin->m_shape = PINSHAPE_FALLING_EDGE_CLOCK; break;
+        case NONLOGIC:            pin->m_shape = PINSHAPE_NONLOGIC;           break;
+        default: SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
         }
     }
 
-    return pin.release();
+    return pin;
 }
 
 
@@ -3417,12 +3279,13 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr< LIB_PART >
 
     wxCHECK_MSG( strCompare( "P", line, &line ), NULL, "Invalid LIB_POLYLINE definition" );
 
-    std::unique_ptr< LIB_POLYLINE > polyLine( new LIB_POLYLINE( aPart.get() ) );
+    LIB_POLYLINE* polyLine = new LIB_POLYLINE( aPart.get() );
 
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
     polyLine->SetWidth( parseInt( aReader, line, &line ) );
+    polyLine->Reserve( points );
 
     wxPoint pt;
 
@@ -3436,7 +3299,7 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr< LIB_PART >
     if( *line != 0 )
         polyLine->SetFillMode( parseFillMode( aReader, line, &line ) );
 
-    return polyLine.release();
+    return polyLine;
 }
 
 
@@ -3447,7 +3310,7 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr< LIB_PART >& aP
 
     wxCHECK_MSG( strCompare( "B", line, &line ), NULL, "Invalid LIB_BEZIER definition" );
 
-    std::unique_ptr< LIB_BEZIER > bezier( new LIB_BEZIER( aPart.get() ) );
+    LIB_BEZIER* bezier = new LIB_BEZIER( aPart.get() );
 
     int points = parseInt( aReader, line, &line );
     bezier->SetUnit( parseInt( aReader, line, &line ) );
@@ -3455,6 +3318,7 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr< LIB_PART >& aP
     bezier->SetWidth( parseInt( aReader, line, &line ) );
 
     wxPoint pt;
+    bezier->Reserve( points );
 
     for( int i = 0; i < points; i++ )
     {
@@ -3466,7 +3330,7 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr< LIB_PART >& aP
     if( *line != 0 )
         bezier->SetFillMode( parseFillMode( aReader, line, &line ) );
 
-    return bezier.release();
+    return bezier;
 }
 
 

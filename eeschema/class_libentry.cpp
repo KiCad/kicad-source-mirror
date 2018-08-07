@@ -199,6 +199,7 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
+    m_drawings[LIB_FIELD_T].reserve( 4 );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, VALUE ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, REFERENCE ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT ) );

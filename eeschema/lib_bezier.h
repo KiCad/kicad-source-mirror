@@ -63,6 +63,7 @@ public:
         return _( "Bezier" );
     }
 
+    void Reserve( size_t aCount ) { m_BezierPoints.reserve( aCount ); }
     void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 
     void SetOffset( const wxPoint& aOffset ) override;

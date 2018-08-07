@@ -62,6 +62,7 @@ public:
         return _( "PolyLine" );
     }
 
+    void Reserve( size_t aPointCount ) { m_PolyPoints.reserve( aPointCount ); }
     void AddPoint( const wxPoint& aPoint );
 
     const std::vector< wxPoint >& GetPolyPoints() const { return m_PolyPoints; }
