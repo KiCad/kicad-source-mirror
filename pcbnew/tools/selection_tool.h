@@ -248,8 +248,10 @@ private:
     /**
      * Function clearSelection()
      * Clears the current selection.
+     *
+     * @param aQuietMode if true selection events are not broadcast to other tools.
      */
-    void clearSelection();
+    void clearSelection( bool aQuietMode = false );
 
     /**
      * Function pickSmallestComponent()
@@ -264,8 +266,9 @@ private:
      * Changes selection status of a given item.
      *
      * @param aItem is the item to have selection status changed.
+     * @param aQuietMode if true selection events are not broadcast to other tools.
      */
-    void toggleSelection( BOARD_ITEM* aItem );
+    void toggleSelection( BOARD_ITEM* aItem, bool aQuietMode = false );
 
     /**
      * Function selectable()

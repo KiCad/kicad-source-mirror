@@ -399,12 +399,12 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
 
         aClientFilter( VECTOR2I(), collector );
 
-        clearSelection();
+        clearSelection( true );
 
         for( int i = 0; i < collector.GetCount(); ++i )
         {
             m_additive = true;
-            toggleSelection( collector[ i ] );
+            toggleSelection( collector[ i ], true );
         }
     }
 
@@ -412,19 +412,20 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
 }
 
 
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
+void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aQuietMode )
 {
     if( aItem->IsSelected() )
     {
         unselect( aItem );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        if( !aQuietMode )
+            m_toolMgr->ProcessEvent( UnselectedEvent );
     }
     else
     {
         if( !m_additive )
-            clearSelection();
+            clearSelection( aQuietMode );
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
@@ -432,14 +433,13 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
             select( aItem );
 
             // Inform other potentially interested tools
-            m_toolMgr->ProcessEvent( SelectedEvent );
+            if( !aQuietMode )
+                m_toolMgr->ProcessEvent( SelectedEvent );
         }
     }
 
     if( m_frame )
-    {
         m_frame->GetGalCanvas()->ForceRefresh();
-    }
 }
 
 const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
@@ -1367,7 +1367,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::clearSelection()
+void SELECTION_TOOL::clearSelection( bool aQuietMode )
 {
     if( m_selection.Empty() )
         return;
@@ -1388,7 +1388,8 @@ void SELECTION_TOOL::clearSelection()
     m_locked = true;
 
     // Inform other potentially interested tools
-    m_toolMgr->ProcessEvent( ClearedEvent );
+    if( !aQuietMode )
+        m_toolMgr->ProcessEvent( ClearedEvent );
 }
 
 
