@@ -176,7 +176,7 @@ bool FIELDS_GRID_TABLE<T>::CanSetValueAs( int aRow, int aCol, const wxString& aT
 template <class T>
 wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
 {
-    static wxRegEx httpPrefix( wxT( "https?:\/\/" ) );
+    static wxRegEx urlPrefix( wxT( "((https?)|(file)):\/\/" ) );
 
     switch( aCol )
     {
@@ -227,7 +227,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
             m_urlAttr->IncRef();
             return m_urlAttr;
         }
-        else if( httpPrefix.Matches( GetValue( aRow, aCol ) ) )
+        else if( urlPrefix.Matches( GetValue( aRow, aCol ) ) )
         {
             // Treat any user-defined field that starts with http:// or https:// as a URL
             m_urlAttr->IncRef();
