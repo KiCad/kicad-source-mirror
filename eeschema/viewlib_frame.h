@@ -171,6 +171,7 @@ private:
     void onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent );
     void onUpdateViewDoc( wxUpdateUIEvent& aEvent );
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectionPartBox( wxUpdateUIEvent& aEvent );
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
     void onViewSymbolDocument( wxCommandEvent& aEvent );

@@ -87,6 +87,7 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                    LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnUpdateElectricalType )
+    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::OnUpdateSelectionPartBox )
 
 END_EVENT_TABLE()
 
@@ -367,6 +368,45 @@ void LIB_VIEW_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 }
 
 
+void LIB_VIEW_FRAME::OnUpdateSelectionPartBox( wxUpdateUIEvent& aEvent )
+{
+    LIB_PART* part = nullptr;
+
+    if( m_libraryName.size() && m_entryName.size() )
+    {
+        if( Prj().SchSymbolLibTable()->HasLibrary( m_libraryName ) )
+            part = GetLibPart( LIB_ID( m_libraryName, m_entryName ) );
+    }
+
+    int unit_count = 1;
+
+    if( part )
+        unit_count = std::max( part->GetUnitCount(), 1 );
+
+    m_selpartBox->Enable( unit_count > 1 );
+
+    if( unit_count > 1 )
+    {
+        // rebuild the unit list if it is not suitable
+        if( unit_count != (int)m_selpartBox->GetCount() )
+        {
+            m_selpartBox->Clear();
+
+            for( int ii = 0; ii < unit_count; ii++ )
+
+                m_selpartBox->Append( wxString::Format( _( "Unit %c" ), 'A' + ii ) );
+
+            m_selpartBox->SetSelection( m_unit > 0 ? m_unit - 1 : 0 );
+        }
+    }
+    else
+    {
+        if( m_selpartBox->GetCount() )
+            m_selpartBox->Clear();
+    }
+}
+
+
 double LIB_VIEW_FRAME::BestZoom()
 {
     LIB_PART*   part = NULL;
@@ -475,7 +515,6 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
     }
 
     bool cmp_changed = ReCreateListCmp();
-    ReCreateHToolbar();
     DisplayLibInfos();
     m_canvas->Refresh();
 
@@ -555,7 +594,6 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
     ReCreateListCmp();
     m_canvas->Refresh();
     DisplayLibInfos();
-    ReCreateHToolbar();
 
     // Ensure the corresponding line in m_libList is selected
     // (which is not necessary the case if SetSelectedLibrary is called
@@ -598,7 +636,6 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
         }
 
         Zoom_Automatique( false );
-        ReCreateHToolbar();
         m_canvas->Refresh();
     }
 }
