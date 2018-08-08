@@ -32,6 +32,7 @@
 #include <template_fieldnames.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <wx/regex.h>
 
 #include "eda_doc.h"
 
@@ -175,6 +176,8 @@ bool FIELDS_GRID_TABLE<T>::CanSetValueAs( int aRow, int aCol, const wxString& aT
 template <class T>
 wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
 {
+    static wxRegEx httpPrefix( wxT( "https?:\/\/" ) );
+
     switch( aCol )
     {
     case FDC_NAME:
@@ -221,6 +224,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else if( aRow == DATASHEET )
         {
+            m_urlAttr->IncRef();
+            return m_urlAttr;
+        }
+        else if( httpPrefix.Matches( GetValue( aRow, aCol ) ) )
+        {
+            // Treat any user-defined field that starts with http:// or https:// as a URL
             m_urlAttr->IncRef();
             return m_urlAttr;
         }
