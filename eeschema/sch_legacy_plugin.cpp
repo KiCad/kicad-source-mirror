@@ -3192,7 +3192,11 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
     parseUnquotedString( pin->m_name, aReader, line, &line );
     parseUnquotedString( pin->m_number, aReader, line, &line );
 
-    pin->m_position = wxPoint( parseInt( aReader, line, &line ), parseInt( aReader, line, &line ) );
+    wxPoint pos;
+    pos.x = parseInt( aReader, line, &line );
+    pos.y = parseInt( aReader, line, &line );
+    pin->m_position = pos;
+
     pin->m_length = parseInt( aReader, line, &line );
     pin->m_orientation = parseChar( aReader, line, &line );
     pin->m_numTextSize = parseInt( aReader, line, &line );
