@@ -136,7 +136,7 @@ void CVPCB_SELECTION_TOOL::setTransitions()
     Go( &CVPCB_SELECTION_TOOL::MeasureTool,      CVPCB_ACTIONS::measureTool.MakeEvent() );
 }
 
-
+/*
 void CVPCB_SELECTION_TOOL::zoomFitSelection( void )
 {
     //Should recalculate the view to zoom in on the selection
@@ -158,7 +158,7 @@ void CVPCB_SELECTION_TOOL::zoomFitSelection( void )
 
     m_frame->GetGalCanvas()->ForceRefresh();
 }
-
+*/
 
 int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
@@ -253,7 +253,6 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
 
 const BOX2I SELECTION::ViewBBox() const
 {

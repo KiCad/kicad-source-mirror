@@ -68,6 +68,10 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
 
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
+    EVT_UPDATE_UI( ID_TB_MEASUREMENT_TOOL, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
+    EVT_UPDATE_UI( ID_ZOOM_SELECTION, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
+
     /*
     EVT_TOOL  and EVT_UPDATE_UI for:
       ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
@@ -184,7 +188,16 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     if( IsGalCanvasActive() )
+    {
         GetGalCanvas()->StopDrawing();
+        GetGalCanvas()->GetView()->Clear();
+        // Be sure any event cannot be fired after frame deletion:
+        GetGalCanvas()->SetEvtHandlerEnabled( false );
+    }
+
+    // Be sure a active tool (if exists) is desactivated:
+    if( m_toolManager )
+        m_toolManager->DeactivateTool();
 
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion
@@ -193,8 +206,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 
 void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
-    // Currently, do nothing
-    event.Skip();
+    Destroy();
 }
 
 
@@ -214,43 +226,57 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
+    // TODO: these can be moved to the 'proper' right vertical toolbar if and when there are
+    // actual tools to put there. That, or I'll get around to implementing configurable
+    // toolbars.
+    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
+                               KiScaledBitmap( cursor_xpm, this ),
+                               wxEmptyString, wxITEM_CHECK );
+
+    m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
+                                   KiScaledBitmap( measurement_xpm, this ),
+                                   _( "Measure distance between two points" ),
+                                   wxITEM_CHECK );
+
+    KiScaledSeparator( m_optionsToolBar, this );
+
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
                                _( "Hide grid" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
-                               KiBitmap( polar_coord_xpm ),
+                               KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiBitmap( unit_inch_xpm ),
+                               KiScaledBitmap( unit_inch_xpm, this ),
                                _( "Set units to inches" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiBitmap( unit_mm_xpm ),
+                               KiScaledBitmap( unit_mm_xpm, this ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
 #ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiBitmap( cursor_shape_xpm ),
+                               KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK  );
 #else
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiBitmap( cursor_shape_xpm ),
+                               KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape (not supported in Legacy Toolset)" ),
                                wxITEM_CHECK  );
 #endif
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
-                               KiBitmap( pad_sketch_xpm ),
+                               KiScaledBitmap( pad_sketch_xpm, this ),
                                _( "Show pads in outline mode" ), wxITEM_CHECK  );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
-                               KiBitmap( text_sketch_xpm ),
+                               KiScaledBitmap( text_sketch_xpm, this ),
                                _( "Show texts in line mode" ), wxITEM_CHECK  );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
-                               KiBitmap( show_mod_edge_xpm ),
+                               KiScaledBitmap( show_mod_edge_xpm, this ),
                                _( "Show outlines in line mode" ), wxITEM_CHECK  );
 
     m_optionsToolBar->Realize();
@@ -265,25 +291,28 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiBitmap( display_options_xpm ),
+    m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiScaledBitmap( display_options_xpm, this ),
                             _( "Display options" ) );
 
     m_mainToolBar->AddSeparator();
 
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ),
                             _( "Zoom in (F1)" ) );
 
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ),
                             _( "Zoom out (F2)" ) );
 
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ),
                             _( "Redraw view (F3)" ) );
 
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ),
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ),
                             _( "Zoom to fit footprint (Home)" ) );
 
+    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
+                            _( "Zoom to selection" ), wxITEM_CHECK );
+
     m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( three_d_xpm ),
+    m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiScaledBitmap( three_d_xpm, this ),
                             _( "3D Display (Alt+3)" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
@@ -556,6 +585,28 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     UpdateMsgPanel();
 
     m_canvas->DrawCrossHair( DC );
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection( wxUpdateUIEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case ID_TB_MEASUREMENT_TOOL:
+        aEvent.Check( GetToolId() == ID_TB_MEASUREMENT_TOOL );
+        break;
+
+    case ID_NO_TOOL_SELECTED:
+        aEvent.Check( GetToolId() == ID_NO_TOOL_SELECTED );
+        break;
+
+    case ID_ZOOM_SELECTION:
+        aEvent.Check( GetToolId() == ID_ZOOM_SELECTION );
+        break;
+
+    default:
+        break;
+    }
 }
 
 

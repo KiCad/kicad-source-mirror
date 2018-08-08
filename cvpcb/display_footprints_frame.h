@@ -48,6 +48,10 @@ public:
 
     void    OnCloseWindow( wxCloseEvent& Event ) override;
 
+    /** UI events:
+     */
+    void OnUIToolSelection( wxUpdateUIEvent& aEvent );
+
     /*
      * Draws the current highlighted footprint.
      */

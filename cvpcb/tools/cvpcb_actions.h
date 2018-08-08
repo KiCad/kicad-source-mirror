@@ -46,6 +46,8 @@ public:
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
 
+    /// Tool selection
+    static TOOL_ACTION no_selectionTool;
     static TOOL_ACTION measureTool;
 
     /// Cursor control with keyboard

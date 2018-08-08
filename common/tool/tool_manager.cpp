@@ -71,7 +71,7 @@ struct TOOL_MANAGER::TOOL_STATE
 
     ~TOOL_STATE()
     {
-        assert( stateStack.empty() );
+        wxASSERT( stateStack.empty() );
     }
 
     /// The tool itself
@@ -509,7 +509,7 @@ OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_L
 {
     TOOL_STATE* st = m_toolState[aTool];
 
-    assert( !st->pendingWait ); // everything collapses on two KiYield() in a row
+    wxASSERT( !st->pendingWait ); // everything collapses on two KiYield() in a row
 
     // indicate to the manager that we are going to sleep and we shall be
     // woken up when an event matching aConditions arrive

@@ -36,9 +36,7 @@
 
 #include <cvpcb_id.h>
 #include <tool/tool_manager.h>
-//#include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
-//#include <pcb_painter.h>
 #include <tools/grid_helper.h>  // from pcbnew
 
 #include <functional>
@@ -89,6 +87,12 @@ TOOL_ACTION CVPCB_ACTIONS::switchUnits( "cvpcb.Control.switchUnits",
         AS_GLOBAL, 'U',//TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
         "", "" );
 
+TOOL_ACTION CVPCB_ACTIONS::no_selectionTool( "cvpcb.Control.no_selectionTool",
+        AS_GLOBAL, ESC,
+        "", "", NULL, AF_ACTIVATE );
+
+
+///////////////
 CVPCB_CONTROL::CVPCB_CONTROL() :
     TOOL_INTERACTIVE( "cvpcb.Control" ), m_frame( NULL )
 {
@@ -276,13 +280,3 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::SwitchCursor,       CVPCB_ACTIONS::switchCursor.MakeEvent() );
     Go( &CVPCB_CONTROL::SwitchUnits,        CVPCB_ACTIONS::switchUnits.MakeEvent() );
 }
-
-/*
-void CVPCB_CONTROL::updateGrid()
-{
-    BASE_SCREEN* screen = m_frame->GetScreen();
-    //GRID_TYPE grid = screen->GetGrid( idx );
-    getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
-    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-}
-*/

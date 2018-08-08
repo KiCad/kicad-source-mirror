@@ -40,6 +40,7 @@ void CVPCB_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
     aToolManager->RegisterTool( new CVPCB_CONTROL );
 }
 
+
 OPT<TOOL_EVENT> CVPCB_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
@@ -59,6 +60,11 @@ OPT<TOOL_EVENT> CVPCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_ZOOM_SELECTION:
         return ACTIONS::zoomTool.MakeEvent();
 
+    case ID_TB_MEASUREMENT_TOOL:
+        return CVPCB_ACTIONS::measureTool.MakeEvent();
+
+    case ID_NO_TOOL_SELECTED:
+        return CVPCB_ACTIONS::no_selectionTool.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
