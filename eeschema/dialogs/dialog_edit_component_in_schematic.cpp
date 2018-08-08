@@ -140,7 +140,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 
     m_cmp = aComponent;
     m_part = GetParent()->GetLibPart( m_cmp->GetLibId(), true );
-    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, false, m_part );
+    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
 
     m_delayedFocusRow = REFERENCE;
     m_delayedFocusColumn = FDC_VALUE;

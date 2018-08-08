@@ -30,6 +30,10 @@
 #include <sch_component.h>
 #include <grid_tricks.h>
 
+class SCH_BASE_FRAME;
+class DIALOG_SHIM;
+
+
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
@@ -67,7 +71,7 @@ template <class T>
 class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<T>
 {
 public:
-    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, bool aInLibEdit, LIB_PART* aPart );
+    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, LIB_PART* aPart );
     ~FIELDS_GRID_TABLE();
 
     int GetNumberRows() override { return (int) this->size(); }
@@ -91,10 +95,10 @@ public:
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
 
 private:
+    SCH_BASE_FRAME*       m_frame;
     EDA_UNITS_T           m_userUnits;
     LIB_PART*             m_part;
 
-    bool                  m_inLibEdit;
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;
     SCH_FIELD_VALIDATOR   m_referenceValidator;
 

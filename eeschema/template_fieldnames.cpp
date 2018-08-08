@@ -82,11 +82,11 @@ void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 {
     out->Print( nestLevel, "(field (name %s)",  out->Quotew( m_Name ).c_str() );
 
-    if( !m_Value.IsEmpty() )
-        out->Print( 0, "(value %s)", out->Quotew( m_Value ).c_str() );
-
     if( m_Visible )
         out->Print( 0, " visible" );
+
+    if( m_URL )
+        out->Print( 0, " url" );
 
     out->Print( 0, ")\n" );
 }
@@ -116,8 +116,8 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in )
         switch( tok )
         {
         case T_value:
+            // older format; silently skip
             in->NeedSYMBOLorNUMBER();
-            m_Value = FROM_UTF8( in->CurText() );
             in->NeedRIGHT();
             break;
 
@@ -125,8 +125,12 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in )
             m_Visible = true;
             break;
 
+        case T_url:
+            m_URL = true;
+            break;
+
         default:
-            in->Expecting( "value|visible" );
+            in->Expecting( "value|url|visible" );
             break;
         }
     }
@@ -219,14 +223,14 @@ int TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
 }
 
 
-bool TEMPLATES::HasFieldName( const wxString& aName ) const
+const TEMPLATE_FIELDNAME* TEMPLATES::GetFieldName( const wxString& aName ) const
 {
-    for( size_t i=0; i<m_Fields.size();  ++i )
+    for( const TEMPLATE_FIELDNAME& field : m_Fields )
     {
-        if( m_Fields[i].m_Name == aName )
-            return true;
+        if( field.m_Name == aName )
+            return &field;
     }
 
-    return false;
+    return nullptr;
 }
 

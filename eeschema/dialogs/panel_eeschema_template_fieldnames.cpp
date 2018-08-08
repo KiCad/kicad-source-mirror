@@ -105,14 +105,19 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToGrid()
     {
         m_grid->SetCellValue( row, 0, m_fields[row].m_Name );
         m_grid->SetCellValue( row, 1, m_fields[row].m_Visible ? wxT( "1" ) : wxEmptyString );
+        m_grid->SetCellValue( row, 2, m_fields[row].m_URL     ? wxT( "1" ) : wxEmptyString );
 
         // Set cell properties
         m_grid->SetCellAlignment( row, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
 
-        // Render the Visible column as a check box
+        // Render the Visible and URL columns as check boxes
         m_grid->SetCellRenderer( row, 1, new wxGridCellBoolRenderer() );
         m_grid->SetReadOnly( row, 1 );  // Not really; we delegate interactivity to GRID_TRICKS
         m_grid->SetCellAlignment( row, 1, wxALIGN_CENTRE, wxALIGN_CENTRE );
+
+        m_grid->SetCellRenderer( row, 2, new wxGridCellBoolRenderer() );
+        m_grid->SetReadOnly( row, 2 );  // Not really; we delegate interactivity to GRID_TRICKS
+        m_grid->SetCellAlignment( row, 2, wxALIGN_CENTRE, wxALIGN_CENTRE );
     }
 
     m_grid->Thaw();
@@ -130,6 +135,7 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
     {
         m_fields[row].m_Name  = m_grid->GetCellValue( row, 0 );
         m_fields[row].m_Visible = ( m_grid->GetCellValue( row, 1 ) != wxEmptyString );
+        m_fields[row].m_URL     = ( m_grid->GetCellValue( row, 2 ) != wxEmptyString );
     }
 
     return true;
@@ -158,8 +164,9 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
-    m_grid->SetColSize( 0, aWidth - m_checkboxColWidth );
+    m_grid->SetColSize( 0, aWidth - 2 * m_checkboxColWidth );
     m_grid->SetColSize( 1, m_checkboxColWidth );
+    m_grid->SetColSize( 2, m_checkboxColWidth );
 }
 
 

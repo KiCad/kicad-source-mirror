@@ -479,13 +479,12 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
         try
         {
-            m_TemplateFieldNames.Parse( &lexer );
+            m_templateFieldNames.Parse( &lexer );
         }
         catch( const IO_ERROR& DBG( e ) )
         {
             // @todo show error msg
-            DBG( printf( "templatefieldnames parsing error: '%s'\n",
-                       TO_UTF8( e.What() ) ); )
+            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
         }
     }
 }
@@ -552,7 +551,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     // Save template fieldnames
     STRING_FORMATTER sf;
-    m_TemplateFieldNames.Format( &sf, 0 );
+    m_templateFieldNames.Format( &sf, 0 );
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
@@ -582,6 +581,23 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     step.y = aCfg->Read( repeatLibStepYEntry, (long)DEFAULT_REPEAT_OFFSET_Y );
     SetRepeatStep( step );
     m_showPinElectricalTypeName = aCfg->Read( showPinElectricalType, true );
+
+    wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
+
+    if( !templateFieldNames.IsEmpty() )
+    {
+        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
+        try
+        {
+            m_templateFieldNames.Parse( &lexer );
+        }
+        catch( const IO_ERROR& DBG( e ) )
+        {
+            // @todo show error msg
+            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+        }
+    }
 }
 
 

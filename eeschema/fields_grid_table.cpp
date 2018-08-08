@@ -25,6 +25,7 @@
 #include <kiway_player.h>
 #include <dialog_shim.h>
 #include <fields_grid_table.h>
+#include <sch_base_frame.h>
 #include <sch_field.h>
 #include <sch_validators.h>
 #include <validators.h>
@@ -32,7 +33,6 @@
 #include <template_fieldnames.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
-#include <wx/regex.h>
 
 #include "eda_doc.h"
 
@@ -45,12 +45,13 @@ enum
 
 
 template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, bool aInLibEdit, LIB_PART* aPart ) :
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
+                                         LIB_PART* aPart ) :
+    m_frame( aFrame ),
     m_userUnits( aDialog->GetUserUnits() ),
     m_part( aPart ),
-    m_inLibEdit( aInLibEdit ),
-    m_fieldNameValidator( aInLibEdit, FIELD_NAME ),
-    m_referenceValidator( aInLibEdit, REFERENCE )
+    m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
+    m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE )
 {
     // Build the various grid cell attributes.
 
@@ -176,8 +177,6 @@ bool FIELDS_GRID_TABLE<T>::CanSetValueAs( int aRow, int aCol, const wxString& aT
 template <class T>
 wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
 {
-    static wxRegEx urlPrefix( wxT( "((https?)|(file)):\/\/" ) );
-
     switch( aCol )
     {
     case FDC_NAME:
@@ -200,7 +199,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else if( aRow == VALUE )
         {
-            if( m_inLibEdit )
+            if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
             {
                 // This field is the lib name and the default value when loading this component
                 // in schematic.  The value is now not editable here (in this dialog) because
@@ -227,11 +226,16 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
             m_urlAttr->IncRef();
             return m_urlAttr;
         }
-        else if( urlPrefix.Matches( GetValue( aRow, aCol ) ) )
+        else
         {
-            // Treat any user-defined field that starts with http:// or https:// as a URL
-            m_urlAttr->IncRef();
-            return m_urlAttr;
+            wxString fieldname = GetValue( aRow, FDC_NAME );
+            const TEMPLATE_FIELDNAME* templateFn = m_frame->GetTemplateFieldName( fieldname );
+
+            if( templateFn && templateFn->m_URL )
+            {
+                m_urlAttr->IncRef();
+                return m_urlAttr;
+            }
         }
         return nullptr;
 

@@ -29,6 +29,7 @@
 #include <draw_frame.h>
 
 #include <sch_screen.h>
+#include "template_fieldnames.h"
 
 class PAGE_INFO;
 class TITLE_BLOCK;
@@ -77,10 +78,12 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
-    wxPoint  m_repeatStep;          ///< the increment value of the position of an item
-                                    ///< when it is repeated
-    int      m_repeatDeltaLabel;    ///< the increment value of labels like bus members
-                                    ///< when they are repeated
+    TEMPLATES m_templateFieldNames;
+
+    wxPoint   m_repeatStep;          ///< the increment value of the position of an item
+                                     ///< when it is repeated
+    int       m_repeatDeltaLabel;    ///< the increment value of labels like bus members
+                                     ///< when they are repeated
 
 
 public:
@@ -205,6 +208,25 @@ public:
             bool aAllowFields = true );
 
     void OnConfigurePaths( wxCommandEvent& aEvent );
+
+    /**
+     * Return a template field names list for read only access.
+     */
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames() const
+    {
+        return m_templateFieldNames.GetTemplateFieldNames();
+    }
+
+    /**
+     * Search for \a aName in the the template field name list.
+     *
+     * @param aName A wxString object containing the field name to search for.
+     * @return the template fieldname if found; NULL otherwise.
+     */
+    const TEMPLATE_FIELDNAME* GetTemplateFieldName( const wxString& aName ) const
+    {
+        return m_templateFieldNames.GetFieldName( aName );
+    }
 
     virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 

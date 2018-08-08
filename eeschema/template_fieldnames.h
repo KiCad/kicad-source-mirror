@@ -71,25 +71,27 @@ enum  NumFieldType {
 struct TEMPLATE_FIELDNAME
 {
     wxString    m_Name;         ///<  The field name
-    wxString    m_Value;        ///<  The default value or empty
     bool        m_Visible;      ///<  If first appearance of the field's editor has as visible.
+    bool        m_URL;          ///<  If field should have a browse button
 
     TEMPLATE_FIELDNAME() :
-        m_Visible( false )
+        m_Visible( false ),
+        m_URL( false )
     {
     }
 
     TEMPLATE_FIELDNAME( const wxString& aName ) :
         m_Name( aName ),
-        m_Visible( false )
+        m_Visible( false ),
+        m_URL( false )
     {
     }
 
     TEMPLATE_FIELDNAME( const TEMPLATE_FIELDNAME& ref )
     {
         m_Name = ref.m_Name;
-        m_Value = ref.m_Value;
         m_Visible = ref.m_Visible;
+        m_URL = ref.m_URL;
     }
 
     /**
@@ -171,19 +173,19 @@ public:
      * Function GetTemplateFieldName
      * returns a template fieldnames list for read only access.
      */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames()
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames() const
     {
         return m_Fields;
     }
 
     /**
-     * Function HasFieldName
-     * checks for \a aName in the the template field name list.
+     * Function GetFieldName
+     * searches for \a aName in the the template field name list.
      *
      * @param aName A wxString object containing the field name to search for.
-     * @return True if \a aName is found in the list.
+     * @return the template fieldname if found; NULL otherwise.
      */
-    bool HasFieldName( const wxString& aName ) const;
+    const TEMPLATE_FIELDNAME* GetFieldName( const wxString& aName ) const;
 };
 
 #endif // _TEMPLATE_FIELDNAME_H_
