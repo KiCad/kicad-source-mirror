@@ -707,34 +707,28 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
 {
     long long timestamp = 0;
 
-#if defined(__WIN32__)
-    // Win32 version.
-    // Save time by not searching for each path twice: once in wxDir.GetNext() and once in
-    // wxFileName.GetModificationTime().  Also cuts out wxWidgets string-matching and case
-    // conversion by staying on the MSW side of things.
-    std::string filespec( aDirPath.t_str() );
-    filespec += '\\';
-    filespec += aFilespec.t_str();
+#ifdef __WINDOWS__
+    // wxFileName construction is egregiously slow.  Construct it once and just swap out
+    // the filename thereafter.
+    WX_FILENAME fn( aDirPath, wxT( "dummyName" ) );
+    wxDir       dir( aDirPath );
+    wxString    fullname;
 
-    WIN32_FIND_DATA findData;
-    wxDateTime      lastModDate;
-
-    HANDLE fileHandle = ::FindFirstFile( filespec, &findData );
-
-    if( fileHandle != INVALID_HANDLE_VALUE )
+    if( dir.IsOpened() )
     {
-        do
+        if( dir.GetFirst( &fullname, aFilespec ) )
         {
-            ConvertFileTimeToWx( lastModDate, findData.ftLastWriteTime );
-            timestamp += lastModDate.GetValue().GetValue();
+            do
+            {
+                fn.SetFullName( fullname );
+                timestamp += fn.GetTimestamp();
+            }
+            while( dir.GetNext( &fullname ) );
         }
-        while ( FindNextFile( fileHandle, &findData ) != 0);
     }
-
-    FindClose( fileHandle );
 #else
-    // POSIX version.
-    // Save time by not converting between encodings -- do everything on the file-system side.
+    // POSIX version.  Save time by not converting between encodings -- do everything on
+    // the file-system side.
     std::string filespec( aFilespec.fn_str() );
     std::string dir_path( aDirPath.fn_str() );
 
