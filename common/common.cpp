@@ -533,11 +533,21 @@ bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) cons
 #endif
 
 
-//
-// A wrapper around a wxFileName which avoids expensive calls to wxFileName::SplitPath()
-// and string concatenations by caching the path and filename locally and only resolving
-// the wxFileName when it has to.
-//
+/**
+ * Performance enhancements to file and directory operations.
+ *
+ * Note: while it's annoying to have to make copies of wxWidgets stuff and then
+ * add platform-specific performance optimizations, the following routies offer
+ * SIGNIFICANT performance benefits.
+ */
+
+/**
+ * WX_FILENAME
+ *
+ * A wrapper around a wxFileName which avoids expensive calls to wxFileName::SplitPath()
+ * and string concatenations by caching the path and filename locally and only resolving
+ * the wxFileName when it has to.
+ */
 WX_FILENAME::WX_FILENAME( const wxString& aPath, const wxString& aFilename ) :
         m_fn( aPath, aFilename ),
         m_path( aPath ),
@@ -596,10 +606,12 @@ long long WX_FILENAME::GetTimestamp()
 }
 
 
-//
-// A copy of wxMatchWild (attributed to <dalewis@cs.Buffalo.EDU>) modified to use
-// POSIX-file-system-encoded inputs.
-//
+/**
+ * A copy of wxMatchWild(), which wxWidgets attributes to Douglas A. Lewis
+ * <dalewis@cs.Buffalo.EDU> and ircII's reg.c.
+ *
+ * This version is modified to skip any encoding conversions (for performance).
+ */
 bool matchWild( const char* pat, const char* text, bool dot_special )
 {
     if ( !*text )
@@ -703,32 +715,71 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
 }
 
 
+/**
+ * A copy of ConvertFileTimeToWx() because wxWidgets left it as a static function
+ * private to src/common/filename.cpp.
+ */
+#if wxUSE_DATETIME && defined(__WIN32__) && !defined(__WXMICROWIN__)
+
+// Convert between wxDateTime and FILETIME which is a 64-bit value representing
+// the number of 100-nanosecond intervals since January 1, 1601 UTC.
+//
+// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
+static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
+
+static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
+{
+    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+    t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
+    t -= EPOCH_OFFSET_IN_MSEC;
+
+    *dt = wxDateTime(t);
+}
+
+#endif // wxUSE_DATETIME && __WIN32__
+
+
+/**
+ * TimestampDir
+ *
+ * This routine offers SIGNIFICANT performance benefits over using wxWidgets to gather
+ * timestamps from matching files in a directory.
+ * @param aDirPath the directory to search
+ * @param aFilespec a (wildcarded) file spec to match against
+ * @return a hash of the last-mod-dates of all matching files in the directory
+ */
 long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
 {
     long long timestamp = 0;
 
-#ifdef __WINDOWS__
-    // wxFileName construction is egregiously slow.  Construct it once and just swap out
-    // the filename thereafter.
-    WX_FILENAME fn( aDirPath, wxT( "dummyName" ) );
-    wxDir       dir( aDirPath );
-    wxString    fullname;
+#if defined(__WIN32__)
+    // Win32 version.
+    // Save time by not searching for each path twice: once in wxDir.GetNext() and once in
+    // wxFileName.GetModificationTime().  Also cuts out wxWidgets' string-matching and case
+    // conversion by staying on the MSW side of things.
+    std::wstring filespec( aDirPath.t_str() );
+    filespec += '\\';
+    filespec += aFilespec.t_str();
 
-    if( dir.IsOpened() )
+    WIN32_FIND_DATA findData;
+    wxDateTime      lastModDate;
+
+    HANDLE fileHandle = ::FindFirstFile( filespec.data(), &findData );
+
+    if( fileHandle != INVALID_HANDLE_VALUE )
     {
-        if( dir.GetFirst( &fullname, aFilespec ) )
+        do
         {
-            do
-            {
-                fn.SetFullName( fullname );
-                timestamp += fn.GetTimestamp();
-            }
-            while( dir.GetNext( &fullname ) );
+            ConvertFileTimeToWx( &lastModDate, findData.ftLastWriteTime );
+            timestamp += lastModDate.GetValue().GetValue();
         }
+        while ( FindNextFile( fileHandle, &findData ) != 0);
     }
+
+    FindClose( fileHandle );
 #else
-    // POSIX version.  Save time by not converting between encodings -- do everything on
-    // the file-system side.
+    // POSIX version.
+    // Save time by not converting between encodings -- do everything on the file-system side.
     std::string filespec( aFilespec.fn_str() );
     std::string dir_path( aDirPath.fn_str() );
 
