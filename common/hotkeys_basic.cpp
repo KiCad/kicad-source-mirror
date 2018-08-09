@@ -260,6 +260,13 @@ wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList,
         switch( aShortCutType )
         {
         case IS_HOTKEY:
+            #ifdef  __LINUX__
+            // In menus, some special keys (BkSp) must be coded by the
+            // actual ASCII value, not an equivalent name
+            if( keyname.EndsWith( "BkSp") )
+                keyname.Replace( "BkSp", "\b" );
+            #endif
+
             msg << wxT( "\t" ) << keyname;
             break;
 
@@ -314,6 +321,13 @@ wxString AddHotkeyName( const wxString&           aText,
                 switch( aShortCutType )
                 {
                 case IS_HOTKEY:
+                    #ifdef  __LINUX__
+                    // In menus, some special keys (BkSp) must be coded by the
+                    // actual ASCII value, not an equivalent name
+                    if( keyname.EndsWith( "BkSp") )
+                        keyname.Replace( "BkSp", "\b" );
+                    #endif
+
                     msg << wxT( "\t" ) << keyname;
                     break;
 
