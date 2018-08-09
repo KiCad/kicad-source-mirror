@@ -193,7 +193,7 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
                             KiScaledBitmap( cursor_xpm, this ) );
-    KiScaledSeparator( m_mainToolBar, this );
+    KiScaledSeparator( m_drawToolBar, this );
 
     m_drawToolBar->Realize();
 }
@@ -222,7 +222,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
                                    wxITEM_CHECK );
     }
 
-    KiScaledSeparator( m_mainToolBar, this );
+    KiScaledSeparator( m_optionsToolBar, this );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
                                KiScaledBitmap( grid_xpm, this ),
