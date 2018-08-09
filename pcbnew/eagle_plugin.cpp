@@ -377,14 +377,20 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
 
 void EAGLE_PLUGIN::loadDesignRules( wxXmlNode* aDesignRules )
 {
-    m_xpath->push( "designrules" );
-    m_rules->parse( aDesignRules );
-    m_xpath->pop();     // "designrules"
+    if( aDesignRules )
+    {
+        m_xpath->push( "designrules" );
+        m_rules->parse( aDesignRules );
+        m_xpath->pop();     // "designrules"
+    }
 }
 
 
 void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 {
+    if( !aLayers )
+        return;
+
     ELAYERS cu;  // copper layers
 
     // Get the first layer and iterate
@@ -456,6 +462,9 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 
 void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 {
+    if( !aGraphics )
+        return;
+
     m_xpath->push( "plain" );
 
     // Get the first graphic and iterate
@@ -785,11 +794,16 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
 void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 {
-    m_xpath->push( "packages" );
+    if( !aLib || !aLibName )
+        return;
 
     // library will have <xmlattr> node, skip that and get the single packages node
     wxXmlNode* packages = MapChildren( aLib )["packages"];
 
+    if( !packages )
+        return;
+
+    m_xpath->push( "packages" );
 
     // Create a MODULE for all the eagle packages, for use later via a copy constructor
     // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
@@ -841,6 +855,9 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
 void EAGLE_PLUGIN::loadLibraries( wxXmlNode* aLibs )
 {
+    if( !aLibs )
+        return;
+
     m_xpath->push( "libraries.library", "name" );
 
     // Get the first library and iterate
@@ -861,6 +878,9 @@ void EAGLE_PLUGIN::loadLibraries( wxXmlNode* aLibs )
 
 void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 {
+    if( !aElements )
+        return;
+
     m_xpath->push( "elements.element", "name" );
 
     EATTR   name;
