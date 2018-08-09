@@ -469,9 +469,10 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
 
     // wxXmlNode* grid = drawingChildren["grid"]
 
-    wxXmlNode* layers = drawingChildren["layers"];
+    auto layers = drawingChildren["layers"];
 
-    loadLayerDefs( layers );
+    if( layers )
+        loadLayerDefs( layers );
 
     // wxXmlNode* library = drawingChildren["library"]
 
@@ -479,7 +480,9 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
 
 
     // Load schematic
-    loadSchematic( drawingChildren["schematic"] );
+    auto schematic = drawingChildren["schematic"];
+    if( schematic )
+        loadSchematic( schematic );
 }
 
 
@@ -488,7 +491,8 @@ void SCH_EAGLE_PLUGIN::countNets( wxXmlNode* aSchematicNode )
     // Map all children into a readable dictionary
     NODE_MAP schematicChildren = MapChildren( aSchematicNode );
     // Loop through all the sheets
-    wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
+
+    wxXmlNode* sheetNode = getChildrenNodes( schematicChildren, "sheets" );
 
     while( sheetNode )
     {
@@ -519,8 +523,12 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 {
     // Map all children into a readable dictionary
     NODE_MAP schematicChildren = MapChildren( aSchematicNode );
+    auto partNode = getChildrenNodes( schematicChildren, "parts" );
+    auto libraryNode = getChildrenNodes( schematicChildren, "libraries" );
+    auto sheetNode = getChildrenNodes( schematicChildren, "sheets" );
 
-    wxXmlNode* partNode = schematicChildren["parts"]->GetChildren();
+    if( !partNode || !libraryNode || !sheetNode )
+        return;
 
     while( partNode )
     {
@@ -529,10 +537,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         partNode = partNode->GetNext();
     }
 
-
     // Loop through all the libraries
-    wxXmlNode* libraryNode = schematicChildren["libraries"]->GetChildren();
-
     while( libraryNode )
     {
         // Read the library name
@@ -553,9 +558,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     countNets( aSchematicNode );
 
     // Loop through all the sheets
-    wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
-
-    int sheet_count = countChildren( schematicChildren["sheets"], "sheet" );
+    int sheet_count = countChildren( sheetNode->GetParent(), "sheet" );
 
     // If eagle schematic has multiple sheets then create corresponding subsheets on the root sheet
     if( sheet_count > 1 )
@@ -1264,7 +1267,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
     NODE_MAP libraryChildren = MapChildren( aLibraryNode );
 
     // Loop through the symbols and load each of them
-    wxXmlNode* symbolNode = libraryChildren["symbols"]->GetChildren();
+    wxXmlNode* symbolNode = getChildrenNodes( libraryChildren, "symbols" );
 
     while( symbolNode )
     {
@@ -1274,7 +1277,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
     }
 
     // Loop through the devicesets and load each of them
-    wxXmlNode* devicesetNode = libraryChildren["devicesets"]->GetChildren();
+    wxXmlNode* devicesetNode = getChildrenNodes( libraryChildren, "devicesets" );
 
     while( devicesetNode )
     {
