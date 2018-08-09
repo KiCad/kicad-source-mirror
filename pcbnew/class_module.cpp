@@ -478,10 +478,8 @@ EDA_RECT MODULE::GetFootprintRect() const
 
     for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
     {
-        const EDGE_MODULE* edge = dyn_cast<const EDGE_MODULE*>( item );
-
-        if( edge )
-            area.Merge( edge->GetBoundingBox() );
+        if( item->Type() == PCB_MODULE_EDGE_T )
+            area.Merge( item->GetBoundingBox() );
     }
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
@@ -493,7 +491,19 @@ EDA_RECT MODULE::GetFootprintRect() const
 
 const EDA_RECT MODULE::GetBoundingBox() const
 {
-    return GetFootprintRect();
+    EDA_RECT area = GetFootprintRect();
+
+    // Add in items not collected by GetFootprintRect():
+    for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
+    {
+        if( item->Type() != PCB_MODULE_EDGE_T )
+            area.Merge( item->GetBoundingBox() );
+    }
+
+    area.Merge( m_Value->GetBoundingBox() );
+    area.Merge( m_Reference->GetBoundingBox() );
+
+    return area;
 }
 
 

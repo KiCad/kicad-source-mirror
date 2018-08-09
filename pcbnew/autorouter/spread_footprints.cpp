@@ -72,7 +72,7 @@ void fillRectList( CSubRectArray& vecSubRects, std::vector <MODULE*>& aModuleLis
 
     for( unsigned ii = 0; ii < aModuleList.size(); ii++ )
     {
-        EDA_RECT fpBox = aModuleList[ii]->GetBoundingBox();
+        EDA_RECT fpBox = aModuleList[ii]->GetFootprintRect();
         TSubRect fpRect( fpBox.GetWidth()/scale, fpBox.GetHeight()/scale, ii );
         vecSubRects.push_back( fpRect );
     }
@@ -156,7 +156,7 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea,
 
         MODULE * module = aModuleList[vecSubRects[it].n];
 
-        EDA_RECT fpBBox = module->GetBoundingBox();
+        EDA_RECT fpBBox = module->GetFootprintRect();
         wxPoint mod_pos = pos + ( module->GetPosition() - fpBBox.GetOrigin() )
                           + aFreeArea.GetOrigin();
 
