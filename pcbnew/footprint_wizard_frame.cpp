@@ -215,6 +215,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     m_auimgr.GetPane( m_parametersPanel ).MinSize( wxSize( 360, 180 ) );
 
     m_auimgr.LoadPerspective( m_auiPerspective );
+    // Ensure the draw panel is shown, regardless the perspective config:
+    m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( true );
 
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
 #ifdef USE_WX_GRAPHICS_CONTEXT
