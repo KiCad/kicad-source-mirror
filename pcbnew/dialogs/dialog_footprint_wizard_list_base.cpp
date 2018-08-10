@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,7 +96,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonUpdateModules = new wxButton( this, wxID_ANY, _("Update Python Modules"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLower->Add( m_buttonUpdateModules, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerLower->Add( m_buttonUpdateModules, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bSizerLower->Add( 0, 0, 1, wxRIGHT|wxLEFT, 5 );
@@ -108,7 +108,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerLower->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bSizerLower->Add( m_sdbSizer, 0, wxALL, 5 );
 	
 	
 	bSizerMain->Add( bSizerLower, 0, wxEXPAND|wxLEFT, 10 );
