@@ -98,6 +98,8 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     if( aQuery && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
+        wxSafeYield( this, true );      // Allow frame to come to front before showing warning.
+
         if( !IsOK( this,
                    _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
             return false;
