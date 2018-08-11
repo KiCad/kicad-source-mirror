@@ -232,8 +232,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.AddPane( m_footprintList, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(1)
                       .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 300, -1 ) );
 
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
 
     // after changing something to the aui manager,
     // call Update()() to reflect the changes

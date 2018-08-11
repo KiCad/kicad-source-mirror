@@ -152,8 +152,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
 
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
 
     ReFillLayerWidget();                // this is near end because contents establish size
     m_auimgr.Update();
