@@ -43,6 +43,9 @@
 #define KEY_ANNOTATE_ALGO_OPTION          wxT( "AnnotateAlgoOption" )
 #define KEY_ANNOTATE_MESSAGES_FILTER      wxT( "AnnotateFilterMsg" )
 
+// A window name for the annotate dialog to retrieve is if not destroyed
+#define DLG_WINDOW_NAME "DialogAnnotateWindowName"
+
 
 class wxConfigBase;
 
@@ -94,6 +97,7 @@ private:
 DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& message )
     : DIALOG_ANNOTATE_BASE( parent )
 {
+    SetName( DLG_WINDOW_NAME );
     m_Parent = parent;
 
     if( !message.IsEmpty() )
@@ -313,14 +317,16 @@ int DIALOG_ANNOTATE::GetStartNumber()
 
 void SCH_EDIT_FRAME::OnAnnotate( wxCommandEvent& event )
 {
-    if( !m_annotateDialog )
+    DIALOG_ANNOTATE* dlg = static_cast<DIALOG_ANNOTATE*> ( wxWindow::FindWindowByName( DLG_WINDOW_NAME ) );
+
+    if( !dlg )
     {
-        m_annotateDialog = new DIALOG_ANNOTATE( this, wxEmptyString );
-        m_annotateDialog->Show( true );
+        dlg = new DIALOG_ANNOTATE( this, wxEmptyString );
+        dlg->Show( true );
     }
-    else    // The dialog is just not visible
+    else    // The dialog is already opened, perhaps not visible
     {
-        m_annotateDialog->Show( true );
+        dlg->Show( true );
     }
 }
 

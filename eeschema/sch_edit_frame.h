@@ -131,7 +131,6 @@ private:
     wxSize                  m_printDialogSize;
     bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
-    DIALOG_ANNOTATE*        m_annotateDialog;
     DIALOG_SCH_FIND*        m_dlgFindReplace;
     wxPoint                 m_findDialogPosition;
     wxSize                  m_findDialogSize;
