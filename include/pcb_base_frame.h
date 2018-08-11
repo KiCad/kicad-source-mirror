@@ -154,6 +154,8 @@ public:
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
     virtual void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
 
+    void SetDrawBgColor( COLOR4D aColor ) override;
+
     /**
      * Function GetDisplayOptions
      * returns the display options current in use

@@ -79,9 +79,9 @@ END_EVENT_TABLE()
 /***********************************************************************/
 
 #ifdef __WXMAC__
-const int drawPanelStyle = wxBORDER | wxHSCROLL | wxVSCROLL | wxALWAYS_SHOW_SB;
+const int drawPanelStyle = wxHSCROLL | wxVSCROLL | wxALWAYS_SHOW_SB;
 #else
-const int drawPanelStyle = wxBORDER | wxHSCROLL | wxVSCROLL;
+const int drawPanelStyle = wxHSCROLL | wxVSCROLL;
 #endif
 
 EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,

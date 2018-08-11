@@ -37,6 +37,7 @@
 #include <msgpanel.h>
 #include <html_messagebox.h>
 #include <executable_names.h>
+#include <eda_dockart.h>
 
 #include <general.h>
 #include <eeschema_id.h>
@@ -394,8 +395,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
+    m_canvas->SetEnableBlockCommands( true );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -409,33 +409,13 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
-
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
-
-    EDA_PANEINFO mesg;
-    mesg.MessageToolbarPane();
-
-    if( m_mainToolBar )
-        m_auimgr.AddPane( m_mainToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
-
-    if( m_drawToolBar )
-        m_auimgr.AddPane( m_drawToolBar, wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right() );
-
-    if( m_optionsToolBar )
-        m_auimgr.AddPane( m_optionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
-
-    if( m_canvas )
-        m_auimgr.AddPane( m_canvas, wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
-
-    if( m_messagePanel )
-        m_auimgr.AddPane( m_messagePanel, wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().
-                          Layer(10) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     m_auimgr.Update();
 
@@ -460,15 +440,11 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     delete m_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
     delete m_undoItem;
-    delete g_RootSheet;
     delete m_findReplaceData;
     delete m_findReplaceStatus;
 
-    m_CurrentSheet = NULL;
-    m_undoItem = NULL;
+    delete g_RootSheet;
     g_RootSheet = NULL;
-    m_findReplaceData = NULL;
-    m_findReplaceStatus = NULL;
 }
 
 

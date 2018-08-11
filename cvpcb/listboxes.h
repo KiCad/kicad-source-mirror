@@ -36,7 +36,7 @@ class CVPCB_MAINFRAME;
 class COMPONENT;
 class FOOTPRINT_LIST;
 
-#define LISTBOX_STYLE     ( wxBORDER_SIMPLE | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
+#define LISTBOX_STYLE     ( wxBORDER_NONE | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
                             wxVSCROLL | wxHSCROLL )
 
 /*********************************************************************/

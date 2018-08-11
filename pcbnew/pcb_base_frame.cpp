@@ -294,6 +294,13 @@ void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 }
 
 
+void PCB_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
+{
+    m_drawBgColor= aColor;
+    m_auimgr.Update();
+}
+
+
 const ZONE_SETTINGS& PCB_BASE_FRAME::GetZoneSettings() const
 {
     wxASSERT( m_Pcb );

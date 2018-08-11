@@ -72,6 +72,7 @@
 #include <tools/pcb_actions.h>
 #include <gestfich.h>
 #include <executable_names.h>
+#include <eda_dockart.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -359,73 +360,30 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
-
     ReCreateMicrowaveVToolbar();
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
+    // Horizontal items; layers 4 - 6
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
+    // Vertical items; layers 1 - 3
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
 
-    EDA_PANEINFO mesg;
-    mesg.MessageToolbarPane();
+    m_auimgr.AddPane( m_microWaveToolBar, EDA_PANE().VToolbar().Name( "MicrowaveToolbar" ).Right().Layer(1) );
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
+    m_auimgr.AddPane( m_Layers, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
+                      .Caption( _( "Layers Manager" ) ).PaneBorder( false )
+                      .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
-    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
-    // LAYER_WIDGET is floatable, but initially docked at far right
-    EDA_PANEINFO   lyrs;
-    lyrs.LayersToolbarPane();
-    lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
-    lyrs.BestSize( m_Layers->GetBestSize() );
-    lyrs.Caption( _( "Layers Manager" ) );
-    lyrs.TopDockable( false ).BottomDockable( false );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
 
-    if( m_mainToolBar )    // The main horizontal toolbar
-    {
-        m_auimgr.AddPane( m_mainToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
-    }
-
-    if( m_auxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows track and via sizes, zoom ...)
-    {
-        m_auimgr.AddPane( m_auxiliaryToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
-    }
-
-    if( m_microWaveToolBar )    // The auxiliary vertical right toolbar (currently microwave tools)
-        m_auimgr.AddPane( m_microWaveToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_microWaveToolBar" ) ).
-                          Right().Layer( 1 ).Position(1).Hide() );
-
-    if( m_drawToolBar )    // The main right vertical toolbar
-        m_auimgr.AddPane( m_drawToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer( 2 ) );
-
-    // Add the layer manager ( most right side of pcbframe )
-    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 3 ) );
-
-    if( m_optionsToolBar )    // The left vertical toolbar (fast acces display options of Pcbnew)
-    {
-        m_auimgr.AddPane( m_optionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left().Layer(1) );
-
-        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
-        m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
-    }
-
-    if( m_canvas )
-        m_auimgr.AddPane( m_canvas,
-                          wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
-
-    if( GetGalCanvas() )
-        m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
-                          wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
-
-    if( m_messagePanel )
-        m_auimgr.AddPane( m_messagePanel,
-                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
+    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
 
     ReFillLayerWidget();        // this is near end because contents establish size
     m_Layers->ReFillRender();   // Update colors in Render after the config is read

@@ -40,6 +40,7 @@
 #include <wildcards_and_files_ext.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
+#include <eda_dockart.h>
 
 #include <io_mgr.h>
 #include <class_module.h>
@@ -119,42 +120,20 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     // Create GAL canvas
     EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-    //EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(), backend );
+    auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                  GetGalDisplayOptions(), backend );
     SetGalCanvas( gal_drawPanel );
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
 
-    EDA_PANEINFO mesg;
-    mesg.MessageToolbarPane();
-
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
-
-    if( m_drawToolBar )    // Currently, no vertical right toolbar.
-        m_auimgr.AddPane( m_drawToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right() );
-
-    if( m_canvas )
-        m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
-
-    if( GetGalCanvas() )
-        m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
-                          wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
-
-    m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
-
-    m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
 
     m_auimgr.Update();
 
@@ -179,7 +158,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     UseGalCanvas( backend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
     updateView();
-
 
     Show( true );
 }

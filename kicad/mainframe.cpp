@@ -82,37 +82,23 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     // Add the wxTextCtrl showing all messages from KiCad:
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize,
-                                    wxTE_MULTILINE | wxTE_READONLY );
+                                    wxTE_MULTILINE | wxTE_READONLY | wxBORDER_NONE );
 
     RecreateBaseHToolbar();
     ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
 
-    EDA_PANEINFO horiztb;
-    horiztb.HorizontalToolbarPane();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
 
-    EDA_PANEINFO info;
-    info.InfoToolbarPane();
+    m_auimgr.AddPane( m_LeftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer(3)
+                      .CaptionVisible( false ).PaneBorder( false )
+                      .MinSize( 150, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiztb ).Name( wxT( "m_mainToolBar" ) ).Top() );
+    m_auimgr.AddPane( m_Launcher, EDA_PANE().HToolbar().Name( "Launcher" ).Top().Layer(1)
+                      .MinSize( m_Launcher->GetPanelWidth(), m_Launcher->GetPanelHeight() ) );
 
-    m_auimgr.AddPane( m_LeftWin,
-                      wxAuiPaneInfo(info).Name( wxT( "m_LeftWin" ) ).Left().
-                      BestSize( m_leftWinWidth, -1 ).
-                      Layer( 1 ) );
-
-    m_auimgr.AddPane( m_Launcher, wxTOP );
-    m_auimgr.GetPane( m_Launcher).CaptionVisible( false ).PaneBorder(false)
-            .MinSize( wxSize( m_Launcher->GetPanelWidth(), m_Launcher->GetPanelHeight() ) )
-            .Resizable( false );
-
-    m_auimgr.AddPane( m_MessagesBox,
-                      wxAuiPaneInfo().Name( wxT( "m_MessagesBox" ) ).CentrePane().Layer( 2 ) );
-
-    m_auimgr.GetPane( m_LeftWin ).MinSize( wxSize( 150, -1) );
-    m_auimgr.GetPane( m_LeftWin ).BestSize(wxSize(m_leftWinWidth, -1) );
+    m_auimgr.AddPane( m_MessagesBox, EDA_PANE().Messages().Name( "MsgPanel" ).Center() );
 
     m_auimgr.Update();
 

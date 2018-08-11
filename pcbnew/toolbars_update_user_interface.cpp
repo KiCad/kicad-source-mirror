@@ -150,12 +150,12 @@ void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).IsShown() );
+    aEvent.Check( m_auimgr.GetPane( "LayersManager" ).IsShown() );
 }
 
 void PCB_EDIT_FRAME::OnUpdateShowMicrowaveToolbar( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).IsShown() );
+    aEvent.Check( m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown() );
 }
 
 

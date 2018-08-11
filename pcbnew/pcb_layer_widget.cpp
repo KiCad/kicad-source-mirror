@@ -604,6 +604,9 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     myframe->ReCreateHToolbar();
 
     myframe->GetCanvas()->Refresh();
+
+    if( aLayer == LAYER_PCB_BACKGROUND )
+        myframe->SetDrawBgColor( aColor );
 }
 
 

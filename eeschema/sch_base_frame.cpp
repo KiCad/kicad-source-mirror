@@ -128,6 +128,9 @@ void SCH_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
 {
     m_drawBgColor= aColor;
     SetLayerColor( aColor, LAYER_SCHEMATIC_BACKGROUND );
+
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
 }
 
 

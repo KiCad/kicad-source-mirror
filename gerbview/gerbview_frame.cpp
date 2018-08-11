@@ -34,6 +34,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
+#include <eda_dockart.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -134,64 +135,25 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
-    m_auimgr.SetManagedWindow( this );
-
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateOptToolbar();
     ReCreateAuxiliaryToolbar();
 
-    EDA_PANEINFO    horiz;
-    horiz.HorizontalToolbarPane();
+    m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO    vert;
-    vert.VerticalToolbarPane();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    EDA_PANEINFO    mesg;
-    mesg.MessageToolbarPane();
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_LayersManager, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
+                      .Caption( _( "Layers Manager" ) ).PaneBorder( false )
+                      .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
 
-    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
-    // the Layers Manager is floatable, but initially docked at far right
-    EDA_PANEINFO    lyrs;
-    lyrs.LayersToolbarPane();
-    lyrs.MinSize( m_LayersManager->GetBestSize() );
-    lyrs.BestSize( m_LayersManager->GetBestSize() );
-    lyrs.Caption( _( "Visibles" ) );
-    lyrs.TopDockable( false ).BottomDockable( false );
-
-
-    if( m_mainToolBar )
-        m_auimgr.AddPane( m_mainToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
-
-    if( m_auxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows component and netname lists
-    {
-        m_auimgr.AddPane( m_auxiliaryToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
-    }
-
-    if( m_drawToolBar )
-        m_auimgr.AddPane( m_drawToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right().Row( 1 ) );
-
-    m_auimgr.AddPane( m_LayersManager,
-                      lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 0 ) );
-
-    if( m_optionsToolBar )
-        m_auimgr.AddPane( m_optionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
-
-    if( m_canvas )
-        m_auimgr.AddPane( m_canvas,
-                          wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
-
-    if( GetGalCanvas() )
-        m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
-                          wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
-
-    if( m_messagePanel )
-        m_auimgr.AddPane( m_messagePanel,
-                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
 
     ReFillLayerWidget();                // this is near end because contents establish size
     m_auimgr.Update();

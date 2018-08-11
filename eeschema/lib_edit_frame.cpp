@@ -39,6 +39,7 @@
 #include <sch_edit_frame.h>
 #include <msgpanel.h>
 #include <confirm.h>
+#include <eda_dockart.h>
 
 #include <general.h>
 #include <eeschema_id.h>
@@ -276,34 +277,18 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     UpdatePartSelectList();
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
 
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    EDA_PANEINFO mesg;
-    mesg.MessageToolbarPane();
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "ComponentTree" ).Left().Layer(1)
+                      .Caption( _( "Libraries" ) ).MinSize( 250, -1 ).Resizable() );
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( "m_mainToolBar" ).Top().Row( 0 ) );
-
-    m_auimgr.AddPane( m_drawToolBar,
-                      wxAuiPaneInfo( vert ).Name( "m_VToolBar" ).Right() );
-
-    m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( "m_optionsToolBar" ).Left().Row( 0 ) );
-
-    m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
-
-    m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom().Layer( 10 ) );
-
-    m_auimgr.AddPane( m_treePane,
-                      wxAuiPaneInfo().Name( "ComponentTree" ).Caption( _( "Libraries" ) ).Left()
-                      .Row( 1 ).Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.Update();
 

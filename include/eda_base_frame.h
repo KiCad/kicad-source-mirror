@@ -126,11 +126,6 @@ class EDA_BASE_FRAME : public wxFrame
 
     wxWindow* findQuasiModalDialog();
 
-    /**
-     * Removes border from wxAui panes.
-     */
-    void removePaneBorder( wxShowEvent& event );
-
 protected:
     FRAME_T      m_Ident;           ///< Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
@@ -440,85 +435,81 @@ public:
  * then after a //==// break has additional calls to anchor toolbars in a way that matches
  * present functionality.
  */
-class EDA_PANEINFO : public wxAuiPaneInfo
+class EDA_PANE : public wxAuiPaneInfo
 {
-
 public:
-
-    /**
-     * Function HorizontalToolbarPane
-     * Change *this to a horizontal toolbar for KiCad.
-     */
-    EDA_PANEINFO& HorizontalToolbarPane()
+    EDA_PANE()
     {
-        ToolbarPane();
-        CloseButton( false );
-        LeftDockable( false );
-        RightDockable( false );
-        //====================  Remove calls below here for movable toolbars //
         Gripper( false );
-        DockFixed( true );
-        Movable( false );
-        Resizable( true );
-        return *this;
+        CloseButton( false );
+        PaneBorder( false );
     }
 
     /**
-     * Function VerticalToolbarPane
-     * Change *this to a vertical toolbar for KiCad.
+     * Function HToolbar
+     * Turn *this to a horizontal toolbar for KiCad.
      */
-    EDA_PANEINFO& VerticalToolbarPane()
+    EDA_PANE& HToolbar()
     {
-        ToolbarPane();
-        CloseButton( false );
-        TopDockable( false );
-        BottomDockable( false );
-        //====================  Remove calls below here for movable toolbars //
-        Gripper( false );
-        DockFixed( true );
-        Movable( false );
-        Resizable( true );
-        return *this;
-    }
-
-    /**
-     * Function MessageToolbarPane
-     * Change *this to a message pane for KiCad.
-     *
-     */
-    EDA_PANEINFO& MessageToolbarPane()
-    {
-        Gripper( false );
-        DockFixed( true );
-        Movable( false );
-        Floatable( false );
-        CloseButton( false );
+        SetFlag( optionToolbar, true );
         CaptionVisible( false );
+        TopDockable().BottomDockable();
+        DockFixed( true );
+        Movable( false );
+        Resizable( true );      // expand to fit available space
         return *this;
     }
 
     /**
-     * Function LayersToolbarPane
-     * Change *this to a layers toolbar for KiCad.
+     * Function VToolbar
+     * Turn *this into a vertical toolbar for KiCad.
      */
-    EDA_PANEINFO& LayersToolbarPane()
+    EDA_PANE& VToolbar()
     {
-        CloseButton( false );
-        return *this;
-    }
-
-    /**
-     * Function InfoToolbarPane
-     * Change *this to a information panel for for KiCad.
-     *
-     * Info panes are used for vertical display of information next to the center pane.
-     * Used in CvPcb and the library viewer primarily.
-     */
-    EDA_PANEINFO& InfoToolbarPane()
-    {
-        Gripper( false );
-        CloseButton( false );
+        SetFlag( optionToolbar, true );
         CaptionVisible( false );
+        LeftDockable().RightDockable();
+        DockFixed( true );
+        Movable( false );
+        Resizable( true );      // expand to fit available space
+        return *this;
+    }
+
+    /**
+     * Function Palette
+     * Turn *this into a captioned palette suitable for a symbol tree, layers manager, etc.
+     */
+    EDA_PANE& Palette()
+    {
+        CaptionVisible( true );
+        PaneBorder( true );
+        return *this;
+    }
+
+    /**
+     * Function Canvas
+     * Turn *this into an undecorated pane suitable for a drawing canvas.
+     */
+    EDA_PANE& Canvas()
+    {
+        CaptionVisible( false );
+        Layer( 0 );
+        PaneBorder( true );
+        Resizable( true );      // expand to fit available space
+        return *this;
+    }
+
+    /**
+     * Function Messages
+     * Turn *this into a messages pane for KiCad.
+     */
+    EDA_PANE& Messages()
+    {
+        CaptionVisible( false );
+        BottomDockable( true );
+        DockFixed( true );
+        Movable( false );
+        Resizable( true );      // expand to fit available space
         return *this;
     }
 };

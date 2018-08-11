@@ -1232,8 +1232,8 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
 
     // Switch panes
-    m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( !aEnable );
-    m_auimgr.GetPane( wxT( "DrawFrameGal" ) ).Show( aEnable );
+    m_auimgr.GetPane( "DrawFrame" ).Show( !aEnable );
+    m_auimgr.GetPane( "DrawFrameGal" ).Show( aEnable );
     m_auimgr.Update();
 
     // Reset current tool on switch();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -129,6 +129,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlDefaultLineWidth;
 		wxStaticText* m_staticText221;
 		wxTextCtrl* m_textCtrlDefaultTextThickness;
+		wxStaticText* m_staticText2211;
 		wxButton* m_buttonDefault;
 		wxStaticLine* m_staticline9;
 		wxStaticText* m_staticTextMargins;

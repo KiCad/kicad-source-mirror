@@ -33,7 +33,7 @@
 #include <class_drawpanel.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-
+#include <eda_dockart.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <general.h>
@@ -141,8 +141,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SetIcon( icon );
 
     m_hotkeysDescrList = g_Viewlib_Hokeys_Descr;
-    m_cmpList   = NULL;
-    m_libList   = NULL;
+    m_libList = NULL;
+    m_cmpList = NULL;
+    m_libListWidth = 200;
+    m_cmpListWidth = 300;
     m_listPowerCmpOnly = false;
     SetShowElectricalType( true );
 
@@ -162,12 +164,15 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     ReCreateHToolbar();
     ReCreateVToolbar();
 
+    m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
+                               0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+
+    m_cmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxDefaultPosition, wxDefaultSize,
+                               0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+
     if( aLibraryName.empty() )
     {
-        // Creates the libraries window display
-        m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST,
-                                   wxPoint( 0, 0 ), wxSize( m_libListWidth, -1 ),
-                                   0, NULL, wxLB_HSCROLL );
+        ReCreateListLib();
     }
     else
     {
@@ -175,64 +180,27 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         m_entryName.Clear();
         m_unit = 1;
         m_convert = 1;
-        m_libListWidth = 0;
     }
 
     m_selection_changed = false;
 
-    // Creates the component window display
-    m_cmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxPoint( 0, 0 ),
-                               wxSize( m_cmpListWidth, -1 ), 0, NULL, wxLB_HSCROLL );
-
-    if( m_libList )
-        ReCreateListLib();
-
     DisplayLibInfos();
 
     m_auimgr.SetManagedWindow( this );
-
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
-
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
-
-    EDA_PANEINFO info;
-    info.InfoToolbarPane();
-
-    EDA_PANEINFO mesg;
-    mesg.MessageToolbarPane();
-
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
     // Manage main toolbar
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( "m_mainToolBar" ).Top().Row( 0 ) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    // Manage the left window (list of libraries)
-    if( m_libList )
-        m_auimgr.AddPane( m_libList, wxAuiPaneInfo( info ).Name( "m_libList" ).Left().Row( 0 ) );
+    m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(3)
+                      .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_libListWidth, -1 ) );
+    m_auimgr.AddPane( m_cmpList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
+                      .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_cmpListWidth, -1 ) );
 
-    // Manage the list of components)
-    m_auimgr.AddPane( m_cmpList, wxAuiPaneInfo( info ).Name( "m_cmpList" ).Left().Row( 1 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    // Manage the draw panel
-    m_auimgr.AddPane( m_canvas, wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
-
-    // Manage the message panel
-    m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom().Layer( 10 ) );
-
-    /* Now the minimum windows are fixed, set library list
-     * and component list of the previous values from last viewlib use
-     */
-    if( m_libList )
-    {
-        m_auimgr.GetPane( m_libList ).MinSize( wxSize( 80, -1 ) );
-        m_auimgr.GetPane( m_libList ).BestSize( wxSize( m_libListWidth, -1 ) );
-    }
-
-    m_auimgr.GetPane( m_cmpList ).MinSize( wxSize( 80, -1) );
-    m_auimgr.GetPane( m_cmpList ).BestSize( wxSize( m_cmpListWidth, -1 ) );
+    m_auimgr.GetPane( m_libList ).Show( aLibraryName.empty() );
 
     m_auimgr.Update();
 

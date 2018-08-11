@@ -40,6 +40,7 @@
 #include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <eda_dockart.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -287,54 +288,25 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_canvas->SetEnableBlockCommands( true );
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
+    // Horizontal items; layers 4 - 6
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    EDA_PANEINFO vert;
-    vert.VerticalToolbarPane();
+    // Vertical items; layers 1 - 3
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(1)
+                      .Caption( _( "Libraries" ) ).MinSize( 250, 400 ) );
 
-    EDA_PANEINFO mesg_pane;
-    mesg_pane.MessageToolbarPane();
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
+    m_auimgr.AddPane( m_Layers, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
+                      .Caption( _( "Layers Manager" ) ).PaneBorder( false )
+                      .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
-    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
-    // LAYER_WIDGET is floatable, but initially docked at far right
-    EDA_PANEINFO   lyrs;
-    lyrs.LayersToolbarPane();
-    lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
-    lyrs.BestSize( m_Layers->GetBestSize() );
-    lyrs.Caption( _( "Visibles" ) );
-
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( "m_mainToolBar" ).Top(). Row( 0 ) );
-
-    m_auimgr.AddPane( m_auxiliaryToolBar,
-                      wxAuiPaneInfo( horiz ).Name( "m_auxiliaryToolBar" ).Top().Row( 1 ) );
-
-    // The main right vertical toolbar
-    m_auimgr.AddPane( m_drawToolBar,
-                      wxAuiPaneInfo( vert ).Name( "m_VToolBar" ).Right().Layer(1) );
-
-    // Add the layer manager ( most right side of pcbframe )
-    m_auimgr.AddPane( m_Layers, lyrs.Name( "m_LayersManagerToolBar" ).Right().Layer( 2 ) );
-    // Layers manager is visible
-    m_auimgr.GetPane( "m_LayersManagerToolBar" ).Show( true );
-
-    // The left vertical toolbar (fast acces to display options)
-    m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( "m_optionsToolBar" ). Left().Layer(1) );
-
-    m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
-    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
-                      wxAuiPaneInfo().Name( "DrawFrameGal" ).CentrePane().Hide() );
-
-    m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg_pane ).Name( "MsgPanel" ).Bottom().Layer(10) );
-
-    m_auimgr.AddPane( m_treePane,
-                      wxAuiPaneInfo().Name( "FootprintTree" ).Caption( _( "Libraries" ) ).Left()
-                      .Row( 1 ).Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
@@ -715,11 +687,11 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     // So force show panes
     wxAuiPaneInfo& tree_pane_info = m_auimgr.GetPane( m_treePane );
     bool tree_shown = tree_pane_info.IsShown();
-    tree_pane_info.Caption( _( "Footprint Libraries" ) );
+    tree_pane_info.Caption( _( "Libraries" ) );
 
     wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_Layers );
     bool lm_shown = lm_pane_info.IsShown();
-    lm_pane_info.Caption( _( "Visibles" ) );
+    lm_pane_info.Caption( _( "Layers Manager" ) );
 
     // update the layer manager
     m_Layers->SetLayersManagerTabsText();

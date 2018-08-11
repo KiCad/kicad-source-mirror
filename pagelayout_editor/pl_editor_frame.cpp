@@ -35,6 +35,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <eda_dockart.h>
 
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
@@ -93,7 +94,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     ReCreateMenuBar();
     ReCreateHToolbar();
-    ReCreateOptToolbar();
 
     wxWindow* stsbar = GetStatusBar();
     int dims[] = {
@@ -122,57 +122,23 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetStatusWidths( DIM( dims ), dims );
 
-
     m_auimgr.SetManagedWindow( this );
-
-    EDA_PANEINFO    horiz;
-    horiz.HorizontalToolbarPane();
-
-    EDA_PANEINFO    vert;
-    vert.VerticalToolbarPane();
-
-    EDA_PANEINFO    mesg;
-    mesg.MessageToolbarPane();
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
     m_propertiesPagelayout = new PROPERTIES_FRAME( this );
-    EDA_PANEINFO    props;
-    props.LayersToolbarPane();
-    props.MinSize( m_propertiesPagelayout->GetMinSize() );
-    props.BestSize( m_propertiesFrameWidth, -1 );
-    props.Caption( _( "Properties" ) );
-
     m_treePagelayout = new DESIGN_TREE_FRAME( this );
-    EDA_PANEINFO    tree;
-    tree.LayersToolbarPane();
-    tree.MinSize( m_treePagelayout->GetMinSize() );
-    tree.BestSize( m_designTreeWidth, -1 );
-    tree.Caption( _( "Design" ) );
 
-    if( m_mainToolBar )
-        m_auimgr.AddPane( m_mainToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    if( m_drawToolBar )
-        m_auimgr.AddPane( m_drawToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right().Row( 1 ) );
+    m_auimgr.AddPane( m_treePagelayout, EDA_PANE().Palette().Name( "Design" ).Left().Layer(1)
+                      .Caption( _( "Design" ) ).MinSize( m_treePagelayout->GetMinSize() )
+                      .BestSize( m_designTreeWidth, -1 ) );
+    m_auimgr.AddPane( m_propertiesPagelayout, EDA_PANE().Palette().Name( "Props" ).Right().Layer(1)
+                      .Caption( _( "Properties" ) ).MinSize( m_propertiesPagelayout->GetMinSize() )
+                      .BestSize( m_propertiesFrameWidth, -1 ) );
 
-    m_auimgr.AddPane( m_propertiesPagelayout,
-                      props.Name( wxT( "m_propertiesPagelayout" ) ).Right().Layer( 1 ) );
-
-    m_auimgr.AddPane( m_treePagelayout,
-                      tree.Name( wxT( "m_treePagelayout" ) ).Left().Layer( 0 ) );
-
-    if( m_optionsToolBar )
-        m_auimgr.AddPane( m_optionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
-
-    if( m_canvas )
-        m_auimgr.AddPane( m_canvas,
-                          wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane().Layer( 5 ) );
-
-    if( m_messagePanel )
-        m_auimgr.AddPane( m_messagePanel,
-                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.Update();
 

@@ -148,32 +148,18 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
-    EDA_PANEINFO horiz;
-    horiz.HorizontalToolbarPane();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
 
-    EDA_PANEINFO layers;
-    layers.LayersToolbarPane();
+    m_auimgr.AddPane( m_libListBox, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(1)
+                      .Caption( _( "Footprint Libraries" ) )
+                      .BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
 
-    if( m_mainToolBar )
-        m_auimgr.AddPane( m_mainToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top() );
+    m_auimgr.AddPane( m_compListBox, EDA_PANE().Palette().Name( "Components" ).Center().Layer(0)
+                      .Caption( _( "Symbol : Footprint Assignments" ) ) );
 
-    if( m_compListBox )
-        m_auimgr.AddPane( m_compListBox,
-                          wxAuiPaneInfo( layers ).Name( wxT( "m_compListBox" ) )
-                          .Caption( _( "Symbol : Footprint Assignments" ) ).Center() );
-
-    if( m_libListBox)
-        m_auimgr.AddPane( m_libListBox,
-                          wxAuiPaneInfo( layers ).Name( wxT( "m_libListBox" ) )
-                          .Caption( _( "Footprint Libraries" ) )
-                          .Left().BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
-
-    if( m_footprintListBox )
-        m_auimgr.AddPane( m_footprintListBox,
-                          wxAuiPaneInfo( layers ).Name( wxT( "m_footprintListBox" ) )
-                          .Caption( _( "Filtered Footprints" ) )
-                          .Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
+    m_auimgr.AddPane( m_footprintListBox, EDA_PANE().Palette().Name( "Footprints" ).Right().Layer(1)
+                      .Caption( _( "Filtered Footprints" ) )
+                      .BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
 
     // Build the bottom panel, to display 2 status texts and the buttons:
     auto bottomPanel = new wxPanel( this );
@@ -221,7 +207,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     sdbSizerOK->SetDefault();
 
-    m_auimgr.AddPane( bottomPanel, wxAuiPaneInfo( horiz ).Name( wxT( "buttons" ) ).Bottom() );
+    m_auimgr.AddPane( bottomPanel, EDA_PANE().HToolbar().Name( "Buttons" ).Bottom().Layer(6) );
 
     m_auimgr.Update();
     m_initialized = true;

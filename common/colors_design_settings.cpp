@@ -189,7 +189,7 @@ void COLORS_DESIGN_SETTINGS::setupConfigParams()
 
     case FRAME_PCB_MODULE_VIEWER:
     case FRAME_PCB_MODULE_VIEWER_MODAL:
-    case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
+    case FRAME_PCB_FOOTPRINT_WIZARD:
     case FRAME_PCB_FOOTPRINT_PREVIEW:
         SetConfigPrefix( "fpview_" );
         break;

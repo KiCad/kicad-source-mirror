@@ -444,7 +444,7 @@ void GERBVIEW_FRAME::OnToggleShowLayerManager( wxCommandEvent& aEvent )
     m_show_layer_manager_tools = !m_show_layer_manager_tools;
 
     // show/hide auxiliary Vertical layers and visibility manager toolbar
-    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.Update();
 }
 

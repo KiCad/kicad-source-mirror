@@ -41,7 +41,7 @@
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
                                         wxWindowID id, const wxPoint& loc,
                                         const wxSize& size ) :
-    ITEMS_LISTBOX_BASE( parent, id, loc, size, wxLC_SINGLE_SEL )
+    ITEMS_LISTBOX_BASE( parent, id, loc, size, wxLC_SINGLE_SEL | wxNO_BORDER )
 {
 }
 

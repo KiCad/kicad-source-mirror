@@ -38,6 +38,7 @@
 #include <macros.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
+#include <eda_dockart.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -49,11 +50,11 @@
 #include <wx/grid.h>
 #include <wx/tokenzr.h>
 #include <wx/numformatter.h>
+#include <wx/statline.h>
 
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <base_units.h>
-
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
@@ -113,7 +114,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
                           : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
                 FOOTPRINT_WIZARD_FRAME_NAME )
 {
-    wxASSERT( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD_MODAL );
+    wxASSERT( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD );
 
     // This frame is always show modal:
     SetModal( true );
@@ -156,8 +157,11 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     m_parametersPanel = new wxPanel( this, wxID_ANY );
 
     m_pageList = new wxListBox( m_parametersPanel, ID_FOOTPRINT_WIZARD_PAGE_LIST,
-                                wxDefaultPosition, wxDefaultSize,
-                                0, NULL, wxLB_HSCROLL );
+                                wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                wxLB_HSCROLL | wxNO_BORDER );
+
+    auto divider = new wxStaticLine( m_parametersPanel, wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 
     m_parameterGrid = new wxGrid( m_parametersPanel, ID_FOOTPRINT_WIZARD_PARAMETER_LIST );
     initParameterGrid();
@@ -166,58 +170,31 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     ReCreatePageList();
 
     wxBoxSizer* parametersSizer = new wxBoxSizer( wxHORIZONTAL );
-    parametersSizer->Add( m_pageList, 0, wxEXPAND|wxALL, 5 );
-    parametersSizer->Add( m_parameterGrid, 1, wxEXPAND|wxALL, 5 );
+    parametersSizer->Add( m_pageList, 0, wxEXPAND, 5 );
+    parametersSizer->Add( divider, 0, wxEXPAND, 5 );
+    parametersSizer->Add( m_parameterGrid, 1, wxEXPAND, 5 );
     m_parametersPanel->SetSizer( parametersSizer );
     m_parametersPanel->Layout();
 
     // Create the build message box
     m_buildMessageBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                         wxDefaultPosition, wxDefaultSize,
-                                        wxTE_MULTILINE|wxTE_READONLY );
+                                        wxTE_MULTILINE | wxTE_READONLY | wxNO_BORDER );
 
     DisplayWizardInfos();
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    EDA_PANEINFO horiztb;
-    horiztb.HorizontalToolbarPane();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    EDA_PANEINFO    info;
-    info.InfoToolbarPane();
+    m_auimgr.AddPane( m_parametersPanel, EDA_PANE().Palette().Name( "Params" ).Left().Position(0)
+                      .Caption( _( "Parameters" ) ).MinSize( 360, 180 ) );
+    m_auimgr.AddPane( m_buildMessageBox, EDA_PANE().Palette().Name( "Output" ).Left().Position(1)
+                      .CaptionVisible( false ).MinSize( 360, -1 ) );
 
-    EDA_PANEINFO    mesg;
-    mesg.MessageToolbarPane();
-
-    // Manage main toolbal
-    m_auimgr.AddPane( m_mainToolBar, wxAuiPaneInfo( horiztb ).
-                      Name( wxT ("m_mainToolBar" ) ).Top().Row( 0 ) );
-
-    // Manage the parameters panel
-    EDA_PANEINFO parametersPaneInfo;
-    parametersPaneInfo.InfoToolbarPane().Name( wxT( "m_parametersPanel" ) ).Left().Position( 0 );
-    m_auimgr.AddPane( m_parametersPanel, wxAuiPaneInfo( parametersPaneInfo ) );
-
-    // Manage the build message box
-    EDA_PANEINFO buildMessageBoxInfo;
-    buildMessageBoxInfo.InfoToolbarPane().Name( wxT( "m_buildMessageBox" ) ).Left().Position( 1 );
-    m_auimgr.AddPane( m_buildMessageBox, wxAuiPaneInfo( buildMessageBoxInfo ) );
-
-    // Manage the draw panel
-    m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
-
-    // Manage the message panel
-    m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(1) );
-
-    // Give a min size to the parameters
-    m_auimgr.GetPane( m_parametersPanel ).MinSize( wxSize( 360, 180 ) );
-
-    m_auimgr.LoadPerspective( m_auiPerspective );
-
-    // Ensure the draw panel is shown, regardless the perspective config:
-    m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( true );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
 #ifdef USE_WX_GRAPHICS_CONTEXT

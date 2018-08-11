@@ -798,14 +798,14 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;
-        m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
+        m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
         m_auimgr.Update();
         break;
 
     case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:
         // show auxiliary Vertical layers and visibility manager toolbar
         m_show_layer_manager_tools = state;
-        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+        m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
         break;
 

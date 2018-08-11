@@ -40,6 +40,7 @@
 #include <confirm.h>
 #include <bitmaps.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <eda_dockart.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -154,11 +155,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     m_hotkeysDescrList = g_Module_Viewer_Hotkeys_Descr;
 
-    m_libList = new wxListBox( this, ID_MODVIEW_LIB_LIST,
-            wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
+    m_libList = new wxListBox( this, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
+                               0, NULL, wxLB_HSCROLL | wxNO_BORDER );
 
-    m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST,
-            wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );
+    m_footprintList = new wxListBox( this, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
+                                     0, NULL, wxLB_HSCROLL | wxNO_BORDER );
 
     SetBoard( new BOARD() );
     // In viewer, the default net clearance is not known (it depends on the actual board).
@@ -219,59 +220,20 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     drawPanel->DisplayBoard( m_Pcb );
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-    wxSize minsize( 100, -1 );     // Min size of list boxes
+    // Horizontal items; layers 4 - 6
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().VToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    // Main toolbar is initially docked at the top of the main window and dockable on any side.
-    // The close button is disable because the footprint viewer has no main menu to re-enable it.
-    // The tool bar will only be dockable on the top or bottom of the main frame window.  This is
-    // most likely due to the fact that the other windows are not dockable and are preventing the
-    // tool bar from docking on the right and left.
-    wxAuiPaneInfo toolbarPaneInfo;
-    toolbarPaneInfo.Name( "m_mainToolBar" ).ToolbarPane().Top().CloseButton( false );
+    // Vertical items; layers 1 - 3
+    m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(2)
+                      .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 200, -1 ) );
+    m_auimgr.AddPane( m_footprintList, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(1)
+                      .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 300, -1 ) );
 
-    EDA_PANEINFO info;
-    info.InfoToolbarPane();
-
-    EDA_PANEINFO mesg;
-    mesg.MessageToolbarPane();
-
-    // Manage main toolbar, top pane
-    m_auimgr.AddPane( m_mainToolBar, toolbarPaneInfo );
-
-    // Manage the list of libraries, left pane.
-    m_auimgr.AddPane( m_libList,
-                      wxAuiPaneInfo( info ).Name( "m_libList" )
-                      .Left().Row( 1 ).MinSize( minsize ) );
-
-    // Manage the list of footprints, center pane.
-    m_auimgr.AddPane( m_footprintList,
-                      wxAuiPaneInfo( info ).Name( "m_footprintList" )
-                      .Left().Row( 2 ).MinSize( minsize ) );
-
-    // Manage the draw panel, right pane.
-    m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
-    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
-                      wxAuiPaneInfo().Name( "DrawFrameGal" ).CentrePane().Hide() );
-
-    // Manage the message panel, bottom pane.
-    m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom() );
-
-    if( !m_perspective.IsEmpty() )
-    {
-        // Restore last saved sizes, pos and other params
-        // However m_mainToolBar size cannot be set to its last saved size
-        // because the actual size change depending on the way modview was called:
-        // the tool to export the current footprint exist or not.
-        // and the saved size is not always OK
-        // the trick is to get the default toolbar size, and set the size after
-        // calling LoadPerspective
-        wxSize tbsize = m_mainToolBar->GetSize();
-        m_auimgr.LoadPerspective( m_perspective, false );
-        m_auimgr.GetPane( m_mainToolBar ).BestSize( tbsize );
-    }
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center().Hide() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center() );
 
     // after changing something to the aui manager,
     // call Update()() to reflect the changes

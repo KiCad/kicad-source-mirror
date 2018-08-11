@@ -181,15 +181,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
 
     m_auimgr.SetManagedWindow( this );
 
-    EDA_PANEINFO horiztb;
-    horiztb.HorizontalToolbarPane();
-
-    m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiztb ).Name( wxT( "m_mainToolBar" ) ).Top() );
-
-    if( m_canvas )
-        m_auimgr.AddPane( m_canvas,
-                          wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.Update();
 

@@ -149,7 +149,7 @@ static struct IFACE : public KIFACE_I
             }
         }
 
-        case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
+        case FRAME_PCB_FOOTPRINT_WIZARD:
             return new FOOTPRINT_WIZARD_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
 
         case FRAME_PCB_FOOTPRINT_PREVIEW:
