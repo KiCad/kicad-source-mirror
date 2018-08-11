@@ -895,14 +895,10 @@ bool SCH_EDIT_FRAME::AskToSaveChanges()
     {
         if( screen->IsModify() )
         {
-            wxString msg = _( "The current schematic has been modified.  Save changes?" );
-
-            switch( UnsavedChangesDialog( this, msg ) )
+            if( !HandleUnsavedChanges( this, _( "The current schematic has been modified.  Save changes?" ),
+                                       [&]()->bool { return SaveProject(); } ) )
             {
-            default:
-            case wxID_CANCEL: return false;
-            case wxID_NO:     return true;
-            case wxID_YES:    return SaveProject();
+                return false;
             }
         }
     }

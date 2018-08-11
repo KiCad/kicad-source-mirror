@@ -81,17 +81,34 @@ void LIB_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
 }
 
 
+bool LIB_EDIT_FRAME::saveCurrentPart()
+{
+    if( GetCurPart() )
+    {
+        LIB_ID libId = GetCurPart()->GetLibId();
+        const wxString& libName = libId.GetLibNickname();
+        const wxString& partName = libId.GetLibItemName();
+
+        if( m_libMgr->FlushPart( partName, libName ) )
+        {
+            m_libMgr->ClearPartModified( partName, libName );
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId )
 {
-    if( GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() && GetCurPart() )
     {
-        KIDIALOG dlg( this, _( "The current symbol contains unsaved changes."  ),
-                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        dlg.SetOKLabel( _( "Discard Changes" ) );
-        dlg.DoNotShowCheckbox();
-
-        if( dlg.ShowModal() == wxID_CANCEL )
+        if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  Save changes?" ),
+                                   [&]()->bool { return saveCurrentPart(); } ) )
+        {
             return false;
+        }
     }
 
     SelectActiveLibrary( aLibId.GetLibNickname() );
@@ -337,7 +354,7 @@ void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
     else
     {
         // Save Part
-        if( m_libMgr->FlushPart( partName,libName ) )
+        if( m_libMgr->FlushPart( partName, libName ) )
             m_libMgr->ClearPartModified( partName, libName );
     }
 

@@ -185,47 +185,11 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        wxString msg;
-        wxString filename = GetCurrFileName();
-
-        if( filename.IsEmpty() )
-            msg = _( "Save changes before closing?" );
-        else
-            msg.Printf( _( "Save changes to\n\"%s\"\nbefore closing?" ), filename );
-
-        switch( UnsavedChangesDialog( this, msg ) )
+        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  Save changes?" ),
+                                   [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
-        case wxID_CANCEL:
             Event.Veto();
             return;
-
-        case wxID_NO:
-            break;
-
-        case wxID_YES:
-            if( filename.IsEmpty() )
-            {
-                wxFileDialog openFileDialog( this, _( "Save As" ), wxEmptyString, wxEmptyString,
-                                             PageLayoutDescrFileWildcard(), wxFD_SAVE );
-
-                if( openFileDialog.ShowModal() == wxID_CANCEL )
-                {
-                    Event.Veto();
-                    return;
-                }
-
-                filename = openFileDialog.GetPath();
-            }
-
-            if( !SavePageLayoutDescrFile( filename ) )
-            {
-                msg.Printf( _( "Unable to create \"%s\"" ), GetChars( filename ) );
-                wxMessageBox( msg );
-                Event.Veto();
-                return;
-            }
-
-            break;
         }
     }
 

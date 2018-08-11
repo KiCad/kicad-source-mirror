@@ -198,6 +198,19 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
 }
 
 
+bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
+                           const std::function<bool()>& aSaveFunction )
+{
+    switch( UnsavedChangesDialog( aParent, aMessage, nullptr ) )
+    {
+    case wxID_YES:    return aSaveFunction();
+    case wxID_NO:     return true;
+    default:
+    case wxID_CANCEL: return false;
+    }
+}
+
+
 int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
                        const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll )
 {

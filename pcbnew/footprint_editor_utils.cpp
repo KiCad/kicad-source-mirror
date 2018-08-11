@@ -176,13 +176,6 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 
 void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
 {
-    if( GetScreen()->IsModify() )
-    {
-        if( !IsOK( this,
-                   _( "Current footprint changes will be lost and this operation cannot be undone. Continue?" ) ) )
-            return;
-    }
-
     if( ! Load_Module_From_BOARD( NULL ) )
         return;
 
@@ -294,48 +287,37 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_NEW_MODULE:
         {
             LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();
-
-            if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
-            {
-                KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
-                              _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-                dlg.SetOKLabel( _( "Discard Changes" ) );
-                dlg.DoNotShowCheckbox();
-
-                if( dlg.ShowModal() == wxID_CANCEL )
-                    break;
-            }
-
             MODULE* module = CreateNewModule( wxEmptyString );
 
-            if( module )        // i.e. if create module command not aborted
+            if( !module )
+                break;
+
+            if( !Clear_Pcb( true ) )
+                break;
+
+            SetCrossHairPosition( wxPoint( 0, 0 ) );
+            AddModuleToBoard( module );
+
+            // Initialize data relative to nets and netclasses (for a new
+            // module the defaults are used)
+            // This is mandatory to handle and draw pads
+            GetBoard()->BuildListOfNets();
+            module->SetPosition( wxPoint( 0, 0 ) );
+
+            if( GetBoard()->m_Modules )
+                GetBoard()->m_Modules->ClearFlags();
+
+            Zoom_Automatique( false );
+            GetScreen()->SetModify();
+
+            // If selected from the library tree then go ahead and save it there
+            if( !selected.GetLibNickname().empty() )
             {
-                Clear_Pcb( false );
-
-                SetCrossHairPosition( wxPoint( 0, 0 ) );
-                AddModuleToBoard( module );
-
-                // Initialize data relative to nets and netclasses (for a new
-                // module the defaults are used)
-                // This is mandatory to handle and draw pads
-                GetBoard()->BuildListOfNets();
-                module->SetPosition( wxPoint( 0, 0 ) );
-
-                if( GetBoard()->m_Modules )
-                    GetBoard()->m_Modules->ClearFlags();
-
-                Zoom_Automatique( false );
-                GetScreen()->SetModify();
-
-                // If selected from the library tree then go ahead and save it there
-                if( !selected.GetLibNickname().empty() )
-                {
-                    LIB_ID fpid = module->GetFPID();
-                    fpid.SetLibNickname( selected.GetLibNickname() );
-                    module->SetFPID( fpid );
-                    SaveFootprint( module );
-                    GetScreen()->ClrModify();
-                }
+                LIB_ID fpid = module->GetFPID();
+                fpid.SetLibNickname( selected.GetLibNickname() );
+                module->SetFPID( fpid );
+                SaveFootprint( module );
+                GetScreen()->ClrModify();
             }
 
             updateView();
@@ -352,13 +334,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
             {
-                KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
-                              _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-                dlg.SetOKLabel( _( "Discard Changes" ) );
-                dlg.DoNotShowCheckbox();
-
-                if( dlg.ShowModal() == wxID_CANCEL )
+                if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  Save changes?" ),
+                                           [&]()->bool { return SaveFootprint( GetBoard()->m_Modules ); } ) )
+                {
                     break;
+                }
             }
 
             FOOTPRINT_WIZARD_FRAME* wizard = (FOOTPRINT_WIZARD_FRAME*) Kiway().Player(
@@ -593,25 +573,14 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_EDIT_MODULE:
     {
-        if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
-        {
-            KIDIALOG dlg( this, _( "The current footprint contains unsaved changes."  ),
-                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            dlg.SetOKLabel( _( "Discard Changes" ) );
-            dlg.DoNotShowCheckbox();
-
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
-        }
-
         LIB_ID partId = m_treePane->GetLibTree()->GetSelectedLibId();
-
         MODULE* module = LoadFootprint( partId );
 
         if( !module )
             break;
 
-        Clear_Pcb( false );
+        if( !Clear_Pcb( true ) )
+            break;
 
         SetCrossHairPosition( wxPoint( 0, 0 ) );
         AddModuleToBoard( module );

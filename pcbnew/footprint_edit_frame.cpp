@@ -494,21 +494,9 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() && GetBoard()->m_Modules )
     {
-        switch( UnsavedChangesDialog( this, _( "Save changes to footprint before closing?" ) ) )
+        if( !HandleUnsavedChanges( this, _( "Save changes to footprint before closing?" ),
+                                   [&]()->bool { return SaveFootprint( GetBoard()->m_Modules ); } ) )
         {
-        default:
-        case wxID_NO:
-            break;
-
-        case wxID_YES:
-            if( !SaveFootprint( GetBoard()->m_Modules ) )
-            {
-                Event.Veto();
-                return;
-            }
-            break;
-
-        case wxID_CANCEL:
             Event.Veto();
             return;
         }

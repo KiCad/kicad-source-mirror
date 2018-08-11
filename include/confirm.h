@@ -76,8 +76,23 @@ protected:
 
 
 /**
- * Function UnsavedChangesDialog
+ * Function HandleUnsavedChanges
  * displays a dialog with Save, Cancel and Discard Changes buttons.
+ *
+ * @param aParent = the parent window
+ * @param aMessage = the main message to put in dialog
+ * @param aSaveFunction = a function to save changes, if requested.  Must return true if
+ *                        the save was successful and false otherwise (which will result
+ *                        in HandleUnsavedChanges() returning wxID_CANCEL).
+ * @return wxID_YES, wxID_CANCEL, wxID_NO.
+ */
+bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
+                           const std::function<bool()>& aSaveFunction );
+
+
+/**
+ * Function UnsavedChangesDialog
+ * a specialized version of HandleUnsavedChanges which handles an apply-to-all checkbox.
  *
  * @param aParent = the parent window
  * @param aMessage = the main message to put in dialog
@@ -85,7 +100,7 @@ protected:
  *                      written back to the bool.
  * @return wxID_YES, wxID_CANCEL, wxID_NO.
  */
-int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll = nullptr );
+int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll );
 
 
 /**

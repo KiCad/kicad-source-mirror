@@ -147,6 +147,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     if( IsGalCanvasActive() )
         updateView();
+    m_canvas->Refresh();
 
     return true;
 }

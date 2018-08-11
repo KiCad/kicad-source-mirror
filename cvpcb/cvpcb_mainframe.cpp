@@ -260,20 +260,11 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( m_modified )
     {
-        wxString msg = _( "Symbol to Footprint links have been modified.\nSave before exit?" );
-
-        switch( UnsavedChangesDialog( this, msg ) )
+        if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified.\nSave before exit?" ),
+                                   [&]()->bool { return SaveFootprintAssociation( false ); } ) )
         {
-        case wxID_CANCEL:
             Event.Veto();
             return;
-
-        case wxID_NO:
-            break;
-
-        case wxID_YES:
-            SaveFootprintAssociation( false );
-            break;
         }
     }
 

@@ -41,6 +41,17 @@
 #include <pl_editor_id.h>
 #include <wildcards_and_files_ext.h>
 
+
+bool PL_EDITOR_FRAME::saveCurrentPageLayout()
+{
+    wxCommandEvent saveEvent;
+    saveEvent.SetId( wxID_SAVE );
+    Files_io( saveEvent );
+
+    return( !GetScreen()->IsModify() );
+}
+
+
 void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString filename;
@@ -49,22 +60,23 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 
     if( filename != wxEmptyString )
     {
-        if( GetScreen()->IsModify() && !IsOK( this,
-                   _( "The current page layout has been modified.\n"
-                      "Do you wish to discard the changes?" ) ) )
+        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  Save changes?" ),
+                                   [&]()->bool { return saveCurrentPageLayout(); } ) )
+        {
             return;
+        }
 
-         m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( filename ) );
 
-         if( LoadPageLayoutDescrFile( filename ) )
-         {
-             wxString msg;
-             msg.Printf( _( "File \"%s\" loaded"), GetChars( filename ) );
-             SetStatusText( msg );
-         }
+        if( LoadPageLayoutDescrFile( filename ) )
+        {
+            wxString msg;
+            msg.Printf( _( "File \"%s\" loaded"), GetChars( filename ) );
+            SetStatusText( msg );
+        }
 
-         OnNewPageLayout();
+        OnNewPageLayout();
     }
 }
 
@@ -80,18 +92,13 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     if( filename.IsEmpty() && id == wxID_SAVE )
         id = wxID_SAVEAS;
 
-    switch( id )
+    if( ( id == wxID_NEW || id == wxID_OPEN ) && GetScreen()->IsModify() )
     {
-    case wxID_NEW:
-    case wxID_OPEN:
-        if( GetScreen()->IsModify() && !IsOK( this,
-                   _( "The current page layout has been modified.\n"
-                      "Do you wish to discard the changes?" ) ) )
+        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  Save changes?" ),
+                                   [&]()->bool { return saveCurrentPageLayout(); } ) )
+        {
             return;
-        break;
-
-    default:
-        break;
+        }
     }
 
     switch( id )

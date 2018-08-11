@@ -632,20 +632,9 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
         wxString msg = _( "Save changes to\n\"%s\"\nbefore closing?" );
 
-        switch( UnsavedChangesDialog( this, wxString::Format( msg, fileName ) ) )
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName ),
+                                   [&]()->bool { return SaveProject(); } ) )
         {
-        case wxID_YES:
-            if( !SaveProject() )
-            {
-                aEvent.Veto();
-                return;
-            }
-            break;
-
-        case wxID_NO:
-            break;
-
-        case wxID_CANCEL:
             aEvent.Veto();
             return;
         }

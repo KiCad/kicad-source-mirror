@@ -205,7 +205,7 @@ public:
      * via the kiway.
      * Optionally saves the schematic to disk as well.
      */
-    void SaveFootprintAssociation( bool doSaveSchematic );
+    bool SaveFootprintAssociation( bool doSaveSchematic );
 
     /**
      * Function ReadNetListAndFpFiles

@@ -590,19 +590,11 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         wxString msg = _( "Save changes to\n\"%s\"\nbefore closing?" );
 
-        switch( UnsavedChangesDialog( this, wxString::Format( msg, GetBoard()->GetFileName() ) ) )
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, GetBoard()->GetFileName() ),
+                                   [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
         {
-        default:
-        case wxID_CANCEL:
             Event.Veto();
             return;
-
-        case wxID_NO:
-            break;
-
-        case wxID_YES:
-            Files_io_from_id( ID_SAVE_BOARD );
-            break;
         }
     }
 

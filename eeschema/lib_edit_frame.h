@@ -742,6 +742,9 @@ private:
      */
     bool saveAllLibraries( bool aRequireConfirmation );
 
+    ///> Saves the current part.
+    bool saveCurrentPart();
+
     ///> Creates or adds an existing library to the symbol library table.
     bool addLibraryFile( bool aCreateNew );
 

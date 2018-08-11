@@ -371,7 +371,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 }
 
 
-void CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
+bool CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
 {
     STRING_FORMATTER sf;
 
@@ -381,4 +381,6 @@ void CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
 
     if( doSaveSchematic )
         Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_SAVE, std::string( "" ) );
+
+    return true;    // we can't tell if it was successful, so just assume the best
 }

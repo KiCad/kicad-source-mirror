@@ -979,24 +979,13 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
 
     if( m_dataModel->IsEdited() )
     {
-        switch( UnsavedChangesDialog( this, wxEmptyString ) )
+        if( !HandleUnsavedChanges( this, wxEmptyString,
+                                   [&]()->bool { return TransferDataFromWindow(); } ) )
         {
-        case wxID_CANCEL:
             event.Veto();
-            break;
-
-        case wxID_YES:
-            if( TransferDataFromWindow() )
-                event.Skip();
-            break;
-
-        case wxID_NO:
-            event.Skip();
-            break;
+            return;
         }
     }
-    else
-    {
-        event.Skip();
-    }
+
+    event.Skip();
 }

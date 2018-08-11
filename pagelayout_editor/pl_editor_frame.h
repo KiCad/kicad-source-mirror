@@ -405,6 +405,9 @@ public:
      */
     void RemoveLastCommandInUndoList();
 
+protected:
+    bool saveCurrentPageLayout();
+
     DECLARE_EVENT_TABLE()
 };
 

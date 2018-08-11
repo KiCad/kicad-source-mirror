@@ -839,7 +839,7 @@ public:
      * ID_SAVE_BOARD_AS
      * Files_io_from_id prepare parameters and calls the specialized function
      */
-    void Files_io_from_id( int aId );
+    bool Files_io_from_id( int aId );
 
     /**
      * Function OpenProjectFiles    (was LoadOnePcbFile)
