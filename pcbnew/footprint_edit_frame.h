@@ -89,6 +89,18 @@ public:
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseModuleEditor( wxCommandEvent& Event );
 
+    /**
+     * switches currently used canvas (default / Cairo / OpenGL).
+     * It also reinit the layers manager that slightly changes with canvases
+     */
+    virtual void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+
+    /**
+     * Update the layer manager and other widgets from the board setup
+     * (layer and items visibility, colors ...)
+     */
+    void UpdateUserInterface();
+
     void Process_Special_Functions( wxCommandEvent& event );
 
     void ProcessPreferences( wxCommandEvent& event );

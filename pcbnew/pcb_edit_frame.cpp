@@ -1135,7 +1135,7 @@ void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
     // switches currently used canvas (default / Cairo / OpenGL).
     PCB_BASE_FRAME::OnSwitchCanvas( aEvent );
 
-    // The base class method reinit the layers manager.
+    // The base class method *does not reinit* the layers manager.
     // We must upate the layer widget to match board visibility states,
     // both layers and render columns.
     syncLayerVisibilities();

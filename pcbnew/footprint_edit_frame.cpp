@@ -169,9 +169,9 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, PCB_BASE_FRAME::OnSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_BASE_FRAME::OnSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_LEGACY, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
 
     // UI update events.
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted )
@@ -359,6 +359,18 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     delete m_Layers;
 }
 
+
+
+void FOOTPRINT_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+{
+    // switches currently used canvas (default / Cairo / OpenGL).
+    PCB_BASE_FRAME::OnSwitchCanvas( aEvent );
+
+    // The base class method *does not reinit* the layers manager.
+    // We must upate the layer widget to match board visibility states,
+    // both layers and render columns, and and some settings dependent on the canvas.
+    UpdateUserInterface();
+}
 
 BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 {
@@ -673,7 +685,10 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
 
 void FOOTPRINT_EDIT_FRAME::ReFillLayerWidget()
 {
+
+    m_Layers->Freeze();
     m_Layers->ReFill();
+    m_Layers->Thaw();
 
     wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
 
@@ -702,24 +717,13 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     bool tree_shown = tree_pane_info.IsShown();
     tree_pane_info.Caption( _( "Footprint Libraries" ) );
 
-    // update the layer manager
-    m_Layers->Freeze();
-
     wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_Layers );
     bool lm_shown = lm_pane_info.IsShown();
     lm_pane_info.Caption( _( "Visibles" ) );
 
+    // update the layer manager
     m_Layers->SetLayersManagerTabsText();
-    ReFillLayerWidget();
-    m_Layers->ReFillRender();
-
-    // upate the layer widget to match board visibility states.
-    m_Layers->SyncLayerVisibilities();
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
-    m_Layers->SelectLayer( GetActiveLayer() );
-    m_Layers->OnLayerSelected();
-
-    m_Layers->Thaw();
+    UpdateUserInterface();
 
     // Now restore the visibility:
     lm_pane_info.Show( lm_shown );
@@ -807,6 +811,26 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     }
 
     SetTitle( title );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::UpdateUserInterface()
+{
+    // Update the layer manager and other widgets from the board setup
+    // (layer and items visibility, colors ...)
+
+    // Update the layer manager
+    m_Layers->Freeze();
+    ReFillLayerWidget();
+    m_Layers->ReFillRender();
+
+    // update the layer widget to match board visibility states.
+    m_Layers->SyncLayerVisibilities();
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
+    m_Layers->SelectLayer( GetActiveLayer() );
+    m_Layers->OnLayerSelected();
+
+    m_Layers->Thaw();
 }
 
 
@@ -1007,6 +1031,9 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
     }
 
     ReCreateMenuBar();
+
+    // Ensure the m_Layers settings are using the canvas type:
+    UpdateUserInterface();
 }
 
 

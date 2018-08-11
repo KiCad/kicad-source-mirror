@@ -110,6 +110,7 @@ protected:
 
     /**
      * switches currently used canvas (default / Cairo / OpenGL).
+     * It also reinit the layers manager that slightly changes with canvases
      */
     virtual void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
 
