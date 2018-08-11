@@ -2,9 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
- * Copyright (C) 2012-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,9 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <class_drawpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
 #include <3d_viewer/eda_3d_viewer.h>
@@ -55,6 +57,14 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <base_units.h>
+
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/common_tools.h>
+#include "tools/selection_tool.h"
+#include "tools/pcbnew_control.h"
+#include "tools/pcb_actions.h"
+
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
@@ -142,8 +152,23 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     // Set some display options here, because the FOOTPRINT_WIZARD_FRAME
     // does not have a config menu to do that:
+
+    // the footprint wizard frame has no config menu. so use some settings
+    // from the caller, or force some options:
+    PCB_BASE_FRAME* caller = dynamic_cast<PCB_BASE_FRAME*>( aParent );
+
+    if( caller )
+    {
+        SetUserUnits( caller->GetUserUnits() );
+    }
+
     auto disp_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    disp_opts->m_DisplayPadIsol = false;
+    // In viewer, the default net clearance is not known (it depends on the actual board).
+    // So we do not show the default clearance, by setting it to 0
+    // The footprint or pad specific clearance will be shown
+    GetBoard()->GetDesignSettings().GetDefault()->SetClearance(0);
+
+    disp_opts->m_DisplayPadIsol = true;
     disp_opts->m_DisplayPadNum = true;
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
@@ -151,7 +176,13 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     ReCreateHToolbar();
     ReCreateVToolbar();
-    SetActiveLayer( F_Cu );
+
+    // Create GAL canvas
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    //EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            GetGalDisplayOptions(), backend );
+    SetGalCanvas( gal_drawPanel );
 
     // Create the parameters panel
     m_parametersPanel = new wxPanel( this, wxID_ANY );
@@ -196,6 +227,34 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
+    m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                      wxAuiPaneInfo().Name( "DrawFrameGal" ).CentrePane().Hide() );
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
+                                   gal_drawPanel->GetViewControls(), this );
+    m_actions = new PCB_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->RegisterTool( new SELECTION_TOOL );  // for std context menus (zoom & grid)
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->InitTools();
+
+    // Run the control tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+
+    auto& galOpts = GetGalDisplayOptions();
+    galOpts.m_fullscreenCursor = true;
+    galOpts.m_forceDisplayCursor = true;
+    galOpts.m_axesEnabled = true;
+
+    UseGalCanvas( backend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    updateView();
+
+    SetActiveLayer( F_Cu );
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
 #ifdef USE_WX_GRAPHICS_CONTEXT
     GetScreen()->SetScalingFactor( BestZoom() );
@@ -217,10 +276,23 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
     // Delete the GRID_TRICKS.
     m_parameterGrid->PopEventHandler( true );
 
+    if( IsGalCanvasActive() )
+    {
+        GetGalCanvas()->StopDrawing();
+        // Be sure any event cannot be fired after frame deletion:
+        GetGalCanvas()->SetEvtHandlerEnabled( false );
+    }
+
+    // Be sure a active tool (if exists) is desactivated:
+    if( m_toolManager )
+        m_toolManager->DeactivateTool();
+
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->Destroy();
+
+    // Now this frame can be deleted
 }
 
 
@@ -271,6 +343,36 @@ void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
     GetScreen()->m_O_Curseur = GetCrossHairPosition();
     UpdateStatusBar();
+}
+
+
+void FOOTPRINT_WIZARD_FRAME::updateView()
+{
+    if( IsGalCanvasActive() )
+    {
+        auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+        dp->UseColorScheme( &Settings().Colors() );
+        dp->DisplayBoard( GetBoard() );
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+        UpdateMsgPanel();
+    }
+}
+
+
+void FOOTPRINT_WIZARD_FRAME::UpdateMsgPanel()
+{
+    BOARD_ITEM* footprint = GetBoard()->m_Modules;
+
+    if( footprint )
+    {
+        MSG_PANEL_ITEMS items;
+
+        footprint->GetMsgPanelInfo( m_UserUnits, items );
+        SetMsgPanel( items );
+    }
+    else
+        ClearMsgPanel();
 }
 
 

@@ -140,6 +140,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
         DBG(printf( "footprintWizard->GetFootprint() returns NULL\n" );)
     }
 
+    updateView();
     m_canvas->Refresh();
 }
 
@@ -217,6 +218,7 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
 {
     SelectFootprintWizard();
+    updateView();
 }
 
 void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
@@ -232,7 +234,6 @@ void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
     ReCreateParameterList();
     ReloadFootprint();
     DisplayWizardInfos();
-
 }
 
 

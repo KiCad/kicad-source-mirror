@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Miguel Angel Ajo Pelayo, miguelangel@nbee.es
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,8 +86,20 @@ public:
 private:
 
     void                OnSize( wxSizeEvent& event ) override;
-
     void                OnGridSize( wxSizeEvent& aSizeEvent );
+
+    /**
+     * redraws the message panel.
+     * display the current footprint info, or
+     * clear the message panel if nothing is loaded
+     */
+    void UpdateMsgPanel() override;
+
+    /**
+     * rebuild the GAL view (reint tool manager, colors and drawings)
+     * must be run after any footprint change.
+     */
+    void updateView();
 
     /**
      * Function ExportSelectedFootprint();
@@ -171,11 +183,21 @@ private:
 
     bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
+    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
+
+    /**
+     * Function OnHotKey
+     * handle hot key events.
+     * <p?
+     * Some commands are relative to the item under the mouse cursor.  Commands are
+     * case insensitive
+     * </p>
+     */
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
+
     void                LoadSettings( wxConfigBase* aCfg ) override;
     void                SaveSettings( wxConfigBase* aCfg ) override;
-
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override { return NULL; }
 
     /**
      * Function OnActivate
