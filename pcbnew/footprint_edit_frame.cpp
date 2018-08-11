@@ -695,14 +695,19 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     // call my base class
     PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
 
+    // We have 2 panes to update.
+    // For some obscure reason, the AUI manager hides the first modified pane.
+    // So force show panes
+    wxAuiPaneInfo& tree_pane_info = m_auimgr.GetPane( m_treePane );
+    bool tree_shown = tree_pane_info.IsShown();
+    tree_pane_info.Caption( _( "Footprint Libraries" ) );
+
     // update the layer manager
     m_Layers->Freeze();
 
-    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_Layers );
-    pane_info.Caption( _( "Visibles" ) );
-    pane_info = m_auimgr.GetPane( m_treePane );
-    pane_info.Caption( _( "Footprint Libraries" ) );
-    m_auimgr.Update();
+    wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_Layers );
+    bool lm_shown = lm_pane_info.IsShown();
+    lm_pane_info.Caption( _( "Visibles" ) );
 
     m_Layers->SetLayersManagerTabsText();
     ReFillLayerWidget();
@@ -715,6 +720,11 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     m_Layers->OnLayerSelected();
 
     m_Layers->Thaw();
+
+    // Now restore the visibility:
+    lm_pane_info.Show( lm_shown );
+    tree_pane_info.Show( tree_shown );
+    m_auimgr.Update();
 }
 
 
