@@ -42,10 +42,10 @@
 
 /**
  * The maximum number of units per package.
- * Increase this number if that ever becomes a problem, but remember
- * the popup menu to select a given unit could be not easy to use.
+ * While counts approaching 100 start to make the unit-selection popup menu
+ * difficult to use, the limit is currently 'ZZ' (26 * 26).
  */
-#define MAX_UNIT_COUNT_PER_PACKAGE 64
+#define MAX_UNIT_COUNT_PER_PACKAGE 676
 
 
 /**
