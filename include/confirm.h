@@ -33,6 +33,7 @@
 
 #include <wx/richmsgdlg.h>
 #include <vector>
+#include <functional>
 
 class wxCheckBox;
 class wxStaticBitmap;
