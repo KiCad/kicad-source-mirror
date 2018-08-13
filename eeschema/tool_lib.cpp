@@ -153,10 +153,6 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( part_properties_xpm, this ),
                             _( "Edit symbol properties" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
-                            KiScaledBitmap( field_properties_xpm, this ),
-                            _( "Edit symbol fields" ) );
-
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString,
                             KiScaledBitmap( pin_table_xpm, this ),
                             _( "Show pin table" ) );
@@ -188,14 +184,6 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                       wxSize( LISTBOX_WIDTH, -1 ),
                                       0, nullptr, wxCB_READONLY );
     m_mainToolBar->AddControl( m_partSelectBox );
-
-    m_aliasSelectBox = new wxComboBox( m_mainToolBar,
-                                       ID_LIBEDIT_SELECT_ALIAS,
-                                       wxEmptyString,
-                                       wxDefaultPosition,
-                                       wxSize( LISTBOX_WIDTH, -1 ),
-                                       0, nullptr, wxCB_READONLY );
-    m_mainToolBar->AddControl( m_aliasSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
 

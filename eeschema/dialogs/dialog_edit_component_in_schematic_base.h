@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -78,7 +78,6 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void UpdateFieldsFromLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBrowseLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

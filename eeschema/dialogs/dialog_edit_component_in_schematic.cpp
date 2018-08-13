@@ -76,11 +76,11 @@ private:
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
 
     bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
     bool Validate() override;
 
     // event handlers
-    void OnOKButtonClick( wxCommandEvent& event ) override;
     void UpdateFieldsFromLibrary( wxCommandEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
@@ -351,8 +351,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
     wxString msg;
     LIB_ID   id;
 
-    // Commit any pending in-place edits and close the editor
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
     {
@@ -401,14 +401,14 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
     m_libraryNameTextCtrl->SetValue( id.Format() );
 
     // Check for missing field names.
-    for( int i = MANDATORY_FIELDS;  i < (int) m_fields->size(); ++i )
+    for( size_t i = MANDATORY_FIELDS;  i < (int) m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
         wxString   fieldName = field.GetName( false );
 
         if( fieldName.IsEmpty() )
         {
-            DisplayErrorMessage( nullptr, _( "Fields must have a name." ) );
+            DisplayErrorMessage( this, _( "Fields must have a name." ) );
 
             m_delayedFocusColumn = FDC_NAME;
             m_delayedFocusRow = i;
@@ -421,10 +421,10 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event )
+bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 {
     if( !Validate() )
-        return;
+        return false;
 
     // save old cmp in undo list if not already in edit, or moving ...
     // or the component to be edited is part of a block
@@ -483,7 +483,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // Remove any TEMPLATE_FIELDNAMES which were not set (given values).
     TEMPLATE_FIELDNAMES templateFieldnames = GetParent()->GetTemplateFieldNames();
 
-    for( int i = MANDATORY_FIELDS; i < (int) m_fields->size(); ++i )
+    for( size_t i = MANDATORY_FIELDS; i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
 
@@ -536,7 +536,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     GetParent()->OnModify();
     GetParent()->GetScreen()->TestDanglingEnds();
 
-    EndQuasiModal( wxID_OK );
+    return true;
 }
 
 
@@ -558,6 +558,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int       fieldID = m_fields->size();
     SCH_FIELD newField( wxPoint( 0, 0 ), fieldID, m_cmp );
 
@@ -573,50 +576,50 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
     m_grid->MakeCellVisible( m_fields->size() - 1, 0 );
     m_grid->SetGridCursor( m_fields->size() - 1, 0 );
 
-    m_grid->EnableCellEditControl( true );
+    m_grid->EnableCellEditControl();
     m_grid->ShowCellEditControl();
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnDeleteField( wxCommandEvent& event )
 {
-    int rowCount = m_grid->GetNumberRows();
-    int curRow   = m_grid->GetGridCursorRow();
+    int curRow = m_grid->GetGridCursorRow();
 
-    if( curRow < 0 || curRow >= (int) m_fields->size() )
+    if( curRow < 0 )
         return;
-
-    if( curRow < MANDATORY_FIELDS )
+    else if( curRow < MANDATORY_FIELDS )
     {
-        DisplayError( nullptr, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                 MANDATORY_FIELDS ) );
+        DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                              MANDATORY_FIELDS ) );
         return;
     }
 
-    SCH_FIELDS::iterator start = m_fields->begin() + curRow;
-    m_fields->erase( start, start + 1 );
+    m_grid->CommitPendingChanges( true /* quiet mode */ );
+
+    m_fields->erase( m_fields->begin() + curRow );
 
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
     m_grid->ProcessTableMessage( msg );
 
-    if( curRow == rowCount - 1 )
+    if( m_grid->GetNumberRows() > 0 )
     {
-        m_grid->MakeCellVisible( curRow-1, m_grid->GetGridCursorCol() );
-        m_grid->SetGridCursor( curRow-1, m_grid->GetGridCursorCol() );
+        m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+        m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
     }
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int i = m_grid->GetGridCursorRow();
 
-    m_grid->DisableCellEditControl();
-
-    if( i > MANDATORY_FIELDS && i < (int) m_fields->size() )
+    if( i > MANDATORY_FIELDS )
     {
-        SCH_FIELD tmp = m_fields->at( i );
+        SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
         m_fields->insert( m_fields->begin() + i - 1, tmp );
         m_grid->ForceRefresh();
@@ -631,13 +634,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int i = m_grid->GetGridCursorRow();
 
-    m_grid->DisableCellEditControl();
-
-    if( i >= MANDATORY_FIELDS && i < (int) m_fields->size() - 1 )
+    if( i >= MANDATORY_FIELDS )
     {
-        SCH_FIELD tmp = m_fields->at( i );
+        SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
         m_fields->insert( m_fields->begin() + i + 1, tmp );
         m_grid->ForceRefresh();
@@ -652,16 +656,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent& event )
 {
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return;
 
     SCH_COMPONENT copy( *m_cmp );
     copy.SetFields( *m_fields );
 
+    // Update the requested fields in the component copy
     std::list<SCH_COMPONENT*> components;
     components.push_back( &copy );
     InvokeDialogUpdateFields( GetParent(), components, false );
 
-    // Copy fields from the modified component copy to the dialog buffer
+    // Copy fields from the component copy to the dialog buffer
     m_fields->clear();
     std::set<wxString> defined;
 

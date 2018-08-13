@@ -59,7 +59,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     LIB_PART*          m_tempCopyComponent;    ///< temp copy of a part during edit, I own it here.
     LIB_COLLECTOR      m_collectedItems;       ///< Used for hit testing.
     wxComboBox*        m_partSelectBox;        ///< a Box to select a part to edit (if any)
-    wxComboBox*        m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
 
@@ -107,7 +106,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     static int m_drawLineWidth;
 
     static LIB_ITEM*    m_lastDrawItem;
-    static wxString     m_aliasName;
 
     // The unit number to edit and show
     static int m_unit;
@@ -296,7 +294,6 @@ public:
 
     void OnDuplicatePart( wxCommandEvent& aEvent );
 
-    void OnSelectAlias( wxCommandEvent& event );
     void OnSelectPart( wxCommandEvent& event );
 
     /**
@@ -312,7 +309,6 @@ public:
     void ClearSearchTreeSelection();
 
     void OnEditComponentProperties( wxCommandEvent& event );
-    void InstallFieldsEditorDialog( wxCommandEvent& event );
 
     void OnViewEntryDoc( wxCommandEvent& event );
     void OnCheckComponent( wxCommandEvent& event );
@@ -331,17 +327,14 @@ public:
     void OnUpdateRevert( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
-    void OnUpdateViewDoc( wxUpdateUIEvent& event );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePinTable( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
     void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
-    void OnUpdateSelectAlias( wxUpdateUIEvent& event );
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent );
 
-    void UpdateAliasSelectList();
     void UpdatePartSelectList();
 
     /**
@@ -405,8 +398,6 @@ public:
      * current screen.
      */
     void OnModify();
-
-    const wxString& GetAliasName()      { return m_aliasName; }
 
     int GetUnit() { return m_unit; }
 

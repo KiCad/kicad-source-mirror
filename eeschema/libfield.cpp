@@ -87,9 +87,6 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         SaveCopyInUndoList( parent, UR_LIB_RENAME );
         parent->SetName( newFieldValue );
 
-        if( !parent->HasAlias( m_aliasName ) )
-            m_aliasName = newFieldValue;
-
         m_libMgr->UpdatePartAfterRename( parent, oldFieldValue, lib );
 
         // Reselect the renamed part
@@ -103,5 +100,4 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     m_canvas->Refresh();
 
     OnModify();
-    UpdateAliasSelectList();
 }

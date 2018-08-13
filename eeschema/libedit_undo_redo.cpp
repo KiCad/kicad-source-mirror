@@ -89,11 +89,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
     }
 
-    if( !m_aliasName.IsEmpty() && !part->HasAlias( m_aliasName ) )
-        m_aliasName = part->GetName();
-
     SetDrawItem( NULL );
-    UpdateAliasSelectList();
     UpdatePartSelectList();
     SetShowDeMorgan( part->HasConversion() );
     DisplayLibInfos();
@@ -140,11 +136,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
     }
 
-    if( !m_aliasName.IsEmpty() && !part->HasAlias( m_aliasName ) )
-        m_aliasName = part->GetName();
-
     SetDrawItem( NULL );
-    UpdateAliasSelectList();
     UpdatePartSelectList();
     SetShowDeMorgan( part->HasConversion() );
     DisplayLibInfos();

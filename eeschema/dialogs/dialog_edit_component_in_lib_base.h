@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,24 +11,27 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/checkbox.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/statline.h>
-#include <wx/stattext.h>
-#include <wx/spinctrl.h>
-#include <wx/panel.h>
+#include <wx/string.h>
+#include <wx/font.h>
+#include <wx/grid.h>
+#include <wx/gdicmn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/textctrl.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/checkbox.h>
+#include <wx/spinctrl.h>
+#include <wx/panel.h>
 #include <wx/listbox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
@@ -36,14 +39,6 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #define ID_LIBEDIT_NOTEBOOK 1000
-#define ID_COPY_DOC_TO_ALIAS 1001
-#define ID_BROWSE_DOC_FILES 1002
-#define ID_ADD_ALIAS 1003
-#define ID_DELETE_ONE_ALIAS 1004
-#define ID_DELETE_ALL_ALIAS 1005
-#define ID_ADD_FOOTPRINT_FILTER 1006
-#define ID_DELETE_ONE_FOOTPRINT_FILTER 1007
-#define ID_DELETE_ALL_FOOTPRINT_FILTER 1008
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE
@@ -55,59 +50,62 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelBasic;
+		WX_GRID* m_grid;
+		wxBitmapButton* m_bpAdd;
+		wxBitmapButton* m_bpDelete;
+		wxBitmapButton* m_bpMoveUp;
+		wxBitmapButton* m_bpMoveDown;
+		wxTextCtrl* m_SymbolNameCtrl;
+		wxTextCtrl* m_DescCtrl;
+		wxStaticText* staticKeywordsLabel;
+		wxTextCtrl* m_KeywordCtrl;
 		wxCheckBox* m_AsConvertButt;
+		wxCheckBox* m_OptionPower;
+		wxStaticText* m_staticTextNbUnits;
+		wxSpinCtrl* m_SelNumberOfUnits;
+		wxCheckBox* m_OptionPartsLocked;
 		wxCheckBox* m_ShowPinNumButt;
 		wxCheckBox* m_ShowPinNameButt;
 		wxCheckBox* m_PinsNameInsideButt;
-		wxStaticLine* m_staticline3;
-		wxStaticText* m_staticTextNbUnits;
-		wxSpinCtrl* m_SelNumberOfUnits;
-		wxStaticText* m_staticTextskew;
-		wxSpinCtrl* m_SetSkew;
-		wxStaticLine* m_staticline1;
-		wxCheckBox* m_OptionPower;
-		wxCheckBox* m_OptionPartsLocked;
-		wxPanel* m_PanelDoc;
-		wxStaticText* m_staticTextDescription;
-		wxTextCtrl* m_DocCtrl;
-		wxStaticText* m_staticTextKeywords;
-		wxTextCtrl* m_KeywordsCtrl;
-		wxStaticText* m_staticTextDocFileName;
-		wxTextCtrl* m_DocfileCtrl;
-		wxButton* m_ButtonCopyDoc;
-		wxButton* m_buttonBrowseDocFiles;
+		wxStaticText* m_nameOffsetLabel;
+		wxTextCtrl* m_nameOffsetCtrl;
+		wxStaticText* m_nameOffsetUnits;
 		wxPanel* m_PanelAlias;
-		wxStaticText* m_staticTextAlias;
-		wxListBox* m_PartAliasListCtrl;
-		wxButton* m_ButtonAddeAlias;
-		wxButton* m_ButtonEditAlias;
-		wxButton* m_ButtonDeleteOneAlias;
-		wxButton* m_ButtonDeleteAllAlias;
+		wxListBox* m_aliasListBox;
+		wxBitmapButton* m_addAliasButton;
+		wxBitmapButton* m_deleteAliasButton;
+		wxStaticText* m_staticText12;
+		WX_GRID* m_aliasGrid;
+		wxTextCtrl* m_AliasNameCtrl;
+		wxTextCtrl* m_AliasDescCtrl;
+		wxStaticText* staticAliasKeywordsLabel;
+		wxTextCtrl* m_AliasKeywordsCtrl;
 		wxPanel* m_PanelFootprintFilter;
 		wxStaticText* m_staticTextFootprints;
 		wxListBox* m_FootprintFilterListBox;
-		wxButton* m_buttonAddFpF;
-		wxButton* m_buttonEditOneFootprintFilter;
-		wxButton* m_ButtonDeleteOneFootprintFilter;
-		wxButton* m_ButtonDeleteAllFootprintFilter;
+		wxBitmapButton* m_addFilterButton;
+		wxBitmapButton* m_editFilterButton;
+		wxBitmapButton* m_deleteFilterButton;
 		wxStdDialogButtonSizer* m_stdSizerButton;
 		wxButton* m_stdSizerButtonOK;
 		wxButton* m_stdSizerButtonCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnUpdateInterchangeableUnits( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void CopyDocFromRootToAlias( wxCommandEvent& event ) { event.Skip(); }
-		virtual void BrowseAndSelectDocFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void AddAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
-		virtual void EditAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DeleteAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DeleteAllAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
-		virtual void AddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void EditOneFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DeleteOneFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DeleteAllFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectAlias( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddAlias( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteAlias( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSizeAliasGrid( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnAliasNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnAliasNameText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

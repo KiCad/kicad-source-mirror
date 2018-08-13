@@ -1280,39 +1280,6 @@ bool LIB_PART::HasAlias( const wxString& aName ) const
 }
 
 
-void LIB_PART::SetAliases( const wxArrayString& aAliasList )
-{
-    wxCHECK_RET( !m_library,
-                 wxT( "Symbol aliases cannot be changed when they are owned by a library." ) );
-    wxCHECK_RET( !aAliasList.IsEmpty(), wxT( "Alias list cannot be empty" ) );
-
-    if( aAliasList == GetAliasNames() )
-        return;
-
-    // Add names not existing in the current component alias list.
-    for( size_t i = 0; i < aAliasList.GetCount(); i++ )
-    {
-        if( HasAlias( aAliasList[ i ] ) )
-            continue;
-
-        m_aliases.push_back( new LIB_ALIAS( aAliasList[ i ], this ) );
-    }
-
-    // Remove names in the current component that are not in the new alias list.
-    LIB_ALIASES::iterator it = m_aliases.begin();
-
-    while( it != m_aliases.end() )
-    {
-        int index = aAliasList.Index( (*it)->GetName(), false );
-
-        if( index != wxNOT_FOUND || (*it)->IsRoot() )
-            ++it;
-        else
-            it = m_aliases.erase( it );
-    }
-}
-
-
 void LIB_PART::RemoveAlias( const wxString& aName )
 {
     LIB_ALIAS* a = GetAlias( aName );
@@ -1394,11 +1361,13 @@ LIB_ALIAS* LIB_PART::GetAlias( size_t aIndex )
 
 void LIB_PART::AddAlias( const wxString& aName )
 {
-    wxCHECK_RET( !HasAlias( aName ),
-                 wxT( "Symbol <" ) + GetName() + wxT( "> already has an alias <" ) +
-                 aName + wxT( ">.  Bad programmer." ) );
-
     m_aliases.push_back( new LIB_ALIAS( aName, this ) );
+}
+
+
+void LIB_PART::AddAlias( LIB_ALIAS* aAlias )
+{
+    m_aliases.push_back( aAlias );
 }
 
 

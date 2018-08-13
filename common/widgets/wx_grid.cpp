@@ -119,3 +119,52 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
 
     rend.DrawLabel( *this, dc, GetColLabelValue( col ), rect, hAlign, vAlign, orient );
 }
+
+
+bool WX_GRID::CommitPendingChanges( bool aQuietMode )
+{
+    if( !IsCellEditControlEnabled() )
+        return true;
+
+    if( !aQuietMode && SendEvent( wxEVT_GRID_EDITOR_HIDDEN ) == -1 )
+        return false;
+
+    HideCellEditControl();
+
+    // do it after HideCellEditControl()
+    m_cellEditCtrlEnabled = false;
+
+    int row = m_currentCellCoords.GetRow();
+    int col = m_currentCellCoords.GetCol();
+
+    wxString oldval = GetCellValue( row, col );
+    wxString newval;
+
+    wxGridCellAttr* attr = GetCellAttr( row, col );
+    wxGridCellEditor* editor = attr->GetEditor( this, row, col );
+
+    bool changed = editor->EndEdit( row, col, this, oldval, &newval );
+
+    editor->DecRef();
+    attr->DecRef();
+
+    if( changed )
+    {
+        if( !aQuietMode && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) == -1 )
+            return false;
+
+        editor->ApplyEdit(row, col, this);
+
+        // for compatibility reasons dating back to wx 2.8 when this event
+        // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
+        // didn't exist we allow vetoing this one too
+        if( !aQuietMode && SendEvent( wxEVT_GRID_CELL_CHANGED, oldval ) == -1 )
+        {
+            // Event has been vetoed, set the data back.
+            SetCellValue( row, col, oldval );
+            return false;
+        }
+    }
+
+    return true;
+}

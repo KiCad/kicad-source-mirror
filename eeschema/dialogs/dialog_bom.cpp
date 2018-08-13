@@ -223,7 +223,7 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
     m_buttonAddPlugin->SetBitmap( KiBitmap( plus_xpm ) );
     m_buttonDelPlugin->SetBitmap( KiBitmap( delete_xpm ) );
-    m_buttonEdit->SetBitmap( KiBitmap( edit_xpm ) );
+    m_buttonEdit->SetBitmap( KiBitmap( small_edit_xpm ) );
 
     installPluginsList();
 

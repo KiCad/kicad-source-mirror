@@ -158,12 +158,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( part_properties_xpm ) );
 
     AddMenuItem( editMenu,
-                 ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
-                 _( "&Fields..." ),
-                 _( "Edit field properties" ),
-                 KiBitmap( field_properties_xpm ) );
-
-    AddMenuItem( editMenu,
                  ID_LIBEDIT_EDIT_PIN_BY_TABLE,
                  _( "Pin &Table..." ),
                  _( "Show pin table" ),

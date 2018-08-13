@@ -281,6 +281,8 @@ public:
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
 
+    LIB_ALIASES GetAliases() const  { return m_aliases; }
+
     size_t GetAliasCount() const    { return m_aliases.size(); }
 
     LIB_ALIAS* GetAlias( size_t aIndex );
@@ -299,6 +301,8 @@ public:
      */
     void AddAlias( const wxString& aName );
 
+    void AddAlias( LIB_ALIAS* aAlias );
+
     /**
      * Test if alias \a aName is in part alias list.
      *
@@ -308,8 +312,6 @@ public:
      * @return True if alias name in alias list.
      */
     bool HasAlias( const wxString& aName ) const;
-
-    void SetAliases( const wxArrayString& aAliasList );
 
     void RemoveAlias( const wxString& aName );
     LIB_ALIAS* RemoveAlias( LIB_ALIAS* aAlias );

@@ -67,7 +67,6 @@
 #include <wx/progdlg.h>
 
 
-wxString LIB_EDIT_FRAME::      m_aliasName;
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
 LIB_ITEM* LIB_EDIT_FRAME::m_lastDrawItem = NULL;
@@ -113,7 +112,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
     EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnEditComponentProperties )
-    EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, LIB_EDIT_FRAME::InstallFieldsEditorDialog )
     EVT_TOOL( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnCheckComponent )
     EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
@@ -122,7 +120,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
-    EVT_COMBOBOX( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnSelectAlias )
 
     // Right vertical toolbar.
     EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
@@ -171,16 +168,13 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateSaveAs )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
-    EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
-    EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
-    EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnUpdateSelectAlias )
     EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
     EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnUpdateSelectTool )
@@ -251,29 +245,10 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
-
-    // Ensure the current alias name is valid if a part is loaded
-    // Sometimes it is not valid. This is the case when a part value (the part lib name), or
-    // the alias list was modified during a previous session and the modifications not saved
-    // in lib.  Reopen libedit in a new session gives a non valid m_aliasName because the curr
-    // part is reloaded from the library (and this is the unmodified part) and the old alias
-    // name (from the previous session) can be invalid
-    LIB_PART* part = GetCurPart();
-
-    if( part == NULL )
-        m_aliasName.Empty();
-    else if( m_aliasName != part->GetName() )
-    {
-        LIB_ALIAS* alias = part->GetAlias( m_aliasName );
-
-        if( !alias )
-            m_aliasName = part->GetName();
-    }
-
     ReCreateOptToolbar();
+
     DisplayLibInfos();
     DisplayCmpDoc();
-    UpdateAliasSelectList();
     UpdatePartSelectList();
 
     m_auimgr.SetManagedWindow( this );
@@ -353,28 +328,6 @@ double LIB_EDIT_FRAME::BestZoom()
     double margin_scale_factor = 1.2;
 
     return bestZoom( sizeX, sizeY, margin_scale_factor, centre);
-}
-
-
-void LIB_EDIT_FRAME::UpdateAliasSelectList()
-{
-    if( m_aliasSelectBox == NULL )
-        return;
-
-    m_aliasSelectBox->Clear();
-
-    LIB_PART*      part = GetCurPart();
-
-    if( !part )
-        return;
-
-    m_aliasSelectBox->Append( part->GetAliasNames() );
-    m_aliasSelectBox->SetSelection( 0 );
-
-    int index = m_aliasSelectBox->FindString( m_aliasName );
-
-    if( index != wxNOT_FOUND )
-        m_aliasSelectBox->SetSelection( index );
 }
 
 
@@ -544,27 +497,6 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateViewDoc( wxUpdateUIEvent& event )
-{
-    bool enable = false;
-
-    LIB_PART* part = GetCurPart();
-
-    if( part )
-    {
-        LIB_ALIAS* alias = part->GetAlias( m_aliasName );
-
-        wxCHECK_RET( alias != NULL,
-                     wxString::Format( "Alias \"%s\" not found in symbol \"%s\".",
-                                       m_aliasName, part->GetName() ) );
-
-        enable = !alias->GetDocFileName().IsEmpty();
-    }
-
-    event.Enable( enable );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
@@ -617,33 +549,6 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateSelectAlias( wxUpdateUIEvent& event )
-{
-    if( m_aliasSelectBox == NULL )
-        return;
-
-    LIB_PART*      part = GetCurPart();
-
-    // Using the typical event.Enable() call doesn't seem to work with wxGTK
-    // so use the pointer to alias combobox to directly enable or disable.
-    m_aliasSelectBox->Enable( part && part->GetAliasCount() > 1 );
-}
-
-
-void LIB_EDIT_FRAME::OnSelectAlias( wxCommandEvent& event )
-{
-    if( m_aliasSelectBox == NULL
-        || ( m_aliasSelectBox->GetStringSelection().CmpNoCase( m_aliasName ) == 0)  )
-        return;
-
-    m_lastDrawItem = NULL;
-    m_aliasName = m_aliasSelectBox->GetStringSelection();
-
-    DisplayCmpDoc();
-    m_canvas->Refresh();
-}
-
-
 void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
 {
     int i = event.GetSelection();
@@ -666,9 +571,9 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
         return;
 
     wxString    fileName;
-    LIB_ALIAS*  alias = part->GetAlias( m_aliasName );
 
-    wxCHECK_RET( alias != NULL, "Alias not found." );
+    // TODO: it would be nice to offer a menu here of aliases....
+    LIB_ALIAS*  alias = part->GetAlias( part->GetName() );
 
     fileName = alias->GetDocFileName();
 
@@ -1090,9 +995,18 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     bool partLocked = GetCurPart()->UnitsLocked();
     wxString oldName = GetCurPart()->GetName();
 
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( GetDrawItem() && GetDrawItem()->Type() == LIB_FIELD_T )
+        SetDrawItem( nullptr );     // selected LIB_FIELD might be deleted
+
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this, GetCurPart() );
+
+    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+    // frame. Therefore this dialog as a modal frame parent, MUST be run under
+    // quasimodal mode for the quasimodal frame support to work.  So don't use
+    // the QUASIMODAL macros here.
+    if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
     // if m_UnitSelectionLocked has changed, set some edit options or defaults
@@ -1104,7 +1018,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
         // also set default edit options to the better value
         // Usually if units are locked, graphic items are specific to each unit
         // and if units are interchangeable, graphic items are common to units
-        m_drawSpecificUnit = GetCurPart()->UnitsLocked() ? true : false;
+        m_drawSpecificUnit = GetCurPart()->UnitsLocked();
     }
 
     if( oldName != GetCurPart()->GetName() )
@@ -1112,7 +1026,6 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
 
     m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
 
-    UpdateAliasSelectList();
     UpdatePartSelectList();
     DisplayLibInfos();
     DisplayCmpDoc();
@@ -1696,7 +1609,6 @@ void LIB_EDIT_FRAME::emptyScreen()
 {
     SetCurLib( wxEmptyString );
     SetCurPart( nullptr );
-    m_aliasName.Empty();
     m_lastDrawItem = nullptr;
     SetDrawItem( NULL );
     SetScreen( m_dummyScreen );

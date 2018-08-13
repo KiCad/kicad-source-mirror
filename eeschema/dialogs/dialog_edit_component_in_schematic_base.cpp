@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -130,10 +130,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_libraryNameTextCtrl = new wxTextCtrl( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryNameTextCtrl->SetToolTip( _("Name of the symbol in the library to which this symbol is linked") );
 	
-	bLibraryReferenceSizer->Add( m_libraryNameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bLibraryReferenceSizer->Add( m_libraryNameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_buttonBrowseLibrary = new wxBitmapButton( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonBrowseLibrary->SetMinSize( wxSize( 29,29 ) );
+	m_buttonBrowseLibrary->SetMinSize( wxSize( 30,29 ) );
 	
 	bLibraryReferenceSizer->Add( m_buttonBrowseLibrary, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -142,14 +142,14 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	
 	m_unitLabel = new wxStaticText( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabel->Wrap( -1 );
-	fgSizer1->Add( m_unitLabel, 0, wxBOTTOM|wxRIGHT, 5 );
+	fgSizer1->Add( m_unitLabel, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxArrayString m_unitChoiceChoices;
 	m_unitChoice = new wxChoice( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitChoiceChoices, 0 );
 	m_unitChoice->SetSelection( 0 );
 	m_unitChoice->SetMinSize( wxSize( 100,-1 ) );
 	
-	fgSizer1->Add( m_unitChoice, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_unitChoice, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -157,10 +157,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_cbAlternateSymbol = new wxCheckBox( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, _("Alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAlternateSymbol->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 	
-	fgSizer1->Add( m_cbAlternateSymbol, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_cbAlternateSymbol, 0, wxALL, 5 );
 	
 	
-	sbSizerLibraryReference->Add( fgSizer1, 1, wxEXPAND, 5 );
+	sbSizerLibraryReference->Add( fgSizer1, 0, wxEXPAND, 5 );
 	
 	
 	lowerSizer->Add( sbSizerLibraryReference, 5, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -243,7 +243,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_updateFieldValues->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::UpdateFieldsFromLibrary ), NULL, this );
 	m_buttonBrowseLibrary->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnBrowseLibrary ), NULL, this );
 	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
-	m_stdDialogButtonSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnOKButtonClick ), NULL, this );
 }
 
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE()
@@ -259,6 +258,5 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BAS
 	m_updateFieldValues->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::UpdateFieldsFromLibrary ), NULL, this );
 	m_buttonBrowseLibrary->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnBrowseLibrary ), NULL, this );
 	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnEditSpiceModel ), NULL, this );
-	m_stdDialogButtonSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnOKButtonClick ), NULL, this );
 	
 }

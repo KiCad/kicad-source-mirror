@@ -82,7 +82,6 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
     EVT_MENU( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnShowElectricalType )
 
-    EVT_UPDATE_UI( ID_LIBVIEW_VIEWDOC, LIB_VIEW_FRAME::onUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                    LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton )
@@ -280,14 +279,6 @@ void LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent )
         aEvent.Check( m_convert <= 1 );
     else
         aEvent.Check( true );
-}
-
-
-void LIB_VIEW_FRAME::onUpdateViewDoc( wxUpdateUIEvent& aEvent )
-{
-    LIB_ALIAS* alias = getSelectedAlias();
-
-    aEvent.Enable( alias && !alias->GetDocFileName().IsEmpty() );
 }
 
 

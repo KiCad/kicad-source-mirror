@@ -60,6 +60,13 @@ public:
      */
     void DestroyTable( wxGridTableBase* aTable );
 
+    /**
+     * Close any open cell edit controls.
+     * @param aQuietMode if true don't send events (ie: for row/col delete operations)
+     * @return false if validation failed
+     */
+    bool CommitPendingChanges( bool aQuietMode = false );
+
 protected:
     void DrawColLabel( wxDC& dc, int col ) override;
 };
