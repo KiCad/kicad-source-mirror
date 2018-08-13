@@ -338,7 +338,13 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     // executed.  Put a reference to the builtins module in it.
 
     PyObject*   globals     = PyDict_New();
+#if PY_MAJOR_VERSION >= 3
+    PyObject*   builtins    = PyImport_ImportModule( "builtins" );
+#else
     PyObject*   builtins    = PyImport_ImportModule( "__builtin__" );
+#endif
+
+    wxASSERT( builtins );
 
     PyDict_SetItemString( globals, "__builtins__", builtins );
     Py_DECREF( builtins );

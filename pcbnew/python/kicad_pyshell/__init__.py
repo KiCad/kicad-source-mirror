@@ -63,8 +63,12 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
         intro = 'Py %s' % version.VERSION
         import imp
         module = imp.new_module('__main__')
-        import __builtin__
-        module.__dict__['__builtins__'] = __builtin__
+        if sys.version_info >= (3,):
+            import builtins
+            module.__dict__['__builtins__'] = builtins
+        else:
+            import __builtin__
+            module.__dict__['__builtins__'] = __builtin__
         namespace = module.__dict__.copy()
 
         self.config_dir = pcbnew.GetKicadConfigPath()
