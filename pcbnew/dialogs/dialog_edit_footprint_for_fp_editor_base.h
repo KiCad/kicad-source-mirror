@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,10 +21,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -55,14 +55,16 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		WX_GRID* m_itemsGrid;
 		wxBitmapButton* m_bpAdd;
 		wxBitmapButton* m_bpDelete;
-		wxStaticText* m_libraryName;
 		wxTextCtrl* m_FootprintNameCtrl;
 		wxTextCtrl* m_DocCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
+		wxStaticBoxSizer* m_sizerAP;
+		wxBoxSizer* m_sizerAllow90;
 		wxStaticText* m_allow90Label;
 		wxSlider* m_CostRot90Ctrl;
+		wxBoxSizer* m_sizerAllow180;
 		wxStaticText* m_allow180Label;
 		wxSlider* m_CostRot180Ctrl;
 		wxRadioBox* m_AttributsCtrl;

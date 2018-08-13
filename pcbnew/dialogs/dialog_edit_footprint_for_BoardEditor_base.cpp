@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -176,16 +176,16 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	sbOrientationSizer->Add( gbSizer1, 1, wxEXPAND, 5 );
 	
 	
-	bSizerLeft->Add( sbOrientationSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerLeft->Add( sbOrientationSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	wxString m_LayerCtrlChoices[] = { _("Front"), _("Back") };
 	int m_LayerCtrlNChoices = sizeof( m_LayerCtrlChoices ) / sizeof( wxString );
 	m_LayerCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Board Side"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_LayerCtrl->SetSelection( 0 );
-	bSizerLeft->Add( m_LayerCtrl, 1, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( m_LayerCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerProperties->Add( bSizerLeft, 8, wxEXPAND, 5 );
+	bSizerProperties->Add( bSizerLeft, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerMiddle;
 	bSizerMiddle = new wxBoxSizer( wxVERTICAL );
@@ -196,44 +196,41 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_AutoPlaceCtrl->SetSelection( 0 );
 	bSizerMiddle->Add( m_AutoPlaceCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxStaticBoxSizer* sbSizerAP;
-	sbSizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Auto-placement Rules") ), wxVERTICAL );
+	m_sizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Auto-placement Rules") ), wxVERTICAL );
 	
-	wxBoxSizer* bSizerRotOpt;
-	bSizerRotOpt = new wxBoxSizer( wxVERTICAL );
+	m_sizerAllow90 = new wxBoxSizer( wxVERTICAL );
 	
-	m_allow90Label = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allow90Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allow90Label->Wrap( -1 );
 	m_allow90Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizerRotOpt->Add( m_allow90Label, 0, 0, 5 );
+	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
 	
-	m_CostRot90Ctrl = new wxSlider( sbSizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	bSizerRotOpt->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	sbSizerAP->Add( bSizerRotOpt, 1, wxEXPAND|wxTOP, 5 );
+	m_sizerAP->Add( m_sizerAllow90, 1, wxEXPAND|wxTOP, 5 );
 	
-	wxBoxSizer* bSizerMoveOpt;
-	bSizerMoveOpt = new wxBoxSizer( wxVERTICAL );
+	m_sizerAllow180 = new wxBoxSizer( wxVERTICAL );
 	
-	m_allow180Label = new wxStaticText( sbSizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_allow180Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allow180Label->Wrap( -1 );
 	m_allow180Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	bSizerMoveOpt->Add( m_allow180Label, 0, 0, 5 );
+	m_sizerAllow180->Add( m_allow180Label, 0, wxTOP, 5 );
 	
-	m_CostRot180Ctrl = new wxSlider( sbSizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	bSizerMoveOpt->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	
-	sbSizerAP->Add( bSizerMoveOpt, 1, wxEXPAND|wxTOP, 5 );
+	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMiddle->Add( sbSizerAP, 0, wxEXPAND|wxALL, 5 );
+	m_sizerAP->Add( m_sizerAllow180, 1, wxEXPAND|wxTOP, 5 );
 	
 	
-	bSizerProperties->Add( bSizerMiddle, 8, wxEXPAND|wxTOP, 5 );
+	bSizerMiddle->Add( m_sizerAP, 0, wxEXPAND|wxALL, 5 );
+	
+	
+	bSizerProperties->Add( bSizerMiddle, 1, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -242,7 +239,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonUpdate = new wxButton( m_PanelGeneral, ID_MODULE_PROPERTIES_UPDATE, _("Update Footprint from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonUpdate, 0, wxEXPAND|wxALL, 5 );
+	bButtonsSizer->Add( m_buttonUpdate, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonExchange = new wxButton( m_PanelGeneral, ID_MODULE_PROPERTIES_EXCHANGE, _("Change Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonExchange, 0, wxEXPAND|wxALL, 5 );
@@ -263,7 +260,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerRight->Add( m_AttributsCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerProperties->Add( bSizerRight, 8, wxEXPAND|wxTOP, 5 );
+	bSizerProperties->Add( bSizerRight, 1, wxEXPAND|wxTOP, 5 );
 	
 	
 	m_PanelPropertiesBoxSizer->Add( bSizerProperties, 0, wxEXPAND, 5 );
@@ -521,6 +518,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	this->SetSizer( m_GeneralBoxSizer );
 	this->Layout();
+	m_GeneralBoxSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnInitDlg ) );
