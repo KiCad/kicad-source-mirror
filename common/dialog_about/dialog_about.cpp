@@ -554,6 +554,13 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << OFF;
 #endif
 
+    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON_PHOENIX=";
+#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
     aMsg << indent4 << "KICAD_SCRIPTING_ACTION_MENU=";
 #ifdef KICAD_SCRIPTING_ACTION_MENU
     aMsg << ON;

@@ -82,6 +82,10 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
     ON )
 
+option( KICAD_SCRIPTING_WXPYTHON_PHOENIX
+    "Use new wxPython binding (default OFF)."
+    OFF )
+
 option( KICAD_SCRIPTING_ACTION_MENU
     "Build a tools menu with registered python plugins: actions plugins (default ON)."
     ON )
@@ -391,6 +395,10 @@ endif()
 
 if( KICAD_SCRIPTING_WXPYTHON )
     add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
+endif()
+
+if( KICAD_SCRIPTING_WXPYTHON_PHOENIX )
+    add_definitions( -DKICAD_SCRIPTING_WXPYTHON_PHOENIX )
 endif()
 
 if( KICAD_SCRIPTING_ACTION_MENU )
@@ -751,8 +759,24 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     if( KICAD_SCRIPTING_WXPYTHON )
         # Check to see if the correct version of wxPython is installed based on the version of
         # wxWidgets found.  At least the major an minor version should match.
-        set( _wxpy_version "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}" )
-        set( _py_cmd "import wxversion;print(wxversion.checkInstalled('${_wxpy_version}'))" )
+        if( KICAD_SCRIPTING_WXPYTHON_PHOENIX )
+            set( _py_cmd "import wx;print(wx.version())" )
+            execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_cmd}"
+                RESULT_VARIABLE WXPYTHON_VERSION_RESULT
+                OUTPUT_VARIABLE WXPYTHON_VERSION_FOUND
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+            )
+            # Check to see if any version of wxPython is installed on the system.
+            if( WXPYTHON_VERSION_RESULT GREATER 0 )
+                message( FATAL_ERROR "wxPython does not appear to be installed on the system." )
+            endif()
+            set( _wxpy_version ${WXPYTHON_VERSION_FOUND} )
+            set( _py_cmd "import wx;import re;print(re.search('wxWidgets ${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}', wx.wxWidgets_version) != None)" )
+        else()
+            set( _wxpy_version "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}" )
+            set( _py_cmd "import wxversion;print(wxversion.checkInstalled('${_wxpy_version}'))" )
+        endif()
+
 
         # Add user specified Python site package path.
         if( PYTHON_SITE_PACKAGE_PATH )

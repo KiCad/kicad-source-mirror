@@ -166,6 +166,11 @@ of Python 2.  This option is disabled by default.
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into
 Pcbnew including the wxPython console.  This option is enabled by default.
 
+## wxPython Phoenix Scripting Support ## {#wxpython_phoenix}
+
+The KICAD_SCRIPTING_WXPYTHON_PHOENIX option is used to enable building the wxPython interface with
+the new Phoenix binding instead of the legacy one.  This option is disabled by default.
+
 ## GitHub Plugin ## {#github_opt}
 
 The BUILD_GITHUB_PLUGIN option is used to control if the GitHub plug in is built.  This option is

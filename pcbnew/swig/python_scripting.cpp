@@ -30,6 +30,7 @@
 #include <python_scripting.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sstream>
 
 #include <fctsys.h>
 #include <eda_base_frame.h>
@@ -162,6 +163,7 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 #ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
 
+#ifndef KICAD_SCRIPTING_WXPYTHON_PHOENIX
 #ifndef __WINDOWS__     // import wxversion.py currently not working under winbuilder, and not useful.
     char cmd[1024];
     // Make sure that that the correct version of wxPython is loaded. In systems where there
@@ -190,13 +192,14 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
         Py_Finalize();
         return false;
     }
+#endif
 
     wxPythonLoaded = true;
 
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
+    g_PythonMainTState = PyEval_SaveThread();
 
-    g_PythonMainTState = wxPyBeginAllowThreads();
 #endif  // ifdef KICAD_SCRIPTING_WXPYTHON
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
@@ -298,7 +301,7 @@ void pcbnewGetWizardsBackTrace( wxString& aNames )
 void pcbnewFinishPythonScripting()
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
-    wxPyEndAllowThreads( g_PythonMainTState );
+    PyEval_RestoreThread( g_PythonMainTState );
 #endif
     Py_Finalize();
 }
@@ -325,15 +328,25 @@ void RedirectStdio()
 
 wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId )
 {
-    const char* pcbnew_pyshell =
-        "import kicad_pyshell\n"
-        "\n"
-        "def makeWindow(parent):\n"
-        "    return kicad_pyshell.makePcbnewShellWindow(parent)\n"
-        "\n";
+    // parent is actually *PCB_EDIT_FRAME
+    const int parentId = parent->GetId();
+    {
+        wxWindow* parent2 = wxWindow::FindWindowById( parentId );
+        wxASSERT( parent2 == parent );
+    }
 
-    wxWindow*   window = NULL;
-    PyObject*   result;
+    // passing window ids instead of pointers is because wxPython is not
+    // exposing the needed c++ apis to make that possible.
+    std::stringstream pcbnew_pyshell_one_step;
+    pcbnew_pyshell_one_step << "import kicad_pyshell\n";
+    pcbnew_pyshell_one_step << "import wx\n";
+    pcbnew_pyshell_one_step << "\n";
+    pcbnew_pyshell_one_step << "parent = wx.FindWindowById( " << parentId << " )\n";
+    pcbnew_pyshell_one_step << "newshell = kicad_pyshell.makePcbnewShellWindow( parent )\n";
+    pcbnew_pyshell_one_step << "newshell.SetName( \"" << aFramenameId << "\" )\n";
+    // return value goes into a "global". It's not actually global, but rather
+    // the dict that is passed to PyRun_String
+    pcbnew_pyshell_one_step << "retval = newshell.GetId()\n";
 
     // As always, first grab the GIL
     PyLOCK      lock;
@@ -354,7 +367,7 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     Py_DECREF( builtins );
 
     // Execute the code to make the makeWindow function we defined above
-    result = PyRun_String( pcbnew_pyshell, Py_file_input, globals, globals );
+    PyObject*   result = PyRun_String( pcbnew_pyshell_one_step.str().c_str(), Py_file_input, globals, globals );
 
     // Was there an exception?
     if( !result )
@@ -365,42 +378,36 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
 
     Py_DECREF( result );
 
-    // Now there should be an object named 'makeWindow' in the dictionary that
-    // we can grab a pointer to:
-    PyObject* func = PyDict_GetItemString( globals, "makeWindow" );
-    wxASSERT( PyCallable_Check( func ) );
+    result = PyDict_GetItemString( globals, "retval" );
 
-    // Now build an argument tuple and call the Python function.  Notice the
-    // use of another wxPython API to take a wxWindows object and build a
-    // wxPython object that wraps it.
-
-    PyObject*   arg = wxPyMake_wxObject( parent, false );
-    wxASSERT( arg != NULL );
-
-    PyObject*   tuple = PyTuple_New( 1 );
-    PyTuple_SET_ITEM( tuple, 0, arg );
-
-    result = PyEval_CallObject( func, tuple );
-
-    // Was there an exception?
-    if( !result )
-        PyErr_Print();
-    else
+#if PY_MAJOR_VERSION >= 3
+    if( !PyLong_Check( result ) )
+#else
+    if( !PyInt_Check( result ) )
+#endif
     {
-        // Otherwise, get the returned window out of Python-land and
-        // into C++-ville...
-        bool success = wxPyConvertSwigPtr( result, (void**) &window, "wxWindow" );
-        (void) success;
-
-        wxASSERT_MSG( success, "Returned object was not a wxWindow!" );
-        Py_DECREF( result );
-
-        window->SetName( aFramenameId );
+        wxLogError("creation of scripting window didn't return a number");
+        return NULL;
     }
 
-    // Release the python objects we still have
+#if PY_MAJOR_VERSION >= 3
+    const long windowId = PyLong_AsLong( result );
+#else
+    const long windowId = PyInt_AsLong( result );
+#endif
+
+    // It's important not to decref globals before extracting the window id.
+    // If you do it early, globals, and the retval int it contains, may/will be garbage collected.
+    // We do not need to decref result, because GetItemString returns a borrowed reference.
     Py_DECREF( globals );
-    Py_DECREF( tuple );
+
+    wxWindow* window = wxWindow::FindWindowById( windowId );
+
+    if( !window )
+    {
+        wxLogError("unable to find pyshell window with id %d", windowId);
+        return NULL;
+    }
 
     return window;
 }
