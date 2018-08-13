@@ -208,8 +208,13 @@ protected:
 
     void OnButtonClick() override
     {
-        wxString uri = ResolveUriByEnvVars( GetValue() );
-        GetAssociatedDocument( m_dlg, uri );
+        wxString filename = GetValue();
+
+        if( !filename.IsEmpty() && filename != wxT( "~" ) )
+        {
+            wxString uri = ResolveUriByEnvVars( GetValue() );
+            GetAssociatedDocument( m_dlg, uri );
+        }
     }
 
     DIALOG_SHIM* m_dlg;

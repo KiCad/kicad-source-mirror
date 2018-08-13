@@ -372,9 +372,8 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
         }
     }
 
-    wxASSERT( m_tool );   // without tool & tool manager we cannot handle events
-
     // forward the action/update event to the TOOL_MANAGER
+    // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
         //aEvent.StopPropagation();

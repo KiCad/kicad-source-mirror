@@ -170,20 +170,30 @@ protected:
         {
         case DATASHEET:
             {
-                if( text.IsEmpty() )
-                    text = m_module->GetDocFileName();
+                text = m_module->GetDocFileName();
 
-                wxString datasheetlink = DatasheetLinkFormat;
-                datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
+                if( text.IsEmpty() || text == wxT( "~" ) )
+                {
+                    fieldhtml.Replace( "__VALUE__", text );
+                }
+                else
+                {
+                    wxString datasheetlink = DatasheetLinkFormat;
+                    datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
 
-                if( text.Length() > 75 )
-                    text = text.Left( 72 ) + wxT( "..." );
+                    if( text.Length() > 75 )
+                        text = text.Left( 72 ) + wxT( "..." );
 
-                datasheetlink.Replace( "__TEXT__", EscapedHTML( text ) );
+                    datasheetlink.Replace( "__TEXT__", EscapedHTML( text ) );
 
-                fieldhtml.Replace( "__VALUE__", datasheetlink );
+                    fieldhtml.Replace( "__VALUE__", datasheetlink );
+                }
             }
             break;
+
+        case VALUE:
+            // showing the value just repeats the name, so that's not much use...
+            return wxEmptyString;
 
         default:
             fieldhtml.Replace( "__VALUE__", EscapedHTML( text ) );

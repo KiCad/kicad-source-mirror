@@ -65,7 +65,7 @@
 
 #include <menus_helpers.h>
 #include <wx/progdlg.h>
-
+#include <tool/context_menu.h>
 
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
@@ -570,18 +570,32 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
     if( !part )
         return;
 
-    wxString    fileName;
+    wxString filename;
 
-    // TODO: it would be nice to offer a menu here of aliases....
-    LIB_ALIAS*  alias = part->GetAlias( part->GetName() );
+    if( part->GetAliasCount() > 1 )
+    {
+        CONTEXT_MENU popup;
+        wxString     msg;
 
-    fileName = alias->GetDocFileName();
+        for( LIB_ALIAS* alias : part->GetAliases() )
+        {
+            msg.Printf( wxT( "%s (%s)" ), alias->GetName(), alias->GetDocFileName() );
+            popup.Append( wxID_ANY, msg );
+        }
 
-    if( !fileName.IsEmpty() )
+        PopupMenu( &popup );
+
+        if( popup.GetSelected() >= 0 )
+            filename = part->GetAlias( (unsigned) popup.GetSelected() )->GetDocFileName();
+    }
+    else
+        filename = part->GetAlias( 0 )->GetDocFileName();
+
+    if( !filename.IsEmpty() && filename != wxT( "~" ) )
     {
         SEARCH_STACK* lib_search = Prj().SchSearchS();
 
-        GetAssociatedDocument( this, fileName, lib_search );
+        GetAssociatedDocument( this, filename, lib_search );
     }
 }
 
