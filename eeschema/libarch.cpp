@@ -148,10 +148,16 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     {
         archLib->Save( false );
     }
-    catch( ... /* IO_ERROR ioe */ )
+    catch( const IO_ERROR& ioe )
     {
         errorMsg.Printf( _( "Failed to save symbol library file \"%s\"" ), aFileName );
-        DisplayError( this, errorMsg );
+        DisplayErrorMessage( this, errorMsg, ioe.What() );
+        return false;
+    }
+    catch( std::exception& error )
+    {
+        errorMsg.Printf( _( "Failed to save symbol library file \"%s\"" ), aFileName );
+        DisplayErrorMessage( this, errorMsg, error.what() );
         return false;
     }
 
