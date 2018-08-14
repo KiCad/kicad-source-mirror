@@ -522,7 +522,7 @@ FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxC
     m_fp = wxFopen( aFileName, aMode );
 
     if( !m_fp )
-        THROW_IO_ERROR( std::strerror( errno ) );
+        THROW_IO_ERROR( strerror( errno ) );
 }
 
 
@@ -536,7 +536,7 @@ FILE_OUTPUTFORMATTER::~FILE_OUTPUTFORMATTER()
 void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
 {
     if( fwrite( aOutBuf, (unsigned) aCount, 1, m_fp ) != 1 )
-        THROW_IO_ERROR( std::strerror( errno ) );
+        THROW_IO_ERROR( strerror( errno ) );
 }
 
 
