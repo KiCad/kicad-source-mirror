@@ -392,38 +392,36 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
             if( text.IsEmpty() )
                 continue;
 
-            if( text.GetChar( 0 ) == '.' )
+            // Analyze each line of a text field
+            wxStringTokenizer tokenizer( text, "\r\n" );
+
+            while( tokenizer.HasMoreTokens() )
             {
-                wxStringTokenizer tokenizer( text, "\r\n" );
+                wxString line( tokenizer.GetNextToken() );
 
-                while( tokenizer.HasMoreTokens() )
+                if( line.StartsWith( ".inc" ) )
                 {
-                    wxString directive( tokenizer.GetNextToken() );
+                    wxString lib = line.AfterFirst( ' ' );
 
-                    if( directive.StartsWith( ".inc" ) )
-                    {
-                        wxString lib = directive.AfterFirst( ' ' );
+                    if( lib.IsEmpty() )
+                        continue;
 
-                        if( !lib.IsEmpty() )
-                        {
-                            // Strip quotes if present
-                            if( ( lib.StartsWith( "\"" ) && lib.EndsWith( "\"" ) )
-                                || ( lib.StartsWith( "'" ) && lib.EndsWith( "'" ) ) )
-                            {
-                                lib = lib.Mid( 1, lib.Length() - 2 );
-                            }
+                    // Strip quotes if present
+                    if( ( lib.StartsWith( "\"" ) && lib.EndsWith( "\"" ) )
+                        || ( lib.StartsWith( "'" ) && lib.EndsWith( "'" ) ) )
+                    {
+                        lib = lib.Mid( 1, lib.Length() - 2 );
+                    }
 
-                            m_libraries.insert( lib );
-                        }
-                    }
-                    else if( directive.StartsWith( ".title " ) )
-                    {
-                        m_title = directive.AfterFirst( ' ' );
-                    }
-                    else
-                    {
-                        m_directives.push_back( directive );
-                    }
+                    m_libraries.insert( lib );
+                }
+                else if( line.StartsWith( ".title " ) )
+                {
+                    m_title = line.AfterFirst( ' ' );
+                }
+                else if( line.StartsWith( '.' ) )
+                {
+                    m_directives.push_back( line );
                 }
             }
         }
