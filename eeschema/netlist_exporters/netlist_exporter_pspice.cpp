@@ -405,7 +405,16 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                         wxString lib = directive.AfterFirst( ' ' );
 
                         if( !lib.IsEmpty() )
+                        {
+                            // Strip quotes if present
+                            if( ( lib.StartsWith( "\"" ) && lib.EndsWith( "\"" ) )
+                                || ( lib.StartsWith( "'" ) && lib.EndsWith( "'" ) ) )
+                            {
+                                lib = lib.Mid( 1, lib.Length() - 2 );
+                            }
+
                             m_libraries.insert( lib );
+                        }
                     }
                     else if( directive.StartsWith( ".title " ) )
                     {
