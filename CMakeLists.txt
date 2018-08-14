@@ -732,9 +732,9 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     message( STATUS "Python module install path: ${PYTHON_DEST}" )
 
     if( KICAD_SCRIPTING_PYTHON3 )
-        find_package( PythonLibs 3.6 )
+        find_package( PythonLibs 3 REQUIRED )
     else()
-        find_package( PythonLibs 2.6 )
+        find_package( PythonLibs 2.6 REQUIRED )
     endif()
 
     if( KICAD_SCRIPTING_WXPYTHON )
