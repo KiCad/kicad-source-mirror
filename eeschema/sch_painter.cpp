@@ -86,6 +86,11 @@ void SCH_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
         m_layerColors[ layer ] = ::GetLayerColor( static_cast<SCH_LAYER_ID>( layer ) );
     }
 
+    for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer ++)
+    {
+        m_layerColors[ layer ] = ::GetLayerColor( static_cast<SCH_LAYER_ID>( layer ) );
+    }
+
     m_backgroundColor = ::GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
 }
 

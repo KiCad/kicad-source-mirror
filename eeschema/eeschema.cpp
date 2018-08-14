@@ -169,11 +169,11 @@ PGM_BASE& Pgm()
 }
 
 
-static COLOR4D s_layerColor[SCH_LAYER_ID_COUNT];
+static COLOR4D s_layerColor[LAYER_ID_COUNT];
 
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
-    unsigned layer = SCH_LAYER_INDEX( aLayer );
+    unsigned layer = ( aLayer );
     wxASSERT( layer < DIM( s_layerColor ) );
     return s_layerColor[layer];
 }
@@ -186,7 +186,7 @@ void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
     if( aColor == COLOR4D::WHITE && aLayer != LAYER_SCHEMATIC_BACKGROUND )
         aColor.Darken( 0.01 );
 
-    unsigned layer = SCH_LAYER_INDEX( aLayer );
+    unsigned layer = aLayer;
     wxASSERT( layer < DIM( s_layerColor ) );
     s_layerColor[layer] = aColor;
 }
@@ -203,7 +203,7 @@ static PARAM_CFG_ARRAY& cfg_params()
 
 #define CLR(x, y, z)\
     ca.push_back( new PARAM_CFG_SETCOLOR( true, wxT( x ),\
-                                          &s_layerColor[SCH_LAYER_INDEX( y )], z ) );
+                                          &s_layerColor[( y )], z ) );
 
         CLR( "Color4DWireEx",             LAYER_WIRE,                 COLOR4D( GREEN ) )
         CLR( "Color4DBusEx",              LAYER_BUS,                  COLOR4D( BLUE ) )
@@ -231,6 +231,8 @@ static PARAM_CFG_ARRAY& cfg_params()
         CLR( "Color4DGridEx",             LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) )
         CLR( "Color4DBgCanvasEx",         LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) )
         CLR( "Color4DBrightenedEx",       LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) )
+        CLR( "Color4DWorksheetEx",        LAYER_WORKSHEET,            COLOR4D( RED ) )
+        CLR( "Color4DGridEx",             LAYER_GRID,                 COLOR4D( DARKGRAY ) )
     }
 
     return ca;

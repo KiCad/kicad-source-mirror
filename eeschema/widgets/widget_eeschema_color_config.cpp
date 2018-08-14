@@ -106,7 +106,7 @@ static BUTTONINDEX buttonGroups[] = {
 
 static COLORBUTTON bgColorButton = { "", LAYER_SCHEMATIC_BACKGROUND };
 
-static COLOR4D currentColors[ SCH_LAYER_ID_COUNT ];
+static COLOR4D currentColors[ LAYER_ID_COUNT ];
 
 
 WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
@@ -155,7 +155,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             columnBoxSizer->Add( rowBoxSizer, 0, wxGROW | wxALL, 0 );
 
             COLOR4D color = GetLayerColor( SCH_LAYER_ID( buttons->m_Layer ) );
-            currentColors[ SCH_LAYER_INDEX( buttons->m_Layer ) ] = color;
+            currentColors[ buttons->m_Layer ] = color;
 
             wxMemoryDC iconDC;
             wxBitmap   bitmap( m_butt_size_pix );
@@ -220,7 +220,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         columnBoxSizer->Add( selBgColorBtn, 1, wxRIGHT | wxBOTTOM, 5 );
     }
 
-    currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ] = bgColor;
+    currentColors[ LAYER_SCHEMATIC_BACKGROUND ] = bgColor;
 
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
@@ -235,7 +235,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     COLORBUTTON* colorButton = (COLORBUTTON*) button->GetClientData();
 
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
-    COLOR4D oldColor = currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ];
+    COLOR4D oldColor = currentColors[ colorButton->m_Layer ];
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
     DIALOG_COLOR_PICKER dialog( this, oldColor, false );
 
@@ -247,7 +247,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     if( newColor == COLOR4D::UNSPECIFIED || oldColor == newColor )
         return;
 
-    currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ] = newColor;
+    currentColors[ colorButton->m_Layer ] = newColor;
 
     wxMemoryDC iconDC;
 
@@ -275,11 +275,11 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
     // Check for color conflicts with background color to give user a chance to bail
     // out before making changes.
 
-    COLOR4D bgcolor = currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ];
+    COLOR4D bgcolor = currentColors[ LAYER_SCHEMATIC_BACKGROUND ];
 
     for( SCH_LAYER_ID clyr = LAYER_WIRE; clyr < SCH_LAYER_ID_END; ++clyr )
     {
-        if( bgcolor == currentColors[ SCH_LAYER_INDEX( clyr ) ] && clyr != LAYER_SCHEMATIC_BACKGROUND )
+        if( bgcolor == currentColors[ clyr ] && clyr != LAYER_SCHEMATIC_BACKGROUND )
         {
             warning = true;
             break;
@@ -300,12 +300,12 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 
     // Update color of background
     GetDrawFrame()->SetDrawBgColor( bgcolor );
-    currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ] = bgcolor;
+    currentColors[ LAYER_SCHEMATIC_BACKGROUND ] = bgcolor;
 
 
     for( SCH_LAYER_ID clyr = LAYER_WIRE; clyr < SCH_LAYER_ID_END; ++clyr )
     {
-        SetLayerColor( currentColors[ SCH_LAYER_INDEX( clyr ) ], clyr );
+        SetLayerColor( currentColors[ clyr ], clyr );
     }
 
     GetDrawFrame()->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
