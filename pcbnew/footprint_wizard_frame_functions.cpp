@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Miguel Angel Ajo Pelayo, miguelangel@nbee.es
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@
 #include <dialogs/dialog_footprint_wizard_list.h>
 #include <base_units.h>
 
+#include <tool/tool_manager.h>
 
 void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -121,6 +122,10 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
         return;
 
     SetCurItem( NULL );
+
+    if( IsGalCanvasActive() )
+        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
 
