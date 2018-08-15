@@ -99,6 +99,11 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
 
     PyObject*   result = CallMethod( aMethod, aArglist );
 
+    if ( result == Py_None ) {
+        Py_DECREF( result );
+        return ret;
+    }
+
     if( result )
     {
 #if PY_MAJOR_VERSION >= 3
@@ -213,6 +218,11 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
     PyObject*   result  = CallMethod( "GetParameterPageName", arglist );
 
     Py_DECREF( arglist );
+
+    if ( result == Py_None ) {
+        Py_DECREF( result );
+        return ret;
+    }
 
     if( result )
     {
