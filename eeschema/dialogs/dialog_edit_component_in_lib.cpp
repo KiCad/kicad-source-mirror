@@ -775,12 +775,19 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
 
         if( !m_delayedErrorMessage.IsEmpty() )
-            DisplayErrorMessage( this, m_delayedErrorMessage );
+        {
+            // We will re-enter this routine when the error dialog is displayed, so make
+            // sure we don't keep putting up more dialogs.
+            wxString msg = m_delayedErrorMessage;
+            m_delayedErrorMessage = wxEmptyString;
+
+            // Do not use DisplayErrorMessage(); it screws up window order on Mac
+            DisplayError( nullptr, msg );
+        }
 
         m_delayedFocusGrid->EnableCellEditControl( true );
         m_delayedFocusGrid->ShowCellEditControl();
 
-        m_delayedErrorMessage = wxEmptyString;
         m_delayedFocusGrid = nullptr;
     }
 }

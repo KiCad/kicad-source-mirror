@@ -546,8 +546,8 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& 
 
 bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
 {
-    // Commit any pending edits
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     int row_max = m_grid->GetNumberRows() - 1;
 

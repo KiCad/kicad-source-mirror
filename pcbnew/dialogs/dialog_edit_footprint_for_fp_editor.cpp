@@ -336,6 +336,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
             m_delayedFocusGrid = m_modelsGrid;
             m_delayedFocusRow = aEvent.GetRow();
             m_delayedFocusColumn = aEvent.GetCol();
+            aEvent.Veto();
         }
 
         // if the user has specified an alias in the name then prepend ':'
