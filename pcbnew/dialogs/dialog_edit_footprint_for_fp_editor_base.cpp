@@ -151,11 +151,14 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	
 	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
 	
-	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_sizerAP->Add( m_sizerAllow90, 1, wxEXPAND|wxTOP, 5 );
+	m_sizerAP->Add( m_sizerAllow90, 0, wxEXPAND, 5 );
+	
+	
+	m_sizerAP->Add( 0, 8, 1, wxEXPAND, 5 );
 	
 	m_sizerAllow180 = new wxBoxSizer( wxVERTICAL );
 	
@@ -163,13 +166,13 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_allow180Label->Wrap( -1 );
 	m_allow180Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	m_sizerAllow180->Add( m_allow180Label, 0, wxTOP, 5 );
+	m_sizerAllow180->Add( m_allow180Label, 0, 0, 5 );
 	
-	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_sizerAP->Add( m_sizerAllow180, 1, wxEXPAND|wxTOP, 5 );
+	m_sizerAP->Add( m_sizerAllow180, 0, wxEXPAND, 5 );
 	
 	
 	bSizerProperties->Add( m_sizerAP, 1, wxEXPAND|wxTOP, 5 );

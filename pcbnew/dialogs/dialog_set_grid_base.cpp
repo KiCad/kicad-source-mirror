@@ -54,7 +54,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	sbLeftSizer->Add( fgSizerGridOrigin, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bUpperSizer->Add( sbLeftSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bUpperSizer->Add( sbLeftSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbUserGridSizer;
 	sbUserGridSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Defined Grid") ), wxVERTICAL );
@@ -127,13 +127,13 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	sbFastSwitchSizer->Add( fgSizer3, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
-	bSizerMain->Add( sbFastSwitchSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( sbFastSwitchSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset Grid Origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonSizer->Add( m_buttonReset, 0, wxALL|wxEXPAND, 5 );
+	bButtonSizer->Add( m_buttonReset, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -145,7 +145,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bButtonSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	bButtonSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	bSizerMain->Add( bButtonSizer, 0, wxEXPAND|wxLEFT, 5 );

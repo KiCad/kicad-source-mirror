@@ -94,12 +94,6 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_config->Read( LibFootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
     m_itemsGrid->ShowHideColumns( shownColumns );
 
-#ifdef __WXOSX_MAC__
-    // Knock the margins off on Mac
-    m_sizerAP->GetItem( m_sizerAllow90 )->SetFlag( wxEXPAND );
-    m_sizerAP->GetItem( m_sizerAllow180 )->SetFlag( wxEXPAND );
-#endif
-
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );

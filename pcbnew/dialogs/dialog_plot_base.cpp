@@ -322,7 +322,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 5 );
 	
 	
-	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxBoxSizer* sbSizerMsg;
 	sbSizerMsg = new wxBoxSizer( wxVERTICAL );
@@ -330,7 +330,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_messagesPanel->SetMinSize( wxSize( -300,150 ) );
 	
-	sbSizerMsg->Add( m_messagesPanel, 1, wxEXPAND | wxALL, 5 );
+	sbSizerMsg->Add( m_messagesPanel, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
 	m_MainSizer->Add( sbSizerMsg, 1, wxEXPAND, 5 );

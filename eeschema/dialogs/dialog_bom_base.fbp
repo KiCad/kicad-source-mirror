@@ -14,7 +14,6 @@
         <property name="file">dialog_bom_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_bom_base</property>
         <property name="namespace"></property>
@@ -638,7 +637,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="selected"></property>
                                 <property name="show">1</property>
-                                <property name="size">-1,-1</property>
+                                <property name="size">30,30</property>
                                 <property name="style">wxBU_AUTODRAW</property>
                                 <property name="subclass">; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
@@ -721,7 +720,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_buttonDelPlugin</property>
+                                <property name="name">m_buttonEdit</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -731,11 +730,11 @@
                                 <property name="resize">Resizable</property>
                                 <property name="selected"></property>
                                 <property name="show">1</property>
-                                <property name="size">-1,-1</property>
+                                <property name="size">30,30</property>
                                 <property name="style">wxBU_AUTODRAW</property>
                                 <property name="subclass">; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Remove the current plugin from list</property>
+                                <property name="tooltip">Edit the plugin file in the text editor</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
@@ -743,7 +742,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnRemovePlugin</event>
+                                <event name="OnButtonClick">OnEditPlugin</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -824,7 +823,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_buttonEdit</property>
+                                <property name="name">m_buttonDelPlugin</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -834,11 +833,11 @@
                                 <property name="resize">Resizable</property>
                                 <property name="selected"></property>
                                 <property name="show">1</property>
-                                <property name="size">-1,-1</property>
+                                <property name="size">30,30</property>
                                 <property name="style">wxBU_AUTODRAW</property>
                                 <property name="subclass">; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Edit the plugin file in the text editor</property>
+                                <property name="tooltip">Remove the current plugin from list</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
@@ -846,7 +845,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnEditPlugin</event>
+                                <event name="OnButtonClick">OnRemovePlugin</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>

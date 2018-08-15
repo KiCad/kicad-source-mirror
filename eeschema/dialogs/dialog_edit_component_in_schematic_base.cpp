@@ -222,7 +222,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 	
-	bSizer101->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer101->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	mainSizer->Add( bSizer101, 0, wxEXPAND, 5 );

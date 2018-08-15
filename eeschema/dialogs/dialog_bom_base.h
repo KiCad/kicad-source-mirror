@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,8 +52,8 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlName;
 		wxTextCtrl* m_Messages;
 		wxBitmapButton* m_buttonAddPlugin;
-		wxBitmapButton* m_buttonDelPlugin;
 		wxBitmapButton* m_buttonEdit;
+		wxBitmapButton* m_buttonDelPlugin;
 		wxStaticText* m_staticTextCmd;
 		wxTextCtrl* m_textCtrlCommand;
 		wxCheckBox* m_checkBoxShowConsole;
@@ -68,8 +68,8 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		virtual void OnPluginSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNameEdited( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddPlugin( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemovePlugin( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditPlugin( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemovePlugin( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCommandLineEdited( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowConsoleChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }

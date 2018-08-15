@@ -97,12 +97,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_config->Read( FootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
     m_itemsGrid->ShowHideColumns( shownColumns );
 
-#ifdef __WXOSX_MAC__
-    // Knock the margins off on Mac
-    m_sizerAP->GetItem( m_sizerAllow90 )->SetFlag( wxEXPAND );
-    m_sizerAP->GetItem( m_sizerAllow180 )->SetFlag( wxEXPAND );
-#endif
-
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -277,7 +271,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
                              && !m_Orient270->GetValue() && !m_Orient180->GetValue() );
     m_OrientValidator.TransferToWindow();
 
-    m_LayerCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
+    m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
     if( m_footprint->IsLocked() )
         m_AutoPlaceCtrl->SetSelection( 2 );
@@ -689,7 +683,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
 
     // Set component side, that also have effect on the fields positions on board
     bool change_layer = false;
-    if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
+    if( m_BoardSideCtrl->GetSelection() == 0 )     // layer req = COMPONENT
     {
         if( m_footprint->GetLayer() == B_Cu )
             change_layer = true;
@@ -760,7 +754,6 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnDeleteField( wxCommandEvent&  )
 {
     m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
 
-    int rowCount = m_itemsGrid->GetNumberRows();
     int curRow   = m_itemsGrid->GetGridCursorRow();
 
     if( curRow < 0 )

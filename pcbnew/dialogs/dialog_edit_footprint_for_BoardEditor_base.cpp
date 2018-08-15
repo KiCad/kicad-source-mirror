@@ -109,7 +109,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerLeft->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 2, 3, 3, 0 );
+	fgSizerPos = new wxFlexGridSizer( 2, 3, 4, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->AddGrowableRow( 0 );
 	fgSizerPos->AddGrowableRow( 1 );
@@ -142,7 +142,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerLeft->Add( fgSizerPos, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerLeft->Add( 0, 0, 0, wxEXPAND|wxTOP, 3 );
+	bSizerLeft->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	wxStaticBoxSizer* sbOrientationSizer;
 	sbOrientationSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Orientation") ), wxVERTICAL );
@@ -176,13 +176,23 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	sbOrientationSizer->Add( gbSizer1, 1, wxEXPAND, 5 );
 	
 	
-	bSizerLeft->Add( sbOrientationSizer, 1, wxEXPAND|wxALL, 5 );
+	bSizerLeft->Add( sbOrientationSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_LayerCtrlChoices[] = { _("Front"), _("Back") };
-	int m_LayerCtrlNChoices = sizeof( m_LayerCtrlChoices ) / sizeof( wxString );
-	m_LayerCtrl = new wxRadioBox( m_PanelGeneral, wxID_ANY, _("Board Side"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_LayerCtrl->SetSelection( 0 );
-	bSizerLeft->Add( m_LayerCtrl, 0, wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizerBoardSize;
+	bSizerBoardSize = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_BoardSideLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Board side:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BoardSideLabel->Wrap( -1 );
+	bSizerBoardSize->Add( m_BoardSideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_BoardSideCtrlChoices[] = { _("Front"), _("Back") };
+	int m_BoardSideCtrlNChoices = sizeof( m_BoardSideCtrlChoices ) / sizeof( wxString );
+	m_BoardSideCtrl = new wxChoice( m_PanelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardSideCtrlNChoices, m_BoardSideCtrlChoices, 0 );
+	m_BoardSideCtrl->SetSelection( 0 );
+	bSizerBoardSize->Add( m_BoardSideCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	bSizerLeft->Add( bSizerBoardSize, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	bSizerProperties->Add( bSizerLeft, 1, wxEXPAND, 5 );
@@ -206,11 +216,14 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
 	
-	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_sizerAP->Add( m_sizerAllow90, 1, wxEXPAND|wxTOP, 5 );
+	m_sizerAP->Add( m_sizerAllow90, 0, wxEXPAND, 5 );
+	
+	
+	m_sizerAP->Add( 0, 8, 1, wxEXPAND, 5 );
 	
 	m_sizerAllow180 = new wxBoxSizer( wxVERTICAL );
 	
@@ -218,13 +231,13 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_allow180Label->Wrap( -1 );
 	m_allow180Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	m_sizerAllow180->Add( m_allow180Label, 0, wxTOP, 5 );
+	m_sizerAllow180->Add( m_allow180Label, 0, 0, 5 );
 	
-	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_sizerAP->Add( m_sizerAllow180, 1, wxEXPAND|wxTOP, 5 );
+	m_sizerAP->Add( m_sizerAllow180, 0, wxEXPAND, 5 );
 	
 	
 	bSizerMiddle->Add( m_sizerAP, 0, wxEXPAND|wxALL, 5 );
@@ -365,21 +378,21 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	bSizerPanelClearances->Add( sbSizerLocalProperties, 0, wxEXPAND|wxALL, 10 );
 	
-	wxStaticBoxSizer* sbSizer5;
-	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_PanelClearances, wxID_ANY, _("Connection to Copper Zones") ), wxHORIZONTAL );
+	wxStaticBoxSizer* sbSizerZoneConnection;
+	sbSizerZoneConnection = new wxStaticBoxSizer( new wxStaticBox( m_PanelClearances, wxID_ANY, _("Connection to Copper Zones") ), wxHORIZONTAL );
 	
-	m_staticText16 = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Pad connection to zones:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16 = new wxStaticText( sbSizerZoneConnection->GetStaticBox(), wxID_ANY, _("Pad connection to zones:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	sbSizer5->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	sbSizerZoneConnection->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
 	wxString m_ZoneConnectionChoiceChoices[] = { _("Use zone setting"), _("Solid"), _("Thermal relief"), _("None") };
 	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
-	m_ZoneConnectionChoice = new wxChoice( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionChoiceNChoices, m_ZoneConnectionChoiceChoices, 0 );
+	m_ZoneConnectionChoice = new wxChoice( sbSizerZoneConnection->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionChoiceNChoices, m_ZoneConnectionChoiceChoices, 0 );
 	m_ZoneConnectionChoice->SetSelection( 0 );
-	sbSizer5->Add( m_ZoneConnectionChoice, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerZoneConnection->Add( m_ZoneConnectionChoice, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerPanelClearances->Add( sbSizer5, 0, wxALL|wxEXPAND, 10 );
+	bSizerPanelClearances->Add( sbSizerZoneConnection, 0, wxALL|wxEXPAND, 10 );
 	
 	
 	m_PanelClearances->SetSizer( bSizerPanelClearances );
@@ -392,7 +405,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_Panel3D, wxID_ANY, wxEmptyString ), wxVERTICAL );
 	
-	m_modelsGrid = new wxGrid( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
+	m_modelsGrid = new WX_GRID( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 	
 	// Grid
 	m_modelsGrid->CreateGrid( 3, 2 );
@@ -470,8 +483,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	wxBoxSizer* bSizer16;
-	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxFlexGridSizer* fgSizerSymbolRef;
 	fgSizerSymbolRef = new wxFlexGridSizer( 2, 2, 1, 0 );
@@ -482,28 +495,16 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_libraryIDLabel->Wrap( -1 );
 	m_libraryIDLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
 	
 	m_staticLibraryID = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLibraryID->Wrap( -1 );
 	m_staticLibraryID->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
-	fgSizerSymbolRef->Add( m_staticLibraryID, 0, wxTOP, 3 );
-	
-	m_sheetPathLabel = new wxStaticText( this, wxID_ANY, _("Schematic sheet:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sheetPathLabel->Wrap( -1 );
-	m_sheetPathLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	
-	fgSizerSymbolRef->Add( m_sheetPathLabel, 0, wxRIGHT|wxLEFT, 3 );
-	
-	m_staticSheetPath = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticSheetPath->Wrap( -1 );
-	m_staticSheetPath->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	
-	fgSizerSymbolRef->Add( m_staticSheetPath, 0, 0, 3 );
+	fgSizerSymbolRef->Add( m_staticLibraryID, 0, wxBOTTOM, 3 );
 	
 	
-	bSizer16->Add( fgSizerSymbolRef, 1, wxRIGHT|wxLEFT, 10 );
+	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -512,10 +513,10 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 	
-	bSizer16->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
+	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	m_GeneralBoxSizer->Add( bSizer16, 0, wxEXPAND, 5 );
+	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
 	this->SetSizer( m_GeneralBoxSizer );

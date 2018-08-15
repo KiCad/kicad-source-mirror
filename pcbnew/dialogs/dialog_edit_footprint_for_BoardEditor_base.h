@@ -32,10 +32,10 @@ class WX_GRID;
 #include <wx/textctrl.h>
 #include <wx/radiobut.h>
 #include <wx/gbsizer.h>
+#include <wx/choice.h>
 #include <wx/radiobox.h>
 #include <wx/slider.h>
 #include <wx/panel.h>
-#include <wx/choice.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -73,7 +73,8 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxRadioButton* m_Orient180;
 		wxRadioButton* m_OrientOther;
 		wxTextCtrl* m_OrientValueCtrl;
-		wxRadioBox* m_LayerCtrl;
+		wxStaticText* m_BoardSideLabel;
+		wxChoice* m_BoardSideCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticBoxSizer* m_sizerAP;
 		wxBoxSizer* m_sizerAllow90;
@@ -107,7 +108,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxChoice* m_ZoneConnectionChoice;
 		wxPanel* m_Panel3D;
 		wxBoxSizer* bSizerMain3D;
-		wxGrid* m_modelsGrid;
+		WX_GRID* m_modelsGrid;
 		wxBitmapButton* m_buttonAdd;
 		wxBitmapButton* m_buttonBrowse;
 		wxBitmapButton* m_buttonRemove;
@@ -115,8 +116,6 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxBoxSizer* bLowerSizer3D;
 		wxStaticText* m_libraryIDLabel;
 		wxStaticText* m_staticLibraryID;
-		wxStaticText* m_sheetPathLabel;
-		wxStaticText* m_staticSheetPath;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;

@@ -14,7 +14,6 @@
         <property name="file">dialog_global_edit_tracks_and_vias_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_global_edit_tracks_and_vias_base</property>
         <property name="namespace"></property>
@@ -1505,6 +1504,16 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize">OnSizeNetclassGrid</event>
                                 <event name="OnUpdateUI"></event>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxTOP</property>
+                            <property name="proportion">1</property>
+                            <object class="spacer" expanded="1">
+                                <property name="height">0</property>
+                                <property name="permission">protected</property>
+                                <property name="width">0</property>
                             </object>
                         </object>
                     </object>

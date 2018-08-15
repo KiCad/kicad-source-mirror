@@ -41,11 +41,8 @@ void DIALOG_EDIT_LIBRARY_TABLES::InstallPanel( wxPanel* aPanel )
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
 
-    mainSizer->Add( m_contentPanel, 1, wxEXPAND|wxALL, 5 );
+    mainSizer->Add( m_contentPanel, 1, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 5 );
     m_contentPanel->SetMinSize( wxSize( 1000, 600 ) );
-
-    auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    mainSizer->Add( line, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 10 );
 
     auto sdbSizer = new wxStdDialogButtonSizer();
     auto sdbSizerOK = new wxButton( this, wxID_OK );

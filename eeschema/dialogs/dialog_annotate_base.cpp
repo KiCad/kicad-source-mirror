@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -115,10 +115,10 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,120 ) );
 	
-	bupperSizer->Add( m_MessageWindow, 5, wxEXPAND | wxALL, 5 );
+	bupperSizer->Add( m_MessageWindow, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bmainSizer->Add( bupperSizer, 1, wxALL|wxEXPAND, 6 );
+	bmainSizer->Add( bupperSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 6 );
 	
 	wxBoxSizer* m_buttonsSizer;
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -136,7 +136,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonsSizer->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bmainSizer->Add( m_buttonsSizer, 0, wxEXPAND, 5 );
+	bmainSizer->Add( m_buttonsSizer, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bmainSizer );
