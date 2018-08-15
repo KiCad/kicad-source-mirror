@@ -140,6 +140,32 @@ wxString PYTHON_ACTION_PLUGIN::GetDescription()
 }
 
 
+bool PYTHON_ACTION_PLUGIN::GetShowToolbarButton()
+{
+    PyLOCK lock;
+
+    PyObject* result = CallMethod( "GetShowToolbarButton");
+
+    return PyObject_IsTrue(result);
+}
+
+
+wxString PYTHON_ACTION_PLUGIN::GetIconFileName()
+{
+    PyLOCK lock;
+
+    return CallRetStrMethod( "GetIconFileName" );
+}
+
+
+wxString PYTHON_ACTION_PLUGIN::GetPluginPath()
+{
+    PyLOCK lock;
+
+    return CallRetStrMethod( "GetPluginPath" );
+}
+
+
 void PYTHON_ACTION_PLUGIN::Run()
 {
     PyLOCK lock;
@@ -164,217 +190,226 @@ void PYTHON_ACTION_PLUGINS::register_action( PyObject* aPyAction )
 
 void PYTHON_ACTION_PLUGINS::deregister_action( PyObject* aPyAction )
 {
-    // deregister also destroyes the previously created "PYTHON_ACTION_PLUGIN object"
+    // deregister also destroys the previously created "PYTHON_ACTION_PLUGIN object"
     ACTION_PLUGINS::deregister_object( (void*) aPyAction );
 }
 
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 
-void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::OnActionPluginMenu( wxCommandEvent& aEvent )
 {
-    int id = aEvent.GetId();
+    ACTION_PLUGIN* actionPlugin = ACTION_PLUGINS::GetActionByMenu( aEvent.GetId() );
 
-    ACTION_PLUGIN* actionPlugin = ACTION_PLUGINS::GetActionByMenu( id );
+	if( actionPlugin )
+        RunActionPlugin( actionPlugin );
+}
 
-    if( actionPlugin )
+void PCB_EDIT_FRAME::OnActionPluginButton( wxCommandEvent& aEvent )
+{
+	ACTION_PLUGIN* actionPlugin = ACTION_PLUGINS::GetActionByButton( aEvent.GetId() );
+
+	if( actionPlugin )
+        RunActionPlugin( actionPlugin );
+}
+
+void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
+{
+    PICKED_ITEMS_LIST itemsList;
+    BOARD*  currentPcb  = GetBoard();
+    bool    fromEmpty   = false;
+
+    itemsList.m_Status = UR_CHANGED;
+
+    OnModify();
+
+    // Append tracks:
+    for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
     {
-        PICKED_ITEMS_LIST itemsList;
-        BOARD*  currentPcb  = GetBoard();
-        bool    fromEmpty   = false;
+        ITEM_PICKER picker( item, UR_CHANGED );
+        itemsList.PushItem( picker );
+    }
 
-        itemsList.m_Status = UR_CHANGED;
+    // Append modules:
+    for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
+    {
+        ITEM_PICKER picker( item, UR_CHANGED );
+        itemsList.PushItem( picker );
+    }
 
-        OnModify();
+    // Append drawings
+    for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+    {
+        ITEM_PICKER picker( item, UR_CHANGED );
+        itemsList.PushItem( picker );
+    }
 
-        // Append tracks:
-        for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
+    // Append zones outlines
+    for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+    {
+        ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
+                        ii ), UR_CHANGED );
+        itemsList.PushItem( picker );
+    }
+
+    // Append zones segm:
+    for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
+    {
+        ITEM_PICKER picker( item, UR_CHANGED );
+        itemsList.PushItem( picker );
+    }
+
+    if( itemsList.GetCount() > 0 )
+        SaveCopyInUndoList( itemsList, UR_CHANGED, wxPoint( 0.0, 0.0 ) );
+    else
+        fromEmpty = true;
+
+    itemsList.ClearItemsList();
+
+    // Execute plugin itself...
+    ACTION_PLUGINS::SetActionRunning( true );
+    aActionPlugin->Run();
+    ACTION_PLUGINS::SetActionRunning( false );
+
+    currentPcb->m_Status_Pcb = 0;
+
+    // Get back the undo buffer to fix some modifications
+    PICKED_ITEMS_LIST* oldBuffer = NULL;
+
+    if( fromEmpty )
+    {
+        oldBuffer = new PICKED_ITEMS_LIST();
+        oldBuffer->m_Status = UR_NEW;
+    }
+    else
+    {
+        oldBuffer = GetScreen()->PopCommandFromUndoList();
+        wxASSERT( oldBuffer );
+    }
+
+    // Try do discover what was modified
+
+    PICKED_ITEMS_LIST deletedItemsList;
+
+    // Found deleted modules
+    for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
+    {
+        BOARD_ITEM* item = (BOARD_ITEM*) oldBuffer->GetPickedItem( i );
+        ITEM_PICKER picker( item, UR_DELETED );
+
+        wxASSERT( item );
+
+        switch( item->Type() )
         {
-            ITEM_PICKER picker( item, UR_CHANGED );
-            itemsList.PushItem( picker );
+        case PCB_NETINFO_T:
+        case PCB_MARKER_T:
+        case PCB_MODULE_T:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
+        case PCB_DIMENSION_T:
+        case PCB_TARGET_T:
+        case PCB_ZONE_T:
+
+            // If item has a list it's mean that the element is on the board
+            if( item->GetList() == NULL )
+            {
+                deletedItemsList.PushItem( picker );
+            }
+
+            break;
+
+        case PCB_ZONE_AREA_T:
+        {
+            bool zoneFound = false;
+
+            for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+                zoneFound |= currentPcb->GetArea( ii ) == item;
+
+            if( !zoneFound )
+            {
+                deletedItemsList.PushItem( picker );
+            }
+
+            break;
         }
 
-        // Append modules:
-        for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
-        {
-            ITEM_PICKER picker( item, UR_CHANGED );
-            itemsList.PushItem( picker );
+        default:
+            wxString msg;
+            msg.Printf( _( "(PCB_EDIT_FRAME::OnActionPlugin) needs work: "
+                                "BOARD_ITEM type (%d) not handled" ),
+                    item->Type() );
+            wxFAIL_MSG( msg );
+            break;
         }
+    }
 
-        // Append drawings
-        for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+    // Mark deleted elements in undolist
+    for( unsigned int i = 0; i < deletedItemsList.GetCount(); i++ )
+    {
+        oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
+    }
+
+    // Find new modules
+    for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
+    {
+        if( !oldBuffer->ContainsItem( item ) )
         {
-            ITEM_PICKER picker( item, UR_CHANGED );
-            itemsList.PushItem( picker );
+            ITEM_PICKER picker( item, UR_NEW );
+            oldBuffer->PushItem( picker );
         }
+    }
 
-        // Append zones outlines
-        for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+    for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
+    {
+        if( !oldBuffer->ContainsItem( item ) )
+        {
+            ITEM_PICKER picker( item, UR_NEW );
+            oldBuffer->PushItem( picker );
+        }
+    }
+
+    for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+    {
+        if( !oldBuffer->ContainsItem( item ) )
+        {
+            ITEM_PICKER picker( item, UR_NEW );
+            oldBuffer->PushItem( picker );
+        }
+    }
+
+    for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
+    {
+        if( !oldBuffer->ContainsItem( item ) )
+        {
+            ITEM_PICKER picker( item, UR_NEW );
+            oldBuffer->PushItem( picker );
+        }
+    }
+
+    for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+    {
+        if( !oldBuffer->ContainsItem( (EDA_ITEM*) currentPcb->GetArea( ii ) ) )
         {
             ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
-                            ii ), UR_CHANGED );
-            itemsList.PushItem( picker );
+                            ii ), UR_NEW );
+            oldBuffer->PushItem( picker );
         }
-
-        // Append zones segm:
-        for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
-        {
-            ITEM_PICKER picker( item, UR_CHANGED );
-            itemsList.PushItem( picker );
-        }
-
-        if( itemsList.GetCount() > 0 )
-            SaveCopyInUndoList( itemsList, UR_CHANGED, wxPoint( 0.0, 0.0 ) );
-        else
-            fromEmpty = true;
-
-        itemsList.ClearItemsList();
-
-        // Execute plugin himself...
-        ACTION_PLUGINS::SetActionRunning( true );
-        actionPlugin->Run();
-        ACTION_PLUGINS::SetActionRunning( false );
-
-        currentPcb->m_Status_Pcb = 0;
-
-        // Get back the undo buffer to fix some modifications
-        PICKED_ITEMS_LIST* oldBuffer = NULL;
-
-        if( fromEmpty )
-        {
-            oldBuffer = new PICKED_ITEMS_LIST();
-            oldBuffer->m_Status = UR_NEW;
-        }
-        else
-        {
-            oldBuffer = GetScreen()->PopCommandFromUndoList();
-            wxASSERT( oldBuffer );
-        }
-
-        // Try do discover what was modified
-
-        PICKED_ITEMS_LIST deletedItemsList;
-
-        // Found deleted modules
-        for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
-        {
-            BOARD_ITEM* item = (BOARD_ITEM*) oldBuffer->GetPickedItem( i );
-            ITEM_PICKER picker( item, UR_DELETED );
-
-            wxASSERT( item );
-
-            switch( item->Type() )
-            {
-            case PCB_NETINFO_T:
-            case PCB_MARKER_T:
-            case PCB_MODULE_T:
-            case PCB_TRACE_T:
-            case PCB_VIA_T:
-            case PCB_LINE_T:
-            case PCB_TEXT_T:
-            case PCB_DIMENSION_T:
-            case PCB_TARGET_T:
-            case PCB_ZONE_T:
-
-                // If item has a list it's mean that the element is on the board
-                if( item->GetList() == NULL )
-                {
-                    deletedItemsList.PushItem( picker );
-                }
-
-                break;
-
-            case PCB_ZONE_AREA_T:
-            {
-                bool zoneFound = false;
-
-                for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
-                    zoneFound |= currentPcb->GetArea( ii ) == item;
-
-                if( !zoneFound )
-                {
-                    deletedItemsList.PushItem( picker );
-                }
-
-                break;
-            }
-
-            default:
-                wxString msg;
-                msg.Printf( _( "(PCB_EDIT_FRAME::OnActionPlugin) needs work: "
-                                 "BOARD_ITEM type (%d) not handled" ),
-                        item->Type() );
-                wxFAIL_MSG( msg );
-                break;
-            }
-        }
-
-        // Mark deleted elements in undolist
-        for( unsigned int i = 0; i < deletedItemsList.GetCount(); i++ )
-        {
-            oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
-        }
-
-        // Find new modules
-        for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
-        {
-            if( !oldBuffer->ContainsItem( item ) )
-            {
-                ITEM_PICKER picker( item, UR_NEW );
-                oldBuffer->PushItem( picker );
-            }
-        }
-
-        for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
-        {
-            if( !oldBuffer->ContainsItem( item ) )
-            {
-                ITEM_PICKER picker( item, UR_NEW );
-                oldBuffer->PushItem( picker );
-            }
-        }
-
-        for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
-        {
-            if( !oldBuffer->ContainsItem( item ) )
-            {
-                ITEM_PICKER picker( item, UR_NEW );
-                oldBuffer->PushItem( picker );
-            }
-        }
-
-        for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
-        {
-            if( !oldBuffer->ContainsItem( item ) )
-            {
-                ITEM_PICKER picker( item, UR_NEW );
-                oldBuffer->PushItem( picker );
-            }
-        }
-
-        for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
-        {
-            if( !oldBuffer->ContainsItem( (EDA_ITEM*) currentPcb->GetArea( ii ) ) )
-            {
-                ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
-                                ii ), UR_NEW );
-                oldBuffer->PushItem( picker );
-            }
-        }
+    }
 
 
-        GetScreen()->PushCommandToUndoList( oldBuffer );
+    GetScreen()->PushCommandToUndoList( oldBuffer );
 
-        if( IsGalCanvasActive() )
-        {
-            UseGalCanvas( GetGalCanvas() );
-        }
-        else
-        {
-            UpdateUserInterface();
-            GetScreen()->SetModify();
-            Refresh();
-        }
+    if( IsGalCanvasActive() )
+    {
+        UseGalCanvas( GetGalCanvas() );
+    }
+    else
+    {
+        UpdateUserInterface();
+        GetScreen()->SetModify();
+        Refresh();
     }
 }
 
@@ -409,34 +444,143 @@ void PCB_EDIT_FRAME::RebuildActionPluginMenus()
         // Remove menus which are not usable for our current plugin list
         Disconnect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                 (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                PCB_EDIT_FRAME::OnActionPlugin );
+                PCB_EDIT_FRAME::OnActionPluginMenu );
         actionMenu->Delete( item );
     }
 
     for( int ii = 0; ii < ACTION_PLUGINS::GetActionsCount(); ii++ )
     {
         wxMenuItem* item;
+        ACTION_PLUGIN* ap = ACTION_PLUGINS::GetAction( ii );
+        const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap : KiBitmap( hammer_xpm );
 
         if( ii < (int) available_menus.size() )
         {
             item = available_menus[ii];
-            item->SetItemLabel( ACTION_PLUGINS::GetAction( ii )->GetName() );
-            item->SetHelp( ACTION_PLUGINS::GetAction( ii )->GetDescription() );
+            item->SetItemLabel( ap->GetName() );
+            item->SetHelp( ap->GetDescription() );
+
+            // On windows we need to set "unchecked" bitmap
+#if defined(__WXMSW__)
+            item->SetBitmap( bitmap, false );
+#else
+            item->SetBitmap( bitmap );
+#endif
         }
         else
         {
             item = AddMenuItem( actionMenu, wxID_ANY,
-                    ACTION_PLUGINS::GetAction( ii )->GetName(),
-                    ACTION_PLUGINS::GetAction( ii )->GetDescription(),
-                    KiBitmap( hammer_xpm ) );
+                    ap->GetName(),
+                    ap->GetDescription(),
+                    bitmap );
 
             Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                     (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                    PCB_EDIT_FRAME::OnActionPlugin );
+                    PCB_EDIT_FRAME::OnActionPluginMenu );
         }
 
         ACTION_PLUGINS::SetActionMenu( ii, item->GetId() );
     }
+}
+
+
+void PCB_EDIT_FRAME::AddActionPluginTools()
+{
+    bool need_separator = true;
+    const auto& orderedPlugins = GetOrderedActionPlugins();
+
+    for( const auto& ap : orderedPlugins )
+    {
+        if( GetActionPluginButtonVisible( ap->GetPluginPath(), ap->GetShowToolbarButton() ) )
+        {
+
+            if ( need_separator )
+            {
+                KiScaledSeparator( m_mainToolBar, this );
+                need_separator = false;
+            }
+
+            // Add button
+            wxBitmap bitmap;
+
+            if ( ap->iconBitmap.IsOk() )
+                bitmap = KiScaledBitmap( ap->iconBitmap, this );
+            else
+                bitmap = KiScaledBitmap( hammer_xpm, this );
+
+            wxAuiToolBarItem* button = m_mainToolBar->AddTool(
+                    wxID_ANY, wxEmptyString, bitmap, ap->GetName() );
+
+            Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
+                    PCB_EDIT_FRAME::OnActionPluginButton );
+
+            // Link action plugin to button
+            ACTION_PLUGINS::SetActionButton( ap, button->GetId() );
+        }
+    }
+}
+
+
+void PCB_EDIT_FRAME::SetActionPluginSettings( const std::vector< std::pair<wxString, wxString> >& aPluginSettings )
+{
+    m_configSettings.m_pluginSettings = aPluginSettings;
+    ReCreateHToolbar();
+}
+
+
+std::vector< std::pair<wxString, wxString> > PCB_EDIT_FRAME::GetActionPluginSettings()
+{
+    return m_configSettings.m_pluginSettings;
+}
+
+
+std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
+{
+    std::vector<ACTION_PLUGIN*> orderedPlugins;
+    const auto& pluginSettings = GetActionPluginSettings();
+
+    // First add plugins that have entries in settings
+    for( size_t ii = 0; ii < pluginSettings.size(); ii++ )
+    {
+        for( int jj = 0; jj < ACTION_PLUGINS::GetActionsCount(); jj++ )
+        {
+            if( ACTION_PLUGINS::GetAction( jj )->GetPluginPath() == pluginSettings[ii].first )
+                orderedPlugins.push_back( ACTION_PLUGINS::GetAction( jj ) );
+        }
+    }
+
+    // Now append new plugins that have not been configured yet
+    for( int ii = 0; ii < ACTION_PLUGINS::GetActionsCount(); ii++ )
+    {
+        bool found = false;
+
+        for( size_t jj = 0; jj < orderedPlugins.size(); jj++ )
+        {
+            if( ACTION_PLUGINS::GetAction( ii ) == orderedPlugins[jj] )
+                found = true;
+        }
+
+        if ( !found )
+            orderedPlugins.push_back( ACTION_PLUGINS::GetAction( ii ) );
+    }
+
+    return orderedPlugins;
+}
+
+
+bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault )
+{
+    auto& settings = m_configSettings.m_pluginSettings;
+
+    for(const auto& entry : settings )
+    {
+        if (entry.first == aPluginPath )
+            return entry.second == wxT( "Visible" );
+    }
+
+    // Plugin is not in settings, return default.
+    return  aPluginDefault;
 }
 
 

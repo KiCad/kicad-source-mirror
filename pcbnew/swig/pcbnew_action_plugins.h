@@ -47,6 +47,9 @@ public:
     wxString    GetCategoryName() override;
     wxString    GetName() override;
     wxString    GetDescription() override;
+    bool        GetShowToolbarButton() override;
+    wxString    GetIconFileName() override;
+    wxString    GetPluginPath() override;
     void        Run() override;
     void*       GetObject() override;
 };

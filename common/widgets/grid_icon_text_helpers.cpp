@@ -27,7 +27,7 @@
 #include <wx/dc.h>
 
 
-//---- Grid helpers: custom wxGridCellRenderer ------------------------------------------
+//---- Grid helpers: custom wxGridCellRenderer that renders icon and a label ------------
 
 
 GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAP_DEF>& icons,
@@ -68,6 +68,45 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     aGrid.DrawTextRectangle( aDC, value, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
 
+//---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
+//
+// Note: this renderer is supposed to be used with read only cells
+
+GRID_CELL_ICON_RENDERER::GRID_CELL_ICON_RENDERER(const wxBitmap& icon) : m_icon( icon )
+{
+}
+
+
+void GRID_CELL_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
+                                    const wxRect& aRect, int aRow, int aCol, bool isSelected )
+{
+    wxRect rect = aRect;
+    rect.Inflate( -1 );
+
+    // erase background
+    wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
+
+    // Draw icon
+    if( m_icon.IsOk() )
+    {
+        aDC.DrawBitmap( m_icon,
+                        rect.GetLeft() + ( rect.GetWidth() - m_icon.GetWidth() ) / 2,
+                        rect.GetTop() + ( rect.GetHeight() - m_icon.GetHeight() ) / 2,
+                        true );
+    }
+}
+
+
+wxSize GRID_CELL_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, int row, int col )
+{
+    return wxSize( m_icon.GetWidth() + 6, m_icon.GetHeight() + 4 );
+}
+
+
+wxGridCellRenderer* GRID_CELL_ICON_RENDERER::Clone() const
+{
+    return new GRID_CELL_ICON_RENDERER( m_icon );
+}
 
 
 //---- Grid helpers: custom wxGridCellEditor ------------------------------------------

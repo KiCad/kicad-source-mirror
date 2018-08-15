@@ -144,6 +144,25 @@ wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow )
 }
 
 
+wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, EDA_BASE_FRAME* aWindow )
+{
+    const int scale = get_scale_factor( aWindow );
+
+    if( scale == 4)
+    {
+        return wxBitmap( aBitmap );
+    }
+    else
+    {
+        wxImage image = aBitmap.ConvertToImage();
+        image.Rescale( scale * image.GetWidth() / 4, scale * image.GetHeight() / 4,
+            wxIMAGE_QUALITY_BILINEAR );
+
+        return wxBitmap( image );
+    }
+}
+
+
 void KiScaledSeparator( wxAuiToolBar* aToolbar, EDA_BASE_FRAME* aWindow )
 {
     const int scale = get_scale_factor( aWindow );

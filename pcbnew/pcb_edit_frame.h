@@ -25,13 +25,14 @@
 #define  WXPCB_STRUCT_H_
 
 #include <unordered_map>
+#include <map>
 #include "pcb_base_edit_frame.h"
 #include "config_params.h"
 #include "undo_redo_container.h"
 #include "zones.h"
 
-
 /*  Forward declarations of classes. */
+class ACTION_PLUGIN;
 class PCB_SCREEN;
 class BOARD;
 class BOARD_COMMIT;
@@ -117,16 +118,36 @@ protected:
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
      * Function RebuildActionPluginMenus
-     * Fill action menu with all registred action plugins
+     * Fill action menu with all registered action plugins
      */
     void RebuildActionPluginMenus();
 
     /**
-     * Function OnActionPlugin
+     * Function AddActionPluginTools
+     * Append action plugin buttons to main toolbar
+     */
+    void AddActionPluginTools();
+
+	/**
+	 * Function RunActionPlugin
+	 * Executes action plugin's Run() method and updates undo buffer
+	 * @param aActionPlugin action plugin
+	 */
+	void RunActionPlugin( ACTION_PLUGIN* aActionPlugin );
+
+    /**
+     * Function OnActionPluginMenu
      * Launched by the menu when an action is called
      * @param aEvent sent by wx
      */
-    void OnActionPlugin( wxCommandEvent& aEvent);
+    void OnActionPluginMenu( wxCommandEvent& aEvent);
+
+    /**
+     * Function OnActionPluginButton
+     * Launched by the button when an action is called
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginButton( wxCommandEvent& aEvent );
 
     /**
      * Function OnActionPluginRefresh
@@ -378,6 +399,36 @@ public:
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+
+    /**
+     * Function SetActionPluginSettings
+     * Set a set of plugins that have visible buttons on toolbar
+     * Plugins are identified by their module path
+     */
+    void SetActionPluginSettings( const std::vector< std::pair<wxString, wxString> >& aPluginsWithButtons );
+
+    /**
+     * Function GetActionPluginSettings
+     * Get a set of plugins that have visible buttons on toolbar
+     */
+    std::vector< std::pair<wxString, wxString> > GetActionPluginSettings();
+
+    /**
+     * Function GetActionPluginButtonVisible
+     * Returns true if button visibility action plugin setting was set to true
+     * or it is unset and plugin defaults to true.
+     */
+    bool GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault );
+
+    /**
+     * Function GetOrderedActionPlugins
+     * Returns ordered list of plugins in sequence in which they should appear on toolbar or in settings
+     */
+    std::vector<ACTION_PLUGIN*> GetOrderedActionPlugins();
+
+#endif
 
     /**
      * Function GetProjectFileParameters

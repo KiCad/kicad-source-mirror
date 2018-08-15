@@ -34,7 +34,7 @@
 class wxGrid;
 
 
-//---- Grid helpers: custom wxGridCellRenderer ------------------------------------------
+//---- Grid helpers: custom wxGridCellRenderer that renders icon and a label ------------
 
 class GRID_CELL_ICON_TEXT_RENDERER : public wxGridCellStringRenderer
 {
@@ -49,6 +49,23 @@ private:
     const wxArrayString&           m_names;
 };
 
+//---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
+//
+// Note: use with read only cells
+
+class GRID_CELL_ICON_RENDERER : public wxGridCellRenderer
+{
+public:
+    GRID_CELL_ICON_RENDERER( const wxBitmap& icon );
+
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
+               const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
+    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
+    wxGridCellRenderer* Clone() const override;
+
+private:
+    const wxBitmap& m_icon;
+};
 
 //---- Grid helpers: custom wxGridCellEditor ------------------------------------------
 //

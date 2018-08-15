@@ -73,9 +73,37 @@ void ACTION_PLUGINS::SetActionMenu( int aIndex, int idMenu )
 }
 
 
-int ACTION_PLUGINS::GetActionMenu( int aIndex )
+ACTION_PLUGIN* ACTION_PLUGINS::GetActionByButton( int aButton )
 {
-    return m_actionsList[aIndex]->m_actionMenuId;
+    int max = GetActionsCount();
+
+    for( int i = 0; i < max; i++ )
+    {
+        if( m_actionsList[i]->m_actionButtonId == aButton )
+            return m_actionsList[i];
+    }
+
+    return NULL;
+}
+
+
+void ACTION_PLUGINS::SetActionButton( ACTION_PLUGIN* aAction, int idButton )
+{
+    aAction->m_actionButtonId = idButton;
+}
+
+
+ACTION_PLUGIN* ACTION_PLUGINS::GetActionByPath(const wxString& aPath)
+{
+    for( int i = 0; i < GetActionsCount() ; i++ )
+    {
+        if( m_actionsList[i]->GetPluginPath() == aPath)
+        {
+            return m_actionsList[i];
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -124,6 +152,20 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
             delete action;
 
             break;
+        }
+    }
+
+    // Load icon if supplied
+    if (!aAction->GetIconFileName().IsEmpty())
+    {
+        {
+            wxLogNull eat_errors;
+            aAction->iconBitmap.LoadFile( aAction->GetIconFileName() , wxBITMAP_TYPE_PNG );
+        }
+
+        if ( !aAction->iconBitmap.IsOk() )
+        {
+            wxLogVerbose( "Failed to load icon " + aAction->GetIconFileName() + " for action plugin " );
         }
     }
 

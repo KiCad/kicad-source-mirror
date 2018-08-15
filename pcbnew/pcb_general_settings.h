@@ -25,6 +25,7 @@
 #define __PCBNEW_GENERAL_SETTINGS_H
 
 #include <colors_design_settings.h>
+#include <vector>
 
 class wxConfigBase;
 class wxString;
@@ -64,6 +65,10 @@ public:
 
     MAGNETIC_PAD_OPTION_VALUES  m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
     MAGNETIC_PAD_OPTION_VALUES  m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    std::vector< std::pair<wxString, wxString> > m_pluginSettings;  // Settings for action plugins
+#endif
 
 protected:
     const FRAME_T m_frameType;

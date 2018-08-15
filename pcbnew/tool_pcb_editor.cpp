@@ -321,6 +321,10 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
                                 KiScaledBitmap( py_script_xpm, this ),
                                 _( "Show/Hide the Python Scripting console" ), wxITEM_CHECK );
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+        AddActionPluginTools();
+#endif
     }
 #endif
 

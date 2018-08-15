@@ -73,6 +73,14 @@ wxBitmap KiBitmap( BITMAP_DEF aBitmap );
  */
 wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow );
 
+/**
+ * Function KiScaledBitmap
+ * Overload of the above function that takes another wxBitmap as a parameter
+ *
+ * @param aBitmap bitmap definition
+ * @param aWindow target window for scaling context
+ */
+wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, EDA_BASE_FRAME* aWindow );
 
 /**
  * Function KiScaledSeparator

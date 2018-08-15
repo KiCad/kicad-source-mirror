@@ -45,6 +45,7 @@
 #include <panel_hotkeys_editor.h>
 #include <panel_pcbnew_settings.h>
 #include <panel_pcbnew_display_options.h>
+#include <panel_pcbnew_action_plugins.h>
 #include <fp_lib_table.h>
 #include <worksheet_shape_builder.h>
 #include <class_board.h>
@@ -97,6 +98,9 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 
     book->AddPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Pcbnew" ) );
     book->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
+#endif
 }
 
 

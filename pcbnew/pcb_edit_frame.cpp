@@ -1243,6 +1243,8 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
         // Action plugins can be modified, therefore the plugins menu
         // must be updated:
         RebuildActionPluginMenus();
+        // Recreate top toolbar to add action plugin buttons
+        ReCreateHToolbar();
     #endif
 #endif
 }

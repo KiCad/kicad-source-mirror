@@ -44,9 +44,16 @@ public:
     // m_actionMenuId set to 0 means the corresponding menuitem to call this
     // action is not yet created
     int m_actionMenuId;
+    // Same for button id
+    int m_actionButtonId;
+    // Icon for the action button and menu entry
+    wxBitmap iconBitmap;
+    // If show_on_toolbar is true a button will be added to top toolbar
+    bool show_on_toolbar;
 
 public:
-    ACTION_PLUGIN() : m_actionMenuId( 0 ) {}
+    ACTION_PLUGIN() : m_actionMenuId( 0 ), m_actionButtonId( 0 ),
+                      show_on_toolbar( false ) {}
     virtual ~ACTION_PLUGIN();
 
     /**
@@ -67,6 +74,24 @@ public:
      * @return a description of the action plugin
      */
     virtual wxString GetDescription() = 0;
+
+    /**
+     * Function GetShowToolbarButton
+     * @return true if button should be shown on top toolbar
+     */
+    virtual bool GetShowToolbarButton() = 0;
+
+    /**
+     * Function GetIconFileName
+     * @return a path to icon for the action plugin button
+     */
+    virtual wxString GetIconFileName() = 0;
+
+    /**
+     * Function GetPluginPath
+     * @return a path this plugin was loaded from
+     */
+    virtual wxString GetPluginPath() = 0;
 
     /**
      * Function GetObject
@@ -137,16 +162,6 @@ public:
      */
     static void SetActionMenu( int aIndex, int idMenu );
 
-
-    /**
-     * Function GetActionMenu
-     * Provide menu id for a plugin index
-     * @param aIndex is the action index
-     * @return associated menuitem id
-     */
-    static int GetActionMenu( int aIndex );
-
-
     /**
      * Function GetActionByMenu
      * find action plugin associated to a menu id
@@ -155,6 +170,29 @@ public:
      */
     static ACTION_PLUGIN* GetActionByMenu( int aMenu );
 
+    /**
+     * Function SetActionButton
+     * Associate a button id to an action plugin
+     * @param aAction is the action
+     * @param idButton is the associated menuitem id
+     */
+    static void SetActionButton( ACTION_PLUGIN* aAction, int idButton );
+
+    /**
+     * Function GetActionByButton
+     * find action plugin associated to a button id
+     * @param aButton is the button id (defined with SetActionButton)
+     * @return the associated ACTION_PLUGIN (or null if not found)
+     */
+    static ACTION_PLUGIN* GetActionByButton( int aButton );
+
+    /**
+     * Function GetActionByPath
+     * find action plugin by module path
+     * @param aPath the path of plugin
+     * @return the corresponding ACTION_PLUGIN (or null if not found)
+     */
+    static ACTION_PLUGIN* GetActionByPath( const wxString& aPath );
 
     /**
      * Function GetAction

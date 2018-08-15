@@ -22,6 +22,7 @@
  */
 
 #include <pcb_general_settings.h>
+#include <wx/tokenzr.h>
 
 PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
     : m_frameType( aFrameType ), m_colorsSettings( aFrameType )
@@ -54,6 +55,32 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
 void PCB_GENERAL_SETTINGS::Load( wxConfigBase* aCfg )
 {
     m_colorsSettings.Load( aCfg );
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+
+    m_pluginSettings.clear();
+
+    wxString pluginSettings = aCfg->Read( "ActionPluginButtons" );
+
+    wxStringTokenizer pluginSettingsTokenizer = wxStringTokenizer( pluginSettings, ";" );
+
+    while( pluginSettingsTokenizer.HasMoreTokens() )
+    {
+        wxString plugin = pluginSettingsTokenizer.GetNextToken();
+        wxStringTokenizer pluginTokenizer = wxStringTokenizer( plugin, "=" );
+
+        if( pluginTokenizer.CountTokens() != 2 )
+        {
+            // Bad config
+            continue;
+        }
+
+        plugin = pluginTokenizer.GetNextToken();
+        m_pluginSettings.push_back( std::make_pair( plugin, pluginTokenizer.GetNextToken() ) );
+    }
+
+#endif
+
     SETTINGS::Load( aCfg );
 }
 
@@ -61,6 +88,24 @@ void PCB_GENERAL_SETTINGS::Load( wxConfigBase* aCfg )
 void PCB_GENERAL_SETTINGS::Save( wxConfigBase* aCfg )
 {
     m_colorsSettings.Save( aCfg );
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+
+    wxString pluginSettings;
+
+    for( auto const& entry : m_pluginSettings )
+    {
+        if( !pluginSettings.IsEmpty() )
+        {
+            pluginSettings = pluginSettings + wxT( ";" );
+        }
+        pluginSettings = pluginSettings + entry.first + wxT( "=" ) + entry.second;
+    }
+
+    aCfg->Write( "ActionPluginButtons" , pluginSettings );
+
+#endif
+
     SETTINGS::Save( aCfg );
 }
 
