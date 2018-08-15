@@ -20,7 +20,7 @@ import FootprintWizardBase
 
 # Additional import for QRCode
 # see https://github.com/kazuhikoarase/qrcode-generator/blob/master/python/qrcode.py
-import qrcode
+import kicad_qrcode as qrcode  # TODO: local qrcode package is prefered, so we renamed it
 
 class QRCodeWizard(FootprintWizardBase.FootprintWizard):
     GetName = lambda self: '2D Barcode QRCode'
