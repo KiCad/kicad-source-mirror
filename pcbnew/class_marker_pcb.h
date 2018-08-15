@@ -73,6 +73,11 @@ public:
 
     ~MARKER_PCB();
 
+    /** A scaling factor to create the marker symbol
+    */
+    static int MarkerScale() {return Millimeter2iu( 0.1 ); }
+
+
     void Move(const wxPoint& aMoveVector) override
     {
         m_Pos += aMoveVector;
@@ -107,7 +112,8 @@ public:
     const BOX2I ViewBBox() const override
     {
         // The following is based on the PCB_PAINTER::draw( const MARKER_PCB* )
-        return BOX2I( m_Pos, VECTOR2I( 1300000, 1300000 ) );
+        // the value 13 comes from the max relative coordinate of the shape)
+        return BOX2I( m_Pos, VECTOR2I( 13*MarkerScale(), 13*MarkerScale() ) );
     }
 
     const EDA_RECT GetBoundingBox() const override;

@@ -575,7 +575,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::checkAliasName( const wxString& aName )
     if( aName.IsEmpty() )
         return false;
 
-    for( size_t i = 0; i < m_aliasListBox->GetCount(); ++i )
+    for( int i = 0; i < (int)m_aliasListBox->GetCount(); ++i )
     {
         if( i == m_aliasListBox->GetSelection() )
             continue;

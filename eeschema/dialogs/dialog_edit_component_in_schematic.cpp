@@ -401,7 +401,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
     m_libraryNameTextCtrl->SetValue( id.Format() );
 
     // Check for missing field names.
-    for( size_t i = MANDATORY_FIELDS;  i < (int) m_fields->size(); ++i )
+    for( size_t i = MANDATORY_FIELDS;  i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
         wxString   fieldName = field.GetName( false );
