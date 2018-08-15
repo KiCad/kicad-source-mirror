@@ -14,6 +14,7 @@
 #  MA 02110-1301, USA.
 
 from __future__ import division
+import functools
 import pcbnew as B
 import FootprintWizardBase
 
@@ -41,12 +42,12 @@ class Uss39:
         self.Text = self.makePrintable(text)
 
      __str__ = lambda self: self.Text
-     makePrintable = lambda self, text: ''.join((c for c in text.upper() if ptd.has_key(c)))
+     makePrintable = lambda self, text: ''.join((c for c in text.upper() if c in ptd))
 
      def getBarCodePattern(self, text = None):
         text = text if not(text is None) else self.Text
         # Reformated text with start and end characters
-        return reduce(lambda a1, a2: a1 + [0] + a2, [map(int, ptd[c]) for c in ("*%s*" % self.makePrintable(text))])
+        return functools.reduce(lambda a1, a2: list(a1) + [0] + list(a2), [map(int, ptd[c]) for c in ("*%s*" % self.makePrintable(text))])
 
 class Uss39Wizard(FootprintWizardBase.FootprintWizard):
     GetName = lambda self: 'BARCODE USS-39'
