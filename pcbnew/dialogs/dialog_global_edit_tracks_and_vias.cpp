@@ -183,12 +183,23 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
     m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia drill" ) );
 
     NETCLASSES& netclasses = m_brd->GetDesignSettings().m_NetClasses;
-    m_netclassGrid->AppendRows( netclasses.GetCount() );
+    m_netclassGrid->AppendRows( netclasses.GetCount() + 1 );
+
+    NETCLASSPTR netclass = m_brd->GetDesignSettings().GetDefault();
     int row = 1;
+
+    m_netclassGrid->SetCellValue( row, GRID_NAME, netclass->GetName() );
+    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_TRACKSIZE, netclass->GetTrackWidth() );
+    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIASIZE, netclass->GetViaDiameter() );
+    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIADRILL, netclass->GetViaDrill() );
+    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIASIZE, netclass->GetuViaDiameter() );
+    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIADRILL, netclass->GetuViaDrill() );
+
+    row++;
 
     for( NETCLASSES::const_iterator nc = netclasses.begin(); nc != netclasses.end(); ++nc, ++row )
     {
-        NETCLASSPTR netclass = nc->second;
+        netclass = nc->second;
         m_netclassGrid->SetCellValue( row, GRID_NAME, netclass->GetName() );
         SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_TRACKSIZE, netclass->GetTrackWidth() );
         SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIASIZE, netclass->GetViaDiameter() );
