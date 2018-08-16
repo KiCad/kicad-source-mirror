@@ -42,6 +42,16 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
 {
     m_useCopyBuffer = GLEW_ARB_copy_buffer;
 
+    wxString vendor( glGetString(GL_VENDOR) );
+    
+    // workaround for intel GPU drivers: diable glCopyBuffer, causes crashes/freezes on certain driver versions
+    if( vendor.Contains ( "Intel ") )
+    {
+        wxLogDebug("Disabling glCopyBuffer() on intel GPU\n");
+        m_useCopyBuffer = false;
+    }
+
+    
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     glBufferData( GL_ARRAY_BUFFER, m_currentSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
