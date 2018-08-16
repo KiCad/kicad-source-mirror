@@ -161,7 +161,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
 
     if( m_arbitraryColors )
     {
-        COLOR4D_PICKER_DLG dialog( this, m_color, true );
+        COLOR4D_PICKER_DLG dialog( ::wxGetTopLevelParent( this ), m_color, true );
 
         if( dialog.ShowModal() == wxID_OK )
             newColor = dialog.GetColor();

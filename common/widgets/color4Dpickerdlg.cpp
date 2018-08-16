@@ -28,14 +28,13 @@ COLOR4D_PICKER_DLG::COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurr
         m_newColor4D.a = 1.0;
     }
 
-    m_notebook->SetSelection( m_ActivePage );
+    if( m_ActivePage >= 0 )
+        m_notebook->SetSelection( (unsigned) m_ActivePage );
 
     // Build the defined colors panel:
     initDefinedColors();
 
     m_sdbSizerOK->SetDefault();
-
-    FinishDialogSettings();
 }
 
 int COLOR4D_PICKER_DLG::m_ActivePage = 0;    // the active notebook page, stored during a session
@@ -115,9 +114,11 @@ bool COLOR4D_PICKER_DLG::TransferDataToWindow()
     SetEditVals( ALL_CHANGED );
     drawAll();
 
-    // Now the bitmaps are built, fix the minsizes:
-    GetSizer()->SetSizeHints( this );
+    m_notebook->GetPage( 0 )->Layout();
+    m_notebook->GetPage( 1 )->Layout();
 
+    FinishDialogSettings();
+    
     return true;
 }
 
