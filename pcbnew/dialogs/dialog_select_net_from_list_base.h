@@ -22,7 +22,6 @@
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/dataview.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,7 +40,6 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlFilter;
 		wxCheckBox* m_cbShowZeroPad;
 		wxDataViewListCtrl* m_netsList;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
