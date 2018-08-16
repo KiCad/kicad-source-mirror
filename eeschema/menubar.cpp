@@ -143,7 +143,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
     text = AddHotkeyName( _( "&Leave Sheet" ), g_Schematic_Hokeys_Descr, HK_LEAVE_SHEET );
     AddMenuItem( aParentMenu,
                  ID_POPUP_SCH_LEAVE_SHEET, text,
-                 _( "Leave Sheet" ),
+                 _( "Return to parent schematic sheet" ),
                  KiBitmap( leave_sheet_xpm ) );
 
     aParentMenu->AppendSeparator();

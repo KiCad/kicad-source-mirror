@@ -249,7 +249,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged()
 
     if( GetMenuBar() )
     {
-        // For icons in menus & icon scaling
+        // For icons in menus, icon scaling & hotkeys
         ReCreateMenuBar();
         GetMenuBar()->Refresh();
     }
