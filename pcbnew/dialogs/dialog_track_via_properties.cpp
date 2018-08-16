@@ -255,12 +255,24 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
+        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
+
+        int widthSelection = wxNOT_FOUND;
+
         for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
             wxString msg = StringFromValue( m_units, width, false, true );
-            m_TrackWidthCtrl->Append( msg );
+            m_DesignRuleWidthsCtrl->Append( msg );
+
+            if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
+                widthSelection = ii;
         }
+
+        m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
+
+        m_DesignRuleWidthsCtrl->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onWidthSelect ), NULL, this );
+        m_TrackWidthCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onWidthEdit ), NULL, this );
 
         SetInitialFocus( m_TrackWidthCtrl );
     }
@@ -468,7 +480,23 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTrackNetclassCheck( wxCommandEvent& aEvent )
 {
     bool enableNC = aEvent.IsChecked();
 
+    m_DesignRuleWidths->Enable( !enableNC );
+    m_DesignRuleWidthsCtrl->Enable( !enableNC );
+    m_DesignRuleWidthsUnits->Enable( !enableNC );
+
     m_trackWidth.Enable( !enableNC );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onWidthSelect( wxCommandEvent& aEvent )
+{
+    m_TrackWidthCtrl->ChangeValue( m_DesignRuleWidthsCtrl->GetStringSelection() );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onWidthEdit( wxCommandEvent& aEvent )
+{
+    m_DesignRuleWidthsCtrl->SetSelection( wxNOT_FOUND );
 }
 
 

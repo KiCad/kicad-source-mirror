@@ -26,8 +26,8 @@ class WIDGET_NET_SELECTOR;
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
-#include <wx/bmpcbox.h>
 #include <wx/choice.h>
+#include <wx/bmpcbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -60,8 +60,11 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackEndYLabel;
 		wxTextCtrl* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
+		wxStaticText* m_DesignRuleWidths;
+		wxChoice* m_DesignRuleWidthsCtrl;
+		wxStaticText* m_DesignRuleWidthsUnits;
 		wxStaticText* m_TrackWidthLabel;
-		wxComboBox* m_TrackWidthCtrl;
+		wxTextCtrl* m_TrackWidthCtrl;
 		wxStaticText* m_TrackWidthUnit;
 		wxCheckBox* m_trackNetclass;
 		wxStaticText* m_TrackLayerLabel;
@@ -94,7 +97,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_StdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTrackNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		

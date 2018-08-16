@@ -42,6 +42,8 @@ public:
 
 private:
     void onTrackNetclassCheck( wxCommandEvent& aEvent ) override;
+    void onWidthSelect( wxCommandEvent& aEvent );
+    void onWidthEdit( wxCommandEvent& aEvent );
     void onViaNetclassCheck( wxCommandEvent& aEvent ) override;
     void onViaSelect( wxCommandEvent& aEvent );
     void onViaEdit( wxCommandEvent& aEvent );
