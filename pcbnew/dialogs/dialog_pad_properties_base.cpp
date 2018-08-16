@@ -146,10 +146,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerShapeType->Add( m_PadOrientText, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
 	
 	m_orientation = new wxComboBox( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_orientation->Append( _("0") );
-	m_orientation->Append( _("90") );
-	m_orientation->Append( _("-90") );
-	m_orientation->Append( _("180") );
+	m_orientation->Append( _("0.0") );
+	m_orientation->Append( _("90.0") );
+	m_orientation->Append( _("-90.0") );
+	m_orientation->Append( _("180.0") );
 	fgSizerShapeType->Add( m_orientation, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText491 = new wxStaticText( m_panelGeneral, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );

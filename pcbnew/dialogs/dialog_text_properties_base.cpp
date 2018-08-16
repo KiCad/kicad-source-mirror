@@ -148,10 +148,10 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_OrientLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_OrientCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_OrientCtrl->Append( _("0") );
-	m_OrientCtrl->Append( _("90") );
-	m_OrientCtrl->Append( _("-90") );
-	m_OrientCtrl->Append( _("180") );
+	m_OrientCtrl->Append( _("0.0") );
+	m_OrientCtrl->Append( _("90.0") );
+	m_OrientCtrl->Append( _("-90.0") );
+	m_OrientCtrl->Append( _("180.0") );
 	fgSizerSetup->Add( m_OrientCtrl, 0, wxEXPAND, 5 );
 	
 	m_PositionXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
