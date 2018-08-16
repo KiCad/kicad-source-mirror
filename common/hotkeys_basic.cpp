@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, j-p.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,6 +94,7 @@ struct hotkey_name_descr
  *        "Space","Ctrl+Space","Alt+Space" or
  *      "Alt+A","Ctrl+F1", ...
  */
+#define KEY_NON_FOUND -1
 static struct hotkey_name_descr hotkeyNameList[] =
 {
     { wxT( "F1" ),           WXK_F1                                                   },
@@ -112,7 +113,7 @@ static struct hotkey_name_descr hotkeyNameList[] =
     { wxT( "Esc" ),          WXK_ESCAPE                                               },
     { wxT( "Del" ),          WXK_DELETE                                               },
     { wxT( "Tab" ),          WXK_TAB                                                  },
-    { wxT( "BkSp" ),         WXK_BACK                                                 },
+    { wxT( "Back" ),         WXK_BACK                                                 },
     { wxT( "Ins" ),          WXK_INSERT                                               },
 
     { wxT( "Home" ),         WXK_HOME                                                 },
@@ -129,8 +130,10 @@ static struct hotkey_name_descr hotkeyNameList[] =
 
     { wxT( "Space" ),        WXK_SPACE                                                },
 
+    { wxT( "<unassigned>" ), 0                                                        },
+
     // Do not change this line: end of list
-    { wxT( "" ),             0                                                        }
+    { wxT( "" ),             KEY_NON_FOUND                                            }
 };
 
 // name of modifier keys.
@@ -169,9 +172,6 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     bool     found = false;
 
     // Assume keycode of 0 is "unassigned"
-    if( aKeycode == 0 )
-        return wxT( "<unassigned>");
-
     if( (aKeycode & GR_KB_CTRL) != 0 )
         modifier << MODIFIER_CTRL;
 
@@ -192,7 +192,7 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     {
         for( ii = 0; ; ii++ )
         {
-            if( hotkeyNameList[ii].m_KeyCode == 0 ) // End of list
+            if( hotkeyNameList[ii].m_KeyCode == KEY_NON_FOUND ) // End of list
             {
                 keyname = wxT( "<unknown>" );
                 break;
@@ -260,13 +260,6 @@ wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList,
         switch( aShortCutType )
         {
         case IS_HOTKEY:
-            #ifdef  __LINUX__
-            // In menus, some special keys (BkSp) must be coded by the
-            // actual ASCII value, not an equivalent name
-            if( keyname.EndsWith( "BkSp") )
-                keyname.Replace( "BkSp", "\b" );
-            #endif
-
             msg << wxT( "\t" ) << keyname;
             break;
 
@@ -321,13 +314,6 @@ wxString AddHotkeyName( const wxString&           aText,
                 switch( aShortCutType )
                 {
                 case IS_HOTKEY:
-                    #ifdef  __LINUX__
-                    // In menus, some special keys (BkSp) must be coded by the
-                    // actual ASCII value, not an equivalent name
-                    if( keyname.EndsWith( "BkSp") )
-                        keyname.Replace( "BkSp", "\b" );
-                    #endif
-
                     msg << wxT( "\t" ) << keyname;
                     break;
 
@@ -391,7 +377,7 @@ wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId )
  */
 int KeyCodeFromKeyName( const wxString& keyname )
 {
-    int ii, keycode = 0;
+    int ii, keycode = KEY_NON_FOUND;
 
     // Search for modifiers: Ctrl+ Alt+ and Shift+
     // Note: on Mac OSX, the Cmd key is equiv here to Ctrl
@@ -439,7 +425,7 @@ int KeyCodeFromKeyName( const wxString& keyname )
         return keycode;
     }
 
-    for( ii = 0; hotkeyNameList[ii].m_KeyCode != 0; ii++ )
+    for( ii = 0; hotkeyNameList[ii].m_KeyCode != KEY_NON_FOUND; ii++ )
     {
         if( key.CmpNoCase( hotkeyNameList[ii].m_Name ) == 0 )
         {
@@ -748,7 +734,11 @@ void ParseHotkeyConfig( const wxString&           data,
 
             if( hk_decr->m_InfoMsg == fctname )
             {
-                hk_decr->m_KeyCode = KeyCodeFromKeyName( keyname );
+                int keycode = KeyCodeFromKeyName( keyname );
+
+                if( keycode != KEY_NON_FOUND )   // means the key name is found in list or unassigned
+                    hk_decr->m_KeyCode = keycode;
+
                 break;
             }
         }
