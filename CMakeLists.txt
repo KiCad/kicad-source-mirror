@@ -596,7 +596,7 @@ endif()
 #
 # Find OpenGL library, required
 #
-set( OpenGL_GL_PREFERENCE "GLVND" )     # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
+set( OpenGL_GL_PREFERENCE "LEGACY" )     # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
 find_package( OpenGL REQUIRED )
 
 #
