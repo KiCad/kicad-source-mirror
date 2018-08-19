@@ -447,7 +447,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/ratsnest_viewitem.cpp
     ../pcbnew/sel_layer.cpp
     ../pcbnew/zone_settings.cpp
-    widgets/widget_net_selector.cpp
+    widgets/net_selector.cpp
 )
 
 # add -DPCBNEW to compilation of these PCBNEW sources

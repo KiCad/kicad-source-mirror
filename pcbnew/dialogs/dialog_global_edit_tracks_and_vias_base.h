@@ -22,6 +22,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <widgets/net_selector.h>
 #include <wx/choice.h>
 #include <wx/bmpcbox.h>
 #include <wx/radiobut.h>
@@ -45,7 +46,7 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_tracks;
 		wxCheckBox* m_vias;
 		wxCheckBox* m_netFilterOpt;
-		wxChoice* m_netFilter;
+		NET_SELECTOR* m_netFilter; 
 		wxCheckBox* m_netclassFilterOpt;
 		wxChoice* m_netclassFilter;
 		wxCheckBox* m_layerFilterOpt;
@@ -62,7 +63,6 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnNetFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetclassFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLayerFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }

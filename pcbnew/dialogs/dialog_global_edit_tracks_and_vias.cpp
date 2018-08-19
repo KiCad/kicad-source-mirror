@@ -68,7 +68,7 @@ private:
     void OnSizeNetclassGrid( wxSizeEvent& event ) override;
     void AdjustNetclassGridColumns( int aWidth );
 
-    void OnNetFilterSelect( wxCommandEvent& event ) override
+    void OnNetFilterSelect( wxCommandEvent& event )
     {
         m_netFilterOpt->SetValue( true );
     }
@@ -115,98 +115,79 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_netclassGrid->SetCellHighlightPenWidth( 0 );
     m_sdbSizerOK->SetDefault();
 
+    m_netFilter->Connect( NET_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ), NULL, this );
+
     FinishDialogSettings();
 }
 
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
 {
+    m_netFilter->Disconnect( NET_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ), NULL, this );
+
     delete[] m_originalColWidths;
 }
 
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 {
-    int currentNet = m_brd->GetHighLightNetCode();
-
-    if( currentNet < 0 && m_parent->GetCurItem() && m_parent->GetCurItem()->IsConnected() )
-        currentNet = static_cast<BOARD_CONNECTED_ITEM*>( m_parent->GetCurItem() )->GetNetCode();
-
-    wxString currentNetClass = m_brd->GetDesignSettings().GetCurrentNetClassName();
-    LAYER_NUM currentLayer = m_parent->GetActiveLayer();
-
     // Populate the net filter list with net names
-    for( unsigned netcode = 0; netcode < m_brd->GetNetCount(); netcode++ )
-    {
-        wxString netname;
-
-        if( netcode == 0 )  // netcode 0 is the netcode of not connected items
-            netname = "<no net>";
-        else
-            netname = m_brd->GetNetInfo().GetNetItem( netcode )->GetNetname();
-
-        m_netFilter->Append( netname );
-
-        if( (int) netcode == currentNet )
-            m_netFilter->SetSelection( m_netFilter->GetCount() - 1 );
-    }
+    m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
+    m_netFilter->SetSelectedNetcode( m_brd->GetHighLightNetCode() );
 
     // Populate the netclass filter list with netclass names
-    NETCLASSES& netclasses = m_brd->GetDesignSettings().m_NetClasses;
+    wxArrayString netclassNames;
+    NETCLASSES&   netclasses = m_brd->GetDesignSettings().m_NetClasses;
 
-    m_netclassFilter->Append( netclasses.GetDefault()->GetName() );
+    netclassNames.push_back(netclasses.GetDefault()->GetName() );
 
     for( NETCLASSES::const_iterator nc = netclasses.begin(); nc != netclasses.end(); ++nc )
-        m_netclassFilter->Append( nc->second->GetName() );
+        netclassNames.push_back( nc->second->GetName() );
 
-    m_netclassFilter->SetSelection( m_netclassFilter->FindString( currentNetClass ) );
+    m_netclassFilter->Set( netclassNames );
+    m_netclassFilter->SetStringSelection( m_brd->GetDesignSettings().GetCurrentNetClassName() );
 
     // Populate the layer filter list
     m_layerFilter->SetBoardFrame( m_parent );
     m_layerFilter->SetLayersHotkeys( false );
     m_layerFilter->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_layerFilter->Resync();
-
-    m_layerFilter->SetLayerSelection( currentLayer );
+    m_layerFilter->SetLayerSelection( m_parent->GetActiveLayer() );
 }
 
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 {
-#define SET_NETCLASS_VALUE( aRow, aGrid, aCol, aValue ) \
-        aGrid->SetCellValue( aRow, aCol, StringFromValue( GetUserUnits(), aValue, true, true ) )
+#define SET_NETCLASS_VALUE( row, col, val ) \
+        m_netclassGrid->SetCellValue( row, col, StringFromValue( GetUserUnits(), val, true, true ) )
 
-    m_netclassGrid->SetCellValue( 0, GRID_NAME, wxEmptyString );
-    m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track width" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via size" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_VIADRILL, _( "Via drill" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_uVIASIZE, _( "uVia size" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia drill" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track Width" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via Size" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_VIADRILL, _( "Via Drill" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_uVIASIZE, _( "uVia Size" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia Drill" ) );
 
     NETCLASSES& netclasses = m_brd->GetDesignSettings().m_NetClasses;
+    NETCLASSPTR defaultNetclass = m_brd->GetDesignSettings().GetDefault();
     m_netclassGrid->AppendRows( netclasses.GetCount() + 1 );
 
-    NETCLASSPTR netclass = m_brd->GetDesignSettings().GetDefault();
-    int row = 1;
+    m_netclassGrid->SetCellValue( 1, GRID_NAME, defaultNetclass->GetName() );
+    SET_NETCLASS_VALUE( 1, GRID_TRACKSIZE, defaultNetclass->GetTrackWidth() );
+    SET_NETCLASS_VALUE( 1, GRID_VIASIZE, defaultNetclass->GetViaDiameter() );
+    SET_NETCLASS_VALUE( 1, GRID_VIADRILL, defaultNetclass->GetViaDrill() );
+    SET_NETCLASS_VALUE( 1, GRID_uVIASIZE, defaultNetclass->GetuViaDiameter() );
+    SET_NETCLASS_VALUE( 1, GRID_uVIADRILL, defaultNetclass->GetuViaDrill() );
 
-    m_netclassGrid->SetCellValue( row, GRID_NAME, netclass->GetName() );
-    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_TRACKSIZE, netclass->GetTrackWidth() );
-    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIASIZE, netclass->GetViaDiameter() );
-    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIADRILL, netclass->GetViaDrill() );
-    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIASIZE, netclass->GetuViaDiameter() );
-    SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIADRILL, netclass->GetuViaDrill() );
-
-    row++;
-
-    for( NETCLASSES::const_iterator nc = netclasses.begin(); nc != netclasses.end(); ++nc, ++row )
+    int row = 2;
+    for( const auto& netclass : netclasses )
     {
-        netclass = nc->second;
-        m_netclassGrid->SetCellValue( row, GRID_NAME, netclass->GetName() );
-        SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_TRACKSIZE, netclass->GetTrackWidth() );
-        SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIASIZE, netclass->GetViaDiameter() );
-        SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_VIADRILL, netclass->GetViaDrill() );
-        SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIASIZE, netclass->GetuViaDiameter() );
-        SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIADRILL, netclass->GetuViaDrill() );
+        m_netclassGrid->SetCellValue( row, GRID_NAME, netclass.first );
+        SET_NETCLASS_VALUE( row, GRID_TRACKSIZE, netclass.second->GetTrackWidth() );
+        SET_NETCLASS_VALUE( row, GRID_VIASIZE, netclass.second->GetViaDiameter() );
+        SET_NETCLASS_VALUE( row, GRID_VIADRILL, netclass.second->GetViaDrill() );
+        SET_NETCLASS_VALUE( row, GRID_uVIASIZE, netclass.second->GetuViaDiameter() );
+        SET_NETCLASS_VALUE( row, GRID_uVIADRILL, netclass.second->GetuViaDrill() );
+        row++;
     }
 }
 
@@ -217,7 +198,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 
     if( item )
     {
-        m_netFilter->SetStringSelection( item->GetNetname() );
+        m_netFilter->SetSelectedNetcode( item->GetNetCode() );
         m_netclassFilter->SetStringSelection( item->GetNet()->GetClassName() );
         m_layerFilter->SetLayerSelection( item->GetLayer() );
     }
@@ -241,11 +222,13 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
     {
         unsigned int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
         unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
-
-        brdSettings.SetTrackWidthIndex( (unsigned) m_trackWidthSelectBox->GetSelection() );
-        brdSettings.SetViaSizeIndex( (unsigned) m_viaSizesSelectBox->GetSelection() );
-
-        m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
+        {
+            brdSettings.SetTrackWidthIndex( (unsigned) m_trackWidthSelectBox->GetSelection() );
+            brdSettings.SetViaSizeIndex( (unsigned) m_viaSizesSelectBox->GetSelection() );
+            m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
+        }
+        brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
+        brdSettings.SetViaSizeIndex( prevViaSizeIndex );
 
         if( m_layerBox->GetLayerSelection() != UNDEFINED_LAYER && aItem->Type() == PCB_TRACE_T )
         {
@@ -259,9 +242,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             aItem->SetLayer( ToLAYER_ID( m_layerBox->GetLayerSelection() ) );
             m_parent->GetBoard()->GetConnectivity()->Update( aItem );
         }
-
-        brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
-        brdSettings.SetViaSizeIndex( prevViaSizeIndex );
     }
     else
     {
@@ -272,13 +252,13 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem )
 {
-    if( m_netFilterOpt->GetValue() )
+    if( m_netFilterOpt->GetValue() && m_netFilter->GetSelectedNetcode() >= 0 )
     {
-        if( aItem->GetNetCode() != m_netFilter->GetSelection() )
+        if( aItem->GetNetCode() != m_netFilter->GetSelectedNetcode() )
             return;
     }
 
-    if( m_netclassFilterOpt->GetValue() )
+    if( m_netclassFilterOpt->GetValue() && !m_netclassFilter->GetStringSelection().IsEmpty() )
     {
         if( aItem->GetNetClassName() != m_netclassFilter->GetStringSelection() )
             return;
@@ -318,9 +298,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
                 m_parent->GetGalCanvas()->GetView()->Update( segment );
         }
         else
-        {
             m_parent->GetCanvas()->Refresh();
-        }
     }
 
     return true;
@@ -342,7 +320,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::AdjustNetclassGridColumns( int aWidth )
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnSizeNetclassGrid( wxSizeEvent& event )
 {
     AdjustNetclassGridColumns( event.GetSize().GetX() );
-
     event.Skip();
 }
 
@@ -350,6 +327,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnSizeNetclassGrid( wxSizeEvent& event 
 void PCB_EDIT_FRAME::OnEditTracksAndVias( wxCommandEvent& event )
 {
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this );
-    dlg.ShowModal();
+    dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
 }
 

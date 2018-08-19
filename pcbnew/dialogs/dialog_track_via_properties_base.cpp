@@ -6,7 +6,6 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pcb_layer_box_selector.h"
-#include "widgets/widget_net_selector.h"
 
 #include "dialog_track_via_properties_base.h"
 
@@ -20,12 +19,12 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	
 	m_sbCommonSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Common") ), wxHORIZONTAL );
 	
-	m_staticText24 = new wxStaticText( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText24->Wrap( -1 );
-	m_sbCommonSizer->Add( m_staticText24, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_netSelectorLabel = new wxStaticText( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netSelectorLabel->Wrap( -1 );
+	m_sbCommonSizer->Add( m_netSelectorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_NetComboBox = new WIDGET_NET_SELECTOR( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY ); 
-	m_sbCommonSizer->Add( m_NetComboBox, 6, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_netSelector = new NET_SELECTOR( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ); 
+	m_sbCommonSizer->Add( m_netSelector, 5, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_sbCommonSizer->Add( 0, 0, 1, wxEXPAND, 5 );

@@ -630,7 +630,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if ( !changeTrackWidthOnClick( selection ) )
         {
             DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
-            dlg.ShowModal();
+            dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
         }
     }
     else if( selection.Size() == 1 ) // Properties are displayed when there is only one item selected

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,8 +29,9 @@
 #include <class_track.h>
 #include <pcb_edit_frame.h>
 #include <confirm.h>
-
-#include <widgets/widget_net_selector.h>
+#include <connectivity_data.h>
+#include <class_module.h>
+#include <widgets/net_selector.h>
 #include <board_commit.h>
 
 #define MIN_SIZE ( int )( 0.001 * IU_PER_MM )
@@ -38,7 +40,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                                                           const SELECTION& aItems,
                                                           COMMIT& aCommit ) :
     DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
-    m_items( aItems ), m_commit( aCommit ),
+    m_frame( aParent ),
+    m_items( aItems ),
+    m_commit( aCommit ),
     m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, m_TrackStartXUnit ),
     m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
     m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, m_TrackEndXUnit ),
@@ -55,11 +59,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     VIATYPE_T    viaType = VIA_NOT_DEFINED;
 
-    m_haveUniqueNet = true;
-    int prevNet = -1;
-
-    m_NetComboBox->SetBoard( aParent->GetBoard() );
-    m_NetComboBox->Enable( true );
+    m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
 
     m_TrackLayerCtrl->SetLayersHotkeys( false );
     m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
@@ -76,32 +76,24 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_ViaEndLayer->SetBoardFrame( aParent );
     m_ViaEndLayer->Resync();
 
+    bool nets = false;
+    int  net = 0;
     bool hasLocked = false;
     bool hasUnlocked = false;
-
-    for( auto& item : m_items )
-    {
-        int net = static_cast<BOARD_CONNECTED_ITEM*>(item)->GetNetCode();
-
-        if( prevNet >= 0 && net != prevNet )
-        {
-            DBG( printf("prev %d net %d\n", net, prevNet ) );
-            m_haveUniqueNet = false;
-            break;
-        }
-
-        prevNet = net;
-    }
-
-    if ( m_haveUniqueNet )
-        m_NetComboBox->SetSelectedNet( prevNet );
-    else
-        m_NetComboBox->SetMultiple( true );
-
 
     // Look for values that are common for every item that is selected
     for( auto& item : m_items )
     {
+        if( !nets )
+        {
+            net = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode();
+            nets = true;
+        }
+        else if( net != static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode() )
+        {
+            net = -1;
+        }
+
         switch( item->Type() )
         {
             case PCB_TRACE_T:
@@ -116,7 +108,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_trackEndY.SetValue( t->GetEnd().y );
                     m_trackWidth.SetValue( t->GetWidth() );
                     m_TrackLayerCtrl->SetLayerSelection( t->GetLayer() );
-                    m_tracks    = true;
+                    m_tracks = true;
                 }
                 else        // check if values are the same for every selected track
                 {
@@ -202,6 +194,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         }
     }
 
+    if ( net >= 0 )
+        m_netSelector->SetSelectedNetcode( net );
+    else
+        m_netSelector->SetIndeterminate();
+
     wxASSERT( m_tracks || m_vias );
 
     if( m_vias )
@@ -236,14 +233,13 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_ViaTypeChoice->Enable();
 
-        if( viaType == VIA_THROUGH )
-            m_ViaTypeChoice->SetSelection( 0 );
-        else if( viaType == VIA_MICROVIA )
-            m_ViaTypeChoice->SetSelection( 1 );
-        else if ( viaType == VIA_BLIND_BURIED )
-            m_ViaTypeChoice->SetSelection( 2 );
-        else if( viaType == VIA_NOT_DEFINED )
-            m_ViaTypeChoice->SetSelection( 3 );
+        switch( viaType )
+        {
+        case VIA_THROUGH:      m_ViaTypeChoice->SetSelection( 0 ); break;
+        case VIA_MICROVIA:     m_ViaTypeChoice->SetSelection( 1 ); break;
+        case VIA_BLIND_BURIED: m_ViaTypeChoice->SetSelection( 2 ); break;
+        case VIA_NOT_DEFINED:  m_ViaTypeChoice->SetSelection( 3 ); break;
+        }
 
         m_ViaStartLayer->Enable( viaType != VIA_THROUGH );
         m_ViaEndLayer->Enable( viaType != VIA_THROUGH );
@@ -297,16 +293,72 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 }
 
 
+bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<D_PAD*>& connectedPads )
+{
+    wxString msg;
+
+    if( connectedPads.size() == 1 )
+    {
+        D_PAD* pad = *connectedPads.begin();
+        msg.Printf( _( "This will change the net assigned to %s pad %s to %s.\n"
+                       "Do you wish to continue?" ),
+                    pad->GetParent()->GetReference(),
+                    pad->GetName(),
+                    m_netSelector->GetValue() );
+    }
+    else if( connectedPads.size() == 2 )
+    {
+        D_PAD* pad1 = *connectedPads.begin();
+        D_PAD* pad2 = *( ++connectedPads.begin() );
+        msg.Printf( _( "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
+                       "Do you wish to continue?" ),
+                    pad1->GetParent()->GetReference(),
+                    pad1->GetName(),
+                    pad2->GetParent()->GetReference(),
+                    pad2->GetName(),
+                    m_netSelector->GetValue() );
+    }
+    else
+    {
+        msg.Printf( _( "This will change the net assigned to %d connected pads to %s.\n"
+                       "Do you wish to continue?" ),
+                    connectedPads.size(),
+                    m_netSelector->GetValue() );
+    }
+
+    KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+    dlg.SetOKLabel( _( "Continue" ) );
+    dlg.DoNotShowCheckbox();
+
+    return dlg.ShowModal() == wxID_OK;
+}
+
+
 bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
+    std::set<D_PAD*> connectedPads;
+    auto connectivity = m_frame->GetBoard()->GetConnectivity();
+
+    if ( !m_netSelector->IsIndeterminate() )
+    {
+        for( auto& item : m_items )
+        {
+            auto boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+            connectivity->GetConnectedPads( boardItem, &connectedPads );
+        }
+    }
+
     // Run validations:
+
+    if( connectedPads.size() )
+    {
+        if( !confirmPadChange( connectedPads ) )
+            return false;
+    }
 
     if( m_vias )
     {
-        if( !m_viaDiameter.Validate( true ) )
-            return false;
-
-        if( !m_viaDrill.Validate( true ) )
+        if( !m_viaDiameter.Validate( true ) || !m_viaDrill.Validate( true ) )
             return false;
 
         if( !m_trackNetclass->IsChecked() && m_viaDiameter.GetValue() <= m_viaDrill.GetValue() )
@@ -372,11 +424,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( changeLock )
                     t->SetLocked( setLock );
 
-                if ( m_NetComboBox->IsUniqueNetSelected() )
-                {
-                    DBG( printf( "snc %d\n", m_NetComboBox->GetSelectedNet() ) );
-                    t->SetNetCode( m_NetComboBox->GetSelectedNet() );
-                }
+                if ( !m_netSelector->IsIndeterminate() )
+                    t->SetNetCode( m_netSelector->GetSelectedNetcode() );
 
                 break;
             }
@@ -396,18 +445,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 {
                     switch( m_ViaTypeChoice->GetSelection() )
                     {
-                        case 0:
-                            v->SetViaType( VIA_THROUGH );
-                            v->SanitizeLayers();
-                            break;
-                        case 1:
-                            v->SetViaType( VIA_MICROVIA );
-                            break;
-                        case 2:
-                            v->SetViaType( VIA_BLIND_BURIED );
-                            break;
-                        default:
-                            break;
+                    default:
+                    case 0: v->SetViaType( VIA_THROUGH ); v->SanitizeLayers(); break;
+                    case 1: v->SetViaType( VIA_MICROVIA );                     break;
+                    case 2: v->SetViaType( VIA_BLIND_BURIED );                 break;
                     }
                 }
 
@@ -439,7 +480,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     case VIA_MICROVIA:
                         v->SetWidth( v->GetNetClass()->GetuViaDiameter() );
                         v->SetDrill( v->GetNetClass()->GetuViaDrill() );
-
                         break;
                     }
                 }
@@ -452,11 +492,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         v->SetDrill( m_viaDrill.GetValue() );
                 }
 
-                if ( m_NetComboBox->IsUniqueNetSelected() )
-                {
-                    DBG( printf( "snc %d\n", m_NetComboBox->GetSelectedNet() ) );
-                    v->SetNetCode( m_NetComboBox->GetSelectedNet() );
-                }
+                if ( !m_netSelector->IsIndeterminate() )
+                    v->SetNetCode( m_netSelector->GetSelectedNetcode() );
 
                 if( changeLock )
                     v->SetLocked( setLock );
@@ -467,6 +504,18 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             default:
                 wxASSERT( false );
                 break;
+        }
+    }
+
+    if ( !m_netSelector->IsIndeterminate() )
+    {
+        // Commit::Push() will rebuild connectivitiy propagating nets from connected pads
+        // outwards.  We therefore have to update the connected pads in order for the net
+        // change to "stick".
+        for( D_PAD* pad : connectedPads )
+        {
+            m_commit.Modify( pad );
+            pad->SetNetCode( m_netSelector->GetSelectedNetcode() );
         }
     }
 

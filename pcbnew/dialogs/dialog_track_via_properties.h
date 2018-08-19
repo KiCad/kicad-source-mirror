@@ -29,8 +29,9 @@
 
 class SELECTION;
 class COMMIT;
-
+class NET_SELECTOR_COMBO_POPUP;
 class PCB_BASE_FRAME;
+class D_PAD;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
@@ -48,6 +49,9 @@ private:
     void onViaSelect( wxCommandEvent& aEvent );
     void onViaEdit( wxCommandEvent& aEvent );
 
+    bool confirmPadChange( const std::set<D_PAD*>& connectedPads );
+
+    PCB_BASE_FRAME*  m_frame;
     const SELECTION& m_items;   // List of items to be modified.
     COMMIT&          m_commit;  // An undo record to add any changes to.
 
@@ -60,7 +64,4 @@ private:
 
     bool             m_tracks;  // True if dialog displays any track properties.
     bool             m_vias;    // True if dialog displays any via properties.
-
-    ///> Fixme
-    bool m_haveUniqueNet;
 };

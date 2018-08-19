@@ -462,22 +462,27 @@ const
 }
 
 
-const std::vector<D_PAD*> CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem )
-const
+const void CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem,
+                                                std::set<D_PAD*>* pads ) const
 {
-    auto& entry = m_connAlgo->ItemEntry( aItem );
-
-    std::set<D_PAD*> pads;
-    std::vector<D_PAD*> rv;
-
-    for( auto citem : entry.GetItems() )
+    for( auto citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
     {
         for( auto connected : citem->ConnectedItems() )
         {
             if( connected->Valid() && connected->Parent()->Type() == PCB_PAD_T )
-                pads.insert( static_cast<D_PAD*> ( connected->Parent() ) );
+                pads->insert( static_cast<D_PAD*> ( connected->Parent() ) );
         }
     }
+}
+
+
+const std::vector<D_PAD*> CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem )
+const
+{
+    std::set<D_PAD*> pads;
+    std::vector<D_PAD*> rv;
+
+    GetConnectedPads( aItem, &pads );
 
     std::copy( pads.begin(), pads.end(), std::back_inserter( rv ) );
     return rv;

@@ -57,11 +57,7 @@ class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
     DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
-    ~DIALOG_PAD_PROPERTIES()
-    {
-        delete m_dummyPad;
-        delete m_axisOrigin;
-    }
+    ~DIALOG_PAD_PROPERTIES();
 
 private:
     PCB_BASE_FRAME* m_parent;
@@ -157,7 +153,6 @@ private:
     void onDeletePrimitive( wxCommandEvent& event ) override;
     void onEditPrimitive( wxCommandEvent& event ) override;
     void onAddPrimitive( wxCommandEvent& event ) override;
-    void onImportPrimitives( wxCommandEvent& event ) override;
     void onGeometryTransform( wxCommandEvent& event ) override;
     void onDuplicatePrimitive( wxCommandEvent& event ) override;
 

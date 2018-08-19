@@ -12,7 +12,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class TEXT_CTRL_EVAL;
-class WIDGET_NET_SELECTOR;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -22,8 +21,9 @@ class WIDGET_NET_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/combobox.h>
+#include <widgets/net_selector.h>
 #include <wx/choice.h>
+#include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -65,7 +65,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_PadNumText;
 		wxTextCtrl* m_PadNumCtrl;
 		wxStaticText* m_PadNameText;
-		WIDGET_NET_SELECTOR* m_PadNetNameCombo;
+		NET_SELECTOR* m_PadNetSelector; 
 		wxStaticText* m_staticText44;
 		wxChoice* m_PadType;
 		wxStaticText* m_staticText45;
@@ -174,7 +174,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_buttonAddShape;
 		wxButton* m_buttonDup;
 		wxButton* m_buttonGeometry;
-		wxButton* m_buttonImport;
 		wxStaticText* m_parentInfoLine1;
 		wxStaticText* m_parentInfoLine2;
 		wxPanel* m_panelShowPad;
@@ -204,7 +203,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onAddPrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onImportPrimitives( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }

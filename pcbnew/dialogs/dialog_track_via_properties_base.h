@@ -12,7 +12,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class PCB_LAYER_BOX_SELECTOR;
-class WIDGET_NET_SELECTOR;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -21,7 +20,7 @@ class WIDGET_NET_SELECTOR;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/combobox.h>
+#include <widgets/net_selector.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -44,8 +43,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		wxBoxSizer* m_MainSizer;
 		wxStaticBoxSizer* m_sbCommonSizer;
-		wxStaticText* m_staticText24;
-		WIDGET_NET_SELECTOR* m_NetComboBox;
+		wxStaticText* m_netSelectorLabel;
+		NET_SELECTOR* m_netSelector; 
 		wxCheckBox* m_lockedCbox;
 		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;

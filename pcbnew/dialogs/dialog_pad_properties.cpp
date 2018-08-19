@@ -1,8 +1,3 @@
-/**
- * @file dialog_pad_properties.cpp
- * @brief dialog pad properties editor.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -47,7 +42,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <pcb_painter.h>
-#include <widgets/widget_net_selector.h>
+#include <widgets/net_selector.h>
 
 #include <dialog_pad_properties.h>
 #include <html_messagebox.h>
@@ -101,7 +96,7 @@ static const LSET std_pad_layers[] =
 void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
-    dlg.ShowModal();
+    dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
 }
 
 
@@ -132,7 +127,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_board      = m_parent->GetBoard();
 
-    m_PadNetNameCombo->SetBoard( m_board );
+    m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 
     m_OrientValidator.SetRange( -360.0, 360.0 );
     m_orientation->SetValidator( m_OrientValidator );
@@ -163,8 +158,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_nonCopperNote->SetFont( infoFont );
 
     // Usually, TransferDataToWindow is called by OnInitDialog
-    // calling it here fixes all widgets sizes, and FinishDialogSettings can
-    // safely fix minsizes
+    // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes
     TransferDataToWindow();
 
     // Initialize canvas to be able to display the dummy pad:
@@ -174,9 +168,21 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_sdbSizerOK->SetDefault();
     m_canUpdate = true;
 
+    m_PadNetSelector->Connect( NET_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ), NULL, this );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
+
+
+DIALOG_PAD_PROPERTIES::~DIALOG_PAD_PROPERTIES()
+{
+    m_PadNetSelector->Disconnect( NET_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ), NULL, this );
+
+    delete m_dummyPad;
+    delete m_axisOrigin;
+}
+
 
 bool DIALOG_PAD_PROPERTIES::m_sketchPreview = false;   // Stores the pad draw option during a session
 
@@ -212,14 +218,12 @@ void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
 	m_buttonAddShape->Enable( aEnable );
 	m_buttonDup->Enable( aEnable );
 	m_buttonGeometry->Enable( aEnable );
-	m_buttonImport->Enable( aEnable );
 }
 
 
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
     // Initialize the canvases (legacy or gal) to display the pad
-    // Enable the suitable canvas and make some inits
 
     // Show the X and Y axis. It is usefull because pad shape can have an offset
     // or be a complex shape.
@@ -282,8 +286,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     if( m_dummyPad->GetLayerSet()[B_Cu] )
         color = color.LegacyMix( m_parent->Settings().Colors().GetItemColor( LAYER_PAD_BK ) );
 
-    // What could happen: the pad color is *actually* black, or no
-    // copper was selected
+    // What could happen: the pad color is *actually* black, or no copper was selected
     if( color == BLACK )
         color = LIGHTGRAY;
 
@@ -355,7 +358,6 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     // draw selected primitives:
     long select = m_listCtrlPrimitives->GetFirstSelected();
-    wxPoint start, end, center;
 
     while( select >= 0 )
     {
@@ -565,7 +567,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_FlippedWarningSizer->Show( m_isFlipped );
 
     m_PadNumCtrl->SetValue( m_dummyPad->GetName() );
-    m_PadNetNameCombo->SetSelectedNet( m_dummyPad->GetNetCode() );
+    m_PadNetSelector->SetSelectedNetcode( m_dummyPad->GetNetCode() );
 
     // Display current pad parameters units:
     m_posX.SetValue( m_dummyPad->GetPosition().x );
@@ -706,7 +708,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadNumText->Enable( enable );
     m_PadNumCtrl->Enable( enable );
     m_PadNameText->Enable( enable && m_canEditNetName && m_currentPad );
-    m_PadNetNameCombo->Enable( enable && m_canEditNetName && m_currentPad );
+    m_PadNetSelector->Enable( enable && m_canEditNetName && m_currentPad );
     m_padToDie.Enable( enable );
 
     if( m_dummyPad->GetDrillShape() != PAD_DRILL_SHAPE_OBLONG )
@@ -976,13 +978,13 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     if( !hasConnection )
     {
         m_PadNumCtrl->SetValue( wxEmptyString );
-        m_PadNetNameCombo->SetSelectedNet( 0 );
+        m_PadNetSelector->SetSelectedNetcode( 0 );
         m_padToDie.SetValue( 0 );
     }
     else if( m_PadNumCtrl->GetValue().IsEmpty() && m_currentPad )
     {
         m_PadNumCtrl->SetValue( m_currentPad->GetName() );
-        m_PadNetNameCombo->SetSelectedNet( m_currentPad->GetNetCode() );
+        m_PadNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
     }
 
     transferDataToPad( m_dummyPad );
@@ -1019,7 +1021,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     m_PadNumText->Enable( hasConnection );
     m_PadNumCtrl->Enable( hasConnection );
     m_PadNameText->Enable( hasConnection );
-    m_PadNetNameCombo->Enable( hasConnection && m_canEditNetName && m_currentPad );
+    m_PadNetSelector->Enable( hasConnection && m_canEditNetName && m_currentPad );
     m_padToDie.Enable( hasConnection );
 
     // Enable/disable Copper Layers control
@@ -1163,9 +1165,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     if( error )
-    {
         error_msgs.Add(  _( "Too large value for pad delta size" ) );
-    }
 
     switch( m_dummyPad->GetAttribute() )
     {
@@ -1448,7 +1448,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     // For PAD_ATTRIB_HOLE_NOT_PLATED, ensure there is no net name selected
     if( m_padMaster->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED  )
-        padNetcode = m_PadNetNameCombo->GetSelectedNet();
+        padNetcode = m_PadNetSelector->GetSelectedNetcode();
 
     if( m_currentPad->GetNetCode() != padNetcode )
     {
@@ -1629,7 +1629,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetOffset( wxPoint( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
     aPad->SetOrientation( m_OrientValue * 10.0 );
     aPad->SetName( m_PadNumCtrl->GetValue() );
-    aPad->SetNetCode( m_PadNetNameCombo->GetSelectedNet() );
+    aPad->SetNetCode( m_PadNetSelector->GetSelectedNetcode() );
 
     // Clear some values, according to the pad type and shape
     switch( aPad->GetShape() )
@@ -1903,12 +1903,6 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
         transferDataToPad( m_dummyPad );
         redraw();
     }
-}
-
-
-void DIALOG_PAD_PROPERTIES::onImportPrimitives( wxCommandEvent& event )
-{
-    wxMessageBox( "Not yet available" );
 }
 
 
