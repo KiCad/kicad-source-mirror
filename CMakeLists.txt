@@ -30,8 +30,6 @@ if(POLICY CMP0025)
   cmake_policy(SET CMP0025 NEW) # CMake 3.0
 endif()
 
-project( kicad )
-
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
 if( DEFINED CMAKE_BUILD_TYPE )
@@ -39,6 +37,8 @@ if( DEFINED CMAKE_BUILD_TYPE )
 else()
     set( CMAKE_BUILD_TYPE Release CACHE STRING "Set to either \"Release\" or \"Debug\"" )
 endif()
+
+project( kicad )
 
 include( GNUInstallDirs )
 
