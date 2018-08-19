@@ -61,6 +61,7 @@ private:
     void visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
     void processItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem );
 
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
@@ -207,6 +208,21 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
         SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIASIZE, netclass->GetuViaDiameter() );
         SET_NETCLASS_VALUE( row, m_netclassGrid, GRID_uVIADRILL, netclass->GetuViaDrill() );
     }
+}
+
+
+bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
+{
+    auto item = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_parent->GetCurItem() );
+
+    if( item )
+    {
+        m_netFilter->SetStringSelection( item->GetNetname() );
+        m_netclassFilter->SetStringSelection( item->GetNet()->GetClassName() );
+        m_layerFilter->SetLayerSelection( item->GetLayer() );
+    }
+
+    return true;
 }
 
 
