@@ -62,6 +62,9 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 
 void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int row = m_grid->GetNumberRows();
     TransferDataFromGrid();
 
@@ -78,6 +81,9 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event
 
 void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int curRow = m_grid->GetGridCursorRow();
 
     if( curRow >= 0 )
@@ -86,9 +92,8 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& ev
         m_grid->DeleteRows( curRow );
     }
 
-    curRow = std::max( 0, curRow - 1 );
-    m_grid->MakeCellVisible( curRow, m_grid->GetGridCursorCol() );
-    m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
+    m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+    m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
 }
 
 
@@ -128,8 +133,8 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToGrid()
 
 bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
 {
-    // Commit any pending edits
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {

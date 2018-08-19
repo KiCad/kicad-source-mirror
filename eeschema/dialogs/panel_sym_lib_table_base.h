@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -43,17 +45,17 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		wxPanel* m_global_panel;
 		wxStaticText* m_staticText3;
 		wxStaticText* m_GblTableFilename;
-		wxGrid* m_global_grid;
+		WX_GRID* m_global_grid;
 		wxPanel* m_project_panel;
 		wxStaticText* m_staticText4;
 		wxStaticText* m_PrjTableFilename;
-		wxGrid* m_project_grid;
+		WX_GRID* m_project_grid;
 		wxBitmapButton* m_append_button;
 		wxBitmapButton* m_browse_button;
 		wxBitmapButton* m_move_up_button;
 		wxBitmapButton* m_move_down_button;
 		wxBitmapButton* m_delete_button;
-		wxGrid* m_path_subs_grid;
+		WX_GRID* m_path_subs_grid;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }

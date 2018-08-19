@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class TEXT_CTRL_EVAL;
+class WX_GRID;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -298,7 +299,7 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxGrid* m_gridCornersList;
+		WX_GRID* m_gridCornersList;
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_deleteButton;
 		wxStaticText* m_thicknessLabel;

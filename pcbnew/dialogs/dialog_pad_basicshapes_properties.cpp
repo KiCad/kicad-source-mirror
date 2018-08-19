@@ -37,7 +37,7 @@
 #include <macros.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
-
+#include <widgets/wx_grid.h>
 #include <class_board.h>
 #include <class_module.h>
 
@@ -264,8 +264,8 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::Validate()
 // test for a valid polygon (a not self intersectiong polygon)
 bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 {
-    // Commit any pending edits
-    m_gridCornersList->DisableCellEditControl();
+    if( !m_gridCornersList->CommitPendingChanges() )
+        return false;
 
     if( m_currshape.m_Poly.size() < 3 )
     {
@@ -324,8 +324,8 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonAdd( wxCommandEvent& event )
 {
-    // Commit any pending edits
-    m_gridCornersList->DisableCellEditControl();
+    if( !m_gridCornersList->CommitPendingChanges() )
+        return;
 
     // Insert a new corner after the currently selected:
     wxArrayInt selections =	m_gridCornersList->GetSelectedRows();
@@ -361,8 +361,8 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonAdd( wxCommandEvent& event )
 
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
 {
-    // Commit any pending edits
-    m_gridCornersList->DisableCellEditControl();
+    if( !m_gridCornersList->CommitPendingChanges() )
+        return;
 
     wxArrayInt selections =	m_gridCornersList->GetSelectedRows();
 

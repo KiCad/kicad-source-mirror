@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/wx_grid.h"
 
 #include "dialog_configure_paths_base.h"
 
@@ -19,7 +21,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbEnvVars;
 	sbEnvVars = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Environment Variables") ), wxVERTICAL );
 	
-	m_EnvVars = new wxGrid( sbEnvVars->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_EnvVars = new WX_GRID( sbEnvVars->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_EnvVars->CreateGrid( 1, 2 );
@@ -54,7 +56,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerEnvVarBtns;
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_btnAddEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnAddEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnAddEnvVar->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerEnvVarBtns->Add( m_btnAddEnvVar, 0, wxRIGHT, 5 );
@@ -62,7 +64,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	
 	bSizerEnvVarBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_btnDeleteEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnDeleteEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnDeleteEnvVar->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerEnvVarBtns->Add( m_btnDeleteEnvVar, 0, wxRIGHT|wxLEFT, 5 );
@@ -75,7 +77,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	
 	m_sb3DSearchPaths = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("3D Search Paths") ), wxVERTICAL );
 	
-	m_SearchPaths = new wxGrid( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SearchPaths = new WX_GRID( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_SearchPaths->CreateGrid( 1, 3 );
@@ -113,17 +115,17 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerSearchPathBtns;
 	bSizerSearchPathBtns = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_btnAddSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnAddSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnAddSearchPath->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnAddSearchPath, 0, wxRIGHT, 5 );
 	
-	m_btnMoveUp = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnMoveUp = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnMoveUp->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnMoveUp, 0, wxRIGHT, 5 );
 	
-	m_btnMoveDown = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnMoveDown = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnMoveDown->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnMoveDown, 0, wxRIGHT, 5 );
@@ -131,7 +133,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	
 	bSizerSearchPathBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_btnDeleteSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnDeleteSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnDeleteSearchPath->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizerSearchPathBtns->Add( m_btnDeleteSearchPath, 0, wxRIGHT|wxLEFT, 5 );

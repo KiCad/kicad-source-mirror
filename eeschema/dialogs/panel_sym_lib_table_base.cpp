@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "panel_sym_lib_table_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,7 +42,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	m_global_sizer->Add( fgSizer1, 0, wxEXPAND, 2 );
 	
-	m_global_grid = new wxGrid( m_global_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_global_grid = new WX_GRID( m_global_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_global_grid->CreateGrid( 1, 5 );
@@ -93,7 +95,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	m_project_sizer->Add( fgSizer2, 0, wxEXPAND, 5 );
 	
-	m_project_grid = new wxGrid( m_project_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_project_grid = new WX_GRID( m_project_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_project_grid->CreateGrid( 1, 5 );
@@ -158,7 +160,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path Substitutions:") ), wxVERTICAL );
 	
-	m_path_subs_grid = new wxGrid( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_path_subs_grid = new WX_GRID( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_path_subs_grid->CreateGrid( 1, 2 );

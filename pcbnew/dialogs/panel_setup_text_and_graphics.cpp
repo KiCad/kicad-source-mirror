@@ -136,8 +136,8 @@ int PANEL_SETUP_TEXT_AND_GRAPHICS::getGridValue( int aRow, int aCol )
 
 bool PANEL_SETUP_TEXT_AND_GRAPHICS::validateData()
 {
-    // Commit any pending in-place edits and close editors from grid
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     // Test text parameters.
     for( int row : { ROW_SILK, ROW_COPPER, ROW_OTHERS } )
@@ -185,6 +185,9 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
 void PANEL_SETUP_TEXT_AND_GRAPHICS::ImportSettingsFrom( BOARD* aBoard )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
 
     m_BrdSettings = &aBoard->GetDesignSettings();

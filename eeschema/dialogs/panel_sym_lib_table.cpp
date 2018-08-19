@@ -28,6 +28,7 @@
 #include <symbol_lib_table.h>
 #include <lib_table_lexer.h>
 #include <grid_tricks.h>
+#include <widgets/wx_grid.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <lib_table_grid.h>
@@ -417,6 +418,9 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     if( m_cur_grid->AppendRows( 1 ) )
     {
         int row = m_cur_grid->GetNumberRows() - 1;
@@ -435,6 +439,9 @@ void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     int curRow = m_cur_grid->GetGridCursorRow();
     int curCol = m_cur_grid->GetGridCursorCol();
 
@@ -485,6 +492,9 @@ void PANEL_SYM_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
 
@@ -512,6 +522,9 @@ void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
 
@@ -539,8 +552,8 @@ void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 
 bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
 {
-    // Commit any pending in-place edits and close the editor
-    m_cur_grid->DisableCellEditControl();
+    if( !m_cur_grid->CommitPendingChanges() )
+        return false;
 
     if( !verifyTables() )
         return false;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -18,10 +20,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/dataview.h>
@@ -49,7 +51,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxButton* m_addFieldButton;
 		wxPanel* m_panel4;
-		wxGrid* m_grid;
+		WX_GRID* m_grid;
 		wxButton* m_button1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

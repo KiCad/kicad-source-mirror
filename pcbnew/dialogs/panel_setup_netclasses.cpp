@@ -300,6 +300,9 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
 
 void PANEL_SETUP_NETCLASSES::OnAddNetclassClick( wxCommandEvent& event )
 {
+    if( !m_netclassGrid->CommitPendingChanges() )
+        return;
+
     int row = m_netclassGrid->GetNumberRows();
     m_netclassGrid->AppendRows();
 
@@ -319,7 +322,8 @@ void PANEL_SETUP_NETCLASSES::OnAddNetclassClick( wxCommandEvent& event )
 
 void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
 {
-    m_netclassGrid->DisableCellEditControl();
+    if( !m_netclassGrid->CommitPendingChanges() )
+        return;
 
     int curRow = m_netclassGrid->GetGridCursorRow();
 
@@ -345,9 +349,8 @@ void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
 
     m_netclassGrid->DeleteRows( curRow, 1 );
 
-    curRow = std::max( 0, curRow - 1 );
-    m_netclassGrid->MakeCellVisible( curRow, m_netclassGrid->GetGridCursorCol() );
-    m_netclassGrid->SetGridCursor( curRow, m_netclassGrid->GetGridCursorCol() );
+    m_netclassGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_netclassGrid->GetGridCursorCol() );
+    m_netclassGrid->SetGridCursor( std::max( 0, curRow-1 ), m_netclassGrid->GetGridCursorCol() );
 
     m_netclassesDirty = true;
 }
@@ -398,8 +401,8 @@ void PANEL_SETUP_NETCLASSES::OnSizeMembershipGrid( wxSizeEvent& event )
 
 void PANEL_SETUP_NETCLASSES::doApplyFilters( bool aShowAll )
 {
-    // Commit any pending in-place edits in the membership grid
-    m_membershipGrid->DisableCellEditControl();
+    if( !m_membershipGrid->CommitPendingChanges() )
+        return;
 
     wxString netClassFilter = m_netClassFilter->GetStringSelection();
     wxString netFilter = m_netNameFilter->GetValue().MakeLower();
@@ -432,8 +435,8 @@ void PANEL_SETUP_NETCLASSES::doApplyFilters( bool aShowAll )
 
 void PANEL_SETUP_NETCLASSES::doAssignments( bool aAssignAll )
 {
-    // Commit any pending in-place edits in the membership grid
-    m_membershipGrid->DisableCellEditControl();
+    if( !m_membershipGrid->CommitPendingChanges() )
+        return;
 
     wxArrayInt selectedRows = m_membershipGrid->GetSelectedRows();
 
@@ -468,9 +471,8 @@ int PANEL_SETUP_NETCLASSES::getNetclassValue( int aRow, int aCol )
 
 bool PANEL_SETUP_NETCLASSES::validateData()
 {
-    // Commit any pending in-place edits and close editors from grid controls
-    m_netclassGrid->DisableCellEditControl();
-    m_membershipGrid->DisableCellEditControl();
+    if( !m_netclassGrid->CommitPendingChanges() || !m_membershipGrid->CommitPendingChanges() )
+        return false;
 
     wxString msg;
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();

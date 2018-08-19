@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/wx_grid.h"
 
 #include "dialog_fields_editor_global_base.h"
 
@@ -59,7 +61,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new wxGrid( m_panel4, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( m_panel4, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
 	m_grid->CreateGrid( 5, 5 );

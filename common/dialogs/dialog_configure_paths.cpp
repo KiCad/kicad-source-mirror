@@ -29,6 +29,7 @@
 #include <validators.h>
 #include <html_messagebox.h>
 #include <filename_resolver.h>
+#include <widgets/wx_grid.h>
 
 
 enum ENV_VAR_GRID_COLUMNS
@@ -184,12 +185,11 @@ void DIALOG_CONFIGURE_PATHS::AppendSearchPath( const wxString& aName, const wxSt
 
 bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
 {
-    if( !wxDialog::TransferDataFromWindow() )
+    if( !m_EnvVars->CommitPendingChanges() || !m_SearchPaths->CommitPendingChanges() )
         return false;
 
-    // Commit any pending in-place edits and close the editor
-    m_EnvVars->DisableCellEditControl();
-    m_SearchPaths->DisableCellEditControl();
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
 
     // Environment variables
 
@@ -320,6 +320,9 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnAddEnvVar( wxCommandEvent& event )
 {
+    if( !m_EnvVars->CommitPendingChanges() )
+        return;
+
     AppendEnvVar( wxEmptyString, wxEmptyString, false );
 
     m_EnvVars->MakeCellVisible( m_EnvVars->GetNumberRows() - 1, EV_NAME_COL );
@@ -332,6 +335,9 @@ void DIALOG_CONFIGURE_PATHS::OnAddEnvVar( wxCommandEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnAddSearchPath( wxCommandEvent& event )
 {
+    if( !m_SearchPaths->CommitPendingChanges() )
+        return;
+
     AppendSearchPath( wxEmptyString, wxEmptyString, wxEmptyString);
 
     m_SearchPaths->MakeCellVisible( m_SearchPaths->GetNumberRows() - 1, SP_ALIAS_COL );
@@ -344,6 +350,9 @@ void DIALOG_CONFIGURE_PATHS::OnAddSearchPath( wxCommandEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 {
+    if( !m_EnvVars->CommitPendingChanges() )
+        return;
+
     int curRow = m_EnvVars->GetGridCursorRow();
 
     if( !m_EnvVars->HasFocus() || curRow < 0 )
@@ -360,14 +369,16 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 
     m_EnvVars->DeleteRows( curRow, 1 );
 
-    curRow = std::max( 0, curRow - 1 );
-    m_EnvVars->MakeCellVisible( curRow, m_EnvVars->GetGridCursorCol() );
-    m_EnvVars->SetGridCursor( curRow, m_EnvVars->GetGridCursorCol() );
+    m_EnvVars->MakeCellVisible( std::max( 0, curRow-1 ), m_EnvVars->GetGridCursorCol() );
+    m_EnvVars->SetGridCursor( std::max( 0, curRow-1 ), m_EnvVars->GetGridCursorCol() );
 }
 
 
 void DIALOG_CONFIGURE_PATHS::OnDeleteSearchPath( wxCommandEvent& event )
 {
+    if( !m_SearchPaths->CommitPendingChanges() )
+        return;
+
     int curRow = m_SearchPaths->GetGridCursorRow();
 
     if( !m_SearchPaths->HasFocus() || curRow < 0 )
@@ -378,18 +389,18 @@ void DIALOG_CONFIGURE_PATHS::OnDeleteSearchPath( wxCommandEvent& event )
 
     m_SearchPaths->DeleteRows( curRow, 1 );
 
-    curRow = std::max( 0, curRow - 1 );
-    m_SearchPaths->MakeCellVisible( curRow, m_SearchPaths->GetGridCursorCol() );
-    m_SearchPaths->SetGridCursor( curRow, m_SearchPaths->GetGridCursorCol() );
+    m_SearchPaths->MakeCellVisible( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
+    m_SearchPaths->SetGridCursor( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
 }
 
 
 void DIALOG_CONFIGURE_PATHS::OnSearchPathMoveUp( wxCommandEvent& event )
 {
+    if( !m_SearchPaths->CommitPendingChanges() )
+        return;
+
     int curRow   = m_SearchPaths->GetGridCursorRow();
     int prevRow  = curRow - 1;
-
-    m_SearchPaths->DisableCellEditControl();
 
     if( curRow > 0 )
     {
@@ -407,10 +418,11 @@ void DIALOG_CONFIGURE_PATHS::OnSearchPathMoveUp( wxCommandEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnSearchPathMoveDown( wxCommandEvent& event )
 {
+    if( !m_SearchPaths->CommitPendingChanges() )
+        return;
+
     int curRow   = m_SearchPaths->GetGridCursorRow();
     int nextRow  = curRow + 1;
-
-    m_SearchPaths->DisableCellEditControl();
 
     if( curRow < m_SearchPaths->GetNumberRows() - 1 )
     {

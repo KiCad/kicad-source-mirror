@@ -144,8 +144,8 @@ bool DIALOG_SWAP_LAYERS::TransferDataToWindow()
 
 bool DIALOG_SWAP_LAYERS::TransferDataFromWindow()
 {
-    // Commit any pending changes
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     LSET enabledCopperLayers = LSET::AllCuMask( m_parent->GetBoard()->GetCopperLayerCount() );
     wxGridTableBase* table = m_grid->GetTable();

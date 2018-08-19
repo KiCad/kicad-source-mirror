@@ -22,6 +22,7 @@
 
 #include <dialog_edit_library_tables.h>
 #include <panel_fp_lib_table_base.h>
+#include <widgets/wx_grid.h>
 
 class FP_LIB_TABLE;
 class FP_LIB_TABLE_GRID;
@@ -86,7 +87,7 @@ private:
 
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
 
-    wxGrid*          m_cur_grid;      // changed based on tab choice
+    WX_GRID*         m_cur_grid;      // changed based on tab choice
     static size_t    m_pageNdx;       // Remember last notebook page selected during a session
     static wxString  m_lastBrowseDir; // Remember last directory browsed during a session
 };

@@ -137,8 +137,8 @@ int PANEL_MODEDIT_DEFAULTS::getGridValue( int aRow, int aCol )
 
 bool PANEL_MODEDIT_DEFAULTS::validateData()
 {
-    // Commit any pending in-place edits and close editors from grid
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     // Test text parameters.
     for( int row : { ROW_SILK, ROW_COPPER, ROW_OTHERS } )

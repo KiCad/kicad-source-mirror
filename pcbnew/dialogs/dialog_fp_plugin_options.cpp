@@ -29,6 +29,7 @@
 #include <dialog_fp_plugin_options_base.h>
 #include <fp_lib_table.h>
 #include <grid_tricks.h>
+#include <widgets/wx_grid.h>
 #include <bitmaps.h>
 
 
@@ -129,8 +130,8 @@ public:
 
     bool TransferDataFromWindow() override
     {
-        // Write any active editors into the grid
-        m_grid->DisableCellEditControl();
+        if( !m_grid->CommitPendingChanges() )
+            return false;
 
         if( !DIALOG_SHIM::TransferDataFromWindow() )
             return false;
@@ -223,16 +224,25 @@ private:
 
     void onAppendOption( wxCommandEvent&  ) override
     {
+        if( !m_grid->CommitPendingChanges() )
+            return;
+
         appendOption();
     }
 
     void onAppendRow( wxCommandEvent&  ) override
     {
+        if( !m_grid->CommitPendingChanges() )
+            return;
+
         appendRow();
     }
 
     void onDeleteRow( wxCommandEvent&  ) override
     {
+        if( !m_grid->CommitPendingChanges() )
+            return;
+
         if( !m_grid->HasFocus() )
         {
             m_grid->SetFocus();

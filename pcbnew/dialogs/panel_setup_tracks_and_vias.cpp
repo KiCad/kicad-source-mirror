@@ -168,10 +168,10 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 
 bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
 {
-    // Commit any pending in-place edits and close editors from grid controls
-    m_trackWidthsGrid->DisableCellEditControl();
-    m_viaSizesGrid->DisableCellEditControl();
-    m_diffPairsGrid->DisableCellEditControl();
+    if( !m_trackWidthsGrid->CommitPendingChanges()
+            || !m_viaSizesGrid->CommitPendingChanges()
+            || !m_diffPairsGrid->CommitPendingChanges() )
+        return false;
 
     wxString msg;
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
@@ -243,6 +243,10 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
 
 void PANEL_SETUP_TRACKS_AND_VIAS::ImportSettingsFrom( BOARD* aBoard )
 {
+    m_trackWidthsGrid->CommitPendingChanges( true );
+    m_viaSizesGrid->CommitPendingChanges( true );
+    m_diffPairsGrid->CommitPendingChanges( true );
+
     // Note: do not change the board, as we need to get the current nets from it for
     // netclass memberships.  All the netclass definitions and dimension lists are in
     // the BOARD_DESIGN_SETTINGS.

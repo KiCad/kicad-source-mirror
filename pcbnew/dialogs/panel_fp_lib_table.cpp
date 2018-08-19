@@ -45,6 +45,7 @@
 #include <invoke_pcb_dialog.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
+#include <widgets/wx_grid.h>
 #include <confirm.h>
 #include <lib_table_grid.h>
 #include <wildcards_and_files_ext.h>
@@ -461,6 +462,9 @@ void PANEL_FP_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 
 void PANEL_FP_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     if( m_cur_grid->AppendRows( 1 ) )
     {
         int last_row = m_cur_grid->GetNumberRows() - 1;
@@ -476,6 +480,9 @@ void PANEL_FP_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 
 void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     int curRow = m_cur_grid->GetGridCursorRow();
     int curCol = m_cur_grid->GetGridCursorCol();
 
@@ -525,6 +532,9 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 
 void PANEL_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     FP_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
 
@@ -552,6 +562,9 @@ void PANEL_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 
 void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     FP_LIB_TABLE_GRID* tbl = cur_model();
     int curRow = m_cur_grid->GetGridCursorRow();
 
@@ -579,6 +592,9 @@ void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 
 void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
     if( m_lastBrowseDir.IsEmpty() )
         m_lastBrowseDir = m_projectBasePath;
 
@@ -669,8 +685,8 @@ void PANEL_FP_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 
 bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
 {
-    // stuff any pending cell editor text into the table.
-    m_cur_grid->DisableCellEditControl();
+    if( !m_cur_grid->CommitPendingChanges() )
+        return false;
 
     if( verifyTables() )
     {

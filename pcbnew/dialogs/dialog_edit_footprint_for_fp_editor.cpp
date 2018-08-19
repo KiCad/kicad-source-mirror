@@ -357,6 +357,9 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
 {
+    if( !m_modelsGrid->CommitPendingChanges() )
+        return;
+
     int idx = m_modelsGrid->GetGridCursorRow();
 
     if( idx >= 0 )
@@ -364,7 +367,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
         m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
         m_modelsGrid->DeleteRows( idx );
 
-        select3DModel( idx );       // will clamp idx within bounds
+        select3DModel( idx-1 );       // will clamp idx within bounds
         m_PreviewPane->UpdateDummyModule();
     }
 }
@@ -372,6 +375,9 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 {
+    if( !m_modelsGrid->CommitPendingChanges() )
+        return;
+
     PROJECT& prj = Prj();
     MODULE_3D_SETTINGS model;
 
@@ -432,6 +438,9 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 {
+    if( !m_modelsGrid->CommitPendingChanges() )
+        return;
+
     MODULE_3D_SETTINGS model;
 
     model.m_Preview = true;
@@ -452,8 +461,8 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 
 bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
 {
-    // Commit any pending in-place edits and close the editor
-    m_itemsGrid->DisableCellEditControl();
+    if( !m_itemsGrid->CommitPendingChanges() )
+        return false;
 
     if( !DIALOG_SHIM::Validate() )
         return false;
@@ -600,6 +609,9 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
+    if( !m_itemsGrid->CommitPendingChanges() )
+        return;
+
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
     TEXTE_MODULE textMod( m_footprint );
 
@@ -630,29 +642,29 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
 {
-    int rowCount = m_itemsGrid->GetNumberRows();
-    int curRow   = m_itemsGrid->GetGridCursorRow();
-
-    if( curRow < 0 || curRow >= (int) m_texts->size() )
+    if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    if( curRow < 2 )
+    int curRow = m_itemsGrid->GetGridCursorRow();
+
+    if( curRow < 0 )
+        return;
+    else if( curRow < 2 )
     {
         DisplayError( nullptr, _( "Reference and value are mandatory." ) );
         return;
     }
 
-    auto start = m_texts->begin() + curRow;
-    m_texts->erase( start, start + 1 );
+    m_texts->erase( m_texts->begin() + curRow );
 
     // notify the grid
     wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
     m_itemsGrid->ProcessTableMessage( msg );
 
-    if( curRow == rowCount - 1 )
+    if( m_itemsGrid->GetNumberRows() > 0 )
     {
-        m_itemsGrid->MakeCellVisible( curRow-1, m_itemsGrid->GetGridCursorCol() );
-        m_itemsGrid->SetGridCursor( curRow-1, m_itemsGrid->GetGridCursorCol() );
+        m_itemsGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_itemsGrid->GetGridCursorCol() );
+        m_itemsGrid->SetGridCursor( std::max( 0, curRow-1 ), m_itemsGrid->GetGridCursorCol() );
     }
 }
 

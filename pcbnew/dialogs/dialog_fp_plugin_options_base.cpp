@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_fp_plugin_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -23,7 +25,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_grid_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Plugin Options") ), wxVERTICAL );
 	
 	m_grid_sizer->SetMinSize( wxSize( 400,300 ) ); 
-	m_grid = new wxGrid( m_grid_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxVSCROLL );
+	m_grid = new WX_GRID( m_grid_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxVSCROLL );
 	
 	// Grid
 	m_grid->CreateGrid( 1, 2 );

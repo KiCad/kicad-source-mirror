@@ -33,9 +33,9 @@ public:
     // Constructor has to be wxFormBuilder-compatible
     WX_GRID( wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             long style = wxWANTS_CHARS, const wxString& name = wxGridNameStr ) :
-            wxGrid( parent, id, pos, size, style, name )
-    {}
+             long style = wxWANTS_CHARS, const wxString& name = wxGridNameStr );
+
+    ~WX_GRID() override;
 
     /**
      * Get a tokenized string containing the shown column indexes.
@@ -52,7 +52,7 @@ public:
      * Hide wxGrid's SetTable() method with one which doesn't mess up the grid column
      * widths when setting the table.
      */
-    void SetTable( wxGridTableBase* table );
+    void SetTable( wxGridTableBase* table, bool aTakeOwnership = false );
 
     /**
      * Work-around for a bug in wxGrid which crashes when deleting the table if the
@@ -69,6 +69,8 @@ public:
 
 protected:
     void DrawColLabel( wxDC& dc, int col ) override;
+
+    bool m_weOwnTable;
 };
 
 #endif //KICAD_WX_GRID_H

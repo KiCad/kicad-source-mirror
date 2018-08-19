@@ -25,6 +25,7 @@
 
 #include <wx/msgdlg.h>
 #include <wx/grid.h>
+#include <widgets/wx_grid.h>
 #include <base_units.h>
 #include <confirm.h>
 #include <bitmaps.h>
@@ -423,7 +424,7 @@ public:
         {
             // Commit any pending in-place edits before the row gets moved out from under
             // the editor.
-            GetView()->DisableCellEditControl();
+            dynamic_cast<WX_GRID*>( GetView() )->CommitPendingChanges( true );
 
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
             GetView()->ProcessTableMessage( msg );
@@ -722,8 +723,8 @@ DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
 
 bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
 {
-    // Commit any pending in-place edits and close the editor
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -974,8 +975,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnCancel( wxCommandEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
 {
-    // Commit any pending in-place edits and close the editor
-    m_grid->DisableCellEditControl();
+    // This is a cancel, so commit quietly as we're going to throw the results away anyway.
+    m_grid->CommitPendingChanges( true );
 
     if( m_dataModel->IsEdited() )
     {

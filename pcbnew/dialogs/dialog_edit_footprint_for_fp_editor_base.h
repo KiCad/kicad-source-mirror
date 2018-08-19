@@ -89,7 +89,7 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxChoice* m_ZoneConnectionChoice;
 		wxPanel* m_Panel3D;
 		wxBoxSizer* bSizerMain3D;
-		wxGrid* m_modelsGrid;
+		WX_GRID* m_modelsGrid;
 		wxBitmapButton* m_button3DShapeAdd;
 		wxBitmapButton* m_button3DShapeBrowse;
 		wxBitmapButton* m_button3DShapeRemove;

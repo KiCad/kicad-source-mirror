@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
+#include "widgets/wx_grid.h"
 
 #include "dialog_pad_properties_base.h"
 
@@ -1079,7 +1080,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_gridCornersList = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
+	m_gridCornersList = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 	
 	// Grid
 	m_gridCornersList->CreateGrid( 1, 2 );

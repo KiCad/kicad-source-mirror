@@ -246,7 +246,7 @@ public:
         {
             // Commit any pending in-place edits before the row gets moved out from under
             // the editor.
-            GetView()->DisableCellEditControl();
+            dynamic_cast<WX_GRID*>( GetView() )->CommitPendingChanges( true );
 
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
             GetView()->ProcessTableMessage( msg );
@@ -448,8 +448,8 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 
 bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
 {
-    // Commit any pending in-place edits and close the editor
-    m_grid->DisableCellEditControl();
+    if( !m_grid->CommitPendingChanges() )
+        return false;
 
     // Delete the part's pins
     while( LIB_PIN* pin = m_part->GetNextPin( nullptr ) )
@@ -488,6 +488,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnColSort( wxGridEvent& aEvent )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     m_pins.push_back( new LIB_PIN( nullptr ) );
 
     m_dataModel->AppendRow( m_pins[ m_pins.size() - 1 ] );
@@ -504,6 +507,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int curRow = m_grid->GetGridCursorRow();
 
     if( curRow < 0 )
@@ -530,6 +536,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellEdited( wxGridEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
 
     adjustGridColumns( m_grid->GetRect().GetWidth() );
