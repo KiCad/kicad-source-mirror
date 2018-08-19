@@ -205,9 +205,15 @@ public:
             return KiROUND( m_DefaultLineWidth * m_WSunits2Iu );
     }
 
-    static int GetMarkerSizeUi()
+    static int GetMarkerSizeUi( wxDC* aDC )
     {
-        return KiROUND( 0.5 * m_WSunits2Iu );
+        double x, y;
+        double scale;
+
+        aDC->GetUserScale( &x, &y );
+        scale = (x + y ) / 2;   // should be equal, but if not best we can do is average
+
+        return KiROUND( 0.01 * m_WSunits2Iu / scale );
     }
 
     /**

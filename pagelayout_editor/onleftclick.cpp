@@ -55,7 +55,7 @@ void PL_EDITOR_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     }
 
     item = m_treePagelayout->GetPageLayoutSelectedItem();
-    WORKSHEET_DATAITEM* newitem = Locate( aPosition );
+    WORKSHEET_DATAITEM* newitem = Locate( aDC, aPosition );
 
     if( newitem == NULL )
         return;

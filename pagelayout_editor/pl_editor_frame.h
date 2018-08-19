@@ -358,7 +358,7 @@ public:
      * @return the page layout item found at position aPosition
      * @param aPosition = the position (in user units) of the reference point
      */
-    WORKSHEET_DATAITEM *Locate( const wxPoint& aPosition );
+    WORKSHEET_DATAITEM *Locate( wxDC* aDC, const wxPoint& aPosition );
 
     /**
      * Initialize a move item command

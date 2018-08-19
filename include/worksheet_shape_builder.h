@@ -119,7 +119,7 @@ public:
      * (texts or polygons)
      * the maxi dist is WORKSHEET_DATAITEM::GetMarkerSizeUi()/2
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition) = 0;
+    virtual bool HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition ) = 0;
 
     /**
      * return true if the point aPosition is near the ending point of this item
@@ -127,7 +127,7 @@ public:
      * 2 points
      * the maxi dist is WORKSHEET_DATAITEM::GetMarkerSizeUi()/2
      */
-    virtual bool HitTestEndPoint( const wxPoint& aPosition)
+    virtual bool HitTestEndPoint( wxDC *aDC, const wxPoint& aPosition)
     {
         return false;
     }
@@ -176,14 +176,14 @@ public:
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 
     /**
      * return true if the point aPosition is on the ending point of this item
      * This is avirtual function which should be overriden for items defien by
      * 2 points
      */
-    virtual bool HitTestEndPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestEndPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 };
 
 // This class draws a polygon
@@ -233,7 +233,7 @@ public:
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 };
 
 // This class draws a not filled rectangle with thick segment
@@ -268,14 +268,14 @@ public:
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 
     /**
      * return true if the point aPosition is on the ending point of this item
      * This is avirtual function which should be overriden for items defien by
      * 2 points
      */
-    virtual bool HitTestEndPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestEndPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 };
 
 // This class draws a graphic text.
@@ -317,7 +317,7 @@ public:
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 };
 
 // This class draws a bitmap.
@@ -359,7 +359,7 @@ public:
     /**
      * return true if the point aPosition is on the reference point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
+    virtual bool HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition ) override;
 
     const wxPoint GetPosition() const { return m_pos; }
 };
@@ -592,7 +592,7 @@ public:
      * @param aList = the list of items found
      * @param aPosition the position (in user units) to locate items
      */
-    void Locate(std::vector <WS_DRAW_ITEM_BASE*>& aList, const wxPoint& aPosition);
+    void Locate(wxDC* aDC, std::vector <WS_DRAW_ITEM_BASE*>& aList, const wxPoint& aPosition);
 };
 
 

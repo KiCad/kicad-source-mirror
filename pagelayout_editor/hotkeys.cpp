@@ -267,7 +267,7 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         if( busy )
             break;
 
-        if( (item = Locate( aPosition )) == NULL )
+        if( (item = Locate( aDC, aPosition ) ) == NULL )
             break;
 
         // Only rect and lines have a end point.

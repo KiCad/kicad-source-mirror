@@ -38,6 +38,7 @@
 #include <worksheet_shape_builder.h>
 #include <worksheet_dataitem.h>
 #include <hotkeys.h>
+#include <kicad_device_context.h>
 
 // Helper function to add menuitems relative to items creation
 void AddNewItemsCommand( wxMenu* aMainMenu )
@@ -83,8 +84,9 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 
     if( ! busy )     // No item currently edited
     {
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
         WORKSHEET_DATAITEM* old_item = m_treePagelayout->GetPageLayoutSelectedItem();
-        WORKSHEET_DATAITEM* item = Locate( aPosition );
+        WORKSHEET_DATAITEM* item = Locate( &dc, aPosition );
 
         if( item && old_item != item )
         {

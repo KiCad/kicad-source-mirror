@@ -600,7 +600,7 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::GetSelectedItem()
 }
 
 
-WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
+WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( wxDC* aDC, const wxPoint& aPosition )
 {
     const PAGE_INFO&    pageInfo = GetPageSettings();
     TITLE_BLOCK         t_block = GetTitleBlock();
@@ -625,7 +625,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     // We do not use here the COLLECTOR classes in use in pcbnew and eeschema
     // because the locate requirements are very basic.
     std::vector <WS_DRAW_ITEM_BASE*> list;
-    drawList.Locate( list, aPosition );
+    drawList.Locate( aDC, list, aPosition );
 
     if( list.size() == 0 )
         return NULL;
