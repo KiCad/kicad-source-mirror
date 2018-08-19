@@ -777,6 +777,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( const wxPoint& aPosition )
     SetRepeatItem( no_connect );
     GetScreen()->Append( no_connect );
     SchematicCleanUp();
+    GetScreen()->TestDanglingEnds();
     OnModify();
     m_canvas->Refresh();
     SaveCopyInUndoList( no_connect, UR_NEW );
