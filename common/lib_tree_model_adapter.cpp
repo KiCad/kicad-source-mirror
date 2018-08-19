@@ -382,7 +382,8 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
     FindAndExpand( m_tree,
                    []( LIB_TREE_NODE const* n )
                    {
-                       return /*n->Type == LIB_TREE_NODE::TYPE::LIBID &&*/ n->Score > 1;
+                       // return leaf nodes with some level of matching
+                       return n->Children.size() == 0 && n->Score > 1;
                    },
                    &highScore );
 
