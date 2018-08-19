@@ -527,7 +527,13 @@ bool EDA_BASE_FRAME::ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CO
             frame->InstallPreferences( &dlg );
     }
 
-    return( dlg.ShowModal() != wxID_CANCEL );
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        dlg.Kiway().CommonSettingsChanged();
+        return true;
+    }
+
+    return false;
 }
 
 

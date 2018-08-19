@@ -113,8 +113,6 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     Pgm().ForceSystemPdfBrowser( m_defaultPDFViewer->GetValue() );
     Pgm().WritePdfBrowserInfos();
 
-    m_dialog->Kiway().CommonSettingsChanged();
-
     return true;
 }
 
