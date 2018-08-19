@@ -364,7 +364,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         text = AddHotkeyName( _( "&New..." ), g_Schematic_Hokeys_Descr, HK_NEW );
         AddMenuItem( aParentMenu, ID_NEW_PROJECT, text,
-                     _( "Clear current schematic hierarchy and start new schematic root sheet" ),
+                     _( "Start new schematic root sheet" ),
                      KiBitmap( new_document_xpm ) );
 
         text = AddHotkeyName( _( "&Open..." ), g_Schematic_Hokeys_Descr, HK_OPEN );
@@ -372,8 +372,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                      _( "Open existing schematic" ),
                      KiBitmap( open_document_xpm ) );
 
-        AddMenuItem( aParentMenu, openRecentMenu,
-                     -1, _( "Open &Recent" ),
+        AddMenuItem( aParentMenu, openRecentMenu, -1, _( "Open &Recent" ),
                      _( "Open recently opened schematic" ),
                      KiBitmap( recent_xpm ) );
 
@@ -381,37 +380,27 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     }
 
     text = AddHotkeyName( _( "&Save" ), g_Schematic_Hokeys_Descr, HK_SAVE );
-    AddMenuItem( aParentMenu,
-                 ID_SAVE_PROJECT, text,
-                 _( "Save all sheets in schematic" ),
+    AddMenuItem( aParentMenu, ID_SAVE_PROJECT, text,
+                 _( "Save changes" ),
                  KiBitmap( save_xpm ) );
 
-    AddMenuItem( aParentMenu,
-                 ID_UPDATE_ONE_SHEET,
-                 _( "Save &Current Sheet" ),
-                 _( "Save only current schematic sheet" ),
+    AddMenuItem( aParentMenu, ID_UPDATE_ONE_SHEET, _( "Save &Current Sheet" ),
+                 _( "Save only the current sheet" ),
                  KiBitmap( save_xpm ) );
 
-    if( aIsOutsideProject )   // not when under a project mgr
-    {
-        text = AddHotkeyName( _( "Save C&urrent Sheet As..." ),
-                              g_Schematic_Hokeys_Descr, HK_SAVEAS );
-        AddMenuItem( aParentMenu,
-                     ID_SAVE_ONE_SHEET_UNDER_NEW_NAME, text,
-                     _( "Save current schematic sheet with new name" ),
-                     KiBitmap( save_as_xpm ) );
-    }
+    text = AddHotkeyName( _( "Save C&urrent Sheet As..." ), g_Schematic_Hokeys_Descr, HK_SAVEAS );
+    AddMenuItem( aParentMenu, ID_SAVE_ONE_SHEET_UNDER_NEW_NAME, text,
+                 _( "Save a copy of the current sheet" ),
+                 KiBitmap( save_as_xpm ) );
 
     aParentMenu->AppendSeparator();
 
-    AddMenuItem( aParentMenu, ID_APPEND_PROJECT,
-                 _( "App&end Schematic Sheet Content..." ),
-                 _( "Import schematic sheet content from another project to current sheet" ),
+    AddMenuItem( aParentMenu, ID_APPEND_PROJECT, _( "App&end Schematic Sheet Content..." ),
+                 _( "Append schematic sheet content from another project to the current sheet" ),
                  KiBitmap( add_document_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_SCH,
-                 _( "&Import Non KiCad Schematic File..." ),
-                 _( "Import schematic file from other applications" ),
+    AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_SCH, _( "&Import Non KiCad Schematic..." ),
+                 _( "Replace current schematic sheet with one imported from another application" ),
                  KiBitmap( import_document_xpm ) );   // TODO needs a different icon
 
     aParentMenu->AppendSeparator();
@@ -419,14 +408,11 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // Import submenu
     wxMenu* submenuImport = new wxMenu();
 
-    AddMenuItem( submenuImport, ID_BACKANNO_ITEMS,
-                 _( "&Footprint Association File..." ),
+    AddMenuItem( submenuImport, ID_BACKANNO_ITEMS, _( "&Footprint Association File..." ),
                  HELP_IMPORT_FOOTPRINTS,
                  KiBitmap( import_footprint_names_xpm ) );
 
-    AddMenuItem( aParentMenu, submenuImport,
-                 ID_GEN_IMPORT_FILE,
-                 _( "&Import" ),
+    AddMenuItem( aParentMenu, submenuImport, ID_GEN_IMPORT_FILE, _( "&Import" ),
                  _( "Import files" ),
                  KiBitmap( import_xpm ) );
 
@@ -434,22 +420,18 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // Export submenu
     wxMenu* submenuExport = new wxMenu();
 
-    AddMenuItem( submenuExport, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
-                 _( "Drawing to C&lipboard" ),
+    AddMenuItem( submenuExport, ID_GEN_COPY_SHEET_TO_CLIPBOARD, _( "Drawing to C&lipboard" ),
                  _( "Export drawings to clipboard" ),
                  KiBitmap( copy_xpm ) );
 
-    AddMenuItem( aParentMenu, submenuExport,
-                 ID_GEN_EXPORT_FILE,
-                 _( "E&xport" ),
+    AddMenuItem( aParentMenu, submenuExport, ID_GEN_EXPORT_FILE, _( "E&xport" ),
                  _( "Export files" ),
                  KiBitmap( export_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     // Edit page layout:
-    AddMenuItem( aParentMenu, ID_SHEET_SET,
-                 _( "Page S&ettings..." ),
+    AddMenuItem( aParentMenu, ID_SHEET_SET, _( "Page S&ettings..." ),
                  _( "Settings for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
@@ -465,7 +447,8 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     aParentMenu->AppendSeparator();
 
     // Quit
-    AddMenuItem( aParentMenu, wxID_EXIT, _( "&Exit" ), _( "Close Eeschema" ),
+    AddMenuItem( aParentMenu, wxID_EXIT, _( "&Exit" ),
+                 _( "Close Eeschema" ),
                  KiBitmap( exit_xpm ) );
 }
 
