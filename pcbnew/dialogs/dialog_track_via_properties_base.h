@@ -21,8 +21,8 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <widgets/net_selector.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
