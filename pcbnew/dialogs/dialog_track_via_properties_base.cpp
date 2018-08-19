@@ -265,7 +265,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbViaSizer->Add( fgViaRightSizer, 4, wxLEFT, 10 );
 	
 	
-	m_MainSizer->Add( m_sbViaSizer, 0, wxALL|wxEXPAND, 5 );
+	m_MainSizer->Add( m_sbViaSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_MainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -277,7 +277,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_StdButtons->AddButton( m_StdButtonsCancel );
 	m_StdButtons->Realize();
 	
-	m_MainSizer->Add( m_StdButtons, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( m_StdButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( m_MainSizer );

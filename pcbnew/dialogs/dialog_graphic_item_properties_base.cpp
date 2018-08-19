@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pcb_layer_box_selector.h"
@@ -75,7 +75,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_fgUpperLeftGridSizer->Add( m_BezierPointC1XLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_BezierC1X_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgUpperLeftGridSizer->Add( m_BezierC1X_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_fgUpperLeftGridSizer->Add( m_BezierC1X_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
 	
 	m_BezierPointC1XUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BezierPointC1XUnit->Wrap( -1 );
@@ -86,7 +86,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_fgUpperLeftGridSizer->Add( m_BezierPointC1YLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_BezierC1Y_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgUpperLeftGridSizer->Add( m_BezierC1Y_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_fgUpperLeftGridSizer->Add( m_BezierC1Y_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
 	
 	m_BezierPointC1YUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BezierPointC1YUnit->Wrap( -1 );
@@ -97,7 +97,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_fgUpperLeftGridSizer->Add( m_BezierPointC2XLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_BezierC2X_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgUpperLeftGridSizer->Add( m_BezierC2X_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_fgUpperLeftGridSizer->Add( m_BezierC2X_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
 	
 	m_BezierPointC2XUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BezierPointC2XUnit->Wrap( -1 );
@@ -108,7 +108,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_fgUpperLeftGridSizer->Add( m_BezierPointC2YLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_BezierC2Y_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgUpperLeftGridSizer->Add( m_BezierC2Y_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_fgUpperLeftGridSizer->Add( m_BezierC2Y_Ctrl, 0, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
 	
 	m_BezierPointC2YUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BezierPointC2YUnit->Wrap( -1 );
