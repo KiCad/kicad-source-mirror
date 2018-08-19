@@ -420,6 +420,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	// Cell Defaults
 	m_modelsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_modelsGrid->SetMinSize( wxSize( -1,86 ) );
+	
 	sbSizer3->Add( m_modelsGrid, 1, wxEXPAND|wxRIGHT, 5 );
 	
 	wxBoxSizer* bSizer3DButtons;
