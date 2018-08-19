@@ -33,7 +33,7 @@
 
 #include <gestfich.h>
 #include <executable_names.h>
-
+#include <kiway.h>
 #include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
@@ -235,10 +235,9 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         break;
 
     case TREE_NET:
-        // Nothing to do ( can be read only by Pcbnew, or by a text editor)
-        break;
-
+    case TREE_DRILL:
     case TREE_TXT:
+    case TREE_REPORT:
         {
             wxString editorname = Pgm().GetEditorName();
 
@@ -249,6 +248,22 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
     case TREE_PAGE_LAYOUT_DESCR:
         frame->Execute( m_parent, PL_EDITOR_EXE, fullFileName );
+        break;
+
+    case TREE_FOOTPRINT_FILE:
+        {
+            wxCommandEvent dummy;
+            frame->OnRunPcbFpEditor( dummy );
+            frame->Kiway().ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, fullFileName );
+        }
+        break;
+
+    case TREE_SCHEMATIC_LIBFILE:
+        {
+            wxCommandEvent dummy;
+            frame->OnRunSchLibEditor( dummy );
+            frame->Kiway().ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, fullFileName );
+        }
         break;
 
     default:

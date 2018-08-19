@@ -29,6 +29,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <kiway.h>
+#include <kiway_express.h>
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
@@ -1104,4 +1105,58 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
     m_canvas->Refresh();
 
     return true;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    const std::string& payload = mail.GetPayload();
+
+    switch( mail.Command() )
+    {
+    case MAIL_FP_EDIT:
+        if( !payload.empty() )
+        {
+            wxFileName fpFileName( payload );
+            wxString libNickname;
+            wxString msg;
+
+            FP_LIB_TABLE*        libTable = Prj().PcbFootprintLibs();
+            const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( fpFileName.GetPath() );
+
+            if( !libTableRow )
+            {
+                msg.Printf( _( "The current configuration does not include the footprint library\n"
+                               "\"%s\".\nUse Manage Footprint Libraries to edit the configuration." ),
+                            fpFileName.GetPath() );
+                DisplayErrorMessage( this, _( "Library not found in footprint library table." ), msg );
+                break;
+            }
+
+            libNickname = libTableRow->GetNickName();
+
+            if( !libTable->HasLibrary( libNickname, true ) )
+            {
+                msg.Printf( _( "The library with the nickname \"%s\" is not enabled\n"
+                               "in the current configuration.  Use Manage Footprint Libraries to\n"
+                               "edit the configuration." ), libNickname );
+                DisplayErrorMessage( this, _( "Footprint library not enabled." ), msg );
+                break;
+            }
+
+            LIB_ID  fpId( libNickname, fpFileName.GetName() );
+
+            if( m_treePane )
+            {
+                m_treePane->GetLibTree()->SelectLibId( fpId );
+                wxCommandEvent event( COMPONENT_SELECTED );
+                wxPostEvent( m_treePane, event );
+            }
+        }
+
+        break;
+
+    default:
+        ;
+    }
 }

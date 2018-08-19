@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
+#include <kiway_express.h>
 #include <class_drawpanel.h>
 #include <base_screen.h>
 #include <confirm.h>
@@ -1658,3 +1659,52 @@ void LIB_EDIT_FRAME::ShowChangedLanguage()
     UpdateMsgPanel();
 }
 
+
+void LIB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    const std::string& payload = mail.GetPayload();
+
+    switch( mail.Command() )
+    {
+    case MAIL_LIB_EDIT:
+        if( !payload.empty() )
+        {
+            wxString libFileName( payload );
+            wxString libNickname;
+            wxString msg;
+
+            SYMBOL_LIB_TABLE*    libTable = Prj().SchSymbolLibTable();
+            const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( libFileName );
+
+            if( !libTableRow )
+            {
+                msg.Printf( _( "The current configuration does not include the symbol library\n"
+                               "\"%s\".\nUse Manage Symbol Libraries to edit the configuration." ),
+                            libFileName );
+                DisplayErrorMessage( this, _( "Library not found in symbol library table." ), msg );
+                break;
+            }
+
+            libNickname = libTableRow->GetNickName();
+
+            if( !libTable->HasLibrary( libNickname, true ) )
+            {
+                msg.Printf( _( "The library with the nickname \"%s\" is not enabled\n"
+                               "in the current configuration.  Use Manage Symbol Libraries to\n"
+                               "edit the configuration." ), libNickname );
+                DisplayErrorMessage( this, _( "Symbol library not enabled." ), msg );
+                break;
+            }
+
+            SetCurLib( libNickname );
+
+            if( m_treePane )
+                m_treePane->GetLibTree()->ExpandLibId( LIB_ID( libNickname, wxEmptyString ) );
+        }
+
+        break;
+
+    default:
+        ;
+    }
+}

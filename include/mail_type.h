@@ -48,6 +48,9 @@ enum MAIL_T
     MAIL_SCH_PCB_UPDATE_REQUEST,
     MAIL_SCH_REFRESH,               ///< The the schematic editor to refresh the display.
 
+    MAIL_LIB_EDIT,
+    MAIL_FP_EDIT,
+
     ///< General-puspose messages
     MAIL_STATUS
 };

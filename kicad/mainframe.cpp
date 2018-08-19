@@ -283,32 +283,20 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
 
 void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName )
 {
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, false );
+    KIWAY_PLAYER* frame;
 
-    // Please: note: DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers() calls
-    // Kiway.Player( FRAME_SCH, true )
-    // therefore, the schematic editor is sometimes running, but the schematic project
-    // is not loaded, if the library editor was called, and the dialog field editor was used.
-    // On linux, it happens the first time the schematic editor is launched, if
-    // library editor was running, and the dialog field editor was open
-    // On Windows, it happens always after the library editor was called,
-    // and the dialog field editor was used
-    if( !frame )
+    try
     {
-        try
-        {
-            frame = Kiway().Player( FRAME_SCH, true );
-        }
-        catch( const IO_ERROR& err )
-        {
-            wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
-                          _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
-            return;
-        }
+        frame = Kiway().Player( FRAME_SCH, true );
+    }
+    catch( const IO_ERROR& err )
+    {
+        wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
+                      _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+        return;
     }
 
-    if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
-                            // but no project loaded.
+    if( !frame->IsShown() ) // A hidden frame might not have the project loaded.
     {
         frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
@@ -338,23 +326,21 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 {
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+    KIWAY_PLAYER* frame;
 
-    if( !frame )
+    try
     {
-        try
-        {
-            frame = Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
-        }
-        catch( const IO_ERROR& err )
-        {
-            wxMessageBox( _( "Component library editor failed to load:\n" ) + err.What(),
-                          _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
-            return;
-        }
-
-        frame->Show( true );
+        frame = Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
     }
+    catch( const IO_ERROR& err )
+    {
+        wxMessageBox( _( "Component library editor failed to load:\n" ) + err.What(),
+                      _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+        return;
+    }
+
+    if( !frame->IsShown() )
+        frame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( frame->IsIconized() )
@@ -379,10 +365,7 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
         return;
     }
 
-    // a pcb frame can be already existing, but not yet used.
-    // this is the case when running the footprint editor, or the footprint viewer first
-    // if the frame is not visible, the board is not yet loaded
-    if( !frame->IsVisible() )
+    if( !frame->IsVisible() )   // A hidden frame might not have the board loaded.
     {
         frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
@@ -410,23 +393,21 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 {
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
+    KIWAY_PLAYER* frame;
 
-    if( !frame )
+    try
     {
-        try
-        {
-            frame = Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
-        }
-        catch( const IO_ERROR& err )
-        {
-            wxMessageBox( _( "Footprint library editor failed to load:\n" ) + err.What(),
-                          _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
-            return;
-        }
-
-        frame->Show( true );
+        frame = Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
     }
+    catch( const IO_ERROR& err )
+    {
+        wxMessageBox( _( "Footprint library editor failed to load:\n" ) + err.What(),
+                      _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+        return;
+    }
+
+    if( !frame->IsShown() )
+        frame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( frame->IsIconized() )

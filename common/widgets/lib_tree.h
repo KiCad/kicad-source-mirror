@@ -85,6 +85,11 @@ public:
     void Unselect();
 
     /**
+     * Expand and item i the tree widget.
+     */
+    void ExpandLibId( const LIB_ID& aLibId );
+
+    /**
      * Associates a right click context menu for a specific node type.
      * @param aType is the node type to have a menu associated.
      * @param aMenu is the associated menu.
@@ -122,6 +127,8 @@ protected:
     void selectIfValid( const wxDataViewItem& aTreeId );
 
     void centerIfValid( const wxDataViewItem& aTreeId );
+
+    void expandIfValid( const wxDataViewItem& aTreeId );
 
     /**
      * Post a wxEVT_DATAVIEW_SELECTION_CHANGED to notify the selection handler

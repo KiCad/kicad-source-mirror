@@ -176,6 +176,11 @@ void LIB_TREE::Unselect()
     m_tree_ctrl->UnselectAll();
 }
 
+void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
+{
+    expandIfValid( m_adapter->FindItem( aLibId ) );
+}
+
 
 void LIB_TREE::Regenerate()
 {
@@ -234,6 +239,12 @@ void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
         m_tree_ctrl->EnsureVisible( aTreeId );
 }
 
+
+void LIB_TREE::expandIfValid( const wxDataViewItem& aTreeId )
+{
+    if( aTreeId.IsOk() && !m_tree_ctrl->IsExpanded( aTreeId ) )
+        m_tree_ctrl->Expand( aTreeId );
+}
 
 
 void LIB_TREE::postPreselectEvent()

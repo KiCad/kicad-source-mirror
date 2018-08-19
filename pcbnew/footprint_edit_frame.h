@@ -507,6 +507,7 @@ public:
      */
     void UpdateMsgPanel() override;
 
+    void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
     DECLARE_EVENT_TABLE()
 
