@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,12 +57,15 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	m_btnAddEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnAddEnvVar->SetMinSize( wxSize( 30,29 ) );
 	
-	bSizerEnvVarBtns->Add( m_btnAddEnvVar, 0, 0, 5 );
+	bSizerEnvVarBtns->Add( m_btnAddEnvVar, 0, wxRIGHT, 5 );
+	
+	
+	bSizerEnvVarBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_btnDeleteEnvVar = new wxBitmapButton( sbEnvVars->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnDeleteEnvVar->SetMinSize( wxSize( 30,29 ) );
 	
-	bSizerEnvVarBtns->Add( m_btnDeleteEnvVar, 0, wxLEFT, 5 );
+	bSizerEnvVarBtns->Add( m_btnDeleteEnvVar, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	sbEnvVars->Add( bSizerEnvVarBtns, 0, wxEXPAND, 5 );
@@ -115,20 +118,23 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	
 	bSizerSearchPathBtns->Add( m_btnAddSearchPath, 0, wxRIGHT, 5 );
 	
-	m_btnDeleteSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnDeleteSearchPath->SetMinSize( wxSize( 30,29 ) );
-	
-	bSizerSearchPathBtns->Add( m_btnDeleteSearchPath, 0, wxRIGHT, 10 );
-	
 	m_btnMoveUp = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnMoveUp->SetMinSize( wxSize( 30,29 ) );
 	
-	bSizerSearchPathBtns->Add( m_btnMoveUp, 0, wxLEFT, 10 );
+	bSizerSearchPathBtns->Add( m_btnMoveUp, 0, wxRIGHT, 5 );
 	
 	m_btnMoveDown = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnMoveDown->SetMinSize( wxSize( 30,29 ) );
 	
-	bSizerSearchPathBtns->Add( m_btnMoveDown, 0, wxLEFT, 5 );
+	bSizerSearchPathBtns->Add( m_btnMoveDown, 0, wxRIGHT, 5 );
+	
+	
+	bSizerSearchPathBtns->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_btnDeleteSearchPath = new wxBitmapButton( m_sb3DSearchPaths->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnDeleteSearchPath->SetMinSize( wxSize( 30,29 ) );
+	
+	bSizerSearchPathBtns->Add( m_btnDeleteSearchPath, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_sb3DSearchPaths->Add( bSizerSearchPathBtns, 0, wxEXPAND, 5 );
@@ -164,9 +170,9 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	m_SearchPaths->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellRightClick ), NULL, this );
 	m_SearchPaths->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ), NULL, this );
 	m_btnAddSearchPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddSearchPath ), NULL, this );
-	m_btnDeleteSearchPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnDeleteSearchPath ), NULL, this );
 	m_btnMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveUp ), NULL, this );
 	m_btnMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveDown ), NULL, this );
+	m_btnDeleteSearchPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnDeleteSearchPath ), NULL, this );
 	m_sdbSizerHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnHelp ), NULL, this );
 }
 
@@ -182,9 +188,9 @@ DIALOG_CONFIGURE_PATHS_BASE::~DIALOG_CONFIGURE_PATHS_BASE()
 	m_SearchPaths->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellRightClick ), NULL, this );
 	m_SearchPaths->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ), NULL, this );
 	m_btnAddSearchPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddSearchPath ), NULL, this );
-	m_btnDeleteSearchPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnDeleteSearchPath ), NULL, this );
 	m_btnMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveUp ), NULL, this );
 	m_btnMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveDown ), NULL, this );
+	m_btnDeleteSearchPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnDeleteSearchPath ), NULL, this );
 	m_sdbSizerHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnHelp ), NULL, this );
 	
 }

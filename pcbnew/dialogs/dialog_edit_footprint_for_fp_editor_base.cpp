@@ -84,15 +84,15 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 	
-	bButtonSize->Add( m_bpAdd, 0, 0, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
+	
+	
+	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 5 );
-	
-	
-	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
 	sbSizerTexts->Add( bButtonSize, 0, wxEXPAND, 5 );

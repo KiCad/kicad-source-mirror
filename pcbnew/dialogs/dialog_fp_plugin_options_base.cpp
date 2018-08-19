@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -59,8 +59,11 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_append_button = new wxBitmapButton( m_grid_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), 0 );
 	bButtonsSizer->Add( m_append_button, 0, wxRIGHT|wxLEFT, 5 );
 	
+	
+	bButtonsSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
 	m_delete_button = new wxBitmapButton( m_grid_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), 0 );
-	bButtonsSizer->Add( m_delete_button, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_grid_sizer->Add( bButtonsSizer, 0, wxEXPAND|wxTOP, 5 );
@@ -76,7 +79,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	
 	m_options_sizer->Add( m_listbox, 3, wxALL|wxEXPAND, 5 );
 	
-	m_append_choice_button = new wxButton( m_options_sizer->GetStaticBox(), wxID_ANY, _("<< Append Selected Option"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_append_choice_button = new wxButton( m_options_sizer->GetStaticBox(), wxID_ANY, _("<<    Append Selected Option"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_options_sizer->Add( m_append_choice_button, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -91,7 +94,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_horizontal_sizer->Add( m_options_sizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( m_horizontal_sizer, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_horizontal_sizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

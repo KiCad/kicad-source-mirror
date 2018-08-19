@@ -148,7 +148,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	bButtonSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	bSizerMain->Add( bButtonSizer, 0, wxEXPAND|wxLEFT, 5 );
+	bSizerMain->Add( bButtonSizer, 0, wxEXPAND|wxLEFT, 10 );
 	
 	
 	this->SetSizer( bSizerMain );

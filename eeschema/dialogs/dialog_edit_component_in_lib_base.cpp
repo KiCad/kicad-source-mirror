@@ -85,25 +85,25 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_bpAdd = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 	
-	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
-	
-	m_bpDelete = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
-	
-	bButtonSize->Add( m_bpDelete, 0, wxRIGHT, 10 );
+	bButtonSize->Add( m_bpAdd, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_bpMoveUp = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bpMoveUp->SetMinSize( wxSize( 30,29 ) );
 	
-	bButtonSize->Add( m_bpMoveUp, 0, wxLEFT, 10 );
+	bButtonSize->Add( m_bpMoveUp, 0, wxRIGHT, 5 );
 	
 	m_bpMoveDown = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bpMoveDown->SetMinSize( wxSize( 30,29 ) );
 	
-	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
 	
 	
-	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
+	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_bpDelete = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
+	
+	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 10 );
 	
 	
 	sbSizer4->Add( bButtonSize, 1, wxEXPAND|wxBOTTOM, 5 );
@@ -280,10 +280,13 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	bSizerButtons->Add( m_addAliasButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
+	bSizerButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
 	m_deleteAliasButton = new wxBitmapButton( m_PanelAlias, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_deleteAliasButton->SetMinSize( wxSize( 30,29 ) );
 	
-	bSizerButtons->Add( m_deleteAliasButton, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizerButtons->Add( m_deleteAliasButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bLeftBoxSizerPanelAlias->Add( bSizerButtons, 0, wxEXPAND, 5 );
@@ -446,9 +449,9 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnUpdateUI ) );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddField ), NULL, this );
-	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteField ), NULL, this );
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnMoveDown ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteField ), NULL, this );
 	m_aliasListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSelectAlias ), NULL, this );
 	m_addAliasButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddAlias ), NULL, this );
 	m_deleteAliasButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteAlias ), NULL, this );
@@ -466,9 +469,9 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE()
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnUpdateUI ) );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddField ), NULL, this );
-	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteField ), NULL, this );
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnMoveDown ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteField ), NULL, this );
 	m_aliasListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSelectAlias ), NULL, this );
 	m_addAliasButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddAlias ), NULL, this );
 	m_deleteAliasButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteAlias ), NULL, this );

@@ -52,9 +52,9 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxPanel* m_PanelBasic;
 		WX_GRID* m_grid;
 		wxBitmapButton* m_bpAdd;
-		wxBitmapButton* m_bpDelete;
 		wxBitmapButton* m_bpMoveUp;
 		wxBitmapButton* m_bpMoveDown;
+		wxBitmapButton* m_bpDelete;
 		wxTextCtrl* m_SymbolNameCtrl;
 		wxTextCtrl* m_DescCtrl;
 		wxStaticText* staticKeywordsLabel;
@@ -94,9 +94,9 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAlias( wxCommandEvent& event ) { event.Skip(); }

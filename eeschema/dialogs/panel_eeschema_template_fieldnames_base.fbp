@@ -339,7 +339,17 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxTOP|wxRIGHT</property>
+                                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                    <property name="proportion">0</property>
+                                    <object class="spacer" expanded="1">
+                                        <property name="height">0</property>
+                                        <property name="permission">protected</property>
+                                        <property name="width">0</property>
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>

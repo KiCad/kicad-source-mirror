@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,10 +18,10 @@
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -44,9 +44,9 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_sb3DSearchPaths;
 		wxGrid* m_SearchPaths;
 		wxBitmapButton* m_btnAddSearchPath;
-		wxBitmapButton* m_btnDeleteSearchPath;
 		wxBitmapButton* m_btnMoveUp;
 		wxBitmapButton* m_btnMoveDown;
+		wxBitmapButton* m_btnDeleteSearchPath;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -60,9 +60,9 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		virtual void OnRemoveEnvVar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnAddSearchPath( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteSearchPath( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchPathMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchPathMoveDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteSearchPath( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
 		
 	

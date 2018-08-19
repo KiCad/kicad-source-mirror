@@ -425,7 +425,7 @@
                                                     <property name="permission">none</property>
                                                     <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
-                                                        <property name="flag"></property>
+                                                        <property name="flag">wxRIGHT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxBitmapButton" expanded="0">
                                                             <property name="BottomDockable">1</property>
@@ -514,6 +514,16 @@
                                                             <event name="OnSetFocus"></event>
                                                             <event name="OnSize"></event>
                                                             <event name="OnUpdateUI"></event>
+                                                        </object>
+                                                    </object>
+                                                    <object class="sizeritem" expanded="0">
+                                                        <property name="border">5</property>
+                                                        <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                                        <property name="proportion">0</property>
+                                                        <object class="spacer" expanded="0">
+                                                            <property name="height">0</property>
+                                                            <property name="permission">protected</property>
+                                                            <property name="width">0</property>
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="0">
@@ -607,16 +617,6 @@
                                                             <event name="OnSetFocus"></event>
                                                             <event name="OnSize"></event>
                                                             <event name="OnUpdateUI"></event>
-                                                        </object>
-                                                    </object>
-                                                    <object class="sizeritem" expanded="0">
-                                                        <property name="border">5</property>
-                                                        <property name="flag">wxEXPAND</property>
-                                                        <property name="proportion">1</property>
-                                                        <object class="spacer" expanded="0">
-                                                            <property name="height">0</property>
-                                                            <property name="permission">protected</property>
-                                                            <property name="width">0</property>
                                                         </object>
                                                     </object>
                                                 </object>

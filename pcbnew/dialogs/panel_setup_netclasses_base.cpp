@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,10 +78,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	
 	buttonBoxSizer->Add( m_addButton, 0, wxRIGHT, 5 );
 	
+	
+	buttonBoxSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
 	m_removeButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_removeButton->SetMinSize( wxSize( 30,29 ) );
 	
-	buttonBoxSizer->Add( m_removeButton, 0, 0, 10 );
+	buttonBoxSizer->Add( m_removeButton, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	sbSizerUpper->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP, 2 );

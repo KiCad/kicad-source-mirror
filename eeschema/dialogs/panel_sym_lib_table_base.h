@@ -50,18 +50,18 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		wxGrid* m_project_grid;
 		wxBitmapButton* m_append_button;
 		wxBitmapButton* m_browse_button;
-		wxBitmapButton* m_delete_button;
 		wxBitmapButton* m_move_up_button;
 		wxBitmapButton* m_move_down_button;
+		wxBitmapButton* m_delete_button;
 		wxGrid* m_path_subs_grid;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void browseLibrariesHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveDownHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		
 	
