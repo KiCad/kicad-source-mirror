@@ -43,12 +43,16 @@ GRID_TRICKS::GRID_TRICKS( wxGrid* aGrid ):
     m_sel_row_count = 0;
     m_sel_col_count = 0;
 
+    m_showEditorOnMouseUp = false;
+
     aGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), NULL, this );
     aGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftDClick ), NULL, this );
     aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), NULL, this );
     aGrid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridLabelRightClick ), NULL, this );
     aGrid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), NULL, this );
     aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), NULL, this );
+    aGrid->GetGridWindow()->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( GRID_TRICKS::onMouseUp ), NULL, this );
+    aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ), NULL, this );
 }
 
 
@@ -90,17 +94,45 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
 }
 
 
+bool GRID_TRICKS::showEditor( int aRow, int aCol )
+{
+    if( m_grid->IsEditable() && !m_grid->IsReadOnly( aRow, aCol ) )
+    {
+        if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectionModes::wxGridSelectRows )
+            m_grid->SelectRow( aRow );
+
+        m_grid->SetGridCursor( aRow, aCol );
+
+        // For several reasons we can't enable the control here.  There's the whole
+        // SetInSetFocus() issue/hack in wxWidgets, and there's also wxGrid's MouseUp
+        // handler which doesn't notice it's processing a MouseUp until after it has
+        // disabled the editor yet again.  So we wait for the MouseUp.
+        m_showEditorOnMouseUp = true;
+
+        return true;
+    }
+
+    return false;
+}
+
+
 void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
 
-    // Don't make users click twice to toggle a checkbox
+    // Don't make users click twice to toggle a checkbox or edit a text cell
 
-    if( !aEvent.GetModifiers() && toggleCell( row, col ) )
-        /* eat event */ ;
-    else
-        aEvent.Skip();
+    if( !aEvent.GetModifiers() )
+    {
+        if( toggleCell( row, col ) )
+            return;
+
+        if( showEditor( row, col ) )
+            return;
+    }
+
+    aEvent.Skip();
 }
 
 
@@ -108,6 +140,24 @@ void GRID_TRICKS::onGridCellLeftDClick( wxGridEvent& aEvent )
 {
     if( !handleDoubleClick( aEvent ) )
         onGridCellLeftClick( aEvent );
+}
+
+
+void GRID_TRICKS::onMouseUp( wxMouseEvent& aEvent )
+{
+    if( m_showEditorOnMouseUp )
+    {
+        // Some wxGridCellEditors don't have the SetInSetFocus() hack.  Even when they do,
+        // it sometimes fails.  Activating the control here seems to avoid those issues.
+        if( m_grid->CanEnableCellControl() )
+        {
+            m_grid->EnableCellEditControl();
+            m_grid->ShowCellEditControl();
+        }
+        m_showEditorOnMouseUp = false;
+    }
+    else
+        aEvent.Skip();
 }
 
 
@@ -385,5 +435,29 @@ void GRID_TRICKS::cutcopy( bool doCut )
 
         if( doCut )
             m_grid->ForceRefresh();
+    }
+}
+
+
+void GRID_TRICKS::onUpdateUI( wxUpdateUIEvent& event )
+{
+    // Respect ROW selectionMode when moving cursor
+
+    if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectionModes::wxGridSelectRows )
+    {
+        int cursorRow = m_grid->GetCursorRow();
+        bool cursorInSelectedRow = false;
+
+        for( int row : m_grid->GetSelectedRows() )
+        {
+            if( row == cursorRow )
+            {
+                cursorInSelectedRow = true;
+                break;
+            }
+        }
+
+        if( !cursorInSelectedRow )
+            m_grid->SelectRow( cursorRow );
     }
 }

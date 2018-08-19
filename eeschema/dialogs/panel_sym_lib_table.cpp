@@ -169,6 +169,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_global_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_global_grid ) );
     m_project_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_project_grid ) );
 
+    m_global_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_project_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+
     m_global_grid->AutoSizeColumns( false );
     m_project_grid->AutoSizeColumns( false );
 
@@ -213,17 +216,20 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     // for ALT+A handling, we want the initial focus to be on the first selected grid.
     m_parent->SetInitialFocus( m_cur_grid );
 
-    // Gives a selection for each grid, mainly for delete lib button.
-    // Without that, we do not see what lib will be deleted
-    m_global_grid->SelectRow( 0 );
-    m_project_grid->SelectRow( 0 );
-
     // Configure button logos
     m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
     m_browse_button->SetBitmap( KiBitmap( folder_xpm ) );
+
+    // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
+    // a currentCell which is sometimes not highlighted.
+    if( m_global_grid->GetNumberRows() > 0 )
+        m_global_grid->SelectRow( 0 );
+
+    if( m_project_grid->GetNumberRows() > 0 )
+        m_project_grid->SelectRow( 0 );
 }
 
 
@@ -469,6 +475,12 @@ void PANEL_SYM_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     // Use the row having the grid cursor only if we have no candidate:
     if( selectedRows.size() == 0 && m_cur_grid->GetGridCursorRow() >= 0 )
         selectedRows.Add( m_cur_grid->GetGridCursorRow() );
+
+    if( selectedRows.size() == 0 )
+    {
+        wxBell();
+        return;
+    }
 
     std::sort( selectedRows.begin(), selectedRows.end() );
 

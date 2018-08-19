@@ -277,8 +277,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_GblTableFilename->SetLabel( aGlobalTblPath );
     m_PrjTableFilename->SetLabel( aProjectTblPath );
 
-    // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
-    // so make it a grid owned table.
     m_global_grid->SetTable(  new FP_LIB_TABLE_GRID( *aGlobal ),  true );
     m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
 
@@ -289,6 +287,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     // add Cut, Copy, and Paste to wxGrids
     m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_global_grid ) );
     m_project_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_project_grid ) );
+
+    m_global_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_project_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
 
     m_global_grid->AutoSizeColumns( false );
     m_project_grid->AutoSizeColumns( false );
@@ -346,10 +347,13 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
 
-    // Gives a selection for each grid, mainly for delete lib button.
-    // Without that, we do not see what lib will be deleted
-    m_global_grid->SetGridCursor( 0, 1 );
-    m_project_grid->SetGridCursor( 0, 1 );
+    // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
+    // a currentCell which is sometimes not highlighted.
+    if( m_global_grid->GetNumberRows() > 0 )
+        m_global_grid->SelectRow( 0 );
+
+    if( m_project_grid->GetNumberRows() > 0 )
+        m_project_grid->SelectRow( 0 );
 }
 
 
@@ -510,6 +514,12 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     // Use the row having the grid cursor only if we have no candidate:
     if( selectedRows.size() == 0 && m_cur_grid->GetGridCursorRow() >= 0 )
         selectedRows.Add( m_cur_grid->GetGridCursorRow() );
+
+    if( selectedRows.size() == 0 )
+    {
+        wxBell();
+        return;
+    }
 
     std::sort( selectedRows.begin(), selectedRows.end() );
 

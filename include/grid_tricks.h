@@ -64,6 +64,8 @@ protected:
     int     m_sel_row_count;
     int     m_sel_col_count;
 
+    bool    m_showEditorOnMouseUp;
+
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
 
@@ -78,12 +80,15 @@ protected:
     void onGridLabelRightClick( wxGridEvent& event );
     void onPopupSelection( wxCommandEvent& event );
     void onKeyDown( wxKeyEvent& ev );
+    void onMouseUp( wxMouseEvent& aEvent );
+    void onUpdateUI( wxUpdateUIEvent& event );
 
     virtual bool handleDoubleClick( wxGridEvent& aEvent );
     virtual void showPopupMenu( wxMenu& menu );
     virtual void doPopupSelection( wxCommandEvent& event );
 
     bool toggleCell( int aRow, int aCol );
+    bool showEditor( int aRow, int aCol );
 
     virtual void paste_clipboard();
     virtual void paste_text( const wxString& cb_text );
