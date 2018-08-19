@@ -542,15 +542,29 @@ void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
+    const wxString& partName = libId.GetLibItemName();  // Empty if this is the library itself that is selected
 
     if( !IsOK( this, _( "The revert operation cannot be undone!\n\nRevert changes?" ) ) )
         return;
 
-    bool currentPart = isCurrentPart( libId );
+    bool reload_currentPart;
+    wxString curr_partName = partName;
+
+    // the library itself is reverted: the current part will be reloaded only if it is owned by this library
+    if( partName.IsEmpty() )
+    {
+        LIB_ID curr_libId = GetCurPart()->GetLibId();
+        reload_currentPart = libName == curr_libId.GetLibNickname();
+
+        if( reload_currentPart )
+            curr_partName = curr_libId.GetLibItemName();
+    }
+    else
+        reload_currentPart = isCurrentPart( libId );
+
     int unit = m_unit;
 
-    if( currentPart )
+    if( reload_currentPart )
         emptyScreen();
 
     if( partName.IsEmpty() )
@@ -565,8 +579,8 @@ void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
         m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
     }
 
-    if( currentPart && m_libMgr->PartExists( partName, libName ) )
-        loadPart( partName, libName, unit );
+    if( reload_currentPart && m_libMgr->PartExists( curr_partName, libName ) )
+        loadPart( curr_partName, libName, unit );
 
     m_treePane->Refresh();
 }
