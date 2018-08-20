@@ -116,17 +116,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 0 );
     m_netlist->SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 
-    try
-    {
-        m_frame->LoadFootprints( *m_netlist, &reporter );
-    }
-    catch( IO_ERROR &error )
-    {
-        reporter.ReportTail( _( "Failed to load one or more footprints. Please add the missing libraries in PCBNew configuration. "
-                            "The PCB will not update completely." ), REPORTER::RPT_ERROR );
-        reporter.ReportTail( error.What(), REPORTER::RPT_INFO );
-    }
-
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
@@ -177,8 +166,8 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
             toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
     }
-    else    // Legacy canvas
-        m_frame->GetCanvas()->Refresh();
+
+    m_frame->GetCanvas()->Refresh();
 }
 
 

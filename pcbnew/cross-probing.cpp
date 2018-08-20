@@ -404,7 +404,6 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         else
         {
             DIALOG_UPDATE_PCB updateDialog( this, &netlist );
-            updateDialog.PerformUpdate( true );
             updateDialog.ShowModal();
         }
 

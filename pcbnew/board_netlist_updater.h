@@ -143,9 +143,10 @@ private:
     bool deleteSinglePadNets();
     bool testConnectivity( NETLIST& aNetlist );
 
-    BOARD_COMMIT m_commit;
-    BOARD* m_board;
-    REPORTER* m_reporter;
+    PCB_EDIT_FRAME* m_frame;
+    BOARD_COMMIT    m_commit;
+    BOARD*          m_board;
+    REPORTER*       m_reporter;
 
     std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > m_zoneConnectionsCache;
     std::map< D_PAD*, wxString > m_padNets;
