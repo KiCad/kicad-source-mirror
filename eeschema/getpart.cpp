@@ -137,31 +137,27 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
 
         if( aFilter->GetFilterPowerParts() )
             adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
-
     }
+
+    std::vector< LIB_TREE_ITEM* > history_list;
+
+    for( auto const& i : aHistoryList )
+    {
+        LIB_ALIAS* alias = GetLibAlias( i.LibId );
+
+        if( alias )
+            history_list.push_back( alias );
+    }
+
+    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list, true );
 
     if( !aHistoryList.empty() )
-    {
-        std::vector< LIB_TREE_ITEM* > history_list;
-
-        for( auto const& i : aHistoryList )
-        {
-            LIB_ALIAS* alias = GetLibAlias( i.LibId );
-
-            if( alias )
-                history_list.push_back( alias );
-        }
-
-        adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list, true );
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
-    }
 
     const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 
     if( !loaded )
-    {
         adapter->AddLibraries( libNicknames, this );
-    }
 
     if( aHighlight && aHighlight->IsValid() )
         adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
