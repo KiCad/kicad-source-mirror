@@ -35,6 +35,7 @@
 #include <search_stack.h>
 
 class wxConfigBase;
+class FILE_HISTORY;
 
 /**
  * Struct BIN_MOD
@@ -55,7 +56,7 @@ struct BIN_MOD
     const char*         m_name;             ///< name of this binary module, static C string.
 
     wxConfigBase*       m_config;           ///< maybe from $HOME/.${m_name}
-    wxFileHistory*      m_history;
+    FILE_HISTORY*       m_history;
     wxString            m_help_file;
 
     SEARCH_STACK        m_search;

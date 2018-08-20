@@ -45,10 +45,9 @@ void BIN_MOD::Init()
 
     // get file history size from common settings
     int fileHistorySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
+    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
 
-    // file history size can only be set in wxFileHistory constructor
-    m_history = new wxFileHistory( fileHistorySize );
+    m_history = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ), ID_FILE1 );
     m_history->Load( *m_config );
 
     // Prepare On Line Help. Use only lower case for help file names, in order to

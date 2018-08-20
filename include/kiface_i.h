@@ -120,7 +120,7 @@ public:
      */
     const wxString& GetHelpFileName() const             { return m_bm.m_help_file; }
 
-    wxFileHistory& GetFileHistory()                     { return *m_bm.m_history; }
+    FILE_HISTORY&   GetFileHistory()                    { return *m_bm.m_history; }
 
     /// Only for DSO specific 'non-library' files.
     /// (The library search path is in the PROJECT class.)

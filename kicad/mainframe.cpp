@@ -507,6 +507,14 @@ void KICAD_MANAGER_FRAME::language_change( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::CommonSettingsChanged()
+{
+    int historySize;
+    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    PgmTop().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+}
+
+
 void KICAD_MANAGER_FRAME::ClearMsg()
 {
     m_MessagesBox->Clear();

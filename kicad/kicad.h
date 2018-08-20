@@ -229,6 +229,8 @@ public:
 
     void SaveSettings( wxConfigBase* aCfg ) override;
 
+    void CommonSettingsChanged() override;
+
     /**
      * Open another KiCad application and logs a message.
      *

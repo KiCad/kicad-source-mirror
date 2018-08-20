@@ -27,6 +27,7 @@
 #define  WX_GERBER_STRUCT_H
 
 
+#include <pgm_base.h>
 #include <config_params.h>
 #include <draw_frame.h>
 #include <layers_id_colors_and_visibility.h>
@@ -157,13 +158,13 @@ protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
 
     // Auxiliary file history used to store zip files history.
-    wxFileHistory           m_zipFileHistory;
+    FILE_HISTORY            m_zipFileHistory;
 
     // Auxiliary file history used to store drill files history.
-    wxFileHistory           m_drillFileHistory;
+    FILE_HISTORY            m_drillFileHistory;
 
     // Auxiliary file history used to store job files history.
-    wxFileHistory           m_jobFileHistory;
+    FILE_HISTORY            m_jobFileHistory;
 
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;

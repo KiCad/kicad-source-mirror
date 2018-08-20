@@ -33,6 +33,7 @@
 
 #include <map>
 #include <wx/filename.h>
+#include <wx/filehistory.h>
 #include <search_stack.h>
 #include <wx/gdicmn.h>
 
@@ -47,12 +48,13 @@
 #define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
 #define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
 #define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
-#define FILE_HISTORY_SIZE               wxT( "FileHistorySize" )
+#define FILE_HISTORY_SIZE_KEY           wxT( "FileHistorySize" )
 
 ///@}
 
 /// The default file history size is 9.
 #define DEFAULT_FILE_HISTORY_SIZE 9
+#define MAX_FILE_HISTORY_SIZE 99
 
 class wxConfigBase;
 class wxSingleInstanceChecker;
@@ -62,6 +64,24 @@ class wxWindow;
 
 class FILENAME_RESOLVER;
 class EDA_DRAW_FRAME;
+
+
+
+enum FILE_HISTORY_IDS
+{
+    ID_FILE = 4200,
+    ID_FILE1,
+    ID_FILEMAX = ID_FILE + MAX_FILE_HISTORY_SIZE
+};
+
+
+class FILE_HISTORY : public wxFileHistory
+{
+public:
+    FILE_HISTORY( size_t aMaxFiles, int aBaseFileId );
+
+    void SetMaxFiles( size_t aMaxFiles );
+};
 
 
 // inter program module calling

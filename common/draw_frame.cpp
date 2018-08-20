@@ -278,6 +278,14 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 {
     EDA_BASE_FRAME::CommonSettingsChanged();
 
+    int autosaveInterval;
+    Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
+    SetAutoSaveInterval( autosaveInterval );
+
+    int historySize;
+    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    Kiface().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+
     bool option;
     Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
     m_canvas->SetEnableMousewheelPan( option );

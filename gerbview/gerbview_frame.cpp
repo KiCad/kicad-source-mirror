@@ -66,7 +66,10 @@ COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_GERBER );
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
-        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
+    m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1 ),
+    m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1 ),
+    m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1 )
 {
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
@@ -90,9 +93,12 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_SelNetnameBox = nullptr;
     m_SelAperAttributesBox = nullptr;
     m_displayMode   = 0;
-    m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
-    m_zipFileHistory.SetBaseId( ID_GERBVIEW_ZIP_FILE1 );
-    m_jobFileHistory.SetBaseId( ID_GERBVIEW_JOB_FILE1 );
+
+    int fileHistorySize;
+    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
+    m_drillFileHistory.SetMaxFiles( fileHistorySize );
+    m_zipFileHistory.SetMaxFiles( fileHistorySize );
+    m_jobFileHistory.SetMaxFiles( fileHistorySize );
 
     EDA_DRAW_PANEL_GAL* galCanvas = new GERBVIEW_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
                                             m_FrameSize,

@@ -52,7 +52,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     m_SaveTime->SetValue( msg );
 
     int fileHistorySize;
-    commonSettings->Read( FILE_HISTORY_SIZE, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
+    commonSettings->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
     m_fileHistorySize->SetValue( fileHistorySize );
 
     int scale_fourths;
@@ -97,7 +97,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->Write( AUTOSAVE_INTERVAL_KEY, m_SaveTime->GetValue() * 60 );
 
-    commonSettings->Write( FILE_HISTORY_SIZE, m_fileHistorySize->GetValue() );
+    commonSettings->Write( FILE_HISTORY_SIZE_KEY, m_fileHistorySize->GetValue() );
 
     const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
     commonSettings->Write( ICON_SCALE_KEY, scale_fourths );

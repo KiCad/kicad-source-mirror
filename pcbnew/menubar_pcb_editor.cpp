@@ -717,7 +717,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // Some commands are available only if Pcbnew is run outside a project (run alone).
     // aIsOutsideProject is false when Pcbnew is run from Kicad manager.
 
-    wxFileHistory&  fhist = Kiface().GetFileHistory();
+    FILE_HISTORY&  fhist = Kiface().GetFileHistory();
 
     // Load Recent submenu
     static wxMenu* openRecentMenu;

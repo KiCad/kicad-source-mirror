@@ -243,10 +243,6 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 
 void EDA_BASE_FRAME::CommonSettingsChanged()
 {
-    int autosaveInterval;
-    Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
-    SetAutoSaveInterval( autosaveInterval );
-
     if( GetMenuBar() )
     {
         // For icons in menus, icon scaling & hotkeys
@@ -422,10 +418,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
             return fn;
         else
         {
-            wxString msg = wxString::Format(
-                        _( "File \"%s\" was not found." ),
-                        GetChars( fn ) );
-
+            wxString msg = wxString::Format( _( "File \"%s\" was not found." ), fn );
             wxMessageBox( msg );
 
             fileHistory->RemoveFileFromHistory( i );
