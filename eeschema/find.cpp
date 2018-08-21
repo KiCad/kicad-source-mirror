@@ -108,8 +108,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
                                                 bool            aSearchHierarchy,
                                                 SCH_SEARCH_T    aSearchType,
-                                                const wxString& aSearchText,
-                                                bool            aWarpMouse )
+                                                const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheet = NULL;
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
@@ -205,31 +204,22 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
         /* There may be need to reframe the drawing */
         if( ! m_canvas->IsPointOnDisplay( pos ) )
-        {
             centerAndRedraw = true;
-        }
 
         if( centerAndRedraw )
         {
             SetCrossHairPosition( pos );
-            RedrawScreen( pos, aWarpMouse );
+            RedrawScreen( pos, false );
         }
-
         else
         {
             INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
             m_canvas->CrossHairOff( &dc );
-
-            if( aWarpMouse )
-                m_canvas->MoveCursor( pos );
-
             SetCrossHairPosition( pos );
-
             m_canvas->CrossHairOn( &dc );
         }
     }
-
 
     /* Print diag */
     wxString msg_item;
@@ -238,45 +228,22 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     switch( aSearchType )
     {
     default:
-    case FIND_COMPONENT_ONLY:      // Find component only
-        msg_item = _( "component" );
-        break;
-
-    case FIND_PIN:                 // find a pin
-        msg_item.Printf( _( "pin %s" ), GetChars( aSearchText ) );
-        break;
-
-    case FIND_REFERENCE:           // find reference
-        msg_item.Printf( _( "reference %s" ), GetChars( aSearchText ) );
-        break;
-
-    case FIND_VALUE:               // find value
-        msg_item.Printf( _( "value %s" ), GetChars( aSearchText ) );
-        break;
-
-    case FIND_FIELD:               // find field. todo
-        msg_item.Printf( _( "field %s" ), GetChars( aSearchText ) );
-        break;
+    case FIND_COMPONENT_ONLY: msg_item = _( "component" );                         break;
+    case FIND_PIN:            msg_item.Printf( _( "pin %s" ), aSearchText );       break;
+    case FIND_REFERENCE:      msg_item.Printf( _( "reference %s" ), aSearchText ); break;
+    case FIND_VALUE:          msg_item.Printf( _( "value %s" ), aSearchText );     break;
+    case FIND_FIELD:          msg_item.Printf( _( "field %s" ), aSearchText );     break;
     }
 
     if( Component )
     {
         if( !notFound )
-        {
-            msg.Printf( _( "%s %s found" ),
-                        GetChars( aReference ), GetChars( msg_item ) );
-        }
+            msg.Printf( _( "%s %s found" ), aReference, msg_item );
         else
-        {
-            msg.Printf( _( "%s found but %s not found" ),
-                        GetChars( aReference ), GetChars( msg_item ) );
-        }
+            msg.Printf( _( "%s found but %s not found" ), aReference, msg_item );
     }
     else
-    {
-        msg.Printf( _( "Component %s not found" ),
-                    GetChars( aReference ) );
-    }
+        msg.Printf( _( "Component %s not found" ), aReference );
 
     SetStatusText( msg );
 

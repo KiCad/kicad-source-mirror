@@ -449,13 +449,11 @@ public:
      *                         the entire hierarchy
      * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
      * @param aSearchText The text to search for, either in value, reference or elsewhere.
-     * @param aWarpMouse If true, then move the mouse cursor to the item.
      */
     SCH_ITEM* FindComponentAndItem( const wxString& aReference,
                                     bool            aSearchHierarchy,
                                     SCH_SEARCH_T    aSearchType,
-                                    const wxString& aSearchText,
-                                    bool            aWarpMouse );
+                                    const wxString& aSearchText );
 
     /**
      * Breaks a single segment into two at the specified point

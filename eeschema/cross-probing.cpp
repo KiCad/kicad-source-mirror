@@ -100,7 +100,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( idcmd == NULL )    // component only
     {
-        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString );
         return;
     }
 
@@ -113,19 +113,19 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {
-        FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
-        FindComponentAndItem( part_ref, true, FIND_VALUE, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_VALUE, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        FindComponentAndItem( part_ref, true, FIND_PIN, msg, false );
+        FindComponentAndItem( part_ref, true, FIND_PIN, msg );
     }
     else
     {
-        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString );
     }
 }
 
