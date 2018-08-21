@@ -1395,6 +1395,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnKeyEvent %s", dump( event ) );
 
     localkey = event.GetKeyCode();
+    bool keyWasHandled = false;
 
     switch( localkey )
     {
@@ -1408,6 +1409,8 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
             EndMouseCapture();
         else
             EndMouseCapture( ID_NO_TOOL_SELECTED, m_defaultCursor, wxEmptyString );
+
+        keyWasHandled = true;   // The key is captured: the key event must not be skipped
         break;
     }
 
@@ -1446,8 +1449,8 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     GetParent()->SetMousePosition( pos );
 
-    if( !GetParent()->GeneralControl( &DC, pos, localkey ) )
-        event.Skip();
+    if( !GetParent()->GeneralControl( &DC, pos, localkey ) && !keyWasHandled )
+        event.Skip();   // Skip this event only when the key was not handled
 }
 
 
