@@ -79,8 +79,8 @@ option( KICAD_SCRIPTING_WXPYTHON
     ON )
 
 option( KICAD_SCRIPTING_ACTION_MENU
-    "Build a tools menu with registred python plugins: actions plugins (default OFF)."
-    )
+    "Build a tools menu with registered python plugins: actions plugins (default ON)."
+    ON )
 
 option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default ON)"
