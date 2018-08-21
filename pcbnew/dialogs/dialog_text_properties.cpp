@@ -120,7 +120,12 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenTextLayers() );
+
+    if( m_item->Type() == PCB_MODULE_TEXT_T )
+		m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenTextLayersForFootprint() );
+    else
+		m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenTextLayersForBoard() );
+
     m_LayerSelectionCtrl->SetBoardFrame( m_Parent );
     m_LayerSelectionCtrl->Resync();
 
