@@ -815,6 +815,8 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
             if( S_ISREG( entry_stat.st_mode ) )    // wxFileExists()
                 timestamp += entry_stat.st_mtime * 1000;
         }
+
+        closedir( dir );
     }
 #endif
 
