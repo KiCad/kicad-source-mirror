@@ -54,7 +54,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_specifiedID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_specifiedID->SetMinSize( wxSize( 500,22 ) );
+	m_specifiedID->SetMinSize( wxSize( 500,-1 ) );
 	
 	bSizer4->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
@@ -81,7 +81,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_newID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_newID->SetMinSize( wxSize( 500,22 ) );
+	m_newID->SetMinSize( wxSize( 500,-1 ) );
 	
 	bSizer3->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
