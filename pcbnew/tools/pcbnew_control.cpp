@@ -1192,11 +1192,9 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ToBeDone,           PCB_ACTIONS::toBeDone.MakeEvent() );
 
     // Append control
-    Go( &PCBNEW_CONTROL::AppendBoardFromFile,
-            PCB_ACTIONS::appendBoard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AppendBoardFromFile, PCB_ACTIONS::appendBoard.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::PasteItemsFromClipboard,
-            PCB_ACTIONS::pasteFromClipboard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PasteItemsFromClipboard, PCB_ACTIONS::pasteFromClipboard.MakeEvent() );
 }
 
 

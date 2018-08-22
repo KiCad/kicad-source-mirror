@@ -394,38 +394,40 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
     {
         GENERAL_COLLECTOR collector;
 
-        for( auto item : m_selection.Items() )
-            collector.Append( item );
+        while( m_selection.GetSize() )
+        {
+            collector.Append( m_selection.Front() );
+            unselect( static_cast<BOARD_ITEM*>( m_selection.Front() ) );
+        }
 
         aClientFilter( VECTOR2I(), collector );
-
-        clearSelection( true );
 
         for( int i = 0; i < collector.GetCount(); ++i )
         {
             m_additive = true;
-            toggleSelection( collector[ i ], true );
+            select( collector[ i ] );
         }
+
+        m_frame->GetGalCanvas()->ForceRefresh();
     }
 
     return m_selection;
 }
 
 
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aQuietMode )
+void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
     {
         unselect( aItem );
 
         // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( UnselectedEvent );
     }
     else
     {
         if( !m_additive )
-            clearSelection( aQuietMode );
+            clearSelection();
 
         // Prevent selection of invisible or inactive items
         if( selectable( aItem ) )
@@ -433,8 +435,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aQuietMode )
             select( aItem );
 
             // Inform other potentially interested tools
-            if( !aQuietMode )
-                m_toolMgr->ProcessEvent( SelectedEvent );
+            m_toolMgr->ProcessEvent( SelectedEvent );
         }
     }
 
@@ -1369,7 +1370,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::clearSelection( bool aQuietMode )
+void SELECTION_TOOL::clearSelection()
 {
     if( m_selection.Empty() )
         return;
@@ -1390,8 +1391,7 @@ void SELECTION_TOOL::clearSelection( bool aQuietMode )
     m_locked = true;
 
     // Inform other potentially interested tools
-    if( !aQuietMode )
-        m_toolMgr->ProcessEvent( ClearedEvent );
+    m_toolMgr->ProcessEvent( ClearedEvent );
 }
 
 
@@ -1778,14 +1778,11 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
     unhighlight( aItem, SELECTED, m_selection );
     view()->Update( &m_selection );
 
+    if( m_frame && m_frame->GetCurItem() == aItem )
+        m_frame->SetCurItem( NULL );
+
     if( m_selection.Empty() )
-    {
-        if( m_frame )
-        {
-            m_frame->SetCurItem( NULL );
-        }
         m_locked = true;
-    }
 }
 
 
