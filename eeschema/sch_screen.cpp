@@ -117,7 +117,13 @@ SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
 SCH_SCREEN::~SCH_SCREEN()
 {
     ClearUndoRedoList();
-    FreeDrawList();
+
+    // Now delete items in draw list. We do that only if the list is not empty,
+    // because if the list was appended to another list (see SCH_SCREEN::Append( SCH_SCREEN* aScreen )
+    // it is empty but as no longer the ownership (m_drawList.meOwner == false) of items, and calling
+    // FreeDrawList() with m_drawList.meOwner == false will generate a debug alert in debug mode
+    if( GetDrawItems() )
+        FreeDrawList();
 }
 
 
