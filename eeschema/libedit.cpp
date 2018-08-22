@@ -398,7 +398,7 @@ void LIB_EDIT_FRAME::savePartAs()
             itemsToDisplay.push_back( item );
         }
 
-        EDA_LIST_DIALOG dlg( this, _( "Save Symbol As" ), headers, itemsToDisplay, old_lib,
+        EDA_LIST_DIALOG dlg( this, _( "Save Copy of Symbol" ), headers, itemsToDisplay, old_lib,
                              nullptr, nullptr, /* sort */ false, /* show headers */ false );
         dlg.SetListLabel( _( "Save in library:" ) );
         dlg.SetOKLabel( _( "Save" ) );
@@ -465,8 +465,6 @@ void LIB_EDIT_FRAME::savePartAs()
 
         if( isCurrentPart( old_lib_id ) )
             loadPart( new_name, new_lib, m_unit );
-
-        m_libMgr->RemovePart( old_name, old_lib );
     }
 }
 
