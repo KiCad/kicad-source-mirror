@@ -718,10 +718,11 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
 SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
                               SCH_SHEET_PATH& aSheetPath )
 {
-    wxASSERT( aComponent != NULL && aLibPart != NULL );
+    wxASSERT( aComponent != NULL );
 
     m_RootCmp   = aComponent;
-    m_Entry     = aLibPart;
+    m_Entry     = aLibPart;     // Warning: can be nullptr for orphan components
+                                // (i.e. with a symbol library not found)
     m_Unit      = aComponent->GetUnitSelection( &aSheetPath );
     m_SheetPath = aSheetPath;
     m_IsNew     = false;
