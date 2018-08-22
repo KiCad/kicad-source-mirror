@@ -25,12 +25,16 @@
 #include "picker_tool.h"
 #include "pcb_actions.h"
 #include "grid_helper.h"
-
+#include <pcbnew_id.h>
 #include <pcb_edit_frame.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include "tool_event_utils.h"
 #include "selection_tool.h"
+
+
+extern bool Magnetize( PCB_BASE_EDIT_FRAME* frame, int aCurrentTool,
+                       wxSize aGridSize, wxPoint on_grid, wxPoint* curpos );
 
 
 TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
@@ -43,51 +47,34 @@ PICKER_TOOL::PICKER_TOOL()
 }
 
 
-bool PICKER_TOOL::Init()
-{
-    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( frame()->GetToolId() != ID_NO_TOOL_SELECTED );
-    };
-
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-
-    // We delegate our context menu to the Selection tool, so make sure it has a
-    // "Cancel" item at the top.
-    if( selTool )
-    {
-        auto& toolMenu = selTool->GetToolMenu();
-        auto& menu = toolMenu.GetMenu();
-
-        menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1000 );
-        menu.AddSeparator( activeToolCondition, 1000 );
-    }
-
-    return true;
-}
-
-
 int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     GRID_HELPER grid( frame() );
 
-    assert( !m_picking );
-    m_picking = true;
-    m_picked = NULLOPT;
-
     setControls();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        auto mousePos = controls->GetMousePosition();
-        auto p = grid.BestSnapAnchor( mousePos, nullptr );
-        controls->ForceCursorPosition( true, p );
+        // TODO: magnetic pad & track processing needs to move to VIEW_CONTROLS.
+        wxPoint pos( controls->GetMousePosition().x, controls->GetMousePosition().y );
+        frame()->SetMousePosition( pos );
+
+        wxRealPoint gridSize = frame()->GetScreen()->GetGridSize();
+        wxSize igridsize;
+        igridsize.x = KiROUND( gridSize.x );
+        igridsize.y = KiROUND( gridSize.y );
+
+        if( Magnetize( frame(), ID_PCB_HIGHLIGHT_BUTT, igridsize, pos, &pos ) )
+            controls->ForceCursorPosition( true, pos );
+        else
+            controls->ForceCursorPosition( false );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
 
-            m_picked = VECTOR2D( p );
+            m_picked = VECTOR2D( controls->GetCursorPosition() );
 
             if( m_clickHandler )
             {
@@ -109,7 +96,24 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         else if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        {
+            if( m_cancelHandler )
+            {
+                try
+                {
+                    (*m_cancelHandler)();
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                }
+            }
+
             break;
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+            m_menu.ShowContextMenu();
 
         else
             m_toolMgr->PassEvent();
@@ -136,8 +140,9 @@ void PICKER_TOOL::reset()
     m_cursorCapture = false;
     m_autoPanning = false;
 
-    m_picking = false;
+    m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
+    m_cancelHandler = NULLOPT;
 }
 
 

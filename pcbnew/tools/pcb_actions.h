@@ -402,9 +402,6 @@ public:
     static TOOL_ACTION findMove;
 
     static TOOL_ACTION editFootprintInFpEditor;
-    static TOOL_ACTION copyPadToSettings;
-    static TOOL_ACTION copySettingsToPads;
-    static TOOL_ACTION globalEditPads;
 
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()

@@ -37,7 +37,9 @@ class ROUTER;
 class PNS_TUNE_STATUS_POPUP : public STATUS_TEXT_POPUP
 {
 public:
-    PNS_TUNE_STATUS_POPUP( EDA_DRAW_FRAME* aParent );
+    PNS_TUNE_STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
+        STATUS_TEXT_POPUP( aParent )
+    { }
 
     void UpdateStatus( PNS::ROUTER* aRouter );
 };

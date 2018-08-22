@@ -37,11 +37,9 @@ public:
     PICKER_TOOL();
     ~PICKER_TOOL() {}
 
-    ///> Mouse event click handler type.
+    ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
-
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init() override;
+    typedef std::function<void(void)> CANCEL_HANDLER;
 
     ///> @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override {}
@@ -74,22 +72,6 @@ public:
     inline void SetCursorCapture( bool aEnable ) { m_cursorCapture = aEnable; }
 
     /**
-     * Function GetPoint()
-     * Returns picked point.
-     */
-    inline OPT<VECTOR2D> GetPoint() const
-    {
-        assert( !m_picking );
-        return m_picked;
-    }
-
-    /**
-     * Function IsPicking()
-     * Returns information whether the tool is still active.
-     */
-    bool IsPicking() const { return m_picking; }
-
-    /**
      * Function SetClickHandler()
      * Sets a handler for mouse click event. Handler may decide to receive further click by
      * returning true.
@@ -98,6 +80,16 @@ public:
     {
         assert( !m_clickHandler );
         m_clickHandler = aHandler;
+    }
+
+    /**
+     * Function SetCancelHandler()
+     * Sets a handler for cancel events (ESC or context-menu Cancel).
+     */
+    inline void SetCancelHandler( CANCEL_HANDLER aHandler )
+    {
+        assert( !m_cancelHandler );
+        m_cancelHandler = aHandler;
     }
 
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
@@ -110,14 +102,12 @@ private:
     bool m_cursorCapture;
     bool m_autoPanning;
 
-    ///> Optional mouse click event handler.
+    ///> Optional event handlers.
     OPT<CLICK_HANDLER> m_clickHandler;
+    OPT<CANCEL_HANDLER> m_cancelHandler;
 
     ///> Picked point (if any).
     OPT<VECTOR2D> m_picked;
-
-    ///> Activity status.
-    bool m_picking;
 
     ///> Reinitializes tool to its initial state.
     void reset();

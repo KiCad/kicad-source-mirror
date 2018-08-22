@@ -37,7 +37,7 @@
 #include <footprint_edit_frame.h>
 #include <array_creator.h>
 #include <pcbnew_id.h>
-
+#include <status_popup.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <view/view.h>
@@ -82,22 +82,6 @@ TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFo
         _( "Open in Footprint Editor" ),
         _( "Opens the selected footprint in the Footprint Editor" ),
         module_editor_xpm );
-
-TOOL_ACTION PCB_ACTIONS::copyPadToSettings( "pcbnew.InteractiveEdit.copyPadToSettings",
-        AS_GLOBAL, 0,
-        _( "Copy Pad Properties to Default Pad Properties" ),
-        _( "Copies the properties of the selected pad to the default pad properties." ) );
-
-TOOL_ACTION PCB_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySettingsToPads",
-        AS_GLOBAL, 0,
-        _( "Copy Default Pad Properties to Pads" ),
-        _( "Copies the default pad properties to the selected pad(s)." ) );
-
-TOOL_ACTION PCB_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
-        AS_GLOBAL, 0,
-        _( "Push Pad Settings..." ),
-        _( "Copies the selected pad's properties to all pads in its footprint (or similar footprints)." ),
-        push_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 0,
@@ -1395,51 +1379,82 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 {
+    STATUS_TEXT_POPUP statusPopup( frame() );
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    assert( picker );
+    bool picking = true;
+    bool retVal = true;
 
+    statusPopup.SetText( _( "Select reference point for the copy..." ) );
     picker->Activate();
+    picker->SetClickHandler( [&]( const VECTOR2D& aPoint ) -> bool
+                             {
+                                 aP = aPoint;
+                                 statusPopup.SetText( _( "Selection copied." ) );
+                                 statusPopup.Expire( 800 );
+                                 picking = false;
+                                 return false;  // we don't need any more points
+                             } );
+    picker->SetCancelHandler( [&]()
+                              {
+                                  statusPopup.SetText( _( "Copy cancelled." ) );
+                                  statusPopup.Expire( 800 );
+                                  picking = false;
+                                  retVal = false;
+                              } );
 
-    while ( picker->IsPicking() )
+    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+    statusPopup.Popup();
+
+    while( picking )
+    {
+        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
         Wait();
+    }
 
-    if( !picker->GetPoint() )
-        return false;
-
-    aP = *picker->GetPoint();
-    return true;
+    statusPopup.Hide();
+    return retVal;
 }
 
 
-int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
+int EDIT_TOOL::doCopyToClipboard( bool withAnchor )
 {
     CLIPBOARD_IO io;
-    VECTOR2I refPoint;
 
     Activate();
-
-    auto item1 = MSG_PANEL_ITEM( "", _( "Select reference point for the block being copied..." ),
-                                  COLOR4D::BLACK );
-
-    std::vector<MSG_PANEL_ITEM> msgItems = { item1 };
 
     SELECTION& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
 
     if( selection.Empty() )
         return 1;
 
-    frame()->SetMsgPanel( msgItems );
-    bool rv = pickCopyReferencePoint( refPoint );
-    frame()->SetMsgPanel( board() );
+    if( withAnchor )
+    {
+        VECTOR2I refPoint;
+        bool rv = pickCopyReferencePoint( refPoint );
+        frame()->SetMsgPanel( board() );
 
-    if( !rv )
-        return 1;
+        if( !rv )
+            return 1;
 
-    selection.SetReferencePoint( refPoint );
+        selection.SetReferencePoint( refPoint );
+    }
+
     io.SetBoard( board() );
     io.SaveSelection( selection );
 
     return 0;
+}
+
+
+int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
+{
+    return doCopyToClipboard( true );
+}
+
+
+int EDIT_TOOL::copyToClipboardWithAnchor( const TOOL_EVENT& aEvent )
+{
+    return doCopyToClipboard( true );
 }
 
 

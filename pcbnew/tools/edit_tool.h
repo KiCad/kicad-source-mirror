@@ -168,6 +168,10 @@ public:
      */
     int copyToClipboard( const TOOL_EVENT& aEvent );
 
+    int copyToClipboardWithAnchor( const TOOL_EVENT& aEvent );
+
+    int doCopyToClipboard( bool withAnchor );
+
     /**
      * Function cutToClipboard()
      * Cuts the current selection to the clipboard by formatting it as a fake pcb

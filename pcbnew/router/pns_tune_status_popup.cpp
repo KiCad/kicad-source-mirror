@@ -24,13 +24,6 @@
 #include "pns_router.h"
 #include "pns_meander_placer.h"
 
-PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
-    STATUS_TEXT_POPUP( aParent )
-{
-    m_panel->SetBackgroundColour( wxColour( 64, 64, 64 ) );
-}
-
-
 void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
 {
     PNS::MEANDER_PLACER_BASE* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aRouter->Placer() );

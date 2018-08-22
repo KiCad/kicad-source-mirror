@@ -45,11 +45,10 @@ private:
 
 public:
     // Constructor and destructor
-    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, TOOL_MANAGER* toolMgr,
-                              wxPoint& translation, wxPoint& anchorposition );
+    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxPoint& translation, wxPoint& anchor );
     ~DIALOG_POSITION_RELATIVE() { };
 
-    void UpdateAnchor( BOARD_ITEM* aItem );
+    void UpdateAnchor( EDA_ITEM* aItem );
 
 private:
 

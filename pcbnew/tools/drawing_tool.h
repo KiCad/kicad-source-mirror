@@ -192,11 +192,6 @@ private:
         GRAPHIC_POLYGON
     };
 
-    ///> Shows the context menu for the drawing tool
-    ///> This menu consists of normal UI functions (zoom, grid, etc)
-    ///> And any suitable global functions for the active drawing type.
-    void showContextMenu();
-
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to

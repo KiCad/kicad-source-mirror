@@ -101,6 +101,8 @@ void STATUS_POPUP::onExpire( wxTimerEvent& aEvent )
 STATUS_TEXT_POPUP::STATUS_TEXT_POPUP( EDA_DRAW_FRAME* aParent ) :
     STATUS_POPUP( aParent )
 {
+    m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ) );
+
     m_statusLine = new wxStaticText( m_panel, wxID_ANY, wxEmptyString ) ;
     m_topSizer->Add( m_statusLine, 1, wxALL | wxEXPAND, 5 );
 }

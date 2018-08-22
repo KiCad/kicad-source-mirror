@@ -30,12 +30,12 @@
 DIALOG_POSITION_RELATIVE::POSITION_RELATIVE_OPTIONS DIALOG_POSITION_RELATIVE::m_options;
 
 
-DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, TOOL_MANAGER* toolMgr,
-                                                    wxPoint& translation, wxPoint& anchorPosition ) :
+DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxPoint& translation,
+                                                    wxPoint& anchor ) :
     DIALOG_POSITION_RELATIVE_BASE( aParent ),
-    m_toolMgr( toolMgr ),
+    m_toolMgr( aParent->GetToolManager() ),
     m_translation( translation ),
-    m_anchor_position( anchorPosition ),
+    m_anchor_position( anchor ),
     m_xOffset( aParent, m_xLabel, m_xEntry, m_xUnit ),
     m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit )
 {
@@ -115,7 +115,6 @@ void DIALOG_POSITION_RELATIVE::OnPolarChanged( wxCommandEvent& event )
         m_xOffset.SetValue( KiROUND( val.x / 10.0 ) * 10 );
         m_yOffset.SetValue( KiROUND( val.y / 10.0 ) * 10 );
     }
-
 }
 
 
@@ -157,25 +156,25 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
-
-    m_referenceInfo->SetLabel( _( "Reference item: <click item on canvas to select>" ) );
     m_toolMgr->RunAction( PCB_ACTIONS::selectpositionRelativeItem, true );
+
+    Hide();
 }
 
 
-void DIALOG_POSITION_RELATIVE::UpdateAnchor( BOARD_ITEM* aItem )
+void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 {
     wxString reference = _( "<none selected>" );
 
     if( aItem )
     {
-        m_anchor_position = aItem->GetPosition();
+        m_anchor_position = dynamic_cast<BOARD_ITEM*>( aItem )->GetPosition();
         reference = aItem->GetSelectMenuText( GetUserUnits() );
     }
 
     m_referenceInfo->SetLabel( _( "Reference item: " ) + reference );
 
-    Raise();    // required at least on OSX
+    Show( true );
 }
 
 
