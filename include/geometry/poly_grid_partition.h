@@ -43,7 +43,7 @@
 class POLY_GRID_PARTITION
 {
 private:
-    enum HASH_FLAG
+enum HASH_FLAG
     {
         LEAD_H  = 1,
         LEAD_V  = 2,
@@ -195,7 +195,12 @@ private:
             auto    dir     = edge.B - edge.A;
             int     flags   = 0;
 
-            if( edgeSet[edge] == 1 )
+
+            if ( dir.y == 0 )
+            {
+                flags = 0;
+            }
+            else if( edgeSet[edge] == 1 )
             {
                 if( dir.Dot( ref_h ) < 0 )
                 {
@@ -209,6 +214,9 @@ private:
             }
 
             m_flags.push_back( flags );
+
+            if( edge.A.y == edge.B.y )
+                continue;
 
             std::set<int> indices;
 
@@ -374,12 +382,12 @@ public:
         build( aPolyOutline, gridSize );
     }
 
-    int containsPoint( const VECTOR2I& aP )    // const
+    int containsPoint( const VECTOR2I& aP, bool debug = false ) const
     {
         const auto gridPoint = poly2grid( aP );
 
         if( !m_bbox.Contains( aP ) )
-            return false;
+            return 0;
 
         SCAN_STATE state;
         const EDGE_LIST& cell = m_grid[ m_gridSize * gridPoint.y + gridPoint.x ];
@@ -414,13 +422,14 @@ public:
                 }
             }
         }
-
+        
         if( state.nearest < 0 )
             return 0;
 
         if( state.dist_max == 0 )
             return 1;
 
+        // special case for diagonal 'slits', e.g. two segments that partially overlap each other.
         if( state.nearest_prev >= 0 && state.dist_max == state.dist_prev )
         {
             int d = std::abs( state.nearest_prev - state.nearest );
@@ -429,12 +438,8 @@ public:
             {
                 return 0;
             }
-            else if( d > 1 )
-            {
-                return 1;
-            }
         }
-
+        
         if( state.dist_max > 0 )
         {
             return m_flags[state.nearest] & LEAD_H ? 1 : 0;
