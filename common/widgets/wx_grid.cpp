@@ -26,6 +26,9 @@
 #include "wx_grid.h"
 
 
+#define MIN_GRIDCELL_MARGIN 3
+
+
 void WX_GRID::SetTable( wxGridTableBase* aTable )
 {
     // wxGrid::SetTable() messes up the column widths from wxFormBuilder so we have to save
@@ -38,7 +41,12 @@ void WX_GRID::SetTable( wxGridTableBase* aTable )
     wxGrid::SetTable( aTable );
 
     for( int i = 0; i < GetNumberCols(); ++i )
-        SetColSize( i, formBuilderColWidths[ i ] );
+    {
+        // correct wxFormBuilder width for large fonts and/or long translations
+        int headingWidth = GetTextExtent( GetColLabelValue( i ) ).x + 2 * MIN_GRIDCELL_MARGIN;
+
+        SetColSize( i, std::max( formBuilderColWidths[ i ], headingWidth ) );
+    }
 
     delete[] formBuilderColWidths;
 }
