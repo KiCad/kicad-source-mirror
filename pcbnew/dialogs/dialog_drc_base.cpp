@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -164,7 +164,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_ClearanceListBox = new DRCLISTBOX( m_panelClearanceListBox, ID_CLEARANCE_LIST, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_ClearanceListBox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	m_ClearanceListBox->SetToolTip( _("MARKERs, double click any to go there in PCB, right click for popup menu") );
+	m_ClearanceListBox->SetToolTip( _("Left-click to center on problem marker.  Right-click to highlight items.") );
 	
 	bSizeClearanceBox->Add( m_ClearanceListBox, 1, wxEXPAND|wxALL, 5 );
 	
@@ -178,7 +178,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );
 	
 	m_UnconnectedListBox = new DRCLISTBOX( m_panelUnconnectedBox, ID_UNCONNECTED_LIST, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_UnconnectedListBox->SetToolTip( _("A list of unconnected pads, right click for popup menu") );
+	m_UnconnectedListBox->SetToolTip( _("Left-click to center on unconnected pair.  Right-click to highlight unconnected items.") );
 	
 	bSizerUnconnectedBox->Add( m_UnconnectedListBox, 1, wxALL|wxEXPAND, 5 );
 	
