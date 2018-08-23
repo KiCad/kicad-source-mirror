@@ -711,9 +711,10 @@ private:
 
     /**
      * Displays a dialog asking the user to select a symbol library table.
+     * @param aOptional if set the Cancel button will be relabelled "Skip".
      * @return Pointer to the selected symbol library table or nullptr if cancelled.
      */
-    SYMBOL_LIB_TABLE* selectSymLibTable();
+    SYMBOL_LIB_TABLE* selectSymLibTable( bool aOptional = false );
 
     ///> Creates a backup copy of a file with requested extension
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );

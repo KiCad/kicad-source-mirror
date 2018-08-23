@@ -1565,15 +1565,25 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
 }
 
 
-SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable()
+SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable( bool aOptional )
 {
     wxArrayString libTableNames;
     libTableNames.Add( _( "Global" ) );
     libTableNames.Add( _( "Project" ) );
 
-    switch( SelectSingleOption( this, _( "Select Library Table" ),
-                                _( "Choose the Library Table to add the library to:" ),
-                                libTableNames ) )
+    wxSingleChoiceDialog dlg( this, _( "Choose the Library Table to add the library to:" ),
+                              _( "Add To Library Table" ), libTableNames );
+
+    if( aOptional )
+    {
+        dlg.FindWindow( wxID_CANCEL )->SetLabel( _( "Skip" ) );
+        dlg.FindWindow( wxID_OK )->SetLabel( _( "Add" ) );
+    }
+
+    if( dlg.ShowModal() != wxID_OK )
+        return nullptr;
+
+    switch( dlg.GetSelection() )
     {
     case 0:  return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
     case 1:  return Prj().SchSymbolLibTable();

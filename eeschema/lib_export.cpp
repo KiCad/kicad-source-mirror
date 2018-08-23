@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,23 +23,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_export.cpp
- * @brief Eeschema library maintenance routines to backup modified libraries and
- *        create, edit, and delete components.
- */
-
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-
+#include <symbol_lib_table.h>
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
 #include <eeschema_id.h>
 #include <lib_manager.h>
-
 #include <wx/filename.h>
 
 
@@ -191,4 +184,19 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     msg.Printf( _( "Symbol \"%s\" saved in library \"%s\"" ), part->GetName(), fn.GetFullPath() );
     SetStatusText( msg );
+
+    // See if the user wants it added to a library table (global or project)
+    SYMBOL_LIB_TABLE* libTable = selectSymLibTable( true );
+
+    if( libTable )
+    {
+        if( !m_libMgr->AddLibrary( fn.GetFullPath(), libTable ) )
+        {
+            DisplayError( this, _( "Could not open the library file." ) );
+            return;
+        }
+
+        bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
+        saveSymbolLibTables( globalTable, !globalTable );
+    }
 }
