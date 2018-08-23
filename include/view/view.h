@@ -28,9 +28,12 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <memory>
 
 #include <math/box2.h>
 #include <gal/definitions.h>
+
+#include <view/view_overlay.h>
 
 namespace KIGFX
 {
@@ -61,6 +64,8 @@ public:
     friend class VIEW_ITEM;
 
     typedef std::pair<VIEW_ITEM*, int> LAYER_ITEM_PAIR;
+
+    static const int VIEW_MAX_LAYERS = 512;      ///< maximum number of layers that may be shown
 
     /**
      * Constructor.
@@ -681,8 +686,7 @@ public:
         m_reverseDrawOrder = aFlag;
     }
 
-    static const int VIEW_MAX_LAYERS = 512;      ///< maximum number of layers that may be shown
-
+    std::shared_ptr<VIEW_OVERLAY> MakeOverlay();
 
 private:
     struct VIEW_LAYER

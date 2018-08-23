@@ -43,6 +43,7 @@ set( GAL_SRCS
     gal/stroke_font.cpp
     geometry/hetriang.cpp
     view/view_controls.cpp
+    view/view_overlay.cpp
     view/wx_view_controls.cpp
 
     # OpenGL GAL
