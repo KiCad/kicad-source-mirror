@@ -114,7 +114,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     fn.SetExt( SchematicLibraryFileExtension );
 
     wxFileDialog dlg( this, _( "Export Symbol" ), m_mruPath, fn.GetFullName(),
-                      SchematicLibraryFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      SchematicLibraryFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -145,7 +145,10 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
         if( old_part )
         {
-            msg.Printf( _( "Symbol \"%s\" already exists." ), part->GetName() );
+            msg.Printf( _( "Symbol \"%s\" already exists in \"%s\"." ),
+                        part->GetName(),
+                        fn.GetFullName() );
+
             KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             errorDlg.SetOKLabel( _( "Overwrite" ) );
             errorDlg.DoNotShowCheckbox();
