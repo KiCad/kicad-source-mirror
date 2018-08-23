@@ -92,6 +92,7 @@
 #define DRCE_BURIED_VIA_NOT_ALLOWED            48   ///< buried vias are not allowed
 #define DRCE_DISABLED_LAYER_ITEM               49   ///< item on a disabled layer
 #define DRCE_DRILLED_HOLES_TOO_CLOSE           50   ///< overlapping drilled holes break drill bits
+#define DRCE_TRACK_NEAR_ZONE                   51   ///< track & zone collide or are too close together
 
 
 class EDA_DRAW_PANEL;
@@ -105,6 +106,7 @@ class TRACK;
 class MARKER_PCB;
 class DRC_ITEM;
 class NETCLASS;
+class EDA_TEXT;
 
 
 /**
@@ -214,7 +216,6 @@ private:
     PCB_EDIT_FRAME*     m_pcbEditorFrame;   ///< The pcb frame editor which owns the board
     BOARD*              m_pcb;
     DIALOG_DRC_CONTROL* m_drcDialog;
-    EDA_UNITS_T         m_units;
 
     DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
 
@@ -311,6 +312,9 @@ private:
     void testZones();
 
     void testKeepoutAreas();
+
+    // aTextItem is type BOARD_ITEM* to accept either TEXTE_PCB or TEXTE_MODULE
+    void doText( BOARD_ITEM* aTextItem );
 
     void testTexts();
 

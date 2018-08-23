@@ -283,7 +283,7 @@ public:
 
     void Remove( BOARD_ITEM* aBoardItem ) override;
 
-    BOARD_ITEM* GetItem( void* aWeakReference, bool includeDrawings = true );
+    BOARD_ITEM* GetItem( void* aWeakReference );
 
     BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard = false );
 

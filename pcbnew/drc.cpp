@@ -131,7 +131,6 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_pcbEditorFrame = aPcbWindow;
     m_pcb = aPcbWindow->GetBoard();
     m_drcDialog  = NULL;
-    m_units = aPcbWindow->GetUserUnits();
 
     // establish initial values for everything:
     m_drcInLegacyRoutingMode = false;
@@ -430,15 +429,6 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     testDrilledHoles();
 
-    // test track and via clearances to other tracks, pads, and vias
-    if( aMessages )
-    {
-        aMessages->AppendText( _( "Track clearances...\n" ) );
-        wxSafeYield();
-    }
-
-    testTracks( aMessages ? aMessages->GetParent() : m_pcbEditorFrame, true );
-
     // caller (a wxTopLevelFrame) is the wxDialog or the Pcb Editor frame that call DRC:
     wxWindow* caller = aMessages ? aMessages->GetParent() : m_pcbEditorFrame;
 
@@ -456,6 +446,15 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
         m_pcbEditorFrame->Check_All_Zones( caller );
     }
+
+    // test track and via clearances to other tracks, pads, and vias
+    if( aMessages )
+    {
+        aMessages->AppendText( _( "Track clearances...\n" ) );
+        wxSafeYield();
+    }
+
+    testTracks( aMessages ? aMessages->GetParent() : m_pcbEditorFrame, true );
 
     // test zone clearances to other zones
     if( aMessages )
@@ -942,7 +941,7 @@ void DRC::testKeepoutAreas()
                 if( area->Outline()->Distance( SEG( segm->GetStart(), segm->GetEnd() ),
                                                segm->GetWidth() ) == 0 )
                 {
-                    addMarkerToPcb( fillMarker( segm, NULL,
+                    addMarkerToPcb( fillMarker( segm, area,
                                                 DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker ) );
                     m_currentMarker = nullptr;
                 }
@@ -972,121 +971,141 @@ void DRC::testKeepoutAreas()
 
 void DRC::testTexts()
 {
+    // Test text items for vias, tracks and pads inside text areas
+
+    for( BOARD_ITEM* brdItem : m_pcb->Drawings() )
+    {
+        if( brdItem->Type() == PCB_TEXT_T && IsCopperLayer( brdItem->GetLayer() ) )
+            doText( brdItem );
+    }
+
+    for( MODULE* module : m_pcb->Modules() )
+    {
+        if( IsCopperLayer( module->Reference().GetLayer() ) )
+            doText( &module->Reference() );
+
+        if( IsCopperLayer( module->Value().GetLayer() ) )
+            doText( &module->Value() );
+
+        for( BOARD_ITEM* item = module->GraphicalItemsList();  item;  item = item->Next() )
+        {
+            if( item->Type() == PCB_MODULE_TEXT_T && IsCopperLayer( item->GetLayer() ) )
+                doText( item );
+        }
+    }
+}
+
+
+void DRC::doText( BOARD_ITEM* aTextItem )
+{
+    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aTextItem );
     std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
     std::vector<D_PAD*> padList = m_pcb->GetPads();
 
-    // Test text areas for vias, tracks and pads inside text areas
-    for( auto item : m_pcb->Drawings() )
+    // So far the bounding box makes up the text-area
+    text->TransformTextShapeToSegmentList( textShape );
+
+    if( textShape.size() == 0 )     // Should not happen (empty text?)
+        return;
+
+    for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
     {
-        // Drc test only items on copper layers
-        if( !IsCopperLayer( item->GetLayer() ) )
+        if( !track->IsOnLayer( aTextItem->GetLayer() ) )
             continue;
 
-        // only texts on copper layers are tested
-        if( item->Type() !=  PCB_TEXT_T )
-            continue;
+        // Test the distance between each segment and the current track/via
+        int min_dist = ( track->GetWidth() + text->GetThickness() ) / 2 +
+                       track->GetClearance( NULL );
 
-        textShape.clear();
-
-        // So far the bounding box makes up the text-area
-        TEXTE_PCB* text = (TEXTE_PCB*) item;
-        text->TransformTextShapeToSegmentList( textShape );
-
-        if( textShape.size() == 0 )     // Should not happen (empty text?)
-            continue;
-
-        for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
+        if( track->Type() == PCB_TRACE_T )
         {
-            if( !track->IsOnLayer( item->GetLayer() ) )
-                    continue;
+            SEG segref( track->GetStart(), track->GetEnd() );
+            wxPoint markerPos;
+            int closestApproach = INT_MAX;
 
-            // Test the distance between each segment and the current track/via
-            int min_dist = ( track->GetWidth() + text->GetThickness() ) /2 +
-                           track->GetClearance(NULL);
-
-            if( track->Type() == PCB_TRACE_T )
+            // Error condition: Distance between text segment and track segment is
+            // smaller than the clearance of the track
+            for( unsigned jj = 0; jj < textShape.size() && closestApproach > 0; jj += 2 )
             {
-                SEG segref( track->GetStart(), track->GetEnd() );
+                SEG segtest( textShape[jj], textShape[jj+1] );
+                int dist = segref.Distance( segtest );
 
-                // Error condition: Distance between text segment and track segment is
-                // smaller than the clearance of the segment
-                for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+                if( dist < closestApproach )
                 {
-                    SEG segtest( textShape[jj], textShape[jj+1] );
-                    int dist = segref.Distance( segtest );
-
-                    if( dist < min_dist )
-                    {
-                        addMarkerToPcb( fillMarker( track, text,
-                                                    DRCE_TRACK_INSIDE_TEXT, m_currentMarker ) );
-                        m_currentMarker = nullptr;
-                        break;
-                    }
+                    markerPos = textShape[jj];
+                    closestApproach = dist;
                 }
             }
-            else if( track->Type() == PCB_VIA_T )
-            {
-                // Error condition: Distance between text segment and via is
-                // smaller than the clearance of the via
-                for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
-                {
-                    SEG segtest( textShape[jj], textShape[jj+1] );
 
-                    if( segtest.PointCloserThan( track->GetPosition(), min_dist ) )
-                    {
-                        addMarkerToPcb( fillMarker( track, text,
-                                                    DRCE_VIA_INSIDE_TEXT, m_currentMarker ) );
-                        m_currentMarker = nullptr;
-                        break;
-                    }
-                }
+            if( closestApproach < min_dist )
+            {
+                addMarkerToPcb( fillMarker( markerPos, track, aTextItem,
+                                            DRCE_TRACK_INSIDE_TEXT, m_currentMarker ) );
+                m_currentMarker = nullptr;
+                break;
             }
         }
-
-        // Test pads
-        for( unsigned ii = 0; ii < padList.size(); ii++ )
+        else if( track->Type() == PCB_VIA_T )
         {
-            D_PAD* pad = padList[ii];
-
-            if( !pad->IsOnLayer( item->GetLayer() ) )
-                    continue;
-
-            wxPoint shape_pos = pad->ShapePos();
-
+            // Error condition: Distance between text segment and via is
+            // smaller than the clearance of the via
             for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
             {
-                /* In order to make some calculations more easier or faster,
-                 * pads and tracks coordinates will be made relative
-                 * to the segment origin
-                 */
-                wxPoint origin = textShape[jj];  // origin will be the origin of other coordinates
-                m_segmEnd = textShape[jj+1] - origin;
-                wxPoint delta = m_segmEnd;
-                m_segmAngle = 0;
+                SEG segtest( textShape[jj], textShape[jj+1] );
 
-                // for a non horizontal or vertical segment Compute the segment angle
-                // in tenths of degrees and its length
-                if( delta.x || delta.y )    // delta.x == delta.y == 0 for vias
+                if( segtest.PointCloserThan( track->GetPosition(), min_dist ) )
                 {
-                    // Compute the segment angle in 0,1 degrees
-                    m_segmAngle = ArcTangente( delta.y, delta.x );
-
-                    // Compute the segment length: we build an equivalent rotated segment,
-                    // this segment is horizontal, therefore dx = length
-                    RotatePoint( &delta, m_segmAngle );    // delta.x = length, delta.y = 0
-                }
-
-                m_segmLength = delta.x;
-                m_padToTestPos = shape_pos - origin;
-
-                if( !checkClearanceSegmToPad( pad, text->GetThickness(),
-                                              pad->GetClearance(NULL) ) )
-                {
-                    addMarkerToPcb( fillMarker( pad, text,
-                                                DRCE_PAD_INSIDE_TEXT, m_currentMarker ) );
+                    addMarkerToPcb( fillMarker( track->GetPosition(), track, aTextItem,
+                                                DRCE_VIA_INSIDE_TEXT, m_currentMarker ) );
                     m_currentMarker = nullptr;
                     break;
                 }
+            }
+        }
+    }
+
+    // Test pads
+    for( unsigned ii = 0; ii < padList.size(); ii++ )
+    {
+        D_PAD* pad = padList[ii];
+
+        if( !pad->IsOnLayer( aTextItem->GetLayer() ) )
+            continue;
+
+        wxPoint shape_pos = pad->ShapePos();
+
+        for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
+        {
+            /* In order to make some calculations more easier or faster,
+             * pads and tracks coordinates will be made relative
+             * to the segment origin
+             */
+            wxPoint origin = textShape[jj];  // origin will be the origin of other coordinates
+            m_segmEnd = textShape[jj+1] - origin;
+            wxPoint delta = m_segmEnd;
+            m_segmAngle = 0;
+
+            // for a non horizontal or vertical segment Compute the segment angle
+            // in tenths of degrees and its length
+            if( delta.x || delta.y )    // delta.x == delta.y == 0 for vias
+            {
+                // Compute the segment angle in 0,1 degrees
+                m_segmAngle = ArcTangente( delta.y, delta.x );
+
+                // Compute the segment length: we build an equivalent rotated segment,
+                // this segment is horizontal, therefore dx = length
+                RotatePoint( &delta, m_segmAngle );    // delta.x = length, delta.y = 0
+            }
+
+            m_segmLength = delta.x;
+            m_padToTestPos = shape_pos - origin;
+
+            if( !checkClearanceSegmToPad( pad, text->GetThickness(), pad->GetClearance(NULL) ) )
+            {
+                addMarkerToPcb( fillMarker( pad, aTextItem, DRCE_PAD_INSIDE_TEXT,
+                                            m_currentMarker ) );
+                m_currentMarker = nullptr;
+                break;
             }
         }
     }

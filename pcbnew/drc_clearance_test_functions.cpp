@@ -197,7 +197,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     layerMask    = aRefSeg->GetLayerSet();
     net_code_ref = aRefSeg->GetNetCode();
 
-    // Phase 0 : Test vias
+    /******************************************/
+    /* Phase 0 : via DRC tests :              */
+    /******************************************/
+
     if( aRefSeg->Type() == PCB_VIA_T )
     {
         VIA *refvia = static_cast<VIA*>( aRefSeg );
@@ -668,6 +671,36 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     }
                 }
             }
+        }
+    }
+
+    /***********************************************/
+    /* Phase 3: test DRC with zones                */
+    /***********************************************/
+
+    SEG refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+
+    for( ZONE_CONTAINER* zone : m_pcb->Zones() )
+    {
+        if( zone->GetIsKeepout()
+            || zone->GetLayer() != aRefSeg->GetLayer()
+            || ( aRefSeg->GetNetCode() == zone->GetNetCode() && aRefSeg->GetNetCode() > 0 ) )
+        {
+            continue;
+        }
+
+        int clearance = zone->GetClearance( aRefSeg );
+        SHAPE_POLY_SET* outline;
+
+        if( zone->IsFilled() )
+            outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
+        else
+            outline = zone->Outline();
+
+        if( outline->Distance( refSeg, aRefSeg->GetWidth() ) < clearance )
+        {
+            addMarkerToPcb( fillMarker( aRefSeg, zone, DRCE_TRACK_NEAR_ZONE, m_currentMarker ) );
+            m_currentMarker = nullptr;
         }
     }
 

@@ -1042,7 +1042,7 @@ void BOARD::DeleteZONEOutlines()
 }
 
 
-BOARD_ITEM* BOARD::GetItem( void* aWeakReference, bool includeDrawings )
+BOARD_ITEM* BOARD::GetItem( void* aWeakReference )
 {
     for( TRACK* track : Tracks() )
         if( track == aWeakReference )
@@ -1057,24 +1057,24 @@ BOARD_ITEM* BOARD::GetItem( void* aWeakReference, bool includeDrawings )
             if( pad == aWeakReference )
                 return pad;
 
-        if( includeDrawings )
-        {
-            for( BOARD_ITEM* drawing : module->GraphicalItems() )
-                if( drawing == aWeakReference )
-                    return drawing;
-        }
+        if( &module->Reference() == aWeakReference )
+            return &module->Reference();
+
+        if( &module->Value() == aWeakReference )
+            return &module->Value();
+
+        for( BOARD_ITEM* drawing : module->GraphicalItems() )
+            if( drawing == aWeakReference )
+                return drawing;
     }
 
     for( ZONE_CONTAINER* zone : Zones() )
         if( zone == aWeakReference )
             return zone;
 
-    if( includeDrawings )
-    {
-        for( BOARD_ITEM* drawing : Drawings() )
-            if( drawing == aWeakReference )
-                return drawing;
-    }
+    for( BOARD_ITEM* drawing : Drawings() )
+        if( drawing == aWeakReference )
+            return drawing;
 
     // Not found; weak reference has been deleted.
     return &g_DeletedItem;

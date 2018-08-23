@@ -407,8 +407,8 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aClearanceValue = the clearance around the text bounding box
  */
-void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
-                    SHAPE_POLY_SET& aCornerBuffer,
+void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon(
+                    SHAPE_POLY_SET* aCornerBuffer,
                     int             aClearanceValue ) const
 {
     // Oh dear.  When in UTF-8 mode, wxString puts string iterators in a linked list, and
@@ -431,13 +431,13 @@ void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
     corners[3].y = corners[2].y;
     corners[3].x = corners[0].x;
 
-    aCornerBuffer.NewOutline();
+    aCornerBuffer->NewOutline();
 
     for( int ii = 0; ii < 4; ii++ )
     {
         // Rotate polygon
         RotatePoint( &corners[ii].x, &corners[ii].y, GetTextPos().x, GetTextPos().y, GetTextAngle() );
-        aCornerBuffer.Append( corners[ii].x, corners[ii].y );
+        aCornerBuffer->Append( corners[ii].x, corners[ii].y );
     }
 }
 

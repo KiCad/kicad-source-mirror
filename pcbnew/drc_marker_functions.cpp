@@ -36,18 +36,23 @@
 #include <common.h>
 #include <pcbnew.h>
 #include <board_design_settings.h>
-
+#include <pcb_edit_frame.h>
 #include <drc.h>
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_marker_pcb.h>
 #include <class_pcb_text.h>
+#include <class_text_mod.h>
+#include <class_edge_mod.h>
 #include <class_board_item.h>
 
 
 MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* bItem, int aErrorCode, MARKER_PCB* fillMe )
 {
+    EDA_UNITS_T units = m_pcbEditorFrame->GetUserUnits();
+    const int EPSILON = Mils2iu( 5 );
+
     wxPoint  posA;
     wxPoint  posB = wxPoint();
 
@@ -63,36 +68,65 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* bItem, int aErrorCode, M
         }
         else if( bItem->Type() == PCB_TRACE_T )
         {
-            TRACK*  track  = (TRACK*) bItem;
+            TRACK*  bTrack  = (TRACK*) bItem;
+            SEG     bTrackSeg( bTrack->GetPosition(), bTrack->GetEnd() );
+            wxPoint pt1 = aTrack->GetPosition();
+            wxPoint pt2 = aTrack->GetEnd();
 
-            posB = track->GetPosition();
+            // Do a binary search for a "good enough" marker location
+            while( GetLineLength( pt1, pt2 ) > EPSILON )
+            {
+                if( bTrackSeg.Distance( pt1 ) < bTrackSeg.Distance( pt2 ) )
+                    pt2 = ( pt1 + pt2 ) / 2;
+                else
+                    pt1 = ( pt1 + pt2 ) / 2;
+            }
 
-            wxPoint endPos = track->GetEnd();
-
-            // either of aItem's start or end will be used for the marker position
-            // first assume start, then switch at end if needed.  decision made on
-            // distance from end of aTrack.
-            posA = track->GetStart();
-
-            double dToEnd = GetLineLength( endPos, aTrack->GetEnd() );
-            double dToStart = GetLineLength( posA, aTrack->GetEnd() );
-
-            if( dToEnd < dToStart )
-                posA = endPos;
+            // Once we're within EPSILON pt1 and pt2 are "equivalent"
+            posA = pt1;
+            posB = bTrack->GetPosition();
         }
-        else if( bItem->Type() == PCB_TEXT_T )
+        else if( bItem->Type() == PCB_ZONE_T || bItem->Type() == PCB_ZONE_AREA_T )
         {
-            posA = aTrack->GetPosition();
-            posB = ((TEXTE_PCB*) bItem)->GetPosition();
+            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( bItem );
+            SHAPE_POLY_SET* outline;
+
+            if( zone->IsFilled() )
+                outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
+            else
+                outline = zone->Outline();
+
+            wxPoint pt1 = aTrack->GetPosition();
+            wxPoint pt2 = aTrack->GetEnd();
+
+            // If the mid-point is in the zone, then that's a fine place for the marker
+            if( outline->Distance( ( pt1 + pt2 ) / 2 ) == 0 )
+                posA = ( pt1 + pt2 ) / 2;
+
+            // Otherwise do a binary search for a "good enough" marker location
+            else
+            {
+                while( GetLineLength( pt1, pt2 ) > EPSILON )
+                {
+                    if( outline->Distance( pt1 ) < outline->Distance( pt2 ) )
+                        pt2 = ( pt1 + pt2 ) / 2;
+                    else
+                        pt1 = ( pt1 + pt2 ) / 2;
+                }
+                // Once we're within EPSILON pt1 and pt2 are "equivalent"
+                posA = pt1;
+            }
+
+            posB = ((ZONE_CONTAINER*)bItem)->GetPosition();
         }
     }
     else
         posA = aTrack->GetPosition();
 
     if( fillMe )
-        fillMe->SetData( m_units, aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
+        fillMe->SetData( units, aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
     else
-        fillMe = new MARKER_PCB( m_units, aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
+        fillMe = new MARKER_PCB( units, aErrorCode, posA, aTrack, aTrack->GetPosition(), bItem, posB );
 
     return fillMe;
 }
@@ -100,6 +134,8 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* bItem, int aErrorCode, M
 
 MARKER_PCB* DRC::fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
 {
+    EDA_UNITS_T units = m_pcbEditorFrame->GetUserUnits();
+
     wxPoint  posA = aPad->GetPosition();
     wxPoint  posB;
 
@@ -115,6 +151,10 @@ MARKER_PCB* DRC::fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MAR
             posB = ((TEXTE_PCB*)aItem)->GetPosition();
             break;
 
+        case PCB_MODULE_TEXT_T:
+            posB = ((TEXTE_MODULE*)aItem)->GetPosition();
+            break;
+
         default:
             wxLogDebug( wxT("fillMarker: unsupported item") );
             break;
@@ -122,9 +162,9 @@ MARKER_PCB* DRC::fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MAR
     }
 
     if( fillMe )
-        fillMe->SetData( m_units, aErrorCode, posA, aPad, posA, aItem, posB );
+        fillMe->SetData( units, aErrorCode, posA, aPad, posA, aItem, posB );
     else
-        fillMe = new MARKER_PCB( m_units, aErrorCode, posA, aPad, posA, aItem, posB );
+        fillMe = new MARKER_PCB( units, aErrorCode, posA, aPad, posA, aItem, posB );
 
     return fillMe;
 }
@@ -140,10 +180,12 @@ MARKER_PCB* DRC::fillMarker(BOARD_ITEM *aItem, const wxPoint &aPos, int aErrorCo
 MARKER_PCB* DRC::fillMarker( const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem,
                              int aErrorCode, MARKER_PCB* fillMe )
 {
+    EDA_UNITS_T units = m_pcbEditorFrame->GetUserUnits();
+
     if( fillMe )
-        fillMe->SetData( m_units, aErrorCode, aPos, aItem, aPos, bItem, aPos );
+        fillMe->SetData( units, aErrorCode, aPos, aItem, aPos, bItem, aPos );
     else
-        fillMe = new MARKER_PCB( m_units, aErrorCode, aPos, aItem, aPos, bItem, aPos );
+        fillMe = new MARKER_PCB( units, aErrorCode, aPos, aItem, aPos, bItem, aPos );
 
     return fillMe;
 }

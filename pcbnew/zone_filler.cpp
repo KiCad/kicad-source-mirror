@@ -186,15 +186,21 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     if( aCheck )
     {
         bool refill = false;
+        wxCHECK( m_progressReporter, false );
 
         if( outOfDate )
         {
-            KIDIALOG dlg( m_progressReporter, _( "Zone fills are out-of-date. Refill?" ),
+            m_progressReporter->Hide();
+
+            KIDIALOG dlg( m_progressReporter->GetParent(),
+                          _( "Zone fills are out-of-date. Refill?" ),
                           _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
             dlg.DoNotShowCheckbox();
 
             refill = ( dlg.ShowModal() == wxID_OK );
+
+            m_progressReporter->Show();
         }
 
         if( !refill )
@@ -512,77 +518,69 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         {
             int clearance = std::max( zone_clearance, item_clearance );
             track->TransformShapeWithClearanceToPolygon( aFeatures,
-                    clearance,
-                    segsPerCircle,
-                    correctionFactor );
+                    clearance, segsPerCircle, correctionFactor );
         }
     }
 
-    /* Add module edge items that are on copper layers
-     * Pcbnew allows these items to be on copper layers in microwave applictions
-     * This is a bad thing, but must be handled here, until a better way is found
+    /* Add graphic items that are on copper layers.  These have no net, so we just
+     * use the zone clearance (or edge clearance).
      */
-    for( auto module : m_board->Modules() )
+    auto doGraphicItem = [&]( BOARD_ITEM* aItem )
     {
-        for( auto item : module->GraphicalItems() )
-        {
-            if( !item->IsOnLayer( aZone->GetLayer() ) && !item->IsOnLayer( Edge_Cuts ) )
-                continue;
+        if( !aItem->IsOnLayer( aZone->GetLayer() ) )
+            return;
 
-            if( item->Type() != PCB_MODULE_EDGE_T )
-                continue;
-
-            item_boundingbox = item->GetBoundingBox();
-
-            if( item_boundingbox.Intersects( zone_boundingbox ) )
-            {
-                int zclearance = zone_clearance;
-
-                if( item->IsOnLayer( Edge_Cuts ) )
-                    // use only the m_ZoneClearance, not the clearance using
-                    // the netclass value, because we do not have a copper item
-                    zclearance = zone_to_edgecut_clearance;
-
-                ( (EDGE_MODULE*) item )->TransformShapeWithClearanceToPolygon(
-                        aFeatures, zclearance, segsPerCircle, correctionFactor );
-            }
-        }
-    }
-
-    // Add graphic items (copper texts) and board edges
-    // Currently copper texts have no net, so only the zone_clearance
-    // is used.
-    for( auto item : m_board->Drawings() )
-    {
-        if( item->GetLayer() != aZone->GetLayer() && item->GetLayer() != Edge_Cuts )
-            continue;
+        if( !aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
+            return;
 
         int zclearance = zone_clearance;
 
-        if( item->GetLayer() == Edge_Cuts )
+        if( aItem->IsOnLayer( Edge_Cuts ) )
             // use only the m_ZoneClearance, not the clearance using
             // the netclass value, because we do not have a copper item
             zclearance = zone_to_edgecut_clearance;
 
-        switch( item->Type() )
+        switch( aItem->Type() )
         {
         case PCB_LINE_T:
-            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                    aFeatures,
-                    zclearance, segsPerCircle, correctionFactor );
+            ( (DRAWSEGMENT*) aItem )->TransformShapeWithClearanceToPolygon(
+                    aFeatures, zclearance, segsPerCircle, correctionFactor );
             break;
 
         case PCB_TEXT_T:
-            ( (TEXTE_PCB*) item )->TransformBoundingBoxWithClearanceToPolygon(
-                    aFeatures, zclearance );
+            ( (TEXTE_PCB*) aItem )->TransformBoundingBoxWithClearanceToPolygon(
+                    &aFeatures, zclearance );
+            break;
+
+        case PCB_MODULE_EDGE_T:
+            ( (EDGE_MODULE*) aItem )->TransformShapeWithClearanceToPolygon(
+                    aFeatures, zclearance, segsPerCircle, correctionFactor );
+            break;
+
+        case PCB_MODULE_TEXT_T:
+            ( (TEXTE_PCB*) aItem )->TransformBoundingBoxWithClearanceToPolygon(
+                    &aFeatures, zclearance );
             break;
 
         default:
             break;
         }
+    };
+
+    for( auto module : m_board->Modules() )
+    {
+        doGraphicItem( &module->Reference() );
+        doGraphicItem( &module->Value() );
+
+        for( auto item : module->GraphicalItems() )
+            doGraphicItem( item );
     }
 
-    // Add zones outlines having an higher priority and keepout
+    for( auto item : m_board->Drawings() )
+        doGraphicItem( item );
+
+    /* Add zones outlines having an higher priority and keepout
+     */
     for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = m_board->GetArea( ii );
@@ -631,7 +629,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                 aFeatures, min_clearance, use_net_clearance );
     }
 
-    // Remove thermal symbols
+    /* Remove thermal symbols
+     */
     for( auto module : m_board->Modules() )
     {
         for( auto pad : module->Pads() )

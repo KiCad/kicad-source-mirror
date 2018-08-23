@@ -40,15 +40,15 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_UNCONNECTED_ITEMS:
         return wxString( _( "Unconnected items" ) );
     case DRCE_TRACK_NEAR_THROUGH_HOLE:
-        return wxString( _( "Track near thru-hole" ) );
+        return wxString( _( "Track too close to thru-hole" ) );
     case DRCE_TRACK_NEAR_PAD:
-        return wxString( _( "Track near pad" ) );
+        return wxString( _( "Track too close to pad" ) );
     case DRCE_TRACK_NEAR_VIA:
-        return wxString( _( "Track near via" ) );
+        return wxString( _( "Track too close to via" ) );
     case DRCE_VIA_NEAR_VIA:
-        return wxString( _( "Via near via" ) );
+        return wxString( _( "Via too close to via" ) );
     case DRCE_VIA_NEAR_TRACK:
-        return wxString( _( "Via near track" ) );
+        return wxString( _( "Via too close to track" ) );
     case DRCE_TRACK_ENDS1:
     case DRCE_TRACK_ENDS2:
     case DRCE_TRACK_ENDS3:
@@ -63,8 +63,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Two parallel track segments too close" ) );
     case DRCE_TRACKS_CROSSING:
         return wxString( _( "Tracks crossing" ) );
+    case DRCE_TRACK_NEAR_ZONE:
+        return wxString( _( "Track too close to copper area" ) );
     case DRCE_PAD_NEAR_PAD1:
-        return wxString( _( "Pad near pad" ) );
+        return wxString( _( "Pad too close to pad" ) );
     case DRCE_VIA_HOLE_BIGGER:
         return wxString( _( "Via hole > diameter" ) );
     case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
@@ -81,22 +83,22 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Copper areas intersect or are too close" ) );
 
     case DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE:
-        return wxString( _( "Copper area belongs a net which has no pads. This is strange" ) );
+        return wxString( _( "Copper area belongs to a net which has no pads" ) );
 
     case DRCE_HOLE_NEAR_PAD:
-        return wxString( _( "Hole near pad" ) );
+        return wxString( _( "Hole too close to pad" ) );
     case DRCE_HOLE_NEAR_TRACK:
-        return wxString( _( "Hole near track" ) );
+        return wxString( _( "Hole too close to track" ) );
     case DRCE_TOO_SMALL_TRACK_WIDTH:
-        return wxString( _( "Too small track width" ) );
+        return wxString( _( "Track width too small" ) );
     case DRCE_TOO_SMALL_VIA:
-        return wxString( _( "Too small via size" ) );
+        return wxString( _( "Via size too small" ) );
     case DRCE_TOO_SMALL_MICROVIA:
-        return wxString( _( "Too small micro via size" ) );
+        return wxString( _( "Micro via size too small" ) );
     case DRCE_TOO_SMALL_VIA_DRILL:
-        return wxString( _( "Too small via drill" ) );
+        return wxString( _( "Via drill too small" ) );
     case DRCE_TOO_SMALL_MICROVIA_DRILL:
-        return wxString( _( "Too small micro via drill" ) );
+        return wxString( _( "Micro via drill too small" ) );
     case DRCE_DRILLED_HOLES_TOO_CLOSE:
         return wxString( _( "Drilled holes too close together" ) );
 
@@ -115,22 +117,22 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "NetClass uVia Drill &lt; global limit" ) );
 
     case DRCE_VIA_INSIDE_KEEPOUT:
-        return wxString( _( "Via inside a keepout area" ) );
+        return wxString( _( "Via inside keepout area" ) );
 
     case DRCE_TRACK_INSIDE_KEEPOUT:
-        return wxString( _( "Track inside a keepout area" ) );
+        return wxString( _( "Track inside keepout area" ) );
 
     case DRCE_PAD_INSIDE_KEEPOUT:
-        return wxString( _( "Pad inside a keepout area" ) );
+        return wxString( _( "Pad inside keepout area" ) );
 
     case DRCE_VIA_INSIDE_TEXT:
-        return wxString( _( "Via inside a text" ) );
+        return wxString( _( "Via inside text" ) );
 
     case DRCE_TRACK_INSIDE_TEXT:
-        return wxString( _( "Track inside a text" ) );
+        return wxString( _( "Track inside text" ) );
 
     case DRCE_PAD_INSIDE_TEXT:
-        return wxString( _( "Pad inside a text" ) );
+        return wxString( _( "Pad inside text" ) );
 
     case DRCE_OVERLAPPING_FOOTPRINTS:
         return wxString( _( "Courtyards overlap" ) );
@@ -225,12 +227,12 @@ wxString DRC_ITEM::ShowReport( EDA_UNITS_T aUnits ) const
 
 BOARD_ITEM* DRC_ITEM::GetMainItem( BOARD* aBoard ) const
 {
-    return aBoard->GetItem( m_mainItemWeakRef, false /* copper only */ );
+    return aBoard->GetItem( m_mainItemWeakRef );
 }
 
 
 BOARD_ITEM* DRC_ITEM::GetAuxiliaryItem( BOARD* aBoard ) const
 {
-    return aBoard->GetItem( m_auxItemWeakRef, false /* copper only */ );
+    return aBoard->GetItem( m_auxItemWeakRef );
 }
 
