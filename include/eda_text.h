@@ -36,6 +36,7 @@
 #include <gr_basic.h>               // EDA_DRAW_MODE_T
 #include <base_struct.h>            // EDA_RECT
 
+#include <mutex>
 
 class SHAPE_POLY_SET;
 
