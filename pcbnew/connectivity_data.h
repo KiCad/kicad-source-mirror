@@ -48,6 +48,7 @@ class RN_DATA;
 class RN_NET;
 class TRACK;
 class D_PAD;
+class MODULE;
 class PROGRESS_REPORTER;
 
 struct CN_DISJOINT_NET_ENTRY
@@ -234,11 +235,11 @@ public:
     }
 
     void MarkItemNetAsDirty( BOARD_ITEM* aItem );
-
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
+    const std::vector<CN_EDGE> GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections = false );
 
 private:
-    
+
     int countRelevantItems( const std::vector<BOARD_ITEM*>& aItems );
     void    updateRatsnest();
     void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );

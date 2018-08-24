@@ -337,6 +337,22 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                  _( "&Grid Origin" ),
                  _( "Set grid origin point" ),
                  KiBitmap( grid_select_axis_xpm ) );
+
+    aParentMenu->AppendSeparator();
+
+    wxMenu* autoplaceSubmenu = new wxMenu;
+    AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_OFF_BOARD_MODULES,
+               _( "&Autoplace off-board components" ), _( "" ), KiBitmap( grid_select_axis_xpm ) // fixme: icons
+              );
+
+    AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_SELECTED_MODULES,
+               _( "&Autoplace selected components" ), _( "" ), KiBitmap( grid_select_axis_xpm ) // fixme: icons
+              );
+
+    AddMenuItem( aParentMenu, autoplaceSubmenu,
+            -1, _( "&Auto-place" ),
+            _( "Automatic component placement" ), KiBitmap( grid_select_axis_xpm ) // fixme: icons
+             );
 }
 
 

@@ -212,6 +212,13 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES:
         return PCB_ACTIONS::zoneUnfillAll.MakeEvent();
+
+    case ID_POPUP_PCB_AUTOPLACE_OFF_BOARD_MODULES:
+        return PCB_ACTIONS::autoplaceOffboardComponents.MakeEvent();
+
+    case ID_POPUP_PCB_AUTOPLACE_SELECTED_MODULES:
+        return PCB_ACTIONS::autoplaceSelectedComponents.MakeEvent();
+
     }
 
     return OPT<TOOL_EVENT>();

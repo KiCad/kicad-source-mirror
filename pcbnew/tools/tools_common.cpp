@@ -45,6 +45,7 @@
 
 #include <router/router_tool.h>
 #include <router/length_tuner_tool.h>
+#include <autorouter/autoplacer_tool.h>
 
 void PCB_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
 {
@@ -64,4 +65,5 @@ void PCB_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
     aToolManager->RegisterTool( new MICROWAVE_TOOL );
     aToolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     aToolManager->RegisterTool( new ZONE_FILLER_TOOL );
+    aToolManager->RegisterTool( new AUTOPLACE_TOOL );
 }

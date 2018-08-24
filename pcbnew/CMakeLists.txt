@@ -205,6 +205,9 @@ set( PCBNEW_CLASS_SRCS
 
     autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp
+    autorouter/ar_autoplacer.cpp
+    autorouter/ar_matrix.cpp
+    autorouter/autoplacer_tool.cpp
 
     action_plugin.cpp
     append_board_to_current.cpp

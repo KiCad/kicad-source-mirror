@@ -239,12 +239,12 @@ int CONNECTIVITY_DATA::countRelevantItems( const std::vector<BOARD_ITEM*>& aItem
             case PCB_VIA_T:
                 n++;
                 break;
-            
+
             default:
                 break;
         }
     }
-    
+
     return n;
 }
 
@@ -261,7 +261,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
     m_dynamicConnectivity->Build( aItems );
 
     m_dynamicRatsnest.clear();
-    
+
     BlockRatsnestItems( aItems );
 
     for( unsigned int nc = 1; nc < m_dynamicConnectivity->m_nets.size(); nc++ )
@@ -659,8 +659,51 @@ void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
     }
 }
 
+
 void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
     m_connAlgo->SetProgressReporter( m_progressReporter );
+}
+
+
+const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections )
+{
+    std::set<int> nets;
+    std::set<D_PAD*> pads;
+    std::vector<CN_EDGE> edges;
+
+    for( auto pad : aComponent->Pads() )
+    {
+        nets.insert( pad->GetNetCode() );
+        pads.insert( pad );
+    }
+
+    for ( auto netcode : nets )
+    {
+        auto net = GetRatsnestForNet( netcode );
+
+        for ( auto edge : net->GetEdges() )
+        {
+            auto srcNode = edge.GetSourceNode();
+            auto dstNode = edge.GetTargetNode();
+
+            auto srcParent = static_cast<D_PAD*>( srcNode->Parent() );
+            auto dstParent = static_cast<D_PAD*>( dstNode->Parent() );
+
+            bool srcFound = ( pads.find(srcParent) != pads.end() );
+            bool dstFound = ( pads.find(dstParent) != pads.end() );
+
+            if ( srcFound && dstFound && !aSkipInternalConnections )
+            {
+                edges.push_back( edge );
+            }
+            else if ( srcFound || dstFound )
+            {
+                edges.push_back( edge );
+            }
+        }
+    }
+
+    return edges;
 }
