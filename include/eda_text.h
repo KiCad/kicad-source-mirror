@@ -30,6 +30,7 @@
 #ifndef EDA_TEXT_H_
 #define EDA_TEXT_H_
 
+#include <mutex>
 #include <trigo.h>                  // NORMALIZE_ANGLE_POS( angle );
 #include <common.h>                 // wxStringSplit
 #include <gr_basic.h>               // EDA_DRAW_MODE_T

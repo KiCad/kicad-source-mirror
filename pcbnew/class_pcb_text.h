@@ -30,7 +30,6 @@
 #ifndef CLASS_PCB_TEXT_H
 #define CLASS_PCB_TEXT_H
 
-#include <mutex>
 #include <eda_text.h>
 #include <class_board_item.h>
 #include <PolyLine.h>
