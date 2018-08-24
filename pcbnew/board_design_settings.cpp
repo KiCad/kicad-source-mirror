@@ -432,6 +432,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_TextItalic[ LAYER_CLASS_EDGES ] = false;
     m_TextUpright[ LAYER_CLASS_EDGES ] = true;
 
+    m_LineThickness[ LAYER_CLASS_COURTYARD ] = Millimeter2iu( DEFAULT_COURTYARD_WIDTH );
+    m_TextSize[ LAYER_CLASS_COURTYARD ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
+                                                  Millimeter2iu( DEFAULT_TEXT_SIZE ) );
+    m_TextThickness[ LAYER_CLASS_COURTYARD ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
+    m_TextItalic[ LAYER_CLASS_COURTYARD ] = false;
+    m_TextUpright[ LAYER_CLASS_COURTYARD ] = true;
+
     m_LineThickness[ LAYER_CLASS_OTHERS ] = Millimeter2iu( DEFAULT_LINE_WIDTH );
     m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
                                                Millimeter2iu( DEFAULT_TEXT_SIZE ) );
@@ -585,10 +592,15 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResu
     aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextUpright" ),
           &m_TextUpright[ LAYER_CLASS_COPPER ], true ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "EdgesAndCourtyardsLineWidth" ),
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "EdgeCutLineWidth" ),
           &m_LineThickness[ LAYER_CLASS_EDGES ],
           Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
           nullptr, MM_PER_IU, wxT( "BoardOutlineThickness" ) ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CourtyardLineWidth" ),
+          &m_LineThickness[ LAYER_CLASS_COURTYARD ],
+          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersLineWidth" ),
           &m_LineThickness[ LAYER_CLASS_OTHERS ],

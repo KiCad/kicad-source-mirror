@@ -55,6 +55,7 @@ enum
     ROW_SILK,
     ROW_COPPER,
     ROW_EDGES,
+    ROW_COURTYARD,
     ROW_OTHERS
 };
 
@@ -144,7 +145,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_Visible->Set3StateValue( wxCHK_UNDETERMINED );
     m_LayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
 
-#define SET_GRID_VALUE( aRow, aCol, aValue ) \
+#define SET_INT_VALUE( aRow, aCol, aValue ) \
         m_grid->SetCellValue( aRow, aCol, StringFromValue( GetUserUnits(), aValue, true, true ) )
 
 #define SET_BOOL_VALUE( aRow, aCol, aValue ) \
@@ -158,31 +159,33 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     const BOARD_DESIGN_SETTINGS& bds = m_parent->GetBoard()->GetDesignSettings();
     wxGridCellAttr* attr;
 
-    m_grid->SetCellValue( ROW_SILK,   COL_CLASS_NAME, _( "Silk Layers" ) );
-    m_grid->SetCellValue( ROW_COPPER, COL_CLASS_NAME, _( "Copper Layers" ) );
-    m_grid->SetCellValue( ROW_EDGES,  COL_CLASS_NAME, _( "Edges & Courtyards" ) );
-    m_grid->SetCellValue( ROW_OTHERS, COL_CLASS_NAME, _( "Other Layers" ) );
+    m_grid->SetCellValue( ROW_SILK,      COL_CLASS_NAME, _( "Silk Layers" ) );
+    m_grid->SetCellValue( ROW_COPPER,    COL_CLASS_NAME, _( "Copper Layers" ) );
+    m_grid->SetCellValue( ROW_EDGES,     COL_CLASS_NAME, _( "Edge Cuts" ) );
+    m_grid->SetCellValue( ROW_COURTYARD, COL_CLASS_NAME, _( "Courtyards" ) );
+    m_grid->SetCellValue( ROW_OTHERS,    COL_CLASS_NAME, _( "Other Layers" ) );
 
     m_grid->SetCellValue( ROW_HEADER, COL_LINE_THICKNESS, _( "Line Thickness" ) );
-    SET_GRID_VALUE( ROW_SILK,   COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_SILK ] );
-    SET_GRID_VALUE( ROW_COPPER, COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_COPPER ] );
-    SET_GRID_VALUE( ROW_EDGES,  COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_EDGES ] );
-    SET_GRID_VALUE( ROW_OTHERS, COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_OTHERS ] );
+    SET_INT_VALUE( ROW_SILK,      COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_SILK ] );
+    SET_INT_VALUE( ROW_COPPER,    COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_COPPER ] );
+    SET_INT_VALUE( ROW_EDGES,     COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_EDGES ] );
+    SET_INT_VALUE( ROW_COURTYARD, COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_COURTYARD ] );
+    SET_INT_VALUE( ROW_OTHERS,    COL_LINE_THICKNESS, bds.m_LineThickness[ LAYER_CLASS_OTHERS ] );
 
     m_grid->SetCellValue( ROW_HEADER, COL_TEXT_WIDTH, _( "Text Width" ) );
-    SET_GRID_VALUE( ROW_SILK,   COL_TEXT_WIDTH, bds.m_TextSize[ LAYER_CLASS_SILK ].x );
-    SET_GRID_VALUE( ROW_COPPER, COL_TEXT_WIDTH, bds.m_TextSize[ LAYER_CLASS_COPPER ].x );
-    SET_GRID_VALUE( ROW_OTHERS, COL_TEXT_WIDTH, bds.m_TextSize[ LAYER_CLASS_OTHERS ].x );
+    SET_INT_VALUE( ROW_SILK,   COL_TEXT_WIDTH, bds.m_TextSize[ LAYER_CLASS_SILK ].x );
+    SET_INT_VALUE( ROW_COPPER, COL_TEXT_WIDTH, bds.m_TextSize[ LAYER_CLASS_COPPER ].x );
+    SET_INT_VALUE( ROW_OTHERS, COL_TEXT_WIDTH, bds.m_TextSize[ LAYER_CLASS_OTHERS ].x );
 
     m_grid->SetCellValue( ROW_HEADER, COL_TEXT_HEIGHT, _( "Text Height" ) );
-    SET_GRID_VALUE( ROW_SILK,   COL_TEXT_HEIGHT, bds.m_TextSize[ LAYER_CLASS_SILK ].y );
-    SET_GRID_VALUE( ROW_COPPER, COL_TEXT_HEIGHT, bds.m_TextSize[ LAYER_CLASS_COPPER ].y );
-    SET_GRID_VALUE( ROW_OTHERS, COL_TEXT_HEIGHT, bds.m_TextSize[ LAYER_CLASS_OTHERS ].y );
+    SET_INT_VALUE( ROW_SILK,   COL_TEXT_HEIGHT, bds.m_TextSize[ LAYER_CLASS_SILK ].y );
+    SET_INT_VALUE( ROW_COPPER, COL_TEXT_HEIGHT, bds.m_TextSize[ LAYER_CLASS_COPPER ].y );
+    SET_INT_VALUE( ROW_OTHERS, COL_TEXT_HEIGHT, bds.m_TextSize[ LAYER_CLASS_OTHERS ].y );
 
     m_grid->SetCellValue( ROW_HEADER, COL_TEXT_THICKNESS, _( "Text Thickness" ) );
-    SET_GRID_VALUE( ROW_SILK,   COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_SILK ] );
-    SET_GRID_VALUE( ROW_COPPER, COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_COPPER ] );
-    SET_GRID_VALUE( ROW_OTHERS, COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_OTHERS ] );
+    SET_INT_VALUE( ROW_SILK,   COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_SILK ] );
+    SET_INT_VALUE( ROW_COPPER, COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_COPPER ] );
+    SET_INT_VALUE( ROW_OTHERS, COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_OTHERS ] );
 
     m_grid->SetCellValue(  ROW_HEADER, COL_TEXT_ITALIC, _( "Italic" ) );
     SET_BOOL_VALUE(  ROW_SILK,   COL_TEXT_ITALIC, bds.m_TextItalic[ LAYER_CLASS_SILK ] );
@@ -196,7 +199,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     return true;
 
-#undef SET_GRID_VALUE
+#undef SET_INT_VALUE
 #undef SET_BOOL_VALUE
 }
 

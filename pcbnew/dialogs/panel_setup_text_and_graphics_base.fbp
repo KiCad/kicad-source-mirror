@@ -249,10 +249,10 @@
                                 <property name="resize">Resizable</property>
                                 <property name="row_label_horiz_alignment">wxALIGN_LEFT</property>
                                 <property name="row_label_size">132</property>
-                                <property name="row_label_values">&quot;Silk Layers&quot; &quot;Copper Layers&quot; &quot;Edges &amp; Courtyards&quot; &quot;Other Layers&quot;</property>
+                                <property name="row_label_values">&quot;Silk Layers&quot; &quot;Copper Layers&quot; &quot;Edge Cuts&quot; &quot;Courtyards&quot; &quot;Other Layers&quot;</property>
                                 <property name="row_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="row_sizes"></property>
-                                <property name="rows">4</property>
+                                <property name="rows">5</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="subclass">WX_GRID; widgets/wx_grid.h; forward_declare</property>

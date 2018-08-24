@@ -149,8 +149,13 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorCopperTextItalic" ),
             &settings.m_TextItalic[ LAYER_CLASS_COPPER ] ) );
 
-    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorEdgesAndCourtyardsLineWidth" ),
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorEdgeCutLineWidth" ),
             &settings.m_LineThickness[ LAYER_CLASS_EDGES ],
+            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            nullptr, MM_PER_IU ) );
+
+    m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorCourtyardLineWidth" ),
+            &settings.m_LineThickness[ LAYER_CLASS_COURTYARD ],
             Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
             nullptr, MM_PER_IU ) );
 

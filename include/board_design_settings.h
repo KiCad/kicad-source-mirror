@@ -32,7 +32,8 @@
 
 #define DEFAULT_SILK_LINE_WIDTH       0.12
 #define DEFAULT_COPPER_LINE_WIDTH     0.20
-#define DEFAULT_EDGE_WIDTH            0.05       // used for Edge.Cuts and CrtYds
+#define DEFAULT_EDGE_WIDTH            0.05
+#define DEFAULT_COURTYARD_WIDTH       0.05
 #define DEFAULT_LINE_WIDTH            0.10
 
 #define DEFAULT_SILK_TEXT_SIZE        1.0
@@ -152,6 +153,7 @@ enum
     LAYER_CLASS_SILK = 0,
     LAYER_CLASS_COPPER,
     LAYER_CLASS_EDGES,
+    LAYER_CLASS_COURTYARD,
     LAYER_CLASS_OTHERS,
 
     LAYER_CLASS_COUNT
