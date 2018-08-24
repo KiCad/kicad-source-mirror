@@ -236,7 +236,10 @@ public:
 
     void MarkItemNetAsDirty( BOARD_ITEM* aItem );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
+
+#ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections = false );
+#endif
 
 private:
 
