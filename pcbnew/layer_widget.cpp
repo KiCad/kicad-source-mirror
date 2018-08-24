@@ -553,7 +553,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
     }
 
     // Account for the parent's frame:
-    totWidth += 32;
+    totWidth += 15;
 
 
     /* The minimum height is a small size to properly force computation
@@ -579,7 +579,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
         }
     }
     // account for the parent's frame, this one has void space of 10 PLUS a border:
-    totWidth += 32;
+    totWidth += 15;
 
     // For totHeight re-use the previous small one
     wxSize renderz( totWidth, totHeight );
