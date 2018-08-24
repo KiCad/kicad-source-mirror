@@ -49,7 +49,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	
 	// Cell Defaults
 	m_EnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_EnvVars->SetMinSize( wxSize( 604,150 ) );
+	m_EnvVars->SetMinSize( wxSize( 604,170 ) );
 	
 	sbEnvVars->Add( m_EnvVars, 1, wxEXPAND|wxBOTTOM, 5 );
 	

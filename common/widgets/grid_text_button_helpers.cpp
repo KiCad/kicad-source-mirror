@@ -149,6 +149,10 @@ void GRID_CELL_TEXT_BUTTON::Reset()
 }
 
 
+/**
+ * Footprint Picker
+ */
+
 class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 {
 public:
@@ -190,6 +194,10 @@ void GRID_CELL_FOOTPRINT_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 }
 
 
+/**
+ * URL Viewer
+ */
+
 class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
@@ -225,6 +233,60 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                    wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_URL( aParent, m_dlg );
+
+    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+}
+
+
+/**
+ * Path Picker
+ */
+
+class TEXT_BUTTON_FILE_BROWSER : public wxComboCtrl
+{
+public:
+    TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg, wxString* aCurrentDir ) :
+            wxComboCtrl( aParent ),
+            m_dlg( aParentDlg ),
+            m_currentDir( aCurrentDir )
+    {
+        SetButtonBitmaps( KiBitmap( folder_xpm ) );
+    }
+
+protected:
+    void DoSetPopupControl( wxComboPopup* popup ) override
+    {
+        m_popup = nullptr;
+    }
+
+    void OnButtonClick() override
+    {
+        wxString path = GetValue();
+
+        if( path.IsEmpty() )
+            path = *m_currentDir;
+        else
+            path = ExpandEnvVarSubstitutions( path );
+
+        wxDirDialog dlg( nullptr, _( "Select Path" ), path,
+                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            SetValue( dlg.GetPath() );
+            *m_currentDir = dlg.GetPath();
+        }
+    }
+
+    DIALOG_SHIM* m_dlg;
+    wxString*    m_currentDir;
+};
+
+
+void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
+                                    wxEvtHandler* aEventHandler )
+{
+    m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir );
 
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }
