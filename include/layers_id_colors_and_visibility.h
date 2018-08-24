@@ -523,20 +523,7 @@ public:
 
     static LSET UserMask();
 
-    /**
-     * Function ForbiddenTextLayersForBoard
-     * returns the layer set that should not be allowed for free text on the board
-     * Currently this is only EdgeCuts and Margin
-     */
-    static LSET ForbiddenTextLayersForBoard();
-
-    /**
-     * Function ForbiddenTextLayersForFootprint
-     * returns the layer set that should not be allowed in text that is attached to a
-     * footprint.  Currently, this is any copper layer (not handled by router or fills)
-     * and any of the aperture layers (mask, paste, adhesive)
-     */
-    static LSET ForbiddenTextLayersForFootprint();
+    static LSET ForbiddenTextLayers();
 
     /**
      * Function CuStack

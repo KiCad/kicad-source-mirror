@@ -65,7 +65,7 @@ TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS_T aUserUnits, PCB_BASE_FRAME
 
     m_layerColAttr = new wxGridCellAttr;
     m_layerColAttr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
-    m_layerColAttr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, LSET::ForbiddenTextLayersForBoard() ) );
+    m_layerColAttr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, LSET::ForbiddenTextLayers() ) );
 }
 
 

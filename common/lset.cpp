@@ -783,58 +783,9 @@ LSET LSET::BackMask()
 }
 
 
-LSET LSET::ForbiddenTextLayersForBoard()
+LSET LSET::ForbiddenTextLayers()
 {
     static const LSET saved( 2, Edge_Cuts, Margin );
-    return saved;
-}
-
-LSET LSET::ForbiddenTextLayersForFootprint()
-{
-    static const PCB_LAYER_ID bad_layers[] = {
-        F_Cu,
-        B_Cu,
-        In1_Cu,
-        In2_Cu,
-        In3_Cu,
-        In4_Cu,
-        In5_Cu,
-        In6_Cu,
-        In7_Cu,
-        In8_Cu,
-        In9_Cu,
-        In10_Cu,
-        In11_Cu,
-        In12_Cu,
-        In13_Cu,
-        In14_Cu,
-        In15_Cu,
-        In16_Cu,
-        In17_Cu,
-        In18_Cu,
-        In19_Cu,
-        In20_Cu,
-        In21_Cu,
-        In22_Cu,
-        In23_Cu,
-        In24_Cu,
-        In25_Cu,
-        In26_Cu,
-        In27_Cu,
-        In28_Cu,
-        In29_Cu,
-        In30_Cu,
-        Edge_Cuts,
-        Margin,
-        F_Paste,
-        B_Paste,
-        F_Mask,
-        B_Mask,
-        F_Adhes,
-        B_Adhes
-    };
-
-    static const LSET saved( bad_layers, DIM( bad_layers ) );
     return saved;
 }
 
