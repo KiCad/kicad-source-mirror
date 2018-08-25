@@ -45,6 +45,9 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
 
+    cursorStrings.push_back( DimensionLabel( "x", aRulerVec.x, aUnits ) );
+    cursorStrings.push_back( DimensionLabel( "y", aRulerVec.y, aUnits ) );
+
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
