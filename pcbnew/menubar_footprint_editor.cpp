@@ -70,10 +70,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  text, _( "Create a new footprint" ),
                  KiBitmap( new_footprint_xpm ) );
 
+#ifdef KICAD_SCRIPTING
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
                  _( "&Create Footprint..." ),
                  _( "Create a new footprint using the footprint wizard" ),
                  KiBitmap( module_wizard_xpm ) );
+#endif
 
     fileMenu->AppendSeparator();
 

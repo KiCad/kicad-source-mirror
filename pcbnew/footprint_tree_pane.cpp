@@ -66,8 +66,10 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     menuLibrary->AppendSeparator();
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE, _( "New &Footprint..." ),
                  KiBitmap( new_component_xpm ) );
+#ifdef KICAD_SCRIPTING
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE_FROM_WIZARD, _( "&Create Footprint..." ),
                  KiBitmap( new_component_xpm ) );
+#endif
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_IMPORT_PART, _( "&Import Footprint..." ),
                  KiBitmap( import_part_xpm ) );
 
