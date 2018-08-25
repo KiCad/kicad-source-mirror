@@ -59,7 +59,7 @@ public:
      */
     KIWAY& Kiway() const
     {
-        wxASSERT( m_kiway );    // smoke out bugs in Debug build, then Release runs fine.
+        //wxASSERT( m_kiway );    // smoke out bugs in Debug build, then Release runs fine.
         return *m_kiway;
     }
 

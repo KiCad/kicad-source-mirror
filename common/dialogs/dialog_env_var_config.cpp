@@ -193,7 +193,7 @@ bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvV
 
 void DIALOG_ENV_VAR_CONFIG::OnAddButton( wxCommandEvent& event )
 {
-    DIALOG_ENV_VAR_SINGLE dlg( nullptr, wxEmptyString, wxEmptyString );
+    DIALOG_ENV_VAR_SINGLE dlg( this, wxEmptyString, wxEmptyString );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -230,7 +230,7 @@ void DIALOG_ENV_VAR_CONFIG::EditSelectedEntry()
 
     if( GetPathAtIndex( m_pathIndex, envName, envPath ) )
     {
-        auto dlg = new DIALOG_ENV_VAR_SINGLE( nullptr, envName, envPath );
+        auto dlg = new DIALOG_ENV_VAR_SINGLE( this, envName, envPath );
 
         if( IsEnvVarImmutable( envName ) )
         {
@@ -432,7 +432,7 @@ void DIALOG_ENV_VAR_SINGLE::OnSelectPath( wxCommandEvent& event )
     wxString title = _( "Select Path for Environment Variable" );
     wxString path;  // Currently the first opened path is not initialized
 
-    wxDirDialog dlg( nullptr, title, path, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+    wxDirDialog dlg( this, title, path, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_OK )
          m_envVarPath->SetValue( dlg.GetPath() );
