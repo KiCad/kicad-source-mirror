@@ -594,7 +594,9 @@ void LIB_EDIT_FRAME::OnUpdateSaveAll( wxUpdateUIEvent& event )
             break;
     }
 
-    event.SetText( modified > 1 ? _( "Save All &Libraries..." ) : _( "Save All &Libraries" ) );
+    wxString text = modified > 1 ? _( "Save All &Libraries..." ) : _( "Save All &Libraries" );
+
+    event.SetText( AddHotkeyName( text, g_Libedit_Hokeys_Descr, HK_SAVE_ALL_LIBS ) );
     event.Enable( modified > 0 );
 }
 
