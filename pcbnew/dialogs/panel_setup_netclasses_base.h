@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,10 +19,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -57,6 +57,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		WX_GRID* m_membershipGrid;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
@@ -65,12 +66,11 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		virtual void OnAssignAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAssignSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeMembershipGrid( wxSizeEvent& event ) { event.Skip(); }
-		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString ); 
+		PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_SETUP_NETCLASSES_BASE();
 	
 };

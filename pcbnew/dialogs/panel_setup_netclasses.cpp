@@ -76,15 +76,13 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
     m_netclassGrid->PushEventHandler( new GRID_TRICKS( m_netclassGrid ) );
     m_membershipGrid->PushEventHandler( new GRID_TRICKS( m_membershipGrid ) );
 
-    m_netclassGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
-    m_membershipGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_netclassGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_membershipGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Set up the net name column of the netclass membership grid to read-only
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly( true );
     m_membershipGrid->SetColAttr( 0, attr );
-
-    m_membershipGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_removeButton->SetBitmap( KiBitmap( trash_xpm ) );
