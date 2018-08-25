@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,10 +81,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing:") ), wxVERTICAL );
 	
 	m_checkApplyToAllParts = new wxCheckBox( sbSizerPinSharing->GetStaticBox(), wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( sbSizerPinSharing->GetStaticBox(), wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALL, 3 );
 	
 	
 	boarderSizer->Add( sbSizerPinSharing, 0, wxEXPAND|wxALL, 5 );
@@ -172,7 +172,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	bRightSizer->Add( fgSizerTextsSizes, 0, wxALL|wxEXPAND, 5 );
 	
-	m_panelShowPin = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_panelShowPin = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL|wxBORDER_SUNKEN );
 	m_panelShowPin->SetMinSize( wxSize( 150,150 ) );
 	
 	bRightSizer->Add( m_panelShowPin, 1, wxEXPAND | wxALL, 5 );
