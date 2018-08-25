@@ -407,8 +407,6 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
         screen->SetModify();
     }
 
-    m_frame.SyncLibraries( false );
-
     return true;
 }
 
@@ -437,6 +435,8 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAli
     partBuf->SetScreen( std::move( screen ) );
     wxCHECK( partBuf, false );
     partBuf->SetOriginal( original ); // part buffer takes ownership of pointer
+
+    m_frame.SyncLibraries( false );
 
     return true;
 }

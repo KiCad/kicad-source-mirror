@@ -93,6 +93,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     }
 
     m_libMgr->UpdatePart( entry->GetPart(), libName );
+    SyncLibraries( false );
     loadPart( symbolName, libName, 1 );
 }
 

@@ -1037,9 +1037,9 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     }
 
     if( oldName != GetCurPart()->GetName() )
-        m_libMgr->RemovePart( GetCurLib(), oldName );
-
-    m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
+        m_libMgr->UpdatePartAfterRename( GetCurPart(), oldName, GetCurLib() );
+    else
+        m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
 
     UpdatePartSelectList();
     DisplayLibInfos();
@@ -1515,19 +1515,20 @@ wxString LIB_EDIT_FRAME::getTargetLib() const
 }
 
 
-void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
+void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
 {
     LIB_ID selected;
 
     if( m_treePane )
         selected = m_treePane->GetLibTree()->GetSelectedLibId();
 
-    if( aProgress )
+    if( aShowProgress )
     {
-        wxProgressDialog progressDlg( _( "Loading Symbol Libraries" ),
-                wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
+        wxProgressDialog progressDlg( _( "Loading Symbol Libraries" ), wxEmptyString,
+                                      m_libMgr->GetAdapter()->GetLibrariesCount(), this );
 
-        m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
+        m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName )
+        {
             progressDlg.Update( progress, wxString::Format( _( "Loading library \"%s\"" ), libName ) );
         } );
     }

@@ -319,6 +319,7 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
         new_part.LockUnits( false );
 
     m_libMgr->UpdatePart( &new_part, lib );
+    SyncLibraries( false );
     loadPart( name, lib, 1 );
 
     new_part.SetConversion( dlg.GetAlternateBodyStyle() );
@@ -461,6 +462,7 @@ void LIB_EDIT_FRAME::savePartAs()
 
         fixDuplicateAliases( &new_part, new_lib );
         m_libMgr->UpdatePart( &new_part, new_lib );
+        SyncLibraries( false );
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
 
         if( isCurrentPart( old_lib_id ) )
@@ -505,6 +507,7 @@ void LIB_EDIT_FRAME::OnDuplicatePart( wxCommandEvent& aEvent )
     LIB_PART newPart( *srcPart );
     fixDuplicateAliases( &newPart, lib );
     m_libMgr->UpdatePart( &newPart, lib );
+    SyncLibraries( false );
     m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart.GetName() ) );
 }
 

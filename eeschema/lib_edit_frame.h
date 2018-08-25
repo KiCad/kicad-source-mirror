@@ -687,9 +687,10 @@ public:
     void SVG_PlotComponent( const wxString& aFullFileName );
 
     /**
-     * Synchronize the library manager and the symbol library table. Displays a progress dialog.
+     * Synchronize the library manager to the symbol library table, and then the symbol tree
+     * to the library manager.  Optionally displays a progress dialog.
      */
-    void SyncLibraries( bool aLoad );
+    void SyncLibraries( bool aShowProgress );
 
     /**
      * Allows Libedit to install its preferences panel into the preferences dialog.
