@@ -61,6 +61,8 @@ public:
     ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
+    bool IsCurrentFPFromBoard() const;
+
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const override;
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings ) override;
 
@@ -206,7 +208,6 @@ public:
     void OnUpdateSaveAs( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
-    void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
     void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
@@ -230,6 +231,7 @@ public:
      */
     bool SaveFootprint( MODULE* aModule );
     bool SaveFootprintAs( MODULE* aModule );
+    bool SaveFootprintToBoard( bool aAddNew );
 
     /**
      * Virtual Function OnModify()
@@ -294,10 +296,10 @@ public:
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
     /// Return the LIB_ID of the part selected in the footprint or the part being edited.
-    LIB_ID getTargetLibId() const;
+    LIB_ID getTargetFPId() const;
 
     /// Return the LIB_ID of the part being edited.
-    LIB_ID GetCurrentLibId() const;
+    LIB_ID GetCurrentFPId() const;
 
     void RemoveStruct( EDA_ITEM* Item );
 

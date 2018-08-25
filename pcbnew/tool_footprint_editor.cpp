@@ -101,10 +101,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( load_module_board_xpm, this ),
                             _( "Load footprint from current board" ) );
 
-    m_mainToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
-                            KiScaledBitmap( update_module_board_xpm, this ),
-                            _( "Update footprint into current board" ) );
-
     m_mainToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
                             KiScaledBitmap( insert_module_board_xpm, this ),
                             _( "Insert footprint into current board" ) );

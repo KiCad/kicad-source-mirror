@@ -113,7 +113,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_PAD_SETTINGS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
     EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, FOOTPRINT_EDIT_FRAME::RestoreCopyFromUndoList )
     EVT_TOOL( wxID_REDO, FOOTPRINT_EDIT_FRAME::RestoreCopyFromRedoList )
@@ -183,8 +182,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_MODEDIT_INSERT_MODULE_IN_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
-    EVT_UPDATE_UI( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_ZOOM_SELECTION, FOOTPRINT_EDIT_FRAME::OnUpdateSelectTool )
 
@@ -350,19 +347,19 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 }
 
 
-LIB_ID FOOTPRINT_EDIT_FRAME::getTargetLibId() const
+LIB_ID FOOTPRINT_EDIT_FRAME::getTargetFPId() const
 {
     LIB_ID   id = m_treePane->GetLibTree()->GetSelectedLibId();
     wxString nickname = id.GetLibNickname();
 
     if( nickname.IsEmpty() )
-        return GetCurrentLibId();
+        return GetCurrentFPId();
 
     return id;
 }
 
 
-LIB_ID FOOTPRINT_EDIT_FRAME::GetCurrentLibId() const
+LIB_ID FOOTPRINT_EDIT_FRAME::GetCurrentFPId() const
 {
     MODULE* module = GetBoard()->m_Modules;
 
@@ -373,9 +370,17 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetCurrentLibId() const
 }
 
 
+bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
+{
+    MODULE* module = GetBoard()->m_Modules;
+
+    return ( module && module->GetLink() > 0 );
+}
+
+
 void FOOTPRINT_EDIT_FRAME::retainLastFootprint()
 {
-    LIB_ID id = GetCurrentLibId();
+    LIB_ID id = GetCurrentFPId();
 
     if( id.IsValid() )
     {
@@ -567,7 +572,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( getTargetLibId().IsValid() );
+    aEvent.Enable( getTargetFPId().IsValid() );
 }
 
 
@@ -579,7 +584,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateSaveAs( wxUpdateUIEvent& aEvent )
 {
-    LIB_ID libId = getTargetLibId();
+    LIB_ID libId = getTargetFPId();
     const wxString& libName = libId.GetLibNickname();
     const wxString& partName = libId.GetLibItemName();
 
@@ -619,32 +624,6 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
     }
 
     aEvent.Enable( canInsert );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent )
-{
-    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
-
-    MODULE* module_in_edit = GetBoard()->m_Modules;
-    bool canReplace = frame && module_in_edit && module_in_edit->GetLink();
-
-    if( canReplace ) // this is not a new module, but verify if the source is still on board
-    {
-        BOARD*  mainpcb = frame->GetBoard();
-        MODULE* source_module = mainpcb->m_Modules;
-
-        // search if the source module was not deleted:
-        for( ; source_module != NULL; source_module = source_module->Next() )
-        {
-            if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
-                break;
-        }
-
-        canReplace = ( source_module != NULL );
-    }
-
-    aEvent.Enable( canReplace );
 }
 
 
@@ -750,7 +729,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
     wxString title = _( "Footprint Library Editor" );
-    LIB_ID   fpid = GetCurrentLibId();
+    LIB_ID   fpid = GetCurrentFPId();
     bool     writable = true;
 
     if( fpid.IsValid() )
@@ -832,7 +811,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
 {
     FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
-    LIB_ID        target = getTargetLibId();
+    LIB_ID        target = getTargetFPId();
     bool          targetSelected = ( target == m_treePane->GetLibTree()->GetSelectedLibId() );
 
     // Sync FOOTPRINT_INFO list to the libraries on disk

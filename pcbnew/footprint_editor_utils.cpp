@@ -276,9 +276,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_DELETE_PART:
-        if( DeleteModuleFromLibrary( LoadFootprint( getTargetLibId() ) ) )
+        if( DeleteModuleFromLibrary( LoadFootprint( getTargetFPId() ) ) )
         {
-            if( getTargetLibId() == GetCurrentLibId() )
+            if( getTargetFPId() == GetCurrentFPId() )
                 Clear_Pcb( false );
 
             SyncLibraryTree( true );
@@ -392,7 +392,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE:
-        if( getTargetLibId() == GetCurrentLibId() )
+        if( getTargetFPId() == GetCurrentFPId() )
         {
             if( SaveFootprint( GetBoard()->m_Modules ) )
             {
@@ -411,22 +411,22 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_AS:
-        if( getTargetLibId().GetLibItemName().empty() )
+        if( getTargetFPId().GetLibItemName().empty() )
         {
             // Save Library As
-            const wxString& libName = getTargetLibId().GetLibNickname();
+            const wxString& libName = getTargetFPId().GetLibNickname();
             if( SaveLibraryAs( Prj().PcbFootprintLibs()->FindRow( libName )->GetFullURI() ) )
                 SyncLibraryTree( true );
         }
         else
         {
             // Save Footprint As
-            MODULE* footprint = LoadFootprint( getTargetLibId() );
+            MODULE* footprint = LoadFootprint( getTargetFPId() );
             if( footprint && SaveFootprintAs( footprint ) )
             {
                 SyncLibraryTree( false );
 
-                if( getTargetLibId() == GetCurrentLibId() )
+                if( getTargetFPId() == GetCurrentFPId() )
                 {
                     m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
@@ -444,93 +444,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
-    case ID_MODEDIT_UPDATE_MODULE_IN_BOARD:
-        {
-            // update module in the current board,
-            // not just add it to the board with total disregard for the netlist...
-            PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
-
-            if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
-            {
-                DisplayErrorMessage( this, _("No board currently open." ) );
-                break;
-            }
-
-            BOARD*          mainpcb  = pcbframe->GetBoard();
-            MODULE*         source_module  = NULL;
-            MODULE*         module_in_edit = GetBoard()->m_Modules;
-
-            // Search the old module (source) if exists
-            // Because this source could be deleted when editing the main board...
-            if( module_in_edit->GetLink() )        // this is not a new module ...
-            {
-                source_module = mainpcb->m_Modules;
-
-                for( ; source_module != NULL; source_module = source_module->Next() )
-                {
-                    if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
-                        break;
-                }
-            }
-
-            if( ( source_module == NULL )
-              && ( id == ID_MODEDIT_UPDATE_MODULE_IN_BOARD ) ) // source not found
-            {
-                wxString msg;
-                msg.Printf( _( "Unable to find the footprint source on the main board" ) );
-                msg << _( "\nCannot update the footprint" );
-                DisplayError( this, msg );
-                break;
-            }
-
-            if( ( source_module != NULL )
-              && ( id == ID_MODEDIT_INSERT_MODULE_IN_BOARD ) ) // source not found
-            {
-                wxString msg;
-                msg.Printf( _( "A footprint source was found on the main board" ) );
-                msg << _( "\nCannot insert this footprint" );
-                DisplayError( this, msg );
-                break;
-            }
-
-            m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
-            pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-            BOARD_COMMIT commit( pcbframe );
-
-            // Create the "new" module
-            MODULE* newmodule = new MODULE( *module_in_edit );
-            newmodule->SetParent( mainpcb );
-            newmodule->SetLink( 0 );
-
-            if( source_module )         // this is an update command
-            {
-                // In the main board,
-                // the new module replace the old module (pos, orient, ref, value
-                // and connexions are kept)
-                // and the source_module (old module) is deleted
-                pcbframe->Exchange_Module( source_module, newmodule, commit );
-                newmodule->SetTimeStamp( module_in_edit->GetLink() );
-                commit.Push( wxT( "Update module" ) );
-            }
-            else        // This is an insert command
-            {
-                wxPoint cursor_pos = pcbframe->GetCrossHairPosition();
-
-                commit.Add( newmodule );
-                pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
-                pcbframe->PlaceModule( newmodule, NULL );
-                newmodule->SetPosition( wxPoint( 0, 0 ) );
-                pcbframe->SetCrossHairPosition( cursor_pos );
-                newmodule->SetTimeStamp( GetNewTimeStamp() );
-                commit.Push( wxT( "Insert module" ) );
-            }
-
-            newmodule->ClearFlags();
-            GetScreen()->ClrModify();
-            pcbframe->SetCurItem( NULL );
-            // @todo LEGACY should be unnecessary
-            mainpcb->m_Status_Pcb = 0;
-        }
+        SaveFootprintToBoard( true );
         break;
 
     case ID_MODEDIT_IMPORT_PART:
@@ -551,7 +465,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EXPORT_PART:
-        Export_Module( LoadFootprint( getTargetLibId() ) );
+        Export_Module( LoadFootprint( getTargetFPId() ) );
         break;
 
     case ID_MODEDIT_CREATE_NEW_LIB:
