@@ -73,6 +73,12 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
     m_netclassGrid->SetDefaultRowSize(    m_netclassGrid->GetDefaultRowSize()    + 4 );
     m_membershipGrid->SetDefaultRowSize(  m_membershipGrid->GetDefaultRowSize()  + 4 );
 
+    m_netclassGrid->PushEventHandler( new GRID_TRICKS( m_netclassGrid ) );
+    m_membershipGrid->PushEventHandler( new GRID_TRICKS( m_membershipGrid ) );
+
+    m_netclassGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_membershipGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+
     // Set up the net name column of the netclass membership grid to read-only
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly( true );
@@ -91,6 +97,10 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
 PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 {
     delete [] m_originalColWidths;
+
+    // Delete the GRID_TRICKS.
+    m_netclassGrid->PopEventHandler( true );
+    m_membershipGrid->PopEventHandler( true );
 
     m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ), NULL, this );
 }
@@ -327,11 +337,8 @@ void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
 
     int curRow = m_netclassGrid->GetGridCursorRow();
 
-    if( !m_netclassGrid->HasFocus() || curRow < 0 )
-    {
-        m_netclassGrid->SetFocus();
+    if( curRow < 0 )
         return;
-    }
     else if( curRow == 0 )
     {
         DisplayErrorMessage( this, _( "The default net class is required." ) );

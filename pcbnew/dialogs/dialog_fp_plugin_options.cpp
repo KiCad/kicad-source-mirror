@@ -61,6 +61,11 @@ public:
     {
         SetTitle( wxString::Format( _( "Options for Library \"%s\"" ), aNickname ) );
 
+        // Give a bit more room for combobox editors
+        m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
+
+        m_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+
         // add Cut, Copy, and Paste to wxGrid
         m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
@@ -242,12 +247,6 @@ private:
     {
         if( !m_grid->CommitPendingChanges() )
             return;
-
-        if( !m_grid->HasFocus() )
-        {
-            m_grid->SetFocus();
-            return;
-        }
 
         int curRow   = m_grid->GetGridCursorRow();
 

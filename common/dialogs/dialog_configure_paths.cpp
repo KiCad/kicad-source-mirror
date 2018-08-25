@@ -374,13 +374,9 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 {
     int curRow = m_EnvVars->GetGridCursorRow();
 
-    if( !m_EnvVars->HasFocus() || curRow < 0 )
-    {
-        m_EnvVars->SetFocus();
+    if( curRow < 0 )
         return;
-    }
-
-    if( IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, EV_NAME_COL ) ) )
+    else if( IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, EV_NAME_COL ) ) )
     {
         wxBell();
         return;
