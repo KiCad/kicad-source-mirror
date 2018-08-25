@@ -810,6 +810,13 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
         ReCreateAuxiliaryToolbar();
         m_Layers->ReFillRender();
         OnModify();
+
+        if( GetGalCanvas() )
+        {
+            GetGalCanvas()->GetView()->RecacheAllItems();
+            GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        }
+        GetCanvas()->Refresh();
     }
 }
 
