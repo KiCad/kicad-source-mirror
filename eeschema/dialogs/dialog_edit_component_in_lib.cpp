@@ -66,7 +66,11 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
     m_aliasGrid->SetDefaultRowSize( m_aliasGrid->GetDefaultRowSize() + 4 );
-    m_aliasGrid->SetMinClientSize( wxSize( -1, 24 + m_aliasGrid->GetDefaultRowSize() * 2 ) );
+
+    // Work around a bug in wxWidgets where it fails to recalculate the grid height
+    // after changing the default row size
+    m_aliasGrid->AppendRows( 1 );
+    m_aliasGrid->DeleteRows( m_grid->GetNumberRows() - 1, 1 );
 
     m_fields = new FIELDS_GRID_TABLE<LIB_FIELD>( this, aParent, m_libEntry );
     m_grid->SetTable( m_fields );
@@ -755,7 +759,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_grid->IsCellEditControlShown() )
-            adjustGridColumns( m_grid->GetRect().GetWidth());
+            adjustGridColumns( m_grid->GetRect().GetWidth() );
     }
 
     // Handle a delayed focus
@@ -795,7 +799,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
 {
-    adjustGridColumns( event.GetSize().GetX());
+    adjustGridColumns( event.GetSize().GetX() );
 
     event.Skip();
 }
@@ -803,7 +807,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeAliasGrid( wxSizeEvent& event )
 {
-    adjustAliasGridColumns( event.GetSize().GetX());
+    adjustAliasGridColumns( event.GetSize().GetX() );
 
     event.Skip();
 }
