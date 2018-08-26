@@ -8,6 +8,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <summary>EDA Suite</summary>
   <summary xml:lang="de">EDA Lösung</summary>
+  <summary xml:lang="it">Suite EDA</summary>
 
   <keywords>
     <keyword>KiCad</keyword>
@@ -28,6 +29,11 @@
       Elektronische Design-Automation (EDA). KiCad enthält Programme zum
       Entwickeln und Bearbeiten von elektronischen Schaltplänen und Leiterplatten
       als auch zum Export von Leiterplatten, z.B. per Gerber Format.
+    </p>
+    <p xml:lang="it">
+      KiCad è una soluzione software EDA (Electronic Design Automation) gratuita
+      e multipiattaforma. Contiene programmi per lo sviluppo e la modifica di
+      schemi elettrici e circuiti stampati esportabili in formato Gerber.
     </p>
   </description>
 
