@@ -143,7 +143,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Do not show&quot; &quot;On pads&quot; &quot;On tracks&quot; &quot;On pads and tracks&quot;</property>
+                                                <property name="choices">&quot;Do not show&quot; &quot;Show on pads&quot; &quot;Show on tracks&quot; &quot;Show on pads and tracks&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -336,7 +336,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Show pad no net connection indicator</property>
+                                                <property name="label">Show pad &lt;no net&gt; indicator</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>

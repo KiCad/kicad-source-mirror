@@ -28,7 +28,7 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	wxStaticBoxSizer* sbAnnotations;
 	sbAnnotations = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Annotations") ), wxVERTICAL );
 	
-	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("On pads"), _("On tracks"), _("On pads and tracks") };
+	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("Show on pads"), _("Show on tracks"), _("Show on pads and tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
 	m_ShowNetNamesOption = new wxRadioBox( sbAnnotations->GetStaticBox(), wxID_ANY, _("Net Names"), wxDefaultPosition, wxDefaultSize, m_ShowNetNamesOptionNChoices, m_ShowNetNamesOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ShowNetNamesOption->SetSelection( 0 );
@@ -40,7 +40,7 @@ PANEL_PCBNEW_DISPLAY_OPTIONS_BASE::PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* 
 	m_OptDisplayPadNumber->SetValue(true); 
 	sbAnnotations->Add( m_OptDisplayPadNumber, 0, wxALL, 10 );
 	
-	m_OptDisplayPadNoConn = new wxCheckBox( sbAnnotations->GetStaticBox(), wxID_ANY, _("Show pad no net connection indicator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayPadNoConn = new wxCheckBox( sbAnnotations->GetStaticBox(), wxID_ANY, _("Show pad <no net> indicator"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptDisplayPadNoConn->SetValue(true); 
 	sbAnnotations->Add( m_OptDisplayPadNoConn, 0, wxBOTTOM|wxLEFT|wxRIGHT, 10 );
 	
