@@ -167,6 +167,20 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         zone->Draw( aPanel, DC, aDrawMode );
     }
 
+    // Draw areas (i.e. zones)
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea( ii );
+
+        // Areas must be drawn here only if not moved or dragged,
+        // because these areas are drawn by ManageCursor() in a specific manner
+        if( ( zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED) ) == 0 )
+        {
+            zone->Draw( aPanel, DC, aDrawMode );
+            zone->DrawFilledArea( aPanel, DC, aDrawMode );
+        }
+    }
+
     // Draw the graphic items
     for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
     {
@@ -184,20 +198,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
 
         default:
             break;
-        }
-    }
-
-    // Draw areas (i.e. zones)
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* zone = GetArea( ii );
-
-        // Areas must be drawn here only if not moved or dragged,
-        // because these areas are drawn by ManageCursor() in a specific manner
-        if( ( zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED) ) == 0 )
-        {
-            zone->Draw( aPanel, DC, aDrawMode );
-            zone->DrawFilledArea( aPanel, DC, aDrawMode );
         }
     }
 
