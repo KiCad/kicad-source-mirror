@@ -135,10 +135,15 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
     // List of file extensions to save.
     static const wxChar* extentionList[] = {
-        wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.mod" ), wxT( "*.cmp" ),
-        wxT( "*.brd" ), wxT( "*.kicad_pcb" ), wxT( "*.gbr" ), wxT( "*.pos" ),
-        wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.drl" ), wxT( "*.py" ),
-        wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ), wxT( "*.kicad_wks" ),
+        wxT( "*.pro" ),
+        wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.dcm" ), // Schematic related files
+        wxT( "*.cmp" ),
+        wxT( "*.brd" ), wxT( "*.kicad_pcb" ),   // Brd files
+        wxT( "*.mod" ), wxT( "*.kicad_mod" ),   // fp files
+        wxT( "*.gbr" ), wxT( "*.gbrjob" ),      // Gerber files
+        wxT( "*.pos" ), wxT( "*.drl" ),         // Fab files
+        wxT( "*.net" ), wxT( "*.py" ),
+        wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.kicad_wks" ),
     };
 
     wxString    msg;
