@@ -473,6 +473,12 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkDuplicateItemAndIncrement,
     &HkCreateArray,
 
+    // Grids
+    &HkSwitchGridToFastGrid1,
+    &HkSwitchGridToFastGrid2,
+    &HkSwitchGridToNext,
+    &HkSwitchGridToPrevious,
+
     // Display
     &HkSwitchHighContrastMode,
     &HkCanvasDefault,
