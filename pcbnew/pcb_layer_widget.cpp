@@ -156,9 +156,7 @@ bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
 bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( PCB_LAYER_ID aLayer )
 {
     static LSET allowed = LSET::AllTechMask();
-    // Currently not in use because putting a graphic item on a copper layer
-    // is not currently supported by DRC.
-    // allowed.set( F_Cu ).set( B_Cu );
+    allowed.set( F_Cu ).set( B_Cu );
     return allowed.test( aLayer );
 }
 
@@ -519,11 +517,10 @@ void PCB_LAYER_WIDGET::ReFill()
             brd->GetLayerName( layer ), layer, myframe->Settings().Colors().GetLayerColor( layer ),
             dsc, true ) );
 
-        if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
+        if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
             getLayerComp( GetLayerRowCount()-1, COLUMN_COLOR_LYRNAME )->Enable( false );
-            getLayerComp( GetLayerRowCount()-1,
-                          COLUMN_COLORBM )->SetToolTip( wxEmptyString );
+            getLayerComp( GetLayerRowCount()-1, COLUMN_COLORBM )->SetToolTip( wxEmptyString );
         }
     }
 
@@ -568,11 +565,10 @@ void PCB_LAYER_WIDGET::ReFill()
             brd->GetLayerName( layer ), layer,  myframe->Settings().Colors().GetLayerColor( layer ),
             wxGetTranslation( non_cu_seq[i].tooltip ), true ) );
 
-        if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
+        if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
             getLayerComp( GetLayerRowCount()-1, COLUMN_COLOR_LYRNAME )->Enable( false );
-            getLayerComp( GetLayerRowCount()-1,
-                          COLUMN_COLORBM )->SetToolTip( wxEmptyString );
+            getLayerComp( GetLayerRowCount()-1, COLUMN_COLORBM )->SetToolTip( wxEmptyString );
         }
     }
 }
@@ -616,7 +612,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     // false from this function.
     PCB_LAYER_ID layer = ToLAYER_ID( aLayer );
 
-    if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
+    if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         return false;
 
     myframe->SetActiveLayer( layer );

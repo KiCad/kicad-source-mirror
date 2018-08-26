@@ -523,6 +523,18 @@ public:
 
     static LSET UserMask();
 
+    /**
+     * Function ForbiddenFootprintLayers
+     * Layers which are not allowed within footprint definitions.  Currently internal
+     * copper layers, Edge.Cuts and Margin.
+     */
+
+    static LSET ForbiddenFootprintLayers();
+
+    /**
+     * Function ForbiddenTextLayers
+     * Layers which are now allowed to have text on them.  Currently Edge.Cuts and Margin.
+     */
     static LSET ForbiddenTextLayers();
 
     /**
