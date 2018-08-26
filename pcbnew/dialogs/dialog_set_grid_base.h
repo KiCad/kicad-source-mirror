@@ -50,8 +50,10 @@ class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 		wxStaticText* m_TextSizeYUnits;
 		wxStaticText* m_staticTextGrid1;
 		wxComboBox* m_comboBoxGrid1;
+		wxStaticText* m_grid1HotKey;
 		wxStaticText* m_staticTextGrid2;
 		wxComboBox* m_comboBoxGrid2;
+		wxStaticText* m_grid2HotKey;
 		wxButton* m_buttonReset;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

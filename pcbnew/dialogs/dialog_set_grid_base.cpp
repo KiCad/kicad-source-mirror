@@ -100,7 +100,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	sbFastSwitchSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fast Switching") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer3 = new wxFlexGridSizer( 2, 3, 0, 5 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -112,7 +112,11 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_comboBoxGrid1 = new wxComboBox( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
 	m_comboBoxGrid1->SetMinSize( wxSize( 240,-1 ) );
 	
-	fgSizer3->Add( m_comboBoxGrid1, 0, wxLEFT, 5 );
+	fgSizer3->Add( m_comboBoxGrid1, 0, wxEXPAND, 5 );
+	
+	m_grid1HotKey = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("(hotkey)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid1HotKey->Wrap( -1 );
+	fgSizer3->Add( m_grid1HotKey, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticTextGrid2 = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("Grid 2:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrid2->Wrap( -1 );
@@ -121,7 +125,11 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_comboBoxGrid2 = new wxComboBox( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
 	m_comboBoxGrid2->SetMinSize( wxSize( 240,-1 ) );
 	
-	fgSizer3->Add( m_comboBoxGrid2, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer3->Add( m_comboBoxGrid2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	
+	m_grid2HotKey = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("(hotkey)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid2HotKey->Wrap( -1 );
+	fgSizer3->Add( m_grid2HotKey, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	sbFastSwitchSizer->Add( fgSizer3, 0, wxEXPAND|wxLEFT, 5 );
