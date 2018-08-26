@@ -399,6 +399,32 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
                 key += 'A' - 1;
         }
 
+#ifdef __APPLE__
+        if( mods & MD_ALT )
+        {
+            // OSX maps a bunch of commonly used extended-ASCII characters onto the keyboard
+            // using the ALT key.  Since we use ALT for some of our hotkeys, we need to map back
+            // to the underlying keys.  The kVK_ANSI_* values come from Apple and are said to be
+            // hardware independant.
+            switch( ke->GetRawKeyCode() )
+            {
+            case /* kVK_ANSI_1     */ 0x12: key = '1'; break;
+            case /* kVK_ANSI_2     */ 0x13: key = '2'; break;
+            case /* kVK_ANSI_3     */ 0x14: key = '3'; break;
+            case /* kVK_ANSI_4     */ 0x15: key = '4'; break;
+            case /* kVK_ANSI_6     */ 0x16: key = '6'; break;
+            case /* kVK_ANSI_5     */ 0x17: key = '5'; break;
+            case /* kVK_ANSI_Equal */ 0x18: key = '='; break;
+            case /* kVK_ANSI_9     */ 0x19: key = '9'; break;
+            case /* kVK_ANSI_7     */ 0x1A: key = '7'; break;
+            case /* kVK_ANSI_Minus */ 0x1B: key = '-'; break;
+            case /* kVK_ANSI_8     */ 0x1C: key = '8'; break;
+            case /* kVK_ANSI_0     */ 0x1D: key = '0'; break;
+            default: ;
+            }
+        }
+#endif
+
         if( key == WXK_ESCAPE ) // ESC is the special key for canceling tools
             evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
         else
