@@ -45,14 +45,15 @@ struct VIEW_OVERLAY::COMMAND_LINE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_LINE( const VECTOR2D& aP0, const VECTOR2D& aP1 ) :
         m_p0( aP0 ),
-        m_p1( aP1 ) {};
+        m_p1( aP1 ) {}
 
     virtual void Execute( VIEW* aView ) const override
     {
         aView->GetGAL()->DrawLine( m_p0, m_p1 );
     }
 
-    VECTOR2D m_p0, m_p1;
+    VECTOR2D m_p0;
+    VECTOR2D m_p1;
 };
 
 
@@ -60,8 +61,7 @@ struct VIEW_OVERLAY::COMMAND_CIRCLE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_CIRCLE( const VECTOR2D& aCenter, double aRadius ) :
         m_center(aCenter),
-        m_radius(aRadius)
-        {}
+        m_radius(aRadius) {}
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -76,11 +76,10 @@ struct VIEW_OVERLAY::COMMAND_CIRCLE : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_ARC( const VECTOR2D& aCenter, double aRadius, double aStartAngle, double aEndAngle ) :
-        m_center(aCenter),
-        m_radius(aRadius),
+        m_center( aCenter ),
+        m_radius( aRadius ),
         m_startAngle( aStartAngle ),
-        m_endAngle( aEndAngle )
-        {}
+        m_endAngle( aEndAngle ) {}
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -88,15 +87,16 @@ struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
     }
 
     VECTOR2D m_center;
-    double m_startAngle, m_endAngle;
     double m_radius;
+    double m_startAngle;
+    double m_endAngle;
 };
 
 
 struct VIEW_OVERLAY::COMMAND_SET_STROKE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_STROKE( bool aIsStroke ) :
-        m_isStroke(  aIsStroke ) {}
+        m_isStroke( aIsStroke ) {}
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -125,8 +125,7 @@ struct VIEW_OVERLAY::COMMAND_SET_COLOR : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_COLOR( bool aIsStroke, const COLOR4D& aColor ) :
         m_isStroke( aIsStroke ),
-        m_color( aColor )
-    {}
+        m_color( aColor ) {}
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -144,8 +143,7 @@ struct VIEW_OVERLAY::COMMAND_SET_COLOR : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_SET_WIDTH : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_WIDTH( double aWidth ) :
-        m_width( aWidth )
-    {}
+        m_width( aWidth ) {}
 
     virtual void Execute( VIEW* aView ) const override
     {
