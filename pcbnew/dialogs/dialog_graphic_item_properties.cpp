@@ -106,6 +106,14 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_angleCtrl->SetValidator( m_AngleValidator );
     m_AngleValidator.SetWindow( m_angleCtrl );
 
+    // Configure the layers list selector
+    if( m_moduleItem )
+        m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
+
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    m_LayerSelectionCtrl->SetBoardFrame( m_parent );
+    m_LayerSelectionCtrl->Resync();
+
     SetInitialFocus( m_startXCtrl );
 
     m_StandardButtonsSizerOK->SetDefault();
@@ -205,16 +213,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     m_thickness.SetValue( m_item->GetWidth() );
 
-    // Configure the layers list selector
-    if( m_moduleItem )
-        m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::InternalCuMask().set( Edge_Cuts ) );
-    else
-        m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::AllCuMask() );
-
-    m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetBoardFrame( m_parent );
-    m_LayerSelectionCtrl->Resync();
-
     if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
         wxMessageBox( _( "This item was on a forbidden or non-existing layer.\n"
@@ -232,18 +230,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         return false;
 
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
-
-    if( IsCopperLayer( layer ) )
-    {
-        // An graphic item is put on a copper layer.
-        // This is sometimes useful, for instance for microwave applications and net tees.
-        // However, because the DRC does not handle graphic items, it can break boards.
-        // Therefore a confirmation is required.
-        if( !IsOK( this, _( "The graphic item will be on a copper layer.\n"
-                            "This is very dangerous because DRC does not handle it.\n"
-                            "Are you sure?" ) ) )
-            return false;
-    }
 
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
