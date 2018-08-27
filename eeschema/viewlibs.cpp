@@ -30,6 +30,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
+#include <sch_view.h>
 #include <confirm.h>
 #include <eda_doc.h>
 
@@ -186,7 +187,7 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
 }
 
 
-void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+LIB_PART* LIB_VIEW_FRAME::CurrentPart() const
 {
     LIB_ID id( m_libraryName, m_entryName );
     LIB_ALIAS* entry = nullptr;
@@ -198,48 +199,45 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     catch( const IO_ERROR& ) {} // ignore, it is handled below
 
     if( !entry )
-        return;
+        return nullptr;
 
     LIB_PART* part = entry->GetPart();
-
-    if( !part )
-        return;
-
-    wxString    msg;
-    wxString    tmp;
-
-    m_canvas->DrawBackGround( DC );
 
     if( !entry->IsRoot() )
     {
         // Temporarily change the name field text to reflect the alias name.
-        msg = entry->GetName();
-        tmp = part->GetName();
+        auto msg = entry->GetName();
 
         part->SetName( msg );
 
-        if( m_unit < 1 )
-            m_unit = 1;
 
-        if( m_convert < 1 )
             m_convert = 1;
     }
-    else
-        msg = _( "None" );
 
-    auto opts = PART_DRAW_OPTIONS::Default();
-    opts.show_elec_type = GetShowElectricalType();
-    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, opts );
+    return part;
+}
 
-    // Redraw the cursor
-    m_canvas->DrawCrossHair( DC );
+void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+{
+    auto part = CurrentPart();
+    auto view = GetCanvas()->GetView();
+    
+    printf("Part %p\n", part );
 
-    if( !tmp.IsEmpty() )
+    if( !part )
+    {
+        view->Clear();
+        return;
+    }
+
+
+    view->Add( part );
+
+    /*if( !tmp.IsEmpty() )
         part->SetName( tmp );
 
     ClearMsgPanel();
     AppendMsgPanel( _( "Name" ), part->GetName(), BLUE, 6 );
-    AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
     AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
-    AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );*/
 }

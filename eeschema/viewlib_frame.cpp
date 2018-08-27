@@ -44,7 +44,7 @@
 #include <dialog_helpers.h>
 #include <class_libentry.h>
 #include <class_library.h>
-
+#include <view/view_controls.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -215,6 +215,9 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         Raise();
         Show( true );
     }
+
+    SyncView();
+    GetGalCanvas()->GetViewControls()->SetSnapping( true );
 }
 
 
@@ -721,4 +724,22 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
     }
 
     ReCreateListLib();
+}
+
+const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
+{
+    LIB_PART*  part = CurrentPart();
+
+    printf("part %p\n", part);
+
+    if( !part )
+    {
+        return BOX2I( VECTOR2I(-100, -100), VECTOR2I( 200, 200 ) );
+    }
+    else
+    {
+        EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
+        return BOX2I( boundingBox.GetOrigin(), VECTOR2I( boundingBox.GetWidth(), boundingBox.GetHeight() ) );
+        
+    }
 }

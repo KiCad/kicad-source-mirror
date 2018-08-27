@@ -23,15 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file viewlib_frame.h
- */
 
-#ifndef LIBVIEWFRM_H_
-#define LIBVIEWFRM_H_
+#ifndef LIB_VIEW_FRAME_H__
 
-
-#include <wx/gdicmn.h>
+#define LIB_VIEW_FRAME_H__
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
@@ -152,6 +147,9 @@ public:
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
+    LIB_PART* CurrentPart() const; 
+    const BOX2I GetDocumentExtents() const override;
+
 private:
     /**
      * Called when the frame is activated to reload the libraries and component lists
@@ -219,4 +217,5 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  // LIBVIEWFRM_H_
+#endif  // LIB_VIEW_FRAME_H__
+
