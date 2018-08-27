@@ -23,9 +23,12 @@
 #include <class_board.h>
 #include <board_connected_item.h>
 #include <class_module.h>
+#include <class_text_mod.h>
+#include <class_edge_mod.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
+#include <class_pcb_text.h>
 #include <board_commit.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
@@ -843,11 +846,64 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
     return true;
 }
 
+
+bool PNS_KICAD_IFACE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer )
+{
+    if( !IsCopperLayer( aLayer ) )
+        return false;
+
+    int textWidth = aText->GetThickness();
+    std::vector<wxPoint> textShape;
+
+    aText->TransformTextShapeToSegmentList( textShape );
+
+    if( textShape.size() < 2 )
+        return false;
+
+    for( size_t jj = 0; jj < textShape.size(); jj += 2 )
+    {
+        VECTOR2I start( textShape[jj] );
+        VECTOR2I end( textShape[jj+1] );
+        std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+
+        solid->SetLayer( aLayer );
+        solid->SetNet( -1 );
+        solid->SetParent( nullptr );
+        solid->SetShape( new SHAPE_SEGMENT( start, end, textWidth ) );
+        solid->SetRoutable( false );
+
+        aWorld->Add( std::move( solid ) );
+    }
+
+    return true;
+
+    /* A coarser (but faster) method:
+     *
+    SHAPE_POLY_SET outline;
+    SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
+
+    aText->TransformBoundingBoxWithClearanceToPolygon( &outline, 0 );
+
+    for( auto iter = outline.CIterate( 0 ); iter; iter++ )
+        shape->Append( *iter );
+
+    solid->SetShape( shape );
+
+    solid->SetLayer( aLayer );
+    solid->SetNet( -1 );
+    solid->SetParent( nullptr );
+    solid->SetRoutable( false );
+    aWorld->Add( std::move( solid ) );
+    return true;
+     */
+}
+
+
 bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 {
     std::vector<SHAPE_SEGMENT*> segs;
 
-    if( aItem->GetLayer() != Edge_Cuts )
+    if( aItem->GetLayer() != Edge_Cuts && !IsCopperLayer( aItem->GetLayer() ) )
         return false;
 
     switch( aItem->GetShape() )
@@ -915,7 +971,11 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
     {
         std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
-        solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+        if( aItem->GetLayer() == Edge_Cuts )
+            solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+        else
+            solid->SetLayer( aItem->GetLayer() );
+
         solid->SetNet( -1 );
         solid->SetParent( nullptr );
         solid->SetShape( seg );
@@ -950,6 +1010,10 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
         {
             syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( gitem ) );
         }
+        else if( gitem->Type() == PCB_TEXT_T )
+        {
+            syncTextItem( aWorld, dynamic_cast<TEXTE_PCB*>( gitem ), gitem->GetLayer() );
+        }
     }
 
     for( auto zone : m_board->Zones() )
@@ -968,6 +1032,21 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 
 
             worstPadClearance = std::max( worstPadClearance, pad->GetLocalClearance() );
+        }
+
+        syncTextItem( aWorld, &module->Reference(), module->Reference().GetLayer() );
+        syncTextItem( aWorld, &module->Value(), module->Value().GetLayer() );
+
+        for( auto mgitem : module->GraphicalItems() )
+        {
+            if( mgitem->Type() == PCB_MODULE_EDGE_T )
+            {
+                syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( mgitem ) );
+            }
+            else if( mgitem->Type() == PCB_MODULE_TEXT_T )
+            {
+                syncTextItem( aWorld, dynamic_cast<TEXTE_MODULE*>( mgitem ), mgitem->GetLayer() );
+            }
         }
     }
 
