@@ -36,7 +36,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_trackWidthsGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_trackWidthsGrid->SetColSize( 0, 100 );
+	m_trackWidthsGrid->SetColSize( 0, 125 );
 	m_trackWidthsGrid->EnableDragColMove( false );
 	m_trackWidthsGrid->EnableDragColSize( false );
 	m_trackWidthsGrid->SetColLabelSize( 22 );
@@ -45,7 +45,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	
 	// Rows
 	m_trackWidthsGrid->EnableDragRowSize( false );
-	m_trackWidthsGrid->SetRowLabelSize( 30 );
+	m_trackWidthsGrid->SetRowLabelSize( 0 );
 	m_trackWidthsGrid->SetRowLabelValue( 0, _("1") );
 	m_trackWidthsGrid->SetRowLabelValue( 1, _("2") );
 	m_trackWidthsGrid->SetRowLabelValue( 2, _("3") );
@@ -61,6 +61,25 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	// Cell Defaults
 	m_trackWidthsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	sbSizer4->Add( m_trackWidthsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_trackWidthsAddButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackWidthsAddButton->SetMinSize( wxSize( 30,30 ) );
+	
+	bSizer3->Add( m_trackWidthsAddButton, 0, wxLEFT|wxRIGHT, 5 );
+	
+	
+	bSizer3->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	m_trackWidthsRemoveButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackWidthsRemoveButton->SetMinSize( wxSize( 30,30 ) );
+	
+	bSizer3->Add( m_trackWidthsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
+	
+	
+	sbSizer4->Add( bSizer3, 0, wxEXPAND|wxTOP, 2 );
 	
 	
 	bSizerLower->Add( sbSizer4, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -78,8 +97,8 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_viaSizesGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_viaSizesGrid->SetColSize( 0, 100 );
-	m_viaSizesGrid->SetColSize( 1, 100 );
+	m_viaSizesGrid->SetColSize( 0, 110 );
+	m_viaSizesGrid->SetColSize( 1, 110 );
 	m_viaSizesGrid->EnableDragColMove( false );
 	m_viaSizesGrid->EnableDragColSize( false );
 	m_viaSizesGrid->SetColLabelSize( 22 );
@@ -89,7 +108,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	
 	// Rows
 	m_viaSizesGrid->EnableDragRowSize( false );
-	m_viaSizesGrid->SetRowLabelSize( 30 );
+	m_viaSizesGrid->SetRowLabelSize( 0 );
 	m_viaSizesGrid->SetRowLabelValue( 0, _("1") );
 	m_viaSizesGrid->SetRowLabelValue( 1, _("2") );
 	m_viaSizesGrid->SetRowLabelValue( 2, _("3") );
@@ -106,8 +125,27 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_viaSizesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	sbSizer5->Add( m_viaSizesGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizerLower->Add( sbSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_viaSizesAddButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaSizesAddButton->SetMinSize( wxSize( 30,30 ) );
+	
+	bSizer4->Add( m_viaSizesAddButton, 0, wxLEFT|wxRIGHT, 5 );
+	
+	
+	bSizer4->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	m_viaSizesRemoveButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaSizesRemoveButton->SetMinSize( wxSize( 30,30 ) );
+	
+	bSizer4->Add( m_viaSizesRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
+	
+	
+	sbSizer5->Add( bSizer4, 0, wxEXPAND|wxTOP, 2 );
+	
+	
+	bSizerLower->Add( sbSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	wxStaticBoxSizer* sbSizer6;
 	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Differential Pairs") ), wxVERTICAL );
@@ -122,9 +160,9 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_diffPairsGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_diffPairsGrid->SetColSize( 0, 100 );
-	m_diffPairsGrid->SetColSize( 1, 100 );
-	m_diffPairsGrid->SetColSize( 2, 100 );
+	m_diffPairsGrid->SetColSize( 0, 110 );
+	m_diffPairsGrid->SetColSize( 1, 110 );
+	m_diffPairsGrid->SetColSize( 2, 110 );
 	m_diffPairsGrid->EnableDragColMove( false );
 	m_diffPairsGrid->EnableDragColSize( true );
 	m_diffPairsGrid->SetColLabelSize( 22 );
@@ -135,7 +173,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	
 	// Rows
 	m_diffPairsGrid->EnableDragRowSize( true );
-	m_diffPairsGrid->SetRowLabelSize( 30 );
+	m_diffPairsGrid->SetRowLabelSize( 0 );
 	m_diffPairsGrid->SetRowLabelValue( 0, _("1") );
 	m_diffPairsGrid->SetRowLabelValue( 1, _("2") );
 	m_diffPairsGrid->SetRowLabelValue( 2, _("3") );
@@ -153,6 +191,25 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_diffPairsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	sbSizer6->Add( m_diffPairsGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_diffPairsAddButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_diffPairsAddButton->SetMinSize( wxSize( 30,30 ) );
+	
+	bSizer5->Add( m_diffPairsAddButton, 0, wxLEFT|wxRIGHT, 5 );
+	
+	
+	bSizer5->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	m_diffPairsRemoveButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_diffPairsRemoveButton->SetMinSize( wxSize( 30,30 ) );
+	
+	bSizer5->Add( m_diffPairsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
+	
+	
+	sbSizer6->Add( bSizer5, 0, wxEXPAND|wxTOP, 2 );
+	
 	
 	bSizerLower->Add( sbSizer6, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
@@ -163,8 +220,24 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
+	
+	// Connect Events
+	m_trackWidthsAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddTrackWidthsClick ), NULL, this );
+	m_trackWidthsRemoveButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveTrackWidthsClick ), NULL, this );
+	m_viaSizesAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddViaSizesClick ), NULL, this );
+	m_viaSizesRemoveButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveViaSizesClick ), NULL, this );
+	m_diffPairsAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddDiffPairsClick ), NULL, this );
+	m_diffPairsRemoveButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveDiffPairsClick ), NULL, this );
 }
 
 PANEL_SETUP_TRACKS_AND_VIAS_BASE::~PANEL_SETUP_TRACKS_AND_VIAS_BASE()
 {
+	// Disconnect Events
+	m_trackWidthsAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddTrackWidthsClick ), NULL, this );
+	m_trackWidthsRemoveButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveTrackWidthsClick ), NULL, this );
+	m_viaSizesAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddViaSizesClick ), NULL, this );
+	m_viaSizesRemoveButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveViaSizesClick ), NULL, this );
+	m_diffPairsAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddDiffPairsClick ), NULL, this );
+	m_diffPairsRemoveButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveDiffPairsClick ), NULL, this );
+	
 }

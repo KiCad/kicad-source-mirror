@@ -27,9 +27,29 @@
 #include <base_units.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
+#include <bitmaps.h>
 #include <widgets/wx_grid.h>
 
 #include <panel_setup_tracks_and_vias.h>
+
+
+enum TRACK_VAR_GRID_COLUMNS
+{
+    TR_WIDTH_COL = 0
+};
+
+enum VIA_VAR_GRID_COLUMNS
+{
+    VIA_SIZE_COL = 0,
+    VIA_DRILL_COL
+};
+
+enum DIFF_VAR_GRID_COLUMNS
+{
+    DP_WIDTH_COL = 0,
+    DP_GAP_COL,
+    DP_VIA_GAP_COL
+};
 
 
 PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS(
@@ -43,48 +63,66 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS(
     m_BrdSettings = &m_Pcb->GetDesignSettings();
     m_ConstraintsPanel = aConstraintsPanel;
 
+    m_trackWidthsAddButton->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_trackWidthsRemoveButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_viaSizesAddButton->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_viaSizesRemoveButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_diffPairsAddButton->SetBitmap( KiBitmap( small_plus_xpm ) );
+    m_diffPairsRemoveButton->SetBitmap( KiBitmap( trash_xpm ) );
+
     // Membership combobox editors require a bit more room, so increase the row size of
     // all our grids for consistency
     m_trackWidthsGrid->SetDefaultRowSize( m_trackWidthsGrid->GetDefaultRowSize() + 4 );
     m_viaSizesGrid->SetDefaultRowSize(    m_viaSizesGrid->GetDefaultRowSize()    + 4 );
     m_diffPairsGrid->SetDefaultRowSize(   m_diffPairsGrid->GetDefaultRowSize()   + 4 );
+
+    m_trackWidthsGrid->PushEventHandler( new GRID_TRICKS( m_trackWidthsGrid ) );
+    m_viaSizesGrid->PushEventHandler( new GRID_TRICKS( m_viaSizesGrid ) );
+    m_diffPairsGrid->PushEventHandler( new GRID_TRICKS( m_diffPairsGrid ) );
+
+    m_trackWidthsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_viaSizesGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_diffPairsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
 }
 
+PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
+{
+    // Delete the GRID_TRICKS.
+    m_trackWidthsGrid->PopEventHandler( true );
+    m_viaSizesGrid->PopEventHandler( true );
+    m_diffPairsGrid->PopEventHandler( true );
+}
 
 bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-#define SETCELL( grid, row, col, val ) \
-    grid->SetCellValue( row, col, StringFromValue( m_Frame->GetUserUnits(), val, true, true ) )
+    if( m_trackWidthsGrid->GetNumberRows() > 0 )
+        m_trackWidthsGrid->DeleteRows( 0, m_trackWidthsGrid->GetNumberRows() );
 
-    m_trackWidthsGrid->ClearGrid();
-    m_viaSizesGrid->ClearGrid();
-    m_diffPairsGrid->ClearGrid();
+    if( m_viaSizesGrid->GetNumberRows() > 0 )
+        m_viaSizesGrid->DeleteRows( 0, m_viaSizesGrid->GetNumberRows() );
+
+    if( m_diffPairsGrid->GetNumberRows() > 0 )
+        m_diffPairsGrid->DeleteRows( 0, m_diffPairsGrid->GetNumberRows() );
 
     // Skip the first item, which is the current netclass value
     for( unsigned ii = 1; ii < m_BrdSettings->m_TrackWidthList.size(); ii++ )
     {
-        SETCELL( m_trackWidthsGrid, ii-1, 0, m_BrdSettings->m_TrackWidthList[ii] );
+        AppendTrackWidth( m_BrdSettings->m_TrackWidthList[ii] );
     }
 
     // Skip the first item, which is the current netclass value
     for( unsigned ii = 1; ii < m_BrdSettings->m_ViasDimensionsList.size(); ii++ )
     {
-        SETCELL( m_viaSizesGrid, ii-1, 0, m_BrdSettings->m_ViasDimensionsList[ii].m_Diameter );
-
-        if( m_BrdSettings->m_ViasDimensionsList[ii].m_Drill > 0 )
-            SETCELL( m_viaSizesGrid, ii-1, 1, m_BrdSettings->m_ViasDimensionsList[ii].m_Drill );
+        AppendViaSize( m_BrdSettings->m_ViasDimensionsList[ii].m_Diameter,
+                       m_BrdSettings->m_ViasDimensionsList[ii].m_Drill );
     }
 
     // Skip the first item, which is the current netclass value
     for( unsigned ii = 1; ii < m_BrdSettings->m_DiffPairDimensionsList.size(); ii++ )
     {
-        SETCELL( m_diffPairsGrid, ii-1, 0, m_BrdSettings->m_DiffPairDimensionsList[ii].m_Width );
-
-        if( m_BrdSettings->m_DiffPairDimensionsList[ii].m_Gap > 0 )
-            SETCELL( m_diffPairsGrid, ii-1, 1, m_BrdSettings->m_DiffPairDimensionsList[ii].m_Gap );
-
-        if( m_BrdSettings->m_DiffPairDimensionsList[ii].m_ViaGap > 0 )
-            SETCELL( m_diffPairsGrid, ii-1, 2, m_BrdSettings->m_DiffPairDimensionsList[ii].m_ViaGap );
+        AppendDiffPairs( m_BrdSettings->m_DiffPairDimensionsList[ii].m_Width,
+                         m_BrdSettings->m_DiffPairDimensionsList[ii].m_Gap,
+                         m_BrdSettings->m_DiffPairDimensionsList[ii].m_ViaGap );
     }
 
     return true;
@@ -101,9 +139,16 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
     std::vector<VIA_DIMENSION>       vias;
     std::vector<DIFF_PAIR_DIMENSION> diffPairs;
 
+    if( !m_trackWidthsGrid->CommitPendingChanges()
+            || !m_viaSizesGrid->CommitPendingChanges()
+            || !m_diffPairsGrid->CommitPendingChanges() )
+    {
+        return false;
+    }
+
     for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
     {
-        msg = m_trackWidthsGrid->GetCellValue( row, 0 );
+        msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
 
         if( !msg.IsEmpty() )
             trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg, true ) );
@@ -111,14 +156,14 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 
     for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
     {
-        msg = m_viaSizesGrid->GetCellValue( row, 0 );
+        msg = m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL );
 
         if( !msg.IsEmpty() )
         {
             VIA_DIMENSION via_dim;
             via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg, true );
 
-            msg = m_viaSizesGrid->GetCellValue( row, 1 );
+            msg = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
             if( !msg.IsEmpty() )
                 via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg, true );
@@ -127,19 +172,19 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         }
     }
 
-    for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
+    for( int row = 0; row < m_diffPairsGrid->GetNumberRows();  ++row )
     {
-        msg = m_diffPairsGrid->GetCellValue( row, 0 );
+        msg = m_diffPairsGrid->GetCellValue( row, DP_WIDTH_COL );
 
         if( !msg.IsEmpty() )
         {
             DIFF_PAIR_DIMENSION diffPair_dim;
             diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg, true );
 
-            msg = m_diffPairsGrid->GetCellValue( row, 1 );
+            msg = m_diffPairsGrid->GetCellValue( row, DP_GAP_COL );
             diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg, true );
 
-            msg = m_diffPairsGrid->GetCellValue( row, 2 );
+            msg = m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL );
 
             if( !msg.IsEmpty() )
                 diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg, true );
@@ -171,7 +216,9 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
     if( !m_trackWidthsGrid->CommitPendingChanges()
             || !m_viaSizesGrid->CommitPendingChanges()
             || !m_diffPairsGrid->CommitPendingChanges() )
+    {
         return false;
+    }
 
     wxString msg;
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
@@ -181,7 +228,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
     // Test tracks
     for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
     {
-        wxString tvalue = m_trackWidthsGrid->GetCellValue( row, 0 );
+        wxString tvalue = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
 
         if( tvalue.IsEmpty() )
             continue;
@@ -190,7 +237,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         {
             msg.Printf( _( "Track width less than minimum track width (%s)." ),
                         StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
-            m_Parent->SetError( msg, this, m_trackWidthsGrid, row, 0 );
+            m_Parent->SetError( msg, this, m_trackWidthsGrid, row, TR_WIDTH_COL );
             return false;
         }
     }
@@ -198,7 +245,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
     // Test vias
     for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
     {
-        wxString viaDia = m_viaSizesGrid->GetCellValue( row, 0 );
+        wxString viaDia = m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL );
 
         if( viaDia.IsEmpty() )
             continue;
@@ -207,16 +254,16 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         {
             msg.Printf( _( "Via diameter less than minimum via diameter (%s)." ),
                         StringFromValue( m_Frame->GetUserUnits(), minViaDia, true, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 0 );
+            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
             return false;
         }
 
-        wxString viaDrill = m_viaSizesGrid->GetCellValue( row, 1 );
+        wxString viaDrill = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
         if( viaDrill.IsEmpty() )
         {
             msg = _( "No via drill defined." );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 1 );
+            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
 
@@ -224,7 +271,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         {
             msg.Printf( _( "Via drill less than minimum via drill (%s)." ),
                         StringFromValue( m_Frame->GetUserUnits(), minViaDrill, true, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 1 );
+            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
 
@@ -232,7 +279,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
                 >= ValueFromString( m_Frame->GetUserUnits(), viaDia ) )
         {
             msg = _( "Via drill larger than via diameter." );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, 1 );
+            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
     }
@@ -304,4 +351,126 @@ void PANEL_SETUP_TRACKS_AND_VIAS::ImportSettingsFrom( BOARD* aBoard )
     m_BrdSettings = savedSettings;
 }
 
+void PANEL_SETUP_TRACKS_AND_VIAS::AppendTrackWidth( const int aWidth )
+{
+    int i = m_trackWidthsGrid->GetNumberRows();
 
+    m_trackWidthsGrid->AppendRows( 1 );
+
+    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true, true );
+    m_trackWidthsGrid->SetCellValue( i, TR_WIDTH_COL, val );
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::AppendViaSize( const int aSize, const int aDrill )
+{
+    int i = m_viaSizesGrid->GetNumberRows();
+
+    m_viaSizesGrid->AppendRows( 1 );
+
+    wxString val = StringFromValue( m_Frame->GetUserUnits(), aSize, true, true );
+    m_viaSizesGrid->SetCellValue( i, VIA_SIZE_COL, val );
+
+    if( aDrill > 0 )
+    {
+        val = StringFromValue( m_Frame->GetUserUnits(), aDrill, true, true );
+        m_viaSizesGrid->SetCellValue( i, VIA_DRILL_COL, val );
+    }
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( const int aWidth, const int aGap,
+                                                   const int aViaGap )
+{
+    int i = m_diffPairsGrid->GetNumberRows();
+
+    m_diffPairsGrid->AppendRows( 1 );
+
+    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true, true );
+    m_diffPairsGrid->SetCellValue( i, DP_WIDTH_COL, val );
+
+    if( aGap > 0 )
+    {
+        val = StringFromValue( m_Frame->GetUserUnits(), aGap, true, true );
+        m_diffPairsGrid->SetCellValue( i, DP_GAP_COL, val );
+    }
+
+    if( aViaGap > 0 )
+    {
+        val = StringFromValue( m_Frame->GetUserUnits(), aViaGap, true, true );
+        m_diffPairsGrid->SetCellValue( i, DP_VIA_GAP_COL, val );
+    }
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent )
+{
+    AppendTrackWidth( 0 );
+
+    m_trackWidthsGrid->MakeCellVisible( m_trackWidthsGrid->GetNumberRows() - 1, TR_WIDTH_COL );
+    m_trackWidthsGrid->SetGridCursor( m_trackWidthsGrid->GetNumberRows() - 1, TR_WIDTH_COL );
+
+    m_trackWidthsGrid->EnableCellEditControl( true );
+    m_trackWidthsGrid->ShowCellEditControl();
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& event )
+{
+    int curRow = m_trackWidthsGrid->GetGridCursorRow();
+
+    if( curRow < 0 || m_trackWidthsGrid->GetNumberRows() <= curRow )
+        return;
+
+    m_trackWidthsGrid->DeleteRows( curRow, 1 );
+
+    curRow = std::max( 0, curRow - 1 );
+    m_trackWidthsGrid->MakeCellVisible( curRow, m_trackWidthsGrid->GetGridCursorCol() );
+    m_trackWidthsGrid->SetGridCursor( curRow, m_trackWidthsGrid->GetGridCursorCol() );
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
+{
+    AppendViaSize( 0, 0 );
+
+    m_viaSizesGrid->MakeCellVisible( m_viaSizesGrid->GetNumberRows() - 1, VIA_SIZE_COL );
+    m_viaSizesGrid->SetGridCursor( m_viaSizesGrid->GetNumberRows() - 1, VIA_SIZE_COL );
+
+    m_viaSizesGrid->EnableCellEditControl( true );
+    m_viaSizesGrid->ShowCellEditControl();
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
+{
+    int curRow = m_viaSizesGrid->GetGridCursorRow();
+
+    if( curRow < 0 || m_viaSizesGrid->GetNumberRows() <= curRow )
+        return;
+
+    m_viaSizesGrid->DeleteRows( curRow, 1 );
+
+    curRow = std::max( 0, curRow - 1 );
+    m_viaSizesGrid->MakeCellVisible( curRow, m_viaSizesGrid->GetGridCursorCol() );
+    m_viaSizesGrid->SetGridCursor( curRow, m_viaSizesGrid->GetGridCursorCol() );
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
+{
+    AppendDiffPairs( 0, 0, 0 );
+
+    m_diffPairsGrid->MakeCellVisible( m_diffPairsGrid->GetNumberRows() - 1, DP_WIDTH_COL );
+    m_diffPairsGrid->SetGridCursor( m_diffPairsGrid->GetNumberRows() - 1, DP_WIDTH_COL );
+
+    m_diffPairsGrid->EnableCellEditControl( true );
+    m_diffPairsGrid->ShowCellEditControl();
+}
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event )
+{
+    int curRow = m_diffPairsGrid->GetGridCursorRow();
+
+    if( curRow < 0 || m_diffPairsGrid->GetNumberRows() <= curRow )
+        return;
+
+    m_diffPairsGrid->DeleteRows( curRow, 1 );
+
+    curRow = std::max( 0, curRow - 1 );
+    m_diffPairsGrid->MakeCellVisible( curRow, m_diffPairsGrid->GetGridCursorCol() );
+    m_diffPairsGrid->SetGridCursor( curRow, m_diffPairsGrid->GetGridCursorCol() );
+}

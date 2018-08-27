@@ -50,9 +50,22 @@ private:
 
     bool validateData();
 
+protected:
+    void OnAddTrackWidthsClick( wxCommandEvent& event ) override;
+    void OnRemoveTrackWidthsClick( wxCommandEvent& event ) override;
+    void OnAddViaSizesClick( wxCommandEvent& event ) override;
+    void OnRemoveViaSizesClick( wxCommandEvent& event ) override;
+    void OnAddDiffPairsClick( wxCommandEvent& event ) override;
+    void OnRemoveDiffPairsClick( wxCommandEvent& event ) override;
+
+    void AppendTrackWidth( const int aWidth );
+    void AppendViaSize( const int aSize, const int aDrill );
+    void AppendDiffPairs( const int aWidth, const int aGap, const int aViaGap );
+
 public:
     PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
                                  PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel );
+    ~PANEL_SETUP_TRACKS_AND_VIAS() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

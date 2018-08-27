@@ -20,6 +20,11 @@ class WX_GRID;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/grid.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
@@ -36,8 +41,23 @@ class PANEL_SETUP_TRACKS_AND_VIAS_BASE : public wxPanel
 	protected:
 		wxStaticText* m_label;
 		WX_GRID* m_trackWidthsGrid;
+		wxBitmapButton* m_trackWidthsAddButton;
+		wxBitmapButton* m_trackWidthsRemoveButton;
 		WX_GRID* m_viaSizesGrid;
+		wxBitmapButton* m_viaSizesAddButton;
+		wxBitmapButton* m_viaSizesRemoveButton;
 		WX_GRID* m_diffPairsGrid;
+		wxBitmapButton* m_diffPairsAddButton;
+		wxBitmapButton* m_diffPairsRemoveButton;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnAddTrackWidthsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveTrackWidthsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddViaSizesClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveViaSizesClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddDiffPairsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveDiffPairsClick( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
