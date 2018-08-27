@@ -233,7 +233,7 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
         if( aZone && ( aZone != zoneRef) )
             continue;
 
-        for( int ia2 = 0; ia2 < board->GetAreaCount(); ia2++ )
+        for( int ia2 = ia + 1; ia2 < board->GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* zoneToTest = board->GetArea( ia2 );
             SHAPE_POLY_SET testSmoothedPoly;
