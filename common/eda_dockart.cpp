@@ -24,8 +24,8 @@
 #include <eda_dockart.h>
 #include <wx/aui/tabart.h>
 #include <wx/aui/auibook.h>
-#include <class_draw_panel_gal.h>
-#include <class_drawpanel.h>
+//#include <class_draw_panel_gal.h>
+//#include <class_drawpanel.h>
 #include <draw_frame.h>
 
 void EDA_DOCKART::DrawBorder( wxDC& aDC, wxWindow* aWindow, const wxRect& aRect,
@@ -54,9 +54,10 @@ void EDA_DOCKART::DrawBorder( wxDC& aDC, wxWindow* aWindow, const wxRect& aRect,
         // This achieves a right-bottom-bordered canvas, which works reasonably well with
         // wxWidgets right-bottom bordered toolbars.
 
-        wxWindow* window = m_frame->GetCanvas();
-        wxSize scrollbarSize = window->GetSize() - window->GetClientSize();
+        //wxWindow* window = reinterpret_cast<wxWindow*>( m_frame->GetCanvas() );
+        //wxSize scrollbarSize = window->GetSize() - window->GetClientSize();
         // Not sure why it takes a pen twice as wide as the border to fill it in, but it does.
+        #if 0
         int borderWidth = GetMetric( wxAUI_DOCKART_PANE_BORDER_SIZE ) * 2;
         int borderAdjust = borderWidth;
 
@@ -85,6 +86,7 @@ void EDA_DOCKART::DrawBorder( wxDC& aDC, wxWindow* aWindow, const wxRect& aRect,
         aDC.DrawLine( r.x + r.width, r.y, r.x + r.width, r.y + r.height - 1 );
         // bottom
         aDC.DrawLine( r.x, r.y + r.height - 1, r.x + r.width - 1, r.y + r.height - 1 );
+        #endif
     }
     else
     {
