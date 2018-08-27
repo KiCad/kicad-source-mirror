@@ -287,6 +287,14 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         wxSize tbsize = m_mainToolBar->GetSize();
         m_auimgr.LoadPerspective( m_perspective, false );
         m_auimgr.GetPane( m_mainToolBar ).BestSize( tbsize );
+
+        // LoadPerspective is overzealous: it stores everything.
+        // be sure these panes are not hidden,
+        // regardless what the perspective has stored
+        m_auimgr.GetPane( m_mainToolBar ).Show();
+        m_auimgr.GetPane( m_libList ).Show();
+        m_auimgr.GetPane( m_footprintList ).Show();
+        m_auimgr.GetPane( m_messagePanel ).Show();
     }
 
     // after changing something to the aui manager,
