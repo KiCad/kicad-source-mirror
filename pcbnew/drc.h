@@ -31,6 +31,7 @@
 
 #include <vector>
 #include <memory>
+#include <geometry/seg.h>
 
 #define OK_DRC  0
 #define BAD_DRC 1
@@ -81,18 +82,18 @@
 #define DRCE_VIA_INSIDE_KEEPOUT                38   ///< Via in inside a keepout area
 #define DRCE_TRACK_INSIDE_KEEPOUT              39   ///< Track in inside a keepout area
 #define DRCE_PAD_INSIDE_KEEPOUT                40   ///< Pad in inside a keepout area
-#define DRCE_VIA_INSIDE_TEXT                   41   ///< Via in inside a text area
-#define DRCE_TRACK_INSIDE_TEXT                 42   ///< Track in inside a text area
-#define DRCE_PAD_INSIDE_TEXT                   43   ///< Pad in inside a text area
-#define DRCE_OVERLAPPING_FOOTPRINTS            44   ///< footprint courtyards overlap
-#define DRCE_MISSING_COURTYARD_IN_FOOTPRINT    45   ///< footprint has no courtyard defined
-#define DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT  46   ///< footprint has a courtyard but malformed
+#define DRCE_TRACK_NEAR_COPPER                 41   ///< track & copper graphic collide or are too close
+#define DRCE_VIA_NEAR_COPPER                   42   ///< via and copper graphic collide or are too close
+#define DRCE_PAD_NEAR_COPPER                   43   ///< pad and copper graphic collide or are too close
+#define DRCE_TRACK_NEAR_ZONE                   44   ///< track & zone collide or are too close together
+#define DRCE_OVERLAPPING_FOOTPRINTS            45   ///< footprint courtyards overlap
+#define DRCE_MISSING_COURTYARD_IN_FOOTPRINT    46   ///< footprint has no courtyard defined
+#define DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT  47   ///< footprint has a courtyard but malformed
                                                     ///< (not convertible to a closed polygon with holes)
-#define DRCE_MICRO_VIA_NOT_ALLOWED             47   ///< micro vias are not allowed
-#define DRCE_BURIED_VIA_NOT_ALLOWED            48   ///< buried vias are not allowed
-#define DRCE_DISABLED_LAYER_ITEM               49   ///< item on a disabled layer
-#define DRCE_DRILLED_HOLES_TOO_CLOSE           50   ///< overlapping drilled holes break drill bits
-#define DRCE_TRACK_NEAR_ZONE                   51   ///< track & zone collide or are too close together
+#define DRCE_MICRO_VIA_NOT_ALLOWED             48   ///< micro vias are not allowed
+#define DRCE_BURIED_VIA_NOT_ALLOWED            49   ///< buried vias are not allowed
+#define DRCE_DISABLED_LAYER_ITEM               50   ///< item on a disabled layer
+#define DRCE_DRILLED_HOLES_TOO_CLOSE           51   ///< overlapping drilled holes break drill bits
 
 
 class EDA_DRAW_PANEL;
@@ -107,6 +108,10 @@ class MARKER_PCB;
 class DRC_ITEM;
 class NETCLASS;
 class EDA_TEXT;
+class DRAWSEGMENT;
+class wxWindow;
+class wxString;
+class wxTextCtrl;
 
 
 /**
@@ -227,53 +232,39 @@ private:
 
 
     /**
-     * Function fillMarker
-     * Optionally creates a marker and fills it in with information, but does not add it to
-     * the BOARD.  Use this to report any kind of DRC problem, or unconnected pad problem.
+     * Function newMarker
+     * Creates a marker on a track, via or pad.
      *
      * @param aTrack/aPad The reference item.
-     * @param aItem  Another item on the BOARD, such as a VIA, SEGZONE, or TRACK, which is
-     *               in conflict with the reference item.
+     * @param aConflitItem  Another item on the board which is in conflict with the
+     *                       reference item.
      * @param aErrorCode An ID for the particular type of error that is being reported.
-     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to be created.
      */
-    MARKER_PCB* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* newMarker( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg,
+                           int aErrorCode );
 
-    MARKER_PCB* fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* newMarker( TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aErrorCode );
+
+    MARKER_PCB* newMarker( D_PAD* aPad, BOARD_ITEM* aConflictItem, int aErrorCode );
 
     /**
-     * Function fillMarker
-     * Optionally creates a marker and fills it in with information, but does not add it to
-     * the BOARD.  Use this to report any kind of DRC problem, or unconnected pad problem.
+     * Function newMarker
+     * Creates a marker at a given location.
      *
      * @param aItem The reference item.
      * @param aPos Usually the position of the item, but could be more specific for a zone.
      * @param aErrorCode An ID for the particular type of error that is being reported.
-     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to be created.
      */
-    MARKER_PCB* fillMarker( BOARD_ITEM* aItem, const wxPoint& aPos, int aErrorCode,
-                            MARKER_PCB* fillMe );
+    MARKER_PCB* newMarker( const wxPoint& aPos, BOARD_ITEM* aItem, int aErrorCode );
+
+    MARKER_PCB* newMarker( const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem,
+                           int aErrorCode );
 
     /**
-     * Function fillMarker
-     * Optionally creates a marker and fills it in with information, but does not add it to
-     * the BOARD.  Use this to report any kind of DRC problem, or unconnected pad problem.
-     *
-     * @param aPos The reference location.
-     * @param aErrorCode An ID for the particular type of error that is being reported.
-     * @param aItem The first item in conflict.
-     * @param bItem (Optional) The second item in conflict or NULL.
-     * @param aErrorCode An ID for the particular type of error that is being reported.
-     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to be created.
-     */
-    MARKER_PCB* fillMarker( const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem,
-                            int aErrorCode, MARKER_PCB* fillMe );
-
-    /**
-     * Fill a MARKER which will report on a generic problem with the board which is
+     * Create a MARKER which will report on a generic problem with the board which is
      * not geographically locatable.
      */
-    MARKER_PCB* fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe );
+    MARKER_PCB* newMarker( int aErrorCode, const wxString& aMessage );
 
     /**
      * Adds a DRC marker to the PCB through the COMMIT mechanism.
@@ -314,9 +305,11 @@ private:
     void testKeepoutAreas();
 
     // aTextItem is type BOARD_ITEM* to accept either TEXTE_PCB or TEXTE_MODULE
-    void doText( BOARD_ITEM* aTextItem );
+    void testCopperTextItem( BOARD_ITEM* aTextItem );
 
-    void testTexts();
+    void testCopperDrawItem( DRAWSEGMENT* aDrawing );
+
+    void testCopperTextAndGraphics();
 
     ///> Tests for items placed on disabled layers (causing false connections).
     void testDisabledLayers();

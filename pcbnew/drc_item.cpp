@@ -118,21 +118,17 @@ wxString DRC_ITEM::GetErrorText() const
 
     case DRCE_VIA_INSIDE_KEEPOUT:
         return wxString( _( "Via inside keepout area" ) );
-
     case DRCE_TRACK_INSIDE_KEEPOUT:
         return wxString( _( "Track inside keepout area" ) );
-
     case DRCE_PAD_INSIDE_KEEPOUT:
         return wxString( _( "Pad inside keepout area" ) );
 
-    case DRCE_VIA_INSIDE_TEXT:
-        return wxString( _( "Via inside text" ) );
-
-    case DRCE_TRACK_INSIDE_TEXT:
-        return wxString( _( "Track inside text" ) );
-
-    case DRCE_PAD_INSIDE_TEXT:
-        return wxString( _( "Pad inside text" ) );
+    case DRCE_VIA_NEAR_COPPER:
+        return wxString( _( "Via too close to copper item" ) );
+    case DRCE_TRACK_NEAR_COPPER:
+        return wxString( _( "Track too close to copper item" ) );
+    case DRCE_PAD_NEAR_COPPER:
+        return wxString( _( "Pad too close to copper item" ) );
 
     case DRCE_OVERLAPPING_FOOTPRINTS:
         return wxString( _( "Courtyards overlap" ) );
