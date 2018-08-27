@@ -24,7 +24,6 @@
 
 #include <algorithm>
 
-#include <common.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 #include "clipper.hpp"
@@ -400,7 +399,7 @@ bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
         const VECTOR2D diff = p2 - p1;
         if( aP.x >= p1.x && aP.x <= p2.x )
         {
-            if( KiROUND( p1.y + ( diff.y / diff.x ) * ( aP.x - p1.x ) ) == aP.y )
+            if( round_nearest( p1.y + ( diff.y / diff.x ) * ( aP.x - p1.x ) ) == aP.y )
                 return true;
         }
     }

@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include <base_units.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>

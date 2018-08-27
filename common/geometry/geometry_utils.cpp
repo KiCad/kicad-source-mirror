@@ -27,8 +27,6 @@
  * @brief a few functions useful in geometry calculations.
  */
 
-#include <math.h>
-#include <common.h>
 #include <geometry/geometry_utils.h>
 
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
@@ -41,7 +39,7 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
     // minimal arc increment in degrees:
     double step = 180 / M_PI * acos( 1.0 - rel_error ) * 2;
     // the minimal seg count for a arc
-    int segCount = KiROUND( fabs( aArcAngleDegree ) / step );
+    int segCount = round_nearest( fabs( aArcAngleDegree ) / step );
 
     // Ensure at least one segment is used
     return std::max( segCount, 1 );
