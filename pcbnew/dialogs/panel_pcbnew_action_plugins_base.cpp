@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Jul 14 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -14,7 +14,7 @@
 PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bPanelSizer;
-	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
+	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bGridSizer;
 	bGridSizer = new wxBoxSizer( wxVERTICAL );
@@ -56,25 +56,28 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	bPanelSizer->Add( bGridSizer, 1, wxALIGN_LEFT|wxEXPAND|wxLEFT, 0 );
 	
 	wxBoxSizer* bButtonsSizer;
-	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
+	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_moveUpButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_moveUpButton->SetMinSize( wxSize( 32,32 ) );
+	m_moveUpButton->SetMinSize( wxSize( 30,30 ) );
 	
-	bButtonsSizer->Add( m_moveUpButton, 0, wxALIGN_TOP|wxALL, 5 );
+	bButtonsSizer->Add( m_moveUpButton, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_moveDownButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_moveDownButton->SetMinSize( wxSize( 32,32 ) );
+	m_moveDownButton->SetMinSize( wxSize( 30,30 ) );
 	
-	bButtonsSizer->Add( m_moveDownButton, 0, wxALL, 5 );
+	bButtonsSizer->Add( m_moveDownButton, 0, wxRIGHT, 5 );
+	
+	
+	bButtonsSizer->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_reloadButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_reloadButton->SetMinSize( wxSize( 32,32 ) );
+	m_reloadButton->SetMinSize( wxSize( 30,30 ) );
 	
-	bButtonsSizer->Add( m_reloadButton, 0, wxALL, 5 );
+	bButtonsSizer->Add( m_reloadButton, 0, wxLEFT|wxRIGHT, 5 );
 	
 	
-	bPanelSizer->Add( bButtonsSizer, 0, wxALIGN_RIGHT|wxALIGN_TOP, 0 );
+	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND, 0 );
 	
 	
 	this->SetSizer( bPanelSizer );

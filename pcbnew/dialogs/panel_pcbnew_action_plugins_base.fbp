@@ -89,7 +89,7 @@
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bPanelSizer</property>
-                <property name="orient">wxHORIZONTAL</property>
+                <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">0</property>
@@ -100,11 +100,11 @@
                         <property name="name">bGridSizer</property>
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxGrid" expanded="1">
+                            <object class="wxGrid" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -254,16 +254,16 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">0</property>
-                    <property name="flag">wxALIGN_RIGHT|wxALIGN_TOP</property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bButtonsSizer</property>
-                        <property name="orient">wxVERTICAL</property>
+                        <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_TOP|wxALL</property>
+                            <property name="flag">wxLEFT|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -306,7 +306,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">32,32</property>
+                                <property name="minimum_size">30,30</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_moveUpButton</property>
                                 <property name="pane_border">1</property>
@@ -364,11 +364,11 @@
                                 <event name="OnUpdateUI"></event>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="1">
+                        <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxRIGHT</property>
                             <property name="proportion">0</property>
-                            <object class="wxBitmapButton" expanded="1">
+                            <object class="wxBitmapButton" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -409,7 +409,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">32,32</property>
+                                <property name="minimum_size">30,30</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_moveDownButton</property>
                                 <property name="pane_border">1</property>
@@ -469,9 +469,19 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                             <property name="proportion">0</property>
-                            <object class="wxBitmapButton" expanded="1">
+                            <object class="spacer" expanded="1">
+                                <property name="height">0</property>
+                                <property name="permission">protected</property>
+                                <property name="width">0</property>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="0">
+                            <property name="border">5</property>
+                            <property name="flag">wxLEFT|wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxBitmapButton" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -512,7 +522,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">32,32</property>
+                                <property name="minimum_size">30,30</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_reloadButton</property>
                                 <property name="pane_border">1</property>

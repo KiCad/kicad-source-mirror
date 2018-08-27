@@ -35,8 +35,8 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame
     m_genericIcon = KiBitmap( hammer_xpm );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    m_moveUpButton->SetBitmap( KiBitmap( up_xpm ) );
-    m_moveDownButton->SetBitmap( KiBitmap( down_xpm ) );
+    m_moveUpButton->SetBitmap( KiBitmap( small_up_xpm ) );
+    m_moveDownButton->SetBitmap( KiBitmap( small_down_xpm ) );
     m_reloadButton->SetBitmap( KiBitmap( refresh_xpm ) );
 }
 
@@ -155,7 +155,8 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 {
     m_grid->Freeze();
-    m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
+    if( m_grid->GetNumberRows() != 0 )
+        m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
 
     const auto& orderedPlugins = m_frame->GetOrderedActionPlugins();
     m_grid->AppendRows( orderedPlugins.size() );
