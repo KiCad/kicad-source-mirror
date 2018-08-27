@@ -58,11 +58,12 @@ m_parent( aParentWindow )
     m_view = new KIGFX::SCH_VIEW( true );
     m_view->SetGAL( m_gal );
 
+    m_gal->SetWorldUnitLength( 0.01 ); // 1 unit = 0.01 inch
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
 
     m_view->SetPainter( m_painter.get() );
-    m_view->SetScaleLimits( 2000000.0, 30000.0 );
+    m_view->SetScaleLimits( 2000000.0, 0.002 ); 
     m_view->SetMirror( false, false );
 
     setDefaultLayerOrder();
@@ -337,16 +338,14 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_PanStartCenter = GetParent()->GetScrollCenterPosition();
         m_PanStartEventPosition = event.GetPosition();
 
-//        INSTALL_UNBUFFERED_DC( dc, this );
           CrossHairOff( );
           SetCurrentCursor( wxCURSOR_SIZING );
     }
 
     if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) )
     {
-//        INSTALL_UNBUFFERED_DC( dc, this );
          CrossHairOn();
-         SetCursor( (wxStockCursor) m_defaultCursor );
+         SetDefaultCursor();
     }
 
     if( event.MiddleIsDown() )
@@ -642,22 +641,6 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     if( !GetParent()->GeneralControl( nullptr, pos, localkey ) )
         event.Skip();
-}
-
-void SCH_DRAW_PANEL::SetCurrentCursor( int aCursor )
-{
-    m_currentCursor = aCursor;
-    SetCursor( (wxStockCursor) m_currentCursor );
-}
-
-void SCH_DRAW_PANEL::SetCurrentCursor( const wxCursor& aCursor )
-{
-    SetCursor( aCursor );
-}
-
-void SCH_DRAW_PANEL::SetDefaultCursor()
-{
-    SetCursor( (wxStockCursor) m_defaultCursor );
 }
 
 void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )

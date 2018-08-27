@@ -78,24 +78,6 @@ public:
     /// @copydoc wxWindow::Refresh()
     void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL ) override;
 
-    virtual void SetCurrentCursor( int aCursor ) override;
-    virtual void SetCurrentCursor( const wxCursor& aCursor ) override;
-    virtual void SetDefaultCursor() override;
-
-    virtual int GetDefaultCursor() const override
-    {
-        return EDA_DRAW_PANEL_GAL::GetDefaultCursor();
-    }
-
-    /**
-     * Function GetCurrentCursor
-     * @return the current cursor shape, depending on the current selected tool
-     */
-    virtual int GetCurrentCursor() const override
-    {
-        return EDA_DRAW_PANEL_GAL::GetCurrentCursor();
-    }
-
 
 protected:
 

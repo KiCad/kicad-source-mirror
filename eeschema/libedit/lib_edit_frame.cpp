@@ -612,7 +612,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
     if( event.GetId() == ID_DE_MORGAN_NORMAL_BUTT )
         m_convert = 1;
@@ -663,7 +663,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->EndMouseCapture();
         else
-            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
         break;
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
@@ -671,13 +671,10 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(),
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor(),
                                    wxEmptyString );
         break;
     }
-
- //fixme-gal
-    //INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     switch( id )
     {
@@ -1026,7 +1023,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     bool partLocked = GetCurPart()->UnitsLocked();
     wxString oldName = GetCurPart()->GetName();
 
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
     if( GetDrawItem() && GetDrawItem()->Type() == LIB_FIELD_T )
         SetDrawItem( nullptr );     // selected LIB_FIELD might be deleted
@@ -1074,14 +1071,14 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         m_lastDrawItem = NULL;
 
     // Stop the current command and deselect the current tool.
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
     LIB_PART*      part = GetCurPart();
 
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
-        SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetToolID( id, GetGalCanvas()->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_MENU_ZOOM_SELECTION:
@@ -1135,13 +1132,13 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
-        SetToolID( id, m_canvas->GetDefaultCursor(), _( "Import" ) );
+        SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
         LoadOneSymbol();
         SetNoToolSelected();
         break;
 
     case ID_LIBEDIT_EXPORT_BODY_BUTT:
-        SetToolID( id, m_canvas->GetDefaultCursor(), _( "Export" ) );
+        SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Export" ) );
         SaveOneSymbol();
         SetNoToolSelected();
         break;

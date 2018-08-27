@@ -255,7 +255,7 @@ void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 {
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
     SetDrawItem( NULL );
     wxString lib = getTargetLib();
 
@@ -647,7 +647,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     wxString   msg;
     PROJECT&   prj = Prj();
 
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
     if( !aNewFile && ( aLibrary.empty() || !prj.SchSymbolLibTable()->HasLibrary( aLibrary ) ) )
     {

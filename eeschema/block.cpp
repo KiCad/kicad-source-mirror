@@ -132,7 +132,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( block->GetMoveVector() == wxPoint( 0, 0 ) )
         {
             // This calls the block-abort command routine on cleanup
-            m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor() );
+            m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor() );
             return;
         }
 
@@ -179,7 +179,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         block->ClearItemsList();
     }
 
-    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString, false );
 
     GetCanvas()->GetView()->ClearPreview();
     GetCanvas()->GetView()->ClearHiddenFlags();
@@ -395,7 +395,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         block->SetState( STATE_NO_BLOCK );
         block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );
-        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
+        m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,
                                    false );
     }
 

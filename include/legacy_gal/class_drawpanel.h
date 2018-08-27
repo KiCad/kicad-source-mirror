@@ -359,28 +359,6 @@ public:
      */
     virtual void CallEndMouseCapture( wxDC* aDC ) { printf("Unimplemented\n"); assert(false); };;
 
-    /**
-     * Function SetCurrentCursor
-     * Set the current cursor shape for drawpanel
-     */
-     virtual void SetCurrentCursor( int aCursor ) {};
-     virtual void SetCurrentCursor( const wxCursor& aCursor ) {};
-
-    /**
-     * Function GetDefaultCursor
-     * @return the default cursor shape
-     */
-     //fixme-gal
-    virtual int GetDefaultCursor() const = 0;
-
-    virtual void SetDefaultCursor() {};
-
-    /**
-     * Function GetCurrentCursor
-     * @return the current cursor shape, depending on the current selected tool
-     */
-    virtual int GetCurrentCursor() const = 0;
-
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL ) {}
 
     virtual wxWindow* GetWindow() = 0;

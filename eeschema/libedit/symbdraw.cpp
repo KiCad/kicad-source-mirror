@@ -351,7 +351,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
         if( GetToolId() != ID_NO_TOOL_SELECTED )
             SetCursor( wxCURSOR_PENCIL );
         else
-            SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
+            SetCursor( (wxStockCursor) GetGalCanvas()->GetDefaultCursor() );
 
         if( GetTempCopyComponent() )    // used when editing an existing item
             SaveCopyInUndoList( GetTempCopyComponent() );

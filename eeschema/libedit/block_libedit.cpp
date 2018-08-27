@@ -414,7 +414,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         block->SetState( STATE_NO_BLOCK );
         block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );
-        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
+        m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,
                                    false );
         m_canvas->Refresh( true );
     }
@@ -525,7 +525,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     block->SetState( STATE_NO_BLOCK );
     block->SetCommand( BLOCK_IDLE );
     GetScreen()->SetCurItem( NULL );
-    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString, false );
     
     GetCanvas()->GetView()->ClearPreview();
     GetCanvas()->GetView()->ClearHiddenFlags();

@@ -201,5 +201,7 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     screen->m_BlockLocate.SetCommand( BLOCK_IDLE );
     aPanel->GetParent()->DisplayToolMsg( wxEmptyString );
-    aPanel->SetDefaultCursor();
+    
+    // ugly, but temporary
+    reinterpret_cast<EDA_DRAW_PANEL_GAL*>( aPanel )->SetDefaultCursor();
 }

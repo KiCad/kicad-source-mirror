@@ -161,7 +161,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_canvas->IsMouseCaptured() )
         {
             m_canvas->EndMouseCapture();
-            SetToolID( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString );
+            SetToolID( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString );
         }
         else
         {
@@ -463,7 +463,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
     if( screen->IsBlockActive() )
     {
-//        m_canvas->SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
+//        m_canvas->SetCursor( (wxStockCursor) GetGalCanvas()->GetDefaultCursor() );
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool
@@ -474,7 +474,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
         if( m_canvas->IsMouseCaptured() ) // Stop the current command but keep the current tool
             m_canvas->EndMouseCapture();
         else                    // Deselect current tool
-            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
      }
 
      GetCanvas()->GetView()->ClearHiddenFlags();
@@ -489,7 +489,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     int lastToolID = GetToolId();
 
     // Stop the current command and deselect the current tool.
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
     switch( id )
     {

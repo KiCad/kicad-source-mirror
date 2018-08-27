@@ -204,16 +204,13 @@ public:
         return m_stealsFocus;
     }
 
+    virtual void SetDefaultCursor();
     /**
      * Function SetCurrentCursor
      * Set the current cursor shape for this panel
      */
-    void SetCurrentCursor( int aCursor )
-    {
-        m_currentCursor = aCursor;
-        SetCursor( (wxStockCursor) m_currentCursor );
-    }
-
+    virtual void SetCurrentCursor( int aCursor );
+    
     /**
      * Function GetDefaultCursor
      * @return the default cursor shape

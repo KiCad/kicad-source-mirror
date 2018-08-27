@@ -625,10 +625,6 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
 
-    // Change m_canvas cursor if requested.
-    if( m_canvas && aCursor >= 0 )
-        m_canvas->SetCurrentCursor( aCursor );
-
     // Change GAL canvas cursor if requested.
     if( IsGalCanvasActive() && aCursor >= 0 )
         GetGalCanvas()->SetCurrentCursor( aCursor );
@@ -654,9 +650,7 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
     // Change GAL canvas cursor if requested.
     if( IsGalCanvasActive() )
         defaultCursor = GetGalCanvas()->GetDefaultCursor();
-    else if( m_canvas )
-        defaultCursor = m_canvas->GetDefaultCursor();
-
+    
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
 }
 
@@ -1107,13 +1101,11 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 {
 
-    printf("GetCrossHairPos\n");
     // subject to change, borrow from old BASE_SCREEN for now.
     if( IsGalCanvasActive() )
     {
         VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
 
-        printf("gal %d %d\n", cursor.x, cursor.y );
 
         return wxPoint( cursor.x, aInvertY ? -cursor.y : cursor.y );
     }
