@@ -42,6 +42,7 @@
 #include <sch_text.h>
 #include <sch_no_connect.h>
 #include <sch_bus_entry.h>
+#include <sch_bitmap.h>
 #include <draw_graphic_text.h>
 
 #include <lib_edit_frame.h>
@@ -140,14 +141,14 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 */
 	switch(item->Type())
 	{
-		HANDLE_ITEM(LIB_PART_T, LIB_PART);
-	    HANDLE_ITEM(LIB_RECTANGLE_T, LIB_RECTANGLE);
+	HANDLE_ITEM(LIB_PART_T, LIB_PART);
+	HANDLE_ITEM(LIB_RECTANGLE_T, LIB_RECTANGLE);
         HANDLE_ITEM(LIB_POLYLINE_T, LIB_POLYLINE);
         HANDLE_ITEM(LIB_CIRCLE_T, LIB_CIRCLE);
         HANDLE_ITEM(LIB_PIN_T, LIB_PIN);
         HANDLE_ITEM(LIB_ARC_T, LIB_ARC);
         HANDLE_ITEM(LIB_FIELD_T, LIB_FIELD);
-  	    HANDLE_ITEM(LIB_TEXT_T, LIB_TEXT);
+        HANDLE_ITEM(LIB_TEXT_T, LIB_TEXT);
         HANDLE_ITEM(SCH_COMPONENT_T, SCH_COMPONENT);
         HANDLE_ITEM(SCH_JUNCTION_T, SCH_JUNCTION);
         HANDLE_ITEM(SCH_LINE_T, SCH_LINE);
@@ -160,7 +161,9 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
         HANDLE_ITEM(SCH_NO_CONNECT_T, SCH_NO_CONNECT);
         HANDLE_ITEM(SCH_BUS_WIRE_ENTRY_T, SCH_BUS_ENTRY_BASE);
         HANDLE_ITEM(SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE);
-
+        HANDLE_ITEM(SCH_BITMAP_T, SCH_BITMAP);
+        HANDLE_ITEM(SCH_MARKER_T, SCH_MARKER);
+        
 		default:
 			return false;
 	}
@@ -705,6 +708,9 @@ void SCH_PAINTER::draw ( SCH_TEXT *aText, int aLayer )
         case SCH_HIERARCHICAL_LABEL_T:
             color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
             break;
+        case SCH_GLOBAL_LABEL_T:
+            color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
+            break;
         default:
             color = m_schSettings.GetLayerColor( LAYER_NOTES );
             break;
@@ -910,9 +916,24 @@ void SCH_PAINTER::draw ( SCH_FIELD *aField, int aLayer )
     m_gal->StrokeText( aField->GetFullyQualifiedText(), textpos, orient == TEXT_ANGLE_VERT ? -M_PI/2 : 0 );
 }
 
+
 void SCH_PAINTER::draw ( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
+    std::vector<wxPoint> pts;
+    std::deque<VECTOR2D> pts2;
 
+    aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
+
+    for( auto p : pts )
+        pts2.push_back( VECTOR2D(p.x, p.y ) );
+
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_GLOBLABEL ) );
+    m_gal->DrawPolyline( pts2 );
+    m_gal->AdvanceDepth(); // fixme
+
+    draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
 }
 
 
@@ -1019,6 +1040,19 @@ void SCH_PAINTER::draw ( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     if( aEntry->IsDanglingEnd() )
         m_gal->DrawCircle( endPos, TARGET_BUSENTRY_RADIUS );
 
+
+}
+
+void SCH_PAINTER::draw ( SCH_BITMAP *aBitmap, int aLayer )
+{
+    m_gal->Save();
+    m_gal->Translate( aBitmap->GetPosition() );
+    m_gal->DrawBitmap( *aBitmap->GetImage() );
+    m_gal->Restore();
+}
+
+void SCH_PAINTER::draw ( SCH_MARKER *aMarker, int aLayer )
+{
 
 }
 

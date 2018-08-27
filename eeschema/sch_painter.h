@@ -49,6 +49,7 @@ class SCH_MARKER;
 class SCH_NO_CONNECT;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
+class SCH_BITMAP;
 
 namespace KIGFX
 {
@@ -134,8 +135,9 @@ private:
     void draw( SCH_SHEET_PIN *, int );
     void draw( SCH_NO_CONNECT *, int );
     void draw( SCH_MARKER *, int );
+    void draw( SCH_BITMAP *, int );
     void draw( SCH_LINE *, int );
-    void draw ( SCH_BUS_ENTRY_BASE *aEntry, int aLayer );
+    void draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer );
 
 
     void defaultColors( const LIB_ITEM *aItem );

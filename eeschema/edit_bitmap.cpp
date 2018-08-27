@@ -28,11 +28,12 @@
 
 #include <fctsys.h>
 #include <sch_draw_panel.h>
-
+#include <sch_view.h>
 #include <sch_edit_frame.h>
 #include <sch_bitmap.h>
 #include <dialog_image_editor.h>
 
+#include <view/view_group.h>
 
 static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
@@ -72,29 +73,25 @@ static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
 static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
+    auto panel = static_cast<SCH_DRAW_PANEL*> ( aPanel );
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_BITMAP* image  = (SCH_BITMAP*) screen->GetCurItem();
+    auto preview = panel->GetView()->GetPreview();
 
-    if( aErase )
-    {
-        // Erase the current bitmap at its current position.
-        // Note also items flagged IS_MOVING are not drawn,
-        // and if image is new, it is not yet il draw list
-        // so image is erased from screen
-        EDA_RECT dirty = image->GetBoundingBox();
-        dirty.Inflate( 4 );     // Give a margin
-        aPanel->SetMouseCapture( NULL, NULL );  // Avoid loop in redraw panel
-
-        STATUS_FLAGS flgs = image->GetFlags();
-        image->ClearFlags();
-        aPanel->RefreshDrawingRect( dirty );
-        image->SetFlags( flgs );
-        aPanel->SetMouseCapture( moveBitmap, abortMoveBitmap );
-    }
+    if ( ! image )
+        return;
 
     // Draw the bitmap at it's new position.
     image->SetPosition( aPanel->GetParent()->GetCrossHairPosition() - image->GetStoredPos() );
-    image->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+
+    auto view = panel->GetView();
+
+    view->ClearPreview();
+    view->AddToPreview( image, false );
+    view->SetVisible( preview, true );
+    view->Update( preview );
+
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
@@ -128,8 +125,11 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
     }
 
 
-    image->SetFlags( IS_NEW | IS_MOVED );
-    image->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    auto view = static_cast<SCH_DRAW_PANEL*>( m_canvas )->GetView();
+
+    view->ClearPreview();
+    view->AddToPreview( image, false );
+
 
     m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
     GetScreen()->SetCurItem( image );
