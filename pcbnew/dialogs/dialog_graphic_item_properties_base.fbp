@@ -116,7 +116,7 @@
                                 <property name="name">m_fgUpperLeftGridSizer</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                 <property name="permission">protected</property>
-                                <property name="rows">4</property>
+                                <property name="rows">8</property>
                                 <property name="vgap">0</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>

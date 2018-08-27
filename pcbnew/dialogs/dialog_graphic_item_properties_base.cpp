@@ -21,7 +21,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_fgUpperLeftGridSizer = new wxFlexGridSizer( 4, 3, 0, 0 );
+	m_fgUpperLeftGridSizer = new wxFlexGridSizer( 8, 3, 0, 0 );
 	m_fgUpperLeftGridSizer->AddGrowableCol( 1 );
 	m_fgUpperLeftGridSizer->SetFlexibleDirection( wxBOTH );
 	m_fgUpperLeftGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
