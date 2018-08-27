@@ -837,7 +837,7 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxBORDER_SIMPLE|wxTAB_TRAVERSAL|wxVSCROLL</property>
+                                <property name="window_style">wxTAB_TRAVERSAL|wxVSCROLL</property>
                                 <event name="OnAux1DClick"></event>
                                 <event name="OnAux1Down"></event>
                                 <event name="OnAux1Up"></event>

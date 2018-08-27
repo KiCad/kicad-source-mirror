@@ -354,7 +354,7 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 714,394 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 714,394 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString ); 
 		~PANEL_SETUP_LAYERS_BASE();
 	
 };
