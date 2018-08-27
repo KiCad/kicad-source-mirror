@@ -31,7 +31,7 @@ additional support regarding online manipulation of board projects is available
 for Pcbnew.  Plugins using this feature are called `Action Plugins` and they are
 accessible using a Pcbnew menu entry that can be found under `Tools->External
 Plugins`.  KiCad plugins that follow the `Action Plugin` conventions can be made
-to show up as external plugins in that menu.
+to show up as external plugins in that menu and optionally as top toolbar button.
 The user can run the plugin resulting in calling a defined entry function in the
 Python plugin's code.
 This function can then be used to access and manipulate the currently loaded
@@ -44,8 +44,23 @@ In order for the discovery process to work, the following requirements must be m
 
 * The plugin must be installed in the KiCad plugins search paths as documented
   in `scripting/kicadplugins.i`.
-  (Currently on a Linux Mint Installation this is
-  /usr/share/kicad/scripting/plugins/ and ~/.kicad_plugins/)
+
+    Currently on a Linux Installation this is
+
+    * /usr/share/kicad/scripting/plugins/
+    * ~/.kicad/scripting/plugins
+    * ~/.kicad_plugins/
+
+    On Windows
+
+    * \{KICAD_INSTALL_PATH\}/share/kicad/scripting/plugins
+    * %APPDATA%/Roaming/kicad/scripting/plugins
+
+    On MacOS
+
+    * /Applications/kicad/Kicad/Contents/SharedSupport/scripting/plugins
+    * ~/Library/Application Support/kicad/scripting/plugins
+
 * Alternatively a symbolic link can be created in the KiCad plugin path link to
   the plugin file/folder in another location of the file system. This can be
   useful for development.
@@ -69,22 +84,33 @@ KiCad plugin path.
 
     + ~/.kicad_plugins/ # A folder in the KiCad plugin path
         - simple_plugin.py
+        - simple_plugin.png (optional)
 
 The file `simple_plugin.py` contains the following.
 
     import pcbnew
+    import os
 
     class SimplePlugin(pcbnew.ActionPlugin):
         def defaults(self):
             self.name = "Plugin Name as shown in Pcbnew: Tools->External Plugins"
             self.category = "A descriptive category name"
             self.description = "A description of the plugin and what it does"
+            self.show_toolbar_button = False # Optional, defaults to False
+            self.icon_file_name = os.path.join(os.path.dirname(__file__), 'simple_plugin.png') # Optional, defaults to ""
 
         def Run(self):
             # The entry function of the plugin that is executed on user action
             print("Hello World")
 
     SimplePlugin().register() # Instantiate and register to Pcbnew
+
+Note that if specified `icon_file_name` must contain absolute path to the plugin icon.
+It must be png file, recommended size is 26x26 pixels. Alpha channel for opacity is supported.
+If icon is not specified a generic tool icon will be used.
+
+`show_toolbar_button` only defines a default state for plugin toolbar button. Users can override
+it in pcbnew preferences.
 
 ## Complex Plugin Example ## {#ppi_complex_example}
 The complex plugin example represents a single Python package that is imported
@@ -103,6 +129,7 @@ The following folder structure shows how complex plugins are implemented:
             - __main__.py # This file is optional. See below
             - complex_plugin_action.py # The ActionPlugin derived class lives here
             - complex_plugin_utils.py # Other Python parts of the plugin
+            - icon.png
             + otherstuff/
                 - otherfile.png
                 - misc.txt
@@ -113,12 +140,15 @@ In this case the file is named `complex_plugin_action.py` with the following
 contents:
 
     import pcbnew
+    import os
 
     class ComplexPluginAction(pcbnew.ActionPlugin)
         def defaults(self):
             self.name = "A complex action plugin"
             self.category = "A descriptive category name"
             self.description "A description of the plugin"
+            self.show_toolbar_button = True # Optional, defaults to False
+            self.icon_file_name = os.path.join(os.path.dirname(__file__), 'icon.png') # Optional
 
         def Run(self):
             # The entry function of the plugin that is executed on user action
