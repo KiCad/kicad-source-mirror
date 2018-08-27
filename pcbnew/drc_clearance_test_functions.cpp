@@ -767,7 +767,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
         if( area_to_test->Outline()->Contains( end ) )
         {
             wxPoint pos( end.x, end.y );
-            m_currentMarker = newMarker( pos, aArea, area_to_test, COPPERAREA_INSIDE_COPPERAREA );
+            m_currentMarker = newMarker( pos, aArea, area_to_test, DRCE_ZONES_INTERSECT );
             return false;
         }
 
@@ -800,7 +800,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
             {
                 // COPPERAREA_COPPERAREA error : edge intersect or too close
                 m_currentMarker = newMarker( wxPoint( x, y ), aArea, area_to_test,
-                                             COPPERAREA_CLOSE_TO_COPPERAREA );
+                                             DRCE_ZONES_TOO_CLOSE );
                 return false;
             }
 

@@ -63,8 +63,8 @@
 #define DRCE_PAD_NEAR_PAD1                     19   ///< pad too close to pad
 #define DRCE_VIA_HOLE_BIGGER                   20   ///< via's hole is bigger than its diameter
 #define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR    21   ///< micro via's layer pair incorrect (layers must be adjacent)
-#define COPPERAREA_INSIDE_COPPERAREA           22   ///< copper area outlines intersect
-#define COPPERAREA_CLOSE_TO_COPPERAREA         23   ///< copper area outlines are too close
+#define DRCE_ZONES_INTERSECT                   22   ///< copper area outlines intersect
+#define DRCE_ZONES_TOO_CLOSE                   23   ///< copper area outlines are too close
 #define DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE   24   ///< copper area has a net but no pads in nets, which is suspicious
 #define DRCE_HOLE_NEAR_PAD                     25   ///< hole too close to pad
 #define DRCE_HOLE_NEAR_TRACK                   26   ///< hole too close to track

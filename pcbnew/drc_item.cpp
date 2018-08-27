@@ -77,9 +77,9 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Buried Via: not allowed" ) );
     case DRCE_DISABLED_LAYER_ITEM:
         return wxString( _( "Item on a disabled layer" ) );
-    case COPPERAREA_INSIDE_COPPERAREA:
+    case DRCE_ZONES_INTERSECT:
         return wxString( _( "Copper area inside copper area" ) );
-    case COPPERAREA_CLOSE_TO_COPPERAREA:
+    case DRCE_ZONES_TOO_CLOSE:
         return wxString( _( "Copper areas intersect or are too close" ) );
 
     case DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE:

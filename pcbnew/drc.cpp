@@ -275,17 +275,12 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
             for( auto iterator = refSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
             {
                 VECTOR2I currentVertex = *iterator;
+                wxPoint pt( currentVertex.x, currentVertex.y );
 
                 if( testSmoothedPoly.Contains( currentVertex ) )
                 {
-                    // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
                     if( aCreateMarkers )
-                    {
-                        wxPoint pt( currentVertex.x, currentVertex.y );
-                        auto marker = new MARKER_PCB( units, COPPERAREA_INSIDE_COPPERAREA,
-                                                      pt, zoneRef, pt, zoneToTest, pt );
-                        commit.Add( marker );
-                    }
+                        commit.Add( newMarker( pt, zoneRef, zoneToTest, DRCE_ZONES_INTERSECT ) );
 
                     nerrors++;
                 }
@@ -295,23 +290,20 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
             for( auto iterator = testSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
             {
                 VECTOR2I currentVertex = *iterator;
+                wxPoint pt( currentVertex.x, currentVertex.y );
 
                 if( refSmoothedPoly.Contains( currentVertex ) )
                 {
-                    // COPPERAREA_COPPERAREA error: copper area corner inside copper area ref
                     if( aCreateMarkers )
-                    {
-                        wxPoint pt( currentVertex.x, currentVertex.y );
-                        auto marker = new MARKER_PCB( units, COPPERAREA_INSIDE_COPPERAREA,
-                                                      pt, zoneToTest, pt, zoneRef, pt );
-                        commit.Add( marker );
-                    }
+                        commit.Add( newMarker( pt, zoneToTest, zoneRef, DRCE_ZONES_INTERSECT ) );
 
                     nerrors++;
                 }
             }
 
             // Iterate through all the segments of refSmoothedPoly
+            std::set<wxPoint> conflictPoints;
+
             for( auto refIt = refSmoothedPoly.IterateSegmentsWithHoles(); refIt; refIt++ )
             {
                 // Build ref segment
@@ -344,18 +336,16 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                                                          &pt.x, &pt.y );
 
                     if( d < zone2zoneClearance )
-                    {
-                        // COPPERAREA_COPPERAREA error : intersect or too close
-                        if( aCreateMarkers )
-                        {
-                            auto marker = new MARKER_PCB( units, COPPERAREA_CLOSE_TO_COPPERAREA,
-                                                          pt, zoneRef, pt, zoneToTest, pt );
-                            commit.Add( marker );
-                        }
-
-                        nerrors++;
-                    }
+                        conflictPoints.insert( pt );
                 }
+            }
+
+            for( wxPoint pt : conflictPoints )
+            {
+                if( aCreateMarkers )
+                    commit.Add( newMarker( pt, zoneRef, zoneToTest, DRCE_ZONES_TOO_CLOSE ) );
+
+                nerrors++;
             }
         }
     }
