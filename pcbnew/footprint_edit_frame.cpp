@@ -547,7 +547,12 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     if( IsGalCanvasActive() )
+    {
+        GetGalCanvas()->SetEventDispatcher( NULL );
         GetGalCanvas()->StopDrawing();
+    }
+
+    Clear_Pcb( false );
 
     //close the editor
     Destroy();
