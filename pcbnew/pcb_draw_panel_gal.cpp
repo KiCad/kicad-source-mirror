@@ -49,6 +49,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_GP_OVERLAY,
     LAYER_DRC,
     LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
+    LAYER_SELECT_OVERLAY,
     Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
 
     LAYER_MOD_TEXT_FR,
@@ -212,8 +213,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 GetNetnameLayer( aLayer ),
                 LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
                 LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
-                LAYER_NON_PLATEDHOLES, LAYER_GP_OVERLAY, LAYER_RATSNEST,
-                LAYER_CURSOR
+                LAYER_NON_PLATEDHOLES, LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
+                LAYER_RATSNEST, LAYER_CURSOR
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -248,8 +249,8 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     const LAYER_NUM layers[] = {
             LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
             LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
-            LAYER_NON_PLATEDHOLES, LAYER_GP_OVERLAY, LAYER_RATSNEST,
-            LAYER_DRC
+            LAYER_NON_PLATEDHOLES, LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
+            LAYER_RATSNEST, LAYER_DRC
     };
 
     for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -312,6 +313,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_PADS_PLATEDHOLES, true );
     m_view->SetLayerVisible( LAYER_VIAS_HOLES, true );
     m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
+    m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
 }
 
 
@@ -453,6 +455,8 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetRequired( LAYER_MOD_TEXT_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );
 
+    m_view->SetLayerTarget( LAYER_SELECT_OVERLAY , KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;
     m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY ) ;
     m_view->SetLayerTarget( LAYER_RATSNEST, KIGFX::TARGET_OVERLAY );

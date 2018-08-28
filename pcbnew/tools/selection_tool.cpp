@@ -1393,7 +1393,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     KIGFX::VIEW_GROUP highlightGroup;
     CONTEXT_MENU menu;
 
-    highlightGroup.SetLayer( LAYER_GP_OVERLAY );
+    highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
 
     int limit = std::min( 9, aCollector->GetCount() );
