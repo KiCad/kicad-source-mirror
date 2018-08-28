@@ -70,6 +70,11 @@ public:
 
     ~MARKER_PCB();
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_MARKER_T == aItem->Type();
+    }
+
     void Move(const wxPoint& aMoveVector) override
     {
         m_Pos += aMoveVector;

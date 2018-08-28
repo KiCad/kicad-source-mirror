@@ -83,6 +83,11 @@ public:
 
     ~DIMENSION();
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_DIMENSION_T == aItem->Type();
+    }
+
     void SetValue( int aValue ) { m_Value = aValue; }
 
     int GetValue() const { return m_Value; }
