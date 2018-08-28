@@ -43,7 +43,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 
     m_shape = NULL;
     m_clearance = -1;
-    m_originLayer = m_layer = LAYER_GP_OVERLAY ;
+    m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
 
     m_showTrackClearance = false;
     m_showViaClearance = false;

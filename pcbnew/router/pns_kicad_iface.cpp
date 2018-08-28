@@ -376,7 +376,7 @@ public:
             return;
 
         m_items = new KIGFX::VIEW_GROUP( m_view );
-        m_items->SetLayer( LAYER_GP_OVERLAY ) ;
+        m_items->SetLayer( LAYER_SELECT_OVERLAY ) ;
         m_view->Add( m_items );
     }
 
@@ -1218,7 +1218,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
     m_view = aView;
     m_previewItems = new KIGFX::VIEW_GROUP( m_view );
-    m_previewItems->SetLayer( LAYER_GP_OVERLAY ) ;
+    m_previewItems->SetLayer( LAYER_SELECT_OVERLAY ) ;
     m_view->Add( m_previewItems );
 
     delete m_debugDecorator;

@@ -41,7 +41,7 @@
 using namespace KIGFX;
 
 VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
-    m_layer( LAYER_GP_OVERLAY )
+    m_layer( LAYER_SELECT_OVERLAY )
 {
 }
 

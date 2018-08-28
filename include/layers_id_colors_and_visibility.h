@@ -193,9 +193,10 @@ enum GAL_LAYER_ID: int
     LAYER_DRC,                  ///< drc markers
     LAYER_WORKSHEET,            ///< worksheet frame
     LAYER_GP_OVERLAY,           ///< general purpose overlay
+    LAYER_SELECT_OVERLAY,       ///< currently selected items overlay
     LAYER_PCB_BACKGROUND,       ///< PCB background color
     LAYER_CURSOR,               ///< PCB cursor
-    LAYER_AUX_ITEMS,            ///< Auxillary items (guides, rule, etc)
+    LAYER_AUX_ITEMS,            ///< Auxiliary items (guides, rule, etc)
 
     /// This is the end of the layers used for visibility bitmasks in Pcbnew
     /// There can be at most 32 layers above here.
@@ -305,6 +306,7 @@ enum GERBVIEW_LAYER_ID: int
 #define MIN_VISIBILITY_MASK int( ( 1 << GAL_LAYER_INDEX( LAYER_PADS_PLATEDHOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_SELECT_OVERLAY ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) )
 
 
