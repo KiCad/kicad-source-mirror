@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,12 @@ void D_PAD::AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness )
 {
     std::vector<wxPoint> points;
 
-    for( auto iter = aPoly.CIterate(); iter; iter++ )
+    // If aPoly has holes, convert it to a polygon with no holes.
+    SHAPE_POLY_SET poly_no_hole;
+    poly_no_hole.Append( aPoly );
+    poly_no_hole.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    for( auto iter = poly_no_hole.CIterate(); iter; iter++ )
         points.push_back( wxPoint( iter->x, iter->y ) );
 
     AddPrimitive( points, aThickness );
