@@ -527,7 +527,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
      */
     auto doGraphicItem = [&]( BOARD_ITEM* aItem )
     {
-        if( !aItem->IsOnLayer( aZone->GetLayer() ) )
+        // A item on the Edge_Cuts is always seen as on any layer:
+        if( !aItem->IsOnLayer( aZone->GetLayer() ) && !aItem->IsOnLayer( Edge_Cuts ) )
             return;
 
         if( !aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
