@@ -648,7 +648,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
     KIGFX::VIEW_GROUP highlightGroup;
     CONTEXT_MENU menu;
 
-    highlightGroup.SetLayer( LAYER_GP_OVERLAY );
+    highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
 
     int limit = std::min( 10, aCollector->GetCount() );
