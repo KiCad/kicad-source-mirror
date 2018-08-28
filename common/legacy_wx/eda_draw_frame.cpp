@@ -90,8 +90,6 @@ static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 /// Most recently used grid size (suffix)
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
-/// GAL Display Options
-static const wxString GalDisplayOptionsKeyword( wxT( "GalDisplayOptions" ) );
 
 const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 
@@ -148,8 +146,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString & aFrameName ) :
-    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_galDisplayOptions( std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>() )
+    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_socketServer        = nullptr;
     m_drawToolBar         = NULL;
@@ -310,6 +307,8 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 
     Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &option );
     m_canvas->SetEnableAutoPan( option );
+
+    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
 }
 
 
@@ -829,7 +828,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
-    m_galDisplayOptions->ReadConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
+    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
 }
 
 
@@ -848,8 +847,6 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
-
-    m_galDisplayOptions->WriteConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
 

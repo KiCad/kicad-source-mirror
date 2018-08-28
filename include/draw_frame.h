@@ -67,17 +67,17 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     friend class EDA_DRAW_PANEL;
 
     ///< Id of active button on the vertical toolbar.
-    int         m_toolId;
+    int                 m_toolId;
 
-    BASE_SCREEN*    m_currentScreen;            ///< current used SCREEN
+    BASE_SCREEN*        m_currentScreen;      ///< current used SCREEN
 
-    bool        m_snapToGrid;                   ///< Indicates if cursor should be snapped to grid.
-    bool        m_galCanvasActive;              ///< whether to use new GAL engine
+    bool                m_snapToGrid;         ///< Indicates if cursor should be snapped to grid.
+    bool                m_galCanvasActive;    ///< whether to use new GAL engine
 
     EDA_DRAW_PANEL_GAL* m_galCanvas;
 
     ///< GAL display options - this is the frame's interface to setting GAL display options
-    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_galDisplayOptions;
+    KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
     bool m_useSingleCanvasPane;
 
 
@@ -923,7 +923,7 @@ public:
      * Function GetGalDisplayOptions
      * Returns a reference to the gal rendering options used by GAL for rendering.
      */
-    KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return *m_galDisplayOptions; }
+    KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
 
     /**
      * Function SyncMenusAndToolbars

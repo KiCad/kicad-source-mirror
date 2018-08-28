@@ -53,6 +53,7 @@
 #include <dialog_configure_paths.h>
 #include <lockfile.h>
 #include <systemdirsappend.h>
+#include <gal/gal_display_options.h>
 
 #define KICAD_COMMON                     wxT( "kicad_common" )
 
@@ -551,24 +552,41 @@ void PGM_BASE::loadCommonSettings()
     if( !m_common_settings->HasEntry( USE_ICONS_IN_MENUS_KEY ) )
         m_common_settings->Write( USE_ICONS_IN_MENUS_KEY, defaultUseIconsInMenus );
 
-    if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
+    if( !m_common_settings->HasEntry( ICON_SCALE_KEY )
+        || !m_common_settings->HasEntry( GAL_DISPLAY_OPTIONS_KEY ) )
     {
-        // 5.0 and earlier saved these for each app; we arbitrarily pick pcbnew to fetch them from
-        wxConfigBase* cfg = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
-        wxString value;
-        bool option;
+        // 5.0 and earlier saved common settings in each app, and saved GAL display options
+        // only in pcbnew (which was the only canvas to support them).  Since there's no
+        // single right answer to where to pull the common settings from, we might as well
+        // get them along with the GAL display options from pcbnew.
+        wxConfigBase* pcbnewConfig = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
 
-        cfg->Read( "PcbIconScale", &value );
-        m_common_settings->Write( ICON_SCALE_KEY, value );
+        if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
+        {
+            wxString value;
+            bool option;
 
-        cfg->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
-        m_common_settings->Write( ENBL_MOUSEWHEEL_PAN_KEY, option );
+            pcbnewConfig->Read( "PcbIconScale", &value );
+            m_common_settings->Write( ICON_SCALE_KEY, value );
 
-        cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &option, false );
-        m_common_settings->Write( ENBL_ZOOM_NO_CENTER_KEY, option );
+            pcbnewConfig->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
+            m_common_settings->Write( ENBL_MOUSEWHEEL_PAN_KEY, option );
 
-        cfg->Read( ENBL_AUTO_PAN_KEY, &option, true );
-        m_common_settings->Write( ENBL_AUTO_PAN_KEY, option );
+            pcbnewConfig->Read( ENBL_ZOOM_NO_CENTER_KEY, &option, false );
+            m_common_settings->Write( ENBL_ZOOM_NO_CENTER_KEY, option );
+
+            pcbnewConfig->Read( ENBL_AUTO_PAN_KEY, &option, true );
+            m_common_settings->Write( ENBL_AUTO_PAN_KEY, option );
+        }
+
+        if( !m_common_settings->HasEntry( GAL_DISPLAY_OPTIONS_KEY ) )
+        {
+            KIGFX::GAL_DISPLAY_OPTIONS temp;
+            temp.ReadConfig( pcbnewConfig, wxString( "PcbFrame" ) + GAL_DISPLAY_OPTIONS_KEY );
+            temp.WriteConfig( m_common_settings, GAL_DISPLAY_OPTIONS_KEY );
+
+            m_common_settings->Write( GAL_DISPLAY_OPTIONS_KEY, 1 );
+        }
     }
 
     m_editor_name = m_common_settings->Read( wxT( "Editor" ) );

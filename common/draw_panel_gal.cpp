@@ -48,7 +48,8 @@
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
-    wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ), m_options( aOptions )
+    wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
+    m_options( aOptions )
 {
     m_parent     = aParentWindow;
     m_edaFrame   = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );

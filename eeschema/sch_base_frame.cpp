@@ -499,11 +499,8 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
 
 void EDA_DRAW_FRAME::createCanvas()
 {
-    KIGFX::GAL_DISPLAY_OPTIONS options;
-
-    m_canvas = new SCH_DRAW_PANEL( this, -1, wxPoint( 0,
-                        0 ), m_FrameSize, options, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
+    m_canvas = new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
+                                   m_galDisplayOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 
     m_useSingleCanvasPane = true;
 

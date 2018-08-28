@@ -87,8 +87,6 @@ static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 /// Most recently used grid size (suffix)
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
-/// GAL Display Options
-static const wxString GalDisplayOptionsKeyword( wxT( "GalDisplayOptions" ) );
 
 const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 
@@ -145,8 +143,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString & aFrameName ) :
-    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_galDisplayOptions( std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>() )
+    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_useSingleCanvasPane = false;
     m_socketServer        = nullptr;
@@ -293,6 +290,14 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 {
     EDA_BASE_FRAME::CommonSettingsChanged();
 
+    int autosaveInterval;
+    Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
+    SetAutoSaveInterval( autosaveInterval );
+
+    int historySize;
+    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    Kiface().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+
     bool option;
     Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
     m_canvas->SetEnableMousewheelPan( option );
@@ -302,6 +307,8 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 
     Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &option );
     m_canvas->SetEnableAutoPan( option );
+
+    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
 }
 
 
@@ -806,8 +813,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     // Read grid color:
     COLOR4D wtmp = COLOR4D::UNSPECIFIED;
 
-    if( wtmp.SetFromWxString( aCfg->Read(
-                baseCfgName + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
+    if( wtmp.SetFromWxString( aCfg->Read( baseCfgName + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
         SetGridColor( wtmp );
 
     aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
@@ -821,7 +827,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
-    m_galDisplayOptions->ReadConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
+    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
 }
 
 
@@ -840,8 +846,6 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
-
-    m_galDisplayOptions->WriteConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
 
