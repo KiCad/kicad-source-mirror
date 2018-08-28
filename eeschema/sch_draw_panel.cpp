@@ -37,23 +37,24 @@
 #include <functional>
 
 #include <sch_sheet.h>
+#include <pgm_base.h>
 
 using namespace std::placeholders;
 
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
-                                        const wxPoint& aPosition, const wxSize& aSize,
-                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
-EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, GAL_TYPE_OPENGL ),
-m_parent( aParentWindow )
+                                const wxPoint& aPosition, const wxSize& aSize,
+                                KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
+    EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
+    m_parent( aParentWindow )
 {
-    #ifdef __WXMAC__
-        m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
-        m_showCrossHair = false;
-    #else
-        m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
-        m_showCrossHair = true;
-    #endif
+#ifdef __WXMAC__
+    m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
+    m_showCrossHair = false;
+#else
+    m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
+    m_showCrossHair = true;
+#endif
 
     m_view = new KIGFX::SCH_VIEW( true );
     m_view->SetGAL( m_gal );
@@ -91,11 +92,12 @@ m_parent( aParentWindow )
     Connect( wxEVT_CHAR, wxKeyEventHandler( SCH_DRAW_PANEL::OnKeyEvent ), NULL, this );
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( SCH_DRAW_PANEL::OnCharHook ), NULL, this );
 
+    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
+    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
+    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
+
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
-    m_enableMousewheelPan = false;
-    m_enableZoomNoCenter = false;
-    m_enableAutoPan = true;
     m_ignoreMouseEvents = false;
     // Be sure a mouse release button event will be ignored when creating the canvas
     // if the mouse click was not made inside the canvas (can happen sometimes, when

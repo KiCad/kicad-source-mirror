@@ -9,9 +9,11 @@
 #include <class_drawpanel.h>
 
 
-namespace KIGFX {
+namespace KIGFX
+{
     class SCH_VIEW;
-    namespace PREVIEW {
+    namespace PREVIEW
+    {
         class SELECTION_AREA;
     };
 };
@@ -23,16 +25,17 @@ class SCH_SCREEN;
 class COLORS_DESIGN_SETTINGS;
 class SCH_EDIT_FRAME;
 
+
 class SCH_DRAW_PANEL : public EDA_DRAW_PANEL, public EDA_DRAW_PANEL_GAL
 {
 public:
     SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
-                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                        GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+                    const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+                    GAL_TYPE aGalType = GAL_TYPE_OPENGL );
 
     ~SCH_DRAW_PANEL();
 
-    virtual wxWindow* GetWindow() override { return this; };
+    virtual wxWindow* GetWindow() override { return this; }
 
     /**
      * Function DisplayBoard FIXME
