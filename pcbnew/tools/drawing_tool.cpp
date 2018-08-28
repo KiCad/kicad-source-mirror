@@ -1296,6 +1296,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
 bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZone )
 {
+    bool clearSelection = false;
     aZone = nullptr;
 
     // not an action that needs a source zone
@@ -1306,17 +1307,23 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
     const SELECTION& selection = selTool->GetSelection();
 
     if( selection.Empty() )
+    {
+        clearSelection = true;
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+    }
 
     // we want a single zone
-    if( selection.Size() != 1 )
-        return false;
-
-    aZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
+    if( selection.Size() == 1 )
+        aZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
 
     // expected a zone, but didn't get one
     if( !aZone )
+    {
+        if( clearSelection )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
         return false;
+    }
 
     return true;
 }
@@ -1434,7 +1441,10 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     ZONE_CONTAINER* sourceZone = nullptr;
 
     if( !getSourceZoneForAction( aMode, sourceZone ) )
+    {
+        m_frame->SetNoToolSelected();
         return 0;
+    }
 
     ZONE_CREATE_HELPER::PARAMS params;
 
@@ -1452,13 +1462,12 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
     auto& controls = *getViewControls();
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
     controls.ShowCursor( true );
     controls.SetSnapping( true );
 
     runPolygonEventLoop( polyGeomMgr );
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->SetNoToolSelected();
 
     return 0;
