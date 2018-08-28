@@ -73,10 +73,14 @@ public:
 
     ~MARKER_PCB();
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_MARKER_T == aItem->Type();
+    }
+
     /** A scaling factor to create the marker symbol
     */
     static int MarkerScale() {return Millimeter2iu( 0.1 ); }
-
 
     void Move(const wxPoint& aMoveVector) override
     {
