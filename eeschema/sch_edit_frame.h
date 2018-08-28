@@ -913,6 +913,11 @@ private:
     void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
 
     /**
+     * Close the ERC dialog if it is open.
+     */
+    void CloseErc();
+
+    /**
      * Set the main window title bar text.
      *
      * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the

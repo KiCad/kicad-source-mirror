@@ -810,6 +810,16 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 }
 
 
+void SCH_EDIT_FRAME::CloseErc()
+{
+    // Find the ERC dialog if it's open and close it
+    wxWindow* erc = FindWindowById( ID_DIALOG_ERC, this );
+
+    if( erc )
+        erc->Close( false );
+}
+
+
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
     doUpdatePcb( "" );
