@@ -40,11 +40,13 @@ class wxButton;
 class wxTimer;
 
 class LIB_TREE;
+class SYMBOL_PREVIEW_WIDGET;
 class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;
 class LIB_ALIAS;
 class LIB_PART;
 class SCH_BASE_FRAME;
+class SCH_DRAW_PANEL;
 
 
 /**
@@ -152,8 +154,6 @@ protected:
     void OnCloseTimer( wxTimerEvent& aEvent );
     void OnUseBrowser( wxCommandEvent& aEvent );
 
-    void OnSymbolPreviewPaint( wxPaintEvent& aEvent );
-
     void OnFootprintSelected( wxCommandEvent& aEvent );
     void OnComponentPreselected( wxCommandEvent& aEvent );
 
@@ -189,14 +189,14 @@ protected:
     void RenderPreview( LIB_PART* aComponent, int aUnit );
 
     wxTimer*                  m_dbl_click_timer;
-    wxPanel*                  m_symbol_preview;
+    SYMBOL_PREVIEW_WIDGET*    m_symbol_preview;
     wxButton*                 m_browser_button;
     wxSplitterWindow*         m_hsplitter;
     wxSplitterWindow*         m_vsplitter;
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_preview;
-    LIB_TREE*           m_tree;
+    LIB_TREE*                 m_tree;
 
     static int                m_h_sash_pos;     // remember sash positions during a session
     static int                m_v_sash_pos;

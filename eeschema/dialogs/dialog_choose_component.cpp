@@ -43,6 +43,7 @@
 #include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
+#include <widgets/symbol_preview_widget.h>
 
 
 wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
@@ -145,7 +146,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
     Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
-    m_symbol_preview->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint, this );
 
     if( m_browser_button )
         m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
@@ -180,7 +180,6 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );
     Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
     Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
-    m_symbol_preview->Unbind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint, this );
 
     if( m_browser_button )
         m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
@@ -208,8 +207,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto panel = new wxPanel( aParent );
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_symbol_preview = new wxPanel( panel, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-                                    wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL );
+    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, Kiway() );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
@@ -302,8 +300,7 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
-                                         "\n\n%s" ),
+        wxLogError( wxString::Format( _( "Error loading symbol %s from library %s.\n\n%s" ),
                                       aLibId.GetLibItemName().wx_str(),
                                       aLibId.GetLibNickname().wx_str(),
                                       ioe.What() ) );
@@ -393,63 +390,6 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnSymbolPreviewPaint( wxPaintEvent& aEvent )
-{
-    int unit = 0;
-    LIB_ID id = m_tree->GetSelectedLibId( &unit );
-
-    if( !id.IsValid() )
-    {
-        // No symbol to show, display a tooltip
-        RenderPreview( nullptr, unit );
-        return;
-    }
-
-    LIB_ALIAS* alias = nullptr;
-
-    try
-    {
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
-                                         "\n\n%s" ),
-                                      id.GetLibItemName().wx_str(),
-                                      id.GetLibNickname().wx_str(),
-                                      ioe.What() ) );
-    }
-
-    if( !alias )
-        return;
-
-    LIB_PART*  part = alias->GetPart();
-
-    // Don't draw if we don't have a part to show, just display a tooltip
-    if( !part )
-    {
-        RenderPreview( nullptr, unit );
-        return;
-    }
-
-    if( alias->IsRoot() )
-    {
-        // just show the part directly
-        RenderPreview( part, unit );
-    }
-    else
-    {
-        // switch out the name temporarily for the alias name
-        wxString tmp( part->GetName() );
-        part->SetName( alias->GetName() );
-
-        RenderPreview( part, unit );
-
-        part->SetName( tmp );
-    }
-}
-
-
 void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
@@ -471,15 +411,18 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
 
     LIB_ID id = m_tree->GetSelectedLibId( &unit );
 
-    m_symbol_preview->Refresh();
 
     if( id.IsValid() )
     {
+        m_symbol_preview->DisplaySymbol( id, unit );
+
         ShowFootprintFor( id );
         PopulateFootprintSelector( id );
     }
     else
     {
+        m_symbol_preview->SetStatusText( _( "No symbol selected" ) );
+
         if( m_fp_preview && m_fp_preview->IsInitialized() )
             m_fp_preview->SetStatusText( wxEmptyString );
 
@@ -509,46 +452,3 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentSelected( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
-{
-    wxPaintDC dc( m_symbol_preview );
-
-    const wxSize dc_size = dc.GetSize();
-
-    // Avoid rendering when either dimension is zero
-    if( dc_size.x == 0 || dc_size.y == 0 )
-        return;
-
-    GRResetPenAndBrush( &dc );
-
-    COLOR4D bgColor = m_parent->GetDrawBgColor();
-
-    dc.SetBackground( wxBrush( bgColor.ToColour() ) );
-    dc.Clear();
-
-    if( !aComponent )   // display a tooltip
-    {
-        wxString tooltip = _( "No symbol selected" );
-        GRDrawWrappedText( dc, tooltip );
-        return;
-    }
-
-    int unit = aUnit > 0 ? aUnit : 1;
-    int convert = m_deMorganConvert > 0 ? m_deMorganConvert : 1;
-
-    dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
-
-    // Find joint bounding box for everything we are about to draw.
-    EDA_RECT     bBox = aComponent->GetUnitBoundingBox( unit, convert );
-    const double xscale = (double) dc_size.x / bBox.GetWidth();
-    const double yscale = (double) dc_size.y / bBox.GetHeight();
-    const double scale = std::min( xscale, yscale ) * 0.85;
-
-    dc.SetUserScale( scale, scale );
-
-    wxPoint offset = -bBox.Centre();
-
-    auto opts = PART_DRAW_OPTIONS::Default();
-    opts.draw_hidden_fields = false;
-    aComponent->Draw( nullptr, &dc, offset, unit, convert, opts );
-}

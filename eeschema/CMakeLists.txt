@@ -90,6 +90,7 @@ set( EESCHEMA_DLGS
 set( EESCHEMA_WIDGETS
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
+    widgets/symbol_preview_widget.cpp
     widgets/symbol_tree_pane.cpp
     widgets/widget_eeschema_color_config.cpp
     )
@@ -193,6 +194,7 @@ set( EESCHEMA_SRCS
     sch_marker.cpp
     sch_no_connect.cpp
     sch_plugin.cpp
+    sch_preview_panel.cpp
     sch_screen.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp
