@@ -287,6 +287,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_SCH_PLACE_COMPONENT:
         if( (item == NULL) || (item->GetFlags() == 0) )
         {
+            // ERC dialog interferes with moving items so we close it before starting
+            CloseErc();
             GetScreen()->SetCurItem( Load_Component( aDC, NULL,
                                                      s_CmpNameList, true ) );
             m_canvas->SetAutoPanRequest( true );
