@@ -44,7 +44,7 @@ using namespace std::placeholders;
 SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                       const wxPoint& aPosition, const wxSize& aSize,
                                       KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
-    EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, GAL_TYPE_OPENGL ),
+    EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
     m_parent( aParentWindow )
 {
     m_view = new KIGFX::SCH_VIEW( true );

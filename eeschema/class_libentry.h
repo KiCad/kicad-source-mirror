@@ -87,6 +87,9 @@ protected:
     wxString        keyWords;       ///< keyword list (used for search for parts by keyword)
     wxString        docFileName;    ///< Associate doc file name
 
+    int             tmpUnit;        ///< Temporary unit designator (used for rendering)
+    int             tmpConversion;  ///< Temporary conversion designator (used for rendering)
+
 public:
     LIB_ALIAS( const wxString& aName, LIB_PART* aRootComponent );
     LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootComponent = NULL );
@@ -155,6 +158,18 @@ public:
      * For symbols with units, return an identifier for unit x.
      */
     wxString GetUnitReference( int aUnit ) override;
+
+    /**
+     * A temporary unit designation for rendering, preview, etc.
+     */
+    void SetTmpUnit( int aUnit ) { tmpUnit = aUnit; }
+    int GetTmpUnit() { return tmpUnit; }
+
+    /**
+     * A temporary conversion (deMorgan) designation for rendering, preview, etc.
+     */
+    void SetTmpConversion( int aConversion ) { tmpConversion = aConversion; }
+    int GetTmpConversion() { return tmpConversion; }
 
     /**
      * KEEPCASE sensitive comparison of the part entry name.

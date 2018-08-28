@@ -193,10 +193,8 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
 void SCH_PAINTER::draw( LIB_ALIAS *aAlias, int aLayer )
 {
     LIB_PART* comp = aAlias->GetPart();
-    int unit = 0;
-    int convert = 0;
 
-    draw( comp, aLayer, false, unit, convert );
+    draw( comp, aLayer, false, aAlias->GetTmpUnit(), aAlias->GetTmpConversion() );
 
     LIB_FIELDS fields;
     comp->GetFields( fields );

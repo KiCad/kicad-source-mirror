@@ -64,7 +64,9 @@ int LIB_PART::m_subpartFirstId = 'A';
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ) :
     EDA_ITEM( LIB_ALIAS_T ),
-    shared( aRootPart )
+    shared( aRootPart ),
+    tmpUnit( 0 ),
+    tmpConversion( 0 )
 {
     SetName( aName );
 }
@@ -72,7 +74,9 @@ LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ) :
 
 LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootPart ) :
     EDA_ITEM( aAlias ),
-    shared( aRootPart )
+    shared( aRootPart ),
+    tmpUnit( 0 ),
+    tmpConversion( 0 )
 {
     name   = aAlias.name;
 

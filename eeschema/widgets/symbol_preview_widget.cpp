@@ -89,7 +89,14 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
 
     if( alias )
     {
-        // JEY TODO: how to communicate unit to drawing code?
+        LIB_PART* part = alias->GetPart();
+
+        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
+        // draw all of them.)
+        if( part->IsMulti() && aUnit == 0 )
+            aUnit = 1;
+
+        alias->SetTmpUnit( aUnit );
         view->Add( alias );
 
         // Zoom to fit
