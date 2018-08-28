@@ -32,6 +32,7 @@ class LIB_PIN;
 class LIB_CIRCLE;
 class LIB_ITEM;
 class LIB_PART;
+class LIB_ALIAS;
 class LIB_POLYLINE;
 class LIB_ARC;
 class LIB_FIELD;
@@ -120,6 +121,7 @@ private:
 	void draw( LIB_CIRCLE *, int );
 	void draw( LIB_ITEM *, int );
 	void draw( LIB_PART *, int, bool aDrawFields = true, int aUnit = 0, int aConvert = 0 );
+    void draw( LIB_ALIAS *, int );
     void draw( LIB_ARC *, int );
     void draw( LIB_POLYLINE *, int );
     void draw( LIB_FIELD *, int );

@@ -399,9 +399,7 @@ public:
     void SetFields( const std::vector <LIB_FIELD>& aFieldsList );
 
     /**
-     * Return a list of fields withing this part. The only known caller of
-     * this function is the library part field editor, and it establishes
-     * needed behavior.
+     * Return a list of fields within this part.
      *
      * @param aList - List to add fields to
      */

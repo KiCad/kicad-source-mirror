@@ -813,9 +813,6 @@ void LIB_PART::GetFields( LIB_FIELDS& aList )
 {
     LIB_FIELD*  field;
 
-    // The only caller of this function is the library field editor, so it
-    // establishes policy here.
-
     // Grab the MANDATORY_FIELDS first, in expected order given by
     // enum NumFieldType
     for( int id=0;  id<MANDATORY_FIELDS;  ++id )

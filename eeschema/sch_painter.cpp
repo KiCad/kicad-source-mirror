@@ -141,6 +141,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 */
 	switch(item->Type())
 	{
+	HANDLE_ITEM(LIB_ALIAS_T, LIB_ALIAS);
 	HANDLE_ITEM(LIB_PART_T, LIB_PART);
 	HANDLE_ITEM(LIB_RECTANGLE_T, LIB_RECTANGLE);
         HANDLE_ITEM(LIB_POLYLINE_T, LIB_POLYLINE);
@@ -170,23 +171,47 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 	return false;
 }
 
-void SCH_PAINTER::draw ( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert )
+
+void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert )
 {
-    auto comp = const_cast<LIB_PART*>(aComp);
-    for ( auto& item : comp->GetDrawItems() )
+    for( auto& item : aComp->GetDrawItems() )
     {
-		if( !aDrawFields && item.Type() == LIB_FIELD_T)
+		if( !aDrawFields && item.Type() == LIB_FIELD_T )
             continue;
 
-        if ( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
+        if( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
             continue;
 
-        if ( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
+        if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
             continue;
 
-        Draw ( &item, aLayer );
+        Draw( &item, aLayer );
     }
 }
+
+
+void SCH_PAINTER::draw( LIB_ALIAS *aAlias, int aLayer )
+{
+    LIB_PART* comp = aAlias->GetPart();
+    int unit = 0;
+    int convert = 0;
+
+    draw( comp, aLayer, false, unit, convert );
+
+    LIB_FIELDS fields;
+    comp->GetFields( fields );
+
+    if( !aAlias->IsRoot() )
+    {
+        fields[ VALUE ].SetText( aAlias->GetName() );
+        fields[ DATASHEET ].SetText( aAlias->GetDocFileName() );
+    }
+
+    for( LIB_FIELD& field : fields )
+        draw( &field, aLayer );
+}
+
+
 
 static VECTOR2D mapCoords( const wxPoint& aCoord )
 {
