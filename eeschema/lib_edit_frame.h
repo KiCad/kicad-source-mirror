@@ -62,6 +62,9 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
 
+    // Copy/cut/paste buffer to move parts between libraries
+    std::unique_ptr<LIB_PART> m_copiedPart;
+
     /** Convert of the item currently being drawn. */
     bool m_drawSpecificConvert;
 
@@ -293,6 +296,8 @@ public:
     void OnRemovePart( wxCommandEvent& aEvent );
 
     void OnDuplicatePart( wxCommandEvent& aEvent );
+    void OnCopyCutPart( wxCommandEvent& aEvent );
+    void OnPasteDuplicatePart( wxCommandEvent& aEvent );
 
     void OnSelectPart( wxCommandEvent& event );
 

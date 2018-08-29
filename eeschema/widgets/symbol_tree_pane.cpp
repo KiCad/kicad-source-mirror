@@ -65,6 +65,8 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
                  KiBitmap( new_component_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_IMPORT_PART, _( "&Import Symbol..." ),
                  KiBitmap( import_part_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ),
+                 KiBitmap( paste_xpm ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
     AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "&Edit Symbol" ),
@@ -81,6 +83,12 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
                  KiBitmap( delete_xpm ) );
     AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
                  KiBitmap( undo_xpm ) );
+
+    menuPart->AppendSeparator();
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut" ),
+                 KiBitmap( cut_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_COPY_PART, _( "Copy" ),
+                 KiBitmap( copy_xpm ) );
 
     menuPart->AppendSeparator();
     AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "E&xport Symbol..." ),

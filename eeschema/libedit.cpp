@@ -490,16 +490,39 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnDuplicatePart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
 {
-    int unit = 0;
-    LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &unit );
+    int dummyUnit;
+    LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
+    LIB_PART* part = m_libMgr->GetBufferedPart( libId.GetLibItemName(), libId.GetLibNickname() );
+
+    if( !part )
+        return;
+
+    m_copiedPart.reset( new LIB_PART( *part ) );
+
+    if( aEvent.GetId() == ID_LIBEDIT_CUT_PART )
+        OnRemovePart( aEvent );
+}
+
+
+void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
+{
+    int dummyUnit;
+    LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
     wxString lib = libId.GetLibNickname();
 
     if( !m_libMgr->LibraryExists( lib ) )
         return;
 
-    LIB_PART* srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+    LIB_PART* srcPart = nullptr;
+
+    if( aEvent.GetId() == ID_LIBEDIT_DUPLICATE_PART )
+        srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+    else if( aEvent.GetId() == ID_LIBEDIT_PASTE_PART )
+        srcPart = m_copiedPart.get();
+    else
+        wxFAIL;
 
     if( !srcPart )
         return;
