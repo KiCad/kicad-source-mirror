@@ -293,23 +293,23 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 }
 
 
-bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<D_PAD*>& connectedPads )
+bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<D_PAD*>& changingPads )
 {
     wxString msg;
 
-    if( connectedPads.size() == 1 )
+    if( changingPads.size() == 1 )
     {
-        D_PAD* pad = *connectedPads.begin();
+        D_PAD* pad = *changingPads.begin();
         msg.Printf( _( "This will change the net assigned to %s pad %s to %s.\n"
                        "Do you wish to continue?" ),
                     pad->GetParent()->GetReference(),
                     pad->GetName(),
                     m_netSelector->GetValue() );
     }
-    else if( connectedPads.size() == 2 )
+    else if( changingPads.size() == 2 )
     {
-        D_PAD* pad1 = *connectedPads.begin();
-        D_PAD* pad2 = *( ++connectedPads.begin() );
+        D_PAD* pad1 = *changingPads.begin();
+        D_PAD* pad2 = *( ++changingPads.begin() );
         msg.Printf( _( "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
                        "Do you wish to continue?" ),
                     pad1->GetParent()->GetReference(),
@@ -322,13 +322,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<D_PAD*>& conn
     {
         msg.Printf( _( "This will change the net assigned to %d connected pads to %s.\n"
                        "Do you wish to continue?" ),
-                    connectedPads.size(),
+                    changingPads.size(),
                     m_netSelector->GetValue() );
     }
 
     KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
     dlg.SetOKLabel( _( "Continue" ) );
-    dlg.DoNotShowCheckbox();
+    dlg.DoNotShowCheckbox( true );
 
     return dlg.ShowModal() == wxID_OK;
 }
@@ -336,23 +336,32 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<D_PAD*>& conn
 
 bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
-    std::set<D_PAD*> connectedPads;
     auto connectivity = m_frame->GetBoard()->GetConnectivity();
+    int newNetCode = m_netSelector->GetSelectedNetcode();
+    std::vector<D_PAD*> changingPads;
 
     if ( !m_netSelector->IsIndeterminate() )
     {
+        std::set<D_PAD*> connectedPads;
+
         for( auto& item : m_items )
         {
             auto boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
             connectivity->GetConnectedPads( boardItem, &connectedPads );
         }
+
+        for( D_PAD* pad : connectedPads )
+        {
+            if( pad->GetNetCode() != newNetCode )
+                changingPads.push_back( pad );
+        }
     }
 
     // Run validations:
 
-    if( connectedPads.size() )
+    if( changingPads.size() )
     {
-        if( !confirmPadChange( connectedPads ) )
+        if( !confirmPadChange( changingPads ) )
             return false;
     }
 
@@ -512,7 +521,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         // Commit::Push() will rebuild connectivitiy propagating nets from connected pads
         // outwards.  We therefore have to update the connected pads in order for the net
         // change to "stick".
-        for( D_PAD* pad : connectedPads )
+        for( D_PAD* pad : changingPads )
         {
             m_commit.Modify( pad );
             pad->SetNetCode( m_netSelector->GetSelectedNetcode() );

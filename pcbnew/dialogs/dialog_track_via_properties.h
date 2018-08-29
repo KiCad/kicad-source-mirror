@@ -49,7 +49,7 @@ private:
     void onViaSelect( wxCommandEvent& aEvent );
     void onViaEdit( wxCommandEvent& aEvent );
 
-    bool confirmPadChange( const std::set<D_PAD*>& connectedPads );
+    bool confirmPadChange( const std::vector<D_PAD*>& connectedPads );
 
     PCB_BASE_FRAME*  m_frame;
     const SELECTION& m_items;   // List of items to be modified.
