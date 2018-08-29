@@ -49,7 +49,12 @@ public:
 
     wxString GetColLabelValue( int aCol ) override
     {
-        return aCol == 1 ? wxString( _( "Move To:" ) ) : wxString( wxEmptyString );
+        switch( aCol )
+        {
+        case 0: return _( "Move items on:" );
+        case 1: return _( "To layer:" );
+        default: return wxEmptyString;
+        }
     }
 
     wxString GetValue( int row, int col ) override { return "undefined"; }
