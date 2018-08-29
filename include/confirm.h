@@ -51,10 +51,7 @@ public:
     KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType, const wxString& aCaption = "" );
 
     ///> Shows the 'do not show again' checkbox
-    void DoNotShowCheckbox()
-    {
-        ShowCheckBox( _( "Do not show again" ), false );
-    }
+    void DoNotShowCheckbox( wxString file, int line );
 
     ///> Checks the 'do not show again' setting for the dialog
     bool DoNotShowAgain() const;
@@ -64,9 +61,6 @@ public:
     int ShowModal() override;
 
 protected:
-    ///> Sets the dialog hash value
-    void setHash();
-
     ///> Unique identifier of the dialog
     unsigned long m_hash;
 

@@ -99,7 +99,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
                           "want to create a new empty directory for the project?" );
 
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxID_YES )
         {

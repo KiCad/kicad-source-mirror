@@ -170,7 +170,7 @@ bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
         wxString msg = wxString::Format( _( "File %s already exists." ), fn.GetPath() );
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Overwrite" ) );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         return ( dlg.ShowModal() == wxID_OK );
     }

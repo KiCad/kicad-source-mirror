@@ -241,7 +241,7 @@ int ALIGN_DISTRIBUTE_TOOL::checkLockedStatus( const SELECTION &selection ) const
                       _( "Selection contains locked items. Do you want to continue?" ),
                       _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Continue" ) );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxID_OK )
             return SELECTION_LOCK_OVERRIDE;

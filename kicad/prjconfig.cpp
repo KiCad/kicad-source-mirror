@@ -365,7 +365,7 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
                           _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             msgDlg.SetExtendedMessage( extendedMsg );
             msgDlg.SetOKLabel( _( "Overwrite" ) );
-            msgDlg.DoNotShowCheckbox();
+            msgDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
             if( msgDlg.ShowModal() == wxID_CANCEL )
                 return;

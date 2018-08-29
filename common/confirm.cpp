@@ -46,7 +46,6 @@ KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
         const wxString& aCaption, long aStyle )
     : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE )
 {
-    setHash();
 }
 
 
@@ -54,7 +53,14 @@ KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
         KD_TYPE aType, const wxString& aCaption )
     : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) )
 {
-    setHash();
+}
+
+
+void KIDIALOG::DoNotShowCheckbox( wxString aUniqueId, int line )
+{
+    ShowCheckBox( _( "Do not show again" ), false );
+
+    m_hash = std::hash<wxString>{}( aUniqueId ) + line;
 }
 
 
@@ -107,14 +113,6 @@ int KIDIALOG::ShowModal()
         doNotShowAgainDlgs[m_hash] = ret;
 
     return ret;
-}
-
-
-void KIDIALOG::setHash()
-{
-    std::size_t h1 = std::hash<wxString>{}( GetMessage() );
-    std::size_t h2 = std::hash<wxString>{}( GetTitle() );
-    m_hash = h1 ^ ( h2 << 1 );
 }
 
 

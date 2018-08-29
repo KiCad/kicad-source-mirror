@@ -125,7 +125,7 @@ bool DIALOG_GENCAD_EXPORT_OPTIONS::TransferDataFromWindow()
         wxString msg = wxString::Format( _( "File %s already exists." ), fn );
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Overwrite" ) );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         return ( dlg.ShowModal() == wxID_OK );
     }

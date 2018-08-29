@@ -196,7 +196,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
                           _( "Zone fills are out-of-date. Refill?" ),
                           _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
-            dlg.DoNotShowCheckbox();
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
             refill = ( dlg.ShowModal() == wxID_OK );
 

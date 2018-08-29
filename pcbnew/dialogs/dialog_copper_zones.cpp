@@ -230,7 +230,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         KIDIALOG dlg( this, _( "The legacy segment fill mode is not recommended."
                                "Convert zone to polygon fill? "), _( "Legacy Warning" ),
                       wxYES_NO | wxICON_WARNING );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxYES )
             m_settings.m_FillMode = ZFM_POLYGONS;

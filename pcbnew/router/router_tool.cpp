@@ -1008,7 +1008,7 @@ void ROUTER_TOOL::performDragging( int aMode )
         KIDIALOG dlg( frame(), _( "The selected item is locked." ), _( "Confirmation" ),
                       wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Drag Anyway" ) );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
@@ -1162,7 +1162,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         KIDIALOG dlg( frame(), _( "The selected item is locked." ), _( "Confirmation" ),
                       wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Drag Anyway" ) );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;

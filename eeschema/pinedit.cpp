@@ -210,7 +210,7 @@ void LIB_EDIT_FRAME::PlacePin()
 
             KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             dlg.SetOKLabel( _( "Create Pin Anyway" ) );
-            dlg.DoNotShowCheckbox();
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
             bool status = dlg.ShowModal() == wxID_OK;
 

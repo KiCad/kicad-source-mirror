@@ -328,7 +328,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
                                "the external environment variable(s) from your system." );
             KIDIALOG dlg( this, msg1, KIDIALOG::KD_WARNING );
             dlg.ShowDetailedText( msg2 );
-            dlg.DoNotShowCheckbox();
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
             dlg.ShowModal();
         }
         else if( col == EV_NAME_COL && m_EnvVars->GetCellValue( row, EV_NAME_COL ) != text )

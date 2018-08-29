@@ -152,7 +152,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
             KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             errorDlg.SetOKLabel( _( "Overwrite" ) );
-            errorDlg.DoNotShowCheckbox();
+            errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
             if( errorDlg.ShowModal() == wxID_CANCEL )
                 return;

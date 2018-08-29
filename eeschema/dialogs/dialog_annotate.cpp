@@ -215,7 +215,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
         KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Clear and Annotate" ) );
-        dlg.DoNotShowCheckbox();
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         if( dlg.ShowModal() == wxCANCEL )
             return;
@@ -261,7 +261,7 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
 
     KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
     dlg.SetOKLabel( _( "Clear Annotation" ) );
-    dlg.DoNotShowCheckbox();
+    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

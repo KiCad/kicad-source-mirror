@@ -490,7 +490,7 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
                 wxString msg = wxString::Format( _( "Library %s already exists." ), libPath );
                 KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
                 dlg.SetOKLabel( _( "Overwrite" ) );
-                dlg.DoNotShowCheckbox();
+                dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
                 if( dlg.ShowModal() == wxID_CANCEL )
                     return wxEmptyString;
