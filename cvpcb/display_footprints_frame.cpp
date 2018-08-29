@@ -87,6 +87,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRA
     SetBoard( new BOARD() );
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
+    // Don't show the default board solder mask clearance.  Only the
+    // footprint or pad clearance setting should be shown if it is not 0.
+    GetBoard()->GetDesignSettings().m_SolderMaskMargin = 0;
+
     LoadSettings( config() );
 
     // Initialize grid id to a default value if not found in config or incorrect:
