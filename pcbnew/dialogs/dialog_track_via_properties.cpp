@@ -328,7 +328,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<D_PAD*>& c
 
     KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
     dlg.SetOKLabel( _( "Continue" ) );
-    dlg.DoNotShowCheckbox( true );
+    dlg.DoNotShowCheckbox();
 
     return dlg.ShowModal() == wxID_OK;
 }
