@@ -1116,14 +1116,15 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
         break;
 
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CHAMFERED_RECT:
     {
         SHAPE_POLY_SET polySet;
         int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         const int corner_radius = aPad->GetRoundRectCornerRadius( aPad->GetSize() );
-        TransformRoundRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(),
-                0.0, corner_radius, segmentToCircleCount );
+        TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(),
+                0.0, corner_radius, 0.0, 0, segmentToCircleCount );
         std::vector< wxRealPoint > cornerList;
-        // TransformRoundRectToPolygon creates only one convex polygon
+        // TransformRoundChamferedRectToPolygon creates only one convex polygon
         SHAPE_LINE_CHAIN poly( polySet.Outline( 0 ) );
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
@@ -1170,7 +1171,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
         pad_dy  = 0;
 
     case PAD_SHAPE_TRAPEZOID:
-    {
+        {
         double coord[8] =
         {
             -pad_w + pad_dy, -pad_h - pad_dx,
@@ -1209,10 +1210,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
             throw( std::runtime_error( aTinLayer->GetError() ) );
 
         break;
-    }
-
-    default:
-        break;
+        }
     }
 }
 

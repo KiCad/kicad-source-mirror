@@ -842,8 +842,8 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     // TODO: use Aperture macro and flash it
     SHAPE_POLY_SET outline;
     const int segmentToCircleCount = 64;
-    TransformRoundRectToPolygon( outline, aPadPos, aSize, aOrient,
-                                 aCornerRadius, segmentToCircleCount );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
+                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
 
     if( aTraceMode != FILLED )
         outline.Inflate( -GetCurrentLineWidth()/2, 16 );

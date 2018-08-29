@@ -36,6 +36,21 @@
 #include <macros.h>
 
 #include <geometry/shape_poly_set.h>
+
+// The chamfer positions of chamfered rect shape.
+// the position is relative to a pad with orientation = 0
+// we can have 1 to 4 chamfered corners (0 corner = roundrect)
+// The position list is the OR of corner to chamfer
+enum RECT_CHAMFER_POSITIONS
+{
+    RECT_NO_CHAMFER = 0,
+    RECT_CHAMFER_TOP_LEFT = 1,
+    RECT_CHAMFER_TOP_RIGHT = 2,
+    RECT_CHAMFER_BOTTOM_LEFT = 4,
+    RECT_CHAMFER_BOTTOM_RIGHT = 8,
+};
+
+
 /**
  * Function TransformCircleToPolygon
  * convert a circle to a polygon, using multiple straight lines
@@ -86,20 +101,29 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
             const wxPoint& aPosition, const wxSize& aSize, double aRotation );
 
+
 /**
- * Function TransformRoundRectToPolygon
- * convert a rectangle with rounded corners to a polygon
- * Convert arcs to multiple straight lines
+ * convert a rectangle with rounded corners and/or chamfered corners to a polygon
+ * Convert rounded corners arcs to multiple straight lines
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aPosition = the coordinate of the center of the rectangle
  * @param aSize = the size of the rectangle
- * @param aCornerRadius = radius of rounded corners
+ * @param aCornerRadius = radius of rounded corners (can be 0)
  * @param aRotation = rotation in 0.1 degrees of the rectangle
+ * @param aChamferRatio = ratio between smaller rect size and chamfer value
+ * @param aChamferCorners = identifier of the corners to chamfer:
+ *  0 = no chamfer
+ *  1 = TOP_LEFT
+ *  2 = TOP_RIGHT
+ *  4 = BOTTOM_LEFT
+ *  8 = BOTTOM_RIGHT
+ * One can have more than one chamfered corner by ORing the corner identifers
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  */
-void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                   const wxPoint& aPosition, const wxSize& aSize,
                                   double aRotation, int aCornerRadius,
+                                  double aChamferRatio, int aChamferCorners,
                                   int aCircleToSegmentsCount );
 
 /**

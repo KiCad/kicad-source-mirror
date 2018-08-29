@@ -323,7 +323,6 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     switch( aPad->GetShape() )
     {
-    default:
     case PAD_SHAPE_CIRCLE:
         {
             double diameter = scale( aPad->GetSize().x );
@@ -491,6 +490,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
+    case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_ROUNDRECT:
         {
             // Export the shape as as polygon, round rect does not exist as primitive
@@ -511,8 +511,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             psize.x += extra_clearance*2;
             psize.y += extra_clearance*2;
             rradius += extra_clearance;
-            TransformRoundRectToPolygon( cornerBuffer, wxPoint(0,0), psize,
-                                         0, rradius, circleToSegmentsCount );
+            bool doChamfer = aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT;
+
+            TransformRoundChamferedRectToPolygon( cornerBuffer, wxPoint(0,0), psize,
+                                         0, rradius,
+                                         aPad->GetChamferRectRatio(),
+                                         doChamfer ? aPad->GetChamferPositions() : 0,
+                                         circleToSegmentsCount );
             SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
 
             for( int ndx=0; ndx < reportedLayers; ++ndx )

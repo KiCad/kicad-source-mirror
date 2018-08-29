@@ -35,6 +35,7 @@ enum PAD_SHAPE_T
     PAD_SHAPE_OVAL,
     PAD_SHAPE_TRAPEZOID,
     PAD_SHAPE_ROUNDRECT,
+    PAD_SHAPE_CHAMFERED_RECT,   // Rectangle with a champered corner ( and with rounded other corners)
     PAD_SHAPE_CUSTOM            // A shape defined by user, using a set of basic shapes
                                 // (thick segments, circles, arcs, polygons
 };

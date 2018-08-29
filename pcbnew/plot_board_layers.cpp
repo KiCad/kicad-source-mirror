@@ -443,6 +443,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_RECT:
             case PAD_SHAPE_ROUNDRECT:
+            case PAD_SHAPE_CHAMFERED_RECT:
                 pad->SetSize( padPlotsSize );
                 itemplotter.PlotPad( pad, color, plotMode );
                 break;

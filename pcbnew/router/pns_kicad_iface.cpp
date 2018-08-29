@@ -612,6 +612,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 break;
             }
 
+            case PAD_SHAPE_CHAMFERED_RECT:
             case PAD_SHAPE_ROUNDRECT:
             {
                 SHAPE_POLY_SET outline;
@@ -624,9 +625,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
                 for( int ii = 0; ii < poly.PointCount(); ++ii )
-                {
-                    shape->Append( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
-                }
+                    shape->Append( poly.Point( ii ) );
 
                 solid->SetShape( shape );
             }
@@ -708,6 +707,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 break;
             }
 
+            case PAD_SHAPE_CHAMFERED_RECT:
             case PAD_SHAPE_ROUNDRECT:
             {
                 SHAPE_POLY_SET outline;

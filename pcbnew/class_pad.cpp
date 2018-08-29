@@ -78,11 +78,14 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     // Parameters for round rect only:
-    m_padRoundRectRadiusScale = 0.25;                   // from  IPC-7351C standard
+    m_padRoundRectRadiusScale = 0.25;               // from  IPC-7351C standard
+    // Parameters for chamfered rect only:
+    m_padChamferRectScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
+    m_chamferPositions  = RECT_NO_CHAMFER;          // No chamfered corner
 
-    m_ZoneConnection      = PAD_ZONE_CONN_INHERITED; // Use parent setting by default
-    m_ThermalWidth        = 0;                  // Use parent setting by default
-    m_ThermalGap          = 0;                  // Use parent setting by default
+    m_ZoneConnection    = PAD_ZONE_CONN_INHERITED;  // Use parent setting by default
+    m_ThermalWidth      = 0;                        // Use parent setting by default
+    m_ThermalGap        = 0;                        // Use parent setting by default
 
     m_customShapeClearanceArea = CUST_PAD_SHAPE_IN_ZONE_OUTLINE;
 
@@ -167,6 +170,14 @@ int D_PAD::boundingRadius() const
         x = m_Size.x >> 1;
         y = m_Size.y >> 1;
         radius += 1 + KiROUND( EuclideanNorm( wxSize( x - radius, y - radius )));
+        break;
+
+    case PAD_SHAPE_CHAMFERED_RECT:
+        radius = GetRoundRectCornerRadius();
+        x = m_Size.x >> 1;
+        y = m_Size.y >> 1;
+        radius += 1 + KiROUND( EuclideanNorm( wxSize( x - radius, y - radius )));
+        // TODO: modify radius if the chamfer is smaller than corner radius
         break;
 
     case PAD_SHAPE_CUSTOM:
@@ -293,6 +304,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
 
     case PAD_SHAPE_RECT:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CHAMFERED_RECT:
         // Use two opposite corners and track their rotation
         // (use symmetry for other points)
         quadrant1.x =  m_Size.x/2;
@@ -919,17 +931,23 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
 
         break;
 
+    case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_ROUNDRECT:
-    {
+        {
         // Check for hit in polygon
         SHAPE_POLY_SET outline;
         const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-        TransformRoundRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
-                                 GetRoundRectCornerRadius(), segmentToCircleCount );
+        bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
+
+        TransformRoundChamferedRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
+                                              GetRoundRectCornerRadius(),
+                                              doChamfer ? GetChamferRectRatio() : 0.0,
+                                              doChamfer ? GetChamferPositions() : 0,
+                                              segmentToCircleCount );
 
         const SHAPE_LINE_CHAIN &poly = outline.COutline( 0 );
         return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );
-    }
+        }
         break;
 
     case PAD_SHAPE_CUSTOM:
@@ -978,6 +996,7 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         return arect.IntersectsCircle( GetPosition(), GetBoundingRadius() );
 
     case PAD_SHAPE_RECT:
+    case PAD_SHAPE_CHAMFERED_RECT:    // TODO use a finer shape analysis
         shapeRect.SetOrigin( shapePos );
         shapeRect.Inflate( m_Size.x / 2, m_Size.y / 2 );
         return arect.Intersects( shapeRect, m_Orient );
@@ -1082,8 +1101,6 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
          * b) Test intersection of vertical rect
          * c) Test intersection of each corner
          */
-
-
         r = GetRoundRectCornerRadius();
 
         /* Test A - intersection of horizontal rect */
@@ -1223,6 +1240,9 @@ wxString D_PAD::ShowPadShape() const
 
     case PAD_SHAPE_ROUNDRECT:
         return _( "Roundrect" );
+
+    case PAD_SHAPE_CHAMFERED_RECT:
+        return _( "Chamferedrect" );
 
     case PAD_SHAPE_CUSTOM:
         return _( "CustomShape" );

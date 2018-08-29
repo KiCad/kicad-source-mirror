@@ -491,6 +491,25 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
     }
     break;
 
+    case PAD_SHAPE_CHAMFERED_RECT:
+    {
+        wxSize shapesize( aPad->GetSize() );
+        shapesize.x += aClearanceValue.x * 2;
+        shapesize.y += aClearanceValue.y * 2;
+
+        SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
+
+        int corner_radius = aPad->GetRoundRectCornerRadius( shapesize );
+        TransformRoundChamferedRectToPolygon( polyList, PadShapePos, shapesize, aPad->GetOrientation(),
+                                         corner_radius, aPad->GetChamferRectRatio(),
+                                         aPad->GetChamferPositions(), 32 );
+
+        // Add the PAD polygon
+        Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits, *aPad );
+
+    }
+        break;
+
     case PAD_SHAPE_CUSTOM:
     {
         SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
@@ -575,6 +594,7 @@ void CINFO3D_VISU::createNewPad( const D_PAD* aPad,
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_CUSTOM:
         createNewPadWithClearance( aPad, aDstContainer, aInflateValue );
         break;

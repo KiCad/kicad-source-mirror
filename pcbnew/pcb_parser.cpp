@@ -49,6 +49,7 @@
 #include <pcb_plot_params.h>
 #include <zones.h>
 #include <pcb_parser.h>
+#include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 
 using namespace PCB_KEYS_T;
 
@@ -2455,6 +2456,8 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
         break;
 
     case T_roundrect:
+        // Note: the shape can be PAD_SHAPE_ROUNDRECT or PAD_SHAPE_CHAMFERED_RECT
+        // (if champfer parameters are found later in pad descr.)
         pad->SetShape( PAD_SHAPE_ROUNDRECT );
         break;
 
@@ -2634,6 +2637,56 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
         case T_roundrect_rratio:
             pad->SetRoundRectRadiusRatio( parseDouble( "roundrect radius ratio" ) );
             NeedRIGHT();
+            break;
+
+        case T_chamfer_ratio:
+            pad->SetChamferRectRatio( parseDouble( "chamfer ratio" ) );
+
+            if( pad->GetChamferRectRatio() > 0 )
+                pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+
+            NeedRIGHT();
+            break;
+
+        case T_chamfer:
+        {
+            int chamfers = 0;
+            bool end_list = false;
+
+            while( !end_list )
+            {
+                token = NextTok();
+                switch( token )
+                {
+                case T_top_left:
+                    chamfers |= RECT_CHAMFER_TOP_LEFT;
+                    break;
+
+                case T_top_right:
+                    chamfers |= RECT_CHAMFER_TOP_RIGHT;
+                    break;
+
+                case T_bottom_left:
+                    chamfers |= RECT_CHAMFER_BOTTOM_LEFT;
+                    break;
+
+                case T_bottom_right:
+                    chamfers |= RECT_CHAMFER_BOTTOM_RIGHT;
+                    break;
+
+                case T_RIGHT:
+                    pad->SetChamferPositions( chamfers );
+                    end_list = true;
+                    break;
+
+                default:
+                    Expecting( "chamfer_top_left chamfer_top_right chamfer_bottom_left or chamfer_bottom_right" );
+                }
+            }
+
+            if( pad->GetChamferPositions() != RECT_NO_CHAMFER )
+                pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+        }
             break;
 
         case T_options:

@@ -642,8 +642,8 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
         aCornerRadius = std::min( aCornerRadius, std::min( size.x, size.y ) /2 );
     }
 
-    TransformRoundRectToPolygon( outline, aPadPos, size, aOrient,
-                                 aCornerRadius, segmentToCircleCount );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient,
+                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     std::vector< wxPoint > cornerList;

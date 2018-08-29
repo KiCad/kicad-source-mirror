@@ -44,8 +44,11 @@ blind
 blind_buried_vias_allowed
 bold
 bottom
+bottom_left
+bottom_right
 center
 chamfer
+chamfer_ratio
 circle
 clearance
 comment
@@ -176,6 +179,8 @@ thermal_gap
 thermal_bridge_width
 thickness
 top
+top_left
+top_right
 trace_width
 tracks
 trace_min

@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_PAD_PROPERTIES_BASE_H__
-#define __DIALOG_PAD_PROPERTIES_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -25,12 +24,12 @@ class WX_GRID;
 #include <widgets/net_selector.h>
 #include <wx/choice.h>
 #include <wx/combobox.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
@@ -53,20 +52,20 @@ class WX_GRID;
 class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		enum
 		{
 			wxID_DIALOG_EDIT_PAD = 1000,
 			wxID_PADNUMCTRL
 		};
-		
+
 		wxNotebook* m_notebook;
 		wxPanel* m_panelGeneral;
 		wxStaticText* m_PadNumText;
 		wxTextCtrl* m_PadNumCtrl;
 		wxStaticText* m_PadNameText;
-		NET_SELECTOR* m_PadNetSelector; 
+		NET_SELECTOR* m_PadNetSelector;
 		wxStaticText* m_staticText44;
 		wxChoice* m_PadType;
 		wxStaticText* m_staticText45;
@@ -106,6 +105,14 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_cornerRadiusLabel;
 		wxTextCtrl* m_tcCornerRadius;
 		wxStaticText* m_cornerRadiusUnits;
+		wxStaticText* m_staticTextChamferRatio;
+		TEXT_CTRL_EVAL* m_tcChamferRatio;
+		wxStaticText* m_staticTextChamferRatioUnit;
+		wxStaticText* m_staticTextChamferCorner;
+		wxCheckBox* m_cbTopLeft;
+		wxCheckBox* m_cbTopRight;
+		wxCheckBox* m_cbBottomLeft;
+		wxCheckBox* m_cbBottomRight;
 		wxStaticText* m_holeShapeLabel;
 		wxChoice* m_holeShapeCtrl;
 		wxStaticText* m_staticText51;
@@ -185,7 +192,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -208,13 +215,13 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PAD_PROPERTIES_BASE();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,24 +230,24 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextPosStart;
 		wxStaticText* m_startXLabel;
-		wxTextCtrl* m_startXCtrl;
+		TEXT_CTRL_EVAL* m_startXCtrl;
 		wxStaticText* m_startXUnits;
 		wxStaticText* m_startYLabel;
-		wxTextCtrl* m_startYCtrl;
+		TEXT_CTRL_EVAL* m_startYCtrl;
 		wxStaticText* m_startYUnits;
 		wxStaticText* m_staticTextPosEnd;
 		wxStaticText* m_endXLabel;
-		wxTextCtrl* m_endXCtrl;
+		TEXT_CTRL_EVAL* m_endXCtrl;
 		wxStaticText* m_endXUnits;
 		wxStaticText* m_endYLabel;
-		wxTextCtrl* m_endYCtrl;
+		TEXT_CTRL_EVAL* m_endYCtrl;
 		wxStaticText* m_endYUnits;
 		wxStaticText* m_radiusLabel;
-		wxTextCtrl* m_radiusCtrl;
+		TEXT_CTRL_EVAL* m_radiusCtrl;
 		wxStaticText* m_radiusUnits;
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
@@ -250,12 +257,12 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-	
+
 	public:
-		
-		DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -264,17 +271,17 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextMove;
 		wxStaticText* m_xLabel;
-		wxTextCtrl* m_xCtrl;
+		TEXT_CTRL_EVAL* m_xCtrl;
 		wxStaticText* m_xUnits;
 		wxStaticText* m_yLabel;
-		wxTextCtrl* m_yCtrl;
+		TEXT_CTRL_EVAL* m_yCtrl;
 		wxStaticText* m_yUnits;
 		wxStaticText* m_rotationLabel;
-		wxTextCtrl* m_rotationCtrl;
+		TEXT_CTRL_EVAL* m_rotationCtrl;
 		wxStaticText* m_rotationUnits;
 		wxStaticText* m_scaleLabel;
 		TEXT_CTRL_EVAL* m_scaleCtrl;
@@ -284,12 +291,12 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-	
+
 	public:
-		
-		DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pad Custom Shape Geometry Transform"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+
+		DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pad Custom Shape Geometry Transform"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -298,13 +305,13 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		WX_GRID* m_gridCornersList;
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_deleteButton;
 		wxStaticText* m_thicknessLabel;
-		wxTextCtrl* m_thicknessCtrl;
+		TEXT_CTRL_EVAL* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
 		wxPanel* m_panelPoly;
 		wxStaticBitmap* m_warningIcon;
@@ -315,7 +322,7 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onGridSelect( wxGridRangeSelectEvent& event ) { event.Skip(); }
 		virtual void onCellSelect( wxGridEvent& event ) { event.Skip(); }
@@ -323,13 +330,12 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 		virtual void OnButtonDelete( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPaintPolyPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onPolyPanelResize( wxSizeEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Basic Shape Polygon"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Basic Shape Polygon"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE();
-	
+
 };
 
-#endif //__DIALOG_PAD_PROPERTIES_BASE_H__

@@ -7,7 +7,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@
 #include <class_drawsegment.h>
 #include <class_pcb_target.h>
 #include <class_dimension.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #include <pcbnew.h>
 #include <pcbplot.h>
@@ -184,6 +185,23 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     case PAD_SHAPE_ROUNDRECT:
         m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize(), aPad->GetRoundRectCornerRadius(),
                                       aPad->GetOrientation(), aPlotMode, &gbr_metadata );
+        break;
+
+    case PAD_SHAPE_CHAMFERED_RECT:
+        {
+        SHAPE_POLY_SET polygons;
+        const int segmentToCircleCount = 64;
+        const int corner_radius = aPad->GetRoundRectCornerRadius( aPad->GetSize() );
+        TransformRoundChamferedRectToPolygon( polygons, shape_pos, aPad->GetSize(),
+                aPad->GetOrientation(), corner_radius, aPad->GetChamferRectRatio(),
+                aPad->GetChamferPositions(), segmentToCircleCount );
+
+        if( polygons.OutlineCount() == 0 )
+            break;
+
+        int min_dim = std::min( aPad->GetSize().x, aPad->GetSize().y ) /2;
+        m_plotter->FlashPadCustom( shape_pos,wxSize( min_dim, min_dim ), &polygons, aPlotMode, &gbr_metadata );
+        }
         break;
 
     case PAD_SHAPE_CUSTOM:

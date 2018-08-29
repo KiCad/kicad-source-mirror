@@ -52,6 +52,7 @@ void CINFO3D_VISU::buildPadShapePolygon( const D_PAD* aPad,
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CHAMFERED_RECT:
     {
         // We are using TransformShapeWithClearanceToPolygon to build the shape.
         // Currently, this method uses only the same inflate value for X and Y dirs.

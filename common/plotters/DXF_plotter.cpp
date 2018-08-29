@@ -747,8 +747,8 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
 {
     SHAPE_POLY_SET outline;
     const int segmentToCircleCount = 64;
-    TransformRoundRectToPolygon( outline, aPadPos, aSize, aOrient,
-                                 aCornerRadius, segmentToCircleCount );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
+                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );

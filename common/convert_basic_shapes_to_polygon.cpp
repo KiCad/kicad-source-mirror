@@ -207,24 +207,19 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
         aCenters[ii] += aPosition;
 }
 
-/**
- * Function TransformRoundRectToPolygon
- * convert a rectangle with rounded corners to a polygon
- * Convert arcs to multiple straight lines
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aPosition = the coordinate of the center of the rectangle
- * @param aSize = the size of the rectangle
- * @param aCornerRadius = radius of rounded corners
- * @param aRotation = rotation in 0.1 degrees of the rectangle
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- */
-void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+
+void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                   const wxPoint& aPosition, const wxSize& aSize,
                                   double aRotation, int aCornerRadius,
+                                  double aChamferRatio, int aChamferCorners,
                                   int aCircleToSegmentsCount )
 {
+    // Build the basic shape in orientation 0.0, position 0,0 for chamfered corners
+    // or in actual position/orientation for round rect only
     wxPoint corners[4];
-    GetRoundRectCornerCenters( corners, aCornerRadius, aPosition, aSize, aRotation );
+    GetRoundRectCornerCenters( corners, aCornerRadius,
+                               aChamferCorners ? wxPoint( 0, 0 ) : aPosition,
+                               aSize, aChamferCorners ? 0.0 : aRotation );
 
     SHAPE_POLY_SET outline;
     outline.NewOutline();
@@ -233,6 +228,68 @@ void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         outline.Append( corners[ii].x, corners[ii].y );
 
     outline.Inflate( aCornerRadius, aCircleToSegmentsCount );
+
+    if( aChamferCorners == RECT_NO_CHAMFER )      // no chamfer
+    {
+        // Add the outline:
+        aCornerBuffer.Append( outline );
+        return;
+    }
+
+    // Now we have the round rect outline, in position 0,0 orientation 0.0.
+    // Chamfer the corner(s).
+    int chamfer_value = aChamferRatio * std::min( aSize.x, aSize.y );
+
+    SHAPE_POLY_SET chamfered_corner;    // corner shape for the current corner to chamfer
+
+    int corner_id[4] =
+    {
+        RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
+        RECT_CHAMFER_BOTTOM_LEFT, RECT_CHAMFER_BOTTOM_RIGHT
+    };
+    // Depending on the corner position, signX[] and signY[] give the sign of chamfer
+    // coordinates relative to the corner position
+    // The first corner is the top left corner, then top right, bottom left and bottom right
+    int signX[4] = {1, -1, 1,-1 };
+    int signY[4] = {1, 1, -1,-1 };
+
+    for( int ii = 0; ii < 4; ii++ )
+    {
+        if( (corner_id[ii] & aChamferCorners) == 0 )
+            continue;
+
+        VECTOR2I corner_pos( -signX[ii]*aSize.x/2, -signY[ii]*aSize.y/2 );
+
+        if( aCornerRadius )
+        {
+            // We recreate a rectangular area covering the full rounded corner (max size = aSize/2)
+            // to rebuild the corner before chamfering, to be sure the rounded corner shape does not
+            // overlap the chamfered corner shape:
+            chamfered_corner.RemoveAllContours();
+            chamfered_corner.NewOutline();
+            chamfered_corner.Append( 0, 0 );
+            chamfered_corner.Append( 0, signY[ii]*aSize.y/2 );
+            chamfered_corner.Append( signX[ii]*aSize.x/2, signY[ii]*aSize.y/2 );
+            chamfered_corner.Append( signX[ii]*aSize.x/2, 0 );
+            chamfered_corner.Move( corner_pos );
+            outline.BooleanAdd( chamfered_corner, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+
+        // Now chamfer this corner
+        chamfered_corner.RemoveAllContours();
+        chamfered_corner.NewOutline();
+        chamfered_corner.Append( 0, 0 );
+        chamfered_corner.Append( 0, signY[ii]*chamfer_value );
+        chamfered_corner.Append( signX[ii]*chamfer_value, 0 );
+        chamfered_corner.Move( corner_pos );
+        outline.BooleanSubtract( chamfered_corner, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    }
+
+    // Rotate and move the outline:
+    if( aRotation != 0.0 )
+        outline.Rotate( DECIDEG2RAD( -aRotation ), VECTOR2I( 0, 0 ) );
+
+    outline.Move( VECTOR2I( aPosition ) );
 
     // Add the outline:
     aCornerBuffer.Append( outline );

@@ -51,6 +51,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
 #include <connectivity/connectivity_data.h>
+#include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 
 using namespace PCB_KEYS_T;
 
@@ -1248,12 +1249,13 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:      shape = "circle";       break;
-    case PAD_SHAPE_RECT:        shape = "rect";         break;
-    case PAD_SHAPE_OVAL:        shape = "oval";         break;
-    case PAD_SHAPE_TRAPEZOID:   shape = "trapezoid";    break;
-    case PAD_SHAPE_ROUNDRECT:   shape = "roundrect";    break;
-    case PAD_SHAPE_CUSTOM:      shape = "custom";       break;
+    case PAD_SHAPE_CIRCLE:          shape = "circle";       break;
+    case PAD_SHAPE_RECT:            shape = "rect";         break;
+    case PAD_SHAPE_OVAL:            shape = "oval";         break;
+    case PAD_SHAPE_TRAPEZOID:       shape = "trapezoid";    break;
+    case PAD_SHAPE_CHAMFERED_RECT:
+    case PAD_SHAPE_ROUNDRECT:       shape = "roundrect";    break;
+    case PAD_SHAPE_CUSTOM:          shape = "custom";       break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), aPad->GetShape() ) );
@@ -1311,11 +1313,36 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     formatLayers( aPad->GetLayerSet() );
 
-    // Output the radius ratio for rounded rect pads
-    if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
+    // Output the radius ratio for rounded and chamfered rect pads
+    if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT || aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT)
     {
         m_out->Print( 0,  " (roundrect_rratio %s)",
                       Double2Str( aPad->GetRoundRectRadiusRatio() ).c_str() );
+    }
+
+    // Output the chamfer corners for chamfered rect pads
+    if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT)
+    {
+        m_out->Print( 0, "\n" );
+
+        m_out->Print( aNestLevel+1,  "(chamfer_ratio %s)",
+                      Double2Str( aPad->GetChamferRectRatio() ).c_str() );
+
+        m_out->Print( 0, " (chamfer" );
+
+        if( ( aPad->GetChamferPositions() & RECT_CHAMFER_TOP_LEFT ) )
+            m_out->Print( 0,  " top_left" );
+
+        if( ( aPad->GetChamferPositions() & RECT_CHAMFER_TOP_RIGHT ) )
+            m_out->Print( 0,  " top_right" );
+
+        if( ( aPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_LEFT ) )
+            m_out->Print( 0,  " bottom_left" );
+
+        if( ( aPad->GetChamferPositions() & RECT_CHAMFER_BOTTOM_RIGHT ) )
+            m_out->Print( 0,  " bottom_right" );
+
+        m_out->Print( 0,  ")" );
     }
 
     std::string output;

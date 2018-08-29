@@ -341,6 +341,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
 void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
+    #define SEGCOUNT 32     // number of segments to approximate a circle
     wxPoint coord[12];
     double  angle = m_Orient;
     int     seg_width;
@@ -436,42 +437,29 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         }
         break;
 
+    case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_ROUNDRECT:
-    {
+        {
         // Use solder[Paste/Mask]size or pad size to build pad shape to draw
         wxSize size( GetSize() );
         size += aDrawInfo.m_Mask_margin * 2;
         int corner_radius = GetRoundRectCornerRadius( size );
+        bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
+
+        SHAPE_POLY_SET outline;
+        TransformRoundChamferedRectToPolygon( outline, shape_pos, size, GetOrientation(),
+                                     corner_radius, GetChamferRectRatio(),
+                                     doChamfer ? GetChamferPositions() : 0,
+                                     SEGCOUNT );
 
         // Draw the polygon: Inflate creates only one convex polygon
-        SHAPE_POLY_SET outline;
         bool filled = aDrawInfo.m_ShowPadFilled;
 
-        if( filled )
-        {
-            wxPoint centers[4];
-            GetRoundRectCornerCenters( centers, corner_radius, shape_pos,
-                                       size, GetOrientation() );
-            GRClosedPoly( aClipBox, aDC, 4, centers, true, corner_radius*2,
-                          aDrawInfo.m_Color, aDrawInfo.m_Color );
-        }
-        else
-        {
-            TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
-                                         corner_radius, 64 );
+        SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-            if( outline.OutlineCount() > 0 )
-            {
-                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-
-                if( poly.PointCount() > 0 )
-                {
-                    GRClosedPoly( aClipBox, aDC, poly.PointCount(),
-                                  (wxPoint*)&poly.Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
-                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
-                }
-            }
-        }
+        GRClosedPoly( aClipBox, aDC, poly.PointCount(),
+                      (wxPoint*)&poly.Point( 0 ), filled, 0,
+                      aDrawInfo.m_Color, aDrawInfo.m_Color );
 
         if( aDrawInfo.m_PadClearance )
         {
@@ -481,27 +469,23 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             size.y += aDrawInfo.m_PadClearance * 2;
             corner_radius = GetRoundRectCornerRadius() + aDrawInfo.m_PadClearance;
 
-            TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
-                                     corner_radius, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
+            TransformRoundChamferedRectToPolygon( outline, shape_pos, size, GetOrientation(),
+                                         corner_radius, GetChamferRectRatio(),
+                                         doChamfer ? GetChamferPositions() : 0,
+                                         SEGCOUNT );
 
-            if( outline.OutlineCount() > 0 )
-            {
-                // Draw the polygon: Inflate creates only one convex polygon
-                SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
+            // Draw the polygon: Inflate creates only one convex polygon
+            SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
 
-                if( clearance_poly.PointCount() > 0 )
-                {
-                    GRClosedPoly( aClipBox, aDC, clearance_poly.PointCount(),
-                                  (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
-                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
-                }
-            }
+            GRClosedPoly( aClipBox, aDC, clearance_poly.PointCount(),
+                          (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
+                          aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
-    }
+        }
         break;
 
     case PAD_SHAPE_CUSTOM:
-    {
+        {
         // The full shape has 2 items
         // 1- The anchor pad: a round or rect pad located at pad position
         // 2- The custom complex shape
@@ -586,10 +570,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             }
         }
         break;
-    }
-
-    default:
-        break;
+        }
     }
 
     // Draw the pad hole

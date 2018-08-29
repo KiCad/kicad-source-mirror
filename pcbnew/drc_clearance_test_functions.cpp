@@ -898,7 +898,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     // priority is aRefPad = ROUND then OVAL then RECT/ROUNDRECT then other
     if( aRefPad->GetShape() != aPad->GetShape() && aRefPad->GetShape() != PAD_SHAPE_CIRCLE )
     {
-        // pad ref shape is here oval, rect, roundrect, trapezoid or custom
+        // pad ref shape is here oval, rect, roundrect, chamfered rect, trapezoid or custom
         switch( aPad->GetShape() )
         {
             case PAD_SHAPE_CIRCLE:
@@ -916,6 +916,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 break;
 
             case PAD_SHAPE_TRAPEZOID:
+            case PAD_SHAPE_CHAMFERED_RECT:
             case PAD_SHAPE_CUSTOM:
                 break;
         }
@@ -962,6 +963,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_RECT:
     case PAD_SHAPE_CUSTOM:
         // pad_angle = pad orient relative to the aRefPad orient
@@ -974,6 +976,17 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             dist_min += padRadius;
             GetRoundRectCornerCenters( polyref, padRadius, wxPoint( 0, 0 ),
                                 aRefPad->GetSize(), aRefPad->GetOrientation() );
+        }
+        else if( aRefPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
+        {
+            // The reference pad can be rotated. calculate the rotated
+            // coordinates ( note, the ref pad position is the origin of
+            // coordinates for this drc test)
+            int padRadius = aRefPad->GetRoundRectCornerRadius();
+            TransformRoundChamferedRectToPolygon( polysetref, wxPoint( 0, 0 ), aRefPad->GetSize(),
+                                             aRefPad->GetOrientation(),
+                                             padRadius, aRefPad->GetChamferRectRatio(),
+                                             aRefPad->GetChamferPositions(), 64 );
         }
         else if( aRefPad->GetShape() == PAD_SHAPE_CUSTOM )
         {
@@ -996,6 +1009,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         {
         case PAD_SHAPE_ROUNDRECT:
         case PAD_SHAPE_RECT:
+        case PAD_SHAPE_CHAMFERED_RECT:
         case PAD_SHAPE_TRAPEZOID:
         case PAD_SHAPE_CUSTOM:
             if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
@@ -1004,6 +1018,17 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 dist_min += padRadius;
                 GetRoundRectCornerCenters( polycompare, padRadius, relativePadPos,
                                     aPad->GetSize(), aPad->GetOrientation() );
+            }
+            else if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
+            {
+                // The reference pad can be rotated. calculate the rotated
+                // coordinates ( note, the ref pad position is the origin of
+                // coordinates for this drc test)
+                int padRadius = aPad->GetRoundRectCornerRadius();
+                TransformRoundChamferedRectToPolygon( polysetcompare, relativePadPos, aPad->GetSize(),
+                                                 aPad->GetOrientation(),
+                                                 padRadius, aPad->GetChamferRectRatio(),
+                                                 aPad->GetChamferPositions(), 64 );
             }
             else if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
             {
@@ -1372,6 +1397,36 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // m_segmAngle (they are already relative to the segment origin)
         aPad->CustomShapeAsPolygonToBoardPosition( &polyset,
                     wxPoint( 0, 0 ), m_segmAngle );
+
+        const SHAPE_LINE_CHAIN& refpoly = polyset.COutline( 0 );
+
+        if( !poly2segmentDRC( (wxPoint*) &refpoly.CPoint( 0 ),
+                              refpoly.PointCount(),
+                              wxPoint( 0, 0 ), wxPoint(m_segmLength,0),
+                              distToLine ) )
+            return false;
+        }
+        break;
+
+    case PAD_SHAPE_CHAMFERED_RECT:
+        {
+        SHAPE_POLY_SET polyset;
+        // The pad can be rotated. calculate the coordinates
+        // relatives to the segment being tested
+        // Note, the pad position relative to the segment origin
+        // is m_padToTestPos
+        int padRadius = aPad->GetRoundRectCornerRadius();
+        TransformRoundChamferedRectToPolygon( polyset, m_padToTestPos, aPad->GetSize(),
+                                         aPad->GetOrientation(),
+                                         padRadius, aPad->GetChamferRectRatio(),
+                                         aPad->GetChamferPositions(), 64 );
+        // Rotate also coordinates by m_segmAngle, because the segment orient
+        // is m_segmAngle.
+        // we are using a horizontal segment for test, because we know here
+        // only the lenght and orientation of the segment
+        // therefore all coordinates of the pad to test must be rotated by
+        // m_segmAngle (they are already relative to the segment origin)
+        polyset.Rotate( DECIDEG2RAD( -m_segmAngle ), VECTOR2I( 0, 0 ) );
 
         const SHAPE_LINE_CHAIN& refpoly = polyset.COutline( 0 );
 

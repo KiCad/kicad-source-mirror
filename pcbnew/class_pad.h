@@ -659,6 +659,48 @@ public:
     }
 
     /**
+     * has meaning only for chamfered rect pads
+     * @return the ratio between the smaller Y or Y size and the radius
+     * of the rounded corners.
+     * Cannot be > 0.5
+     */
+    double GetChamferRectRatio() const
+    {
+        return m_padChamferRectScale;
+    }
+
+    /**
+     * has meaning only for chamfered rect pads
+     * Set the ratio between the smaller Y or Y size and the radius
+     * of the rounded corners.
+     * Cannot be < 0.5 and obviously must be > 0
+     */
+    void SetChamferRectRatio( double aChamferScale )
+    {
+        if( aChamferScale < 0.0 )
+            aChamferScale = 0.0;
+
+        m_padChamferRectScale = std::min( aChamferScale, 0.5 );
+    }
+
+    /**
+     * has meaning only for chamfered rect pads
+     * @return the position of the chamfer for a 0 orientation
+     */
+    int GetChamferPositions() const { return m_chamferPositions; }
+
+    /**
+     * has meaning only for chamfered rect pads
+     * set the position of the chamfer for a 0 orientation, one of
+     * PAD_CHAMFER_TOP_LEFT, PAD_CHAMFER_TOP_RIGHT,
+     * PAD_CHAMFER_BOTTOM_LEFT, PAD_CHAMFER_BOTTOM_RIGHT
+     */
+    void SetChamferPositions( int aChamferPositions )
+    {
+        m_chamferPositions = aChamferPositions;
+    }
+
+    /**
      * Function GetSubRatsnest
      * @return int - the netcode
      */
@@ -835,6 +877,9 @@ private:    // Private variable members:
 
     double      m_padRoundRectRadiusScale;  ///< scaling factor from smallest m_Size coord
                                             ///< to corner radius, default 0.25
+    double      m_padChamferRectScale;      ///< scaling factor from smallest m_Size coord
+                                            ///< to chamfer value, default 0.25
+    int m_chamferPositions;                 ///< the positions of the chamfered position for a 0 orientation
 
     PAD_SHAPE_T m_anchorPadShape;         ///< for custom shaped pads: shape of pad anchor,
                                           ///< PAD_SHAPE_RECT, PAD_SHAPE_CIRCLE

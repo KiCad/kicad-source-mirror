@@ -201,8 +201,8 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
 
     SHAPE_POLY_SET outline;
     const int segmentToCircleCount = 64;
-    TransformRoundRectToPolygon( outline, aPadPos, size, aOrient,
-                                 aCornerRadius, segmentToCircleCount );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient,
+                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
 
     std::vector< wxPoint > cornerList;
     cornerList.reserve( segmentToCircleCount + 5 );

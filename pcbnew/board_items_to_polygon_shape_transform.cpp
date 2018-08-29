@@ -767,18 +767,22 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
         break;
 
+    case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_ROUNDRECT:
     {
         SHAPE_POLY_SET outline;
-        int pad_radius = GetRoundRectCornerRadius();
         int clearance = int( aClearanceValue * aCorrectionFactor );
-        int rounding_radius = pad_radius + clearance;
+        int rounding_radius = GetRoundRectCornerRadius() + clearance;
         wxSize shapesize( m_Size );
         shapesize.x += clearance*2;
         shapesize.y += clearance*2;
+        bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
-        TransformRoundRectToPolygon( outline, padShapePos, shapesize, angle,
-                                     rounding_radius, aCircleToSegmentsCount );
+        TransformRoundChamferedRectToPolygon( outline, padShapePos, shapesize, angle,
+                                     rounding_radius,
+                                     doChamfer ? GetChamferRectRatio() : 0.0,
+                                     doChamfer ? GetChamferPositions() : 0,
+                                     aCircleToSegmentsCount );
 
         aCornerBuffer.Append( outline );
     }
@@ -819,6 +823,7 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CHAMFERED_RECT:
     {
         // We are using TransformShapeWithClearanceToPolygon to build the shape.
         // Currently, this method uses only the same inflate value for X and Y dirs.
@@ -1172,7 +1177,8 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         }
         break;
 
-    case PAD_SHAPE_ROUNDRECT:   // thermal shape is the same for round rect and rect.
+    case PAD_SHAPE_CHAMFERED_RECT:
+    case PAD_SHAPE_ROUNDRECT:   // thermal shape is the same for rectangular shapes.
     case PAD_SHAPE_RECT:
         {
             /* we create 4 copper holes and put them in position 1, 2, 3 and 4
