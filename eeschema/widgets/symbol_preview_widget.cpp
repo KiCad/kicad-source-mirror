@@ -34,7 +34,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway )
     m_kiway( aKiway ),
     m_preview( nullptr ),
     m_status( nullptr ),
-    m_sizer( nullptr )
+    m_sizer( nullptr ),
+    m_previewItem( nullptr )
 {
     m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
 
@@ -58,6 +59,13 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway )
     m_sizer->ShowItems( false );
 
     SetSizer( outer_sizer );
+}
+
+
+SYMBOL_PREVIEW_WIDGET::~SYMBOL_PREVIEW_WIDGET()
+{
+    if( m_previewItem )
+        m_preview->GetView()->Remove( m_previewItem );
 }
 
 
@@ -87,7 +95,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
                                       ioe.What() ) );
     }
 
-    view->Clear();
+    if( m_previewItem )
+    {
+        view->Remove( m_previewItem );
+        m_previewItem = nullptr;
+    }
 
     if( alias )
     {
@@ -99,7 +111,9 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
             aUnit = 1;
 
         alias->SetTmpUnit( aUnit );
+
         view->Add( alias );
+        m_previewItem = alias;
 
         // Zoom to fit
         BOX2I     bBox = alias->GetPart()->GetUnitBoundingBox( aUnit, 0 );

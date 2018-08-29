@@ -489,6 +489,11 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
             DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
         }
     }
+
+    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->SetShowPinsElectricalType( false );
+    settings->SetShowHiddenPins( m_showAllPins );
 }
 
 
@@ -600,6 +605,11 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
             DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
         }
     }
+
+    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->SetShowPinsElectricalType( m_showPinElectricalTypeName );
+    settings->SetShowHiddenPins( true );        // Hidden pins must be editable
 }
 
 

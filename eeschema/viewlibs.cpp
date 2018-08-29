@@ -66,24 +66,15 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;
 
-    /// @todo: The unit selection gets reset to 1 by SetSelectedComponent() so the unit
-    ///        selection feature of the choose symbol dialog doesn't work.
-    LIB_ID id = dlg.GetSelectedLibId( &m_unit );
+    int unit;
+    LIB_ID id = dlg.GetSelectedLibId( &unit );
 
-    if( !id.IsValid() || id.GetLibNickname().empty() )
+    if( !id.IsValid() )
         return;
 
-    if( m_libraryName == id.GetLibNickname() )
-    {
-        if( m_entryName != id.GetLibItemName() )
-            SetSelectedComponent( id.GetLibItemName() );
-    }
-    else
-    {
-        m_entryName = id.GetLibItemName();
-        SetSelectedLibrary( id.GetLibNickname() );
-        SetSelectedComponent( id.GetLibItemName() );
-    }
+    SetSelectedLibrary( id.GetLibNickname() );
+    SetSelectedComponent( id.GetLibItemName() );
+    SetUnitAndConvert( unit, 1 );
 
     Zoom_Automatique( false );
 }
@@ -117,10 +108,17 @@ void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 }
 
 
+void LIB_VIEW_FRAME::onUpdateDocButton( wxUpdateUIEvent& aEvent )
+{
+    LIB_ALIAS* entry = getSelectedAlias();
+
+    aEvent.Enable( entry && !entry->GetDocFileName().IsEmpty() );
+}
+
+
 void LIB_VIEW_FRAME::onViewSymbolDocument( wxCommandEvent& aEvent )
 {
-    LIB_ID id( m_libraryName, m_entryName );
-    LIB_ALIAS* entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    LIB_ALIAS* entry = getSelectedAlias();
 
     if( entry && !entry->GetDocFileName().IsEmpty() )
     {
@@ -147,19 +145,20 @@ void LIB_VIEW_FRAME::onSelectSymbolBodyStyle( wxCommandEvent& aEvent )
         break;
     }
 
-    m_canvas->Refresh();
+    updatePreviewSymbol();
 }
 
 
 void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
 {
-    int ii = m_selpartBox->GetCurrentSelection();
+    int ii = m_unitChoice->GetSelection();
 
     if( ii < 0 )
         return;
 
     m_unit = ii + 1;
-    m_canvas->Refresh();
+
+    updatePreviewSymbol();
 }
 
 
@@ -187,57 +186,8 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
 }
 
 
-LIB_PART* LIB_VIEW_FRAME::CurrentPart() const
-{
-    LIB_ID id( m_libraryName, m_entryName );
-    LIB_ALIAS* entry = nullptr;
-
-    try
-    {
-        entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
-    }
-    catch( const IO_ERROR& ) {} // ignore, it is handled below
-
-    if( !entry )
-        return nullptr;
-
-    LIB_PART* part = entry->GetPart();
-
-    if( !entry->IsRoot() )
-    {
-        // Temporarily change the name field text to reflect the alias name.
-        auto msg = entry->GetName();
-
-        part->SetName( msg );
-
-
-            m_convert = 1;
-    }
-
-    return part;
-}
-
 void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    auto part = CurrentPart();
-    auto view = GetCanvas()->GetView();
-    
-    printf("Part %p\n", part );
-
-    if( !part )
-    {
-        view->Clear();
-        return;
-    }
-
-
-    view->Add( part );
-
-    /*if( !tmp.IsEmpty() )
-        part->SetName( tmp );
-
-    ClearMsgPanel();
-    AppendMsgPanel( _( "Name" ), part->GetName(), BLUE, 6 );
-    AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
-    AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );*/
+    DisplayLibInfos();
+    UpdateStatusBar();
 }

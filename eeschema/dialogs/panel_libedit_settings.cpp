@@ -25,6 +25,8 @@
 #include <fctsys.h>
 #include <base_screen.h>
 #include <lib_edit_frame.h>
+#include <sch_view.h>
+#include <sch_painter.h>
 
 #include "panel_libedit_settings.h"
 
@@ -80,6 +82,12 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
     m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
 
     m_frame->SetShowElectricalType( m_checkShowPinElectricalType->GetValue() );
+
+    SCH_DRAW_PANEL* canvas = m_frame->GetCanvas();
+    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( canvas->GetView()->GetPainter() );
+    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->SetShowPinsElectricalType( m_checkShowPinElectricalType->GetValue() );
+    canvas->ForceRefresh();
 
     return true;
 }

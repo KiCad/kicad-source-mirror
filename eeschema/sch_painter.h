@@ -76,6 +76,9 @@ public:
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
+    void SetShowHiddenPins( bool aShow ) { m_showHiddenPins = aShow; }
+    void SetShowPinsElectricalType( bool aShow ) { m_showPinsElectricalType = aShow; }
+
     bool IsBackgroundDark() const override
     {
         auto luma = m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ].GetBrightness();
@@ -85,9 +88,9 @@ public:
 
 private:
 
+    bool m_showHiddenPins;
     bool m_showPinsElectricalType;
-    bool m_libraryEditorMode;
-    
+
 };
 
 

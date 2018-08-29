@@ -24,7 +24,9 @@
 
 #include <fctsys.h>
 #include <base_screen.h>
+#include <sch_view.h>
 #include <sch_edit_frame.h>
+#include <sch_painter.h>
 #include <class_libentry.h>
 #include <panel_eeschema_display_options.h>
 
@@ -107,6 +109,12 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
     m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
     m_frame->SetFootprintPreview( m_footprintPreview->GetValue() );
+
+    SCH_DRAW_PANEL* canvas = m_frame->GetCanvas();
+    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( canvas->GetView()->GetPainter() );
+    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->SetShowHiddenPins( m_checkShowHiddenPins->GetValue() );
+    canvas->ForceRefresh();
 
     return true;
 }

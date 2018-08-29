@@ -26,6 +26,7 @@
 
 
 class LIB_ID;
+class LIB_ALIAS;
 class EDA_DRAW_PANEL_GAL;
 class wxStaticText;
 class wxSizer;
@@ -42,6 +43,8 @@ public:
      * @param aKiway - an active Kiway instance
      */
     SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway );
+
+    ~SYMBOL_PREVIEW_WIDGET() override;
 
     /**
      * Set the contents of the status label and display it.
@@ -61,6 +64,8 @@ private:
 
     wxStaticText*              m_status;
     wxSizer*                   m_sizer;
+
+    LIB_ALIAS*                 m_previewItem;
 };
 
 

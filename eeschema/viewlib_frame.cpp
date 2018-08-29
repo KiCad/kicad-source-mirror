@@ -31,6 +31,7 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
+#include <sch_view.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <eda_dockart.h>
@@ -45,6 +46,7 @@
 #include <class_libentry.h>
 #include <class_library.h>
 #include <view/view_controls.h>
+#include <sch_painter.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -68,7 +70,7 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL_RANGE( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                     LIB_VIEW_FRAME::onSelectSymbolBodyStyle )
     EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC, LIB_VIEW_FRAME::ExportToSchematicLibraryPart )
-    EVT_COMBOBOX( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onSelectSymbolUnit )
+    EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onSelectSymbolUnit )
 
     // listbox events
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, LIB_VIEW_FRAME::ClickOnLibList )
@@ -83,48 +85,32 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnShowElectricalType )
 
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
-    EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
-                   LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton )
+    EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAltBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnUpdateElectricalType )
-    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::OnUpdateSelectionPartBox )
+    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
+    EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_VIEW_FRAME::onUpdateDocButton )
 
 END_EVENT_TABLE()
 
 
-/* Note:
- * LIB_VIEW_FRAME can be created in "modal mode", or as a usual frame.
- * In modal mode:
- *  a tool to export the selected symbol is shown in the toolbar
- *  the style is wxFRAME_FLOAT_ON_PARENT
- * Note:
- * On windows, when the frame with type wxFRAME_FLOAT_ON_PARENT is displayed
- * its parent frame is sometimes brought to the foreground when closing the
- * LIB_VIEW_FRAME frame.
- * If it still happens, it could be better to use wxSTAY_ON_TOP
- * instead of wxFRAME_FLOAT_ON_PARENT
- */
-#ifdef __WINDOWS__
-#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT   // could be wxSTAY_ON_TOP if issues
-#else
-#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT
-#endif
+#define LIB_VIEW_NAME "ViewlibFrame"
+#define LIB_VIEW_NAME_MODAL "ViewlibFrameModal"
 
-#define LIB_VIEW_FRAME_NAME "ViewlibFrame"
-#define LIB_VIEW_FRAME_NAME_MODAL "ViewlibFrameModal"
+#define LIB_VIEW_STYLE ( KICAD_DEFAULT_DRAWFRAME_STYLE )
+#define LIB_VIEW_STYLE_MODAL ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT )
+
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aLibraryName ) :
     SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Library Browser" ),
-            wxDefaultPosition, wxDefaultSize,
-            aFrameType == FRAME_SCH_VIEWER_MODAL ?
-                aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | MODAL_MODE_EXTRASTYLE
-                          : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
-                : KICAD_DEFAULT_DRAWFRAME_STYLE,
-            aFrameType == FRAME_SCH_VIEWER_MODAL ?
-                          LIB_VIEW_FRAME_NAME_MODAL : LIB_VIEW_FRAME_NAME )
+                    wxDefaultPosition, wxDefaultSize,
+                    aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
+                    aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),
+    m_libList( nullptr ),
+    m_cmpList( nullptr ),
+    m_previewItem( nullptr )
 {
-    wxASSERT( aFrameType == FRAME_SCH_VIEWER ||
-              aFrameType == FRAME_SCH_VIEWER_MODAL );
+    wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
 
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
@@ -132,7 +118,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     // Force the frame name used in config. the lib viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
-    m_configFrameName = LIB_VIEW_FRAME_NAME;
+    m_configFrameName = LIB_VIEW_NAME;
 
     // Give an icon
     wxIcon  icon;
@@ -140,8 +126,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SetIcon( icon );
 
     m_hotkeysDescrList = g_Viewlib_Hokeys_Descr;
-    m_libList = NULL;
-    m_cmpList = NULL;
     m_libListWidth = 200;
     m_cmpListWidth = 300;
     m_listPowerCmpOnly = false;
@@ -223,6 +207,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
+    if( m_previewItem )
+        GetCanvas()->GetView()->Remove( m_previewItem );
 }
 
 
@@ -231,10 +217,12 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
     m_unit = aUnit > 0 ? aUnit : 1;
     m_convert = aConvert > 0 ? aConvert : 1;
     m_selection_changed = false;
+
+    updatePreviewSymbol();
 }
 
 
-LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias()
+LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias() const
 {
     LIB_ALIAS* alias = NULL;
 
@@ -247,7 +235,7 @@ LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias()
 }
 
 
-LIB_PART* LIB_VIEW_FRAME::getSelectedSymbol()
+LIB_PART* LIB_VIEW_FRAME::getSelectedSymbol() const
 {
     LIB_PART* symbol = NULL;
     LIB_ALIAS* alias = getSelectedAlias();
@@ -259,7 +247,37 @@ LIB_PART* LIB_VIEW_FRAME::getSelectedSymbol()
 }
 
 
-void LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton( wxUpdateUIEvent& aEvent )
+void LIB_VIEW_FRAME::updatePreviewSymbol()
+{
+    LIB_ALIAS* alias = getSelectedAlias();
+    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
+
+    if( m_previewItem )
+    {
+        view->Remove( m_previewItem );
+        m_previewItem = nullptr;
+    }
+
+    ClearMsgPanel();
+
+    if( alias )
+    {
+        alias->SetTmpUnit( m_unit );
+        alias->SetTmpConversion( m_convert );
+
+        view->Add( alias );
+        m_previewItem = alias;
+
+        AppendMsgPanel( _( "Name" ), alias->GetName(), BLUE, 6 );
+        AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 6 );
+        AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKDARKGRAY );
+    }
+
+    GetCanvas()->ForceRefresh();
+}
+
+
+void LIB_VIEW_FRAME::onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent )
 {
     LIB_PART* symbol = getSelectedSymbol();
 
@@ -287,6 +305,8 @@ void LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent )
 
 void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    GetCanvas()->StopDrawing();
+
     if( !IsModal() )
     {
         Destroy();
@@ -320,7 +340,11 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 void LIB_VIEW_FRAME::OnShowElectricalType( wxCommandEvent& event )
 {
     SetShowElectricalType( not GetShowElectricalType() );
-    m_canvas->Refresh();
+
+    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->SetShowPinsElectricalType( GetShowElectricalType() );
+    GetCanvas()->ForceRefresh();
 }
 
 
@@ -330,42 +354,32 @@ void LIB_VIEW_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::OnUpdateSelectionPartBox( wxUpdateUIEvent& aEvent )
+void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART* part = nullptr;
-
-    if( m_libraryName.size() && m_entryName.size() )
-    {
-        if( Prj().SchSymbolLibTable()->HasLibrary( m_libraryName ) )
-            part = GetLibPart( LIB_ID( m_libraryName, m_entryName ) );
-    }
+    LIB_PART* part = getSelectedSymbol();
 
     int unit_count = 1;
 
     if( part )
         unit_count = std::max( part->GetUnitCount(), 1 );
 
-    m_selpartBox->Enable( unit_count > 1 );
+    m_unitChoice->Enable( unit_count > 1 );
 
     if( unit_count > 1 )
     {
         // rebuild the unit list if it is not suitable
-        if( unit_count != (int)m_selpartBox->GetCount() )
+        if( unit_count != (int)m_unitChoice->GetCount() )
         {
-            m_selpartBox->Clear();
+            m_unitChoice->Clear();
 
             for( int ii = 0; ii < unit_count; ii++ )
-
-                m_selpartBox->Append( wxString::Format( _( "Unit %c" ), 'A' + ii ) );
-
-            m_selpartBox->SetSelection( m_unit > 0 ? m_unit - 1 : 0 );
+                m_unitChoice->Append( wxString::Format( _( "Unit %c" ), 'A' + ii ) );
         }
+
+        m_unitChoice->SetSelection( std::max( 0, m_unit - 1 ) );
     }
-    else
-    {
-        if( m_selpartBox->GetCount() )
-            m_selpartBox->Clear();
-    }
+    else if( m_unitChoice->GetCount() )
+        m_unitChoice->Clear();
 }
 
 
@@ -598,7 +612,7 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
         }
 
         Zoom_Automatique( false );
-        m_canvas->Refresh();
+        updatePreviewSymbol();
     }
 }
 
@@ -702,6 +716,8 @@ void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
     if (changed)
         m_selection_changed = true;
 
+    updatePreviewSymbol();
+
     DisplayLibInfos();
 }
 
@@ -728,18 +744,17 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 
 const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
 {
-    LIB_PART*  part = CurrentPart();
-
-    printf("part %p\n", part);
+    LIB_ALIAS*  alias = getSelectedAlias();
+    LIB_PART*   part = alias ? alias->GetPart() : nullptr;
 
     if( !part )
     {
-        return BOX2I( VECTOR2I(-100, -100), VECTOR2I( 200, 200 ) );
+        return BOX2I( VECTOR2I(-200, -200), VECTOR2I( 400, 400 ) );
     }
     else
     {
-        EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
-        return BOX2I( boundingBox.GetOrigin(), VECTOR2I( boundingBox.GetWidth(), boundingBox.GetHeight() ) );
+        EDA_RECT bbox = part->GetUnitBoundingBox( m_unit, m_convert );
+        return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
         
     }
 }

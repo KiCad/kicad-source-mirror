@@ -441,7 +441,7 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
 
 void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 {
-    if( !aPin->IsVisible() )
+    if( !aPin->IsVisible() && !m_schSettings.m_showHiddenPins )
       return;
 
     const COLOR4D& color = m_schSettings.GetLayerColor( LAYER_PIN );
@@ -452,7 +452,7 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 	int shape = aPin->GetShape();
     int orient = aPin->GetOrientation();
 
-  switch( orient )
+    switch( orient )
 	{
 		case PIN_UP:
             //printf("pinUp\n");
@@ -474,64 +474,65 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
             p0 = VECTOR2I( pos.x + len, pos.y );
 			dir = VECTOR2I(-1, 0);
 			break;
-
 	}
 
 //printf("pin %p p0 %d %d pos %d %d len %d\n", aPin, p0.x, p0.y, pos.x, pos.y, len);
 
-  VECTOR2D pc;
+    VECTOR2D pc;
 
-  m_gal->SetIsStroke ( true );
-  m_gal->SetIsFill ( false );
-  m_gal->SetLineWidth ( width );
-  m_gal->SetStrokeColor ( color );
-  m_gal->SetFontBold ( false );
-  m_gal->SetFontItalic ( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
+    m_gal->SetLineWidth( width );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetFontBold( false );
+    m_gal->SetFontItalic( false );
 
-  const int radius = ExternalPinDecoSize( *aPin );
-  const int clock_size = InternalPinDecoSize( *aPin );
+    const int radius = ExternalPinDecoSize( *aPin );
+    const int clock_size = InternalPinDecoSize( *aPin );
 
-	if(shape == PINSHAPE_INVERTED)
+	if( shape == PINSHAPE_INVERTED )
 	{
-
-		m_gal->DrawCircle ( p0 + dir * radius, radius );
-		m_gal->DrawLine ( p0 + dir * ( 2 * radius ), pos );
-	} else if (shape == PINSHAPE_FALLING_EDGE_CLOCK )
-  {
-
-    pc = p0 + dir * clock_size ;
-
-    triLine( p0 + VECTOR2D ( dir.y, -dir.x) * clock_size,
-            pc,
-            p0 + VECTOR2D ( -dir.y, dir.x) * clock_size
-            );
-
-    m_gal->DrawLine ( pos, pc );
-  }
-  else {
-      //printf("DrawLPin\n");
-    m_gal->DrawLine ( p0, pos );
-    //m_gal->DrawLine ( p0, pos+dir.Perpendicular() * radius);
-  }
-
-  if(shape == PINSHAPE_CLOCK)
-  {
-    if (!dir.y)
+		m_gal->DrawCircle( p0 + dir * radius, radius );
+		m_gal->DrawLine( p0 + dir * ( 2 * radius ), pos );
+	}
+	else if( shape == PINSHAPE_FALLING_EDGE_CLOCK )
     {
-      triLine (p0 + VECTOR2D( 0, clock_size ),
-                p0 + VECTOR2D( -dir.x * clock_size, 0),
-                p0 + VECTOR2D( 0, -clock_size ));
+        pc = p0 + dir * clock_size ;
 
-    } else {
-      triLine ( p0 + VECTOR2D ( clock_size, 0 ),
-                p0 + VECTOR2D ( 0, -dir.y * clock_size ),
-                p0 + VECTOR2D ( -clock_size, 0 ));
+        triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
+                 pc,
+                 p0 + VECTOR2D( -dir.y, dir.x) * clock_size
+                );
+
+        m_gal->DrawLine( pos, pc );
     }
-  }
+    else
+    {
+        //printf("DrawLPin\n");
+        m_gal->DrawLine ( p0, pos );
+        //m_gal->DrawLine ( p0, pos+dir.Perpendicular() * radius);
+    }
 
-  if( shape == PINSHAPE_INPUT_LOW )
-  {
-    if(!dir.y)
+    if(shape == PINSHAPE_CLOCK)
+    {
+        if (!dir.y)
+        {
+            triLine ( p0 + VECTOR2D( 0, clock_size ),
+                      p0 + VECTOR2D( -dir.x * clock_size, 0),
+                      p0 + VECTOR2D( 0, -clock_size ));
+
+        }
+        else
+        {
+            triLine ( p0 + VECTOR2D( clock_size, 0 ),
+                      p0 + VECTOR2D( 0, -dir.y * clock_size ),
+                      p0 + VECTOR2D( -clock_size, 0 ));
+        }
+    }
+
+    if( shape == PINSHAPE_INPUT_LOW )
+    {
+        if(!dir.y)
         {
             triLine ( p0 + VECTOR2D(dir.x, 0) * radius * 2,
                       p0 + VECTOR2D(dir.x, -1) * radius * 2,
@@ -603,11 +604,8 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 
     #define PIN_TEXT_MARGIN 4
 
-
-    int         name_offset = PIN_TEXT_MARGIN +
-                              ( nameLineWidth + GetDefaultLineThickness() ) / 2;
-    int         num_offset = - PIN_TEXT_MARGIN -
-                             ( numLineWidth + GetDefaultLineThickness() ) / 2;
+    int name_offset = PIN_TEXT_MARGIN + ( nameLineWidth + GetDefaultLineThickness() ) / 2;
+    int num_offset = - PIN_TEXT_MARGIN - ( numLineWidth + GetDefaultLineThickness() ) / 2;
 
     //printf("numoffs %d w %d s %d\n", num_offset, numLineWidth,aPin->GetNumberTextSize() );
 
@@ -616,28 +614,29 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 
     if( textOffset )  /* Draw the text inside, but the pin numbers outside. */
     {
-        m_gal->SetGlyphSize ( VECTOR2D ( nameSize, nameSize ) );
+        m_gal->SetGlyphSize( VECTOR2D( nameSize, nameSize ) );
 
-        if(showNames && (nameSize > 0))
+        if( showNames && ( nameSize > 0 ) )
         {
-        switch ( orient )
-        {
-          case PIN_LEFT:
-            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            m_gal->StrokeText( aPin->GetName(), pos + VECTOR2D ( -textOffset - len, 0 ), 0 );
-            break;
-          case PIN_RIGHT:
-            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-            m_gal->StrokeText( aPin->GetName(), pos + VECTOR2D ( textOffset + len, 0 ), 0 );
-            break;
-          case PIN_DOWN:
-            m_gal->SetHorizontalJustify ( GR_TEXT_HJUSTIFY_RIGHT );
-            m_gal->StrokeText ( aPin->GetName(), pos + VECTOR2D ( 0, textOffset + len), M_PI / 2);
-            break;
-          case PIN_UP:
-            m_gal->SetHorizontalJustify ( GR_TEXT_HJUSTIFY_LEFT );
-            m_gal->StrokeText ( aPin->GetName(), pos + VECTOR2D ( 0, - textOffset - len), M_PI / 2);
-            break;
+            switch( orient )
+            {
+            case PIN_LEFT:
+                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                m_gal->StrokeText( aPin->GetName(), pos + VECTOR2D ( -textOffset - len, 0 ), 0 );
+                break;
+            case PIN_RIGHT:
+                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+                m_gal->StrokeText( aPin->GetName(), pos + VECTOR2D ( textOffset + len, 0 ), 0 );
+                break;
+            case PIN_DOWN:
+                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                m_gal->StrokeText ( aPin->GetName(), pos + VECTOR2D ( 0, textOffset + len), M_PI / 2);
+                break;
+            case PIN_UP:
+                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+                m_gal->StrokeText ( aPin->GetName(), pos + VECTOR2D ( 0, - textOffset - len), M_PI / 2);
+                break;
+            }
         }
     }
 
@@ -645,29 +644,31 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 
     int numSize = aPin->GetNumberTextSize();
 
-      if(showNums && numSize > 0)
-      {
-
-        m_gal->SetGlyphSize ( VECTOR2D ( numSize, numSize ) );
-
+    if( showNums && numSize > 0 )
+    {
+        m_gal->SetGlyphSize( VECTOR2D ( numSize, numSize ) );
 
         m_gal->SetStrokeColor( numColor );
-        m_gal->SetGlyphSize ( VECTOR2D ( numSize, numSize ) );
+        m_gal->SetGlyphSize( VECTOR2D ( numSize, numSize ) );
         m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
         m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
 
-        switch(orient)
+        switch( orient )
         {
-          case PIN_LEFT:
-          case PIN_RIGHT:
+        case PIN_LEFT:
+        case PIN_RIGHT:
             m_gal->StrokeText (stringPinNum, VECTOR2D( (p0.x + pos.x) / 2, p0.y + num_offset ), 0 );
             break;
-          case PIN_DOWN:
-          case PIN_UP:
-            m_gal->StrokeText (stringPinNum, VECTOR2D ( p0.x - num_offset, (p0.y + pos.y) / 2), M_PI / 2);
-           break;
+        case PIN_DOWN:
+        case PIN_UP:
+            m_gal->StrokeText (stringPinNum, VECTOR2D( p0.x - num_offset, (p0.y + pos.y) / 2), M_PI / 2 );
+            break;
         }
-      }
+    }
+
+    if( m_schSettings.m_showPinsElectricalType )
+    {
+        // JEY TODO: draw pin electrical type names
     }
 }
 

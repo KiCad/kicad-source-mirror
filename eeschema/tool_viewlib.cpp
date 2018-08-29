@@ -95,16 +95,14 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-    m_selpartBox = new wxComboBox( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
-            wxEmptyString, wxDefaultPosition,
-            wxSize( 150, -1 ), 0, NULL, wxCB_READONLY );
-    m_mainToolBar->AddControl( m_selpartBox );
+    m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+            wxDefaultPosition, wxSize( 150, -1 ) );
+    m_mainToolBar->AddControl( m_unitChoice );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
             KiScaledBitmap( datasheet_xpm, this ),
             _( "View symbol documents" ) );
-    m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
     if( IsModal() )
     {
