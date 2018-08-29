@@ -171,7 +171,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     wxTreeItemId    id = GetId();
 
     KICAD_MANAGER_FRAME* frame = aTreePrjFrame->m_Parent;
-    wxASSERT( frame );
+    KIWAY&               kiway = frame->Kiway();
 
     switch( GetType() )
     {
@@ -254,7 +254,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         {
             wxCommandEvent dummy;
             frame->OnRunPcbFpEditor( dummy );
-            frame->Kiway().ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, fullFileName );
+            kiway.ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, fullFileName.ToStdString() );
         }
         break;
 
@@ -262,7 +262,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         {
             wxCommandEvent dummy;
             frame->OnRunSchLibEditor( dummy );
-            frame->Kiway().ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, fullFileName );
+            kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, fullFileName.ToStdString() );
         }
         break;
 
