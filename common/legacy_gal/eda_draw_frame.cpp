@@ -476,7 +476,7 @@ int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxSt
 {
     int result = EDA_BASE_FRAME::WriteHotkeyConfig( aDescList, aFullFileName );
 
-    if( IsGalCanvasActive() )
+    if( GetToolManager() )
         GetToolManager()->UpdateHotKeys();
 
     return result;
