@@ -445,7 +445,7 @@ void GRID_TRICKS::onUpdateUI( wxUpdateUIEvent& event )
 
     if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectionModes::wxGridSelectRows )
     {
-        int cursorRow = m_grid->GetCursorRow();
+        int cursorRow = m_grid->GetGridCursorRow();
         bool cursorInSelectedRow = false;
 
         for( int row : m_grid->GetSelectedRows() )
