@@ -1844,10 +1844,11 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGrou
             if( aMode == SELECTED )
                 item->ClearSelected();
             else if( aMode == BRIGHTENED )
-            {
                 item->ClearBrightened();
-                aGroup.Remove( item );
-            }
+
+            // N.B. if we clear the selection flag for sub-elements, we need to also
+            // remove the element from the selection group (if it exists)
+            aGroup.Remove( item );
             view()->Hide( item, false );
             view()->Update( item );
         });
