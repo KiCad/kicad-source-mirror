@@ -479,7 +479,6 @@ void SCH_PAINTER::draw ( LIB_TEXT *aText, int aLayer )
 
 static int InternalPinDecoSize( const LIB_PIN &aPin )
 {
-
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
 
@@ -832,10 +831,18 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling )
     }
 }
 
-void SCH_PAINTER::draw ( SCH_JUNCTION *aJct, int aLayer )
+
+static void drawDanglingSymbol( GAL* aGal, const wxPoint& aPos )
+{
+    wxPoint radius( DANGLING_SYMBOL_SIZE, DANGLING_SYMBOL_SIZE );
+    aGal->SetLineWidth ( 1.0 );
+    aGal->DrawRectangle( aPos - radius, aPos + radius );
+}
+
+
+void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 {
     const COLOR4D& color = m_schSettings.GetLayerColor( LAYER_JUNCTION );
-
 
     m_gal->SetIsStroke(true);
     m_gal->SetIsFill(true);
@@ -844,122 +851,101 @@ void SCH_PAINTER::draw ( SCH_JUNCTION *aJct, int aLayer )
     m_gal->DrawCircle( aJct->GetPosition(),  aJct->GetSymbolSize() / 2 );
 }
 
-void SCH_PAINTER::draw ( SCH_LINE *aLine, int aLayer )
+
+void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 {
-    COLOR4D color = GetLayerColor( LAYER_WIRE );
+    COLOR4D color = GetLayerColor( aLine->GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : LAYER_WIRE );
     int width = aLine->GetPenSize();
-
-    /*if( Color != COLOR4D::UNSPECIFIED )
-        color = Color;
-    else if( m_color != COLOR4D::UNSPECIFIED )
-        color = m_color;
-    else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
-
-    wxPoint start = m_start;
-    wxPoint end = m_end;
-
-    if( ( m_Flags & STARTPOINT ) == 0 )
-        start += offset;
-
-    if( ( m_Flags & ENDPOINT ) == 0 )
-        end += offset;*/
 
     m_gal->SetIsStroke(true);
     m_gal->SetStrokeColor(color);
     m_gal->SetLineWidth( width );
     m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
 
-    //GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color,
-    //        getwxPenStyle( (PlotDashType) GetLineStyle() ) );
+    if( aLine->IsStartDangling() )
+        drawDanglingSymbol( m_gal, aLine->GetStartPoint());
 
-    /*if( m_startIsDangling )
-        DrawDanglingSymbol( panel, DC, start, color );
-
-    if( m_endIsDangling )
-        DrawDanglingSymbol( panel, DC, end, color );*/
+    if( aLine->IsEndDangling() )
+        drawDanglingSymbol( m_gal, aLine->GetEndPoint());
 }
 
-void SCH_PAINTER::draw ( SCH_TEXT *aText, int aLayer )
-{
-    COLOR4D     color;
-    int         linewidth = aText->GetThickness() == 0 ? GetDefaultLineThickness() : aText->GetThickness();
 
-    switch ( aText->Type() )
+void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
+{
+    switch( aText->Type() )
     {
-        case SCH_HIERARCHICAL_LABEL_T:
-            color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
-            break;
-        case SCH_GLOBAL_LABEL_T:
-            color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
-            break;
-        default:
-            color = m_schSettings.GetLayerColor( LAYER_NOTES );
-            break;
+    case SCH_HIERARCHICAL_LABEL_T:
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETLABEL ) );
+        break;
+    case SCH_GLOBAL_LABEL_T:
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_GLOBLABEL ) );
+        break;
+    default:
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_NOTES ) );
+        break;
     }
+
+    if( aText->IsDangling() )
+        drawDanglingSymbol( m_gal, aText->GetTextPos());
+
+    wxPoint  text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
+    int      linewidth = aText->GetThickness() ? aText->GetThickness() : GetDefaultLineThickness();
+    wxString shownText( aText->GetShownText() );
 
     linewidth = Clamp_Text_PenSize( linewidth, aText->GetTextSize(), aText->IsBold() );
 
-    wxPoint text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
-
-    int savedWidth = aText->GetThickness();
-
-    //if( m_isDangling && panel)
-        //DrawDanglingSymbol( panel, DC, GetTextPos() + aOffset, color );
-
-        wxString shownText( aText->GetShownText() );
-        if( shownText.Length() == 0 )
-            return;
-
-
-        m_gal->SetStrokeColor( color );
+    if( !shownText.IsEmpty() )
+    {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
+        m_gal->SetGlyphSize( aText->GetTextSize() );
         m_gal->SetTextAttributes( aText );
         m_gal->SetLineWidth( linewidth );
         m_gal->StrokeText( shownText, text_offset, aText->GetTextAngleRadians() );
-
-
+    }
 }
+
 
 static void orientComponent( LIB_PART *part, int orientation )
 {
-
 #define N_ORIENTATIONS 8
 
-    struct ORIENT {
+    struct ORIENT
+    {
         int flag;
         int n_rots;
         int mirror_x, mirror_y;
-    } orientations[N_ORIENTATIONS] = {
-        {    CMP_ORIENT_0,       0, 0, 0},
-        {    CMP_ORIENT_90,      1, 0, 0},
-        {    CMP_ORIENT_180,     2, 0, 0},
-        {    CMP_ORIENT_270,     3, 0, 0},
-        { CMP_MIRROR_X + CMP_ORIENT_0, 0, 1, 0 },
-        { CMP_MIRROR_X + CMP_ORIENT_90, 1, 1, 0},
-        { CMP_MIRROR_Y, 0, 0, 1},
+    }
+    orientations[N_ORIENTATIONS] =
+    {
+        { CMP_ORIENT_0,                  0, 0, 0 },
+        { CMP_ORIENT_90,                 1, 0, 0 },
+        { CMP_ORIENT_180,                2, 0, 0 },
+        { CMP_ORIENT_270,                3, 0, 0 },
+        { CMP_MIRROR_X + CMP_ORIENT_0,   0, 1, 0 },
+        { CMP_MIRROR_X + CMP_ORIENT_90,  1, 1, 0 },
+        { CMP_MIRROR_Y,                  0, 0, 1 },
         { CMP_MIRROR_X + CMP_ORIENT_270, 3, 1, 0 }
+       // CMP_MIRROR_Y + CMP_ORIENT_0,
+       // CMP_MIRROR_Y + CMP_ORIENT_90,
+       // CMP_MIRROR_Y + CMP_ORIENT_180,
+       // CMP_MIRROR_Y + CMP_ORIENT_270
     };
-    //        ,
-    //        CMP_MIRROR_Y + CMP_ORIENT_0,   CMP_MIRROR_Y + CMP_ORIENT_90,
-    //        CMP_MIRROR_Y + CMP_ORIENT_180, CMP_MIRROR_Y + CMP_ORIENT_270*/
-        //}
 
     ORIENT o;
 
-    for(int i = 0; i < N_ORIENTATIONS;i++)
-    if(orientations[i].flag == orientation)
+    for( int i = 0; i < N_ORIENTATIONS; i++ )
     {
-        o = orientations[i];
-        break;
+        if( orientations[i].flag == orientation )
+        {
+            o = orientations[i];
+            break;
+        }
     }
 
     //printf("orient %d %d %d\n", o.n_rots, o.mirror_x, o.mirror_y );
 
-    for(int i = 0; i < o.n_rots; i++)
+    for( int i = 0; i < o.n_rots; i++ )
     {
         for( auto& item : part->GetDrawItems() )
         {
@@ -975,6 +961,7 @@ static void orientComponent( LIB_PART *part, int orientation )
             item.MirrorHorizontal( wxPoint(0, 0 ) );
     }
 }
+
 
 void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 {
@@ -993,8 +980,10 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
         item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
     }
 
-    draw( ptrans.get(), aLayer, false,
-          aComp->GetUnit(), aComp->GetConvert(), aComp->GetDanglingPinFlags() );
+    // Always draw dangling pin targets when dragging
+    std::vector<bool>* pinFlags = aComp->IsMoving() ? nullptr : aComp->GetDanglingPinFlags();
+
+    draw( ptrans.get(), aLayer, false, aComp->GetUnit(), aComp->GetConvert(), pinFlags );
 
     // The fields are SCH_COMPONENT-specific and so don't need to be copied/
     // oriented/translated.

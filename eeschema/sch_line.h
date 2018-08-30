@@ -158,6 +158,9 @@ public:
 
     bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
+    bool IsStartDangling() const { return m_startIsDangling; }
+    bool IsEndDangling() const { return m_endIsDangling; }
+
     bool IsDangling() const override { return m_startIsDangling || m_endIsDangling; }
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
