@@ -811,13 +811,16 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
     {
         m_xpath->push( "package", "name" );
 
-        const wxString& pack_ref = package->GetAttribute( "name" );
-        std::string pack_name( pack_ref );
-        ReplaceIllegalFileNameChars( &pack_name, '_' );
+        wxString pack_ref = package->GetAttribute( "name" );
+        ReplaceIllegalFileNameChars( pack_ref, '_' );
+        std::string pack_name = Convert<std::string>( pack_ref );
+
+        if(pack_name.length() == 0 )
+            printf("Empty!\n");
 
         m_xpath->Value( pack_name.c_str() );
 
-        wxString key = aLibName ? makeKey( *aLibName, pack_name ) : wxString( pack_name );
+        wxString key = aLibName ? makeKey( *aLibName, pack_ref ) : pack_ref;
 
         MODULE* m = makeModule( package, pack_name );
 
@@ -832,8 +835,9 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
             wxString pkg = FROM_UTF8( pack_name.c_str() );
 
             wxString emsg = wxString::Format(
-                _( "<package> name: \"%s\" duplicated in eagle <library>: \"%s\"" ),
+                _( "<package> name: \"%s\" : %s duplicated in eagle <library>: \"%s\"" ),
                 GetChars( pkg ),
+                GetChars( key ),
                 GetChars( lib )
                 );
             THROW_IO_ERROR( emsg );
