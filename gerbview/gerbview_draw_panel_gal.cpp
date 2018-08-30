@@ -168,6 +168,8 @@ void GERBVIEW_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
     // Move DCODE layer to the top
     m_view->SetTopLayer( GERBER_DCODE_LAYER( aLayer ) );
 
+    m_view->SetTopLayer( LAYER_SELECT_OVERLAY );
+
     m_view->SetTopLayer( LAYER_GP_OVERLAY );
 
     m_view->UpdateAllLayersOrder();
