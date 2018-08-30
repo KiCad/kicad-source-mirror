@@ -374,7 +374,7 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 {
     int curRow = m_EnvVars->GetGridCursorRow();
 
-    if( curRow < 0 )
+    if( curRow < 0 || m_EnvVars->GetNumberRows() <= curRow )
         return;
     else if( IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, EV_NAME_COL ) ) )
     {
@@ -394,11 +394,8 @@ void DIALOG_CONFIGURE_PATHS::OnDeleteSearchPath( wxCommandEvent& event )
 {
     int curRow = m_SearchPaths->GetGridCursorRow();
 
-    if( !m_SearchPaths->HasFocus() || curRow < 0 )
-    {
-        m_SearchPaths->SetFocus();
+    if( curRow < 0 || m_SearchPaths->GetNumberRows() <= curRow )
         return;
-    }
 
     m_SearchPaths->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
     m_SearchPaths->DeleteRows( curRow, 1 );
