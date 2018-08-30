@@ -439,7 +439,7 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
 }
 
 
-void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
+void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 {
     if( !aPin->IsVisible() && !m_schSettings.m_showHiddenPins )
       return;
@@ -513,7 +513,7 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
         //m_gal->DrawLine ( p0, pos+dir.Perpendicular() * radius);
     }
 
-    if(shape == PINSHAPE_CLOCK)
+    if( shape == PINSHAPE_CLOCK )
     {
         if (!dir.y)
         {
@@ -548,28 +548,28 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 
     if( shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
     {
-        if(!dir.y)
-          m_gal->DrawLine( p0 - VECTOR2D(0, radius), p0 + VECTOR2D(dir.x, 1) * radius * 2);
+        if( !dir.y )
+            m_gal->DrawLine( p0 - VECTOR2D(0, radius), p0 + VECTOR2D(dir.x, 1) * radius * 2);
         else
-          m_gal->DrawLine (p0 - VECTOR2D(radius, 0), p0 + VECTOR2D(0, dir.y) * radius * 2);
+            m_gal->DrawLine (p0 - VECTOR2D(radius, 0), p0 + VECTOR2D(0, dir.y) * radius * 2);
     }
 
     if( shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
     {
-        m_gal->DrawLine ( p0 - VECTOR2D(dir.x + dir.y, dir.y - dir.x) * radius,
-                          p0 + VECTOR2D(dir.x + dir.y, dir.y - dir.x) * radius);
-        m_gal->DrawLine ( p0 - VECTOR2D(dir.x - dir.y, dir.x + dir.y) * radius,
-                          p0 + VECTOR2D(dir.x - dir.y, dir.x + dir.y) * radius);
+        m_gal->DrawLine( p0 - VECTOR2D(dir.x + dir.y, dir.y - dir.x) * radius,
+                         p0 + VECTOR2D(dir.x + dir.y, dir.y - dir.x) * radius);
+        m_gal->DrawLine( p0 - VECTOR2D(dir.x - dir.y, dir.x + dir.y) * radius,
+                         p0 + VECTOR2D(dir.x - dir.y, dir.x + dir.y) * radius);
     }
 
     #define NCSYMB_PIN_DIM TARGET_PIN_RADIUS
 
     if( aPin->GetType() == PIN_NC )   // Draw a N.C. symbol
     {
-        m_gal->DrawLine ( pos + VECTOR2D(-1, -1) * NCSYMB_PIN_DIM,
-                          pos + VECTOR2D(1, 1) * NCSYMB_PIN_DIM);
-        m_gal->DrawLine ( pos + VECTOR2D(1, -1) * NCSYMB_PIN_DIM,
-                          pos + VECTOR2D(-1, 1) * NCSYMB_PIN_DIM);
+        m_gal->DrawLine( pos + VECTOR2D(-1, -1) * NCSYMB_PIN_DIM,
+                         pos + VECTOR2D(1, 1) * NCSYMB_PIN_DIM);
+        m_gal->DrawLine( pos + VECTOR2D(1, -1) * NCSYMB_PIN_DIM,
+                         pos + VECTOR2D(-1, 1) * NCSYMB_PIN_DIM);
     }
 
     m_gal->SetLineWidth ( 0.0 );
@@ -577,98 +577,197 @@ void SCH_PAINTER::draw ( LIB_PIN *aPin, int aLayer )
 
 // Draw the labels
 
-    int labelWidth = std::min ( GetDefaultLineThickness(), width );
-    LIB_PART* libEntry = (const_cast<LIB_PIN *> (aPin)) ->GetParent();
-    m_gal->SetLineWidth ( labelWidth );
-    wxString    stringPinNum;
-
-    /* Get the num and name colors */
-    COLOR4D nameColor = m_schSettings.GetLayerColor( LAYER_PINNAM );
-    COLOR4D numColor  = m_schSettings.GetLayerColor( LAYER_PINNUM );
-
-    /* Create the pin num string */
-    stringPinNum = aPin->GetNumber();
+    LIB_PART* libEntry = aPin->GetParent();
     int textOffset = libEntry->GetPinNameOffset();
 
-    bool showNums = libEntry->ShowPinNumbers();
-    bool showNames = libEntry->ShowPinNames();
-
-    //m_gal->SetTextMirrored ( true ); // don't know why yet...
-    m_gal->SetStrokeColor ( nameColor );
-    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-
-    int         nameLineWidth = aPin->GetPenSize();
+    int nameLineWidth = aPin->GetPenSize();
     nameLineWidth = Clamp_Text_PenSize( nameLineWidth, aPin->GetNameTextSize(), false );
-    int         numLineWidth = aPin->GetPenSize();
+    int numLineWidth = aPin->GetPenSize();
     numLineWidth = Clamp_Text_PenSize( numLineWidth, aPin->GetNumberTextSize(), false );
 
     #define PIN_TEXT_MARGIN 4
 
-    int name_offset = PIN_TEXT_MARGIN + ( nameLineWidth + GetDefaultLineThickness() ) / 2;
-    int num_offset = - PIN_TEXT_MARGIN - ( numLineWidth + GetDefaultLineThickness() ) / 2;
+    // Four locations around a pin where text can be drawn
+    enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
 
     //printf("numoffs %d w %d s %d\n", num_offset, numLineWidth,aPin->GetNumberTextSize() );
 
-    int nameSize = aPin->GetNameTextSize();
+    int size[4] = { 0, 0, 0, 0 };
+    int thickness[4];
+    COLOR4D colour[4];
+    wxString text[4];
 
-
-    if( textOffset )  /* Draw the text inside, but the pin numbers outside. */
+    // TextOffset > 0 means pin NAMES on inside, pin NUMBERS above and nothing below
+    if( textOffset )
     {
-        m_gal->SetGlyphSize( VECTOR2D( nameSize, nameSize ) );
+        size     [INSIDE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
+        thickness[INSIDE] = nameLineWidth;
+        colour   [INSIDE] = m_schSettings.GetLayerColor( LAYER_PINNAM );
+        text     [INSIDE] = aPin->GetName();
 
-        if( showNames && ( nameSize > 0 ) )
-        {
-            switch( orient )
-            {
-            case PIN_LEFT:
-                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                m_gal->StrokeText( aPin->GetName(), pos + VECTOR2D ( -textOffset - len, 0 ), 0 );
-                break;
-            case PIN_RIGHT:
-                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-                m_gal->StrokeText( aPin->GetName(), pos + VECTOR2D ( textOffset + len, 0 ), 0 );
-                break;
-            case PIN_DOWN:
-                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                m_gal->StrokeText ( aPin->GetName(), pos + VECTOR2D ( 0, textOffset + len), M_PI / 2);
-                break;
-            case PIN_UP:
-                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-                m_gal->StrokeText ( aPin->GetName(), pos + VECTOR2D ( 0, - textOffset - len), M_PI / 2);
-                break;
-            }
-        }
+        size     [ABOVE] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
+        thickness[ABOVE] = numLineWidth;
+        colour   [ABOVE] = m_schSettings.GetLayerColor( LAYER_PINNUM );
+        text     [ABOVE] = aPin->GetNumber();
     }
-
-    #define TXTMARGE 10
-
-    int numSize = aPin->GetNumberTextSize();
-
-    if( showNums && numSize > 0 )
+    // Otherwise pin NAMES go above and pin NUMBERS go below
+    else
     {
-        m_gal->SetGlyphSize( VECTOR2D ( numSize, numSize ) );
+        size     [ABOVE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
+        thickness[ABOVE] = nameLineWidth;
+        colour   [ABOVE] = m_schSettings.GetLayerColor( LAYER_PINNAM );
+        text     [ABOVE] = aPin->GetName();
 
-        m_gal->SetStrokeColor( numColor );
-        m_gal->SetGlyphSize( VECTOR2D ( numSize, numSize ) );
-        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-
-        switch( orient )
-        {
-        case PIN_LEFT:
-        case PIN_RIGHT:
-            m_gal->StrokeText (stringPinNum, VECTOR2D( (p0.x + pos.x) / 2, p0.y + num_offset ), 0 );
-            break;
-        case PIN_DOWN:
-        case PIN_UP:
-            m_gal->StrokeText (stringPinNum, VECTOR2D( p0.x - num_offset, (p0.y + pos.y) / 2), M_PI / 2 );
-            break;
-        }
+        size     [BELOW] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
+        thickness[BELOW] = numLineWidth;
+        colour   [BELOW] = m_schSettings.GetLayerColor( LAYER_PINNUM );
+        text     [BELOW] = aPin->GetNumber();
     }
 
     if( m_schSettings.m_showPinsElectricalType )
     {
-        // JEY TODO: draw pin electrical type names
+        size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, Millimeter2iu( 0.7 ) );
+        thickness[OUTSIDE] = size[OUTSIDE] / 6;
+        colour   [OUTSIDE] = m_schSettings.GetLayerColor( LAYER_NOTES );
+        text     [OUTSIDE] = aPin->GetElectricalTypeName();
+    }
+
+    int insideOffset = textOffset;
+    int outsideOffset = 10;
+    int aboveOffset = PIN_TEXT_MARGIN + ( thickness[ABOVE] + GetDefaultLineThickness() ) / 2;
+    int belowOffset = PIN_TEXT_MARGIN + ( thickness[BELOW] + GetDefaultLineThickness() ) / 2;
+
+    #define SET_DC( i ) \
+        m_gal->SetGlyphSize( VECTOR2D( size[i], size[i] ) ); \
+        m_gal->SetLineWidth( thickness[i] ); \
+        m_gal->SetStrokeColor( colour[i] );
+
+    switch( orient )
+    {
+    case PIN_LEFT:
+        if( size[INSIDE] )
+        {
+            SET_DC( INSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText( text[INSIDE], pos + VECTOR2D( -insideOffset - len, 0 ), 0 );
+        }
+        if( size[OUTSIDE] )
+        {
+            SET_DC( OUTSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText( text[OUTSIDE], pos + VECTOR2D( outsideOffset, 0 ), 0 );
+        }
+        if( size[ABOVE] )
+        {
+            SET_DC( ABOVE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -len / 2, -aboveOffset ), 0 );
+        }
+        if( size[BELOW] )
+        {
+            SET_DC( BELOW );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( -len / 2, belowOffset ), 0 );
+        }
+        break;
+
+    case PIN_RIGHT:
+        if( size[INSIDE] )
+        {
+            SET_DC( INSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->StrokeText( text[INSIDE], pos + VECTOR2D( insideOffset + len, 0 ), 0 );
+        }
+        if( size[OUTSIDE] )
+        {
+            SET_DC( OUTSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText( text[OUTSIDE], pos + VECTOR2D( -outsideOffset, 0 ), 0 );
+        }
+        if( size[ABOVE] )
+        {
+            SET_DC( ABOVE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( len / 2, -aboveOffset ), 0 );
+        }
+        if( size[BELOW] )
+        {
+            SET_DC( BELOW );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( len / 2, belowOffset ), 0 );
+        }
+        break;
+
+    case PIN_DOWN:
+        if( size[INSIDE] )
+        {
+            SET_DC( INSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText ( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2);
+        }
+        if( size[OUTSIDE] )
+        {
+            SET_DC( OUTSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText ( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2);
+        }
+        if( size[ABOVE] )
+        {
+            SET_DC( ABOVE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2 ), M_PI / 2 );
+        }
+        if( size[BELOW] )
+        {
+            SET_DC( BELOW );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2 ), M_PI / 2 );
+        }
+        break;
+
+    case PIN_UP:
+        if( size[INSIDE] )
+        {
+            SET_DC( INSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText ( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2);
+        }
+        if( size[OUTSIDE] )
+        {
+            SET_DC( OUTSIDE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->StrokeText ( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2);
+        }
+        if( size[ABOVE] )
+        {
+            SET_DC( ABOVE );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2 ), M_PI / 2 );
+        }
+        if( size[BELOW] )
+        {
+            SET_DC( BELOW );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2 ), M_PI / 2 );
+        }
+        break;
     }
 }
 
