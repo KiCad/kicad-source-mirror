@@ -40,7 +40,7 @@ class SCH_COMPONENT;
 #include "class_libentry.h"
 
 // Circle diameter drawn at the active end of pins:
-#define TARGET_PIN_RADIUS   12
+#define TARGET_PIN_RADIUS   15
 
 // Pin visibility flag bit:
 #define PIN_INVISIBLE 1    // Set makes pin invisible

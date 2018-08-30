@@ -100,11 +100,49 @@ const COLOR4D& SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
   return m_layerColors[ aLayer ];
 }
 
-SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
-	KIGFX::PAINTER (aGal)
-	{
 
-	}
+/**
+ * Used when a LIB_PART is not found in library to draw a dummy shape.
+ * This component is a 400 mils square with the text "??"
+ * DEF DUMMY U 0 40 Y Y 1 0 N
+ * F0 "U" 0 -350 60 H V
+ * F1 "DUMMY" 0 350 60 H V
+ * DRAW
+ * T 0 0 0 150 0 0 0 ??
+ * S -200 200 200 -200 0 1 0
+ * ENDDRAW
+ * ENDDEF
+ */
+static LIB_PART* dummy()
+{
+    static LIB_PART* part;
+
+    if( !part )
+    {
+        part = new LIB_PART( wxEmptyString );
+
+        LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
+
+        square->Move( wxPoint( -200, 200 ) );
+        square->SetEndPosition( wxPoint( 200, -200 ) );
+
+        LIB_TEXT* text = new LIB_TEXT( part );
+
+        text->SetTextSize( wxSize( 150, 150 ) );
+        text->SetText( wxString( wxT( "??" ) ) );
+
+        part->AddDrawItem( square );
+        part->AddDrawItem( text );
+    }
+
+    return part;
+}
+
+
+SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
+    KIGFX::PAINTER (aGal)
+{ }
+
 
 #define HANDLE_ITEM(type_id, type_name) \
   case type_id: \
@@ -172,8 +210,11 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert )
+void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert,
+                       std::vector<bool>* danglingPinFlags )
 {
+    size_t pinIndex = 0;
+
     for( auto& item : aComp->GetDrawItems() )
     {
 		if( !aDrawFields && item.Type() == LIB_FIELD_T )
@@ -185,7 +226,19 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
         if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
             continue;
 
-        Draw( &item, aLayer );
+        if( item.Type() == LIB_PIN_T )
+        {
+            auto pin = static_cast<LIB_PIN*>( &item );
+            bool dangling = true;
+
+            if( danglingPinFlags && pinIndex < danglingPinFlags->size() )
+                dangling = (*danglingPinFlags)[ pinIndex ];
+
+            draw( pin, aLayer, dangling );
+            pinIndex++;
+        }
+        else
+            Draw( &item, aLayer );
     }
 }
 
@@ -439,14 +492,20 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
 }
 
 
-void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
+void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling )
 {
-    if( !aPin->IsVisible() && !m_schSettings.m_showHiddenPins )
-      return;
+    COLOR4D color = m_schSettings.GetLayerColor( LAYER_PIN );
 
-    const COLOR4D& color = m_schSettings.GetLayerColor( LAYER_PIN );
+    if( !aPin->IsVisible() )
+    {
+        color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
 
-	VECTOR2I pos = mapCoords( aPin->GetPosition() ), p0, dir;
+        if( !m_schSettings.m_showHiddenPins )
+            return;
+    }
+
+	VECTOR2I pos = mapCoords( aPin->GetPosition() );
+    VECTOR2I p0, dir;
 	int len = aPin->GetLength();
 	int width = aPin->GetPenSize();
 	int shape = aPin->GetShape();
@@ -501,32 +560,30 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
         triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
                  pc,
-                 p0 + VECTOR2D( -dir.y, dir.x) * clock_size
-                );
+                 p0 + VECTOR2D( -dir.y, dir.x) * clock_size );
 
         m_gal->DrawLine( pos, pc );
     }
     else
     {
         //printf("DrawLPin\n");
-        m_gal->DrawLine ( p0, pos );
-        //m_gal->DrawLine ( p0, pos+dir.Perpendicular() * radius);
+        m_gal->DrawLine( p0, pos );
+        //m_gal->DrawLine( p0, pos+dir.Perpendicular() * radius);
     }
 
     if( shape == PINSHAPE_CLOCK )
     {
         if (!dir.y)
         {
-            triLine ( p0 + VECTOR2D( 0, clock_size ),
-                      p0 + VECTOR2D( -dir.x * clock_size, 0),
-                      p0 + VECTOR2D( 0, -clock_size ));
-
+            triLine( p0 + VECTOR2D( 0, clock_size ),
+                     p0 + VECTOR2D( -dir.x * clock_size, 0 ),
+                     p0 + VECTOR2D( 0, -clock_size ) );
         }
         else
         {
-            triLine ( p0 + VECTOR2D( clock_size, 0 ),
-                      p0 + VECTOR2D( 0, -dir.y * clock_size ),
-                      p0 + VECTOR2D( -clock_size, 0 ));
+            triLine( p0 + VECTOR2D( clock_size, 0 ),
+                     p0 + VECTOR2D( 0, -dir.y * clock_size ),
+                     p0 + VECTOR2D( -clock_size, 0 ) );
         }
     }
 
@@ -549,31 +606,32 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     if( shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
     {
         if( !dir.y )
-            m_gal->DrawLine( p0 - VECTOR2D(0, radius), p0 + VECTOR2D(dir.x, 1) * radius * 2);
+            m_gal->DrawLine( p0 - VECTOR2D( 0, radius ), p0 + VECTOR2D( dir.x, 1 ) * radius * 2 );
         else
-            m_gal->DrawLine (p0 - VECTOR2D(radius, 0), p0 + VECTOR2D(0, dir.y) * radius * 2);
+            m_gal->DrawLine( p0 - VECTOR2D( radius, 0 ), p0 + VECTOR2D( 0, dir.y ) * radius * 2 );
     }
 
     if( shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
     {
-        m_gal->DrawLine( p0 - VECTOR2D(dir.x + dir.y, dir.y - dir.x) * radius,
-                         p0 + VECTOR2D(dir.x + dir.y, dir.y - dir.x) * radius);
-        m_gal->DrawLine( p0 - VECTOR2D(dir.x - dir.y, dir.x + dir.y) * radius,
-                         p0 + VECTOR2D(dir.x - dir.y, dir.x + dir.y) * radius);
+        m_gal->DrawLine( p0 - VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius,
+                         p0 + VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius );
+        m_gal->DrawLine( p0 - VECTOR2D( dir.x - dir.y, dir.x + dir.y ) * radius,
+                         p0 + VECTOR2D( dir.x - dir.y, dir.x + dir.y ) * radius );
     }
-
-    #define NCSYMB_PIN_DIM TARGET_PIN_RADIUS
 
     if( aPin->GetType() == PIN_NC )   // Draw a N.C. symbol
     {
-        m_gal->DrawLine( pos + VECTOR2D(-1, -1) * NCSYMB_PIN_DIM,
-                         pos + VECTOR2D(1, 1) * NCSYMB_PIN_DIM);
-        m_gal->DrawLine( pos + VECTOR2D(1, -1) * NCSYMB_PIN_DIM,
-                         pos + VECTOR2D(-1, 1) * NCSYMB_PIN_DIM);
+        m_gal->DrawLine( pos + VECTOR2D( -1, -1 ) * TARGET_PIN_RADIUS,
+                         pos + VECTOR2D(  1,  1 ) * TARGET_PIN_RADIUS );
+        m_gal->DrawLine( pos + VECTOR2D(  1, -1 ) * TARGET_PIN_RADIUS ,
+                         pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
     }
 
-    m_gal->SetLineWidth ( 0.0 );
-    m_gal->DrawCircle( pos, TARGET_PIN_RADIUS );
+    if( isDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    {
+        m_gal->SetLineWidth ( 1.0 );
+        m_gal->DrawCircle( pos, TARGET_PIN_RADIUS );
+    }
 
 // Draw the labels
 
@@ -589,9 +647,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     // Four locations around a pin where text can be drawn
     enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
-
-    //printf("numoffs %d w %d s %d\n", num_offset, numLineWidth,aPin->GetNumberTextSize() );
-
     int size[4] = { 0, 0, 0, 0 };
     int thickness[4];
     COLOR4D colour[4];
@@ -630,6 +685,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         thickness[OUTSIDE] = size[OUTSIDE] / 6;
         colour   [OUTSIDE] = m_schSettings.GetLayerColor( LAYER_NOTES );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
+    }
+
+    if( !aPin->IsVisible() )
+    {
+        for( COLOR4D& c : colour )
+            c = m_schSettings.GetLayerColor( LAYER_HIDDEN );
     }
 
     int insideOffset = textOffset;
@@ -863,16 +924,6 @@ void SCH_PAINTER::draw ( SCH_TEXT *aText, int aLayer )
 
 }
 
-static LIB_PART* clone( LIB_PART *part )
-{
-    LIB_PART *rv = new LIB_PART ( *part );
-    for( auto& item : part->GetDrawItems() )
-    {
-        rv->AddDrawItem( static_cast<LIB_ITEM*>(item.Clone() ) );
-    }
-    return rv;
-}
-
 static void orientComponent( LIB_PART *part, int orientation )
 {
 
@@ -925,50 +976,35 @@ static void orientComponent( LIB_PART *part, int orientation )
     }
 }
 
-void SCH_PAINTER::draw ( SCH_COMPONENT *aComp, int aLayer )
+void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 {
     PART_SPTR part = aComp->GetPartRef().lock();
 
-    if (part)
+    // Use dummy part if the actual couldn't be found (or couldn't be locked).
+    // In either case copy it so we can re-orient and translate it.
+    std::unique_ptr<LIB_PART> ptrans( new LIB_PART( part ? *part.get() : *dummy() ) );
+
+    orientComponent( ptrans.get(), aComp->GetOrientation() );
+
+    for( auto& item : ptrans->GetDrawItems() )
     {
-        std::unique_ptr<LIB_PART> ptrans ( clone(part.get()) );
-
-        auto orient = aComp->GetOrientation();
-
-        orientComponent( ptrans.get(), orient );
-
-        for( auto& item : ptrans->GetDrawItems() )
-        {
-//            item.MirrorVertical( wxPoint(0, 0 ) );
-        }
-
-        for( auto& item : ptrans->GetDrawItems() )
-        {
-            auto rp = aComp->GetPosition();
-            auto ip = item.GetPosition();
-            item.Move( wxPoint(rp.x+ip.x, ip.y-rp.y) );
-        }
-
-        draw( ptrans.get(), aLayer, false, aComp->GetUnit(), aComp->GetConvert() );
-    }
-    else    // Use dummy() part if the actual cannot be found.
-    {
-        //printf("drawDummy\n");
-//        dummy()->Draw( aPanel, aDC, m_Pos + aOffset, 0, 0, opts );
+        auto rp = aComp->GetPosition();
+        auto ip = item.GetPosition();
+        item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
     }
 
-    SCH_FIELD* field = aComp->GetField( REFERENCE );
+    draw( ptrans.get(), aLayer, false,
+          aComp->GetUnit(), aComp->GetConvert(), aComp->GetDanglingPinFlags() );
 
-    draw( field, aLayer );
+    // The fields are SCH_COMPONENT-specific and so don't need to be copied/
+    // oriented/translated.
+    std::vector<SCH_FIELD*> fields;
+    aComp->GetFields( fields, false );
 
-    for( int ii = VALUE; ii < aComp->GetFieldCount(); ii++ )
+    for( SCH_FIELD* field : fields )
     {
-        field = aComp->GetField( ii );
-
-        if( field->IsMoving() )
-            continue;
-
-        draw( field, aLayer );
+        if( field->GetId() == REFERENCE || !field->IsMoving() )
+            draw( field, aLayer );
     }
 
 }

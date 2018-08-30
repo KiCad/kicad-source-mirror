@@ -231,6 +231,7 @@ static PARAM_CFG_ARRAY& cfg_params()
         CLR( "Color4DGridEx",             LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) )
         CLR( "Color4DBgCanvasEx",         LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) )
         CLR( "Color4DBrightenedEx",       LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) )
+        CLR( "Color4DHiddenEx",           LAYER_HIDDEN,               COLOR4D( LIGHTGRAY ) )
         CLR( "Color4DWorksheetEx",        LAYER_WORKSHEET,            COLOR4D( RED ) )
         CLR( "Color4DGridEx",             LAYER_GRID,                 COLOR4D( DARKGRAY ) )
     }

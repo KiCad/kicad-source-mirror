@@ -456,6 +456,8 @@ public:
      */
     void GetPins( std::vector<LIB_PIN*>& aPinsList );
 
+    std::vector<bool>* GetDanglingPinFlags() { return &m_isDangling; }
+
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override
     {

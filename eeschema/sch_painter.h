@@ -38,6 +38,7 @@ class LIB_ARC;
 class LIB_FIELD;
 class LIB_TEXT;
 class SCH_COMPONENT;
+class SCH_PIN;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCH_LABEL;
@@ -87,10 +88,8 @@ public:
     }
 
 private:
-
     bool m_showHiddenPins;
     bool m_showPinsElectricalType;
-
 };
 
 
@@ -120,16 +119,18 @@ public:
 
 private:
 	void draw( LIB_RECTANGLE *, int );
-	void draw( LIB_PIN *, int );
+	void draw( LIB_PIN *, int, bool isDangling = true );
 	void draw( LIB_CIRCLE *, int );
 	void draw( LIB_ITEM *, int );
-	void draw( LIB_PART *, int, bool aDrawFields = true, int aUnit = 0, int aConvert = 0 );
+	void draw( LIB_PART *, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
+               std::vector<bool>* danglingPinFlags = nullptr );
     void draw( LIB_ALIAS *, int );
     void draw( LIB_ARC *, int );
     void draw( LIB_POLYLINE *, int );
     void draw( LIB_FIELD *, int );
     void draw( LIB_TEXT *, int );
     void draw( SCH_COMPONENT *, int );
+    void draw( SCH_PIN *, int );
     void draw( SCH_JUNCTION *, int );
     void draw( SCH_FIELD *, int );
     void draw( SCH_TEXT *, int );
