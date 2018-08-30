@@ -393,8 +393,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     case ID_NO_TOOL_SELECTED:
     {
-        wxMenu* commands = new wxMenu;
-      
         if( !trackFound )
         {
             msg = AddHotkeyName( _( "Begin Track" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_NEW_TRACK );
