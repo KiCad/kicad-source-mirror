@@ -34,6 +34,7 @@
 
 #include <class_board.h>
 #include <class_track.h>
+#include <class_zone.h>
 #include <class_drawsegment.h>
 
 #include <pcbnew.h>
@@ -406,14 +407,14 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
         }
     }
 
-    // Change deprecated zones segments, only found in very old boards.
-    for( TRACK* segm = GetBoard()->m_SegZoneDeprecated; segm; segm = segm->Next() )
+    // Change zones
+    for( auto zone : GetBoard()->Zones() )
     {
         OnModify();
-        int jj = segm->GetLayer();
+        int jj = zone->GetLayer();
 
         if( new_layer[jj] != NO_CHANGE )
-            segm->SetLayer( new_layer[jj] );
+            zone->SetLayer( new_layer[jj] );
     }
 
     // Change other segments.
