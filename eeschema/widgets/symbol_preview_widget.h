@@ -25,8 +25,10 @@
 #include <gal/gal_display_options.h>
 
 
+class EDA_ITEM;
 class LIB_ID;
 class LIB_ALIAS;
+class LIB_PART;
 class EDA_DRAW_PANEL_GAL;
 class wxStaticText;
 class wxSizer;
@@ -56,6 +58,8 @@ public:
      */
     void DisplaySymbol( const LIB_ID& aSymbolID, int aUnit );
 
+    void DisplayPart( LIB_PART* aPart, int aUnit );
+
 private:
     KIWAY&                     m_kiway;
 
@@ -63,9 +67,9 @@ private:
     EDA_DRAW_PANEL_GAL*        m_preview;
 
     wxStaticText*              m_status;
-    wxSizer*                   m_sizer;
+    wxSizer*                   m_statusSizer;
 
-    LIB_ALIAS*                 m_previewItem;
+    EDA_ITEM*                  m_previewItem;
 };
 
 

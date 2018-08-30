@@ -32,6 +32,7 @@
 #include <vector>
 #include <project_rescue.h>
 #include <eeschema_config.h>
+#include <symbol_preview_widget.h>
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
 {
@@ -59,12 +60,9 @@ private:
     bool TransferDataFromWindow() override;
     void PopulateConflictList();
     void PopulateInstanceList();
-    void OnConflictSelect( wxDataViewEvent& event ) override;
-    void OnNeverShowClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
-    void OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
-    void OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
-    void renderPreview( LIB_PART* aComponent, int aUnit, wxPanel* panel );
+    void OnConflictSelect( wxDataViewEvent& aEvent ) override;
+    void OnNeverShowClick( wxCommandEvent& aEvent ) override;
+    void OnCancelClick( wxCommandEvent& aEvent ) override;
 };
 
 
@@ -117,11 +115,11 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
     width = dc.GetTextExtent( header ).GetWidth() * 10;
     m_ListOfInstances->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
 
-    m_componentViewOld->SetLayoutDirection( wxLayout_LeftToRight );
-    m_componentViewNew->SetLayoutDirection( wxLayout_LeftToRight );
+    m_previewOldWidget->SetLayoutDirection( wxLayout_LeftToRight );
+    m_previewNewWidget->SetLayoutDirection( wxLayout_LeftToRight );
 
     Layout();
-    SetSizeInDU( 480, 240 );
+    SetSizeInDU( 480, 360 );
 
     // Make sure the HTML window is large enough. Some fun size juggling and
     // fudge factors here but it does seem to work pretty reliably.
@@ -132,7 +130,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
     m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
     Layout();
     GetSizer()->SetSizeHints( this );
-    SetSizeInDU( 480, 240 );
+    SetSizeInDU( 480, 360 );
     Center();
 }
 
@@ -206,77 +204,8 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
         count++;
     }
 
-    m_titleInstances->SetLabelText( wxString::Format(
-                    _( "Instances of this symbol (%d items):" ), count ) );
-}
-
-
-void DIALOG_RESCUE_EACH::OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEvent )
-{
-    int row = m_ListOfConflicts->GetSelectedRow();
-
-    if( row == wxNOT_FOUND )
-        row = 0;
-
-    RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
-
-    if( selected_part.GetCacheCandidate() )
-        renderPreview( selected_part.GetCacheCandidate(), 0, m_componentViewOld );
-}
-
-
-void DIALOG_RESCUE_EACH::OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEvent )
-{
-    int row = m_ListOfConflicts->GetSelectedRow();
-
-    if( row == wxNOT_FOUND )
-        row = 0;
-
-    RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
-
-    if( selected_part.GetLibCandidate() )
-        renderPreview( selected_part.GetLibCandidate(), 0, m_componentViewNew );
-}
-
-
-// Render the preview in our m_componentView. If this gets more complicated, we should
-// probably have a derived class from wxPanel; but this keeps things local.
-// Call it only from a Paint Event, because we are using a wxPaintDC to draw the component
-void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel* aPanel )
-{
-    wxPaintDC dc( aPanel );
-    wxColour bgColor = m_Parent->GetDrawBgColor().ToColour();
-
-    dc.SetBackground( wxBrush( bgColor ) );
-    dc.Clear();
-
-    if( aComponent == NULL )
-        return;
-
-    if( aUnit <= 0 )
-        aUnit = 1;
-
-    const wxSize dc_size = dc.GetSize();
-    dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
-
-    // Find joint bounding box for everything we are about to draw.
-    EDA_RECT bBox = aComponent->GetUnitBoundingBox( aUnit, /* deMorganConvert */ 1 );
-    const double xscale = (double) dc_size.x / bBox.GetWidth();
-    const double yscale = (double) dc_size.y / bBox.GetHeight();
-    const double scale  = std::min( xscale, yscale ) * 0.85;
-
-    dc.SetUserScale( scale, scale );
-
-    wxPoint offset = - bBox.Centre();
-
-    // Avoid rendering when either dimension is zero
-    int width, height;
-
-    dc.GetSize( &width, &height );
-    if( !width || !height )
-        return;
-
-    aComponent->Draw( NULL, &dc, offset, aUnit, 1, PART_DRAW_OPTIONS::Default() );
+    wxString msg = wxString::Format( _( "Instances of this symbol (%d items):" ), count );
+    m_titleInstances->SetLabelText( msg );
 }
 
 
@@ -290,8 +219,19 @@ void DIALOG_RESCUE_EACH::OnConflictSelect( wxDataViewEvent& aEvent )
 
     PopulateInstanceList();
 
-    m_componentViewOld->Refresh();
-    m_componentViewNew->Refresh();
+    int row = m_ListOfConflicts->GetSelectedRow();
+
+    if( row < 0 )
+    {
+        m_previewOldWidget->DisplayPart( nullptr, 0 );
+        m_previewNewWidget->DisplayPart( nullptr, 0 );
+    }
+    else
+    {
+        RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
+        m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(), 0 );
+        m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(), 0 );
+    }
 }
 
 

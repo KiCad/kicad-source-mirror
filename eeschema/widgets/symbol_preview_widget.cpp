@@ -29,12 +29,11 @@
 #include <pgm_base.h>
 
 SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ) :
-    wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-             wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL ),
+    wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
     m_kiway( aKiway ),
     m_preview( nullptr ),
     m_status( nullptr ),
-    m_sizer( nullptr ),
+    m_statusSizer( nullptr ),
     m_previewItem( nullptr )
 {
     m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
@@ -47,16 +46,16 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway )
     SetForegroundColour( *wxBLACK );
 
     m_status = new wxStaticText( this, -1, wxEmptyString );
-    m_sizer = new wxBoxSizer( wxVERTICAL );
-    m_sizer->Add( 0, 0, 1 );
-    m_sizer->Add( m_status, 0, wxALL | wxALIGN_CENTER, 0 );
-    m_sizer->Add( 0, 0, 1 );
+    m_statusSizer = new wxBoxSizer( wxVERTICAL );
+    m_statusSizer->Add( 0, 0, 1 );
+    m_statusSizer->Add( m_status, 0, wxALL | wxALIGN_CENTER, 0 );
+    m_statusSizer->Add( 0, 0, 1 );
 
     auto outer_sizer = new wxBoxSizer( wxVERTICAL );
     outer_sizer->Add( m_preview, 1, wxALL | wxEXPAND, 0 );
-    outer_sizer->Add( m_sizer, 1, wxALL | wxALIGN_CENTER, 0 );
+    outer_sizer->Add( m_statusSizer, 1, wxALL | wxALIGN_CENTER, 0 );
 
-    m_sizer->ShowItems( false );
+    m_statusSizer->ShowItems( false );
 
     SetSizer( outer_sizer );
 }
@@ -72,7 +71,7 @@ SYMBOL_PREVIEW_WIDGET::~SYMBOL_PREVIEW_WIDGET()
 void SYMBOL_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 {
     m_status->SetLabel( aText );
-    m_sizer->ShowItems( true );
+    m_statusSizer->ShowItems( true );
     m_preview->Hide();
     Layout();
 }
@@ -131,8 +130,47 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
     m_preview->ForceRefresh();
 
     m_preview->Show();
-    m_sizer->ShowItems( false );
-    Layout();
+    m_statusSizer->ShowItems( false );
+}
+
+
+void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
+{
+    KIGFX::VIEW* view = m_preview->GetView();
+
+    if( m_previewItem )
+    {
+        view->Remove( m_previewItem );
+        m_previewItem = nullptr;
+    }
+
+    if( aPart )
+    {
+        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
+        // draw all of them.)
+        if( aPart->IsMulti() && aUnit == 0 )
+            aUnit = 1;
+
+        view->Add( aPart );
+        m_previewItem = aPart;
+
+        // Zoom to fit
+        BOX2I     bBox = aPart->GetUnitBoundingBox( aUnit, 0 );
+        VECTOR2D  clientSize = m_preview->GetClientSize();
+        double    scale = std::min( fabs( clientSize.x / bBox.GetWidth() ),
+                                    fabs( clientSize.y / bBox.GetHeight() ) );
+
+        // Above calculation will yield an exact fit; add a bit of whitespace around symbol
+        scale /= 1.2;
+
+        view->SetScale( scale );
+        view->SetCenter( bBox.Centre() );
+    }
+
+    m_preview->ForceRefresh();
+
+    m_preview->Show();
+    m_statusSizer->ShowItems( false );
 }
 
 
