@@ -813,16 +813,12 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         wxString pack_ref = package->GetAttribute( "name" );
         ReplaceIllegalFileNameChars( pack_ref, '_' );
-        std::string pack_name = Convert<std::string>( pack_ref );
 
-        if(pack_name.length() == 0 )
-            printf("Empty!\n");
-
-        m_xpath->Value( pack_name.c_str() );
+        m_xpath->Value( pack_ref.ToUTF8() );
 
         wxString key = aLibName ? makeKey( *aLibName, pack_ref ) : pack_ref;
 
-        MODULE* m = makeModule( package, pack_name );
+        MODULE* m = makeModule( package, pack_ref );
 
         // add the templating MODULE to the MODULE template factory "m_templates"
         std::pair<MODULE_ITER, bool> r = m_templates.insert( {key, m} );
@@ -831,13 +827,12 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
             // && !( m_props && m_props->Value( "ignore_duplicates" ) )
             )
         {
-            wxString lib = aLibName ? FROM_UTF8( aLibName->c_str() ) : m_lib_path;
-            wxString pkg = FROM_UTF8( pack_name.c_str() );
+            wxString lib = aLibName ? *aLibName : m_lib_path;
+            wxString pkg = pack_ref;
 
             wxString emsg = wxString::Format(
-                _( "<package> name: \"%s\" : %s duplicated in eagle <library>: \"%s\"" ),
+                _( "<package> name: \"%s\" duplicated in eagle <library>: \"%s\"" ),
                 GetChars( pkg ),
-                GetChars( key ),
                 GetChars( lib )
                 );
             THROW_IO_ERROR( emsg );
