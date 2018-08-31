@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <pcb_edit_frame.h>
 #include <trigo.h>
-#include <base_units.h>
 #include <board_design_settings.h>
 #include <class_edge_mod.h>
 #include <class_drawsegment.h>
@@ -214,7 +213,6 @@ int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACK* aList )
 int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
 {
     BOARD* board = m_pcbEditorFrame->GetBoard();
-    EDA_UNITS_T units = m_pcbEditorFrame->GetUserUnits();
     BOARD_COMMIT commit( m_pcbEditorFrame );
     int nerrors = 0;
 
