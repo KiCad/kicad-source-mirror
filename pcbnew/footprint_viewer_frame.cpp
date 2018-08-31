@@ -634,16 +634,30 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aResulta
     if( aFootprint && !aFootprint->IsEmpty() )
     {
         LIB_ID fpid;
-
-        fpid.Parse( *aFootprint, LIB_ID::ID_PCB, true );
-
-        if( fpid.IsValid() )
+        // Loading the footprint will throw an IO Error on a missing footprint library
+        try
         {
-            setCurNickname( fpid.GetLibNickname() );
-            setCurFootprintName( fpid.GetLibItemName() );
-            ReCreateFootprintList();
-            SelectAndViewFootprint( NEW_PART );
+            fpid.Parse( *aFootprint, LIB_ID::ID_PCB, true );
+
+            if( fpid.IsValid() )
+            {
+                setCurNickname( fpid.GetLibNickname() );
+                setCurFootprintName( fpid.GetLibItemName() );
+                ReCreateFootprintList();
+                SelectAndViewFootprint( NEW_PART );
+            }
         }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg = wxString::Format(
+                        _( "Could not load footprint \"%s\" from library \"%s\".\n\nError %s." ),
+                        GetChars( fpid.GetLibItemName() ),
+                        GetChars( fpid.GetLibNickname() ),
+                        GetChars( ioe.What() ) );
+
+            DisplayError( this, msg );
+        }
+        catch( ... ) {}
     }
 
     return KIWAY_PLAYER::ShowModal( aFootprint, aResultantFocusWindow );
