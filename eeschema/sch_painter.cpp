@@ -340,37 +340,33 @@ void SCH_PAINTER::draw ( LIB_ARC *aArc, int aLayer )
 }
 
 
-void SCH_PAINTER::draw ( LIB_FIELD *aField, int aLayer )
+void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 {
-    if(!aField->IsVisible())
-      return;
-
-    int w;
-
-   if( aField->IsBold() )
-      w = GetPenSizeForBold( aField->GetWidth() );
-    else
-      w = aField->GetPenSize();
-
-
     COLOR4D color;
 
-        switch( aField->GetId() )
-        {
-        case REFERENCE:
-            color = m_schSettings.GetLayerColor( LAYER_REFERENCEPART );
-            break;
-
-        case VALUE:
-            color = m_schSettings.GetLayerColor( LAYER_VALUEPART );
-            break;
-
-        default:
-            color = m_schSettings.GetLayerColor( LAYER_FIELDS );
-        break;
+    switch( aField->GetId() )
+    {
+    case REFERENCE: color = m_schSettings.GetLayerColor( LAYER_REFERENCEPART ); break;
+    case VALUE:     color = m_schSettings.GetLayerColor( LAYER_VALUEPART );     break;
+    default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
     }
 
-    m_gal->SetLineWidth(w);
+    if( !aField->IsVisible() )
+    {
+        if( m_schSettings.m_showHiddenText )
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        else
+          return;
+    }
+
+    int linewidth = aField->GetPenSize();
+
+    if( aField->IsBold() )
+        linewidth = GetPenSizeForBold( aField->GetTextWidth() );
+
+    Clamp_Text_PenSize( linewidth, aField->GetTextSize(), aField->IsBold() );
+
+    m_gal->SetLineWidth( linewidth );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke (true);
     m_gal->SetStrokeColor( color );
@@ -379,87 +375,46 @@ void SCH_PAINTER::draw ( LIB_FIELD *aField, int aLayer )
     m_gal->SetHorizontalJustify( aField->GetHorizJustify( ) );
     m_gal->SetVerticalJustify( aField->GetVertJustify( ) );
 
-
     auto pos = mapCoords( aField->GetPosition() );
     double orient = aField->GetTextAngleRadians();
 
     m_gal->StrokeText( aField->GetText(), pos, orient );
 }
 
-#if 0
-void SCH_PAINTER::draw ( SCH_FIELD *aField, int aLayer )
+
+void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
 {
+    defaultColors( aLine );
+    std::deque<VECTOR2D> vtx;
 
-    if(!aField->IsVisible())
-      return;
+    for( auto p : aLine->GetPolyPoints() )
+        vtx.push_back ( mapCoords( p ) );
 
-    int w;
+    if( aLine->GetFillMode() == FILLED_WITH_BG_BODYCOLOR || aLine->GetFillMode() == FILLED_SHAPE )
+        vtx.push_back ( vtx[0] );
 
-   if( aField->IsBold() )
-      w =  aField->GetPenSize() * 1.5; //GetPenSizeForBold( aField->GetWidth() );
-    else
-      w = aField->GetPenSize();
+    m_gal->DrawPolygon ( vtx );
+}
 
-    m_gal->SetLineWidth(w);
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke (true);
 
+void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
+{
     COLOR4D color;
 
-    switch(aField->GetId())
-    {
-      case REFERENCE:
-        color = GetLayerColor( LAYER_REFERENCEPART );
-        break;
-      case VALUE:
-        color = GetLayerColor( LAYER_VALUEPART );
-        break;
-      default:
-        color = GetLayerColor( LAYER_FIELDS );
-        break;
-    }
-
-    m_gal->SetStrokeColor( color );
-    m_gal->SetGlyphSize ( aField->GetTextSize() );
-
-    m_gal->SetHorizontalJustify( aField->GetHorizJustify( ));
-    m_gal->SetVerticalJustify( aField->GetVertJustify( ));
-
-
-    const VECTOR2D pos = aField->GetPosition();
-    double orient = aField->GetTextAngleRadians() + M_PI;
-
-    m_gal->StrokeText( aField->GetFullyQualifiedText(), pos, orient );
-}
-#endif
-
-
-void SCH_PAINTER::draw ( LIB_POLYLINE *aLine, int aLayer )
-{
-  defaultColors(aLine);
-  std::deque<VECTOR2D> vtx;
-
-  for ( auto p : aLine->GetPolyPoints() )
-    vtx.push_back ( mapCoords( p ) );
-
-  if( aLine->GetFillMode() == FILLED_WITH_BG_BODYCOLOR || aLine->GetFillMode() == FILLED_SHAPE)
-    vtx.push_back ( vtx[0] );
-
-  m_gal->DrawPolygon ( vtx );
-}
-
-void SCH_PAINTER::draw ( LIB_TEXT *aText, int aLayer )
-{
-  if(!aText->IsVisible())
-      return;
+    if( aText->IsVisible() )
+        color = m_schSettings.GetLayerColor( LAYER_NOTES );
+    else if( m_schSettings.m_showHiddenText )
+        color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+    else
+        return;
 
     int w = aText->GetPenSize();
 
-    m_gal->SetLineWidth(w);
+    m_gal->SetLineWidth( w );
     m_gal->SetIsFill( false );
-    m_gal->SetIsStroke (true);
-    //m_gal->SetStrokeColor(  );
-    m_gal->SetGlyphSize ( aText->GetTextSize() );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetGlyphSize( aText->GetTextSize() );
 
     m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
     m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
@@ -471,8 +426,8 @@ void SCH_PAINTER::draw ( LIB_TEXT *aText, int aLayer )
 
     double orient = aText->GetTextAngleRadians();
 
-    m_gal->SetFontBold ( aText->IsBold() );
-    m_gal->SetFontItalic ( aText->IsItalic() );
+    m_gal->SetFontBold( aText->IsBold() );
+    m_gal->SetFontItalic( aText->IsItalic() );
     m_gal->StrokeText( aText->GetText(), pos, orient );
 }
 
@@ -872,17 +827,21 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 
 void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 {
+    COLOR4D color;
+
     switch( aText->Type() )
     {
-    case SCH_HIERARCHICAL_LABEL_T:
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETLABEL ) );
-        break;
-    case SCH_GLOBAL_LABEL_T:
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_GLOBLABEL ) );
-        break;
-    default:
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_NOTES ) );
-        break;
+    case SCH_HIERARCHICAL_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
+    case SCH_GLOBAL_LABEL_T:       color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
+    default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
+    }
+
+    if( !aText->IsVisible() )
+    {
+        if( m_schSettings.m_showHiddenText )
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        else
+            return;
     }
 
     if( aText->IsDangling() )
@@ -898,6 +857,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
         m_gal->SetGlyphSize( aText->GetTextSize() );
         m_gal->SetTextAttributes( aText );
         m_gal->SetLineWidth( linewidth );
@@ -998,29 +958,37 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
 }
 
-void SCH_PAINTER::draw ( SCH_FIELD *aField, int aLayer )
+void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 {
     int            orient;
     COLOR4D        color;
     wxPoint        textpos;
-
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) aField->GetParent();
-    int            lineWidth = aField->GetThickness();
+    int            lineWidth = aField->GetPenSize();
 
-    if( lineWidth == 0 )   // Use default values for pen size
+    switch( aField->GetId() )
     {
-        if( aField->IsBold() )
-            lineWidth = GetPenSizeForBold( aField->GetTextWidth() );
-        else
-            lineWidth = GetDefaultLineThickness();
+    case REFERENCE: color = m_schSettings.GetLayerColor( LAYER_REFERENCEPART ); break;
+    case VALUE:     color = m_schSettings.GetLayerColor( LAYER_VALUEPART );     break;
+    default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
     }
+
+    if( !aField->IsVisible() )
+    {
+        if( m_schSettings.m_showHiddenText )
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        else
+            return;
+    }
+
+    if( aField->IsVoid() )
+        return;
+
+    if( aField->IsBold() )
+        lineWidth = GetPenSizeForBold( aField->GetTextWidth() );
 
     // Clip pen size for small texts:
     lineWidth = Clamp_Text_PenSize( lineWidth, aField->GetTextSize(), aField->IsBold() );
-
-    if( !aField->IsVisible() || aField->IsVoid() )
-        return;
-
 
     // Calculate the text orientation according to the component orientation.
     orient = aField->GetTextAngle();
@@ -1046,13 +1014,6 @@ void SCH_PAINTER::draw ( SCH_FIELD *aField, int aLayer )
      */
     EDA_RECT boundaryBox = aField->GetBoundingBox();
     textpos = boundaryBox.Centre();
-
-    if( aField->GetId() == REFERENCE )
-        color = GetLayerColor( LAYER_REFERENCEPART );
-    else if( aField->GetId() == VALUE )
-        color = GetLayerColor( LAYER_VALUEPART );
-    else
-        color = GetLayerColor( LAYER_FIELDS );
 
     m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
     m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );

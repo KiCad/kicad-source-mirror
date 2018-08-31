@@ -77,6 +77,7 @@ public:
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
+    void SetShowHiddenText( bool aShow ) { m_showHiddenText = aShow; }
     void SetShowHiddenPins( bool aShow ) { m_showHiddenPins = aShow; }
     void SetShowPinsElectricalType( bool aShow ) { m_showPinsElectricalType = aShow; }
 
@@ -88,6 +89,7 @@ public:
     }
 
 private:
+    bool m_showHiddenText;
     bool m_showHiddenPins;
     bool m_showPinsElectricalType;
 };

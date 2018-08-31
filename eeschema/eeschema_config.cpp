@@ -609,7 +609,10 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
     settings->SetShowPinsElectricalType( m_showPinElectricalTypeName );
-    settings->SetShowHiddenPins( true );        // Hidden pins must be editable
+
+    // Hidden elements must be editable
+    settings->SetShowHiddenText( true );
+    settings->SetShowHiddenPins( true );
 }
 
 
