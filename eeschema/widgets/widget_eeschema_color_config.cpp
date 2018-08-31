@@ -67,7 +67,7 @@ static COLORBUTTON generalColorButtons[] = {
 };
 
 static COLORBUTTON componentColorButtons[] = {
-    { _( "Body" ),              LAYER_DEVICE },
+    { _( "Body outline" ),      LAYER_DEVICE },
     { _( "Body background" ),   LAYER_DEVICE_BACKGROUND },
     { _( "Pin" ),               LAYER_PIN },
     { _( "Pin number" ),        LAYER_PINNUM },

@@ -20,8 +20,9 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/checkbox.h>
 #include <wx/radiobox.h>
+#include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -38,9 +39,10 @@ class DIALOG_LIB_EDIT_DRAW_ITEM_BASE : public DIALOG_SHIM
 		wxStaticText* m_widthLabel;
 		wxTextCtrl* m_widthCtrl;
 		wxStaticText* m_widthUnits;
+		wxRadioBox* m_fillCtrl;
 		wxCheckBox* m_checkApplyToAllUnits;
 		wxCheckBox* m_checkApplyToAllConversions;
-		wxRadioBox* m_fillCtrl;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

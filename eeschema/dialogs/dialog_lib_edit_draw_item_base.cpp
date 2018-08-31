@@ -14,7 +14,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* mainSizer;
-	mainSizer = new wxBoxSizer( wxHORIZONTAL );
+	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* dlgBorderSizer;
 	dlgBorderSizer = new wxBoxSizer( wxVERTICAL );
@@ -22,7 +22,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_widthLabel = new wxStaticText( this, wxID_ANY, _("Line Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthLabel->Wrap( -1 );
 	bSizer3->Add( m_widthLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
@@ -34,7 +34,13 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	bSizer3->Add( m_widthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
 	
 	
-	dlgBorderSizer->Add( bSizer3, 0, wxEXPAND|wxBOTTOM, 10 );
+	dlgBorderSizer->Add( bSizer3, 0, wxEXPAND, 5 );
+	
+	wxString m_fillCtrlChoices[] = { _("Do not fill"), _("Fill with body outline color"), _("Fill with body background color") };
+	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
+	m_fillCtrl = new wxRadioBox( this, wxID_ANY, _("Fill Style"), wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_fillCtrl->SetSelection( 0 );
+	dlgBorderSizer->Add( m_fillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 	
 	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all &units in component"), wxDefaultPosition, wxDefaultSize, 0 );
 	dlgBorderSizer->Add( m_checkApplyToAllUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
@@ -43,13 +49,10 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	dlgBorderSizer->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
-	dlgBorderSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( dlgBorderSizer, 1, wxEXPAND|wxALL, 10 );
 	
-	wxString m_fillCtrlChoices[] = { _("Do not fill"), _("Fill foreground"), _("Fill background") };
-	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
-	m_fillCtrl = new wxRadioBox( this, wxID_ANY, _("Fill Style"), wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_fillCtrl->SetSelection( 0 );
-	dlgBorderSizer->Add( m_fillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -58,10 +61,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	dlgBorderSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 0 );
-	
-	
-	mainSizer->Add( dlgBorderSizer, 1, wxALL|wxEXPAND, 10 );
+	mainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 0 );
 	
 	
 	this->SetSizer( mainSizer );
