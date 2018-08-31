@@ -28,6 +28,7 @@
  */
 
 %include <std_vector.i>
+%include <std_list.i>
 %include <std_basic_string.i>
 %include <std_string.i>
 %include <std_map.i>

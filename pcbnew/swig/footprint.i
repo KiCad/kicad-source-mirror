@@ -29,14 +29,17 @@
  */
 
 
-
+%rename(MODULE_3D_SETTINGS_VECTOR3D) MODULE_3D_SETTINGS::VECTOR3D;
+%feature("flatnested");
 %include class_module.h
+%feature("flatnested", "");
 
 %rename(Get) operator   MODULE*;
 %template(MODULE_List)  DLIST<MODULE>;
 %{
 #include <class_module.h>
 %}
+%template(MODULE_3D_SETTINGS_List) std::list<MODULE_3D_SETTINGS>;
 
 
 // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
