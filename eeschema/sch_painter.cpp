@@ -164,7 +164,6 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     //printf("bkgd2 %.02f %.02f %.02f %.02f\n", c2.r, c2.g, c2.b, c2.a);
 
     m_gal->EnableDepthTest( false );
-    m_gal->AdvanceDepth();
 
 /*    m_gal->SetLineWidth( 10 );
     m_gal->SetIsFill( false );
@@ -215,16 +214,19 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
 {
     size_t pinIndex = 0;
 
-    for( auto& item : aComp->GetDrawItems() )
+    auto visitItem = [&]( LIB_ITEM& item, bool aBackground )
     {
-		if( !aDrawFields && item.Type() == LIB_FIELD_T )
-            continue;
+        if( aBackground != ( item.GetFillMode() == FILLED_WITH_BG_BODYCOLOR ) )
+            return;
+
+        if( !aDrawFields && item.Type() == LIB_FIELD_T )
+            return;
 
         if( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
-            continue;
+            return;
 
         if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
-            continue;
+            return;
 
         if( item.Type() == LIB_PIN_T )
         {
@@ -239,7 +241,16 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
         }
         else
             Draw( &item, aLayer );
-    }
+    };
+
+    // Apply a z-order heuristic (because we don't yet let the user edit it):
+    // draw body-filled objects first.
+
+    for( auto& item : aComp->GetDrawItems() )
+        visitItem( item, true );
+
+    for( auto& item : aComp->GetDrawItems() )
+        visitItem( item, false );
 }
 
 
@@ -1040,7 +1051,6 @@ void SCH_PAINTER::draw ( SCH_GLOBALLABEL *aLabel, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_GLOBLABEL ) );
     m_gal->DrawPolyline( pts2 );
-    m_gal->AdvanceDepth(); // fixme
 
     draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
 }
@@ -1060,7 +1070,6 @@ void SCH_PAINTER::draw ( SCH_HIERLABEL *aLabel, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETLABEL ) );
     m_gal->DrawPolyline( pts2 );
-    m_gal->AdvanceDepth(); // fixme
 
     draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
 }
@@ -1108,11 +1117,7 @@ void SCH_PAINTER::draw ( SCH_SHEET *aSheet, int aLayer )
 
 
     for( auto& sheetPin : aSheet->GetPins() )
-    {
-        m_gal->AdvanceDepth();
         draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
-    }
-
 }
 
 void SCH_PAINTER::draw ( SCH_NO_CONNECT *aNC, int aLayer )

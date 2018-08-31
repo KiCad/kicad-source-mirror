@@ -116,10 +116,19 @@ void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
 {
     Clear();
 
+    int fgPriority = INT_MAX / 2;
+    int bgPriority = 0;
+
     for ( auto &item : aPart->GetDrawItems() )
     {
         //printf("-- ADD %p\n", &item );
-        Add( &item );
+
+        // Apply a z-order heuristic (because we don't yet let the user edit it):
+        // push body-filled objects to the back.
+        if( item.GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+            Add( &item, bgPriority++ );
+        else
+            Add( &item, fgPriority++ );
     }
 
     m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
