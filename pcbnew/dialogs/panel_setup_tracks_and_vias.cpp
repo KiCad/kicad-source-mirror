@@ -237,6 +237,51 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         }
     }
 
+    // Test diff pairs
+    for( int row = 0; row < m_diffPairsGrid->GetNumberRows();  ++row )
+    {
+        wxString tvalue = m_diffPairsGrid->GetCellValue( row, 0 );
+
+        if( tvalue.IsEmpty() )
+            continue;
+
+        if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
+        {
+            msg.Printf( _( "Differential pair track width less than minimum track width (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
+            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 0 );
+            return false;
+        }
+
+        wxString gap = m_diffPairsGrid->GetCellValue( row, 1 );
+
+        if( gap.IsEmpty() )
+        {
+            msg = _( "No differential pair gap defined." );
+            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
+            return false;
+        }
+
+        if( ValueFromString( m_Frame->GetUserUnits(), gap ) < 0 )
+        {
+            msg.Printf( _( "Differential pair gap cannot be negative." ) );
+            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
+            return false;
+        }
+
+        wxString viaGap = m_diffPairsGrid->GetCellValue( row, 2 );
+
+        if( viaGap.IsEmpty() )
+            continue;
+
+        if( ValueFromString( m_Frame->GetUserUnits(), viaGap ) < 0 )
+        {
+            msg.Printf( _( "Differential pair via gap cannot be negative." ) );
+            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 2 );
+            return false;
+        }
+    }
+
     return true;
 }
 

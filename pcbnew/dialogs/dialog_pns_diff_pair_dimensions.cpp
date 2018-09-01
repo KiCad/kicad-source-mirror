@@ -27,12 +27,13 @@
 #include <widgets/text_ctrl_eval.h>
 #include <router/pns_sizes_settings.h>
 #include <draw_frame.h>
+#include <confirm.h>
 
 DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( EDA_DRAW_FRAME* aParent,
                                                                   PNS::SIZES_SETTINGS& aSizes ) :
     DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( aParent ),
-    m_traceWidth( aParent, m_traceWidthLabel, m_traceWidthText, m_traceWidthUnit, true ),
-    m_traceGap( aParent, m_traceGapLabel, m_traceGapText, m_traceGapUnit, true ),
+    m_traceWidth( aParent, m_traceWidthLabel, m_traceWidthText, m_traceWidthUnit, true, 0 ),
+    m_traceGap( aParent, m_traceGapLabel, m_traceGapText, m_traceGapUnit, true, 0 ),
     m_viaGap( aParent, m_viaGapLabel, m_viaGapText, m_viaGapUnit, true ),
     m_sizes( aSizes )
 {
@@ -48,6 +49,13 @@ bool DIALOG_PNS_DIFF_PAIR_DIMENSIONS::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
+
+    if( m_traceGap.GetValue() <= 0 )
+    {
+        DisplayErrorMessage( this, _( "Trace gap must be greater than 0." ) );
+        m_traceGapText->SetFocus();
+        return false;
+    }
 
     // Save widgets' values to settings
     m_sizes.SetDiffPairGap( m_traceGap.GetValue() );

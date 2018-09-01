@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -19,62 +19,59 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_traceWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceWidthLabel->Wrap( -1 );
-	fgSizer1->Add( m_traceWidthLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizer1->Add( m_traceWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_traceWidthText = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_traceWidthText, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_traceWidthText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_traceWidthUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceWidthUnit->Wrap( -1 );
-	fgSizer1->Add( m_traceWidthUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_traceWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_traceGapLabel = new wxStaticText( this, wxID_ANY, _("Trace gap:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceGapLabel->Wrap( -1 );
-	fgSizer1->Add( m_traceGapLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizer1->Add( m_traceGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_traceGapText = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_traceGapText, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_traceGapText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_traceGapUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceGapUnit->Wrap( -1 );
-	fgSizer1->Add( m_traceGapUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_traceGapUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_viaGapLabel = new wxStaticText( this, wxID_ANY, _("Via gap:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaGapLabel->Wrap( -1 );
 	m_viaGapLabel->Enable( false );
 	
-	fgSizer1->Add( m_viaGapLabel, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_viaGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	m_viaGapText = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaGapText->Enable( false );
 	
-	fgSizer1->Add( m_viaGapText, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_viaGapText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_viaGapUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaGapUnit->Wrap( -1 );
 	m_viaGapUnit->Enable( false );
 	
-	fgSizer1->Add( m_viaGapUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_viaGapUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	bSizer7->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
+	bSizer7->Add( fgSizer1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	m_viaTraceGapEqual = new wxCheckBox( this, wxID_ANY, _("Via gap same as trace gap"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaTraceGapEqual->SetValue(true); 
 	bSizer7->Add( m_viaTraceGapEqual, 0, wxALL|wxEXPAND, 10 );
 	
-	
-	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
-	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer7->Add( m_staticline1, 0, wxEXPAND, 5 );
+	bSizer7->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
