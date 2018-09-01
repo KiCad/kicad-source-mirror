@@ -379,9 +379,9 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
     m_gal->SetLineWidth( linewidth );
     m_gal->SetIsFill( false );
-    m_gal->SetIsStroke (true);
+    m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
-    m_gal->SetGlyphSize ( aField->GetTextSize() );
+    m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
 
     m_gal->SetHorizontalJustify( aField->GetHorizJustify( ) );
     m_gal->SetVerticalJustify( aField->GetVertJustify( ) );
@@ -420,23 +420,18 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
         return;
 
     int w = aText->GetPenSize();
+    EDA_RECT bBox = aText->GetBoundingBox();
+    bBox.RevertYAxis();
+    VECTOR2D pos = mapCoords( bBox.Centre() );
+    double orient = aText->GetTextAngleRadians();
 
+    m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
     m_gal->SetLineWidth( w );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
-    m_gal->SetGlyphSize( aText->GetTextSize() );
-
-    m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-
-    EDA_RECT bBox = aText->GetBoundingBox();
-    bBox.RevertYAxis();
-    
-    auto pos = mapCoords( bBox.Centre() );
-
-    double orient = aText->GetTextAngleRadians();
-
+    m_gal->SetGlyphSize( VECTOR2D( aText->GetTextSize() ) );
     m_gal->SetFontBold( aText->IsBold() );
     m_gal->SetFontItalic( aText->IsItalic() );
     m_gal->StrokeText( aText->GetText(), pos, orient );
@@ -869,7 +864,6 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->SetGlyphSize( aText->GetTextSize() );
         m_gal->SetTextAttributes( aText );
         m_gal->SetLineWidth( linewidth );
         m_gal->StrokeText( shownText, text_offset, aText->GetTextAngleRadians() );
@@ -879,15 +873,14 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
 static void orientComponent( LIB_PART *part, int orientation )
 {
-#define N_ORIENTATIONS 8
-
     struct ORIENT
     {
         int flag;
         int n_rots;
-        int mirror_x, mirror_y;
+        int mirror_x;
+        int mirror_y;
     }
-    orientations[N_ORIENTATIONS] =
+    orientations[] =
     {
         { CMP_ORIENT_0,                  0, 0, 0 },
         { CMP_ORIENT_90,                 1, 0, 0 },
@@ -896,40 +889,36 @@ static void orientComponent( LIB_PART *part, int orientation )
         { CMP_MIRROR_X + CMP_ORIENT_0,   0, 1, 0 },
         { CMP_MIRROR_X + CMP_ORIENT_90,  1, 1, 0 },
         { CMP_MIRROR_Y,                  0, 0, 1 },
-        { CMP_MIRROR_X + CMP_ORIENT_270, 3, 1, 0 }
-       // CMP_MIRROR_Y + CMP_ORIENT_0,
-       // CMP_MIRROR_Y + CMP_ORIENT_90,
-       // CMP_MIRROR_Y + CMP_ORIENT_180,
-       // CMP_MIRROR_Y + CMP_ORIENT_270
+        { CMP_MIRROR_X + CMP_ORIENT_270, 3, 1, 0 },
+        { CMP_MIRROR_Y + CMP_ORIENT_0,   0, 0, 1 },
+        { CMP_MIRROR_Y + CMP_ORIENT_90,  1, 0, 1 },
+        { CMP_MIRROR_Y + CMP_ORIENT_180, 2, 0, 1 },
+        { CMP_MIRROR_Y + CMP_ORIENT_270, 3, 0, 1 }
     };
 
-    ORIENT o;
+    ORIENT o = orientations[ 0 ];
 
-    for( int i = 0; i < N_ORIENTATIONS; i++ )
+    for( auto& i : orientations )
     {
-        if( orientations[i].flag == orientation )
+        if( i.flag == orientation )
         {
-            o = orientations[i];
+            o = i;
             break;
         }
     }
 
     //printf("orient %d %d %d\n", o.n_rots, o.mirror_x, o.mirror_y );
 
-    for( int i = 0; i < o.n_rots; i++ )
-    {
-        for( auto& item : part->GetDrawItems() )
-        {
-            item.Rotate( wxPoint(0, 0 ), true );
-        }
-    }
-
     for( auto& item : part->GetDrawItems() )
     {
-        if( orientation & CMP_MIRROR_X )
-            item.MirrorVertical( wxPoint(0, 0 ) );
-        if( orientation & CMP_MIRROR_Y )
-            item.MirrorHorizontal( wxPoint(0, 0 ) );
+        for( int i = 0; i < o.n_rots; i++ )
+            item.Rotate( wxPoint(0, 0 ), true );
+
+        if( o.mirror_x )
+            item.MirrorVertical( wxPoint( 0, 0 ) );
+
+        if( o.mirror_y )
+            item.MirrorHorizontal( wxPoint( 0, 0 ) );
     }
 }
 
@@ -966,8 +955,8 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
         if( field->GetId() == REFERENCE || !field->IsMoving() )
             draw( field, aLayer );
     }
-
 }
+
 
 void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 {
@@ -1031,13 +1020,16 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetTextAttributes( aField );
+    m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
+    m_gal->SetFontBold( aField->IsBold() );
+    m_gal->SetFontItalic( aField->IsItalic() );
+    m_gal->SetTextMirrored( aField->IsMirrored() );
     m_gal->SetLineWidth( lineWidth );
-    m_gal->StrokeText( aField->GetFullyQualifiedText(), textpos, orient == TEXT_ANGLE_VERT ? -M_PI/2 : 0 );
+    m_gal->StrokeText( aField->GetFullyQualifiedText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI/2 : 0 );
 }
 
 
-void SCH_PAINTER::draw ( SCH_GLOBALLABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
@@ -1045,10 +1037,11 @@ void SCH_PAINTER::draw ( SCH_GLOBALLABEL *aLabel, int aLayer )
     aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
 
     for( auto p : pts )
-        pts2.push_back( VECTOR2D(p.x, p.y ) );
+        pts2.push_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( aLabel->GetThickness() );
     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_GLOBLABEL ) );
     m_gal->DrawPolyline( pts2 );
 
@@ -1056,7 +1049,7 @@ void SCH_PAINTER::draw ( SCH_GLOBALLABEL *aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw ( SCH_HIERLABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 {
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
@@ -1064,10 +1057,11 @@ void SCH_PAINTER::draw ( SCH_HIERLABEL *aLabel, int aLayer )
     aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
 
     for( auto p : pts )
-        pts2.push_back( VECTOR2D(p.x, p.y ) );
+        pts2.push_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( aLabel->GetThickness() );
     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETLABEL ) );
     m_gal->DrawPolyline( pts2 );
 
