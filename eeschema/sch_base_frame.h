@@ -33,6 +33,11 @@
 #include "template_fieldnames.h"
 
 
+namespace KIGFX
+{
+    class SCH_RENDER_SETTINGS;
+}
+
 class PAGE_INFO;
 class TITLE_BLOCK;
 class LIB_VIEW_FRAME;
@@ -97,8 +102,10 @@ public:
 
     virtual ~SCH_BASE_FRAME();
 
-    SCH_DRAW_PANEL *GetCanvas() const override;
+    SCH_DRAW_PANEL* GetCanvas() const override;
     SCH_SCREEN* GetScreen() const override;
+
+    KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
 
     /**
      * @return the increment value of the position of an item

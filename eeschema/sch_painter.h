@@ -38,7 +38,6 @@ class LIB_ARC;
 class LIB_FIELD;
 class LIB_TEXT;
 class SCH_COMPONENT;
-class SCH_PIN;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCH_LABEL;
@@ -77,10 +76,6 @@ public:
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
-    void SetShowHiddenText( bool aShow ) { m_showHiddenText = aShow; }
-    void SetShowHiddenPins( bool aShow ) { m_showHiddenPins = aShow; }
-    void SetShowPinsElectricalType( bool aShow ) { m_showPinsElectricalType = aShow; }
-
     bool IsBackgroundDark() const override
     {
         auto luma = m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ].GetBrightness();
@@ -88,10 +83,12 @@ public:
         return luma < 0.5;
     }
 
-private:
-    bool m_showHiddenText;
-    bool m_showHiddenPins;
-    bool m_showPinsElectricalType;
+    int  m_ShowUnit;                // Show all units if 0
+    int  m_ShowConvert;             // Show all conversions if 0
+
+    bool m_ShowHiddenText;
+    bool m_ShowHiddenPins;
+    bool m_ShowPinsElectricalType;
 };
 
 
@@ -132,7 +129,6 @@ private:
     void draw( LIB_FIELD *, int );
     void draw( LIB_TEXT *, int );
     void draw( SCH_COMPONENT *, int );
-    void draw( SCH_PIN *, int );
     void draw( SCH_JUNCTION *, int );
     void draw( SCH_FIELD *, int );
     void draw( SCH_TEXT *, int );
@@ -147,8 +143,9 @@ private:
     void draw( SCH_LINE *, int );
     void draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer );
 
+    bool isUnitAndConversionShown( const LIB_ITEM* aItem );
 
-    void defaultColors( const LIB_ITEM *aItem );
+    void defaultColors( const LIB_ITEM* aItem );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
 

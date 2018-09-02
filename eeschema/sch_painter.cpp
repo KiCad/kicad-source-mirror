@@ -75,7 +75,9 @@ namespace KIGFX {
     };
 
 
-SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS()
+SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
+    m_ShowUnit( 0 ),
+    m_ShowConvert( 0 )
 {
     ImportLegacyColors( nullptr );
 }
@@ -209,9 +211,35 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 }
 
 
+bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
+{
+    if( m_schSettings.m_ShowUnit            // showing a specific unit
+            && aItem->GetUnit()             // item is unit-specific
+            && aItem->GetUnit() != m_schSettings.m_ShowUnit )
+    {
+        return false;
+    }
+
+    if( m_schSettings.m_ShowConvert         // showing a specific conversion
+            && aItem->GetConvert()          // item is conversion-specific
+            && aItem->GetConvert() != m_schSettings.m_ShowConvert )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert,
                        std::vector<bool>* danglingPinFlags )
 {
+    if( !aUnit )
+        aUnit = m_schSettings.m_ShowUnit;
+
+    if( !aConvert )
+        aConvert = m_schSettings.m_ShowConvert;
+
     size_t pinIndex = 0;
 
     auto visitItem = [&]( LIB_ITEM& item, bool aBackground )
@@ -258,7 +286,7 @@ void SCH_PAINTER::draw( LIB_ALIAS *aAlias, int aLayer )
 {
     LIB_PART* comp = aAlias->GetPart();
 
-    draw( comp, aLayer, false, aAlias->GetTmpUnit(), aAlias->GetTmpConversion() );
+    draw( comp, aLayer, false );
 
     LIB_FIELDS fields;
     comp->GetFields( fields );
@@ -281,13 +309,16 @@ static VECTOR2D mapCoords( const wxPoint& aCoord )
 }
 
 
-void SCH_PAINTER::draw ( LIB_RECTANGLE *aComp, int aLayer )
+void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
 {
-	defaultColors(aComp);
+    if( !isUnitAndConversionShown( aRect ) )
+        return;
+
+    defaultColors(aRect);
+
     //m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aComp->GetPenSize() );
-    m_gal->DrawRectangle( mapCoords( aComp->GetPosition() ),
-                          mapCoords( aComp->GetEnd() ) );
+    m_gal->SetLineWidth( aRect->GetPenSize() );
+    m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
 
 }
 
@@ -322,37 +353,46 @@ void SCH_PAINTER::defaultColors ( const LIB_ITEM *aItem )
   }
 }
 
-void SCH_PAINTER::draw ( LIB_CIRCLE *aCircle, int aLayer )
+void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
 {
-  defaultColors(aCircle);
-  m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
+    if( !isUnitAndConversionShown( aCircle ) )
+        return;
+
+    defaultColors(aCircle);
+
+    m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
 }
 
-void SCH_PAINTER::draw ( LIB_ARC *aArc, int aLayer )
+void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 {
-  defaultColors(aArc);
+    if( !isUnitAndConversionShown( aArc ) )
+        return;
 
-  int sai = aArc->GetFirstRadiusAngle();
-  int eai = aArc->GetSecondRadiusAngle();
+    defaultColors(aArc);
 
-  if (TRANSFORM().MapAngles( &sai, &eai ))
-    std::swap(sai, eai);
+    int sai = aArc->GetFirstRadiusAngle();
+    int eai = aArc->GetSecondRadiusAngle();
 
-  double sa = (double) sai * M_PI / 1800.0;
-  double ea = (double) eai * M_PI / 1800.0 ;
+    if (TRANSFORM().MapAngles( &sai, &eai ))
+        std::swap(sai, eai);
 
-  VECTOR2D pos = mapCoords( aArc->GetPosition() );
+    double sa = (double) sai * M_PI / 1800.0;
+    double ea = (double) eai * M_PI / 1800.0 ;
 
-  m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea);
-  /*m_gal->SetStrokeColor(COLOR4D(1.0,0,0,1.0));
-  m_gal->DrawLine ( pos - VECTOR2D(20, 20), pos + VECTOR2D(20, 20));
-  m_gal->DrawLine ( pos - VECTOR2D(-20, 20), pos + VECTOR2D(-20, 20));*/
+    VECTOR2D pos = mapCoords( aArc->GetPosition() );
 
+    m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea);
+    /*m_gal->SetStrokeColor(COLOR4D(1.0,0,0,1.0));
+    m_gal->DrawLine ( pos - VECTOR2D(20, 20), pos + VECTOR2D(20, 20));
+    m_gal->DrawLine ( pos - VECTOR2D(-20, 20), pos + VECTOR2D(-20, 20));*/
 }
 
 
 void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 {
+    if( !isUnitAndConversionShown( aField ) )
+        return;
+
     COLOR4D color;
 
     switch( aField->GetId() )
@@ -364,7 +404,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
     if( !aField->IsVisible() )
     {
-        if( m_schSettings.m_showHiddenText )
+        if( m_schSettings.m_ShowHiddenText )
             color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
         else
           return;
@@ -395,7 +435,11 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
 void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
 {
+    if( !isUnitAndConversionShown( aLine ) )
+        return;
+
     defaultColors( aLine );
+
     std::deque<VECTOR2D> vtx;
 
     for( auto p : aLine->GetPolyPoints() )
@@ -410,11 +454,14 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
 
 void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 {
+    if( !isUnitAndConversionShown( aText ) )
+        return;
+
     COLOR4D color;
 
     if( aText->IsVisible() )
         color = m_schSettings.GetLayerColor( LAYER_NOTES );
-    else if( m_schSettings.m_showHiddenText )
+    else if( m_schSettings.m_ShowHiddenText )
         color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
     else
         return;
@@ -454,13 +501,16 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
 
 void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling )
 {
+    if( !isUnitAndConversionShown( aPin ) )
+        return;
+
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_PIN );
 
     if( !aPin->IsVisible() )
     {
         color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
 
-        if( !m_schSettings.m_showHiddenPins )
+        if( !m_schSettings.m_ShowHiddenPins )
             return;
     }
 
@@ -639,7 +689,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling )
         text     [BELOW] = aPin->GetNumber();
     }
 
-    if( m_schSettings.m_showPinsElectricalType )
+    if( m_schSettings.m_ShowPinsElectricalType )
     {
         size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, Millimeter2iu( 0.7 ) );
         thickness[OUTSIDE] = size[OUTSIDE] / 6;
@@ -844,7 +894,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( !aText->IsVisible() )
     {
-        if( m_schSettings.m_showHiddenText )
+        if( m_schSettings.m_ShowHiddenText )
             color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
         else
             return;
@@ -975,7 +1025,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
     if( !aField->IsVisible() )
     {
-        if( m_schSettings.m_showHiddenText )
+        if( m_schSettings.m_ShowHiddenText )
             color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
         else
             return;

@@ -160,12 +160,6 @@ public:
     wxString GetUnitReference( int aUnit ) override;
 
     /**
-     * A temporary unit designation for rendering, preview, etc.
-     */
-    void SetTmpUnit( int aUnit ) { tmpUnit = aUnit; }
-    int GetTmpUnit() { return tmpUnit; }
-
-    /**
      * A temporary conversion (deMorgan) designation for rendering, preview, etc.
      */
     void SetTmpConversion( int aConversion ) { tmpConversion = aConversion; }

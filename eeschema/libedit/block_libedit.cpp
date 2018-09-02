@@ -621,8 +621,6 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     if( component == NULL )
         return;
 
-    int unit = parent->GetUnit();
-    int convert = parent->GetConvert();
     auto cp =  parent->GetCrossHairPosition( true );
     auto lcp = block->GetLastCursorPosition();
 

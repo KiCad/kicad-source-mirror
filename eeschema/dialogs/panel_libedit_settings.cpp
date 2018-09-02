@@ -83,11 +83,8 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
 
     m_frame->SetShowElectricalType( m_checkShowPinElectricalType->GetValue() );
 
-    SCH_DRAW_PANEL* canvas = m_frame->GetCanvas();
-    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( canvas->GetView()->GetPainter() );
-    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->SetShowPinsElectricalType( m_checkShowPinElectricalType->GetValue() );
-    canvas->ForceRefresh();
+    m_frame->GetRenderSettings()->m_ShowPinsElectricalType = m_frame->GetShowElectricalType();
+    m_frame->GetCanvas()->Refresh();
 
     return true;
 }

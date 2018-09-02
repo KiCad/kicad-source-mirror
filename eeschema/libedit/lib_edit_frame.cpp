@@ -68,6 +68,7 @@
 #include <wx/progdlg.h>
 #include <tool/context_menu.h>
 #include <sch_view.h>
+#include <sch_painter.h>
 
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
@@ -377,7 +378,11 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
 
 void LIB_EDIT_FRAME::OnShowElectricalType( wxCommandEvent& event )
 {
-    SetShowElectricalType( not GetShowElectricalType() );
+    m_showPinElectricalTypeName = !m_showPinElectricalTypeName;
+
+    // Update canvas
+    GetRenderSettings()->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
+    GetCanvas()->GetView()->MarkDirty();
     GetCanvas()->Refresh();
 }
 
@@ -568,7 +573,12 @@ void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
 
     m_lastDrawItem = NULL;
     m_unit = i + 1;
-    m_canvas->Refresh();
+
+    // Update canvas
+    GetRenderSettings()->m_ShowUnit = m_unit;
+    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->Refresh();
+
     DisplayCmpDoc();
 }
 
@@ -621,7 +631,11 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
         m_convert = 2;
 
     m_lastDrawItem = NULL;
-    m_canvas->Refresh();
+
+    // Update canvas
+    GetRenderSettings()->m_ShowConvert = m_convert;
+    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->Refresh();
 }
 
 
@@ -1691,9 +1705,15 @@ void LIB_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 
 void LIB_EDIT_FRAME::RebuildView()
 {
-    auto view = GetCanvas()->GetView();
+    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
+
     view->Clear();
+
+    GetRenderSettings()->m_ShowUnit = m_unit;
+    GetRenderSettings()->m_ShowConvert = m_convert;
+
     view->DisplayComponent( m_my_part );
+
     view->HideWorksheet();
     view->ClearHiddenFlags();
 }

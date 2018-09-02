@@ -218,7 +218,11 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
     m_convert = aConvert > 0 ? aConvert : 1;
     m_selection_changed = false;
 
-    updatePreviewSymbol();
+    // Update canvas
+    GetRenderSettings()->m_ShowUnit = m_unit;
+    GetRenderSettings()->m_ShowConvert = m_convert;
+    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->Refresh();
 }
 
 
@@ -262,8 +266,8 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
 
     if( alias )
     {
-        alias->SetTmpUnit( m_unit );
-        alias->SetTmpConversion( m_convert );
+        GetRenderSettings()->m_ShowUnit = m_unit;
+        GetRenderSettings()->m_ShowConvert = m_convert;
 
         view->Add( alias );
         m_previewItem = alias;
@@ -339,12 +343,12 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 
 void LIB_VIEW_FRAME::OnShowElectricalType( wxCommandEvent& event )
 {
-    SetShowElectricalType( not GetShowElectricalType() );
+    m_showPinElectricalTypeName = !m_showPinElectricalTypeName;
 
-    auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->SetShowPinsElectricalType( GetShowElectricalType() );
-    GetCanvas()->ForceRefresh();
+    // Update canvas
+    GetRenderSettings()->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
+    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->Refresh();
 }
 
 

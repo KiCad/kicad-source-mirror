@@ -409,9 +409,16 @@ void SCH_BASE_FRAME::RedrawScreen2( const wxPoint& posBefore )
     GetGalCanvas()->Refresh();
 }
 
-SCH_DRAW_PANEL *SCH_BASE_FRAME::GetCanvas() const
+SCH_DRAW_PANEL* SCH_BASE_FRAME::GetCanvas() const
 {
     return static_cast<SCH_DRAW_PANEL*>( GetGalCanvas() );
+}
+
+
+KIGFX::SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
+{
+    KIGFX::PAINTER* painter = GetGalCanvas()->GetView()->GetPainter();
+    return static_cast<KIGFX::SCH_RENDER_SETTINGS*>( painter->GetSettings() );
 }
 
 

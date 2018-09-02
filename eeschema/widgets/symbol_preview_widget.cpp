@@ -27,6 +27,7 @@
 #include <symbol_lib_table.h>
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
+#include <sch_painter.h>
 
 SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ) :
     wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
@@ -80,6 +81,7 @@ void SYMBOL_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
 {
     KIGFX::VIEW* view = m_preview->GetView();
+    auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
     LIB_ALIAS* alias = nullptr;
 
     try
@@ -109,7 +111,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
         if( part->IsMulti() && aUnit == 0 )
             aUnit = 1;
 
-        alias->SetTmpUnit( aUnit );
+        settings->m_ShowUnit = aUnit;
 
         view->Add( alias );
         m_previewItem = alias;
