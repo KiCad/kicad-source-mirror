@@ -1019,7 +1019,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     aPoints.clear();
 
-    int symb_len = LenSize( GetShownText() ) + ( TXT_MARGIN * 2 );
+    int symb_len = LenSize( GetShownText(), linewidth ) + ( TXT_MARGIN * 2 );
 
     // Create outline shape : 6 points
     int x = symb_len + linewidth + 3;
@@ -1133,7 +1133,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
     // text X size add height for triangular shapes(bidirectional)
-    length = LenSize( GetShownText() ) + height + DANGLING_SYMBOL_SIZE;
+    length = LenSize( GetShownText(), width ) + height + DANGLING_SYMBOL_SIZE;
 
     switch( GetLabelSpinStyle() )    // respect orientation
     {
@@ -1313,7 +1313,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     int width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
     height = GetTextHeight() + width + 2 * TXT_MARGIN;
-    length = LenSize( GetShownText() )
+    length = LenSize( GetShownText(), width )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
 

@@ -64,10 +64,11 @@ void EDA_TEXT::SwapEffects( EDA_TEXT& aTradingPartner )
 }
 
 
-int EDA_TEXT::LenSize( const wxString& aLine ) const
+int EDA_TEXT::LenSize( const wxString& aLine, int aThickness ) const
 {
     basic_gal.SetFontItalic( IsItalic() );
     basic_gal.SetFontBold( IsBold() );
+    basic_gal.SetLineWidth( aThickness );
     basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
 
     VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );

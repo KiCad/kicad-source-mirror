@@ -305,8 +305,9 @@ public:
      * @return the text length in internal units
      * @param aLine : the line of text to consider.
      * For single line text, this parameter is always m_Text
+     * @param aThickness : the stroke width of the text
      */
-    int LenSize( const wxString& aLine ) const;
+    int LenSize( const wxString& aLine, int aThickness ) const;
 
     /**
      * Function GetTextBox
