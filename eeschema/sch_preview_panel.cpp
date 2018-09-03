@@ -134,7 +134,8 @@ void SCH_PREVIEW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
     if( m_painter )
         static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
-    
-    EDA_DRAW_PANEL_GAL::onPaint( aEvent );
+
+    if( IsShown() )
+        EDA_DRAW_PANEL_GAL::onPaint( aEvent );
 }
     
