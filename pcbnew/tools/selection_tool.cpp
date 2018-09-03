@@ -963,11 +963,17 @@ void SELECTION_TOOL::selectAllItemsConnectedToTrack( TRACK& aSourceTrack )
 
 void SELECTION_TOOL::selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, EOT };
     auto connectivity = board()->GetConnectivity();
 
     for( auto item : connectivity->GetConnectedItems( &aSourceItem, types ) )
-        select( item );
+    {
+        // We want to select items connected through pads but not pads
+        // otherwise, the common use case of "Select Copper"->Delete will
+        // remove footprints in addition to traces and vias
+        if( item->Type() != PCB_PAD_T )
+            select( item );
+    }
 }
 
 
