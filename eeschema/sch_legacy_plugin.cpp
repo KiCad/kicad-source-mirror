@@ -1366,13 +1366,17 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
 
     int thickness = 0;
 
-    // The following tokens do not exist in version 1 schematic files.
+    // The following tokens do not exist in version 1 schematic files,
+    // and not always in version 2 for HLabels and GLabels
     if( m_version > 1 )
     {
-        if( strCompare( "Italic", line, &line ) )
-            text->SetItalic( true );
-        else if( !strCompare( "~", line, &line ) )
-            SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
+        if( m_version > 2 || *line >= ' ' )
+        {
+            if( strCompare( "Italic", line, &line ) )
+                text->SetItalic( true );
+            else if( !strCompare( "~", line, &line ) )
+                SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
+        }
 
         // The thickness token does not exist in older versions of the schematic file format
         // so calling parseInt will be made only if the EOL is not reached.
