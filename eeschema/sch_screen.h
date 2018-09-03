@@ -50,6 +50,7 @@ class SCH_SHEET_PIN;
 class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
+class SCH_SHEET_LIST;
 
 
 enum SCH_LINE_TEST_T
@@ -72,6 +73,14 @@ private:
 
     int         m_refCount;     ///< Number of sheets referencing this screen.
                                 ///< Delete when it goes to zero.
+
+    /** the list of scheet paths sharing this screen
+     * used in some annotation calculations to update alternate references
+     * Note: a screen having a m_refCount = 1 (only one sheet path using it)
+     * can have many scheet paths sharing this screen, if this sheet is inside
+     * an other sheet having many instances (one sheet path by parent sheet instance).
+     */
+    wxArrayString m_clientSheetPathList;
 
     /// The size of the paper to print or plot on
     PAGE_INFO   m_paper;        // keep with the MVC 'model' if this class gets split
@@ -131,6 +140,17 @@ public:
     void IncRefCount();
 
     int GetRefCount() const                                 { return m_refCount; }
+
+    /**
+     * @return the sheet paths count sharing this screen
+     * if 1 this screen is not in a complex hierarchy: the reference field can be
+     * used to store the component reference
+     * if > 1 this screen is in a complex hierarchy, and components must have
+     * a full alternate reference management
+     */
+    int GetClientSheetPathsCount() { return (int) m_clientSheetPathList.GetCount(); }
+
+    wxArrayString& GetClientSheetPaths() { return m_clientSheetPathList; }
 
     /**
      * @return A pointer to the first item in the linked list of draw items.
@@ -402,6 +422,17 @@ public:
     void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
+     * For screens shared by many sheetpaths (complex hierarchies):
+     * to be able to clear or modify any reference related  sharing this screen
+     * (i.e. thie list of components), an entry for each screen path must exist.
+     * This function creates missing entries, using as default reference the current
+     * reference field and unit number
+     * Note: m_clientSheetPathList must be up to date
+     * ( built by SCH_SCREENS::BuildClientSheetPathList() )
+     */
+    void EnsureAlternateReferencesExist();
+
+    /**
      * Add all schematic sheet and component objects in the screen to \a aItems.
      *
      * @param aItems Hierarchical item list to fill.
@@ -520,6 +551,16 @@ public:
     void ClearAnnotation();
 
     /**
+     * Clear the annotation for the components inside new sheetpaths
+     * when a complex hierarchy is modified and new sheetpaths added
+     * when a screen shares more than one sheet path, missing alternate references are added
+     * and alternate references of new sheet paths are cleared
+     *
+     * @param aInitialSheetPathList is the initial sheet paths list of hierarchy before changes.
+     */
+    void ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetPathList );
+
+    /**
      * Test all sheet and component objects in the schematic for duplicate time stamps
      * and replaces them as necessary.
      * Time stamps must be unique in order for complex hierarchies know which components go
@@ -589,6 +630,12 @@ public:
      * @return the number of symbol library nicknames that were changed.
      */
     int ChangeSymbolLibNickname( const wxString& aFrom, const wxString& aTo );
+
+    /**
+     * built the list of sheet paths sharing a screen for each screen in use
+     */
+    void BuildClientSheetPathList();
+
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen );

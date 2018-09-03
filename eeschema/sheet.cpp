@@ -42,7 +42,7 @@
 #include <dialogs/dialog_sch_sheet_props.h>
 
 
-bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
+bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems )
 {
     if( aSheet == NULL || aHierarchy == NULL )
         return false;
@@ -331,10 +331,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
             return false;
     }
 
-    if( clearAnnotation )
-    {
-        newScreens.ClearAnnotation();
-    }
+    if( aClearAnnotationNewItems )
+        *aClearAnnotationNewItems = clearAnnotation;
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );

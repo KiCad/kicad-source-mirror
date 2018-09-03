@@ -300,6 +300,16 @@ public:
     void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
+     * Add aSheetPath in m_PathsAndReferences alternate references list,
+     * if this entry does not exist
+     * Do nothing if already exists.
+     * In component lists shared by more than one sheet path, an entry for each
+     * sheet path must exist to manage references
+     * @param aSheetPathName is the candidate sheet path name
+     */
+    void AddSheetPathReferenceEntry( const wxString& aSheetPathName );
+
+    /**
      * Change the time stamp to \a aNewTimeStamp and updates the reference path.
      *
      * @see m_PathsAndReferences

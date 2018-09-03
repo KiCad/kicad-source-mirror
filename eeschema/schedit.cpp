@@ -1046,8 +1046,28 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     }
 
     case SCH_SHEET_T:
-        if( EditSheet( (SCH_SHEET*) item, m_CurrentSheet ) )
+        {
+        bool doClearAnnotation;
+        bool doRefresh = false;
+        // Keep trace of existing sheet paths. EditSheet() can modify this list
+        SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+
+        doRefresh = EditSheet( (SCH_SHEET*) item, m_CurrentSheet, &doClearAnnotation );
+
+        if( doClearAnnotation )     // happens when the current sheet load a existing file
+        {                           // we must clear "new" components annotation
+            SCH_SCREENS screensList( g_RootSheet );
+            // We clear annotation of new sheet paths here:
+            screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+            // Clear annotation of m_CurrentSheet itself, because its sheetpath
+            // is not a new path, but components managed by its sheet path must have
+            // their annotation cleared, becuase they are new:
+            ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( m_CurrentSheet );
+        }
+
+        if( doRefresh )
             m_canvas->Refresh();
+        }
         break;
 
     case SCH_SHEET_PIN_T:
