@@ -1099,8 +1099,15 @@ public:
      *   the current associated screen file name is changed and saved to disk.
      *
      * Note: the screen is not refresh. The caller is responsible to do that
+     *
+     * @param aSheet is the sheet to edit
+     * @param aHierarchy is the current hierarchy containing aSheet
+     * @param aClearAnnotationNewItems is a reference to a bool to know if the items managed by
+     * this sheet need to have their annotation cleared i.e. when an existing item list is used.
+     * it can happens when the edited sheet used an existying file, or becomes a new instance
+     * of a already existing sheet.
      */
-    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 

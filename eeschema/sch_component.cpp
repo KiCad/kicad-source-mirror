@@ -1124,6 +1124,32 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 }
 
 
+void SCH_COMPONENT::AddSheetPathReferenceEntry( const wxString& aSheetPathName )
+{
+    if( aSheetPathName.IsEmpty() )
+        return;
+
+    wxString reference_path;
+
+    // The full component reference path is aSheetPathName + the component time stamp itself
+    // full_AR_path is the alternate reference path to search
+    wxString full_AR_path = aSheetPathName + wxString::Format( "%8.8X", GetTimeStamp() );
+
+    for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    {
+        // Break hierarchical reference in path, ref and multi selection:
+        reference_path = m_PathsAndReferences[ii].BeforeFirst( ' ' );
+
+        // if aSheetPath is found, nothing to do:
+        if( reference_path.Cmp( full_AR_path ) == 0 )
+            return;
+    }
+
+    // This entry does not exist: add it, with a (temporary?) reference (last ref used for display)
+    AddHierarchicalReference( full_AR_path, m_Fields[REFERENCE].GetText(), m_unit );
+}
+
+
 void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
     TRANSFORM temp = TRANSFORM();
