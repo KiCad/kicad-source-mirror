@@ -138,9 +138,12 @@ bool BASE_SCREEN::SetZoom( double iu_per_du )
 
 bool BASE_SCREEN::SetNextZoom()
 {
+    // Step must be AT LEAST 1.2
+    double target = m_Zoom * 1.2;
+
     for( unsigned i=0; i < m_ZoomList.size();  ++i )
     {
-        if( m_Zoom < m_ZoomList[i] )
+        if( target < m_ZoomList[i] )
         {
             SetZoom( m_ZoomList[i] );
             return true;
@@ -153,9 +156,12 @@ bool BASE_SCREEN::SetNextZoom()
 
 bool BASE_SCREEN::SetPreviousZoom()
 {
+    // Step must be AT LEAST 1.2
+    double target = m_Zoom / 1.2;
+
     for( unsigned i = m_ZoomList.size(); i != 0;  --i )
     {
-        if( m_Zoom > m_ZoomList[i - 1] )
+        if( target > m_ZoomList[i - 1] )
         {
             SetZoom( m_ZoomList[i - 1] );
             return true;

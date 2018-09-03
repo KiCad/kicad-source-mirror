@@ -54,6 +54,7 @@
 #include <sch_text.h>
 #include <lib_pin.h>
 #include <symbol_lib_table.h>
+#include <tool/common_tools.h>
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
 
@@ -1603,13 +1604,6 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
     }
 
     return cnt;
-}
-
-
-bool SCH_SCREEN::SetZoom( double iu_per_du )
-{
-    printf("SetZoom!\n");
-    return true;
 }
 
 

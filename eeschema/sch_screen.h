@@ -165,7 +165,6 @@ public:
         --m_modification_sync;
     }
 
-    virtual bool SetZoom( double iu_per_du ) override;
     /**
      * Copy the contents of \a aScreen into this #SCH_SCREEN object.
      *

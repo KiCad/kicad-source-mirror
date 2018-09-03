@@ -337,8 +337,8 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
 
 void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    auto galCanvas = GetGalCanvas();
-    auto view = GetGalCanvas()->GetView();
+    EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     BOX2I bBox = GetDocumentExtents();
 
@@ -365,7 +365,11 @@ void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
         margin_scale_factor = 1.2;
     }
 
-    view->SetScale( scale / margin_scale_factor );
+    scale /= margin_scale_factor;
+
+    GetScreen()->SetScalingFactor( 1 / scale );
+
+    view->SetScale( scale );
     view->SetCenter( bBox.Centre() );
 
     // Take scrollbars into account
@@ -377,7 +381,7 @@ void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
                                /* Set the zoom level to show the area Rect */
 void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& Rect )
 {
-    auto view = GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
     BOX2I selectionBox ( Rect.GetPosition(), Rect.GetSize() );
 
     VECTOR2D screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
@@ -392,6 +396,8 @@ void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& Rect )
 
     scale = view->GetScale() / ratio;
 
+    GetScreen()->SetScalingFactor( 1 / scale );
+
     view->SetScale( scale );
     view->SetCenter( selectionBox.Centre() );
     GetGalCanvas()->Refresh();
@@ -400,12 +406,34 @@ void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& Rect )
 
 void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
-    GetGalCanvas()->Refresh();
+    KIGFX::GAL* gal = GetCanvas()->GetGAL();
+
+    double selectedZoom = GetScreen()->GetZoom();
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    double scale = 1.0 / ( zoomFactor * selectedZoom );
+
+    if( aCenterPoint != wxPoint( 0, 0 ) )
+        GetCanvas()->GetView()->SetScale( scale, aCenterPoint );
+    else
+        GetCanvas()->GetView()->SetScale( scale );
+
+    if( aWarpPointer )
+        GetCanvas()->GetViewControls()->CenterOnCursor();
+
+    GetCanvas()->Refresh();
 }
 
 
 void SCH_BASE_FRAME::RedrawScreen2( const wxPoint& posBefore )
 {
+    KIGFX::GAL* gal = GetCanvas()->GetGAL();
+
+    double selectedZoom = GetScreen()->GetZoom();
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    double scale = 1.0 / ( zoomFactor * selectedZoom );
+
+    GetCanvas()->GetView()->SetScale( scale );
+
     GetGalCanvas()->Refresh();
 }
 
