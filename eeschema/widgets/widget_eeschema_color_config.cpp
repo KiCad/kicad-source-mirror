@@ -92,6 +92,7 @@ static COLORBUTTON miscColorButtons[] = {
     { _( "ERC error" ),         LAYER_ERC_ERR },
     { _( "Grid" ),              LAYER_SCHEMATIC_GRID },
     { _( "Brightened" ),        LAYER_BRIGHTENED },
+    { _( "Hidden items" ),      LAYER_HIDDEN },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
 
