@@ -244,15 +244,13 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
             block->ClearItemsList();
             GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh();
             break;
 
         case BLOCK_DRAG:
         case BLOCK_DRAG_ITEM:   // Drag from a drag command
         case BLOCK_MOVE:
         case BLOCK_DUPLICATE:
-            if( block->GetCommand() == BLOCK_DRAG_ITEM &&
-                GetScreen()->GetCurItem() != NULL )
+            if( block->GetCommand() == BLOCK_DRAG_ITEM && GetScreen()->GetCurItem() != NULL )
             {
                 // This is a drag command, not a mouse block command
                 // Only this item is put in list
@@ -313,7 +311,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             }
 
             GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh();
             break;
 
         case BLOCK_COPY:    // Save a copy of items in paste buffer
@@ -356,7 +353,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
             block->ClearItemsList();
             GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh();
             break;
 
         case BLOCK_MIRROR_Y:
@@ -377,7 +373,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
             block->ClearItemsList();
             GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh();
             break;
 
         default:
@@ -390,8 +385,10 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         GetScreen()->ClearDrawingState();
     }
 
-    if( ! nextcmd )
+    if( !nextcmd )
     {
+        block->UpdateItems( GetCanvas() );
+
         block->SetState( STATE_NO_BLOCK );
         block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );
@@ -405,7 +402,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     view->ShowPreview( false );
     view->ShowSelectionArea( false );
     view->ClearHiddenFlags();
-
 
     return nextcmd;
 }

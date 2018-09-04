@@ -146,7 +146,6 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     part->RemoveDuplicateDrawItems();
 
     OnModify();
-    m_canvas->Refresh();
 }
 
 
@@ -224,9 +223,5 @@ void LIB_EDIT_FRAME::PlaceAnchor()
         wxPoint offset( -cross_hair.x, cross_hair.y );
         part->SetOffset( offset );
         OnModify();
-
-        // Redraw the symbol
-        RedrawScreen( wxPoint( 0, 0 ), true );
-        m_canvas->Refresh();
     }
 }

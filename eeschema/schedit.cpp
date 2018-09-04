@@ -888,8 +888,6 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
             if( m_autoplaceFields )
                 component->AutoAutoplaceFields( GetScreen() );
 
-            m_canvas->Refresh();
-
             break;
         }
 
@@ -899,7 +897,6 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     case SCH_HIERARCHICAL_LABEL_T:
         m_canvas->MoveCursorToCrossHair();
         ChangeTextOrient( (SCH_TEXT*) item );
-        m_canvas->Refresh();
         break;
 
     case SCH_FIELD_T:
@@ -911,7 +908,6 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
             SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
             parent->ClearFieldsAutoplaced();
         }
-        m_canvas->Refresh();
         break;
 
     case SCH_BITMAP_T:
@@ -942,6 +938,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     }
 
     GetCanvas()->GetView()->Update( item );
+    GetCanvas()->Refresh();
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
@@ -1101,6 +1098,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     }
 
     GetCanvas()->GetView()->Update( item );
+    GetCanvas()->Refresh();
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
@@ -1246,8 +1244,6 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
             if( m_autoplaceFields )
                 component->AutoAutoplaceFields( GetScreen() );
 
-            m_canvas->Refresh();
-
             break;
         }
 
@@ -1273,6 +1269,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     }
 
     GetCanvas()->GetView()->Update( item );
+    GetCanvas()->Refresh();
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );

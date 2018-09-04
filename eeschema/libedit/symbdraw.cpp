@@ -102,8 +102,6 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     MSG_PANEL_ITEMS items;
     DrawItem->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
-    m_canvas->Refresh();
-    RebuildView();
 }
 
 
@@ -369,8 +367,6 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 
         SetDrawItem( NULL );
 
-        OnModify();
-
         m_canvas->SetMouseCapture( NULL, NULL );
         
         auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
@@ -379,7 +375,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 
         view->ClearHiddenFlags();
         view->ClearPreview();
-        RebuildView();
 
+        OnModify();
     }
 }

@@ -26,7 +26,7 @@
 #include <gr_basic.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
-
+#include <sch_view.h>
 #include <sch_component.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
@@ -97,7 +97,6 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         SaveCopyInUndoList( parent );
 
     dlg.UpdateField( aField );
-    m_canvas->Refresh();
 
     OnModify();
 }

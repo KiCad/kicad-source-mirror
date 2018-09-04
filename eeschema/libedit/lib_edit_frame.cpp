@@ -382,7 +382,7 @@ void LIB_EDIT_FRAME::OnShowElectricalType( wxCommandEvent& event )
 
     // Update canvas
     GetRenderSettings()->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
-    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
     GetCanvas()->Refresh();
 }
 
@@ -574,11 +574,7 @@ void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
     m_unit = i + 1;
 
-    // Update canvas
-    GetRenderSettings()->m_ShowUnit = m_unit;
-    GetCanvas()->GetView()->MarkDirty();
-    GetCanvas()->Refresh();
-
+    RebuildView();
     DisplayCmpDoc();
 }
 
@@ -632,10 +628,7 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 
     m_lastDrawItem = NULL;
 
-    // Update canvas
-    GetRenderSettings()->m_ShowConvert = m_convert;
-    GetCanvas()->GetView()->MarkDirty();
-    GetCanvas()->Refresh();
+    RebuildView();
 }
 
 
@@ -818,7 +811,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             GlobalSetPins( (LIB_PIN*) item, id );
             m_canvas->MoveCursorToCrossHair();
-            m_canvas->Refresh();
         }
         break;
 
@@ -1073,7 +1065,6 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     updateTitle();
     DisplayCmpDoc();
     OnModify();
-    m_canvas->Refresh();
 }
 
 
@@ -1196,8 +1187,6 @@ void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
 
     if( !item->InEditMode() )
         item->ClearFlags();
-
-    m_canvas->Refresh();
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_lastDrawItem = NULL;
@@ -1371,26 +1360,18 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
                 part->RemoveDrawItem( pin );
             }
         }
-
-        m_canvas->Refresh();
     }
     else
     {
         if( m_canvas->IsMouseCaptured() )
-        {
             m_canvas->CallEndMouseCapture( aDC );
-        }
         else
-        {
             part->RemoveDrawItem( aItem, m_canvas, aDC );
-            m_canvas->Refresh();
-        }
     }
 
     SetDrawItem( NULL );
     m_lastDrawItem = NULL;
     OnModify();
-    RebuildView();
     m_canvas->CrossHairOn( aDC );
 }
 
@@ -1399,6 +1380,12 @@ void LIB_EDIT_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     storeCurrentPart();
+
+    // Parts have a small number of view items (compared to a full schematic), and changes
+    // in shared pins, graphic items, etc. can add/remove items from the view.  All things
+    // considered, it's safer to just use a big hammer.
+    RebuildView();
+
     m_treePane->GetLibTree()->Refresh();
 }
 
@@ -1429,8 +1416,6 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
         return;
 
     OnModify();
-    m_canvas->Refresh();
-    return;
 }
 
 
@@ -1716,6 +1701,8 @@ void LIB_EDIT_FRAME::RebuildView()
 
     view->HideWorksheet();
     view->ClearHiddenFlags();
+
+    GetCanvas()->Refresh();
 }
 
 const BOX2I LIB_EDIT_FRAME::GetDocumentExtents() const

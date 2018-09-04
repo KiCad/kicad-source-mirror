@@ -39,6 +39,7 @@
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <netlist_object.h>
+#include <sch_view.h>
 
 #include <dialogs/dialog_edit_line_style.h>
 
@@ -795,7 +796,10 @@ int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
         return wxID_CANCEL;
 
     if( aRedraw )
-        m_canvas->Refresh();
+    {
+        GetCanvas()->GetView()->Update( aLine );
+        GetCanvas()->Refresh();
+    }
 
     return wxID_OK;
 }

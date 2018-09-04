@@ -32,7 +32,8 @@
 #include <sch_edit_frame.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
-
+#include <sch_view.h>
+#include <sch_painter.h>
 #include <general.h>
 #include <hotkeys.h>
 #include <eeschema_id.h>
@@ -328,10 +329,15 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_HIDDEN_PINS:
+    {
         m_showAllPins = !m_showAllPins;
 
-        if( m_canvas )
-            m_canvas->Refresh();
+        auto painter = static_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+        painter->GetSettings()->m_ShowHiddenPins = m_showAllPins;
+
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+        GetCanvas()->Refresh();
+    }
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:

@@ -121,7 +121,6 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         MSG_PANEL_ITEMS items;
         pin->GetMsgPanelInfo( m_UserUnits, items );
         SetMsgPanel( items );
-        m_canvas->Refresh();
     }
 
     pin->EnableEditMode( false );
@@ -169,7 +168,6 @@ static void AbortPinMove( EDA_DRAW_PANEL* aPanel, wxDC* DC )
     panel->GetView()->ClearPreview();
     panel->GetView()->ClearHiddenFlags();
         
-
     // clear edit flags
     parent->SetDrawItem( NULL );
     parent->SetLastDrawItem( NULL );
@@ -271,11 +269,6 @@ void LIB_EDIT_FRAME::PlacePin()
     SetDrawItem( NULL );
 
     OnModify();
-    m_canvas->Refresh();
-
-    printf("Rebuild %d %d\n", cur_pin->GetPosition().x, cur_pin->GetPosition().y );
-    RebuildView();
-
 }
 
 
@@ -323,10 +316,6 @@ void LIB_EDIT_FRAME::StartMovePin( LIB_ITEM* aItem )
     cur_pin->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
-
-    // Refresh the screen to avoid color artifacts when drawing
-    // the pin in Edit mode and moving it from its start position
-    m_canvas->Refresh();
 }
 
 
