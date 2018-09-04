@@ -173,15 +173,14 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
 
     LIB_PART* lib_part = m_libMgr->GetBufferedPart( aEntry->GetName(), aLibrary );
     wxASSERT( lib_part );
-    
+
+    m_unit = 1;
+    m_convert = 1;
+
     auto s = m_libMgr->GetScreen( lib_part->GetName(), aLibrary );
     SetScreen( s );
     SetCurPart( new LIB_PART( *lib_part ) );
     SetCurLib( aLibrary );
-
-    m_unit = 1;
-    m_convert = 1;
-    SetShowDeMorgan( GetCurPart()->HasConversion() );
 
     Zoom_Automatique( false );
     updateTitle();
